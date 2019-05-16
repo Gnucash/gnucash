@@ -76,27 +76,28 @@ void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 void csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 
+/* Fixme: Can we simplify the work of translators by splitting in invariant and variant paragraphs? */
 static const gchar *finish_tree_string = N_(
             /* Translators: %s is the file name string. */
-            "The account tree will be exported to the file '%s' when you click 'Apply'.\n\n"
-            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
+            "The account tree will be exported to the file '%s' when you click \"Apply\".\n\n"
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 static const gchar *finish_trans_string = N_(
             /* Translators: %s is the file name string and %u the number of accounts. */
-            "When you click 'Apply', the transactions will be exported to the file '%s' and"
+            "When you click \"Apply\", the transactions will be exported to the file '%s' and"
             " the number of accounts exported will be %u.\n\n"
-            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 static const gchar *finish_trans_search_gl_string = N_(
             /* Translators: %s is the file name string. */
-            "When you click 'Apply', the transactions will be exported to the file '%s'.\n\n"
-            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
+            "When you click \"Apply\", the transactions will be exported to the file '%s'.\n\n"
+            "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_tree_string = N_(
             "This assistant will help you export the Account Tree to a file\n"
             " with the separator specified below.\n\n"
-            "Select the settings you require for the file and then click 'Forward' to proceed"
-            " or 'Cancel' to Abort Export.\n");
+            "Select the settings you require for the file and then click \"Next\" to proceed"
+            " or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans_string = N_(
             "This assistant will help you export the Transactions to a file\n"
@@ -105,8 +106,8 @@ static const gchar *start_trans_string = N_(
             " require further manipulation to get them in a format you can use.\n\n"
             "Each Transaction will appear once in the export and will be listed in"
             " the order the accounts were processed\n\n"
-            "Select the settings you require for the file and then click 'Forward' to proceed"
-            " or 'Cancel' to Abort Export.\n");
+            "Select the settings you require for the file and then click \"Next\" to proceed"
+            " or \"Cancel\" to abort the export.\n");
 
 static const gchar *start_trans_simple_string = N_(
             "This assistant will help you export the Transactions to a file\n"
@@ -117,8 +118,8 @@ static const gchar *start_trans_simple_string = N_(
             " were processed\n\n"
             "By selecting the simple layout, the output will be equivalent to a single"
             " row register view and as such some of the transfer detail could be lost.\n\n"
-            "Select the settings you require for the file and then click 'Forward' to proceed"
-            " or 'Cancel' to Abort Export.\n");
+            "Select the settings you require for the file and then click \"Next\" to proceed"
+            " or \"Cancel\" to abort the export.\n");
 
 
 /**************************************************
@@ -189,7 +190,7 @@ csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser,
 {
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
 
-    /* Enable the forward button based on a valid filename */
+    /* Enable the "Next" button based on a valid filename */
     gtk_assistant_set_page_complete (assistant, info->file_page,
         csv_export_assistant_check_filename (chooser, info));
 }
@@ -419,7 +420,7 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
 
     info->csva.num_accounts = update_accounts_tree (info);
 
-    /* Enable the Forward Assistant Button if we have accounts */
+    /* Enable the "Next" Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
         gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
@@ -686,7 +687,7 @@ csv_export_assistant_account_page_prepare (GtkAssistant *assistant,
 {
     CsvExportInfo *info = user_data;
 
-    /* Enable the Forward Assistant Button if we have accounts */
+    /* Enable the "Next" Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
         gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
@@ -705,7 +706,7 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
         gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir);
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(info->file_chooser), "");
 
-    /* Disable the Forward Assistant Button */
+    /* Disable the "Next" Assistant Button */
     gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
 }
 

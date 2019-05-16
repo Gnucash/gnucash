@@ -462,12 +462,14 @@ gnucash/report/report-system/report-collectors.scm
 gnucash/report/report-system/report.scm
 gnucash/report/report-system/report-system.scm
 gnucash/report/report-system/report-utilities.scm
+gnucash/report/report-system/trep-engine.scm
 gnucash/report/standard-reports/account-piecharts.scm
 gnucash/report/standard-reports/account-summary.scm
 gnucash/report/standard-reports/advanced-portfolio.scm
 gnucash/report/standard-reports/average-balance.scm
 gnucash/report/standard-reports/balance-forecast.scm
 gnucash/report/standard-reports/balance-sheet.scm
+gnucash/report/standard-reports/balsheet-pnl.scm
 gnucash/report/standard-reports/budget-balance-sheet.scm
 gnucash/report/standard-reports/budget-barchart.scm
 gnucash/report/standard-reports/budget-flow.scm
@@ -485,6 +487,7 @@ gnucash/report/standard-reports/income-statement.scm
 gnucash/report/standard-reports/net-charts.scm
 gnucash/report/standard-reports/portfolio.scm
 gnucash/report/standard-reports/price-scatter.scm
+gnucash/report/standard-reports/reconcile-report.scm
 gnucash/report/standard-reports/register.scm
 gnucash/report/standard-reports/standard-reports.scm
 gnucash/report/standard-reports/sx-summary.scm

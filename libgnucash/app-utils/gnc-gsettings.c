@@ -809,7 +809,7 @@ static void gnc_gsettings_migrate_from_gconf (void)
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-prepare \"",
                            base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
-    migration_ok = scm_is_true (scm_c_eval_string (command));
+    migration_ok = scm_is_true (scm_eval_string (scm_from_utf8_string (command)));
     g_free (command);
     if (!migration_ok)
     {
@@ -867,7 +867,7 @@ static void gnc_gsettings_migrate_from_gconf (void)
     command = g_strconcat ("(use-modules (migrate-prefs))(migration-cleanup \"",
                            base_dir, "\")", NULL);
     DEBUG ("command = %s", command);
-    migration_ok = scm_is_true (scm_c_eval_string (command));
+    migration_ok = scm_is_true (scm_eval_string (scm_from_utf8_string (command)));
     g_free (command);
     if (!migration_ok) /* Cleanup step failed, not critical */
         PWARN ("Cleanup step failed. You may need to delete %s/.gnc-migration-tmp manually.", base_dir);

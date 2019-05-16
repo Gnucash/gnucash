@@ -71,7 +71,7 @@ GncInt128::GncInt128 (int64_t upper, int64_t lower, uint8_t flags) :
     m_lo {static_cast<uint64_t>(lower < 0 ? -lower : lower)}
 {
     if ((upper < 0 && lower > 0) || (upper > 0 && lower < 0))
-	m_lo = (m_hi << 63) - m_lo;
+        m_lo = (m_hi << 63) - m_lo;
     else
         m_lo += (m_hi << 63);
 
@@ -142,7 +142,7 @@ GncInt128::operator int64_t() const
 GncInt128::operator uint64_t() const
 {
     auto flags = get_flags(m_hi);
-    if (flags & neg)
+    if ((flags & neg) && !isZero()) // exclude negative zero
         throw std::underflow_error ("Can't represent negative value as uint64_t");
     if ((flags & (overflow | NaN)) || (m_hi || m_lo > UINT64_MAX))
         throw std::overflow_error ("Value to large to represent as uint64_t");
@@ -160,14 +160,15 @@ GncInt128::cmp (const GncInt128& b) const noexcept
         return 1;
     auto hi = get_num(m_hi);
     auto bhi = get_num(b.m_hi);
+    if (isZero() && b.isZero()) return 0;
     if (flags & neg)
     {
-	if (!b.isNeg()) return -1;
-	if (hi > bhi) return -1;
-	if (hi < bhi) return 1;
-	if (m_lo > b.m_lo) return -1;
-	if (m_lo < b.m_lo) return 1;
-	return 0;
+        if (!b.isNeg()) return -1;
+        if (hi > bhi) return -1;
+        if (hi < bhi) return 1;
+        if (m_lo > b.m_lo) return -1;
+        if (m_lo < b.m_lo) return 1;
+        return 0;
     }
     if (b.isNeg()) return 1;
     if (hi < bhi) return -1;
@@ -309,9 +310,9 @@ GncInt128::operator-() const noexcept
     auto retval = *this;
     auto flags = get_flags(retval.m_hi);
     if (isNeg())
-	flags ^= neg;
+        flags ^= neg;
     else
-	flags |= neg;
+        flags |= neg;
     retval.m_hi = set_flags(retval.m_hi, flags);
     return retval;
 }
@@ -357,7 +358,7 @@ GncInt128::operator+= (const GncInt128& b) noexcept
     if (isOverflow() || isNan())
         return *this;
     if ((isNeg () && !b.isNeg ()) || (!isNeg () && b.isNeg ()))
-	return this->operator-= (-b);
+        return this->operator-= (-b);
     uint64_t result = m_lo + b.m_lo;
     uint64_t carry = static_cast<int64_t>(result < m_lo);  //Wrapping
     m_lo = result;
@@ -365,7 +366,7 @@ GncInt128::operator+= (const GncInt128& b) noexcept
     auto bhi = get_num(b.m_hi);
     result = hi + bhi + carry;
     if (result < hi || result & flagmask)
-	flags |= overflow;
+        flags |= overflow;
     m_hi = set_flags(result, flags);
     return *this;
 }
@@ -439,7 +440,7 @@ GncInt128::operator-= (const GncInt128& b) noexcept
         return *this;
 
     if ((!isNeg() && b.isNeg()) || (isNeg() && !b.isNeg()))
-	return this->operator+= (-b);
+        return this->operator+= (-b);
     bool operand_bigger {abs().cmp (b.abs()) < 0};
     auto hi = get_num(m_hi);
     auto far_hi = get_num(b.m_hi);
@@ -478,6 +479,8 @@ GncInt128::operator*= (const GncInt128& b) noexcept
 {
     /* Test for 0 first */
     auto flags = get_flags(m_hi);
+    /* Handle the sign; ^ flips if b is negative */
+    flags ^= (get_flags(b.m_hi) & neg);
     if (isZero() || b.isZero())
     {
         m_lo = 0;
@@ -514,8 +517,7 @@ GncInt128::operator*= (const GncInt128& b) noexcept
         m_hi = set_flags(m_hi, flags);
         return *this;
     }
-    /* Handle the sign; ^ flips if b is negative */
-    flags ^= (get_flags(b.m_hi) & neg);
+
     /* The trivial case */
     if (abits + bbits <= legbits)
     {
@@ -602,6 +604,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n,
     uint64_t d {(UINT64_C(1) << sublegbits)/(v[n - 1] + UINT64_C(1))};
     uint64_t carry {UINT64_C(0)};
     bool negative {q.isNeg()};
+    bool rnegative {r.isNeg()};
     for (size_t i = 0; i < m; ++i)
     {
         u[i] = u[i] * d + carry;
@@ -689,6 +692,7 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n,
     r = GncInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
     r /= d;
     if (negative) q = -q;
+    if (rnegative) r = -r;
 }
 
 void
@@ -698,6 +702,7 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v,
     uint64_t qv[sublegs] {};
     uint64_t carry {};
     bool negative {q.isNeg()};
+    bool rnegative {r.isNeg()};
     for (int i = m - 1; i >= 0; --i)
     {
         qv[i] = u[i] / v;
@@ -713,13 +718,18 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v,
     q = GncInt128 ((qv[3] << sublegbits) + qv[2], (qv[1] << sublegbits) + qv[0]);
     r = GncInt128 ((u[3] << sublegbits) + u[2], (u[1] << sublegbits) + u[0]);
     if (negative) q = -q;
+    if (rnegative) r = -r;
 }
 
 }// namespace
 
- void
+void
 GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
 {
+    // clear remainder and quotient
+    r = GncInt128(0);
+    q = GncInt128(0);
+
     auto qflags = get_flags(q.m_hi);
     auto rflags = get_flags(r.m_hi);
     if (isOverflow() || b.isOverflow())
@@ -745,6 +755,7 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     assert (&r != &b);
 
     q.zero(), r.zero();
+    qflags = rflags = 0;
     if (b.isZero())
     {
         qflags |= NaN;
@@ -755,10 +766,16 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     }
 
     if (isNeg())
+    {
         qflags |= neg;
+        rflags |= neg;          // the remainder inherits the dividend's sign
+    }
 
     if (b.isNeg())
         qflags ^= neg;
+
+    q.m_hi = set_flags(q.m_hi, qflags);
+    r.m_hi = set_flags(r.m_hi, rflags);
 
     if (abs() < b.abs())
     {
@@ -767,7 +784,7 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     }
     auto hi = get_num(m_hi);
     auto bhi = get_num(b.m_hi);
-    q.m_hi = set_flags(hi, qflags);
+
     if (hi == 0 && bhi == 0) //let the hardware do it
     {
         assert (b.m_lo != 0); // b.m_hi is 0 but b isn't or we didn't get here.
@@ -912,6 +929,11 @@ GncInt128::asCharBufR(char* buf) const noexcept
     if (isNan())
     {
         sprintf (buf, "%s", "NaN");
+        return buf;
+    }
+    if (isZero())
+    {
+        sprintf (buf, "%d", 0);
         return buf;
     }
     uint64_t d[dec_array_size] {};

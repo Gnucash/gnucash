@@ -411,7 +411,7 @@ TEST(gncnumeric_functions, test_convert)
     EXPECT_EQ(3465453, c.num());
     EXPECT_EQ(128, c.denom());
     ASSERT_NO_THROW(c = b.convert<RoundType::floor>(128));
-    EXPECT_EQ(-3465452, c.num());
+    EXPECT_EQ(-3465454, c.num());
     EXPECT_EQ(128, c.denom());
     ASSERT_NO_THROW(c = a.convert<RoundType::ceiling>(128));
     EXPECT_EQ(3465454, c.num());

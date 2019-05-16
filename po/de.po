@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-04-08 17:37+0200\n"
-"PO-Revision-Date: 2019-04-20 18:18+0200\n"
+"PO-Revision-Date: 2019-04-29 23:15+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -19121,7 +19121,6 @@ msgstr "Kontoumsätze online abfragen via HBCI/Onlinebanking"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:113
-#, fuzzy
 msgid "Issue _SEPA Transaction..."
 msgstr "SE_PA Einzelüberweisung..."
 
@@ -20003,7 +20002,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:478
 msgid "Please select a description column."
-msgstr "Bitte wählen Sie eine Beschreibunsspalte."
+msgstr "Bitte wählen Sie eine Beschreibungsspalte."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:484
 msgid "Please select a deposit or withdrawal column."

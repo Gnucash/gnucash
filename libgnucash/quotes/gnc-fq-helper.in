@@ -186,7 +186,7 @@ sub schemify_num {
   if(!$numstr) { return "failed-conversion"; }
 
   if($numstr =~ /^\s*(\d+(\.\d+)?([eE][+-]?\d+)?)$/o) {
-    return $1;
+    return "#e" . $1;
   } else {
     return "failed-conversion";
   }

@@ -178,7 +178,7 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         GncInt128 high(stoll(m[1].str()));
         GncInt128 low(stoll(m[2].str()));
         int64_t d = powten(m[2].str().length());
-        GncInt128 n = high * d + (high > 0 ? low : -low);
+        GncInt128 n = high * d + (high >= 0 ? low : -low);
         if (!autoround && n.isBig())
         {
             std::ostringstream errmsg;

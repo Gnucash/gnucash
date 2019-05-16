@@ -33,15 +33,19 @@
 #include "dialog-utils.h"
 #include "assistant-qif-import.h"
 #include "gnc-gui-query.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h" /* for GNC_RESPONSE_NEW */
 
+#define GNC_PREFS_GROUP   "dialogs.import.qif.account-picker"
+
 enum account_cols
 {
     ACCOUNT_COL_NAME = 0,
     ACCOUNT_COL_FULLNAME,
+    ACCOUNT_COL_PLACEHOLDER,
     ACCOUNT_COL_CHECK,
     NUM_ACCOUNT_COLS
 };
@@ -50,8 +54,11 @@ struct _accountpickerdialog
 {
     GtkWidget       * dialog;
     GtkTreeView     * treeview;
+    GtkWidget       * pwhbox;
+    GtkWidget       * pwarning;
+    GtkWidget       * ok_button;
     QIFImportWindow * qif_wind;
-    SCM             map_entry;
+    SCM               map_entry;
     gchar           * selected_name;
 };
 
@@ -80,9 +87,11 @@ acct_tree_add_accts(SCM accts,
     gboolean     leafnode;
     SCM          current;
     gboolean     checked;
+    Account      * account;
 
     while (!scm_is_null(accts))
     {
+        gboolean placeholder = FALSE;
         current = SCM_CAR(accts);
 
         if (scm_is_null(current))
@@ -119,10 +128,15 @@ acct_tree_add_accts(SCM accts,
 
         checked = (SCM_CADR(current) == SCM_BOOL_T);
 
+        account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), acctname);
+        if (account)
+            placeholder = xaccAccountGetPlaceholder (account);
+
         gtk_tree_store_append(store, &iter, parent);
         gtk_tree_store_set(store, &iter,
                            ACCOUNT_COL_NAME, compname,
                            ACCOUNT_COL_FULLNAME, acctname,
+                           ACCOUNT_COL_PLACEHOLDER, placeholder,
                            ACCOUNT_COL_CHECK, checked,
                            -1);
 
@@ -188,6 +202,8 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import)
         {
             gtk_tree_view_expand_to_path(picker->treeview, path);
             gtk_tree_selection_select_path(selection, path);
+            gtk_tree_view_scroll_to_cell (picker->treeview, path,
+                                          NULL, TRUE, 0.5, 0.0);
             gtk_tree_path_free(path);
         }
         gtk_tree_row_reference_free(reference);
@@ -264,15 +280,34 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
     SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
     GtkTreeModel *model;
     GtkTreeIter iter;
+    gboolean placeholder;
+
+    gtk_widget_set_sensitive (wind->ok_button, TRUE); // enable OK button
 
     g_free(wind->selected_name);
     if (gtk_tree_selection_get_selected(selection, &model, &iter))
     {
         gtk_tree_model_get(model, &iter,
+                           ACCOUNT_COL_PLACEHOLDER, &placeholder,
                            ACCOUNT_COL_FULLNAME, &wind->selected_name,
                            -1);
         scm_call_2(name_setter, wind->map_entry,
                    wind->selected_name ? scm_from_utf8_string(wind->selected_name) : SCM_BOOL_F);
+
+        if (placeholder)
+        {
+            gchar *text = g_strdup_printf (_("The account %s is a placeholder account and does not allow "
+                                             "transactions. Please choose a different account."), wind->selected_name);
+
+            gtk_label_set_text (GTK_LABEL(wind->pwarning), text);
+            gnc_label_set_alignment (wind->pwarning, 0.0, 0.5);
+            gtk_widget_show_all (GTK_WIDGET(wind->pwhbox));
+            g_free (text);
+
+            gtk_widget_set_sensitive (wind->ok_button, FALSE); // disable OK button
+        }
+        else
+            gtk_widget_hide (GTK_WIDGET(wind->pwhbox)); // hide the placeholder warning
     }
     else
     {
@@ -316,6 +351,31 @@ gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data)
 
 
 /****************************************************************
+ * dialog_response_cb
+ *
+ ****************************************************************/
+static void
+dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+    QIFAccountPickerDialog * wind = user_data;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gboolean placeholder;
+
+    if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection
+                                        (wind->treeview), &model, &iter))
+        gtk_tree_model_get (model, &iter,
+                            ACCOUNT_COL_PLACEHOLDER, &placeholder, -1);
+
+    if (response_id == GTK_RESPONSE_OK)
+    {
+        if (placeholder)
+            g_signal_stop_emission_by_name (dialog, "response");
+    }
+}
+
+
+/****************************************************************
  * qif_account_picker_dialog
  *
  * Select an account from the ones that the engine knows about,
@@ -351,18 +411,21 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
 
     wind->dialog     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_account_picker_dialog"));
     wind->treeview   = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_tree"));
+    wind->pwhbox     = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_warning_hbox"));
+    wind->pwarning   = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_warning_label"));
+    wind->ok_button  = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
     wind->qif_wind   = qif_wind;
 
     gtk_window_set_transient_for (GTK_WINDOW (wind->dialog), parent);
 
     {
+        GtkTreeSelection *selection;
         GtkTreeStore *store;
         GtkCellRenderer *renderer;
         GtkTreeViewColumn *column;
-        GtkTreeSelection *selection;
 
         store = gtk_tree_store_new(NUM_ACCOUNT_COLS, G_TYPE_STRING, G_TYPE_STRING,
-                                   G_TYPE_BOOLEAN);
+                                   G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
         gtk_tree_view_set_model(wind->treeview, GTK_TREE_MODEL(store));
         g_object_unref(store);
 
@@ -373,6 +436,15 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
                  ACCOUNT_COL_NAME,
                  NULL);
         g_object_set(column, "expand", TRUE, NULL);
+        gtk_tree_view_append_column(wind->treeview, column);
+
+        renderer = gtk_cell_renderer_toggle_new();
+        g_object_set(renderer, "activatable", FALSE, NULL);
+        column = gtk_tree_view_column_new_with_attributes(_("Placeholder?"),
+                 renderer,
+                 "active",
+                 ACCOUNT_COL_PLACEHOLDER,
+                 NULL);
         gtk_tree_view_append_column(wind->treeview, column);
 
         renderer = gtk_cell_renderer_toggle_new();
@@ -396,15 +468,22 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
                            G_CALLBACK(gnc_ui_qif_account_picker_map_cb),
                            wind);
 
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(wind->dialog), parent);
+
     /* this is to get the checkmarks set up right.. it will get called
      * again after the window is mapped. */
     build_acct_tree(wind, wind->qif_wind);
+
+    g_signal_connect (wind->dialog, "response",
+                      G_CALLBACK (dialog_response_cb), wind);
 
     do
     {
         response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
     }
     while (response == GNC_RESPONSE_NEW);
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));
     gtk_widget_destroy(wind->dialog);
     g_object_unref(G_OBJECT(builder));
 

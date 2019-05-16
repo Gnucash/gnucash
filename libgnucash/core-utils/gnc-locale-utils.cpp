@@ -27,51 +27,48 @@ extern "C"
 #include <boost/locale.hpp>
 #include "gnc-locale-utils.hpp"
 
-/* This function addresses two separate problems: First, if we set
- * std::locale::global then all streams automagically imbue
- * themselves with it and we have to re-imbue all of the backends and
- * logging streams with std::locale::classic() so that data and log
- * files aren't localized. Second, calling std::locale("") is slow,
- * so we want to do it only once. Worse, the standard C++ library in
- * Mingw64 chokes on at least some Microsoft-style locale strings
- * (e.g. "Spanish_Spain") but libc's setlocale(LC_ALL, NULL) emits
- * them even if originally fed a Unix-style locale ("es_ES").
+/** Cache the UI locale
  *
- * The solution is this function which caches the setlocale() locale
- * the first time it's called and which uses a boost::locale
- * generator, which does know what to do with (sometimes adjusted)
- * Microsoft locale strings.
+ * We don't want to set the default locale because we need
+ * std::locale::classic for consistency in stored data. We also don't
+ * want to call std::locale("") more than once, it's slow... and we
+ * don't want to call it on MinGW32 at all because that supports only
+ * std::locale::classic and throws if you try to construct anything
+ * else. Boost::locale doesn't support std::locale::facet required by
+ * boost::datetime (go figure).
+ *
+ * @return a copy of std::locale::classic() on MinGW32 and a copy of
+ * the cached result of std::locale("") otherwise.
  */
 const std::locale&
 gnc_get_locale()
 {
-  static std::locale cached;
-  static bool tried_already = false;
-  if (!tried_already)
-  {
-    boost::locale::generator gen;
-    tried_already = true;
-      try
-      {
-	cached = std::locale("");
-      }
-      catch (const std::runtime_error& err)
-      {
 #ifdef __MINGW32__
-	  char* locale = g_win32_getlocale();
+    return std::locale::classic(); // Nothing else supported.
 #else
-	  char* locale = g_strdup(setlocale(LC_ALL, ""));
-#endif
+    static std::locale cached;
+    static bool tried_already = false;
+    if (!tried_already)
+    {
+	tried_already = true;
+	try
+	{
+	    cached = std::locale("");
+	}
+	catch (const std::runtime_error& err)
+	{
+	    char* locale = g_strdup(setlocale(LC_ALL, ""));
 
-	  g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
-		"Failed to create C++ default locale from"
-		"%s because %s. Using the 'C' locale for C++.",
-		locale, err.what());
-	  g_free(locale);
-	  cached = std::locale::classic();
-      }
-  }
-  return cached;
+	    g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+		  "Failed to create C++ default locale from"
+		  "%s because %s. Using the 'C' locale for C++.",
+		  locale, err.what());
+	    g_free(locale);
+	    cached = std::locale::classic();
+	}
+    }
+    return cached;
+#endif
 }
 
 

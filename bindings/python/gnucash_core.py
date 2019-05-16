@@ -239,7 +239,7 @@ class Book(GnuCashCoreClass):
 
     def InvoiceNextID(self, customer):
       ''' Return the next invoice ID.
-      This works but I'm not entirely happy with it.  FIX ME'''
+      '''
       from gnucash.gnucash_core_c import gncInvoiceNextID
       return gncInvoiceNextID(self.get_instance(),customer.GetEndOwner().get_instance()[1])
 

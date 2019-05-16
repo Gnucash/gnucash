@@ -932,8 +932,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
             LEAVE("bad value");
             return NULL;
         }
-
-        scm_id = scm_c_eval_string(option_string);
+        scm_id = scm_eval_string(scm_from_utf8_string(option_string));
         g_free(option_string);
 
         if (!scm_integer_p(scm_id))

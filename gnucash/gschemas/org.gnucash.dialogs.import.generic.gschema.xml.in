@@ -42,6 +42,7 @@
     </key>
     <child name="match-picker" schema="org.gnucash.dialogs.import.generic.match-picker"/>
     <child name="transaction-list" schema="org.gnucash.dialogs.import.generic.transaction-list"/>
+    <child name="account-picker" schema="org.gnucash.dialogs.import.generic.account-picker"/>
   </schema>
 
   <schema id="org.gnucash.dialogs.import.generic.match-picker" path="/org/gnucash/dialogs/import/generic/match-picker/">
@@ -57,6 +58,16 @@
      <summary>Display or hide reconciled matches</summary>
      <description>Shows or hides transactions from the match picker which are already of some reconciled state.</description>
    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.import.generic.account-picker" path="/org/gnucash/dialogs/import/generic/account-picker/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
   </schema>
 
   <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic/transaction-list/">

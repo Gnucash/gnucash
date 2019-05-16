@@ -238,7 +238,7 @@ struct _GncGWENGui
     GtkWidget *dialog;
 
     /* Progress bars */
-    GtkWidget *entries_table;
+    GtkWidget *entries_grid;
     GtkWidget *top_entry;
     GtkWidget *top_progress;
     GtkWidget *second_entry;
@@ -531,7 +531,7 @@ setup_dialog(GncGWENGui *gui)
 
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_connection_dialog"));
 
-    gui->entries_table = GTK_WIDGET(gtk_builder_get_object (builder, "entries_table"));
+    gui->entries_grid = GTK_WIDGET(gtk_builder_get_object (builder, "entries_grid"));
     gui->top_entry = GTK_WIDGET(gtk_builder_get_object (builder, "top_entry"));
     gui->top_progress = GTK_WIDGET(gtk_builder_get_object (builder, "top_progress"));
     gui->second_entry = GTK_WIDGET(gtk_builder_get_object (builder, "second_entry"));
@@ -604,8 +604,8 @@ reset_dialog(GncGWENGui *gui)
 
     if (gui->other_entries_box)
     {
-        gtk_table_resize(GTK_TABLE(gui->entries_table),
-                         OTHER_ENTRIES_ROW_OFFSET, 2);
+        gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
+                             OTHER_ENTRIES_ROW_OFFSET);
         gtk_widget_destroy(gui->other_entries_box);
         gui->other_entries_box = NULL;
     }
@@ -806,11 +806,8 @@ show_progress(GncGWENGui *gui, Progress *progress)
             gtk_widget_show(entry);
             if (new_box)
             {
-                gtk_table_resize(GTK_TABLE(gui->entries_table),
-                                 OTHER_ENTRIES_ROW_OFFSET + 1, 2);
-                gtk_table_attach_defaults(
-                    GTK_TABLE(gui->entries_table), box, 1, 2,
-                    OTHER_ENTRIES_ROW_OFFSET, OTHER_ENTRIES_ROW_OFFSET + 1);
+                gtk_grid_attach (GTK_GRID(gui->entries_grid), box,
+                                 1, OTHER_ENTRIES_ROW_OFFSET, 1, 1);
                 gtk_widget_show(box);
             }
         }
@@ -885,8 +882,8 @@ hide_progress(GncGWENGui *gui, Progress *progress)
             else
             {
                 /* Last other progress to be hided */
-                gtk_table_resize(GTK_TABLE(gui->entries_table),
-                                 OTHER_ENTRIES_ROW_OFFSET, 2);
+                gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
+                                     OTHER_ENTRIES_ROW_OFFSET);
                 gtk_widget_destroy(box);
                 gui->other_entries_box = NULL;
             }

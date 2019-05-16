@@ -32,7 +32,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (gnc:module-load "gnucash/report/report-system" 0)
-(use-modules (gnucash report standard-reports transaction))
 
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Income and GST Statement"))
@@ -57,11 +56,12 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
    (gnc:html-markup-br)
    (gnc:html-markup-br)))
 
-(define (income-gst-statement-renderer rpt)
-  (trep-renderer rpt
-                 #:custom-calculated-cells gst-calculated-cells
-                 #:empty-report-message TAX-SETUP-DESC
-                 #:custom-split-filter gst-custom-split-filter))
+(define (gst-statement-renderer rpt)
+  (gnc:trep-renderer
+   rpt
+   #:custom-calculated-cells gst-calculated-cells
+   #:empty-report-message TAX-SETUP-DESC
+   #:custom-split-filter gst-custom-split-filter))
 
 (define (gst-custom-split-filter split)
   ;; split -> bool
@@ -74,7 +74,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 (define (gst-statement-options-generator)
 
   ;; Retrieve the list of options specified within the transaction report
-  (define options (trep-options-generator))
+  (define options (gnc:trep-options-generator))
 
   ;; Delete Accounts selector
   (gnc:unregister-option options gnc:pagename-accounts (N_ "Accounts"))
@@ -112,7 +112,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     (list (N_ "Net Balance")                  "t" (N_ "Display the net balance (sales without tax - purchases without tax)") #f)
     (list (N_ "Tax payable")                  "u" (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
 
-  ;; Enable secret option to delete transactions with >1 split
+  ;; Enable option to retrieve unique transactions only
   (gnc:option-set-value (gnc:lookup-option options "__trep" "unique-transactions") #t)
   ;; Disable account filtering
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
@@ -134,48 +134,45 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
 (define (gst-calculated-cells options)
   (define (opt-val section name)
-    (let ((option (gnc:lookup-option options section name)))
-      (if option
-          (gnc:option-value option)
-          (gnc:error "gnc:lookup-option error: " section "/" name))))
+    (gnc:option-value (gnc:lookup-option options section name)))
+  (define (accfilter accounts type)
+    (filter
+     (lambda (acc)
+       (eqv? (xaccAccountGetType acc) type))
+     accounts))
   (letrec*
-      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))           ; custom monetary adder which understands #f
-       (myneg (lambda (X) (and X (gnc:monetary-neg X))))                      ; custom monetary negator which understands #f
+      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))
+       (myneg (lambda (X) (and X (gnc:monetary-neg X))))
        (accounts (opt-val gnc:pagename-accounts "Accounts"))
        (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
-       (accounts-tax-collected (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-LIABILITY)) tax-accounts))
-       (accounts-tax-paid      (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-ASSET))     tax-accounts))
-       (accounts-sales         (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME))    accounts))
-       (accounts-purchases     (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE))   accounts))
-       (common-currency (and (opt-val gnc:pagename-general "Common Currency")             ; if a common currency was specified,
-                             (opt-val gnc:pagename-general "Report's currency")))         ; use it
-       (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
-       (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+       (accounts-tax-collected (accfilter tax-accounts ACCT-TYPE-LIABILITY))
+       (accounts-tax-paid      (accfilter tax-accounts ACCT-TYPE-ASSET))
+       (accounts-sales         (accfilter accounts ACCT-TYPE-INCOME))
+       (accounts-purchases     (accfilter accounts ACCT-TYPE-EXPENSE))
+       (common-currency (and (opt-val gnc:pagename-general "Common Currency")
+                             (opt-val gnc:pagename-general "Report's currency")))
+       (split->date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
+       (split->currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
        (split-adder (lambda (split accountlist)
-                      (let* (;; 1. from split, get the trans
-                             (transaction (xaccSplitGetParent split))
-                             ;; 2. from trans, get all splits
-                             (splits-in-transaction (xaccTransGetSplitList transaction))
-                             ;; 3. but only from accounts specified
-                             (include-split? (lambda (s) (member (xaccSplitGetAccount s) accountlist)))
-                             (filtered-splits (filter include-split? splits-in-transaction))
-                             ;; 4. get the filtered split amount
-                             (split-get-monetary (lambda (s)
-                                                   (gnc:make-gnc-monetary
-                                                    (split-currency s)
-                                                    (if (xaccTransGetVoidStatus transaction)
-                                                        (xaccSplitVoidFormerAmount s)
-                                                        (xaccSplitGetAmount s)))))
-                             ;; 5. amount - always convert to
-                             ;; either report currency or the original split currency
-                             (split-monetary-converted (lambda (s)
-                                                         (gnc:exchange-by-pricedb-nearest
-                                                          (split-get-monetary s)
-                                                          (or common-currency
-                                                              (split-currency split))
-                                                          (time64CanonicalDayTime
-                                                           (split-date s)))))
-                             (list-of-values (map split-monetary-converted filtered-splits)))
+                      (let* ((txn (xaccSplitGetParent split))
+                             (filtered-splits (filter
+                                               (lambda (s)
+                                                 (member (xaccSplitGetAccount s)
+                                                         accountlist))
+                                               (xaccTransGetSplitList txn)))
+                             (split->monetary (lambda (s)
+                                                (gnc:make-gnc-monetary
+                                                 (split->currency s)
+                                                 (if (xaccTransGetVoidStatus txn)
+                                                     (xaccSplitVoidFormerAmount s)
+                                                     (xaccSplitGetAmount s)))))
+                             (split->converted
+                              (lambda (s)
+                                (gnc:exchange-by-pricedb-nearest
+                                 (split->monetary s)
+                                 (or common-currency (split->currency split))
+                                 (time64CanonicalDayTime (split->date s)))))
+                             (list-of-values (map split->converted filtered-splits)))
                         (fold myadd #f list-of-values))))
        (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
        (account-adder-neg (lambda (acc) (lambda (s) (myneg (split-adder s (list acc))))))
@@ -283,4 +280,4 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
  'name reportname
  'report-guid "5bf27f249a0d11e7abc4cec278b6b50a"
  'options-generator gst-statement-options-generator
- 'renderer income-gst-statement-renderer)
+ 'renderer gst-statement-renderer)

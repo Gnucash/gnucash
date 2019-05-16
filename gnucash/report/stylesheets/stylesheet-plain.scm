@@ -24,7 +24,7 @@
 
 (define-module (gnucash report stylesheet-plain))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash gettext))
@@ -39,89 +39,82 @@
 ;; it's supposed to be lightweight and unobtrusive.
 (define (plain-options)
   (let* ((options (gnc:new-options))
-     (opt-register
-      (lambda (opt)
-        (gnc:register-option options opt))))
-     (opt-register
-          (gnc:make-color-option
-           (N_ "General")
-           (N_ "Background Color") "a" (N_ "Background color for reports.")
-           (list #xff #xff #xff #xff)
-           255 #f))
          (opt-register
-          (gnc:make-pixmap-option
-           (N_ "General")
-           (N_ "Background Pixmap") "b" (N_ "Background tile for reports.")
-           ""))
-         (opt-register
-          (gnc:make-simple-boolean-option
-           (N_ "General")
-           (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
-           #t))
-         (opt-register
-          (gnc:make-color-option
-           (N_ "Colors")
-           (N_ "Alternate Table Cell Color") "a" (N_ "Background color for alternate lines.")
-           (list #xff #xff #xff #xff)
-           255 #f))
-         (opt-register
-          (gnc:make-number-range-option
-           (N_ "Tables")
-           (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
-           0 0 20 0 1))
-         (opt-register
-          (gnc:make-number-range-option
-           (N_ "Tables")
-           (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
-           4 0 20 0 1))
-         (opt-register
-          (gnc:make-number-range-option
-           (N_ "Tables")
-           (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
-           0 0 20 0 1))
-         (register-font-options options)
+          (lambda (opt)
+            (gnc:register-option options opt))))
+    (opt-register
+     (gnc:make-color-option
+      (N_ "General")
+      (N_ "Background Color") "a" (N_ "Background color for reports.")
+      (list #xff #xff #xff #xff)
+      255 #f))
+    (opt-register
+     (gnc:make-pixmap-option
+      (N_ "General")
+      (N_ "Background Pixmap") "b" (N_ "Background tile for reports.")
+      ""))
+    (opt-register
+     (gnc:make-simple-boolean-option
+      (N_ "General")
+      (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
+      #t))
+    (opt-register
+     (gnc:make-color-option
+      (N_ "Colors")
+      (N_ "Alternate Table Cell Color") "a" (N_ "Background color for alternate lines.")
+      (list #xff #xff #xff #xff)
+      255 #f))
+    (opt-register
+     (gnc:make-number-range-option
+      (N_ "Tables")
+      (N_ "Table cell spacing") "a" (N_ "Space between table cells.")
+      0 0 20 0 1))
+    (opt-register
+     (gnc:make-number-range-option
+      (N_ "Tables")
+      (N_ "Table cell padding") "b" (N_ "Space between table cell edge and content.")
+      4 0 20 0 1))
+    (opt-register
+     (gnc:make-number-range-option
+      (N_ "Tables")
+      (N_ "Table border width") "c" (N_ "Bevel depth on tables.")
+      0 0 20 0 1))
+    (register-font-options options)
 
-         options))
+    options))
 
 (define (plain-renderer options doc)
-  (let*
-    ((ssdoc (gnc:make-html-document))
-     (opt-val
-      (lambda (section name)
-        (gnc:option-value
-         (gnc:lookup-option options section name))))
-     (bgcolor
-      (gnc:color-option->html
-       (gnc:lookup-option options
-                  "General"
-                  "Background Color")))
-     (bgpixmap (opt-val "General" "Background Pixmap"))
-     (links? (opt-val "General" "Enable Links"))
-     (alternate-row-color
-      (gnc:color-option->html
-       (gnc:lookup-option options
-                  "Colors"
-                  "Alternate Table Cell Color")))
-     (spacing (opt-val "Tables" "Table cell spacing"))
-     (padding (opt-val "Tables" "Table cell padding"))
-     (border (opt-val "Tables" "Table border width"))
-    )
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option options section name)))
+  (let* ((ssdoc (gnc:make-html-document))
+         (bgcolor
+          (gnc:color-option->html
+           (gnc:lookup-option options "General" "Background Color")))
+         (bgpixmap (opt-val "General" "Background Pixmap"))
+         (links? (opt-val "General" "Enable Links"))
+         (alternate-row-color
+          (gnc:color-option->html
+           (gnc:lookup-option options "Colors" "Alternate Table Cell Color")))
+         (spacing (opt-val "Tables" "Table cell spacing"))
+         (padding (opt-val "Tables" "Table cell padding"))
+         (border (opt-val "Tables" "Table border width")))
 
-    (gnc:html-document-set-style!
-       ssdoc "body"
-       'attribute (list "bgcolor" bgcolor))
-
-    (if (and bgpixmap
-         (not (string=? bgpixmap "")))
     (gnc:html-document-set-style!
      ssdoc "body"
-     'attribute (list "background" (make-file-url bgpixmap))))
+     'attribute (list "bgcolor" bgcolor))
+
+    (if (and bgpixmap
+             (not (string-null? bgpixmap)))
+        (gnc:html-document-set-style!
+         ssdoc "body"
+         'attribute (list "background" (make-file-url bgpixmap))))
 
     (gnc:html-document-set-style!
-       ssdoc "table"
-       'attribute (list "border" border)
-       'attribute (list "cellspacing" spacing)
-       'attribute (list "cellpadding" padding))
+     ssdoc "table"
+     'attribute (list "border" border)
+     'attribute (list "cellspacing" spacing)
+     'attribute (list "cellpadding" padding))
 
     (gnc:html-document-set-style!
      ssdoc "column-heading-left"
@@ -189,13 +182,13 @@
      'attribute (list "class" "centered-label-cell"))
 
     (gnc:html-document-set-style!
-       ssdoc "normal-row"
-       'tag "tr")
+     ssdoc "normal-row"
+     'tag "tr")
 
     (gnc:html-document-set-style!
-       ssdoc "alternate-row"
-       'tag "tr"
-       'attribute (list "bgcolor" alternate-row-color))
+     ssdoc "alternate-row"
+     'tag "tr"
+     'attribute (list "bgcolor" alternate-row-color))
 
     (gnc:html-document-set-style!
      ssdoc "primary-subheading"
@@ -212,24 +205,21 @@
 
     ;; don't surround marked-up links with <a> </a>
     (if (not links?)
-    (gnc:html-document-set-style!
-     ssdoc "a"
-     'tag ""))
+        (gnc:html-document-set-style!
+         ssdoc "a"
+         'tag ""))
 
     (add-css-information-to-doc options ssdoc doc)
 
-    (let* ((title (gnc:html-document-title doc))
-           (doc-headline (gnc:html-document-headline doc))
-           (headline (if (eq? doc-headline #f)
-                         title doc-headline)))
+    (let ((headline (or (gnc:html-document-headline doc)
+                        (gnc:html-document-title doc))))
       (if headline
-      (gnc:html-document-add-object!
-       ssdoc
-       (gnc:make-html-text
-         (gnc:html-markup-h3 headline)))))
+          (gnc:html-document-add-object!
+           ssdoc
+           (gnc:make-html-text
+            (gnc:html-markup-h3 headline)))))
 
-    (gnc:html-document-append-objects! ssdoc
-                       (gnc:html-document-objects doc))
+    (gnc:html-document-append-objects! ssdoc (gnc:html-document-objects doc))
 
     ssdoc))
 

@@ -94,7 +94,7 @@ Libraries/Deps
 
   libofx		0.9.0			 OFX/QFX import
 
-  python		3.4.0			 python bindings; headers
+  python		3.2.0			 python bindings; headers
 						 required, not just binaries.
 
   makeinfo                                       Not really needed, it

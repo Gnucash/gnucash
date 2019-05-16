@@ -390,8 +390,8 @@ gnc_style_sheet_select_dialog_response_cb (GtkDialog *unused,
 
     case GTK_RESPONSE_CLOSE:
     default:
-        gnc_style_sheet_dialog = NULL;
         gtk_widget_destroy(ss->toplevel);
+        gnc_style_sheet_dialog = NULL;
         g_free(ss);
         break;
     }

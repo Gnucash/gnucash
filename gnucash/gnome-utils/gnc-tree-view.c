@@ -1723,6 +1723,10 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
     g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
     renderer = gtk_cell_renderer_toggle_new ();
+    if (!toggle_edited_cb)
+    {
+        gtk_cell_renderer_toggle_set_activatable (GTK_CELL_RENDERER_TOGGLE (renderer), FALSE);
+    }
     column =
         gtk_tree_view_column_new_with_attributes (column_short_title,
                 renderer,

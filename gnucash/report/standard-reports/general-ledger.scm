@@ -34,7 +34,6 @@
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report standard-reports transaction))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -52,7 +51,7 @@
 ;; options generator
 
 (define (general-ledger-options-generator)
-  (let* ((options (trep-options-generator)))
+  (let ((options (gnc:trep-options-generator)))
 
     (define pagename-sorting (N_ "Sorting"))
     (define (set-option! section name value)

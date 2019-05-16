@@ -678,7 +678,7 @@ CsvImpPriceAssist::~CsvImpPriceAssist ()
  * Code related to the file chooser page
  **************************************************/
 
-/* check_for_valid_filename for a valid file to activate the forward button
+/* check_for_valid_filename for a valid file to activate the "Next" button
  */
 bool
 CsvImpPriceAssist::check_for_valid_filename ()
@@ -727,7 +727,7 @@ CsvImpPriceAssist::file_activated_cb ()
 void
 CsvImpPriceAssist::file_selection_changed_cb ()
 {
-    /* Enable the forward button based on a valid filename */
+    /* Enable the "Next" button based on a valid filename */
     gtk_assistant_set_page_complete (csv_imp_asst, file_page,
         check_for_valid_filename ());
 }
@@ -1741,7 +1741,7 @@ void CsvImpPriceAssist::preview_validate_settings ()
 void
 CsvImpPriceAssist::assist_file_page_prepare ()
 {
-    /* Disable the Forward Assistant Button */
+    /* Disable the "Next" Assistant Button */
     gtk_assistant_set_page_complete (csv_imp_asst, file_page, false);
     gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
@@ -1796,7 +1796,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
         // set over_write to false as default
         price_imp->over_write (false);
 
-        /* Disable the Forward Assistant Button */
+        /* Disable the "Next" Assistant Button */
         gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
         /* Load the data into the treeview. */

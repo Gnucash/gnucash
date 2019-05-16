@@ -3,7 +3,7 @@
 if (WIN32 OR APPLE)
   cmake_minimum_required (VERSION 3.3.2)
 else()
-  cmake_minimum_required (VERSION 3.0)
+  cmake_minimum_required (VERSION 3.2)
 endif()
 
 project (gnucash)
@@ -238,23 +238,21 @@ if (MSVC)
   add_definitions ( -DNOMINMAX )
 endif (MSVC)
 
-find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
-		  PATHS /usr/include /opt/gnome/include)
-find_library (LIBINTL_LIBRARY NAMES intl)
-
 find_path (LTDL_INCLUDE_PATH NAMES ltdl.h PATHS /usr/include)
-
 if(NOT LTDL_INCLUDE_PATH-NOTFOUND)
   set(HAVE_LTDL_H 1)
 endif()
-
-
 
 find_program(GLIB_COMPILE_SCHEMAS glib-compile-schemas HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 if (NOT GLIB_COMPILE_SCHEMAS)
   message(SEND_ERROR "Can't find glib-compile-schemas program. Please set GLIB_COMPILE_SCHEMAS.")
 endif(NOT GLIB_COMPILE_SCHEMAS)
 
+find_path (REGEX_INCLUDE_PATH NAMES regex.h
+		  PATHS /usr/include /opt/gnome/include)
+find_library (REGEX_LIBRARY NAMES regex)
+
+# I18N
 if (ALLOW_OLD_GETTEXT)
     find_package (Gettext REQUIRED)
 else (ALLOW_OLD_GETTEXT)
@@ -273,9 +271,11 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
     message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19.6 in order to handle translation of the gnucash.appdata file. The build will be configured with an untranslated gnucash.appdata file.")
 endif ()
 
-find_path (REGEX_INCLUDE_PATH NAMES regex.h
+find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
-find_library (REGEX_LIBRARY NAMES regex)
+find_library (LIBINTL_LIBRARY NAMES intl)
+
+# HELP
 if (WIN32)
   message(STATUS "Looking for htmlhelp.h and htmlhelp.a")
   find_path (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h)
@@ -474,8 +474,8 @@ if (WITH_PYTHON)
     message(SEND_ERROR "Python support enabled, but Python interpreter not found.")
   endif()
 
-  if (PYTHON_VERSION_STRING VERSION_LESS "2.4.0")
-    message(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 2.4.0")
+  if (PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
+    message(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 3.2.0")
   endif()
 
   find_package(PythonLibs 3)
@@ -697,9 +697,6 @@ endif(UNIX OR MINGW)
 endif(ENABLE_BINRELOC)
 
 if (UNIX OR MINGW)
-set (HAVE_BIND_TEXTDOMAIN_CODESET 1)
-set (HAVE_DCGETTEXT 1)
-set (HAVE_GETTEXT 1)
 set (HAVE_GETTIMEOFDAY 1)
 set (HAVE_GUILE 1)
 set (HAVE_LIBM 1)

@@ -244,7 +244,7 @@
           <object class="GtkLabel" id="stock_cash_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Forward'.</property>
+            <property name="label" translatable="yes">If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click "Next".</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
           </object>
@@ -417,7 +417,7 @@
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes.</property>
+        <property name="label" translatable="yes">If you are finished creating the stock split or merger, press "Apply". You may also press "Back" to review your choices, or "Cancel" to quit without making any changes.</property>
         <property name="wrap">True</property>
       </object>
       <packing>

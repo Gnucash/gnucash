@@ -58,15 +58,19 @@
 #include "guile-mappings.h"
 #ifdef __MINGW32__
 #include <Windows.h>
+#include <fcntl.h>
 #endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#ifdef HAVE_GETTEXT
-#  include <libintl.h>
-#  include <locale.h>
-#endif
+/* Change the following to have a console window attached to GnuCash
+ * for displaying stdout and stderr on Windows.
+ */
+#define __MSWIN_CONSOLE__ 0
+
+#include <libintl.h>
+#include <locale.h>
 
 #ifdef MAC_INTEGRATION
 #  include <Foundation/Foundation.h>
@@ -96,7 +100,7 @@ static const char  *add_quotes_file  = NULL;
 static char        *namespace_regexp = NULL;
 static const char  *file_to_load     = NULL;
 static gchar      **args_remaining   = NULL;
-static     gchar *sys_locale = NULL;
+static gchar       *sys_locale       = NULL;
 
 static GOptionEntry options[] =
 {
@@ -611,23 +615,7 @@ inner_main (void *closure, int argc, char **argv)
 
     main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
-#ifdef __MINGW32__
-    /* Guile initialization calls setlocale(LC_ALL, "") which on
-     * windows resets the locale to what the user has set in the
-     * registry. Put it back to what we set from the environment or
-     * environment file.
-     */
-    if (sys_locale)
-    {
-	setlocale (LC_ALL, sys_locale);
-	g_free (sys_locale);
-	sys_locale = NULL;
-    }
-    else
-    {
-	setlocale (LC_ALL, "C");
-    }
-#endif
+
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();
 
@@ -763,37 +751,102 @@ gnc_log_init()
 }
 
 #ifdef __MINGW32__
-/* Set the Win32 internal localization for the main thread if the
- * locale has been overridden in the environment. Note that this is
- * separate from what setlocale() does; that only affects POSIX
- * functions and does *not* set the Windows locale.
+/* If one of the Unix locale variables LC_ALL, LC_MESSAGES, or LANG is
+ * set in the environment check to see if it's a valid locale and if
+ * it is set both the Windows and POSIX locales to that. If not
+ * retrieve the Windows locale and set POSIX to match.
  */
 static void
 set_win32_thread_locale()
 {
-    gunichar2* wlocale = NULL;
+    WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
     char *locale = NULL;
-    int len = 0;
-    if (((locale = getenv ("LC_ALL")) == NULL || locale[0] == '\0')
-      && ((locale = getenv ("LC_MESSAGES")) == NULL || locale[0] == '\0')
-      && ((locale = getenv ("LANG")) == NULL || locale[0] == '\0'))
-	return;
-    len = strchr(locale, '.') - locale;
-    locale[2] = '-';
-    wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
-    if (IsValidLocaleName(wlocale))
+
+    if (((locale = getenv ("LC_ALL")) != NULL && locale[0] != '\0') ||
+      ((locale = getenv ("LC_MESSAGES")) != NULL && locale[0] != '\0') ||
+      ((locale = getenv ("LANG")) != NULL && locale[0] != '\0'))
     {
-	LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
-	SetThreadLocale(lcid);
+	gunichar2* wlocale = NULL;
+	int len = 0;
+	len = strchr(locale, '.') - locale;
+	locale[2] = '-';
+	wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
+	if (IsValidLocaleName(wlocale))
+	{
+	    LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+	    SetThreadLocale(lcid);
+	    locale[2] = '_';
+	    setlocale (LC_ALL, locale);
+	    sys_locale = locale;
+	    g_free(wlocale);
+	    return;
+	}
+	g_free(locale);
+	g_free(wlocale);
     }
-    g_free(locale);
-    g_free(wlocale);
+    if (GetUserDefaultLocaleName(lpLocaleName, LOCALE_NAME_MAX_LENGTH))
+    {
+	sys_locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
+				     LOCALE_NAME_MAX_LENGTH,
+				     NULL, NULL, NULL);
+	sys_locale[2] = '_';
+	setlocale (LC_ALL, sys_locale);
+	return;
+    }
 }
 #endif
+
+/* Creates a console window on MSWindows to display stdout and stderr
+ * when __MSWIN_CONSOLE__ is defined at the top of the file.
+ *
+ * Useful for displaying the diagnostics printed before logging is
+ * started and if logging is redirected with --logto=stderr.
+ */
+static void
+redirect_stdout (void)
+{
+#if defined __MINGW32__ && __MSWIN_CONSOLE__
+    static const WORD MAX_CONSOLE_LINES = 500;
+   int hConHandle;
+    long lStdHandle;
+    CONSOLE_SCREEN_BUFFER_INFO coninfo;
+    FILE *fp;
+
+    // allocate a console for this app
+    AllocConsole();
+
+    // set the screen buffer to be big enough to let us scroll text
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+    coninfo.dwSize.Y = MAX_CONSOLE_LINES;
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+
+    // redirect unbuffered STDOUT to the console
+    lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    fp = _fdopen( hConHandle, "w" );
+    *stdout = *fp;
+    setvbuf( stdout, NULL, _IONBF, 0 );
+
+    // redirect unbuffered STDIN to the console
+    lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    fp = _fdopen( hConHandle, "r" );
+    *stdin = *fp;
+    setvbuf( stdin, NULL, _IONBF, 0 );
+
+    // redirect unbuffered STDERR to the console
+    lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+    fp = _fdopen( hConHandle, "w" );
+    *stderr = *fp;
+    setvbuf( stderr, NULL, _IONBF, 0 );
+#endif
+}
 
 int
 main(int argc, char ** argv)
 {
+    gchar *localedir = gnc_path_get_localedir();
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -807,6 +860,7 @@ main(int argc, char ** argv)
         }
     }
 #endif
+    redirect_stdout ();
 
     /* This should be called before gettext is initialized
      * The user may have configured a different language via
@@ -814,12 +868,12 @@ main(int argc, char ** argv)
      */
 #ifdef MAC_INTEGRATION
     set_mac_locale();
+#elif defined __MINGW32__
+    set_win32_thread_locale();
 #endif
     gnc_environment_setup();
-#ifndef MAC_INTEGRATION /* setlocale already done */
+#if ! defined MAC_INTEGRATION && ! defined __MINGW32__/* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
-#ifdef __MINGW32__
-    set_win32_thread_locale();
 #endif
     if (!sys_locale)
       {
@@ -828,18 +882,12 @@ main(int argc, char ** argv)
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
       }
-#endif
-#ifdef HAVE_GETTEXT
-    {
-        gchar *localedir = gnc_path_get_localedir();
-        bindtextdomain(GETTEXT_PACKAGE, localedir);
-	bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
-	bind_textdomain_codeset("iso_4217", "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-        bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-        g_free(localedir);
-    }
-#endif
+    bindtextdomain(GETTEXT_PACKAGE, localedir);
+    bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
+    bind_textdomain_codeset("iso_4217", "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    g_free(localedir);
 
     gnc_parse_command_line(&argc, &argv);
     gnc_print_unstable_message();
@@ -858,12 +906,9 @@ main(int argc, char ** argv)
      * To be on the safe side, only do this if not on OS X,
      * to avoid unintentionally messing up the locale settings */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");
-    PINFO ("Effective locale set to %s.", setlocale (LC_ALL, ""));
-#ifndef __MINGW32__
-    /* We need it for later on Windows, see inner_main(). */
+    PINFO ("Effective locale set to %s.", setlocale (LC_ALL, NULL));
     g_free (sys_locale);
     sys_locale = NULL;
-#endif
 #endif
 
     /* If asked via a command line parameter, fetch quotes only */

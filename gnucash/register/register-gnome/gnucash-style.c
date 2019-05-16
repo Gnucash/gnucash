@@ -709,9 +709,9 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
 
     if (style->dimensions->refcount == 0)
     {
+        style_dimensions_destroy (style->dimensions);
         g_hash_table_remove (sheet->dimensions_hash_table,
                              style_get_key (style));
-        style_dimensions_destroy (style->dimensions);
     }
 
     g_free (style);

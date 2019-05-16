@@ -79,7 +79,7 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-    heading_label  = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
+    heading_label  = GTK_WIDGET(gtk_builder_get_object (builder, "date_heading_label"));
     first_button  = GTK_WIDGET(gtk_builder_get_object (builder, "first_button"));
     last_retrieval_button  = GTK_WIDGET(gtk_builder_get_object (builder, "last_retrieval_button"));
     info.enter_from_button  = GTK_WIDGET(gtk_builder_get_object (builder, "enter_from_button"));

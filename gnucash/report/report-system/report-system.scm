@@ -131,6 +131,7 @@
 (export gnc:menuname-budget)
 (export gnc:menuname-taxes)
 (export gnc:menuname-utility)
+(export gnc:menuname-experimental)
 (export gnc:menuname-custom)
 (export gnc:menuname-business-reports)
 (export gnc:pagename-general)
@@ -743,6 +744,10 @@
 (export gnc:strify)
 (export gnc:pk)
 
+;; trep-engine.scm
+(export gnc:trep-options-generator)
+(export gnc:trep-renderer)
+
 (load-from-path "commodity-utilities")
 (load-from-path "html-barchart")
 (load-from-path "html-document")
@@ -761,5 +766,6 @@
 (load-from-path "options-utilities")
 (load-from-path "report-utilities")
 (load-from-path "report")
+(load-from-path "trep-engine")
 
 (gnc-hook-add-scm-dangler HOOK-SAVE-OPTIONS gnc:save-style-sheet-options)

@@ -363,12 +363,14 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
     nacc = gnc_account_n_descendants (gnc_book_get_root_account (currbook));
 
     /* Display the book info */
+
     period_text =
+	/* Translators: Run the assistent in your language to see GTK's translation of the button labels. */
         _("You have asked for a book to be created. This book "
           "will contain all transactions up to midnight %s "
           "(for a total of %d transactions spread over %d accounts).\n\n "
-          "Amend the Title and Notes or Click on 'Forward' to proceed.\n "
-          "Click on 'Back' to adjust the dates or 'Cancel'.");
+          "Amend the Title and Notes or Click on \"Next\" to proceed.\n "
+          "Click on \"Back\" to adjust the dates or \"Cancel\".");
     str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
     gtk_label_set_text (GTK_LABEL(info->book_details), str);
     g_free (str);
@@ -400,8 +402,8 @@ ap_assistant_apply_prepare (GtkAssistant *assistant, gpointer user_data)
     char *str;
     const char *apply_text =
         _("The book will be created with the title %s when you "
-          "click on 'Apply'. Click on 'Back' to adjust, "
-	  "or 'Cancel' to not create any book.");
+          "click on \"Apply\". Click on \"Back\" to adjust, "
+	  "or \"Cancel\" to not create any book.");
 
     btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
     str = g_strdup_printf (apply_text, btitle);

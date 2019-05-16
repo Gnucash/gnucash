@@ -404,13 +404,7 @@
               (else #f)))
 
       (if price
-          ;; The second argument to inexact->exact is chosen to give reasonable values
-          ;; for prices between .12345e-9 and 12345678.87654
-          
-          ;; inexact->exact is probably not necessary but it can't hurt and is cheap.
-          (set! price
-                (gnc-scm-to-numeric 
-                  (rationalize (inexact->exact price) 1/1000000000000000))))
+          (set! price (gnc-scm-to-numeric price)))
       (if gnc-time
           (set! gnc-time (timestr->time64 gnc-time time-zone))
           (set! gnc-time (gnc:get-today)))
