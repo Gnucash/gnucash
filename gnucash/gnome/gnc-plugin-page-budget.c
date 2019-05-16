@@ -115,6 +115,8 @@ static void gnc_plugin_page_budget_cmd_view_options(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_estimate_budget(
     GtkAction *action, GncPluginPageBudget *page);
+static void gnc_plugin_page_budget_cmd_allperiods_budget(
+    GtkAction *action, GncPluginPageBudget *page);
 
 static GtkActionEntry gnc_plugin_page_budget_actions [] =
 {
@@ -151,6 +153,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
         N_("Estimate a budget value for the selected accounts from past transactions"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_estimate_budget)
     },
+    {
+        "AllPeriodsBudgetAction", "system-run", N_("All Periods"),
+        NULL,
+        N_("Edit budget for all periods for the selected accounts"),
+        G_CALLBACK (gnc_plugin_page_budget_cmd_allperiods_budget)
+    },
 
     /* View menu */
     {
@@ -179,8 +187,17 @@ static action_toolbar_labels toolbar_labels[] =
     { "DeleteBudgetAction",         N_("Delete") },
     { "OptionsBudgetAction",        N_("Options") },
     { "EstimateBudgetAction",       N_("Estimate") },
+    { "AllPeriodsBudgetAction",     N_("All Periods") },
     { NULL, NULL },
 };
+
+typedef enum allperiods_action 
+{
+    REPLACE,
+    ADD,
+    MULTIPLY,
+    UNSET
+} allperiods_action; 
 
 typedef struct GncPluginPageBudgetPrivate
 {
@@ -205,6 +222,11 @@ typedef struct GncPluginPageBudgetPrivate
     Recurrence r;
     gint sigFigs;
     gboolean useAvg;
+
+    /* For the allPeriods value dialog */
+    gnc_numeric allValue;
+    allperiods_action action;
+
 } GncPluginPageBudgetPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
@@ -864,11 +886,13 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     if (priv->useAvg && num_periods)
     {
         num = xaccAccountGetBalanceChangeForPeriod(acct, 
-            recurrenceGetPeriodTime(&priv->r, 0, FALSE),
-            recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
+                recurrenceGetPeriodTime(&priv->r, 0, FALSE),
+                recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
         num = gnc_numeric_div(num, 
-            gnc_numeric_create(num_periods, 1), GNC_DENOM_AUTO,
-            GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
+                              gnc_numeric_create(num_periods, 1), 
+                              GNC_DENOM_AUTO,
+                              GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | 
+                              GNC_HOW_RND_ROUND_HALF_UP);
 
         if (gnc_reverse_balance(acct))
             num = gnc_numeric_neg(num);
@@ -979,6 +1003,133 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
     g_object_unref(G_OBJECT(builder));
 }
 
+static void
+allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
+                         GtkTreeIter *iter, gpointer data)
+{
+    Account *acct;
+    guint num_periods, i;
+    gnc_numeric num;
+    GncPluginPageBudgetPrivate *priv;
+    GncPluginPageBudget *page = data;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    acct = gnc_budget_view_get_account_from_path(priv->budget_view, path);
+    num_periods = gnc_budget_get_num_periods(priv->budget);
+    num = priv->allValue;
+
+    for (i = 0; i < num_periods; i++)
+    {
+        switch (priv->action)
+        {
+        case ADD:
+            num = gnc_budget_get_account_period_value(priv->budget, acct, i);
+            num = gnc_numeric_add(num, priv->allValue, GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
+                                  GNC_HOW_RND_ROUND_HALF_UP);
+            gnc_budget_set_account_period_value(priv->budget, acct, i, num);
+            break;
+        case MULTIPLY:
+            num = gnc_budget_get_account_period_value(priv->budget, acct, i);
+            num = gnc_numeric_mul(num, priv->allValue, GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
+                                  GNC_HOW_RND_ROUND_HALF_UP);
+            gnc_budget_set_account_period_value(priv->budget, acct, i, num);
+            break;
+        case UNSET:
+            gnc_budget_unset_account_period_value(priv->budget, acct, i);
+            break;
+        default:
+            gnc_budget_set_account_period_value(priv->budget, acct, i,
+                                                priv->allValue);
+            break;
+        }
+    }
+}
+
+/*******************************/
+/*  All Periods Value Dialog   */
+/*******************************/
+static void
+gnc_plugin_page_budget_cmd_allperiods_budget(GtkAction *action,
+                                             GncPluginPageBudget *page)
+{
+    GncPluginPageBudgetPrivate *priv;
+    GtkTreeSelection *sel;
+    GtkWidget *dialog, *gde, *val, *dtr, *add, *mult;
+    gint result;
+    GtkBuilder *builder;
+    const gchar *txt;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    sel = gnc_budget_view_get_selection(priv->budget_view);
+
+    if (gtk_tree_selection_count_selected_rows(sel) <= 0)
+    {
+        dialog = gtk_message_dialog_new(
+                    GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
+                    GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                    GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
+                    _("You must select at least one account to edit."));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.glade",
+                              "DigitsToRound_Adj");
+    gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.glade",
+                              "budget_allperiods_dialog");
+
+    dialog = GTK_WIDGET(
+        gtk_builder_get_object(builder, "budget_allperiods_dialog"));
+
+    gtk_window_set_transient_for(
+        GTK_WINDOW(dialog),
+        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+
+    val = GTK_WIDGET(gtk_builder_get_object(builder, "Value"));
+    gtk_entry_set_text(GTK_ENTRY(val), "");
+
+    dtr = GTK_WIDGET(gtk_builder_get_object(builder, "DigitsToRound1"));
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(dtr), (gdouble)priv->sigFigs);
+
+    add  = GTK_WIDGET(gtk_builder_get_object(builder, "RB_Add"));
+    mult = GTK_WIDGET(gtk_builder_get_object(builder, "RB_Multiply"));
+
+    gtk_widget_show_all(dialog);
+    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    switch (result)
+    {
+    case GTK_RESPONSE_OK:
+
+        priv->sigFigs = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(dtr));
+        priv->action = REPLACE;
+        txt = gtk_entry_get_text(GTK_ENTRY(val));
+
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(add)))
+            priv->action = ADD;
+        else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mult)))
+            priv->action = MULTIPLY;
+
+        if (priv->action == REPLACE &&
+            !gtk_entry_get_text_length(GTK_ENTRY(val)))
+            priv->action = UNSET;
+
+        if (xaccParseAmount(txt, TRUE, &priv->allValue, NULL) ||
+            priv->action == UNSET)
+            gtk_tree_selection_selected_foreach(sel, allperiods_budget_helper,
+                                                page);
+        break;
+    default:
+        break;
+    }
+    gtk_widget_destroy(dialog);
+    g_object_unref(G_OBJECT(builder));
+}
 
 static void
 gnc_plugin_page_budget_cmd_view_filter_by (GtkAction *action,
