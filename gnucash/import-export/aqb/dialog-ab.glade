@@ -26,13 +26,14 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="abort_button">
-                <property name="label">_Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <signal name="clicked" handler="ggg_abort_clicked_cb" swapped="no"/>
               </object>
               <packing>
@@ -43,12 +44,13 @@
             </child>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="label">C_lose</property>
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <signal name="clicked" handler="ggg_close_clicked_cb" swapped="no"/>
               </object>
               <packing>
@@ -205,8 +207,9 @@
                   <object class="GtkLabel" id="label8877444">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Log Messages&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;_Log Messages&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -246,7 +249,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="close_checkbutton">
-                <property name="label" translatable="yes">Close when finished</property>
+                <property name="label" translatable="yes">Close when _finished</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -297,12 +300,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel_button1">
-                <property name="label">_Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -312,12 +316,13 @@
             </child>
             <child>
               <object class="GtkButton" id="ok_button">
-                <property name="label">_OK</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -603,12 +608,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton2">
-                <property name="label">_Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -618,12 +624,13 @@
             </child>
             <child>
               <object class="GtkButton" id="okbutton2">
-                <property name="label">_OK</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -670,7 +677,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Password:</property>
+                    <property name="label" translatable="yes">_Password:</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -683,7 +691,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Confirm Password:</property>
+                    <property name="label" translatable="yes">Con_firm Password:</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -721,13 +730,13 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="remember_pin">
-                    <property name="label" translatable="yes">Remember the _PIN in memory</property>
+                    <property name="label" translatable="yes">_Remember the PIN in memory</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
-                    <property name="tooltip_text" translatable="yes">If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
+                    <property name="tooltip_text" translatable="yes">If active, the PIN for FinTS/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
@@ -779,12 +788,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancelbutton1">
-                <property name="label">_Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -794,13 +804,14 @@
             </child>
             <child>
               <object class="GtkButton" id="okbutton1">
-                <property name="label">_OK</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -827,7 +838,8 @@
               <object class="GtkLabel" id="label8877450">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Enter name for new template:</property>
+                <property name="label" translatable="yes"> _Name of the new template:</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -839,6 +851,7 @@
               <object class="GtkEntry" id="template_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Enter a unique name for the new template.</property>
                 <property name="max_length">250</property>
                 <property name="invisible_char">●</property>
                 <property name="activates_default">True</property>
@@ -900,12 +913,13 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">_Cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -986,7 +1000,8 @@
                   <object class="GtkLabel" id="recp_account_heading">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Recipient Account Number</property>
+                    <property name="label" translatable="yes">Recipient Account _Number</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1013,7 +1028,8 @@
                   <object class="GtkLabel" id="recp_bankcode_heading">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Recipient Bank Code</property>
+                    <property name="label" translatable="yes">Recipient _Bank Code</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1041,7 +1057,8 @@
                   <object class="GtkLabel" id="recp_name_heading">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Recipient Name</property>
+                    <property name="label" translatable="yes">_Recipient Name</property>
+                    <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="xalign">0</property>
                   </object>
@@ -1082,7 +1099,8 @@
                   <object class="GtkLabel" id="label8877434">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Amount</property>
+                    <property name="label" translatable="yes">_Amount</property>
+                    <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="xalign">0</property>
                   </object>
@@ -1096,7 +1114,8 @@
                   <object class="GtkLabel" id="label8877433">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Payment Purpose (only for recipient)</property>
+                    <property name="label" translatable="yes">Payment _Purpose (only for recipient)</property>
+                    <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="xalign">0</property>
                   </object>
@@ -1124,7 +1143,7 @@
                   <object class="GtkLabel" id="orig_name_heading">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Originator Name</property>
+                    <property name="label" translatable="yes">_Originator Name</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1486,7 +1505,8 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Templates</property>
+                    <property name="label" translatable="yes">_Templates</property>
+                    <property name="use_underline">True</property>
                   </object>
                 </child>
               </object>
