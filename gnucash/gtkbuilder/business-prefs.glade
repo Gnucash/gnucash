@@ -296,7 +296,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Days in advance:</property>
+            <property name="label" translatable="yes">Days in ad_vance:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.business.bill/days-in-advance</property>
           </object>
@@ -363,7 +363,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">_Days in advance:</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">pref/dialogs.business.bill/days-in-advance</property>
+            <property name="mnemonic_widget">pref/dialogs.business.invoice/days-in-advance</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
