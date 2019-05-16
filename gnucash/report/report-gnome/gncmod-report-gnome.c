@@ -88,7 +88,7 @@ libgncmod_report_gnome_gnc_module_init(int refcount)
         return FALSE;
     }
 
-    lmod ("(gnucash report standard-reports)");
+    lmod ("(gnucash report reports)");
     lmod ("(gnucash report business-reports)");
     lmod ("(gnucash report utility-reports)");
 

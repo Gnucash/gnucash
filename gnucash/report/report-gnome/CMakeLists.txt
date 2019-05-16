@@ -62,7 +62,7 @@ set(GUILE_DEPENDS
   scm-gnc-module
   scm-scm
   scm-report-system
-  scm-standard-reports
+  scm-reports
   scm-business-reports
   scm-utility-reports
   )

@@ -32,7 +32,7 @@ set(GUILE_DEPENDS
   scm-engine
   scm-scm
   scm-business-reports-links
-  scm-standard-reports
+  scm-reports
   scm-report-system
   )
 

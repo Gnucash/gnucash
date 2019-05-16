@@ -24,7 +24,7 @@
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/engine" 0)
 
-(use-modules (gnucash report standard-reports))
+(use-modules (gnucash report reports))
 (use-modules (gnucash report business-reports))
 
 (use-modules (gnucash report eguile-utilities))
