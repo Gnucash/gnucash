@@ -13,7 +13,7 @@ set(GUILE_DEPENDS
   scm-report-stylesheets
 )
 
-gnc_add_scheme_targets(scm-test-load-report-stylesheets-module
+gnc_add_scheme_test_targets(scm-test-load-report-stylesheets-module
   "test-load-report-stylesheets-module.scm"
   "gnucash/report"
   "${GUILE_DEPENDS}"

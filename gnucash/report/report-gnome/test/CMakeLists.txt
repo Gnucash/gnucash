@@ -22,7 +22,7 @@ set(GUILE_DEPENDS
 add_custom_target(test-report-gnome ALL DEPENDS ${GUILE_DEPENDS})
 add_dependencies(test-link-module-report-gnome test-report-gnome)
 
-gnc_add_scheme_targets(scm-test-load-report-gnome-module
+gnc_add_scheme_test_targets(scm-test-load-report-gnome-module
   "test-load-report-gnome-module.scm"
   "gnucash/reports"
   "${GUILE_DEPENDS}"
