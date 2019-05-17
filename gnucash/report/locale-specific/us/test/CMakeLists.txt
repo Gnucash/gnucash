@@ -14,7 +14,7 @@ gnc_add_test(test-link-module-report-locale-specific-us test-link-module.c
 #  gncmod-engine
 #)
 #
-#gnc_add_scheme_targets(test-load-report-locale-specific-module
+#gnc_add_scheme_test_targets(test-load-report-locale-specific-module
 #  "test-load-report-locale-specific-module.scm"
 #  "gnucash/report"
 #  "${GUILE_DEPENDS}"

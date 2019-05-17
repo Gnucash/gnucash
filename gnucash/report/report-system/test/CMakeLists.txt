@@ -39,14 +39,14 @@ if (HAVE_SRFI64)
   gnc_add_scheme_tests ("${scm_test_report_system_with_srfi64_SOURCES}")
 endif (HAVE_SRFI64)
 
-gnc_add_scheme_targets(scm-test-report-system
+gnc_add_scheme_test_targets(scm-test-report-system
   "test-extras.scm"
   gnucash/report/report-system/test
   "${GUILE_DEPENDS}"
   FALSE
   )
 
-gnc_add_scheme_targets(scm-test-report-system-2
+gnc_add_scheme_test_targets(scm-test-report-system-2
   "${scm_test_report_system_SOURCES}"
   gnucash/report/report-system/test
   "scm-test-report-system"

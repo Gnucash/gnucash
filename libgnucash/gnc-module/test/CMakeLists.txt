@@ -66,7 +66,7 @@ set(GUILE_DEPENDS
   gncmod-futuremodsys
   )
 
-gnc_add_scheme_targets(test-gnc-modules-scm
+gnc_add_scheme_test_targets(test-gnc-modules-scm
   "${test_gnc_module_SCHEME}"
   "gnucash/gnc-modules/test"
   "${GUILE_DEPENDS}"

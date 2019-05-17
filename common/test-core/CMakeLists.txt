@@ -59,7 +59,7 @@ set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS      test-core-guile)
 
 
-gnc_add_scheme_targets(scm-test-core
+gnc_add_scheme_test_targets(scm-test-core
   ${test_core_SCHEME}
   ${GUILE_OUTPUT_DIR}
   "${GUILE_DEPENDS}"
