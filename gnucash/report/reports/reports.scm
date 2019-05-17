@@ -43,7 +43,7 @@
 
 (define report-dirs (list
     "standard" ; base directory for standard reports included in gnucash
-    "sample" ; base directory for experimental and sample reports included in gnucash
+    "example"  ; base directory for example reports included in gnucash
 ))
 
 ;; Returns a list of files in a directory

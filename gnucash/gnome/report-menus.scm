@@ -25,6 +25,7 @@
 
 
 (define-module (gnucash report-menus))
+(use-modules (gnucash core-utils))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
@@ -76,8 +77,8 @@
     (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
   (define budget-menu
     (gnc:make-menu gnc:menuname-budget (list gnc:menuname-reports)))
-  (define utility-menu
-    (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
+  (define example-menu
+    (gnc:make-menu gnc:menuname-example (list gnc:menuname-reports)))
   (define experimental-menu
     (gnc:make-menu gnc:menuname-experimental (list gnc:menuname-reports)))
   (define multicolumn-menu
@@ -101,7 +102,7 @@
   (gnc-add-scm-extension income-expense-menu)
   (gnc-add-scm-extension asset-liability-menu)
   (gnc-add-scm-extension budget-menu)
-  (gnc-add-scm-extension utility-menu)
+  (gnc-add-scm-extension example-menu)
   (gnc-add-scm-extension experimental-menu)
   (gnc-add-scm-extension multicolumn-menu)
   (gnc-add-scm-extension business-menu)
