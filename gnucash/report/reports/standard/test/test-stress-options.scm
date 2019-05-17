@@ -5,7 +5,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report reports))
-(use-modules (gnucash report reports sample view-column))
+(use-modules (gnucash report reports standard view-column))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report reports standard taxinvoice))
 (use-modules (gnucash report report-system))

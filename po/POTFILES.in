@@ -424,13 +424,14 @@ gnucash/report/report-gnome/gnc-plugin-page-report.c
 gnucash/report/report-gnome/report-gnome.scm
 gnucash/report/report-gnome/window-report.c
 gnucash/report/reports/aging.scm
+gnucash/report/reports/example/average-balance.scm
+gnucash/report/reports/example/daily-reports.scm
+gnucash/report/reports/example/hello-world.scm
+gnucash/report/reports/example/welcome-to-gnucash.scm
 gnucash/report/reports/reports.scm
-gnucash/report/reports/sample/hello-world.scm
-gnucash/report/reports/sample/welcome-to-gnucash.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm
 gnucash/report/reports/standard/advanced-portfolio.scm
-gnucash/report/reports/standard/average-balance.scm
 gnucash/report/reports/standard/balance-forecast.scm
 gnucash/report/reports/standard/balance-sheet.scm
 gnucash/report/reports/standard/balsheet-eg.scm
@@ -444,7 +445,6 @@ gnucash/report/reports/standard/cashflow-barchart.scm
 gnucash/report/reports/standard/cash-flow.scm
 gnucash/report/reports/standard/category-barchart.scm
 gnucash/report/reports/standard/customer-summary.scm
-gnucash/report/reports/standard/daily-reports.scm
 gnucash/report/reports/standard/dashboard.scm
 gnucash/report/reports/standard/equity-statement.scm
 gnucash/report/reports/standard/general-journal.scm

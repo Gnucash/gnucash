@@ -136,7 +136,7 @@
 (export gnc:menuname-income-expense)
 (export gnc:menuname-budget)
 (export gnc:menuname-taxes)
-(export gnc:menuname-utility)
+(export gnc:menuname-example)
 (export gnc:menuname-multicolumn)
 (export gnc:menuname-experimental)
 (export gnc:menuname-custom)

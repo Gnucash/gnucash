@@ -26,7 +26,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report reports standard average-balance))
+(define-module (gnucash report reports example average-balance))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
@@ -493,6 +493,6 @@
  'version 1
  'name reportname
  'report-guid "d5adcc61c62e4b8684dd8907448d7900"
- 'menu-path (list gnc:menuname-asset-liability)
+ 'menu-path (list gnc:menuname-example)
  'options-generator options-generator
  'renderer renderer)

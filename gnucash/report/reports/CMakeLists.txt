@@ -14,7 +14,6 @@ set (reports_standard_SCHEME
     standard/account-piecharts.scm
     standard/account-summary.scm
     standard/advanced-portfolio.scm
-    standard/average-balance.scm
     standard/balance-sheet.scm
     standard/balance-forecast.scm
     standard/balsheet-pnl.scm
@@ -26,7 +25,6 @@ set (reports_standard_SCHEME
     standard/cash-flow.scm
     standard/cashflow-barchart.scm
     standard/category-barchart.scm
-    standard/daily-reports.scm
     standard/dashboard.scm
     standard/equity-statement.scm
     standard/general-journal.scm
@@ -53,9 +51,11 @@ set (reports_standard_SCHEME
     standard/balsheet-eg.scm
     )
 
-set(reports_sample_SCHEME
-  sample/hello-world.scm
-  sample/welcome-to-gnucash.scm
+set(reports_example_SCHEME
+  example/average-balance.scm
+  example/daily-reports.scm
+  example/hello-world.scm
+  example/welcome-to-gnucash.scm
 )
 
 
@@ -69,14 +69,14 @@ set(scm_rpts_GUILE_DEPENDS
   scm-report-system
   )
 
-set(scm_rpt_sample_GUILE_DEPENDS
+set(scm_rpt_example_GUILE_DEPENDS
   gncmod-html
   scm-app-utils
   scm-core-utils
   scm-gettext
   scm-gnc-module
   scm-scm
-  scm-reports-sample-links
+  scm-reports-example-links
   scm-gnome-utils
   scm-report-system
   )
@@ -111,14 +111,14 @@ gnc_add_scheme_targets(scm-reports-standard
 )
 
 
-gnc_add_scheme_targets(scm-reports-sample
-  "${reports_sample_SCHEME}"
-  "gnucash/report/reports/sample"
-  "${scm_rpt_sample_GUILE_DEPENDS}"
+gnc_add_scheme_targets(scm-reports-example
+  "${reports_example_SCHEME}"
+  "gnucash/report/reports/example"
+  "${scm_rpt_example_GUILE_DEPENDS}"
   TRUE
 )
 
-add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-sample scm-reports-common scm-rpt-reports)
+add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-example scm-reports-common scm-rpt-reports)
 
-set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_sample_SCHEME})
+set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME})
 set(reports_DIST ${reports_DIST_local} ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)
