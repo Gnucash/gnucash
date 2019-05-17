@@ -23,8 +23,8 @@
 
 (use-modules (srfi srfi-64))
 (use-modules (ice-9 pretty-print))
-(use-modules (gnucash engine test srfi64-extras))
-(use-modules (gnucash engine test test-extras))
+(use-modules (tests srfi64-extras))
+(use-modules (tests test-engine-extras))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))

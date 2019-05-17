@@ -1,4 +1,4 @@
-(use-modules (gnucash unittest-support))
+(use-modules (tests unittest-support))
 (define log-domain "gnc.module")
 (define check (new-TestErrorStruct))
 (define log-level (G-LOG-LEVEL-WARNING))

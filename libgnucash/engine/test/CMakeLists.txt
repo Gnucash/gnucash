@@ -229,8 +229,8 @@ set(engine_test_SCHEME
 set(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-scm scm-engine)
 
 gnc_add_scheme_test_targets(scm-test-engine-extras
-  "test-extras.scm"
-  "gnucash/engine/test/"
+  "test-engine-extras.scm"
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
   )
@@ -238,7 +238,7 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
 if (HAVE_SRFI64)
   gnc_add_scheme_test_targets (scm-srfi64-extras
     "srfi64-extras.scm"
-    "gnucash/engine/test/"
+    "tests"
     "${GUILE_DEPENDS}"
     FALSE
     )
@@ -256,7 +256,7 @@ endif (HAVE_SRFI64)
 
 gnc_add_scheme_test_targets(scm-test-engine
   "${engine_test_SCHEME}"
-  ""
+  "tests"
   "${GUILE_DEPENDS};scm-test-engine-extras"
   FALSE
   )
@@ -320,7 +320,7 @@ set(test_engine_SOURCES_DIST
 set(test_engine_SCHEME_DIST
         test-account.scm
         test-create-account.scm
-        test-extras.scm
+        test-engine-extras.scm
         test-scm-query-import.scm
         test-split.scm
         test-business-core.scm

@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash engine test test-extras))
+(define-module (tests test-engine-extras))
 
 (use-modules (gnucash gnc-module))
 

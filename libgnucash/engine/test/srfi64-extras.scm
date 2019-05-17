@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash engine test srfi64-extras))
+(define-module (tests srfi64-extras))
 (use-modules (srfi srfi-64))
 
 (export gnc:test-runner)

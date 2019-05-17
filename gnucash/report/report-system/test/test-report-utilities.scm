@@ -4,9 +4,9 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 
 (use-modules (srfi srfi-64))
-(use-modules (gnucash engine test srfi64-extras))
-(use-modules (gnucash engine test test-extras))
-(use-modules (gnucash report report-system test test-extras))
+(use-modules (tests srfi64-extras))
+(use-modules (tests test-engine-extras))
+(use-modules (tests test-report-system-extras))
 (use-modules (gnucash report report-system))
 
 (setlocale LC_ALL "C")

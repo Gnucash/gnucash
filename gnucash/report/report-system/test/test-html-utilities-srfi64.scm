@@ -3,10 +3,10 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 
-(use-modules (gnucash engine test test-extras))
-(use-modules (gnucash report report-system test test-extras))
+(use-modules (tests test-engine-extras))
+(use-modules (tests test-report-system-extras))
 (use-modules (gnucash report report-system))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 (use-modules (srfi srfi-64))
 
 (define (run-test)

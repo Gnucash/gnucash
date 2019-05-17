@@ -68,7 +68,7 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_test_targets(test-gnc-modules-scm
   "${test_gnc_module_SCHEME}"
-  "gnucash/gnc-modules/test"
+  "tests"
   "${GUILE_DEPENDS}"
   TRUE
   )

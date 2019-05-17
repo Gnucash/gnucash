@@ -3,7 +3,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
-(use-modules (gnucash engine test test-extras))
+(use-modules (tests test-engine-extras))
 (use-modules (gnucash report reports))
 (use-modules (gnucash report reports sample view-column))
 (use-modules (gnucash report stylesheets))
@@ -13,7 +13,7 @@
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-64))
 (use-modules (srfi srfi-98))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 

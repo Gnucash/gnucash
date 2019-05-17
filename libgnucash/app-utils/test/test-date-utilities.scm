@@ -1,8 +1,8 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
-(use-modules (gnucash engine test test-extras))
+(use-modules (tests test-engine-extras))
 (use-modules (srfi srfi-64))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)

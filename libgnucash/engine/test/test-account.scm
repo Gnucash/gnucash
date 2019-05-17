@@ -4,7 +4,7 @@
 
 (use-modules (gnucash engine))
 
-(use-modules (gnucash engine test test-extras))
+(use-modules (tests test-engine-extras))
 
 ;; this test suite tests deprecated functions.
 
