@@ -782,16 +782,6 @@ developing over time"))
     (gnc:report-finished)
     document))
 
-;; Export reports
-
-(export category-barchart-income-uuid category-barchart-expense-uuid
-        category-barchart-asset-uuid category-barchart-liability-uuid)
-
-(define category-barchart-income-uuid "44f81bee049b4b3ea908f8dac9a9474e")
-(define category-barchart-expense-uuid "b1f15b2052c149df93e698fe85a81ea6")
-(define category-barchart-asset-uuid "e9cf815f79db44bcb637d0295093ae3d")
-(define category-barchart-liability-uuid "faf410e8f8da481fbc09e4763da40bcc")
-
 (for-each
  (lambda (l)
    (let ((tip-and-rev (cddddr l)))

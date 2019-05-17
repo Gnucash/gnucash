@@ -1,6 +1,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report reports standard category-barchart))
 (use-modules (gnucash report reports standard net-charts))
 (use-modules (gnucash report reports standard account-piecharts))
 (use-modules (gnucash report reports standard cashflow-barchart))
