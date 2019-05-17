@@ -26,7 +26,7 @@ function(make_unix_path_list PATH)
     set(${PATH} ${newpath} PARENT_SCOPE)
 endfunction()
 
-function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
+function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
                                 MAKE_LINKS)
   set(__DEBUG FALSE)
   if (__DEBUG)
@@ -163,6 +163,20 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     message("TARGET_FILES are ${_TARGET_FILES}")
   endif(__DEBUG)
   add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
+  set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
+endfunction(make_scheme_targets)
+
+function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
+    MAKE_LINKS)
+  make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
+                      "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
   install(FILES ${_TARGET_FILES} DESTINATION ${SCHEME_INSTALLED_CACHE_DIR}/${_OUTPUT_DIR})
   install(FILES ${_SOURCE_FILES} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/${_OUTPUT_DIR})
 endfunction(gnc_add_scheme_targets)
+
+function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
+    MAKE_LINKS)
+  make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
+                      "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
+  add_dependencies(check ${_TARGET})
+endfunction(gnc_add_scheme_test_targets)

@@ -19,7 +19,7 @@ target_include_directories(gncmod-foo PRIVATE
   ${GUILE_INCLUDE_DIRS}
 )
 
-gnc_add_scheme_targets(scm-mod-foo
+gnc_add_scheme_test_targets(scm-mod-foo
   gnucash/foo.scm
   "gnucash"
   gncmod-foo
