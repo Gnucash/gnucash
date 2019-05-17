@@ -92,21 +92,21 @@ set(scm_rpt_std_GUILE_DEPENDS
 gnc_add_scheme_targets(scm-rpt-reports
   "${reports_SCHEME}"
   "gnucash/report"
-  "scm-reports-standard;${scm_rpts_GUILE_DEPENDS}"
+  "${scm_rpts_GUILE_DEPENDS}"
   TRUE
 )
 
 gnc_add_scheme_targets(scm-reports-common
   "${reports_common_SCHEME}"
   "gnucash/report/reports"
-  "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
+  "scm-reports-common-links;scm-rpt-reports;${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
 gnc_add_scheme_targets(scm-reports-standard
   "${reports_standard_SCHEME}"
   "gnucash/report/reports/standard"
-  "${scm_rpt_std_GUILE_DEPENDS}"
+  "scm-rpt-reports;${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
