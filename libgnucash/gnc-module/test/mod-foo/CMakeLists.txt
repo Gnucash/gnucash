@@ -21,7 +21,7 @@ target_include_directories(gncmod-foo PRIVATE
 
 gnc_add_scheme_test_targets(scm-mod-foo
   gnucash/foo.scm
-  "gnucash"
+  "tests"
   gncmod-foo
   TRUE
   )

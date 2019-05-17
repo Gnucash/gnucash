@@ -21,7 +21,7 @@
 (use-modules (srfi srfi-14))
 (use-modules (srfi srfi-64))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 
@@ -31,9 +31,9 @@
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (gnucash report reports standard budget))
-(use-modules (gnucash report report-system test test-extras))
+(use-modules (tests test-report-system-extras))
 (use-modules (gnucash report stylesheets))
-(use-modules (gnucash engine test test-extras))
+(use-modules (tests test-engine-extras))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")

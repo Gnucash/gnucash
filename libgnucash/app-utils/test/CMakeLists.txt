@@ -51,14 +51,14 @@ set (test_app_utils_scheme_SRFI64_SOURCES
 
 gnc_add_scheme_test_targets(scm-test-load-app-utils-module
   "test-load-app-utils-module.scm"
-  "gnucash/reports"
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
 gnc_add_scheme_test_targets(scm-test-c-interface
   "test-c-interface.scm"
-  ""
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
 )

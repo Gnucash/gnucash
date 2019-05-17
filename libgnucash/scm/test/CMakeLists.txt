@@ -12,7 +12,7 @@ set(GUILE_DEPENDS
 if (HAVE_SRFI64)
   gnc_add_scheme_test_targets(scm-test-scm
     "${scm_test_SCHEME}"
-    ""
+    "tests"
     "${GUILE_DEPENDS}"
     FALSE
     )

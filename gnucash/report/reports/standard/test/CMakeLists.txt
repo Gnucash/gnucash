@@ -44,7 +44,7 @@ gnc_add_scheme_tests("${scm_test_reports_standard_SOURCES}")
 
 gnc_add_scheme_test_targets(scm-test-reports-standard
   "${scm_test_reports_standard_SOURCES}"
-  gnucash/report/reports/standard/test
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
 )
