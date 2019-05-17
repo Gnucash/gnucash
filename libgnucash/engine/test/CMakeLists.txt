@@ -257,7 +257,7 @@ endif (HAVE_SRFI64)
 gnc_add_scheme_test_targets(scm-test-engine
   "${engine_test_SCHEME}"
   "tests"
-  "${GUILE_DEPENDS};scm-test-engine-extras"
+  "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras"
   FALSE
   )
 

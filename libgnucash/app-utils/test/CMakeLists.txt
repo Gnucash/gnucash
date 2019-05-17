@@ -67,6 +67,13 @@ gnc_add_scheme_test_targets(scm-test-c-interface
 gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 
 if (HAVE_SRFI64)
+  gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
+    "${test_app_utils_scheme_SRFI64_SOURCES}"
+    "tests"
+    "${GUILE_DEPENDS};scm-srfi64-extras"
+    FALSE
+    )
+
   gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif ()
 
