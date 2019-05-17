@@ -425,6 +425,7 @@ gnucash/report/report-gnome/report-gnome.scm
 gnucash/report/report-gnome/window-report.c
 gnucash/report/reports/aging.scm
 gnucash/report/reports/reports.scm
+gnucash/report/reports/sample/dashboard.scm
 gnucash/report/reports/sample/hello-world.scm
 gnucash/report/reports/sample/view-column.scm
 gnucash/report/reports/sample/welcome-to-gnucash.scm

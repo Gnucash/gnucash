@@ -52,6 +52,7 @@ set (reports_standard_SCHEME
     )
 
 set(reports_sample_SCHEME
+  sample/dashboard.scm
   sample/hello-world.scm
   sample/view-column.scm
   sample/welcome-to-gnucash.scm

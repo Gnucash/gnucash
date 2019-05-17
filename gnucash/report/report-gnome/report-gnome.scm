@@ -29,7 +29,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report reports sample welcome-to-gnucash))
+(use-modules (gnucash report reports sample dashboard))
 
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
@@ -110,12 +110,12 @@
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items)
 
-  ;; the Welcome to GnuCash "extravaganza" report
+  ;; the dashboard report
   (gnc-add-scm-extension
    (gnc:make-menu-item
-    (N_ "Welcome Sample Report")
+    (N_ "Dashboard")
     "ad80271c890b11dfa79f2dcedfd72085"
-    (N_ "Welcome-to-GnuCash report screen")
+    (N_ "A basic dashboard for your accounting data")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
-      (gnc-main-window-open-report (gnc:make-welcome-report) window)))))
+      (gnc-main-window-open-report (gnc:make-dashboard) window)))))
