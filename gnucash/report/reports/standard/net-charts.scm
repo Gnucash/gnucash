@@ -33,7 +33,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash report reports standard category-barchart)) ; for guids of called reports
 (gnc:module-load "gnucash/report/report-system" 0)
 
 
