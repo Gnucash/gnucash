@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports sample welcome-to-gnucash))
+(define-module (gnucash report reports example welcome-to-gnucash))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils)) ; for gnc:version
@@ -54,7 +54,6 @@
  'name (N_ "Welcome to GnuCash")
  'version 1
  'report-guid "65135608f2014c6ca8412793a8cdf169"
- 'in-menu? #f
- 'menu-path (list gnc:menuname-utility)
+ 'menu-path (list gnc:menuname-example)
  'options-generator options
  'renderer renderer)

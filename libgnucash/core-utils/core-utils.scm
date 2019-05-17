@@ -33,7 +33,6 @@
 
 (use-modules (sw_core_utils))
 
-(re-export gnc-prefs-is-debugging-enabled)
 (re-export gnc-path-get-bindir)
 (re-export gnc-path-get-scmdir)
 (re-export gnc-path-get-reportsdir)
@@ -61,5 +60,7 @@
 (re-export gnc-prefs-set-string)
 (re-export gnc-prefs-set-coords)
 (re-export gnc-prefs-get-string)
+(re-export gnc-prefs-is-extra-enabled)
+(re-export gnc-prefs-is-debugging-enabled)
 
 (define-public gnc:version (gnc-version))

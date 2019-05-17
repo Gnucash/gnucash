@@ -25,7 +25,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard daily-reports))
+(define-module (gnucash report reports example daily-reports))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
@@ -326,7 +326,7 @@
     'version 1
     'name (car l)
     'report-guid (car (reverse l))
-    'menu-path (list gnc:menuname-income-expense)
+    'menu-path (list gnc:menuname-example)
     'menu-name (caddr l)
     'menu-tip (car (cdddr l))
     'options-generator (lambda () (options-generator (cadr l)))
