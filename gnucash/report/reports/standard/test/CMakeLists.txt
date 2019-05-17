@@ -34,6 +34,13 @@ set(GUILE_DEPENDS
   )
 
 if (HAVE_SRFI64)
+  gnc_add_scheme_test_targets(scm-test-reports-standard-srfi64
+    "${scm_test_with_srfi64_SOURCES}"
+    "tests"
+    "${GUILE_DEPENDS};scm-srfi64-extras"
+    FALSE
+    )
+
   gnc_add_scheme_tests("${scm_test_with_srfi64_SOURCES}")
   if (HAVE_TEXT_PORTS)
     gnc_add_scheme_tests("${scm_test_with_textual_ports_SOURCES}")

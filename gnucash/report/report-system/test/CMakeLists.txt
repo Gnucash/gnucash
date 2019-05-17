@@ -32,10 +32,18 @@ set(GUILE_DEPENDS
   scm-test-engine
   scm-scm
   scm-report-system-3
+  scm-test-report-system
   )
 gnc_add_scheme_tests("${scm_test_report_system_SOURCES}")
 
 if (HAVE_SRFI64)
+  gnc_add_scheme_test_targets(scm-test-report-system-srfi64
+    "${scm_test_report_system_with_srfi64_SOURCES}"
+    "tests"
+    "${GUILE_DEPENDS};scm-srfi64-extras"
+    FALSE
+    )
+
   gnc_add_scheme_tests ("${scm_test_report_system_with_srfi64_SOURCES}")
 endif (HAVE_SRFI64)
 
