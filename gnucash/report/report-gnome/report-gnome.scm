@@ -29,7 +29,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report reports sample dashboard))
+(use-modules (gnucash report reports standard dashboard))
 
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
@@ -37,7 +37,7 @@
 (use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)
@@ -81,6 +81,8 @@
     (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define experimental-menu
     (gnc:make-menu gnc:menuname-experimental (list gnc:menuname-reports)))
+  (define multicolumn-menu
+    (gnc:make-menu gnc:menuname-multicolumn (list gnc:menuname-reports)))
   (define tax-menu
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
   (define business-menu
@@ -102,6 +104,7 @@
   (gnc-add-scm-extension budget-menu)
   (gnc-add-scm-extension utility-menu)
   (gnc-add-scm-extension experimental-menu)
+  (gnc-add-scm-extension multicolumn-menu)
   (gnc-add-scm-extension business-menu)
 
   ;; run report-hook danglers
@@ -116,6 +119,6 @@
     (N_ "Dashboard")
     "ad80271c890b11dfa79f2dcedfd72085"
     (N_ "A basic dashboard for your accounting data")
-    (list gnc:menuname-reports gnc:menuname-utility "")
+    (list gnc:menuname-reports gnc:menuname-multicolumn "")
     (lambda (window)
       (gnc-main-window-open-report (gnc:make-dashboard) window)))))
