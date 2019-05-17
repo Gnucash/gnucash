@@ -26,7 +26,7 @@
 ;; edited in a special window.  Every view gets a stylesheet so we
 ;; don't have to worry about that here.
 
-(define-module (gnucash report reports sample view-column))
+(define-module (gnucash report reports standard view-column))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gnc-module))
@@ -235,7 +235,7 @@
  'name (N_ "Multicolumn View")
  'report-guid "d8ba4a2e89e8479ca9f6eccdeb164588"
  'menu-name (N_ "Custom Multicolumn Report")
- 'menu-path (list gnc:menuname-utility)
+ 'menu-path (list gnc:menuname-multicolumn)
  'renderer render-view
  'options-generator make-options
  'options-cleanup-cb cleanup-options 

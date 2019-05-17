@@ -27,6 +27,7 @@ set (reports_standard_SCHEME
     standard/cashflow-barchart.scm
     standard/category-barchart.scm
     standard/daily-reports.scm
+    standard/dashboard.scm
     standard/equity-statement.scm
     standard/general-journal.scm
     standard/general-ledger.scm
@@ -40,6 +41,7 @@ set (reports_standard_SCHEME
     standard/sx-summary.scm
     standard/transaction.scm
     standard/trial-balance.scm
+    standard/view-column.scm
     standard/customer-summary.scm
     standard/taxinvoice.scm
     standard/receipt.scm
@@ -52,9 +54,7 @@ set (reports_standard_SCHEME
     )
 
 set(reports_sample_SCHEME
-  sample/dashboard.scm
   sample/hello-world.scm
-  sample/view-column.scm
   sample/welcome-to-gnucash.scm
 )
 

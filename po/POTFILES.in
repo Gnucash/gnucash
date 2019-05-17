@@ -425,9 +425,7 @@ gnucash/report/report-gnome/report-gnome.scm
 gnucash/report/report-gnome/window-report.c
 gnucash/report/reports/aging.scm
 gnucash/report/reports/reports.scm
-gnucash/report/reports/sample/dashboard.scm
 gnucash/report/reports/sample/hello-world.scm
-gnucash/report/reports/sample/view-column.scm
 gnucash/report/reports/sample/welcome-to-gnucash.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm
@@ -447,6 +445,7 @@ gnucash/report/reports/standard/cash-flow.scm
 gnucash/report/reports/standard/category-barchart.scm
 gnucash/report/reports/standard/customer-summary.scm
 gnucash/report/reports/standard/daily-reports.scm
+gnucash/report/reports/standard/dashboard.scm
 gnucash/report/reports/standard/equity-statement.scm
 gnucash/report/reports/standard/general-journal.scm
 gnucash/report/reports/standard/general-ledger.scm
@@ -467,6 +466,7 @@ gnucash/report/reports/standard/sx-summary.scm
 gnucash/report/reports/standard/taxinvoice.scm
 gnucash/report/reports/standard/transaction.scm
 gnucash/report/reports/standard/trial-balance.scm
+gnucash/report/reports/standard/view-column.scm
 gnucash/report/reports/support/balsheet-eg.eguile.scm
 gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
