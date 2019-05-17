@@ -1,5 +1,5 @@
 (use-modules (srfi srfi-64))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 (load "../html-fonts.scm")
 
 (setlocale LC_ALL "C")

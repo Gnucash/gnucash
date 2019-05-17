@@ -24,9 +24,9 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-64))
 (use-modules (gnucash report stylesheets))
-(use-modules (gnucash engine test test-extras))
-(use-modules (gnucash engine test srfi64-extras))
-(use-modules (gnucash report report-system test test-extras))
+(use-modules (tests test-engine-extras))
+(use-modules (tests srfi64-extras))
+(use-modules (tests test-report-system-extras))
 (use-modules (gnucash report reports standard net-charts))
 
 ;; Explicitly set locale to make the report output predictable

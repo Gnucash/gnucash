@@ -15,7 +15,7 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_test_targets(scm-test-load-report-stylesheets-module
   "test-load-report-stylesheets-module.scm"
-  "gnucash/report"
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
   )

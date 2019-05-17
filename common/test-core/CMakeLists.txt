@@ -55,7 +55,7 @@ endif()
 
 set(test_core_SCHEME unittest-support.scm)
 
-set(GUILE_OUTPUT_DIR   gnucash)
+set(GUILE_OUTPUT_DIR   tests)
 set(GUILE_DEPENDS      test-core-guile)
 
 

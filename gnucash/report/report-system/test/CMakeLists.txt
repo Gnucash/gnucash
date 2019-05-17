@@ -40,15 +40,15 @@ if (HAVE_SRFI64)
 endif (HAVE_SRFI64)
 
 gnc_add_scheme_test_targets(scm-test-report-system
-  "test-extras.scm"
-  gnucash/report/report-system/test
+  "test-report-system-extras.scm"
+  "tests"
   "${GUILE_DEPENDS}"
   FALSE
   )
 
 gnc_add_scheme_test_targets(scm-test-report-system-2
   "${scm_test_report_system_SOURCES}"
-  gnucash/report/report-system/test
+  "tests"
   "scm-test-report-system"
   FALSE
 )
@@ -58,6 +58,6 @@ set_dist_list(test_report_system_DIST
   CMakeLists.txt
   ${scm_test_report_system_with_srfi64_SOURCES}
   ${scm_test_report_system_SOURCES}
-  test-extras.scm
+  test-report-system-extras.scm
   test-link-module.c
 )

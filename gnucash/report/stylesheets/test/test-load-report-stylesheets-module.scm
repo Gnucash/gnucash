@@ -1,6 +1,6 @@
 (setenv "GNC_UNINSTALLED" "1")
 (display "  testing stylesheet module load ... ")
-(use-modules (gnucash unittest-support))
+(use-modules (tests unittest-support))
 (define log-domain "gnc.report.core")
 (define check (new-TestErrorStruct))
 (define log-level (G-LOG-LEVEL-CRITICAL))
