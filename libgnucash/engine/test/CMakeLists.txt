@@ -239,7 +239,7 @@ if (HAVE_SRFI64)
   gnc_add_scheme_test_targets (scm-srfi64-extras
     "srfi64-extras.scm"
     "tests"
-    "${GUILE_DEPENDS}"
+    "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras"
     FALSE
     )
 
@@ -257,7 +257,7 @@ endif (HAVE_SRFI64)
 gnc_add_scheme_test_targets(scm-test-engine
   "${engine_test_SCHEME}"
   "tests"
-  "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras"
+  "${GUILE_DEPENDS};scm-test-engine-extras"
   FALSE
   )
 
