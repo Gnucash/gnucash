@@ -869,6 +869,19 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
     return info.total;
 }
 
+static gchar*
+get_negative_color (void)
+{
+    GdkRGBA color;
+    GtkWidget *label = gtk_label_new ("Color");
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    gtk_style_context_add_class (context, "negative-numbers");
+    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    gtk_widget_destroy(label);
+    
+    return gdk_rgba_to_string(&color);
+}
+
 /** \brief Calculates and displays budget amount for a period in a defined account.
 
    Displays budget amount for a period for an account.  If a budget
@@ -885,6 +898,7 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
+    gboolean red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
     bview = GTK_TREE_VIEW(g_object_get_data(G_OBJECT(col), "budget_view"));
@@ -906,10 +920,18 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
             numeric = gbv_get_accumulated_budget_amount(budget, account, period_num);
             xaccSPrintAmount(amtbuff, numeric,
                              gnc_account_print_info(account, FALSE));
-            if (gnc_is_dark_theme (&color))
-                g_object_set(cell, "foreground", "darkgray", NULL);
+            if (gnc_is_dark_theme(&color))
+                g_object_set(cell, "foreground",
+                             red && gnc_numeric_negative_p(numeric)
+                                 ? "darkred"
+                                 : "darkgray",
+                             NULL);
             else
-                g_object_set(cell, "foreground", "dimgray", NULL);
+                g_object_set(cell, "foreground",
+                             red && gnc_numeric_negative_p(numeric)
+                                 ? "PaleVioletRed"
+                                 : "dimgray",
+                             NULL);
         }
     }
     else
@@ -924,7 +946,11 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
         {
             xaccSPrintAmount(amtbuff, numeric,
                              gnc_account_print_info(account, FALSE));
-            g_object_set(cell, "foreground", NULL, NULL);
+            g_object_set(cell, "foreground",
+                         red && gnc_numeric_negative_p(numeric)
+                             ? get_negative_color()
+                             : NULL,
+                         NULL);
         }
     }
     return g_strdup(amtbuff);
@@ -994,11 +1020,14 @@ budget_total_col_source(Account *account, GtkTreeViewColumn *col,
     GncBudget *budget;
     gnc_numeric total;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
+    gboolean red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
     total = bgv_get_total_for_account(account, budget, NULL);
     xaccSPrintAmount(amtbuff, total,
                      gnc_account_print_info(account, TRUE));
+    g_object_set(cell, "foreground",
+                 red && gnc_numeric_negative_p(total) ? get_negative_color () : NULL, NULL);
     return g_strdup(amtbuff);
 }
 
@@ -1060,14 +1089,16 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     gint i;
     gint num_top_accounts;
-    gboolean neg;
+    gboolean neg, red;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
+
 
     gnc_numeric total = gnc_numeric_zero();
 
     view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
+    red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     gtk_tree_model_get(s_model, s_iter, 1, &row_type, -1);
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
@@ -1141,7 +1172,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
                      gnc_commodity_print_info(total_currency,
                                               period_num < 0 ? TRUE : FALSE));
     g_object_set(cell, "foreground",
-                 gnc_numeric_negative_p(total) ? "red" : NULL, NULL);
+                 red && gnc_numeric_negative_p(total) ? get_negative_color () : NULL, NULL);
 
     g_object_set(G_OBJECT(cell), "text", amtbuff, "xalign", 1.0, NULL);
 }
