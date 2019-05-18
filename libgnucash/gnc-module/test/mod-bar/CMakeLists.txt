@@ -19,6 +19,13 @@ target_include_directories(gncmod-bar PRIVATE
   ${GUILE_INCLUDE_DIRS}
 )
 
+gnc_add_scheme_test_targets(scm-mod-bar
+  gnucash/bar.scm
+  "tests/gnucash"
+  gncmod-bar
+  FALSE
+  )
+
 set_target_properties(bar gncmod-bar PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
   ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test

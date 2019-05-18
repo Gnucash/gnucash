@@ -1,6 +1,6 @@
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
-(load "../html-fonts.scm")
+(load "html-fonts")
 
 (setlocale LC_ALL "C")
 

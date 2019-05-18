@@ -32,7 +32,7 @@ function(get_guile_env)
   list(APPEND env "GUILE=${GUILE_EXECUTABLE}")
 
   if (NOT WIN32)
-    list(APPEND env "GUILE_LOAD_COMPILED_PATH=${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}")
+    list(APPEND env "GUILE_LOAD_COMPILED_PATH=${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}:${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}/tests")
   endif()
   set(guile_load_paths "")
   list(APPEND guile_load_paths ${CMAKE_CURRENT_SOURCE_DIR}/mod-foo)
@@ -102,7 +102,7 @@ function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
     set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
   endif()
   add_test(${_TARGET} ${CMAKE_COMMAND_TMP}
-    ${GUILE_EXECUTABLE} --debug -l ${CMAKE_CURRENT_SOURCE_DIR}/${_SOURCE_FILE} -c "(exit (run-test))"
+    ${GUILE_EXECUTABLE} --debug -c "(load-from-path \"${_TARGET}\")(exit (run-test))"
   )
   get_guile_env()
   set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV};${ARGN}")
