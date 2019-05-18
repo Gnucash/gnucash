@@ -118,10 +118,8 @@ static void gbv_create_widget(GncBudgetView *view);
 static gboolean gbv_button_press_cb(
     GtkWidget *widget, GdkEventButton *event, GncBudgetView *view);
 #endif
-#if 0
-static gboolean gbv_key_press_cb(
-    GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
-#endif
+static gboolean gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event,
+                                 gpointer userdata);
 static void gbv_row_activated_cb(
     GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col,
     GncBudgetView *view);
@@ -168,6 +166,9 @@ struct GncBudgetViewPrivate
     Account* assets;
     Account* liabilities;
     Account* rootAcct;
+
+    GtkCellRenderer *temp_cr;
+    GtkCellEditable *temp_ce;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncBudgetView, gnc_budget_view, GTK_TYPE_BOX)
@@ -427,9 +428,6 @@ gbv_create_widget(GncBudgetView *view)
                      G_CALLBACK(gbv_selection_changed_cb), view);
     g_signal_connect(G_OBJECT(tree_view), "button-press-event",
                      G_CALLBACK(gbv_button_press_cb), view);
-    g_signal_connect_after(G_OBJECT(tree_view), "key-press-event",
-                           G_CALLBACK(gbv_key_press_cb), NULL);
-
     gbv_selection_changed_cb(NULL, view);
 #endif
 
@@ -669,39 +667,103 @@ gbv_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 }
 #endif
 
-#if 0
-/** \brief Key press action for gnc budget view.
+/** \brief Key press action for gnc budget view when in editing mode.
+ * Used for navigating with tab while editing.
+ * The handler is for the cell-editable, not for the treeview
 */
 static gboolean
-gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
+gbv_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer userdata)
 {
-    GtkTreeView *tv = GTK_TREE_VIEW(treeview);
     GtkTreeViewColumn *col;
-    GtkTreePath *path = NULL;
+    GtkTreePath *path          = NULL;
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(userdata);
+    GtkTreeView *tv            = priv->tree_view;
+    gboolean shifted;
+    gint period_num, num_periods;
+    gpointer data;
 
-    if (event->type != GDK_KEY_PRESS) return TRUE;
+    if (event->type != GDK_KEY_PRESS || !priv->temp_cr)
+        return FALSE;
 
     switch (event->keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
     case GDK_KEY_KP_Tab:
-    case GDK_KEY_Return:
-    case GDK_KEY_KP_Enter:
+        shifted = event->state & GDK_SHIFT_MASK;
         gtk_tree_view_get_cursor(tv, &path, &col);
-        if (!path) return TRUE;
-        //finish_edit(col);
+        if (!path)
+            return TRUE;
+        data        = g_object_get_data(G_OBJECT(col), "period_num");
+        period_num  = GPOINTER_TO_UINT(data);
+        num_periods = gnc_budget_get_num_periods(priv->budget);
+
+        if (period_num >= num_periods)
+            period_num = num_periods - 1;
+
+        if (shifted)
+            period_num--;
+        else
+            period_num++;
+
+        if (period_num >= num_periods)
+        {
+            period_num = 0;
+            if (gtk_tree_view_row_expanded(tv, path))
+            {
+                gtk_tree_path_down(path);
+            }
+            else
+            {
+                gtk_tree_path_next(path);
+                while (!gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path) &&
+                       gtk_tree_path_get_depth(path) > 1)
+                {
+                    gtk_tree_path_up(path);
+                    gtk_tree_path_next(path);
+                }
+            }
+        }
+        else if (period_num < 0)
+        {
+            period_num = num_periods - 1;
+            if (!gtk_tree_path_prev(path))
+                gtk_tree_path_up(path);
+            else
+                while (gtk_tree_view_row_expanded(tv, path))
+                {
+                    gtk_tree_path_down(path);
+                    do
+                    {
+                        gtk_tree_path_next(path);
+                    } while (
+                        gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path));
+                    gtk_tree_path_prev(path);
+                }
+        }
+
+        col = g_list_nth_data(priv->period_col_list, period_num);
+
+        // finish editing
+        if (priv->temp_ce)
+        {
+            gtk_cell_editable_editing_done(priv->temp_ce);
+            gtk_cell_editable_remove_widget(priv->temp_ce);
+
+            while (gtk_events_pending())
+                gtk_main_iteration();
+        }
+
+        if (gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path))
+            gtk_tree_view_set_cursor(tv, path, col, TRUE);
+        gtk_tree_path_free(path);
         break;
     default:
-        return TRUE;
+        return FALSE;
     }
-    gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
 
-    if (path && gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path))
-        gtk_tree_view_set_cursor(tv, path, col, TRUE);
     return TRUE;
 }
-#endif
 
 /** \brief gnc budget view actions for resize of treeview.
 */
@@ -1270,6 +1332,30 @@ gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text
     gtk_widget_queue_draw(GTK_WIDGET(priv->totals_tree_view));
 }
 
+/* The main Start Editing Call back for the budget columns, for key navigation
+ */
+static void
+gdv_editing_started_cb(GtkCellRenderer *cr, GtkCellEditable *editable,
+                       const gchar *path_string, gpointer user_data)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(user_data);
+
+    priv->temp_cr = cr;
+    priv->temp_ce = editable;
+
+    g_signal_connect(G_OBJECT(editable), "key-press-event",
+                     G_CALLBACK(gbv_key_press_cb), user_data);
+}
+
+static void
+gdv_editing_canceled_cb(GtkCellRenderer *cr, gpointer user_data)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(user_data);
+
+    priv->temp_cr = NULL;
+    priv->temp_ce = NULL;
+}
+
 /** \brief refreshes the current budget view
 
 The function will step through to only display the columns that are set
@@ -1343,7 +1429,10 @@ gnc_budget_view_refresh(GncBudgetView *view)
         gbv_renderer_add_padding (renderer);
 
         g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
-
+        g_signal_connect(G_OBJECT(renderer), "editing-started",
+                         (GCallback)gdv_editing_started_cb, view);
+        g_signal_connect(G_OBJECT(renderer), "editing-canceled",
+                         (GCallback)gdv_editing_canceled_cb, view);
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
         {
