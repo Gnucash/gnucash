@@ -161,10 +161,6 @@ struct GncBudgetViewPrivate
     GtkTreeViewColumn* total_col;
     AccountFilterDialog *fd;
 
-    Account* income;
-    Account* expenses;
-    Account* assets;
-    Account* liabilities;
     Account* rootAcct;
 
     GtkCellRenderer *temp_cr;
@@ -234,29 +230,6 @@ gnc_budget_view_init(GncBudgetView *budget_view)
     num_top_accounts = gnc_account_n_children(root);
 
     priv->rootAcct = root;
-
-    for (i = 0; i < num_top_accounts; ++i)
-    {
-        Account* acc = gnc_account_nth_child(root, i);
-        GNCAccountType type = xaccAccountGetType(acc);
-
-        if (type == ACCT_TYPE_ASSET)
-        {
-            priv->assets = acc;
-        }
-        else if (type == ACCT_TYPE_LIABILITY)
-        {
-            priv->liabilities = acc;
-        }
-        else if (type == ACCT_TYPE_INCOME)
-        {
-            priv->income = acc;
-        }
-        else if (type == ACCT_TYPE_EXPENSE)
-        {
-            priv->expenses = acc;
-        }
-    }
 
     LEAVE("");
 }
