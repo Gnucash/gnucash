@@ -1125,6 +1125,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
                 continue;
             break;
         case ACCT_TYPE_LIABILITY:
+        case ACCT_TYPE_EQUITY:
             if (row_type != TOTALS_TYPE_TRANSFERS &&
                 row_type != TOTALS_TYPE_TOTAL)
                 continue;
