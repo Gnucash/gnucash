@@ -27,9 +27,9 @@ target_include_directories(gncmod-baz PRIVATE
 
 gnc_add_scheme_test_targets(scm-mod-baz
   gnucash/baz.scm
-  "tests"
+  "tests/gnucash"
   gncmod-baz
-  TRUE
+  FALSE
   )
 
 set_target_properties(baz gncmod-baz PROPERTIES

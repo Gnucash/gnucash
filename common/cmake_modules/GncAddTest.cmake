@@ -32,7 +32,7 @@ function(get_guile_env)
   list(APPEND env "GUILE=${GUILE_EXECUTABLE}")
 
   if (NOT WIN32)
-    list(APPEND env "GUILE_LOAD_COMPILED_PATH=${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}")
+    list(APPEND env "GUILE_LOAD_COMPILED_PATH=${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}:${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION}/tests")
   endif()
   set(guile_load_paths "")
   list(APPEND guile_load_paths ${CMAKE_CURRENT_SOURCE_DIR}/mod-foo)
