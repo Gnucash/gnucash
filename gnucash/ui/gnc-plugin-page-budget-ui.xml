@@ -3,6 +3,7 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="Estimate" action="EstimateBudgetAction"/>
+        <menuitem name="AllPeriods" action="AllPeriodsBudgetAction"/>
         <menuitem name="Delete" action="DeleteBudgetAction"/>
       </placeholder>
       <menuitem name="Options" action="OptionsBudgetAction"/>
@@ -22,6 +23,7 @@
       <toolitem name="Options" action="OptionsBudgetAction"/>
       <separator name="ToolbarSep4"/>
       <toolitem name="Estimate" action="EstimateBudgetAction"/>
+      <toolitem name="AllPeriods" action="AllPeriodsBudgetAction"/>
       <toolitem name="Delete" action="DeleteBudgetAction"/>
     </placeholder>
   </toolbar>
