@@ -1,0 +1,5 @@
+This directory is intended to contain files needed by the reports
+but that aren't reports themselves.
+
+Currently that includes the eguile template files and the accompanying
+css files. Other support files could be inserted here as well.
