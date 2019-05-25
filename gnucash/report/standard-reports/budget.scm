@@ -367,7 +367,8 @@
                  (col3 (+ col2 (if show-diff? 1 0))))
             (if show-budget?
                 (gnc:html-table-set-cell/tag!
-                 html-table rownum col0 style-tag
+                 html-table rownum col0
+                 (if (negative? bgt-val) style-tag-neg style-tag)
                  (if (zero? bgt-val) "."
                      (gnc:make-gnc-monetary comm bgt-val))))
             (if show-actual?
