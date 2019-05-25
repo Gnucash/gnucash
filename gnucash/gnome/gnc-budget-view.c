@@ -1230,7 +1230,12 @@ gbv_refresh_col_titles(GncBudgetView *view)
     gchar title[MAX_DATE_LENGTH];
     GList *col_list;
     gint i;
+    gboolean editable, read_only;
+    GtkCellRenderer *renderer;
+    GDate *readonly_threshold =
+        qof_book_get_autoreadonly_gdate(gnc_get_current_book());
 
+    read_only = qof_book_is_readonly(gnc_get_current_book());
     g_return_if_fail(view != NULL);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
 
@@ -1250,7 +1255,14 @@ gbv_refresh_col_titles(GncBudgetView *view)
         }
         recurrenceNextInstance(r, &date, &nextdate);
         date = nextdate;
+
+        // update editable status
+        editable = !read_only && (!readonly_threshold ||
+                   g_date_compare(&date, readonly_threshold) >= 0);
+        renderer = gnc_tree_view_column_get_renderer(col);
+        g_object_set(G_OBJECT(renderer), "editable", editable, NULL);
     }
+    g_date_free(readonly_threshold);
 }
 
 static void
