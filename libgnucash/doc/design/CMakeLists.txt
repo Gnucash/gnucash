@@ -33,20 +33,11 @@ file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" TEXI_BINARY_DIR)
 file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gnucash-design.texi" TEXI_SOURCE_FILE)
 find_program(MAKEINFO makeinfo)
 if (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
-
-  if(${CMAKE_VERSION} VERSION_GREATER 3.1)
-    add_custom_command(
-      OUTPUT gnucash-design.info
-      COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
-      DEPENDS ${gnucash_design_TEXINFOS}
-      )
-  else()
-    add_custom_command(
-      OUTPUT gnucash-design.info
-      COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
-      DEPENDS ${gnucash_design_TEXINFOS}
-      )
-  endif()
+  add_custom_command(
+    OUTPUT gnucash-design.info
+    COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
+    DEPENDS ${gnucash_design_TEXINFOS}
+  )
 endif (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
 dist_add_generated (${BUILDING_FROM_VCS} gnucash-design.info)
 

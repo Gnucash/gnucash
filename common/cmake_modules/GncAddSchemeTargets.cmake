@@ -116,10 +116,6 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       if (__DEBUG)
         message("add_custom_command: output = ${output_file}")
       endif()
-      set(CMAKE_COMMMAND_TMP "")
-      if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-        set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-      endif()
       if (MINGW64)
         set(fpath "")
         file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
@@ -151,7 +147,7 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       #We quote the arguments to stop CMake stripping the path separators.
       add_custom_command(
         OUTPUT ${output_file}
-        COMMAND ${CMAKE_COMMAND_TMP}
+        COMMAND ${CMAKE_COMMAND} -E env
             "${LIBRARY_PATH}"
             "GNC_UNINSTALLED=YES"
             "GNC_BUILDDIR=\"${CMAKE_BINARY_DIR}\""

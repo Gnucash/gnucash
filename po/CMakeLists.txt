@@ -16,11 +16,6 @@ file (WRITE LINGUAS "${ALL_LINGUAS}")
 set (CATALOGS "")
 set (BUILD_CATALOGS "")
 
-set(CMAKE_COMMAND_TMP "")
-if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-endif()
-
 set(po_SOURCES "")
 file (WRITE LINGUAS "")
 foreach(lingua ${ALL_LINGUAS})
@@ -37,7 +32,7 @@ foreach(lingua ${ALL_LINGUAS})
   list(APPEND CATALOGS ${_OUTPUT_FILE})
   add_custom_command(
       OUTPUT ${_OUTPUT_FILE}
-      COMMAND ${CMAKE_COMMAND_TMP}
+      COMMAND ${CMAKE_COMMAND} -E env
         ${GETTEXT_MSGFMT_EXECUTABLE}
             -o ${_OUTPUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
   )

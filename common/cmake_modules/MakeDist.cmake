@@ -15,11 +15,6 @@ include(${CMAKE_MODULE_PATH}/MakeDistFiles.cmake)
 
 function(make_dist PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_FROM_VCS)
 
-    set(CMAKE_COMMAND_TMP "")
-    if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-        set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-    endif()
-
     # -- Remove any existing packaging directory.
     file(REMOVE_RECURSE ${PACKAGE_PREFIX})
 
@@ -68,7 +63,7 @@ function(make_dist PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_F
         COMMAND ${CMAKE_COMMAND} -E copy ${PACKAGE_PREFIX}.tar ${PACKAGE_PREFIX}.tar.save
     )
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND_TMP} gzip -f ${PACKAGE_PREFIX}.tar
+            COMMAND ${CMAKE_COMMAND} -E env gzip -f ${PACKAGE_PREFIX}.tar
             WORKING_DIRECTORY .
             ERROR_MSG "gzip command to create ${PACKAGE_PREFIX}.tar.gz failed."
     )
@@ -78,7 +73,7 @@ function(make_dist PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_F
         COMMAND ${CMAKE_COMMAND} -E rename ${PACKAGE_PREFIX}.tar.save ${PACKAGE_PREFIX}.tar
     )
     execute_process_and_check_result(
-            COMMAND ${CMAKE_COMMAND_TMP} bzip2 -f ${PACKAGE_PREFIX}.tar
+            COMMAND ${CMAKE_COMMAND} -E env bzip2 -f ${PACKAGE_PREFIX}.tar
             WORKING_DIRECTORY .
             ERROR_MSG "bzip2 command to create ${PACKAGE_PREFIX}.tar.bz2 failed."
     )
