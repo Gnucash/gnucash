@@ -54,6 +54,8 @@ static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
         GncMainWindowActionData *data);
+static void gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
+        GncMainWindowActionData *data);
 
 static GtkActionEntry gnc_plugin_actions [] =
 {
@@ -73,6 +75,12 @@ static GtkActionEntry gnc_plugin_actions [] =
         "CopyBudgetAction", NULL, N_("Copy Budget"), NULL,
         N_("Copy an existing Budget"),
         G_CALLBACK (gnc_plugin_budget_cmd_copy_budget)
+    },
+
+    {
+        "DeleteBudgetAction", NULL, N_("Delete Budget"), NULL,
+        N_("Delete an existing Budget"),
+        G_CALLBACK (gnc_plugin_budget_cmd_delete_budget)
     },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -271,6 +279,51 @@ gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
     else     /* if no budgets exist yet, just open a new budget */
     {
         gnc_plugin_budget_cmd_new_budget(action, data);
+    }
+}
+
+/* If only one budget exists, create a copy of it; otherwise user selects one to copy */
+static void
+gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
+                                   GncMainWindowActionData *data)
+{
+    guint count;
+    QofBook *book;
+    GncBudget *bgt = NULL;
+    QofCollection *col;
+    g_return_if_fail (data != NULL);
+
+    book = gnc_get_current_book();
+    col = qof_book_get_collection(book, GNC_ID_BUDGET);
+    count = qof_collection_count(col);
+    if (count > 0)
+    {
+        if (count == 1)
+        {
+            bgt = gnc_budget_get_default(book);
+        }
+        else
+        {
+            bgt = gnc_budget_gui_select_budget(GTK_WINDOW(data->window), book);
+        }
+
+        if (bgt)
+        {
+            GncBudget* copy;
+            const gchar* name;
+
+            name = gnc_budget_get_name (bgt);
+            if (!name)
+                name = _("Unnamed Budget");
+
+            if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
+            {
+                gnc_suspend_gui_refresh ();
+                gnc_budget_destroy(bgt);
+                // Views should close themselves because the CM will notify them.
+                gnc_resume_gui_refresh ();
+            }
+        }
     }
 }
 

@@ -109,7 +109,7 @@ static void gnc_plugin_page_budget_cmd_open_account(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_open_subaccounts(
     GtkAction *action, GncPluginPageBudget *page);
-static void gnc_plugin_page_budget_cmd_delete_budget(
+static void gnc_plugin_page_budget_cmd_unset_budget(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_view_options(
     GtkAction *action, GncPluginPageBudget *page);
@@ -117,6 +117,8 @@ static void gnc_plugin_page_budget_cmd_estimate_budget(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_allperiods_budget(
     GtkAction *action, GncPluginPageBudget *page);
+static void allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
+    GtkTreeIter *iter, gpointer data);
 
 static GtkActionEntry gnc_plugin_page_budget_actions [] =
 {
@@ -138,9 +140,9 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* Edit menu */
     {
-        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
-        NULL, N_("Delete this budget"),
-        G_CALLBACK (gnc_plugin_page_budget_cmd_delete_budget)
+        "UnsetBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Unset Budget"),
+        NULL, N_("Unset budget values for the selected accounts"),
+        G_CALLBACK (gnc_plugin_page_budget_cmd_unset_budget)
     },
     {
         "OptionsBudgetAction", "document-properties", N_("Budget Options"),
@@ -184,7 +186,7 @@ static const gchar *actions_requiring_account[] =
 static action_toolbar_labels toolbar_labels[] =
 {
     { "OpenAccountAction",          N_("Open") },
-    { "DeleteBudgetAction",         N_("Delete") },
+    { "UnsetBudgetAction",          N_("Unset") },
     { "OptionsBudgetAction",        N_("Options") },
     { "EstimateBudgetAction",       N_("Estimate") },
     { "AllPeriodsBudgetAction",     N_("All Periods") },
@@ -740,20 +742,32 @@ gnc_plugin_page_budget_cmd_open_subaccounts (GtkAction *action,
 
 
 static void
-gnc_plugin_page_budget_cmd_delete_budget (GtkAction *action,
+gnc_plugin_page_budget_cmd_unset_budget (GtkAction *action,
         GncPluginPageBudget *page)
 {
     GncPluginPageBudgetPrivate *priv;
-    GncBudget *budget;
+    GtkTreeSelection *sel;
+    GtkWidget *dialog;
 
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    budget = priv->budget;
-    g_return_if_fail (GNC_IS_BUDGET(budget));
-    priv->delete_budget = TRUE;
-    gnc_budget_gui_delete_budget(budget);
+    sel = gnc_budget_view_get_selection(priv->budget_view);
 
+    if (gtk_tree_selection_count_selected_rows(sel) <= 0)
+    {
+        dialog = gtk_message_dialog_new(
+                    GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
+                    GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                    GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
+                    _("You must select at least one account to unset."));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    priv->action = UNSET;
+    gtk_tree_selection_selected_foreach(sel, allperiods_budget_helper, page);
 }
-
 
 /******************************/
 /*       Options Dialog       */
@@ -844,27 +858,6 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
     }
     priv->dialog = NULL;
 }
-
-
-void
-gnc_budget_gui_delete_budget(GncBudget *budget)
-{
-    const char *name;
-
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-    name = gnc_budget_get_name (budget);
-    if (!name)
-        name = _("Unnamed Budget");
-
-    if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name))
-    {
-        gnc_suspend_gui_refresh ();
-        gnc_budget_destroy(budget);
-        // Views should close themselves because the CM will notify them.
-        gnc_resume_gui_refresh ();
-    }
-}
-
 
 static void
 estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
