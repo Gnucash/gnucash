@@ -35,6 +35,7 @@ foreach(lingua ${ALL_LINGUAS})
       COMMAND ${CMAKE_COMMAND} -E env
         ${GETTEXT_MSGFMT_EXECUTABLE}
             -o ${_OUTPUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
   )
   set(_BUILD_FILE_DIR ${DATADIR_BUILD}/locale/${lingua}/LC_MESSAGES)
   make_directory(${_BUILD_FILE_DIR})
