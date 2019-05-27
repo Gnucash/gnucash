@@ -252,13 +252,11 @@
       <?scm ) (begin ?>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (nbsp (strftime dateformat
-                                            (localtime postdate))) ?></td>
+           <td align="right"><?scm:d (nbsp (gnc-print-time64 postdate dateformat)) ?></td>
         </tr>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (nbsp (strftime dateformat
-                                            (localtime duedate))) ?></td>
+           <td align="right"><?scm:d (nbsp (gnc-print-time64 duedate dateformat)) ?></td>
         </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
           <tr>

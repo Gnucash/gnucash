@@ -140,7 +140,7 @@
   <!-- header texts -->
 
   <h1><?scm:d (nbsp (_ "Invoice No.")) ?> <?scm:d invoiceid ?></h1>
-  <h2><?scm:d (strftime	opt-date-format (localtime (gnc:get-today))) ?></h2>
+  <h2><?scm:d (gnc-print-time64 (gnc:get-today) opt-date-format) ?></h2>
   <p>&nbsp;</p>
   <?scm (if (not (string=? billcontact "")) (begin ?>
     <p>Attn: <?scm:d billcontact ?></p><br>

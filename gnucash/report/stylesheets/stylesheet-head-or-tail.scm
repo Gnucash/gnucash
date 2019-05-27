@@ -463,7 +463,7 @@
                    (_ "Report Creation Date: ")
                    (qof-print-date (gnc:get-today))
                    " "
-                   (strftime "%X %Z" (localtime (current-time)))
+                   (gnc-print-time64 (current-time) "%X %Z")
                    )
                   (gnc:html-markup-br)
                   )
@@ -588,7 +588,7 @@
                  (_ "Report Creation Date: ")
                  (qof-print-date (gnc:get-today))
                  " "
-                 (strftime "%X %Z" (localtime (current-time)))
+                 (gnc-print-time64 (current-time) "%X %Z")
                  )
                 (gnc:html-markup-br)
                 )

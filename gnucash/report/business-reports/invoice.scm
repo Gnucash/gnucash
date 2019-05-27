@@ -718,8 +718,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (string-append label ":")
    (gnc:make-html-div/markup
     "div-align-right"
-    (strftime date-format
-              (localtime date)))))
+    (gnc-print-time64 date date-format))))
 
 (define (make-company-table book)
   ;; single-column table. my name, address, and printdate
