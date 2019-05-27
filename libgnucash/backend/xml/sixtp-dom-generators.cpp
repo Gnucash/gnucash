@@ -140,6 +140,7 @@ time64_to_dom_tree (const char* tag, const time64 time)
     auto date_str = GncDateTime(time).format_iso8601();
     if (date_str.empty())
         return NULL;
+    date_str += " +0000"; //Tack on a UTC offset to mollify GnuCash for Android
     ret = xmlNewNode (NULL, BAD_CAST tag);
     xmlNewTextChild (ret, NULL, BAD_CAST "ts:date",
                      checked_char_cast (const_cast<char*>(date_str.c_str())));
