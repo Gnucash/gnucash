@@ -172,7 +172,7 @@ GncTokenizerTest::test_gnc_tokenize_helper (const std::string& separators, token
 
 static tokenize_csv_test_data comma_separated [] = {
         { "Date,Num,Description,Notes,Account,Deposit,Withdrawal,Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
-        { "05/01/15,45,Acme Inc.,,Miscellaneous,,\"1,100.00\",", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
+        { "05/01/15,45,Typical csv import line - including quoted empty field,,Miscellaneous,\"\",\"1,100.00\",", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
         { "05/01/15,45,Acme Inc.,,Miscellaneous,", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
         { "Test\\ with backslash,nextfield", 2, { "Test\\ with backslash","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
         { "Test with \\\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
@@ -188,7 +188,7 @@ TEST_F (GncTokenizerTest, tokenize_comma_sep)
 
 static tokenize_csv_test_data semicolon_separated [] = {
         { "Date;Num;Description;Notes;Account;Deposit;Withdrawal;Balance", 8, { "Date","Num","Description","Notes","Account","Deposit","Withdrawal","Balance" } },
-        { "05/01/15;45;Acme Inc.;;Miscellaneous;;\"1,100.00\";", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
+        { "05/01/15;45;Typical csv import line - including quoted empty field;;Miscellaneous;\"\";\"1,100.00\";", 8, { "05/01/15","45","Acme Inc.","","Miscellaneous","","1,100.00","" } },
         { "05/01/15;45;Acme Inc.;;Miscellaneous;", 6, { "05/01/15","45","Acme Inc.","","Miscellaneous","",NULL,NULL } },
         { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
