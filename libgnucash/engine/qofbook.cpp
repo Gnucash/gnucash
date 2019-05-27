@@ -163,6 +163,8 @@ qof_book_init (QofBook *book)
 
 static const std::string str_KVP_OPTION_PATH(KVP_OPTION_PATH);
 static const std::string str_OPTION_SECTION_ACCOUNTS(OPTION_SECTION_ACCOUNTS);
+static const std::string str_OPTION_SECTION_BUDGETING(OPTION_SECTION_BUDGETING);
+static const std::string str_OPTION_NAME_DEFAULT_BUDGET(OPTION_NAME_DEFAULT_BUDGET);
 static const std::string str_OPTION_NAME_TRADING_ACCOUNTS(OPTION_NAME_TRADING_ACCOUNTS);
 static const std::string str_OPTION_NAME_AUTO_READONLY_DAYS(OPTION_NAME_AUTO_READONLY_DAYS);
 static const std::string str_OPTION_NAME_NUM_FIELD_SOURCE(OPTION_NAME_NUM_FIELD_SOURCE);
@@ -206,7 +208,7 @@ qof_book_get_property (GObject* object,
         break;
     case PROP_OPT_DEFAULT_BUDGET:
         qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
-                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+                str_OPTION_SECTION_BUDGETING, str_OPTION_NAME_DEFAULT_BUDGET});
         break;
     case PROP_OPT_FY_END:
         qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
@@ -261,7 +263,7 @@ qof_book_set_property (GObject      *object,
         break;
     case PROP_OPT_DEFAULT_BUDGET:
         qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
-                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+                str_OPTION_SECTION_BUDGETING, OPTION_NAME_DEFAULT_BUDGET});
         break;
     case PROP_OPT_FY_END:
         qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});

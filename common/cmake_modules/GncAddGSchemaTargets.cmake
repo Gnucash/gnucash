@@ -1,10 +1,6 @@
 macro(add_gschema_targets _gschema_INPUTS)
   set(_gschema_OUTPUTS "")
   set(local_depends ${gschema_depends})
-  set(CMAKE_COMMAND_TMP "")
-  if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-  endif()
   foreach(file ${_gschema_INPUTS})
 
     set(_OUTPUT_FILE ${DATADIR_BUILD}/glib-2.0/schemas/${file})
@@ -16,7 +12,7 @@ macro(add_gschema_targets _gschema_INPUTS)
     list(APPEND _gschema_VALIDS ${_VALID_FILE})
     add_custom_command(
         OUTPUT ${_VALID_FILE}
-        COMMAND ${CMAKE_COMMAND_TMP}
+        COMMAND ${CMAKE_COMMAND} -E env
           ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
         COMMAND ${CMAKE_COMMAND} -E touch ${_VALID_FILE}
         DEPENDS ${_OUTPUT_FILE}

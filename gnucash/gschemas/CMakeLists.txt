@@ -23,14 +23,10 @@ add_gschema_targets("${gschema_SOURCES}")
 
 # Handle gschemas.compiled
 if (COMPILE_GSCHEMAS)
-    set(CMAKE_COMMAND_TMP "")
-    if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-        set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-    endif()
 
     add_custom_command(
         OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
-        COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
+        COMMAND ${CMAKE_COMMAND} -E env ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
         DEPENDS ${gschema_depends}
     )
 

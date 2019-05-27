@@ -90,18 +90,13 @@ add_xml_test(test-xml-transaction "${test_backend_xml_module_SOURCES};test-xml-t
 add_xml_test(test-xml2-is-file "${test_backend_xml_module_SOURCES};test-xml2-is-file.cpp"
    GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2)
 
-set(CMAKE_COMMAND_TMP "")
-if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-endif()
-
 set(test-real-data-env
   SRCDIR=${CMAKE_CURRENT_SOURCE_DIR}
   VERBOSE=yes
   TEST_PATH=${CMAKE_BINARY_DIR}/bin
 )
 add_test(NAME test-real-data
-   COMMAND ${CMAKE_COMMAND_TMP}
+   COMMAND ${CMAKE_COMMAND} -E env
     ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/test-real-data.sh
 )
 set_tests_properties(test-real-data PROPERTIES ENVIRONMENT "${test-real-data-env}")

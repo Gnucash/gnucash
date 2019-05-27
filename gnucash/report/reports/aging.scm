@@ -715,7 +715,7 @@ copying this report to a spreadsheet for use in a mail merge.")
     ;; set default title
     (gnc:html-document-set-title! document report-title)
     ;; maybe redefine better...
-    (if (not (null? account))
+    (if (and account (not (null? account)))
         (begin
           (gnc:html-document-set-title!
            document (string-append report-title ": " (xaccAccountGetName account)))
@@ -730,7 +730,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 
     (gnc:html-table-set-col-headers! table heading-list)
 				     
-    (if (not (null? account))
+    (if (and account (not (null? account)))
 	(begin
 	  (setup-query query account report-date)
 	  ;; get the appropriate splits

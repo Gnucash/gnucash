@@ -1117,6 +1117,7 @@ also show overall period profit & loss."))
                           (cdr monetarypair)
                           (car monetarypair)
                           (closing-adjustment account col-idx)))))))
+
              (get-cell-anchor-fn (lambda (account col-idx)
                                    (define datepair (col-idx->datepair col-idx))
                                    (gnc:make-report-anchor
@@ -1126,9 +1127,16 @@ also show overall period profit & loss."))
                                            (cons 'absolute (car datepair)))
                                      (list "General" "End Date"
                                            (cons 'absolute (cdr datepair)))
+                                     (list "General" "Show original currency amount"
+                                           (and common-currency #t))
+                                     (list "General" "Common Currency"
+                                           common-currency)
+                                     (list "General" "Report's currency"
+                                           (or common-currency book-main-currency))
                                      (list "Display" "Amount" 'double)
                                      (list "Accounts" "Accounts"
                                            (list account))))))
+
              (chart (and include-chart?
                          (gnc:make-report-anchor
                           pnl-barchart-uuid report-obj

@@ -92,8 +92,9 @@ typedef enum
  *  @return The starting day of the specified time interval, as a
  *  GDate. */
 GDate *gnc_accounting_period_start_gdate (GncAccountingPeriod which,
-        const GDate *fy_end,
-        const GDate *contains);
+                                          const GDate *fy_end,
+                                          const GDate *contains);
+
 /** This function returns the ending date for an accounting period.
  *  The date will be computed based upon the type of accounting
  *  interval requested, an optional fiscal year end value, and an
@@ -119,8 +120,8 @@ GDate *gnc_accounting_period_end_gdate (GncAccountingPeriod which,
 
 /* Get the fiscal accounting period from the preferences and return
    the start and end times. */
-time64 gnc_accounting_period_fiscal_start(void);
-time64 gnc_accounting_period_fiscal_end(void);
+time64 gnc_accounting_period_fiscal_start (void);
+time64 gnc_accounting_period_fiscal_end (void);
 
 /** @} */
 

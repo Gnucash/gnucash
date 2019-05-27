@@ -32,7 +32,7 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ; Name definitions
-(define report-title         (N_ "Balance Forecast"))
+(define reportname           (N_ "Balance Forecast"))
 
 (define optname-accounts     (N_ "Accounts"))
 (define opthelp-accounts     (_ "Report on these accounts."))
@@ -133,6 +133,8 @@ date point, a projected minimum balance including scheduled transactions."))
   (define (get-option pagename optname)
     (gnc:option-value
       (gnc:lookup-option (gnc:report-options report-obj) pagename optname)))
+  (define report-title
+    (get-option gnc:pagename-general gnc:optname-reportname))
 
   (gnc:report-starting report-title)
 
@@ -282,7 +284,7 @@ date point, a projected minimum balance including scheduled transactions."))
 
 (gnc:define-report
   'version 1
-  'name report-title
+  'name reportname
   'report-guid "321d940d487d4ccbb4bd0467ffbadbf2"
   'menu-path (list gnc:menuname-asset-liability)
   'options-generator options-generator

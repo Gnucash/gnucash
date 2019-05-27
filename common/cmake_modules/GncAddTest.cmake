@@ -73,11 +73,7 @@ function(gnc_add_test _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_
   target_link_libraries(${_TARGET} ${TEST_LIBS})
   target_include_directories(${_TARGET} PRIVATE ${TEST_INCLUDE_DIRS})
   if (${HAVE_ENV_VARS})
-    set(CMAKE_COMMAND_TMP "")
-    if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-      set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR};${ARGN}")
-    endif()
-    add_test(${_TARGET} ${CMAKE_COMMAND_TMP}
+    add_test(${_TARGET} ${CMAKE_COMMAND} -E env "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR};${ARGN}"
       ${CMAKE_BINARY_DIR}/bin/${_TARGET}
     )
     set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR};${ARGN}")
@@ -97,11 +93,7 @@ endfunction()
 
 
 function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
-  set(CMAKE_COMMAND_TMP "")
-  if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-  endif()
-  add_test(${_TARGET} ${CMAKE_COMMAND_TMP}
+  add_test(${_TARGET} ${CMAKE_COMMAND} -E env
     ${GUILE_EXECUTABLE} --debug -c "(load-from-path \"${_TARGET}\")(exit (run-test))"
   )
   get_guile_env()
