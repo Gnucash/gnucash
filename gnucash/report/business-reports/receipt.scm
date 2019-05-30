@@ -185,7 +185,7 @@
                 headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" ""
-                (N_ "Payment received, thank you!")))
+                (_ "Payment received, thank you!")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
