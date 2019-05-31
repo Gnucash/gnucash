@@ -64,6 +64,7 @@
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 #include "gnc-state.h"
+#include "gnc-cell-renderer-text-flag.h"
 
 #include "qof.h"
 
@@ -929,6 +930,7 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
+    const gchar *note;
     gboolean red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
@@ -984,6 +986,27 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
                          NULL);
         }
     }
+
+    note = gnc_budget_get_account_period_note(budget, account, period_num);
+    g_object_set(cell, "flagged", note != NULL, NULL);
+    if (note != NULL) 
+    {
+        GdkRGBA *c;
+        GtkStateFlags state;
+        GtkStyleContext *stylectxt =
+            gtk_widget_get_style_context(GTK_WIDGET(bview));
+
+        GList *sel = gnc_tree_view_account_get_selected_accounts(GNC_TREE_VIEW_ACCOUNT(bview));
+
+        state = g_list_find(sel, account) == NULL ? GTK_STATE_FLAG_SELECTED
+                                                  : GTK_STATE_FLAG_NORMAL;
+
+        gtk_style_context_get(stylectxt, state, "background-color", &c, NULL);
+        g_object_set(cell, "flag-color-rgba", c, NULL);
+        gdk_rgba_free (c);
+        g_list_free(sel);
+    }
+
     return g_strdup(amtbuff);
 }
 
@@ -1380,19 +1403,15 @@ gnc_budget_view_refresh(GncBudgetView *view)
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
     {
-        GtkCellRenderer* renderer;
-
-        col = gnc_tree_view_account_add_custom_column(
+        GtkCellRenderer *renderer = gnc_cell_renderer_text_flag_new ();
+        col = gnc_tree_view_account_add_custom_column_renderer(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
-                  budget_col_source, budget_col_edited);
+                  budget_col_source, budget_col_edited, renderer);
         g_object_set_data(G_OBJECT(col), "budget", priv->budget);
         g_object_set_data(G_OBJECT(col), "budget_view", priv->tree_view);
         g_object_set_data(G_OBJECT(col), "period_num",
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
-
-        // as we only have one renderer/column, use this function to get it
-        renderer = gnc_tree_view_column_get_renderer (col);
 
         // add some padding to the right of the numbers
         gbv_renderer_add_padding (renderer);
