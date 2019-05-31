@@ -90,6 +90,8 @@ GType gnc_budget_get_type(void);
 
 #define GNC_BUDGET_MAX_NUM_PERIODS_DIGITS 3 // max num periods == 999
 
+#define GNC_BUDGET_NOTES_PATH "notes"
+
 gboolean gnc_budget_register(void);
 
 /**
@@ -149,6 +151,11 @@ gnc_numeric gnc_budget_get_account_period_value(
     const GncBudget *budget, const Account *account, guint period_num);
 gnc_numeric gnc_budget_get_account_period_actual_value(
     const GncBudget *budget, Account *account, guint period_num);
+
+void gnc_budget_set_account_period_note(GncBudget *budget,
+    const Account *account, guint period_num, const gchar *note);
+const gchar *gnc_budget_get_account_period_note(const GncBudget *budget,
+    const Account *account, guint period_num);
 
 /* Returns some budget in the book, or NULL. */
 GncBudget* gnc_budget_get_default(QofBook *book);
