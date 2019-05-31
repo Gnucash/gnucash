@@ -75,4 +75,3 @@
 *.markers-dark {
   background-color: shade (@marker_bg_color, 0.8);
 }
-
