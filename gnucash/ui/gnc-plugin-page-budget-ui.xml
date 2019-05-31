@@ -14,6 +14,9 @@
     <placeholder name="PopupPlaceholder1">
       <menuitem name="Options" action="OptionsBudgetAction"/>
     </placeholder>
+    <placeholder name="PopupPlaceholder2">
+      <menuitem name="Note" action="BudgetNoteAction"/>
+    </placeholder>
   </popup>
 
   <toolbar name="DefaultToolbar">
@@ -25,6 +28,7 @@
       <toolitem name="Estimate" action="EstimateBudgetAction"/>
       <toolitem name="AllPeriods" action="AllPeriodsBudgetAction"/>
       <toolitem name="Unset" action="UnsetBudgetAction"/>
+      <toolitem name="Note" action="BudgetNoteAction"/>
     </placeholder>
   </toolbar>
 </ui>

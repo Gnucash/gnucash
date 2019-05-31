@@ -929,6 +929,7 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
+    const gchar *note;
     gboolean red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
@@ -984,6 +985,18 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
                          NULL);
         }
     }
+
+    note = gnc_budget_get_account_period_note(budget, account, period_num);
+
+    if (note == NULL)
+    {
+        g_object_set(cell, "background", NULL, NULL);
+    }
+    else
+    {
+        g_object_set(cell, "background", "beige", NULL);
+    }
+
     return g_strdup(amtbuff);
 }
 

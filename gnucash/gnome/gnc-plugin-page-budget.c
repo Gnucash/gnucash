@@ -48,6 +48,7 @@
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-gnome-utils.h"
+#include "misc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-page-budget.h"
@@ -117,6 +118,8 @@ static void gnc_plugin_page_budget_cmd_estimate_budget(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_allperiods_budget(
     GtkAction *action, GncPluginPageBudget *page);
+static void gnc_plugin_page_budget_cmd_budget_note(
+    GtkAction *action, GncPluginPageBudget *page);
 static void allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     GtkTreeIter *iter, gpointer data);
 
@@ -161,7 +164,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
         N_("Edit budget for all periods for the selected accounts"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_allperiods_budget)
     },
-
+    {
+        "BudgetNoteAction", "system-run", N_("Edit Note"),
+        NULL,
+        N_("Edit note for the selected account and period"),
+        G_CALLBACK (gnc_plugin_page_budget_cmd_budget_note)
+    },
     /* View menu */
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
@@ -190,6 +198,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "OptionsBudgetAction",        N_("Options") },
     { "EstimateBudgetAction",       N_("Estimate") },
     { "AllPeriodsBudgetAction",     N_("All Periods") },
+    { "BudgetNoteAction",           N_("Note") },
     { NULL, NULL },
 };
 
@@ -1116,6 +1125,82 @@ gnc_plugin_page_budget_cmd_allperiods_budget(GtkAction *action,
             priv->action == UNSET)
             gtk_tree_selection_selected_foreach(sel, allperiods_budget_helper,
                                                 page);
+        break;
+    default:
+        break;
+    }
+    gtk_widget_destroy(dialog);
+    g_object_unref(G_OBJECT(builder));
+}
+
+static void
+gnc_plugin_page_budget_cmd_budget_note(GtkAction *action,
+                                       GncPluginPageBudget *page)
+{
+    GncPluginPageBudgetPrivate *priv;
+    GtkTreeSelection *sel;
+    GtkWidget *dialog, *note;
+    gint result;
+    GtkBuilder *builder;
+    const gchar *txt;
+    GtkTreeViewColumn *col = NULL;
+    GtkTreePath *path = NULL;
+    guint period_num = 0;
+    Account *acc = NULL;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    sel  = gnc_budget_view_get_selection(priv->budget_view);
+
+    gtk_tree_view_get_cursor(
+        GTK_TREE_VIEW(gnc_budget_view_get_account_tree_view(priv->budget_view)),
+        &path, &col);
+
+    if (path)
+    {
+        period_num = col ? GPOINTER_TO_UINT(
+                               g_object_get_data(G_OBJECT(col), "period_num"))
+                         : 0;
+
+        acc = gnc_budget_view_get_account_from_path(priv->budget_view, path);
+        gtk_tree_path_free(path);
+    }
+
+    if (!acc)
+    {
+        dialog = gtk_message_dialog_new(
+            GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
+            GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
+            _("You must select one budget cell to edit."));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file(builder, "gnc-plugin-page-budget.glade",
+                              "budget_note_dialog");
+
+    dialog = GTK_WIDGET(gtk_builder_get_object(builder, "budget_note_dialog"));
+
+    gtk_window_set_transient_for(
+        GTK_WINDOW(dialog),
+        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+
+    note = GTK_WIDGET(gtk_builder_get_object(builder, "BudgetNote"));
+    txt  = gnc_budget_get_account_period_note(priv->budget, acc, period_num);
+    xxxgtk_textview_set_text(GTK_TEXT_VIEW(note), txt);
+
+    gtk_widget_show_all(dialog);
+    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    switch (result)
+    {
+    case GTK_RESPONSE_OK:
+        txt = xxxgtk_textview_get_text(GTK_TEXT_VIEW(note));
+        if (!strlen(txt))
+            txt = NULL;
+        gnc_budget_set_account_period_note(priv->budget, acc, period_num, txt);
         break;
     default:
         break;
