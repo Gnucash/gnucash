@@ -52,12 +52,13 @@ extern "C"
 #define BUDGET_TABLE "budgets"
 #define TABLE_VERSION 1
 #define AMOUNTS_TABLE "budget_amounts"
-#define AMOUNTS_TABLE_VERSION 1
+#define AMOUNTS_TABLE_VERSION 2
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
+#define BUDGET_MAX_NOTES_LEN 2048
 
 static const EntryVec col_table
 {
@@ -79,6 +80,8 @@ static gint get_period_num (gpointer pObj);
 static void set_period_num (gpointer pObj, gpointer val);
 static gnc_numeric get_amount (gpointer pObj);
 static void set_amount (gpointer pObj, gnc_numeric value);
+static const gchar* get_notes (gpointer pObj);
+static void set_notes (gpointer pObj, const gchar *value);
 
 GncSqlBudgetBackend::GncSqlBudgetBackend() :
     GncSqlObjectBackend(TABLE_VERSION, GNC_ID_BUDGET,
@@ -107,7 +110,18 @@ static const EntryVec budget_amounts_col_table
     gnc_sql_make_table_entry<CT_NUMERIC>("amount", 0, COL_NNUL,
                                          (QofAccessFunc)get_amount,
                                          (QofSetterFunc)set_amount),
+    gnc_sql_make_table_entry<CT_STRING>("notes", BUDGET_MAX_NOTES_LEN, 0,
+                                        (QofAccessFunc)get_notes,
+                                        (QofSetterFunc)set_notes)                                     
 };
+
+/* Special column table used to upgrade table from version 1 to 2 */
+static const EntryVec amounts_adjust_col_table
+({
+    gnc_sql_make_table_entry<CT_STRING>(
+       "notes", BUDGET_MAX_NOTES_LEN, 0)
+});
+
 
 /* ================================================================= */
 static QofInstance*
@@ -174,8 +188,14 @@ get_amount (gpointer pObj)
 
     g_return_val_if_fail (pObj != NULL, gnc_numeric_zero ());
 
-    return gnc_budget_get_account_period_value (info->budget, info->account,
-                                                info->period_num);
+    if (gnc_budget_is_account_period_value_set(info->budget, info->account,
+                                               info->period_num))
+        return gnc_budget_get_account_period_value(info->budget, info->account,
+                                                   info->period_num);
+    // if it is unset, save as NaN so when reading it will unset the kvp
+    // instead of setting the budget to zero
+    else
+        return gnc_numeric_error(GNC_ERROR_ARG);
 }
 
 static void
@@ -189,6 +209,27 @@ set_amount (gpointer pObj, gnc_numeric value)
                                          info->period_num, value);
 }
 
+static const gchar *
+get_notes (gpointer pObj)
+{
+    budget_amount_info_t* info = (budget_amount_info_t*)pObj;
+
+    g_return_val_if_fail (pObj != NULL, NULL);
+
+    return gnc_budget_get_account_period_note(info->budget, info->account,
+                                              info->period_num);
+}
+
+static void
+set_notes (gpointer pObj, const gchar * value)
+{
+    budget_amount_info_t* info = (budget_amount_info_t*)pObj;
+
+    g_return_if_fail (pObj != NULL);
+
+    gnc_budget_set_account_period_note(info->budget, info->account,
+                                       info->period_num, value);
+}
 /*----------------------------------------------------------------*/
 /**
  * Loads the budget amounts for a budget.
@@ -277,7 +318,8 @@ save_budget_amounts (GncSqlBackend* sql_be, GncBudget* budget)
         info.account = GNC_ACCOUNT (node->data);
         for (i = 0; i < num_periods && is_ok; i++)
         {
-            if (gnc_budget_is_account_period_value_set (budget, info.account, i))
+            if (gnc_budget_is_account_period_value_set(budget, info.account, i) ||
+                gnc_budget_get_account_period_note(budget, info.account, i))
             {
                 info.period_num = i;
                 is_ok = sql_be->do_db_operation(OP_DB_INSERT, AMOUNTS_TABLE,
@@ -361,6 +403,25 @@ GncSqlBudgetBackend::create_tables (GncSqlBackend* sql_be)
     {
         (void)sql_be->create_table(AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION,
                                     budget_amounts_col_table);
+    } 
+    else if (version == 1)
+    {
+        /* Upgrade:
+            1->2: Add "note" field
+        */
+
+        gboolean ok = sql_be->add_columns_to_table(AMOUNTS_TABLE,
+                                                   amounts_adjust_col_table);
+        if (!ok)
+        {
+            PERR ("Unable to add 'note' column\n");
+            return;
+        }
+
+        sql_be->set_table_version (AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION);
+        PINFO ("Budget table upgraded from version %d to version %d\n", version,
+               AMOUNTS_TABLE_VERSION);
+
     }
 }
 
