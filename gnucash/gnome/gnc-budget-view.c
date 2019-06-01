@@ -215,7 +215,6 @@ static void
 gnc_budget_view_init(GncBudgetView *budget_view)
 {
     GncBudgetViewPrivate *priv;
-    Account* root;
     gint num_top_accounts;
     gint i;
 
@@ -225,11 +224,8 @@ gnc_budget_view_init(GncBudgetView *budget_view)
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    /* Keep track of the root and top level asset, liability, income and expense accounts */
-    root = gnc_book_get_root_account(gnc_get_current_book());
-    num_top_accounts = gnc_account_n_children(root);
-
-    priv->rootAcct = root;
+    /* Keep track of the root account */
+    priv->rootAcct = gnc_book_get_root_account(gnc_get_current_book());
 
     LEAVE("");
 }
