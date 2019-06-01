@@ -1866,9 +1866,11 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     //g_warning("Setting job name=%s", job_name);
 
-
+#ifdef WEBKIT1
+    gnc_html_print (priv->html, job_name, FALSE);
+#else
     gnc_html_print (priv->html, job_name);
-
+#endif
 
     g_free (job_name);
 }
