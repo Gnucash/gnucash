@@ -64,6 +64,7 @@
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 #include "gnc-state.h"
+#include "gnc-cell-renderer-text-flag.h"
 
 #include "qof.h"
 
@@ -987,15 +988,7 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     }
 
     note = gnc_budget_get_account_period_note(budget, account, period_num);
-
-    if (note == NULL)
-    {
-        g_object_set(cell, "background", NULL, NULL);
-    }
-    else
-    {
-        g_object_set(cell, "background", "beige", NULL);
-    }
+    g_object_set(cell, "flagged", note != NULL, NULL);
 
     return g_strdup(amtbuff);
 }
@@ -1405,19 +1398,15 @@ gnc_budget_view_refresh(GncBudgetView *view)
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
     {
-        GtkCellRenderer* renderer;
-
-        col = gnc_tree_view_account_add_custom_column(
+        GtkCellRenderer *renderer = gnc_cell_renderer_text_flag_new ();
+        col = gnc_tree_view_account_add_custom_column_renderer(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
-                  budget_col_source, budget_col_edited);
+                  budget_col_source, budget_col_edited, renderer);
         g_object_set_data(G_OBJECT(col), "budget", priv->budget);
         g_object_set_data(G_OBJECT(col), "budget_view", priv->tree_view);
         g_object_set_data(G_OBJECT(col), "period_num",
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
-
-        // as we only have one renderer/column, use this function to get it
-        renderer = gnc_tree_view_column_get_renderer (col);
 
         // add some padding to the right of the numbers
         gbv_renderer_add_padding (renderer);

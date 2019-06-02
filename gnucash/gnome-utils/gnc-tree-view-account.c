@@ -1883,12 +1883,25 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
                                         GncTreeViewAccountColumnTextEdited
                                         col_edited_cb)
 {
-    GtkCellRenderer *renderer;
+    GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
+
+    return gnc_tree_view_account_add_custom_column_renderer(
+        account_view, column_title, col_source_cb, col_edited_cb, renderer);
+}
+
+GtkTreeViewColumn *
+gnc_tree_view_account_add_custom_column_renderer(GncTreeViewAccount *account_view,
+                                        const gchar *column_title,
+                                        GncTreeViewAccountColumnSource
+                                        col_source_cb,
+                                        GncTreeViewAccountColumnTextEdited
+                                        col_edited_cb,
+                                        GtkCellRenderer *renderer)
+{
     GtkTreeViewColumn *column;
 
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (account_view), NULL);
 
-    renderer = gtk_cell_renderer_text_new ();
     g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
 
     column = gtk_tree_view_column_new_with_attributes (column_title,
