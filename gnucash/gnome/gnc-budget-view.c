@@ -124,6 +124,9 @@ static gboolean gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event,
 static void gbv_row_activated_cb(
     GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col,
     GncBudgetView *view);
+static gboolean query_tooltip_tree_view_cb(GtkWidget *widget, gint x, gint y,
+    gboolean keyboard_tip,
+    GtkTooltip *tooltip, GncBudgetView* view);
 #if 0
 static void gbv_selection_changed_cb(
     GtkTreeSelection *selection, GncBudgetView *view);
@@ -385,6 +388,9 @@ gbv_create_widget(GncBudgetView *view)
     // Add accounts tree view to scroll window
     gtk_container_add(GTK_CONTAINER(scrolled_window), GTK_WIDGET(tree_view));
 
+    g_object_set(tree_view, "has-tooltip", TRUE, NULL);
+    g_signal_connect(G_OBJECT(tree_view), "query-tooltip",
+                     G_CALLBACK(query_tooltip_tree_view_cb), view);
     g_signal_connect(G_OBJECT(tree_view), "row-activated",
                      G_CALLBACK(gbv_row_activated_cb), view);
 
@@ -794,6 +800,44 @@ gbv_row_activated_cb(GtkTreeView *treeview, GtkTreePath *path,
     }
 
     g_signal_emit_by_name(view, "account-activated", account);
+}
+
+static gboolean
+query_tooltip_tree_view_cb(GtkWidget *widget, gint x, gint y,
+                           gboolean keyboard_tip, GtkTooltip *tooltip,
+                           GncBudgetView* view)
+{
+    GtkTreeView *tree_view = GTK_TREE_VIEW(widget);
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
+    GtkTreePath *path      = NULL;
+    GtkTreeViewColumn *column = NULL;
+    const gchar *note;
+    guint period_num;
+    Account *account;
+
+    gtk_tree_view_convert_widget_to_bin_window_coords(tree_view, x, y, &x, &y);
+
+    if (keyboard_tip || !gtk_tree_view_get_path_at_pos(tree_view, x, y, &path,
+                                                       &column, NULL, NULL))
+        return FALSE;
+
+    if (!column)
+        return FALSE;
+
+    period_num = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(column), "period_num"));
+    if (!period_num && priv->period_col_list->data != column)
+        return FALSE;
+    account = gnc_tree_view_account_get_account_from_path(
+        GNC_TREE_VIEW_ACCOUNT(widget), path);
+    note = gnc_budget_get_account_period_note(priv->budget, account, period_num);
+    if (!note)
+        return FALSE;
+
+    gtk_tooltip_set_text(tooltip, note);
+    gtk_tree_view_set_tooltip_cell(tree_view, tooltip, path, column, NULL);
+    gtk_tree_path_free(path);
+
+    return TRUE;
 }
 
 /** \brief Action for when a selection in a gnc budget view is changed
