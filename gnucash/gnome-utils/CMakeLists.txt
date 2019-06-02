@@ -59,6 +59,7 @@ set (gnome_utils_SOURCES
   gnc-cell-renderer-date.c
   gnc-cell-renderer-popup.c
   gnc-cell-renderer-popup-entry.c
+  gnc-cell-renderer-text-flag.c
   gnc-combott.c
   gnc-commodity-edit.c
   gnc-currency-edit.c
@@ -146,6 +147,7 @@ set (gnome_utils_HEADERS
   gnc-cell-renderer-date.h
   gnc-cell-renderer-popup.h
   gnc-cell-renderer-popup-entry.h
+  gnc-cell-renderer-text-flag.h
   gnc-combott.h
   gnc-commodity-edit.h
   gnc-currency-edit.h
