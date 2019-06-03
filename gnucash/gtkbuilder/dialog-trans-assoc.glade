@@ -22,7 +22,8 @@
   </object>
   <object class="GtkWindow" id="transaction_association_window">
     <property name="can_focus">False</property>
-    <child type="titlebar">
+    <property name="title" translatable="yes">All Transaction Associations</property>
+    <child>
       <placeholder/>
     </child>
     <child>

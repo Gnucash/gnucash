@@ -585,6 +585,7 @@
               <object class="GtkGrid" id="gncfreq_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="freq_label">
                     <property name="visible">True</property>
@@ -607,7 +608,7 @@
                     <property name="justify">center</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -625,22 +626,6 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="alignment1">
-                    <property name="width_request">25</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="right_padding">20</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>

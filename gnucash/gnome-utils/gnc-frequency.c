@@ -229,7 +229,7 @@ gnc_frequency_init(GncFrequency *gf)
     /* Add the new widget to the table. */
     {
         GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
-        gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
+        gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 3, 0, 1, 1);
         gtk_widget_set_vexpand (GTK_WIDGET(gf->startDate), FALSE);
         gtk_widget_set_hexpand (GTK_WIDGET(gf->startDate), FALSE);
         gtk_widget_set_valign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);

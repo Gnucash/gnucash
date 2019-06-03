@@ -132,7 +132,7 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">3</property>
+            <property name="border_width">6</property>
             <property name="row_spacing">3</property>
             <property name="column_spacing">3</property>
             <child>
@@ -389,6 +389,7 @@
           <object class="GtkGrid" id="table3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="border_width">6</property>
             <child>
               <object class="GtkFrame" id="frame3">
                 <property name="visible">True</property>
@@ -411,7 +412,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="row_spacing">3</property>
-                            <property name="column_spacing">5</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="date_label">
                                 <property name="visible">True</property>
