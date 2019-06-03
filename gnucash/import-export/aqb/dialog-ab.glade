@@ -104,8 +104,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Current Job</property>
+                        <property name="label" translatable="yes">Current _Job</property>
+                        <property name="use_underline">True</property>
                         <property name="justify">center</property>
+                        <property name="mnemonic_widget">top_entry</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -158,8 +160,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Current Action</property>
+                        <property name="label" translatable="yes">Current _Action</property>
+                        <property name="use_underline">True</property>
                         <property name="justify">center</property>
+                        <property name="mnemonic_widget">second_entry</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -207,7 +211,6 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;_Log Messages&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
-                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -500,7 +503,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="now_button">
-                        <property name="label" translatable="yes">_Now</property>
+                        <property name="label" translatable="yes">No_w</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -673,6 +676,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">_Password:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">input_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -687,6 +691,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Con_firm Password:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">confirm_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -832,6 +837,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes"> _Name of the new template:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">template_name</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -993,6 +999,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Recipient Account _Number</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">recp_account_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1021,6 +1028,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Recipient _Bank Code</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">recp_bankcode_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1051,6 +1059,7 @@
                     <property name="label" translatable="yes">_Recipient Name</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">recp_name_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1108,6 +1117,7 @@
                     <property name="label" translatable="yes">Payment _Purpose (only for recipient)</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">purpose_entry</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -1135,6 +1145,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Originator Name</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">orig_name_label</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
