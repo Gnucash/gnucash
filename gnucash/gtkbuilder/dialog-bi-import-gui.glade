@@ -163,7 +163,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkRadioButton" id="radiobuttonBill">
-                            <property name="label" translatable="yes">Bill</property>
+                            <property name="label" translatable="yes">_Bill</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -171,6 +171,7 @@
                             <property name="tooltip_markup">Import bill CSV data</property>
                             <property name="tooltip_text" translatable="yes">Import bill CSV data</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="gnc_import_gui_type_cb" swapped="no"/>
@@ -183,7 +184,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="radiobuttonInvoice">
-                            <property name="label" translatable="yes">Invoice</property>
+                            <property name="label" translatable="yes">_Invoice</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -191,6 +192,7 @@
                             <property name="tooltip_markup">Import invoice CSV data</property>
                             <property name="tooltip_text" translatable="yes">Import invoice CSV data</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radiobuttonBill</property>
                             <signal name="toggled" handler="gnc_import_gui_type_cb" swapped="no"/>
@@ -240,7 +242,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton1">
-                        <property name="label" translatable="yes">Semicolon separated</property>
+                        <property name="label" translatable="yes">_Semicolon separated</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -258,7 +260,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton2">
-                        <property name="label" translatable="yes">Comma separated</property>
+                        <property name="label" translatable="yes">Co_mma separated</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -276,7 +278,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton3">
-                        <property name="label" translatable="yes">Semicolon separated with quotes</property>
+                        <property name="label" translatable="yes">Semicolon separated with _quotes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -294,7 +296,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton4">
-                        <property name="label" translatable="yes">Comma separated with quotes</property>
+                        <property name="label" translatable="yes">Comma separated with q_uotes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -312,7 +314,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton5">
-                        <property name="label" translatable="yes">Custom regular expression</property>
+                        <property name="label" translatable="yes">Custom _regular expression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -412,7 +414,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonOpenAll">
-                        <property name="label" translatable="yes">Open imported documents in tabs</property>
+                        <property name="label" translatable="yes">Open imported _documents in tabs</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -430,7 +432,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonOpenNotPosted">
-                        <property name="label" translatable="yes">Open not yet posted documents in tabs </property>
+                        <property name="label" translatable="yes">Open not yet _posted documents in tabs </property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -448,7 +450,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonOpenNone">
-                        <property name="label" translatable="yes">Don't open imported documents in tabs</property>
+                        <property name="label" translatable="yes">Do_n't open imported documents in tabs</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

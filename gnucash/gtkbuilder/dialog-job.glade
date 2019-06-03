@@ -288,7 +288,7 @@
                 <property name="label_xalign">0</property>
                 <child>
                   <object class="GtkCheckButton" id="active_check">
-                    <property name="label" translatable="yes">Job Active</property>
+                    <property name="label" translatable="yes">Job _Active</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

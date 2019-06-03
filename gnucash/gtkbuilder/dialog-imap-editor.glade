@@ -109,11 +109,12 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkRadioButton" id="radio-bayes">
-                <property name="label" translatable="yes">Bayesian</property>
+                <property name="label" translatable="yes">_Bayesian</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">center</property>
+                <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -125,11 +126,12 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="radio-nbayes">
-                <property name="label" translatable="yes">Non-Bayesian</property>
+                <property name="label" translatable="yes">_Non-Bayesian</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">center</property>
+                <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio-bayes</property>
@@ -142,11 +144,12 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="radio-online">
-                <property name="label" translatable="yes">Online ID</property>
+                <property name="label" translatable="yes">_Online ID</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">center</property>
+                <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio-bayes</property>
@@ -327,7 +330,7 @@
             </child>
             <child>
               <object class="GtkButton" id="collapse-button">
-                <property name="label" translatable="yes">_Collapse All</property>
+                <property name="label" translatable="yes">Collapse _All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

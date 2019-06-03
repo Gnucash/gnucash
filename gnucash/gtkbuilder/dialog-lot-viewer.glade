@@ -150,6 +150,7 @@
                         <property name="label" translatable="yes">&lt;b&gt;_Notes&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">lot_notes_text</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -200,6 +201,7 @@
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
+                        <property name="mnemonic_widget">lot_title_entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -224,6 +226,7 @@
                         <property name="label" translatable="yes">&lt;b&gt;_Lots in This Account&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">lot_view</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -260,12 +263,13 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="only_show_open_lots_checkbutton">
-                        <property name="label" translatable="yes">Show only open lots</property>
+                        <property name="label" translatable="yes">Show _only open lots</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -308,6 +312,7 @@
                         <property name="label" translatable="yes">&lt;b&gt;Splits _free&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">split_free_view</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -430,6 +435,7 @@
                             <property name="label" translatable="yes">&lt;b&gt;Splits _in lot&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">split_in_lot_view</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

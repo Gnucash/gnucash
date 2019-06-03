@@ -92,10 +92,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="color_button_default">
-                    <property name="label" translatable="yes">Default</property>
+                    <property name="label" translatable="yes">_Default</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -125,11 +126,12 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="replace_check">
-                <property name="label" translatable="yes">Replace any existing account colors</property>
+                <property name="label" translatable="yes">_Replace any existing account colors</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">center</property>
+                <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -1102,6 +1104,7 @@
                             <property name="margin_left">12</property>
                             <property name="label" translatable="yes">Account _Color:</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">color_entry_button</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1702,7 +1705,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Prefix:</property>
+                <property name="label" translatable="yes">_Prefix:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">prefix_entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -1761,7 +1766,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Interval:</property>
+                <property name="label" translatable="yes">_Interval:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">interval_spin</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

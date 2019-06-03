@@ -373,6 +373,7 @@
                     <property name="label" translatable="yes">_Type:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">namespace_cbwe</property>
                   </object>
                 </child>
               </object>
@@ -416,6 +417,7 @@
                     <property name="label" translatable="yes">F_raction traded:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">fraction_spinbutton</property>
                   </object>
                 </child>
               </object>
@@ -653,6 +655,7 @@
                     <property name="label" translatable="yes">_Display symbol</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">user_symbol_entry</property>
                   </object>
                 </child>
               </object>
@@ -813,6 +816,7 @@
                     <property name="label" translatable="yes">_Type:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">ss_namespace_cbwe</property>
                   </object>
                 </child>
               </object>
@@ -834,6 +838,7 @@
                     <property name="label">_Security/currency:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
+                    <property name="mnemonic_widget">ss_commodity_cbwe</property>
                   </object>
                 </child>
               </object>
