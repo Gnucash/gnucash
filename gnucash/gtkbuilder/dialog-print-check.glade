@@ -517,7 +517,7 @@
 ADDRESS item defined in order
 to print an address on the check.</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Address</property>
+                    <property name="label" translatable="yes">_Address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">check_address_name</property>
                   </object>
@@ -962,7 +962,7 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Rotation</property>
+                    <property name="label" translatable="yes">_Rotation:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">check_rotation_entry</property>
                   </object>
@@ -1153,7 +1153,7 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Splits Memo</property>
+                    <property name="label" translatable="yes">Splits Memo:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">splits_memo_x_entry</property>
@@ -1168,7 +1168,7 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Splits Amount</property>
+                    <property name="label" translatable="yes">Splits Amount:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">splits_amount_x_entry</property>
@@ -1183,7 +1183,7 @@ to print an address on the check.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Splits Account</property>
+                    <property name="label" translatable="yes">Splits Account:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">splits_account_x_entry</property>
