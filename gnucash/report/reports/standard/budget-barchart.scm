@@ -279,14 +279,6 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  ;; This is a helper function to find out the level of the account
-  ;; with in the account tree
-  (define (get-account-level account level)
-    (let ((parent (gnc-account-get-parent account)))
-      (cond
-       ((null? parent) level)
-       (else (get-account-level parent (1+ level))))))
-
   (define (curr-period budget)
     (let ((now (current-time))
           (max-period (1- (gnc-budget-get-num-periods budget))))
@@ -353,10 +345,10 @@
           (if (or (and (eq? depth-limit 'all)
                        (null? (gnc-account-get-descendants acct)))
                   (and (not (eq? depth-limit 'all))
-                       (<= (get-account-level acct 0) depth-limit)
+                       (<= (gnc-account-get-current-depth acct) depth-limit)
                        (null? (gnc-account-get-descendants acct)))
                   (and (not (eq? depth-limit 'all))
-                       (= (get-account-level acct 0) depth-limit)))
+                       (= (gnc-account-get-current-depth acct) depth-limit)))
               (gnc:html-document-add-object!
                document
                (gnc:chart-create-budget-actual
