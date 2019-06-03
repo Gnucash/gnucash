@@ -417,7 +417,7 @@
                               <object class="GtkLabel" id="date_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Date</property>
                                 <property name="justify">right</property>
                               </object>
@@ -454,7 +454,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Amount&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                                 <property name="justify">right</property>
@@ -479,7 +479,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Payment</property>
                                 <property name="justify">right</property>
                               </object>
@@ -503,7 +503,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
 If you have selected an invoice, GnuCash will propose the amount still due for it. You can change this amount to create a partial payment or an over-payment.
 
 In case of an over-payment or if no invoice was selected, GnuCash will automatically assign the remaining amount to the first unpaid invoice for this company.</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Refund</property>
                                 <property name="justify">right</property>
                               </object>
@@ -516,7 +516,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               <object class="GtkLabel" id="num_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Num</property>
                                 <property name="justify">right</property>
                               </object>
@@ -529,7 +529,7 @@ In case of an over-payment or if no invoice was selected, GnuCash will automatic
                               <object class="GtkLabel" id="memo_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">end</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Memo</property>
                                 <property name="justify">right</property>
                               </object>

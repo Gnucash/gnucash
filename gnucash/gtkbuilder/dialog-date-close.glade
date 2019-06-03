@@ -112,7 +112,7 @@
                   <object class="GtkLabel" id="postdate_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label">postd</property>
                     <property name="justify">right</property>
                   </object>
@@ -125,7 +125,7 @@
                   <object class="GtkLabel" id="date_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label">duedate</property>
                     <property name="justify">right</property>
                   </object>
@@ -138,7 +138,7 @@
                   <object class="GtkLabel" id="memo_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Description</property>
                     <property name="justify">right</property>
                   </object>
@@ -151,7 +151,7 @@
                   <object class="GtkLabel" id="acct_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
+                    <property name="halign">start</property>
                     <property name="label">acct</property>
                     <property name="justify">right</property>
                   </object>

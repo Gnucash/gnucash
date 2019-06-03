@@ -83,6 +83,7 @@
               <object class="GtkLabel" id="label847713">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Username:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -97,6 +98,7 @@
               <object class="GtkLabel" id="label847714">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Password:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -112,6 +114,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
@@ -125,6 +128,7 @@
               <object class="GtkEntry" id="password_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="visibility">False</property>
                 <property name="activates_default">True</property>
                 <property name="primary_icon_activatable">False</property>

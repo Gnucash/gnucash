@@ -74,7 +74,7 @@
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Due Days: </property>
                         <property name="justify">right</property>
                       </object>
@@ -88,7 +88,7 @@
                       <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Discount Days: </property>
                         <property name="justify">right</property>
                       </object>
@@ -102,7 +102,7 @@
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Discount %: </property>
                         <property name="justify">right</property>
                       </object>
@@ -651,6 +651,7 @@
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">De_scription:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
@@ -665,6 +666,7 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">_Type:</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
@@ -698,7 +700,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label">(type)</property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
