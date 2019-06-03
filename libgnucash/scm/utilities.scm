@@ -155,3 +155,13 @@
   (string-replace-substring
    s1 s2 s3 0 (string-length s1) (max 0 (1- start))
    (and (positive? end-after) (+ (max 0 (1- start)) (1- end-after)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; avoid using strftime, still broken in guile-2.2. see explanation at
+;; https://www.mail-archive.com/bug-guile@gnu.org/msg09778.html
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ((strftime-old strftime))
+  (set! strftime
+    (lambda args
+      (gnc:warn "strftime may be buggy. use gnc-print-time64 instead.")
+      (apply strftime-old args))))
