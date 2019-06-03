@@ -29,7 +29,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="newbutton">
-                <property name="label">New _Account...</property>
+                <property name="label" translatable="yes">New _Account...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1254,9 +1254,9 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">matcher__help</action-widget>
       <action-widget response="-6">matcher_cancel</action-widget>
       <action-widget response="-5">matcher_ok</action-widget>
-      <action-widget response="-11">matcher__help</action-widget>
     </action-widgets>
   </object>
 </interface>

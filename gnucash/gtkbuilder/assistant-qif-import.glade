@@ -380,8 +380,8 @@ Please enter a name for the account. If the file was exported from another accou
                 <property name="invisible_char">●</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <signal name="changed" handler="gnc_ui_qif_import_acct_valid_cb" swapped="no"/>
                 <signal name="activate" handler="gnc_ui_qif_import_acct_enter_cb" swapped="no"/>
+                <signal name="changed" handler="gnc_ui_qif_import_acct_valid_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1155,7 +1155,7 @@ If you don't see your exchange listed, or none of the available choices are appr
                 </child>
                 <child>
                   <object class="GtkButton" id="convert_progress_pause">
-                    <property name="label">P_ause</property>
+                    <property name="label" translatable="yes">P_ause</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
