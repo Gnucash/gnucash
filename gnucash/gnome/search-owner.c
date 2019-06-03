@@ -49,8 +49,6 @@ static void gnc_search_owner_class_init (GNCSearchOwnerClass *klass);
 static void gnc_search_owner_init   (GNCSearchOwner *gspaper);
 static void gnc_search_owner_finalize   (GObject *obj);
 
-typedef struct _GNCSearchOwnerPrivate GNCSearchOwnerPrivate;
-
 typedef struct _GNCSearchOwnerPrivate
 {
     GncOwner    owner;
