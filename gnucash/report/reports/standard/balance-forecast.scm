@@ -152,7 +152,8 @@ date point, a projected minimum balance including scheduled transactions."))
 
           (plot-width (get-option gnc:pagename-display optname-plot-width))
           (plot-height (get-option gnc:pagename-display optname-plot-height))
-          (show-markers (get-option gnc:pagename-display optname-show-markers))
+          (markers (if (get-option gnc:pagename-display optname-show-markers)
+                       3 0))
           (show-reserve (get-option gnc:pagename-display optname-show-reserve))
           (reserve (get-option gnc:pagename-display optname-reserve))
           (show-target (get-option gnc:pagename-display optname-show-target))
@@ -160,8 +161,7 @@ date point, a projected minimum balance including scheduled transactions."))
           (show-minimum (get-option gnc:pagename-display optname-show-minimum))
 
           ; Variables
-          (chart (gnc:make-html-linechart))
-          (series '())
+          (chart (gnc:make-html-chart))
           (intervals (gnc:make-date-interval-list
             from-date to-date (gnc:deltasym-to-delta interval)))
           (accum (gnc:make-commodity-collector))
@@ -231,50 +231,71 @@ date point, a projected minimum balance including scheduled transactions."))
 
         ;; Minimum line
         (when show-minimum
-          (set! series (cons (list (_ "Minimum") "#0AA") series))
-          (gnc:html-linechart-append-column!
-           chart (let loop ((balances balances) (result '()))
+          (gnc:html-chart-add-data-series!
+           chart
+           (_ "Minimum")
+           (let loop ((balances balances) (result '()))
                    (if (null? balances) (reverse! result)
-                       (loop (cdr balances) (cons (apply min balances) result))))))
+                       (loop (cdr balances) (cons (apply min balances) result))))
+           "#0AA"
+           'fill #f
+           'borderWidth 1.5
+           'pointRadius markers))
 
         ;; Balance line (do this here so it draws over the minimum line)
-        (set! series (cons (list (_ "Balance") "#0A0") series))
-        (gnc:html-linechart-append-column! chart balances)
+        (gnc:html-chart-add-data-series!
+         chart (_ "Balance") balances "#0A0"
+         'fill #f
+         'borderWidth 1.5
+         'pointRadius markers)
 
         ;; Target line
         (when show-target
-          (set! series (cons (list (_ "Target") "#FF0") series))
-          (gnc:html-linechart-append-column!
-           chart (make-list (length intervals) (+ reserve target))))
+          (gnc:html-chart-add-data-series!
+           chart (_ "Target")
+           (make-list (length intervals) (+ reserve target))
+           "#FF0"
+           'fill #f
+           'borderWidth 1.5
+           'pointRadius markers))
 
         ;; Reserve line
         (when show-reserve
-          (set! series (cons (list (_ "Reserve") "#F00") series))
-          (gnc:html-linechart-append-column!
-           chart (make-list (length intervals) reserve)))
+          (gnc:html-chart-add-data-series!
+           chart (_ "Reserve") (make-list (length intervals) reserve)
+           "#F00"
+           'fill #f
+           'borderWidth 1.5
+           'pointRadius markers))
 
+        (gnc:html-chart-set-type! chart 'line)
         ;; Set the chart titles
-        (gnc:html-linechart-set-title! chart report-title)
-        (gnc:html-linechart-set-subtitle!
-         chart (format #f (_ "~a to ~a")
-                       (qof-print-date from-date) (qof-print-date to-date)))
+        (gnc:html-chart-set-title!
+         chart (list report-title
+                     (format #f (_ "~a to ~a")
+                       (qof-print-date from-date) (qof-print-date to-date))))
         ;; Set the chart size
-        (gnc:html-linechart-set-width! chart plot-width)
-        (gnc:html-linechart-set-height! chart plot-height)
+        (gnc:html-chart-set-width! chart plot-width)
+        (gnc:html-chart-set-height! chart plot-height)
         ;; Set the axis labels
-        (gnc:html-linechart-set-y-axis-label!
+        (gnc:html-chart-set-y-axis-label!
          chart (gnc-commodity-get-mnemonic currency))
-        ;; Set line markers
-        (gnc:html-linechart-set-markers?! chart show-markers)
         ;; Set series labels
         (let ((old-fmt (qof-date-format-get)))
           (qof-date-format-set QOF-DATE-FORMAT-ISO)
-          (gnc:html-linechart-set-row-labels!
+          (gnc:html-chart-set-data-labels!
            chart (map qof-print-date (map cadr intervals)))
           (qof-date-format-set old-fmt))
-        (gnc:html-linechart-set-col-labels! chart (map car (reverse series)))
-        ;; Assign line colors
-        (gnc:html-linechart-set-col-colors! chart (map cadr (reverse series)))
+
+        ;; Set currency symbol
+        (gnc:html-chart-set-currency-iso!
+        chart (gnc-commodity-get-mnemonic currency))
+        (gnc:html-chart-set-currency-symbol!
+         chart (gnc-commodity-get-nice-symbol currency))
+
+        ;; Allow tooltip in whole chartarea
+        (gnc:html-chart-set! chart '(options tooltips mode) "index")
+        (gnc:html-chart-set! chart '(options tooltips intersect) #f)
 
         ;; We're done!
         (gnc:html-document-add-object! document chart)
