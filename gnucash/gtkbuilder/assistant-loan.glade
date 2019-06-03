@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="len_liststore">
@@ -94,6 +94,9 @@
     <signal name="cancel" handler="loan_assistant_cancel" swapped="no"/>
     <signal name="close" handler="loan_assistant_close" swapped="no"/>
     <signal name="prepare" handler="loan_assistant_prepare" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkLabel" id="loan_intro_page">
         <property name="visible">True</property>
@@ -269,9 +272,6 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="xscale">0.25</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -389,9 +389,6 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="border_width">10</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                     </child>
                     <child type="label">
@@ -530,9 +527,6 @@ Do you utilise an escrow account, if so an account must be specified...</propert
                         <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -719,9 +713,6 @@ All accounts must have valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="border_width">10</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                     </child>
                     <child type="label">
@@ -1054,9 +1045,6 @@ All enabled option pages must contain valid entries to continue.
                                   <object class="GtkBox" id="pay_freq_hbox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1332,10 +1320,8 @@ Review the details below and if correct press Apply to create the schedule.</pro
         <property name="has_padding">False</property>
       </packing>
     </child>
-    <child internal-child="action_area">
-      <object class="GtkBox" id="assistant-action_area2">
-        <property name="can_focus">False</property>
-      </object>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>

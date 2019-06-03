@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="lot_viewer_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Lot Viewer</property>
     <property name="default_width">600</property>
@@ -11,6 +10,9 @@
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="lv_window_destroy_cb" swapped="no"/>
     <signal name="response" handler="lv_response_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -169,8 +171,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Enter any notes you want to make about this lot.</property>
-                            <property name="accepts_tab">False</property>
                             <property name="wrap_mode">word</property>
+                            <property name="accepts_tab">False</property>
                           </object>
                         </child>
                       </object>

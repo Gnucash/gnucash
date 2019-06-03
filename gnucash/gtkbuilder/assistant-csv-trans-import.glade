@@ -34,6 +34,9 @@
     <signal name="destroy" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
     <child>
+      <placeholder/>
+    </child>
+    <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -141,9 +144,6 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="pack_type">end</property>
                             <property name="position">0</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                         <child>
                           <object class="GtkButton" id="save_settings">
@@ -549,9 +549,6 @@ To know which lines belong to the same transaction, the importer will compare th
                             <property name="position">3</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -710,9 +707,6 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -739,9 +733,6 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
-                                </child>
-                                <child>
-                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -787,9 +778,6 @@ For example
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -825,9 +813,6 @@ For example
                       <object class="GtkBox" id="account_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -938,9 +923,6 @@ For example
                 <property name="pack_type">end</property>
                 <property name="position">0</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
@@ -1120,7 +1102,7 @@ More information can be displayed by using the help button.</property>
           <object class="GtkLabel" id="match_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
+            <property name="label">label</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -1164,10 +1146,8 @@ More information can be displayed by using the help button.</property>
         <property name="has_padding">False</property>
       </packing>
     </child>
-    <child internal-child="action_area">
-      <object class="GtkBox" id="assistant-action_area2">
-        <property name="can_focus">False</property>
-      </object>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>
