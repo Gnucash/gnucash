@@ -981,14 +981,22 @@ flawed. see report-utilities.scm. please update reports.")
 ;;   budget - budget to use
 ;;   children - list of children
 ;;   period - budget period to use
+;;   currency - currency to use to accumulate the balances
 ;;
 ;; Return value:
 ;;   budget value to use for account for specified period.
-(define (budget-account-sum budget children period)
-  (apply + (map
-            (lambda (child)
-              (gnc:get-account-period-rolledup-budget-value budget child period))
-            children)))
+(define (budget-account-sum budget children period currency)
+  (let ((pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
+        (start (gnc-budget-get-period-start-date budget period)))
+    (apply + (map
+              (lambda (child)
+                (gnc-pricedb-convert-balance-nearest-price-t64
+                  pricedb
+                  (gnc:get-account-period-rolledup-budget-value budget child period)
+                  (xaccAccountGetCommodity child)
+                  currency
+                  start))
+              children))))
 
 ;; Calculate the value to use for the budget of an account for a specific period.
 ;; - If the account has a budget value set for the period, use it
@@ -1004,10 +1012,11 @@ flawed. see report-utilities.scm. please update reports.")
 ;;   sum of all budgets for list of children for specified period.
 (define (gnc:get-account-period-rolledup-budget-value budget acct period)
   (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
-         (children (gnc-account-get-children acct)))
+         (children (gnc-account-get-children acct))
+         (currency (xaccAccountGetCommodity acct)))
     (cond
      (bgt-set? (gnc-budget-get-account-period-value budget acct period))
-     ((not (null? children)) (budget-account-sum budget children period))
+     ((not (null? children)) (budget-account-sum budget children period currency))
      (else 0))))
 
 ;; Sums rolled-up budget values for a single account from start-period (inclusive) to

@@ -60,8 +60,6 @@
 (define opthelp-show-difference (N_ "Display the difference as budget - actual."))
 (define optname-show-totalcol (N_ "Show Column with Totals"))
 (define opthelp-show-totalcol (N_ "Display a column with the row totals."))
-(define optname-rollup-budget (N_ "Roll up budget amounts to parent"))
-(define opthelp-rollup-budget (N_ "If parent account does not have its own budget value, use the sum of the child account budget values."))
 (define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
 (define opthelp-show-zb-accounts (N_ "Include accounts with zero total (recursive) balances and budget values in this report."))
 
@@ -264,10 +262,6 @@
       "s4" opthelp-show-totalcol #f))
     (add-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-rollup-budget
-      "s4" opthelp-rollup-budget #f))
-    (add-option
-     (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-zb-accounts
       "s5" opthelp-show-zb-accounts #t))
 
@@ -292,7 +286,6 @@
          (show-budget? (get-val params 'show-budget))
          (show-diff? (get-val params 'show-difference))
          (show-totalcol? (get-val params 'show-totalcol))
-         (rollup-budget? (get-val params 'rollup-budget))
          (use-ranges? (get-val params 'use-ranges))
          (num-rows (gnc:html-acct-table-num-rows acct-table))
          (numcolumns (gnc:html-table-num-columns html-table))
@@ -347,11 +340,9 @@
     ;;   colnum - starting column number
     ;;   budget - budget to use
     ;;   acct - account being displayed
-    ;;   rollup-budget? - rollup budget values for account children
-    ;;                    if account budget not set
     ;;   exchange-fn - exchange function (not used)
     (define (gnc:html-table-add-budget-line!
-             html-table rownum colnum budget acct rollup-budget?
+             html-table rownum colnum budget acct
              column-list exchange-fn)
       (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
@@ -376,7 +367,8 @@
                  (col3 (+ col2 (if show-diff? 1 0))))
             (if show-budget?
                 (gnc:html-table-set-cell/tag!
-                 html-table rownum col0 style-tag
+                 html-table rownum col0
+                 (if (negative? bgt-val) style-tag-neg style-tag)
                  (if (zero? bgt-val) "."
                      (gnc:make-gnc-monetary comm bgt-val))))
             (if show-actual?
@@ -605,7 +597,7 @@
                  (acct (get-val env 'account))
                  (exchange-fn (get-val env 'exchange-fn)))
             (gnc:html-table-add-budget-line!
-             html-table rownum colnum budget acct rollup-budget?
+             html-table rownum colnum budget acct
              column-info-list exchange-fn)
             (loop (1+ rownum)))))
 
@@ -634,8 +626,6 @@
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (bottom-behavior (get-option gnc:pagename-accounts optname-bottom-behavior))
-         (rollup-budget? (get-option gnc:pagename-display
-                                     optname-rollup-budget))
          (show-zb-accts? (get-option gnc:pagename-display
                                      optname-show-zb-accounts))
          (use-ranges? (get-option gnc:pagename-general optname-use-budget-period-range))
@@ -696,8 +686,6 @@
                      (get-option gnc:pagename-display optname-show-difference))
                (list 'show-totalcol
                      (get-option gnc:pagename-display optname-show-totalcol))
-               (list 'rollup-budget
-                     (get-option gnc:pagename-display optname-rollup-budget))
                (list 'use-ranges use-ranges?)
                (list 'collapse-before include-collapse-before?)
                (list 'collapse-after include-collapse-after?)
