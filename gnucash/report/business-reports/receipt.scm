@@ -155,7 +155,11 @@
                 displaypage optname-logo-width-footer "h" (N_ "Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to display the logo at its natural width.  The height of the logo will be scaled accordingly.") "72mm"))
 
   (add-option (gnc:make-string-option
-                displaypage  optname-date-format "i" (N_ "The format for the date->string conversion for today's date.") "%A, %b %e, %Y at %l:%M %P"))
+               displaypage  optname-date-format "i"
+               (N_ "The format for the date->string conversion for today's date.")
+               ;; Translators: Boost::date_time format string
+               ;; "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
+               (_ "%l:%M %P, %e %B %Y")))
 
   ;; Heading options
   (add-option (gnc:make-string-option
