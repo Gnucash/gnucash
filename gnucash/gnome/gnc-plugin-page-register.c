@@ -929,13 +929,15 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     GncPluginPageRegisterPrivate *priv;
     SplitRegister *reg;
     GtkAction *action;
-    gboolean expanded, voided;
+    gboolean expanded, voided, read_only = FALSE;
     Transaction *trans;
+    CursorClass cursor_class;
     const char *uri;
 
     /* Set 'Split Transaction' */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     reg = gnc_ledger_display_get_split_register(priv->ledger);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
     expanded = gnc_split_register_current_trans_expanded(reg);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "SplitTransactionAction");
@@ -946,12 +948,50 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     g_signal_handlers_unblock_by_func
     (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 
-    /* Set 'Void' and 'Unvoid' */
-    trans = gnc_split_register_get_current_trans(reg);
+    /* Set available actions based on read only */
+    trans = gnc_split_register_get_current_trans (reg);
+
+    if (trans)
+        read_only = xaccTransIsReadonlyByPostedDate (trans);
     voided = xaccTransHasSplitsInState(trans, VREC);
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "CutTransactionAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), !read_only & !voided);
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "PasteTransactionAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), !read_only & !voided);
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "DeleteTransactionAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), !read_only & !voided);
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "DuplicateTransactionAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), TRUE);
+
+    if (cursor_class == CURSOR_CLASS_SPLIT)
+    {
+        action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                             "DuplicateTransactionAction");
+        gtk_action_set_sensitive (GTK_ACTION(action), !read_only & !voided);
+    }
+
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "RemoveTransactionSplitsAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), !read_only & !voided);
+
+    /* Set 'Void' and 'Unvoid' */
+    if (read_only)
+        voided = TRUE;
+
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "VoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION(action), !voided);
+
+    if (read_only)
+        voided = FALSE;
 
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "UnvoidTransactionAction");
@@ -981,7 +1021,6 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     {
         const char **iter, **label_iter, **tooltip_iter;
         gboolean curr_label_trans = FALSE;
-        CursorClass cursor_class = gnc_split_register_get_current_cursor_class (reg);
         iter = tran_vs_split_actions;
         action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), *iter);
         label_iter = tran_action_labels;
