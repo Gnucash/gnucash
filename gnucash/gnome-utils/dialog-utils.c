@@ -72,12 +72,12 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     if (deficit)
     {
         gnc_widget_style_context_remove_class (GTK_WIDGET(label), "default-color");
-        gnc_widget_set_style_context (GTK_WIDGET(label), "negative-numbers");
+        gnc_widget_style_context_add_class (GTK_WIDGET(label), "negative-numbers");
     }
     else
     {
         gnc_widget_style_context_remove_class (GTK_WIDGET(label), "negative-numbers");
-        gnc_widget_set_style_context (GTK_WIDGET(label), "default-color");
+        gnc_widget_style_context_add_class (GTK_WIDGET(label), "default-color");
     }
 }
 
@@ -369,6 +369,12 @@ gnc_tree_view_get_grid_lines_pref (void)
 \********************************************************************/
 void
 gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
+{
+    gnc_widget_style_context_add_class (widget, gnc_class);
+}
+
+void
+gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class)
 {
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     gtk_style_context_add_class (context, gnc_class);
