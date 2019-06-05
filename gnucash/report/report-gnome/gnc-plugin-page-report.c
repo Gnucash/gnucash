@@ -420,6 +420,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReportPrivate *priv;
     GncMainWindow  *window;
     GtkWindow *topLvl;
+    GtkAction *action;
     URLType type;
     char * id_name;
     char * child_name;
@@ -427,6 +428,13 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     char * url_label = NULL;
 
     ENTER("page %p", page);
+
+#ifndef WEBKIT1
+    /* Hide the ExportPdf action for Webkit2 */
+    action = gnc_plugin_page_get_action (page, "FilePrintPDFAction");
+    gtk_action_set_sensitive (action, FALSE);
+    gtk_action_set_visible (action, FALSE);
+#endif
 
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
@@ -458,7 +466,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
     gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
 
-    /* We need to call the load call back so the report appears to of been run
+    /* We need to call the load call back so the report appears to have been run
      so it will get saved properly if the report is not realized in session */
     id_name = g_strdup_printf("id=%d", priv->reportId );
     child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
@@ -1165,6 +1173,11 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
             N_("Print the current report"),
             G_CALLBACK(gnc_plugin_page_report_print_cb)
+        },
+        {
+            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            N_("Export the current report as a PDF document"),
+            G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
         },
 
         {
