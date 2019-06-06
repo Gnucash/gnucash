@@ -65,7 +65,7 @@ if (BUILDING_FROM_VCS)
 endif (BUILDING_FROM_VCS)
 
 target_link_libraries (gnucash
-   gncmod-ledger-core gncmod-report-gnome gnc-gnome gncmod-gnome-utils gncmod-app-utils
+   gncmod-ledger-core gnc-gnome gncmod-gnome-utils gncmod-app-utils
    gncmod-engine gnc-module gnc-core-utils gncmod-report-system
    ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )

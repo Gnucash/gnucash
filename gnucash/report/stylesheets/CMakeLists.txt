@@ -11,10 +11,15 @@ set(stylesheets_noinst_HEADERS
 
 add_library(gncmod-stylesheets MODULE ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS})
 
-target_link_libraries(gncmod-stylesheets gncmod-report-gnome gncmod-report-system gncmod-gnome-utils gnc-module
+target_link_libraries(gncmod-stylesheets gnc-gnome gncmod-report-system gncmod-gnome-utils gnc-module
     ${GUILE_LDFLAGS} ${GTK3_LDFLAGS} ${GLIB2_LDFLAGS})
 
 target_compile_definitions(gncmod-stylesheets PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
+
+target_include_directories(gncmod-stylesheets
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/gnucash/gnome
+)
 
 set(LIB_DIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
 if (WIN32)

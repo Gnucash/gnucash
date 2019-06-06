@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  report-gnome.scm
-;;  module definition for the gnome report system code 
+;;  report-menus.scm
+;;  code to initialize the report menus
 ;;
 ;;  Copyright (c) 2001 Linux Developers Group, Inc. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report report-gnome))
+(define-module (gnucash report-menus))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
@@ -32,9 +32,8 @@
 (use-modules (gnucash report reports standard dashboard))
 
 (eval-when (compile load eval expand)
-  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
-  (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module"))
-(use-modules (sw_report_gnome))
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+(use-modules (sw_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))

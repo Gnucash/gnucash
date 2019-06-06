@@ -10,6 +10,7 @@ set (gnc_gnome_noinst_HEADERS
   dialog-billterms.h
   dialog-choose-owner.h
   dialog-customer.h
+  dialog-custom-report.h
   dialog-date-close.h
   dialog-employee.h
   dialog-fincalc.h
@@ -25,6 +26,8 @@ set (gnc_gnome_noinst_HEADERS
   dialog-payment.h
   dialog-print-check.h
   dialog-progress.h
+  dialog-report-column-view.h
+  dialog-report-style-sheet.h
   dialog-sx-editor.h
   dialog-sx-editor2.h
   dialog-sx-from-trans.h
@@ -42,9 +45,10 @@ set (gnc_gnome_noinst_HEADERS
   gnc-plugin-page-budget.h
   gnc-plugin-page-invoice.h
   gnc-plugin-page-owner-tree.h
-  gnc-plugin-page-sx-list.h
   gnc-plugin-page-register.h
   gnc-plugin-page-register2.h
+  gnc-plugin-page-report.h
+  gnc-plugin-page-sx-list.h
   gnc-split-reg.h
   gnc-split-reg2.h
   reconcile-view.h
@@ -52,6 +56,7 @@ set (gnc_gnome_noinst_HEADERS
   top-level.h
   window-reconcile.h
   window-reconcile2.h
+  window-report.h
   window-autoclear.h
 )
 
@@ -73,6 +78,7 @@ set (gnc_gnome_SOURCES
   dialog-choose-owner.c
   dialog-commodities.c
   dialog-customer.c
+  dialog-custom-report.c
   dialog-date-close.c
   dialog-employee.c
   dialog-fincalc.c
@@ -90,6 +96,8 @@ set (gnc_gnome_SOURCES
   dialog-price-edit-db.c
   dialog-print-check.c
   dialog-progress.c
+  dialog-report-column-view.c
+  dialog-report-style-sheet.c
   dialog-sx-editor.c
   dialog-sx-editor2.c
   dialog-sx-from-trans.c
@@ -108,9 +116,10 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-budget.c
   gnc-plugin-page-invoice.c
   gnc-plugin-page-owner-tree.c
-  gnc-plugin-page-sx-list.c
   gnc-plugin-page-register.c
   gnc-plugin-page-register2.c
+  gnc-plugin-page-report.c
+  gnc-plugin-page-sx-list.c
   gnc-split-reg.c
   gnc-split-reg2.c
   reconcile-view.c
@@ -118,13 +127,14 @@ set (gnc_gnome_SOURCES
   top-level.c
   window-reconcile.c
   window-reconcile2.c
+  window-report.c
   window-autoclear.c
 )
 
 set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
-target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
+target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-html gncmod-report-system
     gncmod-register-gnome gncmod-register-core gncmod-gnome-utils gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
@@ -134,6 +144,7 @@ target_include_directories(gnc-gnome
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils/calculation
+    ${CMAKE_SOURCE_DIR}/gnucash/html
     ${CMAKE_BINARY_DIR}/gnucash/gnome-utils # for gnc-warnings.h
     ${GTK_MAC_INCLUDE_DIRS}
 )
@@ -203,6 +214,30 @@ add_custom_target(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucas
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
+# Scheme
+
+set(gnome_SCHEME
+    report-menus.scm
+)
+
+set(GUILE_OUTPUT_DIR   gnucash)
+set(GUILE_DEPENDS
+    gncmod-gnome-utils
+    scm-engine
+    scm-gettext
+    scm-gnome-utils
+    scm-gnc-module
+    scm-scm
+    scm-report-system
+    scm-reports
+)
+
+gnc_add_scheme_targets(scm-gnome
+"${gnome_SCHEME}"
+${GUILE_OUTPUT_DIR}
+"${GUILE_DEPENDS}"
+FALSE
+)
 set_dist_list(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
-        ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
+        ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})

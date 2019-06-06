@@ -56,6 +56,7 @@
 #include "engine-helpers-guile.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
+#include "window-report.h"
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
@@ -503,7 +504,6 @@ load_gnucash_modules()
         { "gnucash/report/report-system", 0, FALSE },
         { "gnucash/report/stylesheets", 0, FALSE },
         { "gnucash/report/locale-specific/us", 0, FALSE },
-        { "gnucash/report/report-gnome", 0, FALSE },
         { "gnucash/python", 0, TRUE },
     };
 
@@ -605,6 +605,8 @@ get_file_to_load()
         return gnc_history_get_last();
 }
 
+extern SCM scm_init_sw_gnome_module(void);
+
 static void
 inner_main (void *closure, int argc, char **argv)
 {
@@ -628,8 +630,10 @@ inner_main (void *closure, int argc, char **argv)
     load_user_config();
 
     /* Setting-up the report menu must come after the module
-       loading but before the gui initialization. */
-    scm_c_use_module("gnucash report report-gnome");
+     loading but before the gui initializat*ion. */
+    gnc_report_init ();
+    scm_c_use_module("gnucash report reports");
+    scm_c_use_module("gnucash report-menus");
     scm_c_eval_string("(gnc:report-menu-setup)");
 
     /* TODO: After some more guile-extraction, this should happen even
