@@ -3,7 +3,7 @@
 #
 # Raw data for the number of KLOC of code in gnucash,
 # as a function of date.  Taken from the web page
-# http://www.gnucash.org/en/sizing.phtml
+# https://www.gnucash.org/en/sizing.phtml
 # format: day/month/year <tab> KLOC
 # plot this by saying "gnuplot count.gplot" at the command line
 #

@@ -349,8 +349,8 @@ new, totally cool report, consult the mailing list ~a.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (_ "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;.")
-         (_ "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."))
+         (_ "For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
+         (_ "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
 
         (gnc:html-markup-p
          (gnc:html-markup/format

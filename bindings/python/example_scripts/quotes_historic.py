@@ -14,7 +14,7 @@
 #   @endcode first to achieve data into file INTC which can thereafter be imported to GnuCash using this script.
 # 
 #   For explanation of use have a look at the wiki:
-#   http://wiki.gnucash.org/wiki/Stocks/get_prices
+#   https://wiki.gnucash.org/wiki/Stocks/get_prices
 #
 
 from gnucash import Session, Account, Split

@@ -20,7 +20,7 @@ When making changes to GnuCash and trying to commit to the repository:
 
    If you are making changes to gnucash, you should be subscribed
    to gnucash-devel@gnucash.org and to gnucash-changes@gnucash.org.
-   (Subscription address: http://www.gnucash.org/en/lists.phtml)
+   (Subscription address: https://www.gnucash.org/en/lists.phtml)
    gnucash-devel@gnucash.org is a good place to ask about intended
    changes.
 

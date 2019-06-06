@@ -4,53 +4,53 @@ Entwicklungsversionen. Sie koennen normal funktionieren, muessen aber
 nicht. Benutzung auf eigene Gefahr! 
  
 Die letzte stabile Version war gnucash-2.0.0. 
-Die nächste stabile Version wird gnucash-2.2.0 sein.
+Die nï¿½chste stabile Version wird gnucash-2.2.0 sein.
 
 ##############################################
 
 GnuCash
 -------
 
-GnuCash ist die freie OpenSource-Finanzverwaltung für GNU/Linux
+GnuCash ist die freie OpenSource-Finanzverwaltung fï¿½r GNU/Linux
 und Unix. 
 
-Das Programm ist eine Komplettlösung zur Verwaltung der Finanzen
+Das Programm ist eine Komplettlï¿½sung zur Verwaltung der Finanzen
 von Privatanwendern und Kleinbetrieben. Das aus dem Rechnungswesen
-bekannte Prinzip der doppelten Buchführung wird in GnuCash
-konsequent umgesetzt, so dass GnuCash höchste Ansprüche an die
-Kontenführung erfüllen kann. Auch Homebanking über HBCI ist
-möglich, wenn die Bibliothek AqBanking installiert ist. Für den
-Geschäftsverkehr ist die Verwaltung von Kunden, Lieferanten und
+bekannte Prinzip der doppelten Buchfï¿½hrung wird in GnuCash
+konsequent umgesetzt, so dass GnuCash hï¿½chste Ansprï¿½che an die
+Kontenfï¿½hrung erfï¿½llen kann. Auch Homebanking ï¿½ber HBCI ist
+mï¿½glich, wenn die Bibliothek AqBanking installiert ist. Fï¿½r den
+Geschï¿½ftsverkehr ist die Verwaltung von Kunden, Lieferanten und
 Rechnungen enthalten. Weitere Features sind terminierte Buchungen,
 Import von OFX-Dateien und QIF-Dateien, zahlreiche Berichte und
 Grafiken mit Torten- und Balkendiagrammen und eine
-benutzerdefinierbare Oberfläche.
+benutzerdefinierbare Oberflï¿½che.
  
-Für Neueinsteiger ist ein Assistent zur Kontenerstellung
+Fï¿½r Neueinsteiger ist ein Assistent zur Kontenerstellung
 vorhanden. Bestehende Dateien mit Finanzdaten z.B. aus Quicken
-oder Microsoft Money können problemlos über den QIF-Import
+oder Microsoft Money kï¿½nnen problemlos ï¿½ber den QIF-Import
 eingelesen werden.
 
 Bei Fragen zur Installation und zur Benutzung steht eine
-deutschsprachige Mailingliste gnucash-de zur Verfügung. 
+deutschsprachige Mailingliste gnucash-de zur Verfï¿½gung. 
 
-Homepage: http://www.gnucash.org
+Homepage: https://www.gnucash.org
 
-Deutsche Wiki-Seite: http://linuxwiki.de/GnuCash
+Deutsche Wiki-Seite: https://linuxwiki.de/GnuCash
 
-Übersetzungen der englischen Stichworte siehe po/glossary/de.po.
+ï¿½bersetzungen der englischen Stichworte siehe po/glossary/de.po.
 
 
-Benötigte Pakete: 
+Benï¿½tigte Pakete: 
 -----------------
 
 Siehe README.dependencies; im wesentlichen alle
 Gnome2-Entwickler-Pakete sowie guile, slib und swig. (g-wrap wurde
 mit gnucash-2.2.0 durch swig ersetzt und wird nicht mehr benutzt.)
 
-Für die HBCI-Funktionen muss außerdem das Paket aqbanking
+Fï¿½r die HBCI-Funktionen muss auï¿½erdem das Paket aqbanking
 installiert sein, welches noch ein Paket namens gwenhywfar
-benötigt. Siehe auch doc/README.HBCI.
+benï¿½tigt. Siehe auch doc/README.HBCI.
 
 
 Starten von GnuCash:
@@ -62,13 +62,13 @@ gespeicherten Gnucash-Daten-Files sein muss.
 
 
 
-Übersetzung und Installation
+ï¿½bersetzung und Installation
 ----------------------------
 
-Diese Schritte sind nur für die Sourcedistribution erforderlich, nicht
-für die Binärdistribution.
+Diese Schritte sind nur fï¿½r die Sourcedistribution erforderlich, nicht
+fï¿½r die Binï¿½rdistribution.
 
-Siehe auch http://www.linuxwiki.de/GnuCash/SourceInstall
+Siehe auch https://www.linuxwiki.de/GnuCash/SourceInstall
 
 Nur beim Uebersetzen von GnuCash braucht man zusaetzlich die folgenden 
 Pakete: 
@@ -76,7 +76,7 @@ Pakete:
 libtool -- Erhaeltlich bei ftp://ftp.gnu.org/gnu.
            RPM's und deb's sind in ihrer Betriebssystem-Distribution.
 
-Normalerweise wird GnuCash wie folgt übersetzt und installiert:
+Normalerweise wird GnuCash wie folgt ï¿½bersetzt und installiert:
 
   # ./configure
   # make
@@ -91,7 +91,7 @@ An GnuCash mitentwickeln :
 
 Bevor Sie an GnuCash mitentickeln , sollten sie folgendes tun:
 
-1. Lesen von: http://wiki.gnucash.org/wiki/Development
+1. Lesen von: https://wiki.gnucash.org/wiki/Development
 
 2. Viele der Verzeichnisse unter 'src' enthalten desing.txt-Dateien,
    die viele Aspekte des GnuCash-Designs erklaeren. Auch lesen.

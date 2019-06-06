@@ -1330,7 +1330,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     if (!dcal->showPopup)
         return FALSE;
 
-    /* As per http://www.gtk.org/tutorial/sec-eventhandling.html */
+    /* As per https://www.gtk.org/tutorial/sec-eventhandling.html */
     if (event->is_hint)
     {
 #if GTK_CHECK_VERSION(3,20,0)

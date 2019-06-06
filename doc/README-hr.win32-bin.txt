@@ -6,12 +6,12 @@ Osmišljen da bude jednostavan u upotrebi, istovremeno moćan i prilagodljiv, Gn
 
 Dostupna pomoć
 
-Mrežne FAQ stranice: http://wiki.gnucash.org/wiki/FAQ
-Pretplatničke liste: http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat): Kanal #gnucash na serveru irc.gnome.org, vidi također http://wiki.gnucash.org/wiki/IRC
+Mrežne FAQ stranice: https://wiki.gnucash.org/wiki/FAQ
+Pretplatničke liste: https://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (Chat): Kanal #gnucash na serveru irc.gnome.org, vidi također https://wiki.gnucash.org/wiki/IRC
 
 Ako primijetiš greške ili naiđeš na probleme, slobodno ih prijavi na našu „Bugzilla”-stranicu za praćenje grešaka:
-http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
+https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

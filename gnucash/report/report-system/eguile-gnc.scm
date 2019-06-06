@@ -221,7 +221,7 @@
   ; stack, so we can capture it. The above handler will then be called
   ; to actually handle the exception. This technique is based on the
   ; example in the guile manual. See:
-  ; http://www.gnu.org/software/guile/manual/html_node/Debug-on-Error.html
+  ; https://www.gnu.org/software/guile/manual/html_node/Debug-on-Error.html
   (define (pre-unwind-handler key . rest)
     ; Save the current stack. Note that this will include a couple of
     ; extra entries (this error handler, the call to make-stack and

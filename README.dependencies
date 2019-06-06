@@ -1,7 +1,7 @@
 GnuCash Compiler Dependency
 ---------------------------
 
-The GnuCash developers use gcc (http://gcc.gnu.org) for developing and
+The GnuCash developers use gcc (https://gcc.gnu.org) for developing and
 testing GnuCash.  For convenience, we have relied on certain features
 of gcc that are not part of any official standard and may not be
 available with other standard-compliant compilers.  Anyone desiring to
@@ -40,7 +40,7 @@ strongly discouraged and actively removed whenever it's caught.
 Important notice
 ----------------
 You can find the most recent version of the following part at 
-http://wiki.gnucash.org/wiki/Dependencies.
+https://wiki.gnucash.org/wiki/Dependencies.
 
 GnuCash Library Dependency Policy
 ---------------------------------

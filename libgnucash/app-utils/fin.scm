@@ -51,7 +51,7 @@
 )
 
 ;; 2 functions from
-;; http://lists.gnucash.org/pipermail/gnucash-user/2005-February/012964.html
+;; https://lists.gnucash.org/pipermail/gnucash-user/2005-February/012964.html
 ;; future value of deposits with compound interests:
 (define (gnc:futureValue a r n t)
     ;; Parameters:
@@ -60,7 +60,7 @@
     ;; n: frequency per year
     ;; t: time
     ;;
-    ;; formula from http://www.riskglossary.com/articles/compounding.htm
+    ;; formula from https://www.riskglossary.com/articles/compounding.htm [DEAD LINK]
   (* a (expt (+ 1 (/ r n)) (* n t))))
 
 (define (gnc:computeInterestIncrement pv ann-rate compounds period)

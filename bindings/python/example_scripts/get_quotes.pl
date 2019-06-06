@@ -14,7 +14,7 @@
 #   @endcode 
 # 
 #   For explanation of use have a look at the wiki:
-#   http://wiki.gnucash.org/wiki/Stocks/get_prices
+#   https://wiki.gnucash.org/wiki/Stocks/get_prices
 #
 #   @cond PERL
 

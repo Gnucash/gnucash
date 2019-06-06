@@ -5,7 +5,7 @@ Using CMake to build GnuCash
 
 As part of his CuteCash experiment (now removed from the repository),
 Christian Stimming added support for using
-http://www.cmake.org[CMake] to build the part of GnuCash that
+https://www.cmake.org[CMake] to build the part of GnuCash that
 went into CuteCash. This work extends the use of CMake to cover all of
 GnuCash proper such that GnuCash itself can be fully compiled with
 CMake.
@@ -23,7 +23,7 @@ Some advantages of using CMake:
  * The CMake language, though with significant issues, is still
    easier to maintain than autotools.
 
-This setup also uses the http://www.ninja-build.org[Ninja] build
+This setup also uses the https://www.ninja-build.org[Ninja] build
 system to enable fast and parallel builds on Windows. (On POSIX
 systems [OS X, Linux, FreeBSD, etc.] Ninja does not seem significantly
 faster than using the default Makefile generator to me.)

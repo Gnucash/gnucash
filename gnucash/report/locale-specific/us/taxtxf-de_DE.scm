@@ -14,7 +14,7 @@
 ;; Kennzahlen (from txf-de_DE.scm) as assigned to the different
 ;; accounts, and will write it to some XML file as required by
 ;; e.g. the Winston software
-;; http://www.felfri.de/winston/schnittstellen.htm
+;; https://www.felfri.de/winston/schnittstellen.htm
 ;;
 ;; This file might still contain a lot of US-TXF related stuff. This
 ;; can surely be thrown out once someone was able to actually use this

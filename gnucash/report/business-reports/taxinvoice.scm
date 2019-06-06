@@ -21,7 +21,7 @@
 ; - copy the report to your .gnucash directory
 ; - specify a different module name below (eg mytaxinvoice)
 ; - refer to it from .gnucash/config.user
-; (see http://wiki.gnucash.org/wiki/Custom_Reports )
+; (see https://wiki.gnucash.org/wiki/Custom_Reports )
 (define-module (gnucash report taxinvoice))
 
 (use-modules (ice-9 local-eval))  ; for the-environment

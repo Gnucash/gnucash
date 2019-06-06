@@ -1201,7 +1201,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
     }
     else
-        label = gtk_label_new (_("Enter URL like http://www.gnucash.org:"));
+        label = gtk_label_new (_("Enter URL like https://www.gnucash.org:"));
 
     // pack label and entry to content area
     gnc_label_set_alignment (label, 0.0, 0.5);

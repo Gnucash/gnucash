@@ -1,8 +1,8 @@
 GETTING HELP: If you need help with GnuCash, please do not contact any
-of the Authors directly. Instead, first look at the <a href="http://wiki.gnucash.org/wiki/FAQ">FAQ</a> to see if your question
+of the Authors directly. Instead, first look at the <a href="https://wiki.gnucash.org/wiki/FAQ">FAQ</a> to see if your question
 is common and is answered there. If that doesn't help, there are mailing
 lists in English, Dutch, French, German, Italian, Portuguese and an English
-IRC channel. More information can be found at for <a href="http://wiki.gnucash.org/wiki/Mailing_Lists">Mailing List</a> and <a href="http://wiki.gnucash.org/wiki/IRC">IRC</a>.
+IRC channel. More information can be found at for <a href="https://wiki.gnucash.org/wiki/Mailing_Lists">Mailing List</a> and <a href="https://wiki.gnucash.org/wiki/IRC">IRC</a>.
 
 Current Project Team:
 =====================
@@ -185,7 +185,7 @@ Dave Freese  for leap-year fix
 Todd T. Fries  OpenBSD fix
 John Goerzen  file i/o fix for 64-bit architectures
 Jeff Green  Python bindings, with grant funding from
-  <a href="http://assiniboine.mb.ca/">Assiniboine Credit Union</a>
+  <a href="https://assiniboine.mb.ca/">Assiniboine Credit Union</a>
 Hans de Graaff  XML patches
 Daniel Hagerty  patch to balance sheet report
 Mitsuo Hamada  messages Japanese translations
@@ -206,8 +206,8 @@ Tomokazu Iwashita  Japanese translation of xea
 Geert Janssens  GUI fixes for Lots, autocompletion in gnc-general-search, several small fixes
 David Jafferian  Delete account query code.
 Mark Jenkins  Python bindings, with grant funding from
-  <a href="http://assiniboine.mb.ca/">Assiniboine Credit Union</a> and
-  <a href="http://www.legalaid.mb.ca/">Legal Aid Manitoba</a>
+  <a href="https://assiniboine.mb.ca/">Assiniboine Credit Union</a> and
+  <a href="https://www.legalaid.mb.ca/">Legal Aid Manitoba</a>
 Rich Johnson  Mac OS X patch
 Miquel Jordana Vilamitjana  Spanish translation of manual
 Prakash Kailasa  for gnome build fixes

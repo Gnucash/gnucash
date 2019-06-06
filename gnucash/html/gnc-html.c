@@ -22,9 +22,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-// libgtkhtml docs:
-// http://www.fifi.org/doc/libgtkhtml-dev/html/
-
 #include <config.h>
 
 #include <platform.h>

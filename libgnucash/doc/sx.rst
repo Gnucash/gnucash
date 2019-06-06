@@ -87,9 +87,9 @@ TODO
 
   - [x] no way to clear a variable entry [ve20070209]_
 
-.. [dh20070120] http://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
-.. [ve20070209] http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
-.. [ve20070303] http://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
+.. [dh20070120] https://lists.gnucash.org/pipermail/gnucash-devel/2007-January/019667.html
+.. [ve20070209] https://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019834.html
+.. [ve20070303] https://lists.gnucash.org/pipermail/gnucash-devel/2007-March/020069.html
 
 - sx list page
 
@@ -281,9 +281,9 @@ Notes::
   - [x] ui: add 'review created transactions' checkbox to SLR dialog
         using txn search.
 
-.. [tw20070614] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
-.. [tw20070614-2] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
-.. [tw20070619] http://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020757.html
+.. [tw20070614] https://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020718.html
+.. [tw20070614-2] https://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020729.html
+.. [tw20070619] https://lists.gnucash.org/pipermail/gnucash-devel/2007-June/020757.html
 
 - destroy/cleanup, notes:
 

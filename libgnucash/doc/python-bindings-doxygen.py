@@ -128,7 +128,7 @@
 #
 #   @li The documentation you just read uses doxygen. It collects documentation in GnuCash's sources. Besides that there is
 #   @li the classic python-documentation using help() and docstrings. Have a look at both.
-#   @li There is a page in the GnuCash wiki at http://wiki.gnucash.org/wiki/Python
+#   @li There is a page in the GnuCash wiki at https://wiki.gnucash.org/wiki/Python
 #   @li You may also have a look into the archives of gnucash-devel@gnucash.org. 
 #   @li On Bugzilla there is also some interesting talk regarding the development process. 
 #   @li Then you can use the abilities of git to see the history of the code by @code git log @endcode done in the directory of the python-bindings.

@@ -17,8 +17,8 @@ support. This makes it the world's first *free* HBCI-enabled personal
 finance manager. 
 
 Many additional information about GnuCash and HBCI can be found in
-German language on http://linuxwiki.de/GnuCash,
-http://linuxwiki.de/AqBanking, and http://linuxwiki.de/OpenHBCI.
+German language on https://linuxwiki.de/GnuCash,
+https://linuxwiki.de/AqBanking, and https://linuxwiki.de/OpenHBCI.
 
 HBCI (Home Banking Computer Interface) is a standard used by German
 banks for offering online banking service. Through this standard,
@@ -39,12 +39,12 @@ HBCI for now.
 2. Requirements
 ------------
 
-See also http://linuxwiki.de/AqBanking
+See also https://linuxwiki.de/AqBanking
 
 Required packages:
 
 AqBanking 1.3.0, or any later version: Get aqbanking from
-http://sourceforge.net/projects/aqbanking . (Historical note:
+https://sourceforge.net/projects/aqbanking . (Historical note:
 Until gnucash-1.8.9, the library "openhbci" had been used, but
 with gnucash-1.8.10, gnucash switched to the successor of openhbci
 which is aqbanking/aqhbci.) (Second historical note: The library
@@ -56,11 +56,11 @@ package.)
 which in turn requires: 
 
 Gwenhywfar 1.16.0, or any later version,
-http://sourceforge.net/projects/gwenhywfar, which in turn requires
-OpenSSL any 0.9.x, http://www.openssl.org .
+https://sourceforge.net/projects/gwenhywfar, which in turn requires
+OpenSSL any 0.9.x, https://www.openssl.org .
 
 If you want chipcard support, you also need libchipcard version
-2.0.0 or later, http://sourceforge.net/projects/libchipcard
+2.0.0 or later, https://sourceforge.net/projects/libchipcard
 
 (Note: Not all arbitrary version combinations between aqbanking
 and gwenhywfar will work! Only those versions that have been
@@ -150,7 +150,7 @@ Gnucash/AqBanking (or OpenHBCI) is successfully being used with:
 
 If you encounter an error, you can report it in German language on
 gnucash-de@gnucash.org (Subscriber-only list; please subscribe on
-http://www.gnucash.org/cgi-bin/mailman/listinfo/gnucash-de ) and on on
+https://www.gnucash.org/cgi-bin/mailman/listinfo/gnucash-de ) and on on
 openhbci-general@lists.sf.net. Please remember to include the version
 numbers of gnucash and aqbanking as well as any console output and/or
 HBCI connection log (can be obtained through the HBCI Verbose Debug

@@ -340,7 +340,7 @@ gboolean gnc_keyring_get_password ( GtkWidget *parent,
     else
         db_path = g_strdup_printf ( "%s://%s:%d/%s", access_method, server, port, service );
     heading = g_strdup_printf ( /* Translators: %s is a path to a database or any other url,
-                like mysql://user@server.somewhere/somedb, http://www.somequotes.com/thequotes */
+                like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes */
                     _("Enter a user name and password to connect to: %s"),
                     db_path );
 
