@@ -8,7 +8,7 @@ file(GLOB_RECURSE chartjs_NOINST_DATA
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     samples Chart*)
 
-list(REMOVE_ITEM ${chartjs_DATA})
+list(REMOVE_ITEM chartjs_NOINST_DATA ${chartjs_DATA})
 
 install (FILES ${chartjs_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/chartjs)
 
