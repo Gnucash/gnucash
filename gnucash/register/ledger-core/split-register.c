@@ -953,6 +953,10 @@ gnc_split_register_paste_current (SplitRegister *reg)
             }
         }
 
+        /* Open the transaction for editing. */
+        if (gnc_split_register_begin_edit_or_warn (info, trans))
+        {
+            LEAVE("can't begin editing");
             return;
         }
 
