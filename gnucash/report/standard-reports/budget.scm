@@ -476,15 +476,18 @@
               (when show-budget?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col0 "centered-label-cell"
-                 (_ "Bgt"))) ;; Translators: Abbreviation for "Budget"
+                 ;; Translators: Abbreviation for "Budget" amount
+                 (_ "Bgt")))
               (when show-actual?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col1 "centered-label-cell"
-                 (_ "Act"))) ;; Translators: Abbreviation for "Actual"
+                 ;; Translators: Abbreviation for "Actual" amount
+                 (_ "Act")))
               (when show-diff?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col2 "centered-label-cell"
-                 (_ "Diff"))) ;; Translators: Abbreviation for "Difference"
+                 ;; Translators: Abbreviation for "Difference" amount
+                 (_ "Diff")))
               (loop (cdr column-list)
                     col3))))))
 
