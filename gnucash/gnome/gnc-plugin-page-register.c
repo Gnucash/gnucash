@@ -3582,17 +3582,16 @@ gnc_plugin_page_register_cmd_find_transactions (GtkAction *action,
 
 static void
 gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action,
-        GncPluginPageRegister *page)
+        GncPluginPageRegister *plugin_page)
 {
     GncPluginPageRegisterPrivate *priv;
-    SplitRegister *reg;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-    ENTER("(action %p, page %p)", action, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    reg = gnc_ledger_display_get_split_register(priv->ledger);
-    gnc_split_register_cut_current(reg);
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    gsr_default_cut_txn_handler (priv->gsr, NULL);
     LEAVE(" ");
 }
 

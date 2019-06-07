@@ -71,6 +71,7 @@ static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
 static void gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr);
 
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
+static gboolean is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
 static GtkWidget *gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
@@ -790,10 +791,165 @@ gnc_split_reg_paste_cb (GtkWidget *w, gpointer data)
 }
 
 void
-gsr_default_cut_txn_handler( GNCSplitReg *gsr, gpointer data )
+gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
 {
-    gnc_split_register_cut_current
-    (gnc_ledger_display_get_split_register( gsr->ledger ));
+    CursorClass cursor_class;
+    SplitRegister *reg;
+    Transaction *trans;
+    Split *split;
+    GtkWidget *dialog;
+    gint response;
+    const gchar *warning;
+
+    reg = gnc_ledger_display_get_split_register (gsr->ledger);
+
+    /* get the current split based on cursor position */
+    split = gnc_split_register_get_current_split (reg);
+    if (split == NULL)
+    {
+        gnc_split_register_cancel_cursor_split_changes (reg);
+        return;
+    }
+
+    trans = xaccSplitGetParent (split);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+    /* test for blank_split reference pointing to split */
+    if (gnc_split_register_is_blank_split (reg, split))
+        gnc_split_register_change_blank_split_ref (reg, split);
+
+    /* Cutting the blank split just cancels */
+    {
+        Split *blank_split = gnc_split_register_get_blank_split (reg);
+
+        if (split == blank_split)
+        {
+            gnc_split_register_cancel_cursor_trans_changes (reg);
+            return;
+        }
+    }
+
+    if (cursor_class == CURSOR_CLASS_NONE)
+        return;
+
+    /* this is probably not required but leave as a double check */
+    if (is_trans_readonly_and_warn (GTK_WINDOW(gsr->window), trans))
+        return;
+
+    /* On a split cursor, just delete the one split. */
+    if (cursor_class == CURSOR_CLASS_SPLIT)
+    {
+        const char *format = _("Cut the split '%s' from the transaction '%s'?");
+        const char *recn_warn = _("You would be removing a reconciled split! "
+                                  "This is not a good idea as it will cause your "
+                                  "reconciled balance to be off.");
+        const char *anchor_error = _("You cannot cut this split.");
+        const char *anchor_split = _("This is the split anchoring this transaction "
+                                     "to the register. You may not remove it from "
+                                     "this register window. You may remove the "
+                                     "entire transaction from this window, or you "
+                                     "may navigate to a register that shows "
+                                     "another side of this same transaction and "
+                                     "remove the split from that register.");
+        char *buf = NULL;
+        const char *memo;
+        const char *desc;
+        char recn;
+
+        if (reg->type != GENERAL_JOURNAL) // no anchoring split
+        {
+            if (split == gnc_split_register_get_current_trans_split (reg, NULL))
+            {
+                dialog = gtk_message_dialog_new (GTK_WINDOW(gsr->window),
+                                                 GTK_DIALOG_MODAL
+                                                 | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s", anchor_error);
+                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                         "%s", anchor_split);
+                gtk_dialog_run (GTK_DIALOG(dialog));
+                gtk_widget_destroy (dialog);
+                return;
+            }
+        }
+        memo = xaccSplitGetMemo (split);
+        memo = (memo && *memo) ? memo : _("(no memo)");
+
+        desc = xaccTransGetDescription (trans);
+        desc = (desc && *desc) ? desc : _("(no description)");
+
+        /* ask for user confirmation before performing permanent damage */
+        buf = g_strdup_printf (format, memo, desc);
+        dialog = gtk_message_dialog_new (GTK_WINDOW(gsr->window),
+                                         GTK_DIALOG_MODAL
+                                         | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_QUESTION,
+                                         GTK_BUTTONS_NONE,
+                                         "%s", buf);
+        g_free (buf);
+        recn = xaccSplitGetReconcile (split);
+        if (recn == YREC || recn == FREC)
+        {
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                    "%s", recn_warn);
+            warning = GNC_PREF_WARN_REG_SPLIT_DEL_RECD;
+        }
+        else
+        {
+            warning = GNC_PREF_WARN_REG_SPLIT_DEL;
+        }
+
+        gtk_dialog_add_button (GTK_DIALOG(dialog),
+                               _("_Cancel"), GTK_RESPONSE_CANCEL);
+        gnc_gtk_dialog_add_button (dialog, _("_Cut Split"),
+                                   "edit-delete", GTK_RESPONSE_ACCEPT);
+        response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
+        gtk_widget_destroy (dialog);
+        if (response != GTK_RESPONSE_ACCEPT)
+            return;
+
+        gnc_split_register_cut_current (reg);
+        return;
+    }
+
+    /* On a transaction cursor with 2 or fewer splits in single or double
+     * mode, we just delete the whole transaction, kerblooie */
+    {
+        const char *title = _("Cut the current transaction?");
+        const char *recn_warn = _("You would be removing a transaction "
+                                  "with reconciled splits! "
+                                  "This is not a good idea as it will cause your "
+                                  "reconciled balance to be off.");
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW(gsr->window),
+                                         GTK_DIALOG_MODAL
+                                         | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_WARNING,
+                                         GTK_BUTTONS_NONE,
+                                         "%s", title);
+        if (xaccTransHasReconciledSplits (trans))
+        {
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                     "%s", recn_warn);
+            warning = GNC_PREF_WARN_REG_TRANS_DEL_RECD;
+        }
+        else
+        {
+            warning = GNC_PREF_WARN_REG_TRANS_DEL;
+        }
+        gtk_dialog_add_button (GTK_DIALOG(dialog),
+                               _("_Cancel"), GTK_RESPONSE_CANCEL);
+        gnc_gtk_dialog_add_button (dialog, _("_Cut Transaction"),
+                                  "edit-delete", GTK_RESPONSE_ACCEPT);
+        response =  gnc_dialog_run (GTK_DIALOG(dialog), warning);
+        gtk_widget_destroy (dialog);
+        if (response != GTK_RESPONSE_ACCEPT)
+            return;
+
+        gnc_split_register_cut_current (reg);
+        return;
+    }
 }
 
 /**
