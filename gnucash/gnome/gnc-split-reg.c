@@ -1448,19 +1448,22 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         const char *desc;
         char recn;
 
-        if (split == gnc_split_register_get_current_trans_split (reg, NULL))
+        if (reg->type != GENERAL_JOURNAL) // no anchoring split
         {
-            dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
-                                            GTK_DIALOG_MODAL
-                                            | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                            GTK_MESSAGE_ERROR,
-                                            GTK_BUTTONS_OK,
-                                            "%s", anchor_error);
-            gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                    "%s", anchor_split);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy (dialog);
-            return;
+            if (split == gnc_split_register_get_current_trans_split (reg, NULL))
+            {
+                dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+                                                GTK_DIALOG_MODAL
+                                                | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_MESSAGE_ERROR,
+                                                GTK_BUTTONS_OK,
+                                                "%s", anchor_error);
+                gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                        "%s", anchor_split);
+                gtk_dialog_run(GTK_DIALOG(dialog));
+                gtk_widget_destroy (dialog);
+                return;
+            }
         }
 
         memo = xaccSplitGetMemo (split);
