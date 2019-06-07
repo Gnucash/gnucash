@@ -1,4 +1,4 @@
-GnuCash ist eine freie OpenSource-Finanzverwaltung, kostenlos
+﻿GnuCash ist eine freie OpenSource-Finanzverwaltung, kostenlos
 erhältlich unter der GNU GPL Lizenz für GNU/Linux, Unix, BSD,
 Solaris, Mac OSX und Microsoft Windows.
 

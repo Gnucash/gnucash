@@ -1,4 +1,4 @@
-GnuCash 是一個自由、開放原始碼的帳務軟體，它使用 GNU 通用公共許可證(GPL)，支援 GNU/Linux, *BSD, Solaris, Mac OSX 及微軟 Windows。
+﻿GnuCash 是一個自由、開放原始碼的帳務軟體，它使用 GNU 通用公共許可證(GPL)，支援 GNU/Linux, *BSD, Solaris, Mac OSX 及微軟 Windows。
 
 GnuCash 不僅設計成易於使用，而且功能強大又有彈性。它可以追蹤銀行帳戶、股票、收入與支出，就像用帳簿一樣快捷、直覺。基於專業的會計原則確保帳目平衡並提供準確的報表。
 

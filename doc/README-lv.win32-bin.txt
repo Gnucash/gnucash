@@ -1,4 +1,4 @@
-GnuCash ir bezmaksas grāmatvedības programma, ko izplata saskaņā ar
+﻿GnuCash ir bezmaksas grāmatvedības programma, ko izplata saskaņā ar
 GNU General Public License (GPL) licenci. To var izmantot uz GNU/Linux,
 *BSD, Solaris, Mac OSX un Microsoft Windows datoriem.
 

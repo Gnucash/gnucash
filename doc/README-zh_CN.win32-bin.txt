@@ -1,4 +1,4 @@
-GnuCash 是一个免费的、开放源代码的理财软件，它使用 GNU 通用公共许可证(GPL)，可运行于 GNU/Linux、*BSD、Solaris、Mac OSX以及微软 Windows。
+﻿GnuCash 是一个免费的、开放源代码的理财软件，它使用 GNU 通用公共许可证(GPL)，可运行于 GNU/Linux、*BSD、Solaris、Mac OSX以及微软 Windows。
 
 致力于易于使用，但功能强大而且灵活。GnuCash 允许您跟踪银行账户、股票、收入和支出。就像账簿一样快捷而且直观，它是基于专业的会计理念来确保平衡的账簿和准确的报告。
 

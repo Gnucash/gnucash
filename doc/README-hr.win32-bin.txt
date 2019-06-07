@@ -1,4 +1,4 @@
-GnuCash je besplatan računovodstveni program otvorenog koda, izdan pod GNU općom javnom licencom (GPL). Dostupan za sustave GNU/Linux, *BSD, Solaris, Mac OSX i Microsoft Windows.
+﻿GnuCash je besplatan računovodstveni program otvorenog koda, izdan pod GNU općom javnom licencom (GPL). Dostupan za sustave GNU/Linux, *BSD, Solaris, Mac OSX i Microsoft Windows.
 
 Osmišljen da bude jednostavan u upotrebi, istovremeno moćan i prilagodljiv, GnuCash ti omogućava praćenje bankovnih računa, dionica, prihoda i rashoda. GnuCash se zasniva na profesionalnim računovodstvenim načelima kao što je dvojno knjigovodstvo, te osigurava bilancirane knjige i točne izvještaje.
 

@@ -1,4 +1,4 @@
-GnuCash est un logiciel de comptabilité gratuit et de source
+﻿GnuCash est un logiciel de comptabilité gratuit et de source
 libre, émis sous licence GNU Public Licence (GPL) et disponible
 sous GNU/Linux, *BSD, Solaris, Mac OSX et Microsoft Windows.
 

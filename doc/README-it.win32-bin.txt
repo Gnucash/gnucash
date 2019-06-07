@@ -1,4 +1,4 @@
-GnuCash è un programma di contabilità libero e a codice aperto rilasciato con
+﻿GnuCash è un programma di contabilità libero e a codice aperto rilasciato con
 licenza GNU Public Licence (GPL) e disponibile per i sistemi GNU/Linux, *BSD,
 Solaris, Mac OSX e Microsoft Windows.
 
