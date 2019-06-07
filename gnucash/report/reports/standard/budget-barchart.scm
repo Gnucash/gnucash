@@ -236,7 +236,9 @@
           (gnc:html-chart-set-title!
            chart
            (list (xaccAccountGetName acct)
-                 (format #f "Bgt: ~a Act: ~a"
+                 ;; Translators: Bgt and Act refer to budgeted and
+                 ;; actual total amounts.
+                 (format #f (_ "Bgt: ~a Act: ~a")
                          (amount->monetary bgt-sum)
                          (amount->monetary act-sum))))))
        (else
