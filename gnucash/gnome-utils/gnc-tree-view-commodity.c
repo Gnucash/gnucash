@@ -670,7 +670,9 @@ gnc_tree_view_commodity_select_commodity (GncTreeViewCommodity *view, gnc_commod
     GtkTreePath *s_tree_path;
 
     g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY(view));
-    g_return_if_fail (commodity != NULL);
+
+    if (!commodity)
+        return;
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
 
