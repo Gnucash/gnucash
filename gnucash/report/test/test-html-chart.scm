@@ -7,7 +7,7 @@
 (use-modules (tests srfi64-extras))
 (use-modules (tests test-engine-extras))
 (use-modules (tests test-report-extras))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)

@@ -3,7 +3,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash report reports example average-balance))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (gnucash report reports standard budget))
 (use-modules (tests test-report-extras))
 (use-modules (gnucash report stylesheets))

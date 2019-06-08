@@ -329,5 +329,5 @@
 
 (export gnc:*option-section-budgeting* gnc:*option-name-default-budget*)
 
-(load-from-path "business-options")
-(load-from-path "business-prefs")
+(load-from-path "gnucash/app-utils/business-options")
+(load-from-path "gnucash/app-utils/business-prefs")

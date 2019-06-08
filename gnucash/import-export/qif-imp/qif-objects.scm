@@ -23,7 +23,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "qif-import/simple-obj")
+(load-from-path "gnucash/qif-import/simple-obj")
 
 (define (construct class)
   (apply (record-constructor class)

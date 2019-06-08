@@ -115,7 +115,7 @@
 (export trans-splits)
 (export gnc:transaction-scm-onto-transaction)
 
-(load-from-path "gnc-numeric")
-(load-from-path "commodity-table")
-(load-from-path "engine-interface")
-(load-from-path "engine-utilities")
+(load-from-path "gnucash/engine/gnc-numeric")
+(load-from-path "gnucash/engine/commodity-table")
+(load-from-path "gnucash/engine/engine-interface")
+(load-from-path "gnucash/engine/engine-utilities")

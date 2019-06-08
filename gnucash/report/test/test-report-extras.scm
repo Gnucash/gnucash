@@ -21,7 +21,7 @@
 
 (use-modules (gnucash gnc-module))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 

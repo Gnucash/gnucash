@@ -264,9 +264,9 @@ gnc_add_scheme_targets(scm-gnome-utils-1
 
 gnc_add_scheme_targets(scm-gnome-utils-2
   gnc-menu-extensions.scm
-  ""
+  "gnucash/gnome-utils"
   "${GUILE_DEPENDS}"
-  FALSE
+  TRUE
 )
 
 add_custom_target(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)

@@ -29,7 +29,7 @@
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (sw_app_utils))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (system vm coverage))
 
 (setlocale LC_ALL "C")

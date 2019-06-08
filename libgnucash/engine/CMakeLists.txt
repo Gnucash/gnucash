@@ -298,9 +298,9 @@ gnc_add_scheme_targets(scm-engine-0
 
 gnc_add_scheme_targets(scm-engine-1
   "${engine_SCHEME_1}"
-  ""
+  "gnucash/engine"
   "scm-engine-0;${GUILE_DEPENDS}"
-  FALSE
+  TRUE
 )
 
 add_custom_target(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)

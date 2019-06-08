@@ -3,7 +3,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
 
