@@ -50,15 +50,7 @@ set (report_system_SCHEME
     eguile-html-utilities.scm
 )
 
-set (report_system_SCHEME_2a
-    collectors.scm
-)
-
-set (report_system_SCHEME_2b
-    report-collectors.scm
-)
-
-set (report_system_SCHEME_3
+set (report_system_SCHEME_2
     commodity-utilities.scm
     html-acct-table.scm
     html-chart.scm
@@ -97,34 +89,19 @@ gnc_add_scheme_targets(scm-report-system-1
   FALSE
 )
 
-gnc_add_scheme_targets(scm-report-system-2a
-  "${report_system_SCHEME_2a}"
-  "gnucash/report/report-system"
+gnc_add_scheme_targets(scm-report-system-2
+  "${report_system_SCHEME_2}"
+  ""
   scm-report-system-1
   FALSE
 )
 
-gnc_add_scheme_targets(scm-report-system-2b
-  "${report_system_SCHEME_2b}"
-  "gnucash/report/report-system"
-  scm-report-system-2a
-  FALSE
-)
-
-gnc_add_scheme_targets(scm-report-system-3
-  "${report_system_SCHEME_3}"
-  ""
-  scm-report-system-2b
-  FALSE
-)
-
-add_custom_target(scm-report-system ALL DEPENDS scm-report-system-3)
+add_custom_target(scm-report-system ALL DEPENDS scm-report-system-2)
 
 set_local_dist(report_system_DIST_local CMakeLists.txt
   report-system.i
   ${report_system_HEADERS} ${report_system_SOURCES}
   ${report_system_SCHEME} ${report_system_SCHEME_1}
-  ${report_system_SCHEME_2a} ${report_system_SCHEME_2b}
-  ${report_system_SCHEME_3})
+  ${report_system_SCHEME_2})
 
 set(report_system_DIST ${report_system_DIST_local} ${test_report_system_DIST} PARENT_SCOPE)

@@ -469,7 +469,6 @@ gnucash/report/reports/standard/view-column.scm
 gnucash/report/reports/support/balsheet-eg.eguile.scm
 gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
-gnucash/report/report-system/collectors.scm
 gnucash/report/report-system/commodity-utilities.scm
 gnucash/report/report-system/eguile-gnc.scm
 gnucash/report/report-system/eguile-html-utilities.scm
@@ -491,7 +490,6 @@ gnucash/report/report-system/html-table.scm
 gnucash/report/report-system/html-text.scm
 gnucash/report/report-system/html-utilities.scm
 gnucash/report/report-system/options-utilities.scm
-gnucash/report/report-system/report-collectors.scm
 gnucash/report/report-system/report-register-hooks.scm
 gnucash/report/report-system/report.scm
 gnucash/report/report-system/report-system.scm
@@ -536,7 +534,6 @@ libgnucash/app-utils/gnc-sx-instance-model.c
 libgnucash/app-utils/gnc-ui-balances.c
 libgnucash/app-utils/gnc-ui-util.c
 libgnucash/app-utils/guile-util.c
-libgnucash/app-utils/hooks.scm
 libgnucash/app-utils/options.scm
 libgnucash/app-utils/option-util.c
 libgnucash/app-utils/prefs.scm

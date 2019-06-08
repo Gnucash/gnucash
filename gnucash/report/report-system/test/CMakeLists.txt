@@ -32,7 +32,7 @@ set(GUILE_DEPENDS
   scm-engine
   scm-test-engine
   scm-scm
-  scm-report-system-3
+  scm-report-system
   scm-test-report-system
   )
 gnc_add_scheme_tests("${scm_test_report_system_SOURCES}")

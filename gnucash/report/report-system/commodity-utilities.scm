@@ -76,13 +76,6 @@
 ;; Functions to create some list of prices from data in transactions.
 
 
-;; Helper for warnings below.
-(define (gnc-commodity-numeric->string commodity numeric)
-  (issue-deprecation-warning "gnc-commodity-numeric->string deprecated. \
-construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
-  (gnc:monetary->string
-   (gnc:make-gnc-monetary commodity numeric)))
-
 ;; Helper for exchange below
 (define (gnc:exchange-by-euro-numeric
          foreign-commodity foreign-numeric domestic date)
@@ -265,31 +258,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                    (gnc:make-gnc-monetary report-currency 0)))
             (loop result
                   (cdr commodity-splits))))))))
-
-;; Get the instantaneous prices for all commodities in
-;; 'commodity-list', i.e. the same thing as get-commodity-inst-prices
-;; but extended to a commodity-list. Returns an alist. Each pair
-;; consists of the foreign-currency and the appropriate list from
-;; gnc:get-commodity-inst-prices, see there.
-(define (gnc:get-commoditylist-inst-prices
-         commodity-list report-currency end-date
-         start-percent delta-percent)
-  (issue-deprecation-warning
-   "gnc:get-commoditylist-inst-prices is deprecated.")
-  (let ((currency-accounts
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        (work-to-do (length commodity-list)))
-    (map
-     (lambda (c work-done)
-       (if start-percent
-           (gnc:report-percent-done
-            (+ start-percent (* delta-percent (/ work-done work-to-do)))))
-       (cons c
-             (gnc:get-commodity-inst-prices
-              currency-accounts end-date c report-currency)))
-     commodity-list
-     (iota work-to-do))))
-
 
 ;; Find the price in 'pricelist' that's nearest to 'date'. The
 ;; pricelist comes from
@@ -704,50 +672,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                     (* (gnc:gnc-monetary-amount foreign) (cadr pair))
                     0)))))))
 
-;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
-;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
-;; the <gnc:numeric> 'price-value'. Returns a <gnc:monetary>.
-(define (gnc:exchange-by-pricevalue-helper
-         foreign domestic price-value)
-  (issue-deprecation-warning
-   "gnc:exchange-by-pricevalue-helper is deprecated. please inline function.")
-  (and (gnc:gnc-monetary? foreign)
-       (gnc:make-gnc-monetary
-        domestic
-        (if price-value
-            (* (gnc:gnc-monetary-amount foreign)
-               price-value)
-            (begin
-              (warn "gnc:exchange-by-pricevalue-helper: No price found for "
-                    (gnc:monetary->string foreign) " into "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary domestic 0)))
-              0)))))
-
-;; Helper for gnc:exchange-by-pricedb-* below. 'price' gets tested for
-;; #f here, and gets unref'd here too. Exchange the <gnc:monetary>
-;; 'foreign' into the <gnc:commodity*> 'domestic' by the <gnc:Price>
-;; 'price'. Returns a <gnc:monetary>.
-(define (gnc:exchange-by-pricedb-helper
-         foreign domestic price)
-  (issue-deprecation-warning
-   "gnc:exchange-by-pricedb-helper is deprecated.")
-  (and (gnc:gnc-monetary? foreign)
-       (gnc:make-gnc-monetary
-        domestic
-        (if price
-            (let ((result
-                   (* (gnc:gnc-monetary-amount foreign)
-                      (gnc-price-get-value price))))
-              (gnc-price-unref price)
-              result)
-            (begin
-              (warn "gnc:exchange-by-pricedb-helper: No price found for "
-                    (gnc:monetary->string foreign) " into "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary domestic 0)))
-              0)))))
-
 ;; This is another ready-to-use function for calculation of exchange
 ;; rates. (Note that this is already the function itself. It doesn't
 ;; return a function as opposed to make-exchange-function.) It takes
@@ -876,18 +800,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
-  ;; actual-transactions isn't used, at least not as a value passed to this
-  ;; function. price-scatter.scm does use it but calls
-  ;; gnc:get-commodity-inst-prices directly.
-    ((actual-transactions) (let ((pricealist
-                                  (gnc:get-commoditylist-inst-prices
-                                   commodity-list report-currency to-date-tp
-                                   start-percent delta-percent)))
-                             (issue-deprecation-warning
-                              "this path is never reached in code.")
-                             (lambda (foreign domestic date)
-                               (gnc:exchange-by-pricealist-nearest
-                                pricealist foreign domestic date))))
     ((pricedb-latest) (lambda (foreign domestic date)
                         (gnc:exchange-by-pricedb-latest foreign domestic)))
     ((pricedb-nearest) gnc:exchange-by-pricedb-nearest)
@@ -960,18 +872,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                            domestic))))))
           #f)
          balance)))
-
-(define (gnc-commodity-collector-commodity-count collector)
-  (issue-deprecation-warning
-   "gnc-commodity-collector-commodity-count is deprecated. please inline.")
-  (length (collector 'format (lambda (comm amt) comm) #f)))
-
-(define (gnc-commodity-collector-contains-commodity? collector commodity)
-  (issue-deprecation-warning
-   "gnc-commodity-collector-contains-commodity? is deprecated. please inline.")
-  (member commodity
-          (collector 'format (lambda (comm amt) comm) #f)
-          gnc-commodity-equiv))
 
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt

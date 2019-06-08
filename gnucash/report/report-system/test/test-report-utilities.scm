@@ -22,7 +22,6 @@
   (test-commodity-collector)
   (test-get-account-balances)
   (test-monetary-adders)
-  (test-make-stats-collector)
   (test-end "report-utilities"))
 
 (define (NDayDelta t64 n)
@@ -199,12 +198,6 @@
         (collector->list
          (gnc:commodity-collector-get-negated coll-A)))
 
-      ;; deprecated:
-      (test-equal "gnc:commodity-collectorlist-get-merged"
-        '(("USD" . 25) ("GBP" . 0))
-        (collector->list
-         (gnc:commodity-collectorlist-get-merged (list coll-A coll-B))))
-
       (test-equal "gnc-commodity-collector-allzero? #f"
         #f
         (gnc-commodity-collector-allzero? coll-A))
@@ -295,16 +288,6 @@
            (income (account-lookup "Income"))
            (bank (account-lookup "Bank"))
            (gbp-bank (account-lookup "GBP Bank")))
-
-      ;; deprecated:
-      (test-equal "gnc:account-get-balance-at-date 1/1/2001 incl children"
-        2301
-        (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #t))
-
-      ;; deprecated:
-      (test-equal "gnc:account-get-balance-at-date 1/1/2001 excl children"
-        15
-        (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f))
 
       (test-equal "gnc:account-get-comm-balance-at-date 1/1/2001 incl children"
         '(("GBP" . 608) ("USD" . 2301))
@@ -505,50 +488,3 @@
      "gnc:monetary+ with >1 currency fails"
      #t
      (gnc:monetary+ usd10 usd10 eur8))))
-
-(define (test-make-stats-collector)
-  (test-begin "gnc:make-stats-collector")
-  (let ((s (gnc:make-stats-collector)))
-    (test-equal "initial s is 0"
-      0
-      (s 'total #f))
-
-    (s 'add 5)
-    (test-equal "s+=5 is 5"
-      5
-      (s 'total #f))
-
-    (s 'add 9)
-    (test-equal "s+=9 is 14"
-      14
-      (s 'total #f))
-
-    (test-equal "avg(s) is 7"
-      7
-      (s 'average #f))
-
-    (s 'add 1E12)
-    (s 'add -1E13)
-
-    (test-equal "max(s) is now 1E12"
-      1E12
-      (s 'getmax #f))
-
-    (test-equal "min(s) is now -1E13"
-      -1E13
-      (s 'getmin #f))
-
-    (s 'add 9E12)
-    (test-equal "newavg(s) is 2.8"
-      2.8
-      (s 'average #f))
-
-    (test-equal "num(s) is 5"
-      5
-      (s 'numitems #f))
-
-    (s 'reset #f)
-    (test-equal "after reset num(s) is 0"
-      0
-      (s 'numitems #f)))
-  (test-end "gnc:make-stats-collector"))

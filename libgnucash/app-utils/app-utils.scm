@@ -148,7 +148,6 @@
 (export gnc:options-get-default-section)
 (export gnc:options-copy-values)
 (export gnc:send-options)
-(export gnc:save-options)
 
 (define (gnc:option-get-value book category key)
   ;;Access an option directly
@@ -264,11 +263,6 @@
 (export gnc:get-start-next-year)
 (export gnc:get-three-months-ahead)
 
-;; hooks 
-(export gnc:hook-run-danglers)	    	;; from hooks.scm- deprecated
-(re-export gnc-hook-add-scm-dangler)
-(re-export HOOK-REPORT)
-
 ;; simple-obj
 (export make-simple-class)
 (export simple-obj-getter)
@@ -283,7 +277,6 @@
 
 (load-from-path "c-interface")
 (load-from-path "options")
-(load-from-path "hooks")
 (load-from-path "prefs")
 (load-from-path "date-utilities")
 (load-from-path "simple-obj")

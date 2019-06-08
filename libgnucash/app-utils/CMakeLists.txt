@@ -156,7 +156,6 @@ set (app_utils_SCHEME_2
 )
 
 set (app_utils_SCHEME_1
-    hooks.scm
     business-options.scm
     c-interface.scm
     date-utilities.scm
