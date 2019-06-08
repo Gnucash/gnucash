@@ -6,9 +6,9 @@ set (scm-guile-json-details
 
 gnc_add_scheme_targets (guile-json-details
   "${scm-guile-json-details}"
-  json
+  gnucash/json
   ""
-  FALSE
+  TRUE
 )
 
 set_dist_list (guile-json-details_DIST

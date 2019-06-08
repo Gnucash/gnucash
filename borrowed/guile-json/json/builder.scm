@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(define-module (json builder)
+(define-module (gnucash json builder)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-1)
   #:use-module (rnrs bytevectors)
