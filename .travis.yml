@@ -4,7 +4,7 @@ language: c++
 compiler: gcc
 env:
     - BUILDENV=arch BUILDTYPE=cmake-ninja
-    - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-make
+    - BUILDENV=ubuntu-16.04 BUILDTYPE=cmake-make
 services:
     - docker
 install:
