@@ -537,7 +537,6 @@ libgnucash/app-utils/gnc-ui-balances.c
 libgnucash/app-utils/gnc-ui-util.c
 libgnucash/app-utils/guile-util.c
 libgnucash/app-utils/hooks.scm
-libgnucash/app-utils/migrate-prefs.scm
 libgnucash/app-utils/options.scm
 libgnucash/app-utils/option-util.c
 libgnucash/app-utils/prefs.scm
