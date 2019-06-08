@@ -1153,11 +1153,7 @@ gnc_reconcile_window_create_view_box (Account *account,
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
     *total_save = label;
 
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_end (GTK_WIDGET(label), 10);
-#else
-    gtk_widget_set_margin_right (GTK_WIDGET(label), 10);
-#endif
 
     return vbox;
 }

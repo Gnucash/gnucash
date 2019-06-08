@@ -226,7 +226,7 @@ if (WITH_GNUCASH)
     endif (NOT WEBKIT2_4_FOUND)
   endif (WIN32 OR APPLE)
 
-  pkg_check_modules (GTK3 REQUIRED gtk+-3.0>=3.10.0)
+  pkg_check_modules (GTK3 REQUIRED gtk+-3.0>=3.18.0)
 endif (WITH_GNUCASH)
 
 pkg_check_modules (ZLIB REQUIRED zlib)

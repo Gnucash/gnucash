@@ -325,12 +325,8 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 void
 gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign)
 {
-#if GTK_CHECK_VERSION(3,16,0)
     gtk_label_set_xalign (GTK_LABEL (widget), xalign);
     gtk_label_set_yalign (GTK_LABEL (widget), yalign);
-#else
-    gtk_misc_set_alignment (GTK_MISC (widget), xalign, yalign);
-#endif
 }
 
 /********************************************************************\

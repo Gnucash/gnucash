@@ -204,11 +204,7 @@ gnc_combott_init (GncCombott *combott)
     g_signal_connect (G_OBJECT (arrow), "draw",
                       G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
 
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
-#else
-    gtk_widget_set_margin_left (GTK_WIDGET(arrow), 5);
-#endif
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);

@@ -329,11 +329,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
         if (priv->date_label == NULL)
         {
             priv->date_label = gtk_label_new("");
-#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(priv->date_label), 6);
-#else
-            gtk_widget_set_margin_left (GTK_WIDGET(priv->date_label), 6);
-#endif
             gtk_box_pack_start(GTK_BOX(period), priv->date_label, TRUE, TRUE, 0);
             gtk_widget_show_all(priv->date_label);
         }
