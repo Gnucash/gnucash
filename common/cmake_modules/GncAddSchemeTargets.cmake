@@ -90,9 +90,7 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     list(APPEND _GUILE_LOAD_COMPILED_PATH ${guile_load_compiled_path})
   endif()
   set(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
-  if (MAKE_LINKS)
-      list(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
-  endif()
+  list(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
   list(APPEND _GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
   set(_TARGET_FILES "")
