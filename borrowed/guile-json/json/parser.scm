@@ -23,7 +23,7 @@
 
 ;;; Code:
 
-(define-module (json parser)
+(define-module (gnucash json parser)
   #:use-module (ice-9 rdelim)
   #:use-module (rnrs bytevectors)
   #:use-module (srfi srfi-9)
