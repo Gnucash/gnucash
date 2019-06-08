@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash tax de_DE))
+(define-module (gnucash tax-de_DE))
 
 (use-modules (gnucash gnc-module))
 (eval-when
@@ -54,5 +54,5 @@
 
 (export gnc:*tax-label* gnc:*tax-nr-label*)
 
-(load-from-path "txf-de_DE")
-(load-from-path "txf-help-de_DE")
+(load-from-path "gnucash/tax-de_DE/txf-de_DE")
+(load-from-path "gnucash/tax-de_DE/txf-help-de_DE")

@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash tax us))
+(define-module (gnucash tax-us))
 
 (export gnc:txf-get-payer-name-source)
 (export gnc:txf-get-form)
@@ -40,5 +40,5 @@
 (export txf-asset-categories)
 (export txf-liab-eq-categories)
 
-(load-from-path "txf")
-(load-from-path "txf-help")
+(load-from-path "gnucash/tax-us/txf")
+(load-from-path "gnucash/tax-us/txf-help")

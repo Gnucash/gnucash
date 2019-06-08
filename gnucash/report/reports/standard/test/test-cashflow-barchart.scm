@@ -26,7 +26,7 @@
 (use-modules (sw_engine))
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (tests test-report-extras))
 (use-modules (gnucash report reports standard cashflow-barchart))
 (use-modules (gnucash report stylesheets))

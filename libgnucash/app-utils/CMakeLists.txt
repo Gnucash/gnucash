@@ -151,12 +151,9 @@ install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnuca
 
 # And now handle scheme files
 
-set (app_utils_SCHEME_2
-    app-utils.scm
-)
-
 set (app_utils_SCHEME_1
     business-options.scm
+    business-prefs.scm
     c-interface.scm
     date-utilities.scm
     options.scm
@@ -164,8 +161,8 @@ set (app_utils_SCHEME_1
     fin.scm
 )
 
-set(app_utils_SCHEME_3
-    business-prefs.scm
+set (app_utils_SCHEME_2
+    app-utils.scm
 )
 
 set(GUILE_DEPENDS
@@ -180,14 +177,14 @@ gnc_add_scheme_targets(scm-gettext
   gettext.scm
   gnucash
   gncmod-app-utils
-  FALSE
+  TRUE
 )
 
 gnc_add_scheme_targets(scm-app-utils-1
   "${app_utils_SCHEME_1}"
-  ""
+  "gnucash/app-utils"
   "scm-gettext;${GUILE_DEPENDS}"
-  FALSE
+  TRUE
 )
 
 gnc_add_scheme_targets(scm-app-utils-2
@@ -197,14 +194,7 @@ gnc_add_scheme_targets(scm-app-utils-2
   FALSE
 )
 
-gnc_add_scheme_targets(scm-app-utils-3
-  "${app_utils_SCHEME_3}"
-  ""
-  "scm-app-utils-2"
-  FALSE
-)
-
-add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-3 scm-app-utils-2 scm-app-utils-1 scm-gettext)
+add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1 scm-gettext)
 
 set_local_dist(app_utils_DIST_local
         ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}

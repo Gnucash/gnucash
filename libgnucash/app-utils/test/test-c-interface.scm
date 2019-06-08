@@ -19,7 +19,7 @@
 
 (setenv "GNC_UNINSTALLED" "1")
 (debug-set! stack 50000)
-(load-from-path "c-interface")
+(load-from-path "gnucash/app-utils/c-interface")
 (use-modules (tests test-engine-extras))
 
 (define (test-func a b)

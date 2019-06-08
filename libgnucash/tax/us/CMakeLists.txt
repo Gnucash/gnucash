@@ -23,26 +23,44 @@ install(TARGETS gncmod-tax-us
 
 # Scheme
 
-set(gncmod_tax_us_SCHEME_1 txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm)
-set(gncmod_tax_us_SCHEME_2 de_DE.scm us.scm)
+set(gncmod_tax_us_SCHEME_1 txf.scm txf-help.scm)
+set(gncmod_tax_us_SCHEME_2 tax-us.scm)
 
-set(GUILE_DEPENDS      scm-app-utils scm-gnc-module)
+set(gncmod_tax_de_DE_SCHEME_1 txf-de_DE.scm txf-help-de_DE.scm)
+set(gncmod_tax_de_DE_SCHEME_2 tax-de_DE.scm)
+
+set(GUILE_DEPENDS scm-app-utils scm-gnc-module)
 
 gnc_add_scheme_targets(scm-tax-us-1
   "${gncmod_tax_us_SCHEME_1}"
-  ""
+  "gnucash/tax-us"
   "${GUILE_DEPENDS}"
-  FALSE
+  TRUE
   )
 gnc_add_scheme_targets(scm-tax-us-2
   "${gncmod_tax_us_SCHEME_2}"
-  gnucash/tax
+  gnucash
   "${GUILE_DEPENDS}"
   FALSE
   )
 
-add_custom_target(scm-tax-us ALL DEPENDS scm-tax-us-1 scm-tax-us-2)
+gnc_add_scheme_targets(scm-tax-de_DE-1
+  "${gncmod_tax_de_DE_SCHEME_1}"
+  "gnucash/tax-de_DE"
+  "${GUILE_DEPENDS}"
+  TRUE
+  )
+gnc_add_scheme_targets(scm-tax-de_DE-2
+  "${gncmod_tax_de_DE_SCHEME_2}"
+  gnucash
+  "${GUILE_DEPENDS}"
+  FALSE
+  )
 
-set_local_dist(tax_us_DIST_local CMakeLists.txt ${tax_us_SOURCES} ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2})
+add_custom_target(scm-tax-us ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
+
+set_local_dist(tax_us_DIST_local CMakeLists.txt ${tax_us_SOURCES}
+    ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2}
+    ${gncmod_tax_de_DE_SCHEME_1} ${gncmod_tax_de_DE_SCHEME_2})
 set(tax_us_DIST ${tax_us_DIST_local} ${test_tax_us_DIST} PARENT_SCOPE)
 

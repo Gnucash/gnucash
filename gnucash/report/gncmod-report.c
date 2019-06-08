@@ -72,7 +72,7 @@ libgncmod_report_gnc_module_init(int refcount)
     }
     scm_init_sw_report_module();
 
-    scm_c_eval_string("(use-modules (gnucash report report))");
+    scm_c_eval_string("(use-modules (gnucash report))");
 
     /* if this is the first time the module's being loaded, initialize
      * the relative date system */

@@ -50,9 +50,6 @@ install(FILES ${report_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 set (report_SCHEME
     report.scm
-    eguile-gnc.scm
-    eguile-utilities.scm
-    eguile-html-utilities.scm
 )
 
 set (report_SCHEME_2
@@ -78,6 +75,12 @@ set (report_SCHEME_2
     trep-engine.scm
 )
 
+set (report_SCHEME_3
+    eguile-gnc.scm
+    eguile-utilities.scm
+    eguile-html-utilities.scm
+)
+
 set(GUILE_DEPENDS
   gncmod-html
   scm-gnome-utils
@@ -89,7 +92,7 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_targets(scm-report-1
   "${report_SCHEME}"
-  "gnucash/report"
+  "gnucash"
   "${GUILE_DEPENDS}"
   FALSE
 )
@@ -101,13 +104,20 @@ gnc_add_scheme_targets(scm-report-2
   TRUE
 )
 
-add_custom_target(scm-report ALL DEPENDS scm-report-2)
+gnc_add_scheme_targets(scm-report-3
+  "${report_SCHEME_3}"
+  "gnucash/report"
+  scm-report-1
+  FALSE
+)
+
+add_custom_target(scm-report ALL DEPENDS scm-report-3)
 
 set_local_dist(report_DIST_local CMakeLists.txt
   report.i
   ${report_HEADERS} ${report_SOURCES}
   ${report_SCHEME} ${report_SCHEME_1}
-  ${report_SCHEME_2})
+  ${report_SCHEME_2} ${report_SCHEME_3})
 
 set(report_DIST ${report_DIST_local} ${jqplot_DIST} ${locale_specific_DIST}
                 ${reports_DIST} ${stylesheets_DIST} ${test_report_DIST} PARENT_SCOPE)

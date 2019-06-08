@@ -4,7 +4,7 @@
 (use-modules (gnucash report reports standard balance-sheet))
 (use-modules (gnucash report reports standard income-statement))
 (use-modules (gnucash report stylesheets))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 (use-modules (tests test-report-extras))
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))

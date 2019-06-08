@@ -24,7 +24,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 
 (define <html-scatter>
   (make-record-type "<html-scatter>"

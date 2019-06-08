@@ -26,7 +26,7 @@
 
 
 (use-modules (srfi srfi-13))
-(use-modules (gnucash import-export string))
+(use-modules (gnucash string))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-or-make-acct

@@ -266,10 +266,10 @@
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)
 
-(load-from-path "c-interface")
-(load-from-path "options")
-(load-from-path "prefs")
-(load-from-path "date-utilities")
+(load-from-path "gnucash/app-utils/c-interface")
+(load-from-path "gnucash/app-utils/options")
+(load-from-path "gnucash/app-utils/prefs")
+(load-from-path "gnucash/app-utils/date-utilities")
 
 ;; Business options
 (define gnc:*business-label* (N_ "Business"))
@@ -318,5 +318,5 @@
 
 (export gnc:*option-section-budgeting* gnc:*option-name-default-budget*)
 
-(load-from-path "business-options")
-(load-from-path "business-prefs")
+(load-from-path "gnucash/app-utils/business-options")
+(load-from-path "gnucash/app-utils/business-prefs")

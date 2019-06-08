@@ -71,23 +71,23 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_targets(scm-qif-import-0
   "${qif_import_SCHEME_0}"
-  "gnucash/import-export"
+  "gnucash"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
 gnc_add_scheme_targets(scm-qif-import-2
   "${qif_import_SCHEME_2}"
-  "gnucash/import-export"
+  "gnucash"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
 gnc_add_scheme_targets(scm-qif-import
   "${qif_import_SCHEME}"
-  "qif-import"
+  "gnucash/qif-import"
   "${GUILE_DEPENDS};scm-qif-import-0"
-  FALSE
+  TRUE
 )
 
 set_local_dist(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}

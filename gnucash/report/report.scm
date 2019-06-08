@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report report))
+(define-module (gnucash report))
 (use-modules (gnucash utilities)) 
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))

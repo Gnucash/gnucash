@@ -4,7 +4,7 @@
 
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash report reports standard cash-flow))
-(use-modules (gnucash report report))
+(use-modules (gnucash report))
 
 (define (run-test)
   (and (test test-one-tx-in-cash-flow)

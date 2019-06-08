@@ -39,7 +39,7 @@
 (export gnc:make-menu)
 (export gnc:make-separator)
 
-(load-from-path "gnc-menu-extensions")
+(load-from-path "gnucash/gnome-utils/gnc-menu-extensions")
 
 ;; this function will receive 1 boolean argument, and can be used for
 ;; any UI init/shutdown routines. For now it will set the
