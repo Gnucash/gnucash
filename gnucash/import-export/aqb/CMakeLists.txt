@@ -91,7 +91,7 @@ endif()
     DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
 endif(WITH_AQBANKING)
 
-set_local_dist(aqbanking_DIST_local CMakeLists.txt migratable-prefs-aqbanking.xml
+set_local_dist(aqbanking_DIST_local CMakeLists.txt
         ${aqbanking_SOURCES} ${aqbanking_noinst_HEADERS} ${aqbanking_EXTRA_DIST}
         ${aqbanking_GLADE} ${aqbanking_UI})
 
