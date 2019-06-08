@@ -1202,12 +1202,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     label = gtk_label_new("");
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
     *total_save = label;
-
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
-#else
-    gtk_widget_set_margin_right (GTK_WIDGET(label), 10 + nat_sb.width);
-#endif
 
     return vbox;
 }
@@ -1973,13 +1968,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gint recn_widthc = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->credit), REC_RECN);
         gint recn_widthd = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->debit), REC_RECN);
 
-#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
         gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
-#else
-        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
-        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
-#endif
     }
     return recnData;
 }

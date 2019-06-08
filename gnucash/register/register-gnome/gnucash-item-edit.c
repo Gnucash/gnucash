@@ -854,17 +854,10 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
 
 #if !GTK_CHECK_VERSION(3,20,0)
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(item_edit->editor),
                                  gnc_item_edit_get_margin (item_edit, left));
     gtk_widget_set_margin_end (GTK_WIDGET(item_edit->editor),
                                gnc_item_edit_get_margin (item_edit, right));
-#else
-    gtk_widget_set_margin_left (GTK_WIDGET(item_edit->editor),
-                                gnc_item_edit_get_margin (item_edit, left));
-    gtk_widget_set_margin_right (GTK_WIDGET(item_edit->editor),
-                                 gnc_item_edit_get_margin (item_edit, right));
-#endif
     gtk_widget_set_margin_top (GTK_WIDGET(item_edit->editor),
                                gnc_item_edit_get_margin (item_edit, top));
     gtk_widget_set_margin_bottom (GTK_WIDGET(item_edit->editor),

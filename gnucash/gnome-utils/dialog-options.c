@@ -1219,11 +1219,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     gtk_widget_set_halign (GTK_WIDGET(vbox), GTK_ALIGN_FILL);
     gtk_widget_set_hexpand (GTK_WIDGET(vbox), TRUE);
 
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_end (GTK_WIDGET(vbox), 12);
-#else
-    gtk_widget_set_margin_right (GTK_WIDGET(vbox), 12);
-#endif
     gtk_widget_set_margin_bottom (GTK_WIDGET(vbox), 12);
 
     /* Iterate over the three options and create a radio button for each one */
@@ -1309,11 +1305,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                          book_currency_data->book_currency_table,
                                          TRUE, TRUE, 0);
-#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(book_currency_data->book_currency_table), 12);
-#else
-            gtk_widget_set_margin_left (GTK_WIDGET(book_currency_data->book_currency_table), 12);
-#endif
             gtk_grid_set_row_spacing (GTK_GRID (policy_table), 6);
             gtk_grid_set_column_spacing (GTK_GRID (policy_table), 6);
 
@@ -1336,11 +1328,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
 
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                          policy_table, TRUE, TRUE, 0);
-#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(policy_table), 12);
-#else
-            gtk_widget_set_margin_left (GTK_WIDGET(policy_table), 12);
-#endif
             book_currency_data->gain_loss_account_table = gtk_grid_new ();
             gtk_grid_set_row_spacing (GTK_GRID (book_currency_data->gain_loss_account_table), 6);
             gtk_grid_set_column_spacing (GTK_GRID (book_currency_data->gain_loss_account_table), 6);
@@ -1358,11 +1346,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                 book_currency_data->gain_loss_account_table,
                                 TRUE, TRUE, 0);
-#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(book_currency_data->gain_loss_account_table), 12);
-#else
-            gtk_widget_set_margin_left (GTK_WIDGET(book_currency_data->gain_loss_account_table), 12);
-#endif
             gtk_grid_attach (GTK_GRID(table), book_currency_data->book_currency_vbox, 1, 2, 1, 1);
         }
         else /* trading or neither */

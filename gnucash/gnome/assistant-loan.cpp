@@ -753,12 +753,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 rouid = ldd->repayOptsUI[i];
                 vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
                 gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
-
-#if GTK_CHECK_VERSION(3, 12, 0)
                 gtk_widget_set_margin_start (GTK_WIDGET(vb), 12);
-#else
-                gtk_widget_set_margin_left (GTK_WIDGET(vb), 12);
-#endif
 
                 /* Add payment checkbox. */
 
@@ -782,12 +777,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     FALSE );
 
                 gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb), FALSE, FALSE, 2 );
-
-#if GTK_CHECK_VERSION(3, 12, 0)
                 gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
-#else
-                gtk_widget_set_margin_left (GTK_WIDGET(rouid->escrowCb), 12);
-#endif
+
                 g_signal_connect( rouid->optCb, "toggled",
                                   G_CALLBACK(loan_opt_toggled_cb),
                                   rouid );
