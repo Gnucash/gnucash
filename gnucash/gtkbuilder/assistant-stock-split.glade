@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAssistant" id="stock_split_assistant">
@@ -12,6 +12,9 @@
     <signal name="cancel" handler="gnc_stock_split_assistant_cancel" swapped="no"/>
     <signal name="close" handler="gnc_stock_split_assistant_finish" swapped="no"/>
     <signal name="prepare" handler="gnc_stock_split_assistant_prepare" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkLabel" id="intro_page_label">
         <property name="visible">True</property>
@@ -305,9 +308,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -366,9 +366,6 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="border_width">3</property>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -389,9 +386,6 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="border_width">3</property>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -426,10 +420,8 @@
         <property name="has_padding">False</property>
       </packing>
     </child>
-    <child internal-child="action_area">
-      <object class="GtkBox" id="assistant-action_area2">
-        <property name="can_focus">False</property>
-      </object>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>

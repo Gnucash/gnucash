@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="gnucash_options_window">
     <property name="can_focus">False</property>
     <property name="default_width">640</property>
     <property name="default_height">480</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="dialog-vbox">
         <property name="visible">True</property>
@@ -122,9 +125,6 @@
               <object class="GtkBox" id="notebook_placeholder">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -140,9 +140,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

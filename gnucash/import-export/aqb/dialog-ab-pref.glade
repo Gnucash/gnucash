@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="aqbanking_preferences">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">window1</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkGrid" id="aqbanking_prefs">
         <property name="visible">True</property>
@@ -85,6 +88,7 @@
             <property name="label" translatable="yes">Use Non-SWIFT _transaction text</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
             <property name="tooltip_text" translatable="yes">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>

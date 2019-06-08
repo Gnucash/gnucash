@@ -71,9 +71,6 @@ Please choose the currency to use for new accounts.</property>
               <object class="GtkBox" id="currency_chooser_hbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -338,9 +335,6 @@ Select categories that correspond to the ways that you foresee you will use GnuC
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -436,7 +430,11 @@ Press `Cancel' to close this dialog without creating any new accounts.</property
       <packing>
         <property name="page_type">confirm</property>
         <property name="title" translatable="yes">Finish Account Setup</property>
+        <property name="has_padding">False</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>
