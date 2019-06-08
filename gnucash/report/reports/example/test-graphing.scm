@@ -27,58 +27,86 @@
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 
-(debug-enable 'backtrace)
-
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (define (simple-pie-chart)
-  (let ((chart (gnc:make-html-piechart)))
-    (gnc:html-piechart-set-title! chart "Pie Chart Title")
-    (gnc:html-piechart-set-subtitle! chart "Pie Chart SubTitle")
-    (gnc:html-piechart-set-width! chart 320)
-    (gnc:html-piechart-set-height! chart 240)
-    (gnc:html-piechart-set-data! chart '(25 45 30))
-    (gnc:html-piechart-set-labels! chart '("foo" "bar" "baz"))
-    (gnc:html-piechart-set-colors! chart (gnc:assign-colors 3))
-    chart
-    )
-)
+  (let ((chart (gnc:make-html-chart)))
+    ;; the minimum chartjs-based html-chart requires the following settings
+    (gnc:html-chart-set-type! chart 'pie)
+
+    ;; title is either a string, or a list of strings
+    (gnc:html-chart-set-title! chart "Pie Chart Title")
+    (gnc:html-chart-set-width! chart '(pixels . 480))
+    (gnc:html-chart-set-height! chart '(pixels . 360))
+
+    ;; data-labels and data-series should be the same length
+    (gnc:html-chart-set-data-labels! chart '("alpha" "beta" "delta"))
+    (gnc:html-chart-add-data-series! chart
+                                     "series-1"             ;series name
+                                     '(25 45 30)            ;pie ratios
+                                     (gnc:assign-colors 3)) ;colours
+
+    ;; piechart doesn't need axes display:
+    (gnc:html-chart-set-axes-display! chart #f)
+    chart))
 
 (define (simple-bar-chart stacked?)
-  (let ((chart (gnc:make-html-barchart))
-        (text (gnc:make-html-text (gnc:html-markup-p "[bar goes here]"))))
-    (gnc:html-barchart-set-title! chart "Bar Chart Title")
-    (gnc:html-barchart-set-subtitle! chart (gnc:html-string-sanitize "Bar Chart SubTitle"))
-    (gnc:html-barchart-append-row! chart '(25 45 30))
-    (gnc:html-barchart-append-row! chart '(75 55 70))
-    (gnc:html-barchart-set-width! chart 320)
-    (gnc:html-barchart-set-height! chart 240)
-    (gnc:html-barchart-set-row-labels! chart '("date1" "date2"))
-    (gnc:html-barchart-set-col-labels! chart '("dataset1" "dataset2" "dataset3"))
-    (gnc:html-barchart-set-col-colors! chart (gnc:assign-colors 3))
-    (gnc:html-barchart-set-stacked?! chart stacked?)
-    (gnc:html-barchart-set-y-axis-label! chart "A Y Axis")
+  (let ((chart (gnc:make-html-chart))
+        (colours (gnc:assign-colors 3)))
+    (gnc:html-chart-set-title!
+     chart (list "Bar Chart Title"
+                 (gnc:html-string-sanitize "Bar Chart SubTitle")))
+    (gnc:html-chart-set-type! chart 'bar)
+    (gnc:html-chart-set-width! chart '(pixels . 480))
+    (gnc:html-chart-set-height! chart '(pixels . 360))
+    (gnc:html-chart-set-data-labels! chart '("water" "fire"))
+    (gnc:html-chart-add-data-series! chart
+                                     "dataset1"
+                                     '(25 75)
+                                     (car colours))
+    (gnc:html-chart-add-data-series! chart
+                                     "dataset2"
+                                     '(45 55)
+                                     (cadr colours))
+    (gnc:html-chart-add-data-series! chart
+                                     "dataset3"
+                                     '(30 70)
+                                     (caddr colours))
+
+    (gnc:html-chart-set-stacking?! chart stacked?)
+    (gnc:html-chart-set-y-axis-label! chart "Y Axis")
     chart))
 
 (define (simple-scatter-chart)
-  (let ((chart (gnc:make-html-scatter))
-        (text (gnc:make-html-text (gnc:html-markup-p "[scatter goes here]"))))
-    (gnc:html-scatter-set-title! chart "Scatter Title")
-    (gnc:html-scatter-set-subtitle! chart "Scatter SubTitle")
-    (gnc:html-scatter-add-datapoint! chart '(25 75))
-    (gnc:html-scatter-add-datapoint! chart '(45 55))
-    (gnc:html-scatter-add-datapoint! chart '(70 30))
-    (gnc:html-scatter-set-width! chart 320)
-    (gnc:html-scatter-set-height! chart 240)
-    (gnc:html-scatter-set-markercolor! chart (car (gnc:assign-colors 1)))
+  (let ((chart (gnc:make-html-chart)))
+    (gnc:html-chart-set-type! chart 'line)
+    (gnc:html-chart-set-title! chart "Scatter Title")
+
+    (gnc:html-chart-set-data-labels! chart '("a" "b" "c" "d" "e"))
+    (gnc:html-chart-set-width! chart '(pixels . 480))
+    (gnc:html-chart-set-height! chart '(pixels . 360))
+
+    ;; scatter plots require x/y coordinates for data points
+    (gnc:html-chart-add-data-series! chart
+                                     "xy-plot"
+                                     '(((x . 25) (y . 75))
+                                       ((x . 45) (y . 55))
+                                       ((x . 32) (y . 30)))
+                                     (gnc:assign-colors 3)
+                                     'borderWidth 1
+                                     'fill #f)
+
+    ;; The following sets xaxis to linear rather than category and
+    ;; also illustrates how to precisely select chartjs options. The
+    ;; second parameter is a list of symbols to target a particular
+    ;; chartJS option. See chartJS documentation.
+    (gnc:html-chart-set! chart '(options scales xAxes (0) type) "linear")
+
     chart))
 
 (define (options-generator)
-  (let* ((options (gnc:new-options)))
-    (gnc:options-set-default-section options "Test Graphing")
-    options)
-  )
+  (gnc:new-options))
 
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
@@ -88,9 +116,9 @@
 ;; defined above.
 (define (test-graphing-renderer report-obj)
   ;; These are some helper functions for looking up option values.
+  (define options (gnc:report-options report-obj))
   (define (get-op section name)
-    (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
+    (gnc:lookup-option options section name))
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
 
@@ -124,22 +152,20 @@
      document
      (gnc:make-html-text (gnc:html-markup-p "Scatter:")))
     (gnc:html-document-add-object! document (simple-scatter-chart))
-    
-    (gnc:html-document-add-object! 
-     document 
-     (gnc:make-html-text 
+
+    (gnc:html-document-add-object!
+     document
+     (gnc:make-html-text
       (gnc:html-markup-p "Done.")))
-      
-    document
-    )
-  )
+
+    document))
 
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report
- 
+
  ;; The version of this report.
  'version 1
- 
+
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
@@ -154,11 +180,11 @@
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name "Sample graphs."
+ 'menu-name "Sample graphs"
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip "Sample graphs."
+ 'menu-tip "Sample graphs"
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.
@@ -166,7 +192,6 @@
 
  ;; The options generator function defined above.
  'options-generator options-generator
- ;; 'options-generator gnc:new-options
- 
+
  ;; The rendering function defined above.
  'renderer test-graphing-renderer)
