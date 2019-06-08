@@ -41,12 +41,10 @@
 (export gnc:get-match-commodity-splits)
 (export gnc:get-match-commodity-splits-sorted)
 (export gnc:get-all-commodity-splits )
-(export gnc-commodity-numeric->string)
 (export gnc:exchange-by-euro-numeric)
 (export gnc:get-commodity-totalavg-prices)
 (export gnc:get-commoditylist-totalavg-prices)
 (export gnc:get-commodity-inst-prices)
-(export gnc:get-commoditylist-inst-prices)
 (export gnc:pricelist-price-find-nearest)
 (export gnc:pricealist-lookup-nearest-in-time)
 (export gnc:resolve-unknown-comm)
@@ -57,8 +55,6 @@
 (export gnc:exchange-by-euro)
 (export gnc:exchange-if-same)
 (export gnc:make-exchange-function)
-(export gnc:exchange-by-pricevalue-helper) ;deprecated
-(export gnc:exchange-by-pricedb-helper)
 (export gnc:exchange-by-pricedb-latest )
 (export gnc:exchange-by-pricedb-nearest)
 (export gnc:exchange-by-pricealist-nearest)
@@ -66,7 +62,6 @@
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:sum-collector-stocks)
-(export gnc-commodity-collector-contains-commodity?) ;deprecated
 
 ;; options-utilities.scm
 
@@ -75,10 +70,7 @@
 (export gnc:options-add-interval-choice!)
 (export gnc:options-add-account-levels!)
 (export gnc:options-add-account-selection!)
-(export gnc:options-add-include-subaccounts!) ;deprecated
-(export gnc:options-add-group-accounts!)      ;deprecated
 (export gnc:options-add-currency!)
-(export gnc:options-add-currency-selection!)  ;deprecated
 (export gnc:options-add-price-source!)
 (export gnc:options-add-plot-size!)
 (export gnc:options-add-marker-choice!)
@@ -206,14 +198,6 @@
 (export gnc:report-embedded-list)
 (export gnc:report-template-is-custom/template-guid?)
 (export gnc:is-custom-report-type)
-;; Legacy : the following 3 functions are only needed to
-;; load a saved-reports file version 2.0
-(export gnc:report-template-new-options/name)
-(export gnc:report-template-menu-name/name)
-(export gnc:report-template-renderer/name)
-;; Legacy: this function is needed only to restore
-;; a open report when loading a book last saved in GnuCash 2.2
-(export gnc:restore-report)
 
 ;; html-barchart.scm
 
@@ -705,7 +689,6 @@
 
 (export list-ref-safe)
 (export list-set-safe!)
-(export gnc-commodity-value->string)
 (export gnc:monetary->string)
 (export gnc:account-has-shares?)
 (export gnc:account-is-stock?)
@@ -717,15 +700,10 @@
 (export gnc:get-current-account-tree-depth)
 (export gnc:accounts-and-all-descendants)
 (export gnc:acccounts-get-all-subaccounts)
-(export gnc:make-stats-collector)       ;deprecated
-(export gnc:make-drcr-collector)        ;deprecated
 (export gnc:make-value-collector)
 (export gnc:make-number-collector)      ;deprecated
 (export gnc:make-commodity-collector)
 (export gnc:commodity-collector-get-negated)
-(export gnc:commodity-collectorlist-get-merged) ;deprecated
-(export gnc-commodity-collector-commodity-count)
-(export gnc:account-get-balance-at-date)
 (export gnc:account-get-balances-at-dates)
 (export gnc:account-get-comm-balance-at-date)
 (export gnc:account-get-comm-value-interval)
@@ -754,10 +732,7 @@
 (export gnc:monetaries-add)
 (export gnc:account-get-trans-type-balance-interval)
 (export gnc:account-get-trans-type-balance-interval-with-closing)
-(export gnc:account-get-total-flow)     ;deprecated
-(export gnc:account-get-pos-trans-total-interval)
 (export gnc:account-get-trans-type-splits-interval)
-(export gnc:double-col)                 ;deprecated
 (export gnc:budget-get-start-date)
 (export gnc:budget-get-end-date)
 (export gnc:budget-account-get-net)

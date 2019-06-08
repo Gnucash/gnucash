@@ -36,14 +36,6 @@
             (set! l (append! l filler)))))
   l)
 
-;; pair is a list of one gnc:commodity and one gnc:numeric
-;; value. Deprecated -- use <gnc-monetary> instead.
-(define (gnc-commodity-value->string pair)
-  (issue-deprecation-warning "gnc-commodity-value->string deprecated. \
-construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
-  (xaccPrintAmount
-   (cadr pair) (gnc-commodity-print-info (car pair) #t)))
-
 ;; Just for convenience. But in reports you should rather stick to the
 ;; style-info mechanism and simple plug the <gnc-monetary> into the
 ;; html-renderer.
@@ -186,71 +178,6 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; I might just go for the record-and-function-set way.  <rlb> cstim:
 ;; yes.  I think that would still be faster.
 
-(define (gnc:make-stats-collector)
-  (issue-deprecation-warning
-   "gnc:make-stats-collector is obsolete. use srfi-1 functions instead.")
-  (let ((value 0)
-        (totalitems 0)
-        (maximum -inf.0)
-        (minimum +inf.0))
-    (let ((adder (lambda (amount)
-                   (when (number? amount)
-                     (set! value (+ amount value))
-                     (if (> amount maximum) (set! maximum amount))
-                     (if (< amount minimum) (set! minimum amount))
-                     (set! totalitems (1+ totalitems)))))
-          (getnumitems (lambda () totalitems))
-          (gettotal (lambda () value))
-          (getaverage (lambda () (/ value totalitems)))
-          (getmax (lambda () maximum))
-          (getmin (lambda () minimum))
-          (reset-all (lambda ()
-                       (set! value 0)
-                       (set! maximum -inf.0)
-                       (set! minimum +inf.0)
-                       (set! totalitems 0))))
-      (lambda (action value)
-        (case action
-          ((add) (adder value))
-          ((total) (gettotal))
-          ((average) (getaverage))
-          ((numitems) (getnumitems))
-          ((getmax) (getmax))
-          ((getmin) (getmin))
-          ((reset) (reset-all))
-          (else (gnc:warn "bad stats-collector action: " action)))))))
-
-(define (gnc:make-drcr-collector)
-  (issue-deprecation-warning
-   "gnc:make-drcr-collector is obsolete. use srfi-1 functions instead.")
-  (let ;;; values
-      ((debits 0)
-       (credits 0)
-       (totalitems 0))
-    (let ;;; Functions to manipulate values
-	((adder (lambda (amount)
-		 (if (> 0 amount)
-		     (set! credits (- credits amount))
-		     (set! debits (+ debits amount)))
-		 (set! totalitems (+ 1 totalitems))))
-	 (getdebits (lambda () debits))
-	 (getcredits (lambda () credits))
-	 (setdebits (lambda (amount)
-		      (set! debits amount)))
-	 (getitems (lambda () totalitems))
-	 (reset-all (lambda ()
-		    (set! credits 0)
-		    (set! debits 0)
-		    (set! totalitems 0))))
-      (lambda (action value)  ;;; Dispatch function
-	(case action
-	  ((add) (adder value))
-	  ((debits) (getdebits))
-	  ((credits) (getcredits))
-	  ((items) (getitems))
-	  ((reset) (reset-all))
-          (else (gnc:warn "bad dr-cr-collector action: " action)))))))
-
 ;; This is a collector of values -- works similar to the stats-collector but
 ;; has much less overhead. It is used by the currency-collector (see below).
 (define (gnc:make-value-collector)
@@ -379,13 +306,6 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
     (negated 'minusmerge collector #f)
     negated))
 
-(define (gnc:commodity-collectorlist-get-merged collectorlist)
-  (issue-deprecation-warning
-   "gnc:commodity-collectorlist-get-merged is now deprecated.")
-  (let ((merged (gnc:make-commodity-collector)))
-    (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
-    merged))
-
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc-commodity-collector-allzero? collector)
   (every zero? (map cdr (collector 'format cons #f))))
@@ -410,29 +330,6 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
     (if (null? (cdr list-of-monetaries))
         (car list-of-monetaries)
         (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
-
-;; get the account balance at the specified date. if include-children?
-;; is true, the balances of all children (not just direct children)
-;; are included in the calculation.
-;; I think this (gnc:account-get-balance-at-date) is flawed in sub-acct handling.
-;; Consider account structure:
-;; Assets [USD] - bal=$0
-;;    Bank [USD] - bal=$100
-;;    Broker [USD] - bal=$200
-;;       Cash [USD] - bal=$800
-;;       Funds [FUND] - bal=3 FUND @ $1000 each = $3000
-;; - Calling (gnc:account-get-balance-at-date BANK TODAY #f) returns 100
-;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #f) returns 200
-;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #t) returns 1000
-;;   this is because although it counts all subaccounts bal $200 + $800 + 3FUND,
-;;   it retrieves the parent account commodity USD $1000 only.
-;; It needs to be deprecated.
-(define (gnc:account-get-balance-at-date account date include-children?)
-  (issue-deprecation-warning "this gnc:account-get-balance-at-date function is \
-flawed. see report-utilities.scm. please update reports.")
-  (let ((collector (gnc:account-get-comm-balance-at-date
-                    account date include-children?)))
-    (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
 
 ;; this function will scan through the account splitlist, building
 ;; a list of balances along the way at dates specified in dates-list.
@@ -739,93 +636,6 @@ flawed. see report-utilities.scm. please update reports.")
       account-list type start-date end-date))
     total))
 
-;; Filters the splits from the source to the target accounts
-;; returns a commodity collector
-;; does NOT do currency exchanges
-(define (gnc:account-get-total-flow direction target-account-list from-date to-date)
-  (issue-deprecation-warning
-   "(gnc:account-get-total-flow) is deprecated.")
-  (let ((total-flow (gnc:make-commodity-collector)))
-    (for-each
-     (lambda (target-account)
-       (for-each
-        (lambda (target-account-split)
-          (let* ((transaction (xaccSplitGetParent target-account-split))
-                 (split-value (xaccSplitGetAmount target-account-split)))
-            (if (and (<= from-date (xaccTransGetDate transaction) to-date)
-                     (or (and (eq? direction 'in)
-                              (positive? split-value))
-                         (and (eq? direction 'out)
-                              (negative? split-value))))
-                (total-flow 'add (xaccTransGetCurrency transaction) split-value))))
-        (xaccAccountGetSplitList target-account)))
-     target-account-list)
-    total-flow))
-
-;; similar, but only counts transactions with non-negative shares and
-;; *ignores* any closing entries
-(define (gnc:account-get-pos-trans-total-interval
-	 account-list type start-date end-date)
-  (issue-deprecation-warning
-   "(gnc:account-get-pos-trans-total-interval) is deprecated.")
-  (let* ((str-query (qof-query-create-for-splits))
-	 (sign-query (qof-query-create-for-splits))
-	 (total-query #f)
-         (splits #f)
-	 (get-val (lambda (alist key)
-		    (let ((lst (assoc-ref alist key)))
-		      (if lst (car lst) lst))))
-	 (matchstr (get-val type 'str))
-	 (case-sens (if (get-val type 'cased) #t #f))
-	 (regexp (if (get-val type 'regexp) #t #f))
-	 (pos? (if (get-val type 'positive) #t #f))
-         (total (gnc:make-commodity-collector))
-         )
-    (qof-query-set-book str-query (gnc-get-current-book))
-    (qof-query-set-book sign-query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch str-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddAccountMatch sign-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT
-     str-query
-     (and start-date #t) (if start-date start-date 0)
-     (and end-date #t) (if end-date end-date 0)
-     QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT
-     sign-query
-     (and start-date #t) (if start-date start-date 0)
-     (and end-date #t) (if end-date end-date 0)
-     QOF-QUERY-AND)
-    (xaccQueryAddDescriptionMatch
-     str-query matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-AND)
-    (set! total-query
-          ;; this is a tad inefficient, but its a simple way to accomplish
-          ;; description match inversion...
-          (if pos?
-              (qof-query-merge-in-place sign-query str-query QOF-QUERY-AND)
-              (let ((inv-query (qof-query-invert str-query)))
-                (qof-query-merge-in-place
-                 sign-query inv-query QOF-QUERY-AND)
-                qof-query-destroy inv-query)))
-    (qof-query-destroy str-query)
-
-    (set! splits (qof-query-run total-query))
-    (map (lambda (split)
-	   (let* ((shares (xaccSplitGetAmount split))
-		  (acct-comm (xaccAccountGetCommodity
-			      (xaccSplitGetAccount split)))
-		  )
-	     (or (gnc-numeric-negative-p shares)
-		 (total 'add acct-comm shares)
-		 )
-	     )
-	   )
-         splits
-         )
-    (qof-query-destroy total-query)
-    total))
-
 ;; Return the splits that match an account list, date range, and (optionally) type
 ;; where type is defined as an alist like:
 ;; '((str "match me") (cased #f) (regexp #f) (closing #f))
@@ -867,50 +677,6 @@ flawed. see report-utilities.scm. please update reports.")
         (let ((splits (qof-query-run query)))
           (qof-query-destroy query)
           splits))))
-
-;; the following function is only used in trial-balance. best move it
-;; back there, and deprecate this exported function.
-(define (gnc:double-col
-	 req signed-balance report-commodity exchange-fn show-comm?)
-  (issue-deprecation-warning
-   "(gnc:double-col) is deprecated.")
-  (let* ((sum (and signed-balance
-		   (gnc:sum-collector-commodity
-		    signed-balance
-		    report-commodity
-		    exchange-fn)))
-	 (amt (and sum (gnc:gnc-monetary-amount sum)))
-	 (neg? (and amt (gnc-numeric-negative-p amt)))
-	 (bal (if neg?
-		  (let ((bal (gnc:make-commodity-collector)))
-		    (bal 'minusmerge signed-balance #f)
-		    bal)
-		  signed-balance))
-	 (bal-sum (gnc:sum-collector-commodity
-		   bal
-		   report-commodity
-		   exchange-fn))
-	 (balance
-	  (if (gnc:uniform-commodity? bal report-commodity)
-	      (if (gnc-numeric-zero-p amt) #f bal-sum)
-	      (if show-comm?
-		  (gnc-commodity-table bal report-commodity exchange-fn)
-		  bal-sum)
-	      ))
-	 )
-    (car (assoc-ref
-	  (list
-	   (list 'entry balance)
-	   (list 'debit (if neg? #f balance))
-	   (list 'credit (if neg? balance #f))
-	   (list 'zero-q (if neg? #f (if balance #f #t)))
-	   (list 'debit-q (if neg? #f (if balance #t #f)))
-	   (list 'credit-q (if neg? #t #f))
-	   )
-	  req
-	  ))
-    )
-  )
 
 ;; Returns the start date of the first period (period 0) of the budget.
 (define (gnc:budget-get-start-date budget)

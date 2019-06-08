@@ -91,8 +91,6 @@
 ;; define strings centrally to ease code clarity
 (define rpterr-dupe
   (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "))
-(define rpterr-upgraded
-  (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."))
 (define rpterr-guid1 (_ "Wrong report definition: "))
 (define rpterr-guid2 (_ " Report is missing a GUID."))
 (define rptwarn-legacy
@@ -138,47 +136,9 @@ not found.")))
       (if (hash-ref *gnc:_report-templates_* report-guid)
           (gui-error (string-append rpterr-dupe report-guid))
           (hash-set! *gnc:_report-templates_* report-guid report-rec)))
-
-     (report-name
-      ;; we've got an old style report with no report-guid
-      (issue-deprecation-warning
-       "old report definition without guid is deprecated.")
-
-      ;; give it an arbitrary one
-      (set! report-guid (guid-new-return))
-      (gnc:report-template-set-report-guid! report-rec report-guid)
-
-      ;; we also need to give it a parent-type, so that it will
-      ;; restore from the open state properly we'll key that from the
-      ;; only known good way to tie back to the original report -- the
-      ;; renderer
-      (hash-for-each
-       (lambda (id rec)
-         (if (and (equal? (gnc:report-template-renderer rec)
-                          (gnc:report-template-renderer report-rec))
-                  (not (gnc:report-template-parent-type rec)))
-             (begin
-               (gnc:warn "gnc:define-report: setting parent-type of " report-name
-                         " to " (gnc:report-template-report-guid rec))
-               (gnc:report-template-set-parent-type!
-                report-rec (gnc:report-template-report-guid rec))
-               (gnc:debug "done setting, is now "
-                          (gnc:report-template-parent-type report-rec)))))
-       *gnc:_report-templates_*)
-
-      (cond
-       ((gnc:report-template-parent-type report-rec)
-        ;; re-save this old-style report in the new format
-        (gnc:report-template-save-to-savefile report-rec)
-        (gnc:debug "complete saving " report-name " in new format")
-        (unless gnc:old-style-report-warned
-          (set! gnc:old-style-report-warned #t)
-          (gui-error rpterr-upgraded)
-          (hash-set! *gnc:_report-templates_* report-guid report-rec)))
-
-       (else
-        ;;there is no parent found -> this is an inital faulty report definition
-        (gui-error (string-append rpterr-guid1 report-name rpterr-guid2))))))))
+     (else
+      ;;reports without guid are no longer supported
+      (gui-error (string-append rpterr-guid1 report-name rpterr-guid2))))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
@@ -817,80 +777,3 @@ not found.")))
       (gnc:debug "Renaming report " template-guid)
       (gnc:report-template-set-name templ new-name)
       (gnc:save-all-reports))))
-
-;; Legacy functions
-;;;;;;;;;;;;;;;;;;;
-
-;; Legacy : the following 3 functions are only needed to
-;; load a saved-reports file version 2.0
-
-(define (gnc:report-template-new-options/name template-name)
-  (issue-deprecation-warning
-   "gnc:report-template-new-options/name is deprecated.")
-  (let ((templ #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-           (set! templ (hash-ref *gnc:_report-templates_* id))))
-     *gnc:_report-templates_*)
-    (and templ
-         (gnc:report-template-new-options templ))))
-
-(define (gnc:report-template-menu-name/name template-name)
-  (issue-deprecation-warning
-   "gnc:report-template-menu-name/name is deprecated.")
-  (let ((templ #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-           (set! templ (hash-ref *gnc:_report-templates_* id))))
-     *gnc:_report-templates_*)
-    (and templ
-         (or (gnc:report-template-menu-name templ)
-             (gnc:report-template-name templ)))))
-
-(define (gnc:report-template-renderer/name template-name)
-  (issue-deprecation-warning
-   "gnc:report-template-renderer/name is deprecated.")
-  (let ((templ #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-           (set! templ (hash-ref *gnc:_report-templates_* id))))
-     *gnc:_report-templates_*)
-    (and templ
-         (gnc:report-template-renderer templ))))
-
-;; Used internally only to convert a report template name into a corresponding guid
-;; Note that this may fail if several reports exist with the same name
-(define (gnc:report-template-name-to-id template-name)
-  (issue-deprecation-warning
-   "gnc:report-template-name-to-id is deprecated.")
-  (let ((template-id #f))
-    (hash-for-each
-     (lambda (id rec)
-       (if (equal? template-name (gnc:report-template-name rec))
-           (set! template-id id)))
-     *gnc:_report-templates_*)
-    template-id))
-
-;; Legacy: this function is needed only to restore
-;; a saved report when loading a book last saved in GnuCash 2.2
-(define gnc:restore-report
-  (let ((first-warn? #t))
-    (lambda (id template-name options)
-      (issue-deprecation-warning
-       "gnc:restore-report is deprecated.")
-      (cond
-       (options
-        (let* ((constructor (record-constructor <report>))
-               (template-id (gnc:report-template-name-to-id template-name))
-               (report (constructor template-id id options #t #t #f #f "")))
-          ;; Warn user (one time) we're attempting to restore old style reports
-          (when first-warn?
-            (set! first-warn? #f)
-            (gui-warning rptwarn-legacy))
-          (gnc-report-add report)))
-       (else
-        (gui-error-missing-template template-name)
-        #f)))))

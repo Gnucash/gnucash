@@ -118,28 +118,6 @@
     default-accounts
     #f #t)))
 
-;; The single checkbox whether to include the sub-account balances
-;; into the other balances.
-(define (gnc:options-add-include-subaccounts!
-	 options pagename optname sort-tag)
-  (issue-deprecation-warning "gnc:options-add-include-subaccounts! is deprecated.")
-  (gnc:register-option 
-    options  
-    (gnc:make-simple-boolean-option
-     pagename optname
-     sort-tag (N_ "Include sub-account balances in printed balance?") #t)))
-
-;; The single checkbox whether to group the accounts into main
-;; categories and ahow a subtotal for those.
-(define (gnc:options-add-group-accounts!
-	 options pagename optname sort-tag default?)
-  (issue-deprecation-warning "gnc:options-add-group-accounts! is deprecated.")
-  (gnc:register-option 
-    options  
-    (gnc:make-simple-boolean-option
-     pagename optname
-     sort-tag (N_ "Group the accounts in main categories?") default?)))
-
 ;; To let the user select a currency for the report.
 (define (gnc:options-add-currency!
 	 options pagename name-report-currency sort-tag)
@@ -150,22 +128,6 @@
     sort-tag 
     (N_ "Select the currency to display the values of this report in.")
     (gnc-default-report-currency))))
-
-;; These are common options for the selection of the report's
-;; currency/commodity.
-(define (gnc:options-add-currency-selection!
-	 options pagename 
-	 name-show-foreign name-report-currency sort-tag)
-  (issue-deprecation-warning "gnc:options-add-currency-selection! is deprecated.")
-  (gnc:register-option 
-   options 
-   (gnc:make-simple-boolean-option
-    pagename name-show-foreign
-    (string-append sort-tag "a")
-    (N_ "Display the account's foreign currency amount?") #f))
-
-  (gnc:options-add-currency! options pagename name-report-currency 
-			     (string-append sort-tag "b")))
 
 ;; A multichoice option for the source of prices
 (define (gnc:options-add-price-source! 
