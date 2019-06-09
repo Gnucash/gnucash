@@ -25,6 +25,8 @@
               "&amp;copy;"
               (gnc:html-string-sanitize "&copy;"))
 
+  (if (not (string=? (with-output-to-string (lambda () (display "🎃"))) "🎃"))
+      (test-skip 2))
   (test-equal "emoji unchanged"
               "🎃"
               (gnc:html-string-sanitize "🎃"))
