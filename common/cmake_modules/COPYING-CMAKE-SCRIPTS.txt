@@ -1,7 +1,7 @@
 The copyright notice below applies to all files in the cmake_modules/
 directory. Some of them were published on
-http://websvn.kde.org/trunk/KDE/kdelibs/cmake/modules, others on
-http://cmake-modules.googlecode.com/svn/trunk/Modules/.
+https://websvn.kde.org/trunk/KDE/kdelibs/cmake/modules, others on
+https://cmake-modules.googlecode.com/svn/trunk/Modules/.
 
 
 

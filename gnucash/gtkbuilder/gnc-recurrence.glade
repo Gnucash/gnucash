@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="GCB_PeriodType_liststore">
@@ -32,6 +32,9 @@
   <object class="GtkWindow" id="gnc_recurrence_entry_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="RecurrenceEntryVBox">
         <property name="visible">True</property>

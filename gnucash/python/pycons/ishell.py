@@ -10,7 +10,7 @@
 #
 # All rights reserved. This program and the accompanying materials are made 
 # available under the terms of the BSD which accompanies this distribution, and 
-# is available at U{http://www.opensource.org/licenses/bsd-license.php}
+# is available at U{https://www.opensource.org/licenses/bsd-license.php}
 #
 
 import os

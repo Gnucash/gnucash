@@ -39,6 +39,9 @@ typedef struct _GncHtmlWebkit GncHtmlWebkit;
 typedef struct _GncHtmlWebkitClass GncHtmlWebkitClass;
 typedef struct _GncHtmlWebkitPrivate GncHtmlWebkitPrivate;
 
+/** Key for saving the PDF-export directory in the print settings */
+#define GNC_GTK_PRINT_SETTINGS_EXPORT_DIR "gnc-pdf-export-directory"
+
 struct _GncHtmlWebkit
 {
     GncHtml parent_instance;

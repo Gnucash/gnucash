@@ -1334,7 +1334,7 @@ gncEntryRecomputeValues (GncEntry *entry)
     if (entry->b_tax_table)
     {
         time64 modtime = gncTaxTableLastModifiedSecs (entry->b_tax_table);
-        if (entry->b_taxtable_modtime == modtime)
+        if (entry->b_taxtable_modtime != modtime)
         {
             entry->values_dirty = TRUE;
             entry->b_taxtable_modtime = modtime;

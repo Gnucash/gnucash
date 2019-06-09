@@ -13,10 +13,10 @@ précis.
 
 Sources disponibles d'assistance :
 
-FAQ en ligne:		http://wiki.gnucash.org/wiki/FAQ
-Listes de diffusions:	http://wiki.gnucash.org/wiki/Mailing_Lists
+FAQ en ligne:		https://wiki.gnucash.org/wiki/FAQ
+Listes de diffusions:	https://wiki.gnucash.org/wiki/Mailing_Lists
 IRC (Chat):		Canal #gnucash sur le serveur irc.gnome.org,
-Aussi à consulter:		http://wiki.gnucash.org/wiki/IRC
+Aussi à consulter:		https://wiki.gnucash.org/wiki/IRC
 
 N'hésitez pas à rapporter toute erreur ou tout problème rencontré
 sur notre outil de suivi des bogues "Bugzilla":

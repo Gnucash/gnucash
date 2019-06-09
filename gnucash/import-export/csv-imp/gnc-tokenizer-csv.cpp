@@ -82,8 +82,20 @@ int GncCsvTokenizer::tokenize()
             bs_pos = line.find ("\"\"");
             while (bs_pos != std::string::npos)
             {
-                line.replace (bs_pos, 2, "\\\"");
-                bs_pos = line.find ("\"\"");
+                // Only make changes in case the double quotes are part of a larger field
+                // In other words a field which only contains two double quotes represent an
+                // empty field. We don't need to touch those.
+                // The way to determine whether the double quotes represent an empty string
+                // is by checking whether the character in front or after are either
+                // a field separator or the beginning or end of of the string.
+                if (!(((bs_pos == 0) ||                                          // quotes are at start of line
+                       (m_sep_str.find (line[bs_pos-1]) != std::string::npos))    // quotes preceeded by field separator
+                      &&
+                      ((bs_pos + 2 >= line.length()) ||                          // quotes are at end of line
+                       (m_sep_str.find (line[bs_pos+2]) != std::string::npos))))   // quotes followed by field separator
+                    // Only make changes in case the double quotes are not an empty field
+                    line.replace (bs_pos, 2, "\\\"");
+                bs_pos = line.find ("\"\"", bs_pos + 2);
             }
 
             Tokenizer tok(line, sep);

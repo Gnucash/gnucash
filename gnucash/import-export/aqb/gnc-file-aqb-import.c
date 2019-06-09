@@ -252,7 +252,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually
              * transferred to and accepted by the bank.  See also
-             * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
+             * https://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
              */
 
             /* So we must go through all jobs and check AB_Job_GetStatus(job)

@@ -1,4 +1,4 @@
-GnuCash és un programa de comptabilitat lliure, de codi obert publicat sota la
+﻿GnuCash és un programa de comptabilitat lliure, de codi obert publicat sota la
 Llicència Pública General GNU (GPL) i disponible per a GNU / Linux, *BSD,
 Solaris, Mac OSX i Microsoft Windows.
 
@@ -11,9 +11,9 @@ principis comptables professionals per assegurar balanços de comptes i informes
 
 Opcions d'assistència disponibles:
 
-Preguntes freqüents en línia: http://wiki.gnucash.org/wiki/FAQ
-Llistes de correu: http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Xat): canal #gnucash al servidor irc.gnome.org, vegeu també http://wiki.gnucash.org/wiki/IRC
+Preguntes freqüents en línia: https://wiki.gnucash.org/wiki/FAQ
+Llistes de correu: https://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (Xat): canal #gnucash al servidor irc.gnome.org, vegeu també https://wiki.gnucash.org/wiki/IRC
 
 Si trobeu errors o problemes, no dubteu a informar-los
 a la nostra eina de seguiment d'errors "Bugzilla":

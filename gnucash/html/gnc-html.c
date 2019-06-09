@@ -22,9 +22,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-// libgtkhtml docs:
-// http://www.fifi.org/doc/libgtkhtml-dev/html/
-
 #include <config.h>
 
 #include <platform.h>
@@ -535,10 +532,11 @@ void
 gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
 #else
 void
-gnc_html_print (GncHtml* self)
+gnc_html_print (GncHtml* self, const char *jobname)
 #endif
 {
     g_return_if_fail( self != NULL );
+     g_return_if_fail( jobname != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( GNC_HTML_GET_CLASS(self)->print != NULL )
@@ -546,7 +544,7 @@ gnc_html_print (GncHtml* self)
 #ifdef WEBKIT1
       GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
 #else
-        GNC_HTML_GET_CLASS(self)->print (self);
+        GNC_HTML_GET_CLASS(self)->print (self, jobname);
 #endif
     }
     else

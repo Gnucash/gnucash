@@ -108,7 +108,7 @@ subsections to see a detail graph or report of that particular
 subsection.
 
 This module is implemented using the GUPPI library being developed by
-Jon Trowbridge (@url{http://www.gnome.org/guppi}).
+Jon Trowbridge (@url{https://www.gnome.org/guppi}).
 
 
 @section Price Quotes

@@ -12,10 +12,10 @@ erfüllen kann. Auch Onlinebanking über HBCI wird unterstützt.
 
 Verfügbarer Support
 
-Englische FAQ-Seite:  http://wiki.gnucash.org/wiki/FAQ
-Deutsche Mailingliste:  http://lists.gnucash.org/mailman/listinfo/gnucash-de
+Englische FAQ-Seite:  https://wiki.gnucash.org/wiki/FAQ
+Deutsche Mailingliste:  https://lists.gnucash.org/mailman/listinfo/gnucash-de
 IRC (Online-Chat):   Channel #gnucash auf Server irc.gnome.org, auch
-beschrieben auf http://wiki.gnucash.org/wiki/IRC
+beschrieben auf https://wiki.gnucash.org/wiki/IRC
 
 Sollten Probleme auftreten, bitten die Entwickler darum, diese als
 englischsprachigen Fehlerbericht in »Bugzilla« einzutragen:

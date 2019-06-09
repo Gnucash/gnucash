@@ -23,7 +23,7 @@
 ;; numbers for these Kennzahlen from the actual accounts for a given
 ;; time period, and will write it to some XML file as required by
 ;; e.g. the Winston software
-;; http://www.felfri.de/winston/schnittstellen.htm
+;; https://www.felfri.de/winston/schnittstellen.htm
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or

@@ -131,7 +131,8 @@
     (gnc:strify (cons 'a 2)))
   (test-equal "gnc:strify cons"
     "Proc<cons>"
-    (gnc:strify cons)))
+    (gnc:strify cons))
+  (test-end "debugging tools"))
 
 (define (test-commodity-collector)
   (test-group-with-cleanup "test-commodity-collector"

@@ -1096,7 +1096,7 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
             gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_START);
 
             // Set the style context for this label so it can be easily manipulated with css
-            gnc_widget_set_style_context (GTK_WIDGET(label), "gnc-class-highlight");
+            gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-highlight");
             gtk_file_chooser_set_uri (GTK_FILE_CHOOSER(dialog), file_uri);
 
             g_free (uri_label);
@@ -1201,7 +1201,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
     }
     else
-        label = gtk_label_new (_("Enter URL like http://www.gnucash.org:"));
+        label = gtk_label_new (_("Enter URL like https://www.gnucash.org:"));
 
     // pack label and entry to content area
     gnc_label_set_alignment (label, 0.0, 0.5);
@@ -2311,8 +2311,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By: "), gsr->sort_arrow);
 
-    gnc_widget_set_style_context (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");
-    gnc_widget_set_style_context (GTK_WIDGET(gsr->sort_arrow), "gnc-class-highlight");
+    gnc_widget_style_context_add_class (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");
+    gnc_widget_style_context_add_class (GTK_WIDGET(gsr->sort_arrow), "gnc-class-highlight");
 
     gsr->summarybar = summarybar;
 

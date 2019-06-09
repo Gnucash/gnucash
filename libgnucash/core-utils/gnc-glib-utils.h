@@ -63,7 +63,7 @@ int safe_utf8_collate (const char *str1, const char *str2);
  * @brief Validates UTF-8 encoded text for use in GnuCash.
  *
  * Validates the strict subset of UTF-8 that is valid XML text, as detailed in
- * http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535.
+ * https://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535.
  *
  * <em>Copied from g_utf8_validate():</em>
  *
@@ -92,7 +92,7 @@ gboolean gnc_utf8_validate(const gchar *str, gssize max_len, const gchar **end);
  *  a new string.  This allows it to operate on strings that are
  *  defined as character arrays in a larger data structure.  Note that
  *  it also removes some subset of invalid XML characters, too.
- *  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
+ *  See https://www.w3.org/TR/REC-xml/#NT-Char linked from bug #346535
  *
  *  @param str A pointer to the string to strip of invalid
  *  characters. */
@@ -102,7 +102,7 @@ void gnc_utf8_strip_invalid (gchar *str);
  * non-UTF-8 character stripped from it.
  *
  * Note that it also removes some subset of invalid XML characters,
- * too.  See http://www.w3.org/TR/REC-xml/#NT-Char linked from bug
+ * too.  See https://www.w3.org/TR/REC-xml/#NT-Char linked from bug
  * #346535
  *
  * @param str A pointer to the string to be copied and stripped of

@@ -14,7 +14,7 @@
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, you can retrieve it from        *
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html            *
+ * https://www.gnu.org/licenses/old-licenses/gpl-2.0.html            *
  * or contact:                                                      *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *

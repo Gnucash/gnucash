@@ -4,7 +4,7 @@
 ;; These are TXF codes and a brief description of each. See taxtxf.scm
 ;; and txf-export-help.scm
 ;;
-;; See also http://www.turbotax.com/txf/
+;; See also https://www.turbotax.com/txf/ [DEAD LINK]
 ;;
 ;; Updated Jan 2019 to include codes for version 42, although new codes not
 ;;   implemented yet because data not available

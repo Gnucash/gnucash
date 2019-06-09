@@ -11,9 +11,9 @@ contabilità assicurando il bilancio dei conti e l'accurattezza dei resoconti.
 
 Disponibilità di supporto
 
-FAQ online (in inglese):    http://wiki.gnucash.org/wiki/FAQ
-Mailing List:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat):    canale #gnucash sul server irc.gnome.org; vedere anche http://wiki.gnucash.org/wiki/IRC
+FAQ online (in inglese):    https://wiki.gnucash.org/wiki/FAQ
+Mailing List:  https://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (Chat):    canale #gnucash sul server irc.gnome.org; vedere anche https://wiki.gnucash.org/wiki/IRC
 
 Se si riscontrassero dei problemi o dei bug utilizzando il programma, è possibile comunicarli nel sistema
 di tracciamento dei bug di GnuCash denominato "Bugzilla":

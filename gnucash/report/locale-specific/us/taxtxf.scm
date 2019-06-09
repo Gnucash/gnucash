@@ -487,10 +487,10 @@
     (if (and txf?
              (not (gnc-numeric-zero-p account-value)))
         (let* ((date-str (if date
-                             (strftime "%m/%d/%Y" (gnc-localtime date))
+                             (gnc-print-time64 date "%m/%d/%Y")
                              #f))
                (x-date-str (if x-date
-                               (strftime "%m/%d/%Y" (gnc-localtime x-date))
+                               (gnc-print-time64 x-date "%m/%d/%Y")
                                #f))
                ;; Only formats 1,3,4,6 implemented now! Others are treated as 1.
                (format_type (get-acct-txf-info 'format type code))
@@ -758,8 +758,8 @@
                                )
                                (string-append
                                  " on "
-                                 (strftime "%Y-%b-%d"
-                                    (gnc-localtime pricedb-lookup-price-time))
+                                 (gnc-print-time64 pricedb-lookup-price-time
+                                                   "%Y-%b-%d")
                                  ")"
                                )
                                ""))
@@ -912,8 +912,7 @@
                                                     "Not Available"))
                                              (list (gnc:make-html-table-cell/markup
                                                     "text-cell-center"
-                                                  (strftime "%Y-%b-%d" (gnc-localtime
-                                                            trans-date))))
+                                                  (gnc-print-time64 trans-date "%Y-%b-%d")))
                                              (list (gnc:make-html-table-cell/markup
                                                     "number-cell-bot"
                                                     (xaccPrintAmount
@@ -1197,9 +1196,9 @@
                                  (not transaction-details?))
                             ""
                             (string-append "Balance on "
-                                         (strftime "%Y-%b-%d"
-                                            (gnc-localtime (gnc:time64-previous-day
-                                                                  from-value)))
+                                           (gnc-print-time64
+                                            (gnc:time64-previous-day from-value)
+                                            "%Y-%b-%d")
                                          (if (string=? curr-conv-note "")
                                              ":"
                                              (string-append  " " curr-conv-note)
@@ -1430,8 +1429,7 @@
                             date-table
                             (gnc:make-html-table-cell/markup
                                          "date-cell"
-                                         (strftime "%Y-%b-%d"
-                                                 (gnc-localtime trans-date))))
+                                         (gnc-print-time64 trans-date "%Y-%b-%d")))
                        (gnc:html-table-set-style! num-table "table" 
                                           'attribute (list "border" "0")
                                           'attribute (list "cellspacing" "0")
@@ -1622,14 +1620,14 @@
                                     #f
                                     (if (txf-beg-bal-only? tax-code)
                                         (string-append "Balance on "
-                                           (strftime "%Y-%b-%d" (gnc-localtime 
-                                                (gnc:time64-previous-day
-                                                                  from-value)))
+                                                       (gnc-print-time64
+                                                        (gnc:time64-previous-day
+                                                         from-value)
+                                                        "%Y-%b-%d")
                                            " For "
                                         )
                                         (string-append "Balance on "
-                                           (strftime "%Y-%b-%d"
-                                                     (gnc-localtime to-value))
+                                           (gnc-print-time64 to-value "%Y-%b-%d")
                                            " For "
                                         )
                                     )
@@ -2328,13 +2326,11 @@
           ) ;; end of let*
     )
 
-    (let ((from-date  (strftime "%Y-%b-%d" (gnc-localtime from-value)))
-          (to-date    (strftime "%Y-%b-%d" (gnc-localtime to-value)))
-          (today-date (strftime "D%m/%d/%Y"
-                                (gnc-localtime
-                                 (time64CanonicalDayTime
-                                  (current-time)))))
-          (tax-year   (strftime "%Y" (gnc-localtime from-value)))
+    (let ((from-date  (gnc-print-time64 from-value "%Y-%b-%d"))
+          (to-date    (gnc-print-time64 to-value "%Y-%b-%d"))
+          (today-date (gnc-print-time64 (time64CanonicalDayTime (current-time))
+                                        "D%m/%d/%Y"))
+          (tax-year   (gnc-print-time64 from-value "%Y"))
           (tax-entity-type (gnc-get-current-book-tax-type))
           (tax-entity-type-valid? #f)
           (prior-form-schedule "")

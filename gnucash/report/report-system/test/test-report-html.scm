@@ -529,7 +529,7 @@ HTML Document Title</title></head><body></body>\n\
 
   (test-equal "HTML Text Object - Image"
     (string-append html-doc-header-no-title
-                   "<img src=\"http://www.gnucash.org/images/banner5.png\" width=\"72\" height=\"48\" alt=\"GunCash web site\"  />"
+                   "<img src=\"https://www.gnucash.org/images/banner5.png\" width=\"72\" height=\"48\" alt=\"GunCash web site\"  />"
                    html-doc-tail
     )
     (let (
@@ -539,7 +539,7 @@ HTML Document Title</title></head><body></body>\n\
         (list 
           (gnc:make-html-text
             (gnc:html-markup-img
-              "http://www.gnucash.org/images/banner5.png"
+              "https://www.gnucash.org/images/banner5.png"
               '("width" "72")
               '("height" "48")
               '("alt" "GunCash web site")

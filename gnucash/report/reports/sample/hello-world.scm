@@ -268,12 +268,11 @@ option like this.")
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
     ;; qof-print-date
-    (let ((time-string (strftime "%X" (gnc-localtime (current-time))))
-          (date-string (strftime "%x" (gnc-localtime date-val)))
-          (date-string2 (strftime "%x %X" (gnc-localtime date2-val)))
-          (rel-date-string (strftime "%x" (gnc-localtime rel-date-val)))
-          (combo-date-string
-           (strftime "%x" (gnc-localtime combo-date-val))))
+    (let ((time-string (gnc-print-time64 (current-time) "%X"))
+          (date-string (gnc-print-time64 date-val "%x"))
+          (date-string2 (gnc-print-time64 date2-val "%x %X"))
+          (rel-date-string (gnc-print-time64 rel-date-val "%x"))
+          (combo-date-string (gnc-print-time64 combo-date-val "%x")))
 
       ;; Here's where we fill the report document with content.  We
       ;; do this by adding 'html objects' such as text, tables, and
@@ -350,8 +349,8 @@ new, totally cool report, consult the mailing list ~a.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (_ "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;.")
-         (_ "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."))
+         (_ "For details on subscribing to that list, see &lt;https://www.gnucash.org/&gt;.")
+         (_ "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/&gt;."))
 
         (gnc:html-markup-p
          (gnc:html-markup/format

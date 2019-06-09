@@ -15,7 +15,7 @@ The documentation is organised in a rough sequence:
 \subsection manualguide External documentation.
 
 Please refer to the main
-<a href="http://www.gnucash.org/docs.phtml">documentation
+<a href="https://www.gnucash.org/docs.phtml">documentation
 page</a> on the gnucash website which includes links to the
 GnuCash Manual and the Concepts Guide in various formats.
 
@@ -249,27 +249,27 @@ the declaration. Doxygen will accept both valid C struct definition formats.
 - \ref tipshints Tips and hints for using doxygen
 - \ref stylediscussion Long comments, pages, editors
 
-The Doxygen web site (http://www.stack.nl/~dimitri/doxygen/) has a
+The Doxygen web site (https://www.stack.nl/~dimitri/doxygen/ [DEAD LINK]) has a
 complete user manual.  For the impatient, here are the most
 interesting sections:
 
 - How to write grouped documentation for files, functions, variables,
-etc.: http://www.stack.nl/~dimitri/doxygen/grouping.html .  Do not
+etc.: https://www.stack.nl/~dimitri/doxygen/grouping.html [DEAD LINK] .  Do not
 forget to add a file documentation block (\@file) at the top of your
 file. Otherwise, all documentation in that file will <i>not</i> appear
 in the html output.
 
 - List of the special commands you can use within your documentation
-blocks: http://www.stack.nl/~dimitri/doxygen/commands.html
+blocks: https://www.stack.nl/~dimitri/doxygen/commands.html [DEAD LINK]
 
 \section contact Contacts
 
 \subsection web Web Site
-News about GnuCash as well as the latest version can always be found at http://www.gnucash.org/
+News about GnuCash as well as the latest version can always be found at https://www.gnucash.org/
 
 \subsection email Email
 If you have any suggestions concerning this documentation, do not hesitate to send suggestions to
-gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
+gnucash-devel (see https://www.gnucash.org/en/lists.phtml for details)
 
 Benoit Grégoire <bock@step.polymtl.ca>
 Neil Williams <linux@codehelp.co.uk>

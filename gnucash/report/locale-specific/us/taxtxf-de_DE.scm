@@ -14,7 +14,7 @@
 ;; Kennzahlen (from txf-de_DE.scm) as assigned to the different
 ;; accounts, and will write it to some XML file as required by
 ;; e.g. the Winston software
-;; http://www.felfri.de/winston/schnittstellen.htm
+;; https://www.felfri.de/winston/schnittstellen.htm
 ;;
 ;; This file might still contain a lot of US-TXF related stuff. This
 ;; can surely be thrown out once someone was able to actually use this
@@ -320,10 +320,10 @@
         (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
-                             (strftime "%d.%m.%Y" (gnc-localtime date))
+                             (gnc-print-time64 date "%d.%m.%Y")
                              #f))
                (x-date-str (if x-date
-                               (strftime "%d.%m.%Y" (gnc-localtime x-date))
+                               (gnc-print-time64 x-date "%d.%m.%Y")
                                #f))
                ;; Only formats 1,3 implemented now! Others are treated as 1.
                (format (gnc:get-txf-format code (eq? type ACCT-TYPE-INCOME)))
@@ -408,7 +408,7 @@
 (define (render-level-x-account table level max-level account lx-value
                                 suppress-0 full-names txf-date)
   (let* ((account-name (if txf-date	; special split
-                           (strftime "%d.%m.%Y" (gnc-localtime txf-date))
+                           (gnc-print-time64 txf-date "%d.%m.%Y")
                            (if (or full-names (equal? level 1))
                                (gnc-account-get-full-name account)
                                (xaccAccountGetName account))))
@@ -767,13 +767,11 @@
             ;; Ignore
             '())))
 
-    (let ((from-date  (strftime "%d.%m.%Y" (gnc-localtime from-value)))
-          (to-date    (strftime "%d.%m.%Y" (gnc-localtime to-value)))
-	  (to-year    (strftime "%Y" (gnc-localtime to-value)))
-          (today-date (strftime "%d.%m.%Y" 
-                                (gnc-localtime 
-                                 (time64CanonicalDayTime
-                                       (current-time)))))
+    (let ((from-date  (gnc-print-time64 from-value "%d.%m.%Y"))
+          (to-date    (gnc-print-time64 to-value "%d.%m.%Y"))
+	  (to-year    (gnc-print-time64 to-value "%Y"))
+          (today-date (gnc-print-time64 (time64CanonicalDayTime (current-time))
+                                        "%d.%m.%Y"))
 	  (tax-nr (unless book
                       (or
                        (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)

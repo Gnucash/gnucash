@@ -528,7 +528,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     }
 
     // Set the style context for this label so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(path_head), "gnc-class-highlight");
+    gnc_widget_style_context_add_class (GTK_WIDGET(path_head), "gnc-class-highlight");
 
     /* Need to add toggle renderers here to get the xalign to work. */
     tree_column = gtk_tree_view_column_new();

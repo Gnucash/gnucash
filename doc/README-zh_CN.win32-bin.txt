@@ -6,9 +6,9 @@
 
 您可以获得支持的途径
 
-在线常见问题解答:    http://wiki.gnucash.org/wiki/FAQ
-邮件列表:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (聊天):   irc.gnome.org 服务器的 #gnucash 频道，另见 http://wiki.gnucash.org/wiki/IRC
+在线常见问题解答:    https://wiki.gnucash.org/wiki/FAQ
+邮件列表:  https://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (聊天):   irc.gnome.org 服务器的 #gnucash 频道，另见 https://wiki.gnucash.org/wiki/IRC
 
 如果您遇到了任何 bug 或者问题，请不要犹豫，将它们报告到我们的 bug 跟踪工具“Bugzilla”：https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 

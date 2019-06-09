@@ -90,6 +90,16 @@ GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
  * Returns:  nothing                                                *
 \********************************************************************/
 void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
+void gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class);
+
+/********************************************************************\
+ * Remove a style context class from a Widget                       *
+ *                                                                  *
+ * Args:    widget - widget to remove style class from              *
+ *       gnc_class - character string for css class name            *
+ * Returns:  nothing                                                *
+\********************************************************************/
+void gnc_widget_style_context_remove_class (GtkWidget *widget, const char *gnc_class);
 
 /********************************************************************\
  * Draw an arrow on a Widget so it can be altered with css          *

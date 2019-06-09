@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -8,13 +8,15 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="duplicate_transaction_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Duplicate Transaction</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox15">
         <property name="visible">True</property>
@@ -164,7 +166,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="filter_by_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Filter register by...</property>
@@ -172,6 +173,9 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_plugin_page_register2_filter_response_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox19">
         <property name="visible">True</property>
@@ -677,7 +681,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Void Transaction</property>
@@ -685,6 +688,9 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>

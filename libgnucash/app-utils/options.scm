@@ -744,31 +744,22 @@ the option '~a'."))
      (lambda () (map convert-to-account (default-getter)))
      (gnc:restore-form-generator value->string)
      (lambda (b p)
-       (define (save-acc list count)
-         (if (not (null? list))
-             (let ((key (string-append "acc" (gnc:value->string count))))
-               (qof-book-set-option b (car list) (append p (list key)))
-               (save-acc (cdr list) (+ 1 count)))))
-
-       (if option-set
-           (begin
-             (qof-book-set-option b (length option)
-                                             (append p '("len")))
-             (save-acc option 0))))
+       (when option-set
+         (qof-book-set-option b (length option) (append p '("len")))
+         (let loop ((option option) (idx 0))
+           (unless (null? option)
+             (qof-book-set-option
+              b (car option) (append p (list (format #f "acc~a" idx))))
+             (loop (cdr option) (1+ idx))))))
      (lambda (b p)
        (let ((len (qof-book-get-option b (append p '("len")))))
-         (define (load-acc count)
-           (if (< count len)
-               (let* ((key (string-append "acc" (gnc:value->string count)))
-                      (guid (qof-book-get-option
-                             b (append p (list key)))))
-                 (cons guid (load-acc (+ count 1))))
-               '()))
-         
-         (if (and len (integer? len))
-             (begin
-               (set! option (load-acc 0))
-               (set! option-set #t)))))
+         (when (and len (integer? len))
+           (set! option
+             (map
+              (lambda (idx)
+                (qof-book-get-option b (append p (list (format #f "acc~a" idx)))))
+              (iota len)))
+           (set! option-set #t))))
      validator
      (cons multiple-selection acct-type-list) #f #f #f)))
 
@@ -1090,25 +1081,20 @@ the option '~a'."))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (b p)
-       (define (save-item list count)
-         (if (not (null? list))
-             (let ((key (string-append "item" (gnc:value->string count))))
-               (qof-book-set-option b (car list) (append p (list key)))
-               (save-item (cdr list) (+ 1 count)))))
        (qof-book-set-option b (length value) (append p '("len")))
-       (save-item value 0))
+       (let loop ((value value) (idx 0))
+         (unless (null? value)
+           (qof-book-set-option
+            b (caar value) (append p (list (format #f "item~a" idx))))
+           (loop (cdr value) (1+ idx)))))
      (lambda (b p)
        (let ((len (qof-book-get-option b (append p '("len")))))
-         (define (load-item count)
-           (if (< count len)
-               (let* ((key (string-append "item" (gnc:value->string count)))
-                      (val (qof-book-get-option
-                            b (append p (list key)))))
-                 (cons val (load-item (+ count 1))))
-               '()))
-
          (if (and len (integer? len))
-             (set! value (load-item 0)))))
+             (set! value
+               (map
+                (lambda (idx)
+                  (qof-book-get-option b (append p (list (format #f "item~a" idx)))))
+                (iota len))))))
      (lambda (x)
        (if (list-legal x)
            (list #t x)

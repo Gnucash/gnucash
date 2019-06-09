@@ -1,11 +1,2 @@
 This directory is intended to hold any external code that is needed in
 order to build gnucash, but isn't considered widely available.
-
-------------------------------------------------
-
-Finance::Quote
---------------
-
-Available from http://finance-quote.sourceforge.net.
-
-------------------------------------------------

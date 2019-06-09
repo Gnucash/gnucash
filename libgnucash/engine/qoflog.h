@@ -27,7 +27,7 @@
  * @{
  * @ingroup QOF
  * @brief Logging and tracing facility.
- * @sa "Logging overhaul" announcement <http://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019836.html>
+ * @sa "Logging overhaul" announcement <https://lists.gnucash.org/pipermail/gnucash-devel/2007-February/019836.html>
  *
  * qof_log_init(void) installs a handler that interprets the "log_domain"
  * as a "."-separated path.  Log level thresholds can be set for each level

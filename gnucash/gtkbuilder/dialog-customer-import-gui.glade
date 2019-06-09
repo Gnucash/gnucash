@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="customer_import_dialog">
@@ -9,6 +9,9 @@
     <property name="title" translatable="yes" comments="Title of dialog">Import customers or vendors from text file</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="gnc_customer_import_gui_destroy_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>

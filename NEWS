@@ -1014,7 +1014,7 @@ New Features for Users:
         6-digit-maximum fraction is now 9-digits, and prices may have up
         to 18 digit precision.
     Chart Reports appearance is improved, including more modern chart colours
-        as suggested by http://clrs.cc/.
+        as suggested by https://clrs.cc/.
     Transaction Report improvements, including regular expression filtering
         and many more options and features including a "Subtotal Summary Grid"
         The subtotal summary-grid will tabulate subtotals - prime-sortkey
@@ -1306,7 +1306,7 @@ Updated Translations: Spanish
 
 New Features For Users:
     Modernise chart colours from the dated CSS defaults to
-        modern colours as suggested by http://clrs.cc/.
+        modern colours as suggested by https://clrs.cc/.
     Add "Subtotal Summary Grid" to the Transaction Report.
         The subtotal summary-grid will tabulate subtotals - prime-sortkey
         vertically, sec-sortkey horizontally. This will be useful, for
@@ -3563,7 +3563,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
-	 http://www.gnucash.org.  Please see http://wiki.gnucash.org/wiki/Development
+	 https://www.gnucash.org.  Please see https://wiki.gnucash.org/wiki/Development
 	 on how to get involved.
 	 o Major new features:
 	    * All features, including business features, are supported by a new
@@ -4233,9 +4233,9 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
-	 http://www.gnucash.org. We especially need people to help with
+	 https://www.gnucash.org. We especially need people to help with
 	 updating the documentation as all texts refer currently to the 1.8.x
-	 series. Please see http://wiki.gnucash.org/wiki/Development on how to
+	 series. Please see https://wiki.gnucash.org/wiki/Development on how to
 	 get involved.
 	 o PS I'm not going to list the many features changed or updated in
 	 this release because obviously there is so much that has changed.
@@ -4618,9 +4618,9 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
-	 http://www.gnucash.org. We especially need people to help with
+	 https://www.gnucash.org. We especially need people to help with
 	 updating the documentation as all texts refer currently to the 1.8.x
-	 series. Please see http://wiki.gnucash.org/wiki/Development on how to
+	 series. Please see https://wiki.gnucash.org/wiki/Development on how to
 	 get involved.
 	 o PS I'm not going to list the many features changed or updated in
 	 this release because obviously there is so much that has changed.
@@ -4713,7 +4713,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 at the end of the split list.
 	 o Major change for HBCI, back-ported from HEAD. The HBCI online
 	 banking is no longer based on the openhbci library but instead on the
-	 aqbanking library http://sf.net/projects/aqbanking which is Martin
+	 aqbanking library https://sf.net/projects/aqbanking which is Martin
 	 Preuss' successor of openhbci. This means that now aqbanking-0.9.5 is
 	 required instead of any openhbci package.
 	 o Fixes for x86_64
@@ -4913,7 +4913,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Improve HBCI error handling. Add more user feedback functions.
 	 o Add support for KtoBlzCheck, a small checking package for
 	   destination account numbers for German banks. Very small, very useful
-	   http://sourceforge.net/projects/ktoblzcheck
+	   https://sourceforge.net/projects/ktoblzcheck
 	 o TRANSLATION_HOWTO: Added, by Jon Lapham
 	 o Add API to the plugin modules to allow post-processing (scrubbing)
 	   of the book after it is loaded from XML.  This allows a plug-in to

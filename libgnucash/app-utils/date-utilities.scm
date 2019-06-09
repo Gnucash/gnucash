@@ -68,7 +68,7 @@
   (gnc:date-get-year-day (gnc-localtime t64)))
 
 (define (gnc:date-get-year-string datevec)
-  (gnc-locale-to-utf8 (strftime "%Y" datevec)))
+  (gnc-print-time64 (gnc-mktime datevec) "%Y"))
 
 (define (gnc:date-get-quarter-string datevec)
   (format #f "Q~d" (gnc:date-get-quarter datevec)))
@@ -80,10 +80,10 @@
    (gnc:date-get-year-string datevec)))
 
 (define (gnc:date-get-month-string datevec)
-  (gnc-locale-to-utf8 (strftime "%B" datevec)))
+  (gnc-print-time64 (gnc-mktime datevec) "%B"))
 
 (define (gnc:date-get-month-year-string datevec)
-  (gnc-locale-to-utf8 (strftime "%B %Y" datevec)))
+  (gnc-print-time64 (gnc-mktime datevec) "%B %Y"))
 
 (define (gnc:date-get-week-year-string datevec)
   (let* ((beginweekt64 (* (gnc:time64-get-week

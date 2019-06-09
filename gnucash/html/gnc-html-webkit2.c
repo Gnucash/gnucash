@@ -56,6 +56,9 @@
 #include "gnc-html-webkit.h"
 #include "gnc-html-history.h"
 #include "print-session.h"
+#include "gnc-state.h"
+#include "print-session.h"
+
 
 G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
 
@@ -119,7 +122,7 @@ static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_webkit_print (GncHtml* self);
+static void impl_webkit_print (GncHtml* self,const gchar* jobname);
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
@@ -1112,20 +1115,44 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
  * webkit_web_view_get_snapshot for each page.
  */
 static void
-impl_webkit_print (GncHtml* self)
+impl_webkit_print (GncHtml* self,const gchar* jobname)
 {
      WebKitPrintOperation *op = NULL;
      GtkWindow *top = NULL;
      GncHtmlWebkitPrivate *priv;
-
+     GtkPrintSettings *print_settings = NULL;
+     WebKitPrintOperationResponse print_response;
+     gchar *export_dirname = NULL;
+     gchar *export_filename = NULL;
+     gchar* basename = NULL;
+     GKeyFile *state_file = gnc_state_get_current();
+     
      g_return_if_fail (self != NULL);
      g_return_if_fail (GNC_IS_HTML_WEBKIT (self));
-
      priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
      op = webkit_print_operation_new (priv->web_view);
-     top = GTK_WINDOW(priv->base.parent);
-     webkit_print_operation_run_dialog (op, top);
+     basename = g_path_get_basename(jobname);
+     print_settings = gtk_print_settings_new();
+     webkit_print_operation_set_print_settings(op, print_settings);
+     export_filename = g_strdup(jobname);
+     g_free(basename);
+     gtk_print_settings_set(print_settings,
+                    GTK_PRINT_SETTINGS_OUTPUT_BASENAME,
+                    export_filename);
+     webkit_print_operation_set_print_settings(op, print_settings);
+     // Open a print dialog
+     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->web_view)));
+     print_response = webkit_print_operation_run_dialog (op, top);
+     if (print_response == WEBKIT_PRINT_OPERATION_RESPONSE_PRINT)
+     {
+          // Get the newly updated print settings
+          g_object_unref(print_settings);
+          print_settings = g_object_ref(webkit_print_operation_get_print_settings(op));
+     }
+     g_free(export_dirname);
+     g_free(export_filename);
      g_object_unref (op);
+     g_object_unref (print_settings);
 }
 
 static void

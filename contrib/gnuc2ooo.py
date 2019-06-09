@@ -31,7 +31,7 @@
 #   License along with this library; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#   See:  http://www.gnu.org/licenses/lgpl.html
+#   See:  https://www.gnu.org/licenses/lgpl.html
 #
 #**********************************************************************
 #   Acknowledgements: Special thanks go to the authors on OpenOffice.org

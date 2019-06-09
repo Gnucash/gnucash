@@ -85,24 +85,21 @@
 	 (current-row-num 0))
 
     ;; make sure each subreport has an option change callback that 
-    ;; pings the parent 
-    (let ((new-reports '()))
-      (for-each 
-       (lambda (report-info)
-	 (let ((child (car report-info))
-	       (rowspan (cadr report-info))
-	       (colspan (caddr report-info))
-	       (callback (cadddr report-info)))
-	   (if (not callback)
-	       (begin 
-		 (set! callback 
-		       (make-child-options-callback
-			report (gnc-report-find child)))
-		 (set! report-info 
-		       (list child rowspan colspan callback))))
-	   (set! new-reports (cons report-info new-reports))))
-       reports)
-      (gnc:option-set-value report-opt (reverse new-reports)))
+    ;; pings the parent
+    (let loop ((new-reports '())
+               (reports reports))
+      (if (null? reports)
+          (gnc:option-set-value report-opt (reverse new-reports))
+          (let* ((report-info (car reports))
+                 (child (car report-info))
+                 (rowspan (cadr report-info))
+                 (colspan (caddr report-info))
+                 (callback (or (cadddr report-info)
+                               (make-child-options-callback
+                                report (gnc-report-find child)))))
+            (loop (cons (list child rowspan colspan callback)
+                        new-reports)
+                  (cdr reports)))))
     
     ;; we really would rather do something smart here with the
     ;; report's cached text if possible.  For the moment, we'll have
@@ -147,9 +144,7 @@
 
 	 ;; increment the alloc number for each occupied row
 	 (let loop ((row current-row-num))
-	   (let ((allocation (hash-ref column-allocs row)))
-	     (if (not allocation) 
-		 (set! allocation 0))
+	   (let ((allocation (hash-ref column-allocs row 0)))
 	     (hash-set! column-allocs row (+ colspan allocation))
 	     (if (< (+ 1 (- row current-row-num)) rowspan)
 		 (loop (+ 1 row)))))
@@ -169,16 +164,14 @@
 		 (gnc:html-markup-anchor
 		  (gnc-build-url
 		   URL-TYPE-OPTIONS
-		   (string-append "report-id=" 
-				  (format #f "~a" (car report-info)))
+		   (format #f "report-id=~a" (car report-info))
 		   "")
 		  (_ "Edit Options"))
-		 "&nbsp;"
+		 " "
 		 (gnc:html-markup-anchor
 		  (gnc-build-url
 		   URL-TYPE-REPORT
-		   (string-append "id=" 
-				  (format #f "~a" (car report-info)))
+		   (format #f "id=~a" (car report-info))
 		   "")
 		  (_ "Single Report")))))
 
@@ -223,19 +216,18 @@
 
 (define (cleanup-options report)
   (let* ((options (gnc:report-options report))
-	 (report-opt (gnc:lookup-option options "__general" "report-list"))
-	 (reports (gnc:option-value report-opt))
-	 (new-reports '()))
-    (for-each 
-     (lambda (report-info)
-       (let ((rep (car report-info))
-	     (rowspan (cadr report-info))
-	     (colspan (caddr report-info)))
-	 (set! report-info 
-	       (list rep rowspan colspan #f))
-	 (set! new-reports (cons report-info new-reports))))
-     reports)
-    (gnc:option-set-value report-opt (reverse new-reports))))
+	 (report-opt (gnc:lookup-option options "__general" "report-list")))
+    (let loop ((new-reports '())
+               (reports (gnc:option-value report-opt)))
+      (if (null? reports)
+          (gnc:option-set-value report-opt (reverse new-reports))
+          (let* ((report-info (car reports))
+                 (child (car report-info))
+                 (rowspan (cadr report-info))
+                 (colspan (caddr report-info)))
+            (loop (cons (list child rowspan colspan #f)
+                        new-reports)
+                  (cdr reports)))))))
 
 ;; define the view now.
 (gnc:define-report 

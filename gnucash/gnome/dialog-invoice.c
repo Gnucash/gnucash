@@ -2313,7 +2313,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
 
     // Set the style context for this label so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
+    gnc_widget_style_context_add_class (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
 
     /* grab the project widgets */
     iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_frame"));

@@ -29,19 +29,19 @@
 # Additional information :
 #
 # - Doxygen docs: see page \ref py_invoice_export at https://code.gnucash.org/docs/MAINT or MASTER
-# - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
+# - https://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 #
 # Credits to and ideas from
 #
 # - Main function as proposed by Guido van Rossum
-#   at http://www.artima.com/weblogs/viewpost.jsp?thread=4829
+#   at https://www.artima.com/weblogs/viewpost.jsp?thread=4829
 # - Invoice.tex is derived from\n
 #   scrlttr2.tex v0.3. (c) by Juergen Fenn <juergen.fenn@gmx.de>\n
-#   http://www.komascript.de/node/355\n
+#   https://www.komascript.de/node/355\n
 #   english translation: ftp://ftp.dante.de/tex-archive/info/templates/fenn/scrlttr2en.tex
 # - rechnung.sty\n
 #   from M G Berberich (berberic@fmi.uni-passau.de) and Ulrich Sibiller (uli42@web.de)
-#   Ver3.10 from http://www.forwiss.uni-passau.de/~berberic/TeX/Rechnung/index.html
+#   Ver3.10 from https://www.forwiss.uni-passau.de/~berberic/TeX/Rechnung/index.html
 #
 # To Do:
 #

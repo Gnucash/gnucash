@@ -39,7 +39,7 @@ While the Guile documentation (in info format) explains
 Guile specifics, it doesn't have much information about Scheme,
 the language.  The Internet Scheme Repository:
 
-http://www.cs.indiana.edu/scheme-repository/home.html
+https://www.cs.indiana.edu/scheme-repository/home.html [DEAD LINK]
 
 has quite a useful collection of information, including 
 FAQs, online copies of the Scheme standard (which is actually

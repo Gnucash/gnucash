@@ -643,7 +643,7 @@ start_over:
                 char *posix_d_t_fmt;
 
                 strncpy (d_t_fmt, date_locale_string, date_len);
-                strncat (d_t_fmt, " ", 1);
+                strcat (d_t_fmt, " ");
                 strncat (d_t_fmt, time_locale_string, time_len);
                 free (date_locale_string);
                 free (time_locale_string);
@@ -888,7 +888,7 @@ match_century:
                 char *posix_t_p_fmt;
 
                 strncpy (t_p_fmt, locale_string, locale_len);
-                strncat (t_p_fmt, " tt", 3);
+                strcat (t_p_fmt, " tt");
 
                 posix_t_p_fmt = translate_win32_picture (t_p_fmt);
 

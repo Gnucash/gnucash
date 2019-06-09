@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="list-store">
@@ -22,8 +22,12 @@
   </object>
   <object class="GtkWindow" id="find_account_window">
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Search the Account List</property>
     <property name="default_width">600</property>
     <property name="default_height">400</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="dialog-vbox">
         <property name="can_focus">False</property>
@@ -265,13 +269,7 @@ if account should not be shown, this will be temporarily overridden.</property>
             <property name="position">6</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

@@ -12,9 +12,9 @@ balans en nauwkeurige rapporten te verzekeren.
 
 Beschikbare bronnen voor ondersteuning
 
-Online veel gestelde vragen (FAQ):    http://wiki.gnucash.org/wiki/FAQ
-Mailing Lijsten:  http://wiki.gnucash.org/wiki/Mailing_Lists
-IRC (Chat):    Channel #gnucash on server irc.gnome.org, see also http://wiki.gnucash.org/wiki/IRC
+Online veel gestelde vragen (FAQ):    https://wiki.gnucash.org/wiki/FAQ
+Mailing Lijsten:  https://wiki.gnucash.org/wiki/Mailing_Lists
+IRC (Chat):    Channel #gnucash on server irc.gnome.org, see also https://wiki.gnucash.org/wiki/IRC
 
 Als je programmafouten (bugs) of problemen ervaart, aarzel niet om deze te melden in ons
 bug opvolgsysteem "Bugzilla":

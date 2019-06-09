@@ -643,7 +643,7 @@
     (set-tm:mday tm (car date-list))
     (set-tm:mon tm (- (cadr date-list) 1))
     (set-tm:year tm (- (caddr date-list) 1900))
-    (strftime "%a %B %d %Y" tm)))
+    (gnc-print-time64 (gnc-mktime tm) "%a %B %d %Y")))
 
 (define (qif-parse:print-number num)
   (with-output-to-string

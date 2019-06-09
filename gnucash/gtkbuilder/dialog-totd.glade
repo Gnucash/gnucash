@@ -26,13 +26,12 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="back-button">
-                <property name="label">gtk-media-previous</property>
+                <property name="label" translatable="yes">_Previous</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -42,13 +41,12 @@
             </child>
             <child>
               <object class="GtkButton" id="forward-button">
-                <property name="label">gtk-media-next</property>
+                <property name="label" translatable="yes">_Next</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -58,13 +56,12 @@
             </child>
             <child>
               <object class="GtkButton" id="close-button">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>

@@ -269,10 +269,8 @@
     (gnc:html-table-append-row! table (list (string-expand
                                              (if addy addy "")
                                              #\newline "<br/>")))
-    (gnc:html-table-append-row! table (list
-                                       (strftime
-                                        date-format
-                                        (localtime (gnc:get-today)))))
+    (gnc:html-table-append-row!
+     table (list (gnc-print-time64 (gnc:get-today) date-format)))
 
     (gnc:html-table-set-style!
      table-outer "table"

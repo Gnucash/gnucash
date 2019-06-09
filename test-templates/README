@@ -42,10 +42,10 @@ Run autogen.sh and configure. "make check" will run all tests; "make test" will
 run only the GLib unit tests not guarded by conditionals (see test-suite.c). For
 more control, use gtester as documented in the GLib docs.
 
-See http://www.mail-archive.com/gtk-devel-list@gnome.org/msg06994.html
-and http://library.gnome.org/devel/glib/stable/glib-Testing.html
+See https://www.mail-archive.com/gtk-devel-list@gnome.org/msg06994.html
+and https://developer.gnome.org/glib/stable/glib-Testing.html
 for detailed documentation.
 
 There are some helpful macros and message-trapping functions in
 src/test-core/unittest-support.h, whose Doxygen documentation is at
-http://code.gnucash.org/docs/head/unittest-support_8h_source.html
+https://code.gnucash.org/docs/head/unittest-support_8h_source.html

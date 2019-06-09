@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="discount_adj">
@@ -46,6 +46,9 @@
   <object class="GtkWindow" id="terms_notebook_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">window1</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkNotebook" id="term_notebook">
         <property name="visible">True</property>
@@ -444,6 +447,9 @@
     <property name="title" translatable="yes">Terms</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="billterms_window_destroy_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox5">
         <property name="visible">True</property>
@@ -800,6 +806,9 @@
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
         <property name="visible">True</property>
@@ -991,6 +1000,9 @@
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox7">
         <property name="visible">True</property>

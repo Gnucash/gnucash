@@ -14,7 +14,7 @@
  * Lesser General Public License for more details.
  *
  * You can receive a copy of GNU Lesser General Public License at the
- * World Wide Web address <http://www.gnu.org/licenses/lgpl.html>.
+ * World Wide Web address <https://www.gnu.org/licenses/lgpl.html>.
  *
  * For licensing issues, contact The FarsiWeb Project Group,
  * Computing Center, Sharif University of Technology,

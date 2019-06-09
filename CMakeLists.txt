@@ -109,21 +109,30 @@ set(SYSCONFDIR_BUILD ${CMAKE_BINARY_DIR}/etc)
 set(LIBEXECDIR_BUILD ${CMAKE_BINARY_DIR}/libexec)
 set(BINDIR_BUILD     ${CMAKE_BINARY_DIR}/bin)
 
-set(SHELL_FROM_ENV $ENV{SHELL})
-set(SHELL /bin/bash)
-#We need to distinguish between MinGW.org and MinGW-w64:
-
+# We need to distinguish between MinGW.org and MinGW-w64:
 if (MINGW)
   string(FIND ${CMAKE_C_COMPILER} "msys2" IS_MSYS2)
   if(${IS_MSYS2} GREATER_EQUAL 0)
     set(MINGW64 ON)
   endif()
 endif(MINGW)
-if (MINGW AND NOT MINGW64) # /bin/bash will work fine on MinGW
+
+# Find a proper bash executable
+
+set(GNC_SHELL $ENV{GNC_SHELL})
+if (GNC_SHELL) # Replacing this with if ($ENV{GNC_SHELL}) doesn't work.
+  # Allow shell override by setting the GNC_SHELL environment variable
+  set(SHELL ${GNC_SHELL})
+elseif (MINGW AND NOT MINGW64)
+  # Old mingw's bash is on on the path, so hard-code it for now
   set(SHELL ${CMAKE_PREFIX_PATH}/mingw/msys/1.0/bin/bash.exe)
-endif()
-if (SHELL_FROM_ENV) # Replacing this with if ($ENV{SHELL}) doesn't work.
-  set(SHELL ${SHELL_FROM_ENV})
+else()
+  find_package(UnixCommands)
+  if (BASH)
+    set(SHELL ${BASH})
+  else()
+    message(SEND_ERROR "Can't find a suitable bash executable. Please set GNC_SHELL.")
+  endif()
 endif()
 
 # Determine whether we are building from a VCS or from a tarball

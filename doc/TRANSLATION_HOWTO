@@ -41,17 +41,17 @@ out there and are eager to help.  Go to the #gnucash channel at
 #gnucash".
 
 The main gnucash web site is loaded with information:
-http://www.gnucash.org/
+https://www.gnucash.org/
 
 The GNU Translation Project is another way to submit translations:
-http://www.iro.umontreal.ca/contrib/po/HTML/
+https://translationproject.org/html/welcome.html
 
 ==============================================================================
 2) Get the source
 
 The first thing to do is to download the latest STABLE branch of gnucash.
 This could be easily done by visiting
-http://www.gnucash.org/pub/gnucash/sources/stable/
+https://www.gnucash.org/pub/gnucash/sources/stable/
 and grab the latest stable source package.
 
 Please do not use the HEAD branch from SVN, since the text in the HEAD branch 
@@ -177,7 +177,7 @@ If your language file does exist, update it using the msgmerge program:
 The top of the .po file should be editted somewhat.  The comments at the 
 top of the file should be changed to be current:
 
-# Messages in Deutsch für GnuCash
+# Messages in Deutsch fï¿½r GnuCash
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 
@@ -193,7 +193,7 @@ Finally.  You are ready to do some translating!
 
 There are many transaltion editors, KBabel, for example, works well for 
 GnuCash.  Some Editors are noted here:
-http://translationproject.org/html/software.html
+https://translationproject.org/html/software.html
 
 If you are familiar with a text editor, e.g. vim or emacs, you can also 
 manually edit the .po files.  Here is an example of translating some text 
@@ -213,7 +213,7 @@ msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
 msgstr ""
-"GnuCash: Ihr persönlicher Finanzmanager.\n"
+"GnuCash: Ihr persï¿½nlicher Finanzmanager.\n"
 "Der GNU-Weg, ihr Geld zu verwalten !"
 
 You should read through every translation in the .po file at least once.  
@@ -235,7 +235,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
+"Es gab einen Fehler beim ï¿½ffnen der Datei. \n"
 "     %s."
 
 You need to correct the translated string and remove the 'fuzzy' keyword.
@@ -249,7 +249,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
+"Es gab einen Fehler beim ï¿½ffnen der Datei. \n"
 "     %s."
 
 Notice that the comment "c-format" was not removed.  That is correct, you 

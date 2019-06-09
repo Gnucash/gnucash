@@ -511,10 +511,8 @@
     (gnc:html-table-append-row! table (list (string-expand
 					     (if addy addy "")
 					     #\newline "<br/>")))
-    (gnc:html-table-append-row! table (list
-				       (strftime
-					date-format
-					(gnc-localtime (current-time)))))
+    (gnc:html-table-append-row!
+     table (list (gnc-print-time64 (current-time) date-format)))
     table))
 
 (define (make-break! document)

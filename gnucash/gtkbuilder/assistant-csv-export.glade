@@ -754,5 +754,8 @@ Cancel to abort.</property>
         <property name="has_padding">False</property>
       </packing>
     </child>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
