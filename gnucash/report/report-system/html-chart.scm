@@ -212,7 +212,7 @@
                                                                      (cons 'labelString "")))
                                                   (cons 'ticks (list
                                                                 (cons 'fontSize 10)
-                                                                (cons 'beginAtZero #f))))
+                                                                (cons 'beginAtZero #t))))
                                                  ;; the following another yAxis on the right
                                                  '((position . right)
                                                    (ticks . ((display . #f)))
