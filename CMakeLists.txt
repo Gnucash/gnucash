@@ -356,6 +356,9 @@ if (GNC_TEXT_PORTS_RESULT EQUAL 0)
   set (HAVE_TEXT_PORTS TRUE)
 endif ()
 
+# Determine where to install our guile modules libraries.
+find_guile_dirs()
+
 # ############################################################
 if (WITH_AQBANKING)
   pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.9.99)
@@ -777,9 +780,6 @@ add_definitions (-DHAVE_CONFIG_H)
 
 set (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/common/config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H})
-
-set(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_DATADIR}/gnucash/scm)
-set(SCHEME_INSTALLED_CACHE_DIR ${PKGLIBDIR}/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
 # The subdirectories
 add_subdirectory (borrowed)

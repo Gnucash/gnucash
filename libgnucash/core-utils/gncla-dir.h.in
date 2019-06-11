@@ -31,3 +31,5 @@
 #define LIBDIR "@libdir@"
 
 #define LOCALEDIR "@localedir@"
+
+#define GUILE_REL_SITEDIR "@GUILE_REL_SITEDIR@"
