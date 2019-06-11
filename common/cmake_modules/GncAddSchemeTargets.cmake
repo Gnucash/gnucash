@@ -13,7 +13,7 @@
 # 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 # Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-#Guile and ltdl require MSYS paths on MinGW-w64; this function transforms them.
+# Guile and ltdl require MSYS paths on MinGW-w64; this function transforms them.
 function(make_unix_path PATH)
     string(REGEX REPLACE "^([A-Za-z]):" "/\\1" newpath ${${PATH}})
     string(REGEX REPLACE "\\\\" "/" newpath ${newpath})
@@ -25,6 +25,82 @@ function(make_unix_path_list PATH)
     string(REPLACE ";" ":" newpath "${${PATH}}")
     set(${PATH} ${newpath} PARENT_SCOPE)
 endfunction()
+
+# This function will set two or four environment variables to a directory in the parent PARENT_SCOPE
+# * _DIRCLASS (eg "prefix", "sitedir" is used to construct the variable name(s) and in error messages
+# * _DIRCMD is the guile command to run to get the path for the given _DIRCLASS (eg "(display (%site-dir))")
+# * _PREFIX: if set will be used to calculate paths relative to this prefix and
+#   set two more environment variable with this relative path.
+# When run successfully this function will set following variables in the parent scope:
+# * GUILE_${CMDCLASS} and GUILE_UNIX_${CMDCLASS} - the latter is the former transformed
+#   into an msys compatible format (c:\some\directory => /c/some/directory)
+# * If _PREFIX was set: GUILE_${CMDCLASS} and GUILE_REL_UNIX_${CMDCLASS}
+#   which are the former two variables with _PREFIX removed
+#   (_PREFIX=/usr, GUILE_${CMDCLASS} = /usr/share/something
+#    => GUILE_REL_${CMDCLASS} = share/something
+function(find_one_guile_dir _DIRCLASS _DIRCMD _PREFIX)
+
+    string(TOUPPER ${_DIRCLASS} CLASS_UPPER)
+    string(TOLOWER ${_DIRCLASS} CLASS_LOWER)
+    execute_process(
+        COMMAND ${GUILE_EXECUTABLE} -c ${_DIRCMD}
+        RESULT_VARIABLE CMD_RESULT
+        OUTPUT_VARIABLE CMD_OUTPUT
+        ERROR_VARIABLE CMD_ERROR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_STRIP_TRAILING_WHITESPACE
+    )
+    if (CMD_RESULT)
+        message(SEND_ERROR "Could not determine Guile ${CLASS_LOWER}:\n${CMD_ERROR}")
+    endif()
+
+    set(GUILE_${CLASS_UPPER} ${CMD_OUTPUT} PARENT_SCOPE)
+    set(CMD_UNIX_OUTPUT  ${CMD_OUTPUT})
+    make_unix_path(CMD_UNIX_OUTPUT)
+    set(GUILE_UNIX_${CLASS_UPPER} ${CMD_UNIX_OUTPUT} PARENT_SCOPE)
+
+    if (_PREFIX)
+        string(REGEX REPLACE "^${_PREFIX}[\\/]*" "" CMD_REL_OUTPUT ${CMD_OUTPUT})
+        set(GUILE_REL_${CLASS_UPPER} ${CMD_REL_OUTPUT} PARENT_SCOPE)
+        set(CMD_REL_UNIX_OUTPUT  ${CMD_REL_OUTPUT})
+        make_unix_path(CMD_REL_UNIX_OUTPUT)
+        set(GUILE_REL_UNIX_${CLASS_UPPER} ${CMD_REL_UNIX_OUTPUT} PARENT_SCOPE)
+    endif()
+
+endfunction(find_one_guile_dir)
+
+# Query the guile executable for path information. We're interested in guile's
+# datadir, libdir, sitedir, ccachedir and siteccachedir
+macro(find_guile_dirs)
+    # Get GUILE_PREFIX and GUILE_UNIX_PREFIX
+    find_one_guile_dir("prefix" "(display (assoc-ref %guile-build-info 'prefix))" "")
+    # Get GUILE_DATADIR, GUILE_UNIX_DATADIR, GUILE_REL_DATADIR, GUILE_REL_UNIX_DATADIR
+    find_one_guile_dir("datadir" "(display (%package-data-dir))" ${GUILE_PREFIX})
+    # Get GUILE_LIBDIR, GUILE_UNIX_LIBDIR, GUILE_REL_LIBDIR, GUILE_REL_UNIX_LIBDIR
+    find_one_guile_dir("libdir" "(display (%library-dir))" ${GUILE_PREFIX})
+    # Get GUILE_CCACHEDIR, GUILE_UNIX_CCACHEDIR, GUILE_REL_CCACHEDIR, GUILE_REL_UNIX_CCACHEDIR
+    find_one_guile_dir("ccachedir" "(display (assoc-ref %guile-build-info 'ccachedir))" ${GUILE_PREFIX})
+    # Get GUILE_SITEDIR, GUILE_UNIX_SITEDIR, GUILE_REL_SITEDIR, GUILE_REL_UNIX_SITEDIR
+    find_one_guile_dir("sitedir" "(display (%site-dir))" ${GUILE_PREFIX})
+    # Get GUILE_SITECCACHEDIR, GUILE_UNIX_SITECCACHEDIR, GUILE_REL_SITECCACHEDIR, GUILE_REL_UNIX_SITECCACHEDIR
+    find_one_guile_dir("siteccachedir" "(display (%site-ccache-dir))" ${GUILE_PREFIX})
+    string(REGEX REPLACE "[/\\]*${GUILE_EFFECTIVE_VERSION}$" "" GUILE_REL_TOP_SITEDIR ${GUILE_REL_SITEDIR})
+    string(REGEX REPLACE "[/]*${GUILE_EFFECTIVE_VERSION}$" "" GUILE_REL_UNIX_TOP_SITEDIR ${GUILE_REL_UNIX_SITEDIR})
+
+    # Generate replacement strings for use in environment file. The paths used are
+    # the paths found in %load-path and %load-compiled-path by default but
+    # rebased on {GNC_HOME} (which is the runtime resolved variable to where gnucash
+    # gets installed).
+    set (GNC_GUILE_LOAD_PATH
+            "{GNC_HOME}/${GUILE_REL_UNIX_LIBDIR}"
+            "{GNC_HOME}/${GUILE_REL_UNIX_SITEDIR}"
+            "{GNC_HOME}/${GUILE_REL_UNIX_TOP_SITEDIR}"
+            "{GNC_HOME}/${GUILE_REL_UNIX_DATADIR}")
+
+    set (GNC_GUILE_LOAD_COMPILED_PATH
+            "{GNC_HOME}/${GUILE_REL_UNIX_CCACHEDIR}"
+            "{GNC_HOME}/${GUILE_REL_UNIX_SITECCACHEDIR}")
+endmacro(find_guile_dirs)
 
 function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
                                 MAKE_LINKS)
@@ -54,9 +130,9 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     make_unix_path(CMAKE_SOURCE_DIR)
   endif()
 
-  # If links are requested, we simple link (or copy, for Windows) each source file to the dest directory
+  # If links are requested, we simply link (or copy, for Windows) each source file to the dest directory
   if(MAKE_LINKS)
-    set(_LINK_DIR ${DATADIR_BUILD}/gnucash/scm/${_OUTPUT_DIR})
+    set(_LINK_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}/${_OUTPUT_DIR})
     file(MAKE_DIRECTORY ${_LINK_DIR})
     set(_SCHEME_LINKS "")
     foreach(scheme_file ${_SOURCE_FILES})
@@ -88,9 +164,9 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     list(APPEND _GUILE_LOAD_PATH ${guile_load_path})
     list(APPEND _GUILE_LOAD_COMPILED_PATH ${guile_load_compiled_path})
   endif()
-  set(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
-  list(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
-  list(APPEND _GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
+  set(_GUILE_CACHE_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITECCACHEDIR})
+  list(APPEND _GUILE_LOAD_PATH "${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}")
+  list(APPEND _GUILE_LOAD_COMPILED_PATH ${_GUILE_CACHE_DIR})
 
   set(_TARGET_FILES "")
 
@@ -167,8 +243,8 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_LINKS)
   make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
                       "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
-  install(FILES ${_TARGET_FILES} DESTINATION ${SCHEME_INSTALLED_CACHE_DIR}/${_OUTPUT_DIR})
-  install(FILES ${_SOURCE_FILES} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/${_OUTPUT_DIR})
+  install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
+  install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
 endfunction(gnc_add_scheme_targets)
 
 function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS

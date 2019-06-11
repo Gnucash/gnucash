@@ -171,24 +171,16 @@ gchar *gnc_path_get_accountsdir()
 }
 
 /** Returns the file path to the directory containing all guile scripts, usually
- * "$prefix/share/gnucash/scm".
+ * "$prefix/guile/site/2.2".
+ * This path is determined by querying guile for its sitedir and then
+ * rebasing this to be relative to our own installation prefix.
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_scmdir()
 {
-    /* Careful: if the cmake variable SCHEME_INSTALLED_SOURCE_DIR gets changed
-     * in toplevel CMakeLists.txt, this path should probably change as well.
-     * Currently this code assumes SCHEME_INSTALLED_SOURCE_DIR is set to
-     * pkgdatadir/scm
-     * We can't use GNC_SCM_INSTALL_DIR directly at build time to
-     * get this information, because on Windows and OS X
-     * the final path may get installed in a different location
-     * than assumed during build, invalidating the build path at
-     * runtime.
-     */
-    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *result = g_build_filename (pkgdatadir, "scm", (char*)NULL);
-    g_free (pkgdatadir);
+    gchar *prefix = gnc_path_get_prefix ();
+    gchar *result = g_build_filename (prefix, GUILE_REL_SITEDIR, (char*)NULL);
+    g_free (prefix);
 
     return result;
 }

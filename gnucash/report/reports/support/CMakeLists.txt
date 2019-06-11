@@ -7,7 +7,7 @@ set(support_DATA
   balsheet-eg.eguile.scm
 )
 
-install(FILES ${support_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/gnucash/report)
+install(FILES ${support_DATA} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/gnucash/report)
 
 set(support_EXTRA_DIST
   README
