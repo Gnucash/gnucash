@@ -20,4 +20,4 @@ gnc_add_scheme_test_targets(test-load-report-locale-specific-module
   )
 gnc_add_scheme_tests(test-load-report-locale-specific-module.scm)
 
-set_dist_list(test_locale_specific_us_DIST CMakeLists.txt test-link-module.c test-load-report-locale-specific-module.scm)
+set_dist_list(test_locale_specific_DIST CMakeLists.txt test-link-module.c test-load-report-locale-specific-module.scm)

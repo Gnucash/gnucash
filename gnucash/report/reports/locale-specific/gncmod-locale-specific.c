@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-locale-reports-us.c
- * module definition/initialization for the US reports
+ * gncmod-locale-reports.c
+ * module definition/initialization for the locale specific reports
  *
  * Copyright (c) 2001 Linux Developers Group, Inc.
  *********************************************************************/
@@ -34,35 +34,35 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
-GNC_MODULE_API_DECL(libgncmod_locale_reports_us)
+GNC_MODULE_API_DECL(libgncmod_locale_specific)
 
 /* version of the gnc module system interface we require */
-int libgncmod_locale_reports_us_gnc_module_system_interface = 0;
+int libgncmod_locale_specific_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int libgncmod_locale_reports_us_gnc_module_current  = 0;
-int libgncmod_locale_reports_us_gnc_module_revision = 0;
-int libgncmod_locale_reports_us_gnc_module_age      = 0;
+int libgncmod_locale_specific_gnc_module_current  = 0;
+int libgncmod_locale_specific_gnc_module_revision = 0;
+int libgncmod_locale_specific_gnc_module_age      = 0;
 
 
 char *
-libgncmod_locale_reports_us_gnc_module_path(void)
+libgncmod_locale_specific_gnc_module_path(void)
 {
     /* const char *thislocale = setlocale(LC_ALL, NULL);
     if (strncmp(thislocale, "de_DE", 5) == 0)
       return g_strdup("gnucash/report/locale-specific/de_DE");
       else */
-    return g_strdup("gnucash/report/locale-specific/us");
+    return g_strdup("gnucash/report/locale-specific");
 }
 
 char *
-libgncmod_locale_reports_us_gnc_module_description(void)
+libgncmod_locale_specific_gnc_module_description(void)
 {
     return g_strdup("US income tax reports and related material");
 }
 
 int
-libgncmod_locale_reports_us_gnc_module_init(int refcount)
+libgncmod_locale_specific_gnc_module_init(int refcount)
 {
     const gchar *tax_module, *report_taxtxf;
     /* load the tax info */
@@ -80,12 +80,12 @@ libgncmod_locale_reports_us_gnc_module_init(int refcount)
     if (is_de_DE)
     {
         tax_module = "gnucash/tax/de_DE";
-        report_taxtxf = "(use-modules (gnucash report taxtxf-de_DE))";
+        report_taxtxf = "(use-modules (gnucash report reports locale-specific taxtxf-de_DE))";
     }
     else
     {
         tax_module = "gnucash/tax/us";
-        report_taxtxf = "(use-modules (gnucash report taxtxf))";
+        report_taxtxf = "(use-modules (gnucash report reports locale-specific taxtxf))";
     }
 
     /* The gchar* cast is only because the function declaration expects
@@ -113,7 +113,7 @@ libgncmod_locale_reports_us_gnc_module_init(int refcount)
 }
 
 int
-libgncmod_locale_reports_us_gnc_module_end(int refcount)
+libgncmod_locale_specific_gnc_module_end(int refcount)
 {
     return TRUE;
 }
