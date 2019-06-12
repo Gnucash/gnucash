@@ -64,7 +64,7 @@ libgncmod_locale_reports_us_gnc_module_description(void)
 int
 libgncmod_locale_reports_us_gnc_module_init(int refcount)
 {
-    const gchar *tax_module, *report_taxtxf, *report_locale;
+    const gchar *tax_module, *report_taxtxf;
     /* load the tax info */
     /* This is a very simple hack that loads the (new, special) German
        tax definition file in a German locale, or (default) loads the
@@ -81,13 +81,11 @@ libgncmod_locale_reports_us_gnc_module_init(int refcount)
     {
         tax_module = "gnucash/tax/de_DE";
         report_taxtxf = "(use-modules (gnucash report taxtxf-de_DE))";
-        report_locale = "(use-modules (gnucash report locale-specific de_DE))";
     }
     else
     {
         tax_module = "gnucash/tax/us";
         report_taxtxf = "(use-modules (gnucash report taxtxf))";
-        report_locale = "(use-modules (gnucash report locale-specific us))";
     }
 
     /* The gchar* cast is only because the function declaration expects
@@ -108,13 +106,6 @@ libgncmod_locale_reports_us_gnc_module_init(int refcount)
             == SCM_BOOL_F)
     {
         g_warning("failed to load %s\n", report_taxtxf);
-        return FALSE;
-    }
-
-    /* Load the module scheme code */
-    if (scm_c_eval_string(report_locale)
-            == SCM_BOOL_F)
-    {
         return FALSE;
     }
 

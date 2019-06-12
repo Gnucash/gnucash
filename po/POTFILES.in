@@ -438,11 +438,9 @@ gnucash/report/html-style-sheet.scm
 gnucash/report/html-table.scm
 gnucash/report/html-text.scm
 gnucash/report/html-utilities.scm
-gnucash/report/locale-specific/us/de_DE.scm
 gnucash/report/locale-specific/us/gncmod-locale-reports-us.c
 gnucash/report/locale-specific/us/taxtxf-de_DE.scm
 gnucash/report/locale-specific/us/taxtxf.scm
-gnucash/report/locale-specific/us/us.scm
 gnucash/report/options-utilities.scm
 gnucash/report/report-core.scm
 gnucash/report/report-register-hooks.scm
