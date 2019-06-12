@@ -74,7 +74,7 @@
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/de_DE" 0)
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/engine" 0)
 
 (define reportname (N_ "Tax Report / TXF Export"))
@@ -119,7 +119,7 @@
            (<= t end-date)))))
 
 ;; This is nearly identical to, and could be shared with
-;; display-report-list-item in report.scm. This adds warn-msg parameter
+;; display-report-list-item in report-impl.scm. This adds warn-msg parameter
 (define (gnc:display-report-list-item item port warn-msg)
   (cond
    ((string? item) (display item port))

@@ -18,7 +18,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash gnc-module))
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (srfi srfi-1))
@@ -26,7 +26,7 @@
 (use-modules (gnucash report stylesheets))
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
-(use-modules (tests test-report-system-extras))
+(use-modules (tests test-report-extras))
 (use-modules (gnucash report reports standard net-charts))
 
 ;; Explicitly set locale to make the report output predictable

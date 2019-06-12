@@ -27,7 +27,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -708,7 +708,7 @@
 
 ;; we get called from elsewhere... but this doesn't work FIX-ME, find
 ;; out how to get report-guid's exported from report into the report
-;; system at large. might have to define this at the report-system
+;; system at large. might have to define this at the report
 ;; level to get them read by other reports. Look at the aging reports
 ;; for suggestions, perhaps
 (export register-report-guid)

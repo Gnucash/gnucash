@@ -3,13 +3,13 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report report-system))
+(use-modules (gnucash report report))
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (test-begin "Testing/Temporary/test-report-system")
+  (test-begin "Testing/Temporary/test-report")
   ;; if (test-runner-factory gnc:test-runner) is commented out, this
   ;; will create Testing/Temporary/test-asset-performance.log
   (test-check1)
@@ -19,7 +19,7 @@
   (test-report-template-getters)
   (test-make-report)
   (test-report)
-  (test-end "Testing/Temporary/test-report-system"))
+  (test-end "Testing/Temporary/test-report"))
 
 (define test4-guid "54c2fc051af64a08ba2334c2e9179e24")
 ;; -----------------------------------------------------------------------

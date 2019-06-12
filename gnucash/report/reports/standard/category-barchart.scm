@@ -29,7 +29,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only

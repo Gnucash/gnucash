@@ -28,7 +28,7 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (define (fancy-options)
   (let* ((options (gnc:new-options))

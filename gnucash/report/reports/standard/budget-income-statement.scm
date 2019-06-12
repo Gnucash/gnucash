@@ -45,7 +45,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.

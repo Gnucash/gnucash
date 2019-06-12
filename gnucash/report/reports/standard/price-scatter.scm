@@ -30,7 +30,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (define optname-from-date (N_ "Start Date"))
 (define optname-to-date (N_ "End Date"))

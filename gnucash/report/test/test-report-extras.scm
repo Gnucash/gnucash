@@ -17,11 +17,11 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (tests test-report-system-extras))
+(define-module (tests test-report-extras))
 
 (use-modules (gnucash gnc-module))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report report-system))
+(use-modules (gnucash report report))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 

@@ -32,7 +32,7 @@
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (use-modules (gnucash report reports))
 
 ;; Option names

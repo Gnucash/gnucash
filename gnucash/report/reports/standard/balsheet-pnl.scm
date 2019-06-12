@@ -31,7 +31,7 @@
 (use-modules (gnucash gettext))
 (use-modules (srfi srfi-1))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (define FOOTER-TEXT
   (gnc:make-html-text

@@ -10,7 +10,7 @@
 
 (gnc:module-system-init)
 
-(if (gnc:module-load "gnucash/report/report-system" 0)
+(if (gnc:module-load "gnucash/report" 0)
     (begin 
       (display "ok\n")
       (exit 0))

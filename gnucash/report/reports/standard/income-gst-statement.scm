@@ -31,7 +31,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Income and GST Statement"))

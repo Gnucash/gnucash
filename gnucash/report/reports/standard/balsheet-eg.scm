@@ -42,7 +42,7 @@
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (srfi srfi-13)) ; for extra string functions
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/html" 0)
 
 (define debugging? #f)

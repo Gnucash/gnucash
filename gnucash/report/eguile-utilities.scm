@@ -30,7 +30,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/app-utils" 0)
 
 

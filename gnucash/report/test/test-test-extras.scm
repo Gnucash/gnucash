@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (tests test-report-system-extras))
+(use-modules (tests test-report-extras))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
