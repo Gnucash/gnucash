@@ -19,7 +19,7 @@ set(doc_DATA
 )
 
 set(doc_noinst_DATA
-        build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in
+        build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in
         misc-notes.txt README.HBCI README.OFX README.translator.txt tip_of_the_day.list.c
         TRANSLATION_HOWTO)
 
