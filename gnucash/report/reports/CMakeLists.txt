@@ -1,4 +1,5 @@
 
+add_subdirectory(locale-specific)
 add_subdirectory(standard/test)
 add_subdirectory(support)
 
@@ -119,7 +120,12 @@ gnc_add_scheme_targets(scm-reports-example
   TRUE
 )
 
-add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-example scm-reports-common scm-rpt-reports)
+add_custom_target(scm-reports ALL DEPENDS
+    scm-reports-standard
+    scm-reports-example
+    scm-reports-common
+    scm-rpt-reports
+    scm-reports-locale-specific)
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME})
-set(reports_DIST ${reports_DIST_local} ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)
+set(reports_DIST ${reports_DIST_local} ${reports_locale_specific_DIST} ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)

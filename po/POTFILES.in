@@ -438,9 +438,6 @@ gnucash/report/html-style-sheet.scm
 gnucash/report/html-table.scm
 gnucash/report/html-text.scm
 gnucash/report/html-utilities.scm
-gnucash/report/locale-specific/us/gncmod-locale-reports-us.c
-gnucash/report/locale-specific/us/taxtxf-de_DE.scm
-gnucash/report/locale-specific/us/taxtxf.scm
 gnucash/report/options-utilities.scm
 gnucash/report/report-core.scm
 gnucash/report/report-register-hooks.scm
@@ -450,6 +447,9 @@ gnucash/report/reports/example/daily-reports.scm
 gnucash/report/reports/example/hello-world.scm
 gnucash/report/reports/example/sample-graphs.scm
 gnucash/report/reports/example/welcome-to-gnucash.scm
+gnucash/report/reports/locale-specific/gncmod-locale-specific.c
+gnucash/report/reports/locale-specific/taxtxf-de_DE.scm
+gnucash/report/reports/locale-specific/taxtxf.scm
 gnucash/report/reports/reports.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm
