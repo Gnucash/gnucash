@@ -67,7 +67,7 @@ set(scm_rpts_GUILE_DEPENDS
   scm-gettext
   scm-scm
   scm-gnome-utils
-  scm-report-system
+  scm-report
   )
 
 set(scm_rpt_example_GUILE_DEPENDS
@@ -79,7 +79,7 @@ set(scm_rpt_example_GUILE_DEPENDS
   scm-scm
   scm-reports-example-links
   scm-gnome-utils
-  scm-report-system
+  scm-report
   )
 
 set(scm_rpt_std_GUILE_DEPENDS

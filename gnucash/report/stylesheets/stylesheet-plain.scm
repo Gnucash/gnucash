@@ -32,7 +32,7 @@
 (use-modules (srfi srfi-14))
 
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 ;; plain style sheet
 ;; this should generally be the default style sheet for most reports.

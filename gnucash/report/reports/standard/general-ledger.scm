@@ -35,7 +35,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (define reportname (N_ "General Ledger"))
 (define xactrptguid "2fe3b9833af044abb929a88d5a59620f")

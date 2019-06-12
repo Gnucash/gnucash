@@ -28,7 +28,7 @@ set(GUILE_DEPENDS
   scm-test-engine
   scm-gettext
   scm-scm
-  scm-test-report-system
+  scm-test-report
   scm-reports
   scm-report-stylesheets
   )

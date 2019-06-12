@@ -61,7 +61,7 @@ int
 libgncmod_stylesheets_gnc_module_init(int refcount)
 {
     /* load the report system */
-    if (!gnc_module_load("gnucash/report/report-system", 0))
+    if (!gnc_module_load("gnucash/report", 0))
     {
         return FALSE;
     }

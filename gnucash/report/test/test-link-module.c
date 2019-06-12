@@ -18,27 +18,25 @@
  *                                                                  *
 \********************************************************************/
 
-%module sw_report_system
-%{
-/* Includes the header in the wrapper code */
-#include <config.h>
-#include <gnc-report.h>
-%}
-#if defined(SWIGGUILE)
-%{
-#include "guile-mappings.h"
+#include <stdlib.h>
+#include <libguile.h>
+#include <gnc-module.h>
 
-SCM scm_init_sw_report_system_module (void);
-%}
-#endif
+static void
+guile_main(void *closure, int argc, char ** argv)
+{
+    GNCModule mod;
+    gnc_module_system_init();
+    mod = gnc_module_load("gnucash/report", 0);
 
-%import "base-typemaps.i"
+    exit(mod == NULL);
+}
 
-SCM gnc_report_find(gint id);
-gint gnc_report_add(SCM report);
+int
+main(int argc, char ** argv)
+{
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
+    scm_boot_guile(argc, argv, guile_main, NULL);
+    return 0;
+}
 
-%newobject gnc_get_default_report_font_family;
-gchar* gnc_get_default_report_font_family();
-
-void gnc_saved_reports_backup (void);
-gboolean gnc_saved_reports_write_to_file (const gchar* report_def, gboolean overwrite);

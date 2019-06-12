@@ -38,7 +38,7 @@ set(GUILE_DEPENDS
   scm-scm
   scm-test-core
   scm-tax-us
-  scm-report-system
+  scm-report
   scm-gnome-utils
   )
 

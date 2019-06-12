@@ -33,10 +33,10 @@
 (use-modules (gnucash gettext))
 (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module"))
-(use-modules (sw_report_system))
+      (load-extension "libgncmod-report" "scm_init_sw_report_module"))
+(use-modules (sw_report))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/html" 0) ;for gnc-build-url
 
 (define (make-options)

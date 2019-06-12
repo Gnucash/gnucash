@@ -37,7 +37,7 @@
 (use-modules (sw_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)

@@ -20,14 +20,14 @@
 (use-modules (gnucash gnc-module))
 
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
-(use-modules (gnucash report report-system))
-(use-modules (tests test-report-system-extras))
+(use-modules (gnucash report report))
+(use-modules (tests test-report-extras))
 (use-modules (gnucash report reports standard cashflow-barchart))
 (use-modules (gnucash report stylesheets))
 (use-modules (srfi srfi-1))

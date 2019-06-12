@@ -8,7 +8,7 @@ set(GUILE_DEPENDS
   gncmod-backend-xml
   scm-gnome-utils
   gncmod-html
-  scm-report-system
+  scm-report
   scm-gnome
   scm-report-stylesheets
 )

@@ -501,7 +501,7 @@ load_gnucash_modules()
         { "gnucash/import-export/aqbanking", 0, TRUE },
         { "gnucash/import-export/bi-import", 0, TRUE},
         { "gnucash/import-export/customer-import", 0, TRUE},
-        { "gnucash/report/report-system", 0, FALSE },
+        { "gnucash/report", 0, FALSE },
         { "gnucash/report/stylesheets", 0, FALSE },
         { "gnucash/report/locale-specific/us", 0, FALSE },
         { "gnucash/python", 0, TRUE },

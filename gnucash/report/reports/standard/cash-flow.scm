@@ -33,7 +33,7 @@
 (use-modules (gnucash gettext))
 (use-modules (gnucash engine))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (export cash-flow-calc-money-in-out)

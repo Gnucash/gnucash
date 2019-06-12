@@ -28,15 +28,15 @@
 ;; causing the test to fail
 ;; That's what the wrapper below is meant for:
 
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 
 (use-modules (gnucash utilities))
-(use-modules (gnucash report report-system))
+(use-modules (gnucash report report))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (gnucash report reports standard register))
-(use-modules (tests test-report-system-extras))
+(use-modules (tests test-report-extras))
 (use-modules (gnucash report stylesheets))
 (use-modules (tests test-engine-extras))
 

@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  report-system.scm
+;;  report.scm
 ;;  module definition for the report system code
 ;;
 ;;  Copyright (c) 2001 Linux Developers Group, Inc.
@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report report-system))
+(define-module (gnucash report report))
 (use-modules (gnucash utilities)) 
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
@@ -122,7 +122,7 @@
 (export gnc:html-css-include)
 (export gnc:html-string-sanitize)
 
-;; report.scm
+;; report-core.scm
 (export gnc:menuname-reports)
 (export gnc:menuname-asset-liability)
 (export gnc:menuname-income-expense)
@@ -761,27 +761,27 @@
 (export gnc:lookup-register-report)
 
 
-(load-from-path "commodity-utilities")
-(load-from-path "html-chart")
-(load-from-path "html-barchart")
-(load-from-path "html-document")
-(load-from-path "html-piechart")
-(load-from-path "html-scatter")
-(load-from-path "html-linechart")
-(load-from-path "html-style-info")
-(load-from-path "html-fonts")
+(load-from-path "gnucash/report/commodity-utilities")
+(load-from-path "gnucash/report/html-chart")
+(load-from-path "gnucash/report/html-barchart")
+(load-from-path "gnucash/report/html-document")
+(load-from-path "gnucash/report/html-piechart")
+(load-from-path "gnucash/report/html-scatter")
+(load-from-path "gnucash/report/html-linechart")
+(load-from-path "gnucash/report/html-style-info")
+(load-from-path "gnucash/report/html-fonts")
 
-(load-from-path "html-style-sheet")
-(load-from-path "html-anytag")
-(load-from-path "html-table")
-(load-from-path "html-text")
-(load-from-path "html-acct-table")
-(load-from-path "html-utilities")
-(load-from-path "options-utilities")
-(load-from-path "report-utilities")
-(load-from-path "report-register-hooks")
-(load-from-path "report")
-(load-from-path "trep-engine")
+(load-from-path "gnucash/report/html-style-sheet")
+(load-from-path "gnucash/report/html-anytag")
+(load-from-path "gnucash/report/html-table")
+(load-from-path "gnucash/report/html-text")
+(load-from-path "gnucash/report/html-acct-table")
+(load-from-path "gnucash/report/html-utilities")
+(load-from-path "gnucash/report/options-utilities")
+(load-from-path "gnucash/report/report-utilities")
+(load-from-path "gnucash/report/report-register-hooks")
+(load-from-path "gnucash/report/report-core")
+(load-from-path "gnucash/report/trep-engine")
 
 ;; Report uuids used for the category barcharts
 

@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; report.scm : structures/utilities for representing reports 
+;; report-impl.scm : structures/utilities for representing reports
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;
 ;; This program is free software; you can redistribute it and/or    
@@ -24,8 +24,8 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gettext))
 (eval-when (compile load eval expand)
-  (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module"))
-(use-modules (sw_report_system))
+  (load-extension "libgncmod-report" "scm_init_sw_report_module"))
+(use-modules (sw_report))
 
 ;; Terminology in this file:
 ;; report-template: a report definition of some form. This can be a report
@@ -94,11 +94,11 @@
 (define (gui-error str)
   (if (gnucash-ui-is-running)
       (gnc-error-dialog '() str)
-      (gnc:error "report.scm error: " str)))
+      (gnc:error "report-impl.scm error: " str)))
 (define (gui-warning str)
   (if (gnucash-ui-is-running)
       (gnc-warning-dialog '() str)
-      (gnc:warn "report.scm warning: " str)))
+      (gnc:warn "report-impl.scm warning: " str)))
 (define (gui-error-missing-template template-name)
   (gui-error
    (string-append

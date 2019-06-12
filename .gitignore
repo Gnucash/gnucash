@@ -173,8 +173,8 @@ gnucash/register/register-gnome/test/test-link-module
 gnucash/report/business-reports/gnucash
 gnucash/report/locale-specific/us/gnucash
 gnucash/report/locale-specific/us/test/test-link-module
-gnucash/report/report-system/gnucash
-gnucash/report/report-system/test/test-link-module
+gnucash/report/gnucash
+gnucash/report/test/test-link-module
 gnucash/report/reports/gnucash
 gnucash/report/stylesheets/gnucash
 gnucash/report/utility-reports/gnucash

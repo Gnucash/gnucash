@@ -32,7 +32,7 @@
 ;; Use (_ string) to use a translation of this string if it exists.
 (use-modules (gnucash gettext))
 
-(gnc:module-load "gnucash/report/report-system" 0)
+(gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 ;; It's common to define frequently used strings once
