@@ -161,7 +161,6 @@ set (app_utils_SCHEME_1
     date-utilities.scm
     options.scm
     prefs.scm
-    simple-obj.scm
     fin.scm
 )
 
