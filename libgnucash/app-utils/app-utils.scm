@@ -263,15 +263,6 @@
 (export gnc:get-start-next-year)
 (export gnc:get-three-months-ahead)
 
-;; simple-obj
-(export make-simple-class)
-(export simple-obj-getter)
-(export simple-obj-setter)
-(export simple-obj-print)
-(export simple-obj-to-list)
-(export simple-obj-from-list)
-(export make-simple-obj)
-
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)
 
@@ -279,7 +270,6 @@
 (load-from-path "options")
 (load-from-path "prefs")
 (load-from-path "date-utilities")
-(load-from-path "simple-obj")
 
 ;; Business options
 (define gnc:*business-label* (N_ "Business"))

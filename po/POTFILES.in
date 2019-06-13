@@ -365,6 +365,7 @@ gnucash/import-export/qif-imp/qif-objects.scm
 gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
+gnucash/import-export/qif-imp/simple-obj.scm
 gnucash/import-export/qif-imp/string.scm
 gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c
@@ -538,7 +539,6 @@ libgnucash/app-utils/options.scm
 libgnucash/app-utils/option-util.c
 libgnucash/app-utils/prefs.scm
 libgnucash/app-utils/QuickFill.c
-libgnucash/app-utils/simple-obj.scm
 libgnucash/backend/dbi/gnc-backend-dbi.cpp
 libgnucash/backend/dbi/gnc-dbisqlconnection.cpp
 libgnucash/backend/dbi/gnc-dbisqlresult.cpp
