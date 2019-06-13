@@ -131,14 +131,17 @@ not found.")))
          (report-name (gnc:report-template-name report-rec)))
     (cond
 
-     (report-guid
-      ;; ideal path: report is defined, and has guid
-      (if (hash-ref *gnc:_report-templates_* report-guid)
-          (gui-error (string-append rpterr-dupe report-guid))
-          (hash-set! *gnc:_report-templates_* report-guid report-rec)))
+     ;; missing report-guid: is an error
+     ((not report-guid)
+      (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
+
+     ;; dupe: report-guid is a duplicate
+     ((hash-ref *gnc:_report-templates_* report-guid)
+      (gui-error (string-append rpterr-dupe report-guid)))
+
+     ;; good: new report definition, store into report-templates hash
      (else
-      ;;reports without guid are no longer supported
-      (gui-error (string-append rpterr-guid1 report-name rpterr-guid2))))))
+      (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
