@@ -27,7 +27,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gnc-plugin-page-report.h>
-#include <window-report.h>
 #include <dialog-custom-report.h>
 %}
 #if defined(SWIGGUILE)
