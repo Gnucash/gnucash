@@ -34,7 +34,6 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report" 0)
-(use-modules (gnucash report reports))
 
 ;; Option names
 (define optname-from-date (N_ "From"))

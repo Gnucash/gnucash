@@ -1165,6 +1165,22 @@ gnc_build_data_path (const gchar *filename)
     return g_strdup(path.c_str());
 }
 
+/** @fn gchar * gnc_build_scm_path (const gchar *filename)
+ *  @brief Make a path to filename in the scm directory.
+ *
+ * @param filename The name of the file
+ *
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
+ */
+
+gchar *
+gnc_build_scm_path (const gchar *filename)
+{
+    gchar *result = g_build_filename(gnc_path_get_scmdir(), filename, (gchar *)NULL);
+    return result;
+}
+
 /** @fn gchar * gnc_build_report_path (const gchar *filename)
  *  @brief Make a path to filename in the report directory.
  *

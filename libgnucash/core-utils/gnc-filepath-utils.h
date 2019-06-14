@@ -110,6 +110,7 @@ gchar *gnc_build_userconfig_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);
 gchar *gnc_build_translog_path (const gchar *filename);
 gchar *gnc_build_data_path (const gchar *filename);
+gchar *gnc_build_scm_path (const gchar *filename);
 gchar *gnc_build_report_path (const gchar *filename);
 gchar *gnc_build_reports_path (const gchar *dirname);
 gchar *gnc_build_stdreports_path (const gchar *filename);
