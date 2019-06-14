@@ -1,6 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; stylesheet-header.scm : stylesheet with nicer layout
-;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
+;; stylesheet-easy.scm: stylesheet with nicer formatting for
+;; printing and easier configurability
+;;
+;; Copyright 2004 James Strandboge <jstrand1@rochester.rr.com>
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -18,10 +20,14 @@
 ;; Free Software Foundation           Voice:  +1-617-542-5942
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;
+;; Based on work from:
+;; stylesheet-header.scm
+;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report stylesheet-fancy))
+(define-module (gnucash report stylesheets easy))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
@@ -30,7 +36,7 @@
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/report" 0)
 
-(define (fancy-options)
+(define (easy-options)
   (let* ((options (gnc:new-options))
          (opt-register
           (lambda (opt)
@@ -172,7 +178,7 @@
 
     options))
 
-(define (fancy-renderer options doc)
+(define (easy-renderer options doc)
   (let* ((ssdoc (gnc:make-html-document))
          (opt-val
           (lambda (section name)
@@ -218,7 +224,6 @@
      'attribute (list "bgcolor" bgcolor)
      'attribute (list "text" textcolor)
      'attribute (list "link" linkcolor))
-
 ;;;;
 ;;;;
 ;;;;
@@ -325,8 +330,6 @@
         (gnc:html-document-set-style!
          ssdoc "a" 'tag ""))
 
-    (add-css-information-to-doc options ssdoc doc)
-
     (let ((t (gnc:make-html-table)))
       ;; we don't want a bevel for this table, but we don't want
       ;; that to propagate
@@ -335,15 +338,17 @@
        'attribute (list "border" 0)
        'inheritable? #f)
 
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
-
                                         ; set the header column to be the 2nd when we have a logo
                                         ; do this so that when logo is not present, the document
                                         ; is perfectly centered
-        (if (and logopixmap (> (string-length logopixmap) 0))
-            (set! headcolumn 1))
+      (if (and logopixmap (> (string-length logopixmap) 0))
+          (set! headcolumn 1))
+
+      (add-css-information-to-doc options ssdoc doc)
+
+      (let* ((title (gnc:html-document-title doc))
+             (doc-headline (gnc:html-document-headline doc))
+             (headline (if (eq? doc-headline #f) title doc-headline)))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -367,23 +372,19 @@
               (gnc:html-markup-h3 headline))))
         )
 
-      (if (and logopixmap
-               (not (string=? logopixmap "")))
-          ;; check for logo image file name non blank
-          (gnc:html-table-set-cell!
-           t 0 0
-           (gnc:make-html-text
-            (gnc:html-markup-img (make-file-url logopixmap)))) )
+                                        ; only setup an image if we specified one
+      (if (and logopixmap (> (string-length logopixmap) 0))
+          (begin
+            (gnc:html-table-set-cell!
+             t 0 0
+             (gnc:make-html-text
+              (gnc:html-markup-img (make-file-url logopixmap))))))
 
-      (if (and headpixmap
-               (not (string=? headpixmap "")))
-          ;; check for header image file name nonblank
+      (if (and headpixmap (> (string-length headpixmap) 0))
           (begin
             (gnc:html-table-set-cell!
              t 0 headcolumn
              (gnc:make-html-text
-              ;; XX: isn't there some way to apply the alignment to
-              ;; (gnc:html-markup-img headpixmap)?
               (string-append
                "<div align=\"" align "\">"
                "<img src=\"" (make-file-url headpixmap) "\">"
@@ -397,16 +398,14 @@
        gnc:html-table-set-cell!
        t 2 headcolumn
        (gnc:html-document-objects doc))
-
       (gnc:html-document-add-object! ssdoc t))
-    (gnc:html-document-add-object! ssdoc
-                                   (gnc:make-html-text "</center>")) ;;TODO: make this a div instead of <center> (deprecated)
+    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "</center>")) ;;TODO: make this a div instead of <center> (deprecated)
     ssdoc))
 
 (gnc:define-html-style-sheet
- 'version 1.01
- 'name (N_ "Fancy")
- 'renderer fancy-renderer
- 'options-generator fancy-options)
+ 'version 1
+ 'name (N_ "Easy")
+ 'renderer easy-renderer
+ 'options-generator easy-options)
 
-(gnc:make-html-style-sheet "Fancy" (N_ "Technicolor"))
+(gnc:make-html-style-sheet "Easy" (N_ "Easy"))

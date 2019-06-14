@@ -91,6 +91,7 @@ gnucash/gnome/gnc-plugin-page-report.c
 gnucash/gnome/gnc-plugin-page-sx-list.c
 gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
+gnucash/gnome/gnc-plugin-stylesheets.c
 gnucash/gnome/gnc-split-reg2.c
 gnucash/gnome/gnc-split-reg.c
 gnucash/gnome/gnucash.appdata.xml.in
@@ -494,14 +495,11 @@ gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
 gnucash/report/report.scm
 gnucash/report/report-utilities.scm
-gnucash/report/stylesheets/gncmod-stylesheets.c
-gnucash/report/stylesheets/gnc-plugin-stylesheets.c
-gnucash/report/stylesheets/stylesheet-easy.scm
-gnucash/report/stylesheets/stylesheet-fancy.scm
-gnucash/report/stylesheets/stylesheet-footer.scm
-gnucash/report/stylesheets/stylesheet-head-or-tail.scm
-gnucash/report/stylesheets/stylesheet-plain.scm
-gnucash/report/stylesheets/stylesheets.scm
+gnucash/report/stylesheets/easy.scm
+gnucash/report/stylesheets/fancy.scm
+gnucash/report/stylesheets/footer.scm
+gnucash/report/stylesheets/head-or-tail.scm
+gnucash/report/stylesheets/plain.scm
 gnucash/report/trep-engine.scm
 libgnucash/app-utils/app-utils.scm
 libgnucash/app-utils/business-helpers.c

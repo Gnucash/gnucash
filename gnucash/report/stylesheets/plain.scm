@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report stylesheet-plain))
+(define-module (gnucash report stylesheets plain))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
