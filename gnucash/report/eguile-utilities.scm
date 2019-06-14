@@ -22,8 +22,6 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
-(define-module (gnucash report eguile-utilities))
-
 ; using all of these seems like overkill -- 
 ; not sure which are really required
 (use-modules (gnucash utilities))

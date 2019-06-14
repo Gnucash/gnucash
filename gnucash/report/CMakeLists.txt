@@ -74,10 +74,13 @@ set (report_SCHEME_2
     trep-engine.scm
 )
 
-set (report_SCHEME_3
-    eguile-gnc.scm
+set (report_eguile_parts_SCHEME
     eguile-utilities.scm
     eguile-html-utilities.scm
+)
+
+set (report_eguile_SCHEME
+    eguile.scm
 )
 
 set(GUILE_DEPENDS
@@ -103,20 +106,27 @@ gnc_add_scheme_targets(scm-report-2
   TRUE
 )
 
-gnc_add_scheme_targets(scm-report-3
-  "${report_SCHEME_3}"
-  "gnucash/report"
+gnc_add_scheme_targets(scm-report-eguile-parts
+  "${report_eguile_parts_SCHEME}"
+  "gnucash/eguile"
   scm-report-1
   FALSE
 )
 
-add_custom_target(scm-report ALL DEPENDS scm-report-3)
+gnc_add_scheme_targets(scm-report-eguile
+  "${report_eguile_SCHEME}"
+  "gnucash"
+  scm-report-1
+  FALSE
+)
+
+add_custom_target(scm-report ALL DEPENDS scm-report-eguile)
 
 set_local_dist(report_DIST_local CMakeLists.txt
   report.i
   ${report_HEADERS} ${report_SOURCES}
-  ${report_SCHEME} ${report_SCHEME_1}
-  ${report_SCHEME_2} ${report_SCHEME_3})
+  ${report_SCHEME} ${report_SCHEME_1} ${report_SCHEME_2}
+  ${report_eguile_parts_SCHEME} ${report_eguile_SCHEME})
 
 set(report_DIST ${report_DIST_local} ${jqplot_DIST}
                 ${reports_DIST} ${stylesheets_DIST} ${test_report_DIST} PARENT_SCOPE)

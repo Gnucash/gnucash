@@ -420,8 +420,8 @@ gnucash/register/register-gnome/pricecell-gnome.c
 gnucash/register/register-gnome/quickfillcell-gnome.c
 gnucash/register/register-gnome/table-gnome.c
 gnucash/report/commodity-utilities.scm
-gnucash/report/eguile-gnc.scm
 gnucash/report/eguile-html-utilities.scm
+gnucash/report/eguile.scm
 gnucash/report/eguile-utilities.scm
 gnucash/report/gncmod-report.c
 gnucash/report/gnc-report.c

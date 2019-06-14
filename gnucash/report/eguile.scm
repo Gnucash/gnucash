@@ -81,7 +81,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
-(define-module (gnucash report eguile-gnc))
+(define-module (gnucash eguile))
 
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
@@ -263,3 +263,5 @@
 
 (export eguile-file-to-string)
 
+(load-from-path "gnucash/eguile/eguile-utilities")
+(load-from-path "gnucash/eguile/eguile-html-utilities")
