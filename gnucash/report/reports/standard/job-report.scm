@@ -32,7 +32,6 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report" 0)
-(use-modules (gnucash report reports))
 
 (define acct-string (N_ "Account"))
 (define owner-string (N_ "Job"))

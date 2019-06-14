@@ -32,8 +32,6 @@
 
 (gnc:module-load "gnucash/report" 0)
 
-(use-modules (gnucash report reports))
-
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))

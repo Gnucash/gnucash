@@ -42,60 +42,11 @@
 ;owner-report-create)
 
 (define report-dirs (list
-    "standard" ; base directory for standard reports included in gnucash
-    "example"  ; base directory for example reports included in gnucash
+    '(gnucash report reports standard) ; base directory for standard reports included in gnucash
+    '(gnucash report reports example)  ; base directory for example reports included in gnucash
 ))
 
-;; Returns a list of files in a directory
-;;
-;; Param:
-;;   dir - directory name
-;;
-;; Return value:
-;;   list of files in the directory
-
-(define (directory-files dir)
-  (cond
-   ((file-exists? dir)
-    (let ((dir-stream (opendir dir)))
-      (let loop ((fname (readdir dir-stream))
-                 (acc '()))
-        (cond
-         ((eof-object? fname)
-          (closedir dir-stream)
-          acc)
-         (else
-          (loop (readdir dir-stream)
-                (if (string-suffix? ".scm" fname)
-                    (cons (string-drop-right fname 4) acc)
-                    acc)))))))
-   (else
-    (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
-    '())))
-
-;; Return a list of symbols representing reports in the standard reports directory
-;;
-;; Return value:
-;;  List of symbols for reports
-(define (get-report-list subdir)
-  (let* ((rpt-dir (gnc-build-reports-path subdir))
-         (rpt-list (directory-files rpt-dir)))
-        (gnc:debug "rpt-subdir=" subdir)
-        (gnc:debug "rpt-dir=" rpt-dir)
-        (gnc:debug "dir-files=" rpt-list)
-        rpt-list))
-
-(for-each
-  (lambda (rpt-dir-str)
-    (for-each
-     (lambda (rpt-file-str)
-       (let ((rpt-file (string->symbol rpt-file-str))
-             (rpt-dir (string->symbol rpt-dir-str)))
-       (module-use!
-        (current-module)
-        (resolve-interface `(gnucash report reports ,rpt-dir ,rpt-file)))))
-     (get-report-list rpt-dir-str)))
-  report-dirs)
+(report-module-loader report-dirs)
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
