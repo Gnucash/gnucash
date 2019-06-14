@@ -427,6 +427,7 @@ gnucash/report/reports/aging.scm
 gnucash/report/reports/example/average-balance.scm
 gnucash/report/reports/example/daily-reports.scm
 gnucash/report/reports/example/hello-world.scm
+gnucash/report/reports/example/sample-graphs.scm
 gnucash/report/reports/example/welcome-to-gnucash.scm
 gnucash/report/reports/reports.scm
 gnucash/report/reports/standard/account-piecharts.scm

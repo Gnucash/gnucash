@@ -23,12 +23,22 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
-(define-module (gnucash report reports example test-graphing))
+(define-module (gnucash report reports example sample-graphs))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 
+;; Add this module to enable translatable strings
+;; Use (N_ string) to mark string for translation (it won't be translated on the spot)
+;; Use (_ string) to use a translation of this string if it exists.
+(use-modules (gnucash gettext))
+
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
+
+;; It's common to define frequently used strings once
+;; This also helps getting more consistent messages which simplifies
+;; the life of translators later on.
+(define reportname (N_ "Sample Graphs"))
 
 (define (simple-pie-chart)
   (let ((chart (gnc:make-html-chart)))
@@ -124,39 +134,27 @@
 
   (let ((document (gnc:make-html-document)))
 
-    (gnc:html-document-set-title! document "Graphs")
+    (gnc:html-document-set-title! document (_ reportname))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text
-      (gnc:html-markup-p
-       (gnc:html-markup/format
-        "Sample graphs:"))))
-
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text (gnc:html-markup-p "Pie:")))
+     (gnc:make-html-text (gnc:html-markup-p (_ "Pie:"))))
     (gnc:html-document-add-object! document (simple-pie-chart))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p "Bar, normal:")))
+     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, normal:"))))
     (gnc:html-document-add-object! document (simple-bar-chart #f))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p "Bar, stacked:")))
+     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, stacked:"))))
     (gnc:html-document-add-object! document (simple-bar-chart #t))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p "Scatter:")))
+     (gnc:make-html-text (gnc:html-markup-p (_ "Scatter:"))))
     (gnc:html-document-add-object! document (simple-scatter-chart))
-
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text
-      (gnc:html-markup-p "Done.")))
 
     document))
 
@@ -169,7 +167,7 @@
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name "Test Graphing"
+ 'name reportname
 
  ;; The GUID for this report. This string should be unique, set once
  ;; and left alone forever after that. In theory, you could use any
@@ -180,11 +178,11 @@
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name "Sample graphs"
+ 'menu-name (_ reportname)
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip "Sample graphs"
+ 'menu-tip (_ reportname)
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.

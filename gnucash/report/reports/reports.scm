@@ -97,8 +97,6 @@
      (get-report-list rpt-dir-str)))
   report-dirs)
 
-;;(use-modules (gnucash report test-graphing))
-
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
