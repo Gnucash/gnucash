@@ -775,13 +775,58 @@ not found.")))
          (overwrite-ok? (and (gnc:report-template-is-custom/template-guid?
                               custom-template-id)
                              overwrite?))
-         ;; Generate a serialized report-template with a random guid
-         (saved-form (gnc:report-template-serialize-from-report report))
-         ;; Immediately evaluate the serialized report template to
-         ;; - check if it's error free and can be deserialized
-         ;; - load it into the runtime for immediate use by the user
-         ;; (Bug #342206)
-         (save-result (eval-string saved-form)))
+         (save-result
+          (let* ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
+                 (thunk (gnc:report-template-options-cleanup-cb template)))
+            (if thunk (thunk report))
+            (let* ((name (gnc:report-template-make-unique-name (gnc:report-name report)))
+                   (type (gnc:report-type report))
+                   (templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+                   (options (gnc:report-options report))
+                   (options-gen
+                    (lambda ()
+                      (let* ((options-new (gnc:report-template-new-options/report-guid type templ-name))
+                             (options-list (gnc:options-scm->list options))
+                             (embedded-reports (gnc:report-embedded-list options)))
+                        (when embedded-reports
+                          (let ((embedded-report-ids
+                                 (map
+                                  (lambda (subreport-id)
+                                    (let* ((subreport (gnc-report-find subreport-id))
+                                           (subreport-type (gnc:report-type subreport))
+                                           (subreport-template (hash-ref *gnc:_report-templates_* subreport-type))
+                                           (subreport-template-name (gnc:report-template-name subreport-template))
+                                           (thunk (gnc:report-template-options-cleanup-cb subreport-template)))
+                                      (if thunk (thunk subreport))
+                                      (let ((embedded-options-new
+                                             (gnc:report-template-new-options/report-guid
+                                              subreport-type subreport-template-name))
+                                            (embedded-options-list
+                                             (gnc:options-scm->list
+                                              (gnc:report-options subreport))))
+                                        (gnc:restore-report-by-guid-with-custom-template
+                                         #f subreport-type
+                                         subreport-template-name
+                                         (gnc:report-custom-template subreport)
+                                         options-new))))
+                                  embedded-reports)))
+                            (option (gnc:lookup-option options-new "__general" "report-list"))
+                            (if option
+                                ((gnc:option-setter option)
+                                 (map
+                                  (lambda (x y)
+                                    (cons x (cdr y)))
+                                  embedded-report-ids
+                                  (gnc:option-value option))))))
+                        options-new))))
+              (gnc:define-report
+               'version 1
+               'name name
+               'report-guid (guid-new-return)
+               'parent-type type
+               'options-generator options-gen
+               'menu-path (list gnc:menuname-custom)
+               'renderer (gnc:report-template-renderer/report-guid type templ-name))))))
 
     (and (record? save-result)
          (begin
