@@ -1205,14 +1205,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
                         -1);
     if (gnc_import_TransInfo_get_action (info) == GNCImport_SKIP)
     {
-        /*Show the best match's confidence pixmap in the info column*/
-        gtk_list_store_set (store, iter,
-                            DOWNLOADED_COL_ACTION_PIXBUF,
-                            gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                    (gnc_import_TransInfo_get_selected_match (info)),
-                                    gui->user_settings,
-                                    GTK_WIDGET(gui->view)),
-                            -1);
+        /*If skipping the row, there is no best match's confidence pixmap*/
+        gtk_list_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
     }
 
     gtk_list_store_set (store, iter,
