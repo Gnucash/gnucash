@@ -65,6 +65,7 @@ struct _main_matcher_info
     gpointer user_data;
     GNCImportPendingMatches *pending_matches;
     GtkTreeViewColumn *account_column;
+    gboolean show_desc_memo_match;
 };
 
 enum downloaded_cols
@@ -764,10 +765,38 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 
 static void
 show_account_column_toggled_cb (GtkToggleButton *togglebutton,
-                                GNCImportMainMatcher *info)
+                                GNCImportMainMatcher *gui)
 {
-    gtk_tree_view_column_set_visible (info->account_column,
+    gtk_tree_view_column_set_visible (gui->account_column,
          gtk_toggle_button_get_active (togglebutton));
+}
+
+static void
+show_desc_memo_match_toggled_cb (GtkToggleButton *togglebutton,
+                                GNCImportMainMatcher *gui)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GNCImportTransInfo *trans_info;
+
+    if (gui == NULL)
+        return;
+
+    gui->show_desc_memo_match = gtk_toggle_button_get_active (togglebutton);
+
+    model = gtk_tree_view_get_model (gui->view);
+    if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+        do
+        {
+            gtk_tree_model_get (model, &iter,
+                                DOWNLOADED_COL_DATA, &trans_info,
+                                -1);
+
+            refresh_model_row (gui, model, &iter, trans_info);
+        }
+        while (gtk_tree_model_iter_next (model, &iter));
+    }
 }
 
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
@@ -815,6 +844,12 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), all_from_same_account);
     g_signal_connect (G_OBJECT(button), "toggled",
                       G_CALLBACK(show_account_column_toggled_cb), info);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_desc_memo_match"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), FALSE);
+    info->show_desc_memo_match = FALSE;
+    g_signal_connect (G_OBJECT(button), "toggled",
+                      G_CALLBACK(show_desc_memo_match_toggled_cb), info);
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
     gnc_gen_trans_init_view (info, all_from_same_account, show_update);
@@ -889,6 +924,12 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     g_signal_connect (G_OBJECT(button), "toggled",
                       G_CALLBACK(show_account_column_toggled_cb), info);
 
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_desc_memo_match"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), FALSE);
+    info->show_desc_memo_match = FALSE;
+    g_signal_connect (G_OBJECT(button), "toggled",
+                      G_CALLBACK(show_desc_memo_match_toggled_cb), info);
+
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
     gnc_gen_trans_init_view (info, all_from_same_account, show_update);
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
@@ -947,6 +988,36 @@ get_required_color (const gchar *class_name)
     gtk_style_context_add_class (context, class_name);
     gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
     return gdk_rgba_to_string (&color);
+}
+
+static const gchar*
+get_info_desc_memo (GNCImportMatchInfo *sel_match, gboolean show, const gchar *remark)
+{
+    if (show)
+    {
+        const gchar* modified_remark;
+        const gchar *desc = xaccTransGetDescription (sel_match->trans);
+        const gchar *memo = xaccSplitGetMemo (sel_match->split);
+        gchar *display_desc = NULL;
+        gchar *display_memo = NULL;
+
+        if (desc && *desc != '\0')
+            display_desc = g_strdup_printf (", '%s'", desc);
+        else
+            display_desc = g_strdup_printf (", '%s'", _("(no description)"));
+
+        if (memo && *memo != '\0')
+            display_memo = g_strdup_printf (" / '%s'", memo);
+
+        modified_remark = g_strconcat (remark, display_desc, display_memo, NULL);
+
+        g_free (display_desc);
+        g_free (display_memo);
+
+        return modified_remark;
+    }
+    else
+        return remark;
 }
 
 static void
@@ -1067,41 +1138,43 @@ refresh_model_row (GNCImportMainMatcher *gui,
         }
         break;
     case GNCImport_CLEAR:
-        if (gnc_import_TransInfo_get_selected_match (info))
         {
-            color = get_required_color (int_not_required_class);
-            if (gnc_import_TransInfo_get_match_selected_manually (info) == TRUE)
+            GNCImportMatchInfo *sel_match = gnc_import_TransInfo_get_selected_match (info);
+
+            if (sel_match)
             {
-                ro_text = _("Reconcile (manual) match");
+                color = get_required_color (int_not_required_class);
+
+                if (gnc_import_TransInfo_get_match_selected_manually (info))
+                    ro_text = get_info_desc_memo (sel_match, gui->show_desc_memo_match, _("Reconcile (manual) match"));
+                else
+                    ro_text = get_info_desc_memo (sel_match, gui->show_desc_memo_match, _("Reconcile (auto) match"));
             }
             else
             {
-                ro_text = _("Reconcile (auto) match");
+                color = get_required_color (int_required_class);
+                ro_text = _("Match missing!");
             }
-        }
-        else
-        {
-            color = get_required_color (int_required_class);
-            ro_text = _("Match missing!");
         }
         break;
     case GNCImport_UPDATE:
-        if (gnc_import_TransInfo_get_selected_match (info))
         {
-            color = get_required_color (int_not_required_class);
-            if (gnc_import_TransInfo_get_match_selected_manually (info) == TRUE)
+            GNCImportMatchInfo *sel_match = gnc_import_TransInfo_get_selected_match (info);
+
+            if (sel_match)
             {
-                ro_text = _("Update and reconcile (manual) match");
+                color = get_required_color (int_not_required_class);
+
+                if (gnc_import_TransInfo_get_match_selected_manually (info))
+                    ro_text = get_info_desc_memo (sel_match, gui->show_desc_memo_match, _("Update and reconcile (manual) match"));
+                else
+                    ro_text = get_info_desc_memo (sel_match, gui->show_desc_memo_match, _("Update and reconcile (auto) match"));
             }
             else
             {
-                ro_text = _("Update and reconcile (auto) match");
+                color = get_required_color (int_required_class);
+                ro_text = _("Match missing!");
             }
-        }
-        else
-        {
-            color = get_required_color (int_required_class);
-            ro_text = _("Match missing!");
         }
         break;
     case GNCImport_SKIP:
