@@ -503,7 +503,6 @@ load_gnucash_modules()
         { "gnucash/import-export/bi-import", 0, TRUE},
         { "gnucash/import-export/customer-import", 0, TRUE},
         { "gnucash/report", 0, FALSE },
-        { "gnucash/report/locale-specific", 0, FALSE },
         { "gnucash/python", 0, TRUE },
     };
 

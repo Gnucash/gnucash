@@ -53,6 +53,7 @@
 (re-export gnc-scm-log-msg)
 (re-export gnc-scm-log-debug)
 (re-export gnc-locale-default-iso-currency-code)
+(re-export gnc-locale-name)
 
 (re-export gnc-prefs-set-bool)
 (re-export gnc-prefs-set-int)

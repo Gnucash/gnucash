@@ -37,16 +37,17 @@
 (export gnc:receivables-report-create)
 (export gnc:owner-report-create)
 
-;(re-export payables-report-create-internal
-;receivables-report-create-internal
-;owner-report-create)
-
 (define report-dirs (list
-    '(gnucash reports standard) ; base directory for standard reports included in gnucash
-    '(gnucash reports example)  ; base directory for example reports included in gnucash
+    '(gnucash reports standard) ; prefix for standard reports included in gnucash
+    '(gnucash reports example)  ; rexample for example reports included in gnucash
 ))
 
-(report-module-loader report-dirs)
+; Determine which locale-specific prefix to add to the list above
+; and then load all reports found in the given prefixes
+(let* ((loc (gnc-locale-name))
+       (loc-spec (if (string-prefix? "de_DE" loc) 'de_DE 'us))
+       (all-dirs (append report-dirs (list (list 'gnucash 'reports 'locale-specific loc-spec)))))
+      (report-module-loader all-dirs))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)

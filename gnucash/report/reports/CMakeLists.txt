@@ -1,5 +1,4 @@
 
-add_subdirectory(locale-specific)
 add_subdirectory(standard/test)
 add_subdirectory(support)
 
@@ -60,6 +59,13 @@ set(reports_example_SCHEME
   example/welcome-to-gnucash.scm
 )
 
+set(reports_us_SCHEME
+  locale-specific/us/taxtxf.scm
+)
+
+set(reports_de_DE_SCHEME
+  locale-specific/de_DE/taxtxf.scm
+)
 
 set(scm_rpts_GUILE_DEPENDS
   gncmod-html
@@ -81,6 +87,18 @@ set(scm_rpt_example_GUILE_DEPENDS
   scm-reports-example-links
   scm-gnome-utils
   scm-report
+  )
+
+set(scm_rpt_locale_specific_GUILE_DEPENDS
+  gncmod-html
+  scm-core-utils
+  scm-gettext
+  scm-gnc-module
+  scm-scm
+  scm-test-core
+  scm-tax-us
+  scm-report
+  scm-gnome-utils
   )
 
 set(scm_rpt_std_GUILE_DEPENDS
@@ -112,11 +130,24 @@ gnc_add_scheme_targets(scm-reports-standard
   TRUE
 )
 
-
 gnc_add_scheme_targets(scm-reports-example
   "${reports_example_SCHEME}"
   "gnucash/reports/example"
   "${scm_rpt_example_GUILE_DEPENDS}"
+  TRUE
+)
+
+gnc_add_scheme_targets(scm-reports-us
+  "${reports_us_SCHEME}"
+  "gnucash/reports/locale-specific/us"
+  "${scm_rpt_locale_specific_GUILE_DEPENDS}"
+  TRUE
+)
+
+gnc_add_scheme_targets(scm-reports-de_DE
+  "${reports_de_DE_SCHEME}"
+  "gnucash/reports/locale-specific/de_DE"
+  "${scm_rpt_locale_specific_GUILE_DEPENDS}"
   TRUE
 )
 
@@ -125,9 +156,11 @@ add_custom_target(scm-reports ALL DEPENDS
     scm-reports-example
     scm-reports-common
     scm-rpt-reports
-    scm-reports-locale-specific)
+    scm-reports-us
+    scm-reports-de_DE)
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME}
-    ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME})
-set(reports_DIST ${reports_DIST_local} ${reports_locale_specific_DIST}
-    ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)
+    ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME}
+    ${reports_us_SCHEME} ${reports_de_DE_SCHEME})
+set(reports_DIST ${reports_DIST_local} ${reports_support_DIST}
+    ${test_reports_standard_DIST} PARENT_SCOPE)
