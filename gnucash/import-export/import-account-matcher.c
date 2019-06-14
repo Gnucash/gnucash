@@ -24,7 +24,7 @@
 /** @addtogroup Import_Export
     @{ */
 /**@internal
-	@file import-account-matcher.c
+    @file import-account-matcher.c
  * \brief A very generic and flexible account matcher/picker
  \author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
@@ -58,7 +58,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 /** Constructor for AccountPickerDialog.
  * @return Pointer to a new AccountPickerDialog
  */
-static AccountPickerDialog* gnc_import_new_account_picker(void)
+static AccountPickerDialog* gnc_import_new_account_picker (void)
 {
     AccountPickerDialog* picker = g_new(AccountPickerDialog, 1);
     picker->dialog = NULL;
@@ -81,12 +81,12 @@ static AccountPickerDialog* gnc_import_new_account_picker(void)
  *
  * test for match of account online_ids.
  **************************************************/
-static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
+static gpointer test_acct_online_id_match (Account *acct, gpointer param_online_id)
 {
-    const gchar * current_online_id = gnc_import_get_acc_online_id(acct);
-    if ( (current_online_id != NULL
-            && param_online_id != NULL )
-            && strcmp( current_online_id, param_online_id ) == 0 )
+    const gchar * current_online_id = gnc_import_get_acc_online_id (acct);
+    if ((current_online_id != NULL
+            && param_online_id != NULL)
+            && strcmp (current_online_id, param_online_id ) == 0)
     {
         return (gpointer *) acct;
     }
@@ -103,36 +103,36 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
  * build the account tree with the custome column, online_id
  ************************************************************/
 static void
-build_acct_tree(AccountPickerDialog *picker)
+build_acct_tree (AccountPickerDialog *picker)
 {
     GtkTreeView *account_tree;
     GtkTreeViewColumn *col;
 
     /* Build a new account tree */
     DEBUG("Begin");
-    account_tree = gnc_tree_view_account_new(FALSE);
+    account_tree = gnc_tree_view_account_new (FALSE);
     picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
     gtk_tree_view_set_headers_visible (account_tree, TRUE);
-    col = gnc_tree_view_find_column_by_name(GNC_TREE_VIEW(account_tree), "type");
-    g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+    col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(account_tree), "type");
+    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     /* Add our custom column. */
     col = gnc_tree_view_account_add_property_column (picker->account_tree,
             _("Account ID"), "online-id");
-    g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+    g_object_set_data (G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     // the color background data function is part of the add_property_column
     // function which will color the background based on preference setting
 
-    gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
-                      GTK_WIDGET(picker->account_tree));
+    gtk_container_add (GTK_CONTAINER(picker->account_tree_sw),
+                       GTK_WIDGET(picker->account_tree));
 
     /* Configure the columns */
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
-    g_object_set(account_tree,
-                 "state-section", STATE_SECTION,
-                 "show-column-menu", TRUE,
-                 (gchar*) NULL);
+    g_object_set (account_tree,
+                  "state-section", STATE_SECTION,
+                  "show-column-menu", TRUE,
+                  (gchar*) NULL);
 }
 
 
@@ -142,7 +142,7 @@ build_acct_tree(AccountPickerDialog *picker)
  * Callback for when user clicks to create a new account
  *******************************************************/
 static void
-gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
+gnc_import_add_account (GtkWidget *button, AccountPickerDialog *picker)
 {
     Account *selected_account, *new_account;
     GList * valid_types = NULL;
@@ -155,16 +155,16 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
     if (picker->new_account_default_type != ACCT_TYPE_NONE)
     {
         /*Yes, this is weird, but we really DO want to pass the value instead of the pointer...*/
-        valid_types = g_list_prepend(valid_types, GINT_TO_POINTER(picker->new_account_default_type));
+        valid_types = g_list_prepend (valid_types, GINT_TO_POINTER(picker->new_account_default_type));
     }
-    selected_account = gnc_tree_view_account_get_selected_account(picker->account_tree);
+    selected_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
     new_account = gnc_ui_new_accounts_from_name_with_defaults (parent,
                                           picker->account_human_description,
                                           valid_types,
                                           picker->new_account_default_commodity,
                                           selected_account);
-    g_list_free(valid_types);
-    gnc_tree_view_account_set_selected_account(picker->account_tree, new_account);
+    g_list_free (valid_types);
+    gnc_tree_view_account_set_selected_account (picker->account_tree, new_account);
 }
 
 
@@ -260,11 +260,11 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
  * Callback for when user double clicks on an account
  *******************************************************/
 static void
-account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
-                              GtkTreeViewColumn *column,
-                              AccountPickerDialog *picker)
+account_tree_row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                               GtkTreeViewColumn *column,
+                               AccountPickerDialog *picker)
 {
-    gtk_dialog_response(GTK_DIALOG(picker->dialog), GTK_RESPONSE_OK);
+    gtk_dialog_response (GTK_DIALOG(picker->dialog), GTK_RESPONSE_OK);
 }
 
 
@@ -273,14 +273,14 @@ account_tree_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  *
  * Main call for use with a dialog
  *******************************************************/
-Account * gnc_import_select_account(GtkWidget *parent,
-                                    const gchar * account_online_id_value,
-                                    gboolean auto_create,
-                                    const gchar * account_human_description,
-                                    const gnc_commodity * new_account_default_commodity,
-                                    GNCAccountType new_account_default_type,
-                                    Account * default_selection,
-                                    gboolean * ok_pressed)
+Account * gnc_import_select_account (GtkWidget *parent,
+                                     const gchar * account_online_id_value,
+                                     gboolean auto_create,
+                                     const gchar * account_human_description,
+                                     const gnc_commodity * new_account_default_commodity,
+                                     GNCAccountType new_account_default_type,
+                                     Account * default_selection,
+                                     gboolean * ok_pressed)
 {
 #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
     AccountPickerDialog * picker;
@@ -290,11 +290,11 @@ Account * gnc_import_select_account(GtkWidget *parent,
     GtkBuilder *builder;
     GtkTreeSelection *selection;
     GtkWidget * online_id_label;
-    gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE + 1] = "";
+    gchar account_description_text [ACCOUNT_DESCRIPTION_MAX_SIZE + 1] = "";
     gboolean ok_pressed_retval = FALSE;
 
-    ENTER("Default commodity received: %s", gnc_commodity_get_fullname( new_account_default_commodity));
-    DEBUG("Default account type received: %s", xaccAccountGetTypeStr( new_account_default_type));
+    ENTER("Default commodity received: %s", gnc_commodity_get_fullname (new_account_default_commodity));
+    DEBUG("Default account type received: %s", xaccAccountGetTypeStr (new_account_default_type));
     picker = g_new0(AccountPickerDialog, 1);
 
     picker->account_online_id_value = account_online_id_value;
@@ -306,7 +306,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     if (account_online_id_value != NULL)
     {
         retval =
-            gnc_account_foreach_descendant_until(gnc_get_current_root_account (),
+            gnc_account_foreach_descendant_until (gnc_get_current_root_account (),
                     test_acct_online_id_match,
                     /* This argument will only be used as a "const char*" */
                     (void*)account_online_id_value);
@@ -325,17 +325,17 @@ Account * gnc_import_select_account(GtkWidget *parent,
          *
          * This is a hack to overcome that problem.
          */
-        if ((retval == NULL) && g_str_has_suffix(account_online_id_value, " "))
+        if ((retval == NULL) && g_str_has_suffix (account_online_id_value, " "))
         {
-            gchar *trimmed = g_strndup(account_online_id_value, strlen(account_online_id_value) - 1);
+            gchar *trimmed = g_strndup(account_online_id_value, strlen (account_online_id_value) - 1);
             if (trimmed)
             {
-                retval = gnc_account_foreach_descendant_until(
+                retval = gnc_account_foreach_descendant_until (
                              gnc_get_current_root_account (),
                              test_acct_online_id_match,
                              (void *)trimmed);
             }
-            g_free(trimmed);
+            g_free (trimmed);
         }
         /* END: try again without extra space at the end */
     }
@@ -369,52 +369,52 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         if (account_human_description != NULL)
         {
-            strncat(account_description_text, account_human_description,
-                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen(account_description_text));
-            strncat(account_description_text, "\n",
-                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen(account_description_text));
+            strncat (account_description_text, account_human_description,
+                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen (account_description_text));
+            strncat (account_description_text, "\n",
+                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen (account_description_text));
         }
         if (account_online_id_value != NULL)
         {
-            strncat(account_description_text, _("(Full account ID: "),
-                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen(account_description_text));
-            strncat(account_description_text, account_online_id_value,
-                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen(account_description_text));
-            strncat(account_description_text, ")",
-                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen(account_description_text));
+            strncat (account_description_text, _("(Full account ID: "),
+                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen (account_description_text));
+            strncat (account_description_text, account_online_id_value,
+                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen (account_description_text));
+            strncat (account_description_text, ")",
+                    ACCOUNT_DESCRIPTION_MAX_SIZE - strlen (account_description_text));
         }
-        gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
-        build_acct_tree(picker);
+        gtk_label_set_text ((GtkLabel*)online_id_label, account_description_text);
+        build_acct_tree (picker);
 
-        gtk_window_set_modal(GTK_WINDOW(picker->dialog), TRUE);
-        g_signal_connect(picker->account_tree, "row-activated",
-                         G_CALLBACK(account_tree_row_activated_cb), picker);
+        gtk_window_set_modal (GTK_WINDOW(picker->dialog), TRUE);
+        g_signal_connect (picker->account_tree, "row-activated",
+                          G_CALLBACK(account_tree_row_activated_cb), picker);
 
-        selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(picker->account_tree));
-        g_signal_connect(selection, "changed",
-                         G_CALLBACK(account_tree_row_changed_cb), picker);
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(picker->account_tree));
+        g_signal_connect (selection, "changed",
+                          G_CALLBACK(account_tree_row_changed_cb), picker);
 
-        gnc_tree_view_account_set_selected_account(picker->account_tree, default_selection);
+        gnc_tree_view_account_set_selected_account (picker->account_tree, default_selection);
 
         do
         {
-            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
+            response = gtk_dialog_run (GTK_DIALOG(picker->dialog));
             switch (response)
             {
             case GNC_RESPONSE_NEW:
-                gnc_import_add_account(NULL, picker);
+                gnc_import_add_account (NULL, picker);
                 response = GTK_RESPONSE_OK;
                 /* no break */
 
             case GTK_RESPONSE_OK:
-                retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
+                retval = gnc_tree_view_account_get_selected_account (picker->account_tree);
                 if (retval == NULL)
                 {
                     response = GNC_RESPONSE_NEW;
                     break;
                 }
                 if (retval)
-                    retval_name = xaccAccountGetName(retval);
+                    retval_name = xaccAccountGetName (retval);
                 if (!retval_name)
                     retval_name = "(null)";
                 DEBUG("Selected account %p, %s", retval, retval_name);
@@ -435,9 +435,9 @@ Account * gnc_import_select_account(GtkWidget *parent,
                     break;
                 }
 
-                if ( account_online_id_value != NULL)
+                if (account_online_id_value != NULL)
                 {
-                    gnc_import_set_acc_online_id(retval, account_online_id_value);
+                    gnc_import_set_acc_online_id (retval, account_online_id_value);
                 }
                 ok_pressed_retval = TRUE;
                 break;
@@ -449,13 +449,13 @@ Account * gnc_import_select_account(GtkWidget *parent,
         }
         while (response == GNC_RESPONSE_NEW);
 
-        g_object_unref(G_OBJECT(builder));
+        g_object_unref (G_OBJECT(builder));
         gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(picker->dialog));
-        gtk_widget_destroy(picker->dialog);
+        gtk_widget_destroy (picker->dialog);
     }
     else
     {
-        retval_name = retval ? xaccAccountGetName(retval) : NULL;
+        retval_name = retval ? xaccAccountGetName (retval) : NULL;
         ok_pressed_retval = TRUE; /* There was no dialog involved, so the computer "pressed" ok */
     }
     /*FIXME: DEBUG("WRITEME: gnc_import_select_account() Here we should check if account type is compatible, currency matches, etc.\n"); */

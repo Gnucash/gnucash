@@ -77,20 +77,20 @@ typedef struct
     auto_create must NOT be set to 0.
 
     @param account_human_description
-	 A human-readable description of
+     A human-readable description of
     the account.  Can be NULL. If it is not NULL, it will be shown before
     the id in the account matching dialog.  It will also be used as
     the default account name if a new account is created.
 
     @param new_account_default_commodity
-	 Default commodity of
+     Default commodity of
     the new account. Can be NULL. If not NULL, it will be the
     account's commodity if a new account is created.  Also, if not
     NULL, the function will also warn the user if the found or created
     account's commodity doesn't match.
 
     @param new_account_default_type
-	 Default account type of a
+     Default account type of a
     new account. Can be NULL.  If not ACCT_TYPE_NONE, it will be the
     account's type if a new account is created.  If not
     ACCT_TYPE_NONE, the function will also warn the user if the found
@@ -115,15 +115,14 @@ typedef struct
   @return A pointer to the found or created Account, or NULL if no
   account was found or created.
 */
-Account * gnc_import_select_account(GtkWidget *parent,
-                                    const gchar * account_online_id_value,
-                                    gboolean auto_create,
-                                    const gchar * account_human_description,
-                                    const gnc_commodity * new_account_default_commodity,
-                                    GNCAccountType new_account_default_type,
-                                    Account * default_selection,
-                                    gboolean * ok_pressed
-                                   );
+Account * gnc_import_select_account (GtkWidget *parent,
+                                     const gchar * account_online_id_value,
+                                     gboolean auto_create,
+                                     const gchar * account_human_description,
+                                     const gnc_commodity * new_account_default_commodity,
+                                     GNCAccountType new_account_default_type,
+                                     Account * default_selection,
+                                     gboolean * ok_pressed);
 
 #endif
 /**@}*/
