@@ -386,9 +386,9 @@
          (opt-columns          (get-option display-page     optname-columns))
          (opt-font-family      (get-option display-page     optname-font-family))
          (opt-font-size        (get-option display-page     optname-font-size))
-         (opt-template-file    (find-file
+         (opt-template-file    (find-template
                                  (get-option display-page   optname-template-file)))
-         (opt-css-file         (find-file
+         (opt-css-file         (find-stylesheet
                                  (get-option display-page   optname-css-file)))
          (opt-flatten-depth    999); may get adjusted below
          (opt-neg-format       (get-option display-page     optname-neg-format))
