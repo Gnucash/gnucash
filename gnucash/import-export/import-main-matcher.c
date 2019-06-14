@@ -627,7 +627,7 @@ gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
 
 
 static GtkTreeViewColumn *
-add_text_column(GtkTreeView *view, const gchar *title, int col_num)
+add_text_column(GtkTreeView *view, const gchar *title, int col_num, gboolean ellipsize)
 {
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
@@ -638,6 +638,9 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
               "text", col_num,
               "background", DOWNLOADED_COL_COLOR,
               NULL);
+
+    if (ellipsize)
+        g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
     // If date column, use the time64 value for the sorting.
     if (col_num == DOWNLOADED_COL_DATE_TXT)
@@ -706,12 +709,14 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
 
     /* Add the columns *
      * (keep the line break below to avoid a translator comment) */
-    add_text_column (view, _("Date"), DOWNLOADED_COL_DATE_TXT);
-    info->account_column = add_text_column (view, _("Account"), DOWNLOADED_COL_ACCOUNT);
+    add_text_column (view, _("Date"), DOWNLOADED_COL_DATE_TXT, FALSE);
+    info->account_column = add_text_column (view, _("Account"), DOWNLOADED_COL_ACCOUNT, FALSE);
     gtk_tree_view_column_set_visible (info->account_column, show_account);
-    add_text_column (view, _("Amount"), DOWNLOADED_COL_AMOUNT);
-    add_text_column (view, _("Description"), DOWNLOADED_COL_DESCRIPTION);
-    add_text_column (view, _("Memo"), DOWNLOADED_COL_MEMO);
+    add_text_column (view, _("Amount"), DOWNLOADED_COL_AMOUNT, FALSE);
+    add_text_column (view, _("Description"), DOWNLOADED_COL_DESCRIPTION, FALSE);
+    column = add_text_column (view, _("Memo"), DOWNLOADED_COL_MEMO, TRUE);
+    gtk_tree_view_column_set_expand (column, TRUE);
+
     add_toggle_column (view,
                        /* toggle column: add new transaction */
                        _("A"), DOWNLOADED_COL_ACTION_ADD,
@@ -735,7 +740,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
              NULL);
     gtk_tree_view_append_column (info->view, column);
 
-    add_text_column (view, _("Additional Comments"), DOWNLOADED_COL_ACTION_INFO);
+    column = add_text_column (view, _("Additional Comments"), DOWNLOADED_COL_ACTION_INFO, FALSE);
+    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
