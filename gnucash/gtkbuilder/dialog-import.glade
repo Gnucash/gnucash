@@ -109,6 +109,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkScrolledWindow" id="account_tree_sw">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="placeholder_warning_hbox">
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
@@ -143,22 +157,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="account_tree_sw">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
@@ -1282,9 +1281,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">matcher__help</action-widget>
       <action-widget response="-6">matcher_cancel</action-widget>
       <action-widget response="-5">matcher_ok</action-widget>
+      <action-widget response="-11">matcher__help</action-widget>
     </action-widgets>
   </object>
 </interface>
