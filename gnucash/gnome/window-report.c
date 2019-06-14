@@ -35,18 +35,14 @@
 #include "swig-runtime.h"
 #include "dialog-options.h"
 #include "dialog-report-column-view.h"
-#include "file-utils.h"
-#include "gnc-gkeyfile-utils.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
-#include "gnc-html.h"
 #include "window-report.h"
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-report.h"
-#include "gnc-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 #define MDI_CHILD_CONFIG "mdi_child_config"
@@ -256,138 +252,4 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     scm_call_2 (set_editor, report, ptr);
 
     return TRUE;
-}
-
-static gboolean
-gnc_html_file_stream_cb (const char *location, char ** data, int *len)
-{
-    *len = gncReadFile (location, data);
-    return (*len > 0);
-}
-
-static gboolean
-gnc_html_report_stream_cb (const char *location, char ** data, int *len)
-{
-    gboolean ok;
-
-    ok = gnc_run_report_id_string (location, data);
-
-    if (!ok)
-    {
-        *data = g_strdup_printf ("<html><body><h3>%s</h3>"
-                                 "<p>%s</p></body></html>",
-                                 _("Report error"),
-                                 _("An error occurred while running the report."));
-
-        /* Make sure the progress bar is finished, which will also
-           make the GUI sensitive again. Easier to do this via guile
-           because otherwise we would need to link against gnome-utils
-           and a lot more. */
-        scm_c_eval_string("(gnc:report-finished)");
-    }
-
-    *len = strlen(*data);
-    return ok;
-}
-
-/* TODO: unroll start_editor */
-static gboolean
-gnc_html_options_url_cb (const char *location, const char *label,
-                         gboolean new_window, GNCURLResult *result)
-{
-    SCM report;
-    int report_id;
-
-    g_return_val_if_fail (location != NULL, FALSE);
-    g_return_val_if_fail (result != NULL, FALSE);
-
-    result->load_to_stream = FALSE;
-
-    /* href="gnc-options:report-id=2676" */
-    if (strncmp ("report-id=", location, 10) == 0)
-    {
-        if (sscanf (location + 10, "%d", &report_id) != 1)
-        {
-            result->error_message =
-                g_strdup_printf (_("Badly formed options URL: %s"), location);
-
-            return FALSE;
-        }
-
-        report = gnc_report_find(report_id);
-        if (report == SCM_UNDEFINED ||
-                report == SCM_BOOL_F)
-        {
-            result->error_message =
-                g_strdup_printf (_("Badly-formed report id: %s"), location);
-
-            return FALSE;
-        }
-
-        gnc_report_edit_options (report, GTK_WINDOW(result->parent));
-
-        return TRUE;
-    }
-    else
-    {
-        result->error_message =
-            g_strdup_printf (_("Badly formed options URL: %s"), location);
-
-        return FALSE;
-    }
-}
-
-static gboolean
-gnc_html_report_url_cb (const char *location, const char *label,
-                        gboolean new_window, GNCURLResult *result)
-{
-    g_return_val_if_fail (location != NULL, FALSE);
-    g_return_val_if_fail (result != NULL, FALSE);
-
-    /* make a new window if necessary */
-    if (new_window)
-    {
-        char *url;
-
-        url = gnc_build_url (URL_TYPE_REPORT, location, label);
-        gnc_main_window_open_report_url (url, GNC_MAIN_WINDOW(result->parent));
-        g_free (url);
-
-        result->load_to_stream = FALSE;
-    }
-    else
-    {
-        result->load_to_stream = TRUE;
-    }
-
-    return TRUE;
-}
-
-static gboolean
-gnc_html_help_url_cb (const char *location, const char *label,
-                      gboolean new_window, GNCURLResult *result)
-{
-    g_return_val_if_fail (location != NULL, FALSE);
-
-    if (label && (*label != '\0'))
-        gnc_gnome_help (location, label);
-    else
-        gnc_gnome_help (location, NULL);
-    return TRUE;
-}
-
-void
-gnc_report_init (void)
-{
-    /* Reference the report page plugin to ensure it exists in the gtk
-     * type system. */
-    GNC_TYPE_PLUGIN_PAGE_REPORT;
-
-    gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_REPORT, gnc_html_report_stream_cb);
-
-    gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
 }

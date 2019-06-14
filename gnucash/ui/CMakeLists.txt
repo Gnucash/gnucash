@@ -25,7 +25,7 @@ set (ui_SOURCES
       gnc-plugin-register22-ui.xml
       gnc-plugin-register2-ui.xml
       gnc-plugin-register-ui.xml
-      gnc-plugin-stylesheets-ui.xml
+      gnc-plugin-report-system-ui.xml
       gnc-reconcile-window-ui.xml
       gnc-sxed-to-create-window-ui.xml
       gnc-sxed-window-ui-full.xml
