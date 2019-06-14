@@ -51,6 +51,8 @@
   (record-constructor <html-piechart>))
 
 (define (gnc:make-html-piechart)
+  (issue-deprecation-warning
+   "(gnc:make-html-piechart) is deprecated. use gnc:make-html-chart instead.")
   (gnc:make-html-piechart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f #f #f #f #f #f #f #f))
 
 (define gnc:html-piechart-data
@@ -140,153 +142,22 @@
   (record-modifier <html-piechart> 'button-3-legend-urls))
 
 (define (gnc:html-piechart-render piechart doc)
-  (define (ensure-positive-numbers nlist)
-    (map
-     (lambda (elt)
-       (cond ((number? elt)
-              (exact->inexact (abs elt)))
-             ((string? elt)
-              (with-input-from-string elt
-                (lambda ()
-                  (let ((n (read)))
-                    (if (number? n) (abs n) 0.0)))))
-             (#t
-              0.0)))
-     nlist))
-  
-  (define (catenate-escaped-strings nlist)
-    (if (not (list? nlist))
-        ""
-        (with-output-to-string
-          (lambda ()
-            (for-each 
-             (lambda (s)
-               (let ((escaped 
-                      (regexp-substitute/global 
-                       #f " " 
-                       (regexp-substitute/global 
-                        #f "\\\\" s
-                        'pre "\\\\" 'post)
-                       'pre "\\ " 'post)))
-                 (display escaped)
-                 (display " ")))
-             nlist)))))
-  
-  (let* ((retval '())
-         (push (lambda (l) (set! retval (cons l retval))))
+  (let* ((chart (gnc:make-html-chart))
          (title (gnc:html-piechart-title piechart))
          (subtitle (gnc:html-piechart-subtitle piechart))
-         (url-1
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-1-slice-urls piechart)))
-         (url-2 
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-2-slice-urls piechart)))
-         (url-3
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-3-slice-urls piechart)))
-         (legend-1
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-1-legend-urls piechart)))
-         (legend-2 
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-2-legend-urls piechart)))
-         (legend-3
-          (catenate-escaped-strings 
-           (gnc:html-piechart-button-3-legend-urls piechart)))
-         (data 
-          (ensure-positive-numbers (gnc:html-piechart-data piechart)))
-         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
-         (colors-str (string-join (map (lambda (color)
-                                         (string-append "\"" color "\""))
-                                       (gnc:html-piechart-colors piechart)) ", "))
-         ; Use a unique chart-id for each chart. This prevents chart
-         ; clashed on multi-column reports
-         (chart-id (string-append "chart-" (number->string (random 999999)))))
-    (if (and (list? data) 
-             (not (null? data)))
-        (begin 
-            (push (gnc:html-js-include "jqplot/jquery.min.js"))
-            (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.pieRenderer.js"))
-            (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
+         (data  (gnc:html-piechart-data piechart))
+         (colors (gnc:html-piechart-colors piechart)))
+    (cond
+     ((and (pair? data) (gnc:not-all-zeros data))
+      (gnc:html-chart-set-type! chart 'pie)
+      (gnc:html-chart-set-axes-display! chart #f)
+      (gnc:html-chart-set-width! chart (gnc:html-piechart-width piechart))
+      (gnc:html-chart-set-height! chart (gnc:html-piechart-height piechart))
+      (gnc:html-chart-set-data-labels! chart (gnc:html-piechart-labels piechart))
+      (gnc:html-chart-add-data-series! chart "" data colors)
+      (gnc:html-chart-set-title! chart (list title subtitle))
+      (gnc:html-chart-render chart doc))
 
-            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (cdr (gnc:html-piechart-width piechart)))
-            (if (eq? 'pixels (car (gnc:html-piechart-width piechart)))
-                 (push "px;height:")
-                 (push "%;height:"))
-
-            (push (cdr (gnc:html-piechart-height piechart)))
-            (if (eq? 'pixels (car (gnc:html-piechart-height piechart)))
-                 (push "px;\"></div>\n")
-                 (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
-
-            (push "var data = [];\n")
-
-            (if (and data (list? data))
-              (begin 
-                (for-each 
-                 (lambda (datum label)
-                   (push (format #f "  data.push([~s,~a]);\n"
-                                 (gnc:html-string-sanitize label)
-                                 datum)))
-                 data (gnc:html-piechart-labels piechart))))
-
-            (push "var options = {
-                    seriesDefaults: {
-                        renderer: $.jqplot.PieRenderer,
-                    },
-                    legend: {
-                         show: true,
-                         placement: \"outsideGrid\", },
-                    highlighter: {
-                         show: false },
-                    cursor: {
-                         showTooltip: false },
-                    seriesColors: false,
-                   };\n")
-
-            (if title
-                (push (format #f "  options.title = ~s;\n"
-                              (gnc:html-string-sanitize title))))
-            (if subtitle
-                (push (format #f "  options.title += ' (' + ~s + ')';\n"
-                              (gnc:html-string-sanitize subtitle))))
-
-            (if (not (equal? colors-str ""))
-                (begin            ; example: options.seriesColors= ["blue", "red"];
-                  (push "options.seriesColors = [")
-                  (push colors-str)
-                  (push "];\n")
-                  )
-                )
-
-            (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "$(document).ready(function() {
-var plot = $.jqplot('")(push chart-id)(push "', [data], options);
-plot.replot();
-var timer;
-
-// var win_width = $(window).width();
-// var win_height = $(window).height();
-// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
-
-// var doc_width = document.body.clientWidth;
-// var doc_height = document.body.clientHeight;
-// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
-
-$(window).resize(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-//        console.log( 'Resize Timer!' );
-        plot.replot();
-    }, 100);
-    });
-});\n")
-
-            (push "});\n</script>"))
-        (begin (gnc:warn "null-data, not rendering piechart")
-               " "))
-    retval))
+     (else
+      (gnc:warn "null-data, not rendering piechart")
+      ""))))
