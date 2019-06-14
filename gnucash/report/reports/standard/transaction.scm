@@ -22,7 +22,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard transaction))
+(define-module (gnucash reports standard transaction))
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

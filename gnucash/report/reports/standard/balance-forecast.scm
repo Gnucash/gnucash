@@ -23,7 +23,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard balance-forecast))
+(define-module (gnucash reports standard balance-forecast))
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

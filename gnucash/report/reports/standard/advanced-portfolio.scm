@@ -25,7 +25,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard advanced-portfolio))
+(define-module (gnucash reports standard advanced-portfolio))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))

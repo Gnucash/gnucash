@@ -27,7 +27,7 @@
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
 (use-modules (tests test-report-extras))
-(use-modules (gnucash report reports standard net-charts))
+(use-modules (gnucash reports standard net-charts))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")

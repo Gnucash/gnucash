@@ -266,7 +266,7 @@ gnc_plugin_report_system_new (void)
     gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_report_system_report_url_cb);
     gnc_html_register_url_handler (URL_TYPE_HELP, gnc_report_system_help_url_cb);
 
-    scm_c_use_module("gnucash report reports");
+    scm_c_use_module("gnucash reports");
     scm_c_use_module("gnucash report-menus");
     scm_c_eval_string("(gnc:report-menu-setup)");
 

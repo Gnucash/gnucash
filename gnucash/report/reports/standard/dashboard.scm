@@ -22,7 +22,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard dashboard))
+(define-module (gnucash reports standard dashboard))
 (export gnc:make-dashboard)
 
 (use-modules (gnucash utilities))

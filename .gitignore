@@ -175,7 +175,7 @@ gnucash/report/locale-specific/gnucash
 gnucash/report/locale-specific/test/test-link-module
 gnucash/report/gnucash
 gnucash/report/test/test-link-module
-gnucash/report/reports/gnucash
+gnucash/reports/gnucash
 gnucash/report/stylesheets/gnucash
 gnucash/report/utility-reports/gnucash
 swig-*.c

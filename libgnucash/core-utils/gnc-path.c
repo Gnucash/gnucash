@@ -171,7 +171,7 @@ gchar *gnc_path_get_accountsdir()
 }
 
 /** Returns the file path to the directory containing all guile scripts, usually
- * "$prefix/guile/site/2.2".
+ * "$prefix/guile/site/x.y".
  * This path is determined by querying guile for its sitedir and then
  * rebasing this to be relative to our own installation prefix.
  *
@@ -186,7 +186,7 @@ gchar *gnc_path_get_scmdir()
 }
 
 /** Returns the file path to the report directory, usually
- * "$prefix/share/gnucash/scm/gnucash/report".
+ * "$prefix/share/guile/site/x.y/gnucash/report".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir()
@@ -199,21 +199,21 @@ gchar *gnc_path_get_reportdir()
 }
 
 /** Returns the file path to the reports directory, usually
- * "$prefix/share/gnucash/scm/gnucash/report/reports".
+ * "$prefix/share/guile/site/x.y/gnucash/reports".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportsdir()
 {
-    gchar *reportdir = gnc_path_get_reportdir ();
-    gchar *result = g_build_filename (reportdir, "reports", NULL);
-    g_free (reportdir);
+    gchar *scmdir = gnc_path_get_scmdir ();
+    gchar *result = g_build_filename (scmdir, "gnucash", "reports", NULL);
+    g_free (scmdir);
     //printf("Returning reportsdir %s\n", result);
     return result;
 }
 
 /** Returns the file path to the standard
  * reports, usually
- * "$prefix/share/gnucash/scm/gnucash/report/reports/standard".
+ * "$prefix/share/guile/site/x.y/gnucash/reports/standard".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()

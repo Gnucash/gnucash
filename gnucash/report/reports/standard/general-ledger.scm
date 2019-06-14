@@ -29,7 +29,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard general-ledger))
+(define-module (gnucash reports standard general-ledger))
 (export gnc:make-general-ledger-report)
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))

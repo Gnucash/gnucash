@@ -24,7 +24,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard budget-barchart))
+(define-module (gnucash reports standard budget-barchart))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities)) 

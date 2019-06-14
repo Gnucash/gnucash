@@ -66,7 +66,7 @@
 
 ;; depends must be outside module scope -- and should eventually go away.
 
-(define-module (gnucash report reports locale-specific taxtxf-de_DE))
+(define-module (gnucash reports locale-specific taxtxf-de_DE))
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash core-utils)) ; for gnc:version

@@ -80,12 +80,12 @@ libgncmod_locale_specific_gnc_module_init(int refcount)
     if (is_de_DE)
     {
         tax_module = "gnucash/tax/de_DE";
-        report_taxtxf = "(use-modules (gnucash report reports locale-specific taxtxf-de_DE))";
+        report_taxtxf = "(use-modules (gnucash reports locale-specific taxtxf-de_DE))";
     }
     else
     {
         tax_module = "gnucash/tax/us";
-        report_taxtxf = "(use-modules (gnucash report reports locale-specific taxtxf))";
+        report_taxtxf = "(use-modules (gnucash reports locale-specific taxtxf))";
     }
 
     /* The gchar* cast is only because the function declaration expects

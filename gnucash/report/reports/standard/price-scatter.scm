@@ -22,7 +22,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard price-scatter))
+(define-module (gnucash reports standard price-scatter))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))

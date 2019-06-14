@@ -24,7 +24,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard reconcile-report))
+(define-module (gnucash reports standard reconcile-report))
 
 (use-modules (gnucash gettext))
 (use-modules (gnucash gnc-module))

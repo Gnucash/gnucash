@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports example welcome-to-gnucash))
+(define-module (gnucash reports example welcome-to-gnucash))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils)) ; for gnc:version

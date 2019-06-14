@@ -48,7 +48,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard account-summary))
+(define-module (gnucash reports standard account-summary))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities)) 

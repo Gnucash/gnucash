@@ -26,7 +26,7 @@
 ;; edited in a special window.  Every view gets a stylesheet so we
 ;; don't have to worry about that here.
 
-(define-module (gnucash report reports standard view-column))
+(define-module (gnucash reports standard view-column))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gnc-module))
