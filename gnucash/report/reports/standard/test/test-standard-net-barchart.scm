@@ -23,7 +23,7 @@
 (use-modules (sw_engine))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-64))
-(use-modules (gnucash report stylesheets))
+(use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
 (use-modules (tests test-report-extras))

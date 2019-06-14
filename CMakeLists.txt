@@ -905,7 +905,7 @@ set_target_properties(${_MODULES} PROPERTIES
 )
 
 if (WIN32)
-  set_target_properties(gncmod-backend-xml gncmod-stylesheets PROPERTIES
+  set_target_properties(gncmod-backend-xml PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
   )
 endif()

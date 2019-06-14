@@ -51,6 +51,7 @@
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-file-history.h"
+#include "gnc-plugin-stylesheets.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
 #include "engine-helpers-guile.h"
@@ -502,7 +503,6 @@ load_gnucash_modules()
         { "gnucash/import-export/bi-import", 0, TRUE},
         { "gnucash/import-export/customer-import", 0, TRUE},
         { "gnucash/report", 0, FALSE },
-        { "gnucash/report/stylesheets", 0, FALSE },
         { "gnucash/report/locale-specific", 0, FALSE },
         { "gnucash/python", 0, TRUE },
     };
@@ -635,6 +635,7 @@ inner_main (void *closure, int argc, char **argv)
     scm_c_use_module("gnucash report reports");
     scm_c_use_module("gnucash report-menus");
     scm_c_eval_string("(gnc:report-menu-setup)");
+    gnc_plugin_stylesheets_create_plugin();
 
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */

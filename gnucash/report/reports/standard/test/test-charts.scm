@@ -7,7 +7,7 @@
 (use-modules (gnucash report reports standard cashflow-barchart))
 (use-modules (gnucash report reports standard price-scatter))
 (use-modules (gnucash report reports example daily-reports))
-(use-modules (gnucash report stylesheets))
+(use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (gnucash report))
 (use-modules (tests test-report-extras))
 (use-modules (srfi srfi-64))

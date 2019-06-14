@@ -127,5 +127,7 @@ add_custom_target(scm-reports ALL DEPENDS
     scm-rpt-reports
     scm-reports-locale-specific)
 
-set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME})
-set(reports_DIST ${reports_DIST_local} ${reports_locale_specific_DIST} ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)
+set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME}
+    ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME})
+set(reports_DIST ${reports_DIST_local} ${reports_locale_specific_DIST}
+    ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)

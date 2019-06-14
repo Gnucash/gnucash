@@ -79,6 +79,7 @@ libgncmod_report_gnc_module_init(int refcount)
     if (refcount == 0)
     {
         scm_c_eval_string("(gnc:reldate-initialize)");
+        scm_c_eval_string("(report-module-loader (list '(gnucash report stylesheets)))");
     }
 
     return TRUE;

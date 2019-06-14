@@ -38,7 +38,7 @@
 (use-modules (gnucash report reports standard net-charts))
 (use-modules (tests test-report-extras))
 (use-modules (gnucash report reports standard category-barchart))
-(use-modules (gnucash report stylesheets))
+(use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (tests test-engine-extras))
 
 ;; Explicitly set locale to make the report output predictable
