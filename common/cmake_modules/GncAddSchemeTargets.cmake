@@ -78,8 +78,7 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   endif(MAKE_LINKS)
 
   # Construct the guile source and compiled load paths
-  set(_GUILE_LOAD_PATH "${current_srcdir}"
-      "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
+  set(_GUILE_LOAD_PATH "${current_srcdir}" "${current_bindir}")
   set(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
   # VERSION_GREATER_EQUAL introduced in CMake 3.7.
   if(MINGW64 AND (${GUILE_EFFECTIVE_VERSION} VERSION_GREATER 2.2 OR
