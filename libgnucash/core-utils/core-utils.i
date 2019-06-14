@@ -95,6 +95,9 @@ gchar * gnc_locale_to_utf8(const gchar *);
 
 const char * gnc_locale_default_iso_currency_code (void);
 
+%newobject gnc_locale_name;
+gchar *gnc_locale_name (void);
+
 #if defined(SWIGGUILE)
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
 %inline %{
