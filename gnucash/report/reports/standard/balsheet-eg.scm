@@ -35,8 +35,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report eguile-gnc))
-(use-modules (gnucash report eguile-utilities))
+(use-modules (gnucash eguile))
 
 (use-modules (ice-9 regex))  ; for regular expressions
 (use-modules (ice-9 local-eval))  ; for the-environment

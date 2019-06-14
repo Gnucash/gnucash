@@ -24,9 +24,7 @@
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/engine" 0)
 
-(use-modules (gnucash report eguile-utilities))
-(use-modules (gnucash report eguile-html-utilities))
-(use-modules (gnucash report eguile-gnc))
+(use-modules (gnucash eguile))
 
 (use-modules (srfi srfi-13)) ; for extra string functions
 (use-modules (ice-9 format)) ; for number formatting
