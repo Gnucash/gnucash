@@ -123,14 +123,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="placeholder_warning_hbox">
+          <object class="GtkBox" id="warning_hbox">
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
             <property name="margin_top">6</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkImage" id="placeholder_warning_image">
+              <object class="GtkImage" id="warning_image">
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="stock">gtk-dialog-warning</property>
@@ -142,7 +142,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="placeholder_warning_label">
+              <object class="GtkLabel" id="warning_label">
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="wrap">True</property>
