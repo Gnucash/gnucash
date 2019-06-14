@@ -212,9 +212,9 @@
   ; Get all the options
   (let* ((document                  (gnc:make-html-document))
          (opt-invoice               (opt-value generalpage  optname-invoice-number))
-         (opt-template-file         (find-file
+         (opt-template-file         (find-template
                                       (opt-value displaypage optname-template-file)))
-         (opt-css-file              (find-file
+         (opt-css-file              (find-stylesheet
                                       (opt-value displaypage optname-css-file)))
          (opt-heading-font          (font-name-to-style-info
                                       (opt-value displaypage optname-heading-font)))

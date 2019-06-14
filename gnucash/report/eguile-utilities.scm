@@ -56,9 +56,10 @@
    ((null? (cdr l)) '())
    (else (cadr l))))
 
+; deprecated - use find-stylesheet or find-template instead
 (define-public (find-file fname)
   ;; Find the file 'fname', and return its full path.
-  ;; First look in the user's .gnucash directory.
+  ;; First look in the user's .config/gnucash directory.
   ;; Then look in Gnucash's standard report directory.
   ;; If no file is found, returns just 'fname' for use in error messages.
   ;; Note: this has been tested on Linux and Windows Vista so far...
@@ -69,6 +70,34 @@
      ((access? userpath R_OK) userpath)
      ((access? syspath R_OK) syspath)
      (else fname))))
+
+(define (find-internal ftype fname)
+  ;; Find the file fname', and return its full path.
+  ;; First look in the user's .config/gnucash directory.
+  ;; Then look in Gnucash' gnucash/reports/'ftype' directory.
+  ;; If no file is found, returns just 'fname' for use in error messages.
+  (let* ((userpath (gnc-build-userdata-path fname))
+         (frelpath (string-join (list (symbol->string ftype) fname) "/"))
+         (syspath  (gnc-build-reports-path frelpath)))
+        (if (access? userpath R_OK)
+          userpath
+          (if (access? syspath R_OK)
+            syspath
+            fname))))
+
+(define-public (find-stylesheet fname)
+  ;; Find the stylesheet 'fname', and return its full path.
+  ;; First look in the user's .config/gnucash directory.
+  ;; Then look in Gnucash' gnucash/reports/stylesheets directory.
+  ;; If no file is found, returns just 'fname' for use in error messages.
+  (find-internal 'stylesheets fname))
+
+(define-public (find-template fname)
+  ;; Find the template 'ftype'/'fname', and return its full path.
+  ;; First look in the user's .config/gnucash directory.
+  ;; Then look in Gnucash' gnucash/reports/templates directory.
+  ;; If no file is found, returns just 'fname' for use in error messages.
+  (find-internal 'templates fname))
 
 ; Define syntax for more readable for loops (the built-in for-each requires an
 ; explicit lambda and has the list expression all the way at the end).
