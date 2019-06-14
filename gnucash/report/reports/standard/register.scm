@@ -20,7 +20,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report reports standard register))
+(define-module (gnucash reports standard register))
 
 (use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))

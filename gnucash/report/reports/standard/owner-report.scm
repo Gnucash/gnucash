@@ -25,7 +25,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 
-(define-module (gnucash report reports standard owner-report))
+(define-module (gnucash reports standard owner-report))
 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))

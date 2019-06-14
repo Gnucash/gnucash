@@ -23,7 +23,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard account-piecharts))
+(define-module (gnucash reports standard account-piecharts))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))

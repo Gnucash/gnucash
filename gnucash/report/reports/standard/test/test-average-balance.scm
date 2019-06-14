@@ -2,9 +2,9 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report reports example average-balance))
+(use-modules (gnucash reports example average-balance))
 (use-modules (gnucash report))
-(use-modules (gnucash report reports standard budget))
+(use-modules (gnucash reports standard budget))
 (use-modules (tests test-report-extras))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (tests srfi64-extras))

@@ -23,7 +23,7 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
-(define-module (gnucash report reports example hello-world))
+(define-module (gnucash reports example hello-world))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

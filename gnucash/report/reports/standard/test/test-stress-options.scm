@@ -4,7 +4,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash report reports standard view-column))
+(use-modules (gnucash reports standard view-column))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (gnucash report reports standard taxinvoice))
 (use-modules (gnucash report report-system))

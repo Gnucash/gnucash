@@ -23,7 +23,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; depends must be outside module scope -- and should eventually go away.
-(define-module (gnucash report reports standard category-barchart))
+(define-module (gnucash reports standard category-barchart))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))

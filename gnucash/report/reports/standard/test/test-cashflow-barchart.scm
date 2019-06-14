@@ -28,7 +28,7 @@
 (use-modules (tests srfi64-extras))
 (use-modules (gnucash report))
 (use-modules (tests test-report-extras))
-(use-modules (gnucash report reports standard cashflow-barchart))
+(use-modules (gnucash reports standard cashflow-barchart))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-64))

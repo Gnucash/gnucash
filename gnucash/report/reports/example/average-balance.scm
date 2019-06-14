@@ -26,7 +26,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report reports example average-balance))
+(define-module (gnucash reports example average-balance))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))

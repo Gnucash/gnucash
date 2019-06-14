@@ -23,7 +23,7 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
-(define-module (gnucash report reports example sample-graphs))
+(define-module (gnucash reports example sample-graphs))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 

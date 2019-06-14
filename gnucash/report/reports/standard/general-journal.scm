@@ -26,7 +26,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard general-journal))
+(define-module (gnucash reports standard general-journal))
 (export gnc:make-general-journal-report)
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))

@@ -35,9 +35,9 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
-(use-modules (gnucash report reports standard net-charts))
+(use-modules (gnucash reports standard net-charts))
 (use-modules (tests test-report-extras))
-(use-modules (gnucash report reports standard category-barchart))
+(use-modules (gnucash reports standard category-barchart))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (tests test-engine-extras))
 

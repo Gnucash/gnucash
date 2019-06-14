@@ -23,7 +23,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard payables))
+(define-module (gnucash reports standard payables))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
@@ -31,7 +31,7 @@
 
 (gnc:module-load "gnucash/report" 0)
 
-(use-modules (gnucash report reports aging))
+(use-modules (gnucash reports aging))
 
 (define acc-page gnc:pagename-general)
 (define this-acc (N_ "Payable Account"))

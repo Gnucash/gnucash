@@ -25,7 +25,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard budget))
+(define-module (gnucash reports standard budget))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))

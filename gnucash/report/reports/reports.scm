@@ -24,7 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash report reports))
+(define-module (gnucash reports))
 (use-modules (srfi srfi-13))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
@@ -42,8 +42,8 @@
 ;owner-report-create)
 
 (define report-dirs (list
-    '(gnucash report reports standard) ; base directory for standard reports included in gnucash
-    '(gnucash report reports example)  ; base directory for example reports included in gnucash
+    '(gnucash reports standard) ; base directory for standard reports included in gnucash
+    '(gnucash reports example)  ; base directory for example reports included in gnucash
 ))
 
 (report-module-loader report-dirs)
@@ -78,15 +78,15 @@
         0
         ))
 
-(use-modules (gnucash report reports standard payables))
+(use-modules (gnucash reports standard payables))
 (define (gnc:payables-report-create account title show-zeros?)
   (payables-report-create-internal account title show-zeros?))
 
-(use-modules (gnucash report reports standard receivables))
+(use-modules (gnucash reports standard receivables))
 (define (gnc:receivables-report-create account title show-zeros?)
   (receivables-report-create-internal account title show-zeros?))
 
-(use-modules (gnucash report reports standard owner-report))
+(use-modules (gnucash reports standard owner-report))
 (define (gnc:owner-report-create owner account)
   ; Figure out an account to use if nothing exists here.
   (if (null? account)

@@ -40,7 +40,7 @@ set(GUILE_DEPENDS
 
 gnc_add_scheme_targets(scm-reports-locale-specific-1
   "${gncmod_locale_reports_SCHEME}"
-  gnucash/report/reports/locale-specific
+  gnucash/reports/locale-specific
   "${GUILE_DEPENDS}"
   FALSE
 )

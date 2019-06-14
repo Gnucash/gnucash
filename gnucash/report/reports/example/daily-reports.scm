@@ -25,7 +25,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports example daily-reports))
+(define-module (gnucash reports example daily-reports))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))

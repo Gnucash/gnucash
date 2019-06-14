@@ -800,10 +800,10 @@
 ;; This assumes the modules are located on the file system in a
 ;; path matching the module prefix
 ;; For example passing
-;; '('(gnucash report stylesheets) '(gnucash report reports standard))
+;; '('(gnucash report stylesheets) '(gnucash reports standard))
 ;; will search for scm files in
 ;; - <gnc-guile-dir>/gnucash/report/stylesheets
-;; - <gnc-guile-dir>/gnucash/report/reports/standard
+;; - <gnc-guile-dir>/gnucash/reports/standard
 ;; and try to load them.
 ;; This function is non-recursive so it won't
 ;; descend in subdirectories.

@@ -31,7 +31,7 @@
 ;; periods. Apart from this, all display options are taken from
 ;; account-summary unchangedly.
 
-(define-module (gnucash report reports standard sx-summary))
+(define-module (gnucash reports standard sx-summary))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))

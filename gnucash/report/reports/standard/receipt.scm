@@ -14,7 +14,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
-(define-module (gnucash report reports standard receipt))
+(define-module (gnucash reports standard receipt))
 
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash utilities))

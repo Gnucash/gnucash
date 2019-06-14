@@ -26,7 +26,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard net-charts))
+(define-module (gnucash reports standard net-charts))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities)) 

@@ -25,7 +25,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report reports standard income-gst-statement))
+(define-module (gnucash reports standard income-gst-statement))
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
