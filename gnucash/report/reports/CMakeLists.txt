@@ -55,6 +55,7 @@ set(reports_example_SCHEME
   example/average-balance.scm
   example/daily-reports.scm
   example/hello-world.scm
+  example/sample-graphs.scm
   example/welcome-to-gnucash.scm
 )
 
