@@ -316,6 +316,7 @@ set(test_engine_SOURCES_DIST
 )
 
 set(test_engine_SCHEME_DIST
+        srfi64-extras.scm
         test-create-account.scm
         test-engine-extras.scm
         test-scm-query-import.scm
@@ -328,5 +329,4 @@ set(test_engine_EXTRA_DIST
 )
 
 set_dist_list(test_engine_DIST CMakeLists.txt
-        ${srfi64_extras_SCHEME_DIST}
         ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})
