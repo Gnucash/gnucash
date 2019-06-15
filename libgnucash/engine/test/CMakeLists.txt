@@ -241,10 +241,6 @@ if (HAVE_SRFI64)
     FALSE
     )
 
-  set(srfi64_extras_SCHEME_DIST
-    srfi64-extras.scm
-    )
-
 endif (HAVE_SRFI64)
 
 gnc_add_scheme_test_targets(scm-test-engine
@@ -311,6 +307,7 @@ set(test_engine_SOURCES_DIST
 )
 
 set(test_engine_SCHEME_DIST
+        srfi64-extras.scm
         test-create-account.scm
         test-engine-extras.scm
         test-scm-query-import.scm
@@ -321,5 +318,4 @@ set(test_engine_EXTRA_DIST
 )
 
 set_dist_list(test_engine_DIST CMakeLists.txt
-        ${srfi64_extras_SCHEME_DIST}
         ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})
