@@ -883,13 +883,14 @@
                (renderer (gnc:report-template-renderer template)))
           ;; run the renderer, ignore its output. we'll query the csv export.
           (renderer report #:export-type 'csv #:filename "/tmp/export.csv"))
-        (let ((f (open-file "/tmp/export.csv" "r")))
-          (let lp ((c (read-char f)) (out '()))
-            (if (eof-object? c)
-                (string=?
-                 "\"from\",\"01/01/69\"\n\"to\",\"12/31/70\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
-                 (reverse-list->string out))
-                (lp (read-char f) (cons c out)))))))
+        (let ((call-with-input-file "/tmp/export.csv"))
+          (lambda (f)
+            (let lp ((c (read-char f)) (out '()))
+              (if (eof-object? c)
+                  (string=?
+                   "\"from\",\"01/01/69\"\n\"to\",\"12/31/70\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
+                   (reverse-list->string out))
+                  (lp (read-char f) (cons c out))))))))
     (test-end "csv-export")))
 
 (define (reconcile-tests)
