@@ -1,5 +1,6 @@
 set(scm_test_SCHEME
   test-libgnucash-scm-utilities.scm
+  test-module-deprecation.scm
   )
 
 set(GUILE_DEPENDS
@@ -25,3 +26,7 @@ set_dist_list(test_scm_DIST
   CMakeLists.txt
   ${scm_test_SCHEME}
   )
+
+# Define two imaginary deprecated guile modules to test the compat file generation code
+gnc_add_scheme_deprecated_module ("gnucash deprecated-module" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash superseded-module" "gnucash utilities" "scm-scm" "")
