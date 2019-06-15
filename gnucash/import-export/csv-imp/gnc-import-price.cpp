@@ -139,11 +139,18 @@ void GncPriceImport::from_commodity (gnc_commodity* from_commodity)
     m_settings.m_from_commodity = from_commodity;
     if (m_settings.m_from_commodity)
     {
-        auto col_type_comm = std::find (m_settings.m_column_types_price.begin(),
-                m_settings.m_column_types_price.end(), GncPricePropType::FROM_COMMODITY);
+        auto col_type_sym = std::find (m_settings.m_column_types_price.begin(),
+                m_settings.m_column_types_price.end(), GncPricePropType::FROM_SYMBOL);
 
-        if (col_type_comm != m_settings.m_column_types_price.end())
-            set_column_type_price (col_type_comm -m_settings.m_column_types_price.begin(),
+        if (col_type_sym != m_settings.m_column_types_price.end())
+            set_column_type_price (col_type_sym -m_settings.m_column_types_price.begin(),
+                            GncPricePropType::NONE);
+
+        auto col_type_name = std::find (m_settings.m_column_types_price.begin(),
+                m_settings.m_column_types_price.end(), GncPricePropType::FROM_NAMESPACE);
+
+        if (col_type_name != m_settings.m_column_types_price.end())
+            set_column_type_price (col_type_name -m_settings.m_column_types_price.begin(),
                             GncPricePropType::NONE);
 
         // force a refresh of the to_currency if the from_commodity is changed
@@ -171,7 +178,8 @@ void GncPriceImport::to_currency (gnc_commodity* to_currency)
                             GncPricePropType::NONE);
 
         // force a refresh of the from_commodity if the to_currency is changed
-        std::vector<GncPricePropType> commodities = { GncPricePropType::FROM_COMMODITY };
+        // either namespace or symbol will be sufice
+        std::vector<GncPricePropType> commodities = { GncPricePropType::FROM_SYMBOL };
         reset_formatted_column (commodities);
     }
 }
@@ -367,10 +375,11 @@ void GncPriceImport::tokenize (bool guessColTypes)
     m_parsed_lines.clear();
     for (auto tokenized_line : m_tokenizer->get_tokens())
     {
-        m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                std::make_shared<GncImportPrice>(date_format(), currency_format()),
-                false));
         auto length = tokenized_line.size();
+        if (length > 0)
+            m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+                    std::make_shared<GncImportPrice>(date_format(), currency_format()),
+                    false));
         if (length > max_cols)
             max_cols = length;
     }
@@ -440,12 +449,20 @@ void GncPriceImport::verify_column_selections (ErrorListPrice& error_msg)
             error_msg.add_error( _("Please select a 'Currency to' column or set a Currency in the 'Currency To' field."));
     }
 
-    /* Verify a Commodity from column is selected.
+    /* Verify a From Symbol column is selected.
      */
-    if (!check_for_column_type(GncPricePropType::FROM_COMMODITY))
+    if (!check_for_column_type(GncPricePropType::FROM_SYMBOL))
     {
         if (!m_settings.m_from_commodity)
-            error_msg.add_error( _("Please select a 'Commodity from' column or set a Commodity in the 'Commodity From' field."));
+            error_msg.add_error( _("Please select a 'From Symbol' column or set a Commodity in the 'Commodity From' field."));
+    }
+
+    /* Verify a From Namespace column is selected.
+     */
+    if (!check_for_column_type(GncPricePropType::FROM_NAMESPACE))
+    {
+        if (!m_settings.m_from_commodity)
+            error_msg.add_error( _("Please select a 'From Namespace' column or set a Commodity in the 'Commodity From' field."));
     }
 
     /* Verify a 'Commodity from' does not equal 'Currency to'.
@@ -541,7 +558,7 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
 
     error_message.clear();
 
-    // Add a TO_CURRENCY property with the selected 'currency to' if no 'currency to' column was set by the user
+    // Add a TO_CURRENCY property with the selected 'to_currency' if no 'Currency To' column was set by the user
     auto line_to_currency = price_props->get_to_currency();
     if (!line_to_currency)
     {
@@ -558,7 +575,7 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
         }
     }
 
-    // Add a FROM_COMMODITY property with the selected 'commodity from' if no 'commodity from' column was set by the user
+    // Add a FROM_COMMODITY property with the selected 'from_commodity' if no 'From Namespace/Symbol' columns were set by the user
     auto line_from_commodity = price_props->get_from_commodity();
     if (!line_from_commodity)
     {
@@ -568,7 +585,7 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
         {
             // Oops - the user didn't select a 'commodity from' column *and* we didn't get a selected value either!
             // Note if you get here this suggests a bug in the code!
-            error_message = _("No 'Commodity from' column selected and no selected Commodity specified either.\n"
+            error_message = _("No 'From Namespace/From Symbol' columns selected and no selected Commodity From specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
@@ -667,7 +684,7 @@ void GncPriceImport::update_price_props (uint32_t row, uint32_t col, GncPricePro
                     enable_test_empty = false;
             }
             // set the to_currency based on combo so we can test for same.
-            if (prop_type == GncPricePropType::FROM_COMMODITY)
+            if (prop_type == GncPricePropType::FROM_SYMBOL)
             {
                 if (m_settings.m_to_currency)
                     price_props->set_to_currency (m_settings.m_to_currency);
@@ -706,11 +723,15 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
 
     m_settings.m_column_types_price.at (position) = type;
 
-    // If the user has set a 'commodity from' column, we can't have a commodity from selected
-    if (type == GncPricePropType::FROM_COMMODITY)
+    // If the user has set a 'from namespace' column, we can't have a 'commodity from' selected
+    if (type == GncPricePropType::FROM_NAMESPACE)
         from_commodity (nullptr);
 
-    // If the user has set a 'currency to' column, we can't have a currency to selected
+    // If the user has set a 'from symbol' column, we can't have a 'commodity from' selected
+    if (type == GncPricePropType::FROM_SYMBOL)
+        from_commodity (nullptr);
+
+    // If the user has set a 'currency to' column, we can't have a 'currency to' selected
     if (type == GncPricePropType::TO_CURRENCY)
         to_currency (nullptr);
 

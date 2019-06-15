@@ -1193,11 +1193,13 @@ void CsvImpPriceAssist::preview_update_col_type (GtkComboBox* cbox)
     if (old_col_type == GncPricePropType::TO_CURRENCY)
     {
         // look for a from_commodity column to reparse
-        preview_reparse_col_type (GncPricePropType::FROM_COMMODITY);
+        preview_reparse_col_type (GncPricePropType::FROM_SYMBOL);
+        preview_reparse_col_type (GncPricePropType::FROM_NAMESPACE);
     }
 
-    // if old_col_type is FROM_COMMODITY, force a reparse of currency
-    if (old_col_type == GncPricePropType::FROM_COMMODITY)
+    // if old_col_type is FROM_SYMBOL, or FROM_NAMESPACE force a reparse of currency
+    if ((old_col_type == GncPricePropType::FROM_SYMBOL) ||
+        (old_col_type == GncPricePropType::FROM_NAMESPACE))
     {
         // look for a to_currency column to reparse
         preview_reparse_col_type (GncPricePropType::TO_CURRENCY);
@@ -1624,10 +1626,20 @@ void CsvImpPriceAssist::preview_refresh_table ()
 
     auto column_types = price_imp->column_types_price();
 
-    // look for a commodity column, clear the commodity combo
-    auto col_type_comm = std::find (column_types.begin(),
-                column_types.end(), GncPricePropType::FROM_COMMODITY);
-    if (col_type_comm != column_types.end())
+    // look for a namespace column, clear the commodity combo
+    auto col_type_name = std::find (column_types.begin(),
+                column_types.end(), GncPricePropType::FROM_NAMESPACE);
+    if (col_type_name != column_types.end())
+    {
+        g_signal_handlers_block_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
+        set_commodity_for_combo (GTK_COMBO_BOX(commodity_selector), nullptr);
+        g_signal_handlers_unblock_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
+    }
+
+    // look for a symbol column, clear the commodity combo
+    auto col_type_sym = std::find (column_types.begin(),
+                column_types.end(), GncPricePropType::FROM_SYMBOL);
+    if (col_type_sym != column_types.end())
     {
         g_signal_handlers_block_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
         set_commodity_for_combo (GTK_COMBO_BOX(commodity_selector), nullptr);

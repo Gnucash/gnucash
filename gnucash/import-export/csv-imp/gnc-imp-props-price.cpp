@@ -46,7 +46,8 @@ std::map<GncPricePropType, const char*> gnc_price_col_type_strs = {
         { GncPricePropType::NONE, N_("None") },
         { GncPricePropType::DATE, N_("Date") },
         { GncPricePropType::AMOUNT, N_("Amount") },
-        { GncPricePropType::FROM_COMMODITY, N_("Commodity From") },
+        { GncPricePropType::FROM_SYMBOL, N_("From Symbol") },
+        { GncPricePropType::FROM_NAMESPACE, N_("From Namespace") },
         { GncPricePropType::TO_CURRENCY, N_("Currency To") },
 };
 
@@ -90,49 +91,54 @@ GncNumeric parse_amount_price (const std::string &str, int currency_format)
     return GncNumeric(val);
 }
 
-/** Convert comm_str into a gnc_commodity.
- * @param comm_str The string to be parsed
+/** Convert the combination of symbol_str and namespace_str into a gnc_commodity.
+ * @param symbol_str The symbol string to be parsed
+ * @param namespace_str The Namespace for this commodity
  * @return a gnc_commodity
  * @exception May throw std::invalid argument if string can't be parsed properly
  */
-gnc_commodity* parse_commodity_price_comm (const std::string& comm_str)
+gnc_commodity* parse_commodity_price_comm (const std::string& symbol_str, const std::string& namespace_str)
 {
-    if (comm_str.empty())
+    if (symbol_str.empty())
         return nullptr;
 
     auto table = gnc_commodity_table_get_table (gnc_get_current_book());
     gnc_commodity* comm = nullptr;
 
-    /* First try commodity as a unique name. */
-    if (comm_str.find("::"))
-        comm = gnc_commodity_table_lookup_unique (table, comm_str.c_str());
+    /* First try commodity as a unique name, used in loading settings, returns null if not found */
+    comm = gnc_commodity_table_lookup_unique (table, symbol_str.c_str());
 
-    /* Then try mnemonic in the currency namespace */
-    if (!comm)
-        comm = gnc_commodity_table_lookup (table,
-                GNC_COMMODITY_NS_CURRENCY, comm_str.c_str());
-
+    /* Now lookup with namespace and symbol */
     if (!comm)
     {
-        /* If that fails try mnemonic in all other namespaces */
-        auto namespaces = gnc_commodity_table_get_namespaces(table);
-        for (auto ns = namespaces; ns; ns = ns->next)
-        {
-            gchar* ns_str = (gchar*)ns->data;
-            if (g_utf8_collate(ns_str, GNC_COMMODITY_NS_CURRENCY) == 0)
-                continue;
-
-            comm = gnc_commodity_table_lookup (table,
-                    ns_str, comm_str.c_str());
-            if (comm)
-                break;
-        }
+        comm = gnc_commodity_table_lookup (table,
+                    namespace_str.c_str(), symbol_str.c_str());
     }
 
     if (!comm)
         throw std::invalid_argument (_("Value can't be parsed into a valid commodity."));
     else
         return comm;
+}
+
+/** Check for a valid namespace.
+ * @param namespace_str The string to be parsed
+ * @return a bool
+ * @exception May throw std::invalid argument if string can't be parsed properly
+ */
+bool parse_namespace (const std::string& namespace_str)
+{
+    if (namespace_str.empty())
+        return false;
+
+    auto table = gnc_commodity_table_get_table (gnc_get_current_book());
+
+    if (gnc_commodity_table_has_namespace (table, namespace_str.c_str()))
+        return true;
+    else
+        throw std::invalid_argument (_("Value can't be parsed into a valid namespace."));
+
+    return false;
 }
 
 void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, bool enable_test_empty)
@@ -159,24 +165,56 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, 
                 m_amount = parse_amount_price (value, m_currency_format); // Throws if parsing fails
                 break;
 
-            case GncPricePropType::FROM_COMMODITY:
-                m_from_commodity = boost::none;
-                comm = parse_commodity_price_comm (value); // Throws if parsing fails
-                if (comm)
+            case GncPricePropType::FROM_SYMBOL:
+                m_from_symbol = boost::none;
+
+                if (value.empty())
+                    throw std::invalid_argument (_("'From Symbol' can not be empty."));
+                else
+                    m_from_symbol = value;
+
+                if (m_from_namespace)
                 {
-                    if (m_to_currency == comm)
-                        throw std::invalid_argument (_("'Commodity From' can not be the same as 'Currency To' column type."));
-                    m_from_commodity = comm;
+                    comm = parse_commodity_price_comm (value, *m_from_namespace); // Throws if parsing fails
+                    if (comm)
+                    {
+                        if (m_to_currency == comm)
+                                throw std::invalid_argument (_("'Commodity From' can not be the same as 'Currency To'."));
+                        m_from_commodity = comm;
+                    }
+                }
+                break;
+
+            case GncPricePropType::FROM_NAMESPACE:
+                m_from_namespace = boost::none;
+
+                if (value.empty())
+                    throw std::invalid_argument (_("'From Namespace' can not be empty."));
+
+                if (parse_namespace (value)) // Throws if parsing fails
+                {
+                    m_from_namespace = value;
+
+                    if (m_from_symbol)
+                    {
+                        comm = parse_commodity_price_comm (*m_from_symbol, *m_from_namespace); // Throws if parsing fails
+                        if (comm)
+                        {
+                            if (m_to_currency == comm)
+                                throw std::invalid_argument (_("'Commodity From' can not be the same as 'Currency To'."));
+                            m_from_commodity = comm;
+                        }
+                    }
                 }
                 break;
 
             case GncPricePropType::TO_CURRENCY:
                 m_to_currency = boost::none;
-                comm = parse_commodity_price_comm (value); // Throws if parsing fails
+                comm = parse_commodity_price_comm (value, GNC_COMMODITY_NS_CURRENCY); // Throws if parsing fails
                 if (comm)
                 {
                     if (m_from_commodity == comm)
-                        throw std::invalid_argument (_("'Currency To' can not be the same as 'Commodity From' column type."));
+                        throw std::invalid_argument (_("'Currency To' can not be the same as 'Commodity From'."));
                     if (gnc_commodity_is_currency (comm) != true)
                         throw std::invalid_argument (_("Value parsed into an invalid currency for a currency column type."));
                     m_to_currency = comm;
@@ -211,6 +249,13 @@ void GncImportPrice::reset (GncPricePropType prop_type)
 {
     try
     {
+        if ((prop_type == GncPricePropType::FROM_NAMESPACE) ||
+            (prop_type == GncPricePropType::FROM_SYMBOL))
+             set_from_commodity (nullptr);
+
+        if (prop_type == GncPricePropType::TO_CURRENCY)
+             set_to_currency (nullptr);
+
         // set enable_test_empty to false to allow empty values
         set (prop_type, std::string(), false);
     }
@@ -230,9 +275,9 @@ std::string GncImportPrice::verify_essentials (void)
     else if (m_amount == boost::none)
         return _("No amount column.");
     else if (m_to_currency == boost::none)
-        return _("No 'Currency to' column.");
+        return _("No 'Currency to'.");
     else if (m_from_commodity == boost::none)
-        return _("No 'Commodity from' column.");
+        return _("No 'Commodity from'.");
     else if (gnc_commodity_equal (*m_from_commodity, *m_to_currency))
         return _("'Commodity From' can not be the same as 'Currency To'.");
     else
@@ -260,7 +305,7 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
     GNCPrice *old_price = gnc_pricedb_lookup_day_t64 (pdb, *m_from_commodity,
                                                       *m_to_currency, date);
 
-    // Should old price be over writen
+    // Should old price be over written
     if ((old_price != nullptr) && (over == true))
     {
         DEBUG("Over write");
@@ -316,7 +361,6 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
         gnc_price_set_time64 (price, date);
         gnc_price_set_source (price, PRICE_SOURCE_USER_PRICE);
-//FIXME Not sure which one        gnc_price_set_source (price, PRICE_SOURCE_FQ);
         gnc_price_set_typestr (price, PRICE_TYPE_LAST);
         gnc_price_commit_edit (price);
 

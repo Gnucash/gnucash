@@ -50,7 +50,8 @@ enum class GncPricePropType {
     NONE,
     DATE,
     AMOUNT,
-    FROM_COMMODITY,
+    FROM_SYMBOL,
+    FROM_NAMESPACE,
     TO_CURRENCY,
     PRICE_PROPS = TO_CURRENCY
 };
@@ -77,7 +78,8 @@ private:
     const char *m_name;
 };
 
-gnc_commodity* parse_commodity_price_comm (const std::string& comm_str);
+gnc_commodity* parse_commodity_price_comm (const std::string& symbol_str, const std::string& namespace_str);
+bool parse_namespace (const std::string& namespace_str);
 GncNumeric parse_amount_price (const std::string &str, int currency_format);
 
 struct GncImportPrice
@@ -107,6 +109,8 @@ private:
     boost::optional<GncDate> m_date;
     boost::optional<GncNumeric> m_amount;
     boost::optional<gnc_commodity*> m_from_commodity;
+    boost::optional<std::string> m_from_namespace;
+    boost::optional<std::string> m_from_symbol;
     boost::optional<gnc_commodity*> m_to_currency;
     bool created = false;
 
