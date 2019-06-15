@@ -120,6 +120,18 @@ gnc_add_scheme_targets(scm-report-eguile
   FALSE
 )
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash report eguile-gnc" "gnucash eguile" "scm-report-eguile" "")
+gnc_add_scheme_deprecated_module ("gnucash report eguile-html-utilities" "gnucash eguile" "scm-report-eguile" "")
+gnc_add_scheme_deprecated_module ("gnucash report eguile-utilities" "gnucash eguile" "scm-report-eguile" "")
+gnc_add_scheme_deprecated_module ("gnucash report report-system" "gnucash report" "scm-report-1" "")
+
+gnc_add_scheme_deprecated_module ("gnucash report business-reports" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash report report-system collectors" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash report report-system report-collectors" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash report stylesheets" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash report utility-reports" "" "" "")
+
 add_custom_target(scm-report ALL DEPENDS scm-report-eguile)
 
 set_local_dist(report_DIST_local CMakeLists.txt

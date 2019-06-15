@@ -68,6 +68,10 @@ gnc_add_scheme_test_targets(scm-test-core
 
 add_dependencies(check scm-test-core)
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash unittest-support" "tests unittest-support" "scm-test-core" "")
+
+
 if(NOT GTEST_SHARED_LIB)
   set (lib_gtest_SOURCES ${GTEST_SRC_DIR}/src/gtest-all.cc)
   add_library(gtest STATIC  ${lib_gtest_SOURCES})

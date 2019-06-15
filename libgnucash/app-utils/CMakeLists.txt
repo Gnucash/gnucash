@@ -194,6 +194,10 @@ gnc_add_scheme_targets(scm-app-utils-2
   FALSE
 )
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("migrate-prefs" "" "" "")
+gnc_add_scheme_deprecated_module ("migrate-prefs-user" "" "" "")
+
 add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1 scm-gettext)
 
 set_local_dist(app_utils_DIST_local
