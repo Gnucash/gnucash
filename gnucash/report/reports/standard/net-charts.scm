@@ -209,7 +209,7 @@
                        (if (get-option gnc:pagename-display optname-markers) 3 0)))
          (line-width (and linechart?
                           (get-option gnc:pagename-display optname-line-width)))
-         (y-grid (and linechart? (get-option gnc:pagename-display optname-y-grid)))
+         (y-grid (or (not linechart?) (get-option gnc:pagename-display optname-y-grid)))
          ;;(x-grid (if linechart? (get-option gnc:pagename-display optname-x-grid)))
          (commodity-list #f)
          (exchange-fn #f)
