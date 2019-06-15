@@ -141,8 +141,9 @@
              #f))))
      (iota
       (apply max
-             (map (lambda (opt) (length (vector-ref opt 3)))
-                  report-options)))
+             (cons 0
+                   (map (lambda (opt) (length (vector-ref opt 3)))
+                        report-options))))
      )))
 
 (define (combinatorial-stress-test report-name uuid report-options)
