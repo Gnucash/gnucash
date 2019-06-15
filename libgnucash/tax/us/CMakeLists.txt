@@ -57,6 +57,10 @@ gnc_add_scheme_targets(scm-tax-de_DE-2
   FALSE
   )
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash tax de_DE" "gnucash tax-de_DE" "scm-tax-de_DE-2" "")
+gnc_add_scheme_deprecated_module ("gnucash tax us" "gnucash tax-us" "scm-tax-us-2" "")
+
 add_custom_target(scm-tax-us ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
 
 set_local_dist(tax_us_DIST_local CMakeLists.txt ${tax_us_SOURCES}

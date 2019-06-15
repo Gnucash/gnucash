@@ -262,6 +262,10 @@ gnc_add_scheme_test_targets(scm-test-engine
 add_dependencies(check scm-test-engine)
 gnc_add_scheme_tests("${engine_test_SCHEME}")
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash engine test test-extras" "tests test-engine-extras" "scm-test-engine-extras" "")
+
+
 set(test_engine_SOURCES_DIST
         dummy.cpp
         gtest-gnc-int128.cpp

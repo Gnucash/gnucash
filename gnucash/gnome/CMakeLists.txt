@@ -240,6 +240,10 @@ ${GUILE_OUTPUT_DIR}
 "${GUILE_DEPENDS}"
 FALSE
 )
+
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash report report-gnome" "gnucash report-menus" "scm-gnome" "")
+
 set_dist_list(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})

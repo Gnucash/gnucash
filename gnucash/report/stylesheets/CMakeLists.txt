@@ -24,6 +24,13 @@ gnc_add_scheme_targets(scm-report-stylesheets-1
   TRUE
 )
 
+# Module interfaces deprecated in 4.x, will be removed for 5.x
+gnc_add_scheme_deprecated_module ("gnucash report stylesheet-easy" "gnucash report stylesheets easy" "scm-report-stylesheets-1" "")
+gnc_add_scheme_deprecated_module ("gnucash report stylesheet-fancy" "gnucash report stylesheets fancy" "scm-report-stylesheets-1" "")
+gnc_add_scheme_deprecated_module ("gnucash report stylesheet-footer" "gnucash report stylesheets footer" "scm-report-stylesheets-1" "")
+gnc_add_scheme_deprecated_module ("gnucash report stylesheet-head-or-tail" "gnucash report stylesheets head-or-tail" "scm-report-stylesheets-1" "")
+gnc_add_scheme_deprecated_module ("gnucash report stylesheet-plain" "gnucash report stylesheets plain" "scm-report-stylesheets-1" "")
+
 add_custom_target(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1)
 
 set_local_dist(stylesheets_DIST_local CMakeLists.txt ${stylesheets_SCHEME})
