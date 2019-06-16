@@ -1619,17 +1619,14 @@ new_price(XferDialog *xferData, time64 time)
     gnc_commodity *to = xferData->to_commodity;
     gnc_numeric value = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
 
-/* We want to store currency rates such that the rate > 1 and commodity
- * prices in terms of a currency regardless of value.
- */
     value = gnc_numeric_abs(value);
-    if (gnc_commodity_is_currency(from) && gnc_commodity_is_currency(to))
-    {
-        if (value.num < value.denom)
-            value = swap_commodities(&from, &to, value);
-    }
-    else if (gnc_commodity_is_currency(from))
-            value = swap_commodities(&from, &to, value);
+
+    /* store price against the non currency commodity */
+    if (gnc_commodity_is_currency (from)  && !gnc_commodity_is_currency (to))
+        value = swap_commodities (&from, &to, value);
+    /* store rate against default currency if present */
+    else if (from == gnc_default_currency() && to != gnc_default_currency())
+        value = swap_commodities (&from, &to, value);
 
     value = round_price (from, to, value);
     price = gnc_price_create (xferData->book);

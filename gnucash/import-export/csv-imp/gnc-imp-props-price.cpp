@@ -298,7 +298,6 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
     auto date = static_cast<time64>(GncDateTime(*m_date, DayPart::neutral));
 
-    bool rev = false;
     auto amount = *m_amount;
     Result ret_val = ADDED;
 
@@ -315,27 +314,11 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         ret_val = REPLACED;
     }
 
-    if (gnc_commodity_is_currency (*m_from_commodity)) // Currency Import
-    {
-        // Check for currency in reverse direction.
-        if (old_price != nullptr)
-        {
-            // Check for price in reverse direction.
-            if (gnc_commodity_equiv (gnc_price_get_currency (old_price), *m_from_commodity))
-                rev = true;
-        }
-        DEBUG("Commodity from is a Currency");
-
-        // Check for price less than 1, reverse if so.
-        if (*m_amount < GncNumeric(1,1))
-            rev = true;
-
-    }
     char date_str [MAX_DATE_LENGTH + 1];
     memset (date_str, 0, sizeof(date_str));
     qof_print_date_buff (date_str, sizeof(date_str), date);
-    DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', "
-          "Amount is %s", date_str, rev,
+    DEBUG("Date is %s, Commodity from is '%s', Currency is '%s', "
+          "Amount is %s", date_str,
           gnc_commodity_get_fullname (*m_from_commodity),
           gnc_commodity_get_fullname (*m_to_currency),
           amount.to_string().c_str());
@@ -345,17 +328,10 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         DEBUG("Create");
         GNCPrice *price = gnc_price_create (book);
         gnc_price_begin_edit (price);
-        if (rev)
-        {
-            amount = amount.inv(); //invert the amount
-            gnc_price_set_commodity (price, *m_to_currency);
-            gnc_price_set_currency (price, *m_from_commodity);
-        }
-        else
-        {
-            gnc_price_set_commodity (price, *m_from_commodity);
-            gnc_price_set_currency (price, *m_to_currency);
-        }
+
+        gnc_price_set_commodity (price, *m_from_commodity);
+        gnc_price_set_currency (price, *m_to_currency);
+
         auto amount_conv = amount.convert<RoundType::half_up>(CURRENCY_DENOM);
         gnc_price_set_value (price, static_cast<gnc_numeric>(amount_conv));
 
