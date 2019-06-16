@@ -74,10 +74,6 @@
 (define gnc:menuname-business-reports (N_ "_Business"))
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
 
-;; We want to warn users if they've got an old-style, non-guid custom
-;; report-template, but only once
-(define gnc:old-style-report-warned #f)
-
 ;; A <report-template> represents one of the available report types.
 (define <report-template>
   (make-record-type
