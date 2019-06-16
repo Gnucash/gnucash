@@ -450,7 +450,7 @@ document.getElementById(chartid).onclick = function(evt) {
          (push (lambda (l) (set! retval (cons l retval))))
          ;; Use a unique chart-id for each chart. This prevents charts
          ;; clashing on multi-column reports
-         (id (random 99999999)))
+         (id (guid-new-return)))
 
     (push (format #f "<script language='javascript' type='text/javascript' src='file://~a'></script>\n"
                   (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
