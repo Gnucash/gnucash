@@ -335,9 +335,27 @@ static void csv_price_imp_preview_currency_fmt_sel_cb (GtkComboBox* format_selec
     info->preview_update_currency_format();
 }
 
+enum GncCommColumn {DISPLAYED_COMM, SORT_COMM, COMM_PTR, SEP};
+
 static void csv_price_imp_preview_currency_sel_cb (GtkComboBox* currency_selector, CsvImpPriceAssist* info)
 {
     info->preview_update_currency();
+}
+
+static gboolean separator_row_func (GtkTreeModel *smodel, GtkTreeIter *siter, gpointer data)
+{
+    gboolean      sep_row;
+    GtkTreeModel *store;
+    GtkTreeIter   iter;
+
+    store = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(smodel));
+
+    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(smodel),
+                                                    &iter, siter);
+
+    gtk_tree_model_get (GTK_TREE_MODEL(store), &iter, SEP, &sep_row, -1);
+
+    return sep_row;
 }
 
 static void csv_price_imp_preview_commodity_sel_cb (GtkComboBox* commodity_selector, CsvImpPriceAssist* info)
@@ -375,7 +393,8 @@ gnc_commodity *get_commodity_from_combo (GtkComboBox *combo)
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(sort_model),
                                                     &iter, &siter);
 
-    gtk_tree_model_get (GTK_TREE_MODEL (model), &iter, 0, &string, 2, &comm, -1);
+    gtk_tree_model_get (GTK_TREE_MODEL(model), &iter,
+                        DISPLAYED_COMM, &string, COMM_PTR, &comm, -1);
 
     PINFO("Commodity string is %s", string);
 
@@ -397,7 +416,7 @@ set_commodity_for_combo (GtkComboBox *combo, gnc_commodity *comm)
 
     while (valid)
     {
-        gtk_tree_model_get (model, &iter, 2, &model_comm, -1);
+        gtk_tree_model_get (model, &iter, COMM_PTR, &model_comm, -1);
         if (model_comm == comm)
         {
             if (gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model), &siter, &iter))
@@ -426,13 +445,15 @@ GtkTreeModel *get_model (bool all_commodity)
     GList *namespace_list = gnc_commodity_table_get_namespaces (commodity_table);
     GtkTreeIter iter;
 
-    store = GTK_TREE_MODEL(gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER));
+    store = GTK_TREE_MODEL(gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
+                                                  G_TYPE_POINTER, G_TYPE_BOOLEAN));
     model = gtk_tree_model_sort_new_with_model (store);
-    // set sort to sort on second string, first string will be shown
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 1, GTK_SORT_ASCENDING);
+    // set sort order
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(model), SORT_COMM, GTK_SORT_ASCENDING);
 
     gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", 1, " ", 2, nullptr, -1);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                            DISPLAYED_COMM, " ", SORT_COMM, " ", COMM_PTR, nullptr, SEP, false, -1);
 
     namespace_list = g_list_first (namespace_list);
     while (namespace_list != nullptr)
@@ -447,6 +468,15 @@ GtkTreeModel *get_model (bool all_commodity)
             {
                 commodity_list = gnc_commodity_table_get_commodities (commodity_table, tmp_namespace);
                 commodity_list  = g_list_first (commodity_list);
+
+                // if this is the CURRENCY, add a row to be identified as a separator row
+                if ((g_utf8_collate (tmp_namespace, GNC_COMMODITY_NS_CURRENCY) == 0) && (all_commodity == true))
+                {
+                    gtk_list_store_append (GTK_LIST_STORE(store), &iter);
+                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, DISPLAYED_COMM, " ",
+                                           SORT_COMM, "CURRENCY-", COMM_PTR, nullptr, SEP, true, -1);
+                }
+
                 while (commodity_list != nullptr)
                 {
                     const gchar *name_str;
@@ -456,11 +486,16 @@ GtkTreeModel *get_model (bool all_commodity)
 
                     name_str = gnc_commodity_get_printname (tmp_commodity);
 
-                    sort_str = g_strconcat (tmp_namespace, "::", gnc_commodity_get_mnemonic (tmp_commodity), nullptr);
-                    DEBUG("Name string is %s, Sort string is %s", name_str, sort_str);
+                    if (g_utf8_collate (tmp_namespace, GNC_COMMODITY_NS_CURRENCY) == 0)
+                        sort_str = g_strconcat ("CURRENCY-", name_str, nullptr);
+                    else
+                        sort_str = g_strconcat ("ALL-OTHER-", name_str, nullptr);
+
+                    DEBUG("Name string is '%s', Sort string is '%s'", name_str, sort_str);
 
                     gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, name_str, 1, sort_str, 2, tmp_commodity, -1);
+                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, DISPLAYED_COMM, name_str,
+                                           SORT_COMM, sort_str, COMM_PTR, tmp_commodity, SEP, false, -1);
 
                     g_free (sort_str);
                     commodity_list = g_list_next (commodity_list);
@@ -594,8 +629,10 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         /* Add commodity selection widget */
         commodity_selector = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_cbox"));
         gtk_combo_box_set_model (GTK_COMBO_BOX(commodity_selector), get_model (true));
-        g_signal_connect(G_OBJECT(commodity_selector), "changed",
-                         G_CALLBACK(csv_price_imp_preview_commodity_sel_cb), this);
+        gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX(commodity_selector),
+                                              separator_row_func, nullptr, nullptr);
+        g_signal_connect (G_OBJECT(commodity_selector), "changed",
+                          G_CALLBACK(csv_price_imp_preview_commodity_sel_cb), this);
 
         /* Add currency selection widget */
         currency_selector = GTK_WIDGET(gtk_builder_get_object (builder, "currency_cbox"));
