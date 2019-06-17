@@ -77,6 +77,7 @@
 (export gnc:make-text-option)
 (export gnc:make-font-option)
 (export gnc:make-currency-option)
+(export gnc:make-currency-complex-option)
 (export gnc:make-commodity-option)
 (export gnc:make-simple-boolean-option)
 (export gnc:make-complex-boolean-option)
@@ -272,6 +273,7 @@
 (load-from-path "date-utilities")
 
 ;; Business options
+(define gnc:*book-base-currency* (N_ "Book Base Currency"))
 (define gnc:*business-label* (N_ "Business"))
 (define gnc:*company-name* (N_ "Company Name"))
 (define gnc:*company-addy* (N_ "Company Address"))
@@ -295,6 +297,7 @@
 (export gnc:*business-label* gnc:*company-name*  gnc:*company-addy* 
         gnc:*company-id*     gnc:*company-phone* gnc:*company-fax* 
         gnc:*company-url*    gnc:*company-email* gnc:*company-contact*
+        gnc:*book-base-currency*
         gnc:*fancy-date-label* gnc:*fancy-date-format*
         gnc:company-info gnc:fancy-date-info)
 

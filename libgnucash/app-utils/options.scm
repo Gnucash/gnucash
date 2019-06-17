@@ -299,6 +299,21 @@ the option '~a'."))
          sort-tag
          documentation-string
          default-value)
+  (gnc:make-currency-complex-option section
+                                    name
+                                    sort-tag
+                                    documentation-string
+                                    default-value
+                                    #f #f))
+
+(define (gnc:make-currency-complex-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         setter-function-called-cb
+         option-widget-changed-cb)
 
   (define (currency->scm currency)
     (if (string? currency)
@@ -317,7 +332,10 @@ the option '~a'."))
      (gnc:make-option
       section name sort-tag 'currency documentation-string
       (lambda ()  (scm->currency value))
-      (lambda (x) (set! value (currency->scm x)))
+      (lambda (x)
+        (set! value (currency->scm x))
+        (and (procedure? setter-function-called-cb)
+             (setter-function-called-cb x)))
       (lambda ()  (scm->currency default-value))
       (gnc:restore-form-generator value->string)
       (lambda (b p) (qof-book-set-option b value p))
@@ -326,7 +344,9 @@ the option '~a'."))
           (if (and v (string? v))
               (set! value v))))
       (lambda (x) (list #t x))
-      #f #f #f #f)))
+      #f #f #f
+      (and (procedure? option-widget-changed-cb)
+           (lambda (x) (option-widget-changed-cb x))))))
 
 ;; budget option
 ;; TODO: need to double-check this proc (dates back to r11545 or eariler)

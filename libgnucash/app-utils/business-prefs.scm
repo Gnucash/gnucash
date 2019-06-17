@@ -128,6 +128,14 @@
   ;; Accounts tab
 
   (reg-option
+   (gnc:make-currency-complex-option
+    gnc:*option-section-accounts* gnc:*book-base-currency*
+    "z" (_ "Currency of root account")
+    (xaccAccountGetCommodity (gnc-get-current-root-account))
+    (lambda (x) (xaccAccountSetCommodity (gnc-get-current-root-account) x))
+    #f))
+
+  (reg-option
    (gnc:make-number-range-option
 	gnc:*option-section-accounts* gnc:*option-name-auto-readonly-days*
 	"a" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
