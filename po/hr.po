@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-03-30 14:44-0700\n"
-"PO-Revision-Date: 2019-06-15 22:09+0200\n"
+"PO-Revision-Date: 2019-06-17 14:07+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -29124,31 +29124,31 @@ msgstr "(Porezni podkonti: %d)"
 #. colon. You should only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:920
 msgid "not cleared:n"
-msgstr "not cleared:n"
+msgstr "n"
 
 # p = potvrđeno
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:923
 msgid "cleared:c"
-msgstr "cleared:p"
+msgstr "p"
 
 # d = da
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:926
 msgid "reconciled:y"
-msgstr "reconciled:d"
+msgstr "d"
 
 # z = zamrznuto
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:929
 msgid "frozen:f"
-msgstr "frozen:z"
+msgstr "z"
 
 # s = storno
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:932
 msgid "void:v"
-msgstr "void:s"
+msgstr "s"
 
 #: libgnucash/app-utils/gnc-ui-util.c:973
 msgid "Opening Balances"
