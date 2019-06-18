@@ -122,13 +122,11 @@
                             "#F012BE" "#3D9970" "#39CCCC" "#f39c12"
                             "#e74c3c" "#e67e22" "#9b59b6" "#8e44ad"
                             "#16a085" "#d35400"))
-  (define (assign-colors i)
-    (if (<= num-colors i)
-        '()
-        (cons (list-ref base-colors
-                        (modulo i (length base-colors)))
-              (assign-colors (+ i 1)))))
-  (assign-colors 0))
+  (let lp ((i 0) (result '()) (colors base-colors))
+    (cond
+     ((>= num-colors i) (reverse result))
+     ((null? colors)    (lp (1+ i) (cons (car colors) result) base-colors))
+     (else              (lp (1+ i) (cons (car colors) result) (cdr colors))))))
 
 ;; Appends a horizontal ruler to a html-table with the specified
 ;; colspan at, optionally, the specified column.
@@ -183,9 +181,6 @@
 	 table tree-depth
 	 current-depth my-name my-balance 
 	 reverse-balance? row-style boldface? group-header-line?)
-  ;; just a stupid little helper
-  (define (identity a)
-    a)
   (gnc:html-table-append-row/markup! 
    table
    row-style
