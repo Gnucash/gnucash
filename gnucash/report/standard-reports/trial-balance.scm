@@ -714,31 +714,17 @@
 		(set! parent-headings
 		      (apply append
 			     (map
-			      (if gnc:colspans-are-working-right
-				  (lambda (heading)
-				    (list 
-				     (gnc:make-html-table-cell/size/markup
-				      1 2 "th" heading)
-				     )
-				    )
-				  (lambda (heading)
-				    (list
-				     (gnc:make-html-table-cell/size/markup
-				      1 1 "th" heading)
-				     (gnc:html-make-empty-cell)
-				     )
-				    )
-				  )
+                              (lambda (heading)
+				(list
+				 (gnc:make-html-table-cell/size/markup 1 1 "th" heading)
+				 (gnc:html-make-empty-cell)))
 			      headings)
 			     )
 		      )
 		(gnc:html-table-append-row!
 		 build-table
 		 (append
-		  (if gnc:colspans-are-working-right
-		      (list (gnc:make-html-table-cell/size 1 account-cols #f))
-		      (gnc:html-make-empty-cells account-cols)
-		      )
+                  (gnc:html-make-empty-cells account-cols)
 		  parent-headings)
 		 )
 		(set! header-rows (+ header-rows 1))
@@ -1187,11 +1173,7 @@
 		 build-table
 		 "primary-subheading"
 		 (append
-		  (if gnc:colspans-are-working-right
-		      (list (gnc:make-html-table-cell/size
-			     1 (+ account-cols (* 2 is-col)) #f))
-		      (gnc:html-make-empty-cells (+ account-cols (* 2 is-col)))
-		      )
+                  (gnc:html-make-empty-cells (+ account-cols (* 2 is-col)))
 		  (list
 		   (tot-abs-amt-cell (if is-credit? tot-is is-debits))
 		   (tot-abs-amt-cell (if is-credit? is-credits tot-is))
@@ -1217,8 +1199,6 @@
 	  (gnc:report-percent-done 100)
 	  
 	  ;; if sending the report to a file, do so now
-	  ;; however, this still doesn't seem to get around the
-	  ;; colspan bug... cf. gnc:colspans-are-working-right
 	  (if filename
 	      (let* ((port (open-output-file filename)))
                 (gnc:display-report-list-item

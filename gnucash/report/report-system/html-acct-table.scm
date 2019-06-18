@@ -497,7 +497,9 @@
 
 ;; this is to work around a bug in the HTML export sytmem
 ;; which causes COLSPAN= attributes not to be exported (!!)
-(define gnc:colspans-are-working-right #f)
+(define gnc:colspans-are-working-right
+  ;; should be deprecated
+  #f)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-acct-table> class
@@ -928,14 +930,6 @@
     (traverse-accounts! toplvl-accts 0 0
                         (calculate-balances accounts start-date end-date get-balance-fn))
     
-    ;; set the column-header colspan
-    (if gnc:colspans-are-working-right
-	(if (gnc:html-table-cell? column-header)
-	    (gnc:html-table-cell-set-colspan! column-header
-					      (+ disp-depth-reached 1 indent))
-	    )
-	)
-    
     ;; now set the account-colspan entries
     ;; he he... (let ((x 0)) (while (< x 5) (display x) (set! x (+ x 1))))
     ;; now I know how to loop in scheme... yay!
@@ -1094,13 +1088,9 @@
          amount-colspan    ;; defaults to one
          amount-markup)    ;; optional
   (let* ((lbl-depth (or label-depth 0))
-	 (lbl-colspan (if gnc:colspans-are-working-right
-			  (or label-colspan 1)
-			  1))
+	 (lbl-colspan 1)
 	 (amt-depth (or amount-depth (+ lbl-depth lbl-colspan)))
-	 (amt-colspan (if gnc:colspans-are-working-right
-			  (or amount-colspan 1)
-			  1))
+	 (amt-colspan 1)
 	 (tbl-width (or table-width (+ amt-depth amt-colspan)))
 	 (row
 	  (append
