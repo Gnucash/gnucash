@@ -989,6 +989,7 @@
   (gnc:html-table-num-rows (gnc:_html-acct-table-matrix_ acct-table)))
 
 (define (gnc:html-acct-table-num-cols acct-table)
+  (issue-deprecation-warning "gnc:html-acct-table-num-cols is unused.")
   (- (gnc:html-table-num-columns (gnc:_html-acct-table-matrix_ acct-table)) 1))
 
 (define (gnc:html-acct-table-get-cell acct-table row col)
@@ -1015,6 +1016,7 @@
   (gnc:html-acct-table-set-cell! acct-table row -1 env))
 
 (define (gnc:html-acct-table-append-row! acct-table newrow)
+  (issue-deprecation-warning "gnc:html-acct-table-append-row! is unused.")
   (gnc:html-table-append-row!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
@@ -1022,6 +1024,7 @@
     newrow)))
 
 (define (gnc:html-acct-table-prepend-row! acct-table newrow)
+  (issue-deprecation-warning "gnc:html-acct-table-prepend-row! is unused.")
   (gnc:html-table-prepend-row!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
@@ -1029,6 +1032,7 @@
     newrow)))
 
 (define (gnc:html-acct-table-append-col! acct-table newcol)
+  (issue-deprecation-warning "gnc:html-acct-table-append-col! is unused.")
   (gnc:html-table-append-col!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
@@ -1036,6 +1040,7 @@
     newcol)))
 
 (define (gnc:html-acct-table-prepend-col! acct-table newrow)
+  (issue-deprecation-warning "gnc:html-acct-table-prepend-col! is unused.")
   (gnc:html-table-prepend-col!
    (gnc:_html-acct-table-matrix_ acct-table)
    (map
@@ -1043,15 +1048,14 @@
     newcol)))
 
 (define (gnc:html-acct-table-remove-last-row! acct-table)
+  (issue-deprecation-warning "gnc:html-acct-table-remove-last-row! is unused.")
   (gnc:html-table-remove-last-row! (gnc:_html-acct-table-matrix_ acct-table)))
-
-;; don't think we need this.
-;;(define (gnc:identity i) i)
 
 (define (gnc:html-acct-table-render acct-table doc)
   ;; this will be used if we ever decide to let the utility object
   ;; render a document by calling thunks registered in the row-envs...
   ;; but, for now, this (optional) feature is left unimplemented...
+  (issue-deprecation-warning "gnc:html-acct-table-render is unused.")
   #f
   )
 
