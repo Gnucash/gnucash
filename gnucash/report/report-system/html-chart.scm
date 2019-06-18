@@ -452,8 +452,8 @@ document.getElementById(chartid).onclick = function(evt) {
          ;; clashing on multi-column reports
          (id (guid-new-return)))
 
-    (push (format #f "<script language='javascript' type='text/javascript' src='file://~a'></script>\n"
-                  (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
+    (push (gnc:html-js-include
+           (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
 
     (push (format #f "<div style='width:~a;height:~a;'>\n"
                   (size->str (gnc:html-chart-width chart))
