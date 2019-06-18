@@ -388,38 +388,13 @@
 ;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
 ;; section of the progress bar while running this function.
 ;;
-(define (gnc:html-build-acct-table 
-	 start-date end-date 
-	 tree-depth show-subaccts? accounts 
-	 start-percent delta-percent
-	 show-col-headers?
-	 show-total? get-total-fn
-	 total-name group-types? show-parent-balance? show-parent-total? 
-	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
-  ;; Select, here, which version of gnc:html-build-acct-table you want
-  ;; to use by default.
-  (define fn-version 'first)
-  (if (equal? fn-version 'second)
-      (gnc:second-html-build-acct-table 
-       start-date end-date 
-       tree-depth show-subaccts? accounts 
-       start-percent delta-percent
-       show-col-headers?
-       show-total? get-total-fn
-       total-name group-types? show-parent-balance? show-parent-total? 
-       show-other-curr? report-commodity exchange-fn show-zero-entries?)
-      (gnc:first-html-build-acct-table 
-       start-date end-date 
-       tree-depth show-subaccts? accounts 
-       start-percent delta-percent
-       show-col-headers?
-       show-total? get-total-fn
-       total-name group-types? show-parent-balance? show-parent-total? 
-       show-other-curr? report-commodity exchange-fn show-zero-entries?)
-      )
-  )
 
-(define (gnc:first-html-build-acct-table 
+(define (gnc:first-html-build-acct-table . args)
+  (issue-deprecation-warning
+   "gnc:first-html-build-acct-table is deprecated. use gnc:html-build-acct-table.")
+  (apply gnc:html-build-acct-table args))
+
+(define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
 	 start-percent delta-percent

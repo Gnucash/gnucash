@@ -1373,6 +1373,8 @@
   ;; presently unimplemented.  many of these functions are better left
   ;; to the renderer, anyway.  but if you *really* need them, you may
   ;; still use gnc:first-html-build-acct-table.
+  (issue-deprecation-warning
+   "gnc:second-html-build-acct-table is unused. use gnc:html-build-acct-table.")
   (let* ((env (list
 	       (list 'start-date start-date)
 	       (list 'end-date end-date)
