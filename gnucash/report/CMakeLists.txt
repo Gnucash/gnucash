@@ -116,7 +116,7 @@ gnc_add_scheme_targets(scm-report-eguile-parts
 gnc_add_scheme_targets(scm-report-eguile
   "${report_eguile_SCHEME}"
   "gnucash"
-  scm-report-equile-parts
+  scm-report-eguile-parts
   FALSE
 )
 
