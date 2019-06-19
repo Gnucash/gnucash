@@ -184,13 +184,11 @@
                             "#F012BE" "#3D9970" "#39CCCC" "#f39c12"
                             "#e74c3c" "#e67e22" "#9b59b6" "#8e44ad"
                             "#16a085" "#d35400"))
-  (define (assign-colors i)
-    (if (<= num-colors i)
-        '()
-        (cons (list-ref base-colors
-                        (modulo i (length base-colors)))
-              (assign-colors (+ i 1)))))
-  (assign-colors 0))
+  (let lp ((i 0) (result '()) (colors base-colors))
+    (cond
+     ((>= num-colors i) (reverse result))
+     ((null? colors)    (lp (1+ i) (cons (car colors) result) base-colors))
+     (else              (lp (1+ i) (cons (car colors) result) (cdr colors))))))
 
 ;; Appends a horizontal ruler to a html-table with the specified
 ;; colspan at, optionally, the specified column.
@@ -245,9 +243,6 @@
 	 table tree-depth
 	 current-depth my-name my-balance 
 	 reverse-balance? row-style boldface? group-header-line?)
-  ;; just a stupid little helper
-  (define (identity a)
-    a)
   (gnc:html-table-append-row/markup! 
    table
    row-style
@@ -455,38 +450,13 @@
 ;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
 ;; section of the progress bar while running this function.
 ;;
-(define (gnc:html-build-acct-table 
-	 start-date end-date 
-	 tree-depth show-subaccts? accounts 
-	 start-percent delta-percent
-	 show-col-headers?
-	 show-total? get-total-fn
-	 total-name group-types? show-parent-balance? show-parent-total? 
-	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
-  ;; Select, here, which version of gnc:html-build-acct-table you want
-  ;; to use by default.
-  (define fn-version 'first)
-  (if (equal? fn-version 'second)
-      (gnc:second-html-build-acct-table 
-       start-date end-date 
-       tree-depth show-subaccts? accounts 
-       start-percent delta-percent
-       show-col-headers?
-       show-total? get-total-fn
-       total-name group-types? show-parent-balance? show-parent-total? 
-       show-other-curr? report-commodity exchange-fn show-zero-entries?)
-      (gnc:first-html-build-acct-table 
-       start-date end-date 
-       tree-depth show-subaccts? accounts 
-       start-percent delta-percent
-       show-col-headers?
-       show-total? get-total-fn
-       total-name group-types? show-parent-balance? show-parent-total? 
-       show-other-curr? report-commodity exchange-fn show-zero-entries?)
-      )
-  )
 
-(define (gnc:first-html-build-acct-table 
+(define (gnc:first-html-build-acct-table . args)
+  (issue-deprecation-warning
+   "gnc:first-html-build-acct-table is deprecated. use gnc:html-build-acct-table.")
+  (apply gnc:html-build-acct-table args))
+
+(define (gnc:html-build-acct-table 
 	 start-date end-date 
 	 tree-depth show-subaccts? accounts 
 	 start-percent delta-percent

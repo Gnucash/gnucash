@@ -683,8 +683,6 @@
 	  (gnc:report-percent-done 100)
 	  
 	  ;; if sending the report to a file, do so now
-	  ;; however, this still doesn't seem to get around the
-	  ;; colspan bug... cf. gnc:colspans-are-working-right
 	  (if filename
 	      (let* ((port (open-output-file filename)))
                 (gnc:display-report-list-item

@@ -280,4 +280,13 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
  'name reportname
  'report-guid "5bf27f249a0d11e7abc4cec278b6b50a"
  'options-generator gst-statement-options-generator
- 'renderer gst-statement-renderer)
+ 'renderer gst-statement-renderer
+ 'export-types (list (cons "CSV" 'csv))
+ 'export-thunk (lambda (report-obj export-type file-name)
+                 (gnc:trep-renderer
+                  report-obj
+                  #:custom-calculated-cells gst-calculated-cells
+                  #:empty-report-message TAX-SETUP-DESC
+                  #:custom-split-filter gst-custom-split-filter
+                  #:export-type export-type
+                  #:filename file-name)))
