@@ -124,8 +124,8 @@
                             "#16a085" "#d35400"))
   (let lp ((i 0) (result '()) (colors base-colors))
     (cond
-     ((>= num-colors i) (reverse result))
-     ((null? colors)    (lp (1+ i) (cons (car colors) result) base-colors))
+     ((<= num-colors i) (reverse result))
+     ((null? colors)    (lp (1+ i) (cons (car base-colors) result) (cdr base-colors)))
      (else              (lp (1+ i) (cons (car colors) result) (cdr colors))))))
 
 ;; Appends a horizontal ruler to a html-table with the specified
