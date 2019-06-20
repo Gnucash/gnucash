@@ -386,7 +386,7 @@ hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
 static gchar *
 ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
 {
-    gchar *bankname = "";
+    gchar *bankname = NULL;
     gchar *result = NULL;
     const char *ab_bankname, *bankcode, *subAccountId, *account_number;
 
@@ -398,7 +398,7 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
     account_number = AB_AccountSpec_GetAccountNumber (ab_acc);
 #else
     ab_bankname = AB_Account_GetBankName(ab_acc);
-    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : "";
+    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
     bankcode = AB_Account_GetBankCode(ab_acc);
     subAccountId = AB_Account_GetSubAccountId(ab_acc);
     account_number = AB_Account_GetAccountNumber (ab_acc);
@@ -406,7 +406,9 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
     /* Translators: Strings are 1. Bank code, 2. Bank name,
      * 3. Account Number,  4. Subaccount ID                  */
     result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
-                             bankcode, bankname, account_number,
+                             bankcode,
+                             bankname ? bankname : "",
+                             account_number,
                              subAccountId ? subAccountId : "");
     g_free(bankname);
 
