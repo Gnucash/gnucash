@@ -1058,9 +1058,10 @@
 ;; 
 
 (define (gnc:html-make-nbsps n)
-  (if (> n 0)
-      (string-append "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" (gnc:html-make-nbsps (- n 1)))
-      ""))
+  (let lp ((n n) (res '()))
+    (if (positive? n)
+        (lp (1- n) (cons "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" res))
+        (string-join res ""))))
 
 ;; Stylesheets define the following cell styles which these functions
 ;; use: "text-cell" "total-label-cell" "number-cell"
