@@ -350,7 +350,7 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
         tmp = g_strdup(ab_transactionText);
         g_strstrip(tmp);
         gnc_utf8_strip_invalid(tmp);
-        gnc_description=tmp;
+        gnc_other_name = tmp;
     }
 #else
         GWEN_StringList_ForEach(ab_remote_name, join_ab_strings_cb,
