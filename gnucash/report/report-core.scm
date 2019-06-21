@@ -888,7 +888,7 @@ not found.")))
                              '("custom-templates" "guids"))
         (cond
          ((null? errors)
-          (gnc:gui-msg saved (_ saved))
+          ;; (gnc:gui-msg saved (_ saved))
           #t)
 
          (else
