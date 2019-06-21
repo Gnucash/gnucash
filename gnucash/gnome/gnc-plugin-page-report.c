@@ -834,8 +834,8 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 
 /** The key name used it the state file for storing the report
  *  options. */
-#define SCHEME_OPTIONS   "SchemeOptions"
-#define SCHEME_OPTIONS_N "SchemeOptions%d"
+#define SCHEME_OPTIONS   "JSONOptions"
+#define SCHEME_OPTIONS_N "JSONOptions%d"
 
 
 /** Save enough information about this report page that it can be
