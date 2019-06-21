@@ -41,6 +41,16 @@
 (define gnc:html-piechart? 
   (record-predicate <html-piechart>))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-piechart> class
@@ -161,3 +171,31 @@
      (else
       (gnc:warn "null-data, not rendering piechart")
       ""))))
+
+(gnc:guard-html-chart gnc:html-piechart-data)
+(gnc:guard-html-chart gnc:html-piechart-set-data!)
+(gnc:guard-html-chart gnc:html-piechart-width)
+(gnc:guard-html-chart gnc:html-piechart-set-width!)
+(gnc:guard-html-chart gnc:html-piechart-height)
+(gnc:guard-html-chart gnc:html-piechart-set-height!)
+(gnc:guard-html-chart gnc:html-piechart-labels)
+(gnc:guard-html-chart gnc:html-piechart-set-labels!)
+(gnc:guard-html-chart gnc:html-piechart-colors)
+(gnc:guard-html-chart gnc:html-piechart-set-colors!)
+(gnc:guard-html-chart gnc:html-piechart-title)
+(gnc:guard-html-chart gnc:html-piechart-set-title!)
+(gnc:guard-html-chart gnc:html-piechart-subtitle)
+(gnc:guard-html-chart gnc:html-piechart-set-subtitle!)
+(gnc:guard-html-chart gnc:html-piechart-button-1-slice-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-1-slice-urls!)
+(gnc:guard-html-chart gnc:html-piechart-button-2-slice-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-2-slice-urls!)
+(gnc:guard-html-chart gnc:html-piechart-button-3-slice-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-3-slice-urls!)
+(gnc:guard-html-chart gnc:html-piechart-button-1-legend-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-1-legend-urls!)
+(gnc:guard-html-chart gnc:html-piechart-button-2-legend-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-2-legend-urls!)
+(gnc:guard-html-chart gnc:html-piechart-button-3-legend-urls)
+(gnc:guard-html-chart gnc:html-piechart-set-button-3-legend-urls!)
+(gnc:guard-html-chart gnc:html-piechart-render)

@@ -50,6 +50,17 @@
                       button-3-legend-urls
                       line-width)))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
+
 (define gnc:html-linechart?
   (record-predicate <html-linechart>))
 
@@ -358,3 +369,55 @@
       (gnc:warn "null-data, not rendering linechart")
       ""))))
 
+
+(gnc:guard-html-chart gnc:html-linechart-data)
+(gnc:guard-html-chart gnc:html-linechart-set-data!)
+(gnc:guard-html-chart gnc:html-linechart-width)
+(gnc:guard-html-chart gnc:html-linechart-set-width!)
+(gnc:guard-html-chart gnc:html-linechart-height)
+(gnc:guard-html-chart gnc:html-linechart-set-height!)
+(gnc:guard-html-chart gnc:html-linechart-x-axis-label)
+(gnc:guard-html-chart gnc:html-linechart-set-x-axis-label!)
+(gnc:guard-html-chart gnc:html-linechart-y-axis-label)
+(gnc:guard-html-chart gnc:html-linechart-set-y-axis-label!)
+(gnc:guard-html-chart gnc:html-linechart-row-labels)
+(gnc:guard-html-chart gnc:html-linechart-set-row-labels!)
+(gnc:guard-html-chart gnc:html-linechart-row-labels-rotated?)
+(gnc:guard-html-chart gnc:html-linechart-set-row-labels-rotated?!)
+(gnc:guard-html-chart gnc:html-linechart-stacked?)
+(gnc:guard-html-chart gnc:html-linechart-set-stacked?!)
+(gnc:guard-html-chart gnc:html-linechart-markers?)
+(gnc:guard-html-chart gnc:html-linechart-set-markers?!)
+(gnc:guard-html-chart gnc:html-linechart-major-grid?)
+(gnc:guard-html-chart gnc:html-linechart-set-major-grid?!)
+(gnc:guard-html-chart gnc:html-linechart-minor-grid?)
+(gnc:guard-html-chart gnc:html-linechart-set-minor-grid?!)
+(gnc:guard-html-chart gnc:html-linechart-col-labels)
+(gnc:guard-html-chart gnc:html-linechart-set-col-labels!)
+(gnc:guard-html-chart gnc:html-linechart-col-colors)
+(gnc:guard-html-chart gnc:html-linechart-set-col-colors!)
+(gnc:guard-html-chart gnc:html-linechart-legend-reversed?)
+(gnc:guard-html-chart gnc:html-linechart-set-legend-reversed?!)
+(gnc:guard-html-chart gnc:html-linechart-title)
+(gnc:guard-html-chart gnc:html-linechart-set-title!)
+(gnc:guard-html-chart gnc:html-linechart-subtitle)
+(gnc:guard-html-chart gnc:html-linechart-set-subtitle!)
+(gnc:guard-html-chart gnc:html-linechart-button-1-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-1-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-2-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-2-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-3-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-3-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-1-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-1-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-2-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-2-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-3-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-3-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-append-row!)
+(gnc:guard-html-chart gnc:html-linechart-prepend-row!)
+(gnc:guard-html-chart gnc:html-linechart-append-column!)
+(gnc:guard-html-chart gnc:html-linechart-prepend-column!)
+(gnc:guard-html-chart gnc:html-linechart-render)
+(gnc:guard-html-chart gnc:html-linechart-set-line-width!)
+(gnc:guard-html-chart gnc:html-linechart-line-width)

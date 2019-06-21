@@ -44,6 +44,17 @@
                       markercolor
                       )))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
+
 (define gnc:html-scatter? 
   (record-predicate <html-scatter>))
 
@@ -162,3 +173,24 @@
      (else
       (gnc:warn "null-data, not rendering scatter")
       ""))))
+
+(gnc:guard-html-chart gnc:html-scatter-width)
+(gnc:guard-html-chart gnc:html-scatter-set-width!)
+(gnc:guard-html-chart gnc:html-scatter-height)
+(gnc:guard-html-chart gnc:html-scatter-set-height!)
+(gnc:guard-html-chart gnc:html-scatter-title)
+(gnc:guard-html-chart gnc:html-scatter-set-title!)
+(gnc:guard-html-chart gnc:html-scatter-subtitle)
+(gnc:guard-html-chart gnc:html-scatter-set-subtitle!)
+(gnc:guard-html-chart gnc:html-scatter-x-axis-label)
+(gnc:guard-html-chart gnc:html-scatter-set-x-axis-label!)
+(gnc:guard-html-chart gnc:html-scatter-y-axis-label)
+(gnc:guard-html-chart gnc:html-scatter-set-y-axis-label!)
+(gnc:guard-html-chart gnc:html-scatter-data)
+(gnc:guard-html-chart gnc:html-scatter-set-data!)
+(gnc:guard-html-chart gnc:html-scatter-marker)
+(gnc:guard-html-chart gnc:html-scatter-set-marker!)
+(gnc:guard-html-chart gnc:html-scatter-markercolor)
+(gnc:guard-html-chart gnc:html-scatter-set-markercolor!)
+(gnc:guard-html-chart gnc:html-scatter-add-datapoint!)
+(gnc:guard-html-chart gnc:html-scatter-render)

@@ -43,6 +43,17 @@
                       button-2-legend-urls 
 		      button-3-legend-urls)))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
+
 (define gnc:html-barchart? 
   (record-predicate <html-barchart>))
 
@@ -297,3 +308,47 @@
      (else
       (gnc:warn "null-data, not rendering barchart")
       ""))))
+
+(gnc:guard-html-chart gnc:html-barchart-data)
+(gnc:guard-html-chart gnc:html-barchart-set-data!)
+(gnc:guard-html-chart gnc:html-barchart-width)
+(gnc:guard-html-chart gnc:html-barchart-set-width!)
+(gnc:guard-html-chart gnc:html-barchart-height)
+(gnc:guard-html-chart gnc:html-barchart-set-height!)
+(gnc:guard-html-chart gnc:html-barchart-x-axis-label)
+(gnc:guard-html-chart gnc:html-barchart-set-x-axis-label!)
+(gnc:guard-html-chart gnc:html-barchart-y-axis-label)
+(gnc:guard-html-chart gnc:html-barchart-set-y-axis-label!)
+(gnc:guard-html-chart gnc:html-barchart-row-labels)
+(gnc:guard-html-chart gnc:html-barchart-set-row-labels!)
+(gnc:guard-html-chart gnc:html-barchart-row-labels-rotated?)
+(gnc:guard-html-chart gnc:html-barchart-set-row-labels-rotated?!)
+(gnc:guard-html-chart gnc:html-barchart-stacked?)
+(gnc:guard-html-chart gnc:html-barchart-set-stacked?!)
+(gnc:guard-html-chart gnc:html-barchart-col-labels)
+(gnc:guard-html-chart gnc:html-barchart-set-col-labels!)
+(gnc:guard-html-chart gnc:html-barchart-col-colors)
+(gnc:guard-html-chart gnc:html-barchart-set-col-colors!)
+(gnc:guard-html-chart gnc:html-barchart-legend-reversed?)
+(gnc:guard-html-chart gnc:html-barchart-set-legend-reversed?!)
+(gnc:guard-html-chart gnc:html-barchart-title)
+(gnc:guard-html-chart gnc:html-barchart-set-title!)
+(gnc:guard-html-chart gnc:html-barchart-subtitle)
+(gnc:guard-html-chart gnc:html-barchart-set-subtitle!)
+(gnc:guard-html-chart gnc:html-barchart-button-1-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-1-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-2-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-2-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-3-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-3-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-1-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-1-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-2-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-2-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-3-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-3-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-append-row!)
+(gnc:guard-html-chart gnc:html-barchart-prepend-row!)
+(gnc:guard-html-chart gnc:html-barchart-append-column!)
+(gnc:guard-html-chart gnc:html-barchart-prepend-column!)
+(gnc:guard-html-chart gnc:html-barchart-render)
