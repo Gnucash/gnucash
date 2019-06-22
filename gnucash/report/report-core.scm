@@ -624,6 +624,8 @@ not found.")))
 
 ;; Generate guile code required to recreate an instatiated report
 (define (gnc:report-serialize report)
+  (issue-deprecation-warning
+   "gnc:report-serialize is now obsolete.")
   ;; clean up the options if necessary.  this is only needed
   ;; in special cases.
   (let* ((report-type (gnc:report-type report))
@@ -652,6 +654,8 @@ not found.")))
 
 ;; Generate guile code required to recreate embedded report instances
 (define (gnc:report-serialize-embedded embedded-reports)
+  (issue-deprecation-warning
+   "gnc:report-serialize-embedded is now obsolete.")
   (let* ((result-string ""))
     (if embedded-reports
         (begin
@@ -705,6 +709,8 @@ not found.")))
     result-string))
 
 (define (gnc:report-template-serialize-internal name type templ-name options guid)
+  (issue-deprecation-warning
+   "gnc:report-template-serialize-internal is now obsolete.")
   (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
          (result (string-append
                   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
@@ -732,6 +738,8 @@ not found.")))
 ;; Convert an instantiated report into a report template
 ;; and generate the guile code required to recreate this template
 (define (gnc:report-template-serialize-from-report report)
+  (issue-deprecation-warning
+   "gnc:report-template-serialize-internal is now obsolete.")
   ;; clean up the options if necessary.  this is only needed
   ;; in special cases.
   (let* ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
@@ -754,6 +762,8 @@ not found.")))
 ;; embedded report instances. This results in a mix of template and
 ;; instatiated reports in the saved reports file...
 (define (gnc:report-template-serialize report-template)
+  (issue-deprecation-warning
+   "gnc:report-template-serialize is now obsolete.")
   (let* ((name (gnc:report-template-name report-template))
          (type (gnc:report-template-parent-type report-template))
          (templ-name (gnc:report-template-name
@@ -867,6 +877,8 @@ not found.")))
   (gnc:report-to-template report #t))
 
 (define (gnc:report-template-save-to-savefile report-template)
+  (issue-deprecation-warning
+   "gnc:report-template-save-to-savefile is now obsolete.")
   (let ((saved-form (gnc:report-template-serialize report-template)))
     (gnc-saved-reports-write-to-file saved-form #f)))
 
