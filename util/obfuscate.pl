@@ -6,6 +6,8 @@
 
 use strict;
 use warnings;
+use utf8;
+use Encode;
 
 use Digest::MD5 qw(md5_hex);
 use XML::DOM; # on ubuntu this requires 'libxml-dom-perl'
@@ -32,7 +34,8 @@ close DICT;
 sub get_a_name {
 	my $scalar = shift;
 	return '' if !$scalar;
-	my $index = hex substr(md5_hex($scalar),-$hex_digits);
+	my $scalar_encoded = utf8::is_utf8($scalar) ? Encode::encode_utf8($scalar) : $scalar;
+	my $index = hex substr(md5_hex($scalar_encoded),-$hex_digits);
 	my $result = $dict[$index];
 	chop $result;
 	return $result;
