@@ -169,7 +169,7 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
        currencies and no non-currency commodity.  In that case can use the simpler
        value imbalance check. */
     ro_text = xaccPrintAmount(xaccTransGetImbalanceValue(trans),
-                              gnc_default_print_info(TRUE));
+                              gnc_commodity_print_info (xaccTransGetCurrency (trans), TRUE));
     gtk_list_store_set(store, &iter, DOWNLOADED_COL_BALANCED, ro_text, -1);
 
     gtk_list_store_set(store, &iter, DOWNLOADED_COL_INFO_PTR,
