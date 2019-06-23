@@ -652,14 +652,15 @@ GncXmlBackend::get_file_lock ()
         case EACCES:
         case EROFS:
         case ENOSPC:
-            PWARN ("Unable to create the lockfile %s; may not have write priv",
-                   m_lockfile.c_str());
             be_err = ERR_BACKEND_READONLY;
             break;
         default:
             be_err = ERR_BACKEND_LOCKED;
             break;
         }
+        if (errno != EEXIST) // Can't lock, but not because the file is locked
+            PWARN ("Unable to create the lockfile %s: %s",
+                   m_lockfile.c_str(), strerror(errno));
         set_error(be_err);
         return false;
     }
