@@ -212,43 +212,29 @@
               c)))
        string))))
 
-(define (query-toplevel-setup query account-list start-date end-date)
-  (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-  (xaccQueryAddDateMatchTT query #t start-date #t end-date QOF-QUERY-AND)
-  (qof-query-set-book query (gnc-get-current-book))
-  query)
-
-(define (query-owner-setup q owner)
+(define (query-setup q owner account-list start-date end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
     (qof-query-add-guid-match
-     q
-     (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER
-           OWNER-PARENTG)
+     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER OWNER-PARENTG)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q
-     (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-BILLTO
-           OWNER-PARENTG)
+     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-BILLTO OWNER-PARENTG)
      guid QOF-QUERY-OR)
     ;; Apparently those query terms are unneeded because we never take
     ;; lots into account?!?
-    ;;    (qof-query-add-guid-match
-    ;;     q
-    ;;     (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
-    ;;     guid QOF-QUERY-OR)
-    ;;    (qof-query-add-guid-match
-    ;;     q
-    ;;     (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER
-    ;;           OWNER-PARENTG)
-    ;;     guid QOF-QUERY-OR)
-    ;;    (qof-query-add-guid-match
-    ;;     q
-    ;;     (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-BILLTO
-    ;;           OWNER-PARENTG)
-    ;;     guid QOF-QUERY-OR)
+    ;; (qof-query-add-guid-match
+    ;;  q (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
+    ;;  guid QOF-QUERY-OR)
+    ;; (qof-query-add-guid-match
+    ;;  q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER OWNER-PARENTG)
+    ;;  guid QOF-QUERY-OR)
+    ;; (qof-query-add-guid-match
+    ;;  q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-BILLTO OWNER-PARENTG)
+    ;;  guid QOF-QUERY-OR)
+    (xaccQueryAddAccountMatch q account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT q #t start-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     q))
-
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
@@ -294,14 +280,6 @@
   (if (zero? sales) 0
       (* 100 (/ profit sales))))
 
-(define (query-split-value sub-query toplevel-query)
-  (let ((splits (qof-query-run-subquery sub-query toplevel-query)))
-    (apply + (map xaccSplitGetValue splits))))
-
-(define (single-query-split-value query)
-  (let ((splits (qof-query-run query)))
-    (apply + (map xaccSplitGetValue splits))))
-
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (reg-renderer report-obj)
@@ -324,6 +302,9 @@
          (expense-accounts (opt-val pagename-expenseaccounts optname-expenseaccounts))
          (income-accounts (opt-val pagename-incomeaccounts optname-incomeaccounts))
          (all-accounts (append income-accounts expense-accounts))
+         (commodities (delete-duplicates
+                       (map xaccAccountGetCommodity all-accounts)
+                       gnc-commodity-equiv))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date book))
          (type (opt-val "__reg" "owner-type"))
@@ -332,11 +313,8 @@
                      book
                      (gncOwnerTypeToQofIdType type)
                      (opt-val gnc:pagename-display optname-show-inactive)))
-         (toplevel-income-query (qof-query-create-for-splits))
-         (toplevel-expense-query (qof-query-create-for-splits))
-         (toplevel-total-income #f)
-         (toplevel-total-expense #f)
-         (owner-query (qof-query-create-for-splits))
+         (toplevel-total-income (gnc:make-commodity-collector))
+         (toplevel-total-expense (gnc:make-commodity-collector))
          (any-valid-owner? #f)
          (type-str (cond
                     ((eqv? type GNC-OWNER-CUSTOMER) (N_ "Customer"))
@@ -348,23 +326,23 @@
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
 
-    ;; Set up the toplevel query
-    (query-toplevel-setup toplevel-income-query income-accounts start-date end-date)
+    (for-each
+     (lambda (acc)
+       (toplevel-total-income
+        'add (xaccAccountGetCommodity acc)
+        ((if reverse? - identity)
+         (- (xaccAccountGetBalanceAsOfDate acc end-date)
+            (xaccAccountGetBalanceAsOfDate acc start-date)))))
+     income-accounts)
 
-    ;; Run the query to be able to use the results in a sub-query, and
-    ;; also use the amount as the actual grand total (both assigned
-    ;; and not assigned to customers)
-    (set! toplevel-total-income
-      (single-query-split-value toplevel-income-query))
-    (if reverse?
-        (set! toplevel-total-income (- toplevel-total-income)))
-
-    ;; Total expenses as well
-    (query-toplevel-setup toplevel-expense-query expense-accounts start-date end-date)
-    (set! toplevel-total-expense
-      (single-query-split-value toplevel-expense-query))
-    (if reverse?
-        (set! toplevel-total-expense (- toplevel-total-expense)))
+    (for-each
+     (lambda (acc)
+       (toplevel-total-expense
+        'add (xaccAccountGetCommodity acc)
+        ((if reverse? - identity)
+         (- (xaccAccountGetBalanceAsOfDate acc end-date)
+            (xaccAccountGetBalanceAsOfDate acc start-date)))))
+     expense-accounts)
 
     ;; Continue if we have non-null accounts
     (if (null? income-accounts)
@@ -385,36 +363,45 @@
                 (lambda (owner)
                   ;; Now create the line for one single owner
                   (let ((total-income 0)
-                        (total-expense 0))
-
-                    (set! currency (xaccAccountGetCommodity (car all-accounts)))
+                        (total-expense 0)
+                        (owner-query (qof-query-create-for-splits))
+                        (currency (gncOwnerGetCurrency owner)))
+                        ;; Run one query on all accounts
+                    (query-setup owner-query owner all-accounts start-date end-date)
                     (set! any-valid-owner? #t)
 
-                    ;; Run one query on all income accounts
-                    (query-owner-setup owner-query owner)
+                    (let ((splits (qof-query-run owner-query)))
 
-                    (set! total-income
-                      (query-split-value owner-query toplevel-income-query))
-                    (if reverse?
-                        (set! total-income (- total-income)))
+                      (set! total-income
+                        (gnc:make-gnc-monetary
+                         currency
+                         ((if reverse? - identity)
+                          (apply + (map xaccSplitGetValue
+                                        (filter
+                                         (lambda (s)
+                                           (member (xaccSplitGetAccount s)
+                                                   income-accounts))
+                                         splits))))))
+
+                      (set! total-expense
+                        (gnc:make-gnc-monetary
+                         currency
+                         ((if reverse? - identity)
+                          (apply + (map xaccSplitGetValue
+                                        (filter
+                                         (lambda (s)
+                                           (member (xaccSplitGetAccount s)
+                                                   expense-accounts))
+                                         splits)))))))
 
                     ;; Clean up the query
-                    (qof-query-clear owner-query)
-
-                    ;; And run one query on all expense accounts
-                    (query-owner-setup owner-query owner)
-
-                    (set! total-expense
-                      (query-split-value owner-query toplevel-expense-query))
-                    (if reverse?
-                        (set! total-expense (- total-expense)))
-
-                    ;; Clean up the query
-                    (qof-query-clear owner-query)
+                    (qof-query-destroy owner-query)
 
                     ;; We print the summary now
-                    (let* ((profit (+ total-income total-expense))
-                           (markupfloat (markup-percent profit total-income)))
+                    (let* ((profit (gnc:monetary+ total-income total-expense))
+                           (markupfloat (markup-percent
+                                         (gnc:gnc-monetary-amount profit)
+                                         (gnc:gnc-monetary-amount total-income))))
 
                       ;; Result of this customer
                       (list owner profit markupfloat total-income total-expense))))
@@ -434,9 +421,8 @@
           (let ((table (gnc:make-html-table))
                 (sort-descending? (eq? (opt-val gnc:pagename-display optname-sortascending) 'descend))
                 (sort-key (opt-val gnc:pagename-display optname-sortkey))
-                (total-profit 0)
-                (total-sales 0)
-                (total-expense 0)
+                (total-sales (gnc:make-commodity-collector))
+                (total-expense (gnc:make-commodity-collector))
                 (heading-list
                  (list (_ "Customer")
                        (_ "Profit")
@@ -491,48 +477,59 @@
                          (markupfloat (list-ref row 2))
                          (sales (list-ref row 3))
                          (expense (list-ref row 4)))
-                     (set! total-profit (+ total-profit profit))
-                     (set! total-sales (+ total-sales sales))
-                     (set! total-expense (+ total-expense expense))
+
+                     (total-sales 'add (gnc:gnc-monetary-commodity sales)
+                                  (gnc:gnc-monetary-amount sales))
+                     (total-expense 'add (gnc:gnc-monetary-commodity expense)
+                                    (gnc:gnc-monetary-amount expense))
                      (if (or show-zero-lines?
-                             (not (and (zero? profit) (zero? sales))))
-                         (let ((row-content (list
-                                             (gncOwnerGetName owner)
-                                             (gnc:make-gnc-monetary currency profit)
-                                             ;;(format #f (if (< (abs markupfloat) 10) "~2.1f%%" "%2.0f%%") markupfloat)
-                                             (format #f  "~2,0f%" markupfloat)
-                                             (gnc:make-gnc-monetary currency sales))))
-                           (if show-column-expense?
-                               (set! row-content
-                                 (append row-content
-                                         (list
-                                          (gnc:make-gnc-monetary currency (- expense))))))
-                           (gnc:html-table-append-row!
-                            table row-content))))
+                             (not (and (zero? (gnc:gnc-monetary-amount profit))
+                                       (zero? (gnc:gnc-monetary-amount sales)))))
+                         (gnc:html-table-append-row!
+                          table (append
+                                 (list (gncOwnerGetName owner)
+                                       profit
+                                       (format #f  "~2,0f%" markupfloat)
+                                       sales)
+                                 (if show-column-expense?
+                                     (list expense) '())))))
                    (gnc:warn "Oops, encountered a row with wrong length=" (length row))))
              resulttable) ;; END for-each row
 
-            ;; The "No Customer" line
-            (let* ((other-sales (- toplevel-total-income total-sales))
-                   (other-expense (- toplevel-total-expense total-expense))
-                   (other-profit (+ other-sales other-expense))
-                   (markupfloat (markup-percent other-profit other-sales))
-                   (row-content
-                    (list
-                     (_ "No Customer")
-                     (gnc:make-gnc-monetary currency other-profit)
-                     (format #f  "~2,0f%" markupfloat)
-                     (gnc:make-gnc-monetary currency other-sales))))
-              (if show-column-expense?
-                  (set! row-content
-                    (append row-content
-                            (list
-                             (gnc:make-gnc-monetary currency (- other-expense))))))
-              (if (or show-zero-lines?
-                      (not (and (zero? other-profit) (zero? other-sales))))
-
-                  (gnc:html-table-append-row!
-                   table row-content)))
+            ;; The "No Customer" lines
+            (let* ((other-sales (let ((coll (gnc:make-commodity-collector)))
+                                  (coll 'merge toplevel-total-income #f)
+                                  (coll 'minusmerge total-sales #f)
+                                  coll))
+                   (other-expense (let ((coll (gnc:make-commodity-collector)))
+                                    (coll 'merge toplevel-total-expense #f)
+                                    (coll 'minusmerge total-expense #f)
+                                    coll))
+                   (other-profit (let ((coll (gnc:make-commodity-collector)))
+                                    (coll 'merge other-sales #f)
+                                    (coll 'merge other-expense #f)
+                                    coll)))
+              (for-each
+               (lambda (comm)
+                 (let* ((profit (cadr (other-profit 'getpair comm #f)))
+                        (sales (cadr (other-sales 'getpair comm #f)))
+                        (expense (cadr (other-expense 'getpair comm #f)))
+                        (markupfloat (markup-percent profit sales)))
+                   (if (or show-zero-lines?
+                           (not (and (zero? profit) (zero? sales))))
+                       (gnc:html-table-append-row!
+                        table
+                        (append
+                         (list (string-append (_ "No Customer")
+                                              " "
+                                              (gnc-commodity-get-mnemonic comm))
+                               (gnc:make-gnc-monetary comm profit)
+                               (format #f  "~2,0f%" markupfloat)
+                               (gnc:make-gnc-monetary comm sales))
+                         (if show-column-expense?
+                             (list (gnc:make-gnc-monetary comm (- expense)))
+                             '()))))))
+               commodities))
 
             ;; One horizontal ruler before the summary
             ;;;(gnc:html-table-append-ruler!
@@ -545,21 +542,27 @@
                (gnc:make-html-text (gnc:html-markup/attr/no-end "hr" "noshade")))))
 
             ;; One summary line
-            (let* ((total-profit (+ toplevel-total-income toplevel-total-expense))
-                   (markupfloat (markup-percent total-profit toplevel-total-income))
-                   (row-content
-                    (list
-                     (_ "Total")
-                     (gnc:make-gnc-monetary currency total-profit)
-                     (format #f  "~2,0f%" markupfloat)
-                     (gnc:make-gnc-monetary currency toplevel-total-income))))
-              (if show-column-expense?
-                  (set! row-content
-                    (append row-content
-                            (list
-                             (gnc:make-gnc-monetary currency (- toplevel-total-expense))))))
-              (gnc:html-table-append-row!
-               table row-content))
+            (let* ((total-profit (let ((coll (gnc:make-commodity-collector)))
+                                   (coll 'merge toplevel-total-income #f)
+                                   (coll 'merge toplevel-total-expense #f)
+                                   coll)))
+              (for-each
+               (lambda (comm)
+                 (let* ((profit (cadr (total-profit 'getpair comm #f)))
+                        (sales (cadr (toplevel-total-income 'getpair comm #f)))
+                        (expense (cadr (toplevel-total-expense 'getpair comm #f)))
+                        (markupfloat (markup-percent profit sales)))
+                   (gnc:html-table-append-row!
+                    table
+                    (append (list (string-append (_ "Total") " "
+                                                 (gnc-commodity-get-mnemonic comm))
+                                  (gnc:make-gnc-monetary comm profit)
+                                  (format #f  "~2,0f%" markupfloat)
+                                  (gnc:make-gnc-monetary comm sales))
+                            (if show-column-expense?
+                                (list (gnc:make-gnc-monetary currency (- expense)))
+                                '())))))
+               commodities))
 
             ;; Set the formatting styles
             (gnc:html-table-set-style!
@@ -603,10 +606,6 @@
              (_ "No valid employee selected.")))
            " "
            (_ "Click on the \"Options\" button to select a company.")))))
-
-    (qof-query-destroy owner-query)
-    (qof-query-destroy toplevel-income-query)
-    (qof-query-destroy toplevel-expense-query)
 
     document))
 
