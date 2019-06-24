@@ -317,8 +317,6 @@
          (end-date (gnc:time64-end-day-time
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general optname-to-date))))
-         (print-invoices? #t);;(opt-val gnc:pagename-general optname-invoicelines))
-         ;;(show-txn-table? (opt-val gnc:pagename-display optname-show-txn-table))
          (show-zero-lines? (opt-val gnc:pagename-display optname-show-zero-lines))
          (show-column-expense? (opt-val gnc:pagename-display optname-show-column-expense))
          (table-num-columns (if show-column-expense? 5 4))
@@ -340,17 +338,12 @@
          (toplevel-total-expense #f)
          (owner-query (qof-query-create-for-splits))
          (any-valid-owner? #f)
-         (type-str "")
-         (notification-str "")
+         (type-str (cond
+                    ((eqv? type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+                    ((eqv? type GNC-OWNER-VENDOR)   (N_ "Vendor"))
+                    ((eqv? type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
+                    (else "")))
          (currency (gnc-default-currency)))
-
-    (cond
-     ((eqv? type GNC-OWNER-CUSTOMER)
-      (set! type-str (N_ "Customer")))
-     ((eqv? type GNC-OWNER-VENDOR)
-      (set! type-str (N_ "Vendor")))
-     ((eqv? type GNC-OWNER-EMPLOYEE)
-      (set! type-str (N_ "Employee"))))
 
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
@@ -596,13 +589,7 @@
                                 report-title
                                 (qof-print-date start-date)
                                 (qof-print-date end-date))))
-          (gnc:html-document-set-title! document headline)
-
-          ;; Check the settings for taking invoice/payment lines into
-          ;; account and print the ch
-          (make-break! document)
-          (gnc:html-document-add-object!
-           document (gnc:make-html-text notification-str)))
+          (gnc:html-document-set-title! document headline))
 
         ;; else....
         (gnc:html-document-add-object!
