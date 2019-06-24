@@ -292,7 +292,7 @@
 
 (define (markup-percent profit sales)
   (if (zero? sales) 0
-      (* 100 (gnc-numeric-div profit sales 1000 GNC-HOW-RND-ROUND))))
+      (* 100 (/ profit sales))))
 
 (define (query-split-value sub-query toplevel-query)
   (let ((splits (qof-query-run-subquery sub-query toplevel-query)))
@@ -357,14 +357,14 @@
     (set! toplevel-total-income
       (single-query-split-value toplevel-income-query))
     (if reverse?
-        (set! toplevel-total-income (gnc-numeric-neg toplevel-total-income)))
+        (set! toplevel-total-income (- toplevel-total-income)))
 
     ;; Total expenses as well
     (query-toplevel-setup toplevel-expense-query expense-accounts start-date end-date)
     (set! toplevel-total-expense
       (single-query-split-value toplevel-expense-query))
     (if reverse?
-        (set! toplevel-total-expense (gnc-numeric-neg toplevel-total-expense)))
+        (set! toplevel-total-expense (- toplevel-total-expense)))
 
     ;; Continue if we have non-null accounts
     (if (null? income-accounts)
@@ -384,8 +384,8 @@
                (map
                 (lambda (owner)
                   ;; Now create the line for one single owner
-                  (let ((total-income (gnc-numeric-zero))
-                        (total-expense (gnc-numeric-zero)))
+                  (let ((total-income 0)
+                        (total-expense 0))
 
                     (set! currency (xaccAccountGetCommodity (car all-accounts)))
                     (set! any-valid-owner? #t)
@@ -396,7 +396,7 @@
                     (set! total-income
                       (query-split-value owner-query toplevel-income-query))
                     (if reverse?
-                        (set! total-income (gnc-numeric-neg total-income)))
+                        (set! total-income (- total-income)))
 
                     ;; Clean up the query
                     (qof-query-clear owner-query)
@@ -407,13 +407,13 @@
                     (set! total-expense
                       (query-split-value owner-query toplevel-expense-query))
                     (if reverse?
-                        (set! total-expense (gnc-numeric-neg total-expense)))
+                        (set! total-expense (- total-expense)))
 
                     ;; Clean up the query
                     (qof-query-clear owner-query)
 
                     ;; We print the summary now
-                    (let* ((profit (gnc-numeric-add-fixed total-income total-expense))
+                    (let* ((profit (+ total-income total-expense))
                            (markupfloat (markup-percent profit total-income)))
 
                       ;; Result of this customer
@@ -434,9 +434,9 @@
           (let ((table (gnc:make-html-table))
                 (sort-descending? (eq? (opt-val gnc:pagename-display optname-sortascending) 'descend))
                 (sort-key (opt-val gnc:pagename-display optname-sortkey))
-                (total-profit (gnc-numeric-zero))
-                (total-sales (gnc-numeric-zero))
-                (total-expense (gnc-numeric-zero))
+                (total-profit 0)
+                (total-sales 0)
+                (total-expense 0)
                 (heading-list
                  (list (_ "Customer")
                        (_ "Profit")
@@ -491,11 +491,11 @@
                          (markupfloat (list-ref row 2))
                          (sales (list-ref row 3))
                          (expense (list-ref row 4)))
-                     (set! total-profit (gnc-numeric-add-fixed total-profit profit))
-                     (set! total-sales (gnc-numeric-add-fixed total-sales sales))
-                     (set! total-expense (gnc-numeric-add-fixed total-expense expense))
+                     (set! total-profit (+ total-profit profit))
+                     (set! total-sales (+ total-sales sales))
+                     (set! total-expense (+ total-expense expense))
                      (if (or show-zero-lines?
-                             (not (and (gnc-numeric-zero-p profit) (gnc-numeric-zero-p sales))))
+                             (not (and (zero? profit) (zero? sales))))
                          (let ((row-content (list
                                              (gncOwnerGetName owner)
                                              (gnc:make-gnc-monetary currency profit)
@@ -506,16 +506,16 @@
                                (set! row-content
                                  (append row-content
                                          (list
-                                          (gnc:make-gnc-monetary currency (gnc-numeric-neg expense))))))
+                                          (gnc:make-gnc-monetary currency (- expense))))))
                            (gnc:html-table-append-row!
                             table row-content))))
                    (gnc:warn "Oops, encountered a row with wrong length=" (length row))))
              resulttable) ;; END for-each row
 
             ;; The "No Customer" line
-            (let* ((other-sales (gnc-numeric-sub-fixed toplevel-total-income total-sales))
-                   (other-expense (gnc-numeric-sub-fixed toplevel-total-expense total-expense))
-                   (other-profit (gnc-numeric-add-fixed other-sales other-expense))
+            (let* ((other-sales (- toplevel-total-income total-sales))
+                   (other-expense (- toplevel-total-expense total-expense))
+                   (other-profit (+ other-sales other-expense))
                    (markupfloat (markup-percent other-profit other-sales))
                    (row-content
                     (list
@@ -527,9 +527,9 @@
                   (set! row-content
                     (append row-content
                             (list
-                             (gnc:make-gnc-monetary currency (gnc-numeric-neg other-expense))))))
+                             (gnc:make-gnc-monetary currency (- other-expense))))))
               (if (or show-zero-lines?
-                      (not (and (gnc-numeric-zero-p other-profit) (gnc-numeric-zero-p other-sales))))
+                      (not (and (zero? other-profit) (zero? other-sales))))
 
                   (gnc:html-table-append-row!
                    table row-content)))
@@ -545,7 +545,7 @@
                (gnc:make-html-text (gnc:html-markup/attr/no-end "hr" "noshade")))))
 
             ;; One summary line
-            (let* ((total-profit (gnc-numeric-add-fixed toplevel-total-income toplevel-total-expense))
+            (let* ((total-profit (+ toplevel-total-income toplevel-total-expense))
                    (markupfloat (markup-percent total-profit toplevel-total-income))
                    (row-content
                     (list
@@ -557,7 +557,7 @@
                   (set! row-content
                     (append row-content
                             (list
-                             (gnc:make-gnc-monetary currency (gnc-numeric-neg toplevel-total-expense))))))
+                             (gnc:make-gnc-monetary currency (- toplevel-total-expense))))))
               (gnc:html-table-append-row!
                table row-content))
 
