@@ -383,43 +383,41 @@
                ;; Loop over all owners
                (map
                 (lambda (owner)
-                  (if
-                   (and (gncOwnerIsValid owner)
-                        (> (length all-accounts) 0))
+                  ;; Now create the line for one single owner
+                  (let ((total-income (gnc-numeric-zero))
+                        (total-expense (gnc-numeric-zero)))
 
-                   ;; Now create the line for one single owner
-                   (let ((total-income (gnc-numeric-zero))
-                         (total-expense (gnc-numeric-zero)))
+                    (set! currency (xaccAccountGetCommodity (car all-accounts)))
+                    (set! any-valid-owner? #t)
 
-                     (set! currency (xaccAccountGetCommodity (car all-accounts)))
-                     (set! any-valid-owner? #t)
+                    ;; Run one query on all income accounts
+                    (query-owner-setup owner-query owner)
 
-                     ;; Run one query on all income accounts
-                     (query-owner-setup owner-query owner)
+                    (set! total-income
+                      (query-split-value owner-query toplevel-income-query))
+                    (if reverse?
+                        (set! total-income (gnc-numeric-neg total-income)))
 
-                     (set! total-income (query-split-value owner-query toplevel-income-query))
-                     (if reverse?
-                         (set! total-income (gnc-numeric-neg total-income)))
+                    ;; Clean up the query
+                    (qof-query-clear owner-query)
 
-                     ;; Clean up the query
-                     (qof-query-clear owner-query)
+                    ;; And run one query on all expense accounts
+                    (query-owner-setup owner-query owner)
 
-                     ;; And run one query on all expense accounts
-                     (query-owner-setup owner-query owner)
+                    (set! total-expense
+                      (query-split-value owner-query toplevel-expense-query))
+                    (if reverse?
+                        (set! total-expense (gnc-numeric-neg total-expense)))
 
-                     (set! total-expense (query-split-value owner-query toplevel-expense-query))
-                     (if reverse?
-                         (set! total-expense (gnc-numeric-neg total-expense)))
+                    ;; Clean up the query
+                    (qof-query-clear owner-query)
 
-                     ;; Clean up the query
-                     (qof-query-clear owner-query)
+                    ;; We print the summary now
+                    (let* ((profit (gnc-numeric-add-fixed total-income total-expense))
+                           (markupfloat (markup-percent profit total-income)))
 
-                     ;; We print the summary now
-                     (let* ((profit (gnc-numeric-add-fixed total-income total-expense))
-                            (markupfloat (markup-percent profit total-income)))
-
-                       ;; Result of this customer
-                       (list owner profit markupfloat total-income total-expense)))))
+                      ;; Result of this customer
+                      (list owner profit markupfloat total-income total-expense))))
                 ownerlist)))
 
           ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
