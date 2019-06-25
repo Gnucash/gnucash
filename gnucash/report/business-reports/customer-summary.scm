@@ -43,6 +43,7 @@
 
 ;; let's define a name for the report-guid's, much prettier
 (define customer-report-guid "4166a20981985fd2b07ff8cb3b7d384e")
+(define owner-report-guid "c146317be32e4948a561ec7fc89d15c1")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -337,9 +338,7 @@
       (gnc:html-document-add-object!
        document
        (gnc:make-html-text
-        (string-append
-         (_ "No valid customer selected.")
-         " " (_ "Click on the \"Options\" button to select a company.")))))
+        (_ "No valid customer found."))))
 
      (else
       (let ((all-splits (query #f all-accounts start-date end-date))
@@ -367,9 +366,11 @@
                                 (gnc:make-gnc-monetary currency expense))))
                       ownerlist)))
 
-        (define (add-row owner markup profit sales expense)
+        (define (add-row str markup profit sales expense url)
           (gnc:html-table-append-row!
-           table (cons owner
+           table (cons (if url
+                           (gnc:make-html-text (gnc:html-markup-anchor url str))
+                           str)
                        (map
                         (lambda (cell)
                           (gnc:make-html-table-cell/markup "number-cell" cell))
@@ -414,7 +415,9 @@
              (if (or show-zero-lines?
                      (not (and (zero? (gnc:gnc-monetary-amount profit))
                                (zero? (gnc:gnc-monetary-amount sales)))))
-                 (add-row (gncOwnerGetName owner) markupfloat profit sales expense))))
+                 (add-row (gncOwnerGetName owner) markupfloat profit sales expense
+                          (gnc:report-anchor-text
+                           (gnc:owner-report-create owner '()))))))
          results)
 
         ;; The "No Customer" lines
@@ -433,7 +436,8 @@
                           markupfloat
                           (gnc:make-gnc-monetary comm profit)
                           (gnc:make-gnc-monetary comm sales)
-                          (gnc:make-gnc-monetary comm expense)))))
+                          (gnc:make-gnc-monetary comm expense)
+                          #f))))
            commodities))
 
         ;; One horizontal ruler before the summary
@@ -456,7 +460,8 @@
                         markupfloat
                         (gnc:make-gnc-monetary comm profit)
                         (gnc:make-gnc-monetary comm sales)
-                        (gnc:make-gnc-monetary comm expense))))
+                        (gnc:make-gnc-monetary comm expense)
+                        #f)))
            commodities))
 
         ;; Set the formatting styles
