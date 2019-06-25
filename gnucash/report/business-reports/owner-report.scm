@@ -28,6 +28,7 @@
 (define-module (gnucash report owner-report))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-8))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))
@@ -818,36 +819,30 @@
         (qof-query-destroy query)))))
    document))
 
-(define (find-first-account type)
-  (define (find-first account num index)
-    (if (>= index num)
-    '()
-    (let* ((this-child (gnc-account-nth-child account index))
-           (account-type (xaccAccountGetType this-child)))
-      (if (eq? account-type type)
-          this-child
-          (find-first account num (+ index 1))))))
+(define* (find-first-account type #:key currency)
+  (or (find
+       (lambda (acc)
+         (and (eqv? type (xaccAccountGetType acc))
+              (or (not currency)
+                  (gnc-commodity-equiv currency (xaccAccountGetCommodity acc)))))
+       (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      '()))
 
-  (let* ((current-root (gnc-get-current-root-account))
-         (num-accounts (gnc-account-n-children current-root)))
-    (if (> num-accounts 0)
-        (find-first current-root num-accounts 0)
-        '())))
-
-(define (find-first-account-for-owner owner)
+(define* (find-first-account-for-owner owner #:key currency)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
-       (find-first-account ACCT-TYPE-RECEIVABLE))
+       (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
 
       ((eqv? type GNC-OWNER-VENDOR)
-       (find-first-account ACCT-TYPE-PAYABLE))
+       (find-first-account ACCT-TYPE-PAYABLE #:currency currency))
 
       ((eqv? type GNC-OWNER-EMPLOYEE)
-       (find-first-account ACCT-TYPE-PAYABLE))
+       (find-first-account ACCT-TYPE-PAYABLE #:currency currency))
 
       ((eqv? type GNC-OWNER-JOB)
-       (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
+       (find-first-account-for-owner (gncOwnerGetEndOwner owner)
+                                     #:currency currency))
 
       (else
        '()))))

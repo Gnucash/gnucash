@@ -28,6 +28,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report standard-reports))
+(use-modules (srfi srfi-8))
 
 ;; to define gnc-build-url
 (gnc:module-load "gnucash/html" 0)
@@ -126,10 +127,10 @@
 (define (gnc:receivables-report-create account title show-zeros?)
   (receivables-report-create-internal account title show-zeros?))
 
-(define (gnc:owner-report-create owner account)
+(define* (gnc:owner-report-create owner account #:key currency)
   ; Figure out an account to use if nothing exists here.
   (if (null? account)
-      (set! account (find-first-account-for-owner owner)))
+      (set! account (find-first-account-for-owner owner #:currency currency)))
   (owner-report-create owner account))
 
 (export gnc:invoice-report-create
