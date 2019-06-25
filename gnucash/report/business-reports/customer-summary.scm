@@ -87,31 +87,19 @@
 (define opthelp-sortascending (N_ "Choose the ordering of the column sort: Either ascending or descending."))
 
 
-(define (options-generator acct-type-list owner-type inv-str)
-
+(define (options-generator)
   (define options (gnc:new-options))
 
   (define (add-option new-option)
     (gnc:register-option options new-option))
 
-  (add-option
-   (gnc:make-internal-option "__reg" "inv-str" inv-str))
-
-  (add-option
-   (gnc:make-internal-option "__reg" "owner-type" owner-type))
-
   (gnc:options-add-date-interval!
-   options
-   gnc:pagename-general optname-from-date optname-to-date
-   "b")
+   options gnc:pagename-general optname-from-date optname-to-date "b")
 
   (add-option
    (gnc:make-account-list-option
     pagename-incomeaccounts optname-incomeaccounts
-    "b"
-    opthelp-incomeaccounts
-    ;; This default-getter finds the first account of this type. TODO:
-    ;; Find not only the first one, but all of them!
+    "b" opthelp-incomeaccounts
     (lambda ()
       (gnc:filter-accountlist-type
        (list ACCT-TYPE-INCOME)
@@ -121,10 +109,7 @@
   (add-option
    (gnc:make-account-list-option
     pagename-expenseaccounts optname-expenseaccounts
-    "b"
-    opthelp-expenseaccounts
-    ;; This default-getter finds the first account of this type. TODO:
-    ;; Find not only the first one, but all of them!
+    "b" opthelp-expenseaccounts
     (lambda ()
       (gnc:filter-accountlist-type
        (list ACCT-TYPE-EXPENSE)
@@ -191,11 +176,6 @@
 
   options)
 
-(define (customer-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
-                     (_ "Invoice")))
-
-
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (string-expand string character replace-string)
@@ -238,10 +218,8 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-         (table-outer (gnc:make-html-table))
          (name (gnc:company-info book gnc:*company-name*))
          (addy (gnc:company-info book gnc:*company-addy*)))
-
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 0)
@@ -250,25 +228,21 @@
      'attribute (list "valign" "top")
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
-
-    (gnc:html-table-append-row! table (list (or name "")))
-    (gnc:html-table-append-row! table (list (string-expand
-                                             (or addy "")
-                                             #\newline "<br/>")))
+    (if name (gnc:html-table-append-row! table (list name)))
+    (if addy (gnc:html-table-append-row!
+              table (list (string-expand addy #\newline "<br/>"))))
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
-
-    (gnc:html-table-set-style!
-     table-outer "table"
-     'attribute (list "border" 0)
-     'attribute (list "width" "100%")
-     'attribute (list "valign" "top")
-     'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 0))
-
-    (gnc:html-table-append-row! table-outer (list table))
-
-    table-outer))
+    (let ((table-outer (gnc:make-html-table)))
+      (gnc:html-table-set-style!
+       table-outer "table"
+       'attribute (list "border" 0)
+       'attribute (list "width" "100%")
+       'attribute (list "valign" "top")
+       'attribute (list "cellspacing" 0)
+       'attribute (list "cellpadding" 0))
+      (gnc:html-table-append-row! table-outer (list table))
+      table-outer)))
 
 (define (markup-percent profit sales)
   (if (zero? sales) 0
@@ -315,18 +289,13 @@
                        gnc-commodity-equiv))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date book))
-         (type (opt-val "__reg" "owner-type"))
          (ownerlist (gncBusinessGetOwnerList
                      book
-                     (gncOwnerTypeToQofIdType type)
+                     (gncOwnerTypeToQofIdType GNC-OWNER-CUSTOMER)
                      (opt-val gnc:pagename-display optname-show-inactive)))
          (toplevel-total-sales (gnc:make-commodity-collector))
          (toplevel-total-expense (gnc:make-commodity-collector))
-         (type-str (cond
-                    ((eqv? type GNC-OWNER-CUSTOMER) (N_ "Customer"))
-                    ((eqv? type GNC-OWNER-VENDOR)   (N_ "Vendor"))
-                    ((eqv? type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
-                    (else ""))))
+         (type-str (N_ "Customer")))
 
     (gnc:html-document-set-title!
      document (string-append (_ type-str) " " (_ "Report")))
@@ -369,10 +338,7 @@
        document
        (gnc:make-html-text
         (string-append
-         (cond
-          ((eqv? type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
-          ((eqv? type GNC-OWNER-VENDOR)   (_ "No valid vendor selected."))
-          ((eqv? type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected.")))
+         (_ "No valid customer selected.")
          " " (_ "Click on the \"Options\" button to select a company.")))))
 
      (else
@@ -521,7 +487,7 @@
  'name (N_ "Customer Summary")
  'report-guid customer-report-guid
  'menu-path (list gnc:menuname-business-reports)
- 'options-generator customer-options-generator
+ 'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
 
