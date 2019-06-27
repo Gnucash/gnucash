@@ -284,6 +284,7 @@
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general optname-to-date))))
          (sort-order (opt-val gnc:pagename-display optname-sortascending))
+         (sort-key (opt-val gnc:pagename-display optname-sortkey))
          (show-zero-lines? (opt-val gnc:pagename-display optname-show-zero-lines))
          (show-column-expense?
           (opt-val gnc:pagename-display optname-show-column-expense))
@@ -294,6 +295,7 @@
          (commodities (delete-duplicates
                        (map xaccAccountGetCommodity all-accounts)
                        gnc-commodity-equiv))
+         (commodities>1? (> (length commodities) 1))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date book))
          (ownerlist (gncBusinessGetOwnerList
@@ -336,7 +338,6 @@
             (total-sales (gnc:make-commodity-collector))
             (total-expense (gnc:make-commodity-collector))
             (headings (cons* (_ "Customer")
-                             (_ "Currency")
                              (_ "Profit")
                              (_ "Markup")
                              (_ "Sales")
@@ -351,19 +352,19 @@
                                (expense (filter-splits splits expense-accounts))
                                (profit (coll-minus sales expense)))
                           (list owner profit sales expense)))
-                      ownerlist)))
+                      ownerlist))
+            (sortingtable '()))
 
         (define (add-row str curr markup profit sales expense url)
           (gnc:html-table-append-row!
            table (cons* (if url
                             (gnc:make-html-text (gnc:html-markup-anchor url str))
                             str)
-                        (gnc-commodity-get-mnemonic curr)
                         (map
                          (lambda (cell)
                            (gnc:make-html-table-cell/markup "number-cell" cell))
                          (cons* profit
-                                (format #f "~a%" (round markup))
+                                (and markup (format #f "~a%" (round markup)))
                                 sales
                                 (if show-column-expense?
                                     (list expense)
@@ -375,24 +376,7 @@
           (toplevel-total-sales 'merge sales #f)
           (toplevel-total-expense 'merge expense #f))
 
-        (let* ((owner<? (lambda (a b)
-                          ((if (eq? sort-order 'descend) string>? string<?)
-                           (gncOwnerGetName (car a))
-                           (gncOwnerGetName (car b)))))
-               (op (if (eq? sort-order 'descend) > <))
-               (<? (case sort-key
-                     ((profit)  (lambda (a b) (op (gnc:gnc-monetary-amount (cadr a))
-                                                  (gnc:gnc-monetary-amount (cadr b)))))
-                     ((markup) (lambda (a b) (op (caddr a) (caddr b))))
-                     ((sales) (lambda (a b) (op (gnc:gnc-monetary-amount (cadddr a))
-                                                (gnc:gnc-monetary-amount (cadddr b)))))
-                     ((expense) (lambda (a b) (op (gnc:gnc-monetary-amount (last a))
-                                                  (gnc:gnc-monetary-amount (last b)))))
-                     (else #f))))
-          (set! results (sort results owner<?))
-          (if <? (set! results (sort results <?))))
-
-        ;; The actual content
+        ;; The actual content - add onto sortingtable
         (for-each
          (lambda (row)
            (let* ((owner (car row))
@@ -409,16 +393,18 @@
                        (markup (markup-percent comm-profit comm-sales)))
                   (when (or show-zero-lines?
                             (not (and (zero? comm-profit) (zero? comm-sales))))
-                    (add-row (gncOwnerGetName owner) comm markup
-                             (gnc:make-gnc-monetary comm comm-profit)
-                             (gnc:make-gnc-monetary comm comm-sales)
-                             (gnc:make-gnc-monetary comm comm-expense)
+                    (set! sortingtable
+                      (cons (vector
+                             (gncOwnerGetName owner) comm markup
+                             comm-profit comm-sales comm-expense
                              (gnc:report-anchor-text
-                              (gnc:owner-report-create owner '() #:currency comm))))))
+                              (gnc:owner-report-create owner '() #:currency comm)))
+                            sortingtable)))))
               commodities)))
          results)
 
-        ;; The "No Customer" lines
+        ;; Add the "No Customer" lines to the sortingtable for sorting
+        ;; as well
         (let* ((other-sales (coll-minus toplevel-total-sales total-sales))
                (other-expense (coll-minus toplevel-total-expense total-expense))
                (other-profit (coll-minus other-sales  other-expense)))
@@ -429,12 +415,63 @@
                     (expense (cadr (other-expense 'getpair comm #f)))
                     (markup (markup-percent profit sales)))
                (unless (and (zero? profit) (zero? sales))
-                 (add-row (_ "No Customer") comm markup
-                          (gnc:make-gnc-monetary comm profit)
-                          (gnc:make-gnc-monetary comm sales)
-                          (gnc:make-gnc-monetary comm expense)
-                          #f))))
+                 (set! sortingtable
+                   (cons (vector
+                          (_ "No Customer") comm markup profit sales expense #f)
+                         sortingtable)))))
            commodities))
+
+        ;; Stable-sort the sortingtable according to column, then
+        ;; stable-sort according to currency. This results in group-by
+        ;; currency then sort by columns.
+        (let* ((str-op (if (eq? sort-order 'descend) string>? string<?))
+               (op (if (eq? sort-order 'descend) > <)))
+          (define (<? key)
+            (case key
+              ;; customername sorting is handled differently;
+              ;; this conditional ensures "No Customer" lines
+              ;; are printed last.
+              ((customername)
+               (lambda (a b)
+                 (cond
+                  ((string=? (vector-ref b 0) (_ "No Customer")) #t)
+                  ((string=? (vector-ref a 0) (_ "No Customer")) #f)
+                  (else (str-op (vector-ref a 0) (vector-ref b 0))))))
+              ;; currency sorting always alphabetical a-z
+              ((currency)
+               (lambda (a b) (string<?
+                              (gnc-commodity-get-mnemonic (vector-ref a 1))
+                              (gnc-commodity-get-mnemonic (vector-ref b 1)))))
+              ((markup)
+               (lambda (a b) (op (vector-ref a 2) (vector-ref b 2))))
+              ((profit)
+               (lambda (a b) (op (vector-ref a 3) (vector-ref b 3))))
+              ((sales)
+               (lambda (a b) (op (vector-ref a 4) (vector-ref b 4))))
+              ((expense)
+               (lambda (a b) (op (vector-ref a 5) (vector-ref b 5))))))
+          (set! sortingtable (stable-sort! sortingtable (<? sort-key)))
+          (when (memq sort-key '(profit sales expense))
+            (set! sortingtable (stable-sort! sortingtable (<? 'currency)))))
+
+        ;; After sorting, add the entries to the resultant table
+        (let lp ((sortingtable sortingtable)
+                 (last-comm #f))
+          (unless (null? sortingtable)
+            (let* ((elt (car sortingtable))
+                   (comm (vector-ref elt 1)))
+              (when (and commodities>1?
+                         (memq sort-key '(profit sales expense))
+                         (not (and last-comm (gnc-commodity-equiv last-comm comm))))
+                (add-row (gnc-commodity-get-mnemonic comm) #f #f #f #f #f #f))
+              (add-row (vector-ref elt 0)
+                       comm
+                       (vector-ref elt 2)
+                       (gnc:make-gnc-monetary comm (vector-ref elt 3))
+                       (gnc:make-gnc-monetary comm (vector-ref elt 4))
+                       (gnc:make-gnc-monetary comm (vector-ref elt 5))
+                       (vector-ref elt 6))
+              (lp (cdr sortingtable) comm))))
 
         ;; One horizontal ruler before the summary
         (gnc:html-table-append-row!
@@ -451,7 +488,12 @@
                     (sales (cadr (toplevel-total-sales 'getpair comm #f)))
                     (expense (cadr (toplevel-total-expense 'getpair comm #f)))
                     (markup (markup-percent profit sales)))
-               (add-row (_ "Total") comm markup
+               (add-row (if commodities>1?
+                            (format #f "~a (~a)"
+                                    (_ "Total")
+                                    (gnc-commodity-get-mnemonic comm))
+                            (_ "Total"))
+                        comm markup
                         (gnc:make-gnc-monetary comm profit)
                         (gnc:make-gnc-monetary comm sales)
                         (gnc:make-gnc-monetary comm expense)
