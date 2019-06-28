@@ -242,7 +242,7 @@
        (let* ((bal (gnc-lot-get-balance lot))
           (invoice (gncInvoiceGetInvoiceFromLot lot))
               (date (if (eq? date-type 'postdate)
-               (gncInvoiceGetDatePostedTT invoice) 
+               (gncInvoiceGetDatePosted invoice)
                (gncInvoiceGetDateDue invoice)))
               )
          
