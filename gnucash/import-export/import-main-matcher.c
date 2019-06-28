@@ -100,7 +100,7 @@ void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 /* Local prototypes */
 static void gnc_gen_trans_assign_transfer_account (
                                                 GtkTreeView *treeview,
-                                                gboolean first,
+                                                gboolean *first,
                                                 gboolean is_selection,
                                                 GtkTreePath *path,
                                                 Account **new_acc,
@@ -377,7 +377,7 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
 
 static void
 gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
-                                       gboolean first,
+                                       gboolean *first,
                                        gboolean is_selection,
                                        GtkTreePath *path,
                                        Account **new_acc,
@@ -388,11 +388,13 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     GNCImportTransInfo *trans_info;
     Account *old_acc;
     gboolean ok_pressed;
+    gchar *path_str = gtk_tree_path_to_string (path);
 
     ENTER("");
-    DEBUG("first = %s", first ? "true" : "false");
+    DEBUG("first = %s", *first ? "true" : "false");
     DEBUG("is_selection = %s", is_selection ? "true" : "false");
-    DEBUG("path  = %s", gtk_tree_path_to_string (path));
+    DEBUG("path  = %s", path_str);
+    g_free (path_str);
     DEBUG("account passed in = %s", gnc_get_account_name_for_register (*new_acc));
     model = gtk_tree_view_get_model (treeview);
     if (gtk_tree_model_get_iter (model, &iter, path))
@@ -406,7 +408,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
             {
                 ok_pressed = TRUE;
                 old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
-                if (first)
+                if (*first)
                 {
                     ok_pressed = FALSE;
                     *new_acc = gnc_import_select_account (info->main_widget,
@@ -418,7 +420,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                         ACCT_TYPE_NONE,
                         old_acc,
                         &ok_pressed);
-                    first = FALSE;
+                    *first = FALSE;
                     DEBUG("account selected = %s",
                             gnc_account_get_full_name (*new_acc));
                 }
@@ -428,7 +430,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
             break;
         case GNCImport_CLEAR:
         case GNCImport_UPDATE:
-            if (first && !is_selection)
+            if (*first && !is_selection)
                 run_match_dialog (info, trans_info);
             break;
         case GNCImport_SKIP:
@@ -471,19 +473,18 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     {
         for (l = selected_rows; l != NULL; l = l->next)
         {
-            DEBUG("passing first = %s",
-                                                first?"true":"false");
-            DEBUG("passing is_selection = %s",
-                                                is_selection?"true":"false");
-            DEBUG("passing path = %s",
-                           gtk_tree_path_to_string (l->data));
+            gchar *path_str = gtk_tree_path_to_string (l->data);
+            DEBUG("passing first = %s", first ? "true" : "false");
+            DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
+            DEBUG("passing path = %s", path_str);
+            g_free (path_str);
             DEBUG("passing account value = %s",
                         gnc_account_get_full_name (assigned_account));
             gnc_gen_trans_assign_transfer_account (treeview,
-                           first, is_selection, l->data, &assigned_account, info);
+                           &first, is_selection, l->data, &assigned_account, info);
             DEBUG("returned value of account = %s",
                         gnc_account_get_full_name (assigned_account));
-            DEBUG("returned value of first = %s",first?"true":"false");
+            DEBUG("returned value of first = %s", first ? "true" : "false");
             if (assigned_account == NULL)
                 break;
             gtk_tree_selection_unselect_path (selection, l->data);
@@ -507,7 +508,7 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
     first = TRUE;
     is_selection = FALSE;
     gnc_gen_trans_assign_transfer_account (treeview,
-                            first, is_selection, path,
+                            &first, is_selection, path,
                             &assigned_account, info);
     DEBUG("account returned = %s", gnc_account_get_full_name (assigned_account));
     LEAVE("");
