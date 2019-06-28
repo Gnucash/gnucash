@@ -1391,7 +1391,20 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gtk_label_set_label(GTK_LABEL(label), currency_name);
 
     root_currency = xaccAccountGetCommodity (gnc_get_current_root_account ());
-    currency_name = gnc_commodity_get_printname (root_currency);
+
+    /* Prior to version 3.6, if the qif importer was used from 'New User'
+       dialog the Root Account currency was not set */
+    if (!root_currency)
+    {
+        Account *root = gnc_get_current_root_account ();
+        xaccAccountBeginEdit (root);
+        xaccAccountSetCommodity (root, locale_currency);
+        xaccAccountCommitEdit (root);
+        qof_book_mark_session_dirty (book);
+        currency_name = gnc_commodity_get_printname (locale_currency);
+    }
+    else
+        currency_name = gnc_commodity_get_printname (root_currency);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "root_currency"));
     gtk_label_set_label (GTK_LABEL(label), currency_name);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "root_currency2"));
