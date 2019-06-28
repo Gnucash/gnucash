@@ -3399,6 +3399,16 @@ gnc_ui_qif_import_finish_cb (GtkAssistant *assistant,
                    scm_c_eval_string ("(gnc-get-current-root-account)"),
                    wind->imported_account_tree);
 
+    /* Set the currency of the root account, if this is a new user import it may be null */
+    if (!xaccAccountGetCommodity (gnc_get_current_root_account ()))
+    {
+        Account *root = gnc_get_current_root_account ();
+        xaccAccountBeginEdit (root);
+        xaccAccountSetCommodity (root, gnc_currency_edit_get_currency
+                                       (GNC_CURRENCY_EDIT(wind->currency_picker)));
+        xaccAccountCommitEdit (root);
+    }
+
     gnc_resume_gui_refresh ();
 
     /* Save the user's mapping preferences. */
