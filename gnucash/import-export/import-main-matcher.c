@@ -99,26 +99,32 @@ void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
 /* Local prototypes */
 static void gnc_gen_trans_assign_transfer_account (
-                                                GtkTreeView *treeview,
-                                                gboolean *first,
-                                                gboolean is_selection,
-                                                GtkTreePath *path,
-                                                Account **new_acc,
-                                                GNCImportMainMatcher *info);
+                    GtkTreeView *treeview,
+                    gboolean *first,
+                    gboolean is_selection,
+                    GtkTreePath *path,
+                    Account **new_acc,
+                    GNCImportMainMatcher *info);
 static void gnc_gen_trans_assign_transfer_account_to_selection_cb (
-                                          GtkMenuItem *menuitem,
-                                          GNCImportMainMatcher *info);
-static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
-                                          GdkEvent *event,
-                                          GNCImportMainMatcher *info);
-static gboolean gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
-                                                  GdkEvent *event,
-                                                  GNCImportMainMatcher *info);
-static gboolean gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
-                                              GdkEvent *event,
-                                              GNCImportMainMatcher *info);
-static void refresh_model_row (GNCImportMainMatcher *gui, GtkTreeModel *model,
-                               GtkTreeIter *iter, GNCImportTransInfo *info);
+                    GtkMenuItem *menuitem,
+                    GNCImportMainMatcher *info);
+static void gnc_gen_trans_view_popup_menu (
+                    GtkTreeView *treeview,
+                    GdkEvent *event,
+                    GNCImportMainMatcher *info);
+static gboolean gnc_gen_trans_onButtonPressed_cb (
+                    GtkTreeView *treeview,
+                    GdkEvent *event,
+                    GNCImportMainMatcher *info);
+static gboolean gnc_gen_trans_onPopupMenu_cb (
+                    GtkTreeView *treeview,
+                    GdkEvent *event,
+                    GNCImportMainMatcher *info);
+static void refresh_model_row (
+                    GNCImportMainMatcher *gui,
+                    GtkTreeModel *model,
+                    GtkTreeIter *iter,
+                    GNCImportTransInfo *info);
 /* end local prototypes */
 
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
@@ -233,6 +239,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer3");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer4");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer5");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer1");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
     if (info->dark_theme == TRUE)
@@ -277,14 +284,15 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
     g_assert (trans_info);
     old_acc = gnc_import_TransInfo_get_destacc (trans_info);
 
-    new_acc = gnc_import_select_account (info->main_widget,
-                                         NULL,
-                                         TRUE,
-                                         _("Destination account for the auto-balance split."),
-                                         xaccTransGetCurrency (gnc_import_TransInfo_get_trans (trans_info)),
-                                         ACCT_TYPE_NONE,
-                                         old_acc,
-                                         &ok_pressed);
+    new_acc = gnc_import_select_account (
+            info->main_widget,
+             NULL,
+             TRUE,
+             _("Destination account for the auto-balance split."),
+             xaccTransGetCurrency (gnc_import_TransInfo_get_trans (trans_info)),
+             ACCT_TYPE_NONE,
+             old_acc,
+             &ok_pressed);
     if (ok_pressed)
         gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
 }
@@ -445,8 +453,9 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
 }
 
 static void
-gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
-                                                       GNCImportMainMatcher *info)
+gnc_gen_trans_assign_transfer_account_to_selection_cb (
+            GtkMenuItem *menuitem,
+            GNCImportMainMatcher *info)
 {
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
@@ -475,13 +484,15 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
         {
             gchar *path_str = gtk_tree_path_to_string (l->data);
             DEBUG("passing first = %s", first ? "true" : "false");
-            DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
+            DEBUG("passing is_selection = %s",
+                        is_selection ? "true" : "false");
             DEBUG("passing path = %s", path_str);
             g_free (path_str);
             DEBUG("passing account value = %s",
                         gnc_account_get_full_name (assigned_account));
             gnc_gen_trans_assign_transfer_account (treeview,
-                           &first, is_selection, l->data, &assigned_account, info);
+                        &first, is_selection, l->data,
+                        &assigned_account, info);
             DEBUG("returned value of account = %s",
                         gnc_account_get_full_name (assigned_account));
             DEBUG("returned value of first = %s", first ? "true" : "false");
@@ -556,7 +567,8 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 
     ENTER ("");
     menu = gtk_menu_new();
-    menuitem = gtk_menu_item_new_with_label (_("Assign a transfer account."));
+    menuitem = gtk_menu_item_new_with_label (
+            _("Assign a transfer account to the selection."));
     g_signal_connect (menuitem, "activate",
                       G_CALLBACK(
                       gnc_gen_trans_assign_transfer_account_to_selection_cb),
@@ -598,7 +610,7 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
             selection = gtk_tree_view_get_selection (treeview);
             if (gtk_tree_selection_count_selected_rows (selection) > 0)
             {
-              gnc_gen_trans_view_popup_menu (treeview, event, info);
+                gnc_gen_trans_view_popup_menu (treeview, event, info);
             }
             LEAVE("return TRUE");
             return TRUE;
@@ -619,12 +631,11 @@ gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
     selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_count_selected_rows (selection) > 0)
     {
-      gnc_gen_trans_view_popup_menu (treeview, NULL, info);
+        gnc_gen_trans_view_popup_menu (treeview, NULL, info);
     }
     LEAVE ("");
     return TRUE;
 }
-
 
 static GtkTreeViewColumn *
 add_text_column(GtkTreeView *view, const gchar *title, int col_num)
