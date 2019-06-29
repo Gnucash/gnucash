@@ -130,6 +130,11 @@ static void refresh_model_row (
                     GtkTreeModel *model,
                     GtkTreeIter *iter,
                     GNCImportTransInfo *info);
+static gboolean view_selection_function (GtkTreeSelection *selection,
+                         GtkTreeModel *model,
+                         GtkTreePath *path,
+                         gboolean path_currently_selected,
+                         gpointer data);
 /* end local prototypes */
 
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
@@ -347,10 +352,10 @@ gnc_gen_trans_clear_toggled_cb (GtkCellRendererToggle *cell_renderer,
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
-    
+
     ENTER("");
     model = gtk_tree_view_get_model (gui->view);
-    
+
     if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
         return;
     gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
@@ -376,10 +381,10 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
-    
+
     ENTER("");
     model = gtk_tree_view_get_model (gui->view);
-    
+
     if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
         return;
     gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
@@ -778,20 +783,20 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                                           DOWNLOADED_COL_DATE_INT64,
                                           GTK_SORT_ASCENDING);
     selection = gtk_tree_view_get_selection (info->view);
-    
-    /* set a selection function which will block selection of rows which are not 
+
+    /* set a selection function which will block selection of rows which are not
       flagged to be imported into Gnucash */
     gtk_tree_selection_set_select_function
                                (selection,
                                 view_selection_function,
                                 info,
                                 NULL);
-    /* clear the flag which indicates that A(dd) has been toggled so that the 
-      view_selection_function can block selection of a row when the 
-      view_selection_function is called immediately after A(dd) is toggled 
+    /* clear the flag which indicates that A(dd) has been toggled so that the
+      view_selection_function can block selection of a row when the
+      view_selection_function is called immediately after A(dd) is toggled
       on that row */
     info->add_toggled = FALSE;
-                                
+
     g_signal_connect (info->view, "row-activated",
                       G_CALLBACK(gnc_gen_trans_row_activated_cb), info);
     g_signal_connect (selection, "changed",
@@ -814,7 +819,7 @@ view_selection_function (GtkTreeSelection *selection,
     GNCImportTransInfo *trans_info;
     GNCImportAction action;
     GNCImportMainMatcher *info = data;
-  
+
     ENTER("view_selection_function");
     if (gtk_tree_model_get_iter(model, &iter, path))
     {
@@ -852,22 +857,22 @@ view_selection_function (GtkTreeSelection *selection,
                 DEBUG("Import action = LAST_ACTION row not selected");
                 LEAVE("FALSE");
                 return FALSE;
-            case GNCImport_INVALID_ACTION: 
-                DEBUG("Import action = LAST_ACTION row not selected"); 
+            case GNCImport_INVALID_ACTION:
+                DEBUG("Import action = LAST_ACTION row not selected");
                 LEAVE("FALSE");
-                return FALSE;    
+                return FALSE;
             default:
                 DEBUG("Import action = UNDEFINED -cannot select");
                 LEAVE("FALSE");
                 return FALSE;
-        }    
+        }
     }
     else
     {
         DEBUG("path to selected row undefined");
         LEAVE("FALSE");
         return FALSE;
-    } 
+    }
 }
 
 static void
