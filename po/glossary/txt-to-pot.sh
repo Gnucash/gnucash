@@ -23,7 +23,7 @@ then
 	exit 1;
 fi
 
-# Note: Line 3: PACKAGE, 15: from-code and probably a few other variables are hardcoded
+# Note: Line 3: PACKAGE and probably a few other variables are hardcoded
 cat <<!
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -40,7 +40,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
