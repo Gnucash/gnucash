@@ -428,14 +428,14 @@
                (op (if (eq? sort-order 'descend) > <)))
           (define (<? key)
             (case key
-              ;; customername sorting is handled differently;
-              ;; this conditional ensures "No Customer" lines
-              ;; are printed last.
+              ;; customername sorting is handled differently; this
+              ;; conditional ensures "No Customer" entries,
+              ;; i.e. without owner-report url, are printed last.
               ((customername)
                (lambda (a b)
                  (cond
-                  ((string=? (vector-ref b 0) (_ "No Customer")) #t)
-                  ((string=? (vector-ref a 0) (_ "No Customer")) #f)
+                  ((vector-ref b 6) #t)
+                  ((vector-ref a 6) #f)
                   (else (str-op (vector-ref a 0) (vector-ref b 0))))))
               ;; currency sorting always alphabetical a-z
               ((currency)
