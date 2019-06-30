@@ -63,38 +63,43 @@
 
 ;; Depending on the report type we want to set up some lists/cases 
 ;; with strings to ease overview and translation
-;; note: we default to company
+(define owner-string-alist
+  (list
+   (list GNC-OWNER-CUSTOMER
+         (N_ "Customer")
+         (_ "No valid customer selected.")
+         (_ "This report requires a customer to be selected."))
 
-;; owner-string & doctype-str are nearly equivalent, report is vendor report
-;; but default option naming was Company. 
+   (list GNC-OWNER-EMPLOYEE
+         (N_ "Employee")
+         (_ "No valid employee selected.")
+         (_ "This report requires a employee to be selected."))
+
+   (list GNC-OWNER-JOB
+         (N_ "Job")
+         (_ "No valid job selected.")
+         (_ "This report requires a job to be selected."))
+
+   (list GNC-OWNER-VENDOR
+         (N_ "Vendor")
+         (_ "No valid vendor selected.")
+         (_ "This report requires a vendor to be selected."))))
+
+(define (get-info key)
+  (assv-ref owner-string-alist key))
 
 ;; Names in Option panel (Untranslated! Because it is used for option
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
 (define (owner-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
-        ((eqv? owner-type GNC-OWNER-JOB) (N_ "Job"))
-        ;; FALL THROUGH
-        (else
-          (N_ "Company")))) 
+  (car (get-info owner-type)))
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected."))
-        ((eqv? owner-type GNC-OWNER-JOB) (_ "No valid job selected."))
-        ;; FALL THROUGH
-        (else
-          (_ "No valid company selected."))))
+  (cadr (get-info owner-type)))
 
 (define (invalid-selection-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "This report requires a customer to be selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "This report requires a employee to be selected."))
-        ((eqv? owner-type GNC-OWNER-JOB) (_ "This report requires a job to be selected."))
-        ;; FALL THROUGH
-        (else
-          (_ "This report requires a company to be selected."))))
+  (caddr (get-info owner-type)))
 
 ;; Html formatted error message documents
 (define (gnc:html-make-no-owner-warning
