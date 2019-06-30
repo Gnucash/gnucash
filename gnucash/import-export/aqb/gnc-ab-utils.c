@@ -340,7 +340,6 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
 {
 #ifdef AQBANKING6
     const char* ab_remote_name;
-    const char* ab_transactionText;
 #else
     const GWEN_STRINGLIST *ab_remote_name;
 #endif
@@ -351,16 +350,7 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
     ab_remote_name = AB_Transaction_GetRemoteName(ab_trans);
     if (ab_remote_name)
 #ifdef AQBANKING6
-    ab_transactionText = AB_Transaction_GetPurpose(ab_trans);
-    if (ab_transactionText)
-    {
-        gchar *tmp;
-
-        tmp = g_strdup(ab_transactionText);
-        g_strstrip(tmp);
-        gnc_utf8_strip_invalid(tmp);
-        gnc_other_name = tmp;
-    }
+        gnc_other_name = g_strdup(ab_remote_name);
 #else
         GWEN_StringList_ForEach(ab_remote_name, join_ab_strings_cb,
                                 &gnc_other_name);
@@ -944,6 +934,9 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     time64 booked_tt = 0;
     GtkWidget *dialog;
     gboolean show_recn_window = FALSE;
+#ifndef AQBANKING6
+    AB_ACCOUNT_STATUS *best = NULL;
+#endif
 
     g_return_val_if_fail(element && data, NULL);
 
@@ -967,22 +960,22 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                                                AB_Balance_TypeBooked);
 #else
     {
-    AB_ACCOUNT_STATUS *item, *best = NULL;
-    const GWEN_TIME *best_time = NULL;
-    /* Lookup the most recent ACCOUNT_STATUS available */
-    item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
-    while (item)
-    {
-        const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
-        if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0)
+        AB_ACCOUNT_STATUS *item = NULL;
+        const GWEN_TIME *best_time = NULL;
+        /* Lookup the most recent ACCOUNT_STATUS available */
+        item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
+        while (item)
         {
-            best = item;
-            best_time = item_time;
+            const GWEN_TIME *item_time = AB_AccountStatus_GetTime(item);
+            if (!best || GWEN_Time_Diff(best_time, item_time) < 0.0)
+            {
+                best = item;
+                best_time = item_time;
+            }
+            item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
         }
-        item = AB_ImExporterAccountInfo_GetNextAccountStatus(element);
-    }
 
-    booked_bal = AB_AccountStatus_GetBookedBalance(best);
+        booked_bal = AB_AccountStatus_GetBookedBalance(best);
     }
 #endif
 
