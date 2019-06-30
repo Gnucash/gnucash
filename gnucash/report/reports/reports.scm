@@ -26,6 +26,7 @@
 
 (define-module (gnucash reports))
 (use-modules (srfi srfi-13))
+(use-modules (srfi srfi-8))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash report))
@@ -88,8 +89,8 @@
   (receivables-report-create-internal account title show-zeros?))
 
 (use-modules (gnucash reports standard owner-report))
-(define (gnc:owner-report-create owner account)
+(define* (gnc:owner-report-create owner account #:key currency)
   ; Figure out an account to use if nothing exists here.
   (if (null? account)
-      (set! account (find-first-account-for-owner owner)))
+      (set! account (find-first-account-for-owner owner #:currency currency)))
   (owner-report-create owner account))
