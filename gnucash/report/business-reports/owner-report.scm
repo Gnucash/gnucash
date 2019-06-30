@@ -185,66 +185,40 @@
 
 (define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
-    (buckets (new-bucket-vector))
-    (payments 0)
-    (table (gnc:make-html-table)))
-
-     (define (in-interval this-date current-bucket)
-      (< this-date current-bucket))
-
-     (define (find-bucket current-bucket bucket-intervals date)
-      (begin
-       (if (>= current-bucket (vector-length bucket-intervals))
-        (gnc:error "sanity check failed in find-bucket")
-        (if (in-interval date (vector-ref bucket-intervals current-bucket))
-        current-bucket
-        (find-bucket (+ current-bucket 1) bucket-intervals date)))))
-
-     (define (apply-invoice date value)
-      (let* ((bucket-index (find-bucket 0 bucket-intervals date))
-         (new-value (+
-                     value
-                     (vector-ref buckets bucket-index))))
-       (vector-set! buckets bucket-index new-value)))
-
-    (define (apply-payment value)
-      (set! payments (+ value payments)))
+        (buckets (new-bucket-vector))
+        (table (gnc:make-html-table)))
 
     (for-each
      (lambda (lot)
-       (let* ((bal (gnc-lot-get-balance lot))
-          (invoice (gncInvoiceGetInvoiceFromLot lot))
+       (let* ((bal ((if reverse? - identity) (gnc-lot-get-balance lot)))
+              (invoice (gncInvoiceGetInvoiceFromLot lot))
               (date (if (eq? date-type 'postdate)
-               (gncInvoiceGetDatePosted invoice)
-               (gncInvoiceGetDateDue invoice)))
-              )
-         
-     (if (not (zero? bal))
-         (begin
-           (if reverse?
-           (set! bal (- bal)))
-           (if (not (null? invoice))
-           (begin
-             (apply-invoice date bal))
-           (apply-payment bal))))))
+                        (gncInvoiceGetDatePosted invoice)
+                        (gncInvoiceGetDateDue invoice))))
+
+         (unless (null? invoice)
+           (let loop ((idx 0))
+             (if (< date (vector-ref bucket-intervals idx))
+                 (vector-set! buckets idx (+ bal (vector-ref buckets idx)))
+                 (loop (1+ idx)))))))
      lots)
 
     (gnc:html-table-set-col-headers!
      table
      (list (_ "Current")
            (_ "0-30 days")
-       (_ "31-60 days")
-       (_ "61-90 days")
-       (_ "91+ days")))
+           (_ "31-60 days")
+           (_ "61-90 days")
+           (_ "91+ days")))
 
     (gnc:html-table-append-row!
      table
-     (reverse (map (lambda (entry)
-             (gnc:make-gnc-monetary currency entry))
-           (vector->list buckets))))
-
+     (map
+      (lambda (entry)
+        (gnc:make-gnc-monetary currency entry))
+      (reverse (vector->list buckets))))
     table))
-         
+
 ;;
 ;; Make a row list based on the visible columns
 ;;
