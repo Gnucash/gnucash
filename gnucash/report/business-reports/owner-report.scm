@@ -337,117 +337,119 @@
 
 (define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
-    (used-columns (build-column-used options))
-    (total 0)
-    (debit 0)
-    (credit 0)
-
-    (tax 0)
-    (sale 0)
-    (currency (xaccAccountGetCommodity acc))
-    (table (gnc:make-html-table))
-    (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
-                              "reverse?"))))
+        (used-columns (build-column-used options))
+        (total 0)
+        (debit 0)
+        (credit 0)
+        (tax 0)
+        (sale 0)
+        (currency (xaccAccountGetCommodity acc))
+        (table (gnc:make-html-table))
+        (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?"))))
 
     (gnc:html-table-set-col-headers!
-     table
-     (make-heading-list used-columns))
+     table (make-heading-list used-columns))
 
-    ; Order the transactions properly
+    ;; Order the transactions properly
     (set! txns (sort txns (lambda (a b) (> 0 (xaccTransOrder a b)))))
 
     (let ((printed? #f)
-      (odd-row? #t))
+          (odd-row? #t))
       (for-each
        (lambda (txn)
-     (let ((type (xaccTransGetTxnType txn)))
-       (if
-        (or (equal? type TXN-TYPE-INVOICE)
-        (equal? type TXN-TYPE-PAYMENT))
-        (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
-                       reverse? start-date total)))
+         (let ((type (xaccTransGetTxnType txn)))
+           (if
+            (or (equal? type TXN-TYPE-INVOICE)
+                (equal? type TXN-TYPE-PAYMENT))
+            (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
+                                       reverse? start-date total)))
 
-          (set! printed? (car result))
-          (if (and printed? total)
-            (begin
-              (set! sale (+ sale (cadddr result)))
-              (set! tax (+ tax (car (cddddr result))))
-              (if (negative? (cadr result))
-                (set! debit (+ debit (cadr result)))
-                (set! credit (+ credit (cadr result))))))
-          (set! total (+ total (cadr result)))
-          (set! odd-row? (caddr result))
-          ))))
+              (set! printed? (car result))
+              (if (and printed? total)
+                  (begin
+                    (set! sale (+ sale (cadddr result)))
+                    (set! tax (+ tax (car (cddddr result))))
+                    (if (negative? (cadr result))
+                        (set! debit (+ debit (cadr result)))
+                        (set! credit (+ credit (cadr result))))))
+              (set! total (+ total (cadr result)))
+              (set! odd-row? (caddr result))
+              ))))
        txns)
-      ;Balance row may not have been added if all transactions were before
-      ;start-date (and no other rows would be added either) so add it now
-      (if (not (null? txns))
-      (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
-        ))
+      ;;Balance row may not have been added if all transactions were before
+      ;;start-date (and no other rows would be added either) so add it now
+      (unless (null? txns)
+        (add-balance-row table used-columns (car txns)
+                         odd-row? printed? start-date total)))
 
     (if (or (sale-col used-columns) (tax-col used-columns) (credit-col used-columns) (debit-col used-columns))
-    (gnc:html-table-append-row/markup! 
-     table
-     "grand-total"
-     (append (cons (gnc:make-html-table-cell/markup
-            "total-label-cell"
-            (_ "Period Totals"))
-           '())
+        (gnc:html-table-append-row/markup!
+         table
+         "grand-total"
+         (append (cons (gnc:make-html-table-cell/markup
+                        "total-label-cell"
+                        (_ "Period Totals"))
+                       '())
 
-     (let ((row-contents '())
-         (pre-span 0))
+                 (let ((row-contents '())
+                       (pre-span 0))
 
-      ; HTML gets generated in reverse order
-      (if (value-col used-columns) (addto! row-contents
-          (gnc:make-html-table-cell/size/markup
-          1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency (+ credit debit)))))
-      (if (debit-col used-columns) (addto! row-contents
-          (gnc:make-html-table-cell/size/markup
-          1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency debit))))
-      (if (credit-col used-columns) (addto! row-contents
-          (gnc:make-html-table-cell/size/markup
-          1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency credit))))
-      (if (tax-col used-columns) (addto! row-contents
-          (gnc:make-html-table-cell/size/markup
-          1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency tax))))
-      (if (sale-col used-columns) (addto! row-contents
-          (gnc:make-html-table-cell/size/markup
-          1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency sale))))
-      (if (memo-col used-columns) (set! pre-span (+ pre-span 1)))
-      (if (type-col used-columns) (set! pre-span (+ pre-span 1)))
-      (if (num-col used-columns) (set! pre-span (+ pre-span 1)))
-      (if (date-due-col used-columns) (set! pre-span (+ pre-span 1)))
-      (if (date-col used-columns) (set! pre-span (+ pre-span 1)))
-      (if (>= pre-span 2) (addto! row-contents (gnc:make-html-table-cell/size 1 (- pre-span 1) "")))
-     row-contents))))
+                   ;; HTML gets generated in reverse order
+                   (if (value-col used-columns)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size/markup
+                                1 1 "total-number-cell"
+                                (gnc:make-gnc-monetary currency (+ credit debit)))))
+                   (if (debit-col used-columns)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size/markup
+                                1 1 "total-number-cell"
+                                (gnc:make-gnc-monetary currency debit))))
+                   (if (credit-col used-columns)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size/markup
+                                1 1 "total-number-cell"
+                                (gnc:make-gnc-monetary currency credit))))
+                   (if (tax-col used-columns)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size/markup
+                                1 1 "total-number-cell"
+                                (gnc:make-gnc-monetary currency tax))))
+                   (if (sale-col used-columns)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size/markup
+                                1 1 "total-number-cell"
+                                (gnc:make-gnc-monetary currency sale))))
+                   (if (memo-col used-columns) (set! pre-span (+ pre-span 1)))
+                   (if (type-col used-columns) (set! pre-span (+ pre-span 1)))
+                   (if (num-col used-columns) (set! pre-span (+ pre-span 1)))
+                   (if (date-due-col used-columns) (set! pre-span (+ pre-span 1)))
+                   (if (date-col used-columns) (set! pre-span (+ pre-span 1)))
+                   (if (>= pre-span 2)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell/size 1 (- pre-span 1) "")))
+                   row-contents))))
 
     (if (value-col used-columns)
-    (gnc:html-table-append-row/markup! 
-     table
-     "grand-total"
-     (append (cons (gnc:make-html-table-cell/markup
-            "total-label-cell"
-            (if (negative? total)
-            (_ "Total Credit")
-            (_ "Total Due")))
-           '())
-         (list (gnc:make-html-table-cell/size/markup
-            1 (value-col used-columns)
-            "total-number-cell"
-            (gnc:make-gnc-monetary currency total))))))
+        (gnc:html-table-append-row/markup!
+         table "grand-total"
+         (list (gnc:make-html-table-cell/markup
+                        "total-label-cell"
+                        (if (negative? total)
+                            (_ "Total Credit")
+                            (_ "Total Due")))
+               (gnc:make-html-table-cell/size/markup
+                1 (value-col used-columns)
+                "total-number-cell"
+                (gnc:make-gnc-monetary currency total)))))
 
     (let* ((interval-vec (list->vector (make-extended-interval-list end-date))))
       (gnc:html-table-append-row/markup!
-       table
-       "grand-total"
+       table "grand-total"
        (list (gnc:make-html-table-cell/size
-          1 columns-used-size
-          (make-aging-table options query interval-vec reverse? date-type currency)))))
+              1 columns-used-size
+              (make-aging-table options query interval-vec
+                                reverse? date-type currency)))))
 
     table))
 
