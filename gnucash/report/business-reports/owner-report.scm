@@ -254,18 +254,17 @@
 ;; Returns printed? 
 ;;
 (define (add-balance-row table column-vector txn odd-row? printed? start-date total)
-  (if (not printed?)
-      (begin
+  (unless printed?
     (set! printed? #t)
     (if (and (value-col column-vector) (not (zero? total)))
         (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
-                 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
-          (row-style (if odd-row? "normal-row" "alternate-row")))
+                             (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)
+                             "" "" "" ""))
+              (row-style (if odd-row? "normal-row" "alternate-row")))
           (gnc:html-table-append-row/markup! table row-style (reverse row))
           (set! odd-row? (not odd-row?))
-          (set! row-style (if odd-row? "normal-row" "alternate-row")))
-        )))
-    printed?)
+          (set! row-style (if odd-row? "normal-row" "alternate-row")))))
+  printed?)
 
 ;;
 ;; Make sure the caller checks the type first and only calls us with
