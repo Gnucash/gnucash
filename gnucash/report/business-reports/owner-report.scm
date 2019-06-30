@@ -200,7 +200,7 @@
 
 (define num-buckets 5)
 (define (new-bucket-vector)
-  (make-vector num-buckets (gnc-numeric-zero)))
+  (make-vector num-buckets 0))
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
@@ -218,7 +218,7 @@
 (define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
     (buckets (new-bucket-vector))
-    (payments (gnc-numeric-zero))
+    (payments 0)
     (table (gnc:make-html-table)))
 
      (define (in-interval this-date current-bucket)
@@ -234,13 +234,13 @@
 
      (define (apply-invoice date value)
       (let* ((bucket-index (find-bucket 0 bucket-intervals date))
-         (new-value (gnc-numeric-add-fixed
-             value
-             (vector-ref buckets bucket-index))))
+         (new-value (+
+                     value
+                     (vector-ref buckets bucket-index))))
        (vector-set! buckets bucket-index new-value)))
 
     (define (apply-payment value)
-      (set! payments (gnc-numeric-add-fixed value payments)))
+      (set! payments (+ value payments)))
 
     (for-each
      (lambda (lot)
@@ -251,10 +251,10 @@
                (gncInvoiceGetDateDue invoice)))
               )
          
-     (if (not (gnc-numeric-zero-p bal))
+     (if (not (zero? bal))
          (begin
            (if reverse?
-           (set! bal (gnc-numeric-neg bal)))
+           (set! bal (- bal)))
            (if (not (null? invoice))
            (begin
              (apply-invoice date bal))
@@ -322,7 +322,7 @@
   (if (not printed?)
       (begin
     (set! printed? #t)
-    (if (and (value-col column-vector) (not (gnc-numeric-zero-p total)))
+    (if (and (value-col column-vector) (not (zero? total)))
         (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
                  (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
           (row-style (if odd-row? "normal-row" "alternate-row")))
@@ -344,8 +344,8 @@
      (date (xaccTransGetDate txn))
      (due-date #f)
      (value (xaccTransGetAccountValue txn acc))
-     (sale (gnc-numeric-zero))
-     (tax (gnc-numeric-zero))
+     (sale 0)
+     (tax 0)
      (split (xaccTransGetSplit txn 0))
      (invoice (gncInvoiceGetInvoiceFromTxn txn))
      (currency (xaccTransGetCurrency txn))
@@ -366,7 +366,7 @@
      )
 
    (if reverse?
-    (set! value (gnc-numeric-neg value)))
+    (set! value (- value)))
 
    (if (<= start-date date)
     (begin
@@ -384,15 +384,15 @@
 
       (if (gncInvoiceGetIsCreditNote invoice)
         (begin
-          (set! tax (gnc-numeric-neg tax))
-          (set! sale (gnc-numeric-neg sale))))
+          (set! tax (- tax))
+          (set! sale (- sale))))
 
       (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
                    type-str (xaccSplitGetMemo split)
                    (gnc:make-gnc-monetary currency value)
-           (if (not (gnc-numeric-negative-p value))
+           (if (not (negative? value))
                (gnc:make-gnc-monetary currency value) "")
-           (if (gnc-numeric-negative-p value)
+           (if (negative? value)
                (gnc:make-gnc-monetary currency value) "")
            (if (not (null? invoice))
                (gnc:make-gnc-monetary currency sale) "")
@@ -414,12 +414,12 @@
 (define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
     (used-columns (build-column-used options))
-    (total (gnc-numeric-zero))
-    (debit (gnc-numeric-zero))
-    (credit (gnc-numeric-zero))
+    (total 0)
+    (debit 0)
+    (credit 0)
 
-    (tax (gnc-numeric-zero))
-    (sale (gnc-numeric-zero))
+    (tax 0)
+    (sale 0)
     (currency (xaccAccountGetCommodity acc))
     (table (gnc:make-html-table))
     (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
@@ -446,12 +446,12 @@
           (set! printed? (car result))
           (if (and printed? total)
             (begin
-              (set! sale (gnc-numeric-add-fixed sale (cadddr result)))
-              (set! tax (gnc-numeric-add-fixed tax (car (cddddr result))))
-              (if (gnc-numeric-negative-p (cadr result))
-                (set! debit (gnc-numeric-add-fixed debit (cadr result)))
-                (set! credit (gnc-numeric-add-fixed credit (cadr result))))))
-          (set! total (gnc-numeric-add-fixed total (cadr result)))
+              (set! sale (+ sale (cadddr result)))
+              (set! tax (+ tax (car (cddddr result))))
+              (if (negative? (cadr result))
+                (set! debit (+ debit (cadr result)))
+                (set! credit (+ credit (cadr result))))))
+          (set! total (+ total (cadr result)))
           (set! odd-row? (caddr result))
           ))))
        txns)
@@ -477,7 +477,7 @@
       (if (value-col used-columns) (addto! row-contents
           (gnc:make-html-table-cell/size/markup
           1 1 "total-number-cell"
-          (gnc:make-gnc-monetary currency (gnc-numeric-add-fixed credit debit)))))
+          (gnc:make-gnc-monetary currency (+ credit debit)))))
       (if (debit-col used-columns) (addto! row-contents
           (gnc:make-html-table-cell/size/markup
           1 1 "total-number-cell"
@@ -508,7 +508,7 @@
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
             "total-label-cell"
-            (if (gnc-numeric-negative-p total)
+            (if (negative? total)
             (_ "Total Credit")
             (_ "Total Due")))
            '())
