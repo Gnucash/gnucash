@@ -273,76 +273,66 @@
 ;; Return a list of (printed? value odd-row?)
 ;;
 (define (add-txn-row table txn acc column-vector odd-row? printed?
-             reverse? start-date total)
+                     reverse? start-date total)
   (let* ((type (xaccTransGetTxnType txn))
-     (date (xaccTransGetDate txn))
-     (due-date #f)
-     (value (xaccTransGetAccountValue txn acc))
-     (sale 0)
-     (tax 0)
-     (split (xaccTransGetSplit txn 0))
-     (invoice (gncInvoiceGetInvoiceFromTxn txn))
-     (currency (xaccTransGetCurrency txn))
-     (type-str
-      (cond
-       ((equal? type TXN-TYPE-INVOICE)
-        (if (not (null? invoice))
-        (gnc:make-html-text
-         (gnc:html-markup-anchor
-          (gnc:invoice-anchor-text invoice)
-          (gncInvoiceGetTypeString invoice)))
-        (_ "Unknown")))
-       ((equal? type TXN-TYPE-PAYMENT)
-        (gnc:make-html-text
-	 (gnc:html-markup-anchor
-	  (gnc:split-anchor-text split) (_ "Payment"))))
-       (else (_ "Unknown"))))
-     )
+         (date (xaccTransGetDate txn))
+         (due-date #f)
+         (value ((if reverse? - identity)
+                 (xaccTransGetAccountValue txn acc)))
+         (sale 0)
+         (tax 0)
+         (split (xaccTransGetSplit txn 0))
+         (invoice (gncInvoiceGetInvoiceFromTxn txn))
+         (currency (xaccTransGetCurrency txn))
+         (type-str (cond
+                    ((eqv? type TXN-TYPE-INVOICE)
+                     (if (null? invoice)
+                         (_ "Unknown")
+                         (gnc:make-html-text
+                          (gnc:html-markup-anchor
+                           (gnc:invoice-anchor-text invoice)
+                           (gncInvoiceGetTypeString invoice)))))
+                    ((eqv? type TXN-TYPE-PAYMENT)
+                     (gnc:make-html-text
+	              (gnc:html-markup-anchor
+	               (gnc:split-anchor-text split)
+                       (_ "Payment"))))
+                    (else (_ "Unknown")))))
 
-   (if reverse?
-    (set! value (- value)))
-
-   (if (<= start-date date)
-    (begin
+    (when (<= start-date date)
+      ;; Adds 'balance' row if needed
+      (set! printed?
+        (add-balance-row table column-vector txn odd-row? printed? start-date total))
       
-      ; Adds 'balance' row if needed
-      (set! printed? (add-balance-row table column-vector txn odd-row? printed? start-date total))
-      
-      ; Now print out the invoice row
-      (if (not (null? invoice))
-        (begin
-          (set! due-date (and (gncInvoiceIsPosted invoice)
-                              (gncInvoiceGetDateDue invoice)))
-          (set! sale (gncInvoiceGetTotalSubtotal invoice))
-          (set! tax (gncInvoiceGetTotalTax invoice))))
+      ;; Now print out the invoice row
+      (unless (null? invoice)
+        (set! due-date (and (gncInvoiceIsPosted invoice)
+                            (gncInvoiceGetDateDue invoice)))
+        (set! sale (gncInvoiceGetTotalSubtotal invoice))
+        (set! tax (gncInvoiceGetTotalTax invoice)))
 
-      (if (gncInvoiceGetIsCreditNote invoice)
-        (begin
-          (set! tax (- tax))
-          (set! sale (- sale))))
+      (when (gncInvoiceGetIsCreditNote invoice)
+        (set! tax (- tax))
+        (set! sale (- sale)))
 
-      (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
-                   type-str (xaccSplitGetMemo split)
-                   (gnc:make-gnc-monetary currency value)
-           (if (not (negative? value))
-               (gnc:make-gnc-monetary currency value) "")
-           (if (negative? value)
-               (gnc:make-gnc-monetary currency value) "")
-           (if (not (null? invoice))
-               (gnc:make-gnc-monetary currency sale) "")
-           (if (not (null? invoice))
-               (gnc:make-gnc-monetary currency tax) "")
-        ))
-        (row-style (if odd-row? "normal-row" "alternate-row")))
+      (gnc:html-table-append-row/markup!
+       table (if odd-row? "normal-row" "alternate-row")
+       (reverse
+        (make-row column-vector date due-date (gnc-get-num-action txn split)
+                  type-str (xaccSplitGetMemo split)
+                  (gnc:make-gnc-monetary currency value)
+                  (if (not (negative? value))
+                      (gnc:make-gnc-monetary currency value) "")
+                  (if (negative? value)
+                      (gnc:make-gnc-monetary currency value) "")
+                  (if (not (null? invoice))
+                      (gnc:make-gnc-monetary currency sale) "")
+                  (if (not (null? invoice))
+                      (gnc:make-gnc-monetary currency tax) ""))))
 
-        (gnc:html-table-append-row/markup! table row-style
-                           (reverse row)))
+      (set! odd-row? (not odd-row?)))
 
-      (set! odd-row? (not odd-row?))
-      ))
-
-    (list printed? value odd-row? sale tax)
-    ))
+    (list printed? value odd-row? sale tax)))
 
 
 (define (make-txn-table options query acc start-date end-date date-type)
