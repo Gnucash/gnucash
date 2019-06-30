@@ -50,7 +50,11 @@
 #include "import-utilities.h"
 #include "qof.h"
 #include "engine-helpers.h"
-#include <aqbanking/abgui.h>
+#ifdef AQBANKING6
+# include <aqbanking/gui/abgui.h>
+#else
+# include <aqbanking/abgui.h>
+#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
@@ -155,6 +159,7 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
+#ifndef AQBANKING6
         /* Check for config migration */
         if (AB_Banking_HasConf4(api) != 0)
         {
@@ -175,6 +180,7 @@ gnc_AB_BANKING_new(void)
                 }
             }
         }
+#endif
 
         /* Init the API */
         g_return_val_if_fail(AB_Banking_Init(api) == 0, NULL);
@@ -332,7 +338,10 @@ join_ab_strings_cb(const gchar *str, gpointer user_data)
 gchar *
 gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
 {
-#ifndef AQBANKING6
+#ifdef AQBANKING6
+    const char* ab_remote_name;
+    const char* ab_transactionText;
+#else
     const GWEN_STRINGLIST *ab_remote_name;
 #endif
     gchar *gnc_other_name = NULL;
@@ -368,7 +377,11 @@ gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans)
 gchar *
 gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 {
+#ifdef AQBANKING6
+    const char* ab_purpose;
+#else
     const GWEN_STRINGLIST *ab_purpose;
+#endif
     const char *ab_transactionText = NULL;
     gchar *gnc_description = NULL;
 
@@ -385,12 +398,16 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
     }
 
     ab_purpose = AB_Transaction_GetPurpose(ab_trans);
+#ifdef AQBANKING6
+    gnc_description = g_strdup(ab_purpose ? ab_purpose : "");
+#else
     if (ab_purpose)
         GWEN_StringList_ForEach(ab_purpose, join_ab_strings_cb,
                                 &gnc_description);
 
     if (!gnc_description)
         gnc_description = g_strdup("");
+#endif
 
     return gnc_description;
 }
@@ -717,7 +734,9 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
             /* trans_type = SINGLE_INTERNAL_TRANSFER;
              * break; */
         case AB_Transaction_TypeTransfer:
+#ifndef AQBANKING6
         case AB_Transaction_TypeEuTransfer:
+#endif
         default:
             trans_type = SEPA_TRANSFER;
             break;
@@ -754,7 +773,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
             gnc_gen_trans_list_add_trans_with_ref_id(data->generic_importer,
                                                      gnc_trans,
 #ifdef AQBANKING6
-                                                     AB_Transaction_GetUniqueId));
+                                                     AB_Transaction_GetUniqueId(job));
 #else
                                                      AB_Job_GetJobId(job));
 #endif
@@ -899,11 +918,13 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     /* Iterate through all transactions */
 #ifdef AQBANKING6
-   ab_trans_list = AB_ImExporterAccountInfo_GetTransactionList(element);
-   if (ab_trans_list)
-       AB_Transaction_List_ForEachByType(ab_trans_list,
-                                         txn_transaction_cb, data,
-                                         AB_Transaction_TypeStatement, 0);
+    {
+        AB_TRANSACTION_LIST *ab_trans_list = AB_ImExporterAccountInfo_GetTransactionList(element);
+        if (ab_trans_list)
+            AB_Transaction_List_ForEachByType(ab_trans_list,
+                                              txn_transaction_cb, data,
+                                              AB_Transaction_TypeStatement, 0);
+    }
 #else
     AB_ImExporterAccountInfo_TransactionsForEach(element, txn_transaction_cb,
                                                  data);
@@ -916,8 +937,6 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Account *gnc_acc;
-    AB_ACCOUNT_STATUS *item, *best = NULL;
-    const GWEN_TIME *best_time = NULL;
     const AB_BALANCE *booked_bal, *noted_bal;
     const AB_VALUE *booked_val = NULL, *noted_val = NULL;
     gdouble booked_value, noted_value;
@@ -947,6 +966,9 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     booked_bal=AB_Balance_List_GetLatestByType(AB_ImExporterAccountInfo_GetBalanceList(element),
                                                AB_Balance_TypeBooked);
 #else
+    {
+    AB_ACCOUNT_STATUS *item, *best = NULL;
+    const GWEN_TIME *best_time = NULL;
     /* Lookup the most recent ACCOUNT_STATUS available */
     item = AB_ImExporterAccountInfo_GetFirstAccountStatus(element);
     while (item)
@@ -961,6 +983,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     }
 
     booked_bal = AB_AccountStatus_GetBookedBalance(best);
+    }
 #endif
 
     if (!(data->awaiting & AWAIT_BALANCES))
@@ -993,11 +1016,15 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     /* Lookup booked balance and time */
     if (booked_bal)
     {
+#ifdef AQBANKING6
+        const GWEN_DATE *ti = AB_Balance_GetDate(booked_bal);
+#else
         const GNC_GWEN_DATE *ti = AB_Balance_GetTime(booked_bal);
+#endif
         if (ti)
         {
 #ifdef AQBANKING6
-            time64 secs = GWEN_Date_toLocalTime_t(dt);
+            time64 secs = GWEN_Date_toLocalTime(ti);
 #else
             time64 secs = GWEN_Time_toTime_t(ti);
 #endif

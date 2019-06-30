@@ -32,20 +32,21 @@
 #include <config.h>
 
 #include <glib/gi18n.h>
-#include <aqbanking/jobsingletransfer.h>
-#include <aqbanking/jobsingledebitnote.h>
-#include <aqbanking/jobinternaltransfer.h>
-#include <aqbanking/jobsepatransfer.h>
-#include <aqbanking/jobsepadebitnote.h>
+#include "gnc-ab-utils.h" /* for AQBANKING6 */
 #ifdef AQBANKING6
 # include <aqbanking/types/transaction.h>
+#else
+# include <aqbanking/jobsingletransfer.h>
+# include <aqbanking/jobsingledebitnote.h>
+# include <aqbanking/jobinternaltransfer.h>
+# include <aqbanking/jobsepatransfer.h>
+# include <aqbanking/jobsepadebitnote.h>
 #endif
 
 #include <gnc-aqbanking-templates.h>
 #include "dialog-ab-trans.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "gnc-ab-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
 
@@ -185,7 +186,7 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     AB_TRANSACTION *trans = AB_Transaction_new();
     AB_VALUE *value;
 
-#ifdef AQBNKING6
+#ifdef AQBANKING6
     AB_Banking_FillTransactionFromAccountSpec(trans, td->ab_acc);
 #else
     AB_Transaction_FillLocalFromAccount(trans, td->ab_acc);
@@ -428,8 +429,8 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     {
         gtk_widget_set_sensitive(GTK_WIDGET(td->orig_name_entry), TRUE);
 #if AQBANKING6
-        ab_accountnumber = AB_AccountSpec_GetIBAN(ab_acc);
-        ab_bankcode = AB_AccountSpec_GetBIC(ab_acc);
+        ab_accountnumber = AB_AccountSpec_GetIban(ab_acc);
+        ab_bankcode = AB_AccountSpec_GetBic(ab_acc);
 #else
         ab_accountnumber = AB_Account_GetIBAN(ab_acc);
         ab_bankcode = AB_Account_GetBIC(ab_acc);
@@ -813,7 +814,7 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
 
      switch (trans_type)
      {
-     case SINGLE_DEBITNOTE:
+     case SINGLE_DEBITNOTE: /* no longer in use */
          cmd=AB_Transaction_CommandDebitNote;
          break;
      case SINGLE_INTERNAL_TRANSFER:
@@ -825,9 +826,8 @@ gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTr
      case SEPA_DEBITNOTE:
          cmd=AB_Transaction_CommandSepaDebitNote;
          break;
-     case SEPA_TRANSFER:
      default:
-        cmd=AB_Transaction_CommandTransfer;
+        cmd=AB_Transaction_CommandTransfer; /* no longer in use */
          break;
      };
      if (!AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, cmd))
