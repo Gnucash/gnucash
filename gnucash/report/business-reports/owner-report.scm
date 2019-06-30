@@ -46,6 +46,7 @@
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
 (define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
+(define job-report-guid "5518ac227e474f47a34439f2d4d049de")
 
 (define acct-string (N_ "Account"))
 (define owner-page gnc:pagename-general)
@@ -73,6 +74,7 @@
 (define (owner-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
+        ((eqv? owner-type GNC-OWNER-JOB) (N_ "Job"))
         ;; FALL THROUGH
         (else
           (N_ "Company")))) 
@@ -81,6 +83,7 @@
 (define (invalid-selection-title-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected."))
+        ((eqv? owner-type GNC-OWNER-JOB) (_ "No valid job selected."))
         ;; FALL THROUGH
         (else
           (_ "No valid company selected."))))
@@ -88,6 +91,7 @@
 (define (invalid-selection-string owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "This report requires a customer to be selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "This report requires a employee to be selected."))
+        ((eqv? owner-type GNC-OWNER-JOB) (_ "This report requires a job to be selected."))
         ;; FALL THROUGH
         (else
           (_ "This report requires a company to be selected."))))
@@ -114,6 +118,7 @@
 (define (doctype-str owner-type)
   (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "Employee"))
+        ((eqv? owner-type GNC-OWNER-JOB) (_ "Job"))
         ;; FALL THROUGH
         (else
           (_ "Vendor")))) 
@@ -627,6 +632,10 @@
 (define (employee-options-generator)
   (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
+(define (job-options-generator)
+  (options-generator (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)
+                     GNC-OWNER-JOB #f))
+
 (define (string-expand string character replace-string)
   (define (car-line chars)
     (take-while (lambda (c) (not (eqv? c character))) chars))
@@ -645,6 +654,22 @@
                          (line-helper rest)))))
   (line-helper (string->list string)))
 
+(define (setup-job-query q owner account end-date)
+  (let ((guid (gncOwnerReturnGUID owner)))
+    (qof-query-add-guid-match
+     q  (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER QOF-PARAM-GUID)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
+     q (list SPLIT-LOT OWNER-FROM-LOT QOF-PARAM-GUID)
+     guid QOF-QUERY-OR)
+    (qof-query-add-guid-match
+     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER QOF-PARAM-GUID)
+     guid QOF-QUERY-OR)
+    (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
+    (qof-query-set-book q (gnc-get-current-book))
+    q))
+
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
@@ -662,7 +687,6 @@
      (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER
        OWNER-PARENTG)
      guid QOF-QUERY-OR)
-
     (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
@@ -772,7 +796,9 @@
 
       ;; else....
        (begin
-        (setup-query query owner account end-date)
+        (if (eqv? GNC-OWNER-JOB type)
+            (setup-job-query query owner account end-date)
+            (setup-query query owner account end-date))
         (gnc:html-document-set-title! document report-title)
 
         (gnc:html-document-set-headline!
@@ -870,6 +896,15 @@
  'report-guid employee-report-guid 
  'menu-path (list gnc:menuname-business-reports)
  'options-generator employee-options-generator
+ 'renderer reg-renderer
+ 'in-menu? #t)
+
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Job Report")
+ 'report-guid job-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator job-options-generator
  'renderer reg-renderer
  'in-menu? #t)
 

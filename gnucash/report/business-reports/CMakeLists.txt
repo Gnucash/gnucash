@@ -6,7 +6,6 @@ set (business_reports_SCHEME
   taxinvoice.scm
   receipt.scm
   invoice.scm
-  job-report.scm
   new-aging.scm
   owner-report.scm
   payables.scm
