@@ -569,11 +569,13 @@
           (cons 
            (cons (cons current-new current-existing) (car rest-result))
            (cdr rest-result)))))
+  (issue-deprecation-warning "gnc:html-table-prepend-column! is unused.")
   (let* ((existing-data (reverse (gnc:html-table-data table)))
 	 (existing-length (length existing-data))
 	 (newcol-length (length newcol)))
     (if (<= newcol-length existing-length)
-        (gnc:html-table-set-data! 
+        (gnc:html-table-set-data!
+         table
          (reverse (car (prepend-to-element 
                         newcol
                         existing-data

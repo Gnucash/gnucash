@@ -162,9 +162,8 @@ gnc_commodity* parse_commodity (const std::string& comm_str)
     auto table = gnc_commodity_table_get_table (gnc_get_current_book());
     gnc_commodity* comm = nullptr;
 
-    /* First try commodity as a unique name. */
-    if (comm_str.find("::"))
-        comm = gnc_commodity_table_lookup_unique (table, comm_str.c_str());
+    /* First try commodity as a unique name, returns null if not found */
+    comm = gnc_commodity_table_lookup_unique (table, comm_str.c_str());
 
     /* Then try mnemonic in the currency namespace */
     if (!comm)

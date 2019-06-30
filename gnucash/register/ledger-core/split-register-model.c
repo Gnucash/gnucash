@@ -1954,7 +1954,19 @@ gnc_split_register_cursor_is_readonly (VirtualLocation virt_loc,
     char type;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    if (!split) return FALSE;
+
+    if (!split) // this could be the blank split
+    {
+        txn = gnc_split_register_get_current_trans (reg);
+
+        if (txn) // get the current trans and see if read_only required
+        {
+            if (xaccTransGetReadOnly (txn)
+                    || xaccTransIsReadonlyByPostedDate (txn))
+                return (TRUE);
+        }
+        return FALSE;
+    }
 
     txn = xaccSplitGetParent (split);
     if (!txn) return FALSE;

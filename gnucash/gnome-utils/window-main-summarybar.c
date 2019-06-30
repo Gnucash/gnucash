@@ -359,10 +359,10 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
 
     root = gnc_get_current_root_account ();
-    options.default_currency = xaccAccountGetCommodity(root);
+    options.default_currency = gnc_default_currency ();
     if (options.default_currency == NULL)
     {
-        options.default_currency = gnc_default_currency ();
+        options.default_currency = xaccAccountGetCommodity(root);
     }
 
     options.grand_total =

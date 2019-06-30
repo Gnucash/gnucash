@@ -111,12 +111,11 @@
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 
-(define (make-aging-table options query bucket-intervals reverse?)
+(define (make-aging-table options query bucket-intervals reverse? currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
 	(buckets (new-bucket-vector))
 	(payments (gnc-numeric-zero))
-	(currency (gnc-default-currency)) ;XXX
-	(table (gnc:make-html-table)))
+        (table (gnc:make-html-table)))
 
     (define (in-interval this-date current-bucket)
       (< this-date current-bucket))
@@ -274,7 +273,7 @@
   (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
 	(used-columns (build-column-used options))
 	(total (gnc-numeric-zero))
-	(currency (gnc-default-currency)) ;XXX
+        (currency (xaccAccountGetCommodity acc))
 	(table (gnc:make-html-table))
 	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
 						      "inv-str")))
@@ -331,7 +330,7 @@
        (list (gnc:make-html-table-cell/size/markup
 	      1 (+ 1 (value-col used-columns))
 	      "centered-label-cell"
-	      (make-aging-table options query interval-vec reverse?)))))
+	      (make-aging-table options query interval-vec reverse? currency)))))
 
     table))
 

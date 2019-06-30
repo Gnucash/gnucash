@@ -1,5 +1,370 @@
 Version history:
 ------- -------
+3.6 - 30 June 2019
+The seventh release of the 3.x stable series.
+
+The following bugs have been fixed:
+
+    Bug 397927 - QIF Import: Usability: Remember window position and size
+    Bug 577968 - Values are not stored by pressing <TAB> in budget page
+    Bug 583277 - Cancel button closes QIF importer without confirmation
+    Bug 624176 - budget report - option for showing sum is ignored
+    Bug 642824 - Different actions like QIF import, other imports and...
+                 closing book allow to assign transactions to placeholder...
+                 accounts
+                 Placeholder accounts do not allow transactions so when the
+                 account picker dialog is presented, add an error dialog
+                 for placeholder selection and a column to display that the
+                 account is a placeholder.
+    Bug 646361 - Estimate budget should give option to have same amount...
+                 in each budget period
+    Bug 668349 - Select Account does not return user to correct location...
+                 in "Match payee/memos to GNUCash Accounts" screen
+    Bug 676810 - Wrong accounting in multi-currency budget report
+    Bug 679800 - Shortcut to allow population of all budgeting periods
+    Bug 689753 - Budget Report: Negative Numbers Not Colored Red
+    Bug 728873 - Account name does not focus automatically in QIF import...
+                 assistant
+    Bug 751290 - Rethinking the invoice ledger view
+    Bug 754710 - Add column sorting to Qif import Match views
+    Bug 781345 - Equity disregarded by budget totals
+    Bug 788157 - Open Budget Menu Item Doesn't Select Default Budget
+    Bug 796949 - Incorrect conversion of 0,01 USD to EUR
+    Bug 797051 - Price Database Add Overwrites Data Without Confirmation
+    Bug 797089 - In the main Account Register window, the value shown...
+                 under 'Total (Period)' excludes any transaction with date...
+                 equal to the end date of the reporting period.
+    Bug 797104 - Translations not showing in receipt options
+    Bug 797123 - File->Export Transactions to CSV doesn't output...
+                 transaction data
+    Bug 797126 - It is annoying to run cmake to get an updated mo file
+    Bug 797127 - Company name and address in reports not display properly
+    Bug 797134 - Decimal separator: Windows configured as dot,...
+                 Gnucash shows comma.
+    Bug 797165 - Deleting an old quote from Price Database Core Dumps Gnucash
+    Bug 797169 - GnuCash hangs loading XML file
+    Bug 797170 - gnucash-3.5 fails to compile with GTK+3-3.20.x
+    Bug 797175 - Gnucash will not open from UNC paths.
+    Bug 797175 - Opening a file from a gvfs mount point fails
+    Bug 797183 - association head path with spaces displayed wrong
+    Bug 797185 - Correct the sorting for the Transaction Association Dialog
+    Bug 797186 - gtk crash closing parent window edit->stylesheets
+    Bug 797188 - Default invoice prints credit note as invoice
+    Bug 797196 - Allow for per-payment rounding in amortization calculations.
+    Bug 797197 - Transaction report: Error message when sorting on month
+    Bug 797204 - qif import: commodities throw blocking dialog in symbol...
+                 field on every commodity
+    Bug 797207 - Chart reports show blank when run from the build directory
+    Bug 797215 - qif import: review duplicates - allow sorting candidates...
+                 on all columns
+    Bug 797223 - Missing Tooltip on Edit->Preferences->Register:Actions:Tab...
+                 order includes Transfer on Memorised Transaction
+    Bug 797230 - Use after free in gnucash_sheet_style_destroy.
+    Bug 797232 - dialog-ab.glade was written for gtk 2.16.
+    Bug 797233 - Balance Sheet, Chart of Accounts, and other reports...
+                 crash when involving foreign currency stocks.
+    Bug 797240 - Multicolumn report not showing each report name
+                 reportname was not correctly applied as the chart-title
+    Bug 797241 - Some reports skip transactions of the last day of the
+                 selected period
+    Bug 797244 - Remove the invert prices for less than 1
+    Bug 797246 - Cleared Balance Remains Red After Turning Positive
+    Bug 797249 - Cutting home account causes transaction to disappear
+    Bug 797262 - Change "Today date format"
+    Bug 797266 - Missing translation settings
+    Bug 797277 - Assets over time ignores nested liabilities
+    Bug 797278 - Create an option for type of commodity for Price import
+                 Currently when you use the 'Commodity From' column for
+                 Price imports it can match against the wrong commodity
+                 like COP (Conoco Philips) would match against the currency
+                 COP (Columbian Peso). To fix this add a new column type
+                 'From Namespace' and rename 'Commodity From' to 'From
+                 Symbol' so they match the Security Editor.
+    Bug 797281 - Gnucash crashes when attempting to match online accounts
+
+Other repairs or enhancements not marked as bugs:
+
+    Rewrite the Customer Summary Report to correctly handle multiple currencies.
+    Improve the Owner Report's find-first function to consider currency when
+        selecting the account.
+    Prevent cutting the "anchor" split or pasting another split on top of
+        it in account registers so that the transaction won't suddenly
+        disappear from the register page. Displays an explanatory dialog just
+        like trying to delete the anchor split does. Allow deleting, cutting,
+        and pasting over all splits in Journal View registers which don't have
+        anchor splits because they're not associated with any account.
+    Disable editing the "blank split" (the new split at the bottom of a
+        transaction in split view) if the transaction itself is read-only.
+    Use the customer and vendor currency instead of the default currency from
+        preferences when generating bills, invoices, or credit notes.
+    Allow assigning a single target account to more than one transaction in
+        the import matcher. To do this select the new transactions and
+        right-click to open a single-item context menu. Click the menu item
+        to open the account selection dialog box. Note that imported
+        transactions that match transactions already in the eriger,
+        i.e. those marked "update" or "reconcile and update" are not eligible
+        for inclusion.
+        This feature still has some rough edges that are being addressed for
+        the next release.
+    Use the default currency from Properties>Accounts for the summary bar
+        currency to make it configurable.
+    Allow CSV export of grand total amounts from reports using the trep-engine.
+    Fix XML file import failures into GnuCash for Android.
+    Raise minimum CMake version to 3.5 for all platforms.
+    Prevent crash in Aging Report when the book has no AP or AR accounts.
+    Fix operation of the "default budget" option.
+    Change the account-picker dialog to disable the OK button instead of
+        raising a warning dialog if the selected account is a placeholder.
+    Fix crash after unloading all files from the QIF import assistant.
+    Disable the Next button in the QIF import assistant if no files are
+        selected for import.
+    New report "Balance Sheet-PNL" combines a Balance Sheet and an Income
+        Statement in a single report.
+    Rework localization in C++ on Win32 builds, fixing several crashes and
+        speeding up file loading by 10x.
+    Create a console window for displaying stdout/stderr. Define
+        __MSWIN_CONSOLE__ and recompile to enable.
+    Keep the selection in the Securities Editor on the commodity after
+        editing it.
+    Allow the Securities Editor to stack separately from the main window.
+    Much more Scheme cleanup and refactoring.
+    Python console improvements, including switching to Python3 and not
+        killing GnuCash when quitting the console.
+    
+
+New API:
+    The following functions can now be used in scheduled transaction
+    credit/debit calculations:
+    gnc:amort_pmt
+    gnc:amort_ppmt
+    gnc:amort_ipmt
+
+API Deprecations:
+    gnc:html-table-prepend-column!
+    gnc:html-acct-table-num-cols
+    gnc:html-acct-table-append-row!
+    gnc:html-acct-table-prepend-row!
+    gnc:html-acct-table-append-col!
+    gnc:html-acct-table-prepend-col!
+    gnc:html-acct-table-remove-last-row!
+    gnc:html-acct-table-render
+    gnc:second-html-build-acct-table
+
+Updated Translations: Croatian, Farsi, German, Romanian, and Ukrainian
+
+Known Issues:
+    Bug 787813 - Regression: Price database should allow multiple buy/sell prices on the same date
+    Bug 791825 - Accounting Period dates (among others) stored with a TZ-sensitive time.
+    Bug 792975 - missing hellip in menus
+    Bug 792986 - Connecting with Bank server is very slow
+    Bug 793306 - Price is not imported from CSV
+    Bug 794584 - Register not updated when scheduled transactions created
+    Bug 794644 - Remove Old Prices is very slow
+    Bug 794807 - Calendar widget current month shown as (null)
+    Bug 795071 - new account entry screen keeps on disappearing and coming back
+    Bug 795251 - googletest detection cannot be overridden
+    Bug 795383 - Gnucash crashes on import of a 1400-transaction (or more) CSV file
+    Bug 795384 - GnuCash 3 is tremendously memory hungry on macOs
+    Bug 795393 - Do not create .log files when using sqlite backend
+    Bug 795614 - Unicode handling in amount fields [resubmission]
+    Bug 795753 - Initial save into MySQL should use bulk inserts
+    Bug 796100 - Autosave Doesn't Work if Preferences Changed During Data Entry
+    Bug 796122 - Poor Performance Scanning Old Files During Autosave
+    Bug 796492 - Wrong calculation of the first occurrence
+    Bug 796496 - CSV Importer: Column Selectors invisible on Windows.
+    Bug 796500 - Scalability issue - importing large CSV to large book won't finish
+    Bug 796520 - Layout overlapping in Income & Expense Chart
+    Bug 796688 - "Next" Button Moves Repeatedly During New File Wizard
+    Bug 796736 - Column Widths calculator need to allow more padding
+    Bug 796740 - Selecting register value with mouse fails
+    Bug 796746 - Cannot copy and paste anything into the amount field (both credit and debit)
+    Bug 796750 - qof_query_search_for stores pointer of type string argument
+    Bug 796758 - Improve error messages, why one can not remove a tax table
+    Bug 796761 - Newline (char(10) is inserted into the end of the string if copy & paste text from excel into the description field of transaction
+    Bug 796764 - make check: hardcoded filenames in /tmp, vulnerable to symlink attacks
+    Bug 796767 - The importer shows read-only and placeholder accounts
+    Bug 796769 - Exposing new variables via swig sometimes results in an error "Undefined variable : <something>" while building
+    Bug 796773 - Display of Negative numbers
+    Bug 796774 - Investment account QIF Import does not import transaction
+    Bug 796775 - Auto fill not working correctly (only match the first char you type ...)
+    Bug 796779 - Window size in SEPA transaction
+    Bug 796782 - Cannot import OFX file in new 3.2
+    Bug 796783 - handling invalid date range in "get transaction..."
+    Bug 796787 - report options - default plot size too big
+    Bug 796788 - strange behavior in options of multicolumn report
+    Bug 796799 - After Deleting Transaction Price, Enter Required 2x
+    Bug 796810 - Account creation and editing dialogs do not allow entering umlaut-u
+    Bug 796824 - took more than 2 hours to import 220 transactions
+    Bug 796836 - Credit note wrong, database inconsistency
+    Bug 796844 - Amount column of Customer Report should net Credits and Debits
+    Bug 796850 - Auto-decimal-point causes incorrect price to display when amount is edited.
+    Bug 796852 - Context sensitive Help broken
+    Bug 796857 - Import of QIF duplicates transfer transactions
+    Bug 796861 - Report HTML Pie Chart - default value #f for colors makes the pie chart renderer crash
+    Bug 796862 - Report HTML Scatter Chart - default value #f for makercolor makes the scatter chart renderer crash
+    Bug 796870 - Cannot (occasionally) undo invoice billing
+    Bug 796878 - test-qofsession fails on x86_32
+    Bug 796882 - Entering an amount as a calculation fails the first time in bills
+    Bug 796885 - SX Editor Calendar Sometimes Shows Wrong Year, Wrong Next Date
+    Bug 796890 - CSV import of multi-split transactions marks reconciliation status of first line as cleared
+    Bug 796892 - Startup warning: undefined symbol PyOS_getsig
+    Bug 796894 - Edit -> Preferences results in gnucash.exe- No Disk error box
+    Bug 796895 - Report end and start dates not obeyed
+    Bug 796896 - Button to complete an export not intuitively placed or discoverable
+    Bug 796899 - FTBFS on [mips]: segfault; test-backend-dbi; endianness
+    Bug 796900 - Problems in Description Editing. Select all implemented with the Caps Key (plus no Ctrl Z Undo, grrr)
+    Bug 796905 - GNUcash does not start after windows 10 update
+    Bug 796907 - After a series of actions to the window of GnuCash, some of or all of the contents will dispear and could not get them back
+    Bug 796909 - Can't enter different notes and memos for an AR payment transaction
+    Bug 796911 - Minimum window width is too large, so it may not be possible to maximise the window
+    Bug 796925 - Database connections not closed by session.end()/session.destroy() when is_new=True
+    Bug 796933 - Backspace key doesn't work, sometimes.
+    Bug 796934 - Menu and message characters display as boxes
+    Bug 796935 - Scrollbar indicator does not move while scrolling
+    Bug 796936 - Saving XML-formatted file to CryFS volume crashes GNUCash
+    Bug 796942 - Make Auto-Split Optional or Undo-Able for Data Entry
+    Bug 796945 - Find Transaction Split Search Search Criteria window does not scroll when added criteria exceed a certain amount
+    Bug 796948 - Scheduled Transactions Entered Since Last Run Are not Visible
+    Bug 796954 - No scroll in invoice/billing and all columns not visible. Column resizing is disastrous
+    Bug 796955 - Import CSV - Single-line two-currency transactions can't be imported
+    Bug 796958 - GnuCash tries to lock the database even when opened read-only.
+    Bug 796959 - GnuCash complains about saving on close when read-only.
+    Bug 796966 - Underscore showing in german translation strings in the gui - business - search invoice
+    Bug 796970 - Disable editing of currency retrieval settings for currencies.
+    Bug 796974 - Feature Request - Headings for the Matcher column Deposit/Withdrawal do not change to Debit/Credit when formal accounting labels are preferenced
+    Bug 796977 - No amounts displaying after upgrade from 2.6.19 to 3.3
+    Bug 796979 - GnuCash segfaults on first startup when run from remote X session
+    Bug 796983 - fails when importing QIF exported by Quicken 2015 Deluxe
+    Bug 796984 - Import Bills & Invoices: date of line item is not validated; can lead to unexpected results
+    Bug 796985 - Import Bills & Invoices: option 'open not yet posted docs in tab' does not open tab if invoice could not be posted
+    Bug 796986 - Import Bills & Invoices: in case of invalid posting date in import file, invoice is posted with unexpected date
+    Bug 796987 - Import Bills & Invoices: fixing import items only works in special case
+    Bug 796992 - gnucash --add-price-quotes always fails
+    Bug 796995 - Income and GST Statement: wrong grouping of invoices with multiple tax rates
+    Bug 796997 - Currency Conversion Dialog appears when recording transactions between same currency accounts.
+    Bug 797003 - Number widget changes values by more than one
+    Bug 797006 - Balance is misleading in "open subaccounts" when different currencies are involved
+    Bug 797009 - Database error on split transaction
+    Bug 797010 - Install v3.4 failure
+    Bug 797016 - modifying existing entry don't allow to input zero price or zero stocks
+    Bug 797022 - Import Bills & Invoices: expense/income account is not validated - leads to one-sided posting if account is invalid
+    Bug 797023 - Import Bills & Invoices: no user confirmation requested for update of invoices, if new invoices is created first.
+    Bug 797024 - Import Bills & Invoices: import matches csv data rows with too few separators, messing up the import data
+    Bug 797025 - Import Bills & Invoices: the type of the post to account is not validated - enabling A/P and A/R postings on regular accounts
+    Bug 797026 - Reimport of account structure not working
+    Bug 797033 - The CSV Importer should not obey with the "automatic digital point" setting
+    Bug 797035 - Date selection via calender
+    Bug 797036 - Runtime Error During 3.4 Upgrade
+    Bug 797037 - Counter formats not saving
+    Bug 797038 - GnuCash hangs loading under XWindows
+    Bug 797043 - Rouble Symbol missing in Windows.
+    Bug 797045 - Improve error reporting for bad credentials with MySQL backend ("bad or corrupt data" => "access denied")
+    Bug 797048 - GnuCash in English doesn't show dates in register when book contains Polish characters
+    Bug 797049 - Typing in lists does no longer initiate text search
+    Bug 797050 - Encoding problem at MT940 Import
+    Bug 797052 - Unable to Use Shift Key After Autofill or Paste
+    Bug 797053 - Window state isn't saved
+    Bug 797054 - Reports are rendered in Greek glyphs
+    Bug 797057 - gnc-gwen-gui.c is still based on the deprecated GtkTable
+    Bug 797060 - When importing QFX transactions all dates are current date
+    Bug 797063 - gncEntryGetDocValue is modifying the invoice or entry
+    Bug 797064 - crash when try print report
+    Bug 797065 - character is broken when display report
+    Bug 797070 - With multiple monitors, menus only open in one monitor, regardless of which monitor GnuCash window is located
+    Bug 797073 - Tax Schedule Report off by one year
+    Bug 797076 - Net worth, Assets and Liabilities report wrong period
+    Bug 797077 - Wrong Balance Displayed in Related Registers
+    Bug 797078 - "Automatic decimal point" Should Not Cause 2 Different Behaviors
+    Bug 797080 - "Rate of Gain" and "Rate of Return" Seem to be Mislabeled
+    Bug 797083 - Gnucash crashes when trying to rename budget
+    Bug 797084 - Provide an option to leave edited transactions reconciled
+    Bug 797085 - Import Bills & Invoices – headers not translated
+    Bug 797088 - Encoding problem with CSV-formated account tree import
+    Bug 797092 - Save As fails: tries to save to reserved directory if path contains spaces
+    Bug 797093 - Miscalculation in cashflow reports
+    Bug 797096 - Bad display in dialog window
+    Bug 797101 - repeated pop-up "confirm creation of" some mangled account name
+    Bug 797102 - Advanced Portfolio Ignores Capital Gain Splits
+    Bug 797106 - Advanced Portfolio Report shows too many decimals in security unit prices newly imported from Finance::Quote
+    Bug 797110 - Column alignment on Trial Balance using a Stylesheet
+    Bug 797112 - Unable to Close Period due to reconcile_date falling before 1970-01-01 00:00:00 UTC
+    Bug 797113 - Scrubbing crashes when creating small splits that round to value 0.
+    Bug 797114 - Fixing an SX due to deleted account stuck in an error loop
+    Bug 797115 - Can't 're-activate' an expired SX
+    Bug 797116 - request for review: gnc doesn't understand the chars it allows to be stored in a file and should
+    Bug 797118 - Date entered incorrectly if entered as yyyy with some Date Time Local Settings
+    Bug 797119 - Duplicating transaction produces blocked edit
+    Bug 797121 - Unable to save to database
+    Bug 797124 - Request for Enhancement: Preferences and Saved Reports should be per-book not per-user
+    Bug 797133 - CSV Import of multicurrency transaction export in multiline form
+    Bug 797137 - Advanced portfolio for currency accounts
+    Bug 797142 - txf export report outputs incorrect values in schedule c
+    Bug 797145 - QIF Importer CP1252->UTF-8 transcoding fails
+    Bug 797147 - invoice.GetDatePosted() returns 1970-01-01 for unposted invoices in MySQL backend rather than Null
+    Bug 797158 - gnc:make-account-sel-limited-option is not working
+    Bug 797161 - first transaction with trn:date-posted on 1st day of month counted to previous month by graphs (due to timezone)
+    Bug 797163 - qof_book_get_option segfaults when retrieving a non-leaf frame
+    Bug 797164 - QFX import dialog creates Floppy Drive Not Ready error on a computer with no floppy drive
+    Bug 797166 - Stock scrubbing does not handle Return of Capital Transactions
+    Bug 797167 - Paste from clipboard to invoice editing window fails
+    Bug 797171 - Allow multiple credit/debit columns to be selected
+    Bug 797172 - Allow accounting terms in drop down list.
+    Bug 797173 - Allow user to specify a debit/credit column needs to be negated.
+    Bug 797182 - Doesn't respond correctly when using Windows Snap feature
+    Bug 797184 - chargeback customer invoicing
+    Bug 797187 - Payment processing falsely initialized with order list in the customer entry field (workaround described)
+    Bug 797188 - Default invoice prints credit note as invoice
+    Bug 797190 - When Translations Not Selected, 75 MB of Help Files Installed
+    Bug 797191 - Gnu Cash does not save certificates permanently
+    Bug 797194 - Hebrew fonts are not shown correctly
+    Bug 797199 - AqBanking HBCI import Visa Card (comdirect bank) without line result: from to dates switched
+    Bug 797200 - closing window in python console should trigger regular shutdown or none at all
+    Bug 797201 - ipython shell broken
+    Bug 797203 - autofill value is incorrect in split tx across currencies with trading accounts enabled
+    Bug 797205 - Python Shell startup message: PyGTKDeprecationWarning: Using positional arguments with the GObject constructor has been deprecated
+    Bug 797206 - qif import: investment accounts with cash transactions that are transfers cause import to fail with bug detected
+    Bug 797211 - Very slow UI - dependent on window size
+    Bug 797213 - import map editor shows no maps, takes ~22 seconds to display nothing, yet QIF importer remembers maps somehow
+    Bug 797214 - enhancement: gnucash file anonymizer, great for providing sample errant data to dev/test
+    Bug 797216 - The order of multi-split journal entries in the CSV-importfile is blocking a valid import
+    Bug 797218 - qif import: Quicken exported QIF files do not import diacritic extended characters, they are replaced with ?
+    Bug 797220 - delete account allows move of all transactions to account having non-matching currency
+    Bug 797222 - Resetting the "change reconciled split" warning doesn't take effect until GnuCash is restarted.
+    Bug 797226 - Minor Issues in GnuCash Export Format
+    Bug 797227 - Feature Request: Use trading accounts only for currency conversion
+    Bug 797229 - Two Finger Horizontal Scroll in Register Broken
+    Bug 797231 - Split transaction doesn't complete in future
+    Bug 797232 - dialog-ab.glade was written for gtk 2.16.
+    Bug 797234 - gnucash closes when trying to open new file
+    Bug 797235 - 'Memorised' is british English
+    Bug 797236 - Regression: Reconcile window transaction list resets to top when new transaction created in account
+    Bug 797237 - Default currency is USD no matter what you choose
+    Bug 797243 - Slow XML load/save on OS X 10.11
+    Bug 797244 - Commodity categories are inconsistent
+    Bug 797245 - Smallest fraction of Vietnam Dong VND should be 1
+    Bug 797251 - File choosers have lost the ability to type file names and paths
+    Bug 797256 - AR/AP: placeholder accounts are selectable in the Posting menu for invoices and bills
+    Bug 797260 - msys2 setup incomplete with current setup-mingw64.ps1 bootstrap
+    Bug 797263 - Tax Schedule Report fails to generate
+    Bug 797264 - 3.5 can't use Chinese IME input
+    Bug 797268 - Stock Split Assistant can create nonsense transactions
+    Bug 797270 - Budget Chart report - translation of header and dates
+    Bug 797275 - Multiselection contains matched transactions
+    Bug 797276 - Hitting the cancel button when editing a scheduled transaction does not undo changes
+    Bug 797279 - Reports RTL do not support RTL
+    Bug 797280 - Balance Sheet and P&L Reports use different rounding.
+    Bug 797282 - Bills Due Reminder does not update document count message after processing payment
+    Bug 797283 - Permanent hang on clicking on report tabs
+    Bug 797284 - A column of an account can be too small (width 1), so that it is not possible to get it back with a double-click on it
+    Bug 797285 - QIF import fails and then crashes
+    Bug 797287 - summary bar is wonky
+    Bug 797290 - out-of-memory during register dropdown for income account
+    Bug 797292 - Amounts are displayed and stored with fractions smaller than the commodity's SCU
+    Bug 797293 - Crash when import "U+R" or "R"
+    Bug 797294 - Billing functions freezing
+    Bug 797295 - problems with entering swedish åäö in company address
+
+
 3.5 - 31 March 2019
 The sixth release of the 3.x stable series.
 

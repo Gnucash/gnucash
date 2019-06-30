@@ -76,7 +76,8 @@ static std::shared_ptr<CsvPriceImpSettings> create_int_gnc_exp_preset(void)
     preset->m_column_types_price = {
             GncPricePropType::DATE,
             GncPricePropType::AMOUNT,
-            GncPricePropType::FROM_COMMODITY,
+            GncPricePropType::FROM_SYMBOL,
+            GncPricePropType::FROM_NAMESPACE,
             GncPricePropType::TO_CURRENCY
     };
     return preset;
@@ -152,14 +153,14 @@ CsvPriceImpSettings::load (void)
 
     gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_TO_CURR, &key_error);
     if (key_char && *key_char != '\0')
-        m_to_currency = parse_commodity_price_comm (key_char);
+        m_to_currency = parse_commodity_price_comm (key_char, "");
     m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_FROM_COMM, &key_error);
     if (key_char && *key_char != '\0')
-        m_from_commodity = parse_commodity_price_comm (key_char);
+        m_from_commodity = parse_commodity_price_comm (key_char, "");
     m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
@@ -178,8 +179,8 @@ CsvPriceImpSettings::load (void)
             m_column_types_price.push_back(col_types_it->first);
         }
         else
-            PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
-                    col_types_str_price[i]);
+            PWARN("Found invalid column type '%s' in group '%s'. Inserting column type 'NONE' instead'.",
+                    col_types_str_price[i], group.c_str());
     }
     if (col_types_str_price)
         g_strfreev (col_types_str_price);

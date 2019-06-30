@@ -101,7 +101,7 @@ void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 static void gnc_gen_trans_assign_transfer_account (
                                                 GtkTreeView *treeview,
                                                 gboolean *first,
-                                                gboolean *is_selection,
+                                                gboolean is_selection,
                                                 GtkTreePath *path,
                                                 Account **new_acc,
                                                 GNCImportMainMatcher *info);
@@ -378,7 +378,7 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
 static void
 gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                                        gboolean *first,
-                                       gboolean *is_selection,
+                                       gboolean is_selection,
                                        GtkTreePath *path,
                                        Account **new_acc,
                                        GNCImportMainMatcher *info)
@@ -388,11 +388,13 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     GNCImportTransInfo *trans_info;
     Account *old_acc;
     gboolean ok_pressed;
+    gchar *path_str = gtk_tree_path_to_string (path);
 
     ENTER("");
-    DEBUG("first = %s",*first?"true":"false");
-    DEBUG("is_selection = %s",*is_selection?"true":"false");
-    DEBUG("path  = %s", gtk_tree_path_to_string (path));
+    DEBUG("first = %s", *first ? "true" : "false");
+    DEBUG("is_selection = %s", is_selection ? "true" : "false");
+    DEBUG("path  = %s", path_str);
+    g_free (path_str);
     DEBUG("account passed in = %s", gnc_get_account_name_for_register (*new_acc));
     model = gtk_tree_view_get_model (treeview);
     if (gtk_tree_model_get_iter (model, &iter, path))
@@ -428,7 +430,7 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
             break;
         case GNCImport_CLEAR:
         case GNCImport_UPDATE:
-            if (first && !is_selection)
+            if (*first && !is_selection)
                 run_match_dialog (info, trans_info);
             break;
         case GNCImport_SKIP:
@@ -471,19 +473,18 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     {
         for (l = selected_rows; l != NULL; l = l->next)
         {
-            DEBUG("passing first = %s",
-                                                first?"true":"false");
-            DEBUG("passing is_selection = %s",
-                                                is_selection?"true":"false");
-            DEBUG("passing path = %s",
-                           gtk_tree_path_to_string (l->data));
+            gchar *path_str = gtk_tree_path_to_string (l->data);
+            DEBUG("passing first = %s", first ? "true" : "false");
+            DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
+            DEBUG("passing path = %s", path_str);
+            g_free (path_str);
             DEBUG("passing account value = %s",
                         gnc_account_get_full_name (assigned_account));
             gnc_gen_trans_assign_transfer_account (treeview,
-                           &first, &is_selection, l->data, &assigned_account, info);
+                           &first, is_selection, l->data, &assigned_account, info);
             DEBUG("returned value of account = %s",
                         gnc_account_get_full_name (assigned_account));
-            DEBUG("returned value of first = %s",first?"true":"false");
+            DEBUG("returned value of first = %s", first ? "true" : "false");
             if (assigned_account == NULL)
                 break;
             gtk_tree_selection_unselect_path (selection, l->data);
@@ -507,7 +508,7 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
     first = TRUE;
     is_selection = FALSE;
     gnc_gen_trans_assign_transfer_account (treeview,
-                            &first,  &is_selection, path,
+                            &first, is_selection, path,
                             &assigned_account, info);
     DEBUG("account returned = %s", gnc_account_get_full_name (assigned_account));
     LEAVE("");

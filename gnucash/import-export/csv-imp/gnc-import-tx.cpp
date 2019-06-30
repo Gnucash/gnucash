@@ -392,11 +392,12 @@ void GncTxImport::tokenize (bool guessColTypes)
     m_parsed_lines.clear();
     for (auto tokenized_line : m_tokenizer->get_tokens())
     {
-        m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                std::make_shared<GncPreTrans>(date_format()),
-                std::make_shared<GncPreSplit>(date_format(), currency_format()),
-                false));
         auto length = tokenized_line.size();
+        if (length > 0)
+            m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+                    std::make_shared<GncPreTrans>(date_format()),
+                    std::make_shared<GncPreSplit>(date_format(), currency_format()),
+                    false));
         if (length > max_cols)
             max_cols = length;
     }

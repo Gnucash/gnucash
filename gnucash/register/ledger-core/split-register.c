@@ -921,6 +921,11 @@ gnc_split_register_paste_current (SplitRegister *reg)
     {
         const char *message = _("You are about to overwrite an existing split. "
                                 "Are you sure you want to do that?");
+        const char *anchor_message = _("This is the split anchoring this transaction "
+                                       "to the register. You may not overwrite it from "
+                                       "this register window. You may overwrite it if "
+                                       "you navigate to a register that shows another "
+                                       "side of this same transaction.");
 
         if (copied_class == CURSOR_CLASS_TRANS)
         {
@@ -929,12 +934,29 @@ gnc_split_register_paste_current (SplitRegister *reg)
             return;
         }
 
-        /* Ask before overwriting an existing split. */
-        if (split != NULL &&
-                !gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                    FALSE, "%s", message))
+        if (split != NULL)
         {
-            LEAVE("user cancelled");
+            /* the General Journal does not have any anchoring splits */
+            if ((reg->type != GENERAL_JOURNAL) &&
+                split == gnc_split_register_get_current_trans_split (reg, NULL))
+            {
+                gnc_warning_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+                                    "%s", anchor_message);
+                LEAVE("anchore split");
+                return;
+            }
+            else if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+                                         FALSE, "%s", message))
+            {
+                LEAVE("user cancelled");
+                return;
+            }
+        }
+
+        /* Open the transaction for editing. */
+        if (gnc_split_register_begin_edit_or_warn (info, trans))
+        {
+            LEAVE("can't begin editing");
             return;
         }
 
@@ -1040,7 +1062,7 @@ gnc_split_register_is_blank_split (SplitRegister *reg, Split *split)
 {
     SRInfo *info = gnc_split_register_get_info (reg);
     Split *current_blank_split = xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
-    
+
     if (split == current_blank_split)
         return TRUE;
 

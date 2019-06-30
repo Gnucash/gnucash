@@ -1058,9 +1058,10 @@
 ;; 
 
 (define (gnc:html-make-nbsps n)
-  (if (> n 0)
-      (string-append "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" (gnc:html-make-nbsps (- n 1)))
-      ""))
+  (let lp ((n n) (res '()))
+    (if (positive? n)
+        (lp (1- n) (cons "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" res))
+        (string-join res ""))))
 
 ;; Stylesheets define the following cell styles which these functions
 ;; use: "text-cell" "total-label-cell" "number-cell"
@@ -1135,29 +1136,21 @@
   ;; be a bit redundant, i beleive that it makes the report more
   ;; readable.
   (let* ((table (gnc:make-html-table))
-	 )
-    (amount
-     'format
-     (lambda (curr val)
-       (let ((bal (gnc:make-gnc-monetary curr val)))
-	 (gnc:html-table-append-row!
-	  table
-	  (list
-	   ;; add the account balance in the respective commodity
-	   (gnc:make-html-table-cell/markup
-	    "number-cell" bal)
-           (let ((spacer (gnc:make-html-table-cell)))
-             (gnc:html-table-cell-set-style!
-              spacer "td" 'attribute (list "style" "min-width: 1em"))
-             spacer)
-	   ;; add the account balance in the report commodity
-	   (gnc:make-html-table-cell/markup
-	    "number-cell" (exchange-fn bal report-commodity))
-	   )
-	  )
-	 ))
-     #f)
-    (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em") 'attribute (list "cellpadding" "0"))
+         (spacer (gnc:make-html-table-cell))
+         (list-of-balances (amount 'format gnc:make-gnc-monetary #f)))
+    (gnc:html-table-cell-set-style! spacer "td"
+                                    'attribute (list "style" "min-width: 1em"))
+    (for-each
+     (lambda (bal)
+       (gnc:html-table-append-row!
+	table (list (gnc:make-html-table-cell/markup "number-cell" bal)
+                    spacer
+	            (gnc:make-html-table-cell/markup
+                     "number-cell" (exchange-fn bal report-commodity)))))
+     list-of-balances)
+    (gnc:html-table-set-style! table "table"
+                               'attribute (list "style" "width:100%; max-width:20em")
+                               'attribute (list "cellpadding" "0"))
     table))
 
 ;; 

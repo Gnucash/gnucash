@@ -52,11 +52,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">This assistant will help you import Prices from a CSV file.
 
-There is a minimum number of columns that have to be present for a successful import, these are Date, Amount, Commodity From and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
+There is a minimum number of columns that have to be present for a successful import, these are Date, Amount, From Namespace, From Symbol and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
 
 Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the table of rows displayed to set a column width, then right mouse to change if required.
 
-Examples are "RR.L","21/11/2016",5.345,"GBP" and "USD","2016-11-21",1.56,"GBP"
+Examples are "FTSE","RR.L","21/11/2016",5.345,"GBP" and CURRENCY;USD;2016-11-21;1.56;GBP
 
 There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row which can be used if you have some header text. Also there is an option to over write existing prices for that day if required.
 

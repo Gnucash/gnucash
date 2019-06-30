@@ -191,6 +191,8 @@
 ;;
 ;; New Example: But now USD is a <gnc:commodity*> and 123.4 a
 ;; <gnc:numeric>, so there is no simple example anymore.
+;
+;; Note amounts are rounded to the commodity's SCU.
 ;;
 ;; The functions:
 ;;   'add <commodity> <amount>: Add the given amount to the 
@@ -210,36 +212,33 @@
 ;;       (even the fact that any commodity showed up at all).
 ;;   'getpair <commodity> signreverse?: Returns the two-element-list
 ;;       with the <commodity> and its corresponding balance. If
-;;       <commodity> doesn't exist, the balance will be
-;;       (gnc-numeric-zero). If signreverse? is true, the result's
-;;       sign will be reversed.
-;;   (internal) 'list #f #f: get the association list of 
-;;       commodity->numeric-collector
+;;       <commodity> doesn't exist, the balance will be 0. If
+;;       signreverse? is true, the result's sign will be reversed.
+;;   'getmonetary <commodity> signreverse?: Returns a gnc-monetary
+;;       of the <commodity> and its corresponding balance. If
+;;       <commodity> doesn't exist, the balance will be 0. If
+;;       signreverse? is true, the result's sign will be reversed.
+;;   (internal) 'list #f #f: get the list of
+;;       (cons commodity numeric-collector)
 
 (define (gnc:make-commodity-collector)
-  (let 
-      ;; the association list of (commodity -> value-collector) pairs.
-      ((commoditylist '()))
+  ;; the association list of (commodity . value-collector) pairs.
+  (let ((commoditylist '()))
     
-    ;; helper function to add a commodity->value pair to our list. 
+    ;; helper function to add a (commodity . value) pair to our list.
     ;; If no pair with this commodity exists, we will create one.
     (define (add-commodity-value commodity value)
-      ;; lookup the corresponding pair
       (let ((pair (assoc commodity commoditylist))
             (rvalue (gnc-numeric-convert
                      value
                      (gnc-commodity-get-fraction commodity) GNC-RND-ROUND)))
-	(if (not pair)
-	    (begin
-	      ;; create a new pair, using the gnc:value-collector
-	      (set! pair (list commodity (gnc:make-value-collector)))
-	      ;; and add it to the alist
-	      (set! commoditylist (cons pair commoditylist))))
-	;; add the value
+	(unless pair
+	  (set! pair (list commodity (gnc:make-value-collector)))
+	  (set! commoditylist (cons pair commoditylist)))
 	((cadr pair) 'add rvalue)))
     
     ;; helper function to walk an association list, adding each
-    ;; (commodity -> collector) pair to our list at the appropriate 
+    ;; (commodity . collector) pair to our list at the appropriate
     ;; place
     (define (add-commodity-clist clist)
       (cond ((null? clist) '())
@@ -258,25 +257,24 @@
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
     (define (process-commodity-list fn clist)
-      (map 
-       (lambda (pair) (fn (car pair) 
-			  ((cadr pair) 'total #f)))
+      (map
+       (lambda (pair)
+         (fn (car pair) ((cadr pair) 'total #f)))
        clist))
 
-    ;; helper function which is given a commodity and returns, if
-    ;; existing, a list (gnc:commodity gnc:numeric).
+    ;; helper function which is given a commodity and returns a list
+    ;; (list gnc:commodity number).
     (define (getpair c sign?)
       (let* ((pair (assoc c commoditylist))
-             (total (and pair ((cadr pair) 'total #f))))
-	(list c (if pair (if sign? (- total) total) 0))))
+             (total (if pair ((cadr pair) 'total #f) 0)))
+	(list c (if sign? (- total) total))))
 
-    ;; helper function which is given a commodity and returns, if
-    ;; existing, a <gnc:monetary> value.
+    ;; helper function which is given a commodity and returns a
+    ;; <gnc:monetary> value, whose amount may be 0.
     (define (getmonetary c sign?)
       (let* ((pair (assoc c commoditylist))
-             (total (and pair ((cadr pair) 'total #f))))
-	(gnc:make-gnc-monetary
-         c (if pair (if sign? (- total) total) 0))))
+             (total (if pair ((cadr pair) 'total #f) 0)))
+	(gnc:make-gnc-monetary c (if sign? (- total) total))))
     
     ;; Dispatch function
     (lambda (action commodity amount)
@@ -300,9 +298,7 @@
 
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc-commodity-collector-allzero? collector)
-  (every zero?
-         (map gnc:gnc-monetary-amount
-              (collector 'format gnc:make-gnc-monetary #f))))
+  (every zero? (map cdr (collector 'format cons #f))))
 
 ;; add any number of gnc-monetary objects into a commodity-collector
 ;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
