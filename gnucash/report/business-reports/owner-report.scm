@@ -173,18 +173,15 @@
 (define (new-bucket-vector)
   (make-vector num-buckets 0))
 
-(define (make-interval-list to-date)
-  (let ((begindate to-date))
-    (set! begindate (decdate begindate ThirtyDayDelta))
-    (set! begindate (decdate begindate ThirtyDayDelta))
-    (set! begindate (decdate begindate ThirtyDayDelta))
-    (gnc:make-date-list begindate to-date ThirtyDayDelta)))
-
-;; Have make-list create a stepped list, then add a date in the future for the "current" bucket 
-(define (make-extended-interval-list to-date) 
-    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT 
-    (define oldintervalreversed (reverse (make-interval-list to-date)))          
-    (reverse (cons dayforcurrent oldintervalreversed))) 
+;; Have make-list create a stepped list, then add a date in the
+;; infinite future for the "current" bucket
+(define (make-extended-interval-list to-date)
+  (let* ((begindate to-date)
+         (begindate (decdate begindate ThirtyDayDelta))
+         (begindate (decdate begindate ThirtyDayDelta))
+         (begindate (decdate begindate ThirtyDayDelta)))
+    (append (gnc:make-date-list begindate to-date ThirtyDayDelta)
+            (list +inf.0))))
 
 (define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
