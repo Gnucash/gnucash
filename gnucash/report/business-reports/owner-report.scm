@@ -222,15 +222,13 @@
 ;;
 ;; Make a row list based on the visible columns
 ;;
-(define (make-row column-vector date due-date num type-str memo monetary credit debit sale tax)
+(define (make-row column-vector date due-date num type-str
+                  memo monetary credit debit sale tax)
   (let ((row-contents '()))
     (if (date-col column-vector)
         (addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
-        (addto! row-contents 
-         (if due-date
-             (qof-print-date due-date)
-             "")))
+        (addto! row-contents (and due-date (qof-print-date due-date))))
     (if (num-col column-vector)
         (addto! row-contents (gnc:html-string-sanitize num)))
     (if (type-col column-vector)
@@ -238,20 +236,15 @@
     (if (memo-col column-vector)
         (addto! row-contents (gnc:html-string-sanitize memo)))
     (if (sale-col column-vector)
-        (addto! row-contents
-         (gnc:make-html-table-cell/markup "number-cell" sale)))
+        (addto! row-contents (gnc:make-html-table-cell/markup "number-cell" sale)))
     (if (tax-col column-vector)
-        (addto! row-contents
-         (gnc:make-html-table-cell/markup "number-cell" tax)))
+        (addto! row-contents (gnc:make-html-table-cell/markup "number-cell" tax)))
     (if (credit-col column-vector)
-        (addto! row-contents
-         (gnc:make-html-table-cell/markup "number-cell" credit)))
+        (addto! row-contents (gnc:make-html-table-cell/markup "number-cell" credit)))
     (if (debit-col column-vector)
-        (addto! row-contents
-         (gnc:make-html-table-cell/markup "number-cell" debit)))
+        (addto! row-contents (gnc:make-html-table-cell/markup "number-cell" debit)))
     (if (value-col column-vector)
-        (addto! row-contents
-         (gnc:make-html-table-cell/markup "number-cell" monetary)))
+        (addto! row-contents (gnc:make-html-table-cell/markup "number-cell" monetary)))
     row-contents))
 
 ;;
