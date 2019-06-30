@@ -94,40 +94,6 @@
 (define (owner-string owner-type)
   (car (get-info owner-type)))
 
-;; Error strings in case there is no (valid) selection (translated)
-(define (invalid-selection-title-string owner-type)
-  (cadr (get-info owner-type)))
-
-(define (invalid-selection-string owner-type)
-  (caddr (get-info owner-type)))
-
-;; Html formatted error message documents
-(define (gnc:html-make-no-owner-warning
-         report-title-string report-id)
-  (gnc:html-make-generic-warning
-    report-title-string
-    report-id
-    invalid-selection-title-string
-    invalid-selection-string))
-
-(define (gnc:html-make-no-valid-account-warning
-         report-title-string report-id)
-  (gnc:html-make-generic-warning
-    report-title-string
-    report-id
-    (_ "No valid account selected")
-    (_ "This report requires a valid account to be selected.")))
-
-
-;; Document names, used in report names (translated)
-(define (doctype-str owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "Customer"))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "Employee"))
-        ((eqv? owner-type GNC-OWNER-JOB) (_ "Job"))
-        ;; FALL THROUGH
-        (else
-          (_ "Vendor")))) 
-
 (define (date-col columns-used)
   (vector-ref columns-used 0))
 (define (date-due-col columns-used)
@@ -783,21 +749,29 @@
      (owner-descr (owner-string type))
      (date-type (opt-val gnc:pagename-general optname-date-driver))
      (owner (opt-val owner-page owner-descr))
-     (report-title (string-append (doctype-str type) " " (_ "Report"))))
+     (report-title (string-append (owner-string type) " " (_ "Report"))))
     (if (not (gncOwnerIsValid owner))
      (gnc:html-document-add-object!
       document
-      (gnc:html-make-no-owner-warning
-       report-title (gnc:report-id report-obj)))
+      ;; Html formatted error message documents
+      (gnc:html-make-generic-warning
+       report-title
+       (gnc:report-id report-obj)
+       (cadr (get-info type))
+       (caddr (get-info type))))
 
     ;; else....
      (begin
       (set! report-title (string-append report-title ": " (gncOwnerGetName owner)))
       (if (null? account)
-       (gnc:html-document-add-object!
-        document
-        (gnc:html-make-no-valid-account-warning
-         report-title (gnc:report-id report-obj)))
+
+          (gnc:html-document-add-object!
+           document
+           (gnc:html-make-generic-warning
+            report-title
+            (gnc:report-id report-obj)
+            (_ "No valid account selected")
+            (_ "This report requires a valid account to be selected.")))
 
       ;; else....
        (begin
