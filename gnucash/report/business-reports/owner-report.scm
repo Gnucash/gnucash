@@ -266,76 +266,6 @@
           (set! row-style (if odd-row? "normal-row" "alternate-row")))))
   printed?)
 
-;;
-;; Make sure the caller checks the type first and only calls us with
-;; invoice and payment transactions.  we don't verify it here.
-;;
-;; Return a list of (printed? value odd-row?)
-;;
-(define (add-txn-row table txn acc column-vector odd-row? printed?
-                     reverse? start-date total)
-  (let* ((type (xaccTransGetTxnType txn))
-         (date (xaccTransGetDate txn))
-         (due-date #f)
-         (value ((if reverse? - identity)
-                 (xaccTransGetAccountValue txn acc)))
-         (sale 0)
-         (tax 0)
-         (split (xaccTransGetSplit txn 0))
-         (invoice (gncInvoiceGetInvoiceFromTxn txn))
-         (currency (xaccTransGetCurrency txn))
-         (type-str (cond
-                    ((eqv? type TXN-TYPE-INVOICE)
-                     (if (null? invoice)
-                         (_ "Unknown")
-                         (gnc:make-html-text
-                          (gnc:html-markup-anchor
-                           (gnc:invoice-anchor-text invoice)
-                           (gncInvoiceGetTypeString invoice)))))
-                    ((eqv? type TXN-TYPE-PAYMENT)
-                     (gnc:make-html-text
-	              (gnc:html-markup-anchor
-	               (gnc:split-anchor-text split)
-                       (_ "Payment"))))
-                    (else (_ "Unknown")))))
-
-    (when (<= start-date date)
-      ;; Adds 'balance' row if needed
-      (set! printed?
-        (add-balance-row table column-vector currency
-                         odd-row? printed? start-date total))
-      
-      ;; Now print out the invoice row
-      (unless (null? invoice)
-        (set! due-date (and (gncInvoiceIsPosted invoice)
-                            (gncInvoiceGetDateDue invoice)))
-        (set! sale (gncInvoiceGetTotalSubtotal invoice))
-        (set! tax (gncInvoiceGetTotalTax invoice)))
-
-      (when (gncInvoiceGetIsCreditNote invoice)
-        (set! tax (- tax))
-        (set! sale (- sale)))
-
-      (gnc:html-table-append-row/markup!
-       table (if odd-row? "normal-row" "alternate-row")
-       (reverse
-        (make-row column-vector date due-date (gnc-get-num-action txn split)
-                  type-str (xaccSplitGetMemo split)
-                  (gnc:make-gnc-monetary currency value)
-                  (if (not (negative? value))
-                      (gnc:make-gnc-monetary currency value) "")
-                  (if (negative? value)
-                      (gnc:make-gnc-monetary currency value) "")
-                  (if (not (null? invoice))
-                      (gnc:make-gnc-monetary currency sale) "")
-                  (if (not (null? invoice))
-                      (gnc:make-gnc-monetary currency tax) ""))))
-
-      (set! odd-row? (not odd-row?)))
-
-    (list printed? value odd-row? sale tax)))
-
-
 (define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
                     (lambda (a b)
@@ -367,18 +297,70 @@
                (type (xaccTransGetTxnType txn)))
           (cond
            ((memv type (list TXN-TYPE-INVOICE TXN-TYPE-PAYMENT))
-            (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
-                                       reverse? start-date total)))
+            (let* ((date (xaccTransGetDate txn))
+                   (due-date #f)
+                   (value ((if reverse? - identity)
+                           (xaccTransGetAccountValue txn acc)))
+                   (txn-sale 0)
+                   (txn-tax 0)
+                   (split (xaccTransGetSplit txn 0))
+                   (invoice (gncInvoiceGetInvoiceFromTxn txn))
+                   (type-str (cond
+                              ((and (eqv? type TXN-TYPE-INVOICE)
+                                    (not (null? invoice)))
+                               (gnc:make-html-text
+                                (gnc:html-markup-anchor
+                                 (gnc:invoice-anchor-text invoice)
+                                 (gncInvoiceGetTypeString invoice))))
+                              ((eqv? type TXN-TYPE-PAYMENT)
+                               (gnc:make-html-text
+	                        (gnc:html-markup-anchor
+	                         (gnc:split-anchor-text split)
+                                 (_ "Payment"))))
+                              (else (_ "Unknown")))))
 
-              (set! printed? (car result))
+              (when (<= start-date date)
+                ;; Adds 'balance' row if needed
+                (set! printed?
+                  (add-balance-row table used-columns currency
+                                   odd-row? printed? start-date total))
+
+                ;; Now print out the invoice row
+                (unless (null? invoice)
+                  (set! due-date (and (gncInvoiceIsPosted invoice)
+                                      (gncInvoiceGetDateDue invoice)))
+                  (set! txn-sale (gncInvoiceGetTotalSubtotal invoice))
+                  (set! txn-tax (gncInvoiceGetTotalTax invoice)))
+
+                (when (gncInvoiceGetIsCreditNote invoice)
+                  (set! txn-tax (- txn-tax))
+                  (set! txn-sale (- txn-sale)))
+
+                (gnc:html-table-append-row/markup!
+                 table (if odd-row? "normal-row" "alternate-row")
+                 (reverse
+                  (make-row used-columns date due-date (gnc-get-num-action txn split)
+                            type-str (xaccSplitGetMemo split)
+                            (gnc:make-gnc-monetary currency value)
+                            (if (not (negative? value))
+                                (gnc:make-gnc-monetary currency value) "")
+                            (if (negative? value)
+                                (gnc:make-gnc-monetary currency value) "")
+                            (if (not (null? invoice))
+                                (gnc:make-gnc-monetary currency txn-sale) "")
+                            (if (not (null? invoice))
+                                (gnc:make-gnc-monetary currency txn-tax) ""))))
+                (set! odd-row? (not odd-row?)))
+
               (when printed?
-                (set! sale (+ sale (cadddr result)))
-                (set! tax (+ tax (car (cddddr result))))
-                (if (negative? (cadr result))
-                    (set! debit (+ debit (cadr result)))
-                    (set! credit (+ credit (cadr result)))))
-              (set! total (+ total (cadr result)))
-              (lp printed? (caddr result) (cdr txns))))
+                (set! sale (+ sale txn-sale))
+                (set! tax (+ tax txn-tax))
+                (if (negative? value)
+                    (set! debit (+ debit value))
+                    (set! credit (+ credit value))))
+
+              (set! total (+ total value))
+              (lp printed? odd-row? (cdr txns))))
            (else
             (lp printed? odd-row? (cdr txns))))))))
 
