@@ -253,12 +253,12 @@
 ;;
 ;; Returns printed? 
 ;;
-(define (add-balance-row table column-vector txn odd-row? printed? start-date total)
+(define (add-balance-row table column-vector curr odd-row? printed? start-date total)
   (unless printed?
     (set! printed? #t)
     (if (and (value-col column-vector) (not (zero? total)))
         (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
-                             (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)
+                             (gnc:make-gnc-monetary curr total)
                              "" "" "" ""))
               (row-style (if odd-row? "normal-row" "alternate-row")))
           (gnc:html-table-append-row/markup! table row-style (reverse row))
@@ -302,7 +302,8 @@
     (when (<= start-date date)
       ;; Adds 'balance' row if needed
       (set! printed?
-        (add-balance-row table column-vector txn odd-row? printed? start-date total))
+        (add-balance-row table column-vector currency
+                         odd-row? printed? start-date total))
       
       ;; Now print out the invoice row
       (unless (null? invoice)
@@ -336,7 +337,9 @@
 
 
 (define (make-txn-table options query acc start-date end-date date-type)
-  (let ((txns (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY))
+  (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
+                    (lambda (a b)
+                      (positive? (xaccTransOrder a b)))))
         (used-columns (build-column-used options))
         (total 0)
         (debit 0)
@@ -350,39 +353,39 @@
     (gnc:html-table-set-col-headers!
      table (make-heading-list used-columns))
 
-    ;; Order the transactions properly
-    (set! txns (sort txns (lambda (a b) (> 0 (xaccTransOrder a b)))))
-
-    (let ((printed? #f)
-          (odd-row? #t))
-      (for-each
-       (lambda (txn)
-         (let ((type (xaccTransGetTxnType txn)))
-           (if
-            (or (equal? type TXN-TYPE-INVOICE)
-                (equal? type TXN-TYPE-PAYMENT))
+    (let lp ((printed? #f)
+             (odd-row? #t)
+             (txns txns))
+      (cond
+       ((null? txns)
+        ;;Balance row may not have been added if all transactions were before
+        ;;start-date (and no other rows would be added either) so add it now
+        (add-balance-row table used-columns currency
+                         odd-row? printed? start-date total))
+       (else
+        (let* ((txn (car txns))
+               (type (xaccTransGetTxnType txn)))
+          (cond
+           ((memv type (list TXN-TYPE-INVOICE TXN-TYPE-PAYMENT))
             (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
                                        reverse? start-date total)))
 
               (set! printed? (car result))
-              (if (and printed? total)
-                  (begin
-                    (set! sale (+ sale (cadddr result)))
-                    (set! tax (+ tax (car (cddddr result))))
-                    (if (negative? (cadr result))
-                        (set! debit (+ debit (cadr result)))
-                        (set! credit (+ credit (cadr result))))))
+              (when printed?
+                (set! sale (+ sale (cadddr result)))
+                (set! tax (+ tax (car (cddddr result))))
+                (if (negative? (cadr result))
+                    (set! debit (+ debit (cadr result)))
+                    (set! credit (+ credit (cadr result)))))
               (set! total (+ total (cadr result)))
-              (set! odd-row? (caddr result))
-              ))))
-       txns)
-      ;;Balance row may not have been added if all transactions were before
-      ;;start-date (and no other rows would be added either) so add it now
-      (unless (null? txns)
-        (add-balance-row table used-columns (car txns)
-                         odd-row? printed? start-date total)))
+              (lp printed? (caddr result) (cdr txns))))
+           (else
+            (lp printed? odd-row? (cdr txns))))))))
 
-    (if (or (sale-col used-columns) (tax-col used-columns) (credit-col used-columns) (debit-col used-columns))
+    (if (or (sale-col used-columns)
+            (tax-col used-columns)
+            (credit-col used-columns)
+            (debit-col used-columns))
         (gnc:html-table-append-row/markup!
          table
          "grand-total"
@@ -434,10 +437,10 @@
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (list (gnc:make-html-table-cell/markup
-                        "total-label-cell"
-                        (if (negative? total)
-                            (_ "Total Credit")
-                            (_ "Total Due")))
+                "total-label-cell"
+                (if (negative? total)
+                    (_ "Total Credit")
+                    (_ "Total Due")))
                (gnc:make-html-table-cell/size/markup
                 1 (value-col used-columns)
                 "total-number-cell"
