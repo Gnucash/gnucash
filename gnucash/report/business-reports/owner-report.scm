@@ -569,22 +569,15 @@
                      GNC-OWNER-JOB #f))
 
 (define (string-expand string character replace-string)
-  (define (car-line chars)
-    (take-while (lambda (c) (not (eqv? c character))) chars))
-  (define (cdr-line chars)
-    (let ((rest (drop-while (lambda (c) (not (eqv? c character))) chars)))
-      (if (null? rest)
-          '()
-          (cdr rest))))
-  (define (line-helper chars)
-    (if (null? chars)
-        ""
-        (let ((first (car-line chars))
-              (rest (cdr-line chars)))
-          (string-append (list->string first)
-                         (if (null? rest) "" replace-string)
-                         (line-helper rest)))))
-  (line-helper (string->list string)))
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (if (char=? c character)
+              replace-string
+              c)))
+       string))))
 
 (define (setup-job-query q owner account end-date)
   (let ((guid (gncOwnerReturnGUID owner)))
