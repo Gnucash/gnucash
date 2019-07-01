@@ -596,21 +596,15 @@
     q))
 
 (define (setup-query q owner account end-date)
-  (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
-
+  (let ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
     (qof-query-add-guid-match
-     q 
-     (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER
-       OWNER-PARENTG)
+     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER OWNER-PARENTG)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q
-     (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
+     q (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q
-     (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER
-       OWNER-PARENTG)
+     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER OWNER-PARENTG)
      guid QOF-QUERY-OR)
     (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
