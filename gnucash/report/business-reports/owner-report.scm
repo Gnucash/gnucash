@@ -458,27 +458,30 @@
   (define gnc:*report-options* (gnc:new-options))
 
   (define (gnc:register-inv-option new-option)
-   (gnc:register-option gnc:*report-options* new-option))
+    (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option "__reg" "reverse?" "" "" reverse?))
 
   (gnc:register-inv-option
-   (gnc:make-owner-option owner-page (owner-string owner-type) "v"
-              (N_ "The company for this report.")
-              (lambda () '()) #f owner-type))
+   (gnc:make-owner-option
+    owner-page (owner-string owner-type) "v"
+    (N_ "The company for this report.")
+    (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "owner-type" owner-type))
 
   (gnc:register-inv-option
-   (gnc:make-account-sel-limited-option owner-page acct-string "w"
-                    (N_ "The account to search for transactions.")
-                    #f #f acct-type-list))
+   (gnc:make-account-sel-limited-option
+    owner-page acct-string "w"
+    (N_ "The account to search for transactions.")
+    #f #f acct-type-list))
 
   (gnc:options-add-date-interval!
    gnc:*report-options* gnc:pagename-general
    optname-from-date optname-to-date "a")
+
   ;; Use a default report date of 'today'
   (gnc:option-set-default-value
    (gnc:lookup-option gnc:*report-options* gnc:pagename-general optname-to-date)
@@ -532,18 +535,21 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t)) 
-  
-  (gnc:register-inv-option 
-   (gnc:make-multichoice-option 
-    gnc:pagename-general 
-    optname-date-driver 
-    "k" 
-    (N_ "Leading date.") 
-    'duedate 
-    (list 
-     (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date? 
-     (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date? 
+    "hb" (N_ "Display the transaction amount?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    gnc:pagename-general optname-date-driver "k"
+    (N_ "Leading date.") 'duedate
+    (list
+     ;; Should be using standard label for due date?
+     (vector 'duedate
+             (N_ "Due Date")
+             (N_ "Due date is leading."))
+     ;; Should be using standard label for post date?
+     (vector 'postdate
+             (N_ "Post Date")
+             (N_ "Post date is leading.")))))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
