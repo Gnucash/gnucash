@@ -787,9 +787,7 @@
       ((eqv? type GNC-OWNER-JOB)
        (find-first-account-for-owner (gncOwnerGetEndOwner owner)
                                      #:currency currency))
-
-      (else
-       '()))))
+      (else '()))))
 
 (gnc:define-report
  'version 1
@@ -829,9 +827,8 @@
 
 (define (owner-report-create-internal report-guid owner account owner-type)
   (let* ((options (gnc:make-report-options report-guid))
-     (owner-op (gnc:lookup-option options owner-page (owner-string owner-type))) 
-     (account-op (gnc:lookup-option options owner-page acct-string)))
-
+         (owner-op (gnc:lookup-option options owner-page (owner-string owner-type)))
+         (account-op (gnc:lookup-option options owner-page acct-string)))
     (gnc:option-set-value owner-op owner)
     (gnc:option-set-value account-op account)
     (gnc:make-report report-guid options)))
@@ -839,35 +836,31 @@
 (define (owner-report-create owner account)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (owner-report-create-internal customer-report-guid owner account type)) ;; Not sure whether to pass type, or to use the guid in the report function
+     ;; Not sure whether to pass type, or to use the guid in the report function
+     ((eqv? type GNC-OWNER-CUSTOMER)
+      (owner-report-create-internal customer-report-guid owner account type))
 
-      ((eqv? type GNC-OWNER-VENDOR)
-       (owner-report-create-internal vendor-report-guid owner account type))
+     ((eqv? type GNC-OWNER-VENDOR)
+      (owner-report-create-internal vendor-report-guid owner account type))
 
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (owner-report-create-internal employee-report-guid owner account type))
+     ((eqv? type GNC-OWNER-EMPLOYEE)
+      (owner-report-create-internal employee-report-guid owner account type))
 
-      (else #f))))
+     (else #f))))
 
 (define (gnc:owner-report-create-internal
-     account split query journal? double? title
-     debit-string credit-string)
-
+         account split query journal? double? title
+         debit-string credit-string)
   (let* ((temp-owner (gncOwnerNew))
-     (owner (gnc:owner-from-split split temp-owner))
-     (res -1)) ;; XXX -- in this case we should create an error report
-
-    (if (not (null? owner))
-    (set! res (gnc:owner-report-create owner account)))
-
+         (owner (gnc:owner-from-split split temp-owner))
+         (res (if (null? owner)
+                  -1
+                  (gnc:owner-report-create owner account))))
     (gncOwnerFree temp-owner)
     res))
 
-(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t
-              gnc:owner-report-create-internal)
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
 
-(gnc:register-report-hook ACCT-TYPE-PAYABLE #t
-              gnc:owner-report-create-internal)
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
 
 (export find-first-account-for-owner owner-report-create)
