@@ -661,10 +661,11 @@
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
 
-    (gnc:html-table-append-row! table (list (if name name "")))
-    (gnc:html-table-append-row! table (list (string-expand
-                         (if addy addy "")
-                         #\newline "<br/>")))
+    (when name
+      (gnc:html-table-append-row! table (list name)))
+    (when addy
+      (gnc:html-table-append-row! table (list (string-expand addy #\newline "<br/>"))))
+
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
     table))
