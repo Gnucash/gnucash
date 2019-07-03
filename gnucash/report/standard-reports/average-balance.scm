@@ -242,21 +242,35 @@
           (let* ((splits (qof-query-run query))
                  (daily-dates (gnc:make-date-list begindate enddate DayDelta))
                  (interval-dates (gnc:make-date-list begindate enddate stepsize))
+
+                 ;; for accounts-balances generation
+                 (work-to-do (length accounts))
                  (accounts-balances (map
-                                     (lambda (acc)
+                                     (lambda (work-done acc)
+                                       (gnc:report-percent-done
+                                        (* 100 (/ work-done work-to-do)))
                                        (gnc:account-get-balances-at-dates
                                         acc daily-dates))
+                                     (iota work-to-do)
                                      accounts))
+
+                 ;; for daily-balances generation
+                 (work-to-do (length daily-dates))
                  (balances (map
-                            (lambda (date accounts-balance)
+                            (lambda (work-done date accounts-balance)
+                              (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                               (gnc:gnc-monetary-amount
                                (gnc:sum-collector-commodity
                                 (apply gnc:monetaries-add accounts-balance)
                                 report-currency
                                 (lambda (monetary target-curr)
                                   (exchange-fn monetary target-curr date)))))
+                            (iota work-to-do)
                             daily-dates
-                            (apply zip accounts-balances))))
+                            (apply zip accounts-balances)))
+
+                 ;; for upcoming interval-calculators
+                 (work-to-do (length splits)))
             (qof-query-destroy query)
 
             ;; this is a complicated tight loop. start with:
@@ -268,10 +282,12 @@
                        (interval-bals '())
                        (interval-amts '())
                        (splits splits)
+                       (work-done 0)
                        (daily-balances (cdr balances))
                        (daily-dates (cdr daily-dates))
                        (interval-start (car interval-dates))
                        (interval-dates (cdr interval-dates)))
+
               (cond
 
                ;; daily-dates finished. job done. add details for
@@ -294,6 +310,7 @@
                ;; first daily-date > first interval-date -- crossed
                ;; interval boundary -- add interval details to results
                ((> (car daily-dates) (car interval-dates))
+                (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
                 (loop (cons (list
                              (qof-print-date interval-start)
                              (qof-print-date (decdate (car interval-dates)
@@ -309,6 +326,7 @@
                       '()               ;reset interval-bals
                       '()               ;and interval-amts
                       splits
+                      work-done
                       daily-balances
                       daily-dates
                       (car interval-dates)
@@ -324,6 +342,7 @@
                       (cons (car daily-balances) interval-bals)
                       interval-amts
                       splits
+                      work-done
                       (cdr daily-balances)
                       (cdr daily-dates)
                       interval-start
@@ -344,6 +363,7 @@
                       interval-bals
                       interval-amts ;interval-amts unchanged
                       (cddr splits) ;skip two splits.
+                      (+ work-done 2)
                       daily-balances
                       daily-dates
                       interval-start
@@ -364,6 +384,7 @@
                               (car interval-dates)))
                             interval-amts) ;add split amt to list
                       (cdr splits)         ;and loop to next split
+                      (1+ work-done)
                       daily-balances
                       daily-dates
                       interval-start
