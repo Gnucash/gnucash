@@ -249,6 +249,59 @@
         (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
         (table (gnc:make-html-table)))
 
+    (define (print-totals total debit credit tax sale)
+      (define (total-cell cell)
+        (gnc:make-html-table-cell/markup "total-number-cell" cell))
+      (define (make-cell amt)
+        (total-cell (gnc:make-gnc-monetary currency amt)))
+      (define span
+        (count identity (map (lambda (f) (f used-columns))
+                             (list memo-col type-col num-col date-due-col date-col))))
+      ;; print period totals
+      (if (or (sale-col used-columns) (tax-col used-columns)
+              (credit-col used-columns) (debit-col used-columns))
+          (gnc:html-table-append-row/markup!
+           table "grand-total"
+           (append
+            (list (total-cell (_ "Period Totals")))
+            (addif (>= span 2) (gnc:make-html-table-cell/size 1 (1- span) ""))
+            (addif (sale-col used-columns)   (make-cell sale))
+            (addif (tax-col used-columns)    (make-cell tax))
+            (addif (credit-col used-columns) (make-cell credit))
+            (addif (debit-col used-columns)  (make-cell debit))
+            (addif (value-col used-columns) (make-cell (+ credit debit)))
+            (addif (> link-cols 0) (gnc:make-html-table-cell/size 1 link-cols #f)))))
+
+      ;; print grand total
+      (if (value-col used-columns)
+          (gnc:html-table-append-row/markup!
+           table "grand-total"
+           (list (gnc:make-html-table-cell/markup
+                  "total-label-cell"
+                  (if (negative? total)
+                      (_ "Total Credit")
+                      (_ "Total Due")))
+                 (gnc:make-html-table-cell/size/markup
+                  1 (value-col used-columns)
+                  "total-number-cell"
+                  (gnc:make-gnc-monetary currency total)))))
+
+      ;; print aging table
+      (gnc:html-table-append-row/markup!
+       table "grand-total"
+       (list (gnc:make-html-table-cell/size
+              1 columns-used-size
+              (make-aging-table options query
+                                (list->vector (make-extended-interval-list end-date))
+                                reverse? date-type currency)))))
+
+    (define (add-balance-row odd-row? total)
+      (gnc:html-table-append-row/markup!
+       table (if odd-row? "normal-row" "alternate-row")
+       (make-row used-columns start-date #f "" (_ "Balance") ""
+                 (gnc:make-gnc-monetary currency total)
+                 "" "" "" "")))
+
     (gnc:html-table-set-col-headers!
      table (make-heading-list used-columns))
 
@@ -262,64 +315,13 @@
              (sale 0))
       (cond
 
-       ;; finished transactions. print (maybe) balance, totals, aging-table
        ((null? txns)
         ;;Balance row may not have been added if all transactions were before
         ;;start-date (and no other rows would be added either) so add it now
         (when (and (not printed?) (value-col used-columns) (not (zero? total)))
-          (gnc:html-table-append-row/markup!
-           table (if odd-row? "normal-row" "alternate-row")
-           (make-row used-columns start-date #f "" (_ "Balance") ""
-                     (gnc:make-gnc-monetary currency total)
-                     "" "" "" "")))
-        ;; print period totals
-        (if (or (sale-col used-columns)
-                (tax-col used-columns)
-                (credit-col used-columns)
-                (debit-col used-columns))
-            (let ((make-cell (lambda (size amt)
-                               (gnc:make-html-table-cell/size/markup
-                                1 size "total-number-cell"
-                                (gnc:make-gnc-monetary currency amt)))))
-              (gnc:html-table-append-row/markup!
-               table "grand-total"
-               (append
-                (list (gnc:make-html-table-cell/markup
-                       "total-label-cell" (_ "Period Totals")))
-                (let ((span (count identity
-                                   (map (lambda (f) (f used-columns))
-                                        (list memo-col type-col num-col
-                                              date-due-col date-col)))))
-                  (addif (>= span 2)
-                         (gnc:make-html-table-cell/size 1 (1- span) "")))
-                (addif (sale-col used-columns)   (make-cell 1 sale))
-                (addif (tax-col used-columns)    (make-cell 1 tax))
-                (addif (credit-col used-columns) (make-cell 1 credit))
-                (addif (debit-col used-columns)  (make-cell 1 debit))
-                (addif (value-col used-columns) (make-cell 1 (+ credit debit)))))))
+          (add-balance-row odd-row? total))
 
-        ;; print grand total
-        (if (value-col used-columns)
-            (gnc:html-table-append-row/markup!
-             table "grand-total"
-             (list (gnc:make-html-table-cell/markup
-                    "total-label-cell"
-                    (if (negative? total)
-                        (_ "Total Credit")
-                        (_ "Total Due")))
-                   (gnc:make-html-table-cell/size/markup
-                    1 (value-col used-columns)
-                    "total-number-cell"
-                    (gnc:make-gnc-monetary currency total)))))
-
-        ;; print aging table
-        (gnc:html-table-append-row/markup!
-         table "grand-total"
-         (list (gnc:make-html-table-cell/size
-                1 columns-used-size
-                (make-aging-table options query
-                                  (list->vector (make-extended-interval-list end-date))
-                                  reverse? date-type currency)))))
+        (print-totals total debit credit tax sale))
 
        ;; transactions left to print.
        (else
@@ -355,15 +357,11 @@
            ;; if balance row hasn't been rendered, consider printing
            ;; here. skip if value=0.
            ((not printed?)
-            (and (value-col used-columns)
-                 (not (zero? total))
-                 (gnc:html-table-append-row/markup!
-                  table (if odd-row? "normal-row" "alternate-row")
-                  (make-row used-columns start-date #f "" (_ "Balance") ""
-                            (gnc:make-gnc-monetary currency total)
-                            "" "" "" "")))
-            (lp #t (not odd-row?) txns
-                total debit credit tax sale))
+            (let ((print? (and (value-col used-columns) (not (zero? total)))))
+              (if print? (add-balance-row odd-row? total))
+              (lp #t
+                  (logxor (if odd-row? 1 0) (if print? 1 0))
+                  txns total debit credit tax sale links)))
 
            ;; start printing txns.
            (else
