@@ -700,7 +700,9 @@
        document (gnc:html-markup
                  "span" (owner-string type) " " (_ "Report:") " "
                  (gnc:html-markup-anchor
-                  (gnc:owner-anchor-text owner)
+                  (if (eqv? GNC-OWNER-JOB type)
+                      (gnc:job-anchor-text (gncOwnerGetJob owner))
+                      (gnc:owner-anchor-text owner))
                   (gncOwnerGetName owner))))
 
       (let ((table (make-txn-table
