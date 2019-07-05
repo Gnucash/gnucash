@@ -24,7 +24,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib-object.h>
-#include <dialog-options.h>
 #include <dialog-utils.h>
 #include <gnc-amount-edit.h>
 #include <gnc-date-edit.h>
@@ -48,13 +47,6 @@ SCM scm_init_sw_gnome_utils_module (void);
 #endif
 
 %import "base-typemaps.i"
-
-GNCOptionWin * gnc_options_dialog_new(gchar *title, GtkWindow* parent);
-void gnc_options_dialog_destroy(GNCOptionWin * win);
-void gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
-                                       GNCOptionDB  *odb);
-void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
-        SCM apply_cb, SCM close_cb);
 
 gboolean
 gnc_verify_dialog (GtkWindow *parent, gboolean yes_is_default,
