@@ -924,21 +924,15 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
   (and foreign
        exchange-fn
-       (let ((balance (gnc:make-commodity-collector)))
-         (foreign
-          'format
-          (lambda (curr val)
-            (if (gnc-commodity-equiv domestic curr)
-                (balance 'add domestic val)
-                (balance 'add domestic
-                         (gnc:gnc-monetary-amount
-                          ;; BUG?: this bombs if the exchange-fn
-                          ;; returns #f instead of an actual
-                          ;; <gnc:monetary>.  Better to just return #f.
-                          (exchange-fn (gnc:make-gnc-monetary curr val)
-                                       domestic)))))
-          #f)
-         (balance 'getmonetary domestic #f))))
+       (gnc:make-gnc-monetary
+        domestic
+        (apply + (map
+                  (lambda (mon)
+                    (gnc-numeric-convert
+                     (gnc:gnc-monetary-amount (exchange-fn mon domestic))
+                     (gnc-commodity-get-fraction domestic)
+                     GNC-RND-ROUND))
+                  (foreign 'format gnc:make-gnc-monetary #f))))))
 
 ;; As above, but adds only the commodities of other stocks and
 ;; mutual-funds. Returns a commodity-collector, (not a <gnc:monetary>)
