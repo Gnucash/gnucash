@@ -866,7 +866,8 @@ also show overall period profit & loss."))
          (multicol-table-right (if enable-dual-columns?
                                    (gnc:make-html-table)
                                    multicol-table-left))
-         (maxindent (apply max (cons 0 (map gnc-account-get-current-depth accounts)))))
+         (maxindent (1+ (apply max (cons 0 (map gnc-account-get-current-depth
+                                                accounts))))))
 
     (gnc:html-document-set-title!
      doc (with-output-to-string
