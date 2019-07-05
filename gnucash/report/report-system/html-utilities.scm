@@ -153,6 +153,8 @@
   (gnc:html-table-append-ruler/at! table 0 colspan))
 
 (define (gnc:html-table-append-ruler/markup! table markup colspan)
+  (issue-deprecation-warning
+   "gnc:html-table-append-ruler/markup! is unused.")
   (gnc:html-table-append-ruler/at/markup! table markup 0 colspan))
 
 ;; Creates a table cell with some text in it. The cell will be created
@@ -181,6 +183,8 @@
 	 table tree-depth
 	 current-depth my-name my-balance 
 	 reverse-balance? row-style boldface? group-header-line?)
+  (issue-deprecation-warning
+   "gnc:html-acct-table-row-helper! is unused.")
   (gnc:html-table-append-row/markup! 
    table
    row-style
@@ -223,6 +227,8 @@
 	 current-depth my-name my-commodity balance 
 	 reverse-balance? is-stock-account? main-row-style other-rows-style 
 	 boldface? group-header-line?) 
+  (issue-deprecation-warning
+   "gnc:html-acct-table-comm-row-helper! is unused.")
   (let ((already-printed #f))
     ;; Adds one row to the table. my-name is the html-object
     ;; displayed in the name column; foreign-balance is the
@@ -402,6 +408,8 @@
 	 show-total? get-total-fn
 	 total-name group-types? show-parent-balance? show-parent-total? 
 	 show-other-curr? report-commodity exchange-fn show-zero-entries?)
+  (issue-deprecation-warning
+   "gnc:html-build-acct-table is unused.")
   (let ((table (gnc:make-html-table))
 	(work-to-do 0)
 	(work-done 0)
