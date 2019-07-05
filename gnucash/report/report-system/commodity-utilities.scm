@@ -939,6 +939,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; which (still) may have several different commodities in it -- if
 ;; there have been different *currencies*, not only stocks.
 (define (gnc:sum-collector-stocks foreign domestic exchange-fn)
+  (issue-deprecation-warning
+   "gnc:sum-collector-stocks is never used in code.")
   (and foreign
        (let ((balance (gnc:make-commodity-collector)))
          (foreign
