@@ -27,6 +27,10 @@
 
 (use-modules (gnucash core-utils))
 
+(eval-when (compile load eval expand)
+  (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
+(use-modules (sw_engine))
+
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
@@ -63,7 +67,8 @@
   (gnc-scm-log-msg (strify items)))
 
 (define (gnc:debug . items)
-  (gnc-scm-log-debug (strify items)))
+  (when (qof-log-check "gnc" G-LOG-LEVEL-DEBUG)
+    (gnc-scm-log-debug (strify items))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the following functions are initialized to log message to tracefile
