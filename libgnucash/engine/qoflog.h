@@ -104,7 +104,7 @@ extern "C"
   _(QOF_LOG_INFO,    = G_LOG_LEVEL_INFO)    \
   _(QOF_LOG_DEBUG,   = G_LOG_LEVEL_DEBUG)
 
-DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST)
+DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST);
 
 const char* qof_log_level_to_string(QofLogLevel lvl);
 QofLogLevel qof_log_level_from_string(const char *str);

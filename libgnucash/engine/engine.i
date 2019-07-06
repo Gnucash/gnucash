@@ -24,6 +24,7 @@
 #include <config.h>
 #include <glib.h>
 #include "qof.h"
+#include "qoflog.h"
 #include "Query.h"
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
@@ -82,6 +83,7 @@ engine-common.i */
 
 %include "engine-common.i"
 %include "engine-deprecated.h"
+%include "qoflog.h"
 
 %inline %{
 static const GncGUID * gncPriceGetGUID(GNCPrice *x)
@@ -324,6 +326,8 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     SET_ENUM("QOF-COMPARE-NEQ");
     SET_ENUM("QOF-COMPARE-CONTAINS");
     SET_ENUM("QOF-COMPARE-NCONTAINS");
+
+    SET_ENUM("QOF-LOG-DEBUG");  /* errors out */
 
     SET_ENUM("QOF-NUMERIC-MATCH-ANY");
     SET_ENUM("QOF-NUMERIC-MATCH-CREDIT");
