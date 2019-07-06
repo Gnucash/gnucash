@@ -803,7 +803,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   ;;Used in weighted-average gnc:case-exchange-time-fn only.
   (gnc:debug "foreign " (gnc:monetary->string foreign))
   (gnc:debug "domestic " (gnc-commodity-get-printname domestic))
-  (gnc:debug "pricealist " pricealist)
   (and (record? foreign)
        (gnc:gnc-monetary? foreign)
        date
@@ -873,6 +872,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                (gnc:get-commoditylist-totalavg-prices
                                 commodity-list report-currency to-date-tp
                                 start-percent delta-percent)))
+                          (gnc:debug "weighted-average pricealist " pricealist)
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
