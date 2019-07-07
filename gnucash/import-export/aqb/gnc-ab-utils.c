@@ -159,6 +159,17 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
+#if AQBANKING_VERSION_INT >= 59925
+        /* These two values must be set because newest bank regulation requires
+        the bank servers to require it. The string itself results from our
+        registration with the German bank association at
+        https://www.hbci-zka.de/register/prod_register.htm (where the
+        registration was requested and is managed by cstim). The function call was
+        introduced in aqbanking-5.99.25. */
+        AB_Banking_RuntimeConfig_SetCharValue(api, "fintsRegistrationKey", "412748A1836CDD07181CE1910");
+        AB_Banking_RuntimeConfig_SetCharValue(api, "fintsApplicationVersionString", PACKAGE_VERSION);
+#endif
+
 #ifndef AQBANKING6
         /* Check for config migration */
         if (AB_Banking_HasConf4(api) != 0)
