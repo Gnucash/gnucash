@@ -434,8 +434,8 @@
               ((customername)
                (lambda (a b)
                  (cond
-                  ((vector-ref b 6) #t)
-                  ((vector-ref a 6) #f)
+                  ((not (vector-ref b 6)) #t)
+                  ((not (vector-ref a 6)) #f)
                   (else (str-op (vector-ref a 0) (vector-ref b 0))))))
               ;; currency sorting always alphabetical a-z
               ((currency)
