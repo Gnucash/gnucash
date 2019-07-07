@@ -3,6 +3,7 @@
     <child name="account" schema="org.gnucash.dialogs.account"/>
     <child name="imap-editor" schema="org.gnucash.dialogs.imap-editor"/>
     <child name="preferences" schema="org.gnucash.dialogs.preferences"/>
+    <child name="properties" schema="org.gnucash.dialogs.properties"/>
     <child name="price-editor" schema="org.gnucash.dialogs.price-editor"/>
     <child name="pricedb-editor" schema="org.gnucash.dialogs.pricedb-editor"/>
     <child name="reset-warnings" schema="org.gnucash.dialogs.reset-warnings"/>
@@ -55,6 +56,16 @@
   </schema>
 
   <schema id="org.gnucash.dialogs.preferences" path="/org/gnucash/dialogs/preferences/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.properties" path="/org/gnucash/dialogs/properties/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

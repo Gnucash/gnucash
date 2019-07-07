@@ -45,6 +45,7 @@
 
 #include "dialog-options.h"
 #include "dialog-preferences.h"
+#include "dialog-properties.h"
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -151,6 +152,7 @@ static void gnc_main_window_engine_commit_error_callback( gpointer data, QofBack
 /* Command callbacks */
 static void gnc_main_window_cmd_page_setup (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_file_properties2 (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window);
@@ -293,6 +295,11 @@ static GtkActionEntry gnc_menu_actions [] =
         "FilePropertiesAction", "document-properties", N_("Proper_ties"), "<Alt>Return",
         N_("Edit the properties of the current file"),
         G_CALLBACK (gnc_main_window_cmd_file_properties)
+    },
+    {
+        "FilePropertiesAction2", "document-properties", N_("Proper_ties New"), "<Alt>Return",
+        N_("Edit the properties of the current file"),
+        G_CALLBACK (gnc_main_window_cmd_file_properties2)
     },
     {
         "FileCloseAction", "window-close", N_("_Close"), "<primary>W",
@@ -4094,6 +4101,12 @@ static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 {
     gnc_book_options_dialog_cb (FALSE, NULL, GTK_WINDOW (window));
+}
+
+static void
+gnc_main_window_cmd_file_properties2 (GtkAction *action, GncMainWindow *window)
+{
+    gnc_properties_dialog (GTK_WINDOW (window));
 }
 
 static void

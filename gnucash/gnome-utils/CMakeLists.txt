@@ -46,6 +46,7 @@ set (gnome_utils_SOURCES
   dialog-object-references.c
   dialog-options.c
   dialog-preferences.c
+  dialog-properties.c
   dialog-query-view.c
   dialog-reset-warnings.c
   dialog-tax-table.c
@@ -134,6 +135,7 @@ set (gnome_utils_HEADERS
   dialog-dup-trans.h
   dialog-file-access.h
   dialog-preferences.h
+  dialog-properties.h
   dialog-object-references.h
   dialog-options.h
   dialog-query-view.h

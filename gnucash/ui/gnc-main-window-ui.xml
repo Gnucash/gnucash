@@ -21,6 +21,7 @@
       </menu>
       <separator name="FileSep3"/>
       <menuitem name="FileProperties" action="FilePropertiesAction"/>
+      <menuitem name="FileProperties2" action="FilePropertiesAction2"/>
       <separator name="FileSep4"/>
       <placeholder name="FileOpenRecentPlaceholder"/>
       <separator name="FileSep5"/>

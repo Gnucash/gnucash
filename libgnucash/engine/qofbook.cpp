@@ -1173,6 +1173,81 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     qof_book_commit_edit(book);
 }
 
+double
+qof_book_get_double_option(const QofBook* book, const char* opt_name)
+{
+    double tmp;
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name_to_path(opt_name));
+    if (slot == nullptr)
+        return 0;
+        
+    return slot->get<double>(); 
+}
+
+void
+qof_book_set_double_option(QofBook* book, const char* opt_name, double opt_val)
+{
+    qof_book_begin_edit(book);
+    auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    auto opt_path = opt_name_to_path(opt_name);
+    if (opt_val != 0)
+        delete frame->set_path(opt_path, new KvpValue(double(opt_val)));
+    else
+        delete frame->set_path(opt_path, nullptr);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit(book);
+}
+
+GncGUID*
+qof_book_get_guid_option(const QofBook* book, const char* opt_name)
+{
+    double tmp;
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name_to_path(opt_name));
+    if (slot == nullptr)
+        return 0;
+        
+    return slot->get<GncGUID*>(); 
+}
+
+void
+qof_book_set_guid_option(QofBook* book, const char* opt_name, GncGUID* opt_val)
+{
+    qof_book_begin_edit(book);
+    auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    auto opt_path = opt_name_to_path(opt_name);
+    if (opt_val)
+        delete frame->set_path(opt_path, new KvpValue((GncGUID*)opt_val));
+    else
+        delete frame->set_path(opt_path, nullptr);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit(book);
+}
+
+gint64
+qof_book_get_int64_option(const QofBook* book, const char* opt_name)
+{
+    gint tmp;
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name_to_path(opt_name));
+    if (slot == nullptr)
+        return 0;
+        
+    return slot->get<int64_t>(); 
+}
+
+void
+qof_book_set_int64_option(QofBook* book, const char* opt_name, gint64 opt_val)
+{
+    qof_book_begin_edit(book);
+    auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    auto opt_path = opt_name_to_path(opt_name);
+    if (opt_val != 0)
+        delete frame->set_path(opt_path, new KvpValue(int64_t(opt_val)));
+    else
+        delete frame->set_path(opt_path, nullptr);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit(book);
+}
+
 void
 qof_book_option_frame_delete (QofBook *book, const char* opt_name)
 {

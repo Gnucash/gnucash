@@ -65,6 +65,7 @@ extern "C" {
 #define GNC_MOD_REGISTER  "gnc.register"
 #define GNC_MOD_HTML      "gnc.html"
 #define GNC_MOD_PREFS     "gnc.pref"
+#define GNC_MOD_PROPS     "gnc.prop"
 #define GNC_MOD_IMPORT    "gnc.import"
 #define GNC_MOD_ASSISTANT "gnc.assistant"
 #define GNC_MOD_TEST      "gnc.tests"

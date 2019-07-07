@@ -373,6 +373,16 @@ gchar * qof_book_normalize_counter_format(const gchar *format, gchar **err_msg);
 char *qof_book_get_counter_format (const QofBook *book,
                                    const char *counter_name);
 
+
+double qof_book_get_double_option(const QofBook* book, const char* opt_name);
+void qof_book_set_double_option(QofBook* book, const char* opt_name, double opt_val);
+
+GncGUID* qof_book_get_guid_option(const QofBook* book, const char* opt_name);
+void qof_book_set_guid_option(QofBook* book, const char* opt_name, GncGUID* opt_val);
+
+gint64 qof_book_get_int64_option(const QofBook* book, const char* opt_name);
+void qof_book_set_int64_option(QofBook* book, const char* opt_name, gint64 opt_val);
+
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
 void qof_book_option_frame_delete (QofBook *book, const char* opt_name);

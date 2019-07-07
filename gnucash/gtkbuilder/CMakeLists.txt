@@ -38,6 +38,7 @@ set (gtkbuilder_SOURCES
         dialog-order.glade
         dialog-payment.glade
         dialog-preferences.glade
+        dialog-properties.glade
         dialog-price.glade
         dialog-print-check.glade
         dialog-progress.glade
