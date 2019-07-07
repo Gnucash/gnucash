@@ -59,7 +59,7 @@
 (define tax-header (N_ "Tax"))
 (define credit-header (N_ "Credits"))
 (define debit-header (N_ "Debits"))
-(define amount-header (N_ "Amount"))
+(define amount-header (N_ "Balance"))
 
 ;; Depending on the report type we want to set up some lists/cases 
 ;; with strings to ease overview and translation
@@ -399,7 +399,7 @@
                table (if odd-row? "normal-row" "alternate-row")
                (make-row used-columns date due-date (gnc-get-num-action txn split)
                          type-str (xaccSplitGetMemo split)
-                         (gnc:make-gnc-monetary currency value)
+                         (gnc:make-gnc-monetary currency (+ total value))
                          (if (negative? value)
                              ""
                              (gnc:make-gnc-monetary currency value))
