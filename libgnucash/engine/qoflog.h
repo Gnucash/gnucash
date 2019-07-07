@@ -96,15 +96,15 @@ extern "C"
 
 #define QOF_MOD_ENGINE "qof.engine"
 
-#define LOG_LEVEL_LIST(_) \
-  _(QOF_LOG_FATAL,   = G_LOG_LEVEL_ERROR)   \
-  _(QOF_LOG_ERROR,   = G_LOG_LEVEL_CRITICAL)   \
-  _(QOF_LOG_WARNING, = G_LOG_LEVEL_WARNING) \
-  _(QOF_LOG_MESSAGE, = G_LOG_LEVEL_MESSAGE) \
-  _(QOF_LOG_INFO,    = G_LOG_LEVEL_INFO)    \
-  _(QOF_LOG_DEBUG,   = G_LOG_LEVEL_DEBUG)
-
-DEFINE_ENUM (QofLogLevel, LOG_LEVEL_LIST);
+typedef enum
+{
+    QOF_LOG_FATAL   = G_LOG_LEVEL_ERROR,
+    QOF_LOG_ERROR   = G_LOG_LEVEL_CRITICAL,
+    QOF_LOG_WARNING = G_LOG_LEVEL_WARNING,
+    QOF_LOG_MESSAGE = G_LOG_LEVEL_MESSAGE,
+    QOF_LOG_INFO    = G_LOG_LEVEL_INFO,
+    QOF_LOG_DEBUG   = G_LOG_LEVEL_DEBUG
+} QofLogLevel;
 
 const char* qof_log_level_to_string(QofLogLevel lvl);
 QofLogLevel qof_log_level_from_string(const char *str);
