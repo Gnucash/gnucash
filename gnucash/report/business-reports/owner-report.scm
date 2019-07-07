@@ -166,6 +166,7 @@
         (addto! heading-list (_ debit-header)))
     (if (value-col column-vector)
         (addto! heading-list (_ amount-header)))
+    (addto! heading-list (_ "Payments"))
     (reverse heading-list)))
 
 
@@ -227,7 +228,7 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (make-row column-vector date due-date num type-str
-                  memo monetary credit debit sale tax)
+                  memo monetary credit debit sale tax payments)
   (append
    (addif (date-col column-vector) (qof-print-date date))
    (addif (date-due-col column-vector) (and due-date (qof-print-date due-date)))
@@ -238,7 +239,8 @@
    (addif (tax-col column-vector)    (make-cell tax))
    (addif (credit-col column-vector) (make-cell credit))
    (addif (debit-col column-vector)  (make-cell debit))
-   (addif (value-col column-vector)  (make-cell monetary))))
+   (addif (value-col column-vector)  (make-cell monetary))
+   (list payments)))
 
 (define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
@@ -300,7 +302,7 @@
        table (if odd-row? "normal-row" "alternate-row")
        (make-row used-columns start-date #f "" (_ "Balance") ""
                  (gnc:make-gnc-monetary currency total)
-                 "" "" "" "")))
+                 "" "" "" "" "")))
 
     (gnc:html-table-set-col-headers!
      table (make-heading-list used-columns))
@@ -312,7 +314,8 @@
              (debit 0)
              (credit 0)
              (tax 0)
-             (sale 0))
+             (sale 0)
+             (links '()))
       (cond
 
        ((null? txns)
@@ -339,7 +342,8 @@
                 debit
                 credit
                 tax
-                sale))
+                sale
+                links))
 
            ;; txn-date < start-date. skip display, accumulate amounts
            ((< date start-date)
@@ -352,7 +356,8 @@
                   (if (negative? value) (+ debit value) debit)
                   (if (negative? value) credit (+ credit value))
                   tax
-                  sale)))
+                  sale
+                  links)))
 
            ;; if balance row hasn't been rendered, consider printing
            ;; here. skip if value=0.
@@ -391,6 +396,25 @@
                              ((null? invoice) 0)
                              (credit-note? (- (gncInvoiceGetTotalTax invoice)))
                              (else (gncInvoiceGetTotalTax invoice))))
+                   (invoice-splits
+                    (and (eqv? type TXN-TYPE-INVOICE)
+                         (not (null? invoice))
+                         (sort
+                          (gnc-lot-get-split-list
+                           (gncInvoiceGetPostedLot invoice))
+                          (lambda (a b)
+                            (< (xaccTransGetDate (xaccSplitGetParent a))
+                               (xaccTransGetDate (xaccSplitGetParent b)))))))
+                   (payment-splits
+                    (and (eqv? type TXN-TYPE-PAYMENT)
+                         (sort
+                          (filter
+                           (lambda (inv-split)
+                             (member txn (map xaccSplitGetParent (cdr inv-split))))
+                           links)
+                          (lambda (a b)
+                            (< (gncInvoiceGetDatePosted (car a))
+                               (gncInvoiceGetDatePosted (car b)))))))
                    (due-date (and (not (null? invoice))
                                   (gncInvoiceIsPosted invoice)
                                   (gncInvoiceGetDateDue invoice))))
@@ -400,18 +424,35 @@
                (make-row used-columns date due-date (gnc-get-num-action txn split)
                          type-str (xaccSplitGetMemo split)
                          (gnc:make-gnc-monetary currency (+ total value))
-                         (if (negative? value)
-                             ""
-                             (gnc:make-gnc-monetary currency value))
-                         (if (negative? value)
-                             (gnc:make-gnc-monetary currency value)
-                             "")
-                         (if (null? invoice)
-                             ""
-                             (gnc:make-gnc-monetary currency txn-sale))
-                         (if (null? invoice)
-                             ""
-                             (gnc:make-gnc-monetary currency txn-tax))))
+                         (and (not (negative? value))
+                              (gnc:make-gnc-monetary currency value))
+                         (and (negative? value)
+                              (gnc:make-gnc-monetary currency value))
+                         (and (not (null? invoice))
+                              (gnc:make-gnc-monetary currency txn-sale))
+                         (and (not (null? invoice))
+                              (gnc:make-gnc-monetary currency txn-tax))
+                         (cond
+
+                          (invoice-splits
+                           (and (zero? (gnc-lot-get-balance
+                                        (gncInvoiceGetPostedLot invoice)))
+                                (_ "Paid")))
+
+                          (payment-splits
+                           (apply
+                            gnc:make-html-text
+                            (map
+                             (lambda (inv-splits)
+                               (gnc:html-markup-anchor
+                                (gnc:invoice-anchor-text (car inv-splits))
+                                (gnc-get-num-action
+                                 (gncInvoiceGetPostedTxn (car inv-splits))
+                                 #f)))
+                             payment-splits)))
+
+                          ;; some error occurred
+                          (else #f))))
 
               (lp printed?
                   (not odd-row?)
@@ -420,7 +461,10 @@
                   (if (negative? value) (+ debit value) debit)
                   (if (negative? value) credit (+ credit value))
                   (+ tax txn-tax)
-                  (+ sale txn-sale)))))))))
+                  (+ sale txn-sale)
+                  (if (null? invoice)
+                      links
+                      (cons (cons invoice invoice-splits) links))))))))))
     table))
 
 (define (options-generator acct-type-list owner-type reverse?)
