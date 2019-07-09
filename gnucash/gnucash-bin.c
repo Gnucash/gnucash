@@ -874,7 +874,6 @@ main(int argc, char ** argv)
     gnc_environment_setup();
 #if ! defined MAC_INTEGRATION && ! defined __MINGW32__/* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
-#endif
     if (!sys_locale)
       {
         g_print ("The locale defined in the environment isn't supported. "
@@ -882,6 +881,7 @@ main(int argc, char ** argv)
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
       }
+#endif
     bindtextdomain(GETTEXT_PACKAGE, localedir);
     bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
     bind_textdomain_codeset("iso_4217", "UTF-8");
@@ -901,15 +901,11 @@ main(int argc, char ** argv)
 
     gnc_log_init();
 
-#ifndef MAC_INTEGRATION
-    /* Write some locale details to the log to simplify debugging
-     * To be on the safe side, only do this if not on OS X,
-     * to avoid unintentionally messing up the locale settings */
+    /* Write some locale details to the log to simplify debugging */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");
     PINFO ("Effective locale set to %s.", setlocale (LC_ALL, NULL));
     g_free (sys_locale);
     sys_locale = NULL;
-#endif
 
     /* If asked via a command line parameter, fetch quotes only */
     if (add_quotes_file)
