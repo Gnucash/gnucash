@@ -1,3 +1,4 @@
+set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/app-utils)
 
 set(APP_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
@@ -27,6 +28,25 @@ gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
 add_app_utils_test(test-sx test-sx.cpp)
+
+set(gtest_gnc_option_SOURCES
+  ${MODULEPATH}/gnc-option.cpp
+  gtest-gnc-option.cpp)
+
+set(gtest_gnc_option_INCLUDES
+  ${MODULEPATH}
+  ${CMAKE_SOURCE_DIR}/libgnucash/engine
+  ${CMAKE_BINARY_DIR}/common # for config.h
+  ${GLIB2_INCLUDE_DIRS}
+  ${GUILE_INCLUDE_DIRS})
+
+set(gtest_gnc_option_LIBS
+  gncmod-engine
+  ${GLIB2_LDFLAGS}
+  ${GUILE_LDFLAGS}
+  gtest)
+
+gnc_add_test(test-gnc-option "${gtest_gnc_option_SOURCES}" gtest_gnc_option_INCLUDES gtest_gnc_option_LIBS)
 
 set(GUILE_DEPENDS
   scm-test-engine
