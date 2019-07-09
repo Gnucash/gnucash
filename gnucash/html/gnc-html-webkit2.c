@@ -595,7 +595,6 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
      }
      while ( FALSE );
 }
-#ifdef WEBKIT2_4
 static gboolean
 perform_navigation_policy (WebKitWebView *web_view,
                WebKitNavigationPolicyDecision *decision,
@@ -604,6 +603,8 @@ perform_navigation_policy (WebKitWebView *web_view,
      WebKitURIRequest *req = NULL;
      const gchar* uri; // Can't init it here.
      gchar *scheme = NULL, *location = NULL, *label = NULL;
+     gboolean ignore = FALSE;
+#if WEBKIT2_4
      WebKitNavigationAction *action =
       webkit_navigation_policy_decision_get_navigation_action (decision);
      if (webkit_navigation_action_get_navigation_type (action) !=
@@ -613,19 +614,24 @@ perform_navigation_policy (WebKitWebView *web_view,
           return TRUE;
      }
      req = webkit_navigation_action_get_request (action);
+#else
+     req = webkit_navigation_policy_decision_get_request (decision);
+#endif
      uri = webkit_uri_request_get_uri (req);
      scheme =  gnc_html_parse_url (self, uri, &location, &label);
-     impl_webkit_show_url (self, scheme, location, label, FALSE);
+     if (strcmp (scheme, URL_TYPE_FILE) != 0)
+     {
+          impl_webkit_show_url (self, scheme, location, label, FALSE);
+          ignore = TRUE;
+     }
      g_free (location);
      g_free (label);
-     webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
+     if (ignore)
+          webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
+     else
+          webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
      return TRUE;
 }
-#endif
-/********************************************************************
- * webkit_navigation_requested_cb - called when a URL needs to be
- * loaded within the loading of a page (embedded image).
- ********************************************************************/
 
 static gboolean
 webkit_decide_policy_cb (WebKitWebView *web_view,
@@ -634,7 +640,6 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
              gpointer user_data)
 {
 /* This turns out to be the signal to intercept for handling a link-click. */
-#ifdef WEBKIT2_4
      if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
      {
           webkit_policy_decision_use (decision);
@@ -643,10 +648,6 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
      return perform_navigation_policy (
       web_view, (WebKitNavigationPolicyDecision*) decision,
       GNC_HTML (user_data));
-#else
-     webkit_policy_decision_use (decision);
-     return TRUE;
-#endif
 }
 
 static void
