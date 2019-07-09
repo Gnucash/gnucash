@@ -345,29 +345,6 @@
                 sale
                 links))
 
-           ;; txn-date < start-date. skip display, accumulate amounts
-           ((< date start-date)
-            (let ((value ((if reverse? - identity)
-                          (xaccTransGetAccountValue txn acc))))
-              (lp printed?
-                  odd-row?
-                  (cdr txns)
-                  (+ total value)
-                  (if (negative? value) (+ debit value) debit)
-                  (if (negative? value) credit (+ credit value))
-                  tax
-                  sale
-                  links)))
-
-           ;; if balance row hasn't been rendered, consider printing
-           ;; here. skip if value=0.
-           ((not printed?)
-            (let ((print? (and (value-col used-columns) (not (zero? total)))))
-              (if print? (add-balance-row odd-row? total))
-              (lp #t
-                  (logxor (if odd-row? 1 0) (if print? 1 0))
-                  txns total debit credit tax sale links)))
-
            ;; start printing txns.
            (else
             (let* ((value ((if reverse? - identity)
@@ -419,52 +396,71 @@
                                   (gncInvoiceIsPosted invoice)
                                   (gncInvoiceGetDateDue invoice))))
 
-              (gnc:html-table-append-row/markup!
-               table (if odd-row? "normal-row" "alternate-row")
-               (make-row used-columns date due-date (gnc-get-num-action txn split)
-                         type-str (xaccSplitGetMemo split)
-                         (gnc:make-gnc-monetary currency (+ total value))
-                         (and (not (negative? value))
-                              (gnc:make-gnc-monetary currency value))
-                         (and (negative? value)
-                              (gnc:make-gnc-monetary currency value))
-                         (and (not (null? invoice))
-                              (gnc:make-gnc-monetary currency txn-sale))
-                         (and (not (null? invoice))
-                              (gnc:make-gnc-monetary currency txn-tax))
-                         (cond
+              (cond
 
-                          (invoice-splits
-                           (and (zero? (gnc-lot-get-balance
-                                        (gncInvoiceGetPostedLot invoice)))
-                                (_ "Paid")))
+               ;; txn-date < start-date. skip display, accumulate amounts
+               ((< date start-date)
+                (let ((value ((if reverse? - identity)
+                              (xaccTransGetAccountValue txn acc))))
+                  (lp printed?
+                      odd-row?
+                      (cdr txns)
+                      (+ total value)
+                      (if (negative? value) (+ debit value) debit)
+                      (if (negative? value) credit (+ credit value))
+                      tax
+                      sale
+                      (if (null? invoice)
+                          links
+                          (acons invoice invoice-splits links)))))
 
-                          (payment-splits
-                           (apply
-                            gnc:make-html-text
-                            (map
-                             (lambda (inv-splits)
-                               (gnc:html-markup-anchor
-                                (gnc:invoice-anchor-text (car inv-splits))
-                                (gnc-get-num-action
-                                 (gncInvoiceGetPostedTxn (car inv-splits))
-                                 #f)))
-                             payment-splits)))
+               ;; if balance row hasn't been rendered, consider
+               ;; adding here.  skip if value=0.
+               ((not printed?)
+                (let ((print? (and (value-col used-columns) (not (zero? total)))))
+                  (if print? (add-balance-row odd-row? total))
+                  (lp #t (not print?) txns total debit credit tax sale links)))
 
-                          ;; some error occurred
-                          (else #f))))
+               (else
+                (gnc:html-table-append-row/markup!
+                 table (if odd-row? "normal-row" "alternate-row")
+                 (make-row
+                  used-columns date due-date (gnc-get-num-action txn split)
+                  type-str (xaccSplitGetMemo split)
+                  (gnc:make-gnc-monetary currency (+ total value))
+                  (and (>= value 0) (gnc:make-gnc-monetary currency value))
+                  (and (< value 0) (gnc:make-gnc-monetary currency value))
+                  (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-sale))
+                  (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-tax))
+                  (cond
+                   (invoice-splits
+                    (and (zero? (gnc-lot-get-balance (gncInvoiceGetPostedLot invoice)))
+                         (_ "Paid")))
+                   (payment-splits
+                    (apply
+                     gnc:make-html-text
+                     (map
+                      (lambda (inv-splits)
+                        (gnc:html-markup-anchor
+                         (gnc:invoice-anchor-text (car inv-splits))
+                         (gnc-get-num-action
+                          (gncInvoiceGetPostedTxn (car inv-splits))
+                          #f)))
+                      payment-splits)))
+                   ;; some error occurred
+                   (else #f))))
 
-              (lp printed?
-                  (not odd-row?)
-                  (cdr txns)
-                  (+ total value)
-                  (if (negative? value) (+ debit value) debit)
-                  (if (negative? value) credit (+ credit value))
-                  (+ tax txn-tax)
-                  (+ sale txn-sale)
-                  (if (null? invoice)
-                      links
-                      (cons (cons invoice invoice-splits) links))))))))))
+                (lp printed?
+                    (not odd-row?)
+                    (cdr txns)
+                    (+ total value)
+                    (if (negative? value) (+ debit value) debit)
+                    (if (negative? value) credit (+ credit value))
+                    (+ tax txn-tax)
+                    (+ sale txn-sale)
+                    (if (null? invoice)
+                        links
+                        (acons invoice invoice-splits links))))))))))))
     table))
 
 (define (options-generator acct-type-list owner-type reverse?)
