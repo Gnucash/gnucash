@@ -48,7 +48,6 @@
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
 (define job-report-guid "5518ac227e474f47a34439f2d4d049de")
 
-(define acct-string (N_ "Account"))
 (define owner-page gnc:pagename-general)
 (define date-header (N_ "Date"))
 (define due-date-header (N_ "Due Date"))
@@ -461,9 +460,10 @@
                     (if (null? invoice)
                         links
                         (acons invoice invoice-splits links))))))))))))
-    table))
 
-(define (options-generator acct-type-list owner-type reverse?)
+    (and (pair? txns) table)))
+
+(define (options-generator owner-type reverse?)
 
   (define gnc:*report-options* (gnc:new-options))
 
@@ -481,12 +481,6 @@
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "owner-type" owner-type))
-
-  (gnc:register-inv-option
-   (gnc:make-account-sel-limited-option
-    owner-page acct-string "w"
-    (N_ "The account to search for transactions.")
-    #f #f acct-type-list))
 
   (gnc:options-add-date-interval!
    gnc:*report-options* gnc:pagename-general
@@ -566,17 +560,16 @@
   gnc:*report-options*)
 
 (define (customer-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
+  (options-generator GNC-OWNER-CUSTOMER #f))
 
 (define (vendor-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR #t))
+  (options-generator GNC-OWNER-VENDOR #t))
 
 (define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
+  (options-generator GNC-OWNER-EMPLOYEE #t))
 
 (define (job-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)
-                     GNC-OWNER-JOB #f))
+  (options-generator GNC-OWNER-JOB #f))
 
 (define (string-expand string character replace-string)
   (with-output-to-string
@@ -693,8 +686,9 @@
      (gnc:lookup-option options section name)))
 
   (let* ((document (gnc:make-html-document))
-         (query (qof-query-create-for-splits))
-         (account (opt-val owner-page acct-string))
+         (accounts (filter (compose xaccAccountIsAPARType xaccAccountGetType)
+                           (gnc-account-get-descendants-sorted
+                            (gnc-get-current-root-account))))
          (start-date (gnc:time64-start-day-time
                       (gnc:date-option-absolute-time
                        (opt-val gnc:pagename-general optname-from-date))))
@@ -719,20 +713,16 @@
         (cadr (get-info type))
         (caddr (get-info type)))))
 
-     ((null? account)
+     ((null? accounts)
       (gnc:html-document-add-object!
        document
        (gnc:html-make-generic-warning
         (string-append report-title ": " (gncOwnerGetName owner))
         (gnc:report-id report-obj)
-        (_ "No valid account selected")
-        (_ "This report requires a valid account to be selected."))))
+        (_ "No valid account found")
+        (_ "This report requires a valid AP/AR account to be available."))))
 
      (else
-      (if (eqv? GNC-OWNER-JOB type)
-          (setup-job-query query owner account end-date)
-          (setup-query query owner account end-date))
-
       (gnc:html-document-set-title!
        document (string-append report-title ": " (gncOwnerGetName owner)))
 
@@ -745,34 +735,43 @@
                       (gnc:owner-anchor-text owner))
                   (gncOwnerGetName owner))))
 
-      (let ((table (make-txn-table
-                    options query account start-date end-date date-type)))
+      (gnc:html-document-add-object!
+       document (make-myname-table book date-format))
 
-        (qof-query-destroy query)
+      (gnc:html-document-add-object!
+       document (make-owner-table owner))
 
-        (gnc:html-table-set-style!
-         table "table"
-         'attribute (list "border" 1)
-         'attribute (list "cellspacing" 0)
-         'attribute (list "cellpadding" 4))
+      (gnc:html-document-add-object!
+       document (gnc:make-html-text
+                 (string-append (_ "Date Range") ": " (qof-print-date start-date)
+                                " - " (qof-print-date end-date))))
 
-        (gnc:html-document-add-object!
-         document (make-myname-table book date-format))
+      (make-break! document)
 
-        (gnc:html-document-add-object!
-         document (make-owner-table owner))
-
-        (make-break! document)
-
-        (gnc:html-document-add-object!
-         document
-         (gnc:make-html-text
-          (string-append (_ "Date Range") ": " (qof-print-date start-date)
-                         " - " (qof-print-date end-date))))
-
-        (make-break! document)
-
-        (gnc:html-document-add-object! document table))))
+      (for-each
+       (lambda (account)
+         (let ((query (qof-query-create-for-splits)))
+           (if (eqv? GNC-OWNER-JOB type)
+               (setup-job-query query owner account end-date)
+               (setup-query query owner account end-date))
+           (let ((table (make-txn-table
+                         options query account start-date end-date date-type)))
+             (qof-query-destroy query)
+             (when table
+               (gnc:html-table-set-style!
+                table "table"
+                'attribute (list "border" 1)
+                'attribute (list "cellspacing" 0)
+                'attribute (list "cellpadding" 4))
+               (gnc:html-document-add-object!
+                document
+                (gnc:make-html-text
+                 (gnc:html-markup-h3
+                  (string-append (_ "Account") ": "
+                                 (xaccAccountGetName account)))))
+               (gnc:html-document-add-object! document table)
+               (make-break! document)))))
+       accounts)))
     document))
 
 (define* (find-first-account type #:key currency)
@@ -840,9 +839,10 @@
 (define (owner-report-create-internal report-guid owner account owner-type)
   (let* ((options (gnc:make-report-options report-guid))
          (owner-op (gnc:lookup-option options owner-page (owner-string owner-type)))
-         (account-op (gnc:lookup-option options owner-page acct-string)))
+         ;; (account-op (gnc:lookup-option options owner-page acct-string))
+         )
     (gnc:option-set-value owner-op owner)
-    (gnc:option-set-value account-op account)
+    ;; (gnc:option-set-value account-op account)
     (gnc:make-report report-guid options)))
 
 (define (owner-report-create owner account)
