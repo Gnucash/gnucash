@@ -347,7 +347,7 @@ more than one currency. This report is not designed to cope with this possibilit
      optname-to-date "a")
 
     ;; Use a default report date of 'today'
-    (gnc:option-set-value
+    (gnc:option-set-default-value
      (gnc:lookup-option options gnc:pagename-general optname-to-date)
      (cons 'relative 'today))
 
