@@ -201,26 +201,93 @@ guint32 gnc_option_db_lookup_color_option_argb (GNCOptionDB *odb,
                                                 const char *name,
                                                 guint32 default_value);
 
-GSList * gnc_option_db_lookup_list_option (GNCOptionDB *odb,
-                                           const char *section,
-                                           const char *name,
-                                           GSList *default_value);
+void gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb,
+        SCM callback_id);
 
-void gnc_free_list_option_value (GSList *list);
+char * gnc_option_section(GNCOption *option);
+char * gnc_option_name(GNCOption *option);
+char * gnc_option_type(GNCOption *option);
+char * gnc_option_sort_tag(GNCOption *option);
+char * gnc_option_documentation(GNCOption *option);
+SCM    gnc_option_getter(GNCOption *option);
+SCM    gnc_option_setter(GNCOption *option);
+SCM    gnc_option_default_getter(GNCOption *option);
+SCM    gnc_option_get_option_data(GNCOption *option);
 
-gnc_commodity * gnc_option_db_lookup_currency_option (GNCOptionDB *odb,
-                                                      const char *section,
-                                                      const char *name,
-                                                      gnc_commodity *default_value);
+int    gnc_option_num_permissible_values(GNCOption *option);
+int    gnc_option_permissible_value_index(GNCOption *option, SCM value);
+SCM    gnc_option_permissible_value(GNCOption *option, int index);
+char * gnc_option_permissible_value_name(GNCOption *option, int index);
+char * gnc_option_permissible_value_description(GNCOption *option, int index);
 
-void gnc_option_db_set_option_default (GNCOptionDB *odb,
-                                       const char *section,
-                                       const char *name);
+gboolean gnc_option_show_time(GNCOption *option);
 
-gboolean gnc_option_db_set_option (GNCOptionDB *odb,
-                                   const char *section,
-                                   const char *name,
-                                   SCM value);
+gboolean gnc_option_multiple_selection(GNCOption *option);
+GList * gnc_option_get_account_type_list(GNCOption *option);
+
+gboolean gnc_option_get_range_info(GNCOption *option,
+                                   double *lower_bound,
+                                   double *upper_bound,
+                                   int    *num_decimals,
+                                   double *step_size);
+
+gdouble  gnc_option_color_range(GNCOption *option);
+gdouble  gnc_option_use_alpha(GNCOption *option);
+gboolean gnc_option_get_color_info(GNCOption *option,
+                                   gboolean use_default,
+                                   gdouble *red,
+                                   gdouble *green,
+                                   gdouble *blue,
+                                   gdouble *alpha);
+
+void gnc_option_call_option_widget_changed_proc (GNCOption *option);
+
+void gnc_option_set_default(GNCOption *option);
+
+guint gnc_option_db_num_sections(GNCOptionDB *odb);
+
+const char * gnc_option_section_name(GNCOptionSection *section);
+guint  gnc_option_section_num_options(GNCOptionSection *section);
+
+GNCOptionSection * gnc_option_db_get_section(GNCOptionDB *odb, gint i);
+
+GNCOption * gnc_get_option_section_option(GNCOptionSection *section, int i);
+
+GNCOption * gnc_option_db_get_option_by_name(GNCOptionDB *odb,
+        const char *section_name,
+        const char *name);
+
+void     gnc_option_db_clean(GNCOptionDB *odb);
+
+gboolean gnc_option_db_get_changed(GNCOptionDB *odb);
+GList* gnc_option_db_commit(GNCOptionDB *odb);
+
+char * gnc_option_db_get_default_section(GNCOptionDB *odb);
+
+SCM gnc_option_db_lookup_option(GNCOptionDB *odb,
+                                const char *section,
+                                const char *name,
+                                SCM default_value);
+
+gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
+        const char *section,
+        const char *name,
+        gboolean default_value);
+
+char * gnc_option_db_lookup_string_option(GNCOptionDB *odb,
+        const char *section,
+        const char *name,
+        const char *default_value);
+
+gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
+        const char *section,
+        const char *name,
+        gdouble default_value);
+
+gboolean gnc_option_db_set_option(GNCOptionDB *odb,
+                                  const char *section,
+                                  const char *name,
+                                  SCM value);
 
 gboolean gnc_option_db_set_number_option (GNCOptionDB *odb,
                                           const char *section,
@@ -280,8 +347,5 @@ void gncp_option_invoke_callback (GNCOptionChangeCallback callback,
 
 /* Reset all the widgets in one section to their default values */
 void gnc_option_db_section_reset_widgets (GNCOptionSection *section);
-
-/* Reset all the widgets to their default values */
-void gnc_option_db_reset_widgets (GNCOptionDB *odb);
 
 #endif /* OPTION_UTIL_H */

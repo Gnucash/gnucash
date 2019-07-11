@@ -720,7 +720,7 @@ gnc_option_default_getter (GNCOption *option)
                                         option->guile_option);
 }
 
-/********************************************************************\
+/* ******************************************************************\
  * gnc_option_value_validator                                       *
  *   returns the SCM handle for the option value validator function.*
  *   This value should be tested with scm_procedure_p before use.   *
@@ -728,8 +728,8 @@ gnc_option_default_getter (GNCOption *option)
  * Args: option - the GNCOption                                     *
  * Returns: SCM handle to function                                  *
 \********************************************************************/
-SCM
-gnc_option_value_validator (GNCOption *option)
+static SCM
+gnc_option_value_validator(GNCOption *option)
 {
     initialize_getters ();
 
@@ -737,7 +737,8 @@ gnc_option_value_validator (GNCOption *option)
                                         option->guile_option);
 }
 
-/********************************************************************\
+
+/* ******************************************************************\
  * gnc_option_widget_changed_proc_getter                            *
  *   returns the SCM handle for the function to be called if the    *
  *   GUI widget representing the option is changed.                 *
@@ -748,8 +749,8 @@ gnc_option_value_validator (GNCOption *option)
  * Returns: SCM handle to function                                  *
  *          If no such function exists, returns SCM_UNDEFINED.      *
 \********************************************************************/
-SCM
-gnc_option_widget_changed_proc_getter (GNCOption *option)
+static SCM
+gnc_option_widget_changed_proc_getter(GNCOption *option)
 {
     SCM cb;
 
@@ -1152,36 +1153,6 @@ gnc_option_use_alpha (GNCOption *option)
 }
 
 /********************************************************************\
- * gnc_option_get_color_argb                                        *
- *   returns the argb value of a color option                       *
- *                                                                  *
- * Args: option - the GNCOption                                     *
- * Returns: argb value of option                                    *
-\********************************************************************/
-guint32
-gnc_option_get_color_argb (GNCOption *option)
-{
-    gdouble red, green, blue, alpha;
-    guint32 color = 0;
-
-    if (!gnc_option_get_color_info (option, FALSE, &red, &green, &blue, &alpha))
-        return 0;
-
-    color |= (guint32) (alpha * 255.0);
-    color <<= 8;
-
-    color |= (guint32) (red * 255.0);
-    color <<= 8;
-
-    color |= (guint32) (green * 255.0);
-    color <<= 8;
-
-    color |= (guint32) (blue * 255.0);
-
-    return color;
-}
-
-/********************************************************************\
  * gnc_option_get_color_info                                        *
  *   gets the color information from a color option. rgba values    *
  *   returned are between 0.0 and 1.0.                              *
@@ -1315,21 +1286,6 @@ compare_option_tags (gconstpointer a, gconstpointer b)
         free (tag_b);
 
     return result;
-}
-
-/********************************************************************\
- * gnc_option_db_dirty                                              *
- *   returns true if guile has registered more options into the     *
- *   database since the last time the database was cleaned.         *
- *                                                                  *
- * Returns: dirty flag                                              *
-\********************************************************************/
-gboolean
-gnc_option_db_dirty (GNCOptionDB *odb)
-{
-    g_return_val_if_fail (odb, FALSE);
-
-    return odb->options_dirty;
 }
 
 /********************************************************************\
@@ -1523,38 +1479,6 @@ gnc_option_db_get_option_by_name (GNCOptionDB *odb,
         option_node = option_node->next;
     }
     return NULL;
-}
-
-/********************************************************************\
- * gnc_option_db_get_option_by_SCM                                  *
- *   returns an option given SCM handle. Uses section and name.     *
- *                                                                  *
- * Args: odb          - option database to search in                *
- *       guile_option - SCM handle of option                        *
- * Returns: given option, or NULL if none                           *
-\********************************************************************/
-GNCOption *
-gnc_option_db_get_option_by_SCM (GNCOptionDB *odb, SCM guile_option)
-{
-    GNCOption option_key;
-    GNCOption *option;
-    char *section_name;
-    char *name;
-
-    option_key.guile_option = guile_option;
-
-    section_name = gnc_option_section (&option_key);
-    name = gnc_option_name (&option_key);
-
-    option = gnc_option_db_get_option_by_name (odb, section_name, name);
-
-    if (section_name != NULL)
-        free (section_name);
-
-    if (name != NULL)
-        free (name);
-
-    return option;
 }
 
 static SCM
@@ -1777,30 +1701,6 @@ gnc_option_db_section_reset_widgets (GNCOptionSection *section)
 }
 
 /********************************************************************\
- * gnc_option_db_reset_widgets                                      *
- *   reset all option widgets to their default values.              *
- *                                                                  *
- * Args: odb - option database to reset                             *
- * Return: nothing                                                  *
-\********************************************************************/
-void
-gnc_option_db_reset_widgets (GNCOptionDB *odb)
-{
-    GSList *section_node;
-    GNCOptionSection *section;
-
-    g_return_if_fail (odb);
-
-    for (section_node = odb->option_sections;
-            section_node != NULL;
-            section_node = section_node->next)
-    {
-        section = section_node->data;
-        gnc_option_db_section_reset_widgets (section);
-    }
-}
-
-/********************************************************************\
  * gnc_option_db_get_default_section                                *
  *   returns the malloc'd section name of the default section,      *
  *   or NULL if there is none.                                      *
@@ -1940,69 +1840,6 @@ gnc_option_db_lookup_string_option (GNCOptionDB *odb,
 }
 
 /********************************************************************\
- * gnc_option_db_lookup_font_option                                 *
- *   looks up a font option. If present, returns its malloc'ed      *
- *   string value, otherwise returns the strdup'ed default, or NULL *
- *   if default was NULL.                                           *
- *                                                                  *
- * Args: odb     - option database to search in                     *
- *       section - section name of option                           *
- *       name    - name of option                                   *
- *       default - default value if not found                       *
- * Return: char * option value                                      *
-\********************************************************************/
-char *
-gnc_option_db_lookup_font_option (GNCOptionDB *odb,
-                                  const char *section,
-                                  const char *name,
-                                  const char *default_value)
-{
-    return gnc_option_db_lookup_string_option (odb, section, name, default_value);
-}
-
-/********************************************************************\
- * gnc_option_db_lookup_multichoice_option                          *
- *   looks up a multichoice option. If present, returns its         *
- *   name as a malloc'ed string                                     *
- *   value, otherwise returns the strdup'ed default, or NULL if     *
- *   default was NULL.                                              *
- *                                                                  *
- * Args: odb     - option database to search in                     *
- *       section - section name of option                           *
- *       name    - name of option                                   *
- *       default - default value if not found                       *
- * Return: char * option value                                      *
-\********************************************************************/
-char *
-gnc_option_db_lookup_multichoice_option (GNCOptionDB *odb,
-                                         const char *section,
-                                         const char *name,
-                                         const char *default_value)
-{
-    GNCOption *option;
-    SCM getter;
-    SCM value;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-
-    if (option != NULL)
-    {
-        getter = gnc_option_getter (option);
-        if (getter != SCM_UNDEFINED)
-        {
-            value = scm_call_0 (getter);
-            if (scm_is_symbol (value))
-                return gnc_scm_symbol_to_locale_string (value);
-        }
-    }
-
-    if (default_value == NULL)
-        return NULL;
-
-    return strdup (default_value);
-}
-
-/********************************************************************\
  * gnc_option_db_lookup_number_option                               *
  *   looks up a number option. If present, returns its value        *
  *   as a gdouble, otherwise returns the default_value.             *
@@ -2036,185 +1873,6 @@ gnc_option_db_lookup_number_option (GNCOptionDB *odb,
         }
     }
     return default_value;
-}
-
-/********************************************************************\
- * gnc_option_db_lookup_color_option                                *
- *   looks up a color option. If present, returns its value in the  *
- *   color variable, otherwise leaves the color variable alone.     *
- *                                                                  *
- * Args: odb       - option database to search in                   *
- *       section   - section name of option                         *
- *       name      - name of option                                 *
- *       red       - where to store the red value                   *
- *       blue      - where to store the blue value                  *
- *       green     - where to store the green value                 *
- *       alpha     - where to store the alpha value                 *
- * Return: true if option was found                                 *
-\********************************************************************/
-gboolean gnc_option_db_lookup_color_option (GNCOptionDB *odb,
-                                            const char *section,
-                                            const char *name,
-                                            gdouble *red,
-                                            gdouble *green,
-                                            gdouble *blue,
-                                            gdouble *alpha)
-{
-    GNCOption *option;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-
-    return gnc_option_get_color_info (option, FALSE, red, green, blue, alpha);
-}
-
-/********************************************************************\
- * gnc_option_db_lookup_color_option_argb                           *
- *   looks up a color option. If present, returns its argb value,   *
- *   otherwise returns the given default value.                     *
- *                                                                  *
- * Args: odb       - option database to search in                   *
- *       section   - section name of option                         *
- *       name      - name of option                                 *
- *       default_value - default value to return if problem         *
- * Return: argb value                                               *
-\********************************************************************/
-guint32 gnc_option_db_lookup_color_option_argb (GNCOptionDB *odb,
-                                                const char *section,
-                                                const char *name,
-                                                guint32 default_value)
-{
-    GNCOption *option;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-    if (option == NULL)
-        return default_value;
-
-    return gnc_option_get_color_argb (option);
-}
-
-/********************************************************************\
- * gnc_option_db_lookup_list_option                                 *
- *   looks up a list option. If present, returns its value as a     *
- *   list of strings representing the symbols.                      *
- *                                                                  *
- * Args: odb       - option database to search in                   *
- *       section   - section name of option                         *
- *       name      - name of option                                 *
- *       default_value - default value to return if problem         *
- * Return: list of values                                           *
-\********************************************************************/
-GSList *
-gnc_option_db_lookup_list_option (GNCOptionDB *odb,
-                                  const char *section,
-                                  const char *name,
-                                  GSList *default_value)
-{
-    GNCOption *option;
-    GSList *list = NULL;
-    SCM getter;
-    SCM value;
-    SCM item;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-    if (option == NULL)
-        return default_value;
-
-    getter = gnc_option_getter (option);
-    if (getter == SCM_UNDEFINED)
-        return default_value;
-
-    value = scm_call_0 (getter);
-    while (scm_is_list (value) && !scm_is_null (value))
-    {
-        item = SCM_CAR(value);
-        value = SCM_CDR(value);
-
-        if (!scm_is_symbol (item))
-        {
-            gnc_free_list_option_value (list);
-
-            return default_value;
-        }
-
-        list = g_slist_prepend (list, gnc_scm_symbol_to_locale_string (item));
-    }
-
-    if (!scm_is_list (value) || !scm_is_null (value))
-    {
-        gnc_free_list_option_value (list);
-
-        return default_value;
-    }
-    return list;
-}
-
-/********************************************************************\
- * gnc_option_db_lookup_currency_option                             *
- *   looks up a currency option. If present, returns its value as a *
- *   gnc_commodity object.                                          *
- *                                                                  *
- * Args: odb       - option database to search in                   *
- *       section   - section name of option                         *
- *       name      - name of option                                 *
- *       default_value - default value to return if problem         *
- * Return: commodity or NULL if no commodity found                  *
-\********************************************************************/
-gnc_commodity *
-gnc_option_db_lookup_currency_option (GNCOptionDB *odb,
-                                      const char *section,
-                                      const char *name,
-                                      gnc_commodity *default_value)
-{
-    GNCOption *option;
-    SCM getter;
-    SCM value;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-    if (option == NULL)
-        return default_value;
-
-    getter = gnc_option_getter (option);
-    if (getter == SCM_UNDEFINED)
-        return default_value;
-
-    value = scm_call_0 (getter);
-
-    return gnc_scm_to_commodity (value);
-}
-
-static void
-free_helper (gpointer string, gpointer not_used)
-{
-    if (string)
-        free (string);
-}
-
-void
-gnc_free_list_option_value (GSList *list)
-{
-    g_slist_foreach (list, free_helper, NULL);
-    g_slist_free (list);
-}
-
-/********************************************************************\
- * gnc_option_db_set_option_default                                 *
- *   set the option to its default value                            *
- *                                                                  *
- * Args: odb     - option database to search in                     *
- *       section - section name of option                           *
- *       name    - name of option                                   *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_option_db_set_option_default (GNCOptionDB *odb,
-                                  const char *section,
-                                  const char *name)
-{
-    GNCOption *option;
-
-    option = gnc_option_db_get_option_by_name (odb, section, name);
-
-    gnc_option_set_default (option);
 }
 
 /********************************************************************\
