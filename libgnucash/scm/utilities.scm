@@ -27,6 +27,10 @@
 
 (use-modules (gnucash core-utils))
 
+(eval-when (compile load eval expand)
+  (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
+(use-modules (sw_engine))
+
 ;; Load the srfis (eventually, we should see where these are needed
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
@@ -62,8 +66,18 @@
 (define (gnc:msg . items)
   (gnc-scm-log-msg (strify items)))
 
-(define (gnc:debug . items)
-  (gnc-scm-log-debug (strify items)))
+;; this definition of gnc:debug is different from others because we
+;; want to check loglevel is debug *once* at gnc:debug definition
+;; instead of every call to gnc:debug. if loglevel isn't debug then
+;; gnc:debug becomes a NOOP.
+(define gnc:debug
+  (cond
+   ((qof-log-check "gnc" QOF-LOG-DEBUG)
+    (display "debugging enabled\n")
+    (lambda items (gnc-scm-log-debug (strify items))))
+
+   (else
+    (lambda items #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the following functions are initialized to log message to tracefile
