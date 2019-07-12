@@ -104,6 +104,8 @@
     (if (string? item)
         (gncCustomerLookupFlip item (gnc-get-current-book))
         item))
+  (issue-deprecation-warning
+   "gnc:make-customer-option is unused.")
 
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
@@ -166,6 +168,9 @@
         (gncVendorLookupFlip item (gnc-get-current-book))
         item))
 
+  (issue-deprecation-warning
+   "gnc:make-vendor-option is unused.")
+
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
          (getter (lambda () (convert-to-vendor
@@ -226,6 +231,8 @@
     (if (string? item)
         (gncEmployeeLookupFlip item (gnc-get-current-book))
         item))
+  (issue-deprecation-warning
+   "gnc:make-employee-option is unused.")
 
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
