@@ -3235,8 +3235,8 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
         const gchar *string;
 
         string = gnc_scm_to_utf8_string (value);
-        gtk_text_buffer_set_text (buffer, string, scm_c_string_length(value));
-        g_free ((gpointer *) string);
+        gtk_text_buffer_set_text (buffer, string, -1);
+        free ((void*) string);
         return FALSE;
     }
     else
