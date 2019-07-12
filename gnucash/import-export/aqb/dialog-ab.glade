@@ -7,7 +7,7 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Online Banking Connection Window</property>
     <property name="default_width">350</property>
-    <property name="default_height">420</property>
+    <property name="default_height">500</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="ggg_delete_event_cb" swapped="no"/>
     <child>
@@ -244,7 +244,7 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
@@ -269,7 +269,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
@@ -1086,7 +1086,7 @@
                   <object class="GtkLabel" id="recp_bankname_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">(filled in automatically)</property>
+                    <property name="label" translatable="yes">(filled in automatically)</property>
                     <property name="justify">center</property>
                     <property name="xalign">0</property>
                   </object>

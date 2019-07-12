@@ -548,10 +548,9 @@
    gnc:*report-options* gnc:pagename-general
    optname-from-date optname-to-date "a")
   ;; Use a default report date of 'today'
-  (gnc:option-set-value (gnc:lookup-option gnc:*report-options*
-                                           gnc:pagename-general
-                                           optname-to-date)
-                        (cons 'relative 'today))
+  (gnc:option-set-default-value
+   (gnc:lookup-option gnc:*report-options* gnc:pagename-general optname-to-date)
+   (cons 'relative 'today))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

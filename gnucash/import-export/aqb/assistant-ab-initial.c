@@ -352,10 +352,10 @@ banking_has_accounts(AB_BANKING *banking)
 
 #ifdef AQBANKING6
     if (AB_Banking_GetAccountSpecList (banking, &accl) >= 0 &&
-        accl && AV_AccountSpec_List_GetCount (accl))
+        accl && AB_AccountSpec_List_GetCount (accl))
         result = TRUE;
     if (accl)
-        AB_AccountSpec_List_Free (accl);
+        AB_AccountSpec_List_free (accl);
 #else
     AB_Banking_OnlineInit(banking);
 
@@ -394,7 +394,7 @@ ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
 
 #ifdef AQBANKING6
     bankcode = AB_AccountSpec_GetBankCode(ab_acc);
-    subAccountId = AB_AccountSpec_GetSubAccountId(ab_acc);
+    subAccountId = AB_AccountSpec_GetSubAccountNumber(ab_acc);
     account_number = AB_AccountSpec_GetAccountNumber (ab_acc);
 #else
     ab_bankname = AB_Account_GetBankName(ab_acc);

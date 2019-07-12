@@ -423,8 +423,8 @@
     <!-- total row -->
     <tr valign="top">
       <td align="left" class="total" colspan="<?scm:d (+ tbl_cols 1) ?>"><strong>
-        <?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-report-currency) "")) (begin ?>,
-        <?scm:d (gnc-commodity-get-mnemonic opt-report-currency) ?><?scm )) ?></strong></td>
+        <?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-invoice-currency) "")) (begin ?>,
+        <?scm:d (gnc-commodity-get-mnemonic opt-invoice-currency) ?><?scm )) ?></strong></td>
       <td align="right" class="total"><strong><?scm (display-comm-coll-total total-col #f) ?></strong></td>
     </tr>
 

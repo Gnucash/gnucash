@@ -134,13 +134,17 @@ gnc_ab_getbalance(GtkWidget *parent, Account *gnc_acc)
      * https://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
      */
 #ifdef AQBANKING6
+    job_status = AB_Transaction_GetStatus(job);
+    if (job_status != AB_Transaction_StatusEnqueued
+            && job_status != AB_Transaction_StatusPending
+            && job_status != AB_Transaction_StatusAccepted)
 #else
     job_status = AB_Job_GetStatus(job);
     if (job_status != AB_Job_StatusFinished
             && job_status != AB_Job_StatusPending)
 #endif
     {
-        g_warning("gnc_ab_getbalance: Error on executing job");
+        g_warning("gnc_ab_getbalance: Error on executing job: %d", job_status);
 #ifdef AQBANKING6
         gnc_error_dialog (GTK_WINDOW (parent),
                           _("Error on executing job.\n\nStatus: %s"),

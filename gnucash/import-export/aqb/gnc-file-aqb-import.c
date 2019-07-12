@@ -73,7 +73,9 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     AB_BANKING *api = NULL;
     gboolean online = FALSE;
     GncGWENGui *gui = NULL;
+#ifndef AQBANKING6
     AB_IMEXPORTER *importer;
+#endif
     GWEN_DB_NODE *db_profiles = NULL;
     GWEN_DB_NODE *db_profile;
     AB_IMEXPORTER_CONTEXT *context = NULL;
@@ -266,13 +268,17 @@ gnc_file_aqbanking_import(GtkWindow *parent,
 #endif
             if (jit)
             {
+#ifdef AQBANKING6
+                job = AB_Transaction_List2Iterator_Data(jit);
+#else
                 job = AB_Job_List2Iterator_Data(jit);
+#endif
                 while (job)
                 {
                     num_jobs += 1;
 #ifdef AQBANKING6
                     job_status = AB_Transaction_GetStatus(job);
-                    if (job_status != AB_Transaction_StatusFinished &&
+                    if (job_status != AB_Transaction_StatusAccepted &&
                         job_status != AB_Transaction_StatusPending)
 #else
                     job_status = AB_Job_GetStatus(job);
@@ -319,7 +325,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
 #endif
                 } /* while */
 #ifdef AQBANKING6
-                AB_Job_List2Iterator_free(jit);
+                AB_Transaction_List2Iterator_free(jit);
 #else
                 AB_Job_List2Iterator_free(jit);
 #endif
@@ -359,7 +365,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
 cleanup:
     if (job_list)
 #ifdef AQBANKING6
-        AB_Transaction_List2_FreeAll(job_list);
+        AB_Transaction_List2_freeAll(job_list);
 #else
         AB_Job_List2_FreeAll(job_list);
     if (io)

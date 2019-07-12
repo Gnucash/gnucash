@@ -1,6 +1,6 @@
 add_subdirectory(test)
 
-set(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
+set(GUILE_DEPENDS      scm-core-utils scm-gnc-module gncmod-engine)
 
 
 gnc_add_scheme_targets(scm-scm

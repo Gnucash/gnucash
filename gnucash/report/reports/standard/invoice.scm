@@ -342,7 +342,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Payments")
-    "tc" (N_ "Display the payments applied to this invoice?") #f))
+    "tc" (N_ "Display the payments applied to this invoice?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

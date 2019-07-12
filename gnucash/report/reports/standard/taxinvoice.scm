@@ -86,7 +86,6 @@
 (define optname-row-contact		(N_ "row: Contact"))
 (define optname-row-invoice-number	(N_ "row: Invoice Number"))
 (define optname-row-company-name	(N_ "row: Company Name"))
-(define optname-report-currency		(N_ "Report Currency"))
 (define optname-invoice-number-text	(N_ "Invoice number text"))
 (define optname-to-text			(N_ "To text"))
 (define optname-ref-text		(N_ "Ref text"))
@@ -146,11 +145,6 @@
       gnc:pagename-general gnc:optname-invoice-number 
       "a" "" (lambda () '()) 
       #f))        ;customers-only)) ;-- see above
-
-  (add-option
-    (gnc:make-currency-option
-      gnc:pagename-general optname-report-currency
-      "b" "" (gnc-default-report-currency)))
 
   ;; Elements page options
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-col-date		"a" (N_ "Display the date?") #t))
@@ -277,7 +271,7 @@
          (opt-jobname-show          (opt-value elementspage  optname-jobname-show))
          (opt-jobnumber-show        (opt-value elementspage  optname-jobnumber-show))
          (opt-netprice              (opt-value elementspage  optname-netprice))
-         (opt-report-currency       (opt-value gnc:pagename-general optname-report-currency))
+         (opt-invoice-currency      (gncInvoiceGetCurrency opt-invoice))
          (opt-css-border-collapse   (if (opt-value displaypage optname-border-collapse) "border-collapse:collapse;"))
          (opt-css-border-color-th   (opt-value displaypage optname-border-color-th))
          (opt-css-border-color-td   (opt-value displaypage optname-border-color-td))

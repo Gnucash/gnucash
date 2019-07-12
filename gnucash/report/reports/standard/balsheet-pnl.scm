@@ -866,7 +866,8 @@ also show overall period profit & loss."))
          (multicol-table-right (if enable-dual-columns?
                                    (gnc:make-html-table)
                                    multicol-table-left))
-         (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account))))
+         (maxindent (1+ (apply max (cons 0 (map gnc-account-get-current-depth
+                                                accounts))))))
 
     (gnc:html-document-set-title!
      doc (with-output-to-string
@@ -904,31 +905,42 @@ also show overall period profit & loss."))
                        (valid-splits (filter valid-split? splits)))
                   (and (pair? valid-splits)
                        (gnc:split-anchor-text (last valid-splits))))))
+
              (asset-liability-balances
-              (apply map gnc:monetaries-add
+              (let ((asset-liab-balances
                      (map cdr (filter
                                (lambda (acc-balances)
                                  (member (car acc-balances)
                                          (append asset-accounts liability-accounts)))
                                accounts-balances))))
+                (if (null? asset-liab-balances)
+                    (map (const (gnc:make-commodity-collector)) report-dates)
+                    (apply map gnc:monetaries-add asset-liab-balances))))
+
              (income-expense-balances
-              (map gnc:commodity-collector-get-negated
-                   (apply map gnc:monetaries-add
-                          (map cdr
-                               (filter
-                                (lambda (acc-balances)
-                                  (member (car acc-balances)
-                                          (append income-accounts expense-accounts)))
-                                accounts-balances)))))
+              (let ((inc-exp-balances
+                     (map cdr
+                          (filter
+                           (lambda (acc-balances)
+                             (member (car acc-balances)
+                                     (append income-accounts expense-accounts)))
+                           accounts-balances))))
+                (if (null? inc-exp-balances)
+                    (map (const (gnc:make-commodity-collector)) report-dates)
+                    (map gnc:commodity-collector-get-negated
+                         (apply map gnc:monetaries-add inc-exp-balances)))))
+
              (monetaries->exchanged
               (lambda (monetaries target-currency price-source date)
                 (let ((exchange-fn (gnc:case-exchange-fn
                                     price-source target-currency date)))
                   (apply gnc:monetary+
-                         (map
-                          (lambda (mon)
-                            (exchange-fn mon target-currency))
-                          (monetaries 'format gnc:make-gnc-monetary #f))))))
+                         (cons (gnc:make-gnc-monetary target-currency 0)
+                               (map
+                                (lambda (mon)
+                                  (exchange-fn mon target-currency))
+                                (monetaries 'format gnc:make-gnc-monetary #f)))))))
+
              (unrealized-gain-fn
               (lambda (col-idx)
                 (and common-currency
