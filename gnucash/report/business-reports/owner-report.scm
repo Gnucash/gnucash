@@ -691,8 +691,8 @@
   (gnc:html-table-append-row!
    table
    (list
-    (string-append label ":&nbsp;")
-    (string-expand (qof-print-date date) #\space "&nbsp;"))))
+    (string-append label ": ")
+    (qof-print-date date))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -777,7 +777,7 @@
 
         (gnc:html-document-set-headline!
          document (gnc:html-markup
-                   "!" 
+                   "span"
                    (doctype-str type)
                    " " (_ "Report:") " "
                    (gnc:html-markup-anchor
