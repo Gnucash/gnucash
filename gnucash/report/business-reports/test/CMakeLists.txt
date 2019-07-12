@@ -1,6 +1,7 @@
 
 set(scm_test_business_reports_with_srfi64_SOURCES
   test-invoice.scm
+  test-owner-report.scm
 )
 
 set(GUILE_DEPENDS
