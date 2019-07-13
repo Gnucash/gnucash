@@ -285,11 +285,11 @@
              (qof-print-date due-date)
              "")))
     (if (num-col column-vector)
-        (addto! row-contents num))
+        (addto! row-contents (gnc:html-string-sanitize num)))
     (if (type-col column-vector)
         (addto! row-contents type-str))
     (if (memo-col column-vector)
-        (addto! row-contents memo))
+        (addto! row-contents (gnc:html-string-sanitize memo)))
     (if (sale-col column-vector)
         (addto! row-contents
          (gnc:make-html-table-cell/markup "number-cell" sale)))
