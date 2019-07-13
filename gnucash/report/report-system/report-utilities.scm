@@ -1160,3 +1160,75 @@ flawed. see report-utilities.scm. please update reports.")
       (display (map gnc:strify args))
       (newline)
       (last args))))
+
+;; utility function for testing. dumps the whole book contents to
+;; console.
+(define (gnc:dump-book)
+  (for-each
+   (lambda (acc)
+     (format #t "\nAccount: <~a> Comm<~a> Type<~a>\n"
+             (gnc-account-get-full-name acc)
+             (gnc-commodity-get-mnemonic
+              (xaccAccountGetCommodity acc))
+             (xaccAccountGetTypeStr
+              (xaccAccountGetType acc)))
+     (for-each
+      (lambda (s)
+        (let ((txn (xaccSplitGetParent s)))
+          (format #t "  Split: ~a Amt<~a> Val<~a> Desc<~a>\n"
+                  (qof-print-date (xaccTransGetDate txn))
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary
+                    (xaccAccountGetCommodity acc)
+                    (xaccSplitGetAmount s)))
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary
+                    (xaccTransGetCurrency txn)
+                    (xaccSplitGetValue s)))
+                  (xaccTransGetDescription txn))))
+      (xaccAccountGetSplitList acc)))
+   (gnc-account-get-descendants-sorted
+    (gnc-get-current-root-account))))
+
+;; dump all invoices posted into an AP/AR account
+(define (gnc:dump-invoices)
+  (let* ((acc-APAR (filter (compose xaccAccountIsAPARType xaccAccountGetType)
+                           (gnc-account-get-descendants-sorted
+                            (gnc-get-current-root-account))))
+         (inv-txns (filter (lambda (t) (eqv? (xaccTransGetTxnType t) TXN-TYPE-INVOICE))
+                           (map xaccSplitGetParent
+                                (append-map xaccAccountGetSplitList acc-APAR))))
+         (invoices (map gncInvoiceGetInvoiceFromTxn inv-txns)))
+    (define (maybe-date time64)         ;handle INT-MAX differently
+      (if (= 9223372036854775807 time64) "?" (qof-print-date time64)))
+    (define (maybe-trunc str)
+      (if (> (string-length str) 20) (string-append (substring str 0 17) "...") str))
+    (define (inv-amt->string inv amt)
+      (gnc:monetary->string
+       (gnc:make-gnc-monetary
+        (gncInvoiceGetCurrency inv) amt)))
+    (for-each
+     (lambda (inv)
+       (format #t "\nInvoice: ID<~a> Owner<~a> Account<~a>\n"
+               (gncInvoiceGetID inv)
+               (gncOwnerGetName (gncInvoiceGetOwner inv))
+               (xaccAccountGetName (gncInvoiceGetPostedAcc inv)))
+       (format #t "   Date: Open<~a> Post<~a> Due<~a>\n"
+               (maybe-date (gncInvoiceGetDateOpened inv))
+               (maybe-date (gncInvoiceGetDatePosted inv))
+               (maybe-date (gncInvoiceGetDateDue inv)))
+       (for-each
+        (lambda (entry)
+          (format #t "  Entry: Date<~a> Desc<~a> Action<~a> Notes<~a> Qty<~a>\n"
+                  (maybe-date (gncEntryGetDate entry))
+                  (maybe-trunc (gncEntryGetDescription entry))
+                  (maybe-trunc (gncEntryGetAction entry))
+                  (maybe-trunc (gncEntryGetNotes entry))
+                  (gncEntryGetQuantity entry)))
+        (gncInvoiceGetEntries inv))
+       (format #t " Totals: Total<~a> TotalSubtotal<~a> TotalTax<~a>\n"
+               (inv-amt->string inv (gncInvoiceGetTotal inv))
+               (inv-amt->string inv (gncInvoiceGetTotalSubtotal inv))
+               (inv-amt->string inv (gncInvoiceGetTotalTax inv)))
+       (newline))
+     invoices)))

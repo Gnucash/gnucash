@@ -743,6 +743,8 @@
 (export make-file-url)
 (export gnc:strify)
 (export gnc:pk)
+(export gnc:dump-book)
+(export gnc:dump-invoices)
 
 ;; trep-engine.scm
 (export gnc:trep-options-generator)
