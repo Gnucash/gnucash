@@ -48,9 +48,6 @@
 (define optname-show-subaccounts (N_ "Always show sub-accounts"))
 (define optname-accounts (N_ "Account"))
 
-(define optname-price-source (N_ "Price Source"))
-(define optname-show-rates (N_ "Show Exchange Rates"))
-(define optname-show-full-names (N_ "Show Full Account Names"))
 (define optname-select-columns (N_ "Select Columns"))
 (define optname-show-budget (N_ "Show Budget"))
 (define opthelp-show-budget (N_ "Display a column for the budget values."))
@@ -137,15 +134,6 @@
      (gnc:make-budget-option
       gnc:pagename-general optname-budget
       "a" (N_ "Budget to use.")))
-
-    (gnc:options-add-price-source!
-     options gnc:pagename-general optname-price-source "c" 'pricedb-nearest)
-
-    (gnc:register-option
-     options
-     (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-show-full-names
-      "e" (N_ "Show full account names (including parent accounts).") #t))
 
     (add-option
      (gnc:make-complex-boolean-option
@@ -638,8 +626,6 @@
          (include-collapse-after? (and use-ranges?
                                        (get-option gnc:pagename-general
                                                    optname-period-collapse-after)))
-         (show-full-names? (get-option gnc:pagename-general
-                                       optname-show-full-names))
          (doc (gnc:make-html-document))
          (accounts (append accounts
                            (filter (lambda (acc) (not (member acc accounts)))
