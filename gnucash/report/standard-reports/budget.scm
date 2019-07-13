@@ -137,38 +137,29 @@
 
     (add-option
      (gnc:make-complex-boolean-option
-      gnc:pagename-general
-      optname-use-budget-period-range
-      "f"
-      opthelp-use-budget-period-range
-      #f
-      #f
-      ;; Make period only option widgets
-      ;; selectable only when we are running the report for a budget period
-      ;; range.
+      gnc:pagename-general optname-use-budget-period-range
+      "f" opthelp-use-budget-period-range #f #f
       (lambda (value)
-        (let ((enabler (lambda (target-opt enabled)
-                         (set-option-enabled
-                          options gnc:pagename-general target-opt enabled))))
-          (for-each
-           (lambda (target-opt)
-             (enabler target-opt value))
-           (list optname-budget-period-start optname-budget-period-end
-                 optname-period-collapse-before optname-period-collapse-after))
-          (enabler optname-budget-period-start-exact
-                   (and value
-                        (eq? 'manual ui-start-period-type)))
-          (enabler optname-budget-period-end-exact
-                   (and value
-                        (eq? 'manual ui-end-period-type)))
-          (set! ui-use-periods value)))))
+        (for-each
+         (lambda (opt)
+           (set-option-enabled options gnc:pagename-general opt value))
+         (list optname-budget-period-start optname-budget-period-end
+               optname-period-collapse-before optname-period-collapse-after))
+
+        (set-option-enabled options gnc:pagename-general
+                            optname-budget-period-start-exact
+                            (and value (eq? 'manual ui-start-period-type)))
+
+        (set-option-enabled options gnc:pagename-general
+                            optname-budget-period-end-exact
+                            (and value (eq? 'manual ui-end-period-type)))
+
+        (set! ui-use-periods value))))
 
     (add-option
      (gnc:make-multichoice-callback-option
       gnc:pagename-general optname-budget-period-start
-      "g1.1" opthelp-budget-period-start 'current
-      period-options
-      #f
+      "g1.1" opthelp-budget-period-start 'current period-options #f
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-start-exact
@@ -187,9 +178,7 @@
     (add-option
      (gnc:make-multichoice-callback-option
       gnc:pagename-general optname-budget-period-end
-      "g2.1" opthelp-budget-period-end 'next
-      period-options
-      #f
+      "g2.1" opthelp-budget-period-end 'next period-options #f
       (lambda (new-val)
         (set-option-enabled options gnc:pagename-general
                             optname-budget-period-end-exact
@@ -217,15 +206,15 @@
       "g4" opthelp-period-collapse-after #t))
 
     (gnc:options-add-account-selection!
-     options gnc:pagename-accounts
-     optname-display-depth optname-show-subaccounts
-     optname-accounts "a" 2
+     options gnc:pagename-accounts optname-display-depth
+     optname-show-subaccounts optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type
         (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY ACCT-TYPE-INCOME
               ACCT-TYPE-EXPENSE)
         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
      #f)
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-accounts optname-bottom-behavior
