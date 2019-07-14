@@ -199,7 +199,7 @@
               (gncTaxTableAddEntry tt entry))
             tt)))
 
-    (define* (default-testing-options variant owner account)
+    (define* (default-testing-options variant owner)
       ;; owner-report will run from 1.1.1980 to 1.7.1980
       (let ((options (gnc:make-report-options
                       (assq-ref uuid-list variant))))
@@ -212,7 +212,6 @@
                      (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! options "General" "To"
                      (cons 'absolute (gnc-dmy2time64 1 7 1980)))
-        (set-option! options "General" "Account" account)
         options))
 
     ;; inv-1 $6, due 18.7.1980 after report-date i.e. "current"
@@ -299,7 +298,7 @@
     ;; (gnc:dump-invoices) (newline)
     (display "customer-report tests:\n")
     (test-begin "customer-report")
-    (let* ((options (default-testing-options 'customer owner-1 (get-acct "AR-USD")))
+    (let* ((options (default-testing-options 'customer owner-1))
            (sxml (options->sxml 'customer options "customer-report basic")))
       (test-equal "inv-descriptions"
         '("inv >90 $11.50" "inv 60-90 $7.50" "inv 30-60 $8.50"
@@ -336,12 +335,12 @@
        "inv for job" "fully paid"))
 
     (test-begin "job-report")
-    (let* ((options (default-testing-options 'job owner-2 (get-acct "AR-USD")))
+    (let* ((options (default-testing-options 'job owner-2))
            (sxml (options->sxml 'job options "job-report basic")))
       (test-equal "inv-descriptions"
-        '("inv for job" "inv for job")
+        '("inv for job" "inv for job" "$0.00" "$0.00" "$0.00")
         (sxml-get-row-col sxml #f 5))
       (test-equal "amounts"
-        '("$6.25" "-$6.25")
+        '("$6.25")
         (sxml-get-row-col sxml #f 6)))
     (test-end "job-report")))
