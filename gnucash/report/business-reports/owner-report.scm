@@ -59,6 +59,7 @@
 (define credit-header (N_ "Credits"))
 (define debit-header (N_ "Debits"))
 (define amount-header (N_ "Balance"))
+(define linked-txns-header (N_ "Links"))
 
 ;; Depending on the report type we want to set up some lists/cases 
 ;; with strings to ease overview and translation
@@ -143,7 +144,10 @@
     (set-col (opt-val "Display Columns" amount-header) 9)
     col-vector))
 
-(define (make-heading-list column-vector)
+(define (make-heading-list column-vector options)
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option options section name)))
   (let ((heading-list '()))
     (if (date-col column-vector)
         (addto! heading-list (_ date-header)))
@@ -165,9 +169,14 @@
         (addto! heading-list (_ debit-header)))
     (if (value-col column-vector)
         (addto! heading-list (_ amount-header)))
-    (addto! heading-list (_ "Payments"))
+    (case (opt-val "Display Columns" linked-txns-header)
+      ((simple)
+       (addto! heading-list (_ linked-txns-header)))
+      ((detailed)
+       (addto! heading-list (_ "Date"))
+       (addto! heading-list (_ "Details"))
+       (addto! heading-list (_ "Amount"))))
     (reverse heading-list)))
-
 
 (define num-buckets 5)
 (define (new-bucket-vector)
@@ -226,20 +235,39 @@
 ;;
 ;; Make a row list based on the visible columns
 ;;
-(define (make-row column-vector date due-date num type-str
-                  memo monetary credit debit sale tax payments)
-  (append
-   (addif (date-col column-vector) (qof-print-date date))
-   (addif (date-due-col column-vector) (and due-date (qof-print-date due-date)))
-   (addif (num-col column-vector)    (gnc:html-string-sanitize num))
-   (addif (type-col column-vector)   type-str)
-   (addif (memo-col column-vector)   (gnc:html-string-sanitize memo))
-   (addif (sale-col column-vector)   (make-cell sale))
-   (addif (tax-col column-vector)    (make-cell tax))
-   (addif (credit-col column-vector) (make-cell credit))
-   (addif (debit-col column-vector)  (make-cell debit))
-   (addif (value-col column-vector)  (make-cell monetary))
-   (list payments)))
+(define (add-row table odd-row? column-vector date due-date num type-str
+                 memo monetary credit debit sale tax link-rows)
+  (define empty-cols
+    (count identity
+           (map (lambda (f) (f column-vector))
+                (list date-col date-due-col num-col type-col
+                      memo-col sale-col tax-col credit-col
+                      debit-col value-col))))
+  (let lp ((link-rows link-rows)
+           (first-row? #t))
+    (unless (null? link-rows)
+      (if first-row?
+          (gnc:html-table-append-row/markup!
+           table (if odd-row? "normal-row" "alternate-row")
+           (append
+            (addif (date-col column-vector) (qof-print-date date))
+            (addif (date-due-col column-vector)
+                   (and due-date (qof-print-date due-date)))
+            (addif (num-col column-vector)    (gnc:html-string-sanitize num))
+            (addif (type-col column-vector)   type-str)
+            (addif (memo-col column-vector)   (gnc:html-string-sanitize memo))
+            (addif (sale-col column-vector)   (make-cell sale))
+            (addif (tax-col column-vector)    (make-cell tax))
+            (addif (credit-col column-vector) (make-cell credit))
+            (addif (debit-col column-vector)  (make-cell debit))
+            (addif (value-col column-vector)  (make-cell monetary))
+            (car link-rows)))
+          (gnc:html-table-append-row/markup!
+           table (if odd-row? "normal-row" "alternate-row")
+           (cons
+            (gnc:make-html-table-cell/size 1 empty-cols #f)
+            (car link-rows))))
+      (lp (cdr link-rows) #f))))
 
 (define (make-txn-table options query acc start-date end-date date-type)
   (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
@@ -248,7 +276,12 @@
         (used-columns (build-column-used options))
         (currency (xaccAccountGetCommodity acc))
         (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
+        (link-option (gnc:option-value
+                      (gnc:lookup-option options "Display Columns" linked-txns-header)))
         (table (gnc:make-html-table)))
+
+    (define link-cols
+      (assq-ref '((simple . 1) (detailed . 3) (none . 0)) link-option))
 
     (define (print-totals total debit credit tax sale)
       (define (total-cell cell)
@@ -277,34 +310,88 @@
       (if (value-col used-columns)
           (gnc:html-table-append-row/markup!
            table "grand-total"
-           (list (gnc:make-html-table-cell/markup
-                  "total-label-cell"
-                  (if (negative? total)
-                      (_ "Total Credit")
-                      (_ "Total Due")))
-                 (gnc:make-html-table-cell/size/markup
-                  1 (value-col used-columns)
-                  "total-number-cell"
-                  (gnc:make-gnc-monetary currency total)))))
+           (append
+            (list (total-cell
+                   (if (negative? total)
+                       (_ "Total Credit")
+                       (_ "Total Due")))
+                  (gnc:make-html-table-cell/size/markup
+                   1 (value-col used-columns)
+                   "total-number-cell"
+                   (gnc:make-gnc-monetary currency total)))
+            (addif (> link-cols 0)
+                   (gnc:make-html-table-cell/size 1 link-cols #f)))))
 
       ;; print aging table
       (gnc:html-table-append-row/markup!
        table "grand-total"
        (list (gnc:make-html-table-cell/size
-              1 columns-used-size
+              1 (+ columns-used-size link-cols)
               (make-aging-table options query
                                 (list->vector (make-extended-interval-list end-date))
                                 reverse? date-type currency)))))
 
     (define (add-balance-row odd-row? total)
-      (gnc:html-table-append-row/markup!
-       table (if odd-row? "normal-row" "alternate-row")
-       (make-row used-columns start-date #f "" (_ "Balance") ""
-                 (gnc:make-gnc-monetary currency total)
-                 "" "" "" "" "")))
+      (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
+               (gnc:make-gnc-monetary currency total)
+               "" "" "" "" (list (make-list link-cols #f))))
+
+    (define (make-invoice->payments-table invoice invoice-splits currency txn)
+      (append
+       (map
+        (lambda (pmt-split)
+          (list
+           (qof-print-date
+            (xaccTransGetDate
+             (xaccSplitGetParent pmt-split)))
+           (let ((text (gnc-get-num-action
+                        (xaccSplitGetParent pmt-split)
+                        pmt-split)))
+             (if (string-null? text)
+                 (_ "Payment")
+                 text))
+           (make-cell
+            (gnc:make-html-text
+             (gnc:html-markup-anchor
+              (gnc:split-anchor-text pmt-split)
+              (gnc:make-gnc-monetary
+               currency (- (xaccSplitGetAmount pmt-split))))))))
+        (filter (lambda (s)
+                  (not (equal? (xaccSplitGetParent s) txn)))
+                invoice-splits))
+       (if (gncInvoiceIsPaid invoice)
+           '()
+           (list
+            (list
+             (gnc:make-html-table-cell/size
+              1 2 (_ "Outstanding"))
+             (make-cell
+              (gnc:make-gnc-monetary
+               currency
+               (gnc-lot-get-balance
+                (gncInvoiceGetPostedLot invoice)))))))))
+
+    (define (make-payment->invoices-table split payment-splits currency)
+      (map
+       (lambda (inv-splits)
+         (let ((inv (car inv-splits))
+               (inv-split (cadr inv-splits)))
+           (list
+            (qof-print-date
+             (gncInvoiceGetDatePosted inv))
+            (gnc:make-html-text
+             (gnc:html-markup-anchor
+              (gnc:invoice-anchor-text inv)
+              (gnc-get-num-action
+               (gncInvoiceGetPostedTxn inv) #f)))
+            (make-cell
+             (gnc:make-gnc-monetary
+              currency
+              (- (xaccSplitGetAmount inv-split)))))))
+       payment-splits))
 
     (gnc:html-table-set-col-headers!
-     table (make-heading-list used-columns))
+     table (make-heading-list used-columns options))
 
     (let lp ((printed? #f)
              (odd-row? #t)
@@ -409,33 +496,38 @@
               (lp #t (not print?) txns total debit credit tax sale links)))
 
            (else
-            (gnc:html-table-append-row/markup!
-             table (if odd-row? "normal-row" "alternate-row")
-             (make-row
-              used-columns date due-date (gnc-get-num-action txn split)
-              type-str (xaccSplitGetMemo split)
-              (gnc:make-gnc-monetary currency (+ total value))
-              (and (>= value 0) (gnc:make-gnc-monetary currency value))
-              (and (< value 0) (gnc:make-gnc-monetary currency value))
-              (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-sale))
-              (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-tax))
-              (cond
-               (invoice-splits
-                (and (zero? (gnc-lot-get-balance (gncInvoiceGetPostedLot invoice)))
-                     (_ "Paid")))
-               (payment-splits
-                (apply
-                 gnc:make-html-text
-                 (map
-                  (lambda (inv-splits)
-                    (gnc:html-markup-anchor
-                     (gnc:invoice-anchor-text (car inv-splits))
-                     (gnc-get-num-action
-                      (gncInvoiceGetPostedTxn (car inv-splits))
-                      #f)))
-                  payment-splits)))
-               ;; some error occurred
-               (else #f))))
+            (add-row
+             table odd-row? used-columns date due-date (gnc-get-num-action txn split)
+             type-str (xaccSplitGetMemo split)
+             (gnc:make-gnc-monetary currency (+ total value))
+             (and (>= value 0) (gnc:make-gnc-monetary currency value))
+             (and (< value 0) (gnc:make-gnc-monetary currency value))
+             (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-sale))
+             (and (not (null? invoice)) (gnc:make-gnc-monetary currency txn-tax))
+             (cond
+              ((and invoice-splits (eq? link-option 'simple))
+               (if (gnc-lot-is-closed (gncInvoiceGetPostedLot invoice))
+                   (list (list (_ "Paid")))
+                   (list (list #f))))
+              ((and invoice-splits (eq? link-option 'detailed))
+               (make-invoice->payments-table invoice invoice-splits currency txn))
+              ((and payment-splits (eq? link-option 'simple))
+               (list
+                (list
+                 (apply
+                  gnc:make-html-text
+                  (map
+                   (lambda (inv-splits)
+                     (gnc:html-markup-anchor
+                      (gnc:invoice-anchor-text (car inv-splits))
+                      (gnc-get-num-action
+                       (gncInvoiceGetPostedTxn (car inv-splits))
+                       #f)))
+                   payment-splits)))))
+              ((and payment-splits (eq? link-option 'detailed))
+               (make-payment->invoices-table split payment-splits currency))
+              ;; some error occurred, show 1 line containing empty-list
+              (else '(()))))
 
             (lp printed?
                 (not odd-row?)
@@ -528,6 +620,21 @@
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
     "hb" (N_ "Display the transaction amount?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Display Columns") linked-txns-header
+    "hc" (N_ "Show linked transactions") 'none
+    (list (vector 'none
+                  (N_ "Disabled")
+                  (N_ "Linked transactions are hidden."))
+          (vector 'simple
+                  (N_ "Simple")
+                  (N_ "Invoices show if paid, payments show invoice numbers."))
+          (vector 'detailed
+                  (N_ "Detailed")
+                  (N_ "Invoices show list of payments, payments show list of \
+invoices and amounts.")))))
 
   (gnc:register-inv-option
    (gnc:make-multichoice-option
