@@ -1098,21 +1098,20 @@ flawed. see report-utilities.scm. please update reports.")
   (define (account->str acc)
     (format #f "Acc<~a>" (xaccAccountGetName acc)))
   (define (monetary-collector->str coll)
-    (format #f "Mon-coll<~a>"
+    (format #f "coll<~a>"
             (map gnc:strify (coll 'format gnc:make-gnc-monetary #f))))
   (define (value-collector->str coll)
-    (format #f "Val-coll<~a>"
-            (map gnc:strify (coll 'total gnc:make-gnc-monetary))))
+    (format #f "coll<~a>" (coll 'total #f)))
   (define (procedure->str proc)
     (format #f "Proc<~a>"
             (or (procedure-name proc) "unk")))
   (define (monetary->string mon)
-    (format #f "Mon<~a>"
+    (format #f "[~a]"
             (gnc:monetary->string mon)))
   (define (try proc)
-    ;; Try proc with d as a parameter, catching 'wrong-type-arg
-    ;; exceptions to return #f to the (or) evaluator below.
-    (catch 'wrong-type-arg
+    ;; Try proc with d as a parameter, catching exceptions to return
+    ;; #f to the (or) evaluator below.
+    (catch #t
       (lambda () (proc d))
       (const #f)))
   (or (and (boolean? d) (if d "#t" "#f"))
@@ -1128,13 +1127,13 @@ flawed. see report-utilities.scm. please update reports.")
                              (if (eq? (car d) 'absolute)
                                  (qof-print-date (cdr d))
                                  (gnc:strify (cdr d)))))
+      (try monetary-collector->str)
+      (try value-collector->str)
       (try procedure->str)
       (try gnc-commodity-get-mnemonic)
       (try account->str)
       (try split->str)
       (try trans->str)
-      (try monetary-collector->str)
-      (try value-collector->str)
       (try monetary->string)
       (try gnc-budget-get-name)
       (object->string d)))
