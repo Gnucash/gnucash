@@ -9,14 +9,17 @@
 (define (run-test)
   (and (test test-one-tx-in-cash-flow)
        (test test-one-tx-skip-cash-flow)
-       (test test-both-way-cash-flow)))
+       (test test-both-way-cash-flow)
+       (test test-transaction-cash-flow)
+       (test test-partial-cash-flow)))
 
 (define structure
   (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
 	(list "Asset" 
 	      (list "Bank")
 	      (list "Wallet"))
-	(list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))))
+	(list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE))
+              (list "Fuel"))))
 
 (define (NDayDelta t64 n)
   (let* ((day-secs (* 60 60 24 n)) ; n days in seconds is n times 60 sec/min * 60 min/h * 24 h/day
@@ -144,3 +147,103 @@
 									   report-currency exchange-fn)))
              (begin (format #t "test-both-way-cash-flow success~%") #t)
              )))))
+
+(define (test-transaction-cash-flow)
+  (let* ((env (create-test-env))
+	 (account-alist (env-create-account-structure-alist env structure))
+	 (bank-account (cdr (assoc "Bank" account-alist)))
+	 (wallet-account (cdr (assoc "Wallet" account-alist)))
+	 (expense-account (cdr (assoc "Expenses" account-alist)))
+	 (fuel-account (cdr (assoc "Fuel" account-alist)))
+	 (report-currency (gnc-default-report-currency)))
+
+    (env-create-multisplit-transaction
+     env 01 07 1980
+     (list (vector bank-account -15 -15)
+           (vector wallet-account -10 -10)
+           (vector expense-account 20 20)
+           (vector fuel-account 5 5))
+     #:description "multisplit transaction")
+
+    (let ((result (cash-flow-calc-money-in-out
+                   (list (cons 'accounts (list wallet-account))
+			 (cons 'from-date-t64 (gnc-dmy2time64 01 04 1980))
+			 (cons 'to-date-t64 (gnc-dmy2time64 01 08 1980))
+			 (cons 'report-currency report-currency)
+			 (cons 'include-trading-accounts #f)
+			 (cons 'to-report-currency to-report-currency)))))
+      (let* ((money-in-collector (assq-ref result 'money-in-collector))
+	     (money-out-collector (assq-ref result 'money-out-collector))
+	     (money-in-alist (assq-ref result 'money-in-alist))
+	     (money-out-alist (assq-ref result 'money-out-alist))
+	     (expense-acc-out-collector (cadr (assoc expense-account money-out-alist)))
+	     (expense-out-total (gnc:gnc-monetary-amount
+                                 (gnc:sum-collector-commodity expense-acc-out-collector
+							      report-currency
+							      exchange-fn)))
+             (fuel-acc-out-collector (cadr (assoc fuel-account money-out-alist)))
+	     (fuel-out-total (gnc:gnc-monetary-amount
+                              (gnc:sum-collector-commodity fuel-acc-out-collector
+							   report-currency
+							   exchange-fn))))
+	(and (= 20 expense-out-total)
+             (= 5 fuel-out-total)
+	     (= 15 (gnc:gnc-monetary-amount
+                   (gnc:sum-collector-commodity
+                    money-in-collector report-currency exchange-fn)))
+	     (= 25 (gnc:gnc-monetary-amount
+                    (gnc:sum-collector-commodity
+                     money-out-collector report-currency exchange-fn)))
+             (begin
+               (format #t "test-transaction-cash-flow success ")
+               #t))))))
+
+(define (test-partial-cash-flow)
+  (let* ((env (create-test-env))
+	 (account-alist (env-create-account-structure-alist env structure))
+	 (bank-account (cdr (assoc "Bank" account-alist)))
+	 (wallet-account (cdr (assoc "Wallet" account-alist)))
+	 (expense-account (cdr (assoc "Expenses" account-alist)))
+	 (fuel-account (cdr (assoc "Fuel" account-alist)))
+	 (report-currency (gnc-default-report-currency)))
+
+    (env-create-multisplit-transaction
+     env 01 07 1980
+     (list (vector bank-account -15 -15)
+           (vector wallet-account -10 -10)
+           (vector expense-account 20 20)
+           (vector fuel-account 5 5))
+     #:description "multisplit transaction")
+
+    (let ((result (cash-flow-account-calc-money-in-out
+                   (list (cons 'accounts (list wallet-account))
+			 (cons 'from-date-t64 (gnc-dmy2time64 01 04 1980))
+			 (cons 'to-date-t64 (gnc-dmy2time64 01 08 1980))
+			 (cons 'report-currency report-currency)
+			 (cons 'include-trading-accounts #f)
+			 (cons 'to-report-currency to-report-currency)))))
+      (let* ((money-in-collector (assq-ref result 'money-in-collector))
+	     (money-out-collector (assq-ref result 'money-out-collector))
+	     (money-in-alist (assq-ref result 'money-in-alist))
+	     (money-out-alist (assq-ref result 'money-out-alist))
+	     (expense-acc-out-collector (cadr (assoc expense-account money-out-alist)))
+	     (expense-out-total (gnc:gnc-monetary-amount
+                                 (gnc:sum-collector-commodity expense-acc-out-collector
+							      report-currency
+							      exchange-fn)))
+             (fuel-acc-out-collector (cadr (assoc fuel-account money-out-alist)))
+	     (fuel-out-total (gnc:gnc-monetary-amount
+                              (gnc:sum-collector-commodity fuel-acc-out-collector
+							   report-currency
+							   exchange-fn))))
+	(and (= 8 expense-out-total)
+             (= 2 fuel-out-total)
+	     (= 0 (gnc:gnc-monetary-amount
+                   (gnc:sum-collector-commodity
+                    money-in-collector report-currency exchange-fn)))
+	     (= 10 (gnc:gnc-monetary-amount
+                    (gnc:sum-collector-commodity
+                     money-out-collector report-currency exchange-fn)))
+             (begin
+               (format #t "test-partial-cash-flow success ")
+               #t))))))
