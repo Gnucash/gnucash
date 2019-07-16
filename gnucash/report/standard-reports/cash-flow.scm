@@ -37,8 +37,10 @@
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (export cash-flow-calc-money-in-out)
+(export cash-flow-account-calc-money-in-out)
 
-(define reportname (N_ "Cash Flow"))
+(define reportname (N_ "Cash Flow (Transaction)"))
+(define reportname-acct (N_ "Cash Flow (Account)"))
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
@@ -114,7 +116,7 @@
 ;; set up the document and add the table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (cash-flow-renderer report-obj)
+(define (cash-flow-renderer report-obj reportname variant-vector)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option
@@ -237,8 +239,9 @@
                                report-currency
                                date)))
 
+          (define cashflow-fn (vector-ref variant-vector 0))
 
-          (let ((result (cash-flow-calc-money-in-out
+          (let ((result (cashflow-fn
                          (list (cons 'accounts accounts)
                                (cons 'to-date-t64 to-date-t64)
                                (cons 'from-date-t64 from-date-t64)
@@ -273,8 +276,7 @@
               (gnc:html-table-append-row/markup!
                table
                "primary-subheading"
-               (list
-                (_ "Money into selected accounts comes from")
+               (list (vector-ref variant-vector 1)
                 ""))
 
               (add-accounts-flow money-in-accounts money-in-alist)
@@ -294,8 +296,7 @@
               (gnc:html-table-append-row/markup!
                table
                "primary-subheading"
-               (list
-                (_ "Money out of selected accounts goes to")
+               (list (vector-ref variant-vector 2)
                 ""))
 
               (add-accounts-flow money-out-accounts money-out-alist)
@@ -344,6 +345,7 @@
 
 
 ;; function to add inflow and outflow of money
+;; algorithm to generate money-in and money-out, transaction-oriented
 (define (cash-flow-calc-money-in-out settings)
   (let* ((accounts (cdr (assq 'accounts settings)))
          (to-date-t64 (cdr (assq 'to-date-t64 settings)))
@@ -419,10 +421,126 @@
      (cons 'money-out-alist (map (lambda (p) (list (car p) (cdr p))) money-out))
      (cons 'money-out-collector money-out-collector))))
 
+;; algorithm to generate money-in and money-out, account-oriented
+;; in: an assoc-list of settings
+;; out: an assoc-list of results
+(define (cash-flow-account-calc-money-in-out settings)
+
+  (let* ((accounts (assq-ref settings 'accounts))
+         (to-date-t64 (assq-ref settings 'to-date-t64))
+         (from-date-t64 (assq-ref settings 'from-date-t64))
+         (report-currency (assq-ref settings 'report-currency))
+         (include-trading-accounts (assq-ref settings 'include-trading-accounts))
+         (to-report-currency (assq-ref settings 'to-report-currency))
+         (all-splits (gnc:account-get-trans-type-splits-interval
+                      accounts '() from-date-t64 to-date-t64))
+         (money-in-collector (gnc:make-commodity-collector))
+         (money-out-collector (gnc:make-commodity-collector))
+         (splits-to-do (length all-splits)))
+
+    (define (new-money-accum acc-alist split-val txn samesign-splits opp-sign-splits)
+      (let ((frac (/ split-val (apply + (map xaccSplitGetValue samesign-splits)))))
+        (let lp ((opp-sign-splits opp-sign-splits)
+                 (acc-alist acc-alist))
+          (cond
+           ((null? opp-sign-splits)
+            acc-alist)
+           ((member (xaccSplitGetAccount (car opp-sign-splits)) accounts)
+            (lp (cdr opp-sign-splits) acc-alist))
+           (else
+            (let* ((opp-sign-split (car opp-sign-splits))
+                   (opp-sign-acct (xaccSplitGetAccount opp-sign-split))
+                   (opp-sign-val (to-report-currency
+                                  (xaccTransGetCurrency txn)
+                                  (abs (xaccSplitGetValue opp-sign-split))
+                                  (xaccTransGetDate txn)))
+                   (prev-bal (or (assoc-ref acc-alist opp-sign-acct) 0))
+                   (new-bal (+ prev-bal (* opp-sign-val frac))))
+              (lp (cdr opp-sign-splits)
+                  (assoc-set! acc-alist opp-sign-acct new-bal))))))))
+
+    (let loop ((splits all-splits)
+               (money-in '())
+               (money-out '())
+               (work-done 0))
+      (cond
+       ((null? splits)
+        (for-each
+         (lambda (in)
+           (money-in-collector 'add report-currency (cdr in)))
+         money-in)
+        (for-each
+         (lambda (out)
+           (money-out-collector 'add report-currency (cdr out)))
+         money-out)
+        (list
+         (cons 'money-in-accounts (map car money-in))
+         (cons 'money-in-alist (map
+                                (lambda (p)
+                                  (define coll (gnc:make-commodity-collector))
+                                  (coll 'add report-currency (cdr p))
+                                  (list (car p) coll))
+                                money-in))
+         (cons 'money-in-collector money-in-collector)
+         (cons 'money-out-accounts (map car money-out))
+         (cons 'money-out-alist (map
+                                 (lambda (p)
+                                   (define coll (gnc:make-commodity-collector))
+                                   (coll 'add report-currency (cdr p))
+                                   (list (car p) coll))
+                                 money-out))
+         (cons 'money-out-collector money-out-collector)))
+       (else
+        (when (zero? (modulo work-done 100))
+          (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
+        (let* ((split (car splits))
+               (split-val (xaccSplitGetValue split))
+               (txn (xaccSplitGetParent split))
+               (txn-splits (xaccTransGetSplitList txn))
+               (neg-splits (filter (compose negative? xaccSplitGetValue) txn-splits))
+               (pos-splits (filter (compose positive? xaccSplitGetValue) txn-splits)))
+          (cond
+           ((or (zero? split-val)
+                (and include-trading-accounts
+                     (eqv? (xaccAccountGetType (xaccSplitGetAccount split))
+                           ACCT-TYPE-TRADING)))
+            (loop (cdr splits)
+                  money-in
+                  money-out
+                  (1+ work-done)))
+           ((negative? split-val)
+            (loop (cdr splits)
+                  money-in
+                  (new-money-accum money-out split-val txn neg-splits pos-splits)
+                  (1+ work-done)))
+           ((positive? split-val)
+            (loop (cdr splits)
+                  (new-money-accum money-in split-val txn pos-splits neg-splits)
+                  money-out
+                  (1+ work-done))))))))))
+
+(define account-variant
+  (vector cash-flow-account-calc-money-in-out
+          (_ "Money into selected accounts comes from")
+          (_ "Money out of selected accounts goes to")))
+
+(define transaction-variant
+  (vector cash-flow-calc-money-in-out
+          (_ "Transactions involving selected accounts are funded from")
+          (_ "Transactions involving selected accounts fund")))
+
 (gnc:define-report
  'version 1
  'name reportname
  'report-guid "f8748b813fab4220ba26e743aedf38da"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator cash-flow-options-generator
- 'renderer cash-flow-renderer)
+ 'renderer (lambda (obj) (cash-flow-renderer obj reportname transaction-variant)))
+
+(gnc:define-report
+ 'version 1
+ 'name reportname-acct
+ 'report-guid "873c0565c6254d4d83eb8efdf851387f"
+ 'menu-path (list gnc:menuname-income-expense)
+ 'options-generator cash-flow-options-generator
+ 'renderer (lambda (obj) (cash-flow-renderer obj reportname-acct account-variant)))
