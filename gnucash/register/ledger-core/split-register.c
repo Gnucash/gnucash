@@ -1969,7 +1969,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     g_free (account_name);
 
     /* See if the account (either old or new) is a placeholder. */
-    if (xaccAccountGetPlaceholder (account))
+    if (account && xaccAccountGetPlaceholder (account))
     {
         gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                           placeholder, name);
