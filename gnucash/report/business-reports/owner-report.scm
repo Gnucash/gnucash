@@ -197,8 +197,9 @@
     (append (gnc:make-date-list begindate to-date ThirtyDayDelta)
             (list +inf.0))))
 
-(define (make-aging-table options query bucket-intervals reverse? date-type currency)
-  (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
+(define (make-aging-table options txns bucket-intervals reverse? date-type currency)
+  (let ((lots (map (compose gncInvoiceGetPostedLot gncInvoiceGetInvoiceFromTxn)
+                   (filter txn-is-invoice? txns)))
         (buckets (new-bucket-vector))
         (table (gnc:make-html-table)))
 
@@ -329,7 +330,7 @@
        table "grand-total"
        (list (gnc:make-html-table-cell/size
               1 (+ columns-used-size link-cols)
-              (make-aging-table options query
+              (make-aging-table options txns
                                 (list->vector (make-extended-interval-list end-date))
                                 reverse? date-type currency)))))
 
