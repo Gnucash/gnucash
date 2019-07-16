@@ -182,6 +182,11 @@
 (define (new-bucket-vector)
   (make-vector num-buckets 0))
 
+(define (txn-is-invoice? txn)
+  (eqv? (xaccTransGetTxnType txn) TXN-TYPE-INVOICE))
+(define (txn-is-payment? txn)
+  (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
+
 ;; Have make-list create a stepped list, then add a date in the
 ;; infinite future for the "current" bucket
 (define (make-extended-interval-list to-date)
@@ -409,9 +414,9 @@
         (print-totals total debit credit tax sale))
 
        ;; not an invoice/payment. skip transaction.
-       ((not (memv (xaccTransGetTxnType (car txns))
-                   (list TXN-TYPE-INVOICE TXN-TYPE-PAYMENT)))
-          (lp printed? odd-row? (cdr txns) total debit credit tax sale links))
+       ((not (or (txn-is-invoice? (car txns))
+                 (txn-is-payment? (car txns))))
+        (lp printed? odd-row? (cdr txns) total debit credit tax sale links))
 
        ;; start printing txns.
        (else
@@ -424,13 +429,13 @@
                (invoice (gncInvoiceGetInvoiceFromTxn txn))
                (credit-note? (gncInvoiceGetIsCreditNote invoice))
                (type-str (cond
-                          ((and (eqv? type TXN-TYPE-INVOICE)
+                          ((and (txn-is-invoice? txn)
                                 (not (null? invoice)))
                            (gnc:make-html-text
                             (gnc:html-markup-anchor
                              (gnc:invoice-anchor-text invoice)
                              (gncInvoiceGetTypeString invoice))))
-                          ((eqv? type TXN-TYPE-PAYMENT)
+                          ((txn-is-payment? txn)
                            (gnc:make-html-text
 	                    (gnc:html-markup-anchor
 	                     (gnc:split-anchor-text split)
@@ -445,7 +450,7 @@
                          (credit-note? (- (gncInvoiceGetTotalTax invoice)))
                          (else (gncInvoiceGetTotalTax invoice))))
                (invoice-splits
-                (and (eqv? type TXN-TYPE-INVOICE)
+                (and (txn-is-invoice? txn)
                      (not (null? invoice))
                      (sort
                       (gnc-lot-get-split-list
@@ -454,7 +459,7 @@
                         (< (xaccTransGetDate (xaccSplitGetParent a))
                            (xaccTransGetDate (xaccSplitGetParent b)))))))
                (payment-splits
-                (and (eqv? type TXN-TYPE-PAYMENT)
+                (and (txn-is-payment? txn)
                      (sort
                       (filter
                        (lambda (inv-split)
