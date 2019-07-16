@@ -275,11 +275,8 @@
             (car link-rows))))
       (lp (cdr link-rows) #f))))
 
-(define (make-txn-table options query acc start-date end-date date-type)
-  (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
-                    (lambda (a b)
-                      (negative? (xaccTransOrder a b)))))
-        (used-columns (build-column-used options))
+(define (make-txn-table options txns acc start-date end-date date-type)
+  (let ((used-columns (build-column-used options))
         (currency (xaccAccountGetCommodity acc))
         (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
         (link-option (gnc:option-value
@@ -667,7 +664,7 @@ invoices and amounts.")))))
               c)))
        string))))
 
-(define (setup-job-query q owner account end-date)
+(define (setup-job-query q owner accounts end-date)
   (let ((guid (gncOwnerReturnGUID owner)))
     (qof-query-add-guid-match
      q  (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER QOF-PARAM-GUID)
@@ -678,12 +675,12 @@ invoices and amounts.")))))
     (qof-query-add-guid-match
      q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER QOF-PARAM-GUID)
      guid QOF-QUERY-OR)
-    (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     q))
 
-(define (setup-query q owner account end-date)
+(define (setup-query q owner accounts end-date)
   (let ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
     (qof-query-add-guid-match
      q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER OWNER-PARENTG)
@@ -694,7 +691,7 @@ invoices and amounts.")))))
     (qof-query-add-guid-match
      q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER OWNER-PARENTG)
      guid QOF-QUERY-OR)
-    (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     q))
@@ -771,6 +768,7 @@ invoices and amounts.")))))
      (gnc:lookup-option options section name)))
 
   (let* ((document (gnc:make-html-document))
+         (query (qof-query-create-for-splits))
          (accounts (filter (compose xaccAccountIsAPARType xaccAccountGetType)
                            (gnc-account-get-descendants-sorted
                             (gnc-get-current-root-account))))
@@ -808,6 +806,10 @@ invoices and amounts.")))))
         (_ "This report requires a valid AP/AR account to be available."))))
 
      (else
+      (if (eqv? GNC-OWNER-JOB type)
+          (setup-job-query query owner accounts end-date)
+          (setup-query query owner accounts end-date))
+
       (gnc:html-document-set-title!
        document (string-append report-title ": " (gncOwnerGetName owner)))
 
@@ -833,15 +835,19 @@ invoices and amounts.")))))
 
       (make-break! document)
 
-      (for-each
-       (lambda (account)
-         (let ((query (qof-query-create-for-splits)))
-           (if (eqv? GNC-OWNER-JOB type)
-               (setup-job-query query owner account end-date)
-               (setup-query query owner account end-date))
-           (let ((table (make-txn-table
-                         options query account start-date end-date date-type)))
-             (qof-query-destroy query)
+      (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
+                        (lambda (a b) (< (xaccTransOrder a b) 0)))))
+        (qof-query-destroy query)
+        (for-each
+         (lambda (account)
+           (let* ((acc-txns (filter
+                             (lambda (txn)
+                               (member account
+                                       (map xaccSplitGetAccount
+                                            (xaccTransGetSplitList txn))))
+                             txns))
+                  (table (make-txn-table
+                          options acc-txns account start-date end-date date-type)))
              (when table
                (gnc:html-table-set-style!
                 table "table"
@@ -855,8 +861,8 @@ invoices and amounts.")))))
                   (string-append (_ "Account") ": "
                                  (xaccAccountGetName account)))))
                (gnc:html-document-add-object! document table)
-               (make-break! document)))))
-       accounts)))
+               (make-break! document))))
+         accounts))))
     document))
 
 (define* (find-first-account type #:key currency)
