@@ -279,10 +279,7 @@
         (link-option (gnc:option-value
                       (gnc:lookup-option options "Display Columns" linked-txns-header)))
         (table (gnc:make-html-table)))
-
-    (define link-cols
-      (assq-ref '((simple . 1) (detailed . 3) (none . 0)) link-option))
-
+    (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
     (define (print-totals total debit credit tax sale)
       (define (total-cell cell)
         (gnc:make-html-table-cell/markup "total-number-cell" cell))
@@ -414,15 +411,7 @@
        ;; not an invoice/payment. skip transaction.
        ((not (memv (xaccTransGetTxnType (car txns))
                    (list TXN-TYPE-INVOICE TXN-TYPE-PAYMENT)))
-          (lp printed?
-              odd-row?
-              (cdr txns)
-              total
-              debit
-              credit
-              tax
-              sale
-              links))
+          (lp printed? odd-row? (cdr txns) total debit credit tax sale links))
 
        ;; start printing txns.
        (else
@@ -482,7 +471,7 @@
 
            ;; txn-date < start-date. skip display, accumulate amounts
            ((< date start-date)
-            (lp printed? odd-row? (cdr splits) (+ total value)
+            (lp printed? odd-row? (cdr txns) (+ total value)
                 (if (negative? value) (+ debit value) debit)
                 (if (negative? value) credit (+ credit value))
                 tax sale (if (null? invoice) links
@@ -529,16 +518,11 @@
               ;; some error occurred, show 1 line containing empty-list
               (else '(()))))
 
-            (lp printed?
-                (not odd-row?)
-                (cdr txns)
-                (+ total value)
+            (lp printed? (not odd-row?) (cdr txns) (+ total value)
                 (if (negative? value) (+ debit value) debit)
                 (if (negative? value) credit (+ credit value))
-                (+ tax txn-tax)
-                (+ sale txn-sale)
-                (if (null? invoice)
-                    links
+                (+ tax txn-tax) (+ sale txn-sale)
+                (if (null? invoice) links
                     (acons invoice invoice-splits links)))))))))
 
     (and (pair? txns) table)))
