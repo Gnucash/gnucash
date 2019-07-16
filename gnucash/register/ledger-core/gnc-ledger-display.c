@@ -70,6 +70,8 @@ struct gnc_ledger_display
     GNCLedgerDisplayGetParent get_parent;
 
     gpointer user_data;
+    
+    gint number_of_subaccounts;
 
     gint component_id;
 };
@@ -87,9 +89,13 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              SplitRegisterStyle style,
                              gboolean use_double_line,
                              gboolean is_template);
-static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
-        GList *splits);
 
+static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
+                             GList *splits);
+
+static void gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
+                             gint limit,
+                             SplitRegisterType type);
 
 /** Implementations *************************************************/
 
@@ -572,6 +578,21 @@ refresh_handler (GHashTable *changes, gpointer user_data)
         }
     }
 
+    /* if subaccount ledger, check to see if still the same number
+     *  of subaccounts, if not recreate the query. */
+    if (ld->ld_type == LD_SUBACCOUNT)
+    {
+        Account *leader = gnc_ledger_display_leader (ld);
+        GList *accounts = gnc_account_get_descendants (leader);
+
+        if (g_list_length (accounts) != ld->number_of_subaccounts)
+            gnc_ledger_display_make_query (ld,
+                               gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_MAX_TRANS),
+                               gnc_get_reg_type (leader, ld->ld_type));
+
+        g_list_free (accounts);
+    }
+
     /* Its not clear if we should re-run the query, or if we should
      * just use qof_query_last_run().  Its possible that the dates
      * changed, requiring a full new query.  Similar considerations
@@ -647,8 +668,14 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
 
     leader = gnc_ledger_display_leader (ld);
 
+    /* if this is a subaccount ledger, record the number of 
+     * subaccounts so we can determine if the query needs 
+     * recreating on a refresh. */
     if (ld->ld_type == LD_SUBACCOUNT)
+    {
         accounts = gnc_account_get_descendants (leader);
+        ld->number_of_subaccounts = g_list_length (accounts);
+    }
     else
         accounts = NULL;
 
