@@ -275,7 +275,7 @@
             (car link-rows))))
       (lp (cdr link-rows) #f))))
 
-(define (make-txn-table options txns acc start-date end-date date-type)
+(define (make-txn-table options splits acc start-date end-date date-type)
   (let ((used-columns (build-column-used options))
         (currency (xaccAccountGetCommodity acc))
         (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
@@ -327,7 +327,7 @@
        table "grand-total"
        (list (gnc:make-html-table-cell/size
               1 (+ columns-used-size link-cols)
-              (make-aging-table options txns
+              (make-aging-table options (map xaccSplitGetParent splits)
                                 (list->vector (make-extended-interval-list end-date))
                                 reverse? date-type currency)))))
 
@@ -395,7 +395,7 @@
 
     (let lp ((printed? #f)
              (odd-row? #t)
-             (txns txns)
+             (splits splits)
              (total 0)
              (debit 0)
              (credit 0)
@@ -404,26 +404,27 @@
              (links '()))
       (cond
 
-       ((null? txns)
+       ((null? splits)
         ;;Balance row may not have been added if all transactions were before
         ;;start-date (and no other rows would be added either) so add it now
         (when (and (not printed?) (value-col used-columns) (not (zero? total)))
           (add-balance-row odd-row? total))
-        (print-totals total debit credit tax sale))
+        (print-totals total debit credit tax sale)
+        table)
 
        ;; not an invoice/payment. skip transaction.
-       ((not (or (txn-is-invoice? (car txns))
-                 (txn-is-payment? (car txns))))
-        (lp printed? odd-row? (cdr txns) total debit credit tax sale links))
+       ((not (or (txn-is-invoice? (xaccSplitGetParent (car splits)))
+                 (txn-is-payment? (xaccSplitGetParent (car splits)))))
+        (lp printed? odd-row? (cdr splits) total debit credit tax sale links))
 
        ;; start printing txns.
        (else
-        (let* ((txn (car txns))
+        (let* ((split (car splits))
+               (txn (xaccSplitGetParent split))
                (type (xaccTransGetTxnType txn))
                (date (xaccTransGetDate txn))
                (value ((if reverse? - identity)
                        (xaccTransGetAccountValue txn acc)))
-               (split (xaccTransGetSplit txn 0))
                (invoice (gncInvoiceGetInvoiceFromTxn txn))
                (credit-note? (gncInvoiceGetIsCreditNote invoice))
                (type-str (cond
@@ -474,7 +475,7 @@
 
            ;; txn-date < start-date. skip display, accumulate amounts
            ((< date start-date)
-            (lp printed? odd-row? (cdr txns) (+ total value)
+            (lp printed? odd-row? (cdr splits) (+ total value)
                 (if (negative? value) (+ debit value) debit)
                 (if (negative? value) credit (+ credit value))
                 tax sale (if (null? invoice) links
@@ -485,7 +486,7 @@
            ((not printed?)
             (let ((print? (and (value-col used-columns) (not (zero? total)))))
               (if print? (add-balance-row odd-row? total))
-              (lp #t (not print?) txns total debit credit tax sale links)))
+              (lp #t (not print?) splits total debit credit tax sale links)))
 
            (else
             (add-row
@@ -521,14 +522,12 @@
               ;; some error occurred, show 1 line containing empty-list
               (else '(()))))
 
-            (lp printed? (not odd-row?) (cdr txns) (+ total value)
+            (lp printed? (not odd-row?) (cdr splits) (+ total value)
                 (if (negative? value) (+ debit value) debit)
                 (if (negative? value) credit (+ credit value))
                 (+ tax txn-tax) (+ sale txn-sale)
                 (if (null? invoice) links
-                    (acons invoice invoice-splits links)))))))))
-
-    (and (pair? txns) table)))
+                    (acons invoice invoice-splits links)))))))))))
 
 (define (options-generator owner-type reverse?)
 
@@ -835,33 +834,32 @@ invoices and amounts.")))))
 
       (make-break! document)
 
-      (let ((txns (sort (xaccQueryGetTransactions query QUERY-TXN-MATCH-ANY)
-                        (lambda (a b) (< (xaccTransOrder a b) 0)))))
+      (let ((splits (sort (xaccQueryGetSplitsUniqueTrans query)
+                          (lambda (a b) (< (xaccTransOrder
+                                            (xaccSplitGetParent a)
+                                            (xaccSplitGetParent b)) 0)))))
         (qof-query-destroy query)
         (for-each
          (lambda (account)
-           (let* ((acc-txns (filter
-                             (lambda (txn)
-                               (member account
-                                       (map xaccSplitGetAccount
-                                            (xaccTransGetSplitList txn))))
-                             txns))
-                  (table (make-txn-table
-                          options acc-txns account start-date end-date date-type)))
-             (when table
-               (gnc:html-table-set-style!
-                table "table"
-                'attribute (list "border" 1)
-                'attribute (list "cellspacing" 0)
-                'attribute (list "cellpadding" 4))
-               (gnc:html-document-add-object!
-                document
-                (gnc:make-html-text
-                 (gnc:html-markup-h3
-                  (string-append (_ "Account") ": "
-                                 (xaccAccountGetName account)))))
-               (gnc:html-document-add-object! document table)
-               (make-break! document))))
+           (let ((acc-splits (filter
+                              (lambda (split)
+                                (equal? account (xaccSplitGetAccount split)))
+                              splits)))
+             (unless (null? acc-splits)
+               (let ((table (make-txn-table
+                             options acc-splits account start-date end-date date-type)))
+                 (gnc:html-table-set-style!
+                  table "table"
+                  'attribute (list "border" 1)
+                  'attribute (list "cellspacing" 0)
+                  'attribute (list "cellpadding" 4))
+                 (gnc:html-document-add-object!
+                  document
+                  (gnc:make-html-text
+                   (gnc:html-markup-h3
+                    (string-append (_ "Account") ": " (xaccAccountGetName account)))))
+                 (gnc:html-document-add-object! document table)
+                 (make-break! document)))))
          accounts))))
     document))
 
