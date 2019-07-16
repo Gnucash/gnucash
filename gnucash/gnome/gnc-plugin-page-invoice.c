@@ -69,6 +69,7 @@ static void gnc_plugin_page_invoice_cmd_edit (GtkAction *action, GncPluginPageIn
 static void gnc_plugin_page_invoice_cmd_duplicateInvoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_post (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_unpost (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_refresh (GtkAction *action, GncPluginPageInvoice *plugin_page);
 
 static void gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
         GtkRadioAction *current,
@@ -145,6 +146,13 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
         N_("Unpost this Invoice and make it editable"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_unpost)
+    },
+
+    /* View menu */
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window"),
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_refresh)
     },
 
     /* Actions menu */
@@ -853,6 +861,20 @@ gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
     LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_invoice_cmd_refresh (GtkAction *action,
+                                     GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+
+    gtk_widget_queue_draw (priv->widget);
+    LEAVE(" ");
+}
 
 static void
 gnc_plugin_page_invoice_cmd_enter (GtkAction *action,

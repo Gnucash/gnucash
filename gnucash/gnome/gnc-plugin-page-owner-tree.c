@@ -123,6 +123,7 @@ static void gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPlu
 static void gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwnerTree *page);
 #endif
 static void gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageOwnerTree *page);
+static void gnc_plugin_page_owner_tree_cmd_refresh (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_owners_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
 static void gnc_plugin_page_owner_tree_cmd_owner_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
@@ -180,6 +181,11 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_view_filter_by)
+    },
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_refresh)
     },
 
     /* Business menu */
@@ -1150,6 +1156,17 @@ gnc_plugin_page_owner_tree_cmd_view_filter_by (GtkAction *action,
     LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_owner_tree_cmd_refresh (GtkAction *action,
+        GncPluginPageOwnerTree *page)
+{
+    GncPluginPageOwnerTreePrivate *priv;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(page));
+
+    priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
+    gtk_widget_queue_draw (priv->widget);
+}
 
 static void
 gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,

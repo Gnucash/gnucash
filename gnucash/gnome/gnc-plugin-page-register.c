@@ -175,6 +175,7 @@ static void gnc_plugin_page_register_cmd_reinitialize_transaction (GtkAction *ac
 static void gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_jump (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_reload (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_schedule (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_scrub_all (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_scrub_current (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -348,6 +349,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_view_filter_by)
+    },
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_reload)
     },
 
     /* Actions menu */
@@ -4040,6 +4046,29 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* Show it */
     gtk_widget_show(dialog);
     g_object_unref(G_OBJECT(builder));
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_reload (GtkAction *action, GncPluginPageRegister *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+
+    ENTER("(action %p, page %p)", action, plugin_page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
+    /* Check for trans being edited */
+    if (gnc_split_register_changed (reg))
+    {
+        LEAVE("register has pending edits");
+        return;
+    }
+    gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
 
