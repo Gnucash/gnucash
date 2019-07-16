@@ -317,7 +317,8 @@
                table
                "grand-total"
                (list
-                (gnc:make-html-table-header-cell/markup "text-cell" (_ "Difference"))
+                (gnc:make-html-table-header-cell/markup
+                 "text-cell" (_ "Change in value of selected accounts"))
                 (gnc:make-html-table-header-cell/markup
                  "total-number-cell"
                  (gnc:sum-collector-commodity
@@ -434,8 +435,8 @@
          (to-report-currency (assq-ref settings 'to-report-currency))
          (all-splits (gnc:account-get-trans-type-splits-interval
                       accounts '() from-date-t64 to-date-t64))
-         (money-in-collector (gnc:make-commodity-collector))
-         (money-out-collector (gnc:make-commodity-collector))
+         (in-collector (gnc:make-commodity-collector))
+         (out-collector (gnc:make-commodity-collector))
          (splits-to-do (length all-splits)))
 
     (define (new-money-accum acc-alist split-val txn samesign-splits opp-sign-splits)
@@ -465,14 +466,8 @@
                (work-done 0))
       (cond
        ((null? splits)
-        (for-each
-         (lambda (in)
-           (money-in-collector 'add report-currency (cdr in)))
-         money-in)
-        (for-each
-         (lambda (out)
-           (money-out-collector 'add report-currency (cdr out)))
-         money-out)
+        (in-collector 'add report-currency (apply + (cons 0 (map cdr money-in))))
+        (out-collector 'add report-currency (apply + (cons 0 (map cdr money-out))))
         (list
          (cons 'money-in-accounts (map car money-in))
          (cons 'money-in-alist (map
@@ -481,7 +476,7 @@
                                   (coll 'add report-currency (cdr p))
                                   (list (car p) coll))
                                 money-in))
-         (cons 'money-in-collector money-in-collector)
+         (cons 'money-in-collector in-collector)
          (cons 'money-out-accounts (map car money-out))
          (cons 'money-out-alist (map
                                  (lambda (p)
@@ -489,7 +484,7 @@
                                    (coll 'add report-currency (cdr p))
                                    (list (car p) coll))
                                  money-out))
-         (cons 'money-out-collector money-out-collector)))
+         (cons 'money-out-collector out-collector)))
        (else
         (when (zero? (modulo work-done 100))
           (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
