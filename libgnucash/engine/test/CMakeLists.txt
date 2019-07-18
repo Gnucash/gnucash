@@ -247,6 +247,11 @@ if (HAVE_SRFI64)
     srfi64-extras.scm
     )
 
+  set (scm_tests_with_srfi64_SOURCES
+    test-business-core.scm
+    )
+
+  gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
 endif (HAVE_SRFI64)
 
 gnc_add_scheme_targets(scm-test-engine
