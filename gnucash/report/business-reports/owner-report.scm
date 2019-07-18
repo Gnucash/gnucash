@@ -487,22 +487,14 @@
                (invoice (gncInvoiceGetInvoiceFromTxn txn))
                (invoice-splits
                 (and (txn-is-invoice? txn)
-                     (sort
-                      (gnc-lot-get-split-list
-                       (gncInvoiceGetPostedLot invoice))
-                      (lambda (a b)
-                        (< (xaccTransGetDate (xaccSplitGetParent a))
-                           (xaccTransGetDate (xaccSplitGetParent b)))))))
+                     (gnc-lot-get-split-list
+                       (gncInvoiceGetPostedLot invoice))))
                (payment-splits
                 (and (txn-is-payment? txn)
-                     (sort
-                      (filter
+                     (filter
                        (lambda (inv-split)
                          (member txn (map xaccSplitGetParent (cdr inv-split))))
-                       links)
-                      (lambda (a b)
-                        (< (gncInvoiceGetDatePosted (car a))
-                           (gncInvoiceGetDatePosted (car b))))))))
+                       links))))
 
           (cond
 
