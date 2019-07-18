@@ -1855,7 +1855,12 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 
     /* If that would leave the register, abort */
     if (abort_move)
+    {
+        // Make sure the sheet is the focus
+        if (!gtk_widget_has_focus(GTK_WIDGET (sheet)))
+            gtk_widget_grab_focus (GTK_WIDGET (sheet));
         return TRUE;
+    }
 
     /* Clear the saved selection for the new cell. */
     sheet->end_sel = sheet->start_sel;

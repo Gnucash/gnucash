@@ -2268,7 +2268,7 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh
         gnc_ledger_display_refresh( gsr->ledger );
 }
 
-static void
+static gboolean
 gnc_split_reg_record (GNCSplitReg *gsr)
 {
     SplitRegister *reg;
@@ -2282,7 +2282,7 @@ gnc_split_reg_record (GNCSplitReg *gsr)
     if (!gnc_split_register_save (reg, TRUE))
     {
         LEAVE("no save");
-        return;
+        return FALSE;
     }
 
     gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
@@ -2291,6 +2291,7 @@ gnc_split_reg_record (GNCSplitReg *gsr)
      * since gui_refresh events should handle this. */
     /* gnc_split_register_redraw (reg); */
     LEAVE(" ");
+    return TRUE;
 }
 
 static gboolean
@@ -2354,7 +2355,14 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
     }
 
     /* First record the transaction. This will perform a refresh. */
-    gnc_split_reg_record( gsr );
+    if (!gnc_split_reg_record (gsr))
+    {
+        /* make sure the sheet has the focus if the record is FALSE
+         * which results in no cursor movement. */
+        gnc_split_reg_focus_on_sheet (gsr);
+        LEAVE(" ");
+        return;
+    }
 
     if (!goto_blank && next_transaction)
         gnc_split_register_expand_current_trans (sr, FALSE);

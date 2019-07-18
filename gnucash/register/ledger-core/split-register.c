@@ -1735,8 +1735,12 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
           blank_split, blank_trans, pending_trans, trans);
 
     /* Act on any changes to the current cell before the save. */
-    (void) gnc_split_register_check_cell (reg,
-                                          gnc_table_get_current_cell_name (reg->table));
+    if (!gnc_split_register_check_cell (reg,
+            gnc_table_get_current_cell_name (reg->table)))
+    {
+        LEAVE("need another go at changing cell");
+        return FALSE;
+    }
 
     if (!gnc_split_register_auto_calc (reg, split))
     {
@@ -1945,6 +1949,10 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     if (!account)
         account = gnc_account_lookup_by_code(gnc_get_current_root_account(), name);
 
+    /* if gnc_ui_new_accounts_from_name_window is used, there is a call to
+     * refresh which subsequently calls this function again, thats the
+     * reason for static creating_account. */
+
     if (!account && !creating_account)
     {
         /* Ask if they want to create a new one. */
@@ -1958,21 +1966,27 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
             return NULL;
     }
 
-    /* Now have the account. */
-    account_name = gnc_get_account_name_for_split_register (account, reg->show_leaf_accounts);
-    if (g_strcmp0(account_name, gnc_basic_cell_get_value(bcell)))
+    if (!creating_account)
     {
-        /* The name has changed. Update the cell. */
-        gnc_combo_cell_set_value (cell, account_name);
-        gnc_basic_cell_set_changed (&cell->cell, TRUE);
-    }
-    g_free (account_name);
+        /* Now have the account. */
+        account_name = gnc_get_account_name_for_split_register (account, reg->show_leaf_accounts);
+        if (g_strcmp0(account_name, gnc_basic_cell_get_value(bcell)))
+        {
+            /* The name has changed. Update the cell. */
+            gnc_combo_cell_set_value (cell, account_name);
+            gnc_basic_cell_set_changed (&cell->cell, TRUE);
+        }
+        g_free (account_name);
 
-    /* See if the account (either old or new) is a placeholder. */
-    if (account && xaccAccountGetPlaceholder (account))
-    {
-        gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                          placeholder, name);
+        /* See if the account (either old or new) is a placeholder. */
+        if (account && xaccAccountGetPlaceholder (account))
+        {
+            gchar *fullname = gnc_account_get_full_name (account);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
+                              placeholder, fullname);
+            g_free (fullname);
+            return NULL;
+        }
     }
 
     /* Be seeing you. */
