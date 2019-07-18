@@ -94,6 +94,8 @@
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)
+  (issue-deprecation-warning
+   "gnc:entry-type-percent-p is deprecated.")
   (let ((type type-val))
     (equal? type GNC-AMT-TYPE-PERCENT)))
 
