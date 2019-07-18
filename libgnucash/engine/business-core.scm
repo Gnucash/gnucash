@@ -50,35 +50,25 @@
 ;
 
 (define (gnc:owner-get-name-dep owner)
-  (define (just-name name)
-    (if name name ""))
-
-  (let ((type (gncOwnerGetType owner)))
-    (cond
-      ((eqv? type GNC-OWNER-JOB)
-       (gnc:owner-get-name-dep (gncJobGetOwner
-				(gncOwnerGetJob owner))))
-      (else (just-name (gncOwnerGetName owner))))))
+  (cond
+   ((eqv? (gncOwnerGetType owner) GNC-OWNER-JOB)
+    (gnc:owner-get-name-dep (gncJobGetOwner (gncOwnerGetJob owner))))
+   (else (or (gncOwnerGetName owner) ""))))
 
 (define (gnc:owner-get-address-dep owner)
-  (define (add-if-exists lst new)
-    (if (and new (> (string-length new) 0))
-	(cons new lst)
-	lst))
-  (define (build-string lst)
-    (cond
-     ((null? lst) "")
-     ((null? (cdr lst)) (car lst))
-     (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
-  (let ((lst '())
-	(addr (gnc:owner-get-address owner)))
-; Added gncAddressGetName  <mikee@saxicola.co.uk>
-    (set! lst (add-if-exists lst (gncAddressGetName  addr)))
-    (set! lst (add-if-exists lst (gncAddressGetAddr1 addr)))
-    (set! lst (add-if-exists lst (gncAddressGetAddr2 addr)))
-    (set! lst (add-if-exists lst (gncAddressGetAddr3 addr)))
-    (set! lst (add-if-exists lst (gncAddressGetAddr4 addr)))
-    (build-string lst)))
+  (define (addif elt)
+    (if (and elt (> (string-length elt) 0))
+        (list elt)
+        '()))
+  (let ((addr (gnc:owner-get-address owner)))
+    (string-join
+     (append
+      (addif (gncAddressGetName  addr))
+      (addif (gncAddressGetAddr1 addr))
+      (addif (gncAddressGetAddr2 addr))
+      (addif (gncAddressGetAddr3 addr))
+      (addif (gncAddressGetAddr4 addr)))
+     "\n")))
 
 (define (gnc:owner-get-name-and-address-dep owner)
   (let ((name (gnc:owner-get-name-dep owner))
