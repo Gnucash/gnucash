@@ -103,7 +103,7 @@
           (_ "Total"))))
 
 (define (monetary-or-percent numeric currency entry-type)
-  (if (gnc:entry-type-percent-p entry-type)
+  (if (eqv? entry-type GNC-AMT-TYPE-PERCENT)
       (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (_ "%"))
       (gnc:make-gnc-monetary currency numeric)))
 

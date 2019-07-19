@@ -104,6 +104,8 @@
     (if (string? item)
         (gncCustomerLookupFlip item (gnc-get-current-book))
         item))
+  (issue-deprecation-warning
+   "gnc:make-customer-option is unused.")
 
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
@@ -166,6 +168,9 @@
         (gncVendorLookupFlip item (gnc-get-current-book))
         item))
 
+  (issue-deprecation-warning
+   "gnc:make-vendor-option is unused.")
+
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
          (getter (lambda () (convert-to-vendor
@@ -226,6 +231,8 @@
     (if (string? item)
         (gncEmployeeLookupFlip item (gnc-get-current-book))
         item))
+  (issue-deprecation-warning
+   "gnc:make-employee-option is unused.")
 
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
@@ -344,8 +351,8 @@
        section name sort-tag 'owner documentation-string getter
        (lambda (owner)
 	 (if (null? owner) (set! owner (default-getter)))
-	 (set! owner (convert-to-owner owner))
-	 (let* ((result (validator owner))
+         (set! owner (convert-to-owner owner))
+         (let* ((result (validator owner))
 		(valid (car result))
 		(value (cadr result)))
 	   (if valid
@@ -449,13 +456,22 @@
          sort-tag
          documentation-string
          default-value)
-  (let ((option (gnc:make-number-range-option section name sort-tag documentation-string default-value 0 999999999 0 1)))
-     (gnc:set-option-scm->kvp option (lambda (b p) (qof-book-set-option b (inexact->exact ((gnc:option-getter option))) (list "counters" key))))
-     (gnc:set-option-kvp->scm option (lambda (b p)
-                               (let ((v (qof-book-get-option b (list "counters" key))))
-                                 (if (and v (integer? v))
-                                     ((gnc:option-setter option) v)))))
-     option))
+  (let ((option (gnc:make-number-range-option
+                 section name sort-tag documentation-string
+                 default-value 0 999999999 0 1)))
+    (gnc:set-option-scm->kvp
+     option
+     (lambda (b p)
+       (qof-book-set-option
+        b (inexact->exact ((gnc:option-getter option)))
+        (list "counters" key))))
+    (gnc:set-option-kvp->scm
+     option
+     (lambda (b p)
+       (let ((v (qof-book-get-option b (list "counters" key))))
+         (if (and v (integer? v))
+             ((gnc:option-setter option) v)))))
+    option))
 
 ;; This defines an option to set a counter format, which has the same
 ;; exception as gnc:make-counter-option above.
@@ -469,19 +485,23 @@
          sort-tag
          documentation-string
          default-value)
-  (let ((option (gnc:make-string-option section name sort-tag documentation-string #f)))
-     (gnc:option-set-value option default-value)
-     (gnc:set-option-scm->kvp option
-         (lambda (b p)
-             (let ((value ((gnc:option-getter option)))
-                   (path (string-concatenate (list "counter_formats/" key))))
-                  (qof-book-set-string-option b path value))))
-     (gnc:set-option-kvp->scm option (lambda (b p)
-                               (let* ((path (string-concatenate (list "counter_formats/" key)))
-                                     (v (qof-book-get-string-option b path)))
-                                 (if (and v (string? v))
-                                     ((gnc:option-setter option) v)))))
-     option))
+  (let ((option (gnc:make-string-option
+                 section name sort-tag documentation-string #f)))
+    (gnc:option-set-value option default-value)
+    (gnc:set-option-scm->kvp
+     option
+     (lambda (b p)
+       (let ((value ((gnc:option-getter option)))
+             (path (string-concatenate (list "counter_formats/" key))))
+         (qof-book-set-string-option b path value))))
+    (gnc:set-option-kvp->scm
+     option
+     (lambda (b p)
+       (let* ((path (string-concatenate (list "counter_formats/" key)))
+              (v (qof-book-get-string-option b path)))
+         (if (and v (string? v))
+             ((gnc:option-setter option) v)))))
+    option))
 
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)

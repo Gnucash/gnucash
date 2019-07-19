@@ -284,11 +284,11 @@
              (qof-print-date due-date)
              "")))
     (if (num-col column-vector)
-        (addto! row-contents num))
+        (addto! row-contents (gnc:html-string-sanitize num)))
     (if (type-col column-vector)
         (addto! row-contents type-str))
     (if (memo-col column-vector)
-        (addto! row-contents memo))
+        (addto! row-contents (gnc:html-string-sanitize memo)))
     (if (sale-col column-vector)
         (addto! row-contents
          (gnc:make-html-table-cell/markup "number-cell" sale)))
@@ -690,8 +690,8 @@
   (gnc:html-table-append-row!
    table
    (list
-    (string-append label ":&nbsp;")
-    (string-expand (qof-print-date date) #\space "&nbsp;"))))
+    (string-append label ": ")
+    (qof-print-date date))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -776,7 +776,7 @@
 
         (gnc:html-document-set-headline!
          document (gnc:html-markup
-                   "!" 
+                   "span"
                    (doctype-str type)
                    " " (_ "Report:") " "
                    (gnc:html-markup-anchor

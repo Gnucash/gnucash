@@ -242,6 +242,12 @@ if (HAVE_SRFI64)
     )
 
   gnc_add_scheme_deprecated_module ("gnucash engine test srfi64-extras" "tests srfi64-extras" "scm-srfi64-extras" "")
+
+  set (scm_tests_with_srfi64_SOURCES
+    test-business-core.scm
+    )
+
+  gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
 endif (HAVE_SRFI64)
 
 gnc_add_scheme_test_targets(scm-test-engine
