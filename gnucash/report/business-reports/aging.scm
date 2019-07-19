@@ -319,64 +319,62 @@ copying this report to a spreadsheet for use in a mail merge.")
              (table (gnc:make-html-table))
              (heading-list make-heading-list))
 
-        (let loop ((accounts accounts))
+        (let loop ((accounts accounts)
+                   (splits splits))
           (unless (null? accounts)
-            (let* ((account (car accounts))
-                   (account-buckets (make-vector num-buckets 0))
-                   (acc-splits
-                    (filter
-                     (lambda (split)
-                       (and (equal? account (xaccSplitGetAccount split))
-                            (or (txn-is-invoice? (xaccSplitGetParent split))
-                                (txn-is-payment? (xaccSplitGetParent split)))))
-                     splits))
-                   (owners
-                    (delete-duplicates
-                     (map
-                      (compose gncOwnerGetEndOwner gncInvoiceGetOwner
-                               gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
-                      (filter (compose txn-is-invoice? xaccSplitGetParent)
-                              acc-splits))
-                     gnc-owner-equal?)))
-              (gnc:pk 'account account 'splits:)
-              (for-each gnc:pk acc-splits)
-              (gnc:pk 'owners)
-              (gnc:html-table-append-row!
-               table
-               (list
-                (gnc:make-html-table-cell
-                 (xaccAccountGetName (car accounts)))))
-              (let lp ((owners owners)
-                       (rest-splits acc-splits))
-                (unless (null? owners)
-                  (receive (owner-splits rest)
-                      (partition
-                       (lambda (split)
-                         (string=? (gncOwnerReturnGUID (car owners))
-                                   (gncOwnerReturnGUID
-                                    (gncOwnerGetEndOwner
-                                     (gncInvoiceGetOwner
-                                      (gncInvoiceGetInvoiceFromLot
-                                       (xaccSplitGetLot
-                                        (gnc-lot-get-earliest-split
-                                         (xaccSplitGetLot split)))))))))
-                       rest-splits)
-                    (gnc:html-table-append-row!
-                     table
-                     (append
-                      (list #f)
-                      (list
-                       (gnc:make-html-text
-                        (gnc:html-markup-anchor
-                         (gnc:owner-anchor-text (car owners))
-                         (gncOwnerGetName (car owners))))
-                       (apply + (cons 0 (map xaccSplitGetAmount owner-splits))))
-                      (list)
-                      (list)))
-                    (lp (cdr owners)
-                        rest))
-                  )))
-            (loop (cdr accounts))))
+            (let ((account (car accounts)))
+              (receive (acc-splits not-acc-splits)
+                  (partition
+                   (lambda (split)
+                     (and (equal? account (xaccSplitGetAccount split))
+                          (or (txn-is-invoice? (xaccSplitGetParent split))
+                              (txn-is-payment? (xaccSplitGetParent split)))))
+                   splits)
+                (gnc:pk 'account account 'splits:)
+                (for-each gnc:pk acc-splits)
+                (gnc:pk 'owners)
+                (let ((acc-owners
+                       (delete-duplicates
+                        (map
+                         (compose gncOwnerGetEndOwner gncInvoiceGetOwner
+                                  gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
+                         (filter (compose txn-is-invoice? xaccSplitGetParent)
+                                 acc-splits))
+                        gnc-owner-equal?)))
+                  (gnc:html-table-append-row!
+                   table (list
+                          (gnc:make-html-table-cell
+                           (xaccAccountGetName (car accounts)))))
+                  (let lp ((acc-owners acc-owners)
+                           (acc-splits acc-splits))
+                    (unless (null? acc-owners)
+                      (receive (owner-splits not-owner-splits)
+                          (partition
+                           (lambda (split)
+                             (string=? (gncOwnerReturnGUID (car acc-owners))
+                                       (gncOwnerReturnGUID
+                                        (gncOwnerGetEndOwner
+                                         (gncInvoiceGetOwner
+                                          (gncInvoiceGetInvoiceFromLot
+                                           (xaccSplitGetLot
+                                            (gnc-lot-get-earliest-split
+                                             (xaccSplitGetLot split)))))))))
+                           acc-splits)
+                        (gnc:html-table-append-row!
+                         table
+                         (append
+                          (list #f)
+                          (list
+                           (gnc:make-html-text
+                            (gnc:html-markup-anchor
+                             (gnc:owner-anchor-text (car acc-owners))
+                             (gncOwnerGetName (car acc-owners))))
+                           (apply + (cons 0 (map xaccSplitGetAmount owner-splits))))
+                          (list)
+                          (list)))
+                        (lp (cdr acc-owners) not-owner-splits)))))
+                (loop (cdr accounts)
+                      not-acc-splits)))))
 
         (gnc:html-document-add-object! document table))))
     (qof-query-destroy query)
