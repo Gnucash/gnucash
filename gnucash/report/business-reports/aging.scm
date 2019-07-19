@@ -27,8 +27,7 @@
 (define-module (gnucash report aging))
 
 (use-modules (srfi srfi-1))
-(use-modules (srfi srfi-9))             ;record
-(use-modules (ice-9 receive))
+(use-modules (srfi srfi-11))            ;let-values
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -39,7 +38,6 @@
 (use-modules (gnucash report business-reports))
 
 (define optname-to-date (N_ "To"))
-(define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
@@ -57,6 +55,12 @@
 (define optname-disp-addr-fax (N_ "Address Fax"))
 (define optname-disp-addr-email (N_ "Address Email"))
 (define optname-disp-active (N_ "Active"))
+
+(define no-APAR-account (_ "No valid A/Payable or A/Receivable \
+account found. Please ensure valid AP/AR account exists."))
+
+(define empty-APAR-accounts (_ "A/Payable or A/Receivable accounts \
+exist but have no suitable transactions."))
 
 (export optname-show-zeros)
 
@@ -87,31 +91,13 @@
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-general
-      optname-sort-by
-      "i"
-      (N_ "Sort companies by.")
-      'name
-      (list
-       (vector 'name
-               (N_ "Name")
-               (N_ "Name of the company."))
-       (vector 'total
-               (N_ "Total Owed")
-               (N_ "Total amount owed to/from Company."))
-       (vector 'oldest-bracket
-               (N_ "Bracket Total Owed")
-               (N_ "Amount owed in oldest bracket - if same go to next oldest.")))))
-
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-general
       optname-sort-order
       "ia"
       (N_ "Sort order.")
       'increasing
       (list
-       (vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z."))
-       (vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A.")))))
+       (vector 'increasing (N_ "Increasing") (N_ "Alphabetical order"))
+       (vector 'decreasing (N_ "Decreasing") (N_ "Reverse alphabetical order")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -220,10 +206,10 @@ copying this report to a spreadsheet for use in a mail merge.")
     options))
 
 (define (make-interval-list to-date)
-  (let ((begindate to-date))
-    (set! begindate (decdate begindate ThirtyDayDelta))
-    (set! begindate (decdate begindate ThirtyDayDelta))
-    (set! begindate (decdate begindate ThirtyDayDelta))
+  (let* ((begindate to-date)
+         (begindate (decdate begindate ThirtyDayDelta))
+         (begindate (decdate begindate ThirtyDayDelta))
+         (begindate (decdate begindate ThirtyDayDelta)))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 ;; Have make-list create a stepped list, then add a date in the future for the "current" bucket
@@ -238,11 +224,50 @@ copying this report to a spreadsheet for use in a mail merge.")
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 
 ;; this is required because (equal? owner-a owner-b) doesn't always
-;; return #t if owner-a and owner-b refer to the same owner
+;; return #t even if owner-a and owner-b refer to the same owner
 (define (gnc-owner-equal? a b)
   (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
 
-(define (aging-renderer report-obj reportname account reverse?)
+(define (split->invoice split)
+  (gncInvoiceGetInvoiceFromLot
+   (xaccSplitGetLot
+    (gnc-lot-get-earliest-split
+     (xaccSplitGetLot split)))))
+
+;; simpler version of gnc:owner-from-split.
+(define (split->owner split)
+  (gncOwnerGetEndOwner
+   (gncInvoiceGetOwner
+    (split->invoice split))))
+
+(define (owner-splits->aging-list splits to-date date-type reverse?)
+  (gnc:debug 'processing: (qof-print-date to-date) date-type 'reverse? reverse?)
+  (for-each gnc:debug splits)
+  (let ((bucket-dates (make-extended-interval-list to-date))
+        (buckets (make-vector num-buckets 0))
+        (lots (map (compose gncInvoiceGetPostedLot gncInvoiceGetInvoiceFromTxn)
+                   (filter txn-is-invoice? (map xaccSplitGetParent splits)))))
+    (for-each
+     (lambda (lot)
+       (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
+              (bal (gnc-lot-get-balance lot))
+              ;; (bal ((if reverse? - identity) bal))
+              ;; (bal ((if (gncInvoiceGetIsCreditNote invoice) - identity) bal))
+              (date (if (eq? date-type 'postdate)
+                        (gncInvoiceGetDatePosted invoice)
+                        (gncInvoiceGetDateDue invoice))))
+         (unless (null? invoice)
+           (let loop ((idx 0)
+                      (bucket-dates bucket-dates))
+             (gnc:debug idx buckets bal invoice date)
+             (if (< date (car bucket-dates))
+                 (vector-set! buckets idx (+ bal (vector-ref buckets idx)))
+                 (loop (1+ idx) (cdr bucket-dates)))))
+         (gnc:debug '* buckets bal invoice date)))
+     lots)
+    (vector->list buckets)))
+
+(define (aging-renderer report-obj reportname APARaccount reverse?)
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
   (define (op-value section name)
@@ -252,6 +277,7 @@ copying this report to a spreadsheet for use in a mail merge.")
   ;; more general interval scheme in this report
   (define make-heading-list
     (list
+     ""
      (_ "Company")
      (_ "Current")
      (_ "0-30 days")
@@ -260,21 +286,27 @@ copying this report to a spreadsheet for use in a mail merge.")
      (_ "91+ days")
      (_ "Total")))
 
-  (gnc:report-starting reportname)
+  (when (or reportname APARaccount)
+    (issue-deprecation-warning "reportname and account are no longer in use."))
+
   (let* ((accounts (filter (compose xaccAccountIsAPARType xaccAccountGetType)
                            (gnc-account-get-descendants-sorted
                             (gnc-get-current-root-account))))
-         (companys (make-hash-table 23))
          (receivable (eq? (op-value "__hidden" "receivable-or-payable") 'R))
+         (accounts (filter
+                    (lambda (acc)
+                      (eqv? (xaccAccountGetType acc)
+                            (if receivable ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
+                    accounts))
          (report-title (op-value gnc:pagename-general gnc:optname-reportname))
          ;; document will be the HTML document that we return.
          (report-date (gnc:time64-end-day-time
                        (gnc:date-option-absolute-time
                         (op-value gnc:pagename-general optname-to-date))))
-         (interval-vec (list->vector (make-extended-interval-list report-date)))
          ;; (sort-pred (get-sort-pred
          ;;             (op-value gnc:pagename-general optname-sort-by)
          ;;             (op-value gnc:pagename-general optname-sort-order)))
+         (sort-order (op-value gnc:pagename-general optname-sort-order))
          (show-zeros (op-value gnc:pagename-general optname-show-zeros))
          (date-type (op-value gnc:pagename-general optname-date-driver))
          (disp-addr-source (if receivable
@@ -300,8 +332,6 @@ copying this report to a spreadsheet for use in a mail merge.")
           (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)) ;; shipping
           (gncOwnerGetAddr owner)))                            ;; billing
 
-    
-    
     ;; set default title
     (gnc:html-document-set-title! document report-title)
 
@@ -309,75 +339,118 @@ copying this report to a spreadsheet for use in a mail merge.")
      ((null? accounts)
       (gnc:html-document-add-object!
        document
-       (gnc:make-html-text
-        (_ "No valid account selected. Click on the Options button and select the account to use."))))
+       (gnc:make-html-text no-APAR-account)))
 
      (else
       (setup-query query accounts report-date)
       (let* ((splits (qof-query-run query))
              (accounts (delete-duplicates (map xaccSplitGetAccount splits)))
-             (table (gnc:make-html-table))
-             (heading-list make-heading-list))
-
+             (table (gnc:make-html-table)))
+        (qof-query-destroy query)
         (let loop ((accounts accounts)
-                   (splits splits))
-          (unless (null? accounts)
+                   (splits (filter
+                            (lambda (split)
+                              (or (txn-is-invoice? (xaccSplitGetParent split))
+                                  (txn-is-payment? (xaccSplitGetParent split))))
+                            splits)))
+          (cond
+           ((null? accounts)
+            (gnc:html-table-set-col-headers! table make-heading-list)
+            (gnc:html-document-add-object!
+             document
+             (if (null? (gnc:html-table-data table))
+                 (gnc:make-html-text empty-APAR-accounts)
+                 table)))
+           (else
             (let ((account (car accounts)))
               (receive (acc-splits not-acc-splits)
                   (partition
                    (lambda (split)
-                     (and (equal? account (xaccSplitGetAccount split))
-                          (or (txn-is-invoice? (xaccSplitGetParent split))
-                              (txn-is-payment? (xaccSplitGetParent split)))))
+                     (equal? account (xaccSplitGetAccount split)))
                    splits)
-                (gnc:pk 'account account 'splits:)
-                (for-each gnc:pk acc-splits)
-                (gnc:pk 'owners)
+                (gnc:debug 'account account)
+                (gnc:html-table-append-row!
+                 table
+                 (list
+                  (gnc:make-html-table-cell/size
+                   1 (+ 2 num-buckets)
+                   (xaccAccountGetName account))))
                 (let ((acc-owners
                        (delete-duplicates
-                        (map
-                         (compose gncOwnerGetEndOwner gncInvoiceGetOwner
-                                  gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
-                         (filter (compose txn-is-invoice? xaccSplitGetParent)
-                                 acc-splits))
+                        (sort
+                         (map
+                          (compose gncOwnerGetEndOwner gncInvoiceGetOwner
+                                   gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
+                          (filter (compose txn-is-invoice? xaccSplitGetParent)
+                                  acc-splits))
+                         (lambda (a b)
+                           ((if (eq? sort-order 'increasing) string<? string>?)
+                            (gncOwnerGetName a) (gncOwnerGetName b))))
                         gnc-owner-equal?)))
-                  (gnc:html-table-append-row!
-                   table (list
-                          (gnc:make-html-table-cell
-                           (xaccAccountGetName (car accounts)))))
+                  (gnc:debug 'owners acc-owners)
                   (let lp ((acc-owners acc-owners)
-                           (acc-splits acc-splits))
-                    (unless (null? acc-owners)
+                           (acc-splits acc-splits)
+                           (acc-totals (make-list (1+ num-buckets) 0)))
+                    (cond
+                     ((null? acc-owners)
+                      (gnc:html-table-append-row!
+                       table
+                       (cons*
+                        #f
+                        (gnc:make-html-table-cell/markup
+                         "total-label-cell" (_ "Total"))
+                        (map
+                         (lambda (amt)
+                           (gnc:make-html-table-cell/markup
+                            "total-number-cell" (gnc:make-gnc-monetary
+                                                 (xaccAccountGetCommodity account)
+                                                 amt)))
+                         acc-totals)))
+                      (loop (cdr accounts)
+                            not-acc-splits))
+                     (else
                       (receive (owner-splits not-owner-splits)
                           (partition
                            (lambda (split)
                              (string=? (gncOwnerReturnGUID (car acc-owners))
-                                       (gncOwnerReturnGUID
-                                        (gncOwnerGetEndOwner
-                                         (gncInvoiceGetOwner
-                                          (gncInvoiceGetInvoiceFromLot
-                                           (xaccSplitGetLot
-                                            (gnc-lot-get-earliest-split
-                                             (xaccSplitGetLot split)))))))))
+                                       (gncOwnerReturnGUID (split->owner split))))
                            acc-splits)
-                        (gnc:html-table-append-row!
-                         table
-                         (append
-                          (list #f)
-                          (list
-                           (gnc:make-html-text
-                            (gnc:html-markup-anchor
-                             (gnc:owner-anchor-text (car acc-owners))
-                             (gncOwnerGetName (car acc-owners))))
-                           (apply + (cons 0 (map xaccSplitGetAmount owner-splits))))
-                          (list)
-                          (list)))
-                        (lp (cdr acc-owners) not-owner-splits)))))
-                (loop (cdr accounts)
-                      not-acc-splits)))))
-
-        (gnc:html-document-add-object! document table))))
-    (qof-query-destroy query)
+                        (let* ((owner (car acc-owners))
+                               (aging (owner-splits->aging-list
+                                       owner-splits report-date date-type reverse?))
+                               (aging-total (apply + aging)))
+                          (gnc:html-table-append-row!
+                           table
+                           (append
+                            (list #f)
+                            (cons
+                             (gnc:make-html-text
+                              (gnc:html-markup-anchor
+                               (gnc:owner-anchor-text owner)
+                               (gncOwnerGetName owner)))
+                             (map
+                              (lambda (amt)
+                                (gnc:make-html-table-cell/markup
+                                 "number-cell"
+				 (gnc:make-gnc-monetary
+                                  (xaccAccountGetCommodity account)
+                                  amt)))
+                              (reverse aging)))
+                            (list
+                             (gnc:make-html-table-cell/markup
+                              "number-cell"
+                              (gnc:make-html-text
+                               (gnc:html-markup-anchor
+			        (gnc:owner-report-text owner account)
+			        (gnc:make-gnc-monetary
+                                 (xaccAccountGetCommodity account)
+                                 aging-total)))))
+                            (list)))
+                          (lp (cdr acc-owners)
+                              not-owner-splits
+                              (map +
+                                   acc-totals
+                                   (reverse (cons aging-total aging))))))))))))))))))
     (gnc:report-finished)
     document))
 
