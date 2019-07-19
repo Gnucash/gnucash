@@ -36,7 +36,6 @@
 (use-modules (gnucash report business-reports))
 
 (define acc-page gnc:pagename-general)
-(define this-acc (N_ "Receivables Account"))
 (define optname-addr-source (N_ "Address Source")) ;; Billing or Shipping addresses
 
 (define (options-generator)    
@@ -44,12 +43,6 @@
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    (add-option
-     (gnc:make-account-sel-limited-option
-      acc-page this-acc
-      "w" (N_ "The receivables account you wish to examine.") 
-      #f #f (list ACCT-TYPE-RECEIVABLE)))
 
     ;; As aging.scm functions are used by both receivables.scm and payables.scm
     ;;  add option "receivable" on hidden page "__hidden" with default value 'R
@@ -78,10 +71,7 @@
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  (let* ((receivables-account (op-value acc-page this-acc)))
-    (gnc:debug "receivables-account" receivables-account)
-
-    (aging-renderer report-obj this-acc receivables-account #t)))
+  (aging-renderer report-obj #f #f #t))
 
 (define receivables-aging-guid "9cf76bed17f14401b8e3e22d0079cb98")
 
