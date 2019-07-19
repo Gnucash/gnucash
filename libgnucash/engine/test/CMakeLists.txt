@@ -247,7 +247,14 @@ if (HAVE_SRFI64)
     test-business-core.scm
     )
 
-  gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
+  gnc_add_scheme_test_targets (scm-test-with-srfi64
+    "${scm_tests_with_srfi64_SOURCES}"
+    "tests"
+    "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras;gncmod-engine"
+    FALSE
+    )
+
+    gnc_add_scheme_tests ("${scm_tests_with_srfi64_SOURCES}")
 endif (HAVE_SRFI64)
 
 gnc_add_scheme_test_targets(scm-test-engine
@@ -322,6 +329,7 @@ set(test_engine_SCHEME_DIST
         test-create-account.scm
         test-engine-extras.scm
         test-scm-query-import.scm
+        test-business-core.scm
 )
 
 set(test_engine_EXTRA_DIST
