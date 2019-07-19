@@ -419,37 +419,37 @@ copying this report to a spreadsheet for use in a mail merge.")
                                (aging (owner-splits->aging-list
                                        owner-splits report-date date-type reverse?))
                                (aging-total (apply + aging)))
-                          (gnc:html-table-append-row!
-                           table
-                           (append
-                            (list #f)
-                            (cons
-                             (gnc:make-html-text
-                              (gnc:html-markup-anchor
-                               (gnc:owner-anchor-text owner)
-                               (gncOwnerGetName owner)))
-                             (map
-                              (lambda (amt)
-                                (gnc:make-html-table-cell/markup
-                                 "number-cell"
-				 (gnc:make-gnc-monetary
-                                  (xaccAccountGetCommodity account)
-                                  amt)))
-                              (reverse aging)))
-                            (list
-                             (gnc:make-html-table-cell/markup
-                              "number-cell"
-                              (gnc:make-html-text
-                               (gnc:html-markup-anchor
-			        (gnc:owner-report-text owner account)
-			        (gnc:make-gnc-monetary
-                                 (xaccAccountGetCommodity account)
-                                 aging-total)))))
-                            (list)))
+                          (when (or show-zeros (not (every zero? aging)))
+                            (gnc:html-table-append-row!
+                             table
+                             (append
+                              (list #f)
+                              (cons
+                               (gnc:make-html-text
+                                (gnc:html-markup-anchor
+                                 (gnc:owner-anchor-text owner)
+                                 (gncOwnerGetName owner)))
+                               (map
+                                (lambda (amt)
+                                  (gnc:make-html-table-cell/markup
+                                   "number-cell"
+				   (gnc:make-gnc-monetary
+                                    (xaccAccountGetCommodity account)
+                                    amt)))
+                                (reverse aging)))
+                              (list
+                               (gnc:make-html-table-cell/markup
+                                "number-cell"
+                                (gnc:make-html-text
+                                 (gnc:html-markup-anchor
+			          (gnc:owner-report-text owner account)
+			          (gnc:make-gnc-monetary
+                                   (xaccAccountGetCommodity account)
+                                   aging-total)))))
+                              (list))))
                           (lp (cdr acc-owners)
                               not-owner-splits
-                              (map +
-                                   acc-totals
+                              (map + acc-totals
                                    (reverse (cons aging-total aging))))))))))))))))))
     (gnc:report-finished)
     document))
