@@ -323,6 +323,7 @@ set(test_engine_SCHEME_DIST
         test-extras.scm
         test-scm-query-import.scm
         test-split.scm
+        test-business-core.scm
 )
 
 set(test_engine_EXTRA_DIST
