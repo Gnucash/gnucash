@@ -29,6 +29,7 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
+(use-modules (srfi srfi-11))             ;for let-values
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))
@@ -461,6 +462,11 @@
         (when (and (not printed?) (value-col used-columns) (not (zero? total)))
           (add-balance-row odd-row? total))
         (print-totals total debit credit tax sale)
+        (gnc:html-table-set-style!
+         table "table"
+         'attribute (list "border" 1)
+         'attribute (list "cellspacing" 0)
+         'attribute (list "cellpadding" 4))
         table)
 
        ;; not an invoice/payment. skip transaction.
@@ -852,28 +858,29 @@ invoices and amounts.")))))
                                             (xaccSplitGetParent a)
                                             (xaccSplitGetParent b)) 0)))))
         (qof-query-destroy query)
-        (for-each
-         (lambda (account)
-           (let ((acc-splits (filter
-                              (lambda (split)
-                                (equal? account (xaccSplitGetAccount split)))
-                              splits)))
-             (unless (null? acc-splits)
-               (let ((table (make-txn-table
-                             options acc-splits account start-date end-date date-type)))
-                 (gnc:html-table-set-style!
-                  table "table"
-                  'attribute (list "border" 1)
-                  'attribute (list "cellspacing" 0)
-                  'attribute (list "cellpadding" 4))
-                 (gnc:html-document-add-object!
-                  document
-                  (gnc:make-html-text
-                   (gnc:html-markup-h3
-                    (string-append (_ "Account") ": " (xaccAccountGetName account)))))
-                 (gnc:html-document-add-object! document table)
-                 (make-break! document)))))
-         accounts))))
+        (let loop ((accounts accounts)
+                   (splits splits))
+          (unless (null? accounts)
+            (let*-values (((acc-splits other-acc-splits)
+                           (partition
+                            (lambda (split)
+                              (equal? (car accounts) (xaccSplitGetAccount split)))
+                            splits)))
+              (unless (null? acc-splits)
+                (let* ((account (car accounts))
+                       (table (make-txn-table
+                               acc-splits account start-date end-date date-type
+                               used-columns reverse? link-option)))
+
+                  (gnc:html-document-add-object!
+                   document
+                   (gnc:make-html-text
+                    (gnc:html-markup-h3
+                     (string-append (_ "Account") ": " (xaccAccountGetName account)))))
+                  (gnc:html-document-add-object! document table)
+                  (make-break! document)))
+              (loop (cdr accounts)
+                    other-acc-splits)))))))
     document))
 
 (define* (find-first-account type #:key currency)
