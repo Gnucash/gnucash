@@ -363,11 +363,11 @@ copying this report to a spreadsheet for use in a mail merge.")
                  table)))
            (else
             (let ((account (car accounts)))
-              (receive (acc-splits not-acc-splits)
-                  (partition
-                   (lambda (split)
-                     (equal? account (xaccSplitGetAccount split)))
-                   splits)
+              (let-values (((acc-splits other-acc-splits)
+                            (partition
+                             (lambda (split)
+                               (equal? account (xaccSplitGetAccount split)))
+                             splits)))
                 (gnc:debug 'account account)
                 (gnc:html-table-append-row!
                  table
@@ -407,14 +407,14 @@ copying this report to a spreadsheet for use in a mail merge.")
                                                  amt)))
                          acc-totals)))
                       (loop (cdr accounts)
-                            not-acc-splits))
+                            other-acc-splits))
                      (else
-                      (receive (owner-splits not-owner-splits)
-                          (partition
-                           (lambda (split)
-                             (string=? (gncOwnerReturnGUID (car acc-owners))
-                                       (gncOwnerReturnGUID (split->owner split))))
-                           acc-splits)
+                      (let-values (((owner-splits other-owner-splits)
+                                    (partition
+                                     (lambda (split)
+                                       (gnc-owner-equal? (car acc-owners)
+                                                         (split->owner split)))
+                                     acc-splits)))
                         (let* ((owner (car acc-owners))
                                (aging (owner-splits->aging-list
                                        owner-splits report-date date-type reverse?))
@@ -448,7 +448,7 @@ copying this report to a spreadsheet for use in a mail merge.")
                                    aging-total)))))
                               (list))))
                           (lp (cdr acc-owners)
-                              not-owner-splits
+                              other-owner-splits
                               (map + acc-totals
                                    (reverse (cons aging-total aging))))))))))))))))))
     (gnc:report-finished)
