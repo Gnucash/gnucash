@@ -46,18 +46,18 @@ TEST(GncOption, test_string_default_value)
 {
     auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
                                          std::string{"waldo"});
-    EXPECT_STREQ("waldo", option->get_default_value().c_str());
-    EXPECT_STREQ("waldo", option->get_value().c_str());
+    EXPECT_STREQ("waldo", option.get_default_value<std::string>().c_str());
+    EXPECT_STREQ("waldo", option.get_value<std::string>().c_str());
 }
 
 TEST(GncOption, test_string_value)
 {
     auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
                                          std::string{"waldo"});
-    option->set_value("pepper");
-    EXPECT_STREQ("waldo", option->get_default_value().c_str());
+    option.set_value(std::string{"pepper"});
+    EXPECT_STREQ("waldo", option.get_default_value<std::string>().c_str());
     EXPECT_NO_THROW({
-            EXPECT_STREQ("pepper", option->get_value().c_str());
+            EXPECT_STREQ("pepper", option.get_value<std::string>().c_str());
         });
 }
 
@@ -65,11 +65,11 @@ TEST(GncOption, test_string_scm_functions)
 {
     auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
                                          std::string{"waldo"});
-    auto scm_value = option->get_scm_value();
+    auto scm_value = option.get_scm_value();
     auto str_value = scm_to_utf8_string(scm_value);
     EXPECT_STREQ("waldo", str_value);
     g_free(str_value);
-    scm_value = option->get_scm_default_value();
+    scm_value = option.get_scm_default_value();
     str_value = scm_to_utf8_string(scm_value);
     EXPECT_STREQ("waldo", str_value);
     g_free(str_value);
@@ -93,7 +93,7 @@ TEST(GNCOption, test_budget_scm_functions)
     auto budget = gnc_budget_new(book);
     auto option = gnc_make_budget_option("foo", "bar", "baz",
                                          "Phony Option", budget);
-    auto scm_budget = option->get_scm_value();
+    auto scm_budget = option.get_scm_value();
     auto str_value = scm_to_utf8_string(scm_budget);
     auto guid = guid_to_string(qof_instance_get_guid(budget));
     EXPECT_STREQ(guid, str_value);
@@ -158,13 +158,13 @@ TEST(GNCOption, test_currency_setter)
     auto usd = gnc_commodity_new(book, "United States Dollar",
                                  "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
-            option->set_value(QOF_INSTANCE(usd));
+            option.set_value(QOF_INSTANCE(usd));
         });
-    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option->get_value()));
+    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option.get_value<QofInstance*>()));
     EXPECT_THROW({
-            option->set_value(QOF_INSTANCE(hpe));
+            option.set_value(QOF_INSTANCE(hpe));
         }, std::invalid_argument);
-    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option->get_value()));
+    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option.get_value<QofInstance*>()));
     gnc_commodity_destroy(hpe);
     gnc_commodity_destroy(usd);
     gnc_commodity_destroy(eur);

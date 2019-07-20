@@ -33,6 +33,7 @@ extern "C"
 }
 #include <libguile.h>
 #include <string>
+#include <boost/variant.hpp>
 
 /*
  * Unused base class to document the structure of the current Scheme option
@@ -97,7 +98,7 @@ SCM scm_from_value(ValueType);
  * for a detailed explanation.
  */
 template <typename ValueType, class ValueClass>
-class GncOption
+class GncOptionBase
 {
 public:
     ValueType get_value() const
@@ -112,12 +113,12 @@ public:
     {
         return static_cast<ValueClass const&>(*this).get_default_value();
     }
-    SCM get_scm_value()
+    SCM get_scm_value() const
     {
         ValueType value{static_cast<ValueClass const&>(*this).get_value()};
         return scm_from_value<ValueType>(value);
     }
-    SCM get_scm_default_value()
+    SCM get_scm_default_value() const
     {
         ValueType value{static_cast<ValueClass const&>(*this).get_default_value()};
         return scm_from_value<ValueType>(value);
@@ -127,7 +128,7 @@ public:
 template <typename ValueType>
 class GncOptionValue :
     public OptionClassifier,
-    public GncOption<ValueType, GncOptionValue<ValueType>>
+    public GncOptionBase<ValueType, GncOptionValue<ValueType>>
 {
 public:
     GncOptionValue<ValueType>(const char* section, const char* name,
@@ -146,7 +147,7 @@ protected:
 template <typename ValueType>
 class GncOptionValidatedValue :
     public OptionClassifier,
-    public GncOption<ValueType, GncOptionValidatedValue<ValueType>>
+    public GncOptionBase<ValueType, GncOptionValidatedValue<ValueType>>
 {
 public:
     GncOptionValidatedValue<ValueType>(const char* section, const char* name,
@@ -187,29 +188,122 @@ private:
     ValueType m_validation_data;
 };
 
-std::shared_ptr<GncOptionValue<std::string>>
+using GncOptionVariant = boost::variant<GncOptionValue<std::string>,
+                                 GncOptionValue<bool>,
+                                 GncOptionValue<int64_t>,
+                                 GncOptionValue<QofInstance*>,
+                                 GncOptionValidatedValue<QofInstance*>>;
+class GncOption
+{
+public:
+    template <typename OptionType>
+    GncOption(OptionType option) : m_option{option} {}
+    template <typename ValueType> ValueType get_value() const
+    {
+        return boost::apply_visitor(GetValueVisitor<ValueType>(), m_option);
+    }
+    template <typename ValueType> ValueType get_default_value() const
+    {
+        return boost::apply_visitor(GetDefaultValueVisitor<ValueType>(), m_option);
+    }
+    SCM get_scm_value() const
+    {
+        return boost::apply_visitor(GetSCMVisitor(), m_option);
+    }
+    SCM get_scm_default_value() const
+    {
+        return boost::apply_visitor(GetSCMDefaultVisitor(), m_option);
+    }
+    template <typename ValueType> void set_value(ValueType value)
+    {
+        boost::apply_visitor(SetValueVisitor<ValueType>(value), m_option);
+    }
+private:
+    template <typename ValueType>
+    struct GetValueVisitor : public boost::static_visitor<ValueType>
+    {
+        ValueType operator()(const GncOptionValue<ValueType>& option) const {
+            return option.get_value();
+        }
+        ValueType operator()(const GncOptionValidatedValue<ValueType>& option) const {
+            return option.get_value();
+        }
+        template <class OptionType>
+        ValueType operator()(OptionType& option) const {
+            return ValueType{};
+        }
+    };
+    template <typename ValueType>
+    struct GetDefaultValueVisitor : public boost::static_visitor<ValueType>
+    {
+        ValueType operator()(const GncOptionValue<ValueType>& option) const {
+            return option.get_default_value();
+        }
+        ValueType operator()(const GncOptionValidatedValue<ValueType>& option) const {
+            return option.get_default_value();
+        }
+        template <class OptionType>
+        ValueType operator()(OptionType& option) const {
+            return ValueType();
+        }
+    };
+    template <typename ValueType>
+    struct SetValueVisitor : public boost::static_visitor<>
+    {
+        SetValueVisitor(ValueType value) : m_value{value} {}
+        void operator()(GncOptionValue<ValueType>& option) const {
+            option.set_value(m_value);
+        }
+        void operator()(GncOptionValidatedValue<ValueType>& option) const {
+            option.set_value(m_value);
+        }
+        template <class OptionType>
+        void operator()(OptionType& option) const {
+        }
+    private:
+        ValueType m_value;
+    };
+    struct GetSCMVisitor : public boost::static_visitor<SCM>
+    {
+        template <class OptionType>
+        SCM operator()(OptionType& option) const {
+            return option.get_scm_value();
+        }
+    };
+    struct GetSCMDefaultVisitor : public boost::static_visitor<SCM>
+    {
+        template <class OptionType>
+        SCM operator()(OptionType& option) const {
+            return option.get_scm_default_value();
+        }
+    };
+    GncOptionVariant m_option;
+};
+
+GncOption
 gnc_make_string_option(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        std::string value);
 
-std::shared_ptr<GncOptionValue<std::string>>
+GncOption
 gnc_make_text_option(const char* section, const char* name,
                      const char* key, const char* doc_string,
                      std::string value);
 
-std::shared_ptr<GncOptionValue<QofInstance*>>
+GncOption
 gnc_make_budget_option(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        GncBudget* value);
 
-std::shared_ptr<GncOptionValue<QofInstance*>>
+GncOption
 gnc_make_commodity_option(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           gnc_commodity* value);
 
-std::shared_ptr<GncOptionValidatedValue<QofInstance*>>
+GncOption
 gnc_make_currency_option(const char* section, const char* name,
                          const char* key, const char* doc_string,
                          gnc_commodity* value);
+
 
 #endif //GNC_OPTION_HPP_

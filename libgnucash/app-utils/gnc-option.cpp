@@ -51,16 +51,18 @@ scm_from_value<QofInstance*>(QofInstance* value)
     return scm_guid;
 }
 
-std::shared_ptr<GncOptionValue<std::string>>
+GncOption
 gnc_make_string_option(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        std::string value)
 {
-    return std::make_shared<GncOptionValue<std::string>>(
-        section, name, key, doc_string, value);
+    GncOptionValue<std::string> retval {
+        section, name, key, doc_string, value
+            };
+    return retval;
 }
 
-std::shared_ptr<GncOptionValue<std::string>>
+GncOption
 gnc_make_text_option(const char* section, const char* name,
                      const char* key, const char* doc_string,
                      std::string value)
@@ -68,36 +70,41 @@ gnc_make_text_option(const char* section, const char* name,
     return gnc_make_string_option(section, name, key, doc_string, value);
 }
 
-std::shared_ptr<GncOptionValue<QofInstance*>>
+GncOption
 gnc_make_budget_option(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        GncBudget *value)
 {
-    return std::make_shared<GncOptionValue<QofInstance*>>(
-        section, name, key, doc_string, QOF_INSTANCE(value));
+    GncOptionValue<QofInstance*> retval {
+        section, name, key, doc_string, QOF_INSTANCE(value)
+            };
+    return retval;
 }
 
-std::shared_ptr<GncOptionValue<QofInstance*>>
+GncOption
 gnc_make_commodity_option(const char* section, const char* name,
                      const char* key, const char* doc_string,
                          gnc_commodity *value)
 {
-    return std::make_shared<GncOptionValue<QofInstance*>>(
-        section, name, key, doc_string, QOF_INSTANCE(value));
+    GncOptionValue<QofInstance*> retval {
+        section, name, key, doc_string, QOF_INSTANCE(value)
+            };
+    return retval;
 }
 
 
-std::shared_ptr<GncOptionValidatedValue<QofInstance*>>
+GncOption
 gnc_make_currency_option(const char* section, const char* name,
                          const char* key, const char* doc_string,
                          gnc_commodity *value)
 {
-    return std::make_shared<GncOptionValidatedValue<QofInstance*>>(
+    GncOptionValidatedValue<QofInstance*> retval {
         section, name, key, doc_string, QOF_INSTANCE(value),
         [](QofInstance* new_value) -> bool
             {
                 return GNC_IS_COMMODITY (new_value) &&
                     gnc_commodity_is_currency(GNC_COMMODITY(new_value));
             }
-        );
+    };
+    return retval;
 }
