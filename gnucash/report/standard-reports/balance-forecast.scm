@@ -167,8 +167,7 @@ date point, a projected minimum balance including scheduled transactions."))
           (accum (gnc:make-commodity-collector))
           (exchange-fn (gnc:case-exchange-time-fn
                         price currency
-                        (delete-duplicates! (map xaccAccountGetCommodity accounts)
-                                            gnc-commodity-equiv)
+                        (gnc:accounts-get-commodities accounts #f)
                         to-date #f #f))
           (accounts-balancelist
            (map

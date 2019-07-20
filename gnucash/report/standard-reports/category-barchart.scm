@@ -375,8 +375,7 @@ developing over time"))
                                 (xaccSplitGetAmount s))))))))
              ;; all selected accounts (of report-specific type), *and*
              ;; their descendants (of any type) need to be scanned.
-             (delete-duplicates
-              (append accounts (gnc:acccounts-get-all-subaccounts accounts)))))
+             (gnc:accounts-and-all-descendants accounts)))
 
           ;; Creates the <balance-list> to be used in the function
           ;; below.

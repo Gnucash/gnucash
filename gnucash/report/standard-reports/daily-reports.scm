@@ -226,21 +226,9 @@
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
-          (if dosubs? 
-              (let ((subaccts '()))
-                (for-each 
-                 (lambda (acct)
-                   (let ((this-acct-subs 
-                          (gnc-account-get-descendants-sorted acct)))
-                     (if (list? this-acct-subs)
-                         (set! subaccts 
-                               (append subaccts this-acct-subs)))))
-                 accounts)
-                ;; Beware: delete-duplicates is an O(n^2)
-                ;; algorithm. More efficient method: sort the list,
-                ;; then use a linear algorithm.
-                (set! accounts
-                      (delete-duplicates (append accounts subaccts)))))
+          (if dosubs?
+              (set! accounts
+                (gnc:accounts-and-all-descendants accounts)))
 	  (gnc:report-percent-done 30)
           
           (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
