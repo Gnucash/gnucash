@@ -375,18 +375,16 @@ copying this report to a spreadsheet for use in a mail merge.")
                   (gnc:make-html-table-cell/size
                    1 (+ 2 num-buckets)
                    (xaccAccountGetName account))))
-                (let ((acc-owners
-                       (delete-duplicates
-                        (sort
-                         (map
-                          (compose gncOwnerGetEndOwner gncInvoiceGetOwner
-                                   gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
-                          (filter (compose txn-is-invoice? xaccSplitGetParent)
-                                  acc-splits))
+                (let* ((acc-owners
+                        (sort-and-delete-duplicates
+                         (map (compose gncOwnerGetEndOwner gncInvoiceGetOwner
+                                       gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
+                              (filter (compose txn-is-invoice? xaccSplitGetParent)
+                                      acc-splits))
                          (lambda (a b)
                            ((if (eq? sort-order 'increasing) string<? string>?)
-                            (gncOwnerGetName a) (gncOwnerGetName b))))
-                        gnc-owner-equal?)))
+                            (gncOwnerGetName a) (gncOwnerGetName b)))
+                         gnc-owner-equal?)))
                   (gnc:debug 'owners acc-owners)
                   (let lp ((acc-owners acc-owners)
                            (acc-splits acc-splits)
