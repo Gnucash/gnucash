@@ -129,11 +129,12 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; 'accounts', excluding the 'exclude-commodity'.
 (define (gnc:accounts-get-commodities accounts exclude-commodity)
   (delete exclude-commodity
-	  (delete-duplicates
-	   (sort (map xaccAccountGetCommodity accounts)
-		 (lambda (a b) 
-		   (string<? (or (gnc-commodity-get-mnemonic a) "")
-			     (or (gnc-commodity-get-mnemonic b) "")))))))
+	  (sort-and-delete-duplicates
+           (map xaccAccountGetCommodity accounts)
+           (lambda (a b)
+	     (string<? (gnc-commodity-get-mnemonic a)
+                       (gnc-commodity-get-mnemonic b)))
+           gnc-commodity-equiv)))
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
