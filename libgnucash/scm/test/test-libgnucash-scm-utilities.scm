@@ -9,6 +9,7 @@
   (test-begin "test-libgnucash-scm-utilities.scm")
   (test-traverse-vec)
   (test-substring-replace)
+  (test-sort-and-delete-duplicates)
   (test-begin "test-libgnucash-scm-utilities.scm"))
 
 (define (test-traverse-vec)
@@ -61,3 +62,28 @@
      "foo" "xxx" 4 -1))
 
   (test-end "substring-replace"))
+
+(define (test-sort-and-delete-duplicates)
+  (test-begin "sort-and-delete-duplicates")
+  (test-equal "sort-and-delete-duplicates empty"
+    '()
+    (sort-and-delete-duplicates '() <))
+  (test-equal "sort-and-delete-duplicates 1-element"
+    '(1)
+    (sort-and-delete-duplicates '(1) <))
+  (test-equal "sort-and-delete-duplicates 2-element, equal"
+    '(1)
+    (sort-and-delete-duplicates '(1 1) <))
+  (test-equal "sort-and-delete-duplicates 2-element, unequal"
+    '(1 2)
+    (sort-and-delete-duplicates '(2 1) <))
+  (test-equal "sort-and-delete-duplicates 3-element, equal"
+    '(1)
+    (sort-and-delete-duplicates '(1 1 1) <))
+  (test-equal "sort-and-delete-duplicates 3-element, 2-equal"
+    '(1 2)
+    (sort-and-delete-duplicates '(1 2 1) <))
+  (test-equal "sort-and-delete-duplicates 3-element, unequal"
+    '(1 2 3)
+    (sort-and-delete-duplicates '(3 1 2) <))
+  (test-end "sort-and-delete-duplicates"))

@@ -46,6 +46,7 @@
 (export gnc:msg)
 (export gnc:debug)
 (export addto!)
+(export sort-and-delete-duplicates)
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
@@ -179,3 +180,17 @@
     (lambda args
       (gnc:warn "strftime may be buggy. use gnc-print-time64 instead.")
       (apply strftime-old args))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; a basic sort-and-delete-duplicates. because delete-duplicates
+;; usually run in O(N^2) and if the list must be sorted, it's more
+;; efficient to sort first then delete adjacent elements. guile-2.0
+;; uses quicksort internally.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define* (sort-and-delete-duplicates lst < #:optional (= =))
+  (let lp ((lst (sort lst <)) (result '()))
+    (cond
+     ((null? lst) '())
+     ((null? (cdr lst)) (reverse (cons (car lst) result)))
+     ((= (car lst) (cadr lst)) (lp (cdr lst) result))
+     (else (lp (cdr lst) (cons (car lst) result))))))
