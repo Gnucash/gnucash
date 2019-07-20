@@ -22,6 +22,7 @@
   (test-commodity-collector)
   (test-get-account-balances)
   (test-monetary-adders)
+  (test-utility-functions)
   (test-end "report-utilities"))
 
 (define (NDayDelta t64 n)
@@ -244,7 +245,8 @@
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)
                                  (cons 'commodity (mnemonic->commodity "GBP"))))
-        (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
+        (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE))
+              (list "Fuel"))
         (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
         (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
         ))
@@ -463,6 +465,44 @@
           '(("GBP" . 603) ("USD" . 2286))
           (collector->list
            (gnc:get-assoc-account-balances-total account-balances)))))
+    (teardown)))
+
+(define (test-utility-functions)
+
+  (define (account-lookup str)
+    (gnc-account-lookup-by-name
+     (gnc-book-get-root-account (gnc-get-current-book))
+     str))
+
+  (test-group-with-cleanup "utility functions"
+    (create-test-data)
+    (test-equal "gnc:accounts-get-commodities"
+      (list "GBP" "USD")
+      (map gnc-commodity-get-mnemonic
+           (gnc:accounts-get-commodities (gnc-account-get-descendants-sorted
+                                          (gnc-get-current-root-account))
+                                         #f)))
+
+    (test-equal "gnc:get-current-account-tree-depth"
+      5
+      (gnc:get-current-account-tree-depth))
+
+    (test-equal "gnc:acccounts-get-all-subaccounts"
+      (list (account-lookup "Fuel")
+            (account-lookup "GBP Savings"))
+      (gnc:acccounts-get-all-subaccounts
+       (list (account-lookup "Expenses")
+             (account-lookup "GBP Bank"))))
+
+    (test-equal "gnc:accounts-and-all-descendants"
+      (list (account-lookup "GBP Bank")
+            (account-lookup "GBP Savings")
+            (account-lookup "Expenses")
+            (account-lookup "Fuel"))
+      (gnc:accounts-and-all-descendants
+       (list (account-lookup "Expenses")
+             (account-lookup "GBP Bank"))))
+
     (teardown)))
 
 (define (test-monetary-adders)

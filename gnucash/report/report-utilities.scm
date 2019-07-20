@@ -121,11 +121,12 @@
 ;; 'accounts', excluding the 'exclude-commodity'.
 (define (gnc:accounts-get-commodities accounts exclude-commodity)
   (delete exclude-commodity
-	  (delete-duplicates
-	   (sort (map xaccAccountGetCommodity accounts)
-		 (lambda (a b) 
-		   (string<? (or (gnc-commodity-get-mnemonic a) "")
-			     (or (gnc-commodity-get-mnemonic b) "")))))))
+	  (sort-and-delete-duplicates
+           (map xaccAccountGetCommodity accounts)
+           (lambda (a b)
+	     (string<? (gnc-commodity-get-mnemonic a)
+                       (gnc-commodity-get-mnemonic b)))
+           gnc-commodity-equiv)))
 
 
 ;; Returns the depth of the current account hierarchy, that is, the
@@ -139,6 +140,15 @@
 (define (gnc:acccounts-get-all-subaccounts accountlist)
   (append-map gnc-account-get-descendants-sorted
               accountlist))
+
+;; Return accountslist *and* their descendant accounts
+(define (gnc:accounts-and-all-descendants accountslist)
+  (sort-and-delete-duplicates
+   (append accountslist
+           (gnc:acccounts-get-all-subaccounts accountslist))
+   (lambda (a b)
+     (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
+   equal?))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.

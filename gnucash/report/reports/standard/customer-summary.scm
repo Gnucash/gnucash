@@ -291,9 +291,7 @@
          (expense-accounts (opt-val pagename-expenseaccounts optname-expenseaccounts))
          (sales-accounts (opt-val pagename-incomeaccounts optname-incomeaccounts))
          (all-accounts (append sales-accounts expense-accounts))
-         (commodities (delete-duplicates
-                       (map xaccAccountGetCommodity all-accounts)
-                       gnc-commodity-equiv))
+         (commodities (gnc:accounts-get-commodities all-accounts #f))
          (commodities>1? (> (length commodities) 1))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date book))

@@ -1,4 +1,5 @@
 add_subdirectory(test)
+include(CheckSymbolExists)
 
 #GTK before 3.14 didn't have GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK
 check_symbol_exists(GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK gdk/gdktypes.h have_mod_mask)

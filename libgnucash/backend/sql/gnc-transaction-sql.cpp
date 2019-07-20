@@ -70,7 +70,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define TRANSACTION_TABLE "transactions"
 #define TX_TABLE_VERSION 4
 #define SPLIT_TABLE "splits"
-#define SPLIT_TABLE_VERSION 4
+#define SPLIT_TABLE_VERSION 5
 
 struct split_info_t : public write_objects_t
 {
@@ -456,7 +456,9 @@ GncSqlSplitBackend::create_tables (GncSqlBackend* sql_be)
 
         /* Upgrade:
            1->2: 64 bit int handling
-           3->4: Split reconcile date can be NULL */
+           3->4: Split reconcile date can be NULL
+           4->5: Use DATETIME instead of TIMESTAMP in MySQL
+        */
         sql_be->upgrade_table(m_table_name.c_str(), split_col_table);
         if (!sql_be->create_index("splits_tx_guid_index",
                                    m_table_name.c_str(),
