@@ -145,10 +145,7 @@
     (set-col (opt-val "Display Columns" amount-header) 9)
     col-vector))
 
-(define (make-heading-list column-vector options)
-  (define (opt-val section name)
-    (gnc:option-value
-     (gnc:lookup-option options section name)))
+(define (make-heading-list column-vector link-option)
   (let ((heading-list '()))
     (if (date-col column-vector)
         (addto! heading-list (_ date-header)))
@@ -170,7 +167,7 @@
         (addto! heading-list (_ debit-header)))
     (if (value-col column-vector)
         (addto! heading-list (_ amount-header)))
-    (case (opt-val "Display Columns" linked-txns-header)
+    (case link-option
       ((simple)
        (addto! heading-list (_ linked-txns-header)))
       ((detailed)
@@ -198,7 +195,7 @@
     (append (gnc:make-date-list begindate to-date ThirtyDayDelta)
             (list +inf.0))))
 
-(define (make-aging-table options txns bucket-intervals reverse? date-type currency)
+(define (make-aging-table txns bucket-intervals reverse? date-type currency)
   (let ((lots (map (compose gncInvoiceGetPostedLot gncInvoiceGetInvoiceFromTxn)
                    (filter txn-is-invoice? txns)))
         (buckets (new-bucket-vector))
@@ -282,12 +279,9 @@
             (car link-rows))))
       (lp (cdr link-rows) #f))))
 
-(define (make-txn-table options splits acc start-date end-date date-type)
-  (let ((used-columns (build-column-used options))
-        (currency (xaccAccountGetCommodity acc))
-        (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
-        (link-option (gnc:option-value
-                      (gnc:lookup-option options "Display Columns" linked-txns-header)))
+(define (make-txn-table splits acc start-date end-date date-type
+                        used-columns reverse? link-option)
+  (let ((currency (xaccAccountGetCommodity acc))
         (table (gnc:make-html-table)))
     (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
     (define (print-totals total debit credit tax sale)
@@ -334,7 +328,7 @@
        table "grand-total"
        (list (gnc:make-html-table-cell/size
               1 (+ columns-used-size link-cols)
-              (make-aging-table options (map xaccSplitGetParent splits)
+              (make-aging-table (map xaccSplitGetParent splits)
                                 (list->vector (make-extended-interval-list end-date))
                                 reverse? date-type currency)))))
 
@@ -443,7 +437,7 @@
            (gncInvoiceGetDateDue invoice)))
 
     (gnc:html-table-set-col-headers!
-     table (make-heading-list used-columns options))
+     table (make-heading-list used-columns link-option))
 
     (let lp ((printed? #f)
              (odd-row? #t)
@@ -798,6 +792,11 @@ invoices and amounts.")))))
                      (opt-val gnc:pagename-general optname-to-date))))
          (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date (gnc-get-current-book)))
+         (used-columns (build-column-used options))
+         (reverse? (gnc:option-value (gnc:lookup-option options "__reg" "reverse?")))
+         (link-option
+          (gnc:option-value
+           (gnc:lookup-option options "Display Columns" linked-txns-header)))
          (type (opt-val "__reg" "owner-type"))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
