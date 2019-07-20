@@ -511,6 +511,15 @@
        (list (account-lookup "Expenses")
              (account-lookup "GBP Bank"))))
 
+    (test-equal "gnc:accounts-and-all-descendants"
+      (list (account-lookup "GBP Bank")
+            (account-lookup "GBP Savings")
+            (account-lookup "Expenses")
+            (account-lookup "Fuel"))
+      (gnc:accounts-and-all-descendants
+       (list (account-lookup "Expenses")
+             (account-lookup "GBP Bank"))))
+
     (teardown)))
 
 (define (test-monetary-adders)
