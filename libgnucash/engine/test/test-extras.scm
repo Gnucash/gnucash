@@ -472,3 +472,364 @@
                      income bank  109 #:description "$109 income"))
      (iota 12))
     account-alist))
+
+;; creates 8 invoices. (1) customer-invoice (2) customer's job's
+;; invoice (3) vendor bill (4) employee bill (5) customer credit-note
+;; (6) vendor credit-note (7) employee credit-note (8)
+;; customer-invoice with various combinations of entries. in addition,
+;; this function will return the vector-list of invoices created.
+(define-public (create-test-invoice-data)
+  (define USD (mnemonic->commodity "USD"))
+  (define structure
+    (list "Root" (list (cons 'type ACCT-TYPE-ASSET)
+                       (cons 'commodity USD))
+          (list "Asset"
+                (list "Bank"))
+          (list "VAT"
+                (list "VAT-on-Purchases")
+                (list "VAT-on-Sales" (list (cons 'type ACCT-TYPE-LIABILITY))))
+          (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+          (list "Expense" (list (cons 'type ACCT-TYPE-EXPENSE)))
+          (list "A/Receivable" (list (cons 'type ACCT-TYPE-RECEIVABLE)))
+          (list "A/Payable" (list (cons 'type ACCT-TYPE-PAYABLE)))))
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (expense (cdr (assoc "Expense" account-alist)))
+         (vat-sales (cdr (assoc "VAT-on-Sales" account-alist)))
+         (vat-purchases (cdr (assoc "VAT-on-Purchases" account-alist)))
+         (receivable (cdr (assoc "A/Receivable" account-alist)))
+         (payable (cdr (assoc "A/Payable" account-alist)))
+         (YEAR (gnc:time64-get-year (gnc:get-today)))
+
+         (cust-1 (let ((cust-1 (gncCustomerCreate (gnc-get-current-book))))
+                   (gncCustomerSetID cust-1 "cust-1-id")
+                   (gncCustomerSetName cust-1 "cust-1-name")
+                   (gncCustomerSetNotes cust-1 "cust-1-notes")
+                   (gncCustomerSetCurrency cust-1 USD)
+                   (gncCustomerSetTaxIncluded cust-1 1) ;1 = GNC-TAXINCLUDED-YES
+                   cust-1))
+
+         (owner-1 (let ((owner-1 (gncOwnerNew)))
+                    (gncOwnerInitCustomer owner-1 cust-1)
+                    owner-1))
+
+         ;; inv-1 is generated for a customer
+         (inv-1 (let ((inv-1 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-1 owner-1)
+                  (gncInvoiceSetNotes inv-1 "inv-1-notes")
+                  (gncInvoiceSetBillingID inv-1 "inv-1-billing-id")
+                  (gncInvoiceSetCurrency inv-1 USD)
+                  inv-1))
+
+         (job-1 (let ((job-1 (gncJobCreate (gnc-get-current-book))))
+                  (gncJobSetID job-1 "job-1-id")
+                  (gncJobSetName job-1 "job-1-name")
+                  (gncJobSetOwner job-1 owner-1)
+                  job-1))
+
+         (owner-2 (let ((owner-2 (gncOwnerNew)))
+                    (gncOwnerInitJob owner-2 job-1)
+                    owner-2))
+
+         ;; inv-2 is generated from a customer's job
+         (inv-2 (let ((inv-2 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-2 owner-2)
+                  (gncInvoiceSetNotes inv-2 "inv-2-notes")
+                  (gncInvoiceSetCurrency inv-2 USD)
+                  inv-2))
+
+         (vend-1 (let ((vend-1 (gncVendorCreate (gnc-get-current-book))))
+                   (gncVendorSetID vend-1 "vend-1-id")
+                   (gncVendorSetName vend-1 "vend-1-name")
+                   (gncVendorSetNotes vend-1 "vend-1-notes")
+                   (gncVendorSetCurrency vend-1 USD)
+                   (gncVendorSetTaxIncluded vend-1 1) ;1 = GNC-TAXINCLUDED-YES
+                   vend-1))
+
+         (owner-3 (let ((owner-3 (gncOwnerNew)))
+                    (gncOwnerInitVendor owner-3 vend-1)
+                    owner-3))
+
+         ;; inv-3 is generated from a vendor
+         (inv-3 (let ((inv-3 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-3 owner-3)
+                  (gncInvoiceSetNotes inv-3 "inv-3-notes")
+                  (gncInvoiceSetCurrency inv-3 USD)
+                  inv-3))
+
+         (emp-1 (let ((emp-1 (gncEmployeeCreate (gnc-get-current-book))))
+                  (gncEmployeeSetID emp-1 "emp-1-id")
+                  (gncEmployeeSetCurrency emp-1 USD)
+                  (gncEmployeeSetName emp-1 "emp-1-name")
+                  emp-1))
+
+         (owner-4 (let ((owner-4 (gncOwnerNew)))
+                    (gncOwnerInitEmployee owner-4 emp-1)
+                    owner-4))
+
+         ;; inv-4 is generated for an employee
+         (inv-4 (let ((inv-4 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-4 owner-4)
+                  (gncInvoiceSetNotes inv-4 "inv-4-notes")
+                  (gncInvoiceSetCurrency inv-4 USD)
+                  inv-4))
+
+         ;; inv-5 cust-credit-note
+         (inv-5 (let ((inv-5 (gncInvoiceCopy inv-1)))
+                  (gncInvoiceSetIsCreditNote inv-5 #t)
+                  (gncInvoiceSetCurrency inv-5 USD)
+                  inv-5))
+
+         ;; inv-6 vend-credit-note
+         (inv-6 (let ((inv-6 (gncInvoiceCopy inv-3)))
+                  (gncInvoiceSetIsCreditNote inv-6 #t)
+                  (gncInvoiceSetCurrency inv-6 USD)
+                  inv-6))
+
+         ;; inv-7 emp-credit-note
+         (inv-7 (let ((inv-7 (gncInvoiceCopy inv-4)))
+                  (gncInvoiceSetIsCreditNote inv-7 #t)
+                  (gncInvoiceSetCurrency inv-7 USD)
+                  inv-7))
+
+         (inv-8 (let ((inv-8 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-8 owner-1)
+                  (gncInvoiceSetCurrency inv-8 USD)
+                  inv-8))
+
+         (standard-vat-sales-tt
+          (let ((tt (gncTaxTableCreate (gnc-get-current-book))))
+            (gncTaxTableIncRef tt)
+            (gncTaxTableSetName tt "10% vat on sales")
+            (let ((entry (gncTaxTableEntryCreate)))
+              (gncTaxTableEntrySetAccount entry vat-sales)
+              (gncTaxTableEntrySetType entry GNC-AMT-TYPE-PERCENT)
+              (gncTaxTableEntrySetAmount entry 10)
+              (gncTaxTableAddEntry tt entry))
+            tt))
+
+         (standard-vat-purchases-tt
+          (let ((tt (gncTaxTableCreate (gnc-get-current-book))))
+            (gncTaxTableIncRef tt)
+            (gncTaxTableSetName tt "10% vat on purchases")
+            (let ((entry (gncTaxTableEntryCreate)))
+              (gncTaxTableEntrySetAccount entry vat-purchases)
+              (gncTaxTableEntrySetType entry GNC-AMT-TYPE-PERCENT)
+              (gncTaxTableEntrySetAmount entry 10)
+              (gncTaxTableAddEntry tt entry))
+            tt)))
+
+    ;; entry-1  2 widgets of $3 = $6
+    (let ((entry-1 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-1 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-1 "entry-1-desc")
+      (gncEntrySetAction entry-1 "entry-1-action")
+      (gncEntrySetNotes entry-1 "entry-1-notes")
+      (gncEntrySetInvAccount entry-1 income)
+      (gncEntrySetDocQuantity entry-1 2 #f)
+      (gncEntrySetInvPrice entry-1 3)
+      (gncInvoiceAddEntry inv-1 entry-1))
+
+    ;; entry-inv-2  2 widgets of $3 = $6
+    (let ((entry-inv-2 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-inv-2 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-inv-2 "entry-inv-2-desc")
+      (gncEntrySetAction entry-inv-2 "entry-inv-2-action")
+      (gncEntrySetNotes entry-inv-2 "entry-inv-2-notes")
+      (gncEntrySetInvAccount entry-inv-2 income)
+      (gncEntrySetDocQuantity entry-inv-2 2 #f)
+      (gncEntrySetInvPrice entry-inv-2 3)
+      (gncInvoiceAddEntry inv-2 entry-inv-2))
+
+    ;; entry-inv-3  2 widgets of $3 = $6
+    (let ((entry-inv-3 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-inv-3 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-inv-3 "entry-inv-3-desc")
+      (gncEntrySetAction entry-inv-3 "entry-inv-3-action")
+      (gncEntrySetNotes entry-inv-3 "entry-inv-3-notes")
+      (gncEntrySetBillAccount entry-inv-3 expense)
+      (gncEntrySetDocQuantity entry-inv-3 2 #f)
+      (gncEntrySetBillPrice entry-inv-3 3)
+      (gncInvoiceAddEntry inv-3 entry-inv-3))
+
+    ;; entry-inv-4  2 widgets of $3 = $6
+    (let ((entry-inv-4 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-inv-4 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-inv-4 "entry-inv-4-desc")
+      (gncEntrySetAction entry-inv-4 "entry-inv-4-action")
+      (gncEntrySetNotes entry-inv-4 "entry-inv-4-notes")
+      (gncEntrySetBillAccount entry-inv-4 expense)
+      (gncEntrySetDocQuantity entry-inv-4 2 #f)
+      (gncEntrySetBillPrice entry-inv-4 3)
+      (gncInvoiceAddEntry inv-4 entry-inv-4))
+
+    ;; entry-5  2 widgets of $3 = $6
+    (let ((entry-5 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-5 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-5 "entry-5-desc")
+      (gncEntrySetAction entry-5 "entry-5-action")
+      (gncEntrySetNotes entry-5 "entry-5-notes")
+      (gncEntrySetInvAccount entry-5 income)
+      (gncEntrySetDocQuantity entry-5 2 #t)
+      (gncEntrySetInvPrice entry-5 3)
+      (gncInvoiceAddEntry inv-5 entry-5))
+
+    (let ((entry-inv-6 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-inv-6 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-inv-6 "entry-inv-6-desc")
+      (gncEntrySetAction entry-inv-6 "entry-inv-6-action")
+      (gncEntrySetNotes entry-inv-6 "entry-inv-6-notes")
+      (gncEntrySetBillAccount entry-inv-6 expense)
+      (gncEntrySetDocQuantity entry-inv-6 2 #t)
+      (gncEntrySetBillPrice entry-inv-6 3)
+      (gncInvoiceAddEntry inv-6 entry-inv-6))
+
+    ;; entry-inv-7  2 widgets of $3 = $6
+    (let ((entry-inv-7 (gncEntryCreate (gnc-get-current-book))))
+      (gncEntrySetDateGDate entry-inv-7 (time64-to-gdate (current-time)))
+      (gncEntrySetDescription entry-inv-7 "entry-inv-7-desc")
+      (gncEntrySetAction entry-inv-7 "entry-inv-7-action")
+      (gncEntrySetNotes entry-inv-7 "entry-inv-7-notes")
+      (gncEntrySetBillAccount entry-inv-7 expense)
+      (gncEntrySetDocQuantity entry-inv-7 2 #t)
+      (gncEntrySetBillPrice entry-inv-7 3)
+      (gncInvoiceAddEntry inv-7 entry-inv-7))
+
+    (gncInvoicePostToAccount inv-1 receivable
+                             (gnc-dmy2time64 1 9 1980)
+                             (gnc-dmy2time64 1 9 1980)
+                             "cust-invoice"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-2 receivable
+                             (gnc-dmy2time64 2 9 1980)
+                             (gnc-dmy2time64 3 9 1980)
+                             "job-invoice"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-3 payable
+                             (gnc-dmy2time64 3 9 1980)
+                             (gnc-dmy2time64 3 9 1980)
+                             "vendor-bill"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-4 payable
+                             (gnc-dmy2time64 4 9 1980)
+                             (gnc-dmy2time64 4 9 1980)
+                             "emp-bill"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-5 receivable
+                             (gnc-dmy2time64 5 9 1980)
+                             (gnc-dmy2time64 5 9 1980)
+                             "cust-credit-note"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-6 payable
+                             (gnc-dmy2time64 6 9 1980)
+                             (gnc-dmy2time64 6 9 1980)
+                             "vend-credit-note"
+                             #t #f)
+
+    (gncInvoicePostToAccount inv-7 payable
+                             (gnc-dmy2time64 7 9 1980)
+                             (gnc-dmy2time64 7 9 1980)
+                             "emp-credit-note"
+                             #t #f)
+
+    (let* ((taxrate 109/10)
+           (discount 7/2)
+           (unitprice 777/4)
+           (quantity 11)
+           (combo-vat-sales-tt
+            (let ((tt (gncTaxTableCreate (gnc-get-current-book))))
+              (gncTaxTableIncRef tt)
+              (gncTaxTableSetName tt (format #f "~a% vat on sales" taxrate))
+              (let ((entry (gncTaxTableEntryCreate)))
+                (gncTaxTableEntrySetAccount entry vat-sales)
+                (gncTaxTableEntrySetType entry GNC-AMT-TYPE-PERCENT)
+                (gncTaxTableEntrySetAmount entry taxrate)
+                (gncTaxTableAddEntry tt entry))
+              tt))
+           (order (let ((order (gncOrderCreate (gnc-get-current-book))))
+                    (gncOrderSetID order "order-id")
+                    (gncOrderSetOwner order owner-1)
+                    (gncOrderSetReference order "order-ref")
+                    (gncOrderSetActive order #t)
+                    order))
+           (billterm (let ((term (gncBillTermCreate (gnc-get-current-book))))
+                       (gncBillTermSetName term "billterm-name")
+                       (gncBillTermSetDescription term "billterm-desc")
+                       (gncBillTermSetType term 1) ;1 = GNC-TERM-TYPE-DAYS
+                       (gncBillTermSetDueDays term 8)
+                       term)))
+      (gncInvoiceSetTerms inv-8 billterm)
+      (for-each
+       (lambda (combo)
+         (let* ((each-entry (gncEntryCreate (gnc-get-current-book)))
+                (taxable? (= (vector-ref combo 0) 1))
+                (tax-included? (= (vector-ref combo 1) 1))
+                (discount-type (vector-ref combo 2))
+                (discount-how (vector-ref combo 3))
+                (desc (format #f "taxable=~a tax-included=~a discount-type=~a discount-how=~a"
+                              (if taxable? "Y" "N")
+                              (if tax-included? "Y" "N")
+                              (gncAmountTypeToString discount-type)
+                              (gncEntryDiscountHowToString discount-how))))
+           (gncEntrySetDateGDate each-entry (time64-to-gdate (current-time)))
+           (gncEntrySetDescription each-entry desc)
+           (gncEntrySetAction each-entry "action")
+           (gncEntrySetInvAccount each-entry income)
+           (gncEntrySetDocQuantity each-entry quantity #f)
+           (gncEntrySetInvPrice each-entry unitprice)
+           (gncEntrySetInvDiscount each-entry discount)
+           (gncEntrySetInvDiscountType each-entry discount-type)
+           (gncEntrySetInvDiscountHow each-entry discount-how)
+           (gncEntrySetInvTaxable each-entry taxable?)
+           (gncEntrySetInvTaxIncluded each-entry tax-included?)
+           (gncEntrySetInvTaxTable each-entry combo-vat-sales-tt)
+           (gncOrderAddEntry order each-entry)
+           ;; FIXME: Note: The following function hides a subtle
+           ;; bug. It aims to retrieve & dump the entry description
+           ;; and amount. Unfortunately the (gncEntryGetDocValue)
+           ;; function will subtly modify the entry amounts by a
+           ;; fraction; this means that the subsequent invoice payment
+           ;; will not make the invoice amount completely zero. If the
+           ;; following statement is uncommented, test-invoice will
+           ;; fail because the (gncInvoiceIsPaid) final test will
+           ;; fail.
+           ;; (format #t "inv-8: adding ~a to invoice, entry amount is ~a\n"
+           ;;         desc
+           ;;         (exact->inexact (gncEntryGetDocValue each-entry #f #t #f)))
+           (gncInvoiceAddEntry inv-8 each-entry)))
+       (list
+        ;; the following list specifies combinations to test gncEntry options
+        ;; thanks to rgmerk and to jenny for idea how to generate list of options
+        ;; (vector Taxable?(1=#t) Tax-included?(1=#t) DiscountType DiscountHow)
+        (vector 1 2 1 1)
+        (vector 2 1 2 2)
+        (vector 1 1 2 3)
+        (vector 2 2 1 3)
+        (vector 2 1 1 1)
+        (vector 1 2 2 2)
+        (vector 1 2 1 2)
+        (vector 1 1 2 1)))
+
+      (gncInvoiceSetNotes
+       inv-8 (format #f "tax=~a%, discount=~a, qty=~a, price=~a"
+                     taxrate discount quantity unitprice))
+
+      (gncInvoicePostToAccount inv-8 receivable
+                               (gnc-dmy2time64 8 9 1980)
+                               (gnc-dmy2time64 8 9 1980)
+                               "trans-posting-memo"
+                               #t #f)
+
+      (gncInvoiceApplyPayment inv-8 '() bank 1747918/100 1
+                              (gnc-dmy2time64 10 9 1980)
+                              "trans-payment-memo-1"
+                              "trans-payment-num-1"))
+
+    (vector inv-1 inv-2 inv-3 inv-4 inv-5 inv-6 inv-7 inv-8)))
