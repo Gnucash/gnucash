@@ -11,49 +11,77 @@
 (use-modules (gnucash report taxinvoice))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
+(use-modules (srfi srfi-9))
 (use-modules (srfi srfi-64))
 (use-modules (srfi srfi-98))
 (use-modules (gnucash engine test srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 
-;; NOTE
-;; ----
-;; SIMPLE stress tests by default
+;; NOTE: This file will attempt to run most reports and set their
+;; options. First, the reports are run on empty-book, then on a book
+;; with sample transactions and invoices.
+
+;; SIMPLE stress tests by default will run tests as many times as the
+;; maximum number of multichoice. if the option with most choices is a
+;; price-source with the 4 possibilities, average-cost,
+;; weighted-average, pricedb-nearest, pricedb-latest;
+;; simple-stress-test will run it 4 times using each price-source. Other
+;; options with fewer options are cycled e.g. multichoice 'simple
+;; 'detailed will be run with 'simple 'detailed 'simple 'detailed
+;; while the price-source gets more exhaustively tested. The report is
+;; only run to verify it does not crash. No testing of report output
+;; is actually done.
 ;;
-;; PAIRWISE COMBINATORICS are enabled by setting environment variable COMBINATORICS
-;; to the fullpath for the compiled jenny from http://burtleburtle.net/bob/math/jenny.html
+;; PAIRWISE testing will improve test coverage. From the above
+;; example, if the stress test runs: average-cost + simple,
+;; weighted-average + detailed, pricedb-nearest + simple,
+;; pricedb-latest + detailed. No testing of average-cost + detailed is
+;; performed. PAIRWISE testing ensures pairs are tested adequately and
+;; uses an external tool jenny to generate combinations. The full-path
+;; to jenny must be specified in the COMBINATORICS environment
+;; variable. The n-tuple may be modified -- see the global variable
+;; N-TUPLE. The jenny.c is copied in the "borrowed" folder in GnuCash
+;; source.  Source: http://burtleburtle.net/bob/math/jenny.html
 ;;
 ;; e.g. COMBINATORICS=/home/user/jenny/jenny ninja check
 
+;; the following is the N-tuple
+(define N-TUPLE 2)
+
 (define optionslist '())
+
+(define-record-type :combo
+  (make-combo section name combos)
+  combo?
+  (section get-section)
+  (name get-name)
+  (combos get-combos))
 
 (define (generate-optionslist)
   (gnc:report-templates-for-each
    (lambda (report-id template)
      (let* ((options-generator (gnc:report-template-options-generator template))
-            (name (gnc:report-template-name template))
-            (options (options-generator)))
+            (options (options-generator))
+            (report-options-tested '()))
+       (gnc:options-for-each
+        (lambda (option)
+          (when (memq (gnc:option-type option)
+                      '(multichoice boolean))
+            (set! report-options-tested
+              (cons (make-combo
+                     (gnc:option-section option)
+                     (gnc:option-name option)
+                     (case (gnc:option-type option)
+                       ((multichoice) (map (lambda (d) (vector-ref d 0))
+                                           (gnc:option-data option)))
+                       ((boolean) (list #t #f))))
+                    report-options-tested))))
+        options)
        (set! optionslist
          (cons (list (cons 'report-id report-id)
                      (cons 'report-name (gnc:report-template-name template))
-                     (cons 'options (let ((report-options-tested '()))
-                                      (gnc:options-for-each
-                                       (lambda (option)
-                                         (when (memq (gnc:option-type option)
-                                                     '(multichoice boolean))
-                                           (set! report-options-tested
-                                             (cons (vector
-                                                    (gnc:option-section option)
-                                                    (gnc:option-name option)
-                                                    (gnc:option-type option)
-                                                    (case (gnc:option-type option)
-                                                      ((multichoice) (map (lambda (d) (vector-ref d 0))
-                                                                          (gnc:option-data option)))
-                                                      ((boolean) (list #t #f))))
-                                                   report-options-tested))))
-                                       options)
-                                      report-options-tested)))
+                     (cons 'options report-options-tested))
                optionslist))))))
 
 ;; Explicitly set locale to make the report output predictable
@@ -64,6 +92,8 @@
   (test-begin "stress options")
   (generate-optionslist)
   (tests)
+  (gnc:dump-book)
+  (gnc:dump-invoices)
   (test-end "stress options"))
 
 (define jennypath
@@ -89,19 +119,19 @@
    (gnc-commodity-get-namespace (gnc-default-report-currency))
    sym))
 
-(define structure
-  (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
-        (list "Asset"
-              (list "Bank")
-              (list "GBP Bank" (list (cons 'commodity (mnemonic->commodity "GBP"))))
-              (list "Wallet"))
-        (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
-        (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)
-                                 (cons 'commodity (mnemonic->commodity "GBP"))))
-        (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
-        (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
-        (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
-        ))
+;; code snippet to run report uuid, with options object
+(define (try-run-report uuid options option-summary)
+  (define (try proc . args) (gnc:apply-with-error-handling proc args))
+  (let* ((res (try gnc:options->render uuid options "stress-test" "test"))
+         (captured-error (cadr res)))
+    (cond
+     (captured-error
+      (format #t "[fail]... \noptions-list are:\n~abacktrace:\n~a\n"
+              (gnc:html-render-options-changed options #t)
+              captured-error)
+      (test-assert "logging test failure..." #f))
+     (else
+      (format #t "[pass] ~a\n" (string-join option-summary ","))))))
 
 (define (simple-stress-test report-name uuid report-options)
   (let ((options (gnc:make-report-options uuid)))
@@ -111,108 +141,98 @@
     (for-each
      (lambda (option)
        (format #t ",~a/~a"
-               (vector-ref option 0)
-               (vector-ref option 1)))
+               (get-section option)
+               (get-name option)))
      report-options)
     (newline)
     (for-each
      (lambda (idx)
-       (display report-name)
-       (for-each
-        (lambda (option)
-          (let* ((section (vector-ref option 0))
-                 (name (vector-ref option 1))
-                 (value (list-ref (vector-ref option 3)
-                                  (modulo idx (length (vector-ref option 3))))))
-            (set-option! options section name value)
-            (format #t ",~a"
-                    (cond
-                     ((boolean? value) (if value 't 'f))
-                     (else value)))))
-        report-options)
-       (catch #t
-         (lambda ()
-           (gnc:options->render uuid options "stress-test" "test")
-           (display "[pass]\n"))
-         (lambda (k . args)
-           (format #t "[fail]... error: (~s . ~s) options-list are:\n~a"
-                   k args
-                   (gnc:html-render-options-changed options #t))
-           (test-assert "logging test failure as above..."
-             #f))))
-     (iota
-      (apply max
-             (map (lambda (opt) (length (vector-ref opt 3)))
-                  report-options)))
-     )))
+       (when (gnc:lookup-option options "General" "Start Date")
+         (set-option! options "General" "Start Date"
+                      (cons 'absolute (gnc-dmy2time64 1 12 1969))))
+       (when (gnc:lookup-option options "General" "End Date")
+         (set-option! options "General" "End Date"
+                      (cons 'absolute (gnc-dmy2time64 1 1 1972))))
+       (let loop ((report-options report-options)
+                  (option-summary '()))
+         (if (null? report-options)
+             (try-run-report uuid options option-summary)
+             (let* ((option (car report-options))
+                    (section (get-section option))
+                    (name (get-name option))
+                    (value (list-ref (get-combos option)
+                                     (modulo idx (length (get-combos option))))))
+               (set-option! options section name value)
+               (loop (cdr report-options)
+                     (cons (cond
+                            ((boolean? value) (if value "t" "f"))
+                            (else (object->string value)))
+                           option-summary))))))
+     (iota (apply max (cons 0 (map (lambda (opt) (length (get-combos opt)))
+                                   report-options)))))))
 
 (define (combinatorial-stress-test report-name uuid report-options)
   (let* ((options (gnc:make-report-options uuid))
          (render #f))
+
     (test-assert (format #f "basic test ~a" report-name)
       (set! render
         (gnc:options->render
          uuid options (string-append "stress-" report-name) "test")))
-    (if render
-        (begin
-          (format #t "Testing n-tuple combinatorics for:\n~a" report-name)
-          (for-each
-           (lambda (option)
-             (format #t ",~a/~a"
-                     (vector-ref option 0)
-                     (vector-ref option 1)))
-           report-options)
-          (newline)
-          ;; generate combinatorics
-          (let* ((option-lengths (map (lambda (report-option)
-                                        (length (vector-ref report-option 3)))
-                                      report-options))
-                 (jennyargs (string-join (map number->string option-lengths) " "))
-                 (n-tuple (min
-                           ;; the following is the n-tuple
-                           2
-                           (length report-options)))
-                 (cmdline (format #f "~a -n~a ~a"
-                                  jennypath n-tuple jennyargs))
-                 (jennyout (get-string-all (open-input-pipe cmdline)))
-                 (test-cases (string-split jennyout #\newline)))
-            (for-each
-             (lambda (case)
-               (unless (string-null? case)
-                 (let* ((choices-str (string-filter char-alphabetic? case))
-                        (choices-alpha (map char->integer (string->list choices-str)))
-                        (choices (map (lambda (n)
-                                        (- n (if (> n 96) 97 39))) ; a-z -> 0-25, and A-Z -> 26-51
-                                      choices-alpha)))
-                   (let loop ((option-idx (1- (length report-options)))
-                              (option-summary '()))
-                     (if (negative? option-idx)
-                         (catch #t
-                           (lambda ()
-                             (gnc:options->render uuid options "stress-test" "test")
-                             (format #t "[pass] ~a:~a \n"
-                                     report-name
-                                     (string-join option-summary ",")))
-                           (lambda (k . args)
-                             (format #t "[fail]... error (~s . ~s) options-list are:\n~a"
-                                     k args
-                                     (gnc:html-render-options-changed options #t))
-                             (test-assert "logging test failure as above..."
-                               #f)))
-                         (let* ((option (list-ref report-options option-idx))
-                                (section (vector-ref option 0))
-                                (name (vector-ref option 1))
-                                (value (list-ref (vector-ref option 3)
-                                                 (list-ref choices option-idx))))
-                           (set-option! options section name value)
-                           (loop (1- option-idx)
-                                 (cons (format #f "~a"
-                                               (cond
-                                                ((boolean? value) (if value 't 'f))
-                                                (else value)))
-                                       option-summary))))))))
-             test-cases)))
-        (display "...aborted due to basic test failure"))))
+
+    (cond
+     (render
+      (format #t "Testing n-tuple combinatorics for:\n~a" report-name)
+      (for-each
+       (lambda (option)
+         (format #t ",~a/~a"
+                 (get-section option)
+                 (get-name option)))
+       report-options)
+      (newline)
+      (when (gnc:lookup-option options "General" "Start Date")
+        (set-option! options "General" "Start Date"
+                     (cons 'absolute (gnc-dmy2time64 1 12 1969))))
+      (when (gnc:lookup-option options "General" "End Date")
+        (set-option! options "General" "End Date"
+                     (cons 'absolute (gnc-dmy2time64 1 1 1972))))
+      ;; generate combinatorics
+      (let* ((option-lengths (map (lambda (report-option)
+                                    (length (get-combos report-option)))
+                                  report-options))
+             (jennyargs (string-join (map number->string option-lengths) " "))
+             (n-tuple (min N-TUPLE (length report-options)))
+             (cmdline (format #f "~a -n~a ~a" jennypath n-tuple jennyargs))
+             (jennyout (get-string-all (open-input-pipe cmdline)))
+             (test-cases (string-split jennyout #\newline)))
+        (for-each
+         (lambda (case)
+           (unless (string-null? case)
+             (let* ((choices-str (string-filter char-alphabetic? case))
+                    (choices-alpha (map char->integer (string->list choices-str)))
+                    (choices (map (lambda (n)
+                                    ;; a-z -> 0-25, and A-Z -> 26-51
+                                    (- n (if (> n 96) 97 39)))
+                                  choices-alpha)))
+               (let loop ((option-idx (1- (length report-options)))
+                          (option-summary '()))
+                 (if (negative? option-idx)
+                     (try-run-report uuid options option-summary)
+                     (let* ((option (list-ref report-options option-idx))
+                            (section (get-section option))
+                            (name (get-name option))
+                            (value (list-ref (get-combos option)
+                                             (list-ref choices option-idx))))
+                       (set-option! options section name value)
+                       (loop (1- option-idx)
+                             (cons (cond
+                                    ((boolean? value) (if value "t" "f"))
+                                    (else (object->string value)))
+                                   option-summary))))))))
+         test-cases)))
+
+     (else
+      (display "...aborted due to basic test failure")))))
 
 (define test
   ;; what strategy are we using here? simple stress test (ie tests as
@@ -221,63 +241,6 @@
   (if jenny-exists?
       combinatorial-stress-test
       simple-stress-test))
-
-(define (create-test-data)
-  (let* ((env (create-test-env))
-         (account-alist (env-create-account-structure-alist env structure))
-         (bank (cdr (assoc "Bank" account-alist)))
-         (gbp-bank (cdr (assoc "GBP Bank" account-alist)))
-         (wallet (cdr (assoc "Wallet" account-alist)))
-         (income (cdr (assoc "Income" account-alist)))
-         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
-         (expense (cdr (assoc "Expenses" account-alist)))
-         (liability (cdr (assoc "Liabilities" account-alist)))
-         (equity (cdr (assoc "Equity" account-alist))))
-    ;; populate datafile with old transactions
-    (env-transfer env 01 01 1970 bank expense       5   #:description "desc-1" #:num "trn1" #:memo "memo-3")
-    (env-transfer env 31 12 1969 income bank       10   #:description "desc-2" #:num "trn2" #:void-reason "void" #:notes "notes3")
-    (env-transfer env 31 12 1969 income bank       29   #:description "desc-3" #:num "trn3"
-                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
-    (env-transfer env 01 02 1970 bank expense      15   #:description "desc-4" #:num "trn4" #:notes "notes2" #:memo "memo-1")
-    (env-transfer env 10 01 1970 liability expense 10   #:description "desc-5" #:num "trn5" #:void-reason "any")
-    (env-transfer env 10 01 1970 liability expense 11   #:description "desc-6" #:num "trn6" #:notes "notes1")
-    (env-transfer env 10 02 1970 bank liability     8   #:description "desc-7" #:num "trn7" #:notes "notes1" #:memo "memo-2"
-                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
-    (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
-          (split-1 (xaccMallocSplit  (gnc-get-current-book)))
-          (split-2 (xaccMallocSplit  (gnc-get-current-book)))
-          (split-3 (xaccMallocSplit  (gnc-get-current-book))))
-      (xaccTransBeginEdit txn)
-      (xaccTransSetDescription txn "$100bank -> $80expenses + $20wallet")
-      (xaccTransSetCurrency txn (xaccAccountGetCommodity bank))
-      (xaccTransSetDate txn 14 02 1971)
-      (xaccSplitSetParent split-1 txn)
-      (xaccSplitSetParent split-2 txn)
-      (xaccSplitSetParent split-3 txn)
-      (xaccSplitSetAccount split-1 bank)
-      (xaccSplitSetAccount split-2 expense)
-      (xaccSplitSetAccount split-3 wallet)
-      (xaccSplitSetValue split-1 -100)
-      (xaccSplitSetValue split-2 80)
-      (xaccSplitSetValue split-3 20)
-      (xaccSplitSetAmount split-1 -100)
-      (xaccSplitSetAmount split-2 80)
-      (xaccSplitSetAmount split-3 20)
-      (xaccTransSetNotes txn "multisplit")
-      (xaccTransCommitEdit txn))
-    (let ((closing-txn (env-transfer env 31 12 1977 expense equity 111 #:description "Closing")))
-      (xaccTransSetIsClosingTxn closing-txn #t))
-    (env-transfer-foreign env 15 01 2000 gbp-bank bank 10 14 #:description "GBP 10 to USD 14")
-    (env-transfer-foreign env 15 02 2000 bank gbp-bank  9  6 #:description "USD 9 to GBP 6")
-    (for-each (lambda (m)
-                (env-transfer env 08 (1+ m) 1978 gbp-income gbp-bank 51 #:description "#51 income")
-                (env-transfer env 03 (1+ m) 1978 income bank  103 #:description "$103 income")
-                (env-transfer env 15 (1+ m) 1978 bank expense  22 #:description "$22 expense")
-                (env-transfer env 09 (1+ m) 1978 income bank  109 #:description "$109 income"))
-              (iota 12))
-    (let ((mid (floor (/ (+ (gnc-accounting-period-fiscal-start)
-                            (gnc-accounting-period-fiscal-end)) 2))))
-      (env-create-transaction env mid bank income 200))))
 
 (define (run-tests prefix)
   (for-each
@@ -293,15 +256,6 @@
                      "Receipt"
                      "Australian Tax Invoice"
                      "Balance Sheet (eguile)"
-
-                     ;; tax-schedule - locale-dependent?
-                     "Tax Schedule Report/TXF Export"
-
-                     ;; unusual reports
-                     "Welcome to GnuCash"
-                     "Hello, World"
-                     "Multicolumn View"
-                     "General Journal"
                      ))
            (format #t "\nSkipping ~a ~a...\n" report-name prefix)
            (begin
@@ -312,4 +266,5 @@
 (define (tests)
   (run-tests "with empty book")
   (create-test-data)
+  (create-test-invoice-data)
   (run-tests "on a populated book"))
