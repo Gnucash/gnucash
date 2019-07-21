@@ -849,9 +849,19 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
 ;;
-;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; arguments:
+;; source-option: symbol 'average-cost 'weighted-average
+;;                'pricedb-nearest 'pricedb-latest
+;; report-currency: the target currency
+;; commodity-list: the list of commodities to generate an exchange-fn for
+;; to-date-tp (time64): last date to analyse transactions
+;; start-percent, delta-percent: Fill in the [start:start+delta]
 ;; section of the progress bar while running this function.
 ;;
+;; returns: a function which takes 3 arguments, and returns a gnc-monetary
+;;    foreign  - foreign commodity/currency
+;;    domestic - a gnc-monetary pair
+;;    date     - time64 price
 (define (gnc:case-exchange-time-fn
          source-option report-currency commodity-list to-date-tp
          start-percent delta-percent)
