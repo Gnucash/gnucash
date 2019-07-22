@@ -1173,6 +1173,7 @@ flawed. see report-utilities.scm. please update reports.")
 ;; utility function for testing. dumps the whole book contents to
 ;; console.
 (define (gnc:dump-book)
+  (display "\n(gnc:dump-book)\n")
   (for-each
    (lambda (acc)
      (format #t "\nAccount: <~a> Comm<~a> Type<~a>\n"
@@ -1184,7 +1185,8 @@ flawed. see report-utilities.scm. please update reports.")
      (for-each
       (lambda (s)
         (let ((txn (xaccSplitGetParent s)))
-          (format #t "  Split: ~a Amt<~a> Val<~a> Desc<~a>\n"
+          (format #t "~a Split: ~a Amt<~a> Val<~a> Desc<~a> Memo<~a>\n"
+                  (xaccSplitGetReconcile s)
                   (qof-print-date (xaccTransGetDate txn))
                   (gnc:monetary->string
                    (gnc:make-gnc-monetary
@@ -1194,13 +1196,28 @@ flawed. see report-utilities.scm. please update reports.")
                    (gnc:make-gnc-monetary
                     (xaccTransGetCurrency txn)
                     (xaccSplitGetValue s)))
-                  (xaccTransGetDescription txn))))
-      (xaccAccountGetSplitList acc)))
+                  (xaccTransGetDescription txn)
+                  (xaccSplitGetMemo s))))
+      (xaccAccountGetSplitList acc))
+     (format #t "Balance: ~a Cleared: ~a Reconciled: ~a\n"
+             (gnc:monetary->string
+              (gnc:make-gnc-monetary
+               (xaccAccountGetCommodity acc)
+               (xaccAccountGetBalance acc)))
+             (gnc:monetary->string
+              (gnc:make-gnc-monetary
+               (xaccAccountGetCommodity acc)
+               (xaccAccountGetClearedBalance acc)))
+             (gnc:monetary->string
+              (gnc:make-gnc-monetary
+               (xaccAccountGetCommodity acc)
+               (xaccAccountGetReconciledBalance acc)))))
    (gnc-account-get-descendants-sorted
     (gnc-get-current-root-account))))
 
 ;; dump all invoices posted into an AP/AR account
 (define (gnc:dump-invoices)
+  (display "\n(gnc:dump-invoices)\n")
   (let* ((acc-APAR (filter (compose xaccAccountIsAPARType xaccAccountGetType)
                            (gnc-account-get-descendants-sorted
                             (gnc-get-current-root-account))))
@@ -1218,7 +1235,7 @@ flawed. see report-utilities.scm. please update reports.")
         (gncInvoiceGetCurrency inv) amt)))
     (for-each
      (lambda (inv)
-       (format #t "\nInvoice: ID<~a> Owner<~a> Account<~a>\n"
+       (format #t "Invoice: ID<~a> Owner<~a> Account<~a>\n"
                (gncInvoiceGetID inv)
                (gncOwnerGetName (gncInvoiceGetOwner inv))
                (xaccAccountGetName (gncInvoiceGetPostedAcc inv)))
