@@ -1743,7 +1743,7 @@
   namespace="ISO4217"
   exchange-code="478"
   parts-per-unit="5"
-  smallest-fraction="5"
+  smallest-fraction="100"
   local-symbol="UM"
 />
 <!-- "MRU" - "Ouguiya"
