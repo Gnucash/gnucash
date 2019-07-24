@@ -24,8 +24,6 @@
 (use-modules (gnucash core-utils)
              (gnucash gettext))
 
-(define gnc:reldate-list '())
-
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
   (+ 1900 (tm:year datevec)))
@@ -153,9 +151,10 @@
   (let ((lt (gnc-localtime caltime)))
     (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
        (gnc:date-get-month lt) -1
-       (/ (- (gnc:date-get-month-day lt) 1.0) (gnc:days-in-month 
-					       (gnc:date-get-month lt)
-					       (gnc:date-get-year lt))))))
+       (/ (- (gnc:date-get-month-day lt) 1.0)
+          (gnc:days-in-month
+	   (gnc:date-get-month lt)
+	   (gnc:date-get-year lt))))))
 
 ;; convert a date in seconds since 1970 into # of two-week periods since
 ;; Jan 4, 1970 ignoring leap-seconds (just halfing date-to-week-fraction)
@@ -209,10 +208,12 @@
 ;; date-granularity comparison functions.
 
 (define (gnc:time64-le-date t1 t2)
+  (issue-deprecation-warning "gnc:time64-le-date is unused")
   (<= (time64CanonicalDayTime t1)
       (time64CanonicalDayTime t2)))
 
 (define (gnc:time64-ge-date t1 t2)
+  (issue-deprecation-warning "gnc:time64-ge-date is unused")
   (gnc:time64-le-date t2 t1))
 
 ;; returns #t if adding 1 to mday causes a month change.
@@ -414,6 +415,9 @@
 (define (gnc:time64-next-day t64)
   (incdate t64 DayDelta))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; relative-date functions start here
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))
 (define (gnc:reldate-get-string x) (vector-ref x 1))
@@ -421,19 +425,24 @@
 (define (gnc:reldate-get-fn x) (vector-ref x 3))
 
 (define (gnc:make-reldate-hash hash reldate-list)
+  (issue-deprecation-warning "gnc:make-reldate-hash is deprecated.")
   (map (lambda (reldate) (hash-set! 
 			  hash 
 			  (gnc:reldate-get-symbol reldate)
 			  reldate))
        reldate-list))
 
-(define gnc:reldate-string-db (gnc:make-string-database))
+;; the following two variables will be inlined and can be deprecated
+(define gnc:reldate-string-db (gnc:make-string-database)) ;deprecate
+(define gnc:relative-date-values '())                     ;deprecate
 
-(define gnc:relative-date-values '())
-
-(define gnc:relative-date-hash (make-hash-table 23))
+;; the globally available hash of reldates (hash-key = reldate
+;; symbols, hash-value = a vector, reldate data). aim to deprecate it
+;; being exported.
+(define gnc:relative-date-hash (make-hash-table))
 
 (define (gnc:get-absolute-from-relative-date date-symbol)
+  ;; used in options.scm
   (let ((rel-date-data (hash-ref gnc:relative-date-hash date-symbol)))
     (if rel-date-data
         ((gnc:reldate-get-fn rel-date-data))
@@ -446,18 +455,25 @@ Defaulting to today."))
           (current-time)))))
 
 (define (gnc:get-relative-date-strings date-symbol)
+  (issue-deprecation-warning "gnc:get-relative-date-strings is unused.")
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
     
     (cons (gnc:reldate-get-string rel-date-info)
 	  (gnc:relate-get-desc rel-date-info))))
 
 (define (gnc:get-relative-date-string date-symbol)
+  ;; used in options.scm
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
     (gnc:reldate-get-string rel-date-info)))
 
 (define (gnc:get-relative-date-desc date-symbol)
+  ;; used in options.scm
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
     (gnc:reldate-get-desc rel-date-info)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; end relative-date functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:get-start-cal-year)
   (let ((now (gnc-localtime (current-time))))
@@ -808,6 +824,9 @@ Defaulting to today."))
 ;;start-cur-fin-year start-prev-fin-year end-prev-fin-year
 
 (define (gnc:reldate-initialize)
+  (define gnc:reldate-string-db (gnc:make-string-database))
+  (define gnc:relative-date-values #f)
+
   (gnc:reldate-string-db 
    'store 'start-cal-year-string 
    (N_ "Start of this year"))
@@ -1131,7 +1150,8 @@ Defaulting to today."))
 		 (gnc:reldate-string-db 'lookup 'one-year-ahead-desc)
 		 gnc:get-one-year-ahead)))
 
-
-  (gnc:make-reldate-hash gnc:relative-date-hash gnc:relative-date-values)
-  (set! gnc:reldate-list
-	(map (lambda (x) (vector-ref x 0)) gnc:relative-date-values)))
+  ;; initialise gnc:relative-date-hash
+  (for-each
+   (lambda (reldate)
+     (hash-set! gnc:relative-date-hash (gnc:reldate-get-symbol reldate) reldate))
+   gnc:relative-date-values))
