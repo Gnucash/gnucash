@@ -325,7 +325,7 @@ else(GUILE22_FOUND)
     message(STATUS "Using guile-2.0.x")
     find_program (GUILE_EXECUTABLE NAMES guile2.0 guile)
   else(GUILE2_FOUND)
-    message (FATAL_ERROR "Neither guile 2.2 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pgk-config.")
+    message (FATAL_ERROR "Neither guile 2.2 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pkg-config.")
   endif(GUILE2_FOUND)
 endif(GUILE22_FOUND)
 
