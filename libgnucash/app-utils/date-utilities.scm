@@ -249,6 +249,8 @@
 (define (gnc:make-date-interval-list startdate enddate incr)
   (define month-delta
     (assv-ref MonthDeltas incr))
+  (define (make-interval from to)
+    (list from (if (< to enddate) (decdate to SecDelta) enddate)))
   (let loop ((result '())
              (date startdate)
              (idx 0))
@@ -258,20 +260,12 @@
      (month-delta
       (let* ((curr (incdate-months startdate (* month-delta idx)))
              (next (incdate-months startdate (* month-delta (1+ idx)))))
-        (loop (cons (list curr
-                          (if (< next enddate)
-                              (decdate next SecDelta)
-                              enddate))
-                    result)
+        (loop (cons (make-interval curr next) result)
               next
               (1+ idx))))
      (else
       (let ((next (incdate date incr)))
-        (loop (cons (list date
-                          (if (< next enddate)
-                              (decdate next SecDelta)
-                              enddate))
-                    result)
+        (loop (cons (make-interval date next) result)
               next
               (1+ idx)))))))
 
