@@ -1748,6 +1748,7 @@
   local-symbol="UM"
 />
 <!-- "MRU" - "Ouguiya"
+;; Bug 797319: In cash parts-per-unit is still 5, but not in banking 
 -->
 <currency
   isocode="MRU"
