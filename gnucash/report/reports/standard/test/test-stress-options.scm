@@ -8,6 +8,7 @@
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (gnucash reports standard taxinvoice))
 (use-modules (gnucash report))
+(use-modules (gnucash reports))
 (use-modules (tests test-report-extras))
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-64))
@@ -254,6 +255,9 @@
                      "Receipt"
                      "Australian Tax Invoice"
                      "Balance Sheet (eguile)"
+
+                     ;; skip Hello World which is designed to crash...
+                     "Hello, World"
                      ))
            (format #t "\nSkipping ~a ~a...\n" report-name prefix)
            (begin
