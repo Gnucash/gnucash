@@ -2710,9 +2710,8 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
     gnc_option_set_widget (option, value);
-    /* DOCUMENT ME: Why is the only option type that sets use_default to
-       TRUE? */
-    gnc_option_set_ui_value(option, TRUE);
+
+    gnc_option_set_ui_value(option, FALSE);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
