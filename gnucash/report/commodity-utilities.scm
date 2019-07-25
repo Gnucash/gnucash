@@ -263,27 +263,21 @@
 ;; pricelist comes from
 ;; e.g. gnc:get-commodity-totalavg-prices. Returns a <gnc-numeric> or,
 ;; if pricelist was empty, #f.
-(define (gnc:pricelist-price-find-nearest
-         pricelist date)
-  (let* ((later (find (lambda (p)
-                        (< date (car p)))
-                      pricelist))
-         (earlierlist (take-while
-                       (lambda (p)
-                         (>= date (car p)))
-                       pricelist))
-         (earlier (and (not (null? earlierlist))
-                       (last earlierlist))))
-
-    (if (and earlier later)
-        (if (< (abs (- date (car earlier)))
-               (abs (- date (car later))))
-            (cadr earlier)
-            (cadr later))
-        (or
-         (and earlier (cadr earlier))
-         (and later (cadr later))))))
-
+(define (gnc:pricelist-price-find-nearest pricelist date)
+  (let lp ((pricelist pricelist))
+    (cond
+     ((null? pricelist) #f)
+     ((null? (cdr pricelist)) (cadr (car pricelist)))
+     (else
+      (let ((earlier (car pricelist))
+            (later (cadr pricelist)))
+        (cond
+         ((< (car later) date)
+          (lp (cdr pricelist)))
+         ((< (- date (car earlier)) (- (car later) date))
+          (cadr earlier))
+         (else
+          (cadr later))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get one price at a given time (i.e. not time-variant).
@@ -779,9 +773,19 @@
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
 ;;
-;; <int> start-percent, delta-percent: Fill in the [start:start+delta]
+;; arguments:
+;; source-option: symbol 'average-cost 'weighted-average
+;;                'pricedb-nearest 'pricedb-latest
+;; report-currency: the target currency
+;; commodity-list: the list of commodities to generate an exchange-fn for
+;; to-date-tp (time64): last date to analyse transactions
+;; start-percent, delta-percent: Fill in the [start:start+delta]
 ;; section of the progress bar while running this function.
 ;;
+;; returns: a function which takes 3 arguments, and returns a gnc-monetary
+;;    foreign  - foreign commodity/currency
+;;    domestic - a gnc-monetary pair
+;;    date     - time64 price
 (define (gnc:case-exchange-time-fn
          source-option report-currency commodity-list to-date-tp
          start-percent delta-percent)

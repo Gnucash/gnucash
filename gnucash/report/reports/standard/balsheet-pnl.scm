@@ -781,20 +781,30 @@ also show overall period profit & loss."))
                             price-source common-currency
                             (map xaccAccountGetCommodity accounts) enddate
                             #f #f)))
+
+         ;; this function will convert the monetary found at col-idx
+         ;; into report-currency if the latter exists. The price
+         ;; applicable the the col-idx column is used. If the monetary
+         ;; cannot be converted (eg. missing price) then it is not converted.
          (convert-curr-fn (lambda (monetary col-idx)
                             (and common-currency
                                  (not (gnc-commodity-equal
                                        (gnc:gnc-monetary-commodity monetary)
                                        common-currency))
                                  (has-price? (gnc:gnc-monetary-commodity monetary))
-                                 (let* ((date (case price-source
-                                                ((pricedb-latest) (current-time))
-                                                (else
-                                                 (list-ref report-dates
-                                                           (case report-type
-                                                             ((balsheet) col-idx)
-                                                             ((pnl) (1+ col-idx))))))))
+                                 (let ((date
+                                        (cond
+                                         ((eq? price-source 'pricedb-latest)
+                                          (current-time))
+                                         ((eq? col-idx 'overall-period)
+                                          (last report-dates))
+                                         (else
+                                          (list-ref report-dates
+                                                    (case report-type
+                                                      ((balsheet) col-idx)
+                                                      ((pnl) (1+ col-idx))))))))
                                    (exchange-fn monetary common-currency date)))))
+
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
          ;; accountlist given, obtain commodities, and convert 1 unit
