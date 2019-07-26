@@ -981,31 +981,6 @@ write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
     struct file_backend be_data;
 
-#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
-    /* We can't just blast out the dom tree, because the dom tree
-     * doesn't have the books, transactions, etc underneath it.
-     * But that is just as well, since I think the performance
-     * will be much better if we write out as we go along
-     */
-    xmlNodePtr node;
-
-    node = gnc_book_dom_tree_create (book);
-
-    if (!node)
-    {
-        return FALSE;
-    }
-
-    xmlElemDump (out, NULL, node);
-    xmlFreeNode (node);
-
-    if (ferror (out) || fprintf (out, "\n") < 0)
-    {
-        return FALSE;
-    }
-
-#endif
-
     be_data.out = out;
     be_data.book = book;
     be_data.gd = gd;
