@@ -65,7 +65,7 @@ static void
 shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 {
     QFB *qfb = user_data;
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_ACCOUNT_SEPARATOR,
                                  shared_quickfill_pref_changed,
                                  qfb);
