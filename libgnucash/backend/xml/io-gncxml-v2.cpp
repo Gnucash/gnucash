@@ -853,6 +853,9 @@ qof_session_load_from_xml_file_v2_full (
     gnc_account_foreach_descendant (root,
                                     (AccountCb) xaccAccountCommitEdit,
                                     NULL);
+    gnc_account_foreach_descendant (gnc_book_get_template_root (book),
+                                    (AccountCb) xaccAccountCommitEdit,
+                                    NULL);
 
     /* start logging again */
     xaccLogEnable ();
