@@ -748,6 +748,31 @@ gnc_gui_destroy (void)
     if (!gnome_is_initialized)
         return;
 
+    if (gnc_prefs_is_set_up())
+    {
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_DATE_FORMAT,
+                                     gnc_configure_date_format,
+                                     NULL);
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_DATE_COMPL_THISYEAR,
+                                     gnc_configure_date_completion,
+                                     NULL);
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_DATE_COMPL_SLIDING,
+                                     gnc_configure_date_completion,
+                                     NULL);
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_DATE_BACKMONTHS,
+                                     gnc_configure_date_completion,
+                                     NULL);
+        gnc_prefs_remove_group_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                           gnc_gui_refresh_all,
+                                           NULL);
+
+        gnc_ui_util_remove_registered_prefs ();
+        gnc_prefs_remove_registered ();
+    }
     gnc_extensions_shutdown ();
 }
 
