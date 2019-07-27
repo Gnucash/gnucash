@@ -28,8 +28,16 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "income-gst-statement.scm")
   (null-test)
-  (gstr-tests)
+  (test-group-with-cleanup "default GST report"
+    (gstr-tests)
+    (teardown))
+  (test-group-with-cleanup "UK-VAT report"
+    (uk-vat-tests)
+    (teardown))
   (test-end "income-gst-statement.scm"))
+
+(define (teardown)
+  (gnc-clear-current-session))
 
 (define (options->sxml options test-title)
   (gnc:options->sxml rpt-uuid options "test-gstr" test-title))
@@ -40,21 +48,11 @@
         (gnc:option-set-value option value)
         (test-assert (format #f "wrong-option ~a ~a" section name) #f))))
 
-(define structure
-  (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
-        (list "GST"
-              (list "GST on Purchases")
-              (list "GST on Sales" (list (cons 'type ACCT-TYPE-LIABILITY)))
-              (list "Reduced GST on Sales" (list (cons 'type ACCT-TYPE-LIABILITY))))
-        (list "Asset"
-              (list "Bank")
-              (list "A/Receivable" (list (cons 'type ACCT-TYPE-RECEIVABLE))))
-        (list "Liability" (list (cons 'type ACCT-TYPE-PAYABLE))
-              (list "CreditCard")
-              (list "A/Payable"))
-        (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
-        (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
-        ))
+(define* (create-txn d m y desc splits #:optional txn-type)
+  (let* ((splits (map (lambda (s) (vector (cdr s) (car s) (car s))) splits))
+         (txn (env-create-multisplit-transaction #f d m y splits #:description desc)))
+    (when txn-type (xaccTransSetTxnType txn txn-type))
+    txn))
 
 (define (null-test)
   ;; This null-test tests for the presence of report.
@@ -62,7 +60,21 @@
     (test-assert "null-test" (options->sxml options "null-test"))))
 
 (define (gstr-tests)
-  ;; This function will perform implementation testing on the transaction report.
+  (define structure
+    (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
+          (list "GST"
+                (list "GST on Purchases")
+                (list "GST on Sales" (list (cons 'type ACCT-TYPE-LIABILITY)))
+                (list "Reduced GST on Sales" (list (cons 'type ACCT-TYPE-LIABILITY))))
+          (list "Asset"
+                (list "Bank")
+                (list "A/Receivable" (list (cons 'type ACCT-TYPE-RECEIVABLE))))
+          (list "Liability" (list (cons 'type ACCT-TYPE-PAYABLE))
+                (list "CreditCard")
+                (list "A/Payable"))
+          (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+          (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))))
+  ;; This function will perform implementation testing on the GST report.
   (let* ((env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
          (bank (cdr (assoc "Bank" account-alist)))
@@ -77,40 +89,16 @@
          (YEAR (gnc:time64-get-year (gnc:get-today))))
 
     (define (default-testing-options)
-      ;; To ease testing of transaction report, we will set default
-      ;; options for generating reports. We will elable extra columns
-      ;; for Exporting, disable generation of informational text, and
-      ;; disable indenting. These options will be tested separately as
-      ;; the first test group. By default, we'll select the modern dates.
       (let ((options (gnc:make-report-options rpt-uuid)))
-        (set-option! options "Accounts" "Accounts" (list income expense payable receivable))
-        (set-option! options "Accounts" "Tax Accounts" (list gst-sales
-                                                             reduced-gst-sales
-                                                             gst-purch))
+        (set-option! options "Accounts" "Sales" (list income))
+        (set-option! options "Accounts" "Purchases" (list expense))
+        (set-option! options "Accounts" "Tax Accounts"
+                     (list gst-sales reduced-gst-sales gst-purch))
         (set-option! options "General" "Add options summary" 'always)
         (set-option! options "General" "Table for Exporting" #t)
         (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
         (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
         options))
-
-    (define* (create-txn DD MM YY DESC list-of-splits #:optional txn-type)
-      (let ((txn (xaccMallocTransaction (gnc-get-current-book))))
-        (xaccTransBeginEdit txn)
-        (xaccTransSetDescription txn DESC)
-        (xaccTransSetCurrency txn (gnc-default-report-currency))
-        (xaccTransSetDate txn DD MM YY)
-        (for-each
-         (lambda (tfr)
-           (let ((split (xaccMallocSplit (gnc-get-current-book))))
-             (xaccSplitSetParent split txn)
-             (xaccSplitSetAccount split (cdr tfr))
-             (xaccSplitSetValue split (car tfr))
-             (xaccSplitSetAmount split (car tfr))))
-         list-of-splits)
-        (if txn-type
-            (xaccTransSetTxnType txn txn-type))
-        (xaccTransCommitEdit txn)
-        txn))
 
     ;; This will make all accounts use default currency (I think depends on locale)
     (for-each
@@ -192,22 +180,157 @@
           (sxml->table-row-col sxml 1 -1 #f))
 
         (test-equal "tax on sales as expected"
-          '("$20.00" "$20.00" "$20.00" "$20.00" "$15.00" "$15.00" "$55.00")
-          (sxml->table-row-col sxml 1 #f 6))
+          '("$20.00" "$15.00" "$20.00" "$55.00")
+          (sxml->table-row-col sxml 1 #f 5))
 
         (test-equal "tax on purchases as expected"
-          '("$8.00" "$10.00" "$18.00" "$18.00")
-          (sxml->table-row-col sxml 1 #f 9)))
+          '("$8.00" "$10.00" "$18.00")
+          (sxml->table-row-col sxml 1 #f 8)))
 
-      (set-option! options "Display" "Individual tax columns" #t)
-      (set-option! options "Display" "Individual purchases columns" #t)
-      (set-option! options "Display" "Individual sales columns" #t)
-      (set-option! options "Display" "Gross Balance" #t)
-      (set-option! options "Display" "Net Balance" #t)
-      (set-option! options "Display" "Tax payable" #t)
+      (set-option! options "Format" "Individual tax columns" #t)
+      (set-option! options "Format" "Individual purchases columns" #t)
+      (set-option! options "Format" "Individual sales columns" #t)
+      (set-option! options "Format" "Gross Balance" #t)
+      (set-option! options "Format" "Net Balance" #t)
+      (set-option! options "Format" "Tax payable" #t)
       (let ((sxml (options->sxml options "display options enabled")))
         (test-equal "all display columns enabled"
           '("Grand Total" "$1,055.00" "$1,000.00" "$20.00" "$35.00" "$248.00" "$230.00" "$18.00" "$807.00" "$770.00" "$37.00")
           (sxml->table-row-col sxml 1 -1 #f))))
 
     (test-end "display options")))
+
+(define (uk-vat-tests)
+  (define structure
+    (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
+          (list "VAT"
+                (list "Input"
+                      (list "Purchases VAT"))
+                (list "Output" (list (cons 'type ACCT-TYPE-LIABILITY))
+                      (list "EU Purchases VAT")
+                      (list "Sales VAT")))
+          (list "Asset"
+                (list "Bank")
+                (list "Capital Assets"))
+          (list "Income" (list (cons 'type ACCT-TYPE-INCOME))
+                (list "Sales non-EU")
+                (list "Sales EU Goods")
+                (list "Sales EU Services"))
+          (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE))
+                (list "Professional Fees")
+                (list "EU Reverse VAT Expenses"))))
+  ;; This function will perform implementation testing on the VAT report.
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (YEAR (gnc:time64-get-year (gnc:get-today))))
+
+    (define (get-acct a)
+      (or (assoc-ref account-alist a) (error "invalid account:" a)))
+    (define (default-testing-options)
+      (let ((options (gnc:make-report-options rpt-uuid)))
+        (set-option! options "Accounts" "Sales"
+                     (gnc:accounts-and-all-descendants
+                      (list (get-acct "Income"))))
+        (set-option! options "Accounts" "Purchases"
+                     (gnc:accounts-and-all-descendants
+                      (list (get-acct "Expenses"))))
+        (set-option! options "Accounts" "Tax Accounts"
+                     (list (get-acct "Purchases VAT")
+                           (get-acct "EU Purchases VAT")
+                           (get-acct "Sales VAT")))
+        (set-option! options "General" "Add options summary" 'always)
+        (set-option! options "General" "Table for Exporting" #t)
+        (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
+        (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
+        options))
+
+    (xaccAccountSetDescription (get-acct "Sales EU Goods") "*EUGOODS*")
+    (xaccAccountSetDescription (get-acct "EU Reverse VAT Expenses") "*EUGOODS*")
+    (xaccAccountSetDescription (get-acct "EU Purchases VAT") "*EUVAT*")
+
+    (create-txn 01 01 YEAR "$1000 sales + $200 VAT"
+                (list
+                 (cons  1200 (get-acct "Bank"))
+                 (cons  -200 (get-acct "Sales VAT"))
+                 (cons -1000 (get-acct "Income"))))
+
+    (create-txn 02 01 YEAR "$100 sales + $20 VAT"
+                (list
+                 (cons   120 (get-acct "Bank"))
+                 (cons   -20 (get-acct "Sales VAT"))
+                 (cons  -100 (get-acct "Income"))))
+
+    (create-txn 03 01 YEAR "refund for $50 sales + $10 VAT"
+                (list
+                 (cons  -120 (get-acct "Bank"))
+                 (cons    20 (get-acct "Sales VAT"))
+                 (cons   100 (get-acct "Income"))))
+
+    (create-txn 04 01 YEAR "reduced VAT sales $200 + $20 VAT"
+                (list
+                 (cons   220 (get-acct "Bank"))
+                 (cons   -20 (get-acct "Sales VAT"))
+                 (cons  -200 (get-acct "Income"))))
+
+    (create-txn 05 01 YEAR "Sale of Goods to EU $100"
+                (list
+                 (cons  100 (get-acct "Bank"))
+                 (cons -100 (get-acct "Sales EU Goods"))))
+
+    (create-txn 07 01 YEAR "UK Accountant Services"
+                (list
+                 (cons  -54 (get-acct "Bank"))
+                 (cons   45 (get-acct "Professional Fees"))
+                 (cons    9 (get-acct "Purchases VAT"))))
+
+    (create-txn 08 01 YEAR "VAT-free sales, $0 vat-sales"
+                (list
+                 (cons   50 (get-acct "Bank"))
+                 (cons    0 (get-acct "Sales VAT"))
+                 (cons  -50 (get-acct "Sales non-EU"))))
+
+    (create-txn 09 01 YEAR "Widget Inserter bought from EU"
+                (list
+                 (cons -150 (get-acct "Bank"))
+                 (cons  -30 (get-acct "EU Purchases VAT"))
+                 (cons  150 (get-acct "EU Reverse VAT Expenses"))
+                 (cons   30 (get-acct "Purchases VAT"))))
+
+    (create-txn 10 01 YEAR "Services to EU customer"
+                (list
+                 (cons  125 (get-acct "Bank"))
+                 (cons -125 (get-acct "Sales EU Services"))))
+
+    (create-txn 11 01 YEAR "Consumables from EU Supplier"
+                (list
+                 (cons  -50 (get-acct "Bank"))
+                 (cons   50 (get-acct "EU Reverse VAT Expenses"))
+                 (cons   10 (get-acct "Purchases VAT"))
+                 (cons  -10 (get-acct "EU Purchases VAT"))))
+
+    (create-txn 12 01 YEAR "Laptop bought in UK"
+                (list
+                 (cons -360 (get-acct "Bank"))
+                 (cons  300 (get-acct "Expenses"))
+                 (cons   60 (get-acct "Purchases VAT"))))
+
+    (let ((options (default-testing-options)))
+      (set-option! options "Format" "Report format" 'default)
+      (let ((sxml (options->sxml options "ukvat-default-format")))
+        (test-equal "ukvat-default-format"
+          '("Grand Total" "$1,735.00" "$1,475.00" "$260.00"
+            "$654.00" "$545.00" "$109.00")
+          (sxml->table-row-col sxml 1 -1 #f)))
+
+      (set-option! options "Format" "Report format" 'uk-vat)
+      (let ((sxml (options->sxml options "ukvat-return-format")))
+        (test-equal "ukvat-return-format"
+          '("Grand Total" "$220.00" "$40.00" "$260.00" "$109.00"
+            "$151.00" "$1,475.00" "$545.00" "$100.00" "$200.00")
+          (sxml->table-row-col sxml 1 -1 #f)))
+
+      (set-option! options "Format" "Report format" 'au-bas)
+      (let ((sxml (options->sxml options "aubas-return-format")))
+        (test-equal "aubas-return-format"
+          '("Grand Total" "$1,735.00" "$260.00" "$109.00")
+          (sxml->table-row-col sxml 1 -1 #f))))))
