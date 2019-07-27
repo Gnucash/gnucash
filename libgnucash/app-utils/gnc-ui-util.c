@@ -1511,7 +1511,7 @@ gnc_default_price_print_info (const gnc_commodity *curr)
     info.use_symbol = 0;
     info.use_locale = 1;
     info.monetary = 1;
-    
+
     info.force_fit = force;
     info.round = force;
     return info;
@@ -2674,4 +2674,46 @@ gnc_ui_util_init (void)
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES,
                           gnc_set_auto_decimal_places, NULL);
 
+}
+
+void
+gnc_ui_util_remove_registered_prefs (void)
+{
+    // remove the registered pref call backs above
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNT_SEPARATOR,
+                                 gnc_configure_account_separator, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_REVERSED_ACCTS_NONE,
+                                 gnc_configure_reverse_balance, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_REVERSED_ACCTS_CREDIT,
+                                 gnc_configure_reverse_balance, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_REVERSED_ACCTS_INC_EXP,
+                                 gnc_configure_reverse_balance, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_CURRENCY_CHOICE_LOCALE,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_CURRENCY_CHOICE_OTHER,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_CURRENCY_OTHER,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
+                                 GNC_PREF_CURRENCY_CHOICE_LOCALE,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
+                                 GNC_PREF_CURRENCY_CHOICE_OTHER,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
+                                 GNC_PREF_CURRENCY_OTHER,
+                                 gnc_currency_changed_cb, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_AUTO_DECIMAL_POINT,
+                                 gnc_set_auto_decimal_enabled, NULL);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_AUTO_DECIMAL_PLACES,
+                                 gnc_set_auto_decimal_places, NULL);
 }

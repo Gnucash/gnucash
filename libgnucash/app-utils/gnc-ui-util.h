@@ -355,6 +355,10 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
 void gnc_ui_util_init (void);
 
+/* Remove callback preferences **************************************/
+
+void gnc_ui_util_remove_registered_prefs (void);
+
 #endif
 /** @} */
 /** @} */
