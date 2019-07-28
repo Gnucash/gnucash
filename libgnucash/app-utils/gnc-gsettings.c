@@ -296,6 +296,13 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema,
     // remove the handlerid from the registerered_handlers_hash
     g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
 
+    // destroy hash table if size is 0
+    if (g_hash_table_size (registered_handlers_hash) == 0)
+    {
+        g_hash_table_destroy (registered_handlers_hash);
+        PINFO ("All registered preference callbacks removed");
+    }
+
     LEAVE ("Schema: %s, handlerid: %d, hashtable size: %d - removed for handler",
             schema, handlerid, g_hash_table_size (registered_handlers_hash));
 }
