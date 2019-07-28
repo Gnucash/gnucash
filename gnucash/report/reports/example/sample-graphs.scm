@@ -24,7 +24,8 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash reports example sample-graphs))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
+(use-modules (ice-9 local-eval))
 (use-modules (gnucash gnc-module))
 
 ;; Add this module to enable translatable strings
@@ -116,7 +117,93 @@
     chart))
 
 (define (options-generator)
-  (gnc:new-options))
+  (let* ((options (gnc:new-options))
+         (add-option
+          (lambda (new-option)
+            (gnc:register-option options new-option))))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      (N_ "General") (N_ "Show Tutorial")
+      "g" (N_ "Show gnc:html-chart tutorial, for scheme coders only.")
+      #f))
+
+    (gnc:options-set-default-section options "Test Graphing")
+    options))
+
+(define (add-tutorial document)
+
+  (define step1
+    '((gnc:html-chart-set-title! chart "title")
+      (gnc:html-chart-set-type! chart "bar")
+      (gnc:html-chart-set-width! chart '(pixels . 800))
+      (gnc:html-chart-set-height! chart '(pixels . 600))
+      (gnc:html-chart-set-y-axis-label! chart "yAxis")))
+
+  (define step2
+    '((gnc:html-chart-set-data-labels! chart '("a" "b" "c"))
+      (gnc:html-chart-add-data-series! chart "series1" '(20 40 30) "red")
+      (gnc:html-chart-add-data-series! chart "series2" '(30 25 20) "green")))
+
+  (define step3
+    '((gnc:html-chart-set! chart '(options chartArea backgroundColor) "wheat")))
+
+  (define (steps->chart . many-steps)
+    (let ((chart (gnc:make-html-chart)))
+      (for-each
+       (lambda (steps)
+         (for-each
+          (lambda (step)
+            (gnc:html-document-add-object!
+             document (gnc:make-html-text (gnc:html-markup-tt (object->string step))
+                                          (gnc:html-markup-br)))
+            (local-eval step (the-environment)))
+          steps))
+       many-steps)
+      (gnc:html-document-add-object!
+       document (gnc:make-html-text (gnc:html-markup-p "Resulting output: ")))
+      (gnc:html-document-add-object! document chart)))
+
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-p "The following is a guide to creating charts.")
+    (gnc:html-markup-p "First we have a blank html-chart object: "
+     (gnc:html-markup-tt "(define chart (gnc:make-html-chart))"))
+    (gnc:html-markup-p "This can be added to document: "
+     (gnc:html-markup-tt "(gnc:html-document-add-object! document chart)"))))
+
+  (steps->chart)
+
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-p "For this chart we can set some options. \
+Many common options are exposed in html-chart.scm")))
+  (steps->chart step1)
+
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-p
+     "Let's add data. This is done via calls to "
+     (gnc:html-markup-tt
+      "(gnc:html-chart-add-data-series! chart name list-of-numbers colour)."))))
+  (steps->chart step1 step2)
+
+  (gnc:html-document-add-object!
+   document
+   (gnc:make-html-text
+    (gnc:html-markup-p
+     "The options and data adders above all modify the options object. \
+The options object is converted to JSON to ChartJS which renders the \
+chart. The full ChartJS API is available for use, for example, "
+     (gnc:html-markup-tt (object->string step3))
+     " will set chart background color. The "
+     (gnc:html-markup-tt "'(options chartArea backgroundColor)")
+     "is a full path to the chartJS option in the options JSON tree.")))
+
+  (steps->chart step1 step2 step3))
 
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
@@ -136,25 +223,30 @@
 
     (gnc:html-document-set-title! document (_ reportname))
 
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Pie:"))))
-    (gnc:html-document-add-object! document (simple-pie-chart))
+    (cond
+     ((op-value "General" "Show Tutorial")
+      (add-tutorial document))
 
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, normal:"))))
-    (gnc:html-document-add-object! document (simple-bar-chart #f))
+     (else
+      (gnc:html-document-add-object!
+       document
+       (gnc:make-html-text (gnc:html-markup-p (_ "Pie:"))))
+      (gnc:html-document-add-object! document (simple-pie-chart))
 
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, stacked:"))))
-    (gnc:html-document-add-object! document (simple-bar-chart #t))
+      (gnc:html-document-add-object!
+       document
+       (gnc:make-html-text (gnc:html-markup-p (_ "Bar, normal:"))))
+      (gnc:html-document-add-object! document (simple-bar-chart #f))
 
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Scatter:"))))
-    (gnc:html-document-add-object! document (simple-scatter-chart))
+      (gnc:html-document-add-object!
+       document
+       (gnc:make-html-text (gnc:html-markup-p (_ "Bar, stacked:"))))
+      (gnc:html-document-add-object! document (simple-bar-chart #t))
+
+      (gnc:html-document-add-object!
+       document
+       (gnc:make-html-text (gnc:html-markup-p (_ "Scatter:"))))
+      (gnc:html-document-add-object! document (simple-scatter-chart))))
 
     document))
 
