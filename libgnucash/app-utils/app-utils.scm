@@ -270,23 +270,23 @@
 (re-export HOOK-REPORT)
 
 ;; simple-obj
-(export make-simple-class)
-(export simple-obj-getter)
-(export simple-obj-setter)
-(export simple-obj-print)
-(export simple-obj-to-list)
-(export simple-obj-from-list)
-(export make-simple-obj)
+(export make-simple-class)              ;deprecate
+(export simple-obj-getter)              ;deprecate
+(export simple-obj-setter)              ;deprecate
+(export simple-obj-print)               ;deprecate
+(export simple-obj-to-list)             ;deprecate
+(export simple-obj-from-list)           ;deprecate
+(export make-simple-obj)                ;deprecate
 
 (define gnc:*kvp-option-path* (list KVP-OPTION-PATH))
 (export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface")
 (load-from-path "options")
-(load-from-path "hooks")
+(load-from-path "hooks")                ;deprecate
 (load-from-path "prefs")
 (load-from-path "date-utilities")
-(load-from-path "simple-obj")
+(load-from-path "simple-obj")           ;deprecate
 
 ;; Business options
 (define gnc:*business-label* (N_ "Business"))
