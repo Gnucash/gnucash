@@ -1653,70 +1653,68 @@ the option '~a'."))
 
   (define callback-hash (make-hash-table 23))
   (define last-callback-id 0)
+  (define new-names-alist
+    '(("Accounts to include" #f "Accounts")
+      ("Exclude transactions between selected accounts?" #f
+       "Exclude transactions between selected accounts")
+      ("Filter Accounts" #f "Filter By...")
+      ("Flatten list to depth limit?" #f "Flatten list to depth limit")
+      ("From" #f "Start Date")
+      ("Report Accounts" #f "Accounts")
+      ("Report Currency" #f "Report's currency")
+      ("Show Account Code?" #f "Show Account Code")
+      ("Show Full Account Name?" #f "Show Full Account Name")
+      ("Show Multi-currency Totals?" #f "Show Multi-currency Totals")
+      ("Show zero balance items?" #f "Show zero balance items")
+      ("Sign Reverses?" #f "Sign Reverses")
+      ("To" #f "End Date")
+      ("Charge Type" #f "Action") ;easy-invoice.scm, renamed June 2018
+      ;; the following 4 options in income-gst-statement.scm renamed Dec 2018
+      ("Individual income columns" #f "Individual sales columns")
+      ("Individual expense columns" #f "Individual purchases columns")
+      ("Remittance amount" #f "Gross Balance")
+      ("Net Income" #f "Net Balance")
+      ;; transaction.scm:
+      ("Use Full Account Name?" #f "Use Full Account Name")
+      ("Use Full Other Account Name?" #f "Use Full Other Account Name")
+      ("Void Transactions?" "Filter" "Void Transactions")
+      ("Void Transactions" "Filter" "Void Transactions")
+      ("Account Substring" "Filter" "Account Name Filter")
+      ;; invoice.scm, renamed November 2018
+      ("Individual Taxes" #f "Use Detailed Tax Summary")
+      ))
 
   (define (lookup-option section name)
     (let ((section-hash (hash-ref option-hash section)))
-      (if section-hash
-          (let ((option-hash (hash-ref section-hash name)))
-            (if option-hash
-                option-hash
-                ;; Option name was not found. Perhaps it was renamed ?
-                ;; Let's try to map it to a known new name.
-                ;; This list will try match names - if one is found
-                ;; the next item will describe a pair.
-                ;; (cons newsection newname)
-                ;; If newsection is #f then reuse previous section name.
-                ;;
-                ;; Please note the rename list currently supports renaming
-                ;; individual option names, or individual option names moved
-                ;; to another section. It does not currently support renaming
-                ;; whole sections.
-                (let* ((new-names-list (list
-                                        "Accounts to include" (cons #f "Accounts")
-                                        "Exclude transactions between selected accounts?" (cons #f "Exclude transactions between selected accounts")
-                                        "Filter Accounts" (cons #f "Filter By...")
-                                        "Flatten list to depth limit?" (cons #f "Flatten list to depth limit")
-                                        "From" (cons #f "Start Date")
-                                        "Report Accounts" (cons #f "Accounts")
-                                        "Report Currency" (cons #f "Report's currency")
-                                        "Show Account Code?" (cons #f "Show Account Code")
-                                        "Show Full Account Name?" (cons #f "Show Full Account Name")
-                                        "Show Multi-currency Totals?" (cons #f "Show Multi-currency Totals")
-                                        "Show zero balance items?" (cons #f "Show zero balance items")
-                                        "Sign Reverses?" (cons #f "Sign Reverses")
-                                        "To" (cons #f "End Date")
-                                        "Charge Type" (cons #f "Action") ;easy-invoice.scm, renamed June 2018
-                                        ;; the following 4 options in income-gst-statement.scm renamed Dec 2018
-                                        "Individual income columns" (cons #f "Individual sales columns")
-                                        "Individual expense columns" (cons #f "Individual purchases columns")
-                                        "Remittance amount" (cons #f "Gross Balance")
-                                        "Net Income" (cons #f "Net Balance")
-                                        ;; transaction.scm:
-                                        "Use Full Account Name?" (cons #f "Use Full Account Name")
-                                        "Use Full Other Account Name?" (cons #f "Use Full Other Account Name")
-                                        "Void Transactions?" (cons "Filter" "Void Transactions")
-                                        "Void Transactions" (cons "Filter" "Void Transactions")
-                                        "Account Substring" (cons "Filter" "Account Name Filter")
-                                        ;; invoice.scm, renamed November 2018
-                                        "Individual Taxes" (cons "#f" "Use Detailed Tax Summary")
-                                        ))
-                       (name-match (member name new-names-list)))
-
-                  (and name-match
-                       (let ((new-section (car (cadr name-match)))
-                             (new-name (cdr (cadr name-match))))
-                         (gnc:debug
-                          (format #f "option ~s/~s has been renamed to ~s/~s\n"
-                                  section name new-section new-name))
-                         ;; compare if new-section name exists.
-                         (if new-section
-                             ;; if so, if it's different to current section name
-                             ;; then try new section name
-                             (and (not (string=? new-section section))
-                                  (lookup-option new-section new-name))
-                             ;; else reuse section-name with new-name
-                             (lookup-option section new-name)))))))
-          #f)))
+      (and section-hash
+           (or (hash-ref section-hash name)
+               ;; Option name was not found. Perhaps it was renamed?
+               ;; Let's try to map to a known new name.  The alist
+               ;; new-names-alist will try match names - car is the old
+               ;; name, cdr is the 2-element list describing
+               ;; newsection newname. If newsection is #f then reuse
+               ;; previous section name. Please note the rename list
+               ;; currently supports renaming individual option names,
+               ;; or individual option names moved to another
+               ;; section. It does not currently support renaming
+               ;; whole sections.
+               (let ((name-match (assoc-ref new-names-alist name)))
+                 (and name-match
+                      (let ((new-section (car name-match))
+                            (new-name (cadr name-match)))
+                        (gnc:debug
+                         (format #f "option ~a/~a has been renamed to ~a/~a\n"
+                                 section name new-section new-name))
+                        (cond
+                         ;; new-name only
+                         ((not new-section)
+                          (lookup-option section new-name))
+                         ;; new-section different to current section
+                         ;; name, and possibly new-name
+                         ((not (string=? new-section section))
+                          (lookup-option new-section new-name))
+                         ;; no match, return #f
+                         (else #f)))))))))
 
   (define (option-changed section name)
     (set! options-changed #t)
