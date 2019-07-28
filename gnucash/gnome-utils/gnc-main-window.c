@@ -175,6 +175,8 @@ static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *wi
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified(void);
+static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
+static void gnc_main_window_remove_prefs (GncMainWindow *window);
 
 #ifdef MAC_INTEGRATION
 static void gnc_quartz_shutdown(GtkosxApplication *theApp, gpointer data);
@@ -1382,6 +1384,8 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
+        /* remove the preference callbacks from the main window */
+        gnc_main_window_remove_prefs (window);
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
         return TRUE;
     }
@@ -2611,6 +2615,47 @@ gnc_main_window_finalize (GObject *object)
 
 
 static void
+gnc_main_window_remove_prefs (GncMainWindow *window)
+{
+    // remove the registered preference callbacks setup in this file.
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_COLOR,
+                                 gnc_main_window_update_tab_color,
+                                 window);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_SHOW_CLOSE_BUTTON,
+                                 gnc_main_window_update_tab_close,
+                                 NULL);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_WIDTH,
+                                 gnc_main_window_update_tab_width,
+                                 NULL);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_POSITION_TOP,
+                                 gnc_main_window_update_tab_position,
+                                 window);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_POSITION_BOTTOM,
+                                 gnc_main_window_update_tab_position,
+                                 window);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_POSITION_LEFT,
+                                 gnc_main_window_update_tab_position,
+                                 window);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_TAB_POSITION_RIGHT,
+                                 gnc_main_window_update_tab_position,
+                                 window);
+}
+
+
+static void
 gnc_main_window_destroy (GtkWidget *widget)
 {
     GncMainWindow *window;
@@ -2640,10 +2685,8 @@ gnc_main_window_destroy (GtkWidget *widget)
         /* Update the "Windows" menu in all other windows */
         gnc_main_window_update_all_menu_items();
 #endif
-        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                     GNC_PREF_TAB_COLOR,
-                                     gnc_main_window_update_tab_color,
-                                     window);
+        /* remove the preference callbacks from the main window */
+        gnc_main_window_remove_prefs (window);
 
         qof_event_unregister_handler(priv->event_handler_id);
         priv->event_handler_id = 0;
@@ -3054,6 +3097,9 @@ gnc_main_window_close_page (GncPluginPage *page)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
+        /* remove the preference callbacks from the main window */
+        gnc_main_window_remove_prefs (window);
+
         if (g_list_length(active_windows) > 1)
         {
             gtk_widget_destroy(GTK_WIDGET(window));
