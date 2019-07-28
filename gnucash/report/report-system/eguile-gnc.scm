@@ -88,17 +88,24 @@
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash app-utils)) ; for _
 
+(define-public (string-substitute-alist str sub-alist)
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (or (assv-ref sub-alist c)
+              c)))
+       str))))
+
 ;; This is needed for displaying error messages -- note that it assumes that
 ;; the output is HTML, which is a pity, because otherwise this module is
 ;; non-specific -- it is designed to output a mixture of Guile and any other
 ;; sort of text.  Oh well.
-(define (escape-html s1) 
-  ;; convert string s1 to escape HTML special characters < > and &
-  ;; i.e. convert them to &lt; &gt; and &amp; respectively.
-  ;; Maybe there's a way to do this in one go... (but order is important)
-  (set! s1 (regexp-substitute/global #f "&" s1 'pre "&amp;" 'post))
-  (set! s1 (regexp-substitute/global #f "<" s1 'pre "&lt;" 'post))
-  (regexp-substitute/global #f ">" s1 'pre "&gt;" 'post))
+(define-public (escape-html s1)
+  (string-substitute-alist s1 '((#\< . "&lt;")
+                                (#\> . "&gt;")
+                                (#\& . "&amp;"))))
 
 ;; regexps used to find start and end of code segments
 (define startre (make-regexp "<\\?scm(:d)?[[:space:]]"))
