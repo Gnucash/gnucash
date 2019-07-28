@@ -341,7 +341,7 @@
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
-      <td align="center" ><nobr><?scm:d (nbsp (qof-print-date (gncEntryGetDate entry))) ?></nobr></td>
+      <td align="center" ><?scm:d (nbsp (qof-print-date (gncEntryGetDate entry))) ?></td>
       <?scm )) ?>
       <td align="left"><?scm:d (gncEntryGetDescription entry) ?></td>
       <!-- td align="left">< ?scm:d (gncEntryGetNotes entry) ?></td -->
