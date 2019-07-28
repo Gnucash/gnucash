@@ -201,7 +201,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
     /*
      * Update window to remove UI items
      */
-    if (klass->actions_name)
+    if (klass->actions_name && !window->just_plugin_prefs)
     {
         DEBUG ("%s: %d actions to unmerge",
                klass->actions_name, (klass->n_actions + klass->n_toggle_actions));

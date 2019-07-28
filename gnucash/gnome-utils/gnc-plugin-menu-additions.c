@@ -474,7 +474,8 @@ gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
     /* Have to remove our actions manually. Its only automatic if the
      * actions name is installed into the plugin class. */
     group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-    if (group)
+
+    if (group && !window->just_plugin_prefs)
         gtk_ui_manager_remove_action_group(window->ui_merge, group);
 
     /* Note: This code does not clean up the per-callback data structures

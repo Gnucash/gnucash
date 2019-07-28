@@ -58,6 +58,7 @@ typedef struct GncMainWindow
     GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
                                  structure for the whole window. */
     gboolean window_quitting; /**< Set to TRUE when quitting from this window. */
+    gboolean just_plugin_prefs; /**< Just remove preferences only from plugins */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */

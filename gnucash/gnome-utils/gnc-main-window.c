@@ -2747,6 +2747,7 @@ gnc_main_window_new (void)
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
     window->window_quitting = FALSE;
+    window->just_plugin_prefs = FALSE;
 #ifdef MAC_INTEGRATION
     gnc_quartz_set_menu(window);
 #else
@@ -3115,6 +3116,15 @@ gnc_main_window_close_page (GncPluginPage *page)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
+        GncPluginManager *manager = gnc_plugin_manager_get ();
+        GList *plugins = gnc_plugin_manager_get_plugins (manager);
+
+        /* remove only the preference callbacks from the window plugins */
+        window->just_plugin_prefs = TRUE;
+        g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
+        window->just_plugin_prefs = FALSE;
+        g_list_free (plugins);
+
         /* remove the preference callbacks from the main window */
         gnc_main_window_remove_prefs (window);
 
