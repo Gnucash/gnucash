@@ -2652,6 +2652,22 @@ gnc_main_window_remove_prefs (GncMainWindow *window)
                                  GNC_PREF_TAB_POSITION_RIGHT,
                                  gnc_main_window_update_tab_position,
                                  window);
+
+    // remove the registered negative color preference callback.
+    if (gnc_prefs_get_reg_negative_color_pref_id() > 0)
+    {
+        gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL,
+                                   gnc_prefs_get_reg_negative_color_pref_id());
+        gnc_prefs_set_reg_negative_color_pref_id (0);
+    }
+
+    // remove the registered auto_raise_lists preference callback.
+    if (gnc_prefs_get_reg_auto_raise_lists_id() > 0)
+    {
+        gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                   gnc_prefs_get_reg_auto_raise_lists_id());
+        gnc_prefs_set_reg_auto_raise_lists_id (0);
+    }
 }
 
 

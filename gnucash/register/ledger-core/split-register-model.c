@@ -2459,9 +2459,13 @@ gnc_split_register_colorize_negative (gpointer gsettings, gchar *key, gpointer u
 static gpointer
 gnc_split_register_model_add_hooks (gpointer unused)
 {
-    gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
-                          gnc_split_register_colorize_negative,
-                          NULL);
+    gulong id = gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                                       GNC_PREF_NEGATIVE_IN_RED,
+                                       gnc_split_register_colorize_negative,
+                                       NULL);
+
+    gnc_prefs_set_reg_negative_color_pref_id (id);
+
     /* Get the initial value */
     use_red_for_negative = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
                                               GNC_PREF_NEGATIVE_IN_RED);

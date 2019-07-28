@@ -99,13 +99,16 @@ gnc_combo_cell_set_autopop (gpointer prefs, gchar *pref, gpointer user_data)
 static gpointer
 gnc_combo_cell_autopop_init (gpointer unused)
 {
+    gulong id;
     auto_pop_combos = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                           GNC_PREF_AUTO_RAISE_LISTS);
 
-    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                           GNC_PREF_AUTO_RAISE_LISTS,
-                           gnc_combo_cell_set_autopop,
-                           NULL);
+    id = gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                GNC_PREF_AUTO_RAISE_LISTS,
+                                gnc_combo_cell_set_autopop,
+                                NULL);
+
+    gnc_prefs_set_reg_auto_raise_lists_id (id);
     return NULL;
 }
 
