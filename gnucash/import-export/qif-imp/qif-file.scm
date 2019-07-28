@@ -569,7 +569,7 @@
     (if (or (and (not acct-name)
                  (not security)
                  payee (string? payee)
-                 (string=? (string-remove-trailing-space payee)
+                 (string=? (string-trim-right payee)
                            "Opening Balance")
                  cat-is-acct?)
             (and acct-name (string? acct-name)

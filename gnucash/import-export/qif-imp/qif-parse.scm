@@ -24,6 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash import-export string))
+(use-modules (srfi srfi-13))
 
 (define qif-category-compiled-rexp
   (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
@@ -162,8 +163,7 @@
 
 (define (qif-parse:parse-acct-type read-value errorproc errortype)
   (let ((mangled-string
-         (string-downcase! (string-remove-trailing-space
-                            (string-remove-leading-space read-value)))))
+         (string-downcase! (string-trim-both read-value))))
     (cond
      ((string=? mangled-string "bank")
       (list GNC-BANK-TYPE))
@@ -197,8 +197,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-bang-field read-value)
-  (let ((bang-field (string-downcase!
-                     (string-remove-trailing-space read-value))))
+  (let ((bang-field (string-downcase! (string-trim read-value))))
 ;; The QIF files output by the WWW site of Credit Lyonnais
 ;; begin by:   !type bank
 ;; instead of: !Type:bank
@@ -211,8 +210,8 @@
 
 (define (qif-parse:parse-action-field read-value errorproc errortype)
   (if read-value
-      (let ((action-symbol (string-to-canonical-symbol read-value)))
-        (case action-symbol
+      (begin
+        (case (string->symbol (string-downcase (string-trim-both read-value)))
           ;; buy
           ((buy cvrshrt kauf)
            'buy)
@@ -579,7 +578,7 @@
         (filtered-string (gnc:string-delete-chars value-string "$'+-")))
     (case format
       ((decimal)
-       (let* ((read-string (string-remove-char filtered-string #\,))
+       (let* ((read-string (gnc:string-delete-chars filtered-string ","))
               (read-val (with-input-from-string read-string
                                                 (lambda () (read)))))
          (if (number? read-val)
@@ -587,12 +586,12 @@
               (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
               GNC-DENOM-AUTO
               (logior (GNC-DENOM-SIGFIGS
-                       (string-length (string-remove-char read-string #\.)))
+                       (string-length (gnc:string-delete-chars read-string ".")))
                       GNC-RND-ROUND))
              (gnc-numeric-zero))))
       ((comma)
        (let* ((read-string (gnc:string-replace-char
-                              (string-remove-char filtered-string #\.)
+                              (gnc:string-delete-chars filtered-string ".")
                               #\, #\.))
               (read-val (with-input-from-string read-string
                                                 (lambda () (read)))))
@@ -601,7 +600,7 @@
               (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
               GNC-DENOM-AUTO
               (logior (GNC-DENOM-SIGFIGS
-                       (string-length (string-remove-char read-string #\.)))
+                       (string-length (gnc:string-delete-chars read-string ".")))
                       GNC-RND-ROUND))
              (gnc-numeric-zero))))
       ((integer)

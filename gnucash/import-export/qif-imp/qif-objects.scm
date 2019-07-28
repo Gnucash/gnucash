@@ -525,8 +525,8 @@
                              (if last-dot 
                                  last-dot 
                                  (string-length namestring)))))
-          (set! namestring (string-replace-char! namestring #\- #\space))
-          (set! namestring (string-replace-char! namestring #\_ #\space))
+          (set! namestring (gnc:string-replace-char namestring #\- #\space))
+          (set! namestring (gnc:string-replace-char namestring #\_ #\space))
           namestring)
         "QIF Import")))
 
