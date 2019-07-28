@@ -1385,6 +1385,7 @@ gnc_main_window_quit(GncMainWindow *window)
     if (do_shutdown)
     {
         /* remove the preference callbacks from the main window */
+        window->window_quitting = TRUE;
         gnc_main_window_remove_prefs (window);
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
         return TRUE;
@@ -2654,7 +2655,7 @@ gnc_main_window_remove_prefs (GncMainWindow *window)
                                  window);
 
     // remove the registered negative color preference callback.
-    if (gnc_prefs_get_reg_negative_color_pref_id() > 0)
+    if (gnc_prefs_get_reg_negative_color_pref_id() > 0 && window->window_quitting)
     {
         gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL,
                                    gnc_prefs_get_reg_negative_color_pref_id());
@@ -2662,7 +2663,7 @@ gnc_main_window_remove_prefs (GncMainWindow *window)
     }
 
     // remove the registered auto_raise_lists preference callback.
-    if (gnc_prefs_get_reg_auto_raise_lists_id() > 0)
+    if (gnc_prefs_get_reg_auto_raise_lists_id() > 0 && window->window_quitting)
     {
         gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                    gnc_prefs_get_reg_auto_raise_lists_id());
@@ -2745,6 +2746,7 @@ gnc_main_window_new (void)
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
+    window->window_quitting = FALSE;
 #ifdef MAC_INTEGRATION
     gnc_quartz_set_menu(window);
 #else

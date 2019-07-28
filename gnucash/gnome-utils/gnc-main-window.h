@@ -56,7 +56,8 @@ typedef struct GncMainWindow
 {
     GtkWindow gtk_window;	/**< The parent object for a main window. */
     GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
-				   structure for the whole window. */
+                                 structure for the whole window. */
+    gboolean window_quitting; /**< Set to TRUE when quitting from this window. */
 } GncMainWindow;
 
 /** The class data structure for a main window object. */
