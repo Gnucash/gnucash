@@ -30,9 +30,8 @@
 
 ;; We do this initialization here because src/gnome isn't a real module.
 ;; Note: Guile 2 needs to find the symbols from the extension at compile time already
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
+(eval-when (compile load eval expand)
+  (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
 
 (use-modules (sw_gnome))
 
