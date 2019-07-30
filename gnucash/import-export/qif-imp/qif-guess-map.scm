@@ -68,112 +68,47 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:load-map-prefs)
+  (define (safe-read) (false-if-exception (read)))
+  (let ((pref-filename (gnc-build-userdata-path "qif-accounts-map")))
+    (cons
+     (map
+      (lambda (acc)
+        (list (xaccAccountGetName acc) (gnc-account-get-full-name acc) acc))
+      (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+     ;; Get the user's saved mappings.
+     (cond
+      ((access? pref-filename R_OK)
+       ;; We have access to the mapping file (qif-accounts-map).
+       (with-input-from-file pref-filename
+         (lambda ()
+           (let* ((qif-account-list (safe-read))
+                  (qif-cat-list (safe-read))
+                  (qif-memo-list (safe-read))
+                  (qif-security-list (safe-read))
+                  (saved-sep (let ((s (safe-read))) (if (char? s) (string s) s))))
 
-  ;; This procedure builds a list of all descendants of an existing
-  ;; GnuCash account. Each member of the list is itself a list with
-  ;; the form: (shortname fullname Account*)
-  (define (extract-all-account-info an-account root-name)
-    (if (null? an-account)
-        '()
-        (let ((children-list (gnc-account-get-children-sorted an-account))
-              (names '()))
+             ;; Put all the mappings together in a list.
+             (list (if (list? qif-account-list)
+                       (qif-import:read-map qif-account-list saved-sep)
+                       (make-hash-table 20))
+                   (if (list? qif-cat-list)
+                       (qif-import:read-map qif-cat-list saved-sep)
+                       (make-hash-table 20))
+                   (if (list? qif-memo-list)
+                       (qif-import:read-map qif-memo-list saved-sep)
+                       (make-hash-table 20))
+                   (if (list? qif-security-list)
+                       (qif-import:read-securities qif-security-list)
+                       (make-hash-table 20))
+                   qif-security-list)))))
 
-          ;; Recursively walk the account tree.
-          (for-each
-           (lambda (child-acct)
-             (let* ((name (xaccAccountGetName child-acct))
-                    (fullname
-                     (if (string? root-name)
-                         (string-append root-name
-                                        (gnc-get-account-separator-string)
-                                        name)
-                         name)))
-               (set! names
-                     (append (cons (list name fullname child-acct)
-                                   (extract-all-account-info child-acct fullname))
-                             names))))
-           children-list)
-          names)))
-
-  (define (safe-read)
-    (false-if-exception
-     (read)))
-
-  (let* ((pref-filename (gnc-build-userdata-path "qif-accounts-map"))
-         (results '()))
-
-    ;; Get the user's saved mappings.
-    (if (access? pref-filename R_OK)
-        ;; We have access to the mapping file (qif-accounts-map).
-        (with-input-from-file pref-filename
-          (lambda ()
-            (let ((qif-account-list #f)
-                  (qif-cat-list #f)
-                  (qif-memo-list #f)
-                  (qif-security-list #f)
-                  (qif-account-hash #f)
-                  (qif-cat-hash #f)
-                  (qif-memo-hash #f)
-                  (qif-security-hash #f)
-                  (saved-sep #f))
-
-              ;; Read the mapping file.
-              (set! qif-account-list (safe-read))
-              (set! qif-cat-list (safe-read))
-              (set! qif-memo-list (safe-read))
-              (set! qif-security-list (safe-read))
-              (set! saved-sep (safe-read))
-
-              ;; Convert the separator to a string if necessary.
-              ;; It was a character prior to 2.2.6.
-              (if (char? saved-sep)
-                  (set! saved-sep (string saved-sep)))
-
-              ;; Process the QIF account mapping.
-              (if (not (list? qif-account-list))
-                  (set! qif-account-hash (make-hash-table 20))
-                  (set! qif-account-hash
-                        (qif-import:read-map qif-account-list
-                                             saved-sep)))
-
-              ;; Process the QIF category mapping.
-              (if (not (list? qif-cat-list))
-                  (set! qif-cat-hash (make-hash-table 20))
-                  (set! qif-cat-hash (qif-import:read-map qif-cat-list
-                                                          saved-sep)))
-
-              ;; Process the QIF payee/memo mapping.
-              (if (not (list? qif-memo-list))
-                  (set! qif-memo-hash (make-hash-table 20))
-                  (set! qif-memo-hash (qif-import:read-map qif-memo-list
-                                                           saved-sep)))
-
-              ;; Process the QIF security mapping.
-              (if (not (list? qif-security-list))
-                  (set! qif-security-hash (make-hash-table 20))
-                  (set! qif-security-hash (qif-import:read-securities
-                                           qif-security-list)))
-
-              ;; Put all the mappings together in a list.
-              (set! results (list qif-account-hash
-                                  qif-cat-hash
-                                  qif-memo-hash
-                                  qif-security-hash
-                                  qif-security-list)))))
-
-        ;; Otherwise, we can't get any saved mappings. Use empty tables.
-        (set! results (list (make-hash-table 20)
-                            (make-hash-table 20)
-                            (make-hash-table 20)
-                            (make-hash-table 20)
-                            '())))
-
-    ;; Build the list of all known account names.
-    (let* ((all-accounts (gnc-get-current-root-account))
-           (all-account-info (extract-all-account-info all-accounts #f)))
-      (set! results (cons all-account-info results)))
-
-    results))
+      ;; Otherwise, we can't get any saved mappings. Use empty tables.
+      (else
+       (list (make-hash-table 20)
+             (make-hash-table 20)
+             (make-hash-table 20)
+             (make-hash-table 20)
+             '()))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -184,34 +119,27 @@
 ;;  of bogus accounts if you have funny stuff in your map.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:write-map hashtab port)
-  (let ((table '()))
-    (hash-for-each
-     (lambda (key value)
-       (set! table
-         (cons (cons key (record-fields->list value)) table)))
-     hashtab)
-    (write table port)))
+(define (qif-import:write-map hashtab)
+  (write
+   (hash-map->list
+    (lambda (key value)
+      (cons key (record-fields->list value)))
+    hashtab)))
 
 (define (qif-import:read-map tablist tab-sep)
   (let* ((table (make-hash-table 20))
          (sep (gnc-get-account-separator-string))
          (changed-sep? (and (string? tab-sep) (not (string=? tab-sep sep)))))
-
     (for-each
      (lambda (entry)
        (let ((key (car entry))
              (value (list->record-fields (cdr entry) <qif-map-entry>)))
-
          ;; If the account separator has changed, fix the account name.
-         (if changed-sep?
-           (let ((acct-name (qif-map-entry:gnc-name value)))
-             (if (string? acct-name)
-                 (qif-map-entry:set-gnc-name! value
-                                              (gnc:substring-replace acct-name
-                                                                     tab-sep  
-                                                                     sep)))))
-
+         (when changed-sep?
+           (let* ((acct-name (qif-map-entry:gnc-name value)))
+             (when (string? acct-name)
+               (qif-map-entry:set-gnc-name!
+                value (gnc:substring-replace acct-name tab-sep sep)))))
          (qif-map-entry:set-display?! value #f)
          (hash-set! table key value)))
      tablist)
@@ -230,24 +158,21 @@
   (let ((table (make-hash-table 20)))
     (for-each
      (lambda (entry)
-       (if (and (list? entry)
-                (= 3 (length entry)))
+       (if (and (list? entry) (= 3 (length entry)))
            ;; The saved information about each security mapping is a
            ;; list of three items: the QIF name, and the GnuCash
            ;; namespace and mnemonic (symbol) to which it maps.
            ;; Example: ("McDonald's" "NYSE" "MCD")
            (let ((commodity (gnc-commodity-table-lookup
-                              (gnc-commodity-table-get-table
-                                (gnc-get-current-book))
-                              (cadr entry)
-                              (caddr entry))))
-             (if (and commodity (not (null? commodity)))
-                 ;; There is an existing GnuCash commodity for this
-                 ;; combination of namespace and symbol.
-                 (hash-set! table (car entry) commodity)))))
+                             (gnc-commodity-table-get-table (gnc-get-current-book))
+                             (cadr entry)
+                             (caddr entry))))
+             (when (and commodity (not (null? commodity)))
+               ;; There is an existing GnuCash commodity for this
+               ;; combination of namespace and symbol.
+               (hash-set! table (car entry) commodity)))))
      security-list)
     table))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:write-securities
@@ -256,30 +181,24 @@
 ;;  GnuCash commodity namespaces and mnemonics (symbols).
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:write-securities security-hash security-prefs port)
-  (let ((table '()))
-    ;; For each security that has been paired with an existing
-    ;; GnuCash commodity, create a list containing the QIF name
-    ;; and the commodity's namespace and mnemonic (symbol).
-    (hash-for-each
-     (lambda (key value)
-       (set! table
-         (cons (list key
-                     (gnc-commodity-get-namespace value)
-                     (gnc-commodity-get-mnemonic value))
-               table)))
-     security-hash)
-
+(define (qif-import:write-securities security-hash security-prefs)
+  ;; For each security that has been paired with an existing
+  ;; GnuCash commodity, create a list containing the QIF name
+  ;; and the commodity's namespace and mnemonic (symbol).
+  (let ((table (hash-map->list
+                (lambda (key value)
+                  (list key
+                        (gnc-commodity-get-namespace value)
+                        (gnc-commodity-get-mnemonic value)))
+                security-hash)))
     ;; Add on the rest of the saved security mapping preferences.
     (for-each
      (lambda (m)
-       (if (not (hash-ref security-hash (car m)))
-           (set! table (cons m table))))
+       (unless (hash-ref security-hash (car m))
+         (set! table (cons m table))))
      security-prefs)
-
     ;; Write out the mappings.
     (write table port)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:save-map-prefs
@@ -358,30 +277,26 @@
           (qif-import:find-similar-acct acct-name allowed-types
                                         gnc-acct-info))
          (retval (make-qif-map-entry)))
-
     ;; set fields needed for any return value
     (qif-map-entry:set-qif-name! retval acct-name)
     (qif-map-entry:set-allowed-types! retval allowed-types)
-
-    (if mapped-gnc-acct
-        ;; ok, we've found an existing account that
-        ;; seems to work OK name-wise.
-        (begin
-          (qif-map-entry:set-gnc-name! retval (car mapped-gnc-acct))
-          (qif-map-entry:set-allowed-types! retval
-                                            (cadr mapped-gnc-acct))
-          (qif-map-entry:set-new-acct?! retval #f))
-        ;; we haven't found a match, so by default just create a new
-        ;; one.  Try to put the new account in a similar place in
-        ;; the hierarchy if there is one.
-        (let ((new-acct-info
-               (qif-import:find-new-acct acct-name allowed-types
-                                         gnc-acct-info)))
-          (qif-map-entry:set-gnc-name! retval (car new-acct-info))
-          (qif-map-entry:set-allowed-types! retval (cadr new-acct-info))
-          (qif-map-entry:set-new-acct?! retval #t)))
+    (cond
+     (mapped-gnc-acct
+      ;; ok, we've found an existing account that
+      ;; seems to work OK name-wise.
+      (qif-map-entry:set-gnc-name! retval (car mapped-gnc-acct))
+      (qif-map-entry:set-allowed-types! retval (cadr mapped-gnc-acct))
+      (qif-map-entry:set-new-acct?! retval #f))
+     (else
+      ;; we haven't found a match, so by default just create a new
+      ;; one.  Try to put the new account in a similar place in
+      ;; the hierarchy if there is one.
+      (let ((new-acct-info
+             (qif-import:find-new-acct acct-name allowed-types gnc-acct-info)))
+        (qif-map-entry:set-gnc-name! retval (car new-acct-info))
+        (qif-map-entry:set-allowed-types! retval (cadr new-acct-info))
+        (qif-map-entry:set-new-acct?! retval #t))))
     retval))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-similar-acct
@@ -389,42 +304,29 @@
 ;;  guess a translation from QIF info
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:find-similar-acct qif-acct-name allowed-types
-                                      gnc-acct-info)
+(define (qif-import:find-similar-acct qif-acct-name allowed-types gnc-acct-info)
   (let* ((same-type-accts '())
-         (matching-name-accts '())
-         (retval #f))
+         (matching-name-accts '()))
     (for-each
      (lambda (gnc-acct)
-       ;; check against allowed-types
-       (let ((acct-matches? #f))
-         (for-each
-          (lambda (type)
-            (if (= type (xaccAccountGetType (caddr gnc-acct)))
-                (set! acct-matches? #t)))
-          allowed-types)
-         (if acct-matches?
-             (set! same-type-accts (cons gnc-acct same-type-accts)))))
+       (when (any (lambda (type) (= type (xaccAccountGetType (caddr gnc-acct))))
+                  allowed-types)
+         (set! same-type-accts (cons gnc-acct same-type-accts))))
      gnc-acct-info)
 
     ;; now find one in the same-type-list with a similar name.
     (for-each
      (lambda (gnc-acct)
-       (if (qif-import:possibly-matching-name?
-            qif-acct-name gnc-acct)
-           (set! matching-name-accts
-                 (cons gnc-acct matching-name-accts))))
+       (when (qif-import:possibly-matching-name? qif-acct-name gnc-acct)
+         (set! matching-name-accts
+           (cons gnc-acct matching-name-accts))))
      same-type-accts)
 
     ;; now we have either nothing, something, or too much :)
     ;; return the full-name of the first name-matching account
-    (if (not (null? matching-name-accts))
-        (set! retval (list
-                      (cadr (car matching-name-accts))
-                      (list (xaccAccountGetType
-                             (caddr (car matching-name-accts))))))
-        #f)
-    retval))
+    (and (not (null? matching-name-accts))
+         (list (cadr (car matching-name-accts))
+               (list (xaccAccountGetType (caddr (car matching-name-accts))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -462,18 +364,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:find-new-acct qif-acct allowed-types gnc-acct-info)
-  (cond ((and (string? qif-acct)
-              (string=? qif-acct (default-equity-account)))
-         (let ((existing-equity
-                (qif-import:find-similar-acct (default-equity-account)
-                                              (list GNC-EQUITY-TYPE)
-                                              gnc-acct-info)))
-           (if existing-equity
-               existing-equity
-               (list (default-equity-account) (list GNC-EQUITY-TYPE)))))
-        ((and (string? qif-acct)
-              (not (string=? qif-acct "")))
-         (list qif-acct allowed-types))
-        (#t
-         (list (default-unspec-acct) allowed-types))))
+  (cond
+
+   ((and (string? qif-acct) (string=? qif-acct (default-equity-account)))
+    (or (qif-import:find-similar-acct
+         (default-equity-account) (list GNC-EQUITY-TYPE) gnc-acct-info)
+        (list (default-equity-account) (list GNC-EQUITY-TYPE))))
+
+   ((and (string? qif-acct) (string-null? qif-acct))
+    (list qif-acct allowed-types))
+
+   (else
+    (list (default-unspec-acct) allowed-types))))
 
