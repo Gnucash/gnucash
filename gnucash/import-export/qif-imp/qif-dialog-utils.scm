@@ -25,6 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash import-export string))
+(use-modules (srfi srfi-1))
 
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc-get-account-separator-string) security))
@@ -98,14 +99,7 @@
 
 
 (define (qif-import:gnc-account-exists map-entry acct-list)
-  (let ((retval #f))
-    (for-each
-     (lambda (acct)
-       (if (string=? (qif-map-entry:gnc-name map-entry)
-                     (cadr acct))
-           (set! retval #t)))
-     acct-list)
-    retval))
+  (member (qif-map-entry:gnc-name map-entry) (map cadr acct-list)))
 
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
@@ -116,11 +110,10 @@
 (define (qif-dialog:make-account-display qif-files acct-hash gnc-acct-info)
   ;; first, clear the "display" flags in the acct-hash and set up the
   ;; new-file? flags.  If there's nothing to show any more, don't.
-  (hash-fold
-   (lambda (k v p)
-     (qif-map-entry:set-display?! v #f)
-     #f)
-   #f acct-hash)
+  (hash-for-each
+   (lambda (k v)
+     (qif-map-entry:set-display?! v #f))
+   acct-hash)
 
   (let ((retval '()))
     ;; we want to make two passes here.  The first pass picks the
@@ -397,24 +390,20 @@
      qif-files)
 
     ;; now that the hash table is filled, make the display list
-    (hash-fold
-     (lambda (k v p)
-       (if (qif-map-entry:display? v)
-           (begin
-             (qif-map-entry:set-new-acct?!
-              v (not (qif-import:gnc-account-exists v gnc-acct-info)))
-             (set! retval (cons v retval))))
-       #f)
-     #f acct-hash)
+    (hash-for-each
+     (lambda (k v)
+       (when (qif-map-entry:display? v)
+         (qif-map-entry:set-new-acct?!
+          v (not (qif-import:gnc-account-exists v gnc-acct-info)))
+         (set! retval (cons v retval))))
+     acct-hash)
 
     ;; sort by number of transactions with that account so the
     ;; most important are at the top
-    (set! retval
-          (sort retval
-                (lambda (a b)
-                  (string<? (qif-map-entry:qif-name a)
-                            (qif-map-entry:qif-name b)))))
-    retval))
+    (sort retval
+          (lambda (a b)
+            (string<? (qif-map-entry:qif-name a)
+                      (qif-map-entry:qif-name b))))))
 
 
 ;; the category display is similar to the Account display.
@@ -423,11 +412,10 @@
 (define (qif-dialog:make-category-display qif-files cat-hash gnc-acct-info)
   ;; first, clear the "display" flags in the cat-hash.  If there's
   ;; nothing to show any more, don't.
-  (hash-fold
-   (lambda (k v p)
-     (qif-map-entry:set-display?! v #f)
-     #f)
-   #f cat-hash)
+  (hash-for-each
+   (lambda (k v)
+     (qif-map-entry:set-display?! v #f))
+   cat-hash)
 
   (let ((retval '())
         (entry #f))
@@ -519,22 +507,19 @@
      qif-files)
 
     ;; now that the hash table is filled, make the display list
-    (hash-fold
-     (lambda (k v p)
-       (if (qif-map-entry:display? v)
-           (begin
-             (qif-map-entry:set-new-acct?!
-              v (not (qif-import:gnc-account-exists v gnc-acct-info)))
-             (set! retval (cons v retval))))
-       #f)
-     #f cat-hash)
+    (hash-for-each
+     (lambda (k v)
+       (when (qif-map-entry:display? v)
+         (qif-map-entry:set-new-acct?!
+          v (not (qif-import:gnc-account-exists v gnc-acct-info)))
+         (set! retval (cons v retval))))
+     cat-hash)
 
     ;; sort by qif account name
-    (set! retval (sort retval
-                       (lambda (a b)
-                         (string<? (qif-map-entry:qif-name a)
-                                   (qif-map-entry:qif-name b)))))
-    retval))
+    (sort retval
+          (lambda (a b)
+            (string<? (qif-map-entry:qif-name a)
+                      (qif-map-entry:qif-name b))))))
 
 ;; this one's like the other display builders, it just looks at the
 ;; payee and memo too.
@@ -542,11 +527,10 @@
 (define (qif-dialog:make-memo-display qif-files memo-hash gnc-acct-info)
   (let ((retval '()))
     ;; clear the display flags for existing items
-    (hash-fold
-     (lambda (k v p)
-       (qif-map-entry:set-display?! v #f)
-       #f)
-     #f memo-hash)
+    (hash-for-each
+     (lambda (k v)
+       (qif-map-entry:set-display?! v #f))
+     memo-hash)
 
     ;; iterate over every imported transaction.  If there's no
     ;; category in the transaction, look at the payee to get a clue.
@@ -611,32 +595,23 @@
      qif-files)
 
     ;; build display list
-    (hash-fold
-     (lambda (k v p)
-       (if (qif-map-entry:display? v)
-           (begin
-             (qif-map-entry:set-new-acct?!
-              v (not (qif-import:gnc-account-exists v gnc-acct-info)))
-             (set! retval (cons v retval))))
-       #f)
-     #f memo-hash)
+    (hash-for-each
+     (lambda (k v)
+       (when (qif-map-entry:display? v)
+         (qif-map-entry:set-new-acct?!
+          v (not (qif-import:gnc-account-exists v gnc-acct-info)))
+         (set! retval (cons v retval))))
+     memo-hash)
 
     ;; sort by qif memo/payee name
-    (set! retval (sort retval
-                       (lambda (a b)
-                         (string<? (qif-map-entry:qif-name a)
-                                   (qif-map-entry:qif-name b)))))
-    retval))
+    (sort retval
+          (lambda (a b)
+            (string<? (qif-map-entry:qif-name a)
+                      (qif-map-entry:qif-name b))))))
 
 
 (define (qif-dialog:qif-file-loaded? filename list-of-files)
-  (let ((status (map
-                 (lambda (file)
-                   (string=? filename (qif-file:path file)))
-                 list-of-files)))
-    (if (memq #t status)
-        #t
-        #f)))
+  (member filename (map qif-file:path list-of-files)))
 
 (define (qif-dialog:unload-qif-file oldfile list-of-files)
   (delq oldfile list-of-files))
@@ -765,8 +740,8 @@
 (define (qif-import:update-security-hash security-hash ticker-map
                                          acct-hash sec-prefs)
   (let ((names '()))
-    (hash-fold
-     (lambda (qif-name map-entry p)
+    (hash-for-each
+     (lambda (qif-name map-entry)
        (let ((security-name (qif-import:get-account-name qif-name)))
          ;; Is this account going to be imported, is it security-denominated,
          ;; and is the security not already in the security hash table?
@@ -821,13 +796,11 @@
                                                    100000))
 
                      ;; Add the hash key to the list to be returned.
-                     (set! names (cons security-name names))))))
-         #f))
-     #f acct-hash)
+                     (set! names (cons security-name names))))))))
+     acct-hash)
 
-    (if (not (null? names))
-        (sort names string<?)
-        #f)))
+    (and (not (null? names))
+         (sort names string<?))))
 
 ;; this is used within the dialog to get a list of all the new
 ;; accounts the importer thinks it's going to make.  Passed to the
@@ -878,17 +851,15 @@
     (for-each
      (lambda (acctmap)
        (if acctmap
-           (hash-fold
-            (lambda (k v p)
+           (hash-for-each
+            (lambda (k v)
               (if (qif-map-entry:display? v)
                   (set! accts
-                        (cons
-                         (cons (gnc:substring-split (qif-map-entry:gnc-name v)
-                                                    sep)
-                               (qif-map-entry:new-acct? v))
-                         accts)))
-              #f)
-            #f acctmap)))
+                    (cons
+                     (cons (gnc:substring-split (qif-map-entry:gnc-name v) sep)
+                           (qif-map-entry:new-acct? v))
+                     accts))))
+            acctmap)))
      extra-maps)
 
     ;; get the old accounts from the current account group
