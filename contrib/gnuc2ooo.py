@@ -1,6 +1,6 @@
 #**********************************************************************
 #   Gnu Cash to OpenOffice.org (gnuc2ooo.py)
-#   
+#
 #   Makros for the download of GnuCash Data to OpenOffice.org Base
 #
 #   Makro SetGnuCashFilePaths:
@@ -11,7 +11,7 @@
 #   Makro fillGnuCashDB:
 #       Download data from the GnuCash data source to OpenOffice.org
 #       Base
-#   
+#
 #
 #**********************************************************************
 #   Copyright (c) 2008 Knut Gerwens
@@ -126,7 +126,7 @@ def getDBFilename(default):
     crout = 'getDBFilename'
     global last_input_getDBFilename
 ##    last_input_getDBFilename = str(default) + '\n'
-    
+
     fp_write.Title = "Enter Database Filename"
     fp_write.MultiSelectionMode = False
     try:
@@ -136,7 +136,7 @@ def getDBFilename(default):
     fp_write.initialize((FILESAVE_AUTOEXTENSION,))
     fp_write.setDefaultName(default)
     if fp_write.execute():
-        return fp_write.Files[0] 
+        return fp_write.Files[0]
 
 def createDB(db_defaultname):
     global crout
@@ -160,7 +160,7 @@ def createDB(db_defaultname):
 
 def exec_SetGnuCashFilePaths():
     """ Definition of data source and target files, creation of empty database """
-    
+
     global fp_read, fp_write
     global crout
     crout = 'SetGnuCashFilePaths'
@@ -190,12 +190,12 @@ def exec_SetGnuCashFilePaths():
         settings.write(dbname.encode(lcodec) + '\n')
     else:
         return None
-    
+
     settings.close()
-    
+
     MessageBox('A new Openoffice.org database has been created.\n' +
                'To fill with data please run makro "fillGnuCashDB."',
-               MsgType="infobox")  
+               MsgType="infobox")
 
 def read_filepaths():
     global crout
@@ -220,7 +220,7 @@ def read_filepaths():
         return []
     else:
         return [gcfile, dbname]
-    
+
 # ***********************  TABLES ooo-DB **********************************
 
 # Three definitions for account: must be kept in sync
@@ -301,7 +301,7 @@ def eval_fraction(cont):
     global crout
     crout = 'eval_fraction'
     global last_input_eval_fraction
-##    last_input_eval_fraction = str(cont) 
+##    last_input_eval_fraction = str(cont)
 
     l_split = cont.split('/')
     numerator = cont.split('/')[0]
@@ -384,8 +384,8 @@ def view_all_transactions(ct_lvl):
             vd4 = vd4 + v4.replace("?", sl)
         vtup = (vd2, vd4)
         return vtup
-        
-##    viewdef = 
+
+##    viewdef =
 ##    "ACCTTREE"."LEVEL1" AS "LEVEL1",
 ##    "ACCTTREE"."LEVEL2" AS "LEVEL2",
 ##    "ACCTTREE"."LEVEL3" AS "LEVEL3",
@@ -408,7 +408,7 @@ def view_all_transactions(ct_lvl):
     AND "SPLIT"."VALUE" != '0'
     ORDER BY"""
     viewdef5 =  """ "DATE_YM", "DATE_D",
-    "TRN-NUMBER", "DESCRIPTION" """ 
+    "TRN-NUMBER", "DESCRIPTION" """
 
     vtup = vardefs()
     viewdef2 = vtup[0]
@@ -446,7 +446,7 @@ class GCContent(sax.handler.ContentHandler):
         if ':' in name:
             self.tbl = name.split(':')[0]
             self.key = name.split(':')[1]
-            
+
 
     def endElement(self, name):
         global crout
@@ -464,20 +464,20 @@ class GCContent(sax.handler.ContentHandler):
             if insert_ct >= maxmemory:
                 Stmt.execute("CHECKPOINT")
                 insert_ct = insert_ct - maxmemory
-            if kind == 'account': 
+            if kind == 'account':
                 Stmt_ins_account.setString(1, value_dict['name'])
                 Stmt_ins_account.setString(2, value_dict['id'])
                 Stmt_ins_account.setString(3, value_dict['type'])
                 Stmt_ins_account.setString(4, value_dict['description'])
                 Stmt_ins_account.setString(5, value_dict['parent'])
-                Stmt_ins_account.executeUpdate()                
+                Stmt_ins_account.executeUpdate()
             elif kind == 'trn':
                 Stmt_ins_trn.setString(1, value_dict['id'])
                 Stmt_ins_trn.setString(2, value_dict['num'])
                 Stmt_ins_trn.setString(3, value_dict['description'])
                 Stmt_ins_trn.setString(4, value_dict['date_ym'])
                 Stmt_ins_trn.setString(5, value_dict['date_d'])
-                Stmt_ins_trn.executeUpdate()                
+                Stmt_ins_trn.executeUpdate()
             elif kind == 'split':
                 Stmt_ins_split.setString(1, value_dict['id'])
                 Stmt_ins_split.setString(2, value_dict['trn_id'])
@@ -527,7 +527,7 @@ class GCContent(sax.handler.ContentHandler):
             createdelete("CREATE INDEX S_TRN_ID ON SPLIT (TRN_ID)", None)
             createdelete("CREATE INDEX S_ACCOUNT ON SPLIT (ACCOUNT)", None)
 
-            
+
     def characters(self, content):
         global crout
         crout = 'characters'
@@ -569,22 +569,22 @@ def MessageBox(MsgText, MsgTitle="GnuCash to Ooo", MsgType="messbox", MsgButtons
     global last_input_MessageBox
 ##    last_input_MessageBox = str(MsgText)
 
-    if not ParentWin:
-            doc = XSCRIPTCONTEXT.getDocument()
+    if not ParentWin:  # TODO: Where is XSCRIPTCONTEXT defined?
+            doc = XSCRIPTCONTEXT.getDocument()  # noqa: F821
             try:
                 ParentWin = doc.CurrentController.Frame.ContainerWindow
-            except AttributeError:               
+            except AttributeError:
                 ParentWin = doc.Frame.ContainerWindow
 
-    
+
     MsgType = MsgType.lower()
-    
+
     #available msg types
     MsgTypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
-    
+
     if not ( MsgType in MsgTypes ):
         MsgType = "messbox"
-    
+
     #describe window properties.
     aDescriptor = WindowDescriptor()
     aDescriptor.Type = MODALTOP
@@ -593,14 +593,14 @@ def MessageBox(MsgText, MsgTitle="GnuCash to Ooo", MsgType="messbox", MsgButtons
     aDescriptor.Parent = ParentWin
     #aDescriptor.Bounds = Rectangle()
     aDescriptor.WindowAttributes = MsgButtons
-    
+
     tk = ParentWin.getToolkit()
     msgbox = tk.createWindow(aDescriptor)
-    
+
     msgbox.setMessageText(MsgText)
     if MsgTitle :
         msgbox.setCaptionText(MsgTitle)
-        
+
     return msgbox.execute()
 
 ##    callXray(DB)
@@ -632,10 +632,10 @@ def exec_fillGnuCashDB():
         MessageBox('Reading filepaths not successful.\n' +
             'Please run makro ' + '"' + set_makro + '"', MsgType="errorbox")
         return False
-        
+
     gcfile = filepaths[0]
     dbname = filepaths[1]
-    
+
     answer = MessageBox('Update database ' + dbname +'?', MsgType = "querybox", MsgButtons=YES_NO)
     if not answer == 2:          # 2 = YES, 3 = NO
         return False
@@ -649,7 +649,7 @@ def exec_fillGnuCashDB():
     Connection=DB.connectWithCompletion(dbhandler)
     # create Statement object
     Stmt=Connection.createStatement()
-    
+
     # create base Tables
     createdelete(create_account, "ACCOUNT")
     createdelete(create_trn, "TRN")
@@ -663,7 +663,7 @@ def exec_fillGnuCashDB():
     Stmt.execute("DROP INDEX ACCTTREE_ID IF EXISTS")
     # drop derived tables
     Stmt.execute("DROP VIEW ALL_TRANSACTIONS IF EXISTS")
-    Stmt.execute("DROP TABLE ACCTTREE IF EXISTS")  
+    Stmt.execute("DROP TABLE ACCTTREE IF EXISTS")
 
     # read GnuCash Data
     try:
@@ -691,7 +691,7 @@ def exec_fillGnuCashDB():
     # (and not only in logfile)
     Stmt.execute("CHECKPOINT")
     DB.DatabaseDocument.store()
-    # close connection   
+    # close connection
     Connection.close()
     MessageBox('Database ' + dbname + ' has been successfully updated.',
            MsgType="infobox")
@@ -741,7 +741,7 @@ def fillGnuCashDB():
     except Exception as args:
         issue_error_messages(args)
         return
-    
+
 def SetGnuCashFilePaths():
     global crout
     crout = 'SetGnuCashFilePaths'
@@ -750,6 +750,6 @@ def SetGnuCashFilePaths():
     except Exception as args:
         issue_error_messages(args)
         return
-    
-g_exportedScripts = fillGnuCashDB, SetGnuCashFilePaths, 
+
+g_exportedScripts = fillGnuCashDB, SetGnuCashFilePaths,
 
