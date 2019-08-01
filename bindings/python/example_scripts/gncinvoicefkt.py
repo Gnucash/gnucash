@@ -22,6 +22,7 @@ try:
             GNC_DISC_PRETAX
     import str_methods
 except ImportError as import_error:
+    import sys
     print("Problem importing modules.")
     print(import_error)
     sys.exit(2)

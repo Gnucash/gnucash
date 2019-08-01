@@ -40,11 +40,11 @@ cur = comm_table.lookup("CURRENCY", cur_mnemonic)
 cur_name = cur.get_fullname()
 
 
-if namespace_name != "":                    # Show single namespace
+if namespace_name == "":  # Show all namespaces
+  namespaces = comm_table.get_namespaces_list()
+else:  # Show single namespace
   namespaces [ comm_table.find_namespace(namespace_name) ]
 
-else:                                 # Show all namespaces
-  namespaces=comm_table.get_namespaces_list()
 
 for namespace in namespaces:
 

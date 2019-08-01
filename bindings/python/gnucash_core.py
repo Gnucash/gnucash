@@ -46,6 +46,8 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
     gnc_numeric_to_string
 
+ERR_BACKEND_NO_ERR = 0  # defined in gnucash/libgnucash/engine/qofbackend.h
+
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
 
@@ -133,7 +135,7 @@ class Session(GnuCashCoreClass):
     def generate_errors(self):
         """A generator that yields any outstanding QofBackend errors
         """
-        while self.get_error() is not ERR_BACKEND_NO_ERR:
+        while self.get_error() != ERR_BACKEND_NO_ERR:
             error = self.pop_error()
             yield error
 

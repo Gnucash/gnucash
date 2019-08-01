@@ -738,7 +738,7 @@ def fillGnuCashDB():
     crout = 'fillGnuCashDB'
     try:
         exec_fillGnuCashDB()
-    except Exception, args:
+    except Exception as args:
         issue_error_messages(args)
         return
     
@@ -747,7 +747,7 @@ def SetGnuCashFilePaths():
     crout = 'SetGnuCashFilePaths'
     try:
         exec_SetGnuCashFilePaths()
-    except Exception, args:
+    except Exception as args:
         issue_error_messages(args)
         return
     

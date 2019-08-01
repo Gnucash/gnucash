@@ -32,6 +32,7 @@ Format needs to be:
 Not all fields need to have values but the delimiters (,) do have to be present.
 Some fields are compulsory: id, vendor_id, action, quantity, price, taxable
 '''
+from __future__ import print_function
 import sys
 import csv
 
@@ -39,14 +40,14 @@ VENDOR_ID="000013" # Obviously this needs to match your vendor ID
 try:
 	INFILE=sys.argv[1]
 except:
-	print "No input files specified."
-	print "Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
+	print("No input files specified.")
+	print("Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\"")
 	quit(1)
 try:
 	INV_ID=sys.argv[2]
 except:
-	print "No order number  specified."
-	print "Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\""
+	print("No order number  specified.")
+	print("Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv \"ORDER_NUMBER\"")
 	quit(1)
 try:
 	ACCOUNT=sys.argv[3]
@@ -62,13 +63,13 @@ for row in Reader:
 	if row[0].isdigit(): # We only use numbered lines
 		outline=(INV_ID + ",," + VENDOR_ID + ",,,," + row[1] + " > " + row[4] + ",ea," +
 			ACCOUNT + "," + row[2] + "," + row[5].replace("GBP", "") + ",,,,no,,,,,,,,")
-		print outline
+		print(outline)
 	elif not row[0]: # Last row?  Has empty first element
 		delivery = row[8].replace("GBP", "")
 		vat = row[10].replace("GBP", "")
 		outline=(INV_ID + ",," + VENDOR_ID + ",,,," + "DELIVERY" + ",ea," +
 			"Expenses:Postage and Delivery" + "," + "1" + "," + delivery + ",,,,no,,,,,,,,")
-		print outline # pipe to file for GnuCash import
+		print(outline) # pipe to file for GnuCash import
 		outline=(INV_ID + ",," + VENDOR_ID + ",,,," + "VAT" + ",tax," +
 			"Expenses:VAT" + "," + "1" + "," + vat + ",,,,no,,,,,,,,")
-		print outline # pipe to file for GnuCash import
+		print(outline) # pipe to file for GnuCash import

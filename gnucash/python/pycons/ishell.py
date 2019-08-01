@@ -20,7 +20,7 @@ from StringIO import StringIO
 try:
     import IPython
     from IPython import ipapi
-except Exception,e:
+except Exception as e:
     raise "Error importing IPython (%s)" % str(e)
 
 
