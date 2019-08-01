@@ -1,5 +1,4 @@
 # Test
-sudo: required
 language: c++
 compiler: gcc
 env:
@@ -7,6 +6,9 @@ env:
     - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-make
 services:
     - docker
+before_install:
+    - python3 -m pip install --user flake8
+    - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 install:
     - docker --version
     - echo BUILDENV="$BUILDENV"
