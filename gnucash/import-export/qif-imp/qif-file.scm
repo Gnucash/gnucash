@@ -35,8 +35,7 @@
   (make-regexp "^\\.\\.\\."))
 
 (define (not-bad-numeric-string? input)
-  (let ((match (regexp-exec qif-bad-numeric-rexp input)))
-    (if match #f #t)))
+  (not (regexp-exec qif-bad-numeric-rexp input)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1046,12 +1045,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-file:parse-fields-results results type)
-  (define (test-results results)
-    (if (null? results) #f
-        (let* ((this-res (car results))
-               (this-type (car this-res)))
-          (if (eq? this-type type)
-              (cdr this-res)
-              (test-results (cdr results))))))
-
-  (if results (test-results results) #f))
+  (and results (assq-ref results type)))
