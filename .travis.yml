@@ -7,6 +7,7 @@ env:
 services:
     - docker
 before_install:
+    - python3 -m pip --version || wget -qO- https://bootstrap.pypa.io/get-pip.py | sudo -H python3
     - python3 -m pip install --user flake8
     - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 install:
