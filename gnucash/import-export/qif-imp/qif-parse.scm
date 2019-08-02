@@ -26,28 +26,6 @@
 (use-modules (gnucash import-export string))
 (use-modules (srfi srfi-13))
 
-(define qif-category-compiled-rexp
-  (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
-
-(define qif-date-compiled-rexp
-  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$"))
-
-(define qif-date-mdy-compiled-rexp
-  (make-regexp "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])"))
-
-(define qif-date-ymd-compiled-rexp
-  (make-regexp "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])"))
-
-(define decimal-radix-regexp
-  (make-regexp
-   "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+\\.[0-9]*[+-]? *$"))
-
-(define comma-radix-regexp
-  (make-regexp
-   "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$"))
-
-(define integer-regexp (make-regexp "^[$]?[+-]?[$]?[0-9]+[+-]? *$"))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category
 ;;  this one just gets nastier and nastier.
@@ -61,37 +39,42 @@
 ;;  gosh, I love regular expressions.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define qif-category-compiled-rexp
+  (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 (define (qif-split:parse-category self value)
-  (let ((match (regexp-exec qif-category-compiled-rexp value)))
-    (if match
-        (let ((rv
-               (list (match:substring match 2)
-                     (if (and (match:substring match 1)
-                              (match:substring match 3))
-                         #t #f)
-                     (if (match:substring match 4)
-                         (match:substring match 5)
-                         #f)
-                     ;; miscx category name
-                     (if (match:substring match 6)
-                         (match:substring match 8)
-                         #f)
-                     ;; is it an account?
-                     (if (and (match:substring match 7)
-                              (match:substring match 9))
-                         #t #f)
-                     (if (match:substring match 10)
-                         (match:substring match 11)
-                         #f))))
-          rv)
-        (begin
-          ;; Parsing failed. Bug detected!
-          (gnc:warn "qif-split:parse-category: can't parse [" value "].")
-          (throw 'bug
-                 "qif-split:parse-category"
-                 "Can't parse account or category ~A."
-                 (list value)
-                 #f)))))
+  ;; example category regex matches (excluding initial 'L'):
+  ;; field1
+  ;; field1/field2
+  ;; field1/|field3
+  ;; field1/|field3/field4
+
+  ;; where field1 is a category or [account]
+  ;;   and field2 is a class
+  ;;   and field3 is a miscx-category or [miscx-account]
+  ;;   and field4 is a miscx-class
+  (cond
+   ((regexp-exec qif-category-compiled-rexp value) =>
+    (lambda (rmatch)
+      (list (match:substring rmatch 2)
+            (and (match:substring rmatch 1)
+                 (match:substring rmatch 3)
+                 #t)
+            (and (match:substring rmatch 4)
+                 (match:substring rmatch 5))
+            ;; miscx category name
+            (and (match:substring rmatch 6)
+                 (match:substring rmatch 8))
+            ;; is it an account?
+            (and (match:substring rmatch 7)
+                 (match:substring rmatch 9)
+                 #t)
+            (and (match:substring rmatch 10)
+                 (match:substring rmatch 11)))))
+   (else
+    ;; Parsing failed. Bug detected!
+    (gnc:warn "qif-split:parse-category: can't parse [" value "].")
+    (throw 'bug "qif-split:parse-category""Can't parse account or category ~A."
+           (list value) #f))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -102,59 +85,40 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:fix-year year-string y2k-threshold)
-  (let ((fixed-string #f)
-        (post-read-value #f)
-        (y2k-fixed-value #f))
-
-    ;; quicken prints 2000 as "' 0" for at least some versions.
-    ;; thanks dave p for reporting this.
-    (if (eq? (string-ref year-string 0) #\')
-        (begin
-          (gnc:warn "qif-file:fix-year: found weird QIF Y2K year ["
-                    year-string "].")
-          (set! fixed-string
-                (substring year-string 2 (string-length year-string))))
-        (set! fixed-string year-string))
-
-    ;; now the string should just have a number in it plus some
-    ;; optional trailing space.
-    (set! post-read-value
-          (with-input-from-string fixed-string
-            (lambda () (read))))
+  (let* ((fixed-string
+          (cond
+           ((char=? (string-ref year-string 0) #\')
+            (gnc:warn "qif-file:fix-year: weird QIF year [" year-string "].")
+            (substring year-string 2 (string-length year-string)))
+           (else year-string)))
+         (post-read-value (with-input-from-string fixed-string read)))
 
     (cond
      ;; 2-digit numbers less than the window size are interpreted to
      ;; be post-2000.
-     ((and (integer? post-read-value)
-           (< post-read-value y2k-threshold))
-      (set! y2k-fixed-value (+ 2000 post-read-value)))
+     ((and (integer? post-read-value) (< post-read-value y2k-threshold))
+      (+ 2000 post-read-value))
 
-     ;; there's a common bug in printing post-2000 dates that
-     ;; prints 2000 as 19100 etc.
-     ((and (integer? post-read-value)
-           (> post-read-value 19000))
-      (set! y2k-fixed-value (+ 1900 (- post-read-value 19000))))
+     ;; there's a common bug in printing post-2000 dates that prints
+     ;; 2000 as 19100 etc.
+     ((and (integer? post-read-value) (> post-read-value 19000))
+      (+ 1900 (- post-read-value 19000)))
 
      ;; normal dates represented in unix years (i.e. year-1900, so
      ;; 2000 => 100.)  We also want to allow full year specifications,
      ;; (i.e. 1999, 2001, etc) and there's a point at which you can't
      ;; determine which is which.  this should eventually be another
      ;; field in the qif-file struct but not yet.
-          ((and (integer? post-read-value)
-           (< post-read-value 1902))
-      (set! y2k-fixed-value (+ 1900 post-read-value)))
+     ((and (integer? post-read-value) (< post-read-value 1902))
+      (+ 1900 post-read-value))
 
      ;; this is a normal, 4-digit year spec (1999, 2000, etc).
-     ((integer? post-read-value)
-      (set! y2k-fixed-value post-read-value))
+     ((integer? post-read-value) post-read-value)
 
      ;; No idea what the string represents.  Maybe a new bug in Quicken!
-     (#t
-      (gnc:warn "qif-file:fix-year: ay caramba! What is this? ["
-                year-string "].")))
-
-    y2k-fixed-value))
-
+     (else
+      (gnc:warn "qif-file:fix-year: ay! What is this? [" year-string "].")
+      #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-acct-type : set the type of the account, using gnucash
@@ -162,34 +126,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-acct-type read-value errorproc errortype)
-  (let ((mangled-string
-         (string-downcase! (string-trim-both read-value))))
-    (cond
-     ((string=? mangled-string "bank")
-      (list GNC-BANK-TYPE))
-     ((string=? mangled-string "port")
-      (list GNC-BANK-TYPE))
-     ((string=? mangled-string "cash")
-      (list GNC-CASH-TYPE))
-     ((string=? mangled-string "ccard")
-      (list GNC-CCARD-TYPE))
-     ((string=? mangled-string "invst") ;; these are brokerage accounts.
-      (list GNC-BANK-TYPE))
-     ((string=? mangled-string "401(k)/403(b)")
-      (list GNC-BANK-TYPE))
-     ((string=? mangled-string "oth a")
-      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
-     ((string=? mangled-string "oth l")
-      (list GNC-LIABILITY-TYPE GNC-CCARD-TYPE))
-     ((string=? mangled-string "oth s") ;; German asset account
-      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
-     ((string=? mangled-string "mutual")
-      (list GNC-BANK-TYPE))
-     (#t
-      (errorproc errortype
-                 (format #f (_ "Unrecognized account type '~s'. Defaulting to Bank.")
-                          read-value))
-      (list GNC-BANK-TYPE)))))
+  (define string-map-alist
+    (list (list "bank" GNC-BANK-TYPE)
+          (list "port" GNC-BANK-TYPE)
+          (list "cash" GNC-CASH-TYPE)
+          (list "ccard" GNC-CCARD-TYPE)
+          (list "invst" GNC-BANK-TYPE)
+          (list "401(k)/403(b)" GNC-BANK-TYPE)
+          (list "oth a" GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE)
+          (list "oth l" GNC-LIABILITY-TYPE GNC-CCARD-TYPE)
+          (list "oth s" GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE)
+          (list "mutual" GNC-BANK-TYPE)))
+  (or (assoc-ref string-map-alist (string-downcase! (string-trim-both read-value)))
+      (let ((msg (format #f (_ "Unrecognized account type '~s'. Defaulting to Bank.")
+                         read-value)))
+        (errorproc errortype msg)
+        (list GNC-BANK-TYPE))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-bang-field : the bang fields switch the parse context
@@ -198,104 +150,59 @@
 
 (define (qif-parse:parse-bang-field read-value)
   (let ((bang-field (string-downcase! (string-trim read-value))))
-;; The QIF files output by the WWW site of Credit Lyonnais
-;; begin by:   !type bank
-;; instead of: !Type:bank
+    ;; The QIF files output by the WWW site of Credit Lyonnais
+    ;; begin by:   !type bank
+    ;; instead of: !Type:bank
     (if (>= (string-length bang-field) 5)
         (if (string=? (substring bang-field 0 5) "type ")
             (string-set! bang-field 4 #\:)))
-
     (string->symbol bang-field)))
 
-
 (define (qif-parse:parse-action-field read-value errorproc errortype)
-  (if read-value
-      (begin
-        (case (string->symbol (string-downcase (string-trim-both read-value)))
-          ;; buy
-          ((buy cvrshrt kauf)
-           'buy)
-          ((buyx cvrshrtx kaufx)
-           'buyx)
-          ((cglong kapgew) ;; Kapitalgewinnsteuer
-           'cglong)
-          ((cglongx kapgewx)
-           'cglongx)
-          ((cgmid) ;; Kapitalgewinnsteuer
-           'cgmid)
-          ((cgmidx)
-           'cgmidx)
-          ((cgshort k.gewsp)
-           'cgshort)
-          ((cgshortx k.gewspx)
-           'cgshortx)
-          ((div)   ;; dividende
-           'div)
-          ((divx)
-           'divx)
-;          ((exercise)
-;           'exercise)
-;          ((exercisx)
-;           'exercisx)
-;          ((expire)
-;           'expire)
-;          ((grant)
-;           'grant)
-          ((int intinc) ;; zinsen
-           'intinc)
-          ((intx intincx)
-           'intincx)
-          ((margint)
-           'margint)
-          ((margintx)
-           'margintx)
-          ((miscexp)
-           'miscexp)
-          ((miscexpx)
-           'miscexpx)
-          ((miscinc cash)
-           'miscinc)
-          ((miscincx)
-           'miscincx)
-          ((reinvdiv)
-           'reinvdiv)
-          ((reinvint reinvzin)
-           'reinvint)
-          ((reinvlg reinvkur)
-           'reinvlg)
-          ((reinvmd)
-           'reinvmd)
-          ((reinvsg reinvksp)
-           'reinvsg)
-          ((reinvsh)
-           'reinvsh)
-          ((reminder erinnerg)
-           'reminder)
-          ((rtrncap)
-           'rtrncap)
-          ((rtrncapx)
-           'rtrncapx)
-          ((sell shtsell verkauf)  ;; verkaufen
-           'sell)
-          ((sellx shtsellx verkaufx)
-           'sellx)
-          ((shrsin aktzu)
-           'shrsin)
-          ((shrsout aktab)
-           'shrsout)
-          ((stksplit aktsplit)
-           'stksplit)
-          ((xin contribx)
-           'xin)
-          ((xout withdrwx)
-           'xout)
-;          ((vest)
-;           'vest)
-          (else
-           (errorproc errortype
-                      (format #f (_ "Unrecognized action '~a'.") read-value))
-           #f)))
-      #f))
+  (define action-map
+    '((buy cvrshrt kauf)
+      (buyx cvrshrtx kaufx)
+      (cglong cglong kapgew)
+      (cglongx cglongx kapgewx)
+      (cgmid cgmid)
+      (cgmidx cgmidx)
+      (cgshort cgshort k.gewsp)
+      (cgshortx cgshortx k.gewspx)
+      (div div)
+      (divx divx)
+      ;; (exercise exercise)
+      ;; (exercisx exercisx)
+      ;; (expire expire)
+      ;; (grant grant)
+      (intinc int intinc)
+      (intincx intx intincx)
+      (margint margint)
+      (margintx margintx)
+      (miscexp miscexp)
+      (miscexpx miscexpx)
+      (miscinc miscinc cash)
+      (miscincx miscincx)
+      (reinvdiv reinvdiv)
+      (reinvint reinvint reinvzin)
+      (reinvlg reinvlg reinvkur)
+      (reinvmd reinvmd)
+      (reinvsg reinvsg reinvksp)
+      (reinvsh reinvsh)
+      (reminder reminder erinnerg)
+      (rtrncap rtrncap)
+      (rtrncapx rtrncapx)
+      (sell sell shtsell verkauf)
+      (sellx sellx shtsellx verkaufx)
+      (shrsin shrsin aktzu)
+      (shrsout shrsout aktab)
+      (stksplit stksplit aktsplit)
+      (xin xin contribx)
+      (xout xout withdrwx)))
+  (and read-value
+       (let ((sym (string->symbol (string-downcase (string-trim-both read-value)))))
+         (or (any (lambda (lst) (and (memq sym lst) (car lst))) action-map)
+             (let ((msg (format #f (_ "Unrecognized action '~a'.") read-value)))
+               (errorproc errortype msg))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-cleared-field : In a "C" (cleared status) QIF line,
@@ -304,24 +211,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-cleared-field read-value errorproc errortype)
-  (if (and (string? read-value)
-           (not (string-null? read-value)))
-      (let ((secondchar (string-ref read-value 0)))
-        (case secondchar
-          ;; Reconciled is the most likely, especially for large imports,
-          ;; so check that first. Also allow for lowercase.
-          ((#\X #\x #\R #\r)
-           'reconciled)
-          ((#\* #\C #\c)
-           'cleared)
-          ((#\? #\!)
-           'budgeted)
-          (else
-            (errorproc errortype
-                       (format #f (_ "Unrecognized status '~a'. Defaulting to uncleared.")
-                                read-value))
-            #f)))
-      #f))
+  (define maplist
+    '((reconciled #\X #\x #\R #\r)
+      (cleared #\* #\C #\c)
+      (budgeted #\? #\!)))
+  (and
+   (string? read-value)
+   (not (string-null? read-value))
+   (let* ((secondchar (string-ref read-value 0)))
+     (or (any (lambda (m) (and (memq secondchar (cdr m)) (car m))) maplist)
+         (let ((msg (format #f (_ "Unrecognized status '~a'. Defaulting to uncleared.")
+                            read-value)))
+           (errorproc errortype msg))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -331,115 +232,69 @@
 ;;  that this date string could actually be.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (parse-check-date-format match possible-formats)
-  (let ((date-parts (list (match:substring match 1)
-                          (match:substring match 2)
-                          (match:substring match 3)))
-        (numeric-date-parts '())
-        (retval '()))
+  (define (date? d m y ys)
+    (and (number? d) (<= 1 d 31)
+         (number? m) (<= 1 m 12)
+         (= 4 (string-length ys))
+         (number? y) (> y 1930)))
+  (let* ((date-parts (list (match:substring match 1)
+                           (match:substring match 2)
+                           (match:substring match 3)))
+         (numeric-date-parts (map (lambda (elt) (with-input-from-string elt read))
+                                  date-parts))
+         (n1 (car numeric-date-parts))
+         (n2 (cadr numeric-date-parts))
+         (n3 (caddr numeric-date-parts))
+         (s1 (car date-parts))
+         (s3 (caddr date-parts))
+         (format-alist (list (list 'd-m-y n1 n2 n3 s3)
+                             (list 'm-d-y n2 n1 n3 s3)
+                             (list 'y-m-d n3 n2 n1 s1)
+                             (list 'y-d-m n2 n3 n1 s1))))
 
-    ;;(define (print-list l)
-    ;;  (for-each (lambda (x) (display x) (display " ")) l))
-
-    ;;(for-each (lambda (x) (if (list? x) (print-list x) (display x)))
-    ;;      (list "parsing: " date-parts " in " possible-formats "\n"))
-
-    ;; get the strings into numbers (but keep the strings around)
-    (set! numeric-date-parts
-          (map (lambda (elt)
-                 (with-input-from-string elt
-                   (lambda () (read))))
-               date-parts))
-
-    (let ((possibilities possible-formats)
-          (n1 (car numeric-date-parts))
-          (n2 (cadr numeric-date-parts))
-          (n3 (caddr numeric-date-parts))
-          (s1 (car date-parts))
-          (s3 (caddr date-parts)))
-
-      ;; filter the possibilities to eliminate (hopefully)
-      ;; all but one
-      (if (or (not (number? n1)) (> n1 12))
-          (set! possibilities (delq 'm-d-y possibilities)))
-      (if (or (not (number? n1)) (> n1 31))
-          (set! possibilities (delq 'd-m-y possibilities)))
-      (if (or (not (number? n1)) (< n1 1))
-          (set! possibilities (delq 'd-m-y possibilities)))
-      (if (or (not (number? n1)) (< n1 1))
-          (set! possibilities (delq 'm-d-y possibilities)))
-
-      (if (or (not (number? n2)) (> n2 12))
-          (begin
-            (set! possibilities (delq 'd-m-y possibilities))
-            (set! possibilities (delq 'y-m-d possibilities))))
-
-      (if (or (not (number? n2)) (> n2 31))
-          (begin
-            (set! possibilities (delq 'm-d-y possibilities))
-            (set! possibilities (delq 'y-d-m possibilities))))
-
-      (if (or (not (number? n3)) (> n3 12))
-          (set! possibilities (delq 'y-d-m possibilities)))
-      (if (or (not (number? n3)) (> n3 31))
-          (set! possibilities (delq 'y-m-d possibilities)))
-
-      (if (or (not (number? n3)) (< n3 1))
-          (set! possibilities (delq 'y-m-d possibilities)))
-      (if (or (not (number? n3)) (< n3 1))
-          (set! possibilities (delq 'y-d-m possibilities)))
-
-      ;; If we've got a 4-character year, make sure the date
-      ;; is after 1930.  Don't check the high value (perhaps
-      ;; we should?).
-      (if (= (string-length s1) 4)
-          (if (or (not (number? n1)) (< n1 1930))
-              (begin
-                (set! possibilities (delq 'y-m-d possibilities))
-                (set! possibilities (delq 'y-d-m possibilities)))))
-      (if (= (string-length s3) 4)
-          (if (or (not (number? n3)) (< n3 1930))
-              (begin
-                (set! possibilities (delq 'm-d-y possibilities))
-                (set! possibilities (delq 'd-m-y possibilities)))))
-
-      (set! retval possibilities))
-    retval))
+    (let lp ((possible-formats possible-formats)
+             (res '()))
+      (cond
+       ((null? possible-formats) (reverse res))
+       (else
+        (lp (cdr possible-formats)
+            (let ((args (assq (car possible-formats) format-alist)))
+              (if (apply date? (cdr args)) (cons (car args) res) res))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:check-date-format
 ;;  given a list of possible date formats, return a pruned list
 ;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define qif-date-compiled-rexp
+  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$"))
+
+(define qif-date-mdy-compiled-rexp
+  (make-regexp "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])"))
+
+(define qif-date-ymd-compiled-rexp
+  (make-regexp "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])"))
+
 (define (qif-parse:check-date-format date-string possible-formats)
-  (let ((retval '()))
-    (if (or (not (string? date-string))
-            (not (> (string-length date-string) 0)))
-        (set! retval #f)
-        (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
-      (if match
-          (if (match:substring match 1)
-              (set! retval (parse-check-date-format match possible-formats))
-
-              ;; Uh oh -- this is a string XXXXXXXX; we don't know which
-              ;; way to test..  So test both YYYYxxxx and xxxxYYYY,
-              ;; and let the parser verify the year is valid.
-              (let* ((new-date-string (match:substring match 4))
-                     (date-ymd (regexp-exec qif-date-ymd-compiled-rexp
-                                            new-date-string))
-                     (date-mdy (regexp-exec qif-date-mdy-compiled-rexp
-                                               new-date-string))
-                     (res1 '())
-                     (res2 '()))
-                (if (or (memq 'y-d-m possible-formats)
-                        (memq 'y-m-d possible-formats))
-                    (set! res1 (parse-check-date-format date-ymd possible-formats)))
-                (if (or (memq 'd-m-y possible-formats)
-                        (memq 'm-d-y possible-formats))
-                    (set! res2 (parse-check-date-format date-mdy possible-formats)))
-
-                (set! retval (append res1 res2)))))))
-
-    retval))
+  (and (string? date-string)
+       (not (string-null? date-string))
+       (let ((rmatch (regexp-exec qif-date-compiled-rexp date-string)))
+         (if rmatch
+             (if (match:substring rmatch 1)
+                 (parse-check-date-format rmatch possible-formats)
+                 ;; Uh oh -- this is a string XXXXXXXX; we don't know which
+                 ;; way to test..  So test both YYYYxxxx and xxxxYYYY,
+                 ;; and let the parser verify the year is valid.
+                 (let* ((newstr (match:substring rmatch 4))
+                        (date-ymd (regexp-exec qif-date-ymd-compiled-rexp newstr))
+                        (date-mdy (regexp-exec qif-date-mdy-compiled-rexp newstr)))
+                   (append
+                    (if (or (memq 'y-d-m possible-formats)
+                            (memq 'y-m-d possible-formats))
+                        (parse-check-date-format date-ymd possible-formats))
+                    (if (or (memq 'd-m-y possible-formats)
+                            (memq 'm-d-y possible-formats))
+                        (parse-check-date-format date-mdy possible-formats)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:parse-date/format
@@ -447,107 +302,71 @@
 ;;  date and return a list of day, month, year
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-parse:parse-date/format date-string format)
-  (let ((date-parts '())
-        (numeric-date-parts '())
-        (retval #f)
+(define (qif-parse:parse-date/format date-string dateformat)
+  (define (date? d m y)
+    (and (number? d) (<= 1 d 31)
+         (number? m) (<= 1 m 12)))
+  (let* ((rmatch (regexp-exec qif-date-compiled-rexp date-string))
+         (date-parts
+          (if rmatch
+              (if (match:substring rmatch 1)
+                  (list (match:substring rmatch 1)
+                        (match:substring rmatch 2)
+                        (match:substring rmatch 3))
+                  ;; This is of the form XXXXXXXX; split the string based on
+                  ;; whether the format is YYYYxxxx or xxxxYYYY
+                  (let ((date-str (match:substring rmatch 4)))
+                    (case dateformat
+                      ((d-m-y m-d-y)
+                       (let ((m (regexp-exec qif-date-mdy-compiled-rexp date-str)))
+                         (list (match:substring m 1)
+                               (match:substring m 2)
+                               (match:substring m 3))))
+                      ((y-m-d y-d-m)
+                       (let ((m (regexp-exec qif-date-ymd-compiled-rexp date-str)))
+                         (list (match:substring m 1)
+                               (match:substring m 2)
+                               (match:substring m 3)))))))
+              '()))
+         ;; get the strings into numbers (but keep the strings around)
+         (numeric-date-parts (map (lambda (elt) (with-input-from-string elt read))
+                                  date-parts)))
 
-        (match (regexp-exec qif-date-compiled-rexp date-string)))
-    (if match
-        (if (match:substring match 1)
-             (set! date-parts (list (match:substring match 1)
-                                    (match:substring match 2)
-                                    (match:substring match 3)))
-             ;; This is of the form XXXXXXXX; split the string based on
-             ;; whether the format is YYYYxxxx or xxxxYYYY
-             (let ((date-str (match:substring match 4)))
-               (case format
-                 ((d-m-y m-d-y)
-                  (let ((m (regexp-exec qif-date-mdy-compiled-rexp date-str)))
-                    (set! date-parts (list (match:substring m 1)
-                                           (match:substring m 2)
-                                           (match:substring m 3)))))
-                 ((y-m-d y-d-m)
-                  (let ((m (regexp-exec qif-date-ymd-compiled-rexp date-str)))
-                    (set! date-parts (list (match:substring m 1)
-                                           (match:substring m 2)
-                                           (match:substring m 3)))))
-                 ))))
-
-    ;; get the strings into numbers (but keep the strings around)
-    (set! numeric-date-parts
-          (map (lambda (elt)
-                 (with-input-from-string elt
-                   (lambda () (read))))
-               date-parts))
+    (define (refs->list dd mm yy)
+      (let ((d (list-ref numeric-date-parts dd))
+            (m (list-ref numeric-date-parts mm))
+            (y (qif-parse:fix-year (list-ref date-parts yy) 50)))
+        (cond
+         ((date? d m y) (list d m y))
+         (else (gnc:warn "qif-parse:parse-date/format: format is " dateformat
+                         " but date is [" date-string "].") #f))))
 
     ;; if the date parts list doesn't have 3 parts, we're in trouble
-    (if (not (eq? 3 (length date-parts)))
-        (gnc:warn "qif-parse:parse-date/format: can't interpret date ["
-                  date-string "]\nDate parts: " date-parts)
-        (case format
-          ((d-m-y)
-           (let ((d (car numeric-date-parts))
-                 (m (cadr numeric-date-parts))
-                 (y (qif-parse:fix-year (caddr date-parts) 50)))
-             (if (and (integer? d) (integer? m) (integer? y)
-                      (<= m 12) (<= d 31))
-                 (set! retval (list d m y))
-                 (gnc:warn "qif-parse:parse-date/format: "
-                           "format is d/m/y, but date is ["
-                           date-string "]."))))
-
-          ((m-d-y)
-           (let ((m (car numeric-date-parts))
-                 (d (cadr numeric-date-parts))
-                 (y (qif-parse:fix-year (caddr date-parts) 50)))
-             (if (and (integer? d) (integer? m) (integer? y)
-                      (<= m 12) (<= d 31))
-                 (set! retval (list d m y))
-                 (gnc:warn "qif-parse:parse-date/format: "
-                           "format is m/d/y, but date is ["
-                           date-string "]."))))
-
-          ((y-m-d)
-           (let ((y (qif-parse:fix-year (car date-parts) 50))
-                 (m (cadr numeric-date-parts))
-                 (d (caddr numeric-date-parts)))
-             (if (and (integer? d) (integer? m) (integer? y)
-                      (<= m 12) (<= d 31))
-                 (set! retval (list d m y))
-                 (gnc:warn "qif-parse:parse-date/format: "
-                           "format is y/m/d, but date is ["
-                           date-string "]."))))
-
-          ((y-d-m)
-           (let ((y (qif-parse:fix-year (car date-parts) 50))
-                 (d (cadr numeric-date-parts))
-                 (m (caddr numeric-date-parts)))
-             (if (and (integer? d) (integer? m) (integer? y)
-                      (<= m 12) (<= d 31))
-                 (set! retval (list d m y))
-                 (gnc:warn "qif-parse:parse-date/format: "
-                           "format is y/d/m, but date is ["
-                           date-string "]."))))))
-    retval))
-
+    (cond
+     ((not (= 3 (length date-parts)))
+      (gnc:warn "qif-parse:parse-date/format: can't interpret date ["
+                date-string "]\nDate parts: " date-parts) #f)
+     ((eq? dateformat 'd-m-y) (refs->list 0 1 2))
+     ((eq? dateformat 'm-d-y) (refs->list 1 0 2))
+     ((eq? dateformat 'y-m-d) (refs->list 2 1 0))
+     ((eq? dateformat 'y-d-m) (refs->list 2 0 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  number format predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (value-is-decimal-radix? value)
-  (if (regexp-exec decimal-radix-regexp value)
-      #t #f))
 
-(define (value-is-comma-radix? value)
-  (if (regexp-exec comma-radix-regexp value)
-      #t #f))
+;; eg 1000.00 or 1,500.00 or 2'000.00
+(define decimal-radix-regexp
+  (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+\\.[0-9]*[+-]? *$"))
 
-(define (value-is-integer? value)
-  (if (regexp-exec integer-regexp value)
-      #t #f))
+;; eg 5.000,00 or 4'500,00
+(define comma-radix-regexp
+  (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$"))
 
+;; eg 456 or 123
+(define integer-regexp
+  (make-regexp "^[$]?[+-]?[$]?[0-9]+[+-]? *$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:check-number-format
@@ -556,15 +375,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:check-number-format value-string possible-formats)
-  (let ((retval possible-formats))
-    (if (not (value-is-decimal-radix? value-string))
-        (set! retval (delq 'decimal retval)))
-    (if (not (value-is-comma-radix? value-string))
-        (set! retval (delq 'comma retval)))
-    (if (not (value-is-integer? value-string))
-        (set! retval (delq 'integer retval)))
-    retval))
-
+  (define numtypes-alist
+    (list (cons 'decimal decimal-radix-regexp)
+          (cons 'comma comma-radix-regexp)
+          (cons 'integer integer-regexp)))
+  (filter (lambda (fmt) (regexp-exec (assq-ref numtypes-alist fmt) value-string))
+          possible-formats))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:parse-number/format
@@ -573,69 +389,35 @@
 ;;  represent the number
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; the following is a working refactored function
 (define (qif-parse:parse-number/format value-string format)
-  (let ((minus-index (string-index value-string #\-))
-        (filtered-string (gnc:string-delete-chars value-string "$'+-")))
-    (case format
-      ((decimal)
-       (let* ((read-string (gnc:string-delete-chars filtered-string ","))
-              (read-val (with-input-from-string read-string
-                                                (lambda () (read)))))
-         (if (number? read-val)
-             (double-to-gnc-numeric
-              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
-              GNC-DENOM-AUTO
-              (logior (GNC-DENOM-SIGFIGS
-                       (string-length (gnc:string-delete-chars read-string ".")))
-                      GNC-RND-ROUND))
-             (gnc-numeric-zero))))
-      ((comma)
-       (let* ((read-string (gnc:string-replace-char
-                              (gnc:string-delete-chars filtered-string ".")
-                              #\, #\.))
-              (read-val (with-input-from-string read-string
-                                                (lambda () (read)))))
-         (if (number? read-val)
-             (double-to-gnc-numeric
-              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
-              GNC-DENOM-AUTO
-              (logior (GNC-DENOM-SIGFIGS
-                       (string-length (gnc:string-delete-chars read-string ".")))
-                      GNC-RND-ROUND))
-             (gnc-numeric-zero))))
-      ((integer)
-       (let ((read-val (with-input-from-string filtered-string
-                                               (lambda () (read)))))
-         (if (number? read-val)
-             (double-to-gnc-numeric
-              (if minus-index (- 0.0 read-val) (+ 0.0 read-val))
-              1 GNC-RND-ROUND)
-             (gnc-numeric-zero)))))))
+  (let* ((filtered-string (gnc:string-delete-chars value-string "$'+"))
+         (read-string (case format
+                        ((decimal) (gnc:string-delete-chars filtered-string ","))
+                        ((comma) (gnc:string-replace-char
+                                  (gnc:string-delete-chars filtered-string ".")
+                                  #\, #\.))
+                        ((integer) filtered-string))))
+    (or (string->number (string-append "#e" read-string)) 0)))
 
+;; input: list of numstrings eg "10.50" "20.54"
+;; input: formats to test '(decimal comma integer)
+;; output: list of formats applicable eg '(decimal)
 (define (qif-parse:check-number-formats amt-strings formats)
-  (let ((retval formats))
-    (for-each
-     (lambda (amt)
-       (if amt
-           (set! retval (qif-parse:check-number-format amt retval))))
-     amt-strings)
-    retval))
+  (let lp ((amt-strings amt-strings)
+           (formats formats))
+    (if (null? amt-strings)
+        formats
+        (lp (cdr amt-strings)
+            (qif-parse:check-number-format (car amt-strings) formats)))))
 
+;; list of number-strings and format -> list of numbers eg '("1,00"
+;; "2,50" "3,99") 'comma --> '(1 5/2 399/100) this function would
+;; formerly attempt to return #f if a list element couldn't be parsed;
+;; but in practice always returns a list, with unparsed numbers as 0.
 (define (qif-parse:parse-numbers/format amt-strings format)
-  (let* ((all-ok #t)
-         (tmp #f)
-         (parsed
-          (map
-           (lambda (amt)
-             (if amt
-                 (begin
-                   (set! tmp (qif-parse:parse-number/format amt format))
-                   (if (not tmp)
-                       (set! all-ok #f))
-                   tmp)
-                 (gnc-numeric-zero)))
-           amt-strings)))
-    (if all-ok parsed #f)))
+  (map (lambda (amt) (if amt (qif-parse:parse-number/format amt format) 0))
+       amt-strings))
 
 (define (qif-parse:print-date date-list)
   (let ((tm (gnc-localtime (current-time))))
