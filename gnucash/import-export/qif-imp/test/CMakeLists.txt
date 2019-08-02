@@ -6,6 +6,7 @@ set(QIF_IMP_TEST_LIBS)
 set(scm_qifimp_test_with_srfi64_SOURCES
   test-qif-imp.scm
   test-qif-parse.scm
+  test-qif-merge-groups.scm
   )
 
 
