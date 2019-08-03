@@ -275,6 +275,34 @@
 ;; unfinished
 (define (test-qif-split:parse-category)
   
-  (test-equal "qif-split:parse-category"
-    '("LGas" #f "" #f #f #f)
-    (qif-split:parse-category #f "LGas")))
+  (test-equal "qif-split:parse-category [Transfer]/Class"
+    '("Transfer" #t "Class" #f #f #f)
+    (qif-split:parse-category #f "[Transfer]/Class"))
+
+  (test-equal "qif-split:parse-category Category/Class"
+    '("Category" #f "Class" #f #f #f)
+    (qif-split:parse-category #f "Category/Class"))
+
+  (test-equal "qif-split:parse-category Category"
+    '("Category" #f "" #f #f #f)
+    (qif-split:parse-category #f "Category"))
+
+  (test-equal "qif-split:parse-category [Transfer]"
+    '("Transfer" #t "" #f #f #f)
+    (qif-split:parse-category #f "[Transfer]"))
+
+  (test-equal "qif-split:parse-category Category/|miscx-category"
+    '("Category" #f "" "miscx-category" #f "")
+    (qif-split:parse-category #f "Category/|miscx-category"))
+
+  (test-equal "qif-split:parse-category Category/|[miscx-account]"
+    '("Category" #f "" "miscx-account" #t "")
+    (qif-split:parse-category #f "Category/|[miscx-account]"))
+
+  (test-equal "qif-split:parse-category Category/|miscx-category/miscx-class"
+    '("Category" #f "" "miscx-category" #f "miscx-class")
+    (qif-split:parse-category #f "Category/|miscx-category/miscx-class"))
+
+  (test-equal "qif-split:parse-category Category/|[miscx-account]/miscx-class"
+    '("Category" #f "" "miscx-account" #t "miscx-class")
+    (qif-split:parse-category #f "Category/|[miscx-account]/miscx-class")))
