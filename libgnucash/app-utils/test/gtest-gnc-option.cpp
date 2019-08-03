@@ -42,6 +42,16 @@ TEST(GncOption, test_text_ctor)
         });
 }
 
+TEST(GncOption, test_string_classifier_getters)
+{
+    auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
+                                         std::string{"waldo"});
+    EXPECT_STREQ("foo", option.get_section().c_str());
+    EXPECT_STREQ("bar", option.get_name().c_str());
+    EXPECT_STREQ("baz", option.get_key().c_str());
+    EXPECT_STREQ("Phony Option", option.get_docstring().c_str());
+}
+
 TEST(GncOption, test_string_default_value)
 {
     auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",

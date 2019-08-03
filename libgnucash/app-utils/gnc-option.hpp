@@ -198,6 +198,7 @@ class GncOption
 public:
     template <typename OptionType>
     GncOption(OptionType option) : m_option{option} {}
+
     template <typename ValueType> ValueType get_value() const
     {
         return boost::apply_visitor(GetValueVisitor<ValueType>(), m_option);
@@ -217,6 +218,22 @@ public:
     template <typename ValueType> void set_value(ValueType value)
     {
         boost::apply_visitor(SetValueVisitor<ValueType>(value), m_option);
+    }
+    const std::string& get_section() const
+    {
+        return boost::apply_visitor(GetSectionVisitor(), m_option);
+    }
+    const std::string& get_name() const
+    {
+        return boost::apply_visitor(GetNameVisitor(), m_option);
+    }
+    const std::string& get_key() const
+    {
+        return boost::apply_visitor(GetKeyVisitor(), m_option);
+    }
+    const std::string& get_docstring() const
+    {
+        return boost::apply_visitor(GetDocstringVisitor(), m_option);
     }
 private:
     template <typename ValueType>
@@ -275,6 +292,35 @@ private:
         template <class OptionType>
         SCM operator()(OptionType& option) const {
             return option.get_scm_default_value();
+        }
+    };
+    struct GetSectionVisitor : public boost::static_visitor<const std::string&>
+    {
+        template <class OptionType>
+        const std::string& operator()(OptionType& option) const {
+            return option.m_section;
+        }
+    };
+    struct GetNameVisitor : public boost::static_visitor<const std::string&>
+    {
+        template <class OptionType>
+        const std::string& operator()(OptionType& option) const {
+            return option.m_name;
+        }
+    };
+    struct GetKeyVisitor : public boost::static_visitor<const std::string&>
+    {
+        template <class OptionType>
+        const std::string& operator()(OptionType& option) const {
+            return option.m_sort_tag;
+        }
+    };
+    struct GetDocstringVisitor :
+        public boost::static_visitor<const std::string&>
+    {
+        template <class OptionType>
+        const std::string& operator()(OptionType& option) const {
+            return option.m_doc_string;
         }
     };
     GncOptionVariant m_option;
