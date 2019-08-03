@@ -58,145 +58,103 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:account-tree-find-duplicates old-root new-root progress-dialog)
+  (define old-accounts (gnc-account-get-descendants-sorted old-root))
+  (define (progress v)
+    (when progress-dialog (gnc-progress-dialog-set-value progress-dialog v)))
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-find)
+    (cond
+     ((any (compose pair? xaccAccountGetSplitList) old-accounts)
+      ;; Get all the splits in the new tree, then iterate over them
+      ;; trying to find matches in the old tree.  If there are
+      ;; matches, push the splits' parent onto a list.
+      (let ((WeekSecs (* 60 60 24 7)))
 
-    (let ((old-accounts (gnc-account-get-descendants-sorted old-root)))
+        (define new-splits
+          (let ((q (qof-query-create-for-splits))
+                (accounts (gnc-account-get-descendants-sorted new-root)))
+            (qof-query-set-book q (gnc-account-get-book new-root))
+            (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+            (let ((new-splits (qof-query-run q)))
+              (qof-query-destroy q)
+              new-splits)))
 
-      (cond
-       ((any pair? (map xaccAccountGetSplitList old-accounts))
-        ;; Get all the transactions in the new tree, thisthen iterate
-        ;; over them trying to find matches in the old tree.  If
-        ;; there are matches, push the matches onto a list.
-        (let* ((new-xtns (gnc:account-tree-get-transactions new-root))
-               (work-to-do (length new-xtns))
-               (work-done 0)
-               (matches '()))
+        (define old-splits
+          (let ((q (qof-query-create-for-splits))
+                (dates (map (compose xaccTransGetDate xaccSplitGetParent) new-splits)))
+            (qof-query-set-book q (gnc-account-get-book old-root))
+            (xaccQueryAddAccountMatch q old-accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+            (xaccQueryAddDateMatchTT q
+                                     #t (decdate (apply min dates) WeekDelta)
+                                     #t (incdate (apply max dates) WeekDelta)
+                                     QOF-QUERY-AND)
+            (let ((splits (qof-query-run q)))
+              (qof-query-destroy q)
+              splits)))
 
-          ;; This procedure handles progress reporting, pause, and cancel.
-          (define (update-progress)
-            (set! work-done (+ 1 work-done))
-            (when (and progress-dialog (zero? (modulo work-done 8)))
-              (gnc-progress-dialog-set-value progress-dialog
-                                             (/ work-done work-to-do))
-              (qif-import:check-pause progress-dialog)
-              (if qif-import:canceled (throw 'cancel))))
+        (define work-to-do (length new-splits))
+        (define (update-progress work-done)
+          (when (and progress-dialog (zero? (modulo work-done 8)))
+            (progress (/ work-done work-to-do))
+            (qif-import:check-pause progress-dialog)
+            (if qif-import:canceled (throw 'cancel))))
 
-          (when progress-dialog
-            (gnc-progress-dialog-set-sub progress-dialog
-                                         (_ "Finding duplicate transactions")))
+        (when progress-dialog
+          (gnc-progress-dialog-set-sub progress-dialog
+                                       (_ "Finding duplicate transactions")))
 
-          ;; For each transaction in the new account tree, build a query
-          ;; that matches possibly duplicate transactions in the old tree.
-          (for-each
-           (lambda (xtn)
-             (let ((query (qof-query-create-for-splits))
-                   (num-splits 0))
-               (qof-query-set-book query (gnc-account-get-book old-root))
+        (let loop ((new-splits new-splits)
+                   (work-done 0)
+                   (matches '()))
+          (cond
+           ((null? new-splits)
+            (progress 1)
+            matches)
 
-               ;; First, we only want to find only transactions
-               ;; from accounts in the old tree.
-               (xaccQueryAddAccountMatch
-                query old-accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+           ((assoc (xaccSplitGetParent (car new-splits)) matches)
+            ;; txn has already been matched, by another split within same txn
+            (loop (cdr new-splits)
+                  (1+ work-done)
+                  matches))
 
-               ;; The date should be close to the same.. +/- a week.
-               (let ((date (xaccTransGetDate xtn)))
-                 (xaccQueryAddDateMatchTT
-                  query #t (decdate date WeekDelta)
-                  #t (incdate date WeekDelta) QOF-QUERY-AND))
+           (else
+            (let* ((new-split (car new-splits))
+                   (candidate-old-splits
+                    (filter
+                     (lambda (old-split)
+                       (and
+                        ;; split value matches
+                        (= (xaccSplitGetValue old-split)
+                           (xaccSplitGetValue new-split))
+                        ;; account name matches
+                        (string=?
+                         (gnc-account-get-full-name (xaccSplitGetAccount old-split))
+                         (gnc-account-get-full-name (xaccSplitGetAccount new-split)))
+                        ;; maximum 1 week date difference
+                        (<= (abs (- (xaccTransGetDate (xaccSplitGetParent old-split))
+                                    (xaccTransGetDate (xaccSplitGetParent new-split))))
+                            WeekSecs)))
+                     old-splits)))
+              (update-progress work-done)
+              (loop (cdr new-splits)
+                    (1+ work-done)
+                    (if (null? candidate-old-splits)
+                        matches
+                        (cons (cons (xaccSplitGetParent new-split)
+                                    (map (lambda (s) (cons (xaccSplitGetParent s) #f))
+                                         candidate-old-splits))
+                              matches)))))))))
 
-               ;; For each split in the new transaction, add a
-               ;; term that can match on its properties.
-               (let ((q-splits (qof-query-create-for-splits)))
-                 (for-each
-                  (lambda (split)
-                    (set! num-splits (+ num-splits 1))
-                    (let ((sq (qof-query-create-for-splits)))
-                      (qof-query-set-book sq (gnc-account-get-book old-root))
-
-                      ;; Require a match on the account name. If the name
-                      ;; doesn't exist in the old tree (indicating a new
-                      ;; account), the match will be NULL and the query
-                      ;; won't find anything.  Optimize this later.
-                      (xaccQueryAddSingleAccountMatch
-                       sq (gnc-account-lookup-by-full-name
-                           old-root (gnc-account-get-full-name
-                                     (xaccSplitGetAccount split)))
-                       QOF-QUERY-AND)
-
-                      ;; Require the value of the split in the new tree
-                      ;; to match the the value of the split in the old
-                      ;; tree.  We should really check for fuzziness.
-                      (xaccQueryAddValueMatch
-                       sq (xaccSplitGetValue split) QOF-NUMERIC-MATCH-ANY
-                       QOF-COMPARE-EQUAL QOF-QUERY-AND)
-
-                      ;; Now merge into the split query.  Reminder: q-splits
-                      ;; must be merged with an OR. Otherwise, nothing will
-                      ;; match. (For example, something can be equal to 4 or
-                      ;; to -4, but not both.)
-                      (let ((q-new (qof-query-merge q-splits sq QOF-QUERY-OR)))
-                        (qof-query-destroy q-splits)
-                        (qof-query-destroy sq)
-                        (set! q-splits q-new))))
-                  (xaccTransGetSplitList xtn))
-
-                 ;; Now q-splits will find every split that is the same as
-                 ;; any one split of the new-root transaction.  Merge it in.
-                 (let ((q-new (qof-query-merge query q-splits QOF-QUERY-AND)))
-                   (qof-query-destroy query)
-                   (qof-query-destroy q-splits)
-                   (set! query q-new)))
-
-               ;; Now that we have built a query that finds matching splits
-               ;; in the old tree, run it and build a list of transactions
-               ;; from the results.
-               ;;
-               ;; If the transaction from the new tree has more than two
-               ;; splits, then we'll assume that it fully reflects what
-               ;; occurred, and only consider transactions in the old tree
-               ;; that match with every single split.
-               ;;
-               ;; All other new transactions could be incomplete, so we'll
-               ;; consider transactions from the old tree to be possible
-               ;; duplicates even if only one split matches.
-               ;;
-               ;; For more information, see bug 481528.
-
-               (let ((old-xtns (map (lambda (elt) (cons elt #f))
-                                    (xaccQueryGetTransactions
-                                     query (if (> num-splits 2)
-                                               QUERY-TXN-MATCH-ALL
-                                               QUERY-TXN-MATCH-ANY)))))
-                 (display "\n*** gnc:account-tree-find-duplicates\n")
-                 (for-each pk old-xtns)
-
-                 ;; If anything matched the query, add it to our "matches"
-                 ;; association list, keyed by the new-root transaction.
-                 (if (not (null? old-xtns))
-                     (set! matches (cons (cons xtn old-xtns) matches))))
-
-               (qof-query-destroy query))
-             (update-progress))
-           new-xtns)
-
-          ;; Finished.
-          (when progress-dialog
-            (gnc-progress-dialog-set-value progress-dialog 1))
-
-          ;; Return the matches.
-          matches))
-
-       ;; Since there are either no accounts or no transactions in the old
-       ;; tree, duplicate checking is unnecessary.
-       (else
-        (when progress-dialog (gnc-progress-dialog-set-value progress-dialog 1))
-        '()))))
+     ;; Since there are either no accounts or no transactions in the old
+     ;; tree, duplicate checking is unnecessary.
+     (else
+      (progress 1)
+      '())))
 
   ;; Safely do the work and return the result.
   (gnc:backtrace-if-exception
-   (lambda () (catch 'cancel private-find (lambda (key . args) #t)))))
+   (lambda () (catch 'cancel private-find (const #t)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
