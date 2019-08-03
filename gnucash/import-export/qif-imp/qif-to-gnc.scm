@@ -51,14 +51,11 @@
     (define (compatible? account)
       (let ((acc-type (xaccAccountGetType account))
             (acc-commodity (xaccAccountGetCommodity account)))
-        (and
-         (if check-types?
-             (and (list? allowed-types)
-                  (memv acc-type allowed-types))
-             #t)
-	 (if check-commodity?
-	     (gnc-commodity-equiv acc-commodity commodity)
-	     #t))))
+        (and (or (not check-types?)
+                 (and (list? allowed-types)
+                      (memv acc-type allowed-types)))
+	     (or (not check-commodity?)
+	         (gnc-commodity-equiv acc-commodity commodity)))))
 
     (define (make-unique-name-variant long-name short-name)
       (if (not (null? (gnc-account-lookup-by-full-name old-root long-name)))
@@ -1240,10 +1237,10 @@
 ;;  NOTE: Any new commodities should be destroyed by the druid.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (qif-import:qif-to-gnc-undo root)
-  (if root
+  (when root
     (let ((txns (gnc:account-tree-get-transactions root)))
       ;; Destroy all the transactions and their splits.
-      (for-each (lambda (elt) (xaccTransDestroy elt)) txns)
+      (for-each xaccTransDestroy txns)
 
       ;; Destroy the accounts
       (xaccAccountBeginEdit root)
