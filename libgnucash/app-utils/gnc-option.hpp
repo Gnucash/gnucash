@@ -83,11 +83,11 @@ protected:
 
 struct OptionClassifier
 {
-    const std::string m_section;
-    const std::string m_name;
-    const std::string m_sort_tag;
-//    const std::type_info m_kvp_type;
-    const std::string m_doc_string;
+    std::string m_section;
+    std::string m_name;
+    std::string m_sort_tag;
+//  std::type_info m_kvp_type;
+    std::string m_doc_string;
 };
 
 template <typename ValueType>
