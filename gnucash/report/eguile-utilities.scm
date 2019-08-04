@@ -31,7 +31,6 @@
 (gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/app-utils" 0)
 
-
 (define-public (fmtnumber n)
   ;; Format a number (integer or real) into something printable
   (number->string (if (integer? n) 
@@ -44,28 +43,18 @@
 
 (define-public (gnc-monetary-neg? monetary)
   ; return true if the monetary value is negative
-  (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary)))
-
-(define-public (string-repeat s n)
-  ;; return a string made of n copies of string s
-  ;; (there's probably a better way)
-  (let ((s2 ""))
-    (do ((i 1 (1+ i))) ((> i n))
-      (set! s2 (string-append s2 s)))
-    s2))
+  (negative? (gnc:gnc-monetary-amount monetary)))
 
 ;; 'Safe' versions of cdr and cadr that don't crash
 ;; if the list is empty  (is there a better way?)
 (define-public (safe-cdr l)
-  (if (null? l)
-    '()
-    (cdr l)))
+  (if (null? l) '()
+      (cdr l)))
 (define-public (safe-cadr l)
-  (if (null? l)
-    '()
-    (if (null? (cdr l))
-      '()
-      (cadr l))))
+  (cond
+   ((null? l) '())
+   ((null? (cdr l)) '())
+   (else (cadr l))))
 
 ; deprecated - use find-stylesheet or find-template instead
 (define-public (find-file fname)
@@ -77,11 +66,10 @@
          (templatepath  (find-template fname)))
     ; make sure there's a trailing delimiter
       (issue-deprecation-warning "find-file is deprecated. Please use find-stylesheet or find-template instead.")
-      (if (access? stylesheetpath R_OK)
-        stylesheetpath
-        (if (access? templatepath R_OK)
-          templatepath
-          fname))))
+      (cond
+       ((access? stylesheetpath R_OK) stylesheetpath)
+       ((access? templatepath R_OK) templatepath)
+       (else fname))))
 
 (define (find-internal ftype fname)
   ;; Find the file fname', and return its full path.
@@ -113,29 +101,17 @@
 
 ; Define syntax for more readable for loops (the built-in for-each requires an
 ; explicit lambda and has the list expression all the way at the end).
-(define-syntax for
-  (syntax-rules (for in => do hash)
-		; Multiple variables and equal number of lists (in
-		; parenthesis). e.g.:
-		;
-		;   (for (a b) in (lsta lstb) do (display (+ a b)))
-		;
-		; Note that this template must be defined before the
-		; next one, since the template are evaluated in-order.
-                ((for (<var> ...) in (<list> ...) do <expr> ...)
-                 (for-each (lambda (<var> ...) <expr> ...) <list> ...))
-		; Single variable and list. e.g.:
-		;
-		; (for a in lst do (display a))
-                ((for <var> in <list> do <expr> ...)
-                 (for-each (lambda (<var>) <expr> ...) <list>))
-		; Iterate over key & values in a hash. e.g.:
-		;
-		; (for key => value in hash do (display (* key value)))
-                ((for <key> => <value> in <hash> do <expr> ...)
-		 ; We use fold to iterate over the hash (instead of
-		 ; hash-for-each, since that is not present in guile
-		 ; 1.6).
-                 (hash-fold (lambda (<key> <value> accum) (begin <expr> ... accum)) *unspecified* <hash>))
-                ))
 (export for)
+(define-syntax for
+  (syntax-rules (for in do)
+    ;; Multiple variables and equal number of lists (in
+    ;; parenthesis). e.g.:
+    ;;   (for (a b) in (lsta lstb) do (display (+ a b)))
+    ;; Note that this template must be defined before the
+    ;; next one, since the template are evaluated in-order.
+    ((for (<var> ...) in (<list> ...) do <expr> ...)
+     (for-each (lambda (<var> ...) <expr> ...) <list> ...))
+
+    ;; Single variable and list. e.g.: (for a in lst do (display a))
+    ((for <var> in <list> do <expr> ...)
+     (for-each (lambda (<var>) <expr> ...) <list>))))

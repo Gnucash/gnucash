@@ -127,6 +127,7 @@ static void gnc_plugin_page_sx_list_cmd_edit2(GtkAction *action, GncPluginPageSx
 /*################## Added for Reg2 #################*/
 #endif
 static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page);
+static void gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page);
 
 /* Command callbacks */
 static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
@@ -159,6 +160,13 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
     {
         "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
         N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
+    },
+
+    /* View menu */
+
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window"), G_CALLBACK (gnc_plugin_page_sx_list_cmd_refresh)
     },
 };
 /** The number of actions provided by this plugin. */
@@ -658,6 +666,17 @@ gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
 }
 /*################## Added for Reg2 #################*/
 #endif
+
+static void
+gnc_plugin_page_sx_list_cmd_refresh (GtkAction *action, GncPluginPageSxList *page)
+{
+    GncPluginPageSxListPrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
+
+    priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    gtk_widget_queue_draw (priv->widget);
+}
 
 static void
 _edit_sx(gpointer data, gpointer user_data)

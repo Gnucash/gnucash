@@ -39,6 +39,14 @@
 (define GNC-RECEIVABLE-TYPE 11)
 (define GNC-PAYABLE-TYPE 12)
 
+(define (record-fields->list record)
+  (let ((type (record-type-descriptor record)))
+    (map
+     (lambda (field) ((record-accessor type field) record))
+     (record-type-fields type))))
+
+(define (list->record-fields lst type)
+  (apply (record-constructor type) lst))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:load-map-prefs
@@ -180,7 +188,7 @@
   (let ((table '()))
     (hash-fold
      (lambda (key value p)
-       (set! table (cons (cons key (simple-obj-to-list value)) table))
+       (set! table (cons (cons key (record-fields->list value)) table))
        #f) #f hashtab)
     (write table)))
 
@@ -192,7 +200,7 @@
     (for-each
      (lambda (entry)
        (let ((key (car entry))
-             (value (simple-obj-from-list (cdr entry) <qif-map-entry>)))
+             (value (list->record-fields (cdr entry) <qif-map-entry>)))
 
          ;; If the account separator has changed, fix the account name.
          (if changed-sep?

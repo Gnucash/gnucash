@@ -23,7 +23,10 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "gnucash/qif-import/simple-obj")
+
+(define (construct class)
+  (apply (record-constructor class)
+         (map (const #f) (record-type-fields class))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file class 
@@ -34,7 +37,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-file>
-  (make-simple-class 
+  (make-record-type
    'qif-file 
    '(path                 ;; where file was loaded 
      y2k-threshold
@@ -47,43 +50,43 @@
   (record-predicate <qif-file>))
 
 (define qif-file:path 
-  (simple-obj-getter <qif-file> 'path))
+  (record-accessor <qif-file> 'path))
 
 (define qif-file:set-path! 
-  (simple-obj-setter <qif-file> 'path))
+  (record-modifier <qif-file> 'path))
 
 (define qif-file:y2k-threshold 
-  (simple-obj-getter <qif-file> 'y2k-threshold))
+  (record-accessor <qif-file> 'y2k-threshold))
 
 (define qif-file:set-y2k-threshold!
-  (simple-obj-setter <qif-file> 'y2k-threshold))
+  (record-modifier <qif-file> 'y2k-threshold))
 
 (define qif-file:cats 
-  (simple-obj-getter <qif-file> 'cats))
+  (record-accessor <qif-file> 'cats))
 
 (define qif-file:set-cats!
-  (simple-obj-setter <qif-file> 'cats))
+  (record-modifier <qif-file> 'cats))
 
 (define qif-file:classes 
-  (simple-obj-getter <qif-file> 'classes))
+  (record-accessor <qif-file> 'classes))
 
 (define qif-file:set-classes!
-  (simple-obj-setter <qif-file> 'classes))
+  (record-modifier <qif-file> 'classes))
 
 (define qif-file:xtns 
-  (simple-obj-getter <qif-file> 'xtns))
+  (record-accessor <qif-file> 'xtns))
 
 (define qif-file:set-xtns!
-  (simple-obj-setter <qif-file> 'xtns))
+  (record-modifier <qif-file> 'xtns))
 
 (define qif-file:accounts 
-  (simple-obj-getter <qif-file> 'accounts))
+  (record-accessor <qif-file> 'accounts))
 
 (define qif-file:set-accounts!
-  (simple-obj-setter <qif-file> 'accounts))
+  (record-modifier <qif-file> 'accounts))
 
 (define (make-qif-file) 
-  (let ((self (make-simple-obj <qif-file>)))
+  (let ((self (construct <qif-file>)))
     (qif-file:set-y2k-threshold! self 50)
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
@@ -97,16 +100,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-split>
-  (make-simple-class 
+  (make-record-type
    'qif-split
    '(category class memo amount category-is-account? matching-cleared mark
               miscx-category miscx-is-account? miscx-class)))
 
 (define qif-split:category 
-  (simple-obj-getter <qif-split> 'category))
+  (record-accessor <qif-split> 'category))
 
 (define qif-split:set-category-private!
-  (simple-obj-setter <qif-split> 'category))
+  (record-modifier <qif-split> 'category))
 
 (define (qif-split:set-category! self value)
   (let* ((cat-info 
@@ -125,61 +128,61 @@
     (qif-split:set-miscx-class! self miscx-class)))
     
 (define qif-split:class 
-  (simple-obj-getter <qif-split> 'class))
+  (record-accessor <qif-split> 'class))
 
 (define qif-split:set-class!
-  (simple-obj-setter <qif-split> 'class))
+  (record-modifier <qif-split> 'class))
 
 (define qif-split:memo 
-  (simple-obj-getter <qif-split> 'memo))
+  (record-accessor <qif-split> 'memo))
 
 (define qif-split:set-memo! 
-  (simple-obj-setter <qif-split> 'memo))
+  (record-modifier <qif-split> 'memo))
 
 (define qif-split:amount 
-  (simple-obj-getter <qif-split> 'amount))
+  (record-accessor <qif-split> 'amount))
 
 (define qif-split:set-amount! 
-  (simple-obj-setter <qif-split> 'amount))
+  (record-modifier <qif-split> 'amount))
 
 (define qif-split:mark 
-  (simple-obj-getter <qif-split> 'mark))
+  (record-accessor <qif-split> 'mark))
 
 (define qif-split:set-mark! 
-  (simple-obj-setter <qif-split> 'mark))
+  (record-modifier <qif-split> 'mark))
 
 (define qif-split:matching-cleared 
-  (simple-obj-getter <qif-split> 'matching-cleared))
+  (record-accessor <qif-split> 'matching-cleared))
 
 (define qif-split:set-matching-cleared! 
-  (simple-obj-setter <qif-split> 'matching-cleared))
+  (record-modifier <qif-split> 'matching-cleared))
 
 (define qif-split:category-is-account? 
-  (simple-obj-getter <qif-split> 'category-is-account?))
+  (record-accessor <qif-split> 'category-is-account?))
 
 (define qif-split:set-category-is-account?! 
-  (simple-obj-setter <qif-split> 'category-is-account?))
+  (record-modifier <qif-split> 'category-is-account?))
 
 (define qif-split:miscx-is-account? 
-  (simple-obj-getter <qif-split> 'miscx-is-account?))
+  (record-accessor <qif-split> 'miscx-is-account?))
 
 (define qif-split:set-miscx-is-account?!
-  (simple-obj-setter <qif-split> 'miscx-is-account?))
+  (record-modifier <qif-split> 'miscx-is-account?))
 
 (define qif-split:miscx-category 
-  (simple-obj-getter <qif-split> 'miscx-category))
+  (record-accessor <qif-split> 'miscx-category))
 
 (define qif-split:set-miscx-category!
-  (simple-obj-setter <qif-split> 'miscx-category))
+  (record-modifier <qif-split> 'miscx-category))
 
 (define qif-split:miscx-class 
-  (simple-obj-getter <qif-split> 'miscx-class))
+  (record-accessor <qif-split> 'miscx-class))
 
 (define qif-split:set-miscx-class!
-  (simple-obj-setter <qif-split> 'miscx-class))
+  (record-modifier <qif-split> 'miscx-class))
 
 (define (make-qif-split)
-  (let ((self (make-simple-obj <qif-split>)))
+  (let ((self (construct <qif-split>)))
     (qif-split:set-category! self "")
     self))
 
@@ -200,7 +203,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-xtn>
-  (make-simple-class 
+  (make-record-type
    'qif-xtn
    '(date payee address number action cleared  
           from-acct share-price num-shares security-name commission 
@@ -210,97 +213,97 @@
   (record-predicate <qif-xtn>))
 
 (define qif-xtn:date
-  (simple-obj-getter <qif-xtn> 'date))
+  (record-accessor <qif-xtn> 'date))
 
 (define qif-xtn:set-date! 
-  (simple-obj-setter <qif-xtn> 'date))
+  (record-modifier <qif-xtn> 'date))
 
 (define qif-xtn:payee
-  (simple-obj-getter <qif-xtn> 'payee))
+  (record-accessor <qif-xtn> 'payee))
 
 (define qif-xtn:set-payee! 
-  (simple-obj-setter <qif-xtn> 'payee))
+  (record-modifier <qif-xtn> 'payee))
 
 (define qif-xtn:address
-  (simple-obj-getter <qif-xtn> 'address))
+  (record-accessor <qif-xtn> 'address))
 
 (define qif-xtn:set-address! 
-  (simple-obj-setter <qif-xtn> 'address))
+  (record-modifier <qif-xtn> 'address))
 
 (define qif-xtn:number
-  (simple-obj-getter <qif-xtn> 'number))
+  (record-accessor <qif-xtn> 'number))
 
 (define qif-xtn:set-number! 
-  (simple-obj-setter <qif-xtn> 'number))
+  (record-modifier <qif-xtn> 'number))
 
 (define qif-xtn:action
-  (simple-obj-getter <qif-xtn> 'action))
+  (record-accessor <qif-xtn> 'action))
 
 (define qif-xtn:set-action! 
-  (simple-obj-setter <qif-xtn> 'action))
+  (record-modifier <qif-xtn> 'action))
 
 (define qif-xtn:cleared
-  (simple-obj-getter <qif-xtn> 'cleared))
+  (record-accessor <qif-xtn> 'cleared))
 
 (define qif-xtn:set-cleared! 
-  (simple-obj-setter <qif-xtn> 'cleared))
+  (record-modifier <qif-xtn> 'cleared))
 
 (define qif-xtn:from-acct
-  (simple-obj-getter <qif-xtn> 'from-acct))
+  (record-accessor <qif-xtn> 'from-acct))
 
 (define qif-xtn:set-from-acct! 
-  (simple-obj-setter <qif-xtn> 'from-acct))
+  (record-modifier <qif-xtn> 'from-acct))
 
 (define qif-xtn:share-price
-  (simple-obj-getter <qif-xtn> 'share-price))
+  (record-accessor <qif-xtn> 'share-price))
 
 (define qif-xtn:set-share-price! 
-  (simple-obj-setter <qif-xtn> 'share-price))
+  (record-modifier <qif-xtn> 'share-price))
 
 (define qif-xtn:num-shares
-  (simple-obj-getter <qif-xtn> 'num-shares))
+  (record-accessor <qif-xtn> 'num-shares))
 
 (define qif-xtn:set-num-shares! 
-  (simple-obj-setter <qif-xtn> 'num-shares))
+  (record-modifier <qif-xtn> 'num-shares))
 
 (define qif-xtn:security-name
-  (simple-obj-getter <qif-xtn> 'security-name))
+  (record-accessor <qif-xtn> 'security-name))
 
 (define qif-xtn:set-security-name! 
-  (simple-obj-setter <qif-xtn> 'security-name))
+  (record-modifier <qif-xtn> 'security-name))
 
 (define qif-xtn:commission
-  (simple-obj-getter <qif-xtn> 'commission))
+  (record-accessor <qif-xtn> 'commission))
 
 (define qif-xtn:set-commission! 
-  (simple-obj-setter <qif-xtn> 'commission))
+  (record-modifier <qif-xtn> 'commission))
 
 (define qif-xtn:default-split
-  (simple-obj-getter <qif-xtn> 'default-split))
+  (record-accessor <qif-xtn> 'default-split))
 
 (define qif-xtn:set-default-split! 
-  (simple-obj-setter <qif-xtn> 'default-split))
+  (record-modifier <qif-xtn> 'default-split))
 
 (define qif-xtn:splits
-  (simple-obj-getter <qif-xtn> 'splits))
+  (record-accessor <qif-xtn> 'splits))
 
 (define qif-xtn:set-splits! 
-  (simple-obj-setter <qif-xtn> 'splits))
+  (record-modifier <qif-xtn> 'splits))
 
 (define qif-xtn:mark
-  (simple-obj-getter <qif-xtn> 'mark))
+  (record-accessor <qif-xtn> 'mark))
 
 (define qif-xtn:set-mark! 
-  (simple-obj-setter <qif-xtn> 'mark))
+  (record-modifier <qif-xtn> 'mark))
 
 (define (make-qif-xtn)
-  (let ((self (make-simple-obj <qif-xtn>)))
+  (let ((self (construct <qif-xtn>)))
     (qif-xtn:set-mark! self #f)
     (qif-xtn:set-splits! self '())
     self))
 
 (define (qif-xtn:print self)
-  (simple-obj-print self))
+  (write self))
 
 
 (define (qif-xtn:split-amounts self)
@@ -340,42 +343,42 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-acct>
-  (make-simple-class 
+  (make-record-type
    'qif-acct
    '(name type description limit budget)))
 
 (define qif-acct:name
-  (simple-obj-getter <qif-acct> 'name))
+  (record-accessor <qif-acct> 'name))
 
 (define qif-acct:set-name! 
-  (simple-obj-setter <qif-acct> 'name))
+  (record-modifier <qif-acct> 'name))
 
 (define qif-acct:type
-  (simple-obj-getter <qif-acct> 'type))
+  (record-accessor <qif-acct> 'type))
 
 (define qif-acct:set-type! 
-  (simple-obj-setter <qif-acct> 'type))
+  (record-modifier <qif-acct> 'type))
 
 (define qif-acct:description
-  (simple-obj-getter <qif-acct> 'description))
+  (record-accessor <qif-acct> 'description))
 
 (define qif-acct:set-description! 
-  (simple-obj-setter <qif-acct> 'description))
+  (record-modifier <qif-acct> 'description))
 
 (define qif-acct:limit
-  (simple-obj-getter <qif-acct> 'limit))
+  (record-accessor <qif-acct> 'limit))
 
 (define qif-acct:set-limit! 
-  (simple-obj-setter <qif-acct> 'limit))
+  (record-modifier <qif-acct> 'limit))
 
 (define qif-acct:budget
-  (simple-obj-getter <qif-acct> 'budget))
+  (record-accessor <qif-acct> 'budget))
 
 (define qif-acct:set-budget! 
-  (simple-obj-setter <qif-acct> 'budget))
+  (record-modifier <qif-acct> 'budget))
 
 (define (make-qif-acct)
-  (let ((retval (make-simple-obj <qif-acct>)))
+  (let ((retval (construct <qif-acct>)))
     (qif-acct:set-type! retval "Bank")
     (qif-acct:set-name! retval "Default Account")
     retval))
@@ -384,7 +387,7 @@
   (record-predicate <qif-acct>))
 
 (define (qif-acct:print self)
-  (simple-obj-print self))
+  (write self))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <qif-class>
@@ -393,27 +396,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-class>
-  (make-simple-class
+  (make-record-type
    'qif-class
    '(name description)))
 
 (define qif-class:name
-  (simple-obj-getter <qif-class> 'name))
+  (record-accessor <qif-class> 'name))
 
 (define qif-class:set-name! 
-  (simple-obj-setter <qif-class> 'name))
+  (record-modifier <qif-class> 'name))
 
 (define qif-class:description
-  (simple-obj-getter <qif-class> 'description))
+  (record-accessor <qif-class> 'description))
 
 (define qif-class:set-description! 
-  (simple-obj-setter <qif-class> 'description))
+  (record-modifier <qif-class> 'description))
 
 (define (qif-class:print self)
-  (simple-obj-print self))
+  (write self))
 
 (define (make-qif-class)
-  (make-simple-obj <qif-class>))
+  (construct <qif-class>))
 
 (define qif-class? 
   (record-predicate <qif-class>))
@@ -431,60 +434,60 @@
 
 
 (define <qif-cat>
-  (make-simple-class 
+  (make-record-type
    'qif-cat
    '(name description taxable expense-cat income-cat tax-class budget-amt)))
 
 (define qif-cat:name
-  (simple-obj-getter <qif-cat> 'name))
+  (record-accessor <qif-cat> 'name))
 
 (define qif-cat:set-name! 
-  (simple-obj-setter <qif-cat> 'name))
+  (record-modifier <qif-cat> 'name))
 
 (define qif-cat:description
-  (simple-obj-getter <qif-cat> 'description))
+  (record-accessor <qif-cat> 'description))
 
 (define qif-cat:set-description! 
-  (simple-obj-setter <qif-cat> 'description))
+  (record-modifier <qif-cat> 'description))
 
 (define qif-cat:taxable
-  (simple-obj-getter <qif-cat> 'taxable))
+  (record-accessor <qif-cat> 'taxable))
 
 (define qif-cat:set-taxable! 
-  (simple-obj-setter <qif-cat> 'taxable))
+  (record-modifier <qif-cat> 'taxable))
 
 (define qif-cat:expense-cat
-  (simple-obj-getter <qif-cat> 'expense-cat))
+  (record-accessor <qif-cat> 'expense-cat))
 
 (define qif-cat:set-expense-cat! 
-  (simple-obj-setter <qif-cat> 'expense-cat))
+  (record-modifier <qif-cat> 'expense-cat))
 
 (define qif-cat:income-cat
-  (simple-obj-getter <qif-cat> 'income-cat))
+  (record-accessor <qif-cat> 'income-cat))
 
 (define qif-cat:set-income-cat! 
-  (simple-obj-setter <qif-cat> 'income-cat))
+  (record-modifier <qif-cat> 'income-cat))
 
 (define qif-cat:tax-class
-  (simple-obj-getter <qif-cat> 'tax-class))
+  (record-accessor <qif-cat> 'tax-class))
 
 (define qif-cat:set-tax-class! 
-  (simple-obj-setter <qif-cat> 'tax-class))
+  (record-modifier <qif-cat> 'tax-class))
 
 (define qif-cat:budget-amt
-  (simple-obj-getter <qif-cat> 'budget-amt))
+  (record-accessor <qif-cat> 'budget-amt))
 
 (define qif-cat:set-budget-amt! 
-  (simple-obj-setter <qif-cat> 'budget-amt))
+  (record-modifier <qif-cat> 'budget-amt))
 
 (define (make-qif-cat) 
-  (make-simple-obj <qif-cat>))
+  (construct <qif-cat>))
 
 (define qif-cat? 
   (record-predicate <qif-cat>))
 
 (define (qif-cat:print self)
-  (simple-obj-print self))
+  (write self))
 
 (define (qif-file:add-xtn! self xtn)
   (qif-file:set-xtns! self 
@@ -522,8 +525,8 @@
                              (if last-dot 
                                  last-dot 
                                  (string-length namestring)))))
-          (set! namestring (string-replace-char! namestring #\- #\space))
-          (set! namestring (string-replace-char! namestring #\_ #\space))
+          (set! namestring (gnc:string-replace-char namestring #\- #\space))
+          (set! namestring (gnc:string-replace-char namestring #\_ #\space))
           namestring)
         "QIF Import")))
 
@@ -535,7 +538,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-map-entry>
-  (make-simple-class
+  (make-record-type
    'qif-map-entry
    '(qif-name       ;; set while parsing file 
      allowed-types  ;; set while parsing file 
@@ -545,7 +548,7 @@
      display?)))    ;; set when non-zero transactions 
 
 (define (make-qif-map-entry)
-  (make-simple-obj <qif-map-entry>))
+  (construct <qif-map-entry>))
 
 (define (qif-map-entry:clone orig)
   (let ((me (make-qif-map-entry)))
@@ -586,40 +589,40 @@
 
 
 (define qif-map-entry:qif-name
-  (simple-obj-getter <qif-map-entry> 'qif-name))
+  (record-accessor <qif-map-entry> 'qif-name))
 
 (define qif-map-entry:set-qif-name!
-  (simple-obj-setter <qif-map-entry> 'qif-name))
+  (record-modifier <qif-map-entry> 'qif-name))
 
 (define qif-map-entry:allowed-types
-  (simple-obj-getter <qif-map-entry> 'allowed-types))
+  (record-accessor <qif-map-entry> 'allowed-types))
 
 (define qif-map-entry:set-allowed-types!
-  (simple-obj-setter <qif-map-entry> 'allowed-types))
+  (record-modifier <qif-map-entry> 'allowed-types))
 
 (define qif-map-entry:description
-  (simple-obj-getter <qif-map-entry> 'description))
+  (record-accessor <qif-map-entry> 'description))
 
 (define qif-map-entry:set-description!
-  (simple-obj-setter <qif-map-entry> 'description))
+  (record-modifier <qif-map-entry> 'description))
 
 (define qif-map-entry:gnc-name
-  (simple-obj-getter <qif-map-entry> 'gnc-name))
+  (record-accessor <qif-map-entry> 'gnc-name))
 
 (define qif-map-entry:set-gnc-name!
-  (simple-obj-setter <qif-map-entry> 'gnc-name))
+  (record-modifier <qif-map-entry> 'gnc-name))
 
 (define qif-map-entry:new-acct?
-  (simple-obj-getter <qif-map-entry> 'new-acct?))
+  (record-accessor <qif-map-entry> 'new-acct?))
 
 (define qif-map-entry:set-new-acct?!
-  (simple-obj-setter <qif-map-entry> 'new-acct?))
+  (record-modifier <qif-map-entry> 'new-acct?))
 
 (define qif-map-entry:display?
-  (simple-obj-getter <qif-map-entry> 'display?))
+  (record-accessor <qif-map-entry> 'display?))
 
 (define qif-map-entry:set-display?!
-  (simple-obj-setter <qif-map-entry> 'display?))
+  (record-modifier <qif-map-entry> 'display?))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -630,51 +633,51 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-stock-symbol>
-  (make-simple-class
+  (make-record-type
    'qif-stock-symbol
    '(name symbol type)))
 
 (define qif-stock-symbol:name
-  (simple-obj-getter <qif-stock-symbol> 'name))
+  (record-accessor <qif-stock-symbol> 'name))
 
 (define qif-stock-symbol:set-name! 
-  (simple-obj-setter <qif-stock-symbol> 'name))
+  (record-modifier <qif-stock-symbol> 'name))
 
 (define qif-stock-symbol:symbol
-  (simple-obj-getter <qif-stock-symbol> 'symbol))
+  (record-accessor <qif-stock-symbol> 'symbol))
 
 (define qif-stock-symbol:set-symbol! 
-  (simple-obj-setter <qif-stock-symbol> 'symbol))
+  (record-modifier <qif-stock-symbol> 'symbol))
 
 (define qif-stock-symbol:type
-  (simple-obj-getter <qif-stock-symbol> 'type))
+  (record-accessor <qif-stock-symbol> 'type))
 
 (define qif-stock-symbol:set-type! 
-  (simple-obj-setter <qif-stock-symbol> 'type))
+  (record-modifier <qif-stock-symbol> 'type))
 
 (define (qif-stock-symbol:print self)
-  (simple-obj-print self))
+  (write self))
 
 (define (make-qif-stock-symbol)
-  (let ((retval (make-simple-obj <qif-stock-symbol>)))
+  (let ((retval (construct <qif-stock-symbol>)))
     (qif-stock-symbol:set-name! retval "")
     (qif-stock-symbol:set-symbol! retval "")
     (qif-stock-symbol:set-type! retval "")
     retval))
 
 (define <qif-ticker-map>
-  (make-simple-class
+  (make-record-type
    'qif-ticker-map
    '(stocks)))
 
 (define qif-ticker-map:ticker-map
-  (simple-obj-getter <qif-ticker-map> 'stocks))
+  (record-accessor <qif-ticker-map> 'stocks))
 
 (define qif-ticker-map:set-ticker-map!
-  (simple-obj-setter <qif-ticker-map> 'stocks))
+  (record-modifier <qif-ticker-map> 'stocks))
 
 (define (make-ticker-map) 
-  (let ((self (make-simple-obj <qif-ticker-map>)))
+  (let ((self (construct <qif-ticker-map>)))
     (qif-ticker-map:set-ticker-map! self '())
     self))
 

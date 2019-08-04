@@ -88,17 +88,24 @@
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash app-utils)) ; for _
 
+(define-public (string-substitute-alist str sub-alist)
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (or (assv-ref sub-alist c)
+              c)))
+       str))))
+
 ;; This is needed for displaying error messages -- note that it assumes that
 ;; the output is HTML, which is a pity, because otherwise this module is
 ;; non-specific -- it is designed to output a mixture of Guile and any other
 ;; sort of text.  Oh well.
-(define (escape-html s1) 
-  ;; convert string s1 to escape HTML special characters < > and &
-  ;; i.e. convert them to &lt; &gt; and &amp; respectively.
-  ;; Maybe there's a way to do this in one go... (but order is important)
-  (set! s1 (regexp-substitute/global #f "&" s1 'pre "&amp;" 'post))
-  (set! s1 (regexp-substitute/global #f "<" s1 'pre "&lt;" 'post))
-  (regexp-substitute/global #f ">" s1 'pre "&gt;" 'post))
+(define-public (escape-html s1)
+  (string-substitute-alist s1 '((#\< . "&lt;")
+                                (#\> . "&gt;")
+                                (#\& . "&amp;"))))
 
 ;; regexps used to find start and end of code segments
 (define startre (make-regexp "<\\?scm(:d)?[[:space:]]"))
@@ -127,44 +134,40 @@
   ;; display either code or text
   (define (display-it t code?)
     (if code?
-      (display t)
-      (display-text t)))  
+        (display t)
+        (display-text t)))
 
   (define stop textstop)    ; text to output at end of current section
 
   ;; switch between code and text modes
   (define (switch-mode code? dmodifier?)
     (display stop)
-    (if code?
-      (begin ; code mode to text mode
-        (display textstart)
-        (set! stop textstop))
-      (begin ; text mode to code mode
-        (if dmodifier?
-          (begin
-            (display dcodestart)
-            (set! stop dcodestop))
-          (begin
-            (display codestart)
-            (set! stop codestop))))))
+    (cond
+     (code? (display textstart)
+            (set! stop textstop))
+     (dmodifier? (display dcodestart)
+                 (set! stop dcodestop))
+     (else (display codestart)
+           (set! stop codestop))))
 
   ;; recursively process input stream
   (define (loop inp needle other code? line)
-    (if (equal? line "")
+    (when (string-null? line)
       (set! line (read-line inp 'concat)))
-    (if (not (eof-object? line)) 
-      (let ((match (regexp-exec needle line)))
-        (if match
-          (let ((dmodifier? #f))
-            (display-it (match:prefix match) code?)
-            (if (not code?)
-              ; switching from text to code -- check for modifier
-              (set! dmodifier? (match:substring match 1)))
-            (switch-mode code? dmodifier?)
-            (loop inp other needle (not code?) (match:suffix match)))
-          (begin    ; no match - output whole line and continue
-            (display-it line code?)
-            (loop inp needle other code? ""))))))
+    (unless (eof-object? line)
+      (cond
+       ((regexp-exec needle line)
+        => (lambda (rmatch)
+             (let ((dmodifier? #f))
+               (display-it (match:prefix rmatch) code?)
+               (unless code?
+                 ;; switching from text to code -- check for modifier
+                 (set! dmodifier? (match:substring rmatch 1)))
+               (switch-mode code? dmodifier?)
+               (loop inp other needle (not code?) (match:suffix rmatch)))))
+       (else    ; no match - output whole line and continue
+        (display-it line code?)
+        (loop inp needle other code? "")))))
 
   (display textstart)
   (loop (current-input-port) startre endre #f "")
@@ -175,7 +178,7 @@
 ;; Evaluate input containing Scheme code, trapping errors
 ;; e.g. (display "Text ")(display (+ x 2))(display ".") -> Text 42.
 ;; Parameters:
-;;   env  - environment in which to do the evaluation; 
+;;   env  - environment in which to do the evaluation;
 ;;          if #f, (the-environment) will be used
 (define (script->output env)
   ; Placeholder for the normal stack and error stack in case of an error
@@ -188,7 +191,7 @@
 	     ; Capture the current stack, so we can detect from where we
 	     ; need to display the stack trace
 	     (set! good-stack (make-stack #t))
-             (local-eval s-expression (or env (the-environment))) 
+             (local-eval s-expression (or env (the-environment)))
              (set! s-expression (read)))))
 
   ; Error handler to display any errors while evaluating the template
@@ -214,7 +217,10 @@
 		   (error-length (stack-length error-stack)))
 	      ; Show the backtrace. Remove one extra from the "first"
 	      ; argument, since that is an index, not a count.
-	      (display-backtrace error-stack (current-output-port) (- (- error-length remove-top) 1) (- (- error-length remove-top) remove-bottom)))
+	      (display-backtrace error-stack
+                                 (current-output-port)
+                                 (- (- error-length remove-top) 1)
+                                 (- (- error-length remove-top) remove-bottom)))
     (display "</pre><br>"))
 
   ; This handler will be called by catch before unwinding the
@@ -242,15 +248,18 @@
 
 ;; Process a template file and return the result as a string
 (define (eguile-file-to-string infile environment)
-  (if (not (access? infile R_OK))  
-    (format #f (_ "Template file \"~a\" can not be read") infile)
-    (let ((script (with-input-from-file
-                    infile
-                    (lambda () (with-output-to-string template->script)))))
+  (cond
+   ((not (access? infile R_OK))
+    (format #f (_ "Template file \"~a\" can not be read") infile))
+   (else
+    (let ((script (with-input-from-file infile
+                    (lambda ()
+                      (with-output-to-string template->script)))))
       (with-output-to-string
-        (lambda () (with-input-from-string 
-                     script
-                     (lambda () (script->output environment))))))))
+        (lambda ()
+          (with-input-from-string script
+            (lambda ()
+              (script->output environment)))))))))
 
 (export eguile-file-to-string)
 

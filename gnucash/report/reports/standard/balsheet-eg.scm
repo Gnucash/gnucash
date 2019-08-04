@@ -37,7 +37,6 @@
 (use-modules (gnucash gettext))
 (use-modules (gnucash eguile))
 
-(use-modules (ice-9 regex))  ; for regular expressions
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (srfi srfi-13)) ; for extra string functions
 
@@ -45,38 +44,6 @@
 (gnc:module-load "gnucash/html" 0)
 
 (define debugging? #f)
-
-;;; these could go into a separate module..........
-;;;
-;; Useful routines to use in the template
-(define (escape-html s1)
-  ;; convert string s1 to escape HTML special characters < > and &
-  ;; i.e. convert them to &lt; &gt; and &amp; respectively.
-  ;; Maybe there's a way to do this in one go... (but order is important)
-  (set! s1 (regexp-substitute/global #f "&" s1 'pre "&amp;" 'post))
-  (set! s1 (regexp-substitute/global #f "<" s1 'pre "&lt;" 'post))
-  (regexp-substitute/global #f ">" s1 'pre "&gt;" 'post))
-
-(define (nl->br str)
-  ;; replace newlines with <br>
-  (regexp-substitute/global #f "\n" str 'pre "<br />" 'post))
-
-(define (nbsp str)
-  ;; replace spaces with &nbsp; (non-breaking spaces)
-  ;; (yes, I know <nobr> is non-standard, but webkit splits e.g. "-£40.00" between
-  ;; the '-' and the '£' without it.)
-  (string-append "<nobr>" (regexp-substitute/global #f " " str 'pre "&nbsp;" 'post) "</nobr>"))
-
-(define (dump x) (escape-html (object->string x)))
-(define (ddump x) (display (dump x)))
-
-(define (string-repeat s n)
-  ;; return a string made of n copies of string s
-  ;; (there's probably a better way)
-  (let ((s2 ""))
-    (do ((i 1 (1+ i))) ((> i n))
-      (set! s2 (string-append s2 s)))
-    s2))
 
 (define (debug . args)
   (if debugging?
@@ -90,28 +57,6 @@
   (display "<tr valign=\"center\"><td colspan=\"")
   (display cols)
   (display "\">&nbsp;</td></tr>\n"))
-
-(define (empty-cells n)
-  ;; Display n empty table cells
-  (display (string-repeat "<td class=\"empty\"></td>" n)))
-
-(define (indent-cells n)
-  ;; Display n empty table cells with width attribute for indenting
-  ;; (the &nbsp;s are just there in case CSS isn't working)
-  (display (string-repeat "<td min-width=\"32\" class=\"indent\">&nbsp;&nbsp;</td>" n)))
-
-;; 'Safe' versions of cdr and cadr that don't crash
-;; if the list is empty  (is there a better way?)
-(define (safe-cdr l)
-  (if (null? l)
-    '()
-    (cdr l)))
-(define (safe-cadr l)
-  (if (null? l)
-    '()
-    (if (null? (cdr l))
-      '()
-      (cadr l))))
 
 (define (add-to-cc cc com num neg?)
   ; add a numeric and commodity to a commodity-collector,

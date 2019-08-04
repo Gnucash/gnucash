@@ -23,7 +23,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 ;;  this is an extremely rudimentary object system.  Each object is a
 ;;  cons cell, where the car is a symbol with the class name and the
 ;;  cdr is a vector of the slots.  
@@ -41,18 +40,23 @@
 
 ;; the 'simple-class' class.  
 (define (make-simple-class class-symbol slot-names) 
+  (issue-deprecation-warning "make-simple-class is deprecated. use make-record-type.")
   (make-record-type (symbol->string class-symbol) slot-names))
 
 (define (simple-obj-getter class slot)  
+  (issue-deprecation-warning "simple-obj-getter is deprecated. use record-accessor.")
   (record-accessor class slot))
 
 (define (simple-obj-setter class slot)
+  (issue-deprecation-warning "simple-obj-setter is deprecated. use record-modifier.")
   (record-modifier class slot))
 
 (define (simple-obj-print obj)
+  (issue-deprecation-warning "simple-obj-print is deprecated. use write.")
   (write obj))
 
 (define (simple-obj-to-list obj)
+  (issue-deprecation-warning "simple-obj-to-list is deprecated. use record-type->list in qif-guess-map.scm")
   (let ((retval '()))
     (for-each 
      (lambda (slot)
@@ -62,6 +66,7 @@
     (reverse retval)))
 
 (define (simple-obj-from-list list type)
+  (issue-deprecation-warning "simple-obj-from-list-obj is deprecated. use list->record-type in qif-guess-map.scm")
   (let ((retval (make-simple-obj type)))
     (for-each 
      (lambda (slot)
@@ -73,6 +78,7 @@
 
 
 (define (make-simple-obj class)
+  (issue-deprecation-warning "make-simple-obj is deprecated. use construct in qif-objects.scm")
   (let ((ctor (record-constructor class))
         (field-defaults 
          (map (lambda (v) #f) (record-type-fields class))))

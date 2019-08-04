@@ -60,45 +60,6 @@ static QofLogModule log_module = GNC_MOD_IO;
 
 /* ================================================================ */
 
-#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
-
-static void
-append_account_tree (xmlNodePtr parent,
-                     Account* account,
-                     gboolean allow_incompat)
-{
-    GList* children, *node;
-
-    children = gnc_account_get_children (account);
-    children = g_list_sort (children, qof_instance_guid_compare);
-    for (node = children; node; node = node->next)
-    {
-        xmlNodePtr accnode;
-        Account* account;
-
-        account = node->data;
-        accnode = gnc_account_dom_tree_create (account, FALSE, allow_incompat);
-        xmlAddChild (parent, accnode);
-        append_account_tree (accnode, account);
-    }
-    g_list_free (children);
-}
-
-static int
-traverse_txns (Transaction* txn, gpointer data)
-{
-    xmlNodePtr node;
-    xmlNodePtr parent = data;
-
-    node = gnc_transaction_dom_tree_create (txn);
-    xmlAddChild (parent, node);
-
-    return 0;
-}
-#endif
-
-/* ================================================================ */
-
 xmlNodePtr
 gnc_book_dom_tree_create (QofBook* book)
 {
@@ -114,32 +75,6 @@ gnc_book_dom_tree_create (QofBook* book)
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
     xmlAddChild (ret, qof_instance_slots_to_dom_tree (book_slots_string,
                                                       QOF_INSTANCE (book)));
-
-#ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
-    /* theoretically, we should be adding all the below to the book
-     * but in fact, there's enough brain damage in the code already
-     * that we are only going to hand-edit the file at a higher layer.
-     * And that's OK, since its probably a performance boost anyway.
-     */
-    xmlAddChild (ret, gnc_commodity_dom_tree_create (
-                     gnc_commodity_table_get_table (book)));
-    xmlAddChild (ret, gnc_pricedb_dom_tree_create (gnc_pricedb_get_db (book)));
-    if (allow_incompat)
-    {
-        accnode = gnc_account_dom_tree_create (account, FALSE);
-        xmlAddChild (ret, rootAccNode);
-    }
-    append_account_tree (ret, gnc_book_get_root (book));
-
-    xaccAccountTreeForEachTransaction (gnc_book_get_root_account (book),
-                                       traverse_txns, ret);
-
-    /* xxx FIXME hack alert how are we going to handle
-     *  gnc_book_get_template_group handled ???   */
-    xmlAddChild (ret, gnc_schedXaction_dom_tree_create (
-                     gnc_book_get_schedxactions (book)));
-
-#endif
 
     return ret;
 }

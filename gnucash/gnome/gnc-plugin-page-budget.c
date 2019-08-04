@@ -117,6 +117,8 @@ static void gnc_plugin_page_budget_cmd_estimate_budget(
     GtkAction *action, GncPluginPageBudget *page);
 static void gnc_plugin_page_budget_cmd_allperiods_budget(
     GtkAction *action, GncPluginPageBudget *page);
+static void gnc_plugin_page_budget_cmd_refresh (
+    GtkAction *action, GncPluginPageBudget *page);
 
 static GtkActionEntry gnc_plugin_page_budget_actions [] =
 {
@@ -164,6 +166,11 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_budget_cmd_view_filter_by)
+    },
+    {
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
+        N_("Refresh this window"),
+        G_CALLBACK (gnc_plugin_page_budget_cmd_refresh)
     },
 
 };
@@ -1143,5 +1150,20 @@ gnc_plugin_page_budget_cmd_view_filter_by (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
     account_filter_dialog_create(&priv->fd, GNC_PLUGIN_PAGE(page));
 
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_budget_cmd_refresh (GtkAction *action,
+        GncPluginPageBudget *page)
+{
+    GncPluginPageBudgetPrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    ENTER("(action %p, page %p)", action, page);
+
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+
+    gnc_budget_view_refresh (priv->budget_view);
     LEAVE(" ");
 }

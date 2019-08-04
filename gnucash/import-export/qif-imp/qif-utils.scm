@@ -24,71 +24,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(use-modules (ice-9 regex))
+(use-modules (srfi srfi-13))
 
 (define qif-import:paused #f)
 (define qif-import:canceled #f)
 
-(define (simple-filter pred list)
-  (let ((retval '()))
-    (map (lambda (elt)
-           (if (pred elt)
-               (set! retval (cons elt retval))))
-         list)
-    (reverse retval)))
-
-(define remove-trailing-space-rexp 
-  (make-regexp "^(.*[^ ]+) *$"))
-
-(define remove-leading-space-rexp 
-  (make-regexp "^ *([^ ].*)$"))
-
 (define (string-remove-trailing-space str)
-  (let ((match (regexp-exec remove-trailing-space-rexp str)))
-    (if match
-        (string-copy (match:substring match 1))
-        "")))
+  (issue-deprecation-warning "string-remove-trailing-space - use string-trim-right")
+  (string-trim-right str))
 
 (define (string-remove-leading-space str)
-  (let ((match (regexp-exec remove-leading-space-rexp str)))
-    (if match 
-        (string-copy (match:substring match 1))
-        "")))
+  (issue-deprecation-warning "string-remove-leading-space - use string-trim")
+  (string-trim str))
 
 (define (string-remove-char str char)
-  (let ((rexpstr 
-         (case char  
-           ((#\.) "\\.")
-           ((#\^) "\\^")
-           ((#\$) "\\$")
-           ((#\*) "\\*")
-           ((#\+) "\\+")
-           ((#\\) "\\\\")
-           ((#\?) "\\?")
-           (else 
-             (make-string 1 char)))))
-    (regexp-substitute/global #f rexpstr str 'pre 'post)))
-
-
-(define (string-char-count str char)
-  (length (simple-filter (lambda (elt) (eq? elt char))
-                         (string->list str))))
-
+  (issue-deprecation-warning "string-remove-char - use gnc:string-delete-chars")
+  (gnc:string-delete-chars s (list char)))
 
 (define (string-replace-char! str old new)
-  (let ((rexpstr 
-         (if (not (eq? old #\.))
-             (make-string 1 old)
-             "\\."))
-        (newstr (make-string 1 new)))
-    (regexp-substitute/global #f rexpstr str 'pre newstr 'post)))
+  (issue-deprecation-warning "string-replace-char! - use gnc:string-replace-char")
+  (gnc:string-replace-char str old new))
 
 (define (string-to-canonical-symbol str)
+  (issue-deprecation-warning "string-to-canonical-symbol - inline instead")
   (string->symbol 
    (string-downcase
     (string-remove-leading-space
      (string-remove-trailing-space str)))))
-
 
 (define (qif-import:log progress-dialog proc str)
   (if progress-dialog
@@ -103,15 +65,13 @@
   (set! qif-import:canceled #t))
 
 (define (qif-import:toggle-pause progress-dialog)
-  (if qif-import:paused
-      (begin
-        (set! qif-import:paused #f)
-        (if progress-dialog
-            (gnc-progress-dialog-resume progress-dialog)))
-      (begin
-        (set! qif-import:paused #t)
-        (if progress-dialog
-            (gnc-progress-dialog-pause progress-dialog)))))
+  (cond
+   (qif-import:paused
+    (set! qif-import:paused #f)
+    (when progress-dialog (gnc-progress-dialog-resume progress-dialog)))
+   (else
+    (set! qif-import:paused #t)
+    (when progress-dialog (gnc-progress-dialog-pause progress-dialog)))))
 
 (define (qif-import:check-pause progress-dialog)
   (while (and qif-import:paused (not qif-import:canceled))

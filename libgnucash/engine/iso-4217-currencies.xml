@@ -1734,6 +1734,7 @@
   local-symbol="MOP$"
 />
 <!-- "MRO" - "Ouguiya"
+  2018-01-01 "MRU" 10
 -->
 <currency
   isocode="MRO"
@@ -1747,6 +1748,7 @@
   local-symbol="UM"
 />
 <!-- "MRU" - "Ouguiya"
+;; Bug 797319: In cash parts-per-unit is still 5, but not in banking 
 -->
 <currency
   isocode="MRU"

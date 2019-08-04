@@ -1855,7 +1855,12 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 
     /* If that would leave the register, abort */
     if (abort_move)
+    {
+        // Make sure the sheet is the focus
+        if (!gtk_widget_has_focus(GTK_WIDGET (sheet)))
+            gtk_widget_grab_focus (GTK_WIDGET (sheet));
         return TRUE;
+    }
 
     /* Clear the saved selection for the new cell. */
     sheet->end_sel = sheet->start_sel;
@@ -2671,7 +2676,6 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
                gpointer    user_data)
 {
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
-    GnucashCursor *cursor = sheet->cursor;
     Table *table = sheet->table;
     VirtualLocation virt_loc;
     gchar *tooltip_text;
@@ -2711,7 +2715,7 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
     by = block->origin_y;
 
     // get the cell location and dimensions
-    gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
+    gnucash_sheet_style_get_cell_pixel_rel_coords (block->style,
             virt_loc.phys_row_offset, virt_loc.phys_col_offset,
             &cx, &cy, &cw, &ch);
 
