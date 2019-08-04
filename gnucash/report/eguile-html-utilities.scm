@@ -30,7 +30,6 @@
 (gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/app-utils" 0)
 
-(use-modules (gnucash report eguile-gnc))
 (use-modules (ice-9 regex))  ; for regular expressions
 (use-modules (srfi srfi-13)) ; for extra string functions
 
