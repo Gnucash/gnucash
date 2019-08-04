@@ -1,11 +1,10 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (srfi srfi-64))
-(use-modules (gnucash engine test srfi64-extras))
-(use-modules (gnucash import-export qif-import))
-(use-modules (gnucash import-export string))
-(use-modules (gnucash engine test test-extras))
-(use-modules (gnucash report report-system))
+(use-modules (tests srfi64-extras))
+(use-modules (gnucash qif-import))
+(use-modules (gnucash string))
+(use-modules (tests test-engine-extras))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
@@ -23,7 +22,7 @@
 
 (define (test-gnc:account-tree-get-transactions)
   (define gnc:account-tree-get-transactions
-    (@@ (gnucash import-export qif-import) gnc:account-tree-get-transactions))
+    (@@ (gnucash qif-import) gnc:account-tree-get-transactions))
 
   (test-group-with-cleanup "test-gnc:account-tree-get-transactions"
     (create-test-data)
@@ -37,7 +36,7 @@
 
 (define (test-gnc:account-tree-find-duplicates)
   (define gnc:account-tree-find-duplicates
-    (@@ (gnucash import-export qif-import) gnc:account-tree-find-duplicates))
+    (@@ (gnucash qif-import) gnc:account-tree-find-duplicates))
   (define new-structure
     (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
           (list "Asset"
