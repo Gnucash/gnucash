@@ -157,6 +157,12 @@
      "1979/03/03"
      '(d-m-y y-m-d m-d-y y-d-m)))
 
+  (test-equal "qif-parse:check-date-format 03/03/79"
+    '(d-m-y m-d-y)
+    (qif-parse:check-date-format
+     "03/03/79"
+     '(d-m-y y-m-d m-d-y y-d-m)))
+
   (test-equal "qif-parse:check-date-format 19790303"
     '(y-m-d y-d-m)
     (qif-parse:check-date-format
