@@ -213,10 +213,7 @@
 
 
 (define (teardown)
-  (let* ((book  (gnc-get-current-book))
-         (pricedb (gnc-pricedb-get-db book)))
-    (gnc-pricedb-destroy pricedb)
-    (gnc-clear-current-session)))
+  (gnc-clear-current-session))
 
 (define (collect collector shares value)
   ((car collector) 'add shares)
