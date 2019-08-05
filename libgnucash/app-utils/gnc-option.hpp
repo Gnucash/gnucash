@@ -199,6 +199,14 @@ public:
     template <typename OptionType>
     GncOption(OptionType option) : m_option{option} {}
 
+    template <typename ValueType>
+    GncOption(const char* section, const char* name,
+              const char* key, const char* doc_string,
+              ValueType value) :
+        m_option{GncOptionValue<ValueType> {
+            section, name, key, doc_string, value
+                }} {}
+
     template <typename ValueType> ValueType get_value() const
     {
         return boost::apply_visitor(GetValueVisitor<ValueType>(), m_option);
@@ -325,31 +333,5 @@ private:
     };
     GncOptionVariant m_option;
 };
-
-GncOption
-gnc_make_string_option(const char* section, const char* name,
-                       const char* key, const char* doc_string,
-                       std::string value);
-
-GncOption
-gnc_make_text_option(const char* section, const char* name,
-                     const char* key, const char* doc_string,
-                     std::string value);
-
-GncOption
-gnc_make_budget_option(const char* section, const char* name,
-                       const char* key, const char* doc_string,
-                       GncBudget* value);
-
-GncOption
-gnc_make_commodity_option(const char* section, const char* name,
-                          const char* key, const char* doc_string,
-                          gnc_commodity* value);
-
-GncOption
-gnc_make_currency_option(const char* section, const char* name,
-                         const char* key, const char* doc_string,
-                         gnc_commodity* value);
-
 
 #endif //GNC_OPTION_HPP_

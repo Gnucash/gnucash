@@ -27,25 +27,14 @@
 TEST(GncOption, test_string_ctor)
 {
     EXPECT_NO_THROW({
-            auto option = gnc_make_string_option("foo", "bar", "baz",
-                                                 "Phony Option",
-                                                 std::string{"waldo"});
-        });
-}
-
-TEST(GncOption, test_text_ctor)
-{
-    EXPECT_NO_THROW({
-            auto option = gnc_make_text_option("foo", "bar", "baz",
-                                               "Phony Option",
-                                               std::string{"waldo"});
+            GncOption option("foo", "bar", "baz", "Phony Option",
+                             std::string{"waldo"});
         });
 }
 
 TEST(GncOption, test_string_classifier_getters)
 {
-    auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
-                                         std::string{"waldo"});
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
     EXPECT_STREQ("foo", option.get_section().c_str());
     EXPECT_STREQ("bar", option.get_name().c_str());
     EXPECT_STREQ("baz", option.get_key().c_str());
@@ -54,16 +43,14 @@ TEST(GncOption, test_string_classifier_getters)
 
 TEST(GncOption, test_string_default_value)
 {
-    auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
-                                         std::string{"waldo"});
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
     EXPECT_STREQ("waldo", option.get_default_value<std::string>().c_str());
     EXPECT_STREQ("waldo", option.get_value<std::string>().c_str());
 }
 
 TEST(GncOption, test_string_value)
 {
-    auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
-                                         std::string{"waldo"});
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
     option.set_value(std::string{"pepper"});
     EXPECT_STREQ("waldo", option.get_default_value<std::string>().c_str());
     EXPECT_NO_THROW({
@@ -73,8 +60,7 @@ TEST(GncOption, test_string_value)
 
 TEST(GncOption, test_string_scm_functions)
 {
-    auto option = gnc_make_string_option("foo", "bar", "baz", "Phony Option",
-                                         std::string{"waldo"});
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
     auto scm_value = option.get_scm_value();
     auto str_value = scm_to_utf8_string(scm_value);
     EXPECT_STREQ("waldo", str_value);
@@ -90,8 +76,8 @@ TEST(GNCOption, test_budget_ctor)
     auto book = qof_book_new();
     auto budget = gnc_budget_new(book);
     EXPECT_NO_THROW({
-            auto option = gnc_make_budget_option("foo", "bar", "baz",
-                                                 "Phony Option", budget);
+            GncOption option("foo", "bar", "baz", "Phony Option",
+                             QOF_INSTANCE(budget));
         });
     gnc_budget_destroy(budget);
     qof_book_destroy(book);
@@ -101,8 +87,8 @@ TEST(GNCOption, test_budget_scm_functions)
 {
     auto book = qof_book_new();
     auto budget = gnc_budget_new(book);
-    auto option = gnc_make_budget_option("foo", "bar", "baz",
-                                         "Phony Option", budget);
+    GncOption option("foo", "bar", "baz", "Phony Option",
+                     QOF_INSTANCE(budget));
     auto scm_budget = option.get_scm_value();
     auto str_value = scm_to_utf8_string(scm_budget);
     auto guid = guid_to_string(qof_instance_get_guid(budget));
@@ -118,11 +104,26 @@ TEST(GNCOption, test_commodity_ctor)
     auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_NO_THROW({
-            auto option = gnc_make_commodity_option("foo", "bar", "baz",
-                                                 "Phony Option", hpe);
+            GncOption option("foo", "bar", "baz", "Phony Option",
+                             QOF_INSTANCE(hpe));
         });
     gnc_commodity_destroy(hpe);
     qof_book_destroy(book);
+}
+static GncOption
+make_currency_option (const char* section, const char* name,
+                      const char* key, const char* doc_string,
+                      gnc_commodity *value)
+{
+    GncOption option{GncOptionValidatedValue<QofInstance*>{
+        section, name, key, doc_string, QOF_INSTANCE(value),
+        [](QofInstance* new_value) -> bool
+            {
+                return GNC_IS_COMMODITY (new_value) &&
+                    gnc_commodity_is_currency(GNC_COMMODITY(new_value));
+            }
+        }};
+    return option;
 }
 
 TEST(GNCOption, test_currency_ctor)
@@ -133,21 +134,21 @@ TEST(GNCOption, test_currency_ctor)
     auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_THROW({
-            auto option = gnc_make_currency_option("foo", "bar", "baz",
-                                                 "Phony Option", hpe);
+            auto option = make_currency_option("foo", "bar", "baz",
+                                               "Phony Option", hpe);
         }, std::invalid_argument);
     gnc_commodity_destroy(hpe);
     auto eur = gnc_commodity_new(book, "Euro", "ISO4217", "EUR", NULL, 100);
     EXPECT_NO_THROW({
-            auto option = gnc_make_currency_option("foo", "bar", "baz",
-                                                 "Phony Option", eur);
+            auto option = make_currency_option("foo", "bar", "baz",
+                                               "Phony Option", eur);
         });
     gnc_commodity_destroy(eur);
     auto usd = gnc_commodity_new(book, "United States Dollar",
                                  "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
-            auto option = gnc_make_currency_option("foo", "bar", "baz",
-                                                 "Phony Option", usd);
+            auto option = make_currency_option("foo", "bar", "baz",
+                                               "Phony Option",usd);
         });
     gnc_commodity_destroy(usd);
     qof_book_set_data(book, GNC_COMMODITY_TABLE, nullptr);
@@ -163,8 +164,8 @@ TEST(GNCOption, test_currency_setter)
     auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     auto eur = gnc_commodity_new(book, "Euro", "ISO4217", "EUR", NULL, 100);
-    auto option = gnc_make_currency_option("foo", "bar", "baz",
-                                                 "Phony Option", eur);
+            auto option = make_currency_option("foo", "bar", "baz",
+                                               "Phony Option",eur);
     auto usd = gnc_commodity_new(book, "United States Dollar",
                                  "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
