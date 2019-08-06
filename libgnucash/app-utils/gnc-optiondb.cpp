@@ -1,0 +1,159 @@
+/********************************************************************\
+ * gnc-optiondb.cpp -- Collection of GncOption objects              *
+ * Copyright (C) 2019 John Ralls <jralls@ceridwen.us>               *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
+#include "gnc-optiondb.hpp"
+
+GncOptionDB::GncOptionDB() : m_default_section{nullptr} {}
+
+GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
+
+void
+GncOptionDB::save_to_book(QofBook* book, bool do_clear) const
+{
+}
+
+void
+GncOptionDB::register_option(const char* section, GncOption&& option)
+{
+    auto db_section = std::find_if(
+        m_sections.begin(), m_sections.end(),
+        [section](GncOptionSection sect) -> bool
+        {
+            return sect.first == std::string{section};
+        });
+
+    if (db_section == m_sections.end())
+    {
+        m_sections.emplace_back(std::make_pair(std::string{section},
+                                               GncOptionVec{}));
+        db_section = std::prev(m_sections.end());
+    }
+    auto wrapper = std::make_shared<GncOptionWrapper>(option, nullptr);
+    db_section->second.emplace_back(wrapper);
+}
+
+void
+GncOptionDB::unregister_option(const char* section, const char* name)
+{
+    auto db_section = std::find_if(
+        m_sections.begin(), m_sections.end(),
+        [section](GncOptionSection sect) -> bool
+        {
+            return sect.first == std::string{section};
+        });
+    if (db_section != m_sections.end())
+    {
+        db_section->second.erase(
+            std::remove_if(
+                db_section->second.begin(), db_section->second.end(),
+                [name](GncOptionWrapperPtr option) -> bool
+                {
+                    return option->m_option.get_name() == std::string{name};
+                }));
+    }
+}
+
+void
+GncOptionDB::set_default_section(const char* section)
+{
+}
+
+SCM
+GncOptionDB::lookup_option(const char* section, const char* name) const
+{
+    auto db_section = std::find_if(
+        m_sections.begin(), m_sections.end(),
+        [section](GncOptionSection sect) -> bool
+        {
+            return sect.first == std::string{section};
+        });
+    if (db_section == m_sections.end())
+        return SCM_BOOL_F;
+    auto db_opt = std::find_if(
+        db_section->second.begin(), db_section->second.end(),
+        [name](GncOptionWrapperPtr option) -> bool
+        {
+            return option->m_option.get_name() == std::string{name};
+        });
+    if (db_opt == db_section->second.end() || !*db_opt)
+        return SCM_BOOL_F;
+    return (*db_opt)->m_option.get_scm_value();
+}
+
+static const std::string empty_string;
+std::string
+GncOptionDB::lookup_string_option(const char* section, const char* name) const
+{
+    auto db_section = std::find_if(
+        m_sections.begin(), m_sections.end(),
+        [section](GncOptionSection sect) -> bool
+        {
+            return sect.first == std::string{section};
+        });
+    if (db_section == m_sections.end())
+        return empty_string;
+    auto db_opt = std::find_if(
+        db_section->second.begin(), db_section->second.end(),
+        [name](GncOptionWrapperPtr option) -> bool
+        {
+            return option->m_option.get_name() == std::string{name};
+        });
+    if (db_opt == db_section->second.end() || !*db_opt)
+        return empty_string;
+    return (*db_opt)->m_option.get_value<std::string>();
+}
+
+bool
+GncOptionDB::set_option(const char* section, const char* name, SCM value)
+{
+    return false;
+}
+
+void
+GncOptionDB::set_selectable(const char* section, const char* name)
+{
+}
+
+void
+GncOptionDB::commit()
+{
+    std::for_each(
+        m_sections.begin(), m_sections.end(),
+        [](GncOptionSection section)
+        {
+            std::for_each(
+                section.second.begin(), section.second.end(),
+                [](GncOptionWrapperPtr option)
+                {
+/* FIXME, not implemented.
+                    if (option->m_option.is_dirty())
+                    {
+                        option->m_option.commit();
+
+* FIXME, no Gtk in      gtk_widget_set_value(option->m_widget,
+* libgnucash!                                option->m_option.get_value());
+                  }
+*/
+                });
+        });
+}

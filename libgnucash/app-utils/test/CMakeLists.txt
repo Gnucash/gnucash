@@ -31,7 +31,9 @@ add_app_utils_test(test-sx test-sx.cpp)
 
 set(gtest_gnc_option_SOURCES
   ${MODULEPATH}/gnc-option.cpp
-  gtest-gnc-option.cpp)
+  ${MODULEPATH}/gnc-optiondb.cpp
+  gtest-gnc-option.cpp
+  gtest-gnc-optiondb.cpp)
 
 set(gtest_gnc_option_INCLUDES
   ${MODULEPATH}
