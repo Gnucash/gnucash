@@ -139,7 +139,7 @@ public:
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
-protected:
+private:
     ValueType m_value;
     ValueType m_default_value;
 };
