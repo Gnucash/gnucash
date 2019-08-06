@@ -46,6 +46,7 @@ TEST(GncOption, test_string_default_value)
     GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
     EXPECT_STREQ("waldo", option.get_default_value<std::string>().c_str());
     EXPECT_STREQ("waldo", option.get_value<std::string>().c_str());
+    EXPECT_EQ(0, option.get_value<int64_t>());
 }
 
 TEST(GncOption, test_string_value)
@@ -56,6 +57,14 @@ TEST(GncOption, test_string_value)
     EXPECT_NO_THROW({
             EXPECT_STREQ("pepper", option.get_value<std::string>().c_str());
         });
+}
+
+TEST(GncOption, test_int64_t_value)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", INT64_C(123456789));
+    option.set_value(INT64_C(987654321));
+    EXPECT_TRUE(option.get_default_value<std::string>().empty());
+    EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
 }
 
 TEST(GncOption, test_string_scm_functions)
