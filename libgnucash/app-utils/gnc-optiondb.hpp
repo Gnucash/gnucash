@@ -66,6 +66,45 @@ private:
     GncOptionSectionPtr m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
+
+    std::function<void*()> m_get_ui_value;
+    std::function<void(void*)> m_set_ui_value;
 };
+
+/**
+ * Create an empty option database.
+ *
+ * It would be nice to use a std::shared_ptr here but Swig doesn't implement
+ * that for Guile.
+ * @return A newly allocated GncOptionDB. Use delete to destroy it.
+ */
+GncOptionDB *gnc_option_db_new(void);
+
+void gnc_register_string_option(GncOptionDB* db, const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string, std::string value);
+
+
+void gnc_register_string_option(GncOptionDB* db, const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string, std::string value);
+
+void gnc_register_text_option(GncOptionDB* db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string, std::string value);
+
+void gnc_register_budget_option(GncOptionDB* db, const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string, GncBudget* value);
+
+void gnc_register_commodity_option(GncOptionDB* db, const char* section,
+                                   const char* name, const char* key,
+                                   const char* doc_string,
+                                   gnc_commodity* value);
+
+void gnc_register_currency_option(GncOptionDB* db, const char* section,
+                                  const char* name, const char* key,
+                                  const char* doc_string, gnc_commodity* value);
+
 
 #endif //GNC_OPTIONDB_HPP_

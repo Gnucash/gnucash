@@ -56,3 +56,12 @@ TEST(GncOptionDB, test_unregister_option)
     optiondb.unregister_option("foo", "bar");
     EXPECT_TRUE(optiondb.lookup_string_option("foo", "bar").empty());
 }
+
+TEST(GncOptionDB, test_register_string_option)
+{
+    GncOptionDB* db = gnc_option_db_new();
+    gnc_register_string_option(db, "foo", "bar", "baz", "Phony Option",
+                               std::string{"waldo"});
+    EXPECT_STREQ("waldo", db->lookup_string_option("foo", "bar").c_str());
+    delete db;
+}

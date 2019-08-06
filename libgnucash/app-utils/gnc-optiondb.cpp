@@ -157,3 +157,61 @@ GncOptionDB::commit()
                 });
         });
 }
+
+GncOptionDB*
+gnc_option_db_new(void)
+{
+    return new GncOptionDB;
+}
+
+void
+gnc_register_string_option(GncOptionDB* db, const char* section,
+                           const char* name, const char* key,
+                           const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_text_option(GncOptionDB* db, const char* section, const char* name,
+                         const char* key, const char* doc_string,
+                         std::string value)
+{
+    gnc_register_string_option(db, section, name, key, doc_string, value);
+}
+
+void
+gnc_register_budget_option(GncOptionDB* db, const char* section,
+                           const char* name, const char* key,
+                           const char* doc_string, GncBudget *value)
+{
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value)};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_commodity_option(GncOptionDB* db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string, gnc_commodity *value)
+{
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value)};
+    db->register_option(section, std::move(option));
+}
+
+
+void
+gnc_register_currency_option(GncOptionDB* db, const char* section,
+                             const char* name, const char* key,
+                             const char* doc_string, gnc_commodity *value)
+{
+    GncOption option{GncOptionValidatedValue<QofInstance*>{
+        section, name, key, doc_string, QOF_INSTANCE(value),
+        [](QofInstance* new_value) -> bool
+            {
+                return GNC_IS_COMMODITY (new_value) &&
+                    gnc_commodity_is_currency(GNC_COMMODITY(new_value));
+            }
+        }};
+    db->register_option(section, std::move(option));
+}
