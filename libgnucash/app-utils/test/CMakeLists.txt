@@ -82,12 +82,49 @@ gnc_add_scheme_test_targets(scm-test-c-interface
 gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 
 if (HAVE_SRFI64)
-    gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
-        SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
-        OUTPUT_DIR "tests"
-        DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
+  gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
+    "${test_app_utils_scheme_SRFI64_SOURCES}"
+    "tests"
+    "${GUILE_DEPENDS};scm-srfi64-extras"
+    FALSE
+    )
 
-    gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
+  set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
+  gnc_add_swig_guile_command(swig-gnc-optiondb-guile
+    SWIG_GNC_OPTIONDB_GUILE_CPP swig-gnc-optiondb-guile.cpp
+    ${MODULEPATH}/gnc-optiondb.i
+    )
+  add_library(swig-gnc-optiondb MODULE
+    ${MODULEPATH}/gnc-option.cpp
+    ${MODULEPATH}/gnc-optiondb.cpp
+    ${SWIG_GNC_OPTIONDB_GUILE_CPP}
+    )
+  set(swig_gnc_optiondb_INCLUDES
+    ${MODULEPATH}
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine
+    ${CMAKE_BINARY_DIR}/common # for config.h
+    ${GLIB2_INCLUDE_DIRS}
+    ${GUILE_INCLUDE_DIRS}
+    )
+
+  set(swig_gnc_optiondb_LIBS
+    gncmod-engine
+    ${GLIB2_LDFLAGS}
+    ${GUILE_LDFLAGS}
+    )
+
+  target_link_libraries(swig-gnc-optiondb ${swig_gnc_optiondb_LIBS})
+  target_include_directories(swig-gnc-optiondb
+    PRIVATE ${swig_gnc_optiondb_INCLUDES})
+
+  gnc_add_scheme_test_targets(scm-test-gnc-optiondb
+    "test-gnc-optiondb.scm"
+    "tests"
+    "swig-gnc-optiondb;scm-srfi64-extras"
+    FALSE
+    )
+  gnc_add_scheme_tests("test-gnc-optiondb.scm")
+  gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif()
 
 # Doesn't work yet:
