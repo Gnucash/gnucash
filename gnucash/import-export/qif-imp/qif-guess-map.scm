@@ -120,26 +120,41 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:write-map hashtab)
+  (define (upgrade-account value)
+    (let* ((temp (qif-map-entry:clone value))
+           (gnc-name (qif-map-entry:gnc-name temp))
+           (acc (find
+                 (lambda (acc) (string=? gnc-name (gnc-account-get-full-name acc)))
+                 (gnc-account-get-descendants-sorted
+                  (gnc-get-current-root-account)))))
+      (if acc (qif-map-entry:set-gnc-name! temp (gncAccountGetGUID acc)))
+      temp))
   (write
    (hash-map->list
     (lambda (key value)
-      (cons key (record-fields->list value)))
+      (cons key (record-fields->list (upgrade-account value))))
     hashtab)))
 
 (define (qif-import:read-map tablist tab-sep)
   (let* ((table (make-hash-table 20))
+         (book (gnc-get-current-book))
          (sep (gnc-get-account-separator-string))
          (changed-sep? (and (string? tab-sep) (not (string=? tab-sep sep)))))
     (for-each
      (lambda (entry)
-       (let ((key (car entry))
-             (value (list->record-fields (cdr entry) <qif-map-entry>)))
-         ;; If the account separator has changed, fix the account name.
-         (when changed-sep?
+       (let* ((key (car entry))
+              (value (list->record-fields (cdr entry) <qif-map-entry>))
+              (trylookup (xaccAccountLookup (qif-map-entry:gnc-name value) book)))
+         (cond
+          ((not (null? trylookup))
+           (qif-map-entry:set-gnc-name!
+            value (gnc-account-get-full-name trylookup)))
+          ;; If the account separator has changed, fix the account name.
+          (changed-sep?
            (let* ((acct-name (qif-map-entry:gnc-name value)))
              (when (string? acct-name)
                (qif-map-entry:set-gnc-name!
-                value (gnc:substring-replace acct-name tab-sep sep)))))
+                value (gnc:substring-replace acct-name tab-sep sep))))))
          (qif-map-entry:set-display?! value #f)
          (hash-set! table key value)))
      tablist)
