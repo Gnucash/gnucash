@@ -28,39 +28,11 @@
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-(use-modules (srfi srfi-1))
+(use-modules (srfi srfi-11)
+             (srfi srfi-1))
 
 (gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 (gnc:module-load "gnucash/app-utils" 0)
-
-(define (item-list->hash! lst hash
-			  getkey getval
-			  hashref hashset
-			  list-duplicates?)
-  ;; Takes a list of the form (item item item item) and returns a hash
-  ;; formed by traversing the list, and getting the key and val from
-  ;; each item using the supplied get-key and get-val functions, and
-  ;; building a hash table from the result using the given hashref and
-  ;; hashset functions.  list-duplicates? determines whether or not in
-  ;; the resulting hash, the value for a given key is a list of all
-  ;; the values associated with that key in the input or just the
-  ;; first one encountered.
-
-  (define (handle-item item)
-    (let* ((key (getkey item))
-	   (val (getval item))
-	   (existing-val (hashref hash key)))
-
-      (if (not list-duplicates?)
-	  ;; ignore if not first value.
-	  (if (not existing-val) (hashset hash key val))
-	  ;; else result is list.
-	  (if existing-val
-	      (hashset hash key (cons val existing-val))
-	      (hashset hash key (list val))))))
-
-  (for-each handle-item lst)
-  hash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -197,47 +169,39 @@
     ;; form:
     ;;
     ;; (("alphavantage" (commodity-1 currency-1 tz-1)
-    ;;           (commodity-2 currency-2 tz-2) ...)
+    ;;                  (commodity-2 currency-2 tz-2) ...)
     ;;  ("fidelity_direct" (commodity-3 currency-3 tz-3)
     ;;                     (commodity-4 currency-4 tz-4) ...)
-    ;;  ...)
+    ;;  ("currency" curr-1 curr-2 tz)
+    ;;  ("currency" curr-3 curr-4 tz) ...)
 
-    (let* ((ct (gnc-commodity-table-get-table book))
-	   (big-list
-	    (gnc-commodity-table-get-quotable-commodities
-	     ct))
-	   (commodity-list #f)
-	   (currency-list (filter
-			   (lambda (a)
-                             (and
-                              (not (gnc-commodity-equiv (cadr a) (caddr a)))
-                              (not (string=? "XXX" (gnc-commodity-get-mnemonic (cadr a))))
-                              ))
-			   (call-with-values
-                               (lambda () (partition!
-                                           (lambda (cmd)
-                                             (not (string=? (car cmd) "currency")))
-                                           big-list))
-                             (lambda (a b) (set! commodity-list a) b))))
-	   (quote-hash (make-hash-table 31)))
+    (let-values (((currency-list commodity-list)
+                  (partition (lambda (a) (string=? (car a) "currency"))
+                             (gnc-commodity-table-get-quotable-commodities
+                              (gnc-commodity-table-get-table book)))))
 
-      (if (and (null? commodity-list) (null? currency-list))
-	  #f
-	  (begin
+      (let ((commodity-hash (make-hash-table))
+            (currency-list-filtered
+             (filter
+              (lambda (a)
+                (and (not (gnc-commodity-equiv (cadr a) (caddr a)))
+                     (not (string=? (gnc-commodity-get-mnemonic (cadr a)) "XXX"))))
+              currency-list)))
 
-	    ;; Now collect symbols going to the same backend.
-	    (item-list->hash! commodity-list quote-hash car cdr hash-ref hash-set! #t)
+        ;; Now collect symbols going to the same backend.
+        (for-each
+         (lambda (item)
+           (let ((key (car item))
+                 (val (cdr item)))
+             (hash-set! commodity-hash key
+                        (cons val (hash-ref commodity-hash key '())))))
+         commodity-list)
 
-	    ;; Now translate to just what gnc-fq-helper expects.
-	    (append
-	     (hash-fold
-	      (lambda (key value prior-result)
-		(cons (cons key value)
-		      prior-result))
-	      '()
-	      quote-hash)
-	     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
-		  currency-list))))))
+        ;; Now translate to just what gnc-fq-helper expects.
+        (append
+         (hash-map->list cons commodity-hash)
+         (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
+              currency-list-filtered)))))
 
   (define (fq-call-data->fq-calls fq-call-data)
     ;; take an output element from book->commodity->fq-call-data and
@@ -246,7 +210,7 @@
     ;; the latter:
     ;;
     ;; ("alphavantage" (commodity-1 currency-1 tz-1)
-    ;;          (commodity-2 currency-2 tz-2) ...)
+    ;;                 (commodity-2 currency-2 tz-2) ...)
     ;;
     ;; ("alphavantage" "IBM" "AMD" ...)
     ;;
