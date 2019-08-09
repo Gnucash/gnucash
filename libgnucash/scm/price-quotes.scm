@@ -68,35 +68,28 @@
   (string-append (gnc-path-get-bindir) "/gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
-  (let ((program '())
-        (from-child #f))
+  (let ((program #f))
 
     (define (start-program)
-      (if (not (string-null? gnc:*finance-quote-check*))
-          (set! program (gnc-spawn-process-async
-                         (list "perl" "-w" gnc:*finance-quote-check*) #t))))
+      (set! program
+        (gnc-spawn-process-async
+         (list "perl" "-w" gnc:*finance-quote-check*) #t)))
 
     (define (get-sources)
-      (if (not (null? program))
-          (let ((results #f))
-            (set! from-child (fdes->inport (gnc-process-get-fd program 1)))
-            (catch
-             #t
-             (lambda ()
-               (set! results (read from-child))
-               (gnc:debug "results: " results)
-               results)
-             (lambda (key . args)
-               key)))))
+      (when program
+        (catch #t
+          (lambda ()
+            (let ((results (read (fdes->inport (gnc-process-get-fd program 1)))))
+              (gnc:debug "gnc:fq-check-sources results: " results)
+              results))
+          (lambda (key . args) key))))
 
     (define (kill-program)
-      (if (not (null? program))
-          (gnc-detach-process program #t)))
+      (when program
+        (gnc-detach-process program #t)
+        (set! program #f)))
 
-    (dynamic-wind
-        start-program
-        get-sources
-        kill-program)))
+    (dynamic-wind start-program get-sources kill-program)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
