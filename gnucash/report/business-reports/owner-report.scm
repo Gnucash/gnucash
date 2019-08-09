@@ -279,10 +279,9 @@
             (car link-rows))))
       (lp (cdr link-rows) #f))))
 
-(define (make-txn-table splits acc start-date end-date date-type
-                        used-columns reverse? link-option)
-  (let ((currency (xaccAccountGetCommodity acc))
-        (table (gnc:make-html-table)))
+(define (add-owner-table table splits acc start-date end-date date-type
+                         used-columns reverse? link-option)
+  (let ((currency (xaccAccountGetCommodity acc)))
     (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
     (define (print-totals total debit credit tax sale)
       (define (total-cell cell)
@@ -435,9 +434,6 @@
       (and (not (null? invoice))
            (gncInvoiceIsPosted invoice)
            (gncInvoiceGetDateDue invoice)))
-
-    (gnc:html-table-set-col-headers!
-     table (make-heading-list used-columns link-option))
 
     (let lp ((printed? #f)
              (odd-row? #t)
@@ -801,6 +797,8 @@ invoices and amounts.")))))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
+         (table (gnc:make-html-table))
+         (headings (make-heading-list used-columns link-option))
          (report-title (string-append (owner-string type) " " (_ "Report"))))
 
     (cond
@@ -867,19 +865,23 @@ invoices and amounts.")))))
                             splits)))
               (unless (null? acc-splits)
                 (let* ((account (car accounts))
-                       (table (make-txn-table
-                               acc-splits account start-date end-date date-type
-                               used-columns reverse? link-option)))
+                       (header (gnc:make-html-table-cell/size
+                                1 (length headings)
+                                (gnc:make-html-text
+                                 (gnc:html-markup-b
+                                  (string-append (_ "Account") ": "
+                                                 (xaccAccountGetName account)))))))
 
-                  (gnc:html-document-add-object!
-                   document
-                   (gnc:make-html-text
-                    (gnc:html-markup-h3
-                     (string-append (_ "Account") ": " (xaccAccountGetName account)))))
-                  (gnc:html-document-add-object! document table)
-                  (make-break! document)))
+                   (gnc:html-table-append-row! table header)
+
+                  (add-owner-table table acc-splits account start-date end-date
+                                   date-type used-columns reverse? link-option)))
               (loop (cdr accounts)
                     other-acc-splits)))))))
+
+    (gnc:html-table-set-col-headers! table headings)
+
+    (gnc:html-document-add-object! document table)
     document))
 
 (define* (find-first-account type #:key currency)
