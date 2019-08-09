@@ -144,50 +144,43 @@
   ;; was unparsable.  See the gnc-fq-helper for more details
   ;; about it's output.
 
-  (let ((quoter '())
-        (to-child #f)
-        (from-child #f))
+  (let ((quoter #f))
 
     (define (start-quoter)
-      (if (not (string-null? gnc:*finance-quote-helper*))
-          (set! quoter (gnc-spawn-process-async
-                        (list "perl" "-w" gnc:*finance-quote-helper*) #t))))
+      (set! quoter
+        (gnc-spawn-process-async (list "perl" "-w" gnc:*finance-quote-helper*) #t)))
 
     (define (get-quotes)
-      (if (not (null? quoter))
-          (let ((results #f))
-            (set! to-child (fdes->outport (gnc-process-get-fd quoter 0)))
-            (set! from-child (fdes->inport (gnc-process-get-fd quoter 1)))
-            (map
-             (lambda (request)
-               (catch
-                #t
-                (lambda ()
-                  (gnc:debug "handling-request: " request)
-                  ;; we need to display the first element (the method, so it
-                  ;; won't be quoted) and then write the rest
-                  (display #\( to-child)
-                  (display (car request) to-child)
-                  (display " " to-child)
-                  (for-each (lambda (x) (write x to-child)) (cdr request))
-                  (display #\) to-child)
-                  (newline to-child)
-                  (force-output to-child)
-                  (set! results (read from-child))
-                  (gnc:debug "results: " results)
-                  results)
-                (lambda (key . args)
-                  key)))
-             requests))))
+      (when quoter
+        (map
+         (lambda (request)
+           (catch #t
+             (lambda ()
+               (gnc:debug "handling-request: " request)
+               ;; we need to display the first element (the method,
+               ;; so it won't be quoted) and then write the rest
+               (with-output-to-port (fdes->outport (gnc-process-get-fd quoter 0))
+                 (lambda ()
+                   (display #\()
+                   (display (car request))
+                   (display " ")
+                   (for-each write (cdr request))
+                   (display #\))
+                   (newline)
+                   (force-output)))
+
+               (let ((results (read (fdes->inport (gnc-process-get-fd quoter 1)))))
+                 (gnc:debug "results: " results)
+                 results))
+             (lambda (key . args) key)))
+         requests)))
 
     (define (kill-quoter)
-      (if (not (null? quoter))
-          (gnc-detach-process quoter #t)))
+      (when quoter
+        (gnc-detach-process quoter #t)
+        (set! quoter #f)))
 
-    (dynamic-wind
-        start-quoter
-        get-quotes
-        kill-quoter)))
+    (dynamic-wind start-quoter get-quotes kill-quoter)))
 
 (define (gnc:book-add-quotes window book)
 
