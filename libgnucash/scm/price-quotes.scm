@@ -78,7 +78,7 @@
 (define gnc:*finance-quote-helper*
   (string-append (gnc-path-get-bindir) "/gnc-fq-helper"))
 
-(define (gnc:fq-get-quotes requests)
+(define (gnc:fq-get-quotes requests window)
   ;; requests should be a list where each item is of the form
   ;;
   ;; (<fq-method> sym sym ...)
@@ -113,12 +113,13 @@
   ;;
   ;; Also note that any given value in the alist might be
   ;; 'failed-conversion if the Finance::Quote result for that field
-  ;; was unparsable.  See the gnc-fq-helper for more details
-  ;; about it's output.
-
-  (let ((quoter #f))
+  ;; was unparsable.  See the gnc-fq-helper for more details about its
+  ;; output.
+  (let ((quoter #f)
+        (old-title #f))
 
     (define (start-quoter)
+      (set! old-title (gnc-window-get-title window))
       (set! quoter
         (gnc-spawn-process-async (list "perl" "-w" gnc:*finance-quote-helper*) #t)))
 
@@ -129,6 +130,12 @@
            (catch #t
              (lambda ()
                (gnc:debug "handling-request: " request)
+               (gnc-window-set-title
+                ;; Translators: ~a window-title, ~a F::Q source, ~s
+                ;; F::Q list-of-symbols
+                window (format #f (_ "~a retrieving ~a: ~s...")
+                               old-title (car request) (cdr request)))
+
                ;; we need to display the first element (the method,
                ;; so it won't be quoted) and then write the rest
                (with-output-to-port (fdes->outport (gnc-process-get-fd quoter 0))
@@ -152,7 +159,9 @@
         (gnc-detach-process quoter #t)
         (set! quoter #f)))
 
-    (dynamic-wind start-quoter get-quotes kill-quoter)))
+    (let ((retval (dynamic-wind start-quoter get-quotes kill-quoter)))
+      (when old-title (gnc-window-set-title window old-title))
+      retval)))
 
 (define (gnc:book-add-quotes window book)
 
@@ -413,7 +422,7 @@
   (let* ((fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (append-map fq-call-data->fq-calls fq-call-data)))
-         (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
+         (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls window)))
          (commod-tz-quote-triples (and fq-results (list? (car fq-results))
                                        (fq-results->commod-tz-quote-triples
                                         fq-call-data fq-results)))

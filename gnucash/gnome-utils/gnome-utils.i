@@ -75,6 +75,8 @@ void gnc_add_scm_extension (SCM extension);
 void gnc_set_busy_cursor (GtkWidget *w, gboolean update_now);
 void gnc_unset_busy_cursor (GtkWidget *w);
 void gnc_window_show_progress (const char *message, double percentage);
+void gnc_window_set_title (GtkWindow *window, const char *message);
+const char *   gnc_window_get_title (GtkWindow *window);
 
 gboolean gnucash_ui_is_running(void);
 

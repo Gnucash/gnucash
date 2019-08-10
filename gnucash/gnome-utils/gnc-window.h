@@ -78,6 +78,8 @@ void           gnc_window_set_progressbar_window (GncWindow *window);
 GncWindow     *gnc_window_get_progressbar_window (void);
 GtkWidget     *gnc_window_get_progressbar (GncWindow *window);
 void           gnc_window_show_progress (const char *message, double percentage);
+void           gnc_window_set_title (GtkWindow *window, const char *message);
+const char *   gnc_window_get_title (GtkWindow *window);
 
 G_END_DECLS
 

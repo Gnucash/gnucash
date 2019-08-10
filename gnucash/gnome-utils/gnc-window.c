@@ -161,6 +161,26 @@ gnc_window_get_progressbar_window (void)
     return progress_bar_hack_window;
 }
 
+void
+gnc_window_set_title (GtkWindow *window, const char *message)
+{
+  if (window == NULL)
+      return;
+
+  gtk_window_set_title (window, message);
+
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+}
+
+const char *
+gnc_window_get_title (GtkWindow *window)
+{
+  if (window == NULL)
+      return "";
+
+  return gtk_window_get_title (window);
+}
 
 void
 gnc_window_show_progress (const char *message, double percentage)
