@@ -409,149 +409,125 @@
                #f)))
        prices)))
 
+  (define (show-error msg)
+    (gnc:gui-error msg (_ msg)))
+
   ;; Add the alphavantage api key to the environment. This value is taken from
   ;; the Online Quotes preference tab
-  (let* ((alphavantage-api-key (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
-        (gnc:debug (string-concatenate (list "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)))
-        (if (not (string-null? alphavantage-api-key))
-            (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
-
-  ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
-  ;; now, they'll result in funny formatting.
+  (let ((alphavantage-api-key
+         (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
+    (gnc:debug "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)
+    (unless (string-null? alphavantage-api-key)
+      (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
 
   (let* ((fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
-                        (apply append
-                               (map fq-call-data->fq-calls fq-call-data))))
+                        (append-map fq-call-data->fq-calls fq-call-data)))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
-         (commod-tz-quote-triples
-          (and fq-results (list? (car fq-results))
-               (fq-results->commod-tz-quote-triples fq-call-data fq-results)))
+         (commod-tz-quote-triples (and fq-results (list? (car fq-results))
+                                       (fq-results->commod-tz-quote-triples
+                                        fq-call-data fq-results)))
          ;; At this point commod-tz-quote-triples will either be #f or a
          ;; list of items. Each item will either be (commodity
          ;; timezone quote-data) or (#f . problem-commodity)
-         (problem-syms
-          (and commod-tz-quote-triples
-               (filter-map (lambda (cq-pair)
-                             (if (car cq-pair)
-                                 #f
-                                 (string-append
-                                  (gnc-commodity-get-namespace (cdr cq-pair))
-                                  ":"
-                                  (gnc-commodity-get-mnemonic (cdr cq-pair)))))
-                           commod-tz-quote-triples)))
+         (problem-syms (and commod-tz-quote-triples
+                            (filter-map
+                             (lambda (cq-pair)
+                               (and (not (car cq-pair))
+                                    (string-append
+                                     (gnc-commodity-get-namespace (cdr cq-pair))
+                                     ":"
+                                     (gnc-commodity-get-mnemonic (cdr cq-pair)))))
+                             commod-tz-quote-triples)))
          ;; strip out the "bad" ones from above.
-         (ok-syms
-          (and commod-tz-quote-triples
-               (filter car commod-tz-quote-triples)))
+         (ok-syms (and commod-tz-quote-triples (filter car commod-tz-quote-triples)))
          (keep-going? #t))
 
     (cond
-     ((eq? fq-call-data #f)
+     ((not fq-call-data)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window (_ "No commodities marked for quote retrieval."))
-	  (gnc:warn "No commodities marked for quote retrieval.")))
-     ((eq? fq-results #f)
+      (show-error (N_ "No commodities marked for quote retrieval.")))
+
+     ((not fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window (_ "Unable to get quotes or diagnose the problem."))
-	  (gnc:warn "Unable to get quotes or diagnose the problem.")))
-     ((member 'missing-lib fq-results)
+      (show-error (N_ "Unable to get quotes or diagnose the problem.")))
+
+     ((memq 'missing-lib fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "You are missing some needed Perl libraries.
-Run 'gnc-fq-update' as root to install them."))
-          (gnc:warn "You are missing some needed Perl libraries.
-Run 'gnc-fq-update' as root to install them." "\n")))
-     ((member 'system-error fq-results)
+      (show-error (N_ "You are missing some needed Perl libraries.
+Run 'gnc-fq-update' as root to install them.")))
+
+     ((memq 'system-error fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "There was a system error while retrieving the price quotes."))
-          (gnc:warn "There was a system error while retrieving the price quotes." "\n")))
+      (show-error (N_ "There was a system error while retrieving the price quotes.")))
+
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "There was an unknown error while retrieving the price quotes."))
-          (gnc:warn "There was an unknown error while retrieving the price quotes." "\n")))
-     ((and (not commod-tz-quote-triples) (gnucash-ui-is-running))
-      (gnc-error-dialog window
-       (_ "Unable to get quotes or diagnose the problem."))
-       (set! keep-going? #f))
+      (show-error (N_ "There was an unknown error while retrieving the price quotes.")))
+
      ((not commod-tz-quote-triples)
-      (gnc:warn "Unable to get quotes or diagnose the problem.")
-      (set! keep-going? #f))
-     ((not (null? problem-syms))
-      (if (gnucash-ui-is-running)
-          (if (and ok-syms (not (null? ok-syms)))
-              (set!
-               keep-going?
-               (gnc-verify-dialog window #t
-                (call-with-output-string
-                 (lambda (p)
-                   (display (_ "Unable to retrieve quotes for these items:") p)
-                   (newline p)
-                   (display "  " p)
-                   (display (string-join problem-syms "\n  ") p)
-                   (newline p)
-                   (display (_ "Continue using only the good quotes?") p)))))
-              (begin
-                (gnc-error-dialog window
-                 (call-with-output-string
-                  (lambda (p)
-                    (display
-                     (_ "Unable to retrieve quotes for these items:") p)
-                    (newline p)
-                    (display "  " p)
-                    (display (string-join problem-syms "\n  ") p))))
-                (set! keep-going? #f)))
-          (gnc:warn
-           (call-with-output-string
-            (lambda (p)
-              (display "Unable to retrieve quotes for these items:" p)
-              (newline p)
-              (display "  " p)
-              (display (string-join problem-syms "\n  ") p)
-              (newline p)
-              (display "Continuing with good quotes." p)
-              (newline p)))))))
+      (set! keep-going? #f)
+      (show-error (N_ "Unable to get quotes or diagnose the problem.")))
 
-    (if
-     keep-going?
-     (let ((prices (map (lambda (triple)
-                          (commodity-tz-quote-triple->price book triple))
-                        ok-syms)))
-       (if (any string? prices)
-           (if (gnucash-ui-is-running)
-               (set!
-                keep-going?
-                (gnc-verify-dialog window #t
-                 (call-with-output-string
-                  (lambda (p)
-                    (display (_ "Unable to create prices for these items:") p)
-                    (newline p)
-                    (display "  " p)
-                    (display (string-join (filter string? prices) "\n  ") p)
-                    (newline p)
-                    (display (_ "Add remaining good quotes?") p)))))
-               (gnc:warn
-                (call-with-output-string
-                 (lambda (p)
-                   (display "Unable to create prices for these items:" p)
-                   (newline p)
-                   (display "  " p)
-                   (display (string-join (filter string? prices) "\n  ") p)
-                   (newline p)
-                   (display "Adding remaining good quotes." p)
-                   (newline p))))))
+     ((pair? problem-syms)
+      (cond
+       ((not (gnucash-ui-is-running))
+        (gnc:warn
+         (with-output-to-string
+           (lambda ()
+             (display "Unable to retrieve quotes for these items:\n")
+             (display (string-join problem-syms "\n  "))
+             (newline)
+             (display "Continuing with good quotes.")
+             (newline)))))
 
-       (if keep-going?
-           (book-add-prices! book (filter
-                                   (lambda (x) (not (string? x)))
-                                   prices)))))))
+       ((and ok-syms (not (null? ok-syms)))
+        (set! keep-going?
+          (gnc-verify-dialog
+           window #t (with-output-to-string
+                       (lambda ()
+                         (display (_ "Unable to retrieve quotes for these items:"))
+                         (display "\n  ")
+                         (display (string-join problem-syms "\n  "))
+                         (newline)
+                         (display (_ "Continue using only the good quotes?")))))))
+
+       (else
+        (set! keep-going? #f)
+        (gnc-error-dialog
+         window (with-output-to-string
+                  (lambda ()
+                    (display (_ "Unable to retrieve quotes for these items:"))
+                    (display "\n  ")
+                    (display (string-join problem-syms "\n  ")))))))))
+
+    (when keep-going?
+      (let ((prices (map (lambda (triple)
+                           (commodity-tz-quote-triple->price book triple))
+                         ok-syms)))
+        (when (any string? prices)
+          (if (gnucash-ui-is-running)
+              (set! keep-going?
+                (gnc-verify-dialog
+                 window #t
+                 (with-output-to-string
+                   (lambda ()
+                     (display (_ "Unable to create prices for these items:"))
+                     (display "\n  ")
+                     (display (string-join (filter string? prices) "\n  "))
+                     (newline)
+                     (display (_ "Add remaining good quotes?"))))))
+              (gnc:warn
+               (with-output-to-string
+                 (lambda ()
+                   (display "Unable to create prices for these items:\n  ")
+                   (display (string-join (filter string? prices) "\n  "))
+                   (newline)
+                   (display "Adding remaining good quotes.")
+                   (newline))))))
+
+        (when keep-going?
+          (book-add-prices! book (filter (negate string?) prices)))))))
 
 (define (gnc:price-quotes-install-sources)
   (let ((sources (gnc:fq-check-sources)))
