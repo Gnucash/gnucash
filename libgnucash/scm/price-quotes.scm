@@ -603,26 +603,15 @@ Run 'gnc-fq-update' as root to install them." "\n")))
                                    (lambda (x) (not (string? x)))
                                    prices)))))))
 
-; (define (get-1-quote exchange . items)
-;   (let ((cmd (apply list 'fetch exchange items))
-; 	(quoter (run-sub-process #f
-; 				 gnc:*finance-quote-helper*
-; 				 gnc:*finance-quote-helper*)))
-;     (and quoter
-; 	 (write cmd (caddr quoter))
-; 	 (newline (caddr quoter))
-; 	 (force-output (caddr quoter))
-; 	 (let ((result (read (cadr quoter))))
-; 	   (close-input-port (cadr quoter))
-; 	   (close-output-port (caddr quoter))
-; 	   result))))
-
 (define (gnc:price-quotes-install-sources)
   (let ((sources (gnc:fq-check-sources)))
-    (if (list? sources)
-	(begin
-;; Translators: ~A is the version string
+    (cond
+     ((list? sources)
+      ;; Translators: ~A is the version string
       (format #t (_ "Found Finance::Quote version ~A.") (car sources))
       (newline)
-	  (gnc:msg "Found Finance::Quote version " (car sources))
-	  (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))
+      (gnc:msg "Found Finance::Quote version " (car sources))
+      (gnc-quote-source-set-fq-installed (car sources) (cdr sources)))
+     (else
+      (display "No Finance::Quote found\n")
+      (gnc:msg "No Finance::Quote found")))))
