@@ -46,6 +46,9 @@ install(FILES ${report_system_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/g
 set (report_system_SCHEME
     report-system.scm
     eguile-gnc.scm
+)
+
+set (report_system_SCHEME_1
     eguile-utilities.scm
     eguile-html-utilities.scm
 )
@@ -95,10 +98,17 @@ gnc_add_scheme_targets(scm-report-system-1
   FALSE
 )
 
+gnc_add_scheme_targets(scm-report-system-1a
+  "${report_system_SCHEME_1}"
+  "gnucash/report"
+  scm-report-system-1
+  FALSE
+)
+
 gnc_add_scheme_targets(scm-report-system-2a
   "${report_system_SCHEME_2a}"
   "gnucash/report/report-system"
-  scm-report-system-1
+  scm-report-system-1a
   FALSE
 )
 
