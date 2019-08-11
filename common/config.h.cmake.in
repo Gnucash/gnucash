@@ -363,6 +363,9 @@
 #cmakedefine WEBKIT2_3 1
 #cmakedefine WEBKIT1 1
 
+/* Definition for AQBanking Runtime Config feature */
+#cmakedefine AQB_HAS_RUNTIME_CONFIG 1
+
 /* Definitions for all OS */
 /* From cutecash */
 //#define HAVE_LIBQOF /**/
