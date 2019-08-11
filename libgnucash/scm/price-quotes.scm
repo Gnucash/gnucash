@@ -335,26 +335,18 @@
                        (string? symbol)
                        (gnc-commodity-table-lookup commodity-table "ISO4217"
                                                    (string-upcase symbol)))))
-            (set! commodity other-curr))
-        )
-      (or-map (lambda (price-sym)
-                (let ((p (assq-ref quote-data price-sym)))
-                  (if p
-                      (begin (set! price p)
-                             (set! price-type price-sym)
-                             #t)
-                      #f)))
-              '(last nav price))
+            (set! commodity other-curr)))
 
-      (set! price-type
-            (case price-type
-              ((last) "last")
-              ((nav) "nav")
-              ((price) "unknown")
-              (else #f)))
+      (let lp ((price-syms '(last nav price))
+               (price-types '("last" "nav" "unknown")))
+        (unless (null? price-syms)
+          (cond
+           ((assq-ref quote-data (car price-syms)) =>
+            (lambda (p)
+              (set! price (gnc-scm-to-numeric p))
+              (set! price-type (car price-types))))
+           (else (lp (cdr price-syms) (cdr price-types))))))
 
-      (if price
-          (set! price (gnc-scm-to-numeric price)))
       (if gnc-time
           (set! gnc-time (timestr->time64 gnc-time time-zone))
           (set! gnc-time (gnc:get-today)))
@@ -402,11 +394,9 @@
     (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (if price
-             (begin
-               (gnc-pricedb-add-price pricedb price)
-               (gnc-price-unref price)
-               #f)))
+         (when price
+           (gnc-pricedb-add-price pricedb price)
+           (gnc-price-unref price)))
        prices)))
 
   (define (show-error msg)
