@@ -608,7 +608,7 @@
 		   (if (equal? pred #t) gnc:account-code-less-p pred)))
 	 (start-date (get-val env 'start-date))
 	 (end-date (or (get-val env 'end-date)
-		       (cons 'absolute (cons (current-time) 0))))
+		       (gnc:get-today)))
 	 (report-commodity (or (get-val env 'report-commodity)
 			       (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe
