@@ -25,7 +25,7 @@ fi
 
 # Note: Line 3: PACKAGE and probably a few other variables are hardcoded
 cat <<!
-# SOME DESCRIPTIVE TITLE.
+# SOME DESCRIPTIVE TITLE. (Glossary)
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the GnuCash package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
