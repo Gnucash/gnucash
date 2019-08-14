@@ -137,30 +137,30 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
   column = gtk_tree_view_column_new_with_attributes (description, renderer, "text", column_id, NULL); \
   gtk_tree_view_column_set_resizable (column, TRUE); \
   gtk_tree_view_append_column (GTK_TREE_VIEW (gui->tree_view), column);
-    CREATE_COLUMN (_("id"), ID);
-    CREATE_COLUMN (_("date__opened"), DATE_OPENED);
-    CREATE_COLUMN (_("owner__id"), OWNER_ID);
-    CREATE_COLUMN (_("billing__id"), BILLING_ID);
-    CREATE_COLUMN (_("notes"), NOTES);
+    CREATE_COLUMN (_("ID"), ID);
+    CREATE_COLUMN (_("Date-opened"), DATE_OPENED);
+    CREATE_COLUMN (_("Owner-ID"), OWNER_ID);
+    CREATE_COLUMN (_("Billing-ID"), BILLING_ID);
+    CREATE_COLUMN (_("Notes"), NOTES);
 
-    CREATE_COLUMN (_("date"), DATE);
-    CREATE_COLUMN (_("desc"), DESC);
-    CREATE_COLUMN (_("action"), ACTION);
-    CREATE_COLUMN (_("account"), ACCOUNT);
-    CREATE_COLUMN (_("quantity"), QUANTITY);
-    CREATE_COLUMN (_("price"), PRICE);
-    CREATE_COLUMN (_("disc__type"), DISC_TYPE);
-    CREATE_COLUMN (_("disc__how"), DISC_HOW);
-    CREATE_COLUMN (_("discount"), DISCOUNT);
-    CREATE_COLUMN (_("taxable"), TAXABLE);
-    CREATE_COLUMN (_("taxincluded"), TAXINCLUDED);
-    CREATE_COLUMN (_("tax__table"), TAX_TABLE);
+    CREATE_COLUMN (_("Date"), DATE);
+    CREATE_COLUMN (_("Description"), DESC);
+    CREATE_COLUMN (_("Action"), ACTION);
+    CREATE_COLUMN (_("Account"), ACCOUNT);
+    CREATE_COLUMN (_("Quantity"), QUANTITY);
+    CREATE_COLUMN (_("Price"), PRICE);
+    CREATE_COLUMN (_("Disc-type"), DISC_TYPE);
+    CREATE_COLUMN (_("Disc-how"), DISC_HOW);
+    CREATE_COLUMN (_("Discount"), DISCOUNT);
+    CREATE_COLUMN (_("Taxable"), TAXABLE);
+    CREATE_COLUMN (_("Taxincluded"), TAXINCLUDED);
+    CREATE_COLUMN (_("Tax-table"), TAX_TABLE);
 
-    CREATE_COLUMN (_("date__posted"), DATE_POSTED);
-    CREATE_COLUMN (_("due__date"), DUE_DATE);
-    CREATE_COLUMN (_("account__posted"), ACCOUNT_POSTED);
-    CREATE_COLUMN (_("memo__posted"), MEMO_POSTED);
-    CREATE_COLUMN (_("accu__splits"), ACCU_SPLITS);
+    CREATE_COLUMN (_("Date-posted"), DATE_POSTED);
+    CREATE_COLUMN (_("Due-date"), DUE_DATE);
+    CREATE_COLUMN (_("Account-posted"), ACCOUNT_POSTED);
+    CREATE_COLUMN (_("Memo-posted"), MEMO_POSTED);
+    CREATE_COLUMN (_("Accu-splits"), ACCU_SPLITS);
 
     gui->component_id = gnc_register_gui_component ("dialog-bi-import-gui",
                         NULL,
