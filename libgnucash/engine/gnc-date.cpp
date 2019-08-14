@@ -48,6 +48,7 @@ extern "C"
 }
 
 #include <cinttypes>
+#include <unicode/calendar.h>
 
 #include "gnc-date.h"
 #include "gnc-date-p.h"
@@ -199,6 +200,30 @@ gnc_gmtime (const time64 *secs)
         return NULL;
     }
 
+}
+
+gint
+gnc_start_of_week (void)
+{
+    /* icu's day of week is 1 based. Using 0 here to mean unset or error while setting */
+    static int cached_result = 0;
+
+    if (!cached_result)
+    {
+        UErrorCode err = U_ZERO_ERROR;
+        auto cal = icu::Calendar::createInstance (err);
+        if (!cal)
+        {
+            PERR("ICU error: %s\n", u_errorName (err));
+            return 0;
+        }
+
+        /* 1 for sunday, 2 for monday, etc. */
+        cached_result = cal->getFirstDayOfWeek (err);
+        delete cal;
+    }
+
+    return cached_result;
 }
 
 time64
