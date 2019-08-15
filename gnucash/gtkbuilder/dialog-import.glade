@@ -754,7 +754,7 @@
     <property name="text" translatable="yes">This transaction requires your intervention or it will NOT be imported.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer5">
-    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
+    <property name="text" translatable="yes">Double click on the transaction to either change the matching transaction in GnuCash or the destination account of the auto-balance split (if required).</property>
   </object>
   <object class="GtkDialog" id="matcher_help_dialog">
     <property name="can_focus">False</property>
@@ -941,7 +941,7 @@
               <object class="GtkLabel" id="label847797">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"U+R"</property>
+                <property name="label" translatable="yes">"U+C"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -952,7 +952,7 @@
               <object class="GtkLabel" id="label847798">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"R"</property>
+                <property name="label" translatable="yes">"C"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -976,7 +976,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "U+R" to update and reconcile a matching transaction.</property>
+                <property name="label" translatable="yes">Select "U+C" to update a matching transaction and mark it as cleared (c).</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -988,7 +988,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "R" to reconcile a matching transaction.</property>
+                <property name="label" translatable="yes">Select "C" to mark a matching transaction as cleared (c).</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
