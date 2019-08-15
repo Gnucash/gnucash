@@ -125,7 +125,7 @@
 ?>
 
 <!-- The HTML starts here... -->
-<html>
+<html dir='auto'>
 <head>
 <meta http-equiv="content-type" content="text-html; charset=utf-8">
 <title><?scm:d coyname ?> <?scm:d opt-report-title ?> <?scm:d (qof-print-date opt-date) ?></title>

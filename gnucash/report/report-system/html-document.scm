@@ -150,7 +150,7 @@
             ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
             ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
 
-            (push "<html>\n")
+            (push "<html dir='auto'>\n")
             (push "<head>\n")
             (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
             (if style-text
