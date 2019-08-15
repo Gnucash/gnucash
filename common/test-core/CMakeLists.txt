@@ -69,7 +69,8 @@ gnc_add_scheme_targets(scm-test-core
 add_dependencies(check scm-test-core)
 
 if(NOT GTEST_SHARED_LIB)
-  set (lib_gtest_SOURCES ${GTEST_SRC_DIR}/src/gtest-all.cc)
+  # in contrast to GoogleTest build system libraries libgtest.a and libgtest_main.a
+  # are combined to one library libtest.a here
   add_library(gtest STATIC  ${lib_gtest_SOURCES})
   if(APPLE)
     target_compile_options(gtest PRIVATE -Wno-missing-prototypes)
