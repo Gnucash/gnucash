@@ -194,3 +194,53 @@
      ((null? (cdr lst)) (reverse (cons (car lst) result)))
      ((= (car lst) (cadr lst)) (lp (cdr lst) result))
      (else (lp (cdr lst) (cons (car lst) result))))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; compatibility hack for fixing guile-2.0 string handling. this code
+;; may be removed when minimum guile is 2.2 or later. see
+;; https://lists.gnu.org/archive/html/guile-user/2019-04/msg00012.html
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (string=? (effective-version) "2.0")
+  ;; When using Guile 2.0.x, use monkey patching to change the
+  ;; behavior of string ports to use UTF-8 as the internal encoding.
+  ;; Note that this is the default behavior in Guile 2.2 or later.
+  (let* ((mod                     (resolve-module '(guile)))
+         (orig-open-input-string  (module-ref mod 'open-input-string))
+         (orig-open-output-string (module-ref mod 'open-output-string))
+         (orig-object->string     (module-ref mod 'object->string))
+         (orig-simple-format      (module-ref mod 'simple-format)))
+
+    (define (open-input-string str)
+      (with-fluids ((%default-port-encoding "UTF-8"))
+        (orig-open-input-string str)))
+
+    (define (open-output-string)
+      (with-fluids ((%default-port-encoding "UTF-8"))
+        (orig-open-output-string)))
+
+    (define (object->string . args)
+      (with-fluids ((%default-port-encoding "UTF-8"))
+        (apply orig-object->string args)))
+
+    (define (simple-format . args)
+      (with-fluids ((%default-port-encoding "UTF-8"))
+        (apply orig-simple-format args)))
+
+    (define (call-with-input-string str proc)
+      (proc (open-input-string str)))
+
+    (define (call-with-output-string proc)
+      (let ((port (open-output-string)))
+        (proc port)
+        (get-output-string port)))
+
+    (module-set! mod 'open-input-string       open-input-string)
+    (module-set! mod 'open-output-string      open-output-string)
+    (module-set! mod 'object->string          object->string)
+    (module-set! mod 'simple-format           simple-format)
+    (module-set! mod 'call-with-input-string  call-with-input-string)
+    (module-set! mod 'call-with-output-string call-with-output-string)
+
+    (when (eqv? (module-ref mod 'format) orig-simple-format)
+      (module-set! mod 'format simple-format))))
