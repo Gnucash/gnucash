@@ -740,7 +740,7 @@
     </action-widgets>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">Multiple transaction rows may be selected and a transfer account assigned to all selected rows. Use Ctrl Left Click or Shift-Click to select multiple rows and then Right Click to select a transfer account. Only rows with "A" checked can be added to a selection. </property>
+    <property name="text" translatable="yes">Multiple transaction rows may be selected and a transfer account assigned to all selected rows. Use Ctrl Left Click or Shift-Click to select multiple rows and then Right Click to select a transfer account. Only rows with "A" checked can be added to a selection.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer2">
     <property name="text" translatable="yes">This transaction probably requires your intervention or it will be imported unbalanced.</property>
@@ -752,7 +752,7 @@
     <property name="text" translatable="yes">This transaction requires your intervention or it will NOT be imported.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer5">
-    <property name="text" translatable="yes">Double click on the transaction to eitherchange the matching transaction in GnuCash, or the destination account of the auto-balance split (if required).</property>
+    <property name="text" translatable="yes">Double click on the transaction to either change the matching transaction in GnuCash or the destination account of the auto-balance split (if required).</property>
   </object>
   <object class="GtkDialog" id="matcher_help_dialog">
     <property name="can_focus">False</property>
