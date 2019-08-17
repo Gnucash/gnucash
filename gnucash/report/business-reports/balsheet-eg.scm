@@ -565,6 +565,12 @@
           (negstyle (nbsp mny-string)))
         (nbsp mny-string)))
 
+    (define (monetary-rounded mon)
+      (let ((c (gnc:gnc-monetary-commodity mon))
+            (a (gnc:gnc-monetary-amount mon)))
+        (gnc:make-gnc-monetary
+         c (gnc-numeric-convert a (gnc-commodity-get-fraction c) GNC-RND-ROUND))))
+
     (define (format-monetary mny)
       ;; Format the given gnc:monetary value according to opt-neg-format
       ;; If mny's currency isn't the same as that of the report,
@@ -578,10 +584,10 @@
         (if (not (gnc-commodity-equiv comm opt-report-commodity))
           (begin
             (if opt-show-foreign?
-              (set! answer (string-append (foreignstyle (neg-format (gnc:monetary->string mny) neg?)) "&nbsp;")))
+              (set! answer (string-append (foreignstyle (neg-format (gnc:monetary->string (monetary-rounded mny)) neg?)) "&nbsp;")))
             (set! mny (exchange-fn mny opt-report-commodity))))
         ; main currency - converted if necessary
-        (set! answer (string-append answer (neg-format (gnc:monetary->string mny) neg?)))
+        (set! answer (string-append answer (neg-format (gnc:monetary->string (monetary-rounded mny)) neg?)))
         answer))
 
     (define (format-comm-coll cc)
@@ -600,7 +606,7 @@
     (define (fmtmoney2 mny)
       ;; format a monetary amount in the given currency/commodity
       ;; !! this takes a gnc-monetary
-      (nbsp (gnc:monetary->string mny)))
+      (nbsp (gnc:monetary->string (monetary-rounded mny))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
