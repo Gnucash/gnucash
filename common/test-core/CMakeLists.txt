@@ -82,6 +82,13 @@ if (GTEST_SRC_DIR)
     target_compile_options(gtest PRIVATE -Wno-missing-declarations)
   endif()
   target_include_directories(gtest PUBLIC ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR})
+else()
+  add_library(gtest UNKNOWN IMPORTED GLOBAL)
+  set_target_properties(gtest PROPERTIES
+    IMPORTED_LOCATION ${GTEST_SHARED_LIB}
+    INTERFACE_INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIR}
+    INTERFACE_LINK_LIBRARIES ${GTEST_MAIN_LIB}
+  )
 endif()
 if (GMOCK_SRC_DIR)
   set (lib_gmock_SOURCES ${GMOCK_SRC})

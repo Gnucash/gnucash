@@ -139,13 +139,9 @@ function(gnc_gtest_configure)
       "${GTEST_SRC_DIR}/src/gtest_main.cc"
       "${GTEST_SRC_DIR}/src/gtest-all.cc"
       PARENT_SCOPE)
-    set(GTEST_LIB "${CMAKE_BINARY_DIR}/common/test-core/libgtest.a" PARENT_SCOPE)
   else()
     find_library(GTEST_SHARED_LIB gtest)
     find_library(GTEST_MAIN_LIB gtest_main)
-    if (GTEST_MAIN_LIB AND GTEST_SHARED_LIB)
-      set(GTEST_LIB "${GTEST_MAIN_LIB};${GTEST_SHARED_LIB}" PARENT_SCOPE)
-    endif()
   endif()
   if ((GTEST_SHARED_LIB OR GTEST_SRC_DIR) AND GTEST_INCLUDE_DIR)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
