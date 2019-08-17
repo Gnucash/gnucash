@@ -72,7 +72,7 @@ add_dependencies(check scm-test-core)
 gnc_add_scheme_deprecated_module ("gnucash unittest-support" "tests unittest-support" "scm-test-core" "")
 
 
-if(NOT GTEST_SHARED_LIB)
+if (GTEST_SRC_DIR)
   # in contrast to GoogleTest build system libraries libgtest.a and libgtest_main.a
   # are combined to one library libtest.a here
   add_library(gtest STATIC  ${lib_gtest_SOURCES})
@@ -83,7 +83,7 @@ if(NOT GTEST_SHARED_LIB)
   endif()
   target_include_directories(gtest PUBLIC ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR})
 endif()
-if(NOT GMOCK_SHARED_LIB)
+if (GMOCK_SRC_DIR)
   set (lib_gmock_SOURCES ${GMOCK_SRC})
   add_library(gmock STATIC  ${lib_gmock_SOURCES})
   if (APPLE)
