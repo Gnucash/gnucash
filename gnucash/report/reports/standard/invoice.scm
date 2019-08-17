@@ -928,6 +928,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
  'in-menu? #t)
 
 (define (gnc:easy-invoice-report-create-internal invoice)
+  (issue-deprecation-warning
+   "gnc:easy-invoice-report-create-internal is unused")
   (let* ((options (gnc:make-report-options easy-invoice-guid))
          (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
     (gnc:option-set-value invoice-op invoice)
@@ -935,6 +937,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (export gnc:easy-invoice-report-create-internal)
 
 (define (gnc:fancy-invoice-report-create-internal invoice)
+  (issue-deprecation-warning
+   "gnc:fancy-invoice-report-create-internal is unused")
   (let* ((options (gnc:make-report-options fancy-invoice-guid))
          (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
     (gnc:option-set-value invoice-op invoice)

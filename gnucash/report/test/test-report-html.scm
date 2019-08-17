@@ -4,10 +4,32 @@
 
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash report))
+(use-modules (tests test-report-extras))
+(use-modules (gnucash report stylesheets plain))
 (use-modules (srfi srfi-64))
+(use-modules (ice-9 pretty-print))
+(use-modules (sxml simple))
 (use-modules (tests srfi64-extras))
+(use-modules (system vm coverage))
+
+(define (coverage-test)
+  (let* ((currfile (dirname (current-filename)))
+         (path (string-take currfile (string-rindex currfile #\/))))
+    (add-to-load-path path))
+  (call-with-values
+      (lambda()
+        (with-code-coverage run-test-proper))
+    (lambda (data result)
+      (let ((port (open-output-file "/tmp/lcov.info")))
+        (coverage-data->lcov data port)
+        (close port)))))
 
 (define (run-test)
+  (if #f
+      (coverage-test)
+      (run-test-proper)))
+
+(define (run-test-proper)
     (test-runner-factory gnc:test-runner)
     (test-begin "Testing/Temporary/test-report-html")
       ;; if (test-runner-factory gnc:test-runner) is commented out, this
@@ -17,6 +39,8 @@
     (test-html-objects)
     (test-html-cells)
     (test-html-table)
+    (test-gnc:html-table-add-labeled-amount-line!)
+    (test-gnc:make-html-acct-table/env/accts)
     (test-end "Testing/Temporary/test-report-html")
 )
 
@@ -776,3 +800,85 @@ HTML Document Title</title></head><body></body>\n\
 
   (test-end "HTML Tables - without style sheets")
 )
+
+(define (test-gnc:html-table-add-labeled-amount-line!)
+
+  (define (table->html table)
+    (let ((doc (gnc:make-html-document)))
+      (string-concatenate
+       (gnc:html-document-tree-collapse
+        (gnc:html-table-render table doc)))))
+
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-add-labeled-amount-line!
+     table #f #f #f "label" #f #f #f #f #f #f #f)
+    (test-equal "gnc:html-table-add-labeled-amount-line!"
+      "<table><tbody><tr><td rowspan=\"1\" colspan=\"1\"><string> <string> label</td>\n<td rowspan=\"1\" colspan=\"1\"><string>  </td>\n</tr>\n</tbody>\n</table>\n"
+      (table->html table)))
+
+  (let* ((table (gnc:make-html-table)))
+    (gnc:html-table-add-labeled-amount-line!
+     table 5 "tdd" #t "label1" 1 2 "label-markup"
+     "amount" 3 2 "amount-markup")
+    (test-equal "gnc:html-table-add-labeled-amount-line! all options"
+      "<table><tbody><tdd><label-markup rowspan=\"1\" colspan=\"1\"><string> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<string> label1</label-markup>\n<td rowspan=\"1\" colspan=\"1\"><hr /></td>\n<amount-markup rowspan=\"1\" colspan=\"1\"><string> amount</amount-markup>\n<td><string>  </td>\n</tdd>\n</tbody>\n</table>\n"
+      (table->html table))))
+
+(define (test-gnc:make-html-acct-table/env/accts)
+
+  ;; create html-document, add table, render, convert to sxml
+  (define (table->sxml table prefix)
+    (let* ((doc (gnc:make-html-document)))
+      (gnc:html-document-set-style-sheet! doc (gnc:html-style-sheet-find "Default"))
+      (gnc:html-document-add-object! doc table)
+      (let ((render (gnc:html-document-render doc)))
+        (with-output-to-file (format #f "/tmp/html-acct-table-~a.html" prefix)
+          (lambda ()
+            (display render)))
+        (xml->sxml render
+                   #:trim-whitespace? #t
+                   #:entities '((nbsp . "\xa0")
+                                (ndash . "­"))))))
+
+  (let* ((accounts-alist (create-test-data))
+         (accounts (map cdr accounts-alist)))
+
+    (let* ((table (gnc:make-html-table))
+           (get-balance (lambda (acc start-date end-date)
+                          (let ((coll (gnc:make-commodity-collector)))
+                            (coll 'add (xaccAccountGetCommodity acc) 10)
+                            coll)))
+           (acct-table (gnc:make-html-acct-table/env/accts
+                        `((get-balance-fn ,get-balance)
+                          (display-tree-depth 9))
+                        accounts)))
+      (gnc:html-table-add-account-balances table acct-table '())
+      (let ((sxml (table->sxml table "basic - combo 1")))
+        (test-equal "gnc:make-html-acct-table/env/accts combo 1"
+          '("Root" "Asset" "Bank" "GBP Bank" "Wallet" "Liabilities"
+            "Income" "Income-GBP" "Expenses" "Equity")
+          (sxml->table-row-col sxml 1 #f 1))))
+
+    (let* ((table (gnc:make-html-table))
+           (acct-table (gnc:make-html-acct-table/env/accts
+                        `((balance-mode pre-closing)
+                          (display-tree-depth 9))
+                        accounts)))
+      (gnc:html-table-add-account-balances table acct-table '())
+      (let ((sxml (table->sxml table "basic - combo 2")))
+        (test-equal "gnc:make-html-acct-table/env/accts combo 2"
+          '("Root" "Asset" "Bank" "GBP Bank" "Wallet" "Liabilities"
+            "Income" "Income-GBP" "Expenses" "Equity")
+          (sxml->table-row-col sxml 1 #f 1))))
+
+    (let* ((table (gnc:make-html-table))
+           (acct-table (gnc:make-html-acct-table/env/accts
+                        '((balance-mode pre-adjusting)
+                          (display-tree-depth 9))
+                        accounts)))
+      (gnc:html-table-add-account-balances table acct-table '())
+      (let ((sxml (table->sxml table "basic - combo 3")))
+        (test-equal "gnc:make-html-acct-table/env/accts combo 3"
+          '("Root" "Asset" "Bank" "GBP Bank" "Wallet" "Liabilities"
+            "Income" "Income-GBP" "Expenses" "Equity")
+          (sxml->table-row-col sxml 1 #f 1))))))

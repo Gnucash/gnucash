@@ -149,7 +149,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-parse:parse-bang-field read-value)
-  (let ((bang-field (string-downcase! (string-trim read-value))))
+  (let ((bang-field (string-downcase! (string-trim-right read-value))))
     ;; The QIF files output by the WWW site of Credit Lyonnais
     ;; begin by:   !type bank
     ;; instead of: !Type:bank
@@ -235,8 +235,8 @@
   (define (date? d m y ys)
     (and (number? d) (<= 1 d 31)
          (number? m) (<= 1 m 12)
-         (= 4 (string-length ys))
-         (number? y) (> y 1930)))
+         (number? y) (or (not (= 4 (string-length ys)))
+                         (> y 1930))))
   (let* ((date-parts (list (match:substring match 1)
                            (match:substring match 2)
                            (match:substring match 3)))

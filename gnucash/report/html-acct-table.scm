@@ -495,6 +495,8 @@
 ;; user.  This class simply maps its contents to the html-table.
 ;; 
 
+(use-modules (srfi srfi-9))
+
 ;; this is to work around a bug in the HTML export sytmem
 ;; which causes COLSPAN= attributes not to be exported (!!)
 (define gnc:colspans-are-working-right
@@ -506,23 +508,14 @@
 ;;  utility class for generating account tables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-acct-table>
-  (make-record-type "<html-acct-table>"
-		    '(matrix ;; an html-table
-		      env    ;; an alist
-		      )))
-
-(define gnc:html-acct-table? 
-  (record-predicate <html-acct-table>))
-
-(define gnc:_make-html-acct-table_
-  (record-constructor <html-acct-table>))
+(define-record-type <html-acct-table>
+  (gnc:_make-html-acct-table_ matrix env)
+  gnc:html-acct-table?
+  (matrix gnc:_html-acct-table-matrix_ gnc:_html-acct-table-set-matrix!_)
+  (env gnc:_html-acct-table-env_ gnc:_html-acct-table-set-env!_))
 
 (define (gnc:make-html-acct-table)
-  (gnc:_make-html-acct-table_
-   (gnc:make-html-table) ;; matrix
-   #f                    ;; env
-   ))
+  (gnc:_make-html-acct-table_ (gnc:make-html-table) #f))
 
 (define (gnc:make-html-acct-table/env env)
   (let ((acct-table (gnc:make-html-acct-table)))
@@ -537,18 +530,6 @@
     (gnc:_html-acct-table-set-env!_ acct-table env)
     (gnc:html-acct-table-add-accounts! acct-table accts)
     acct-table))
-
-(define gnc:_html-acct-table-matrix_
-  (record-accessor <html-acct-table> 'matrix))
-
-(define gnc:_html-acct-table-set-matrix!_
-  (record-modifier <html-acct-table> 'matrix))
-
-(define gnc:_html-acct-table-env_
-  (record-accessor <html-acct-table> 'env))
-
-(define gnc:_html-acct-table-set-env!_
-  (record-modifier <html-acct-table> 'env))
 
 ;; some useful predicates to export
 (define (gnc:account-code-less-p a b)
@@ -608,7 +589,7 @@
 		   (if (equal? pred #t) gnc:account-code-less-p pred)))
 	 (start-date (get-val env 'start-date))
 	 (end-date (or (get-val env 'end-date)
-		       (cons 'absolute (cons (current-time) 0))))
+		       (gnc:get-today)))
 	 (report-commodity (or (get-val env 'report-commodity)
 			       (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe

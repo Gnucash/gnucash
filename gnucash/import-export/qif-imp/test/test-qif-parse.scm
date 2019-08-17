@@ -157,6 +157,18 @@
      "1979/03/03"
      '(d-m-y y-m-d m-d-y y-d-m)))
 
+  (test-equal "qif-parse:check-date-format 03/03/79"
+    '(d-m-y m-d-y)
+    (qif-parse:check-date-format
+     "03/03/79"
+     '(d-m-y y-m-d m-d-y y-d-m)))
+
+  (test-equal "qif-parse:check-date-format 03121984"
+    '(d-m-y m-d-y)
+    (qif-parse:check-date-format
+     "03121984"
+     '(d-m-y y-m-d m-d-y y-d-m)))
+
   (test-equal "qif-parse:check-date-format 19790303"
     '(y-m-d y-d-m)
     (qif-parse:check-date-format
@@ -272,7 +284,6 @@
     (qif-parse:parse-numbers/format '("1" #f "300")
                                     'integer)))
 
-;; unfinished
 (define (test-qif-split:parse-category)
   
   (test-equal "qif-split:parse-category [Transfer]/Class"
@@ -294,6 +305,18 @@
   (test-equal "qif-split:parse-category Category/|miscx-category"
     '("Category" #f "" "miscx-category" #f "")
     (qif-split:parse-category #f "Category/|miscx-category"))
+
+  (test-equal "qif-split:parse-category Category/Class|miscx-category"
+    '("Category" #f "Class" "miscx-category" #f "")
+    (qif-split:parse-category #f "Category/Class|miscx-category"))
+
+  (test-equal "qif-split:parse-category [Transfer]/Class|miscx-category"
+    '("Transfer" #t "Class" "miscx-category" #f "")
+    (qif-split:parse-category #f "[Transfer]/Class|miscx-category"))
+
+  (test-equal "qif-split:parse-category [Transfer]/Class|miscx-category/miscx-class"
+    '("Transfer" #t "Class" "miscx-category" #f "miscx-class")
+    (qif-split:parse-category #f "[Transfer]/Class|miscx-category/miscx-class"))
 
   (test-equal "qif-split:parse-category Category/|[miscx-account]"
     '("Category" #f "" "miscx-account" #t "")

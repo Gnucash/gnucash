@@ -1,5 +1,4 @@
 # Test
-sudo: required
 language: c++
 compiler: gcc
 env:

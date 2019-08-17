@@ -84,11 +84,9 @@
   (gnc-print-time64 (gnc-mktime datevec) "%B %Y"))
 
 (define (gnc:date-get-week-year-string datevec)
-  (let* ((beginweekt64 (* (gnc:time64-get-week
-                            (gnc-mktime datevec))
-                          604800))
-         (begin-string (qof-print-date (+ beginweekt64 345600)))
-         (end-string (qof-print-date (+ beginweekt64 864000))))
+  (let* ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime datevec)) 7 86400))
+         (begin-string (qof-print-date (+ beginweekt64 (* 3 86400))))
+         (end-string (qof-print-date (+ beginweekt64 (* 9 86400)))))
     (format #f (_ "~a to ~a") begin-string end-string)))
 
 ;; is leap year?
@@ -156,18 +154,21 @@
 	   (gnc:date-get-month lt)
 	   (gnc:date-get-year lt))))))
 
-;; convert a date in seconds since 1970 into # of two-week periods since
-;; Jan 4, 1970 ignoring leap-seconds (just halfing date-to-week-fraction)
 (define (gnc:date-to-twoweek-fraction caltime)
   (/ (gnc:date-to-week-fraction caltime) 2))
 
-;; convert a date in seconds since 1970 into # of weeks since Jan 4, 1970
-;; ignoring leap-seconds
+;; which dow does the week start? 1=Sunday, 2=Monday etc
+(define weekstart
+  (let ((dow (gnc-start-of-week)))
+    (cond
+     ((zero? dow) (gnc:warn "cannot determine start of week. using Sunday") 1)
+     (else dow))))
+
 (define (gnc:date-to-week-fraction caltime)
-  (/ (- (/ (/ caltime 3600.0) 24) 3) 7))
+  (/ (- (/ caltime 86400) 1 weekstart) 7))
 
 (define (gnc:date-to-week caltime)
-  (floor (/ (- (/ caltime 86400) 3) 7)))
+  (floor (gnc:date-to-week-fraction caltime)))
 
 ;; convert a date in seconds since 1970 into # of days since Feb 28, 1970
 ;; ignoring leap-seconds

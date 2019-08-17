@@ -688,7 +688,7 @@ msgstr "Aktiensaldo"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "Anteile "
+msgstr "Anteile"
 
 #. "(of a price) A place wfrom which sth comes or is obtained"
 msgid "source"

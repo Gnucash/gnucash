@@ -24609,7 +24609,7 @@
   <act:parent type="new">b37b684d8e8a4472abfdffdf41e2901a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Zakelijke verhuiskosten: kosten overbrenging boedel</act:name>
+  <act:name>Zakelijke verhuiskosten - kosten overbrenging boedel</act:name>
   <act:id type="new">45326480387a43739a8671874670cd4b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>

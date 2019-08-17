@@ -28,39 +28,11 @@
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-(use-modules (srfi srfi-1))
+(use-modules (srfi srfi-11)
+             (srfi srfi-1))
 
 (gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 (gnc:module-load "gnucash/app-utils" 0)
-
-(define (item-list->hash! lst hash
-			  getkey getval
-			  hashref hashset
-			  list-duplicates?)
-  ;; Takes a list of the form (item item item item) and returns a hash
-  ;; formed by traversing the list, and getting the key and val from
-  ;; each item using the supplied get-key and get-val functions, and
-  ;; building a hash table from the result using the given hashref and
-  ;; hashset functions.  list-duplicates? determines whether or not in
-  ;; the resulting hash, the value for a given key is a list of all
-  ;; the values associated with that key in the input or just the
-  ;; first one encountered.
-
-  (define (handle-item item)
-    (let* ((key (getkey item))
-	   (val (getval item))
-	   (existing-val (hashref hash key)))
-
-      (if (not list-duplicates?)
-	  ;; ignore if not first value.
-	  (if (not existing-val) (hashset hash key val))
-	  ;; else result is list.
-	  (if existing-val
-	      (hashset hash key (cons val existing-val))
-	      (hashset hash key (list val))))))
-
-  (for-each handle-item lst)
-  hash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -68,35 +40,28 @@
   (string-append (gnc-path-get-bindir) "/gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
-  (let ((program '())
-        (from-child #f))
+  (let ((program #f))
 
     (define (start-program)
-      (if (not (string-null? gnc:*finance-quote-check*))
-          (set! program (gnc-spawn-process-async
-                         (list "perl" "-w" gnc:*finance-quote-check*) #t))))
+      (set! program
+        (gnc-spawn-process-async
+         (list "perl" "-w" gnc:*finance-quote-check*) #t)))
 
     (define (get-sources)
-      (if (not (null? program))
-          (let ((results #f))
-            (set! from-child (fdes->inport (gnc-process-get-fd program 1)))
-            (catch
-             #t
-             (lambda ()
-               (set! results (read from-child))
-               (gnc:debug "results: " results)
-               results)
-             (lambda (key . args)
-               key)))))
+      (when program
+        (catch #t
+          (lambda ()
+            (let ((results (read (fdes->inport (gnc-process-get-fd program 1)))))
+              (gnc:debug "gnc:fq-check-sources results: " results)
+              results))
+          (lambda (key . args) key))))
 
     (define (kill-program)
-      (if (not (null? program))
-          (gnc-detach-process program #t)))
+      (when program
+        (gnc-detach-process program #t)
+        (set! program #f)))
 
-    (dynamic-wind
-        start-program
-        get-sources
-        kill-program)))
+    (dynamic-wind start-program get-sources kill-program)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -151,50 +116,43 @@
   ;; was unparsable.  See the gnc-fq-helper for more details
   ;; about it's output.
 
-  (let ((quoter '())
-        (to-child #f)
-        (from-child #f))
+  (let ((quoter #f))
 
     (define (start-quoter)
-      (if (not (string-null? gnc:*finance-quote-helper*))
-          (set! quoter (gnc-spawn-process-async
-                        (list "perl" "-w" gnc:*finance-quote-helper*) #t))))
+      (set! quoter
+        (gnc-spawn-process-async (list "perl" "-w" gnc:*finance-quote-helper*) #t)))
 
     (define (get-quotes)
-      (if (not (null? quoter))
-          (let ((results #f))
-            (set! to-child (fdes->outport (gnc-process-get-fd quoter 0)))
-            (set! from-child (fdes->inport (gnc-process-get-fd quoter 1)))
-            (map
-             (lambda (request)
-               (catch
-                #t
-                (lambda ()
-                  (gnc:debug "handling-request: " request)
-                  ;; we need to display the first element (the method, so it
-                  ;; won't be quoted) and then write the rest
-                  (display #\( to-child)
-                  (display (car request) to-child)
-                  (display " " to-child)
-                  (for-each (lambda (x) (write x to-child)) (cdr request))
-                  (display #\) to-child)
-                  (newline to-child)
-                  (force-output to-child)
-                  (set! results (read from-child))
-                  (gnc:debug "results: " results)
-                  results)
-                (lambda (key . args)
-                  key)))
-             requests))))
+      (when quoter
+        (map
+         (lambda (request)
+           (catch #t
+             (lambda ()
+               (gnc:debug "handling-request: " request)
+               ;; we need to display the first element (the method,
+               ;; so it won't be quoted) and then write the rest
+               (with-output-to-port (fdes->outport (gnc-process-get-fd quoter 0))
+                 (lambda ()
+                   (display #\()
+                   (display (car request))
+                   (display " ")
+                   (for-each write (cdr request))
+                   (display #\))
+                   (newline)
+                   (force-output)))
+
+               (let ((results (read (fdes->inport (gnc-process-get-fd quoter 1)))))
+                 (gnc:debug "results: " results)
+                 results))
+             (lambda (key . args) key)))
+         requests)))
 
     (define (kill-quoter)
-      (if (not (null? quoter))
-          (gnc-detach-process quoter #t)))
+      (when quoter
+        (gnc-detach-process quoter #t)
+        (set! quoter #f)))
 
-    (dynamic-wind
-        start-quoter
-        get-quotes
-        kill-quoter)))
+    (dynamic-wind start-quoter get-quotes kill-quoter)))
 
 (define (gnc:book-add-quotes window book)
 
@@ -211,47 +169,39 @@
     ;; form:
     ;;
     ;; (("alphavantage" (commodity-1 currency-1 tz-1)
-    ;;           (commodity-2 currency-2 tz-2) ...)
+    ;;                  (commodity-2 currency-2 tz-2) ...)
     ;;  ("fidelity_direct" (commodity-3 currency-3 tz-3)
     ;;                     (commodity-4 currency-4 tz-4) ...)
-    ;;  ...)
+    ;;  ("currency" curr-1 curr-2 tz)
+    ;;  ("currency" curr-3 curr-4 tz) ...)
 
-    (let* ((ct (gnc-commodity-table-get-table book))
-	   (big-list
-	    (gnc-commodity-table-get-quotable-commodities
-	     ct))
-	   (commodity-list #f)
-	   (currency-list (filter
-			   (lambda (a)
-                             (and
-                              (not (gnc-commodity-equiv (cadr a) (caddr a)))
-                              (not (string=? "XXX" (gnc-commodity-get-mnemonic (cadr a))))
-                              ))
-			   (call-with-values
-                               (lambda () (partition!
-                                           (lambda (cmd)
-                                             (not (string=? (car cmd) "currency")))
-                                           big-list))
-                             (lambda (a b) (set! commodity-list a) b))))
-	   (quote-hash (make-hash-table 31)))
+    (let-values (((currency-list commodity-list)
+                  (partition (lambda (a) (string=? (car a) "currency"))
+                             (gnc-commodity-table-get-quotable-commodities
+                              (gnc-commodity-table-get-table book)))))
 
-      (if (and (null? commodity-list) (null? currency-list))
-	  #f
-	  (begin
+      (let ((commodity-hash (make-hash-table))
+            (currency-list-filtered
+             (filter
+              (lambda (a)
+                (and (not (gnc-commodity-equiv (cadr a) (caddr a)))
+                     (not (string=? (gnc-commodity-get-mnemonic (cadr a)) "XXX"))))
+              currency-list)))
 
-	    ;; Now collect symbols going to the same backend.
-	    (item-list->hash! commodity-list quote-hash car cdr hash-ref hash-set! #t)
+        ;; Now collect symbols going to the same backend.
+        (for-each
+         (lambda (item)
+           (let ((key (car item))
+                 (val (cdr item)))
+             (hash-set! commodity-hash key
+                        (cons val (hash-ref commodity-hash key '())))))
+         commodity-list)
 
-	    ;; Now translate to just what gnc-fq-helper expects.
-	    (append
-	     (hash-fold
-	      (lambda (key value prior-result)
-		(cons (cons key value)
-		      prior-result))
-	      '()
-	      quote-hash)
-	     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
-		  currency-list))))))
+        ;; Now translate to just what gnc-fq-helper expects.
+        (append
+         (hash-map->list cons commodity-hash)
+         (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
+              currency-list-filtered)))))
 
   (define (fq-call-data->fq-calls fq-call-data)
     ;; take an output element from book->commodity->fq-call-data and
@@ -260,7 +210,7 @@
     ;; the latter:
     ;;
     ;; ("alphavantage" (commodity-1 currency-1 tz-1)
-    ;;          (commodity-2 currency-2 tz-2) ...)
+    ;;                 (commodity-2 currency-2 tz-2) ...)
     ;;
     ;; ("alphavantage" "IBM" "AMD" ...)
     ;;
@@ -385,26 +335,18 @@
                        (string? symbol)
                        (gnc-commodity-table-lookup commodity-table "ISO4217"
                                                    (string-upcase symbol)))))
-            (set! commodity other-curr))
-        )
-      (or-map (lambda (price-sym)
-                (let ((p (assq-ref quote-data price-sym)))
-                  (if p
-                      (begin (set! price p)
-                             (set! price-type price-sym)
-                             #t)
-                      #f)))
-              '(last nav price))
+            (set! commodity other-curr)))
 
-      (set! price-type
-            (case price-type
-              ((last) "last")
-              ((nav) "nav")
-              ((price) "unknown")
-              (else #f)))
+      (let lp ((price-syms '(last nav price))
+               (price-types '("last" "nav" "unknown")))
+        (unless (null? price-syms)
+          (cond
+           ((assq-ref quote-data (car price-syms)) =>
+            (lambda (p)
+              (set! price (gnc-scm-to-numeric p))
+              (set! price-type (car price-types))))
+           (else (lp (cdr price-syms) (cdr price-types))))))
 
-      (if price
-          (set! price (gnc-scm-to-numeric price)))
       (if gnc-time
           (set! gnc-time (timestr->time64 gnc-time time-zone))
           (set! gnc-time (gnc:get-today)))
@@ -452,177 +394,137 @@
     (let ((pricedb (gnc-pricedb-get-db book)))
       (for-each
        (lambda (price)
-         (if price
-             (begin
-               (gnc-pricedb-add-price pricedb price)
-               (gnc-price-unref price)
-               #f)))
+         (when price
+           (gnc-pricedb-add-price pricedb price)
+           (gnc-price-unref price)))
        prices)))
+
+  (define (show-error msg)
+    (gnc:gui-error msg (_ msg)))
 
   ;; Add the alphavantage api key to the environment. This value is taken from
   ;; the Online Quotes preference tab
-  (let* ((alphavantage-api-key (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
-        (gnc:debug (string-concatenate (list "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)))
-        (if (not (string-null? alphavantage-api-key))
-            (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
-
-  ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
-  ;; now, they'll result in funny formatting.
+  (let ((alphavantage-api-key
+         (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
+    (gnc:debug "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)
+    (unless (string-null? alphavantage-api-key)
+      (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
 
   (let* ((fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
-                        (apply append
-                               (map fq-call-data->fq-calls fq-call-data))))
+                        (append-map fq-call-data->fq-calls fq-call-data)))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
-         (commod-tz-quote-triples
-          (and fq-results (list? (car fq-results))
-               (fq-results->commod-tz-quote-triples fq-call-data fq-results)))
+         (commod-tz-quote-triples (and fq-results (list? (car fq-results))
+                                       (fq-results->commod-tz-quote-triples
+                                        fq-call-data fq-results)))
          ;; At this point commod-tz-quote-triples will either be #f or a
          ;; list of items. Each item will either be (commodity
          ;; timezone quote-data) or (#f . problem-commodity)
-         (problem-syms
-          (and commod-tz-quote-triples
-               (filter-map (lambda (cq-pair)
-                             (if (car cq-pair)
-                                 #f
-                                 (string-append
-                                  (gnc-commodity-get-namespace (cdr cq-pair))
-                                  ":"
-                                  (gnc-commodity-get-mnemonic (cdr cq-pair)))))
-                           commod-tz-quote-triples)))
+         (problem-syms (and commod-tz-quote-triples
+                            (filter-map
+                             (lambda (cq-pair)
+                               (and (not (car cq-pair))
+                                    (string-append
+                                     (gnc-commodity-get-namespace (cdr cq-pair))
+                                     ":"
+                                     (gnc-commodity-get-mnemonic (cdr cq-pair)))))
+                             commod-tz-quote-triples)))
          ;; strip out the "bad" ones from above.
-         (ok-syms
-          (and commod-tz-quote-triples
-               (filter car commod-tz-quote-triples)))
+         (ok-syms (and commod-tz-quote-triples (filter car commod-tz-quote-triples)))
          (keep-going? #t))
 
     (cond
-     ((eq? fq-call-data #f)
+     ((not fq-call-data)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window (_ "No commodities marked for quote retrieval."))
-	  (gnc:warn "No commodities marked for quote retrieval.")))
-     ((eq? fq-results #f)
+      (show-error (N_ "No commodities marked for quote retrieval.")))
+
+     ((not fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window (_ "Unable to get quotes or diagnose the problem."))
-	  (gnc:warn "Unable to get quotes or diagnose the problem.")))
-     ((member 'missing-lib fq-results)
+      (show-error (N_ "Unable to get quotes or diagnose the problem.")))
+
+     ((memq 'missing-lib fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "You are missing some needed Perl libraries.
-Run 'gnc-fq-update' as root to install them."))
-          (gnc:warn "You are missing some needed Perl libraries.
-Run 'gnc-fq-update' as root to install them." "\n")))
-     ((member 'system-error fq-results)
+      (show-error (N_ "You are missing some needed Perl libraries.
+Run 'gnc-fq-update' as root to install them.")))
+
+     ((memq 'system-error fq-results)
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "There was a system error while retrieving the price quotes."))
-          (gnc:warn "There was a system error while retrieving the price quotes." "\n")))
+      (show-error (N_ "There was a system error while retrieving the price quotes.")))
+
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
-      (if (gnucash-ui-is-running)
-          (gnc-error-dialog window
-           (_ "There was an unknown error while retrieving the price quotes."))
-          (gnc:warn "There was an unknown error while retrieving the price quotes." "\n")))
-     ((and (not commod-tz-quote-triples) (gnucash-ui-is-running))
-      (gnc-error-dialog window
-       (_ "Unable to get quotes or diagnose the problem."))
-       (set! keep-going? #f))
+      (show-error (N_ "There was an unknown error while retrieving the price quotes.")))
+
      ((not commod-tz-quote-triples)
-      (gnc:warn "Unable to get quotes or diagnose the problem.")
-      (set! keep-going? #f))
-     ((not (null? problem-syms))
-      (if (gnucash-ui-is-running)
-          (if (and ok-syms (not (null? ok-syms)))
-              (set!
-               keep-going?
-               (gnc-verify-dialog window #t
-                (call-with-output-string
-                 (lambda (p)
-                   (display (_ "Unable to retrieve quotes for these items:") p)
-                   (newline p)
-                   (display "  " p)
-                   (display (string-join problem-syms "\n  ") p)
-                   (newline p)
-                   (display (_ "Continue using only the good quotes?") p)))))
-              (begin
-                (gnc-error-dialog window
-                 (call-with-output-string
-                  (lambda (p)
-                    (display
-                     (_ "Unable to retrieve quotes for these items:") p)
-                    (newline p)
-                    (display "  " p)
-                    (display (string-join problem-syms "\n  ") p))))
-                (set! keep-going? #f)))
-          (gnc:warn
-           (call-with-output-string
-            (lambda (p)
-              (display "Unable to retrieve quotes for these items:" p)
-              (newline p)
-              (display "  " p)
-              (display (string-join problem-syms "\n  ") p)
-              (newline p)
-              (display "Continuing with good quotes." p)
-              (newline p)))))))
+      (set! keep-going? #f)
+      (show-error (N_ "Unable to get quotes or diagnose the problem.")))
 
-    (if
-     keep-going?
-     (let ((prices (map (lambda (triple)
-                          (commodity-tz-quote-triple->price book triple))
-                        ok-syms)))
-       (if (any string? prices)
-           (if (gnucash-ui-is-running)
-               (set!
-                keep-going?
-                (gnc-verify-dialog window #t
-                 (call-with-output-string
-                  (lambda (p)
-                    (display (_ "Unable to create prices for these items:") p)
-                    (newline p)
-                    (display "  " p)
-                    (display (string-join (filter string? prices) "\n  ") p)
-                    (newline p)
-                    (display (_ "Add remaining good quotes?") p)))))
-               (gnc:warn
-                (call-with-output-string
-                 (lambda (p)
-                   (display "Unable to create prices for these items:" p)
-                   (newline p)
-                   (display "  " p)
-                   (display (string-join (filter string? prices) "\n  ") p)
-                   (newline p)
-                   (display "Adding remaining good quotes." p)
-                   (newline p))))))
+     ((pair? problem-syms)
+      (cond
+       ((not (gnucash-ui-is-running))
+        (gnc:warn
+         (with-output-to-string
+           (lambda ()
+             (display "Unable to retrieve quotes for these items:\n")
+             (display (string-join problem-syms "\n  "))
+             (newline)
+             (display "Continuing with good quotes.")
+             (newline)))))
 
-       (if keep-going?
-           (book-add-prices! book (filter
-                                   (lambda (x) (not (string? x)))
-                                   prices)))))))
+       ((and ok-syms (not (null? ok-syms)))
+        (set! keep-going?
+          (gnc-verify-dialog
+           window #t (with-output-to-string
+                       (lambda ()
+                         (display (_ "Unable to retrieve quotes for these items:"))
+                         (display "\n  ")
+                         (display (string-join problem-syms "\n  "))
+                         (newline)
+                         (display (_ "Continue using only the good quotes?")))))))
 
-; (define (get-1-quote exchange . items)
-;   (let ((cmd (apply list 'fetch exchange items))
-; 	(quoter (run-sub-process #f
-; 				 gnc:*finance-quote-helper*
-; 				 gnc:*finance-quote-helper*)))
-;     (and quoter
-; 	 (write cmd (caddr quoter))
-; 	 (newline (caddr quoter))
-; 	 (force-output (caddr quoter))
-; 	 (let ((result (read (cadr quoter))))
-; 	   (close-input-port (cadr quoter))
-; 	   (close-output-port (caddr quoter))
-; 	   result))))
+       (else
+        (set! keep-going? #f)
+        (gnc-error-dialog
+         window (with-output-to-string
+                  (lambda ()
+                    (display (_ "Unable to retrieve quotes for these items:"))
+                    (display "\n  ")
+                    (display (string-join problem-syms "\n  ")))))))))
+
+    (when keep-going?
+      (let ((prices (map (lambda (triple)
+                           (commodity-tz-quote-triple->price book triple))
+                         ok-syms)))
+        (when (any string? prices)
+          (if (gnucash-ui-is-running)
+              (set! keep-going?
+                (gnc-verify-dialog
+                 window #t
+                 (with-output-to-string
+                   (lambda ()
+                     (display (_ "Unable to create prices for these items:"))
+                     (display "\n  ")
+                     (display (string-join (filter string? prices) "\n  "))
+                     (newline)
+                     (display (_ "Add remaining good quotes?"))))))
+              (gnc:warn
+               (with-output-to-string
+                 (lambda ()
+                   (display "Unable to create prices for these items:\n  ")
+                   (display (string-join (filter string? prices) "\n  "))
+                   (newline)
+                   (display "Adding remaining good quotes.")
+                   (newline))))))
+
+        (when keep-going?
+          (book-add-prices! book (filter (negate string?) prices)))))))
 
 (define (gnc:price-quotes-install-sources)
   (let ((sources (gnc:fq-check-sources)))
-    (if (list? sources)
-	(begin
-;; Translators: ~A is the version string
+    (cond
+     ((list? sources)
+      ;; Translators: ~A is the version string
       (format #t (_ "Found Finance::Quote version ~A.") (car sources))
       (newline)
-	  (gnc:msg "Found Finance::Quote version " (car sources))
-	  (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))
+      (gnc:msg "Found Finance::Quote version " (car sources))
+      (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))

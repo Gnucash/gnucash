@@ -185,6 +185,11 @@ struct tm* gnc_localtime_r (const time64 *secs, struct tm* time);
  */
 struct tm* gnc_gmtime (const time64 *secs);
 
+/** \brief returns an integer corresponding to locale start of week
+ *  \return An integer 1=Sunday, 2=Monday etc. If error, return 0.
+ */
+gint gnc_start_of_week (void);
+
 /** \brief calculate seconds from the epoch given a time struct
  *  \param time: A struct tm* containing the date-time information.
  *  The time is understood to be in the current local time zone.
