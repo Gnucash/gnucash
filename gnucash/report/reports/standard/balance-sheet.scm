@@ -73,8 +73,6 @@
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
-(define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual."))
@@ -150,11 +148,7 @@
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
-    
-    (add-option
-      (gnc:make-string-option
-      gnc:pagename-general optname-report-title
-      "a" opthelp-report-title (_ reportname)))
+
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
@@ -290,8 +284,7 @@
   (gnc:report-starting reportname)
 
   ;; get all option's values
-  (let* (
-         (report-title (get-option gnc:pagename-general optname-report-title))
+  (let* ((report-title (get-option gnc:pagename-general gnc:optname-reportname))
          (company-name (get-option gnc:pagename-general optname-party-name))
          (reportdate (gnc:time64-end-day-time
                       (gnc:date-option-absolute-time

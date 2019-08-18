@@ -1682,6 +1682,9 @@ the option '~a'."))
       ("Account Substring" "Filter" "Account Name Filter")
       ;; invoice.scm, renamed November 2018
       ("Individual Taxes" #f "Use Detailed Tax Summary")
+      ;; Title/Report Title -> Report name, renamed Aug 2019
+      ("Title" #f "Report name")
+      ("Report Title" #f "Report name")
       ))
 
   (define (lookup-option section name)

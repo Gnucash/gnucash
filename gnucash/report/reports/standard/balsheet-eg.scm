@@ -176,8 +176,6 @@
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
-(define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-date    (N_ "Balance Sheet Date"))
 (define optname-columns (N_ "1- or 2-column report"))
@@ -282,8 +280,6 @@
                                         opthelp-css-file "balsheet-eg.css"))
 
     ;; General options
-    (add-option (gnc:make-string-option general-page optname-report-title
-                                        "a" opthelp-report-title reportname))
     (gnc:options-add-report-date!  options general-page optname-date "b")
 
     ;; Notes options

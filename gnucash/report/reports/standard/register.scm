@@ -371,12 +371,6 @@
    (gnc:make-internal-option "__reg" "credit-string" (_ "Credit")))
 
   (gnc:register-reg-option
-   (gnc:make-string-option
-    (N_ "General") (N_ "Title")
-    "a" (N_ "The title of the report.")
-    (N_ "Register Report")))
-
-  (gnc:register-reg-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Date")
     "b" (N_ "Display the date?") #t))
@@ -651,7 +645,7 @@
          (journal? (opt-val "__reg" "journal"))
          (debit-string (opt-val "__reg" "debit-string"))
          (credit-string (opt-val "__reg" "credit-string"))
-         (title (opt-val "General" "Title"))
+         (title (opt-val "General" gnc:optname-reportname))
          (query (gnc-scm2query query-scm)))
 
     (qof-query-set-book query (gnc-get-current-book))
@@ -693,7 +687,7 @@
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (ledger-type-op (gnc:lookup-option options "__reg" "ledger-type"))
          (double-op (gnc:lookup-option options "__reg" "double"))
-         (title-op (gnc:lookup-option options "General" "Title"))
+         (title-op (gnc:lookup-option options "General" gnc:optname-reportname))
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string"))
          (account-op (gnc:lookup-option options "Display" "Account")))
