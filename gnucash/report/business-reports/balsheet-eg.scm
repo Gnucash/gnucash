@@ -326,7 +326,7 @@
          (opt-report-commodity (get-option commodities-page optname-report-commodity))
          (opt-price-source     (get-option commodities-page optname-price-source))
          (opt-show-foreign?    (get-option commodities-page optname-show-foreign))
-         (opt-report-title     (get-option general-page     optname-report-title))
+         (opt-report-title     (get-option general-page     gnc:optname-reportname))
          (opt-date             (gnc:time64-end-day-time
                                  (gnc:date-option-absolute-time
                                    (get-option general-page optname-date))))
