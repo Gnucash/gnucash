@@ -41,6 +41,7 @@
 ;; report constructor
 
 (define (gnc:make-general-journal-report)
+  (issue-deprecation-warning "gnc:make-general-journal-report is unused.")
   (let* ((regrpt (gnc:make-report regrptguid)))
     regrpt))
 
