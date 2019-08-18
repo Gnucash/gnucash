@@ -30,7 +30,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports general-ledger))
-(export gnc:make-general-ledger-report)
+(export gnc:make-general-ledger-report) ;deprecated
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -45,6 +45,7 @@
 ;; report constructor
 
 (define (gnc:make-general-ledger-report)
+  (issue-deprecation-warning "gnc:make-general-ledger-report is unused")
   (let* ((xactrpt (gnc:make-report xactrptguid)))
     xactrpt))
 
