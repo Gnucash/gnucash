@@ -879,10 +879,10 @@ also show overall period profit & loss."))
            (lambda ()
              (display report-title)
              (display " ")
-             (when (or incr (eq? report-type 'pnl))
-               (display (qof-print-date startdate))
-               (display (_ " to ")))
-             (display (qof-print-date enddate)))))
+             (if (or incr (eq? report-type 'pnl))
+                 (format #t (_ "~a to ~a")
+                         (qof-print-date startdate) (qof-print-date enddate))
+                 (qof-print-date enddate)))))
 
     (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
         (gnc:html-document-add-object!
@@ -1057,9 +1057,9 @@ also show overall period profit & loss."))
          multicol-table-right (_ "Equity")
          (append equity-accounts
                  (list
-                  (vector "Unrealized Gains"
+                  (vector (_ "Unrealized Gains")
                           unrealized-gain-fn)
-                  (vector "Retained Earnings"
+                  (vector (_ "Retained Earnings")
                           retained-earnings-fn)))
          #:negate-amounts? #t)
 
@@ -1074,7 +1074,7 @@ also show overall period profit & loss."))
             (gnc:html-document-add-object!
              doc
              (gnc:make-html-text
-              (gnc:html-markup-anchor chart "Barchart"))))))
+              (gnc:html-markup-anchor chart (_ "Barchart")))))))
 
      ((eq? report-type 'pnl)
       (let* ((closing-str (get-option pagename-entries optname-closing-pattern))
