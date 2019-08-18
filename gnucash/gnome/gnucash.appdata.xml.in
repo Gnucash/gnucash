@@ -25,6 +25,7 @@
       <li>Perform financial calculations, such as a loan repayment</li>
     </ul>
   </description>
+  <developer_name>GnuCash Project</developer_name>
   <categories>
     <category>Finance</category>
   </categories>
