@@ -106,8 +106,6 @@ static gchar **gnc_tree_view_get_column_order (GncTreeView *view,
 
 typedef struct GncTreeViewPrivate
 {
-    /*  Spacer column */
-    GtkTreeViewColumn *spacer_column;
     GtkTreeViewColumn *selection_column;
 
     /* Column selection menu related values */
@@ -238,19 +236,6 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     gtk_tree_view_set_column_drag_function(GTK_TREE_VIEW(view),
                                            gnc_tree_view_drop_ok_cb, NULL, NULL);
 
-    /* Create the next to last column which is always present, visible,
-     * and empty. Override the defaults and make this a one pixel wide
-     * column, but have it take up any extra space in the window. */
-    column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
-                                            -1, -1, NULL);
-    g_object_set(G_OBJECT(column),
-                 "fixed-width", 1,
-                 "expand", TRUE,
-                 (gchar *)NULL);
-    priv->spacer_column = column;
-
-    gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
-
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
@@ -273,7 +258,7 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     g_object_set(G_OBJECT(column),
                  "clickable", TRUE,
                  "widget", icon,
-                 "fixed-width", requisition.width + 10,
+                 "alignment", 1.0,
                  (gchar *)NULL);
     priv->selection_column = column;
     g_signal_connect(G_OBJECT(column), "clicked",
@@ -1407,8 +1392,6 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
     }
     va_end (args);
 
-    gtk_tree_view_column_set_visible (priv->spacer_column, !hide_spacer);
-
     LEAVE(" ");
 }
 
@@ -1449,7 +1432,6 @@ gnc_tree_view_set_control_column_background (GncTreeView *view, gint column, Gtk
     ENTER("view %p, column %d, func %p", view, column, func);
     priv = GNC_TREE_VIEW_GET_PRIVATE (view);
 
-    update_control_cell_renderers_background (view, priv->spacer_column, column, func);
     update_control_cell_renderers_background (view, priv->selection_column, column, func);
 
     LEAVE(" ");
@@ -1562,7 +1544,6 @@ gnc_tree_view_configure_columns (GncTreeView *view)
     hide_spacer = (gnc_tree_view_count_visible_columns(view) == 1);
     column = gtk_tree_view_get_column(GTK_TREE_VIEW(view), 0);
     gtk_tree_view_column_set_expand(column, hide_spacer);
-    gtk_tree_view_column_set_visible(priv->spacer_column, !hide_spacer);
     gtk_tree_view_column_set_visible(priv->selection_column, !hide_spacer);
 
     LEAVE(" ");
@@ -2066,9 +2047,9 @@ gnc_tree_view_append_column (GncTreeView *view,
     n = g_list_length(columns);
     g_list_free(columns);
 
-    /* Ignore the initial two columns (the spacer and the selection menu) */
-    if (n >= 2)
-        n -= 2;
+    /* Ignore the initial column, the selection menu */
+    if (n >= 1)
+        n -= 1;
     return gtk_tree_view_insert_column (GTK_TREE_VIEW(view), column, n);
 }
 
