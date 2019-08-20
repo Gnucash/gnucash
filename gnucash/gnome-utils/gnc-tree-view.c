@@ -106,12 +106,11 @@ static gchar **gnc_tree_view_get_column_order (GncTreeView *view,
 
 typedef struct GncTreeViewPrivate
 {
-    GtkTreeViewColumn *selection_column;
-
     /* Column selection menu related values */
     GtkTreeViewColumn *column_menu_column;
     GtkWidget         *column_menu;
     gboolean           show_column_menu;
+    GtkWidget         *column_menu_icon_box;
 
     /* Sort callback model */
     GtkTreeModel      *sort_model;
@@ -197,6 +196,36 @@ gnc_tree_view_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
 }
 
+static gboolean
+gnc_tree_view_select_column_icon_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+    GncTreeView *view = user_data;
+    GncTreeViewPrivate *priv;
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (widget);
+    GtkBorder padding;
+
+    // if the event button is not the right one, leave.
+    if (event->button != 1)
+        return FALSE;
+
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+
+    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
+
+    if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    {
+        if (event->x < (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.left))
+            gnc_tree_view_select_column_cb (priv->column_menu_column, view);
+    }
+    else
+    {
+        if (event->x > (gtk_widget_get_allocated_width (widget) -
+                       (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.right)))
+            gnc_tree_view_select_column_cb (priv->column_menu_column, view);
+    }
+    return FALSE;
+}
+
 /** Initialize a new instance of a base gnucash tree view.  This
  *  function allocates and initializes the object private storage
  *  space.  It also adds the new object to a list (for memory tracking
@@ -211,8 +240,7 @@ gnc_tree_view_init (GncTreeView *view, void *data)
 {
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
-    GtkWidget *icon;
-    GtkRequisition requisition;
+    GtkWidget *sep, *icon;
 
     GncTreeViewClass *klass = (GncTreeViewClass*)data;
 
@@ -247,25 +275,62 @@ gnc_tree_view_init (GncTreeView *view, void *data)
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
     icon = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show(icon);
+
+    priv->column_menu_icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX(priv->column_menu_icon_box), FALSE);
+
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start (GTK_WIDGET(icon), 5);
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(icon), 5);
+#endif
+    gtk_box_pack_end (GTK_BOX (priv->column_menu_icon_box), icon, FALSE, FALSE, 0);
+
+    sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_box_pack_end (GTK_BOX (priv->column_menu_icon_box), sep, FALSE, FALSE, 0);
+
+    gtk_widget_show_all (priv->column_menu_icon_box);
 
     g_signal_connect (G_OBJECT (icon), "draw",
                       G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
 
-    gtk_widget_get_preferred_size(icon, &requisition, NULL);
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
                                             -1, -1, NULL);
     g_object_set(G_OBJECT(column),
                  "clickable", TRUE,
-                 "widget", icon,
+                 "widget", priv->column_menu_icon_box,
                  "alignment", 1.0,
+                 "expand", TRUE,
                  (gchar *)NULL);
-    priv->selection_column = column;
-    g_signal_connect(G_OBJECT(column), "clicked",
-                     G_CALLBACK (gnc_tree_view_select_column_cb),
-                     view);
+
     priv->column_menu_column = column;
 
+    // get the actual column button by looking at the parents of the column_menu_icon
+    {
+        GtkWidget *mybox = gtk_widget_get_parent (icon);
+        GtkWidget *walign = gtk_widget_get_parent (mybox);
+        GtkWidget *box = gtk_widget_get_parent (walign);
+        GtkWidget *button = gtk_widget_get_parent (box);
+
+        if (!GTK_IS_BUTTON(button)) // just in case this order changes.
+        {
+            // this will fire for the whole column header
+            g_signal_connect (G_OBJECT(column), "clicked",
+                              G_CALLBACK (gnc_tree_view_select_column_cb),
+                              view);
+        }
+        else
+        {
+            /* this part will restrict the mouse click to just where the
+               icon is, tried using an eventbox but it would only work
+               some of the time */
+            gtk_widget_set_events (button, GDK_BUTTON_PRESS_MASK);
+
+            g_signal_connect (G_OBJECT(button), "button_press_event",
+                              G_CALLBACK (gnc_tree_view_select_column_icon_cb),
+                              view);
+        }
+    }
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 }
 
@@ -1432,7 +1497,7 @@ gnc_tree_view_set_control_column_background (GncTreeView *view, gint column, Gtk
     ENTER("view %p, column %d, func %p", view, column, func);
     priv = GNC_TREE_VIEW_GET_PRIVATE (view);
 
-    update_control_cell_renderers_background (view, priv->selection_column, column, func);
+    update_control_cell_renderers_background (view, priv->column_menu_column, column, func);
 
     LEAVE(" ");
 }
@@ -1524,7 +1589,7 @@ gnc_tree_view_configure_columns (GncTreeView *view)
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GList *columns;
-    gboolean hide_spacer;
+    gboolean hide_menu_column;
 
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
@@ -1541,10 +1606,10 @@ gnc_tree_view_configure_columns (GncTreeView *view)
 
     /* If only the first column is visible, hide the spacer and make that
      * column expand. */
-    hide_spacer = (gnc_tree_view_count_visible_columns(view) == 1);
+    hide_menu_column = (gnc_tree_view_count_visible_columns(view) == 1);
     column = gtk_tree_view_get_column(GTK_TREE_VIEW(view), 0);
-    gtk_tree_view_column_set_expand(column, hide_spacer);
-    gtk_tree_view_column_set_visible(priv->selection_column, !hide_spacer);
+    gtk_tree_view_column_set_expand(column, hide_menu_column);
+    gtk_tree_view_column_set_visible(priv->column_menu_column, !hide_menu_column);
 
     LEAVE(" ");
 }
