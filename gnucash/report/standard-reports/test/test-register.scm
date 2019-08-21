@@ -64,6 +64,10 @@
          (account-alist (create-test-data))
          (bank (cdr (assoc "Bank" account-alist))))
 
+    (gnc-commodity-set-user-symbol
+     (xaccAccountGetCommodity (assoc-ref account-alist "GBP Bank"))
+     "#")
+
     (let ((query (qof-query-create-for-splits)))
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddAccountMatch query (list bank)
@@ -75,61 +79,93 @@
         231
         (length (sxml->table-row-col sxml 1 #f #f)))
 
-      (test-equal "total debit = 2587"
+      (test-equal "total debit = $2587"
         '("Total Debits" "$2,587.00")
         (sxml->table-row-col sxml 1 -3 #f))
 
-      (test-equal "total credits = 401"
+      (test-equal "total credits = $401"
         '("Total Credits" "$401.00")
         (sxml->table-row-col sxml 1 -1 #f)))
 
     (set-option options "__reg" "journal" #t)
     (let ((sxml (options->sxml options "journal")))
-      (test-equal "table has 333 cells"
-        333
+      (test-equal "table has 337 cells"
+        337
         (length (sxml->table-row-col sxml 1 #f #f)))
 
-      (test-equal "total debit = 2587"
-        '("Total Debits" "$2,587.00")
-        (sxml->table-row-col sxml 1 -3 #f))
+      (test-equal "total debit = #6"
+        '("Total Debits" "#6.00")
+        (sxml->table-row-col sxml 1 135 #f))
 
-      (test-equal "total credits = 401"
-        '("Total Credits" "$401.00")
-        (sxml->table-row-col sxml 1 -1 #f)))
+      (test-equal "total debit = $2979"
+        '("Total Debits" "$2,979.00")
+        (sxml->table-row-col sxml 1 136 #f))
+
+      (test-equal "total credits = #10"
+        '("Total Credits" "#10.00")
+        (sxml->table-row-col sxml 1 138 #f))
+
+      (test-equal "total credits = 2974"
+        '("Total Credits" "$2,974.00")
+        (sxml->table-row-col sxml 1 139 #f)))
 
     (set-option options "__reg" "ledger-type" #t)
     (let ((sxml (options->sxml options "ledger-type")))
-      (test-equal "table has 335 cells"
-        335
+      (test-equal "table has 341 cells"
+        341
         (length (sxml->table-row-col sxml 1 #f #f)))
 
-      (test-equal "total debit = 2587"
-        '("Total Debits" "$2,587.00")
-        (sxml->table-row-col sxml 1 -5 #f))
+      (test-equal "total debit = #6"
+        '("Total Debits" "#6.00")
+        (sxml->table-row-col sxml 1 135 #f))
 
-      (test-equal "total credits = 401"
-        '("Total Credits" "$401.00")
-        (sxml->table-row-col sxml 1 -3 #f))
+      (test-equal "total debit = $2979"
+        '("Total Debits" "$2,979.00")
+        (sxml->table-row-col sxml 1 136 #f))
 
-      (test-equal "net change = 401"
-        '("Net Change" "$2,186.00")
-        (sxml->table-row-col sxml 1 -1 #f)))
+      (test-equal "total credits = #10"
+        '("Total Credits" "#10.00")
+        (sxml->table-row-col sxml 1 138 #f))
+
+      (test-equal "total credits = $2974"
+        '("Total Credits" "$2,974.00")
+        (sxml->table-row-col sxml 1 139 #f))
+
+      (test-equal "net change = #4"
+        '("Net Change" "#4.00")
+        (sxml->table-row-col sxml 1 141 #f))
+
+      (test-equal "net change = $5"
+        '("Net Change" "$5.00")
+        (sxml->table-row-col sxml 1 142 #f)))
 
     (set-option options "__reg" "double" #t)
     (let ((sxml (options->sxml options "double")))
-      (test-equal "table has 339 cells"
-        339
+      (test-equal "table has 345 cells"
+        345
         (length (sxml->table-row-col sxml 1 #f #f)))
 
-      (test-equal "total debit = 2587"
-        '("Total Debits" "$2,587.00")
-        (sxml->table-row-col sxml 1 -5 #f))
+      (test-equal "total debit = #6"
+        '("Total Debits" "#6.00")
+        (sxml->table-row-col sxml 1 179 #f))
 
-      (test-equal "total credits = 401"
-        '("Total Credits" "$401.00")
-        (sxml->table-row-col sxml 1 -3 #f))
+      (test-equal "total debit = $2979"
+        '("Total Debits" "$2,979.00")
+        (sxml->table-row-col sxml 1 180 #f))
 
-      (test-equal "net change = 401"
-        '("Net Change" "$2,186.00")
-        (sxml->table-row-col sxml 1 -1 #f)))
+      (test-equal "total credits = #10"
+        '("Total Credits" "#10.00")
+        (sxml->table-row-col sxml 1 182 #f))
+
+      (test-equal "total credits = $2974"
+        '("Total Credits" "$2,974.00")
+        (sxml->table-row-col sxml 1 183 #f))
+
+      (test-equal "net change = #4"
+        '("Net Change" "#4.00")
+        (sxml->table-row-col sxml 1 185 #f))
+
+      (test-equal "net change = $5"
+        '("Net Change" "$5.00")
+        (sxml->table-row-col sxml 1 186 #f)))
     ))

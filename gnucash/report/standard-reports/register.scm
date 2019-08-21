@@ -610,20 +610,15 @@
           ;; ----------------------------------------------
           ;; update totals, but don't add them to the table
           ;; ----------------------------------------------
-          (if multi-rows?
-              (for-each
-               (lambda (split)
-                 (if (equal? (xaccSplitGetAccount current)
-                             (xaccSplitGetAccount split))
-                     (accumulate-totals split
-                                        total-collector total-value
-                                        debit-collector debit-value
-                                        credit-collector credit-value)))
-               (xaccTransGetSplitList (xaccSplitGetParent current)))
-              (accumulate-totals current
-                                 total-collector total-value
-                                 debit-collector debit-value
-                                 credit-collector credit-value))
+          (for-each
+           (lambda (split)
+             (accumulate-totals split
+                                total-collector total-value
+                                debit-collector debit-value
+                                credit-collector credit-value))
+           (if multi-rows?
+               (xaccTransGetSplitList (xaccSplitGetParent current))
+               (list current)))
           ;; ----------------------------------
           ;; add the splits to the table
           ;; ----------------------------------
