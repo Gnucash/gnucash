@@ -65,6 +65,7 @@
               <object class="GtkLabel" id="color_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">6</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -773,7 +774,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Show accounts which have the option "Hidden" checked.</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin_left">6</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_hidden_toggled_cb" swapped="no"/>
@@ -792,7 +793,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Show accounts which do not have any transactions.</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin_left">6</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_unused_toggled_cb" swapped="no"/>
@@ -811,7 +812,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Show accounts which have a zero total value.</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin_left">6</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_zero_toggled_cb" swapped="no"/>
@@ -1318,6 +1319,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="type_label">
                         <property name="visible">True</property>
@@ -1331,17 +1333,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label8">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">    </property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
