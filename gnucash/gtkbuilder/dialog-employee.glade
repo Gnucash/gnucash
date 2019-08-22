@@ -104,8 +104,8 @@
                           <object class="GtkLabel" id="label1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Employee Number:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Employee Number: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -117,8 +117,8 @@
                           <object class="GtkLabel" id="label19">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Username:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Username: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -180,7 +180,7 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">Active:</property>
                           </object>
                           <packing>
@@ -220,8 +220,8 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Name:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Name: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -233,8 +233,8 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Address:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Address: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -246,8 +246,8 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Phone:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Phone: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -259,8 +259,8 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Fax:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Fax: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -272,8 +272,8 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Email:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Email: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -450,8 +450,8 @@
                               <object class="GtkLabel" id="label34">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">end</property>
-                                <property name="label" translatable="yes">Language:</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Language: </property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -533,8 +533,8 @@
                           <object class="GtkLabel" id="label35">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Default Hours per Day:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Default Hours per Day: </property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
@@ -546,8 +546,8 @@
                           <object class="GtkLabel" id="label36">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Default Rate:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Default Rate: </property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
@@ -559,8 +559,8 @@
                           <object class="GtkLabel" id="label37">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Currency:</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Currency: </property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -642,7 +642,7 @@
                           <object class="GtkLabel" id="label39">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">Credit Account:</property>
                             <property name="justify">right</property>
                           </object>

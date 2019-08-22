@@ -233,7 +233,7 @@
                       <object class="GtkLabel" id="label847842">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">_Name:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
@@ -248,7 +248,7 @@
                       <object class="GtkLabel" id="label847843">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Frequency:</property>
                         <property name="justify">center</property>
                       </object>
@@ -261,7 +261,7 @@
                       <object class="GtkLabel" id="label847875">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Start Date:</property>
                         <property name="justify">center</property>
                       </object>
@@ -422,7 +422,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">End: </property>
                         <property name="use_markup">True</property>
                       </object>

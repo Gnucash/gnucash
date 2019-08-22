@@ -83,6 +83,7 @@
               <object class="GtkLabel" id="label847713">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Username:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -97,6 +98,7 @@
               <object class="GtkLabel" id="label847714">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Password:</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
