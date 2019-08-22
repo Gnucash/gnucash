@@ -137,25 +137,6 @@ GncOptionDB::set_selectable(const char* section, const char* name)
 void
 GncOptionDB::commit()
 {
-    std::for_each(
-        m_sections.begin(), m_sections.end(),
-        [](GncOptionSection section)
-        {
-            std::for_each(
-                section.second.begin(), section.second.end(),
-                [](GncOptionWrapperPtr option)
-                {
-/* FIXME, not implemented.
-                    if (option->m_option.is_dirty())
-                    {
-                        option->m_option.commit();
-
-* FIXME, no Gtk in      gtk_widget_set_value(option->m_widget,
-* libgnucash!                                option->m_option.get_value());
-                  }
-*/
-                });
-        });
 }
 
 GncOptionDB*

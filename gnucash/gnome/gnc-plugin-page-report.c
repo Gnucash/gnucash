@@ -72,7 +72,6 @@
 #include "window-report.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "business-options.h"
 #include "gnc-icons.h"
 #include "print-session.h"
 
@@ -1785,11 +1784,17 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
         gnc_plugin_page_report_add_edited_report(priv, priv->cur_report);
 }
 
-static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
+static GncInvoice*
+lookup_invoice(GncPluginPageReportPrivate *priv)
 {
-    g_assert(priv);
-    return gnc_option_db_lookup_invoice_option(priv->cur_odb, "General",
-            "Invoice Number", NULL);
+    SCM opt_val = gnc_option_db_lookup_option(priv->cur_odb, "General",
+                                              "Invoice Number", NULL);
+    if (opt_val == SCM_UNDEFINED)
+        return NULL;
+
+#define FUNC_NAME G_STRFUNC
+    return SWIG_MustGetPtr(opt_val, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
+#undef FUNC_NAME
 }
 
 #define GNC_PREFS_GROUP_REPORT_PDFEXPORT GNC_PREFS_GROUP_GENERAL_REPORT ".pdf-export"

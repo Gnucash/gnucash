@@ -1,5 +1,5 @@
 /*
- * business-options.h -- Initialize the Business Options
+ * business-options-gnome.h -- Initialize the Business Options
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
  * Copyright (C) 2002 Derek Atkins
