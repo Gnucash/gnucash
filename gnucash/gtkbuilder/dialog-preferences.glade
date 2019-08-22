@@ -653,7 +653,9 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Character:</property>
+                    <property name="label" translatable="yes">C_haracter:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pref/general/account-separator</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -701,7 +703,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/show-account-color">
-                    <property name="label" translatable="yes">Show the Account Color as background</property>
+                    <property name="label" translatable="yes">Show the Account Color as _background</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -730,7 +732,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/show-account-color-tabs">
-                    <property name="label" translatable="yes">Show the Account Color on tabs</property>
+                    <property name="label" translatable="yes">Show the Account Color on _tabs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -982,7 +984,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/date-completion-thisyear">
-                    <property name="label" translatable="yes">In the current calendar year</property>
+                    <property name="label" translatable="yes">In the current calendar _year</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1002,7 +1004,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/date-completion-sliding">
-                    <property name="label" translatable="yes">In a sliding 12-month window starting this
+                    <property name="label" translatable="yes">In a _sliding 12-month window starting this
 many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1160,7 +1162,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/num-source">
-                    <property name="label" translatable="yes">Set book option on new files to use split "action" field for "Num" field on registers/reports</property>
+                    <property name="label" translatable="yes">Set _book option on new files to use split "action" field for "Num" field on registers/reports</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1619,7 +1621,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/save-on-close-expires">
-                    <property name="label" translatable="yes">Enable timeout on "Save changes on closing" question</property>
+                    <property name="label" translatable="yes">Enable timeout on "Save changes on closing" _question</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1752,7 +1754,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/grid-lines-horizontal">
-                    <property name="label" translatable="yes">Enable horizontal grid lines on table displays</property>
+                    <property name="label" translatable="yes">Enable hori_zontal grid lines on table displays</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1770,7 +1772,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/grid-lines-vertical">
-                    <property name="label" translatable="yes">Enable vertical grid lines on table displays</property>
+                    <property name="label" translatable="yes">Enable _vertical grid lines on table displays</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -3102,7 +3104,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/summarybar-position-top">
-                    <property name="label" translatable="yes">Top</property>
+                    <property name="label" translatable="yes">T_op</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -3122,7 +3124,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/summarybar-position-bottom">
-                    <property name="label" translatable="yes">Bottom</property>
+                    <property name="label" translatable="yes">Botto_m</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -3195,6 +3197,7 @@ many months before the current month:</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">_Width:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">pref/general/tab-width</property>
                         <property name="ellipsize">middle</property>
                       </object>
                     </child>
@@ -3293,7 +3296,9 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
-                    <property name="label" translatable="yes">Alpha Vantage API key</property>
+                    <property name="label" translatable="yes">Alpha _Vantage API key</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pref/general.finance-quote/alphavantage-api-key</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

@@ -162,7 +162,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="advanced_button">
-                <property name="label" translatable="yes">Advanced...</property>
+                <property name="label" translatable="yes">_Advanced...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -234,8 +234,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Name:</property>
+                        <property name="label" translatable="yes">_Name:</property>
+                        <property name="use_underline">True</property>
                         <property name="justify">center</property>
+                        <property name="mnemonic_widget">name_entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -311,7 +313,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="never_end_button">
-                                <property name="label" translatable="yes">Never End</property>
+                                <property name="label" translatable="yes">Ne_ver End</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -332,7 +334,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkRadioButton" id="end_on_date_button">
-                                    <property name="label" translatable="yes">End Date:</property>
+                                    <property name="label" translatable="yes">End _Date:</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -363,7 +365,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkRadioButton" id="n_occurrences_button">
-                                    <property name="label" translatable="yes">Number of Occurrences:</property>
+                                    <property name="label" translatable="yes">Number of _Occurrences:</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -625,7 +627,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin_left">12</property>
-                <property name="label" translatable="yes">R_emind in advance:</property>
+                <property name="label" translatable="yes">Re_mind in advance:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/remind-days</property>
               </object>
@@ -930,7 +932,7 @@
                             <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="advance_opt">
-                                <property name="label" translatable="yes">Create in advance:</property>
+                                <property name="label" translatable="yes">Crea_te in advance:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -945,7 +947,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="remind_opt">
-                                <property name="label" translatable="yes">Remind in advance:</property>
+                                <property name="label" translatable="yes">Re_mind in advance:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1003,7 +1005,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="autocreate_opt">
-                                <property name="label" translatable="yes">Create automatically</property>
+                                <property name="label" translatable="yes">Create _automatically</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1066,7 +1068,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkCheckButton" id="notify_opt">
-                                    <property name="label" translatable="yes">Notify me when created</property>
+                                    <property name="label" translatable="yes">_Notify me when created</property>
                                     <property name="visible">True</property>
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
@@ -1084,7 +1086,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="enabled_opt">
-                                <property name="label" translatable="yes">Enabled</property>
+                                <property name="label" translatable="yes">_Enabled</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1212,7 +1214,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="GtkRadioButton" id="rb_noend">
-                                        <property name="label" translatable="yes">Forever</property>
+                                        <property name="label" translatable="yes">Fore_ver</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -1228,7 +1230,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkRadioButton" id="rb_enddate">
-                                        <property name="label" translatable="yes">Until:</property>
+                                        <property name="label" translatable="yes">_Until:</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -1244,7 +1246,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkRadioButton" id="rb_num_occur">
-                                        <property name="label" translatable="yes">For:</property>
+                                        <property name="label" translatable="yes">_For:</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>

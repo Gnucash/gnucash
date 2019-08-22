@@ -1203,7 +1203,7 @@ Are you sure you want to unpost it?</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="yes_tt_reset">
-                        <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
+                        <property name="label" translatable="yes">_Yes, reset the Tax Tables</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1220,7 +1220,7 @@ Are you sure you want to unpost it?</property>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="no_tt_reset">
-                        <property name="label" translatable="yes">No, keep them as they are</property>
+                        <property name="label" translatable="yes">_No, keep them as they are</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
