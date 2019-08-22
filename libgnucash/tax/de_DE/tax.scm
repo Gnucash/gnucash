@@ -17,7 +17,16 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash tax-us))
+(define-module (gnucash locale de_DE tax))
+
+(use-modules (gnucash gnc-module))
+(eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
+(use-modules (sw_app_utils))
+(use-modules (sw_engine))
+(use-modules (gnucash app-utils))
 
 (export gnc:txf-get-payer-name-source)
 (export gnc:txf-get-form)
@@ -40,5 +49,10 @@
 (export txf-asset-categories)
 (export txf-liab-eq-categories)
 
-(load-from-path "gnucash/tax-us/txf")
-(load-from-path "gnucash/tax-us/txf-help")
+(define gnc:*tax-label* (N_ "Tax"))
+(define gnc:*tax-nr-label* (N_ "Tax Number"))
+
+(export gnc:*tax-label* gnc:*tax-nr-label*)
+
+(load-from-path "gnucash/locale/de_DE/tax/txf")
+(load-from-path "gnucash/locale/de_DE/tax/txf-help")

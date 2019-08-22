@@ -80,9 +80,9 @@ libgncmod_locale_tax_gnc_module_init(int refcount)
     gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
 # endif /* G_OS_WIN32 */
     if (is_de_DE)
-        lmod("(gnucash tax-de_DE)");
+        lmod("(gnucash locale de_DE tax)");
     else
-        lmod("(gnucash tax-us)");
+        lmod("(gnucash locale us tax)");
     return TRUE;
 }
 

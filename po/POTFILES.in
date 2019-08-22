@@ -695,10 +695,10 @@ libgnucash/gnc-module/gnc-module.c
 libgnucash/gnc-module/gnc-module.scm
 libgnucash/scm/price-quotes.scm
 libgnucash/scm/utilities.scm
-libgnucash/tax/de_DE/tax-de_DE.scm
-libgnucash/tax/de_DE/txf-de_DE.scm
-libgnucash/tax/de_DE/txf-help-de_DE.scm
+libgnucash/tax/de_DE/tax.scm
+libgnucash/tax/de_DE/txf-help.scm
+libgnucash/tax/de_DE/txf.scm
 libgnucash/tax/gncmod-locale-tax.c
-libgnucash/tax/us/tax-us.scm
+libgnucash/tax/us/tax.scm
 libgnucash/tax/us/txf-help.scm
 libgnucash/tax/us/txf.scm

@@ -24,42 +24,42 @@ install(TARGETS gncmod-locale-tax
 # Scheme
 
 set(gncmod_tax_us_SCHEME_1 us/txf.scm us/txf-help.scm)
-set(gncmod_tax_us_SCHEME_2 us/tax-us.scm)
+set(gncmod_tax_us_SCHEME_2 us/tax.scm)
 
-set(gncmod_tax_de_DE_SCHEME_1 de_DE/txf-de_DE.scm de_DE/txf-help-de_DE.scm)
-set(gncmod_tax_de_DE_SCHEME_2 de_DE/tax-de_DE.scm)
+set(gncmod_tax_de_DE_SCHEME_1 de_DE/txf.scm de_DE/txf-help.scm)
+set(gncmod_tax_de_DE_SCHEME_2 de_DE/tax.scm)
 
 set(GUILE_DEPENDS scm-app-utils scm-gnc-module)
 
 gnc_add_scheme_targets(scm-tax-us-1
 "${gncmod_tax_us_SCHEME_1}"
-"gnucash/tax-us"
+"gnucash/locale/us/tax"
 "${GUILE_DEPENDS}"
 TRUE
 )
 gnc_add_scheme_targets(scm-tax-us-2
 "${gncmod_tax_us_SCHEME_2}"
-gnucash
+"gnucash/locale/us"
 "${GUILE_DEPENDS}"
 FALSE
 )
 
 gnc_add_scheme_targets(scm-tax-de_DE-1
 "${gncmod_tax_de_DE_SCHEME_1}"
-"gnucash/tax-de_DE"
+"gnucash/locale/de_DE/tax"
 "${GUILE_DEPENDS}"
 TRUE
 )
 gnc_add_scheme_targets(scm-tax-de_DE-2
 "${gncmod_tax_de_DE_SCHEME_2}"
-gnucash
+"gnucash/locale/de_DE"
 "${GUILE_DEPENDS}"
 FALSE
 )
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash tax de_DE" "gnucash tax-de_DE" "scm-tax-de_DE-2" "")
-gnc_add_scheme_deprecated_module ("gnucash tax us" "gnucash tax-us" "scm-tax-us-2" "")
+gnc_add_scheme_deprecated_module ("gnucash tax de_DE" "gnucash locale de_DE tax" "scm-tax-de_DE-2" "")
+gnc_add_scheme_deprecated_module ("gnucash tax us" "gnucash locale us tax" "scm-tax-us-2" "")
 
 add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
 

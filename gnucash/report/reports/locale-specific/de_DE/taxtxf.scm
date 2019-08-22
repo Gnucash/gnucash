@@ -71,7 +71,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gettext))
-(use-modules (gnucash tax-de_DE))
+(use-modules (gnucash locale de_DE tax))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report" 0)

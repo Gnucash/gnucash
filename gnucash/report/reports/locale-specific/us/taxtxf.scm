@@ -103,7 +103,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash tax-us))
+(use-modules (gnucash locale us tax))
 
 (eval-when
       (compile load eval expand)
