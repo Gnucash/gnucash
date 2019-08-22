@@ -32,6 +32,7 @@
 #include "guile-mappings.h"
 #include "guile-util.h"
 #include "gnc-guile-utils.h"
+#include "gnc-module.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -145,6 +146,10 @@ typedef struct
 static void
 initialize_getters (void)
 {
+    if (!gnc_module_load("gnucash/locale/tax", 0))
+    {
+        return;
+    }
     getters.payer_name_source = scm_c_eval_string ("gnc:txf-get-payer-name-source");
     getters.form              = scm_c_eval_string ("gnc:txf-get-form");
     getters.description       = scm_c_eval_string ("gnc:txf-get-description");

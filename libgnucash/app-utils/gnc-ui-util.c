@@ -667,23 +667,10 @@ gnc_ui_account_get_tax_info_string (const Account *account)
         {
             GNCModule module;
             const gchar *tax_module;
-            /* load the tax info */
-            /* This is a very simple hack that loads the (new, special) German
-               tax definition file in a German locale, or (default) loads the
-               US tax file. */
-# ifdef G_OS_WIN32
-            gchar *thislocale = g_win32_getlocale();
-            gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-            g_free(thislocale);
-# else /* !G_OS_WIN32 */
-            const char *thislocale = setlocale(LC_ALL, NULL);
-            gboolean is_de_DE = (strncmp(thislocale, "de_DE", 5) == 0);
-# endif /* G_OS_WIN32 */
-            tax_module = is_de_DE ?
-                         "gnucash/tax/de_DE" :
-                         "gnucash/tax/us";
-
-            module = gnc_module_load ((char *)tax_module, 0);
+            /* load the tax info
+               Note that the module "gnucash/locale/tax" will handle selecting
+               the proper locale specific tax info */
+            module = gnc_module_load ("gnucash/locale/tax", 0);
 
             g_return_val_if_fail (module, NULL);
 

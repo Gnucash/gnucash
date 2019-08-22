@@ -103,6 +103,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+(use-modules (gnucash tax-us))
 
 (eval-when
       (compile load eval expand)
@@ -112,7 +113,6 @@
 (use-modules (gnucash core-utils)) ; for gnc:version
 
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report" 0)
 
 (define reportname (N_ "Tax Schedule Report/TXF Export"))
