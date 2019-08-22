@@ -105,7 +105,7 @@
                     <property name="hexpand">True</property>
                     <property name="resize_mode">immediate</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>

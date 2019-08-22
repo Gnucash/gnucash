@@ -360,9 +360,9 @@
               <object class="GtkGrid" id="options_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">5</property>
+                <property name="border_width">6</property>
                 <property name="row_spacing">1</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label847677">
                     <property name="visible">True</property>
@@ -632,8 +632,8 @@ to print an address on the check.</property>
               <object class="GtkGrid" id="custom_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">5</property>
-                <property name="column_spacing">5</property>
+                <property name="border_width">6</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label703">
                     <property name="visible">True</property>

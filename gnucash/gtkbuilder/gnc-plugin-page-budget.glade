@@ -77,12 +77,9 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">
-                  Use a fixed value or apply transformation for all periods.
-                </property>
+                <property name="label" translatable="yes">Use a fixed value or apply transformation for all periods.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">40</property>
-                <property name="max_width_chars">40</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -101,6 +98,7 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
@@ -128,6 +126,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Action</property>
               </object>
               <packing>
@@ -318,7 +317,6 @@
                 <property name="label" translatable="yes">GnuCash will estimate budget values for the selected accounts from past transactions.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">40</property>
-                <property name="max_width_chars">40</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -337,6 +335,7 @@
           <object class="GtkGrid" id="table6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label96">
                 <property name="visible">True</property>
@@ -451,12 +450,6 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkButton" id="cancelbutton2">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
@@ -501,8 +494,9 @@
               <object class="GtkGrid" id="table5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="border_width">6</property>
                 <property name="row_spacing">3</property>
-                <property name="column_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label85">
                     <property name="visible">True</property>
