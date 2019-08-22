@@ -1,21 +1,21 @@
 add_subdirectory(test)
 
-set(tax_us_SOURCES gncmod-tax-us.c)
+set(locale_tax_SOURCES gncmod-locale-tax.c)
 
 # Add dependency on config.h
-set_source_files_properties (${tax_us_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${locale_tax_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-add_library(gncmod-tax-us ${tax_us_SOURCES})
-target_link_libraries(gncmod-tax-us gnc-module ${GLIB2_LDFLAGS} ${GUILE_LDFLAGS})
+add_library(gncmod-locale-tax ${locale_tax_SOURCES})
+target_link_libraries(gncmod-locale-tax gnc-module ${GLIB2_LDFLAGS} ${GUILE_LDFLAGS})
 
-target_include_directories(gncmod-tax-us
+target_include_directories(gncmod-locale-tax
     PRIVATE ${CMAKE_BINARY_DIR}/common ${GUILE_INCLUDE_DIRS})
 
 if (APPLE)
-  set_target_properties (gncmod-tax-us PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gncmod-locale-tax PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gncmod-tax-us
+install(TARGETS gncmod-locale-tax
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -61,10 +61,10 @@ gnc_add_scheme_targets(scm-tax-de_DE-2
 gnc_add_scheme_deprecated_module ("gnucash tax de_DE" "gnucash tax-de_DE" "scm-tax-de_DE-2" "")
 gnc_add_scheme_deprecated_module ("gnucash tax us" "gnucash tax-us" "scm-tax-us-2" "")
 
-add_custom_target(scm-tax-us ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
+add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
 
-set_local_dist(tax_us_DIST_local CMakeLists.txt ${tax_us_SOURCES}
+set_local_dist(locale_tax_DIST_local CMakeLists.txt ${locale_tax_SOURCES}
     ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2}
     ${gncmod_tax_de_DE_SCHEME_1} ${gncmod_tax_de_DE_SCHEME_2})
-set(tax_us_DIST ${tax_us_DIST_local} ${test_tax_us_DIST} PARENT_SCOPE)
+set(locale_tax_DIST ${locale_tax_DIST_local} ${test_locale_tax_DIST} PARENT_SCOPE)
 

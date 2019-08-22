@@ -96,7 +96,7 @@ set(scm_rpt_locale_specific_GUILE_DEPENDS
   scm-gnc-module
   scm-scm
   scm-test-core
-  scm-tax-us
+  scm-locale-tax
   scm-report
   scm-gnome-utils
   )

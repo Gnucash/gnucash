@@ -1,5 +1,5 @@
 /*********************************************************************
- * gncmod-tax-us.c
+ * gncmod-locale-tax.c
  * module definition/initialization for us tax info
  *
  * Copyright (c) 2001 Linux Developers Group, Inc.
@@ -34,25 +34,25 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
-GNC_MODULE_API_DECL(libgncmod_tax_us)
+GNC_MODULE_API_DECL(libgncmod_locale_tax)
 
 /* version of the gnc module system interface we require */
-int libgncmod_tax_us_gnc_module_system_interface = 0;
+int libgncmod_locale_tax_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int libgncmod_tax_us_gnc_module_current  = 0;
-int libgncmod_tax_us_gnc_module_revision = 0;
-int libgncmod_tax_us_gnc_module_age      = 0;
+int libgncmod_locale_tax_gnc_module_current  = 0;
+int libgncmod_locale_tax_gnc_module_revision = 0;
+int libgncmod_locale_tax_gnc_module_age      = 0;
 
 
 char *
-libgncmod_tax_us_gnc_module_path(void)
+libgncmod_locale_tax_gnc_module_path(void)
 {
     return g_strdup("gnucash/locale/tax");
 }
 
 char *
-libgncmod_tax_us_gnc_module_description(void)
+libgncmod_locale_tax_gnc_module_description(void)
 {
     return g_strdup("Locale dependent income tax information. Currently supported are 'us' and 'de_DE'. Default is 'us'");
 }
@@ -66,7 +66,7 @@ lmod(char * mn)
 }
 
 int
-libgncmod_tax_us_gnc_module_init(int refcount)
+libgncmod_locale_tax_gnc_module_init(int refcount)
 {
     /* This is a very simple hack that loads the (new, special) German
        tax definition file in a German locale, or (default) loads the
@@ -87,7 +87,7 @@ libgncmod_tax_us_gnc_module_init(int refcount)
 }
 
 int
-libgncmod_tax_us_gnc_module_end(int refcount)
+libgncmod_locale_tax_gnc_module_end(int refcount)
 {
     return TRUE;
 }

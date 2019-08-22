@@ -1,4 +1,4 @@
-(display "  testing US tax info module load ... ")
+(display "  testing locale tax info module load ... ")
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
