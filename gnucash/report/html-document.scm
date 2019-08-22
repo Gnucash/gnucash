@@ -151,7 +151,7 @@
             ;;<guile-sitedir>/gnucash/reports/data/balsheet-eg.eguile.scm:<html>
             ;;<guile-sitedir>/gnucash/reports/data/receipt.eguile.scm:<html>
 
-            (push "<html>\n")
+            (push "<html dir='auto'>\n")
             (push "<head>\n")
             (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
             (if style-text

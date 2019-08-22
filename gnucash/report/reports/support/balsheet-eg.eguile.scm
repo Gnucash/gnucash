@@ -125,10 +125,10 @@
 ?>
 
 <!-- The HTML starts here... -->
-<html>
+<html dir='auto'>
 <head>
 <meta http-equiv="content-type" content="text-html; charset=utf-8">
-<title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></title>
+<title><?scm:d coyname ?> <?scm:d opt-report-title ?> <?scm:d (qof-print-date opt-date) ?></title>
 
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the stylesheet file is overridden by some options, i.e.
@@ -152,7 +152,7 @@
 </head>
 <body>
 <h3><?scm:d coyname ?></h3>
-<h2><?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></h2>
+<h2><?scm:d opt-report-title ?> <?scm:d (qof-print-date opt-date) ?></h2>
 
 <?scm
   ;; This is where the work is done.

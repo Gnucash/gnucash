@@ -41,6 +41,7 @@
 ;; report constructor
 
 (define (gnc:make-general-journal-report)
+  (issue-deprecation-warning "gnc:make-general-journal-report is unused.")
   (let* ((regrpt (gnc:make-report regrptguid)))
     regrpt))
 
@@ -90,14 +91,7 @@
       )
      )
     ;; we'll leave query malloc'd in case this is required by the C side...
-    
-    ;; set options in the general tab...
-    (set-option!
-     gnc:pagename-general (N_ "Title") (_ reportname))
-    ;; we can't (currently) set the Report name here
-    ;; because it is automatically set to the template
-    ;; name... :(
-    
+
     ;; set options in the display tab...
     (for-each
      (lambda (l)
@@ -126,7 +120,10 @@
 
 (define (general-journal-renderer report-obj)
   ;; just delegate rendering to the Register Report renderer...
-  ((gnc:report-template-renderer/report-guid regrptguid regrptname) report-obj))
+  (let* ((renderer (gnc:report-template-renderer/report-guid regrptguid #f))
+         (doc (renderer report-obj)))
+    (gnc:html-document-set-title! doc (_ reportname))
+    doc))
 
 (gnc:define-report 
  'version 1

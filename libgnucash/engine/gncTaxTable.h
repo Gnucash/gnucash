@@ -60,32 +60,6 @@ typedef struct _gncTaxTableClass GncTaxTableClass;
 };
 
 */
-typedef struct _gncTaxTableEntry GncTaxTableEntry;
-
-typedef struct _gncAccountValue GncAccountValue;
-
-#include "Account.h"
-#include "qof.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
-
-#define GNC_ID_TAXTABLE       "gncTaxTable"
-
-/* --- type macros --- */
-#define GNC_TYPE_TAXTABLE            (gnc_taxtable_get_type ())
-#define GNC_TAXTABLE(o)              \
-     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TAXTABLE, GncTaxTable))
-#define GNC_TAXTABLE_CLASS(k)        \
-     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TAXTABLE, GncTaxTableClass))
-#define GNC_IS_TAXTABLE(o)           \
-     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TAXTABLE))
-#define GNC_IS_TAXTABLE_CLASS(k)     \
-     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TAXTABLE))
-#define GNC_TAXTABLE_GET_CLASS(o)    \
-     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TAXTABLE, GncTaxTableClass))
-GType gnc_taxtable_get_type(void);
-
 /**
  * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
@@ -103,6 +77,32 @@ typedef enum
     GNC_TAXINCLUDED_NO,		/**< tax is not included */
     GNC_TAXINCLUDED_USEGLOBAL, /**< use the global setting */
 } GncTaxIncluded;
+
+typedef struct _gncTaxTableEntry GncTaxTableEntry;
+
+typedef struct _gncAccountValue GncAccountValue;
+
+#include "Account.h"
+#include "qof.h"
+#include "gncBusiness.h"
+#include "gncOwner.h"
+
+#define GNC_ID_TAXTABLE       "gncTaxTable"
+
+/* --- type macros --- */
+#define GNC_TYPE_TAXTABLE            (gnc_taxtable_get_type ())
+#define GNC_TAXTABLE(o)              \
+     (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TAXTABLE, GncTaxTable))
+#define GNC_TAXTABLE_CLASS(k)        \
+     (G_TYPE_CHECK_CLASS_CAST((k), GNC_TYPE_TAXTABLE, GncTaxTableClass))
+#define GNC_IS_TAXTABLE(o)           \
+     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TAXTABLE))
+#define GNC_IS_TAXTABLE_CLASS(k)     \
+     (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TAXTABLE))
+#define GNC_TAXTABLE_GET_CLASS(o)    \
+     (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TAXTABLE, GncTaxTableClass))
+GType gnc_taxtable_get_type(void);
+
 
 const char * gncAmountTypeToString (GncAmountType type);
 gboolean gncAmountStringToType (const char *str, GncAmountType *type);
@@ -151,6 +151,7 @@ static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GncGUID
 }
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
+GncTaxTable *gncTaxTableGetDefault (QofBook *book, GncOwnerType type);
 
 typedef GList GncTaxTableList;
 GncTaxTableList  * gncTaxTableGetTables (QofBook *book);

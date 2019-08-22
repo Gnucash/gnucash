@@ -11,7 +11,6 @@ set (app_utils_noinst_HEADERS
 
 set (app_utils_HEADERS
   QuickFill.h
-  business-helpers.h
   business-options.h
   file-utils.h
   gfec.h
@@ -52,7 +51,6 @@ gnc_add_swig_python_command (swig-app-utils-python
 set (app_utils_SOURCES
   calculation/expression_parser.c
   calculation/fin.c
-  business-helpers.c
   business-options.c
   QuickFill.c
   file-utils.c

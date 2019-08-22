@@ -103,7 +103,7 @@
 
 <!-- ====================================================================== -->
 <!-- The HTML for the invoice starts here -->
-<html>
+<html dir='auto'>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>

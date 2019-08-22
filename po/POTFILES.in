@@ -501,7 +501,6 @@ gnucash/report/stylesheets/head-or-tail.scm
 gnucash/report/stylesheets/plain.scm
 gnucash/report/trep-engine.scm
 libgnucash/app-utils/app-utils.scm
-libgnucash/app-utils/business-helpers.c
 libgnucash/app-utils/business-options.c
 libgnucash/app-utils/business-options.scm
 libgnucash/app-utils/business-prefs.scm

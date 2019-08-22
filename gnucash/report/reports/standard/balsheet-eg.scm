@@ -324,7 +324,7 @@
          (opt-report-commodity (get-option commodities-page optname-report-commodity))
          (opt-price-source     (get-option commodities-page optname-price-source))
          (opt-show-foreign?    (get-option commodities-page optname-show-foreign))
-         (opt-report-title     (get-option general-page     optname-report-title))
+         (opt-report-title     (get-option general-page     gnc:optname-reportname))
          (opt-date             (gnc:time64-end-day-time
                                  (gnc:date-option-absolute-time
                                    (get-option general-page optname-date))))
@@ -563,6 +563,12 @@
           (negstyle (nbsp mny-string)))
         (nbsp mny-string)))
 
+    (define (monetary-rounded mon)
+      (let ((c (gnc:gnc-monetary-commodity mon))
+            (a (gnc:gnc-monetary-amount mon)))
+        (gnc:make-gnc-monetary
+         c (gnc-numeric-convert a (gnc-commodity-get-fraction c) GNC-RND-ROUND))))
+
     (define (format-monetary mny)
       ;; Format the given gnc:monetary value according to opt-neg-format
       ;; If mny's currency isn't the same as that of the report,
@@ -576,10 +582,10 @@
         (if (not (gnc-commodity-equiv comm opt-report-commodity))
           (begin
             (if opt-show-foreign?
-              (set! answer (string-append (foreignstyle (neg-format (gnc:monetary->string mny) neg?)) "&nbsp;")))
+              (set! answer (string-append (foreignstyle (neg-format (gnc:monetary->string (monetary-rounded mny)) neg?)) "&nbsp;")))
             (set! mny (exchange-fn mny opt-report-commodity))))
         ; main currency - converted if necessary
-        (set! answer (string-append answer (neg-format (gnc:monetary->string mny) neg?)))
+        (set! answer (string-append answer (neg-format (gnc:monetary->string (monetary-rounded mny)) neg?)))
         answer))
 
     (define (format-comm-coll cc)
@@ -598,7 +604,7 @@
     (define (fmtmoney2 mny)
       ;; format a monetary amount in the given currency/commodity
       ;; !! this takes a gnc-monetary
-      (nbsp (gnc:monetary->string mny)))
+      (nbsp (gnc:monetary->string (monetary-rounded mny))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

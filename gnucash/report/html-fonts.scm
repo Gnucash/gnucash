@@ -140,7 +140,7 @@
             (string-append
                 "h3 { " title-font-info " }\n"
                 "a { " account-link-font-info " }\n"
-                "body, p, table, tr, td { text-align: left; vertical-align: top; " text-cell-font-info " }\n"
+                "body, p, table, tr, td { vertical-align: top; " text-cell-font-info " }\n"
                 "tr.alternate-row { background: " alternate-row-color " }\n"
                 "tr { page-break-inside: avoid !important;}\n"
                 "th.column-heading-left { text-align: left; " number-header-font-info " }\n"

@@ -34,8 +34,6 @@
 #include "gnc-ui-util.h"
 #include "recncell.h"
 
-#include "business-helpers.h"
-
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
@@ -430,16 +428,16 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 switch (gncOwnerGetType (owner))
                 {
                 case GNC_OWNER_CUSTOMER:
-                    table = gnc_business_get_default_tax_table (ledger->book,
-                            GNC_OWNER_CUSTOMER);
+                    table = gncTaxTableGetDefault (ledger->book,
+                                                   GNC_OWNER_CUSTOMER);
 
                     if (gncCustomerGetTaxTableOverride (owner->owner.customer))
                         table = gncCustomerGetTaxTable (owner->owner.customer);
                     break;
 
                 case GNC_OWNER_VENDOR:
-                    table = gnc_business_get_default_tax_table (ledger->book,
-                            GNC_OWNER_VENDOR);
+                    table = gncTaxTableGetDefault (ledger->book,
+                                                   GNC_OWNER_VENDOR);
 
                     if (gncVendorGetTaxTableOverride (owner->owner.vendor))
                         table = gncVendorGetTaxTable (owner->owner.vendor);

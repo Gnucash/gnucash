@@ -26,11 +26,9 @@
     width: 1em;
   }
   td.accname {
-    text-align: left;
     vertical-align: top;
   }
   td.accnametotal {
-    text-align: left;
     vertical-align: top;
     font-weight: bold;
   }
