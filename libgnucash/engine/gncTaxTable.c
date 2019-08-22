@@ -681,6 +681,26 @@ GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
     return NULL;
 }
 
+GncTaxTable*
+gncTaxTableGetDefault (QofBook *book, GncOwnerType type)
+{
+    GSList *path = NULL;
+    const GncGUID *guid = NULL;
+    const char *vendor = "Default Vendor TaxTable";
+    const char *customer = "Default Customer TaxTable";
+    const char *section = "Business";
+
+    g_return_val_if_fail (book != NULL, NULL);
+    g_return_val_if_fail (type == GNC_OWNER_CUSTOMER || \
+                          type == GNC_OWNER_VENDOR, NULL);
+    path = g_slist_prepend (path, type == GNC_OWNER_CUSTOMER ? (void*)customer : (void*)vendor);
+    path = g_slist_prepend (path, (void*)section);
+
+    guid = qof_book_get_guid_option (book, path);
+    g_return_val_if_fail (guid, NULL);
+    return gncTaxTableLookup (book, guid);
+}
+
 GncTaxTableList * gncTaxTableGetTables (QofBook *book)
 {
     struct _book_info *bi;

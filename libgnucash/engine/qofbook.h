@@ -375,6 +375,7 @@ char *qof_book_get_counter_format (const QofBook *book,
 
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
+const GncGUID* qof_book_get_guid_option(QofBook* book, GSList* path);
 void qof_book_option_frame_delete (QofBook *book, const char* opt_name);
 
 /** Access functions for reading and setting the used-features on this book.

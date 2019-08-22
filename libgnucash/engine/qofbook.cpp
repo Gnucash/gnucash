@@ -1173,6 +1173,18 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     qof_book_commit_edit(book);
 }
 
+const GncGUID*
+qof_book_get_guid_option(QofBook* book, GSList* path)
+{
+    g_return_val_if_fail(book != nullptr, nullptr);
+    g_return_val_if_fail(path != nullptr, nullptr);
+
+    auto table_value = qof_book_get_option(book, path);
+    if (!table_value)
+        return nullptr;
+    return table_value->get<GncGUID*>();
+}
+
 void
 qof_book_option_frame_delete (QofBook *book, const char* opt_name)
 {
