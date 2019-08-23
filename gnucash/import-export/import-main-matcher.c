@@ -1171,6 +1171,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     const gchar *ro_text;
     gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
     gchar *class_extension = NULL;
+    gboolean show_pixbuf = TRUE;
     Split *split;
     time64 date;
     gnc_numeric amount;
@@ -1302,6 +1303,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
             {
                 color = get_required_color (int_required_class);
                 ro_text = _("Match missing!");
+                show_pixbuf = FALSE;
                 remove_child_row (model, iter);
             }
         }
@@ -1327,6 +1329,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
             {
                 color = get_required_color (int_required_class);
                 ro_text = _("Match missing!");
+                show_pixbuf = FALSE;
                 remove_child_row (model, iter);
             }
         }
@@ -1334,11 +1337,13 @@ refresh_model_row (GNCImportMainMatcher *gui,
     case GNCImport_SKIP:
         color = get_required_color (int_required_class);
         ro_text = _("Do not import (no action selected)");
+        show_pixbuf = FALSE;
         remove_child_row (model, iter);
         break;
     default:
         color = "white";
         ro_text = "WRITEME, this is an unknown action";
+        show_pixbuf = FALSE;
         break;
     }
 
@@ -1360,14 +1365,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
                         -1);
     if (gnc_import_TransInfo_get_action (info) == GNCImport_SKIP)
     {
-        /*Show the best match's confidence pixmap in the info column*/
-        gtk_tree_store_set (store, iter,
-                            DOWNLOADED_COL_ACTION_PIXBUF,
-                            gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                    (gnc_import_TransInfo_get_selected_match (info)),
-                                    gui->user_settings,
-                                    GTK_WIDGET(gui->view)),
-                            -1);
+        /*If skipping the row, there is no best match's confidence pixmap*/
+        gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
     }
 
     gtk_tree_store_set (store, iter,
@@ -1377,13 +1376,16 @@ refresh_model_row (GNCImportMainMatcher *gui,
     if (gnc_import_TransInfo_get_action (info) == GNCImport_CLEAR)
     {
         /*Show the best match's confidence pixmap in the info column*/
-        gtk_tree_store_set (store, iter,
-                            DOWNLOADED_COL_ACTION_PIXBUF,
-                            gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                    (gnc_import_TransInfo_get_selected_match (info)),
-                                    gui->user_settings,
-                                    GTK_WIDGET(gui->view)),
-                            -1);
+        if (show_pixbuf)
+            gtk_tree_store_set (store, iter,
+                                DOWNLOADED_COL_ACTION_PIXBUF,
+                                gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
+                                        (gnc_import_TransInfo_get_selected_match (info)),
+                                        gui->user_settings,
+                                        GTK_WIDGET(gui->view)),
+                                -1);
+        else
+            gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
     }
 
     gtk_tree_store_set (store, iter,
@@ -1393,13 +1395,16 @@ refresh_model_row (GNCImportMainMatcher *gui,
     if (gnc_import_TransInfo_get_action (info) == GNCImport_UPDATE)
     {
         /*Show the best match's confidence pixmap in the info column*/
-        gtk_tree_store_set (store, iter,
-                            DOWNLOADED_COL_ACTION_PIXBUF,
-                            gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
-                                    (gnc_import_TransInfo_get_selected_match (info)),
-                                    gui->user_settings,
-                                    GTK_WIDGET(gui->view)),
-                            -1);
+        if (show_pixbuf)
+            gtk_tree_store_set (store, iter,
+                                DOWNLOADED_COL_ACTION_PIXBUF,
+                                gen_probability_pixbuf (gnc_import_MatchInfo_get_probability
+                                        (gnc_import_TransInfo_get_selected_match (info)),
+                                        gui->user_settings,
+                                        GTK_WIDGET(gui->view)),
+                                -1);
+        else
+            gtk_tree_store_set (store, iter, DOWNLOADED_COL_ACTION_PIXBUF, NULL, -1);
     }
 
     // show child row if 'show matched info' is toggled
