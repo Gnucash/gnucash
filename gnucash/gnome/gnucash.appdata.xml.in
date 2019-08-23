@@ -29,6 +29,9 @@
   <categories>
     <category>Finance</category>
   </categories>
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
   <screenshots>
     <screenshot type="default">
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_accounts_lg.png</image>
