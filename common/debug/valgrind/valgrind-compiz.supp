@@ -1,0 +1,919 @@
+# -*- tab-width: 3; indent-tabs-mode: nil -*-
+#
+# GNOME supressions base.supp:
+#  git://github.com/dtrebbien/GNOME.supp.git
+#  Copyright (C) 2012  Daniel Trebbien
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Python supressions valgrind-python.supp:
+#  http://hg.python.org/cpython
+#  Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+#  2011, 2012 Python Software Foundation; All Rights Reserved
+#  PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
+#  --------------------------------------------
+#
+# 1. This LICENSE AGREEMENT is between the Python Software Foundation
+# ("PSF"), and the Individual or Organization ("Licensee") accessing and
+# otherwise using this software ("Python") in source or binary form and
+# its associated documentation.
+
+# 2. Subject to the terms and conditions of this License Agreement, PSF hereby
+# grants Licensee a nonexclusive, royalty-free, world-wide license to reproduce,
+# analyze, test, perform and/or display publicly, prepare derivative works,
+# distribute, and otherwise use Python alone or in any derivative version,
+# provided, however, that PSF's License Agreement and PSF's notice of copyright,
+# i.e., "Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+# 2011, 2012 Python Software Foundation; All Rights Reserved" are retained in Python
+# alone or in any derivative version prepared by Licensee.
+
+# 3. In the event Licensee prepares a derivative work that is based on
+# or incorporates Python or any part thereof, and wants to make
+# the derivative work available to others as provided herein, then
+# Licensee hereby agrees to include in any such work a brief summary of
+# the changes made to Python.
+
+# 4. PSF is making Python available to Licensee on an "AS IS"
+# basis.  PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+# IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND
+# DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
+# FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT
+# INFRINGE ANY THIRD PARTY RIGHTS.
+# 
+# 5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON
+# FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS
+# A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON,
+# OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
+# 
+# 6. This License Agreement will automatically terminate upon a material
+# breach of its terms and conditions.
+
+# 7. Nothing in this License Agreement shall be deemed to create any
+# relationship of agency, partnership, or joint venture between PSF and
+# Licensee.  This License Agreement does not grant permission to use PSF
+# trademarks or trade name in a trademark sense to endorse or promote
+# products or services of Licensee, or any third party.
+# 
+# 8. By copying, installing or otherwise using Python, Licensee
+# agrees to be bound by the terms and conditions of this License
+# Agreement.
+#
+# All other supressions:
+#
+#  Copyright © 2012 Canonical Ltd.
+# 
+#  Permission to use, copy, modify, distribute, and sell this software
+#  and its documentation for any purpose is hereby granted without
+#  fee, provided that the above copyright notice appear in all copies
+#  and that both that copyright notice and this permission notice
+#  appear in supporting documentation, and that the name of
+#  Canonical Ltd. not be used in advertising or publicity pertaining to
+#  distribution of the software without specific, written prior permission.
+#  Canonical Ltd. makes no representations about the suitability of this
+#  software for any purpose. It is provided "as is" without express or
+#  implied warranty.
+# 
+#  CANONICAL, LTD. DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+#  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
+#  NO EVENT SHALL CANONICAL, LTD. BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+#  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+#  OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+#  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
+#  WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# 
+#  Authored by: Sam Spilsbury <sam.spilsbury@canonical.com>
+# /
+
+{
+    xmlReadFile leaks a string
+    Memcheck:Leak
+    fun:malloc
+    fun:xmlStrndup
+    ...
+    fun:xmlReadFile
+}
+
+{
+    xmlReadFile leaks an xmlNewCharEncodingHandler
+    Memcheck:Leak
+    fun:malloc
+    fun:xmlNewCharEncodingHandler
+    ...
+    fun:xmlReadFile
+}
+
+{
+    xmInitCharEncodingHandlers leaks
+    Memcheck:Leak
+    fun:*alloc*
+    fun:xmlInitCharEncodingHandlers
+}
+
+{
+    xmlReadFile leaks an xmlNewRMutex
+    Memcheck:Leak
+    fun:malloc
+    fun:xmlNewRMutex
+    ...
+    fun:xmlReadFile
+}
+
+{
+    xmlParseDocument leaks an xmlNewMutex
+    Memcheck:Leak
+    fun:malloc
+    fun:xmlNewMutex
+    ...
+    fun:xmlParseDocument
+}
+
+{
+    dlopen leaks some tokens
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:dlopen*
+}
+
+{
+    dlclose calls malloc and leaks
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:dlclose*
+}
+
+{
+    import_submodule
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:import_*module*
+}
+
+{
+    everything from PyInitialize_Ex
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:Py_InitializeEx*
+}
+
+{
+    everything from PySys*
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:PySys*
+}
+
+{
+    everything from PyList
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:PyList_*
+}
+
+{
+    everything from PyThread
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:PyThread*
+}
+
+{
+    everything from PyStructSequence
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:PyStructSequence*
+}
+
+
+
+{
+   don't care about protobuf
+   Memcheck:Leak
+   ...
+   fun:_ZN6google8protobuf24SimpleDescriptorDatabase15DescriptorIndexISt4pairIPKviEE7AddFileERKNS0_19FileDescriptorProtoES6_
+}
+
+{
+    google::protobuf::protobufAddDesc
+    Memcheck:Leak
+    ...
+    fun:*protobuf*AddDesc*
+}
+
+{
+   don't care about protobuf
+   Memcheck:Leak
+   ...
+   fun:_ZN6google8protobuf8internal10OnShutdownEPFvvE
+}
+
+{
+   g_types are never free'd
+   Memcheck:Leak
+   ...
+   fun:g_type*
+}
+
+{
+    g_settings_class_init intentionally leaks signals
+    Memcheck:Leak
+    fun:*alloc
+    ...
+    fun:g_signal_new
+    ...
+    fun:g_type_class_ref
+    ...
+    fun:g_object_new
+}
+
+{
+    g_list_append calls g_slice_alloc can call g_private_get which seems to leave reachable blocks
+    Memcheck:Leak
+    fun:malloc
+    ...
+    fun:g_private_get
+    fun:g_slice_alloc
+    fun:g_list_append
+}
+
+{
+    g_list_append calls g_mutex_lock which calls malloc
+    Memcheck:Leak
+    fun:malloc
+    ...
+    fun:g_mutex*
+    ...
+    fun:g_slice_alloc
+    fun:g_list_append
+}
+
+# not entirely certain about this
+
+{
+    g_list_append calls thread_memory_from_self, but we can't detect it
+    Memcheck:Leak
+    fun:calloc
+    ...
+    fun:g_slice_alloc
+    fun:g_list_append
+}
+
+{
+    g_variant_builder_end calls g_rec_mutex_lock
+    Memcheck:Leak
+    fun:malloc
+    ...
+    fun:g_slice_alloc
+    ...
+    fun:g_rec_mutex_lock
+    fun:g_variant_type_info_get
+    ...
+    fun:g_variant_builder_end
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:__GI___strcasecmp_l
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Value8
+   fun:__GI___strcasecmp_l
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr8
+   fun:__strspn_sse42
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:__strspn_sse42
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:FcConfigFileExists
+}
+
+
+{
+   g_hash_table_insert_node() in ghash.c
+   Memcheck:Leak
+   ...
+   fun:g_memdup
+   fun:g_hash_table_insert_node
+}
+
+{
+   g_hash_table_resize() in ghash.c
+   Memcheck:Leak
+   ...
+   fun:g_hash_table_resize
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_application_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_home_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_host_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_prgname
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_real_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_system_config_dirs
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_system_data_dirs
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_tmp_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_cache_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_config_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_data_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_runtime_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_special_dir
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_reload_user_special_dirs_cache
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_set_application_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_set_prgname
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_random_double
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_random_double_range
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_random_int
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_random_int_range
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_random_set_seed
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_bus_get
+   fun:g_bus_own_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_hash_table_new
+   fun:g_bus_own_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_main_context_ref_thread_default
+   fun:g_bus_own_name
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_hash_table_new
+   fun:g_bus_own_name_on_connection
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_variant_new
+   fun:g_bus_unown_name
+}
+
+{
+   _g_dbus_initialize() in gio/gdbusprivate.c
+   Memcheck:Leak
+   ...
+   fun:_g_dbus_initialize
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:FcConfigSubstitute*
+   fun:pango_cairo_fc_font_map_fontset_key_substitute
+}
+
+{
+   _gtk_accessibility_init() in gail.c
+   Memcheck:Leak
+   ...
+   fun:atk_add_focus_tracker
+   fun:_gtk_accessibility_init
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gdk_display_manager_get
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gdk_display_manager_get_default_display
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gdk_display_get_default
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_clipboard_get_for_display
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_clipboard_request_contents
+}
+
+{
+   gtk_im_module_initialize() in gtkimmodule.c
+   Memcheck:Leak
+   ...
+   fun:gtk_im_module_initialize
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_widget_get_style_context
+}
+
+{
+    g_main_context_default calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_main_context_new
+    fun:g_main_context_default
+}
+
+{
+    g_main_context_default calls g_mutex_lock
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_mutex_lock
+    ...
+    fun:g_main_context_default
+}
+
+{
+    g_main_context_default calls g_cond_broadcast
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_cond_broadcast
+    ...
+    fun:g_main_context_default
+}
+
+{
+    g_main_context_default calls g_slist_prepend
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_slist_prepend
+    ...
+    fun:g_main_context_default
+}
+
+{
+    g_get_worker_context calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_main_context_new
+    fun:g_get_worker_context
+}
+
+{
+    g_get_worker_context calls g_thread_new
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_thread_new
+    fun:g_get_worker_context
+}
+
+{
+    g_get_worker_context calls g_mutex_lock
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_mutex_lock
+    ...
+    fun:g_get_worker_context
+}
+
+{
+    g_main_context_iterate calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_main_context_iterate*
+}
+
+{
+    g_main_loop_run calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_main_loop_run*
+}
+
+{
+    g_thread_proxy calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_thread_proxy
+}
+
+{
+    g_unix_signal_add_full calls g_mutex_lock which calls malloc
+    Memcheck:Leak
+    fun:*alloc*
+    ...
+    fun:g_mutex_lock
+    ...
+    fun:g_unix_signal_add_full
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_source_style_scheme_manager_get_default
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_source_style_scheme_get_style
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Addr4
+   fun:Py_ADDRESS_IN_RANGE
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Value4
+   fun:Py_ADDRESS_IN_RANGE
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 8 (x86_64 aka amd64)
+   Memcheck:Value8
+   fun:Py_ADDRESS_IN_RANGE
+}
+
+{
+   ADDRESS_IN_RANGE/Conditional jump or move depends on uninitialised value
+   Memcheck:Cond
+   fun:Py_ADDRESS_IN_RANGE
+}
+
+{
+   Suppress leaking the GIL.  Happens once per process, see comment in ceval.c.
+   Memcheck:Leak
+   fun:malloc
+   fun:PyThread_allocate_lock
+   fun:PyEval_InitThreads
+}
+
+{
+   Suppress leaking the GIL after a fork.
+   Memcheck:Leak
+   fun:malloc
+   fun:PyThread_allocate_lock
+   fun:PyEval_ReInitThreads
+}
+
+{
+   Suppress leaking the autoTLSkey.  This looks like it shouldn't leak though.
+   Memcheck:Leak
+   fun:malloc
+   fun:PyThread_create_key
+   fun:_PyGILState_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+}
+
+{
+   Hmmm, is this a real leak or like the GIL?
+   Memcheck:Leak
+   fun:malloc
+   fun:PyThread_ReInitTLS
+}
+
+{
+   Handle PyMalloc confusing valgrind (possibly leaked)
+   Memcheck:Leak
+   fun:realloc
+   fun:_PyObject_GC_Resize
+}
+
+{
+   Handle PyMalloc confusing valgrind (possibly leaked)
+   Memcheck:Leak
+   fun:malloc
+   fun:_PyObject_GC_New
+}
+
+{
+   Handle PyMalloc confusing valgrind (possibly leaked)
+   Memcheck:Leak
+   fun:malloc
+   fun:*PyObject*Malloc*
+}
+
+{
+   Handle PyMalloc confusing valgrind (possibly leaked)
+   Memcheck:Leak
+   fun:malloc
+   fun:_PyObject_GC_NewVar
+}
+
+{
+    Dictresize confuses valgrind too
+    Memcheck:Leak
+    ...
+    fun:dictresize*
+}
+
+{
+    PyString can confuse it too
+    Memcheck:Leak
+    ...
+    fun:PyString*
+}
+
+#
+# Non-python specific leaks
+#
+
+{
+   Handle pthread issue (possibly leaked)
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate_tls_storage
+   fun:_dl_allocate_tls
+}
+
+{
+   Handle pthread issue (possibly leaked)
+   Memcheck:Leak
+   fun:memalign
+   fun:_dl_allocate_tls_storage
+   fun:_dl_allocate_tls
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Addr4
+   fun:PyObject_Free
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Value4
+   fun:PyObject_Free
+}
+
+{
+   ADDRESS_IN_RANGE/Use of uninitialised value of size 8
+   Memcheck:Addr8
+   fun:PyObject_Free
+}
+
+{
+   ADDRESS_IN_RANGE/Use of uninitialised value of size 8
+   Memcheck:Value8
+   fun:PyObject_Free
+}
+
+{
+   ADDRESS_IN_RANGE/Conditional jump or move depends on uninitialised value
+   Memcheck:Cond
+   fun:PyObject_Free
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Addr4
+   fun:PyObject_Realloc*
+}
+
+{
+   ADDRESS_IN_RANGE/Invalid read of size 4
+   Memcheck:Value4
+   fun:PyObject_Realloc*
+}
+
+{
+   ADDRESS_IN_RANGE/Use of uninitialised value of size 8
+   Memcheck:Addr8
+   fun:PyObject_Realloc*
+}
+
+{
+   ADDRESS_IN_RANGE/Use of uninitialised value of size 8
+   Memcheck:Value8
+   fun:PyObject_Realloc*
+}
+
+{
+   ADDRESS_IN_RANGE/Conditional jump or move depends on uninitialised value
+   Memcheck:Cond
+   fun:PyObject_Realloc*
+}
+
+# Additional suppressions for the unified decimal tests:
+{
+   test_decimal
+   Memcheck:Addr4
+   fun:PyUnicodeUCS2_FSConverter
+}
+
+{
+   test_decimal2
+   Memcheck:Addr4
+   fun:PyUnicode_FSConverter
+}
