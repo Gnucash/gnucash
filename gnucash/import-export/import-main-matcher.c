@@ -786,18 +786,10 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
              "pixbuf", DOWNLOADED_COL_ACTION_PIXBUF,
              "cell-background", DOWNLOADED_COL_COLOR,
              NULL);
-    renderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_column_pack_start (column, renderer, TRUE);
-    gtk_tree_view_column_set_attributes (column, renderer,
-                                         "text", DOWNLOADED_COL_ACTION_INFO,
-                                         "background", DOWNLOADED_COL_COLOR,
-                                         NULL);
-    gtk_tree_view_column_set_sort_column_id (column, DOWNLOADED_COL_ACTION_INFO);
-    g_object_set (G_OBJECT(column),
-                  "reorderable", TRUE,
-                  "resizable", TRUE,
-                  NULL);
+
     gtk_tree_view_append_column (info->view, column);
+
+    add_text_column (view, _("Additional Comments"), DOWNLOADED_COL_ACTION_INFO);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
