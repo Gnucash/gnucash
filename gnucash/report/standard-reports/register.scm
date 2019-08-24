@@ -228,16 +228,15 @@
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
                  "text-cell"
-                 (if split-info?
-                     (if transaction-info?
-                         (let ((other-split
-                                (xaccSplitGetOtherSplit split)))
-                           (if (not (null? other-split))
-                               (gnc-account-get-full-name
-                                (xaccSplitGetAccount other-split))
-                               (_ "-- Split Transaction --")))
-                         (gnc-account-get-full-name account))
-                     " "))))
+                 (cond
+                  ((not split-info?) #f)
+                  ((not transaction-info?) (gnc-account-get-full-name account))
+                  (else (case (xaccTransCountSplits (xaccSplitGetParent split))
+                          ((2) (gnc-account-get-full-name
+                                (xaccSplitGetAccount
+                                 (xaccSplitGetOtherSplit split))))
+                          ((1) (_ "None"))
+                          (else (_ "-- Split Transaction --"))))))))
     (if (shares-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
