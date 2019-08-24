@@ -54,14 +54,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list DESTINATION  ${CMA
 file(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
   DESTINATION ${DATADIR_BUILD}/gnucash)
 
-# ---
-if (BUILDING_FROM_VCS)
-  set(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
-else()
-  set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
-endif()
-set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
-
 add_custom_command(OUTPUT gnucash.1
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in gnc-vcs-info
   COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in

@@ -41,6 +41,16 @@ set(sysconfdir ${CMAKE_INSTALL_FULL_SYSCONFDIR})
 set(localedir "${CMAKE_INSTALL_FULL_DATAROOTDIR}/locale")
 configure_file(gncla-dir.h.in gncla-dir.h)
 
+
+
+# ---
+if (BUILDING_FROM_VCS)
+  set(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
+else()
+  set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
+endif()
+set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h CACHE STRING "path to gnc-vcs-dir")
+
 ### Create gnc-vcs-info.h
 # This can only be done when building from a vcs (git/svn/bzr/svk) working directory.
 # This file is shipped in the distribution tarball, so no need to generate it in that case anyway.
@@ -63,7 +73,7 @@ add_custom_target(gnc-vcs-info ALL
                              -P ${CMAKE_SOURCE_DIR}/cmake/git2version-info.cmake
 )
 else(BUILDING_FROM_VCS)
-  add_custom_target(gnc-vcs-info DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnc-vcs-info.h)
+  add_custom_target(gnc-vcs-info DEPENDS ${VCS_INFO_FILE})
 endif(BUILDING_FROM_VCS)
 dist_add_generated (${BUILDING_FROM_VCS} gnc-vcs-info.h)
 ### Compile library

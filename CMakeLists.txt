@@ -152,7 +152,14 @@ if (GNC_VCS_INFO_RESULT EQUAL 0)
   if (NOT GIT_FOUND)
     message(SEND_ERROR "Looks like we're building from version control, but can't find git executable. Please set GIT_EXECUTABLE.")
   endif()
+  set(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
+else()
+  set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
 endif()
+# The location of gnc-vcs-info.h depends on whether we build from VCS or not
+# And this file is needed in several other build rules, so we define its
+# location once here.
+set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
 
 # Determine whether to generate the swig wrappers.
 # By default they will only be generated when building from a git worktree
