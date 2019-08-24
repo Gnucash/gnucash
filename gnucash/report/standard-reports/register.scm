@@ -163,17 +163,6 @@
         (addto! heading-list (_ "Balance")))
     (reverse heading-list)))
 
-(define (gnc:split-get-balance-display split-info? split)
-  (let* ((account (xaccSplitGetAccount split))
-         (balance
-          (if split-info?
-              (xaccSplitGetBalance split)
-              (xaccTransGetAccountBalance
-               (xaccSplitGetParent split) account))))
-    (if (and (not (null? account)) (gnc-reverse-balance account))
-        (- balance)
-        balance)))
-
 (define (add-split-row table split column-vector row-style transaction-info?
                        split-info? action-for-num? ledger-type? double? memo?
                        description? total-collector)
@@ -360,10 +349,6 @@
                                                    (reverse row-contents))))))
     split-value))
 
-(define (lookup-sort-key sort-option)
-  (vector-ref (cdr (assq sort-option comp-funcs-assoc-list)) 0))
-(define (lookup-subtotal-pred sort-option)
-  (vector-ref (cdr (assq sort-option comp-funcs-assoc-list)) 1))
 
 (define (options-generator)
 
