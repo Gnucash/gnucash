@@ -62,18 +62,6 @@ else()
 endif()
 set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
 
-# The copious use of backslashes below is to escape escape sequences that
-# have to end up in the file being written...
-# eg \\\" will become \", \\\\1 will become \\1 (which cmake will then interpret as \1)
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
-"file(STRINGS \${VCS_INFO_FILE} ym_line REGEX \"GNC_VCS_REV_Y_M\")
-string(REGEX REPLACE \"^.* \\\"(.*)\\\"\" \"\\\\1\" DATE \${ym_line})
-configure_file(\${SRC} \${DST} )
-file(COPY gnucash.1
-  DESTINATION \${DATADIR_BUILD}/gnucash)
-")
-
-
 add_custom_command(OUTPUT gnucash.1
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in gnc-vcs-info
   COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in
@@ -81,7 +69,8 @@ add_custom_command(OUTPUT gnucash.1
                            -D VERSION=${VERSION}
                            -D VCS_INFO_FILE=${VCS_INFO_FILE}
                            -D DATADIR_BUILD=${DATADIR_BUILD}
-                           -P ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
+                           -D SRC_DIR=${CMAKE_SOURCE_DIR}
+                           -P ${CMAKE_SOURCE_DIR}/cmake/configure-manpage.cmake
   )
 add_custom_target(gnucash-manpage DEPENDS gnucash.1)
 dist_add_generated (${BUILDING_FROM_VCS} gnucash.1)

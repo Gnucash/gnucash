@@ -8,4 +8,7 @@ if (APPLE)
 endif(APPLE)
 
 
-set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)
+set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in
+    configure-manpage.cmake git2version-info.cmake
+    version-info2env.cmake
+)

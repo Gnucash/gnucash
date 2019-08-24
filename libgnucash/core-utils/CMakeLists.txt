@@ -54,29 +54,13 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
 #define GNC_VCS_REV_Y_M \"@GNC_VCS_REV_Y_M@\"
 ")
 
-set(SCM_REV_COMMAND "${CMAKE_SOURCE_DIR}/util/gnc-vcs-info -r")
-set(SCM_REV_DATE_COMMAND "${CMAKE_SOURCE_DIR}/util/gnc-vcs-info -d")
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
-  "execute_process(
-    COMMAND ${SHELL} ${SCM_REV_COMMAND} ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE GNC_VCS_REV
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  execute_process(
-    COMMAND ${SHELL} ${SCM_REV_DATE_COMMAND} ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE GNC_VCS_REV_DATE
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  string(SUBSTRING \${GNC_VCS_REV_DATE} 0 4 GNC_VCS_REV_YEAR)
-  string(SUBSTRING \${GNC_VCS_REV_DATE} 0 7 GNC_VCS_REV_Y_M)
-  configure_file(\${SRC} \${DST} @ONLY)
-")
-
 add_custom_target(gnc-vcs-info ALL
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
     COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
                              -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
-                             -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
+                             -D SRC_DIR=${CMAKE_SOURCE_DIR}
+                             -D SHELL="${SHELL}"
+                             -P ${CMAKE_SOURCE_DIR}/cmake/git2version-info.cmake
 )
 else(BUILDING_FROM_VCS)
   add_custom_target(gnc-vcs-info DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnc-vcs-info.h)
