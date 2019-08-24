@@ -43,6 +43,7 @@
       <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_bar_chart_lg.png</image>
     </screenshot>
   </screenshots>
+  <translation type="gettext">gnucash</translation>
   <url type="homepage">https://www.gnucash.org</url>
   <url type="bugtracker">https://bugs.gnucash.org</url>
   <url type="faq">https://wiki.gnucash.org/wiki/FAQ</url>
