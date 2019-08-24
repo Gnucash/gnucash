@@ -72,21 +72,12 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
   configure_file(\${SRC} \${DST} @ONLY)
 ")
 
-if (${CMAKE_VERSION} VERSION_GREATER "3.1")
-  add_custom_target(gnc-vcs-info ALL
+add_custom_target(gnc-vcs-info ALL
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
     COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
-                     -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
-                     -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
-  )
-else()
-  # BYPRODUCTS keyword not supported below 3.2
-  add_custom_target(gnc-vcs-info ALL
-    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
-                     -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
-                     -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
-  )
-endif()
+                             -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
+                             -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
+)
 else(BUILDING_FROM_VCS)
   add_custom_target(gnc-vcs-info DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnc-vcs-info.h)
 endif(BUILDING_FROM_VCS)
