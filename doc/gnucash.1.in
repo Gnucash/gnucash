@@ -2,7 +2,7 @@
 .\" Process this file with
 .\" groff -man -Tascii foo.1
 .\"
-.TH GNUCASH 1 "@GNC_VCS_REV_DATE@" "Version @VERSION@" "GnuCash Manual Pages"
+.TH GNUCASH 1 "@GNC_VCS_REV_DATE@" "Version @GNC_VCS_REV@" "GnuCash Manual Pages"
 .SH NAME
 gnucash \- personal finance manager
 .SH SYNOPSIS

@@ -55,10 +55,9 @@ file(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
   DESTINATION ${DATADIR_BUILD}/gnucash)
 
 add_custom_command(OUTPUT gnucash.1
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in gnc-vcs-info
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in ${VCS_INFO_FILE}
   COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in
                            -D DST=gnucash.1
-                           -D VERSION=${VERSION}
                            -D VCS_INFO_FILE=${VCS_INFO_FILE}
                            -D DATADIR_BUILD=${DATADIR_BUILD}
                            -D SRC_DIR=${CMAKE_SOURCE_DIR}
