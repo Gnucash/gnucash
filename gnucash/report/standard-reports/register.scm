@@ -516,27 +516,23 @@
                 (gnc:monetary-neg monetary)
                 monetary)))
 
-      (if (or single-col credit-col debit-col)
-          (begin
-            (gnc:html-table-append-row!
-             table
-             (list
-              (gnc:make-html-table-cell/size
-               1 (num-columns-required used-columns)
-               (gnc:make-html-text (gnc:html-markup-hr)))))
+      (when (or single-col credit-col debit-col)
+        (gnc:html-table-append-row!
+         table
+         (list
+          (gnc:make-html-table-cell/size
+           1 (num-columns-required used-columns)
+           (gnc:make-html-text (gnc:html-markup-hr)))))
 
-            (for-each (lambda (currency)
-                        (gnc:html-table-append-row/markup!
-                         table
-                         subtotal-style
-                         (append (cons (gnc:make-html-table-cell/markup
-                                        "total-label-cell" label)
-                                       '())
-                                 (list (gnc:make-html-table-cell/size/markup
-                                        1 (colspan currency)
-                                        "total-number-cell"
-                                        (display-subtotal currency))))))
-                      currency-totals)))))
+        (for-each
+         (lambda (monetary)
+           (gnc:html-table-append-row/markup!
+            table subtotal-style
+            (list (gnc:make-html-table-cell/markup "total-label-cell" label)
+                  (gnc:make-html-table-cell/size/markup
+                   1 (colspan monetary) "total-number-cell"
+                   (display-subtotal monetary)))))
+         currency-totals))))
 
   (define (accumulate-totals split total-amount total-value
                              debit-amount debit-value
@@ -555,17 +551,6 @@
           (credit-value 'add trans-currency split-value))
       (total-amount 'add split-currency split-amount)
       (total-value 'add trans-currency split-value)))
-
-  (define (add-other-split-rows split table used-columns row-style
-                                action-for-num? ledger-type? total-collector)
-    (let loop ((splits (xaccTransGetSplitList (xaccSplitGetParent split))))
-      (when (pair? splits)
-        (add-split-row table (car splits) used-columns row-style #f #t
-                       action-for-num? ledger-type? #f
-                       (opt-val "Display" "Memo")
-                       (opt-val "Display" "Description")
-                       total-collector)
-        (loop (cdr splits)))))
 
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
@@ -664,10 +649,15 @@
                          double? (opt-val "Display" "Memo")
                          (opt-val "Display" "Description")
                          total-collector)
-          (if multi-rows?
-              (add-other-split-rows current table used-columns
-                                    "alternate-row" action-for-num?
-                                    ledger-type? total-collector))
+          (when multi-rows?
+            (for-each
+             (lambda (split)
+               (add-split-row table split used-columns "alternate-row"
+                              #f #t action-for-num? ledger-type? #f
+                              (opt-val "Display" "Memo")
+                              (opt-val "Display" "Description") total-collector))
+             (xaccTransGetSplitList (xaccSplitGetParent current))))
+
           (loop (cdr splits)
                 (not odd-row?))))))
     table))
