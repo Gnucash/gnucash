@@ -179,6 +179,12 @@ TEST(gncnumeric_constructors, test_string_constructor)
                  std::out_of_range);
     EXPECT_THROW(GncNumeric bad_string("Four score and seven"),
                  std::invalid_argument);
+    GncNumeric neg_decimal_frac("-0.12345");
+    EXPECT_EQ(-12345, neg_decimal_frac.num());
+    EXPECT_EQ(100000, neg_decimal_frac.denom());
+    GncNumeric neg_decimal_frac_nozero("-.12345");
+    EXPECT_EQ(-12345, neg_decimal_frac_nozero.num());
+    EXPECT_EQ(100000, neg_decimal_frac_nozero.denom());
 }
 
 TEST(gncnumeric_output, string_output)

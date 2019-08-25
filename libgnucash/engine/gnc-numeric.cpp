@@ -120,7 +120,7 @@ using boost::smatch;
 using boost::regex_search;
 GncNumeric::GncNumeric(const std::string& str, bool autoround)
 {
-    static const std::string numer_frag("(-?[0-9]+)");
+    static const std::string numer_frag("(-?[0-9]*)");
     static const std::string denom_frag("([0-9]+)");
     static const std::string hex_frag("(0x[a-f0-9]+)");
     static const std::string slash( "[ \\t]*/[ \\t]*");
@@ -175,10 +175,13 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
     }
     if (regex_search(str, m, decimal))
     {
-        GncInt128 high(stoll(m[1].str()));
+        auto neg = (m[1].length() && m[1].str()[0] == '-');
+        GncInt128 high((neg && m[1].length() > 1) || (!neg && m[1].length()) ?
+                       stoll(m[1].str()) : 0);
         GncInt128 low(stoll(m[2].str()));
         int64_t d = powten(m[2].str().length());
-        GncInt128 n = high * d + (high >= 0 ? low : -low);
+        GncInt128 n = high * d + (neg ? -low : low);
+
         if (!autoround && n.isBig())
         {
             std::ostringstream errmsg;
