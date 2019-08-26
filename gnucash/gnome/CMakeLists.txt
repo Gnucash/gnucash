@@ -166,11 +166,11 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
     # Fall back to providing an unmerged (and hence untranslated) appdata file.
     add_custom_command (
         OUTPUT gnucash.appdata.xml
-        COMMAND ${CMAKE_COMMAND} -E env
-           cp ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-              ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
+           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
 
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in gnc-vcs-info
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
         )
 else()
     # FIXME: where does LC_ALL=C come from?
@@ -182,7 +182,7 @@ else()
                 --xml --template ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o gnucash.appdata.xml
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in gnc-vcs-info
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
     )
 endif()
 
