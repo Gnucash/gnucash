@@ -424,7 +424,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>ILS</cmdty:id>
+    <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>דמי ניהול</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
