@@ -154,8 +154,8 @@ install(TARGETS gnc-gnome
 # No headers to install
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
-    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in ${VCS_INFO_FILE}
+    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in
                              -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
                              -D VCS_INFO_FILE=${VCS_INFO_FILE}
                              -D SRC_DIR=${CMAKE_SOURCE_DIR}
@@ -217,5 +217,5 @@ add_custom_target(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucas
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
 set_dist_list(gnome_DIST
-        CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
+        CMakeLists.txt gnome.i gnucash.appdata.xml.in.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
