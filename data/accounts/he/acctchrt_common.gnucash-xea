@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
+<gnc-act:title>
+חשבונות נפוצים
+</gnc-act:title>
+<gnc-act:short-description>
+  תרשים חשבונות בסיסינפוץ ביותר בשימוש פרטי
+</gnc-act:short-description>
+<gnc-act:long-description>
+  תוכלו לבחור בתרשים חשבונות זה למעקב וניהול חשבונאי פרטי, לא עיסקי. התרשים כולל את כל סוגי החשבונות הנפוצים הנדרשים לשפ כך (הכנסות, הוצאות, כרטיסי אשראי, המחאות, הוצאות מחייה ועוד).
+</gnc-act:long-description>
+<gnc-act:start-selected>1</gnc-act:start-selected>
+
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>רכוש</act:name>
+  <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>רכוש</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>רכוש שוטף</act:name>
+  <act:id type="new">a1dd5f225156f110689c204fefded0ab</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>רכוש שוטף</act:description>
+  <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>חשבון עובר ושב</act:name>
+  <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>חשבון עובר ושב</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>חשבון חיסכון</act:name>
+  <act:id type="new">eeae5a1892e88adbc3b369c76ee4e889</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>חשבון חיסכון</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מזומנים</act:name>
+  <act:id type="new">07b454b9dd6f68c4b613c5f1ef76f884</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מזומנים</act:description>
+  <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>התחייבויות</act:name>
+  <act:id type="new">19a911feed9b41b8b01be036a2aed9fe</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>התחייבויות</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>כרטיס אשראי</act:name>
+  <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>כרטיס אשראי</act:description>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הכנסות</act:name>
+  <act:id type="new">a7ab23dd2d41616042034d5a012a0850</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הכנסות</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בונוס</act:name>
+  <act:id type="new">59b72cd943a2ca6f077748bba9a942cd</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בונוס</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מתנות שנתקבלו</act:name>
+  <act:id type="new">1adcf2c65d7a66f32144ccd9ce4f438f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מתנות שמיתקבלו</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הכנסות ריבית</act:name>
+  <act:id type="new">c47361e40d9478ec11758097e64d693c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הכנסות ריבית</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ריבית זכות</act:name>
+  <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ריבית זכות</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ריבית אחרת</act:name>
+  <act:id type="new">be17363347a8578c48cecd06bc8b7aa8</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ריבית אחרת</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ריבית מחיסכון</act:name>
+  <act:id type="new">2802ac0d1bff1c09a903f2ad6fde2725</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ריבית מחיסכון</act:description>
+  <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הכנסות אחרות</act:name>
+  <act:id type="new">49525ad0fb4ced06b9874d365d53f505</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הכנסות אחרות</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>משכורת</act:name>
+  <act:id type="new">a750b99cb8487a5e47daedcd3a69fe85</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>משכורת</act:description>
+  <act:parent type="new">a7ab23dd2d41616042034d5a012a0850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הוצאות</act:name>
+  <act:id type="new">1884bbd7394883ebafec8b9e2eb091a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הוצאות</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>התאמה</act:name>
+  <act:id type="new">72f85277a7a7f8b4de175405e20d83bd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>התאמה</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>רכב</act:name>
+  <act:id type="new">56df186f1ce6114ddca7b9e5d03af390</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>רכב</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>עמלות</act:name>
+  <act:id type="new">2ff007a389bd23d8970afeba2d58c9a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>עמלות</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>דלק</act:name>
+  <act:id type="new">e64b5eecf86ce4e27a64c477a4c77477</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>דלק</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>חניה</act:name>
+  <act:id type="new">d72262c1c0e2c3388183ebb44a98b011</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>חניה</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>אחזקה ותיקונים</act:name>
+  <act:id type="new">665dd78f0cc75dd331f556949337de68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>אחזקה ותיקונים</act:description>
+  <act:parent type="new">56df186f1ce6114ddca7b9e5d03af390</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>עמלות בנק</act:name>
+  <act:id type="new">fb6c8e25a50737e70fffde432a2355ee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>עמלות בנק</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ספרות</act:name>
+  <act:id type="new">36479bbc17680f4b9663a9842736153f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ספרות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>כבלים</act:name>
+  <act:id type="new">a1393344fb199f08f751ac3154694e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>כבלים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>תרומות</act:name>
+  <act:id type="new">ec8eec3d46c69aa861fda836e11346c0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>תרומות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הלבשה</act:name>
+  <act:id type="new">c27a040a73eac2688d85d29b5b5309c8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הלבשה</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מחשוב</act:name>
+  <act:id type="new">fc4390b6214ad1576c5ffffc2b3c268c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מחשוב</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ארוחות</act:name>
+  <act:id type="new">0a59a3347e4ff02b862de41ef59d7351</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ארוחות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>חינוך</act:name>
+  <act:id type="new">5b5ac050529b0f553752babe4a6a35d2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>חינוך</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ארוח</act:name>
+  <act:id type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ארוח</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>פנאי</act:name>
+  <act:id type="new">4570ea8f4ac5cbd7d8927c905f0978ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>פנאי</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>נופש</act:name>
+  <act:id type="new">7db9b0aa3bc348da9900f95fc67541a1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>נופש</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>נסיעה</act:name>
+  <act:id type="new">def0eac939dbd668f503d84860de8d6e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>נסיעה</act:description>
+  <act:parent type="new">0ebd1d5f40d9e9e8bb1a4bf539650dd1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מתנות</act:name>
+  <act:id type="new">f86b1cebc619455ada23952a0e810909</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מתנות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מצרכים</act:name>
+  <act:id type="new">83bc2bd915ab6b74c7107b55f8783523</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מצרכים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>תחביבים</act:name>
+  <act:id type="new">89f6400a94cd87fea0b056faf6ab7744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>תחביבים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בטוח</act:name>
+  <act:id type="new">5bda5ff833bc395dc1b00f95c66ce555</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בטוח</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בטוח רכב</act:name>
+  <act:id type="new">cd72695526906a15ba1a1d9a7680b8e7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בטוח רכב</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בטוח בריאות</act:name>
+  <act:id type="new">d80613194a52340c9e5eb62e853c72cf</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בטוח בריאות</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בטוח חיים</act:name>
+  <act:id type="new">70a327f54be53ef187a52b1d8df70fdd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בטוח חיים</act:description>
+  <act:parent type="new">5bda5ff833bc395dc1b00f95c66ce555</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>כביסה/ניקוי יבש</act:name>
+  <act:id type="new">1006551b2458631dfc8507b7451c9631</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>כביסה/ניקוי יבש</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בריאות</act:name>
+  <act:id type="new">62752930dd1b2b4c90c6d198bd2ff33f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בריאות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>שונות</act:name>
+  <act:id type="new">759deef82e73587bf48a7dd76aa6abe8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>שונות</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>שרותים מקוונים</act:name>
+  <act:id type="new">2170a1a631cc3b6fc32813fa49a12f77</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>שרותים מקוונים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>טלפון</act:name>
+  <act:id type="new">1d9d7265e25c6c84dda514d2e8899e87</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>טלפון</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>תחבורה ציבורית</act:name>
+  <act:id type="new">64aa760163c7768518e49a104d1c171f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>תחבורה ציבורית</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מנויים</act:name>
+  <act:id type="new">0336712690d36bcb02e0ce59b5d7653b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מנויים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>אספקה</act:name>
+  <act:id type="new">e2b34f49d4cf916cf4d45525e1e7319d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>אספקה</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מיסים</act:name>
+  <act:id type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מיסים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מס הכנסה</act:name>
+  <act:id type="new">090a786357463ec7fbee8066cb999097</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מס הכנסה</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מס בריאות</act:name>
+  <act:id type="new">0785932c5de43e814659420762c9b577</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מס בריאות</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מס אחר</act:name>
+  <act:id type="new">51875f8aaa0e4f2295a2ae13cf780b2e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מס אחר</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>בטוח לאומי</act:name>
+  <act:id type="new">c252f10f3d57dd05c500856164b1729e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>בטוח לאומי</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>ארנונה</act:name>
+  <act:id type="new">cd1f1b512ed51a069fd83a5ffcaf6e11</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>ארנונה</act:description>
+  <act:parent type="new">2c53a8a0c8b36f7de3f4052653886c2b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>שרותים מקומיים</act:name>
+  <act:id type="new">57635fa5f71dee8ffc207c277250e773</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>שרותים מקומיים</act:description>
+  <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>חשמל</act:name>
+  <act:id type="new">2fe462e202e2daffd845359b08a7eefe</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>חשמל</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>איסוף אשפה</act:name>
+  <act:id type="new">2d0315d7b2f8f11a8a8b32d805bca6eb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>איסוף אשפה</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>גז</act:name>
+  <act:id type="new">dcc33ce7edf402e327318aa1890d35ea</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>גז</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>מיים</act:name>
+  <act:id type="new">8cdc91b733444f9f0dfae9773b8f408c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>מיים</act:description>
+  <act:parent type="new">57635fa5f71dee8ffc207c277250e773</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>הון</act:name>
+  <act:id type="new">3ab6a6d97b216c11333e48aa2b749a91</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>הון</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>יתרות פתיחה</act:name>
+  <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:commodity>
+  <act:description>יתרות פתיחה</act:description>
+  <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
+</gnc:account>
+
+</gnc-account-example>
