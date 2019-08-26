@@ -6,10 +6,6 @@ set (reports_common_SCHEME
   aging.scm
 )
 
-set (reports_SCHEME
-  reports.scm
-)
-
 set (reports_standard_SCHEME
     standard/account-piecharts.scm
     standard/account-summary.scm
@@ -40,7 +36,6 @@ set (reports_standard_SCHEME
     standard/transaction.scm
     standard/trial-balance.scm
     standard/view-column.scm
-    standard/customer-summary.scm
     standard/taxinvoice.scm
     standard/receipt.scm
     standard/invoice.scm
@@ -49,7 +44,11 @@ set (reports_standard_SCHEME
     standard/payables.scm
     standard/receivables.scm
     standard/balsheet-eg.scm
-    )
+)
+
+set (reports_standard_SCHEME_2
+    standard/customer-summary.scm # Depends on owner-report
+)
 
 set(reports_example_SCHEME
   example/average-balance.scm
@@ -65,6 +64,10 @@ set(reports_us_SCHEME
 
 set(reports_de_DE_SCHEME
   locale-specific/de_DE/taxtxf.scm
+)
+
+set (reports_SCHEME
+  reports.scm
 )
 
 set(scm_rpts_GUILE_DEPENDS
@@ -109,24 +112,17 @@ set(scm_rpt_std_GUILE_DEPENDS
   scm-reports-standard-links
   )
 
-gnc_add_scheme_targets(scm-rpt-reports
-  "${reports_SCHEME}"
-  "gnucash"
-  "${scm_rpts_GUILE_DEPENDS}"
-  TRUE
-)
-
 gnc_add_scheme_targets(scm-reports-common
   "${reports_common_SCHEME}"
   "gnucash/reports"
-  "scm-reports-common-links;scm-rpt-reports;${scm_rpt_std_GUILE_DEPENDS}"
+  "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
 gnc_add_scheme_targets(scm-reports-standard
   "${reports_standard_SCHEME}"
   "gnucash/reports/standard"
-  "scm-rpt-reports;${scm_rpt_std_GUILE_DEPENDS}"
+  "scm-reports-common;${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
@@ -151,8 +147,23 @@ gnc_add_scheme_targets(scm-reports-de_DE
   TRUE
 )
 
+gnc_add_scheme_targets(scm-rpt-reports
+  "${reports_SCHEME}"
+  "gnucash"
+  "scm-reports-standard;scm-reports-example;scm-reports-us;scm-reports-de_DE;${scm_rpts_GUILE_DEPENDS};"
+  TRUE
+)
+
+gnc_add_scheme_targets(scm-reports-standard-2
+  "${reports_standard_SCHEME_2}"
+  "gnucash/reports/standard"
+  "scm-rpt-reports"
+  TRUE
+)
+
 add_custom_target(scm-reports ALL DEPENDS
     scm-reports-standard
+    scm-reports-standard-2
     scm-reports-example
     scm-reports-common
     scm-rpt-reports
@@ -210,7 +221,7 @@ gnc_add_scheme_deprecated_module ("gnucash report standard-reports trial-balance
 gnc_add_scheme_deprecated_module ("gnucash report view-column" "gnucash reports standard view-column" "scm-reports-standard" "")
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME}
-    ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_example_SCHEME}
-    ${reports_us_SCHEME} ${reports_de_DE_SCHEME})
+    ${reports_common_SCHEME} ${reports_standard_SCHEME}  ${reports_standard_SCHEME_2}
+    ${reports_example_SCHEME} ${reports_us_SCHEME} ${reports_de_DE_SCHEME})
 set(reports_DIST ${reports_DIST_local} ${reports_support_DIST}
     ${test_reports_standard_DIST} PARENT_SCOPE)

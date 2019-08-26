@@ -32,7 +32,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))
-(use-modules (gnucash reports))
 
 (gnc:module-load "gnucash/report" 0)
 
@@ -881,8 +880,11 @@
     (gnc:option-set-value account-op account)
     (gnc:make-report report-guid options)))
 
-(define (owner-report-create owner account)
+(define* (owner-report-create owner account #:key currency)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
+    ; Figure out an account to use if nothing exists here.
+    (if (null? account)
+        (set! account (find-first-account-for-owner owner #:currency currency)))
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
        (owner-report-create-internal customer-report-guid owner account type)) ;; Not sure whether to pass type, or to use the guid in the report function
@@ -904,7 +906,7 @@
      (res -1)) ;; XXX -- in this case we should create an error report
 
     (if (not (null? owner))
-    (set! res (gnc:owner-report-create owner account)))
+    (set! res (owner-report-create owner account)))
 
     (gncOwnerFree temp-owner)
     res))
@@ -915,4 +917,4 @@
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t
               gnc:owner-report-create-internal)
 
-(export find-first-account-for-owner owner-report-create)
+(export owner-report-create)

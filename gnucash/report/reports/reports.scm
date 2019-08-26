@@ -90,7 +90,4 @@
 
 (use-modules (gnucash reports standard owner-report))
 (define* (gnc:owner-report-create owner account #:key currency)
-  ; Figure out an account to use if nothing exists here.
-  (if (null? account)
-      (set! account (find-first-account-for-owner owner #:currency currency)))
-  (owner-report-create owner account))
+  (owner-report-create owner account #:currency currency))
