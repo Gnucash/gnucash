@@ -89,6 +89,7 @@ gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-split-reg2.c
 gnucash/gnome/gnc-split-reg.c
+gnucash/gnome/gnucash.appdata.xml.in.in
 gnucash/gnome/gnucash.desktop.in.in
 gnucash/gnome/reconcile-view.c
 gnucash/gnome/search-owner.c
