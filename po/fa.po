@@ -5240,7 +5240,7 @@ msgstr "مدیریت امور مالی"
 #. Icon file name, do not translate or use "gnucash-icon" as msgstr
 #: gnucash/gnome/gnucash.desktop.in.in:11
 msgid "gnucash-icon"
-msgstr "شمایل-گنوکش"
+msgstr "gnucash-icon"
 
 #. Translators: The abbreviation for 'Reconciled'
 #. in the header row of the register. Please only
@@ -5250,7 +5250,7 @@ msgstr "شمایل-گنوکش"
 #: gnucash/register/ledger-core/split-register-layout.c:699
 #: gnucash/register/ledger-core/split-register-model.c:306
 msgid "Reconciled:R"
-msgstr "مغایرت‌گیری‌شده:م"
+msgstr "Reconciled:م"
 
 #: gnucash/gnome/search-owner.c:138
 msgid "You have not selected an owner"
@@ -7233,7 +7233,6 @@ msgstr "حسابداری برای امور مالی شخصی و کسب و کار
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4496
-#, fuzzy
 #| msgid "translator_credits"
 msgid "translator-credits"
 msgstr "علی‌اکبر نجفیا <s.ali.najafian@chmail.ir>، ۲۰۱۲، ۲۰۱۳هدایت وطن‌خواه <hedayat.fwd@gmail.com>، ۲۰۱۷حمیدرضا جعفری <hamidrjafari@gmail.com>، ۲۰۱۸"
@@ -18206,7 +18205,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-layout.c:642
 #: gnucash/register/ledger-core/split-register-layout.c:650
 msgid "sample:12/12/2000"
-msgstr "نمونه :‌۲۰۰۰/۱۲/۱۲"
+msgstr "sample:‌۲۰۰۰/۱۲/۱۲"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:85
 msgid "sample:Description of an Entry"
@@ -18214,17 +18213,17 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:89
 msgid "sample:Action"
-msgstr "نمونه:کنش"
+msgstr "sample:کنش"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:93
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:101
 msgid "sample:9,999.00"
-msgstr "نمونه : ۹,۹۹۹.۰۰"
+msgstr "sample: ۹,۹۹۹.۰۰"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:97
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
 msgid "sample:999,999.00"
-msgstr "نمونه : ۹۹۹,۹۹۹.۰۰"
+msgstr "sample: ۹۹۹,۹۹۹.۰۰"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:106
 msgid "sample(DT):+%"
@@ -18255,7 +18254,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 msgid "sample:999.00"
-msgstr "نمونه : ۹۹۹.۰۰"
+msgstr "sample: ۹۹۹.۰۰"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:145
 msgid "sample:BI"
@@ -18541,7 +18540,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-layout.c:817
 #: gnucash/register/ledger-core/split-register-layout.c:869
 msgid "sample:999,999.000"
-msgstr "نمونه:999,999.000"
+msgstr "sample:999,999.000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:751
 msgid "sample:Memo field sample text string"
@@ -18566,7 +18565,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-layout.c:853
 #: gnucash/register/ledger-core/split-register-layout.c:861
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "نمونه:(x + 0.33 * y + (x+y) )"
+msgstr "sample:(x + 0.33 * y + (x+y) )"
 
 #: gnucash/register/ledger-core/split-register-load.c:278
 msgid "Could not determine the account currency. Using the default currency provided by your system."
