@@ -68,6 +68,7 @@ struct _FinCalcDialog
     GtkWidget *payment_combo;
 
     GtkWidget *end_of_period_radio;
+    GtkWidget *precision;
     GtkWidget *discrete_compounding_radio;
 
     GtkWidget *payment_total_label;
@@ -99,6 +100,7 @@ void fincalc_update_calc_button_cb(GtkWidget *unused, FinCalcDialog *fcd);
 void fincalc_calc_clicked_cb(GtkButton *button, FinCalcDialog *fcd);
 void fincalc_compounding_radio_toggled(GtkToggleButton *togglebutton, gpointer data);
 void fincalc_amount_clear_clicked_cb(GtkButton *button, FinCalcDialog *fcd);
+void fincalc_precision_spin_value_changed_cb (GtkButton *button, FinCalcDialog *fcd);
 void fincalc_response_cb (GtkDialog *dialog, gint response, FinCalcDialog *fcd);
 
 /** Implementations *****************************************************/
@@ -128,7 +130,7 @@ normalize_period(unsigned int *period)
 static void
 fi_to_gui(FinCalcDialog *fcd)
 {
-    const gnc_commodity *commodity;
+    int precision;
     static char string[64];
     gnc_numeric total;
     gnc_numeric npp;
@@ -153,12 +155,11 @@ fi_to_gui(FinCalcDialog *fcd)
 
     pmt = double_to_gnc_numeric (fcd->financial_info.pmt, 100000, GNC_HOW_RND_ROUND_HALF_UP);
 
-    commodity = gnc_default_currency ();
+    precision = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(fcd->precision));
 
-    total = gnc_numeric_mul (npp, pmt, gnc_commodity_get_fraction (commodity),
-                             GNC_HOW_RND_ROUND_HALF_UP);
+    total = gnc_numeric_mul (npp, pmt, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
 
-    xaccSPrintAmount (string, total, gnc_default_print_info (FALSE));
+    xaccSPrintAmount (string, total, gnc_share_print_info_places (precision));
     gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
     i = normalize_period(&fcd->financial_info.CF);
@@ -278,6 +279,12 @@ fincalc_amount_clear_clicked_cb(GtkButton *button, FinCalcDialog *fcd)
 
     if (edit && GTK_IS_ENTRY(edit))
         gtk_entry_set_text(edit, "");
+}
+
+void
+fincalc_precision_spin_value_changed_cb (GtkButton *button, FinCalcDialog *fcd)
+{
+    gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), TRUE);
 }
 
 static void
@@ -427,7 +434,6 @@ calc_value(FinCalcDialog *fcd, FinCalcValue value)
         fi_calc_future_value(&fcd->financial_info);
         break;
     default:
-        PERR("Unknown financial variable");
         break;
     }
 
@@ -450,6 +456,7 @@ fincalc_calc_clicked_cb(GtkButton *button, FinCalcDialog *fcd)
         calc_value(fcd, i);
         return;
     }
+    calc_value(fcd, NUM_FIN_CALC_VALUES);
 }
 
 void fincalc_response_cb (GtkDialog *dialog,
@@ -555,8 +562,10 @@ gnc_ui_fincalc_dialog_create(GtkWindow *parent)
     GtkWidget *button;
     GtkWidget *combo;
     GtkWidget *edit;
+    GtkWidget *spin;
     GtkWidget *hbox;
     GtkBuilder *builder;
+    GtkAdjustment *adjustment;
 
     if (gnc_forall_gui_components (DIALOG_FINCALC_CM_CLASS,
                                    show_handler, NULL))
@@ -654,6 +663,11 @@ gnc_ui_fincalc_dialog_create(GtkWindow *parent)
     fcd->payment_combo = combo;
     g_signal_connect(fcd->compounding_combo, "changed",
                      G_CALLBACK (fincalc_update_calc_button_cb), fcd);
+
+    spin = GTK_WIDGET (gtk_builder_get_object (builder, "precision_spin"));
+    adjustment = gtk_adjustment_new (2, 0, 10, 1, 1, 1);
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON(spin), adjustment);
+    fcd->precision = spin;
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "period_payment_radio"));
     fcd->end_of_period_radio = button;

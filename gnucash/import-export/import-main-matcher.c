@@ -99,6 +99,7 @@ static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
 void on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info);
 void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
+gboolean on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data);
 void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
@@ -225,6 +226,14 @@ on_matcher_cancel_clicked (GtkButton *button, gpointer user_data)
 {
     GNCImportMainMatcher *info = user_data;
     gnc_gen_trans_list_delete (info);
+}
+
+gboolean
+on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+    GNCImportMainMatcher *info = data;
+    gnc_gen_trans_list_delete (info);
+    return FALSE;
 }
 
 void

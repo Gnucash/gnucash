@@ -1212,6 +1212,7 @@
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
     <signal name="close" handler="on_matcher_cancel_clicked" swapped="no"/>
+    <signal name="delete-event" handler="on_matcher_delete_event" swapped="no"/>
     <child>
       <placeholder/>
     </child>
