@@ -64,11 +64,11 @@ gnc_add_scheme_deprecated_module ("gnucash tax us" "gnucash locale us tax" "scm-
 add_custom_target(scm-locale-tax ALL DEPENDS scm-tax-us-1 scm-tax-us-2 scm-tax-de_DE-1 scm-tax-de_DE-2 )
 
 set(de_DE_tax_EXTRA_DIST
-    "de_DE/taxtxf-LIES MICH.txt"
-    "de_DE/txf-Ust-Bericht.html"
-    "de_DE/txf-Ust-VA Anleitung 2011.pdf")
+    "de_DE/taxtxf - LIES MICH.txt"
+    "de_DE/txf-USt-Bericht.html"
+    "de_DE/txf-USt-VA Anleitung 2011.pdf")
 set_local_dist(tax_DIST_local CMakeLists.txt ${locale_tax_SOURCES}
     ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2}
     ${gncmod_tax_de_DE_SCHEME_1} ${gncmod_tax_de_DE_SCHEME_2}
-    $de_DE_tax_EXTRA_DIST)
+    ${de_DE_tax_EXTRA_DIST})
 set(tax_DIST ${tax_DIST_local} ${locale_tax_DIST} ${test_locale_tax_DIST} PARENT_SCOPE)
