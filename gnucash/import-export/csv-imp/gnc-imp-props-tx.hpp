@@ -157,6 +157,7 @@ public:
         m_currency_format{currency_format}{};
     void set (GncTransPropType prop_type, const std::string& value);
     void reset (GncTransPropType prop_type);
+    void add (GncTransPropType prop_type, const std::string& value);
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format; }
     std::string verify_essentials (void);
