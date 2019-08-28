@@ -106,7 +106,7 @@
 (export gnc:assign-colors)
 (export gnc:html-table-append-ruler!)
 (export gnc:html-table-append-ruler/markup!)
-(export gnc:html-acct-table-cell)
+(export gnc:html-acct-table-cell)       ;deprecated
 (export gnc:html-acct-table-row-helper! )
 (export gnc:html-acct-table-comm-row-helper!)
 (export gnc:html-build-acct-table)

@@ -166,6 +166,8 @@
   ;; instead of html-markup-b, just use the corresponding html-table-styles.
   (define default-style "text-cell")
   (define boldface-style "total-label-cell")
+  (issue-deprecation-warning
+   "gnc:html-acct-table-cell is unused.")
   (gnc:make-html-table-cell/size/markup 
    1 colspan 
    (if boldface? boldface-style default-style)
