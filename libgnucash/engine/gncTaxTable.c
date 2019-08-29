@@ -697,7 +697,6 @@ gncTaxTableGetDefault (QofBook *book, GncOwnerType type)
     path = g_slist_prepend (path, (void*)section);
 
     guid = qof_book_get_guid_option (book, path);
-    g_return_val_if_fail (guid, NULL);
     return gncTaxTableLookup (book, guid);
 }
 
