@@ -83,7 +83,7 @@ maybe_add_string (xmlNodePtr ptr, const char* tag, const char* str)
 static void
 maybe_add_time64 (xmlNodePtr ptr, const char* tag, time64 time)
 {
-    if (time)
+    if (time != INT64_MAX)
         xmlAddChild (ptr, time64_to_dom_tree (tag, time));
 }
 
