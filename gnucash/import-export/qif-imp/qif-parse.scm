@@ -409,7 +409,9 @@
     (if (null? amt-strings)
         formats
         (lp (cdr amt-strings)
-            (qif-parse:check-number-format (car amt-strings) formats)))))
+            (if (car amt-strings)
+                (qif-parse:check-number-format (car amt-strings) formats)
+                formats)))))
 
 ;; list of number-strings and format -> list of numbers eg '("1,00"
 ;; "2,50" "3,99") 'comma --> '(1 5/2 399/100) this function would

@@ -248,6 +248,11 @@
     (qif-parse:check-number-formats '("10.50" "20.54")
                                     '(decimal comma integer)))
 
+  (test-equal "qif-parse:check-number-formats 1234.00 #f"
+    '(comma)
+    (qif-parse:check-number-formats '("123,45" #f)
+                                    '(decimal comma integer)))
+
   (test-equal "qif-parse:check-number-formats 1234 4567"
     '(decimal comma integer)
     (qif-parse:check-number-formats '("1234" "4567")
