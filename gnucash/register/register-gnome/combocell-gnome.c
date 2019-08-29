@@ -381,6 +381,8 @@ gnc_combo_cell_clear_menu (ComboCell * cell)
 
         unblock_list_signals (cell);
     }
+    else
+        gtk_list_store_clear (box->tmp_store);
 }
 
 void
