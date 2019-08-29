@@ -365,6 +365,8 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
             blank_entry = gncEntryCreate (ledger->book);
 
+            gncEntryBeginEdit (blank_entry);
+
             gncEntrySetBlankEntry (blank_entry, TRUE);
 
             gncEntrySetDateGDate (blank_entry, &ledger->last_date_entered);
