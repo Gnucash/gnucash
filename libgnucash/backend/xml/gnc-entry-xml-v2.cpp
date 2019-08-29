@@ -796,8 +796,13 @@ entry_sixtp_parser_create (void)
 static void
 do_count (QofInstance* entry_p, gpointer count_p)
 {
-    int* count = static_cast<decltype (count)> (count_p);
-    (*count)++;
+    GncEntry* entry = (GncEntry*) entry_p;
+
+    if (!gncEntryIsBlankEntry(entry))
+    {
+        int* count = static_cast<decltype (count)> (count_p);
+        (*count)++;
+    }
 }
 
 static int

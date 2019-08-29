@@ -121,6 +121,12 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
  *  actual credit note (and hence how the ledger and reports show it
  *  to the user). */
 void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn);
+/** Set the entry is_blank_entry depending on is_blank
+ */
+void gncEntrySetBlankEntry (GncEntry *entry, gboolean is_blank);
+/** Get the is_blank_entry for the entry
+ */
+gboolean gncEntryIsBlankEntry (const GncEntry *entry);
 /** @} */
 
 /** @name Customer Invoices

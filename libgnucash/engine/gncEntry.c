@@ -41,6 +41,7 @@
 struct _gncEntry
 {
     QofInstance inst;
+    gboolean    is_blank_entry;
 
     time64	date;
     time64	date_entered;
@@ -422,6 +423,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
     entry = g_object_new (GNC_TYPE_ENTRY, NULL);
     qof_instance_init_data (&entry->inst, _GNC_MOD_NAME, book);
+    entry->is_blank_entry = FALSE;
 
     entry->desc = CACHE_INSERT ("");
     entry->action = CACHE_INSERT ("");
@@ -466,11 +468,14 @@ static void gncEntryFree (GncEntry *entry)
         gncAccountValueDestroy (entry->i_tax_values);
     if (entry->b_tax_values)
         gncAccountValueDestroy (entry->b_tax_values);
-    if (entry->i_tax_table)
-        gncTaxTableDecRef (entry->i_tax_table);
-    if (entry->b_tax_table)
-        gncTaxTableDecRef (entry->b_tax_table);
 
+    if (!entry->is_blank_entry)
+    {
+        if (entry->i_tax_table)
+            gncTaxTableDecRef (entry->i_tax_table);
+        if (entry->b_tax_table)
+            gncTaxTableDecRef (entry->b_tax_table);
+    }
     /* qof_instance_release (&entry->inst); */
     g_object_unref (entry);
 }
@@ -569,6 +574,20 @@ void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_
     gncEntryCommitEdit (entry);
 }
 
+void gncEntrySetBlankEntry (GncEntry *entry, gboolean is_blank)
+{
+    if (!entry) return;
+    gncEntryBeginEdit (entry);
+    entry->is_blank_entry = is_blank;
+    gncEntryCommitEdit (entry);
+}
+
+gboolean gncEntryIsBlankEntry (const GncEntry *entry)
+{
+    if (!entry) return FALSE;
+    return entry->is_blank_entry;
+}
+
 /* Customer Invoices */
 
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc)
@@ -619,10 +638,14 @@ void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table)
     if (!entry) return;
     if (entry->i_tax_table == table) return;
     gncEntryBeginEdit (entry);
-    if (entry->i_tax_table)
-        gncTaxTableDecRef (entry->i_tax_table);
-    if (table)
-        gncTaxTableIncRef (table);
+    
+    if (!entry->is_blank_entry)
+    {
+        if (entry->i_tax_table)
+            gncTaxTableDecRef (entry->i_tax_table);
+        if (table)
+            gncTaxTableIncRef (table);
+    }
     entry->i_tax_table = table;
     entry->values_dirty = TRUE;
     mark_entry (entry);
@@ -743,10 +766,14 @@ void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table)
     if (!entry) return;
     if (entry->b_tax_table == table) return;
     gncEntryBeginEdit (entry);
-    if (entry->b_tax_table)
-        gncTaxTableDecRef (entry->b_tax_table);
-    if (table)
-        gncTaxTableIncRef (table);
+    
+    if (!entry->is_blank_entry)
+    {
+        if (entry->b_tax_table)
+            gncTaxTableDecRef (entry->b_tax_table);
+        if (table)
+            gncTaxTableIncRef (table);
+    }
     entry->b_tax_table = table;
     entry->values_dirty = TRUE;
     mark_entry (entry);

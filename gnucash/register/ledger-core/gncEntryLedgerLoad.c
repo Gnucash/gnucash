@@ -364,6 +364,9 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
             gnc_suspend_gui_refresh ();
 
             blank_entry = gncEntryCreate (ledger->book);
+
+            gncEntrySetBlankEntry (blank_entry, TRUE);
+
             gncEntrySetDateGDate (blank_entry, &ledger->last_date_entered);
             ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
 

@@ -93,6 +93,8 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
         time64 time = gnc_time (NULL);
         gncEntrySetDateEntered (blank_entry, time);
 
+        gncEntrySetBlankEntry (blank_entry, FALSE);
+
         switch (ledger->type)
         {
         case GNCENTRY_ORDER_ENTRY:
@@ -100,6 +102,9 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
             break;
         case GNCENTRY_INVOICE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+            /* saving blank entry so increase the tax table ref if present */
+            if (gncEntryGetInvTaxable (blank_entry))
+                gncTaxTableIncRef (gncEntryGetInvTaxTable (blank_entry));
             /* Anything entered on an invoice entry must be part of the invoice! */
             gncInvoiceAddEntry (ledger->invoice, blank_entry);
             break;
@@ -107,6 +112,9 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
         case GNCENTRY_EXPVOUCHER_ENTRY:
         case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+            /* saving blank entry so increase the tax table ref if present */
+            if (gncEntryGetBillTaxable (blank_entry))
+                gncTaxTableIncRef (gncEntryGetBillTaxTable (blank_entry));
             /* Anything entered on an invoice entry must be part of the invoice! */
             gncBillAddEntry (ledger->invoice, blank_entry);
             break;
