@@ -4403,7 +4403,7 @@ msgstr "gnucash-icon"
 #. leave the rest ("Reconciled:") as is.
 #: gnucash/gnome/reconcile-view.c:425 gnucash/register/ledger-core/split-register-layout.c:699 gnucash/register/ledger-core/split-register-model.c:306
 msgid "Reconciled:R"
-msgstr "א"
+msgstr "Reconciled:א"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
@@ -16741,7 +16741,7 @@ msgstr "הרשומה הנוכחית השתנתה. האם לשמור אותה?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:76
 msgid "sample:X"
-msgstr "X"
+msgstr "sample:X"
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -16750,60 +16750,60 @@ msgstr "X"
 #. leave the rest ("sample:") as is.
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:80 gnucash/register/ledger-core/split-register-layout.c:642 gnucash/register/ledger-core/split-register-layout.c:650
 msgid "sample:12/12/2000"
-msgstr "12/12/2000"
+msgstr "sample:12/12/2000"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:85
 msgid "sample:Description of an Entry"
-msgstr "תאור רשומה"
+msgstr "sample:תאור רשומה"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:89
 msgid "sample:Action"
-msgstr "פעולה"
+msgstr "sample:פעולה"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:93 gnucash/register/ledger-core/gncEntryLedgerLayout.c:101
 msgid "sample:9,999.00"
-msgstr "9,999.00"
+msgstr "sample:9,999.00"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:97 gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
 msgid "sample:999,999.00"
-msgstr "999,999.00"
+msgstr "sample:999,999.00"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:106
 msgid "sample(DT):+%"
-msgstr "דוגמה(DT):+%"
+msgstr "sample(DT):+%"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:111
 msgid "sample(DH):+%"
-msgstr "דוגמה(DH):+%"
+msgstr "sample(DH):+%"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:116 gnucash/register/ledger-core/gncEntryLedgerLayout.c:121 gnucash/register/ledger-core/split-register-layout.c:735
 #: gnucash/register/ledger-core/split-register-layout.c:743
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "הוצאות:כלי רכב:דלק"
+msgstr "sample:הוצאות:כלי רכב:דלק"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
-msgstr "T?"
+msgstr "sample:T?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:129
 msgid "sample:TI"
-msgstr "TI"
+msgstr "sample:TI"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:133
 msgid "sample:Tax Table 1"
-msgstr "טבלת מס 1"
+msgstr "sample:טבלת מס 1"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 msgid "sample:999.00"
-msgstr "999.00"
+msgstr "sample:999.00"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:145
 msgid "sample:BI"
-msgstr "BI"
+msgstr "sample:BI"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
 msgid "sample:Payment"
-msgstr "תשלום"
+msgstr "sample:תשלום"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
 msgid "$"
@@ -17041,11 +17041,11 @@ msgstr "התנועה הנוכחית השתנתה. האם לרשום את השי�
 #. leave the rest ("sample:") as is.
 #: gnucash/register/ledger-core/split-register-layout.c:663 gnucash/register/ledger-core/split-register-layout.c:671
 msgid "sample:99999"
-msgstr "99999"
+msgstr "sample:99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:679
 msgid "sample:Description of a transaction"
-msgstr "תאור תנועה"
+msgstr "sample:תאור תנועה"
 
 #. Translators: The abbreviation for 'Associate'
 #. in the header row of the register. Please only
@@ -17053,18 +17053,18 @@ msgstr "תאור תנועה"
 #. leave the rest ("Associate:") as is.
 #: gnucash/register/ledger-core/split-register-layout.c:711 gnucash/register/ledger-core/split-register-model.c:328
 msgid "Associate:A"
-msgstr "צ"
+msgstr "Associate:צ"
 
 #: gnucash/register/ledger-core/split-register-layout.c:719 gnucash/register/ledger-core/split-register-layout.c:759 gnucash/register/ledger-core/split-register-layout.c:767
 #: gnucash/register/ledger-core/split-register-layout.c:775 gnucash/register/ledger-core/split-register-layout.c:785 gnucash/register/ledger-core/split-register-layout.c:793
 #: gnucash/register/ledger-core/split-register-layout.c:801 gnucash/register/ledger-core/split-register-layout.c:809 gnucash/register/ledger-core/split-register-layout.c:817
 #: gnucash/register/ledger-core/split-register-layout.c:869
 msgid "sample:999,999.000"
-msgstr "999,999.000"
+msgstr "sample:999,999.000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:751
 msgid "sample:Memo field sample text string"
-msgstr "דוגמת מחרוזת מלל שדה מזכר"
+msgstr "sample:דוגמת מחרוזת מלל שדה מזכר"
 
 #. Translators: The abbreviation for 'Type'
 #. in the header row of the register. Please only
@@ -17072,19 +17072,19 @@ msgstr "דוגמת מחרוזת מלל שדה מזכר"
 #. leave the rest ("Type:") as is.
 #: gnucash/register/ledger-core/split-register-layout.c:829
 msgid "Type:T"
-msgstr "ס"
+msgstr "Type:ס"
 
 #: gnucash/register/ledger-core/split-register-layout.c:837
 msgid "sample:Notes field sample text string"
-msgstr "דוגמת מחרוזת מלל שדה מזכר"
+msgstr "sample:דוגמת מחרוזת מלל שדה מזכר"
 
 #: gnucash/register/ledger-core/split-register-layout.c:845
 msgid "sample:No Particular Reason"
-msgstr "ללא סיבה מיוחדת"
+msgstr "sample:ללא סיבה מיוחדת"
 
 #: gnucash/register/ledger-core/split-register-layout.c:853 gnucash/register/ledger-core/split-register-layout.c:861
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "( (x + 0.33 * y + (x+y)"
+msgstr "sample:( (x + 0.33 * y + (x+y)"
 
 #: gnucash/register/ledger-core/split-register-load.c:278
 msgid "Could not determine the account currency. Using the default currency provided by your system."
@@ -23920,17 +23920,17 @@ msgstr "(חשבונות משנה הנוגעים למיסוי: %d)"
 #. colon. You should only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:920
 msgid "not cleared:n"
-msgstr "ל"
+msgstr "not cleared:ל"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:923
 msgid "cleared:c"
-msgstr "א"
+msgstr "cleared:א"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:926
 msgid "reconciled:y"
-msgstr "מ"
+msgstr "מreconciled:"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:929
@@ -23940,7 +23940,7 @@ msgstr "ק"
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:932
 msgid "void:v"
-msgstr "ט"
+msgstr "void:ט"
 
 #: libgnucash/app-utils/gnc-ui-util.c:973
 msgid "Opening Balances"
