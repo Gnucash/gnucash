@@ -68,15 +68,19 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
         gboolean span;
     } cells[] =
     {
-        /* Translators: The 'sample:' items are strings which are not
+        /* Translators: The following strings are used for the layout of the
+           cells while editing invoices.
+           Important: The 'sample:' items are strings which are not
            displayed, but only used to estimate widths. Please only
            translate the portion after the ':' and leave the rest
-           ("sample:") as is. */
+           ("sample:") as is.
+           This sample is for a checkbox */
         {
             ENTRY_INV_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:X") + 7,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
+            /* Translators: This sample is for a date */
             ENTRY_DATE_CELL, DATE_CELL_TYPE_NAME, N_("sample:12/12/2000") + 7,
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
@@ -101,13 +105,15 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
             ENTRY_DISC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
-        /* xgettext:no-c-format */
         {
+            /* xgettext:no-c-format
+               Translators: Header for Discount Type */
             ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample(DT):+%") + 11,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
-        /* xgettext:no-c-format */
         {
+            /* xgettext:no-c-format
+               Translators: Header for Discount How */
             ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, N_("sample(DH):+%") + 11,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
@@ -122,10 +128,12 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
+            /* Translators: Abbreviation sample for Taxable? */
             ENTRY_TAXABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:T?") + 7,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
+            /* Translators: Abbreviation sample for Tax Included */
             ENTRY_TAXINCLUDED_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:TI") + 7,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
@@ -142,6 +150,7 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
+            /* Translators: Abbreviation sample for Billable */
             ENTRY_BILLABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:BI") + 7,
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
