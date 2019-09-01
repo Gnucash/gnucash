@@ -357,14 +357,7 @@
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
 		   account end-date #f)))
-	       (terse-period? #t)
-	       (period-for (if terse-period?
-			       (string-append " " (_ "for Period"))
-			       (format #f (string-append ", " (_ "~a to ~a"))
-					(qof-print-date start-date-printable)
-					(qof-print-date end-date))
-			       ))
-	       )
+	       (period-for (string-append " " (_ "for Period"))))
 	  
 	  ;; a helper to add a line to our report
 	  (define (report-line

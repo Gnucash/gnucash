@@ -476,14 +476,7 @@
          ;; exchange rates calculation parameters
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity end-date))
-	 (terse-period? #t)
-	 (period-for (if terse-period?
-			 (string-append " " (_ "for Period"))
-			 (format #f (string-append ", " (_ "~a to ~a"))
-				  (qof-print-date start-date-printable)
-				  (qof-print-date end-date))
-			 ))
-	 )
+	 (period-for (string-append " " (_ "for Period"))))
     
     (gnc:html-document-set-title! 
      doc (if (equal? report-variant 'current)
