@@ -687,7 +687,7 @@
 (export gnc:accounts-get-commodities)
 (export gnc:get-current-account-tree-depth)
 (export gnc:accounts-and-all-descendants)
-(export gnc:acccounts-get-all-subaccounts)
+(export gnc:acccounts-get-all-subaccounts) ;deprecated
 (export gnc:make-stats-collector)       ;deprecated
 (export gnc:make-drcr-collector)        ;deprecated
 (export gnc:make-value-collector)

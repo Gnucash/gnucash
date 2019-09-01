@@ -146,14 +146,14 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
+  (issue-deprecation-warning "gnc:acccounts-get-all-subaccounts is unused.")
   (append-map gnc-account-get-descendants-sorted
               accountlist))
 
 ;; Return accountslist *and* their descendant accounts
 (define (gnc:accounts-and-all-descendants accountslist)
   (sort-and-delete-duplicates
-   (append accountslist
-           (gnc:acccounts-get-all-subaccounts accountslist))
+   (apply append accountslist (map gnc-account-get-descendants accountslist))
    (lambda (a b)
      (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
    equal?))
