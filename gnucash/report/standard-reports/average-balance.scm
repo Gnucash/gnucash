@@ -293,11 +293,9 @@
          (internal-included (not (get-option gnc:pagename-accounts optname-internal)))
          (accounts   (get-option gnc:pagename-accounts (N_ "Accounts")))
          (dosubs?    (get-option gnc:pagename-accounts optname-subacct))
-         (accounts (append accounts
-                           (if dosubs?
-                               (filter (lambda (acc) (not (member acc accounts)))
-                                       (gnc:acccounts-get-all-subaccounts accounts))
-                               '())))
+         (accounts (if dosubs?
+                       (gnc:accounts-and-all-descendants accounts)
+                       accounts))
          (plot-type  (get-option gnc:pagename-display (N_ "Plot Type")))
          (show-plot? (get-option gnc:pagename-display (N_ "Show plot")))
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))

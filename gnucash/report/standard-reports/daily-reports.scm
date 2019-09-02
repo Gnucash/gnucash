@@ -204,10 +204,8 @@
           ;; lookup should be distributed and done when actually
           ;; needed so as to amortize the cpu time properly.
 	  (gnc:report-percent-done 1)
-	  (set! commodity-list (gnc:accounts-get-commodities 
-                                (append 
-                                 (gnc:acccounts-get-all-subaccounts accounts)
-                                 accounts)
+	  (set! commodity-list (gnc:accounts-get-commodities
+                                (gnc:accounts-and-all-descendants accounts)
                                 report-currency))
 	  (gnc:report-percent-done 5)
 	  (set! exchange-fn (gnc:case-exchange-time-fn 

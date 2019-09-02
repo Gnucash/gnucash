@@ -156,11 +156,9 @@
          (table (gnc:make-html-table))
 
          ;;add subaccounts if requested
-         (accounts (append accounts
-                           (filter (lambda (acc) (not (member acc accounts)))
-                                   (if show-subaccts?
-                                       (gnc:acccounts-get-all-subaccounts accounts)
-                                       '()))))
+         (accounts (if show-subaccts?
+                       (gnc:accounts-and-all-descendants accounts)
+                       accounts))
          (accounts (sort accounts account-full-name<?)))
 
     (define (add-accounts-flow accounts accounts-alist)

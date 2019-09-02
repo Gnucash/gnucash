@@ -638,11 +638,9 @@
                                        (get-option gnc:pagename-general
                                                    optname-period-collapse-after)))
          (doc (gnc:make-html-document))
-         (accounts (append accounts
-                           (filter (lambda (acc) (not (member acc accounts)))
-                                   (if show-subaccts?
-                                       (gnc:acccounts-get-all-subaccounts accounts)
-                                       '())))))
+         (accounts (if show-subaccts?
+                       (gnc:accounts-and-all-descendants accounts)
+                       accounts)))
     ;; end of defines
 
     (cond
