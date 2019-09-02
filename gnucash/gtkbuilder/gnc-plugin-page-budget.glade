@@ -77,9 +77,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">
-                  Use a fixed value or apply transformation for all periods.
-                </property>
+                <property name="label" translatable="yes">Use a fixed value or apply transformation for all periods.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">40</property>
                 <property name="max_width_chars">40</property>
@@ -146,9 +144,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">
-                      Replace the budget for all periods with new 'value'. Use empty value to unset budget for the accounts.
-                    </property>
+                    <property name="tooltip_text" translatable="yes">Replace the budget for all periods with new 'value'. Use empty value to unset budget for the accounts.</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -164,9 +160,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">
-                      Add 'value' to current budget for each period
-                    </property>
+                    <property name="tooltip_text" translatable="yes">Add 'value' to current budget for each period</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_Replace</property>
@@ -183,9 +177,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">
-                      Multiply current budget for each period by 'value'
-                    </property>
+                    <property name="tooltip_text" translatable="yes">Multiply current budget for each period by 'value'</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_Replace</property>
@@ -398,9 +390,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">
-                  Use the average value over all actual periods for all projected periods
-                </property>
+                <property name="tooltip_text" translatable="yes">Use the average value over all actual periods for all projected periods</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
