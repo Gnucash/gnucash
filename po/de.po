@@ -4,12 +4,12 @@
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Copyright (C) 2005-2019 by the translators:
 # Andreas Hentze <pictarus@gmx.de>, 2019
-# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2019.
+# Christian Stimming <stimming@tuhh.de>, 2001-2019.
+# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
-# Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Rolf Leggewie, 2008.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
@@ -21,11 +21,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.5\n"
+"Project-Id-Version: GnuCash 3.6+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-08-14 22:33+0200\n"
-"PO-Revision-Date: 2019-07-06 22:17+0200\n"
+"PO-Revision-Date: 2019-09-03 10:42+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -7966,11 +7966,11 @@ msgid "translator-credits"
 msgstr ""
 "Andreas Hentze, 2019\n"
 "Joachim Wetzig, 2019\n"
+"Frank H. Ellenberger, 2007, 2009-2019\n"
+"Christian Stimming, 2001-2019\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
-"Frank H. Ellenberger, 2007, 2009-2019\n"
 "quazgar, 2017\n"
-"Christian Stimming, 2001-2014\n"
 "Rolf Leggewie, 2008\n"
 "Herbert Thoma, 2001\n"
 "Christian Meyer, 2000-2001\n"
@@ -18095,7 +18095,6 @@ msgstr "Sortierreihenfolge s_peichern"
 msgid "Save the sort order for this register."
 msgstr "Sortierreihenfolge für diese Liste speichern"
 
-# Fixme: Source Accelerator missing
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:875
 msgid "_Reverse Order"
 msgstr "_Umgekehrte Reihenfolge"
@@ -19615,7 +19614,6 @@ msgstr "Versteckt"
 msgid "tax"
 msgstr "Steuerrelevant"
 
-# Fixme: Source should be changed
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
 msgid "placeholder"
 msgstr "Platzhalter"
@@ -20236,11 +20234,9 @@ msgstr ""
 "   %u %s neu angelegt\n"
 "   %u %s aktualisiert (gemäß ID)"
 
-# Fixme: Source
-#. Menu entry with label and tooltip
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
 msgid "Import _Customers & Vendors..."
-msgstr "K_unden und Lieferanten importieren"
+msgstr "K_unden und Lieferanten importieren..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
 msgid "Import Customers and Vendors from a CSV text file."
@@ -21380,7 +21376,7 @@ msgstr "sample:Buchungstext-Feld irgendein Beispieltext"
 #. leave the rest ("Type:") as is.
 #: gnucash/register/ledger-core/split-register-layout.c:829
 msgid "Type:T"
-msgstr "Typ:T"
+msgstr "Type:T"
 
 #: gnucash/register/ledger-core/split-register-layout.c:837
 msgid "sample:Notes field sample text string"
@@ -21393,7 +21389,7 @@ msgstr "sample:Keinen besonderen Grund"
 #: gnucash/register/ledger-core/split-register-layout.c:853
 #: gnucash/register/ledger-core/split-register-layout.c:861
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "Beispiel: (x + 0,33 * y + (x+y) )"
+msgstr "sample: (x + 0,33 * y + (x+y) )"
 
 #: gnucash/register/ledger-core/split-register-load.c:278
 msgid ""
@@ -22743,8 +22739,6 @@ msgstr "St."
 msgid "Net Price"
 msgstr "Nettobetrag"
 
-# strange, had fuzzy translation Saldo (Periodenbezogen)
-# Ja, der Kundenbericht hat einen solchen
 #: gnucash/report/business-reports/invoice.scm:568
 #: gnucash/report/business-reports/receipt.scm:98
 #: gnucash/report/business-reports/receipt.scm:181
@@ -26714,20 +26708,21 @@ msgstr ""
 #: gnucash/report/standard-reports/income-gst-statement.scm:108
 #: gnucash/report/standard-reports/income-gst-statement.scm:211
 msgid "Individual sales columns"
-msgstr "Einzelne Verkaufsanteile"
+msgstr "Individuelle Spalten für Verkäufe"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:108
 msgid "Display individual sales columns rather than their sum"
-msgstr "Einzelne Spalten für Verkäufe statt Summenspalte"
+msgstr "Individuelle Spalten für Verkäufe statt Summenspalte anzeigen."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:109
 #: gnucash/report/standard-reports/income-gst-statement.scm:236
 msgid "Individual purchases columns"
-msgstr "Einzelne Erwerbsanteile"
+msgstr "Individuelle Spalten für Erwerbungen"
 
+# Fixme Source: Dot missing
 #: gnucash/report/standard-reports/income-gst-statement.scm:109
 msgid "Display individual purchases columns rather than their sum"
-msgstr "Einzelne Spalten für Käufe statt Summenspalte"
+msgstr "Einzelne Spalten für Käufe statt Summenspalte anzeigen."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:110
 #: gnucash/report/standard-reports/income-gst-statement.scm:221
@@ -26737,26 +26732,28 @@ msgstr "Einzelne Steueranteile"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:110
 msgid "Display individual tax columns rather than their sum"
-msgstr "Einzelne Spalten für Steuern statt Summenspalte"
+msgstr "Einzelne Spalten für Steuern statt Summenspalte anzeigen."
 
+# Fixme: Mnemonic?
 #. Translators: "Gross Balance" refer to "Gross Sales - Gross Purchases" in GST Report
 #: gnucash/report/standard-reports/income-gst-statement.scm:111
 #: gnucash/report/standard-reports/income-gst-statement.scm:256
 #: gnucash/report/standard-reports/income-gst-statement.scm:258
 msgid "Gross Balance"
-msgstr "_Bruttobilanz"
+msgstr "Bruttosalden"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:111
 msgid "Display the gross balance (gross sales - gross purchases)"
 msgstr "Nur Summensaldo anzeigen (Summe Verkäufe minus Summe Käufe)"
 
+# Fixme: Mnemonic?
 #. Note: Net income = net balance - other costs
 #. Translators: "Net Balance" refer to Net Sales - Net Purchases in GST Report
 #: gnucash/report/standard-reports/income-gst-statement.scm:112
 #: gnucash/report/standard-reports/income-gst-statement.scm:264
 #: gnucash/report/standard-reports/income-gst-statement.scm:266
 msgid "Net Balance"
-msgstr "_Umsatzerlöse"
+msgstr "Nettosalden"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:112
 msgid "Display the net balance (sales without tax - purchases without tax)"
@@ -26767,12 +26764,12 @@ msgstr ""
 #: gnucash/report/standard-reports/income-gst-statement.scm:113
 #: gnucash/report/standard-reports/income-gst-statement.scm:271
 msgid "Tax payable"
-msgstr "Steuertabelle"
+msgstr "Zu zahlende Steuern"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:113
 msgid "Display the tax payable (tax on sales - tax on purchases)"
 msgstr ""
-"Zu zahlende Steuern anzeigen (Steuer auf Verkäufe minus Steuer auf Käufe)"
+"Zu zahlende Steuern anzeigen (Steuer auf Verkäufe minus Steuer auf Käufe)."
 
 #. Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
 #: gnucash/report/standard-reports/income-gst-statement.scm:207
@@ -26785,7 +26782,7 @@ msgstr "Nettoumsatz"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:227
 msgid "Tax on Sales"
-msgstr "Steuertabellen"
+msgstr "Umsatzsteuer"
 
 #. Translators: "Gross Purchases" refer to Net Purchase + GST/VAT on Purchase
 #: gnucash/report/standard-reports/income-gst-statement.scm:232
@@ -26798,7 +26795,7 @@ msgstr "Einkaufsnetto"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:252
 msgid "Tax on Purchases"
-msgstr "Umsatzsteuer"
+msgstr "Vorsteuer"
 
 #. Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
 #: gnucash/report/standard-reports/income-gst-statement.scm:273
@@ -30090,376 +30087,3 @@ msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
 #: libgnucash/tax/us/txf.scm:108
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "PAID"
-#~ msgstr "Bezahlt"
-
-#~ msgid "UNPAID"
-#~ msgstr "Unbezahlt"
-
-#~ msgid "Are you sure you want to replace the existing price?"
-#~ msgstr "Sind Sie sicher, dass Sie den gewählten Kurswert ersetzen wollen?"
-
-#~ msgid "Replace price?"
-#~ msgstr "Kurs ersetzen?"
-
-#~ msgid "_Replace"
-#~ msgstr "_Ersetzen"
-
-#~ msgid "Path head not set, using '%s' for relative paths"
-#~ msgstr "Pfad nicht angegeben, benutze '%s' für relative Pfade"
-
-#~ msgid "All Periods"
-#~ msgstr "Alle Perioden"
-
-#~ msgid "Edit budget for all periods for the selected accounts"
-#~ msgstr "Budget für Ausgewähltes Konto bearbeiten"
-
-#~ msgid "You must select at least one account to edit."
-#~ msgstr ""
-#~ "Sie müssen mindestens ein Konto auswählen, das bearbeitet werden soll."
-
-#~ msgid "Cut the split '%s' from the transaction '%s'?"
-#~ msgstr "Den Buchungsteil »%s« von der Buchung »%s« ausschneiden?"
-
-#~ msgid ""
-#~ "You would be removing a reconciled split! This is not a good idea as it "
-#~ "will cause your reconciled balance to be off."
-#~ msgstr ""
-#~ "Sie würden einen abgeglichenen Buchungsteil löschen! Das würde bewirken, "
-#~ "dass Ihr Saldo nicht mehr abgeglichen ist."
-
-#~ msgid "You cannot cut this split."
-#~ msgstr "Sie können diesen Buchungsteil nicht ausschneiden."
-
-#~ msgid ""
-#~ "This is the split anchoring this transaction to the register. You may not "
-#~ "remove it from this register window. You may remove the entire "
-#~ "transaction from this window, or you may navigate to a register that "
-#~ "shows another side of this same transaction and remove the split from "
-#~ "that register."
-#~ msgstr ""
-#~ "Dieser Buchungsteil verankert die Buchung in diesem Konto. Sie können den "
-#~ "Buchungsteil nicht von diesem Kontofenster aus löschen. Sie können "
-#~ "entweder die ganze Buchung von diesem Kontofenster aus löschen, oder Sie "
-#~ "öffnen ein Kontofenster für einen anderen Buchungsteil dieser Buchung "
-#~ "(zum Beispiel mit dem Knopf »Gegenbuchung«) und löschen diesen "
-#~ "Buchungsteil von jenem anderen Kontofenster."
-
-#~ msgid "_Cut Split"
-#~ msgstr "Buchungsteil aus_schneiden"
-
-#~ msgid "Cut the current transaction?"
-#~ msgstr "Aktuellen Buchungssatz ausschneiden?"
-
-#~ msgid ""
-#~ "You would be removing a transaction with reconciled splits! This is not a "
-#~ "good idea as it will cause your reconciled balance to be off."
-#~ msgstr ""
-#~ "Beachten Sie, dass Sie einen Buchungssatz mit abgeglichenen "
-#~ "Buchungsteilen löschen würden. Dies bedeutet, dass ihr abgeglichener "
-#~ "Saldo verändert wird."
-
-#~ msgid "_Cut Transaction"
-#~ msgstr "Buchung auss_chneiden"
-
-#~ msgid "Enter URL like https://www.gnucash.org:"
-#~ msgstr "Geben Sie eine URL ein, z.B. http://www.gnucash.org:"
-
-#~ msgid "Rename"
-#~ msgstr "Umbenennen"
-
-#~ msgid "Please enter new name"
-#~ msgstr "Bitte geben Sie einen neuen Namen ein"
-
-#~ msgid "_Rename"
-#~ msgstr "_Umbenennen"
-
-#~ msgid "Tax table name \"%s\" already exists."
-#~ msgstr "Eine Steuertabelle mit Namen »%s« existiert bereits."
-
-#~ msgid "Replace existing price"
-#~ msgstr "Ersetze vorhandenen Preis"
-
-#~ msgid ""
-#~ "This dialog is presented before allowing you to replace an existing price."
-#~ msgstr "Diese Rückfrage kommt vor dem Löschen einer Buchung."
-
-#~ msgid "<b>Accounts</b>"
-#~ msgstr "<b>Konten</b>"
-
-#~ msgid "Sho_w All"
-#~ msgstr "_Alle anzeigen"
-
-#~ msgid "Cho_ose Date:"
-#~ msgstr "Datum w_ählen:"
-
-#~ msgid ""
-#~ "\n"
-#~ "Select location and file name for the Import, then click \"OK\"...\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Wählen Sie Ort und Dateinamen für den Import. Dann betätigen Sie »OK«...\n"
-
-#~ msgid ""
-#~ "Starting from the first line that is actually imported every second line "
-#~ "will be skipped. This option will take the leading lines to skip into "
-#~ "account as well.\n"
-#~ "For example\n"
-#~ "* if \"Leading Lines to Skip\" is set to 3, the first line to import will "
-#~ "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#~ "* if \"Leading Lines to Skip\" is set to 4, the first line to import will "
-#~ "be line 5. Lines 6, 8, 10,... will be skipped."
-#~ msgstr ""
-#~ "Ausgehend von der ersten Zeile, die tatsächlich importiert wird, wird "
-#~ "jede 2. Zeile übersprungen. Diese Option nimmt auch die führenden Zeilen, "
-#~ "um in das Konto zu springen.\n"
-#~ "Zum Beispiel\n"
-#~ "* Wenn 'Führende Zeilen überspringen' auf 3 gesetzt ist, ist die erste "
-#~ "Zeile, die importiert werden soll, Zeile 4. Die Zeilen 5, 7, 9,... "
-#~ "werden übersprungen.\n"
-#~ "* Wenn 'Führende Zeilen überspringen' auf 4 gesetzt ist, ist die erste "
-#~ "Zeile, die importiert werden soll, Zeile 5. Die Zeilen 6, 8, 10,... "
-#~ "werden übersprungen."
-
-#~ msgid "All fields must be complete to continue..."
-#~ msgstr "Alle Konten müssen gültige Werte haben, um fortzufahren."
-
-#~ msgid "Days in ad_vance:"
-#~ msgstr "_Tage im Voraus:"
-
-#~ msgid "How many days in the future to warn about Invoices coming due."
-#~ msgstr ""
-#~ "Anzahl der Tage im Voraus, die an fällige Rechnungen erinnert werden soll."
-
-#~ msgid "<b>Security Information</b>"
-#~ msgstr "<b>Wertpapierinformationen</b>"
-
-#~ msgid "Search the Account List"
-#~ msgstr "<b>Kontenstruktur durchsuchen</b>"
-
-#~ msgid "_Previous"
-#~ msgstr "_Voriger"
-
-#~ msgid "_Next"
-#~ msgstr "_Nächster"
-
-#~ msgid "Edit budget for all periods"
-#~ msgstr "Bearbeite das Budget für alle Perioden"
-
-#~ msgid "Value:"
-#~ msgstr "Wert:"
-
-#~ msgid "Replace"
-#~ msgstr "Ersetzen"
-
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
-#~ msgid "Multiply"
-#~ msgstr "Multiplizieren"
-
-#~ msgid "Use Average"
-#~ msgstr "Durchschnitt benutzen"
-
-#~ msgid ""
-#~ "This assistant helps you setting up your Online Banking connection with "
-#~ "your bank."
-#~ msgstr ""
-#~ "Dieser Assistent führt Sie durch die Einrichtung der Online-Banking-"
-#~ "Verbindung mit Ihrer Bank."
-
-#~ msgid "_Abort"
-#~ msgstr "_Abbrechen"
-
-#~ msgid "No_w"
-#~ msgstr "_Jetzt"
-
-#~ msgid "_Remember the PIN in memory"
-#~ msgstr "HBCI PIN im Speicher _merken"
-
-#~ msgid ""
-#~ "If active, the PIN for FinTS/AqBanking actions will be remembered in "
-#~ "memory during a session. Otherwise it will have to be entered again each "
-#~ "time during a session when it is needed."
-#~ msgstr ""
-#~ "Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
-#~ "AqBanking während einer Programmbenutzung im Speicher "
-#~ "zwischengespeichert. Wenn nicht aktiviert, muss die PIN bei jeder "
-#~ "einzelnen Aktion von HBCI/AqBanking eingegeben werden und wird nicht im "
-#~ "Speicher gehalten."
-
-#~ msgid " _Name of the new template:"
-#~ msgstr "_Namen für neue Überweisungsvorlage"
-
-#~ msgid "Enter a unique name for the new template."
-#~ msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein."
-
-#~ msgid "_Amount"
-#~ msgstr "_Betrag:"
-
-#~ msgid "_Up"
-#~ msgstr "_Höher"
-
-#~ msgid "_Down"
-#~ msgstr "_Tiefer"
-
-#~ msgid "D_elete"
-#~ msgstr "_Löschen"
-
-#~ msgid ""
-#~ "Error on executing job.\n"
-#~ "\n"
-#~ "Status: %s"
-#~ msgstr ""
-#~ "Fehler beim Ausführen des Auftrags.\n"
-#~ "\n"
-#~ "Status: %s"
-
-#~ msgid ""
-#~ "Error on executing job.\n"
-#~ "\n"
-#~ "Status: %s (%d)"
-#~ msgstr ""
-#~ "Fehler beim Ausführen des Auftrags.\n"
-#~ "\n"
-#~ "Status: %s (%d)"
-
-#~ msgid "Job %d status %d - %s\n"
-#~ msgstr "Auftrag %d Status %d - %s\n"
-
-#~ msgid ""
-#~ "Import an end-of-day account statement in SWIFT MT940 format into GnuCash."
-#~ msgstr ""
-#~ "Importiert einen zum Tagesabschluß erstellten Kontoauszug im SWIFT MT940-"
-#~ "Format in GnuCash."
-
-#~ msgid ""
-#~ "Import an interim account statement in SWIFT MT942 format into GnuCash."
-#~ msgstr ""
-#~ "Importiert einen vorläufigen Kontoauszug im SWIFT MT942-Format in GnuCash."
-
-#~ msgid ""
-#~ "Please select a 'From Namespace' column or set a Commodity in the "
-#~ "'Commodity From' field."
-#~ msgstr ""
-#~ "Bitte wählen Sie eine Spalte für das Herkunfts-Wertpapier oder geben Sie "
-#~ "ein Wertpapier im Feld Herkunfts-Wertpapier ein."
-
-#~ msgid ""
-#~ "No 'From Namespace/From Symbol' columns selected and no selected "
-#~ "Commodity From specified either.\n"
-#~ "This should never happen. Please report this as a bug."
-#~ msgstr ""
-#~ "Hoppla: Keine Herkunfts-Wertpapier Spalte ausgewählt und auch kein "
-#~ "Wertpapier angegeben.\n"
-#~ "Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
-
-#~ msgid "From Symbol"
-#~ msgstr "Von Symbol"
-
-#~ msgid "From Namespace"
-#~ msgstr "Von Namensraum"
-
-#~ msgid "Value can't be parsed into a valid namespace."
-#~ msgstr ""
-#~ "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
-
-#~ msgid "'From Symbol' can not be empty."
-#~ msgstr "»Von Symbol« darf nicht leer sein."
-
-#~ msgid "'From Namespace' can not be empty."
-#~ msgstr "»Von Namensraum« darf nicht leer sein."
-
-#~ msgid "Assign a transfer account."
-#~ msgstr "_Herkunftskonto auswählen"
-
-#~ msgid "Are you sure you want to cancel?"
-#~ msgstr "Sind Sie sicher, dass Sie abbrechen möchten?"
-
-#~ msgid "Placeholder?"
-#~ msgstr "Platzhalter?"
-
-#~ msgid ""
-#~ "This is the split anchoring this transaction to the register. You may not "
-#~ "overwrite it from this register window. You may overwrite it if you "
-#~ "navigate to a register that shows another side of this same transaction."
-#~ msgstr ""
-#~ "Dieser Buchungsteil verankert die Buchung in diesem Konto. Sie können den "
-#~ "Buchungsteil nicht von diesem Kontofenster aus löschen. Sie können "
-#~ "entweder die ganze Buchung von diesem Kontofenster aus löschen, oder Sie "
-#~ "öffnen ein Kontofenster für einen anderen Buchungsteil dieser Buchung "
-#~ "(zum Beispiel mit dem Knopf »Gegenbuchung«) und löschen diesen "
-#~ "Buchungsteil von jenem anderen Kontofenster aus."
-
-#~ msgid "No valid customer found."
-#~ msgstr "Kein passender Kunde gefunden."
-
-#~ msgid "_Experimental"
-#~ msgstr "_Experimentell"
-
-#~ msgid "error ~a during csv output to ~a: ~s"
-#~ msgstr "Fehler ~a während CSV Export nach ~a: ~s"
-
-#~ msgid "Period duration"
-#~ msgstr "Periodendauer"
-
-#~ msgid "Duration between time periods"
-#~ msgstr "Dauer zwischen Zeitperioden"
-
-#~ msgid "Enable dual columns"
-#~ msgstr "mehrspaltig aktivieren"
-
-#~ msgid "Parent account amounts include children"
-#~ msgstr "Saldo übergeordneter Konten inklusive Unterkonten"
-
-#~ msgid "Display amounts as hyperlinks"
-#~ msgstr "Kontonamen anklickbar anzeigen"
-
-#~ msgid ""
-#~ "Shows each amounts in the table as a hyperlink to a register or report."
-#~ msgstr ""
-#~ "Zeige Konten als Hyperlinks an, die beim Anklicken das jeweilige "
-#~ "Kontofenster öffnen."
-
-#~ msgid "Label sections"
-#~ msgstr "Abschnitt Aktiva beschriften"
-
-#~ msgid "Whether or not to include a label for sections."
-#~ msgstr "Zeige eine Beschriftung für den Abschnitt mit Aktiva an."
-
-#~ msgid "Include totals"
-#~ msgstr "_Gesamtsumme anzeigen"
-
-#~ msgid "Whether or not to include a line indicating total amounts."
-#~ msgstr "Zeige eine Zeile für die Summe Aktiva an."
-
-#~ msgid "Enable chart"
-#~ msgstr "Liniendiagramm"
-
-#~ msgid "Enable link to chart"
-#~ msgstr "Hyperlinks zu Grafik aktivieren"
-
-#~ msgid "Convert all amounts to a single currency."
-#~ msgstr "Alle Buchungen in eine gemeinsame Währung umrechnen."
-
-#~ msgid "One year."
-#~ msgstr "Ein Jahr."
-
-#~ msgid "missing"
-#~ msgstr "fehlt"
-
-#~ msgid " to "
-#~ msgstr " bis "
-
-#~ msgid "Exchange Rates"
-#~ msgstr "Wechselkurse"
-
-#~ msgid "Balance Sheet (Multicolumn)"
-#~ msgstr "Bilanz (mit »eguile«)"
-
-#~ msgid "Income Statement (Multicolumn)"
-#~ msgstr "Ergebnisrechnung (mit »eguile«)"
-
-#~ msgid "Found Finance::Quote version ~A."
-#~ msgstr "Finance::Quote Version ~A wurde gefunden."
