@@ -136,7 +136,7 @@ find_cell_by_pixel (GnucashSheet *sheet, gint x, gint y,
     {
         cd = gnucash_style_get_cell_dimensions (style, row, 0);
 
-        if (y >= cd->origin_y && y < cd->origin_y + cd->pixel_height)
+        if (cd && y >= cd->origin_y && y < cd->origin_y + cd->pixel_height)
             break;
 
         row++;
@@ -150,7 +150,7 @@ find_cell_by_pixel (GnucashSheet *sheet, gint x, gint y,
     {
         cd = gnucash_style_get_cell_dimensions (style, row, col);
 
-        if (x >= cd->origin_x && x < cd->origin_x + cd->pixel_width)
+        if (cd && x >= cd->origin_x && x < cd->origin_x + cd->pixel_width)
             break;
 
         col++;
@@ -572,6 +572,8 @@ draw_block (GnucashSheet *sheet,
                  (block->style,
                   virt_loc.phys_row_offset,
                   virt_loc.phys_col_offset);
+
+            if (!cd) break;
 
             x_paint = block->origin_x + cd->origin_x - x;
             if (x_paint > width)
