@@ -23930,12 +23930,12 @@ msgstr "cleared:א"
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:926
 msgid "reconciled:y"
-msgstr "מreconciled:"
+msgstr "reconciled:מ"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:929
 msgid "frozen:f"
-msgstr "ק"
+msgstr "frozen:ק"
 
 #. Translators: Please only translate the letter *after* the colon.
 #: libgnucash/app-utils/gnc-ui-util.c:932
