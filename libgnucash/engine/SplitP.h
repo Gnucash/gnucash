@@ -123,6 +123,7 @@ struct split_s
      * These balances apply to a sorting order by date posted
      * (not by date entered). */
     gnc_numeric  balance;
+    gnc_numeric  noclosing_balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
 };

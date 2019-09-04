@@ -63,6 +63,8 @@ static const std::string AB_ACCOUNT_UID("account-uid");
 static const std::string AB_BANK_CODE("bank-code");
 static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
+static gnc_numeric xaccAccountGetBalanceAsOfDate_priv (Account *acc, time64 date, gboolean ignclosing);
+
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
 using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
@@ -88,6 +90,7 @@ enum
     PROP_COMMODITY_SCU,                 /* Table */
     PROP_NON_STD_SCU,                   /* Table */
     PROP_END_BALANCE,                   /* Constructed */
+    PROP_END_NOCLOSING_BALANCE,         /* Constructed */
     PROP_END_CLEARED_BALANCE,           /* Constructed */
     PROP_END_RECONCILED_BALANCE,        /* Constructed */
 
@@ -116,6 +119,7 @@ enum
     PROP_SORT_DIRTY,                    /* Runtime Value */
     PROP_BALANCE_DIRTY,                 /* Runtime Value */
     PROP_START_BALANCE,                 /* Runtime Value */
+    PROP_START_NOCLOSING_BALANCE,       /* Runtime Value */
     PROP_START_CLEARED_BALANCE,         /* Runtime Value */
     PROP_START_RECONCILED_BALANCE,      /* Runtime Value */
 };
@@ -279,9 +283,11 @@ gnc_account_init(Account* acc)
     priv->non_standard_scu = FALSE;
 
     priv->balance = gnc_numeric_zero();
+    priv->noclosing_balance = gnc_numeric_zero();
     priv->cleared_balance = gnc_numeric_zero();
     priv->reconciled_balance = gnc_numeric_zero();
     priv->starting_balance = gnc_numeric_zero();
+    priv->starting_noclosing_balance = gnc_numeric_zero();
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
@@ -364,6 +370,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_START_BALANCE:
         g_value_set_boxed(value, &priv->starting_balance);
         break;
+    case PROP_START_NOCLOSING_BALANCE:
+        g_value_set_boxed(value, &priv->starting_noclosing_balance);
+        break;
     case PROP_START_CLEARED_BALANCE:
         g_value_set_boxed(value, &priv->starting_cleared_balance);
         break;
@@ -372,6 +381,9 @@ gnc_account_get_property (GObject         *object,
         break;
     case PROP_END_BALANCE:
         g_value_set_boxed(value, &priv->balance);
+        break;
+    case PROP_END_NOCLOSING_BALANCE:
+        g_value_set_boxed(value, &priv->noclosing_balance);
         break;
     case PROP_END_CLEARED_BALANCE:
         g_value_set_boxed(value, &priv->cleared_balance);
@@ -496,6 +508,10 @@ gnc_account_set_property (GObject         *object,
     case PROP_START_BALANCE:
         number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_account_set_start_balance(account, *number);
+        break;
+    case PROP_START_NOCLOSING_BALANCE:
+        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
+        gnc_account_set_start_noclosing_balance(account, *number);
         break;
     case PROP_START_CLEARED_BALANCE:
         number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
@@ -748,6 +764,23 @@ gnc_account_class_init (AccountClass *klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_START_NOCLOSING_BALANCE,
+     g_param_spec_boxed("start-noclosing-balance",
+                        "Starting No-closing Balance",
+                        "The starting balance for the account, ignoring closing."
+                        "This parameter is intended for use with backends "
+                        "that do not return the complete list of splits "
+                        "for an account, but rather return a partial "
+                        "list.  In such a case, the backend will "
+                        "typically return all of the splits after "
+                        "some certain date, and the 'starting noclosing "
+                        "balance' will represent the summation of the "
+                        "splits up to that date, ignoring closing splits.",
+                        GNC_TYPE_NUMERIC,
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    g_object_class_install_property
+    (gobject_class,
      PROP_START_CLEARED_BALANCE,
      g_param_spec_boxed("start-cleared-balance",
                         "Starting Cleared Balance",
@@ -788,6 +821,18 @@ gnc_account_class_init (AccountClass *klass)
                         "This is the current ending balance for the "
                         "account.  It is computed from the sum of the "
                         "starting balance and all splits in the account.",
+                        GNC_TYPE_NUMERIC,
+                        G_PARAM_READABLE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_END_NOCLOSING_BALANCE,
+     g_param_spec_boxed("end-noclosing-balance",
+                        "Ending Account Noclosing Balance",
+                        "This is the current ending no-closing balance for "
+                        "the account.  It is computed from the sum of the "
+                        "starting balance and all cleared splits in the "
+                        "account.",
                         GNC_TYPE_NUMERIC,
                         G_PARAM_READABLE));
 
@@ -1269,6 +1314,7 @@ xaccFreeAccount (Account *acc)
     priv->children = nullptr;
 
     priv->balance  = gnc_numeric_zero();
+    priv->noclosing_balance = gnc_numeric_zero();
     priv->cleared_balance = gnc_numeric_zero();
     priv->reconciled_balance = gnc_numeric_zero();
 
@@ -1565,6 +1611,22 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
         return FALSE;
     }
 
+    if (!gnc_numeric_equal(priv_aa->starting_noclosing_balance,
+                           priv_ab->starting_noclosing_balance))
+    {
+        char *str_a;
+        char *str_b;
+
+        str_a = gnc_numeric_to_string(priv_aa->starting_noclosing_balance);
+        str_b = gnc_numeric_to_string(priv_ab->starting_noclosing_balance);
+
+        PWARN ("starting noclosing balances differ: %s vs %s", str_a, str_b);
+
+        g_free (str_a);
+        g_free (str_b);
+
+        return FALSE;
+    }
     if (!gnc_numeric_equal(priv_aa->starting_cleared_balance,
                            priv_ab->starting_cleared_balance))
     {
@@ -1615,6 +1677,21 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
         return FALSE;
     }
 
+    if (!gnc_numeric_equal(priv_aa->noclosing_balance, priv_ab->noclosing_balance))
+    {
+        char *str_a;
+        char *str_b;
+
+        str_a = gnc_numeric_to_string(priv_aa->noclosing_balance);
+        str_b = gnc_numeric_to_string(priv_ab->noclosing_balance);
+
+        PWARN ("noclosing balances differ: %s vs %s", str_a, str_b);
+
+        g_free (str_a);
+        g_free (str_b);
+
+        return FALSE;
+    }
     if (!gnc_numeric_equal(priv_aa->cleared_balance, priv_ab->cleared_balance))
     {
         char *str_a;
@@ -2070,6 +2147,7 @@ xaccAccountRecomputeBalance (Account * acc)
 {
     AccountPrivate *priv;
     gnc_numeric  balance;
+    gnc_numeric  noclosing_balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
     GList *lp;
@@ -2083,6 +2161,7 @@ xaccAccountRecomputeBalance (Account * acc)
     if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 
     balance            = priv->starting_balance;
+    noclosing_balance  = priv->starting_noclosing_balance;
     cleared_balance    = priv->starting_cleared_balance;
     reconciled_balance = priv->starting_reconciled_balance;
 
@@ -2107,13 +2186,18 @@ xaccAccountRecomputeBalance (Account * acc)
                 gnc_numeric_add_fixed(reconciled_balance, amt);
         }
 
+        if (!(xaccTransGetIsClosingTxn (split->parent)))
+            noclosing_balance = gnc_numeric_add_fixed(noclosing_balance, amt);
+
         split->balance = balance;
+        split->noclosing_balance = noclosing_balance;
         split->cleared_balance = cleared_balance;
         split->reconciled_balance = reconciled_balance;
 
     }
 
     priv->balance = balance;
+    priv->noclosing_balance = noclosing_balance;
     priv->cleared_balance = cleared_balance;
     priv->reconciled_balance = reconciled_balance;
     priv->balance_dirty = FALSE;
@@ -3216,6 +3300,20 @@ gnc_account_set_start_cleared_balance (Account *acc,
 }
 
 void
+gnc_account_set_start_noclosing_balance (Account *acc,
+                                         const gnc_numeric start_baln)
+{
+    AccountPrivate *priv;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    priv = GET_PRIVATE(acc);
+    priv->starting_noclosing_balance = start_baln;
+    priv->balance_dirty = TRUE;
+}
+
+
+void
 gnc_account_set_start_reconciled_balance (Account *acc,
         const gnc_numeric start_baln)
 {
@@ -3233,6 +3331,13 @@ xaccAccountGetBalance (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
     return GET_PRIVATE(acc)->balance;
+}
+
+gnc_numeric
+xaccAccountGetNoclosingBalance (const Account *acc)
+{
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
+    return GET_PRIVATE(acc)->noclosing_balance;
 }
 
 gnc_numeric
@@ -3287,8 +3392,8 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-gnc_numeric
-xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
+static gnc_numeric
+xaccAccountGetBalanceAsOfDate_priv(Account *acc, time64 date, gboolean ignclosing)
 {
     /* Ideally this could use xaccAccountForEachSplit, but
      * it doesn't exist yet and I'm uncertain of exactly how
@@ -3307,7 +3412,10 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
     xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
 
     priv = GET_PRIVATE(acc);
-    balance = priv->balance;
+    if (ignclosing)
+        balance = priv->noclosing_balance;
+    else
+        balance = priv->balance;
 
     lp = priv->splits;
     while ( lp && !found )
@@ -3340,6 +3448,18 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
      */
 
     return( balance );
+}
+
+gnc_numeric
+xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
+{
+    return xaccAccountGetBalanceAsOfDate_priv (acc, date, FALSE);
+}
+
+static gnc_numeric
+xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
+{
+    return xaccAccountGetBalanceAsOfDate_priv (acc, date, TRUE);
 }
 
 /*
@@ -3619,6 +3739,16 @@ xaccAccountGetBalanceInCurrency (const Account *acc,
 
 
 gnc_numeric
+xaccAccountGetNoclosingBalanceInCurrency (const Account *acc,
+                                          const gnc_commodity *report_commodity,
+                                          gboolean include_children)
+{
+    return xaccAccountGetXxxBalanceInCurrencyRecursive
+      (acc, xaccAccountGetNoclosingBalance, report_commodity,
+       include_children);
+}
+
+gnc_numeric
 xaccAccountGetClearedBalanceInCurrency (const Account *acc,
                                         const gnc_commodity *report_commodity,
                                         gboolean include_children)
@@ -3670,6 +3800,16 @@ xaccAccountGetBalanceAsOfDateInCurrency(
 }
 
 gnc_numeric
+xaccAccountGetNoclosingBalanceAsOfDateInCurrency(
+    Account *acc, time64 date, gnc_commodity *report_commodity,
+    gboolean include_children)
+{
+    return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive
+      (acc, date, xaccAccountGetNoclosingBalanceAsOfDate,
+       report_commodity, include_children);
+}
+
+gnc_numeric
 xaccAccountGetBalanceChangeForPeriod (Account *acc, time64 t1, time64 t2,
                                       gboolean recurse)
 {
@@ -3677,6 +3817,17 @@ xaccAccountGetBalanceChangeForPeriod (Account *acc, time64 t1, time64 t2,
 
     b1 = xaccAccountGetBalanceAsOfDateInCurrency(acc, t1, NULL, recurse);
     b2 = xaccAccountGetBalanceAsOfDateInCurrency(acc, t2, NULL, recurse);
+    return gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+}
+
+gnc_numeric
+xaccAccountGetNoclosingBalanceChangeForPeriod (Account *acc, time64 t1,
+                                               time64 t2, gboolean recurse)
+{
+    gnc_numeric b1, b2;
+
+    b1 = xaccAccountGetNoclosingBalanceAsOfDateInCurrency(acc, t1, NULL, recurse);
+    b2 = xaccAccountGetNoclosingBalanceAsOfDateInCurrency(acc, t2, NULL, recurse);
     return gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
 }
 

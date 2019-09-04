@@ -1273,6 +1273,12 @@ xaccSplitGetBalance (const Split *s)
 }
 
 gnc_numeric
+xaccSplitGetNoclosingBalance (const Split *s)
+{
+    return s ? s->noclosing_balance : gnc_numeric_zero();
+}
+
+gnc_numeric
 xaccSplitGetClearedBalance (const Split *s)
 {
     return s ? s->cleared_balance : gnc_numeric_zero();

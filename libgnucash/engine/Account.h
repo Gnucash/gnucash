@@ -329,6 +329,16 @@ gboolean xaccAccountIsPriced(const Account *acc);
 void gnc_account_set_start_balance (Account *acc,
                                     const gnc_numeric start_baln);
 
+/** This function will set the starting noclosing commodity balance for
+ *  this account.  This routine is intended for use with backends that
+ *  do not return the complete list of splits for an account, but
+ *  rather return a partial list.  In such a case, the backend will
+ *  typically return all of the splits after some certain date, and
+ *  the 'starting balance' will represent the summation of the splits
+ *  up to that date. */
+void gnc_account_set_start_noclosing_balance (Account *acc,
+                                            const gnc_numeric start_baln);
+
 /** This function will set the starting cleared commodity balance for
  *  this account.  This routine is intended for use with backends that
  *  do not return the complete list of splits for an account, but
@@ -546,6 +556,8 @@ gboolean  xaccAccountGetNonStdSCU (const Account *account);
 /** Get the current balance of the account, which may include future
     splits */
 gnc_numeric xaccAccountGetBalance (const Account *account);
+/** Get the current balance of the account, excluding closing transactions */
+gnc_numeric xaccAccountGetNoclosingBalance (const Account *account);
 /** Get the current balance of the account, only including cleared
     transactions */
 gnc_numeric xaccAccountGetClearedBalance (const Account *account);
@@ -582,6 +594,9 @@ gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
 gnc_numeric xaccAccountGetBalanceInCurrency (
     const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
+gnc_numeric xaccAccountGetNoclosingBalanceInCurrency (
+    const Account *account, const gnc_commodity *report_commodity,
+    gboolean include_children);
 gnc_numeric xaccAccountGetClearedBalanceInCurrency (
     const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
@@ -597,10 +612,15 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
 
 /* This function gets the balance as of the given date in the desired
    commodity. */
+gnc_numeric xaccAccountGetNoclosingBalanceAsOfDateInCurrency(
+    Account *acc, time64 date, gnc_commodity *report_commodity,
+    gboolean include_children);
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
     Account *account, time64 date, gnc_commodity *report_commodity,
     gboolean include_children);
 
+gnc_numeric xaccAccountGetNoclosingBalanceChangeForPeriod (
+    Account *acc, time64 date1, time64 date2, gboolean recurse);
 gnc_numeric xaccAccountGetBalanceChangeForPeriod (
     Account *acc, time64 date1, time64 date2, gboolean recurse);
 
@@ -1504,6 +1524,7 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 #define ACCOUNT_SORT_REVERSED_ "sort-reversed"
 #define ACCOUNT_NOTES_		"notes"
 #define ACCOUNT_BALANCE_	"balance"
+#define ACCOUNT_NOCLOSING_	"noclosing"
 #define ACCOUNT_CLEARED_	"cleared"
 #define ACCOUNT_RECONCILED_	"reconciled"
 #define ACCOUNT_PRESENT_	"present"
