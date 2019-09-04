@@ -104,11 +104,13 @@ typedef struct AccountPrivate
 
     /* protected data - should only be set by backends */
     gnc_numeric starting_balance;
+    gnc_numeric starting_noclosing_balance;
     gnc_numeric starting_cleared_balance;
     gnc_numeric starting_reconciled_balance;
 
     /* cached parameters */
     gnc_numeric balance;
+    gnc_numeric noclosing_balance;
     gnc_numeric cleared_balance;
     gnc_numeric reconciled_balance;
 

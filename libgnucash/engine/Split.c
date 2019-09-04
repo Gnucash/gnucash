@@ -120,6 +120,7 @@ gnc_split_init(Split* split)
     split->balance             = gnc_numeric_zero();
     split->cleared_balance     = gnc_numeric_zero();
     split->reconciled_balance  = gnc_numeric_zero();
+    split->noclosing_balance   = gnc_numeric_zero();
 
     split->gains = GAINS_STATUS_UNKNOWN;
     split->gains_split = NULL;
@@ -513,6 +514,7 @@ xaccSplitReinit(Split * split)
     split->balance             = gnc_numeric_zero();
     split->cleared_balance     = gnc_numeric_zero();
     split->reconciled_balance  = gnc_numeric_zero();
+    split->noclosing_balance   = gnc_numeric_zero();
 
     qof_instance_set_idata(split, 0);
 
@@ -597,6 +599,7 @@ xaccSplitCloneNoKvp (const Split *s)
     split->balance             = s->balance;
     split->cleared_balance     = s->cleared_balance;
     split->reconciled_balance  = s->reconciled_balance;
+    split->noclosing_balance   = s->noclosing_balance;
 
     split->gains = GAINS_STATUS_UNKNOWN;
     split->gains_split = NULL;
@@ -679,6 +682,7 @@ xaccSplitDump (const Split *split, const char *tag)
     printf("    CBalance: %s\n", gnc_numeric_to_string(split->cleared_balance));
     printf("    RBalance: %s\n",
            gnc_numeric_to_string(split->reconciled_balance));
+    printf("    NoClose:  %s\n", gnc_numeric_to_string(split->noclosing_balance));
     printf("    idata:    %x\n", qof_instance_get_idata(split));
 }
 #endif
@@ -867,6 +871,9 @@ xaccSplitEqual(const Split *sa, const Split *sb,
             return FALSE;
         if (!xaccSplitEqualCheckBal ("reconciled ", sa->reconciled_balance,
                                      sb->reconciled_balance))
+            return FALSE;
+        if (!xaccSplitEqualCheckBal ("noclosing ", sa->noclosing_balance,
+                                     sb->noclosing_balance))
             return FALSE;
     }
 
@@ -1270,6 +1277,12 @@ gnc_numeric
 xaccSplitGetBalance (const Split *s)
 {
     return s ? s->balance : gnc_numeric_zero();
+}
+
+gnc_numeric
+xaccSplitGetNoclosingBalance (const Split *s)
+{
+    return s ? s->noclosing_balance : gnc_numeric_zero();
 }
 
 gnc_numeric
