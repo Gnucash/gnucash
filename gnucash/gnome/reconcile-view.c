@@ -422,7 +422,7 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     param = gnc_search_param_simple_new();
     gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
                                     gnc_reconcile_view_is_reconciled, view);
-    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
+    gnc_search_param_set_title ((GNCSearchParam *) param, C_("Column header for 'Reconciled'", "R"));
     gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
     gnc_search_param_set_passive ((GNCSearchParam *) param, FALSE);
     gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);

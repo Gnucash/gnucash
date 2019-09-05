@@ -303,7 +303,7 @@ gnc_split_register_get_recn_label (VirtualLocation virt_loc,
         return _("Paid");
 
     default:
-        return _("Reconciled:R") + 11;
+        return C_("Column header for 'Reconciled'", "R");
     }
 }
 
@@ -325,7 +325,7 @@ static const char *
 gnc_split_register_get_associate_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-    return _("Associate:A") + 10;
+    return C_("Column header for 'Associate'", "A");
 }
 
 static const char *
