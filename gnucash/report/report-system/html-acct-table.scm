@@ -1084,7 +1084,7 @@
 		 1 1 (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label))
 	    )
 	   (gnc:html-make-empty-cells             ;; padding after label
-            (+ (- amt-depth (/ tbl-width 2))
+            (+ (- amt-depth (floor (/ tbl-width 2)))
                (if total-rule? -1 0)
                )
             )
