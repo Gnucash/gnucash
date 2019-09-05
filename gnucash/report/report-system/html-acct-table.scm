@@ -1166,7 +1166,6 @@
 			params))
 		  (acct (get-val env 'account))
 		  (children (get-val env 'account-children))
-		  (children-displayed? (get-val env 'children-displayed?))
 		  (label (get-val env 'account-label))
 		  (acct-name (get-val env 'account-name)) ;; for diagnostics...
 		  (report-commodity  (get-val env 'report-commodity))
@@ -1293,18 +1292,6 @@
 	      amount
 	      (+ account-cols (- 0 1)
 		 (- logical-cols display-depth)
-		 ;; account for 'immediate-bal parents displaying children
-		 ;; NOTE: before you go mucking with this, BE ABSOLUTELY
-		 ;; SURE you know what you're doing... i spent A LOT of
-		 ;; time trying to make sure this is right. i know, in
-		 ;; some reports, the output might look incorrect. but,
-		 ;; if you think long and hard about it, i think you'll
-		 ;; find the current treatment correct... i think. -DM-
-		 (- 0 (if (if (not children-displayed?)
-			      #f
-			      (equal? bal-method 'immediate-bal))
-			  1 0)
-		    )
 		 (if (equal? subtotal-mode 'canonically-tabbed) 1 0)
 		 )                          ;; amount-depth
 	      1                             ;; amount-colspan
