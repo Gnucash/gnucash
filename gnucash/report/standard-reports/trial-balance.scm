@@ -165,15 +165,14 @@
 	      (if show-comm?
 		  (gnc-commodity-table bal report-commodity exchange-fn)
 		  bal-sum))))
-    (car (assoc-ref
-	  (list
-	   (list 'entry balance)
-	   (list 'debit (if neg? #f balance))
-	   (list 'credit (if neg? balance #f))
-	   (list 'zero-q (if neg? #f (if balance #f #t)))
-	   (list 'debit-q (if neg? #f (if balance #t #f)))
-	   (list 'credit-q (if neg? #t #f)))
-	  req))))
+    (assq-ref (list
+               (cons 'entry balance)
+               (cons 'debit (if neg? #f balance))
+               (cons 'credit (if neg? balance #f))
+               (cons 'zero-q (if neg? #f (if balance #f #t)))
+               (cons 'debit-q (if neg? #f (if balance #t #f)))
+               (cons 'credit-q (if neg? #t #f)))
+              req)))
 
 ;; options generator
 (define (trial-balance-options-generator)

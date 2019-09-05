@@ -1210,14 +1210,10 @@
 		  (comm-amt
 		   ;; this will be the immediate/recursive commodity
 		   ;; balance (a commodity collector) or #f.
-		   (get-val env
-			    (car (or (assoc-ref
-				      '((immediate-bal account-bal)
-					(recursive-bal recursive-bal)
-					(omit-bal #f))
-				      bal-method)
-				     '(#f)
-				     ))))
+		   (get-val env (assq-ref '((immediate-bal . account-bal)
+				            (recursive-bal . recursive-bal)
+				            (omit-bal . #f))
+				          bal-method)))
 		  (zero-mode (let ((mode
 				       (get-val
 					env 'zero-balance-display-mode)))
