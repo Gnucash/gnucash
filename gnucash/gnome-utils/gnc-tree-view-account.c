@@ -903,9 +903,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                             NULL);
 
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
-                                    /* Translators: This string has a context prefix; the translation
-                                        must only contain the part after the | character. */
-                                    Q_("Column letter for 'Placeholder'|P"),
+				    C_("Column header for 'Placeholder'", "P"),
                                     "placeholder",
                                     GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
