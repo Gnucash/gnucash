@@ -1084,7 +1084,7 @@
 		 1 1 (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label))
 	    )
 	   (gnc:html-make-empty-cells             ;; padding after label
-            (+ (- amt-depth (/ tbl-width 2))
+            (+ (- amt-depth (floor (/ tbl-width 2)))
                (if total-rule? -1 0)
                )
             )
@@ -1210,14 +1210,10 @@
 		  (comm-amt
 		   ;; this will be the immediate/recursive commodity
 		   ;; balance (a commodity collector) or #f.
-		   (get-val env
-			    (car (or (assoc-ref
-				      '((immediate-bal account-bal)
-					(recursive-bal recursive-bal)
-					(omit-bal #f))
-				      bal-method)
-				     '(#f)
-				     ))))
+		   (get-val env (assq-ref '((immediate-bal . account-bal)
+				            (recursive-bal . recursive-bal)
+				            (omit-bal . #f))
+				          bal-method)))
 		  (zero-mode (let ((mode
 				       (get-val
 					env 'zero-balance-display-mode)))

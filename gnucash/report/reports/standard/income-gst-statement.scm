@@ -267,7 +267,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
          '())
      (if (opt-val gnc:pagename-display (N_ "Tax payable"))
          ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
-         (list (vector (_ "Tax Payable")
+         (list (vector (_ "Tax payable")
                        tax-payable
                        #f #t #f
                        (lambda (a) "")))

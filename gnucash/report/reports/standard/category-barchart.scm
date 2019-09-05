@@ -466,9 +466,7 @@ developing over time"))
           ;; needed so as to amortize the cpu time properly.
           (gnc:report-percent-done 1)
           (set! commodity-list (gnc:accounts-get-commodities
-                                (append
-                                 (gnc:acccounts-get-all-subaccounts accounts)
-                                 accounts)
+                                (gnc:accounts-and-all-descendants accounts)
                                 report-currency))
           (set! exchange-fn (gnc:case-exchange-time-fn
                              price-source report-currency

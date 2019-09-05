@@ -166,9 +166,9 @@
           "$60.00" "$77.00" "-$17.00" "$100.00" "$124.00" "-$24.00")
         (sxml->table-row-col sxml 1 5 #f)))
 
-    (set-option options "General" "Use envelope budgeting" #t)
-    (let ((sxml (options->sxml options "envelope budgeting")))
-      (test-equal "envelope budgeting"
+    (set-option options "General" "Use accumulated amounts" #t)
+    (let ((sxml (options->sxml options "Use accumulated amounts")))
+      (test-equal "use accumulated amounts"
         '("Bank" "$60.00" "$15.00" "$45.00" "$60.00" "$82.00" "-$22.00"
           "$120.00" "$159.00" "-$39.00" "$120.00" "$159.00" "-$39.00")
         (sxml->table-row-col sxml 1 5 #f)))

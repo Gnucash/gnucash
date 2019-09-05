@@ -561,6 +561,7 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
     g_return_if_fail (col < style->ncols);
 
     cd = gnucash_style_get_cell_dimensions (style, 0, col);
+    if (!cd) return;
 
     /* adjust the overall width of this style */
     diff = cd->pixel_width - width;
@@ -731,6 +732,7 @@ gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
     g_return_if_fail (cell_col >= 0 && cell_col <= style->ncols);
 
     cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
+    if (!cd) return;
 
     *x = cd->origin_x;
     *y = cd->origin_y;
@@ -954,7 +956,7 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet,
                                                     row, col);
 
             cell = gnc_cellblock_get_cell (header, row, col);
-            if (!cell || !cell->cell_name)
+            if (!cell || !cell->cell_name || !cd)
                 continue;
 
             cd->pixel_width = gnc_header_widths_get_width

@@ -40,7 +40,8 @@
   ;; It also dumps the render into /tmp/XX-YY.html where XX is the
   ;; test prefix and YY is the test title.
 
-  (let* ((template (gnc:find-report-template uuid))
+  (let* ((template (or (gnc:find-report-template uuid)
+                       (error "report not found:" uuid)))
          (constructor (record-constructor <report>))
          (report (constructor uuid "bar" options #t #t #f #f ""))
          (renderer (gnc:report-template-renderer template))

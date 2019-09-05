@@ -195,9 +195,8 @@
     ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
         (let* ((commodity-list (gnc:accounts-get-commodities
-                                (append
-                                 (gnc:acccounts-get-all-subaccounts
-                                  accounts) accounts) currency))
+                                (gnc:accounts-and-all-descendants accounts)
+                                report-currency))
                (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
 	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn

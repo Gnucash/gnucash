@@ -304,9 +304,7 @@
 
     (gnc:report-percent-done 1)
     (set! commodity-list (gnc:accounts-get-commodities
-                          (append
-                           (gnc:acccounts-get-all-subaccounts accounts)
-                           accounts)
+                          (gnc:accounts-and-all-descendants accounts)
                           report-currency))
     (gnc:report-percent-done 10)
     (set! exchange-fn (gnc:case-exchange-time-fn

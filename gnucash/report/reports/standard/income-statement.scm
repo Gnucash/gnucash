@@ -326,10 +326,9 @@
          (parent-balance-mode (get-option gnc:pagename-display
                                            optname-parent-balance-mode))
          (parent-total-mode
-	  (car
-	   (assoc-ref '((t #t) (f #f) (canonically-tabbed canonically-tabbed))
-		      (get-option gnc:pagename-display
-				  optname-parent-total-mode))))
+	  (assq-ref '((t . #t) (f . #f) (canonically-tabbed . canonically-tabbed))
+		    (get-option gnc:pagename-display
+				optname-parent-total-mode)))
          (show-zb-accts? (get-option gnc:pagename-display
 				     optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display
@@ -467,16 +466,8 @@
                (revenue-table #f)                  ;; gnc:html-acct-table
                (expense-table #f)                  ;; gnc:html-acct-table
                (trading-table #f)
-	       
-	       (terse-period? #t)
-	       (period-for (if terse-period?
-			       (string-append " " (_ "for Period"))
-			       (format #f (string-append ", " (_ "~a to ~a"))
-					(qof-print-date start-date-printable)
-					(qof-print-date end-date))
-			       )
-			   )
-	       )
+
+               (period-for (string-append " " (_ "for Period"))))
 	  
 	  ;; a helper to add a line to our report
 	  (define (report-line

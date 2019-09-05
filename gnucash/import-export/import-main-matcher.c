@@ -214,10 +214,11 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     }
     while (gtk_tree_model_iter_next (model, &iter));
 
+    gnc_gen_trans_list_delete (info);
+
     /* Allow GUI refresh again. */
     gnc_resume_gui_refresh();
 
-    gnc_gen_trans_list_delete (info);
     /* DEBUG ("End") */
 }
 

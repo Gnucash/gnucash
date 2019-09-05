@@ -1003,6 +1003,8 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 
     gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
 
+    /* Translators: This is a date format, see i.e.
+       https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html */
     date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 
     return g_strdup (date_string);

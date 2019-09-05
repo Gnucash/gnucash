@@ -55,8 +55,8 @@
 (define opthelp-show-actual (N_ "Display a column for the actual values."))
 (define optname-show-difference (N_ "Show Difference"))
 (define opthelp-show-difference (N_ "Display the difference as budget - actual."))
-(define optname-use-envelope (N_ "Use envelope budgeting"))
-(define opthelp-use-envelope (N_ "Values are accumulated across periods."))
+(define optname-accumulate (N_ "Use accumulated amounts"))
+(define opthelp-accumulate (N_ "Values are accumulated across periods."))
 (define optname-show-totalcol (N_ "Show Column with Totals"))
 (define opthelp-show-totalcol (N_ "Display a column with the row totals."))
 (define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
@@ -139,8 +139,8 @@
 
     (add-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-use-envelope
-      "b" opthelp-use-envelope #f))
+      gnc:pagename-general optname-accumulate
+      "b" opthelp-accumulate #f))
 
     (add-option
      (gnc:make-complex-boolean-option
@@ -269,7 +269,7 @@
          (show-actual? (get-val params 'show-actual))
          (show-budget? (get-val params 'show-budget))
          (show-diff? (get-val params 'show-difference))
-         (use-envelope? (get-val params 'use-envelope))
+         (accumulate? (get-val params 'use-envelope))
          (show-totalcol? (get-val params 'show-totalcol))
          (use-ranges? (get-val params 'use-ranges))
          (num-rows (gnc:html-acct-table-num-rows acct-table))
@@ -343,7 +343,7 @@
       (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
              (allperiods (filter number? (flatten column-list)))
-             (total-periods (if use-envelope?
+             (total-periods (if accumulate?
                                 (iota (1+ (apply max allperiods)))
                                 allperiods))
              (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
@@ -406,7 +406,7 @@
            (else
             (let* ((period-list (cond
                                  ((list? (car column-list)) (car column-list))
-                                 (use-envelope? (iota (1+ (car column-list))))
+                                 (accumulate? (iota (1+ (car column-list))))
                                  (else (list (car column-list)))))
                    (bgt-val (gnc:get-account-periodlist-budget-value
                              budget acct period-list))
@@ -638,11 +638,9 @@
                                        (get-option gnc:pagename-general
                                                    optname-period-collapse-after)))
          (doc (gnc:make-html-document))
-         (accounts (append accounts
-                           (filter (lambda (acc) (not (member acc accounts)))
-                                   (if show-subaccts?
-                                       (gnc:acccounts-get-all-subaccounts accounts)
-                                       '())))))
+         (accounts (if show-subaccts?
+                       (gnc:accounts-and-all-descendants accounts)
+                       accounts)))
     ;; end of defines
 
     (cond
@@ -675,7 +673,7 @@
                          (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
                    (list 'report-budget budget)))
              (accounts (sort accounts account-full-name<?))
-             (use-envelope? (get-option gnc:pagename-general optname-use-envelope))
+             (accumulate? (get-option gnc:pagename-general optname-accumulate))
              (acct-table (gnc:make-html-acct-table/env/accts env accounts))
              (paramsBudget
               (list
@@ -685,7 +683,7 @@
                      (get-option gnc:pagename-display optname-show-budget))
                (list 'show-difference
                      (get-option gnc:pagename-display optname-show-difference))
-               (list 'use-envelope use-envelope?)
+               (list 'use-envelope accumulate?)
                (list 'show-totalcol
                      (get-option gnc:pagename-display optname-show-totalcol))
                (list 'use-ranges use-ranges?)
@@ -707,7 +705,11 @@
         (gnc:html-document-set-title!
          doc (format #f "~a: ~a ~a"
                      report-name (gnc-budget-get-name budget)
-                     (if use-envelope? (_ "using envelope budgeting")
+                     ;; Translators: using accumulated amounts mean
+                     ;; budget will report on budgeted and actual
+                     ;; amounts from the beginning of budget, instead
+                     ;; of only using the budget-period amounts.
+                     (if accumulate? (_ "using accumulated amounts")
                          "")))
 
         ;; We do this in two steps: First the account names...  the

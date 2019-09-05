@@ -29,6 +29,7 @@ if (HAVE_SRFI64)
     "${GUILE_DEPENDS};scm-srfi64-extras"
     FALSE
     )
+  add_dependencies(check scm-qif-import-2 scm-qif-import)
 endif (HAVE_SRFI64)
 
 set_dist_list(test_qif_import_DIST CMakeLists.txt test-link.c
