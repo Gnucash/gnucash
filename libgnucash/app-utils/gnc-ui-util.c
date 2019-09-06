@@ -887,20 +887,6 @@ gnc_ui_account_get_tax_info_sub_acct_string (const Account *account)
         return NULL;
 }
 
-static const char *
-string_after_colon (const char *msgstr)
-{
-    const char *string_at_colon;
-    g_assert(msgstr);
-    string_at_colon = strchr(msgstr, ':');
-    if (string_at_colon)
-        return string_at_colon + 1;
-    else
-        /* No colon found; we assume the translation contains only the
-           part after the colon, similar to the disambiguation prefixes */
-        return msgstr;
-}
-
 /********************************************************************\
  * gnc_get_reconcile_str                                            *
  *   return the i18n'd string for the given reconciled flag         *
@@ -914,22 +900,15 @@ gnc_get_reconcile_str (char reconciled_flag)
     switch (reconciled_flag)
     {
     case NREC:
-        /* Translators: For the following strings, the single letters
-           after the colon are abbreviations of the word before the
-           colon. You should only translate the letter *after* the colon. */
-        return string_after_colon(_("not cleared:n"));
+        return C_("Reconciled flag 'not cleared'", "n");
     case CREC:
-        /* Translators: Please only translate the letter *after* the colon. */
-        return string_after_colon(_("cleared:c"));
+        return C_("Reconciled flag 'cleared'", "c");
     case YREC:
-        /* Translators: Please only translate the letter *after* the colon. */
-        return string_after_colon(_("reconciled:y"));
+        return C_("Reconciled flag 'reconciled'", "y");
     case FREC:
-        /* Translators: Please only translate the letter *after* the colon. */
-        return string_after_colon(_("frozen:f"));
+        return C_("Reconciled flag 'frozen'", "f");
     case VREC:
-        /* Translators: Please only translate the letter *after* the colon. */
-        return string_after_colon(_("void:v"));
+        return C_("Reconciled flag 'void'", "v");
     default:
         PERR("Bad reconciled flag\n");
         return NULL;
