@@ -810,11 +810,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TYPE_CELL,
                            RECN_CELL_TYPE_NAME,
-	                          /* Translators: The abbreviation for 'Type'
-	                              in the header row of the register. Please only
-	                              translate the portion after the ':' and
-	                              leave the rest ("Type:") as is. */
-	                            N_("Type:T") + 5,
+	                   C_("Column header for 'Type'", "T"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
