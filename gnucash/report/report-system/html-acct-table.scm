@@ -1189,92 +1189,52 @@
 		  (parent-acct-bal-mode
 		   (or (get-val env 'parent-account-balance-mode)
 		       'omit-bal))
-		  (bal-method
-		   ;; figure out how to calculate our balance:
-		   ;; 'immediate-bal|'recursive-bal ('omit-bal handled below)
-		   (or (and (equal? row-type 'subtotal-row) 'recursive-bal)
-		       (and (equal? (+ display-depth 1) display-tree-depth)
-			    (or (and (equal? limit-behavior 'summarize)
-				     'recursive-bal)
-				(and (null? children) 'immediate-bal)
-				;; otherwise, parent account at depth limit,
-				;; with either 'truncate or 'flatten...
-				parent-acct-bal-mode
-				)
-			    )
-		       (if (null? children) #f parent-acct-bal-mode)
-		       'immediate-bal
-		       )
-		   )
-		  (comm-amt
-		   ;; this will be the immediate/recursive commodity
-		   ;; balance (a commodity collector) or #f.
-		   (get-val env (assq-ref '((immediate-bal . account-bal)
-				            (recursive-bal . recursive-bal)
-				            (omit-bal . #f))
-				          bal-method)))
-		  (zero-mode (let ((mode
-				       (get-val
-					env 'zero-balance-display-mode)))
-			       (or (if (equal? mode #t) 'show-balance mode)
-				   'show-balance)
-			       ))
-		  (reverse-balance (gnc-reverse-balance acct))
-		  (native-comm?
-		   (lambda (amt)
-		     (gnc:uniform-commodity? amt report-commodity)))
-                  ;; amount is either a <gnc:monetary> or #f
-		  (amount (and comm-amt
-			       (if (and (equal? zero-mode 'omit-balance)
-                                        (gnc-commodity-collector-allzero?
-                                         comm-amt)
-                                        )
-				   #f
-				   ;; else:
-                                   ;; this let* block evals to a <gnc:monetary>
-				   (let*
-				       ((amt (gnc:make-commodity-collector)))
-				     (if reverse-balance
-					 (amt 'minusmerge comm-amt #f)
-					 (set! amt comm-amt))
-				     (or (and (native-comm? amt)
-					      (gnc:sum-collector-commodity
-					       amt
-					       report-commodity
-					       exchange-fn)
-					      )
-					 ((if (and (equal?
-                                                    multicommodity-mode 'table)
-                                                   (equal?
-                                                    row-type 'account-row)
-                                                   )
-                                              gnc-commodity-table
-                                              gnc:sum-collector-commodity
-                                              )
-                                          amt
-                                          report-commodity
-                                          exchange-fn
-                                          )  ;; factored from below
-; 					 (if (and (equal?
-; 						   multicommodity-mode 'table)
-; 						  (equal?
-; 						   row-type 'account-row)
-; 						  )
-; 					     (gnc-commodity-table
-; 					      amt
-; 					      report-commodity
-; 					      exchange-fn)
-; 					     (gnc:sum-collector-commodity
-; 					      amt
-; 					      report-commodity
-; 					      exchange-fn)
-; 					     )
 
-					 )
-				     ) ;; end of let*
-				   ) ;; end of if
-			       ))
-		  (indented-depth (get-val env 'indented-depth))
+                  (bal-method
+                   ;; figure out how to calculate our balance:
+                   ;; 'immediate-bal|'recursive-bal ('omit-bal handled below)
+                   (cond ((eq? row-type 'subtotal-row) 'recursive-bal)
+                         ((eq? (1+ display-depth) display-tree-depth)
+                          (cond ((eq? limit-behavior 'summarize) 'recursive-bal)
+                                ((null? children) 'immediate-bal)
+                                (else parent-acct-bal-mode)))
+                         ((not (null? children)) parent-acct-bal-mode)
+                         (else 'immediate-bal)))
+
+                  (comm-amt
+                   (get-val env (assq-ref '((immediate-bal . account-bal)
+                                            (recursive-bal . recursive-bal)
+                                            (omit-bal . #f))
+                                          bal-method)))
+                  (amt (and comm-amt
+                            (if (gnc-reverse-balance acct)
+                                (gnc:commodity-collector-get-negated comm-amt)
+                                comm-amt)))
+
+                  (zero-mode (let ((mode (get-val env 'zero-balance-display-mode)))
+                               (if (boolean? mode)
+                                   'show-balance
+                                   mode)))
+
+                  (native-comm?
+                   (lambda (amt)
+                     (gnc:uniform-commodity? amt report-commodity)))
+
+                  ;; amount is either a <gnc:monetary> or #f
+                  (amount (and amt
+                               (not (and (eq? zero-mode 'omit-balance)
+                                         (gnc-commodity-collector-allzero? amt)))
+                               (cond
+                                ((and (not (native-comm? amt))
+                                      (eq? multicommodity-mode 'table)
+                                      (eq? row-type 'account-row))
+                                 (gnc-commodity-table
+                                  amt report-commodity exchange-fn))
+                                (else
+                                 (gnc:sum-collector-commodity
+                                  amt report-commodity exchange-fn)))))
+
+                  (indented-depth (get-val env 'indented-depth))
 		  (account-colspan (get-val env 'account-colspan))
 		  )
 
