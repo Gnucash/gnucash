@@ -1081,14 +1081,17 @@ also show overall period profit & loss."))
              (closing-regexp (get-option pagename-entries optname-closing-regexp))
              (include-overall-period? (get-option gnc:pagename-general
                                                   optname-include-overall-period))
-             (col-idx->datepair (lambda (idx)
-                                  (if (eq? idx 'overall-period)
-                                      (cons (car report-dates) (last report-dates))
-                                      (cons (list-ref report-dates idx)
-                                            (gnc:time64-end-day-time
-                                             (decdate
-                                              (list-ref report-dates (1+ idx))
-                                              DayDelta))))))
+             (col-idx->datepair
+              (lambda (idx)
+                (cond
+                 ((eq? idx 'overall-period)
+                  (cons (car report-dates) (last report-dates)))
+                 ((= idx (- (length report-dates) 2))
+                  (cons (list-ref report-dates idx) (last report-dates)))
+                 (else
+                  (cons (list-ref report-dates idx)
+                        (decdate (list-ref report-dates (1+ idx)) DayDelta))))))
+
              (col-idx->monetarypair (lambda (balancelist idx)
                                       (if (eq? idx 'overall-period)
                                           (cons (car balancelist) (last balancelist))
