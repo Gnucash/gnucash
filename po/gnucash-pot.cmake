@@ -21,8 +21,10 @@ execute_process(
                         --flag=g_scanner_error:2:c-format
                         --flag=g_scanner_warn:2:c-format
                         --keyword=_
+                        --keyword=Q_:1g
                         --keyword=N_
-                        --keyword=Q_
+                        --keyword=C_:1c,2
+                        --keyword=NC_:1c,2
                         --keyword=translate:1,1t
                         --keyword=translate:1c,2,2t
                         --keyword=translate:1,2,3t

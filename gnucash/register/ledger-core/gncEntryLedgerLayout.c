@@ -68,85 +68,94 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
         gboolean span;
     } cells[] =
     {
-        /* Translators: The 'sample:' items are strings which are not
-           displayed, but only used to estimate widths. Please only
-           translate the portion after the ':' and leave the rest
-           ("sample:") as is. */
+        /* Translators: The following strings are used for the layout of the
+           cells while editing invoices.
+           Important: The 'sample:' items are strings which are not
+           displayed, but only used to estimate widths.
+           This sample is for a checkbox */
         {
-            ENTRY_INV_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:X") + 7,
+            ENTRY_INV_CELL, CHECKBOX_CELL_TYPE_NAME, C_("sample for a checkbox", "X"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
-            ENTRY_DATE_CELL, DATE_CELL_TYPE_NAME, N_("sample:12/12/2000") + 7,
+            ENTRY_DATE_CELL, DATE_CELL_TYPE_NAME, C_("sample for 'Date'", "12/12/2000"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
             ENTRY_DESC_CELL, QUICKFILL_CELL_TYPE_NAME,
-            N_("sample:Description of an Entry") + 7, CELL_ALIGN_LEFT, TRUE, FALSE
+            C_("sample for 'Description'", "Description of an Entry"), CELL_ALIGN_LEFT,
+	    TRUE, FALSE
         },
         {
+            /* Translators: Enter the longest 'Action' entry */
             ENTRY_ACTN_CELL, COMBO_CELL_TYPE_NAME,
-            N_("sample:Action") + 7, CELL_ALIGN_RIGHT,
+            C_("sample", "Action"), CELL_ALIGN_RIGHT,
             FALSE, FALSE
         },
         {
-            ENTRY_QTY_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
+            ENTRY_QTY_CELL, PRICE_CELL_TYPE_NAME, C_("sample", "9,999.00"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_PRIC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00") + 7,
+            ENTRY_PRIC_CELL, PRICE_CELL_TYPE_NAME, C_("sample", "999,999.00"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_DISC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
+            ENTRY_DISC_CELL, PRICE_CELL_TYPE_NAME, C_("sample", "9,999.00"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
-        /* xgettext:no-c-format */
         {
-            ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample(DT):+%") + 11,
+            /* xgettext:no-c-format
+               Translators: Header for Discount Type */
+            ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, C_("sample for 'Discount Type'", "+%"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
-        /* xgettext:no-c-format */
         {
-            ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, N_("sample(DH):+%") + 11,
+            /* xgettext:no-c-format
+               Translators: Header for Discount How */
+            ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, C_("sample for Discount How'", "+%"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
             ENTRY_IACCT_CELL, COMBO_CELL_TYPE_NAME,
-            N_("sample:Expenses:Automobile:Gasoline") + 7,
+            /* Translators: Enter the longest expected path of an Account */
+            C_("sample", "Expenses:Automobile:Gasoline"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
             ENTRY_BACCT_CELL, COMBO_CELL_TYPE_NAME,
-            N_("sample:Expenses:Automobile:Gasoline") + 7,
+            C_("sample", "Expenses:Automobile:Gasoline"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_TAXABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:T?") + 7,
+            /* Translators: Abbreviation sample for Taxable? */
+            ENTRY_TAXABLE_CELL, CHECKBOX_CELL_TYPE_NAME, C_("sample for 'Taxable'", "T?"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
-            ENTRY_TAXINCLUDED_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:TI") + 7,
+            /* Translators: Abbreviation sample for Tax Included */
+            ENTRY_TAXINCLUDED_CELL, CHECKBOX_CELL_TYPE_NAME, C_("sample for 'Tax Included'", "TI"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
-            ENTRY_TAXTABLE_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Tax Table 1") + 7,
+            ENTRY_TAXTABLE_CELL, COMBO_CELL_TYPE_NAME, C_("sample for 'Tax Table'", "Tax Table 1"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_VALUE_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00") + 7,
+            ENTRY_VALUE_CELL, PRICE_CELL_TYPE_NAME, C_("sample", "999,999.00"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_TAXVAL_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999.00") + 7,
+            ENTRY_TAXVAL_CELL, PRICE_CELL_TYPE_NAME, C_("sample", "999.00"),
             CELL_ALIGN_RIGHT, FALSE, FALSE
         },
         {
-            ENTRY_BILLABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:BI") + 7,
+            /* Translators: Abbreviation sample for Billable */
+            ENTRY_BILLABLE_CELL, CHECKBOX_CELL_TYPE_NAME, C_("sample for 'Billable'", "BI"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         },
         {
-            ENTRY_PAYMENT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Payment") + 7,
+            ENTRY_PAYMENT_CELL, COMBO_CELL_TYPE_NAME, C_("sample", "Payment"),
             CELL_ALIGN_LEFT, FALSE, FALSE
         }
     };

@@ -216,13 +216,13 @@
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-multilevel")))
         (test-equal "multilevel. root = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 3 5))
+          (sxml->table-row-col sxml 1 3 6))
         (test-equal "multilevel. assets = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 4 4))
+          (sxml->table-row-col sxml 1 4 5))
         (test-equal "multilevel. bank1 = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 5 3))
+          (sxml->table-row-col sxml 1 5 4))
         (test-equal "multilevel. bonds = $2,000.00"
           (list "$2,000.00")
           (sxml->table-row-col sxml 1 6 3))
@@ -240,7 +240,7 @@
           (sxml->table-row-col sxml 1 10 4))
         (test-equal "multilevel. broker = $2,000.00"
           (list "$2,000.00")
-          (sxml->table-row-col sxml 1 11 3))
+          (sxml->table-row-col sxml 1 11 4))
         (test-equal "multilevel. funds = $15,000.00"
           (list "30 FUNDS" "$15,000.00" "$15,000.00")
           (sxml->table-row-col sxml 1 12 3))
@@ -249,7 +249,7 @@
           (sxml->table-row-col sxml 1 13 4))
         (test-equal "multilevel. foreign = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 14 3))
+          (sxml->table-row-col sxml 1 14 4))
         (test-equal "multilevel. foreignsavings = #200.00 = $340"
           (list "#200.00" "$340.00" "$340.00")
           (sxml->table-row-col sxml 1 15 3))
@@ -352,7 +352,7 @@
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-incl-zb-accts=#t omit-zb-bals=#f")))
         (test-equal "omit-zb-bals=#f"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 3 5))
+          (sxml->table-row-col sxml 1 3 6))
         (test-equal "incl-zb-accts=#t"
           '("Empty" "$0.00")
           (sxml->table-row-col sxml 1 8 #f)))
@@ -362,35 +362,41 @@
     (let* ((pnl-options (default-pnl-testing-options))
            (sxml (options->sxml pnl-uuid pnl-options "pnl-default")))
       (test-equal "total revenue  = $1,270.00"
-        (list "$1,270.00" "$1,270.00")
-        (sxml->table-row-col sxml 1 5 6))
+        (list "$1,270.00")
+        ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+         sxml))
       (test-equal "total expenses  = $0.00"
-        (list "$0.00" "$0.00")
-        (sxml->table-row-col sxml 1 3 6))
+        (list "$0.00")
+        ((sxpath '(// table // (tr 2) // table // (tr 3) // (td 6) // *text*))
+         sxml))
 
       (set-option! pnl-options "Commodities" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-weighted-average")))
         (test-equal "weighted average revenue = $1160.36"
-          (list "$1,160.36" "$1,160.36")
-          (sxml->table-row-col sxml 1 5 6)))
+          (list "$1,160.36")
+          ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+           sxml)))
 
       (set-option! pnl-options "Commodities" "Price Source" 'average-cost)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-average-cost")))
         (test-equal "average-cost revenue = $976"
-          (list "$976.00" "$976.00")
-          (sxml->table-row-col sxml 1 5 6)))
+          (list "$976.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+           sxml)))
 
       (set-option! pnl-options "Commodities" "Price Source" 'pricedb-nearest)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-nearest")))
         (test-equal "pricedb-nearest revenue = $1270"
-          (list "$1,270.00" "$1,270.00")
-          (sxml->table-row-col sxml 1 5 6)))
+          (list "$1,270.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+           sxml)))
 
       (set-option! pnl-options "Commodities" "Price Source" 'pricedb-latest)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-latest")))
         (test-equal "pricedb-latest revenue = $1270"
-          (list "$1,270.00" "$1,270.00")
-          (sxml->table-row-col sxml 1 5 6)))
+          (list "$1,270.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+           sxml)))
 
       ;; set multilevel subtotal style
       ;; verifies amount in EVERY line of the report.
@@ -398,23 +404,29 @@
       (set-option! pnl-options "Display" "Parent account subtotals" 't)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-multilevel")))
         (test-equal "multilevel. income = -$250.00"
-          (list "-$250.00" "-$250.00")
-          (sxml->table-row-col sxml 1 3 5))
-        (test-equal "multilevel. income-GBP = $0.00"
-          (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
-          (sxml->table-row-col sxml 1 4 5))
+          (list "-$250.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 3) // (td 6) // *text*))
+           sxml))
+        (test-equal "multilevel. income-GBP = -#600"
+          (list "-#600.00" "-$1,020.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 4) // (td 5) // *text*))
+           sxml))
         (test-equal "multilevel. total income = -$1,270.00"
-          (list "-$1,270.00" "-$1,270.00")
-          (sxml->table-row-col sxml 1 5 6))
+          (list "-$1,270.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 5) // (td 6) // *text*))
+           sxml))
         (test-equal "multilevel. total revenue = $1,270.00"
-          (list "$1,270.00" "$1,270.00")
-          (sxml->table-row-col sxml 1 6 6))
+          (list "$1,270.00")
+          ((sxpath '(// table // (tr 1) // table // (tr 6) // (td 6) // *text*))
+           sxml))
         (test-equal "multilevel. expenses = $0.00"
-          (list "$0.00" "$0.00")
-          (sxml->table-row-col sxml 1 3 6))
+          (list "$0.00")
+          ((sxpath '(// table // (tr 2) // table // (tr 3) // (td 6) // *text*))
+           sxml))
         (test-equal "multilevel. net-income = $1,270"
-          (list "$1,270.00" "$1,270.00")
-          (sxml->table-row-col sxml 1 4 6)))
+          (list "$1,270.00")
+          ((sxpath '(// table // (tr 2) // table // (tr 4) // (td 6) // *text*))
+           sxml)))
 
       ;; set recursive-subtotal subtotal style
       (set-option! pnl-options "Display" "Parent account balances" 'recursive-bal)

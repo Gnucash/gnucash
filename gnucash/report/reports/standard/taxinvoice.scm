@@ -75,7 +75,6 @@
 (define headingpage  (N_ "Headings 1"))
 (define headingpage2 (N_ "Headings 2"))
 (define notespage    (N_ "Notes"))
-;(define filespage    (N_ "Files"))
 (define displaypage  (N_ "Display"))
 (define elementspage			(N_ "Elements"))
 ; option names 
@@ -323,9 +322,7 @@
 
   (let ((options (options-generator)))
        (set-opt options headingpage optname-report-title (_ "Tax Invoice"))
-       ;(gnc:warn "title: " (gnc:option-value title-op))
        (set-opt options headingpage optname-unit-price (_ "Unit"))
-       ;(gnc:warn "unitprice: " (gnc:option-value unit-price-op))
        (set-opt options headingpage optname-tax-rate (_ "GST Rate"))
        (set-opt options headingpage optname-tax-amount (_ "GST Amount"))
        (set-opt options headingpage2 optname-amount-due (_ "Amount Due (inc GST)"))

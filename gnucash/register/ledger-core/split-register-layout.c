@@ -636,10 +636,8 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            DATE_CELL_TYPE_NAME,
                            /* Translators: The 'sample:' items are
                               strings which are not displayed, but only
-                              used to estimate widths. Please only
-                              translate the portion after the ':' and
-                              leave the rest ("sample:") as is. */
-                           N_("sample:12/12/2000") + 7,
+                              used to estimate widths. */
+                           C_("sample", "12/12/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -647,7 +645,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DDUE_CELL,
                            DATE_CELL_TYPE_NAME,
-                           N_("sample:12/12/2000") + 7,
+                           C_("sample", "12/12/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -655,12 +653,10 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            NUM_CELL,
                            NUM_CELL_TYPE_NAME,
-                           /* Translators: The 'sample:' items are
+                           /* Translators: The 'sample' items are
                               strings which are not displayed, but only
-                              used to estimate widths. Please only
-                              translate the portion after the ':' and
-                              leave the rest ("sample:") as is. */
-                           N_("sample:99999") + 7,
+                              used to estimate widths. */
+                           C_("sample", "99999"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -668,7 +664,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TNUM_CELL,
                            BASIC_CELL_TYPE_NAME,
-                           N_("sample:99999") + 7,
+                           C_("sample", "99999"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -676,7 +672,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DESC_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           N_("sample:Description of a transaction") + 7,
+                           C_("sample", "Description of a transaction"),
                            CELL_ALIGN_LEFT,
                            TRUE,
                            FALSE);
@@ -692,11 +688,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            RECN_CELL,
                            RECN_CELL_TYPE_NAME,
-	                          /* Translators: The abbreviation for 'Reconciled'
-	                              in the header row of the register. Please only
-	                              translate the portion after the ':' and
-	                              leave the rest ("Reconciled:") as is. */
-	                            N_("Reconciled:R") + 11,
+	                   C_("Column header for 'Reconciled'", "R"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -704,11 +696,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            ASSOC_CELL,
                            RECN_CELL_TYPE_NAME,
-                           /* Translators: The abbreviation for 'Associate'
-                              in the header row of the register. Please only
-                              translate the portion after the ':' and
-                              leave the rest ("Associate:") as is. */
-                           N_("Associate:A") + 10,
+                           C_("Column header for 'Associate'", "A"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -716,7 +704,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            BALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -724,7 +712,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            XFRM_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           N_("Transfer"),
+                           _("Transfer"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -732,7 +720,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            MXFRM_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           N_("sample:Expenses:Automobile:Gasoline") + 7,
+                           C_("sample", "Expenses:Automobile:Gasoline"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -740,7 +728,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            ACTN_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           N_("sample:Expenses:Automobile:Gasoline") + 7,
+                           C_("sample", "Expenses:Automobile:Gasoline"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -748,7 +736,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            MEMO_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           N_("sample:Memo field sample text string") + 7,
+                           C_("sample", "Memo field sample text string"),
                            CELL_ALIGN_LEFT,
                            TRUE,
                            FALSE);
@@ -756,7 +744,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DEBT_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -764,7 +752,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            CRED_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -772,7 +760,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            SHRS_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -782,7 +770,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            PRIC_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -790,7 +778,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TDEBT_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -798,7 +786,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TCRED_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -806,7 +794,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TSHRS_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -814,7 +802,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TBALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -822,11 +810,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TYPE_CELL,
                            RECN_CELL_TYPE_NAME,
-	                          /* Translators: The abbreviation for 'Type'
-	                              in the header row of the register. Please only
-	                              translate the portion after the ':' and
-	                              leave the rest ("Type:") as is. */
-	                            N_("Type:T") + 5,
+	                   C_("Column header for 'Type'", "T"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -834,7 +818,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            NOTES_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           N_("sample:Notes field sample text string") + 7,
+                           C_("sample", "Notes field sample text string"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            TRUE);
@@ -842,7 +826,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            VNOTES_CELL,
                            BASIC_CELL_TYPE_NAME,
-                           N_("sample:No Particular Reason") + 7,
+                           C_("sample", "No Particular Reason"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            TRUE);
@@ -850,7 +834,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            FCRED_CELL,
                            FORMULA_CELL_TYPE_NAME,
-                           N_("sample:(x + 0.33 * y + (x+y) )") + 7,
+                           C_("sample", "(x + 0.33 * y + (x+y) )"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -858,7 +842,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            FDEBT_CELL,
                            FORMULA_CELL_TYPE_NAME,
-                           N_("sample:(x + 0.33 * y + (x+y) )") + 7,
+                           C_("sample", "(x + 0.33 * y + (x+y) )"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -866,7 +850,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            RBALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           N_("sample:999,999.000") + 7,
+                           C_("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);

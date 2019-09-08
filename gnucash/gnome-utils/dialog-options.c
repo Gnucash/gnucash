@@ -716,10 +716,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 col = gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                         _("Placeholder"),
-                        /* Translators: This string has a context prefix; the
-                           translation must only contain the part after
-                           the | character. */
-                        Q_("Column letter for 'Placeholder'|P"),
+                        C_("Column header for 'Placeholder'", "P"),
                         "placeholder",
                         GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
