@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-09-08 21:56+0200\n"
-"PO-Revision-Date: 2019-09-03 10:42+0200\n"
+"PO-Revision-Date: 2019-09-08 22:12+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1068,10 +1068,9 @@ msgstr "Treuhandzahlung"
 #: gnucash/gnome/assistant-stock-split.c:382
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2956
 #: gnucash/register/ledger-core/split-register.c:2679
-#, fuzzy
 msgctxt "Action Column"
 msgid "Split"
-msgstr "Vollständig"
+msgstr "Aktienteilung"
 
 #: gnucash/gnome/assistant-stock-split.c:408
 msgid "Error adding price."
@@ -5675,7 +5674,6 @@ msgid "_Remove"
 msgstr "_Entfernen"
 
 #: gnucash/gnome/gnc-split-reg.c:1247
-#, fuzzy
 msgid "Existing Association is '"
 msgstr "Die bestehende Zuordnung ist '"
 
@@ -5820,9 +5818,8 @@ msgid "Perform financial calculations, such as a loan repayment"
 msgstr "Finanzkalkulationen ausführen wie Kredit-Rückzahlung"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
-#, fuzzy
 msgid "GnuCash Project"
-msgstr "GnuCash Einstellungen"
+msgstr "GnuCash-Projekt"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
@@ -5836,10 +5833,9 @@ msgstr "gnucash-icon"
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/register/ledger-core/split-register-layout.c:691
 #: gnucash/register/ledger-core/split-register-model.c:306
-#, fuzzy
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
-msgstr "Abgl"
+msgstr "A"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
@@ -6163,12 +6159,11 @@ msgstr "Neuer Buchungsteil"
 
 #. Translators: This string has a disambiguation prefix. Translate only the part behind '|'
 #: gnucash/gnome-search/dialog-search.c:1098
-#, fuzzy
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,...)"
 msgid "New item"
-msgstr "_Neuer Eintrag..."
+msgstr "Neues Element"
 
 #. Set the 'add criterion' button
 #: gnucash/gnome-search/dialog-search.c:1140
@@ -6841,7 +6836,7 @@ msgstr "Kein Konto gewählt"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
 msgctxt "Column header for 'Placeholder'"
 msgid "P"
-msgstr ""
+msgstr "P"
 
 # Todo: sind die "\n" erforderlich?
 #: gnucash/gnome-utils/dialog-options.c:786
@@ -8441,7 +8436,6 @@ msgstr "Neues Konto der obersten Ebene"
 #. must only contain the part after the | character.
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2856
 #: gnucash/register/ledger-core/split-register.c:2579
-#, fuzzy
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "Einzahlung"
@@ -8937,7 +8931,7 @@ msgstr "Kurse abrufen"
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:409
 msgctxt "Column letter for 'Get Quotes'"
 msgid "Q"
-msgstr ""
+msgstr "K"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:415
 #: gnucash/gnome-utils/gnc-tree-view-price.c:414
@@ -9016,10 +9010,9 @@ msgstr "Aktiv"
 #. Translators: This string has a context prefix; the translation
 #. must only contain the part after the | character.
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:481
-#, fuzzy
 msgctxt "Column letter for 'Active'"
 msgid "A"
-msgstr "Neu"
+msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-price.c:396
 msgid "Security"
@@ -9300,7 +9293,7 @@ msgstr "Aktiv"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:143
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:154
 msgid "Last Occur"
@@ -12111,9 +12104,8 @@ msgid "Select _All"
 msgstr "A_lle auswählen"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:442
-#, fuzzy
 msgid "<b>Dates</b>"
-msgstr "<b>_Datumsbereich</b>"
+msgstr "<b>Datumsbereich</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:454
 msgid "Sho_w All"
@@ -13435,7 +13427,6 @@ msgstr ""
 "gewählte eingeben."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1024
-#, fuzzy
 msgid "Enter Information about..."
 msgstr "Eingabe der Informationen über..."
 
@@ -15081,9 +15072,8 @@ msgid "Future value"
 msgstr "Zukünftiger Wert"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:474
-#, fuzzy
 msgid "Precision"
-msgstr "Version"
+msgstr "Genauigkeit"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:516
 msgid "Calculate"
@@ -18721,26 +18711,22 @@ msgid "<b>Progress</b>"
 msgstr "<b>Verlauf</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:107
-#, fuzzy
 msgid "Current _Job"
-msgstr "Aktueller Auftrag"
+msgstr "Aktueller _Auftrag"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:149
 msgid "Progress"
 msgstr "Verlauf"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:163
-#, fuzzy
 msgid "Current _Action"
-msgstr "Aktuelle Aktion"
+msgstr "Aktuelle A_ktion"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:212
-#, fuzzy
 msgid "<b>_Log Messages</b>"
-msgstr "<b>Protokoll</b>"
+msgstr "<b>Protokol_l</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:254
-#, fuzzy
 msgid "Close when _finished"
 msgstr "Fenster nach Verbindungsende _schließen"
 
@@ -18789,7 +18775,6 @@ msgid "Enter your password"
 msgstr "Geben Sie Ihr Passwort ein"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:693
-#, fuzzy
 msgid "Con_firm Password:"
 msgstr "Passwort _wiederholen:"
 
@@ -18825,12 +18810,10 @@ msgid "Online Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:901
-#, fuzzy
 msgid "Execute _later (unimpl.)"
 msgstr "Später _ausführen (unfertig)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:930
-#, fuzzy
 msgid "Execute _Now"
 msgstr "_Jetzt ausführen"
 
@@ -18843,17 +18826,14 @@ msgid "Enter an Online Transaction"
 msgstr "Online-Überweisung eingeben"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1001
-#, fuzzy
 msgid "Recipient Account _Number"
 msgstr "Konto-Nr. des _Empfängers"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1030
-#, fuzzy
 msgid "Recipient _Bank Code"
 msgstr "Empfänger _Bankleitzahl"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1060
-#, fuzzy
 msgid "_Recipient Name"
 msgstr "Empfänger: _Name, Vorname / Firma"
 
@@ -18871,7 +18851,6 @@ msgid "_Amount"
 msgstr "_Betrag:"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1118
-#, fuzzy
 msgid "Payment _Purpose (only for recipient)"
 msgstr "_Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
@@ -18880,7 +18859,6 @@ msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1148
-#, fuzzy
 msgid "_Originator Name"
 msgstr "_Auftraggeber: Name, Vorname"
 
@@ -18893,7 +18871,6 @@ msgid "Bank Code"
 msgstr "Bankleitzahl"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1385
-#, fuzzy
 msgid "_Add current"
 msgstr "Aktuelle hin_zufügen"
 
@@ -18918,7 +18895,6 @@ msgid "Move the selected transaction template one row down"
 msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1439
-#, fuzzy
 msgid "_Sort"
 msgstr "_Sortieren"
 
@@ -18935,7 +18911,6 @@ msgid "Delete the currently selected transaction template"
 msgstr "Ausgewählte Überweisungsvorlage löschen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1512
-#, fuzzy
 msgid "_Templates"
 msgstr "Vor_lagen"
 
@@ -19389,7 +19364,7 @@ msgid "Job %d status %d - %s\n"
 msgstr "Auftrag %d Status %d - %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:297
-#, fuzzy, c-format
+#, c-format
 msgid "Job %d status %d - %s: %s\n"
 msgstr "Auftrag %d Status %d - %s: %s\n"
 
@@ -19496,7 +19471,6 @@ msgid ""
 msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:118
-#, fuzzy
 msgid "_Internal Transaction..."
 msgstr "_Interne Umbuchung..."
 
@@ -19506,7 +19480,6 @@ msgstr ""
 "Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:123
-#, fuzzy
 msgid "Issue SEPA Direct _Debit..."
 msgstr "SEPA Einzel_lastschrift..."
 
@@ -19545,7 +19518,6 @@ msgid "Import _DTAUS"
 msgstr "_DTAUS importieren"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:147
-#, fuzzy
 msgid "Import a traditional german DTAUS file into GnuCash."
 msgstr "Importiere Buchungen aus einer traditionellen deutschen DTAUS-Datei."
 
@@ -19554,7 +19526,6 @@ msgid "Import DTAUS and _send..."
 msgstr "DTAUS importieren und _senden..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:160
-#, fuzzy
 msgid ""
 "Import a DTAUS file into GnuCash and transmit its orders by Online Banking."
 msgstr ""
@@ -19708,12 +19679,10 @@ msgstr ""
 "Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:140
-#, fuzzy
 msgid "ID"
 msgstr "Nummer"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:141
-#, fuzzy
 msgid "Date-opened"
 msgstr "Eröffnungsdatum"
 
@@ -19735,7 +19704,6 @@ msgid "Quantity"
 msgstr "Anzahl"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
-#, fuzzy
 msgid "Disc-type"
 msgstr "Art des Nachlasses"
 
@@ -19782,9 +19750,8 @@ msgid "Account-posted"
 msgstr "Kontennotizen"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
-#, fuzzy
 msgid "Memo-posted"
-msgstr " (gebucht)"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:163
 #, fuzzy
@@ -19844,7 +19811,6 @@ msgstr ""
 "verarbeiten. Sie müssen diesen Ausdruck an ihr Dateiformat anpassen.\n"
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
-#, fuzzy
 msgid "Import Bills & _Invoices..."
 msgstr "_Rechnungen importieren..."
 
@@ -20095,7 +20061,6 @@ msgstr "Buchungen in eine CSV-Textdatei exportieren"
 
 #
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
-#, fuzzy
 msgid "Export A_ctive Register to CSV..."
 msgstr "_Aktives Kontobuch als CSV-Datei exportieren..."
 
@@ -20555,7 +20520,6 @@ msgid "'From Namespace' can not be empty."
 msgstr "»Von Namensraum« darf nicht leer sein."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:217
-#, fuzzy
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr "Die 'Zielwährung' kann nicht gleich sein mit 'Herkunfts-Wertpapier'."
 
@@ -20584,12 +20548,10 @@ msgid "No amount column."
 msgstr "Keine Betragsspalte."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:278
-#, fuzzy
 msgid "No 'Currency to'."
 msgstr "Keine »Nach Währung« Spalte."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
-#, fuzzy
 msgid "No 'Commodity from'."
 msgstr "Keine »Von Währung/Wertpapier« Spalte."
 
@@ -20770,9 +20732,8 @@ msgid "Destination account for the auto-balance split."
 msgstr "Gegenkonto für Ausgleichsbuchung."
 
 #: gnucash/import-export/import-main-matcher.c:600
-#, fuzzy
 msgid "Assign a transfer account to the selection."
-msgstr "_Herkunftskonto auswählen"
+msgstr "Gegenkonto zu Auswahl zuweisen."
 
 #. toggle column: add new transaction
 #: gnucash/import-export/import-main-matcher.c:759
@@ -21470,100 +21431,87 @@ msgstr "Der aktuelle Posten wurde verändert. Soll er gespeichert werden?"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:77
 msgctxt "sample for a checkbox"
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:81
-#, fuzzy
 msgctxt "sample for 'Date'"
 msgid "12/12/2000"
-msgstr "sample:12.12.2000"
+msgstr "12.12.2000"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:86
-#, fuzzy
 msgctxt "sample for 'Description'"
 msgid "Description of an Entry"
-msgstr "sample:Beschreibungsbeispiel einer Buchung"
+msgstr "Beschreibungsbeispiel einer Buchung"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:92
-#, fuzzy
 msgctxt "sample"
 msgid "Action"
 msgstr "Aktion"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:96
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:104
-#, fuzzy
 msgctxt "sample"
 msgid "9,999.00"
-msgstr "sample:9.999,00"
+msgstr "9.999,00"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:100
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:145
-#, fuzzy
 msgctxt "sample"
 msgid "999,999.00"
-msgstr "sample:999.999,00"
+msgstr "999.999,00"
 
 #. Translators: Header for Discount Type
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for 'Discount Type'"
 msgid "+%"
-msgstr "%"
+msgstr "+%"
 
 #. Translators: Header for Discount How
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:116
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for Discount How'"
 msgid "+%"
-msgstr "%"
+msgstr "+%"
 
 #. Translators: Enter the longest expected path of an Account
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:122
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:127
 #: gnucash/register/ledger-core/split-register-layout.c:723
 #: gnucash/register/ledger-core/split-register-layout.c:731
-#, fuzzy
 msgctxt "sample"
 msgid "Expenses:Automobile:Gasoline"
-msgstr ""
-"sample:Aufwendungen 2/4:Reparatur/Instandhaltung:4805 Reparatur u. Instandh. "
-"von Anlagen/Maschinen u. Betriebs- u. Geschäftsausst."
+msgstr "Aufwendungen 2/4:Reparatur/Instandhaltung:4805 Reparatur u. Instandh. von Anlagen/Maschinen u. Betriebs- u. Geschäftsausst."
 
 #. Translators: Abbreviation sample for Taxable?
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:132
-#, fuzzy
 msgctxt "sample for 'Taxable'"
 msgid "T?"
-msgstr "St."
+msgstr "St.?"
 
 #. Translators: Abbreviation sample for Tax Included
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
-#, fuzzy
 msgctxt "sample for 'Tax Included'"
 msgid "TI"
-msgstr "St."
+msgstr "USt."
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
-#, fuzzy
 msgctxt "sample for 'Tax Table'"
 msgid "Tax Table 1"
-msgstr "Steuertabelle: "
+msgstr "Steuertabelle"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
-#, fuzzy
 msgctxt "sample"
 msgid "999.00"
-msgstr "sample:999,00"
+msgstr "999,00"
 
 #. Translators: Abbreviation sample for Billable
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:154
 msgctxt "sample for 'Billable'"
 msgid "BI"
-msgstr ""
+msgstr "BI"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:158
-#, fuzzy
 msgctxt "sample"
 msgid "Payment"
 msgstr "Zahlung"
@@ -21842,10 +21790,9 @@ msgstr ""
 #. used to estimate widths.
 #: gnucash/register/ledger-core/split-register-layout.c:640
 #: gnucash/register/ledger-core/split-register-layout.c:648
-#, fuzzy
 msgctxt "sample"
 msgid "12/12/2000"
-msgstr "sample:12.12.2000"
+msgstr "12.12.2000"
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -21854,20 +21801,18 @@ msgstr "sample:12.12.2000"
 #: gnucash/register/ledger-core/split-register-layout.c:667
 msgctxt "sample"
 msgid "99999"
-msgstr ""
+msgstr "99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:675
-#, fuzzy
 msgctxt "sample"
 msgid "Description of a transaction"
-msgstr "sample:Beschreibungsbeispiel einer Buchung"
+msgstr "Beschreibungsbeispiel einer Buchung"
 
 #: gnucash/register/ledger-core/split-register-layout.c:699
 #: gnucash/register/ledger-core/split-register-model.c:328
-#, fuzzy
 msgctxt "Column header for 'Associate'"
 msgid "A"
-msgstr "Neu"
+msgstr "Z"
 
 #: gnucash/register/ledger-core/split-register-layout.c:707
 #: gnucash/register/ledger-core/split-register-layout.c:747
@@ -21879,41 +21824,35 @@ msgstr "Neu"
 #: gnucash/register/ledger-core/split-register-layout.c:797
 #: gnucash/register/ledger-core/split-register-layout.c:805
 #: gnucash/register/ledger-core/split-register-layout.c:853
-#, fuzzy
 msgctxt "sample"
 msgid "999,999.000"
-msgstr "sample:999.999,000"
+msgstr "999.999,000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:739
-#, fuzzy
 msgctxt "sample"
 msgid "Memo field sample text string"
-msgstr "sample:Buchungstext-Feld irgendein Beispieltext"
+msgstr "Buchungstext-Feld irgendein Beispieltext"
 
 #: gnucash/register/ledger-core/split-register-layout.c:813
-#, fuzzy
 msgctxt "Column header for 'Type'"
 msgid "T"
 msgstr "St."
 
 #: gnucash/register/ledger-core/split-register-layout.c:821
-#, fuzzy
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "sample:Bemerkungsfeld irgendein Beispieltext"
+msgstr "Bemerkungsfeld irgendein Beispieltext"
 
 #: gnucash/register/ledger-core/split-register-layout.c:829
-#, fuzzy
 msgctxt "sample"
 msgid "No Particular Reason"
-msgstr "sample:Keinen besonderen Grund"
+msgstr "Kein besonderer Grund"
 
 #: gnucash/register/ledger-core/split-register-layout.c:837
 #: gnucash/register/ledger-core/split-register-layout.c:845
-#, fuzzy
 msgctxt "sample"
 msgid "(x + 0.33 * y + (x+y) )"
-msgstr "sample: (x + 0,33 * y + (x+y) )"
+msgstr "(x + 0,33 * y + (x+y) )"
 
 #: gnucash/register/ledger-core/split-register-load.c:278
 msgid ""
@@ -30321,28 +30260,27 @@ msgstr "(Steuerrelevante Unterkonten: %d)"
 #: libgnucash/app-utils/gnc-ui-util.c:903
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: libgnucash/app-utils/gnc-ui-util.c:905
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
-msgstr ""
+msgstr "b"
 
 #: libgnucash/app-utils/gnc-ui-util.c:907
-#, fuzzy
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
-msgstr "y"
+msgstr "j"
 
 #: libgnucash/app-utils/gnc-ui-util.c:909
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.c:911
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr ""
+msgstr "u"
 
 #: libgnucash/app-utils/gnc-ui-util.c:952
 msgid "Opening Balances"
@@ -30722,11 +30660,10 @@ msgstr "Suche nach unausgeglichenen Buchungen im Konto %s: %u von %u"
 
 #. Translators: This string has a disambiguation prefix
 #: libgnucash/engine/Split.c:1613
-#, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
-msgstr "Vollständig"
+msgstr "Mehrteilig"
 
 #: libgnucash/engine/Transaction.c:2694
 msgid "Voided transaction"
