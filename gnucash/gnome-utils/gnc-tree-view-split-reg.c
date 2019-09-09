@@ -1454,7 +1454,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             //date on new transactions
             if (t == 0)
                 t = gnc_time (NULL);
-            qof_print_date_buff (datebuff, sizeof(datebuff), t);
+            qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
             editable = TRUE;
         }
         else if (is_trow2 && show_extra_dates) {
@@ -1465,7 +1465,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             //date on new transactions
             if (t == 0)
                 t = gnc_time (NULL);
-            qof_print_date_buff (datebuff, sizeof(datebuff), t);
+            qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
             editable = FALSE;
         }
         else if (is_split && show_extra_dates) {
@@ -1473,7 +1473,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             if (xaccSplitGetReconcile (split) == YREC)
             {
                 time64 t = xaccSplitGetDateReconciled (split);
-                qof_print_date_buff (datebuff, sizeof(datebuff), t);
+                qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
             }
             editable = FALSE;
         }
@@ -1484,7 +1484,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         /* Is this a template */
         if (is_template && is_trow1)
         {
-            strncpy (datebuff,  _(" Scheduled "), sizeof(datebuff)-1);
+            strncpy (datebuff,  _(" Scheduled "), MAX_DATE_LENGTH);
             editable = FALSE;
         }
         else if (is_template && is_trow2 && show_extra_dates)
@@ -1514,7 +1514,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             if (type == TXN_TYPE_INVOICE)
             {
                 time64 t = xaccTransRetDateDue (trans);
-                qof_print_date_buff (datebuff, sizeof(datebuff), t);
+                qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
                 editable = FALSE;
             }
             else {

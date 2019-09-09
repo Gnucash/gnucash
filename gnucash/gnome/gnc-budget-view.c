@@ -1227,7 +1227,7 @@ gbv_refresh_col_titles(GncBudgetView *view)
     GtkTreeViewColumn *col;
     guint titlelen;
     gint num_periods_visible;
-    gchar title[MAX_DATE_LENGTH];
+    gchar title[MAX_DATE_LENGTH + 1];
     GList *col_list;
     gint i;
 
@@ -1420,7 +1420,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
 
     if (priv->total_col == NULL)
     {
-        gchar title[MAX_DATE_LENGTH];
+        gchar title[MAX_DATE_LENGTH + 1];
         guint titlelen;
         GDate *date;
         GtkCellRenderer* renderer;

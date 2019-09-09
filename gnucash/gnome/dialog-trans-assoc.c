@@ -422,7 +422,7 @@ get_trans_info (AssocDialog *assoc_dialog)
                 memset (datebuff, 0, sizeof(datebuff));
                 if (t == 0)
                     t = gnc_time (NULL);
-                qof_print_date_buff (datebuff, sizeof(datebuff), t);
+                qof_print_date_buff (datebuff, MAX_DATE_LENGTH, t);
                 gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 
                 if (!scheme) // path is relative

@@ -151,7 +151,7 @@ add_reconcile_date (gchar *so_far, Split *split, CsvExportInfo *info)
         time64 t = xaccSplitGetDateReconciled (split);
         char str_rec_date[MAX_DATE_LENGTH + 1];
         memset (str_rec_date, 0, sizeof(str_rec_date));
-        qof_print_date_buff (str_rec_date, sizeof(str_rec_date), t);
+        qof_print_date_buff (str_rec_date, MAX_DATE_LENGTH, t);
         result = g_strconcat (so_far, str_rec_date, info->mid_sep, NULL);
     }
     else

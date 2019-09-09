@@ -524,13 +524,14 @@ void
 xaccTransDump (const Transaction *trans, const char *tag)
 {
     GList *node;
+    char datebuff[MAX_DATE_LENGTH + 1];
 
     printf("%s Trans %p", tag, trans);
     memset(datebuff, 0, sizeof(datebuff));
-    qof_print_date_buff(datebuff, sizeof(datebuff), trans->date_entered);
+    qof_print_date_buff(datebuff, MAX_DATE_LENGTH, trans->date_entered);
     printf("    Entered:     %s\n", datebuff);
     memset(datebuff, 0, sizeof(datebuff));
-    qof_print_date_buff(datebuff, sizeof(datebuff), trans->date_posted);
+    qof_print_date_buff(datebuff, MAX_DATE_LENGTH, trans->date_posted);
     printf("    Posted:      %s\n", datebuff);
     printf("    Num:         %s\n", trans->num ? trans->num : "(null)");
     printf("    Description: %s\n",

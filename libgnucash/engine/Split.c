@@ -656,7 +656,7 @@ xaccSplitDump (const Split *split, const char *tag)
 {
     char datebuff[MAX_DATE_LENGTH + 1];
     memset (datebuff, 0, sizeof(datebuff));
-    qof_print_date_buff (datebuff, sizeof(datebuff), split->date_reconciled);
+    qof_print_date_buff (datebuff, MAX_DATE_LENGTH, split->date_reconciled);
     printf("  %s Split %p", tag, split);
     printf("    Book:     %p\n", qof_instance_get_book(split));
     printf("    Account:  %p (%s)\n", split->acc,

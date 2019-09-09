@@ -1186,7 +1186,7 @@ refresh_old_transactions (QIFImportWindow * wind, int selection)
             }
 
             gtk_list_store_append (store, &iter);
-            qof_print_date_buff (datebuff, sizeof (datebuff),
+            qof_print_date_buff (datebuff, MAX_DATE_LENGTH,
                                 xaccTransRetDatePosted (gnc_xtn));
             gtk_list_store_set
             (store, &iter,
@@ -3304,7 +3304,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
             gdouble amount_gd = 0;
             time64 send_time = 0;
             char datebuff [MAX_DATE_LENGTH + 1];
-            memset (datebuff, 0, sizeof (datebuff));
+            memset (datebuff, 0, MAX_DATE_LENGTH);
             current_xtn = SCM_CAAR(duplicates);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn = SWIG_MustGetPtr (current_xtn,
@@ -3323,7 +3323,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
             }
             gtk_list_store_append (store, &iter);
             send_time = xaccTransRetDatePosted (gnc_xtn);
-            qof_print_date_buff (datebuff, sizeof (datebuff), send_time);
+            qof_print_date_buff (datebuff, MAX_DATE_LENGTH, send_time);
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,

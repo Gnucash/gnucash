@@ -139,7 +139,7 @@ static void
 gnc_period_sample_update_date_label (GncPeriodSelect *period)
 {
     GncPeriodSelectPrivate *priv;
-    gchar time_string[MAX_DATE_LENGTH];
+    gchar time_string[MAX_DATE_LENGTH + 1];
     GDate *date;
     GncAccountingPeriod which;
 

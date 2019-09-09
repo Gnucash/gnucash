@@ -850,7 +850,7 @@ gnc_tree_model_split_reg_get_tooltip (GncTreeModelSplitReg *model, gint position
         else
         {
             time64 t = xaccTransRetDatePosted (trans);
-            qof_print_date_buff (date_text, sizeof(date_text), t);
+            qof_print_date_buff (date_text, MAX_DATE_LENGTH, t);
             desc_text = xaccTransGetDescription (trans);
             model->current_trans = trans;
             return g_strconcat (date_text, "\n", desc_text, NULL);
