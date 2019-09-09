@@ -404,9 +404,7 @@ gnc_tree_view_commodity_new (QofBook *book,
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_add_toggle_column(
               view, _("Get Quotes"),
-              /* Translators: This string has a context prefix; the translation
-                 must only contain the part after the | character. */
-              Q_("Column letter for 'Get Quotes'|Q"), "quote_flag",
+              C_("Column letter for 'Get Quotes'", "Q"), "quote_flag",
               GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_quote_flag,

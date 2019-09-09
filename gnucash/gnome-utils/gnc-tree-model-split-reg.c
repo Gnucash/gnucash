@@ -2851,9 +2851,7 @@ gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model)
         /* broken ! FIXME bg ????????? What is broken */
     case SEARCH_LEDGER2:
 
-        /* Translators: This string has a context prefix; the translation
-        	must only contain the part after the | character. */
-        gtk_list_store_insert_with_values (store, &iter, 100, 0, Q_("Action Column|Deposit"), -1);
+        gtk_list_store_insert_with_values (store, &iter, 100, 0, C_("Action Column", "Deposit"), -1);
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Withdraw"), -1);
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Check"), -1);
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Interest"), -1);
@@ -2952,8 +2950,7 @@ gnc_tree_model_split_reg_update_action_list (GncTreeModelSplitReg *model)
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Income"), -1);
         /* Action: Distribution */
         gtk_list_store_insert_with_values (store, &iter, 100, 0, _("Dist"), -1);
-        /* Translators: This string has a disambiguation prefix */
-        gtk_list_store_insert_with_values (store, &iter, 100, 0, Q_("Action Column|Split"), -1);
+        gtk_list_store_insert_with_values (store, &iter, 100, 0, C_("Action Column", "Split"), -1);
         break;
 
     default:
