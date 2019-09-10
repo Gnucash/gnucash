@@ -53,7 +53,7 @@ struct _GNCSearchParamPrivate
 };
 
 #define GNC_SEARCH_PARAM_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParamPrivate))
+   ((GNCSearchParamPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_PARAM))
 
 typedef struct _GNCSearchParamSimplePrivate	GNCSearchParamSimplePrivate;
 
@@ -67,7 +67,7 @@ struct _GNCSearchParamSimplePrivate
 };
 
 #define GNC_SEARCH_PARAM_SIMPLE_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE, GNCSearchParamSimplePrivate))
+   ((GNCSearchParamSimplePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_PARAM_SIMPLE))
 
 typedef struct _GNCSearchParamCompoundPrivate	GNCSearchParamCompoundPrivate;
 
@@ -80,7 +80,7 @@ struct _GNCSearchParamCompoundPrivate
 };
 
 #define GNC_SEARCH_PARAM_COMPOUND_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompoundPrivate))
+   ((GNCSearchParamCompoundPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_PARAM_COMPOUND))
 
 static GObjectClass *parent_gobject_class;
 static GNCSearchParamClass *parent_search_param_class;

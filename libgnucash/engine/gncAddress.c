@@ -61,7 +61,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
 
-G_INLINE_FUNC void mark_address (GncAddress *address);
+static inline void mark_address (GncAddress *address);
 void mark_address (GncAddress *address)
 {
     address->dirty = TRUE;

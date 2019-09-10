@@ -60,7 +60,7 @@ typedef struct _GNCSearchOwnerPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchOwner, gnc_search_owner, GNC_TYPE_SEARCH_CORE_TYPE);
 
 #define _PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_OWNER, GNCSearchOwnerPrivate))
+   ((GNCSearchOwnerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_OWNER))
 
 static GNCSearchCoreTypeClass *parent_class;
 

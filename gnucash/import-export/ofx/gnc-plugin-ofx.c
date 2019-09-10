@@ -58,7 +58,7 @@ typedef struct GncPluginOfxPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginOfx, gnc_plugin_ofx, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_OFX_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_OFX, GncPluginOfxPrivate))
+   ((GncPluginOfxPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_OFX))
 
 static GObjectClass *parent_class = NULL;
 

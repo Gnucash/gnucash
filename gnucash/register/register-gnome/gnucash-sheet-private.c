@@ -283,7 +283,7 @@ static guint32 dec_intensity_10percent(guint32 argb)
 
 /* Actual drawing routines */
 
-G_INLINE_FUNC void
+static inline void
 draw_cell_line (cairo_t *cr, GdkRGBA *bg_color,
                 double x1, double y1, double x2, double y2,
                 PhysicalCellBorderLineStyle style);

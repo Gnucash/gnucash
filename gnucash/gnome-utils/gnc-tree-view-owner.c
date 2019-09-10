@@ -87,7 +87,7 @@ typedef struct GncTreeViewOwnerPrivate
 } GncTreeViewOwnerPrivate;
 
 #define GNC_TREE_VIEW_OWNER_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_OWNER, GncTreeViewOwnerPrivate))
+   ((GncTreeViewOwnerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_OWNER))
 
 
 /************************************************************/

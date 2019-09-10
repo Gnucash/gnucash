@@ -112,7 +112,7 @@ struct _GncPeriodSelectPrivate
 };
 
 #define GNC_PERIOD_SELECT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PERIOD_SELECT, GncPeriodSelectPrivate))
+   ((GncPeriodSelectPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PERIOD_SELECT))
 
 
 /************************************************************/

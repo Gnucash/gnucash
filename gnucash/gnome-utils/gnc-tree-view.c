@@ -131,7 +131,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
                           G_ADD_PRIVATE(GncTreeView))
 
 #define GNC_TREE_VIEW_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW, GncTreeViewPrivate))
+   ((GncTreeViewPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW))
 
 
 /************************************************************/

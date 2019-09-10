@@ -86,7 +86,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 /* ============================================================== */
 /* misc inline funcs */
 
-G_INLINE_FUNC void mark_customer (GncCustomer *customer);
+static inline void mark_customer (GncCustomer *customer);
 void mark_customer (GncCustomer *customer)
 {
     qof_instance_set_dirty(&customer->inst);

@@ -49,7 +49,8 @@ enum
     PROP_TIP_COL,
 };
 
-#define GNC_COMBOTT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_COMBOTT, GncCombottPrivate))
+#define GNC_COMBOTT_GET_PRIVATE(o) \
+    ((GncCombottPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_COMBOTT))
 
 static guint combott_signals[LAST_SIGNAL] = {0,};
 

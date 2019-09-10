@@ -59,7 +59,7 @@ typedef struct GncTreeViewSxListPrivate
 } GncTreeViewSxListPrivate;
 
 #define GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_SX_LIST, GncTreeViewSxListPrivate))
+   ((GncTreeViewSxListPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_SX_LIST))
 
 static GObjectClass *parent_class = NULL;
 

@@ -555,7 +555,7 @@ typedef struct GncPluginPageRegister2Private
 } GncPluginPageRegister2Private;
 
 #define GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_REGISTER2, GncPluginPageRegister2Private))
+   ((GncPluginPageRegister2Private*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_REGISTER2))
 
 static GObjectClass *parent_class = NULL;
 

@@ -86,7 +86,7 @@ typedef struct GncPluginPageOwnerTreePrivate
 } GncPluginPageOwnerTreePrivate;
 
 #define GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_OWNER_TREE, GncPluginPageOwnerTreePrivate))
+   ((GncPluginPageOwnerTreePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_OWNER_TREE))
 
 static GObjectClass *parent_class = NULL;
 

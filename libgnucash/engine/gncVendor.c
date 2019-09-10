@@ -78,7 +78,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 /* ============================================================ */
 /* Misc inline funcs */
 
-G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
+static inline void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {
     qof_instance_set_dirty(&vendor->inst);

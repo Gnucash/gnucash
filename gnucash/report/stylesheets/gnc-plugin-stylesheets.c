@@ -64,7 +64,7 @@ typedef struct GncPluginStylesheetsPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginStylesheets, gnc_plugin_stylesheets, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_STYLESHEETS, GncPluginStylesheetsPrivate))
+   ((GncPluginStylesheetsPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_STYLESHEETS))
 
 static GObjectClass *parent_class = NULL;
 

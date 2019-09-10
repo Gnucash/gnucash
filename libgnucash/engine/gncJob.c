@@ -61,7 +61,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 /* ================================================================== */
 /* misc inline functions */
 
-G_INLINE_FUNC void mark_job (GncJob *job);
+static inline void mark_job (GncJob *job);
 void mark_job (GncJob *job)
 {
     qof_instance_set_dirty(&job->inst);

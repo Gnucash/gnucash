@@ -74,7 +74,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 	member = tmp; \
 	}
 
-G_INLINE_FUNC void mark_order (GncOrder *order);
+static inline void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
     qof_instance_set_dirty(&order->inst);

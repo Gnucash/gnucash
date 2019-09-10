@@ -93,7 +93,7 @@ typedef struct _GNCCurrencyEditPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
 
 #define GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditPrivate))
+   ((GNCCurrencyEditPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_CURRENCY_EDIT))
 
 /** @name Basic Object Implementation */
 /** @{ */

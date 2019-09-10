@@ -91,7 +91,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
                                                 gnc_window_embedded_window_init))
 
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
+   ((GncEmbeddedWindowPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_EMBEDDED_WINDOW))
 
 /*  Display a data plugin page in a window. */
 void

@@ -70,7 +70,7 @@ typedef struct GncPluginMenuAdditionsPrivate
 } GncPluginMenuAdditionsPrivate;
 
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_MENU_ADDITIONS, GncPluginMenuAdditionsPrivate))
+   ((GncPluginMenuAdditionsPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_MENU_ADDITIONS))
 
 
 /** Per-window private data for this plugin.  This plugin is unique in

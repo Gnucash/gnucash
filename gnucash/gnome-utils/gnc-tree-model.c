@@ -51,7 +51,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
 		        G_ADD_PRIVATE(GncTreeModel))
 
 #define GNC_TREE_MODEL_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL, GncTreeModelPrivate))
+   ((GncTreeModelPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL))
 
 
 /************************************************************/

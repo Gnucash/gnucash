@@ -294,7 +294,7 @@ typedef struct GncPluginPageInvoicePrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageInvoice, gnc_plugin_page_invoice, GNC_TYPE_PLUGIN_PAGE)
 
 #define GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_INVOICE, GncPluginPageInvoicePrivate))
+   ((GncPluginPageInvoicePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_INVOICE))
 
 static GObjectClass *parent_class = NULL;
 

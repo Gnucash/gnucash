@@ -60,7 +60,7 @@ typedef struct GncPluginLogreplayPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogreplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_LOG_REPLAY_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_LOG_REPLAY, GncPluginLogreplayPrivate))
+   ((GncPluginLogreplayPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_LOG_REPLAY))
 
 static GObjectClass *parent_class = NULL;
 

@@ -78,7 +78,7 @@ typedef struct GncPluginRegister2Private
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginRegister2, gnc_plugin_register2, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_REGISTER2_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REGISTER2, GncPluginRegister2Private))
+   ((GncPluginRegister2Private*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_REGISTER2))
 
 static GObjectClass *parent_class = NULL;
 static QofLogModule log_module = GNC_MOD_GUI;

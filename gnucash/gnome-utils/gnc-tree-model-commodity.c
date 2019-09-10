@@ -101,7 +101,7 @@ typedef struct GncTreeModelCommodityPrivate
 } GncTreeModelCommodityPrivate;
 
 #define GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodityPrivate))
+   ((GncTreeModelCommodityPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_MODEL_COMMODITY))
 
 /** A pointer to the parent class of a commodity tree model. */
 static GObjectClass *parent_class = NULL;

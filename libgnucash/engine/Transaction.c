@@ -228,13 +228,13 @@ xaccTransStillHasSplit(const Transaction *trans, const Split *s)
         }                                                               \
     }
 
-G_INLINE_FUNC void mark_trans (Transaction *trans);
+static inline void mark_trans (Transaction *trans);
 void mark_trans (Transaction *trans)
 {
     FOR_EACH_SPLIT(trans, mark_split(s));
 }
 
-G_INLINE_FUNC void gen_event_trans (Transaction *trans);
+static inline void gen_event_trans (Transaction *trans);
 void gen_event_trans (Transaction *trans)
 {
     GList *node;
