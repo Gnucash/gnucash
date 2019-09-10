@@ -5,7 +5,7 @@
 # CURRENT AUTHOR: Avi Markovitz <avi.markovitz@gmail.com, 2019
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.6\n"
+"Project-Id-Version: GnuCash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-09-09 12:04+0300\n"
