@@ -22,7 +22,10 @@
 ;; Copyright 2000 Rob Browning <rlb@cs.utexas.edu>
 (use-modules (gnucash gnc-module))
 
-(gnc:module-begin-syntax (gnc:module-load "gnucash/engine" 0))
+(eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
+(use-modules (sw_engine))
 
 (use-modules (srfi srfi-1)
              (srfi srfi-13))

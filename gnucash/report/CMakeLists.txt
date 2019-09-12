@@ -132,7 +132,7 @@ gnc_add_scheme_deprecated_module ("gnucash report report-system report-collector
 gnc_add_scheme_deprecated_module ("gnucash report stylesheets" "" "" "")
 gnc_add_scheme_deprecated_module ("gnucash report utility-reports" "" "" "")
 
-add_custom_target(scm-report ALL DEPENDS scm-report-eguile)
+add_custom_target(scm-report ALL DEPENDS scm-report-2 scm-report-eguile)
 
 set_local_dist(report_DIST_local CMakeLists.txt
   report.i
