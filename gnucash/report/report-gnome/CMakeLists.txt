@@ -29,7 +29,7 @@ add_library (gncmod-report-gnome
   ${SWIG_REPORT_GNOME_C}
 )
 target_link_libraries(gncmod-report-gnome gncmod-report-system gncmod-html gncmod-gnome-utils
-      ${GUILE_LDFLAGS} ${GTK3_LDFLAGS})
+     PkgConfig::GTK3 ${GUILE_LDFLAGS} )
 
 target_compile_definitions (gncmod-report-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.report.gui\")
 target_compile_options(gncmod-report-gnome PRIVATE -Wno-deprecated-declarations)

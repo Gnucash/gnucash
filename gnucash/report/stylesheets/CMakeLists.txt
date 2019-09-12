@@ -12,7 +12,7 @@ set(stylesheets_noinst_HEADERS
 add_library(gncmod-stylesheets MODULE ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS})
 
 target_link_libraries(gncmod-stylesheets gncmod-report-gnome gncmod-report-system gncmod-gnome-utils gnc-module
-    ${GUILE_LDFLAGS} ${GTK3_LDFLAGS} ${GLIB2_LDFLAGS})
+    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
 
 target_compile_definitions(gncmod-stylesheets PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 

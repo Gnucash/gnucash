@@ -71,10 +71,10 @@ G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
 static void gnc_html_class_init( GncHtmlClass* klass );
 static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
-
-//#define GNC_HTML_GET_PRIVATE(o) \
+/*
+#define GNC_HTML_GET_PRIVATE(o) \
      ((GncHtmlPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_HTML))
-
+*/
 #define GNC_HTML_GET_PRIVATE(o) (GNC_HTML(o)->priv)
 
 #include "gnc-html-p.h"
