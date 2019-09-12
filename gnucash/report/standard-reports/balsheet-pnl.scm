@@ -706,12 +706,14 @@ also show overall period profit & loss."))
 
   ;; get all options values
   (let* ((report-title (get-option gnc:pagename-general gnc:optname-reportname))
-         (startdate (gnc:date-option-absolute-time
-                     (get-option gnc:pagename-general
-                                 optname-startdate)))
-         (enddate (gnc:date-option-absolute-time
-                   (get-option gnc:pagename-general
-                               optname-enddate)))
+         (startdate ((if (eq? report-type 'pnl)
+                         gnc:time64-start-day-time
+                         gnc:time64-end-day-time)
+                     (gnc:date-option-absolute-time
+                      (get-option gnc:pagename-general optname-startdate))))
+         (enddate (gnc:time64-end-day-time
+                   (gnc:date-option-absolute-time
+                    (get-option gnc:pagename-general optname-enddate))))
          (disable-account-indent? (get-option gnc:pagename-display
                                               optname-account-full-name))
          (incr (get-option gnc:pagename-general optname-period))
@@ -761,15 +763,13 @@ also show overall period profit & loss."))
                                     common-currency)))))
          (price-source (and common-currency
                             (get-option pagename-commodities optname-price-source)))
-         (report-dates (map (if (eq? report-type 'balsheet)
-                                gnc:time64-end-day-time
-                                gnc:time64-start-day-time)
-                            (if incr
-                                (gnc:make-date-list
-                                 startdate enddate (gnc:deltasym-to-delta incr))
-                                (if (eq? report-type 'balsheet)
-                                    (list enddate)
-                                    (list startdate enddate)))))
+
+         (report-dates
+          (cond
+           (incr (gnc:make-date-list startdate enddate (gnc:deltasym-to-delta incr)))
+           ((eq? report-type 'pnl) (list startdate enddate))
+           (else (list enddate))))
+
          (accounts-balances (map
                              (lambda (acc)
                                (cons acc
