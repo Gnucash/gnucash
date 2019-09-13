@@ -691,32 +691,38 @@
           ;; it stores a two-element list of commodity collectors:
           ;;  (list debit-collector credit-collector)
           (let* ((row 0)
-                 (rows (gnc:html-acct-table-num-rows acct-table)))
+                 (rows (gnc:html-acct-table-num-rows acct-table))
+                 (closing-splits
+                  (gnc:account-get-trans-type-splits-interval
+                   all-accounts (list (list 'str closing-str)
+                                      (list 'cased closing-cased)
+                                      (list 'regexp closing-regexp)
+                                      (list 'closing #t))
+                   start-date end-date))
+                 (adjusting-splits
+                  (gnc:account-get-trans-type-splits-interval
+                   all-accounts (list (list 'str adjusting-str)
+                                      (list 'cased adjusting-cased)
+                                      (list 'regexp adjusting-regexp))
+                   start-date end-date)))
+
+            (define (sum-account-splits account splits)
+              (let ((total (gnc:make-commodity-collector))
+                    (comm (xaccAccountGetCommodity account)))
+                (for-each
+                 (lambda (s)
+                   (when (equal? (xaccSplitGetAccount s) account)
+                     (total 'add comm (xaccSplitGetAmount s))))
+                 splits)
+                total))
 
             (while (< row rows)
               (let* ((env (gnc:html-acct-table-get-row-env acct-table row))
                      (acct (get-val env 'account))
                      (group (list acct))
                      (curr-bal (get-val env 'account-bal))
-                     (closing
-                      (gnc:account-get-trans-type-balance-interval-with-closing
-                       group
-                       (list (list 'str closing-str)
-                             (list 'cased closing-cased)
-                             (list 'regexp closing-regexp)
-                             (list 'closing #t)
-                             )
-                       start-date end-date
-                       ))
-                     (adjusting
-                      (gnc:account-get-trans-type-balance-interval-with-closing
-                       group
-                       (list (list 'str adjusting-str)
-                             (list 'cased adjusting-cased)
-                             (list 'regexp adjusting-regexp)
-                             )
-                       start-date end-date
-                       ))
+                     (closing (sum-account-splits acct closing-splits))
+                     (adjusting (sum-account-splits acct adjusting-splits))
                      (is? (member acct all-is-accounts))
                      (ga-or-is? (or (member acct all-ga-accounts) is?))
                      (pos-adjusting
