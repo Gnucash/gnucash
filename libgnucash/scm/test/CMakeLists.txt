@@ -8,6 +8,8 @@ set(GUILE_DEPENDS
   scm-app-utils
   scm-scm scm-engine
   scm-srfi64-extras
+  scm-deprecated-gnucash-deprecated-module
+  scm-deprecated-gnucash-superseded-module
   )
 
 if (HAVE_SRFI64)
