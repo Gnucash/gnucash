@@ -364,7 +364,7 @@ get_fiscal_end_date (void)
     char datebuff[MAX_DATE_LENGTH + 1];
     memset (datebuff, 0, sizeof(datebuff));
     end = gnc_accounting_period_fiscal_end();
-    qof_print_date_buff(datebuff, sizeof(datebuff),
+    qof_print_date_buff(datebuff, MAX_DATE_LENGTH,
                         gnc_accounting_period_fiscal_end());
     PINFO("Fiscal end date is %s", datebuff);
 

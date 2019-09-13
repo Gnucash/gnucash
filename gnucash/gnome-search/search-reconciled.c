@@ -57,7 +57,7 @@ struct _GNCSearchReconciledPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_SEARCH_CORE_TYPE)
 
 #define _PRIVATE(o) \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciledPrivate))
+   ((GNCSearchReconciledPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_RECONCILED))
 
 static GNCSearchCoreTypeClass *parent_class;
 

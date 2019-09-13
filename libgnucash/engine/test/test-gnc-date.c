@@ -642,7 +642,7 @@ static void tm_set_dmy (struct tm *tm, gint year, gint month, gint mday)
 static void
 test_qof_print_date_dmy_buff (void)
 {
-    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH + 1], t_buff[MAX_DATE_LENGTH + 1];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -652,47 +652,47 @@ test_qof_print_date_dmy_buff (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 23, 11, 1974), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23/11/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 2, 2, 1961), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 16, 6, 2045), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16/06/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 23, 11, 1974), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23.11.1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 2, 2, 1961), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02.02.1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 16, 6, 2045), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16.06.2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 23, 11, 1974), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 2, 2, 1961), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 16, 6, 2045), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 23, 11, 1974), ==, strlen (buff));
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 23, 11, 1974), ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 2, 2, 1961),
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 2, 2, 1961),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), 16, 6, 2045),
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, 16, 6, 2045),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
@@ -701,7 +701,7 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -710,7 +710,7 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 1961, 2, 2);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -718,7 +718,7 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 2045, 6, 16);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -727,22 +727,22 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
     tm_set_dmy (&tm, 1961, 2, 2);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
     tm_set_dmy (&tm, 2045, 6, 16);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
-    memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    memset ((gpointer)buff, 0, MAX_DATE_LENGTH);
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -751,14 +751,14 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
     tm_set_dmy (&tm, 1961, 2, 2);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -766,7 +766,7 @@ test_qof_print_date_dmy_buff (void)
     tm_set_dmy (&tm, 2045, 6, 16);
     strftime(t_buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_dmy_buff (buff, sizeof (buff), tm.tm_mday,
+    g_assert_cmpint (qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, tm.tm_mday,
                      tm.tm_mon + 1, tm.tm_year + 1900),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, t_buff);
@@ -787,7 +787,7 @@ test_qof_print_date_dmy_buff (void)
 
 #define test_assert_localized_timestring(time, datestr)                 \
     {                                                                   \
-        gchar t_buff[MAX_DATE_LENGTH];                                  \
+        gchar t_buff[MAX_DATE_LENGTH + 1];                                  \
         struct tm *ltime = gnc_localtime ((time64 *)(&time));           \
         strftime (t_buff, sizeof (t_buff), GNC_D_FMT, ltime);           \
         gnc_tm_free (ltime);                                            \
@@ -802,7 +802,7 @@ qof_print_date_buff (char * buff, size_t len, time64 t)// C: 3 in 1  Local: 2:0:
 static void
 test_qof_print_date_buff (void)
 {
-    gchar buff[MAX_DATE_LENGTH], ans[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH + 1], ans[MAX_DATE_LENGTH + 1];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
 
     struct tm tm1 = {0, 0, 12, 23, 10, 74};
@@ -814,110 +814,110 @@ test_qof_print_date_buff (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23/11/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
 
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16/06/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23.11.1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02.02.1961");
 
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16.06.2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
 
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
 
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     test_gnc_setlocale (LC_TIME, "en_US");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
 
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
     test_gnc_setlocale (LC_TIME, "en_GB");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm1);
     g_assert_cmpstr (buff, ==, ans);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm2);
     g_assert_cmpstr (buff, ==, ans);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm3);
     g_assert_cmpstr (buff, ==, ans);
 
     test_gnc_setlocale (LC_TIME, "fr_FR");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time1),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time1),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm1);
     g_assert_cmpstr (buff, ==, ans);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time2),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time2),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm2);
     g_assert_cmpstr (buff, ==, ans);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_date_buff (buff, sizeof (buff), time3),
+    g_assert_cmpint (qof_print_date_buff (buff, MAX_DATE_LENGTH, time3),
                      ==, strlen (buff));
     strftime(ans, MAX_DATE_LENGTH, GNC_D_FMT, &tm3);
     g_assert_cmpstr (buff, ==, ans);
@@ -932,7 +932,7 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )// C: 6 in 5  Local: 0:
 static void
 test_qof_print_gdate (void)
 {
-    gchar buff[MAX_DATE_LENGTH], t_buff[MAX_DATE_LENGTH];
+    gchar buff[MAX_DATE_LENGTH + 1], t_buff[MAX_DATE_LENGTH + 1];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     GDate *gd1 = g_date_new_dmy (23, 11, 1974);
     GDate *gd2 = g_date_new_dmy (2, 2, 1961);
@@ -940,59 +940,59 @@ test_qof_print_gdate (void)
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23/11/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16/06/2045");
 
     qof_date_format_set (QOF_DATE_FORMAT_CE);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "23.11.1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02.02.1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "16.06.2045");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "11/23/1974");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "02/02/1961");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "06/16/2045");
 
 
     qof_date_format_set (QOF_DATE_FORMAT_ISO);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1974-11-23");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "1961-02-02");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_assert_cmpstr (buff, ==, "2045-06-16");
 
@@ -1000,34 +1000,34 @@ test_qof_print_gdate (void)
     qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
     test_gnc_setlocale (LC_TIME, "en_US");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
     g_assert_cmpstr (buff, ==, t_buff);
 
     test_gnc_setlocale (LC_TIME, "en_GB");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
     g_assert_cmpstr (buff, ==, t_buff);
@@ -1035,17 +1035,17 @@ test_qof_print_gdate (void)
 
     test_gnc_setlocale (LC_TIME, "fr_FR");
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd1),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd1),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd2),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd2),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
     g_assert_cmpstr (buff, ==, t_buff);
     memset ((gpointer)buff, 0, sizeof (buff));
-    g_assert_cmpint (qof_print_gdate (buff, sizeof (buff), gd3),
+    g_assert_cmpint (qof_print_gdate (buff, MAX_DATE_LENGTH, gd3),
                      ==, strlen (buff));
     g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
     g_assert_cmpstr (buff, ==, t_buff);

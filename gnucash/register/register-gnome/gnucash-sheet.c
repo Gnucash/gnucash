@@ -103,7 +103,7 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 
 /** Implementation *****************************************************/
 
-G_INLINE_FUNC gboolean
+static inline gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc);
 gboolean

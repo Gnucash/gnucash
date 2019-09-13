@@ -1,9 +1,4 @@
 
-if (${CMAKE_VERSION} VERSION_LESS 3.3)
-    include(CMakeParseArguments)
-endif()
-
-
 function(set_local_dist output)
     set(dist_files "")
     foreach(file ${ARGN})

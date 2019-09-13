@@ -71,7 +71,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_EMPLOYEE
 
-G_INLINE_FUNC void mark_employee (GncEmployee *employee);
+static inline void mark_employee (GncEmployee *employee);
 void mark_employee (GncEmployee *employee)
 {
     qof_instance_set_dirty(&employee->inst);

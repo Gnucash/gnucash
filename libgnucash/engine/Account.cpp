@@ -121,7 +121,7 @@ enum
 };
 
 #define GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_ACCOUNT, AccountPrivate))
+    ((AccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_ACCOUNT))
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -241,7 +241,7 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void mark_account (Account *acc);
+static inline void mark_account (Account *acc);
 void
 mark_account (Account *acc)
 {

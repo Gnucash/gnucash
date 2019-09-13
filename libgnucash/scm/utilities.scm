@@ -188,12 +188,8 @@
 ;; uses quicksort internally.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define* (sort-and-delete-duplicates lst < #:optional (= =))
-  (let lp ((lst (sort lst <)) (result '()))
-    (cond
-     ((null? lst) '())
-     ((null? (cdr lst)) (reverse (cons (car lst) result)))
-     ((= (car lst) (cadr lst)) (lp (cdr lst) result))
-     (else (lp (cdr lst) (cons (car lst) result))))))
+  (define (kons a b) (if (and (pair? b) (= a (car b))) b (cons a b)))
+  (reverse (fold kons '() (sort lst <))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

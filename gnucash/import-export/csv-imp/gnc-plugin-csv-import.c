@@ -72,7 +72,7 @@ typedef struct GncPluginCsvImportPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvImport, gnc_plugin_csv_import, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_CSV_IMPORT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_CSV_IMPORT, GncPluginCsvImportPrivate))
+   ((GncPluginCsvImportPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_CSV_IMPORT))
 
 static GObjectClass *parent_class = NULL;
 

@@ -58,7 +58,7 @@ struct _GNCSearchCoreTypePrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchCoreType, gnc_search_core_type, G_TYPE_OBJECT)
 
 #define _PRIVATE(o) \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypePrivate))
+   ((GNCSearchCoreTypePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_SEARCH_CORE_TYPE))
 
 static GObjectClass *parent_class;
 

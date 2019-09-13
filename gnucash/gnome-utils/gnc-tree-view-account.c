@@ -115,7 +115,7 @@ typedef struct GncTreeViewAccountPrivate
 } GncTreeViewAccountPrivate;
 
 #define GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountPrivate))
+   ((GncTreeViewAccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_ACCOUNT))
 
 
 /************************************************************/

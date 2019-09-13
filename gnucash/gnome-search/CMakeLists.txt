@@ -46,7 +46,7 @@ add_library (gncmod-gnome-search
     ${gnome_search_noinst_HEADERS}
 )
 
-target_link_libraries(gncmod-gnome-search gncmod-gnome-utils ${GTK3_LDFLAGS})
+target_link_libraries(gncmod-gnome-search gncmod-gnome-utils PkgConfig::GTK3)
 
 target_compile_definitions(gncmod-gnome-search PRIVATE -DG_LOG_DOMAIN=\"gnc.gui.search\")
 

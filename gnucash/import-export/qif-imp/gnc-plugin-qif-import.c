@@ -59,7 +59,7 @@ typedef struct GncPluginQifImportPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginQifImport, gnc_plugin_qif_import, GNC_TYPE_PLUGIN);
 
 #define GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_QIF_IMPORT, GncPluginQifImportPrivate))
+   ((GncPluginQifImportPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_QIF_IMPORT))
 
 static GObjectClass *parent_class = NULL;
 

@@ -526,7 +526,7 @@ gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
         char datebuff[MAX_DATE_LENGTH + 1];
         time64 time = xaccSplitGetDateReconciled (split);
         memset (datebuff, 0, sizeof(datebuff));
-        qof_print_date_buff (datebuff, sizeof(datebuff), time);
+        qof_print_date_buff (datebuff, MAX_DATE_LENGTH, time);
         return g_strdup_printf (_("Reconciled on %s"), datebuff);
     }
     else if (xaccSplitGetReconcile (split) == VREC)

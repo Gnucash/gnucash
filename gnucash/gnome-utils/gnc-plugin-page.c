@@ -108,7 +108,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
 		        G_ADD_PRIVATE(GncPluginPage))
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPagePrivate))
+   ((GncPluginPagePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE))
 
 /*  Create the display widget that corresponds to this plugin.  This
  *  function will be called by the main/embedded window manipulation

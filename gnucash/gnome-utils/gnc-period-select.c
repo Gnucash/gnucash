@@ -112,7 +112,7 @@ struct _GncPeriodSelectPrivate
 };
 
 #define GNC_PERIOD_SELECT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PERIOD_SELECT, GncPeriodSelectPrivate))
+   ((GncPeriodSelectPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PERIOD_SELECT))
 
 
 /************************************************************/
@@ -139,7 +139,7 @@ static void
 gnc_period_sample_update_date_label (GncPeriodSelect *period)
 {
     GncPeriodSelectPrivate *priv;
-    gchar time_string[MAX_DATE_LENGTH];
+    gchar time_string[MAX_DATE_LENGTH + 1];
     GDate *date;
     GncAccountingPeriod which;
 

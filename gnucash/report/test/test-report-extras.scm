@@ -61,14 +61,14 @@
       render)))
 
 (define (strip-string s1 s2)
-  (let loop ((str s1))
+  (let loop ((str s1)
+             (res '()))
     (let ((startpos (string-contains str (format #f "<~a" s2)))
           (endpos (string-contains str (format #f "</~a>" s2))))
       (if (and startpos endpos)
-          (loop (string-append
-                 (string-take str startpos)
-                 (string-drop str (+ endpos (string-length s2) 3))))
-          str))))
+          (loop (substring str (+ endpos (string-length s2) 3))
+                (cons (substring str 0 startpos) res))
+          (string-concatenate-reverse (cons str res))))))
 
 (export gnc:options->sxml)
 (define* (gnc:options->sxml uuid options prefix test-title #:key strip-tag)

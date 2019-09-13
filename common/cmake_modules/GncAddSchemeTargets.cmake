@@ -195,7 +195,7 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       if (MINGW64)
         set(fpath "")
         file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
-        set(LIBRARY_PATH "PATH=\"${BINDIR_BUILD};${fpath}\"")
+        set(LIBRARY_PATH "PATH=${BINDIR_BUILD};${fpath}")
       else (MINGW64)
         set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash")
       endif (MINGW64)
@@ -226,13 +226,14 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         COMMAND ${CMAKE_COMMAND} -E env
             "${LIBRARY_PATH}"
             "GNC_UNINSTALLED=YES"
-            "GNC_BUILDDIR=\"${CMAKE_BINARY_DIR}\""
-            "GUILE_LOAD_PATH=\"${_GUILE_LOAD_PATH}\""
-            "GUILE_LOAD_COMPILED_PATH=\"${_GUILE_LOAD_COMPILED_PATH}\""
-            "GNC_MODULE_PATH=\"${_GNC_MODULE_PATH}\""
-            ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
+            "GNC_BUILDDIR=${CMAKE_BINARY_DIR}"
+            "GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}"
+            "GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}"
+            "GNC_MODULE_PATH=${_GNC_MODULE_PATH}"
+            ${GUILE_EXECUTABLE} -e "\(@@ \(guild\) main\)" -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}
+        VERBATIM
         )
   endforeach(source_file)
   if (__DEBUG)

@@ -95,7 +95,7 @@ typedef struct GNCLotPrivate
 } GNCLotPrivate;
 
 #define GET_PRIVATE(o) \
-    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, GNCLotPrivate))
+    ((GNCLotPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_LOT))
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 

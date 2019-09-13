@@ -552,9 +552,10 @@ const gchar *qof_date_text_format_get_string(QofDateFormat df)
 }
 
 size_t
-qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
+qof_print_date_dmy_buff (char * buff, const size_t len, int day, int month, int year)
 {
     if (!buff) return 0;
+
     try
     {
         GncDate date(year, month, day);
@@ -577,9 +578,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 }
 
 size_t
-qof_print_date_buff (char * buff, size_t len, time64 t)
+qof_print_date_buff (char * buff, const size_t len, time64 t)
 {
     if (!buff) return 0;
+
     try
     {
         GncDateTime gncdt(t);
@@ -614,7 +616,7 @@ qof_print_gdate( char *buf, size_t len, const GDate *gd )
 char *
 qof_print_date (time64 t)
 {
-    char buff[MAX_DATE_LENGTH];
+    char buff[MAX_DATE_LENGTH + 1];
     memset (buff, 0, sizeof (buff));
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
     return g_strdup (buff);

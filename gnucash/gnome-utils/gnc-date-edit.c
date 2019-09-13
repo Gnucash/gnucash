@@ -558,13 +558,13 @@ fill_time_combo (GtkWidget *widget, GNCDateEdit *gde)
 static void
 gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
 {
-    char buffer [40];
+    char buffer [MAX_DATE_LENGTH + 1];
     struct tm *mytm = gnc_localtime (&the_time);
 
     g_return_if_fail(mytm != NULL);
 
     /* Update the date text. */
-    qof_print_date_dmy_buff(buffer, 40,
+    qof_print_date_dmy_buff(buffer, MAX_DATE_LENGTH,
                             mytm->tm_mday,
                             mytm->tm_mon + 1,
                             1900 + mytm->tm_year);

@@ -40,15 +40,14 @@ add_library (gncmod-html
   ${html_HEADERS}
 )
 
-target_link_libraries(gncmod-html gncmod-engine gnc-module gncmod-gnome-utils ${WEBKIT_LDFLAGS} ${GUILE_LDFLAGS})
+target_link_libraries(gncmod-html gncmod-engine gnc-module gncmod-gnome-utils
+  PkgConfig::GTK3 PkgConfig::WEBKIT ${GUILE_LDFLAGS})
 
 target_compile_definitions(gncmod-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 
 
 target_include_directories (gncmod-html
 PUBLIC
-    ${GTK3_INCLUDE_DIRS}
-    ${WEBKIT_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

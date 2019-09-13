@@ -87,7 +87,7 @@ typedef struct GncTreeViewOwnerPrivate
 } GncTreeViewOwnerPrivate;
 
 #define GNC_TREE_VIEW_OWNER_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_OWNER, GncTreeViewOwnerPrivate))
+   ((GncTreeViewOwnerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_OWNER))
 
 
 /************************************************************/
@@ -476,9 +476,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
     gnc_tree_view_add_toggle_column (view, _("Active"),
-                                     /* Translators: This string has a context prefix; the translation
-                                        must only contain the part after the | character. */
-                                     Q_("Column letter for 'Active'|A"),
+                                     C_("Column letter for 'Active'", "A"),
                                      GNC_OWNER_TREE_ACTIVE_COL,
                                      GNC_TREE_MODEL_OWNER_COL_ACTIVE,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,

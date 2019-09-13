@@ -1094,8 +1094,7 @@ type_label_to_new_button(const gchar* type_label)
     else
     {
         PWARN("No translatable new-button label found for search type \"%s\", please add one into dialog-search.c!", type_label);
-        /* Translators: This string has a disambiguation prefix. Translate only the part behind '|' */
-        return Q_("Item represents an unknown object type (in the sense of bill, customer, invoice, transaction, split,...)|New item");
+        return C_("Item represents an unknown object type (in the sense of bill, customer, invoice, transaction, split,...)!", "New item");
     }
 }
 

@@ -2075,9 +2075,7 @@ typedef enum
 
 #define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
 
-G_INLINE_FUNC long long int multiplier (int num_decimals);
-
-long long int
+static inline long long int
 multiplier (int num_decimals)
 {
     switch (num_decimals)

@@ -98,7 +98,7 @@ typedef struct GncPluginPageSxListPrivate
 } GncPluginPageSxListPrivate;
 
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_SX_LIST, GncPluginPageSxListPrivate))
+   ((GncPluginPageSxListPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE_SX_LIST))
 
 static GObjectClass *parent_class = NULL;
 

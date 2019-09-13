@@ -78,7 +78,7 @@ struct _GNCGeneralSearchPrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GNCGeneralSearch, gnc_general_search, GTK_TYPE_BOX)
 
 #define _PRIVATE(o) \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_GENERAL_SEARCH, GNCGeneralSearchPrivate))
+   ((GNCGeneralSearchPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_GENERAL_SEARCH))
 
 static GtkBoxClass *parent_class;
 static guint general_search_signals[LAST_SIGNAL];

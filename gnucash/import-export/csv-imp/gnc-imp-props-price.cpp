@@ -316,7 +316,7 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
     char date_str [MAX_DATE_LENGTH + 1];
     memset (date_str, 0, sizeof(date_str));
-    qof_print_date_buff (date_str, sizeof(date_str), date);
+    qof_print_date_buff (date_str, MAX_DATE_LENGTH, date);
     DEBUG("Date is %s, Commodity from is '%s', Currency is '%s', "
           "Amount is %s", date_str,
           gnc_commodity_get_fullname (*m_from_commodity),

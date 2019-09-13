@@ -200,7 +200,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 	member = tmp; \
 	}
 
-G_INLINE_FUNC void mark_entry (GncEntry *entry);
+static inline void mark_entry (GncEntry *entry);
 void mark_entry (GncEntry *entry)
 {
     qof_instance_set_dirty(&entry->inst);

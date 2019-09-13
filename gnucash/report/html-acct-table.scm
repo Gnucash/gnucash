@@ -495,6 +495,7 @@
 ;; user.  This class simply maps its contents to the html-table.
 ;; 
 
+(use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 
 ;; this is to work around a bug in the HTML export sytmem
@@ -554,39 +555,28 @@
   ;; helper for fetching values from the key/val environment alist
   (define (get-val alist key)
     (let ((lst (assoc-ref alist key)))
-      (if lst (car lst) lst)))
-
-
+      (and lst (car lst))))
 
   ;; helper to plop <env> in the next available env cell
   (define (add-row env)
     (let* ((html-table (gnc:_html-acct-table-matrix_ acct-table))
            (row (gnc:html-table-num-rows html-table)))
-      (gnc:html-table-set-cell!
-       html-table
-       row
-       0
-       env)
-      row
-      )
-    )
+      (gnc:html-table-set-cell! html-table row 0 env)
+      row))
 
   ;; Add more stuff to an existing row
   (define (append-to-row row env)
     (gnc:html-acct-table-set-row-env! acct-table row
       (append (gnc:html-acct-table-get-row-env acct-table row) env)))
-  
+
   (let* ((env (gnc:_html-acct-table-env_ acct-table))
 	 ;; establish all input parameters and their defaults 
 	 (depth-limit (let ((lim (get-val env 'display-tree-depth)))
-			(if (or (equal? lim 'unlimited)
-				(equal? lim 'all))
-			    #f ;; BUG?  other code expects integer here
-			    lim)))
+                        (and (number? lim) lim)))
 	 (limit-behavior (or (get-val env 'depth-limit-behavior) 'summarize))
 	 (indent (or (get-val env 'initial-indent) 0))
 	 (less-p (let ((pred (get-val env 'account-less-p)))
-		   (if (equal? pred #t) gnc:account-code-less-p pred)))
+		   (if (eq? pred #t) gnc:account-code-less-p pred)))
 	 (start-date (get-val env 'start-date))
 	 (end-date (or (get-val env 'end-date)
 		       (gnc:get-today)))
@@ -594,18 +584,15 @@
 			       (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe
          ;; someone was thinking price-source?
-	 (exchange-fn (or (get-val env 'exchange-fn)
-                          #f))
-         (get-balance-fn (or (get-val env 'get-balance-fn) #f))
+	 (exchange-fn (get-val env 'exchange-fn))
+         (get-balance-fn (get-val env 'get-balance-fn))
 	 (column-header (let ((cell (get-val env 'column-header)))
-			  (if (equal? cell #t)
+			  (if (eq? cell #t)
 			      (gnc:make-html-table-cell "Account name")
 			      cell)))
 	 (subtotal-mode (get-val env 'parent-account-subtotal-mode))
 	 (zero-mode (let ((mode (get-val env 'zero-balance-mode)))
-		      (or (if (equal? mode #t) 'show-leaf-acct mode)
-			  'show-leaf-acct)
-		      ))
+		      (if (boolean? mode) 'show-leaf-acct mode)))
 	 (label-mode (or (get-val env 'account-label-mode) 'anchor))
 	 (balance-mode (or (get-val env 'balance-mode) 'post-closing))
 	 (closing-pattern (or (get-val env 'closing-pattern)
@@ -613,16 +600,12 @@
 			       (list 'str (_ "Closing Entries"))
 			       (list 'cased #f)
 			       (list 'regexp #f)
-			       (list 'closing #t)
-			       )
-			      ))
+			       (list 'closing #t))))
 	 (adjusting-pattern (or (get-val env 'adjusting-pattern)
 				(list
 				 (list 'str (_ "Adjusting Entries"))
 				 (list 'cased #f)
-				 (list 'regexp #f)
-				 )
-				))
+				 (list 'regexp #f))))
 	 (report-budget (or (get-val env 'report-budget) #f))
 	 ;; local variables
 	 (toplvl-accts
@@ -637,19 +620,15 @@
 
     ;; helper to calculate the balances for all required accounts
     (define (calculate-balances accts start-date end-date get-balance-fn)
-      (define (calculate-balances-helper accts start-date end-date acct-balances)
-        (if (not (null? accts))
-            (begin
-              ;; using the existing function that cares about balance-mode
-              ;; maybe this should get replaces at some point.
-              (hash-set! acct-balances (gncAccountGetGUID (car accts))
-                         (get-balance-fn (car accts) start-date end-date))
-              (calculate-balances-helper (cdr accts) start-date end-date acct-balances)
-              )
-            acct-balances)
-        )
+      (define ret-hash (make-hash-table))
+      (define (calculate-balances-helper)
+        (for-each
+         (lambda (acct)
+           (hash-set! ret-hash (gncAccountGetGUID acct)
+                      (get-balance-fn acct start-date end-date)))
+         accts))
 
-      (define (calculate-balances-simple accts start-date end-date hash-table)
+      (define (calculate-balances-simple)
         (define (merge-splits splits subtract?)
           (for-each
            (lambda (split)
@@ -657,101 +636,72 @@
                     (guid (gncAccountGetGUID acct))
                     (acct-comm (xaccAccountGetCommodity acct))
                     (shares (xaccSplitGetAmount split))
-                    (hash (hash-ref hash-table guid)))
-               (if (not hash)
-                   (begin (set! hash (gnc:make-commodity-collector))
-                          (hash-set! hash-table guid hash)))
-               (hash 'add acct-comm (if subtract?
-                                        (gnc-numeric-neg shares)
-                                        shares))))
+                    (hash (hash-ref ret-hash guid)))
+               (unless hash
+                 (set! hash (gnc:make-commodity-collector))
+                 (hash-set! ret-hash guid hash))
+               (hash 'add acct-comm (if subtract? (- shares) shares))))
            splits))
 
-        ;; If you pass a null account list to gnc:account-get-trans-type-splits-interval
-        ;; it returns splits from all accounts rather than from no accounts.  This is
-        ;; probably a bug but we'll work around it for now.
-        (if (not (null? accts))
-            (begin
-              (merge-splits (gnc:account-get-trans-type-splits-interval
-                             accts #f start-date end-date)
-                            #f)
-              (cond
-               ((equal? balance-mode 'post-closing) #t)
-      
-               ((equal? balance-mode 'pre-closing)
-                (merge-splits (gnc:account-get-trans-type-splits-interval
-                               accts closing-pattern start-date end-date)
-                              #t))
-      
-               ((equal? balance-mode 'pre-adjusting)
-                (merge-splits (gnc:account-get-trans-type-splits-interval
-                               accts closing-pattern start-date end-date)
-                              #t)
-                (merge-splits (gnc:account-get-trans-type-splits-interval
-                               accts adjusting-pattern start-date end-date)
-                              #t))
-               (else (begin (display "you fail it")
-                            (newline))))))
-        hash-table
-        )
+        (merge-splits (gnc:account-get-trans-type-splits-interval
+                       accts #f start-date end-date)
+                      #f)
+
+        (case balance-mode
+          ((post-closing) #f)
+
+          ;; remove closing entries
+          ((pre-closing)
+           (merge-splits (gnc:account-get-trans-type-splits-interval
+                          accts closing-pattern start-date end-date) #t))
+
+          ;; remove closing and adjusting entries
+          ((pre-adjusting)
+           (merge-splits (gnc:account-get-trans-type-splits-interval
+                          accts closing-pattern start-date end-date) #t)
+           (merge-splits (gnc:account-get-trans-type-splits-interval
+                          accts adjusting-pattern start-date end-date) #t))
+
+          (else
+           (display "you fail it\n"))))
 
       (if get-balance-fn
-          (calculate-balances-helper accts start-date end-date
-                                     (make-hash-table 23))                               
-          (calculate-balances-simple accts start-date end-date
-                                     (make-hash-table 23))                               
-          )
-      )
+          (calculate-balances-helper)
+          (calculate-balances-simple))
+      ret-hash)
 
     (define (traverse-accounts! accts acct-depth logi-depth new-balances)
-      
+
       (define (use-acct? acct)
 	;; BUG?  when depth-limit is not integer but boolean?
-	(and (or (equal? limit-behavior 'flatten) (< logi-depth depth-limit))
-	     (member acct accounts)
-	     )
-	)
+	(and (or (eq? limit-behavior 'flatten)
+                 (< logi-depth depth-limit))
+	     (member acct accounts)))
       
       ;; helper function to return a cached balance from a list of 
       ;; ( acct . balance ) cells
       (define (get-balance acct-balances acct)
-	(let ((this-collector (gnc:make-commodity-collector)))
-	  (this-collector
-           'merge
-	   (or (hash-ref acct-balances (gncAccountGetGUID acct))
-	       ;; return a zero commodity collector
-	       (gnc:make-commodity-collector))
-	   #f)
-	  this-collector
-	  )
-	)
+	(let ((this-collector (gnc:make-commodity-collector))
+              (acct-coll (hash-ref acct-balances (gncAccountGetGUID acct)
+                                   (gnc:make-commodity-collector))))
+	  (this-collector 'merge acct-coll #f)
+	  this-collector))
 
-      
-      ;; helper function that returns a cached balance  from a list of
-      ;; ( acct . balance ) cells for the given account *and* its 
+      ;; helper function that returns a cached balance from a list of
+      ;; ( acct . balance) cells for the given account *and* its
       ;; sub-accounts.
       (define (get-balance-sub acct-balances account)
-	;; its important to make a *new* collector for this, otherwise we're dealing with 
-	;; pointers to the current collectors in our acct-balances hash and that's a 
-	;; problem -- the balances get changed.
-	(let ((this-collector (gnc:make-commodity-collector)))
-	  ;; get the balance of the parent account and stick it on the collector
-	  ;; that nice shiny *NEW* collector!!
-	  (this-collector 'merge (get-balance acct-balances account) #f)
-	  (for-each
-	   (lambda (x) (if x (this-collector 'merge x #f)))
-	   (gnc:account-map-descendants
-	    (lambda (a)
-	      (get-balance acct-balances a ))
-	    account))
+        (let ((this-collector (gnc:make-commodity-collector)))
+          (for-each
+           (lambda (acct)
+             (this-collector 'merge (get-balance acct-balances acct) #f))
+           (gnc:accounts-and-all-descendants (list account)))
 	  this-collector))
-      
-      
-      (let ((disp-depth
-	     (if (integer? depth-limit)
-		 (min (- depth-limit 1) logi-depth)
-		 logi-depth))
-            (row-added? #f)
-	    )
+
+      (let ((disp-depth (if (integer? depth-limit)
+		            (min (- depth-limit 1) logi-depth)
+		            logi-depth))
+            (row-added? #f))
 	
 	(for-each
 	 (lambda (acct)
@@ -816,11 +766,9 @@
 			    (list 'exchange-fn exchange-fn)
 			    )))
 		  (row-env #f)
-		  (label (or (and (equal? label-mode 'anchor)
-				  account-anchor)
-			     (and (equal? label-mode 'name)
-				  (gnc:make-html-text account-name))
-			     ))
+		  (label (case label-mode
+                           ((anchor) account-anchor)
+			   ((name) (gnc:make-html-text account-name))))
                   (row #f)
                   (children-displayed? #f)
 		  )
@@ -1201,38 +1149,32 @@
                          ((not (null? children)) parent-acct-bal-mode)
                          (else 'immediate-bal)))
 
-                  (comm-amt
-                   (get-val env (assq-ref '((immediate-bal . account-bal)
-                                            (recursive-bal . recursive-bal)
-                                            (omit-bal . #f))
-                                          bal-method)))
-                  (amt (and comm-amt
-                            (if (gnc-reverse-balance acct)
-                                (gnc:commodity-collector-get-negated comm-amt)
-                                comm-amt)))
-
                   (zero-mode (let ((mode (get-val env 'zero-balance-display-mode)))
                                (if (boolean? mode)
                                    'show-balance
                                    mode)))
 
-                  (native-comm?
-                   (lambda (amt)
-                     (gnc:uniform-commodity? amt report-commodity)))
+                  (amt (and-let* ((bal-syms '((immediate-bal . account-bal)
+                                              (recursive-bal . recursive-bal)
+                                              (omit-bal . #f)))
+                                  (bal-sym (assq-ref bal-syms bal-method))
+                                  (comm-amt (get-val env bal-sym)))
+                         (cond
+                          ((and (eq? zero-mode 'omit-balance)
+                                (gnc-commodity-collector-allzero? comm-amt)) #f)
+                          ((gnc-reverse-balance acct)
+                           (gnc:commodity-collector-get-negated comm-amt))
+                          (else comm-amt))))
 
-                  ;; amount is either a <gnc:monetary> or #f
-                  (amount (and amt
-                               (not (and (eq? zero-mode 'omit-balance)
-                                         (gnc-commodity-collector-allzero? amt)))
-                               (cond
-                                ((and (not (native-comm? amt))
-                                      (eq? multicommodity-mode 'table)
-                                      (eq? row-type 'account-row))
-                                 (gnc-commodity-table
-                                  amt report-commodity exchange-fn))
-                                (else
-                                 (gnc:sum-collector-commodity
-                                  amt report-commodity exchange-fn)))))
+                  (amount
+                   (cond
+                    ((not amt) #f)
+                    ((and (not (gnc:uniform-commodity? amt report-commodity))
+                          (eq? multicommodity-mode 'table)
+                          (eq? row-type 'account-row))
+                     (gnc-commodity-table amt report-commodity exchange-fn))
+                    (else
+                     (gnc:sum-collector-commodity amt report-commodity exchange-fn))))
 
                   (indented-depth (get-val env 'indented-depth))
 		  (account-colspan (get-val env 'account-colspan))

@@ -45,7 +45,7 @@ typedef struct GncPluginManagerPrivate
 }  GncPluginManagerPrivate;
 
 #define GNC_PLUGIN_MANAGER_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_MANAGER, GncPluginManagerPrivate))
+   ((GncPluginManagerPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_MANAGER))
 
 enum
 {

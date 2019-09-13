@@ -59,7 +59,7 @@ typedef struct GncTreeViewSxListPrivate
 } GncTreeViewSxListPrivate;
 
 #define GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_SX_LIST, GncTreeViewSxListPrivate))
+   ((GncTreeViewSxListPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_TREE_VIEW_SX_LIST))
 
 static GObjectClass *parent_class = NULL;
 
@@ -138,9 +138,7 @@ gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     col = gnc_tree_view_add_toggle_column(view, _("Enabled"),
-                                          /* Translators: This string has a context prefix; the translation
-                                             must only contain the part after the | character. */
-                                          Q_("Single-character short column-title form of 'Enabled'|E"),
+                                          C_("Single-character short column-title form of 'Enabled'", "E"),
                                           "enabled", SXLTMA_COL_ENABLED,
                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                           NULL, NULL);
