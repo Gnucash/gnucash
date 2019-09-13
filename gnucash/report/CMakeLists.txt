@@ -90,6 +90,7 @@ set(GUILE_DEPENDS
   scm-app-utils
   scm-scm
   scm-gnc-module
+  guile-json
   )
 
 gnc_add_scheme_targets(scm-report-1
