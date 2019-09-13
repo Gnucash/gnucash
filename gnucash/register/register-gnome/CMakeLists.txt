@@ -1,16 +1,6 @@
 add_subdirectory(test)
 include(CheckSymbolExists)
 
-#GTK before 3.14 didn't have GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK
-check_symbol_exists(GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK gdk/gdktypes.h have_mod_mask)
-if (NOT have_mod_mask)
-if (MAC_INTEGRATION)
-  add_definitions(-DGDK_MODIFIER_INTENT_DEFAULT_MOD_MASK=GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK|GDK_MOD2_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK)
-else (MAC_INTEGRATION)
-  add_definitions(-DGDK_MODIFIER_INTENT_DEFAULT_MOD_MASK=GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK)
-endif(MAC_INTEGRATION)
-endif(NOT have_mod_mask)
-
 set (register_gnome_SOURCES
   gncmod-register-gnome.c
   combocell-gnome.c
