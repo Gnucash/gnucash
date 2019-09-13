@@ -356,10 +356,10 @@
           (let ((inv-query (qof-query-invert str-query)))
             (qof-query-merge-in-place
              sign-query inv-query QOF-QUERY-AND)
-            qof-query-destroy inv-query)))
+            (qof-query-destroy inv-query))))
     (qof-query-destroy str-query)
 
-    (map
+    (for-each
      (lambda (split)
 	   (let* ((shares (xaccSplitGetAmount split))
 		  (acct-comm (xaccAccountGetCommodity
