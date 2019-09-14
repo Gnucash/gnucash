@@ -616,7 +616,7 @@ endif()
 set(BUILD_SHARED_LIBS ON)
 
 # Most libraries are installed to lib/gnucash, so set that as the default.
-# For the handful that are installed to lib, we override the properies below
+# For the handful that are installed to lib, we override the properties below
 # (after the targets have been read in).
 
 

@@ -89,7 +89,7 @@ gchar *csv_test_field_string (CsvExportInfo *info, const gchar *string_in)
     g_strfreev (parts);
 
     /* Check for separator string and \n and " in field,
-       if so quote field if not allready quoted */
+       if so quote field if not already quoted */
     if (g_strrstr (string_parts, info->separator_str) != NULL)
         need_quote = TRUE;
     if (g_strrstr (string_parts, "\n") != NULL)

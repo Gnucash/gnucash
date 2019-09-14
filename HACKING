@@ -129,9 +129,9 @@ or unit tests with Electric Fence.
 It should probably be relatively straightforward to add this as all it
 needs is to link with libefence.so (-lefence).
 
-Fedora 27 ships an ElectricFence package containing that libary and also
-an exectuable 'ef' to run an arbitrary program with Electric Fence
-guarding enabled. I have given it a quick spin on gnucash but it immediatly
+Fedora 27 ships an ElectricFence package containing that library and also
+an executable 'ef' to run an arbitrary program with Electric Fence
+guarding enabled. I have given it a quick spin on gnucash but it immediately
 crashes. I haven't investigated whether this is because I should first have
 linked gnucash with -lefence or because a real problem in GnuCash code.
 

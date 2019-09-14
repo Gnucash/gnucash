@@ -865,7 +865,7 @@ gnc_tree_view_split_reg_set_format (GncTreeViewSplitReg *view)
 
             priv->expanded = FALSE;
 
-            LEAVE("#### Single line foramt ####");
+            LEAVE("#### Single line format ####");
         }
 
         if (model->use_double_line)
@@ -929,7 +929,7 @@ gnc_tree_view_split_reg_format_trans (GncTreeViewSplitReg *view, Transaction *tr
     {
         gtk_tree_view_collapse_row (GTK_TREE_VIEW (view), spath);
         priv->expanded = FALSE;
-        LEAVE("#### Single line transaction foramt ####");
+        LEAVE("#### Single line transaction format ####");
     }
 
     if ((model->use_double_line) && (model->style != REG2_STYLE_JOURNAL))
@@ -1498,7 +1498,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
 
         editable = (read_only == TRUE) ? FALSE : editable;
 
-        /* This will remove the calander buttons if FALSE */
+        /* This will remove the calendar buttons if FALSE */
         g_object_set (cell, "use_buttons", view->priv->show_calendar_buttons, NULL );
         g_object_set (cell, "text", datebuff, "editable", editable, NULL);
         break;
@@ -4491,7 +4491,7 @@ gtv_sr_edited_normal_cb (GtkCellRendererText *cell, const gchar *path_string,
             // Set the split parent trans
             xaccSplitSetParent (split, trans);
 
-            // If we are at trasaction level, column is value, split level is amount
+            // If we are at transaction level, column is value, split level is amount
             if (viewcol == COL_AMTVAL)
             {
                 gnc_tree_util_set_number_for_input (view, trans, split, input, COL_AMTVAL);

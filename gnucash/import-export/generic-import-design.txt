@@ -40,7 +40,7 @@ In split_to_match's parent account; for each split where date >= split_to_match.
 	if amount match
 		if transaction_online_id exists but doesn't match
 			add to matches using UNLIKELY (not IMPOSSIBLE, could be protocol change or prior error)
-		eles if memo match and date within 4 days
+		else if memo match and date within 4 days
 			add to matches using PROBABLE
 		else if date within 24 hours
 			add to matches using LIKELY

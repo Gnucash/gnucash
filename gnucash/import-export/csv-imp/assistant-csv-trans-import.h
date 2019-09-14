@@ -29,7 +29,7 @@
 #define GNC_ASSISTANT_CSV_IMPORT_TRANS_H
 
 
-/** The gnc_file_csv_trans_import() will let the user import thte
+/** The gnc_file_csv_trans_import() will let the user import the
  *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_trans_import (void);

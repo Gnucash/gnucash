@@ -328,7 +328,7 @@
                    (loop rest (append (loop elt '()) result))
                    (loop rest (cons elt result))))))))
 
-    ;; Adds a line to tbe budget report.
+    ;; Adds a line to the budget report.
     ;;
     ;; Parameters:
     ;;   html-table - html table being created

@@ -300,7 +300,7 @@ gnucash_register_update_hadjustment (GtkAdjustment *adj,
             gtk_widget_hide(reg->hscrollbar);
             reg->hscrollbar_visible = FALSE;
             // When sheet first loaded and the scrollbar is hidden, the space left
-            // is not always automaticly taken up by the sheet so queue a resize
+            // is not always automatically taken up by the sheet so queue a resize
             // when all is idle
             g_idle_add ((GSourceFunc) gnucash_register_sheet_resize, reg);
         }

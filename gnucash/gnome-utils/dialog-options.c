@@ -1209,7 +1209,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     gtk_widget_set_halign (GTK_WIDGET(frame), GTK_ALIGN_FILL);
     gtk_widget_set_hexpand (GTK_WIDGET(frame), TRUE);
 
-    /* Create the verticle button box */
+    /* Create the vertical button box */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_container_add (GTK_CONTAINER (frame), vbox);

@@ -450,7 +450,7 @@
             end-cells))
           (if (= level 1) (make-header-row table max-level))))))
 
-;; Recursivly validate children if parent is not a tax account.
+;; Recursively validate children if parent is not a tax account.
 ;; Don't check children if parent is valid.
 ;; Returns the Parent if a child or grandchild is valid.
 (define (validate accounts)

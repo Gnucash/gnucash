@@ -15,8 +15,8 @@
 
 ;; Guide to the test-transaction.scm
 
-;; This test-transation will implement regression testing for most
-;; features from transction.scm as of March 2018. It requires SRFI-64
+;; This test-transaction will implement regression testing for most
+;; features from transaction.scm as of March 2018. It requires SRFI-64
 ;; (present in guile-2.0.10 or later), SXML, and VM.  SRFI-64 and SXML
 ;; are mandatory and has tremendously eased creation of tests. The VM
 ;; modules are only required to perform coverage analysis of this test

@@ -520,7 +520,7 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
 
 /* Use a list available billing terms to fill the model of
  * the combobox passed in.  If none_ok is true, then add "none" as a
- * choice (with data set to NULL)..  If inital_choice is non-NULL,
+ * choice (with data set to NULL)..  If initial_choice is non-NULL,
  * then that will be the default option setting when the menu is
  * created.
  */

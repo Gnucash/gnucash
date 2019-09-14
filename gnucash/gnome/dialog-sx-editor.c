@@ -962,7 +962,7 @@ gnc_sxed_save_sx( GncSxEditorDialog *sxed )
 
         autocreateState = gtk_toggle_button_get_active( sxed->autocreateOpt );
         notifyState = gtk_toggle_button_get_active( sxed->notifyOpt );
-        /* "Notify" only makes sense if AutoCreate is actived;
+        /* "Notify" only makes sense if AutoCreate is activated;
          * enforce that here. */
         xaccSchedXactionSetAutoCreate( sxed->sx,
                                        autocreateState,

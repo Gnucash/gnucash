@@ -199,7 +199,7 @@ csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser,
 /*******************************************************
  * csv_export_sep_cb
  *
- * call back for type of separartor required
+ * call back for type of separator required
  *******************************************************/
 void
 csv_export_sep_cb (GtkWidget *radio, gpointer user_data)

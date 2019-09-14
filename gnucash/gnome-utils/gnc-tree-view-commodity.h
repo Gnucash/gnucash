@@ -96,7 +96,7 @@ GtkTreeView *gnc_tree_view_commodity_new (QofBook *book,
 
 /** Configure (by name) the set of visible columns in an commodity tree
  *  view.  By default, only the commodity name column is show.  The
- *  avalible list of columns can be found in the file
+ *  available list of columns can be found in the file
  *  gnc-tree-view-commodity.c
  *
  *  @param view A pointer to an commodity tree view.
@@ -136,7 +136,7 @@ typedef gboolean (*gnc_tree_view_commodity_cm_filter_func)(gnc_commodity*, gpoin
  *  thinks should possibly show.  The filter may perform any actions
  *  necessary on the commodity to decide whether it should be shown or
  *  not.  (I.E. Check type, placeholder status, etc.)  If the filter
- *  returns TRUE then the commodity wil be displayed.
+ *  returns TRUE then the commodity will be displayed.
  *
  *  @param view A pointer to an commodity tree view.
  *

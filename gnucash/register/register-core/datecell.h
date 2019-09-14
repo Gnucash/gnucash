@@ -30,7 +30,7 @@
  * keys.
  *
  * On output, this cell will display a date as mm/dd/yy
- * The actual date formate is compile-time configurable.
+ * The actual date format is compile-time configurable.
  *
  * hack alert -- make the display format run-time configurable, and
  * appropriately internationalized.

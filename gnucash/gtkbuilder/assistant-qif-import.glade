@@ -39,7 +39,7 @@
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. 
+        <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. 
 
 The import process has several steps. Your GnuCash accounts will not be changed until you click "Apply" at the end of the process. 
 
@@ -63,7 +63,7 @@ Click "Next" to start loading your QIF data, or "Cancel" to abort the process. <
           <object class="GtkLabel" id="label822">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">Please select a file to load. When you click "Next", the file will be loaded and analyzed. You may need to answer some questions about the account(s) in the file.
+            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">Please select a file to load. When you click "Next", the file will be loaded and analyzed. You may need to answer some questions about the account(s) in the file.
 
 You will have the opportunity to load as many files as you wish, so don't worry if your data is in multiple files. 
 </property>
@@ -451,7 +451,7 @@ Please enter a name for the account. If the file was exported from another accou
           <object class="GtkLabel" id="label816">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">Click "Load another file" if you have more data to import at this time. Do this if you have saved your accounts to separate QIF files.
+            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">Click "Load another file" if you have more data to import at this time. Do this if you have saved your accounts to separate QIF files.
 
 Click "Next" to finish loading files and move to the next step of the QIF import process. </property>
             <property name="wrap">True</property>
@@ -1222,7 +1222,7 @@ If you don't see your exchange listed, or none of the available choices are appr
           <object class="GtkLabel" id="label847694">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">
+            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">
 If you are importing a QIF file from a bank or other financial institution, some of the transactions may already exist in your GnuCash accounts. To avoid duplication, GnuCash has tried to identify matches and needs your help to review them.
 
 On the next page you will be shown a list of imported transactions. As you select each one, a list of possible matches will be shown below it. If you find a correct match, click on it. Your selection will be confirmed by a check mark in the "Match?" column.

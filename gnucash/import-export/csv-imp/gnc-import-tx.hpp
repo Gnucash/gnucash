@@ -79,7 +79,7 @@ enum parse_line_cols {
 };
 
 /** Tuple to hold all internal state for one parsed line. The contents of each
- * colummn is described by the parse_line_cols enum. This enum should be used
+ * column is described by the parse_line_cols enum. This enum should be used
  * with std::get to access the columns. */
 using parse_line_t = std::tuple<StrVec,
                                 std::string,

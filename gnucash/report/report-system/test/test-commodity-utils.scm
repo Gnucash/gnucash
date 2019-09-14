@@ -564,7 +564,7 @@
                    (cadr (assoc (gnc-dmy2time64-neutral 15 01 2012)
                                 report-list)))
 ;; Astute observers will notice that the totals include the
-;; capital gain split but not the acutal sell split on the day because the
+;; capital gain split but not the actual sell split on the day because the
 ;; capital gain price is first in the list so that's the one (assoc) finds. See
 ;; the comment at the gnc:get-commodity-totalavg-prices definition for more
 ;; about the prices from this function.

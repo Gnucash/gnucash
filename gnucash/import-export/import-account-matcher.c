@@ -100,7 +100,7 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
 /***********************************************************
  * build_acct_tree
  *
- * build the account tree with the custome column, online_id
+ * build the account tree with the custom column, online_id
  ************************************************************/
 static void
 build_acct_tree(AccountPickerDialog *picker)

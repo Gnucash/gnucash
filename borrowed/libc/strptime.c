@@ -460,7 +460,7 @@ int era_cnt;
         }
 
         /* Any character but `%' must be matched by the same character
-        	 in the iput string.  */
+        	 in the input string.  */
         if (*fmt != '%')
         {
             match_char (*fmt++, *rp++);

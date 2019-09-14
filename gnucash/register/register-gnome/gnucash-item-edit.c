@@ -898,7 +898,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
                       item_edit->popup_toggle.tbutton);
 
     /* The button needs to be packed into a vertical box so that the height and position
-     * can be controlled in ealier than Gtk3.20 versions */
+     * can be controlled in earlier than Gtk3.20 versions */
     gtk_box_pack_start (GTK_BOX(vb), item_edit->popup_toggle.ebox,
                         FALSE, FALSE, 0);
 

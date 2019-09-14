@@ -80,7 +80,7 @@ static void
 test_performance_function( void )
 {
     /* A slow function that measures performance of some critical
-     * routine. Note g_test_timer functions for simple perfomance
+     * routine. Note g_test_timer functions for simple performance
      * measurements. */
 }
 

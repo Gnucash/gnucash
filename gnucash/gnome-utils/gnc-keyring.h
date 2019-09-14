@@ -100,7 +100,7 @@ void gnc_keyring_set_password ( const gchar *access_method,
  *  @return       a boolean indicating whether or not a valid password
  *                has been retrieved. The function will return FALSE
  *                when the user explicitly cancels the password dialog or
- *                if it wasn't called properly. Otherwise it wil return
+ *                if it wasn't called properly. Otherwise it will return
  *                TRUE.
  *
  *  access_method, server, port, service and user will be the parameters

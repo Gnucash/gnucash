@@ -2,7 +2,7 @@
 # -*- perl -*-
 #
 # Sort filenames in POTFILES.in in a consistent way
-# This reduces the amount of clutter in our version manangement system
+# This reduces the amount of clutter in our version management system
 # The files will be sorted
 # * per directory
 # * case-insensitive

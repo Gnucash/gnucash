@@ -55,10 +55,10 @@ class Shell:
         return self.globals
 
     def is_balanced (self, line):
-        """ Checks line balance for brace, bracket, parenthese and string quote
+        """ Checks line balance for brace, bracket, parentheses and string quote
 
         This helper function checks for the balance of brace, bracket,
-        parenthese and string quote. Any unbalanced line means to wait until
+        parentheses and string quote. Any unbalanced line means to wait until
         some other lines are fed to the console.
         """
         

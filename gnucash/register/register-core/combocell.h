@@ -29,7 +29,7 @@
  *
  * On output, the currently selected menu item is displayed.
  * On input, the user can select from a list in the pull-down menu,
- * or use the keyboard to slect a menu entry by typing the first
+ * or use the keyboard to select a menu entry by typing the first
  * few menu characters.
  *
  * @author Created Jan 1998 Linas Vepstas

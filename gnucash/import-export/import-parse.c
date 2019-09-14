@@ -270,7 +270,7 @@ gnc_import_parse_numeric(const char* str, GncImportFormat fmt, gnc_numeric *val)
 static int
 fix_year(int y)
 {
-    /* two-digit numbers less than "70"  are interpretted to be post-2000. */
+    /* two-digit numbers less than "70"  are interpreted to be post-2000. */
     if (y < 70)
         return (y + 2000);
 

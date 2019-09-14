@@ -310,7 +310,7 @@ gnucash_cursor_get_type (void)
             NULL,		/* class_data */
             sizeof (GnucashCursor),
             0,		/* n_preallocs */
-            NULL        /* instance intialization */
+            NULL        /* instance initialization */
         };
 
         gnucash_cursor_type =

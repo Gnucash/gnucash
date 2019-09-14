@@ -100,7 +100,7 @@ email address.
 4) Building, Installing and running GnuCash
 
 Before starting to work on your translations, it is suggested that you 
-buiild the gnucash source code.  This way you can get your system set up 
+build the gnucash source code.  This way you can get your system set up 
 correctly with all the development packages you need.  It is a good idea
 to actually run gnucash with your new translations because it is quite 
 helpful to see the phrases in the context of the running program.
@@ -157,7 +157,7 @@ Now, open your language's glossary file and translate it completely.
 ==============================================================================
 6) Initial processing of the translation file
 
-Before you begin actualy translation work, you should update the gnucash.pot 
+Before you begin actual translation work, you should update the gnucash.pot 
 file and use this to update your .po file.  This process will insure that 
 you have the latest translatable strings.
 
@@ -174,7 +174,7 @@ If your language file does exist, update it using the msgmerge program:
 
 /usr/bin/msgmerge -o XXXX.po XXXX.po gnucash.pot
 
-The top of the .po file should be editted somewhat.  The comments at the 
+The top of the .po file should be edited somewhat.  The comments at the 
 top of the file should be changed to be current:
 
 # Messages in Deutsch f�r GnuCash
@@ -191,7 +191,7 @@ Make sure that the header of your .po file contains this line:
 
 Finally.  You are ready to do some translating!
 
-There are many transaltion editors, KBabel, for example, works well for 
+There are many translation editors, KBabel, for example, works well for 
 GnuCash.  Some Editors are noted here:
 https://translationproject.org/html/software.html
 
@@ -256,13 +256,13 @@ Notice that the comment "c-format" was not removed.  That is correct, you
 should leave that.
 
 When you see the comment "c-format", it means that the format codes in the 
-tranlatable string are referring to C formatting codes.  So, '%s' means text, 
+translatable string are referring to C formatting codes.  So, '%s' means text, 
 '%d' means an integer, etc...
 
 ==============================================================================
 8) Testing and submitting your translations
 
-You must check that your new translations are programatically correct (ie: 
+You must check that your new translations are programmatically correct (ie: 
 that there are no unclosed quotes, etc).  To do this, use the msgfmt program
 
 /usr/bin/msgfmt -c --statistics XXXX.po

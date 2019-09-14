@@ -1,6 +1,6 @@
 Things and thoughts AKA the TODO and README pages.
 
-BAD THINGS BAOUT THE IMPORTER
+BAD THINGS ABOUT THE IMPORTER
 The importer should be limited to a single invoice per file, perhaps creating a new invoice number each time.
 Too many fields, and too inflexible field format.
 
