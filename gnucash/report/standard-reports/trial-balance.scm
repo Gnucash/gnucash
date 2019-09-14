@@ -667,6 +667,12 @@
                  splits)
                 total))
 
+            (define (coll-minus . collectors)
+              (let ((res (gnc:make-commodity-collector)))
+                (res 'merge (car collectors) #f)
+                (for-each (lambda (mon) (res 'minusmerge mon #f)) (cdr collectors))
+                res))
+
             (while (< row rows)
               (let* ((env (gnc:html-acct-table-get-row-env acct-table row))
                      (acct (get-val env 'account))
@@ -676,46 +682,33 @@
                      (is? (member acct all-is-accounts))
                      (ga-or-is? (or (member acct all-ga-accounts) is?))
                      (pos-adjusting
-                      (and ga-or-is?
-                           adjusting
-                           (sum-account-splits acct adjusting-splits #t)))
+                      (and ga-or-is? (sum-account-splits acct adjusting-splits #t)))
                      (neg-adjusting
-                      (and pos-adjusting (gnc:make-commodity-collector)))
-                     (pre-closing-bal (gnc:make-commodity-collector))
-                     (pre-adjusting-bal (gnc:make-commodity-collector))
-                     (atb #f))
+                      (and ga-or-is? (coll-minus adjusting pos-adjusting)))
+                     (pre-closing-bal (coll-minus curr-bal closing))
+                     (pre-adjusting-bal (coll-minus pre-closing-bal adjusting))
+                     (atb (if is?
+                              (let* ((debit (gnc:make-commodity-collector))
+                                     (credit (gnc:make-commodity-collector)))
+                                (debit 'merge pos-adjusting #f)
+                                (credit 'merge neg-adjusting #f)
+                                (if (double-col
+                                     'credit-q pre-adjusting-bal
+                                     report-commodity exchange-fn show-fcur?)
+                                    (credit 'merge pre-adjusting-bal #f)
+                                    (debit 'merge pre-adjusting-bal #f))
+                                (list debit credit))
+                              pre-closing-bal)))
 
-                ;; +P_ADJ + -N_ADJ = xADJ. xADJ - +P_ADJ = -N_ADJ.
-                ;; That is, credit values are stored as such (negative).
-                (when neg-adjusting
-                  (neg-adjusting 'merge adjusting #f)
-                  (neg-adjusting 'minusmerge pos-adjusting #f))
+                ;; curr-bal = account-bal with closing & adj entries
+                ;; pre-closing-bal = account-bal with adj entries only
+                ;; pre-adjusting-bal = account-bal without both
 
-                (pre-closing-bal 'merge curr-bal #f)
-                ;; remove closing entries
-                (pre-closing-bal 'minusmerge closing #f)
-                (pre-adjusting-bal 'merge pre-closing-bal #f)
-                ;; remove closing entries
-                (pre-adjusting-bal 'minusmerge adjusting #f)
-                ;; we now have a pre-adjusting-bal,
-                ;; pre-closing-bal, and curr-bal
+                ;; pos- and neg-adjusting are adjusting's +ve and -ve amounts
 
-                (set! atb
-                  ;; calculate the adjusted trial balance to use
-                  ;; this depends on whether or not we are netting
-                  ;; the atb value... so we check is?.
-                  (if is?
-                      (let* ((debit (gnc:make-commodity-collector))
-                             (credit (gnc:make-commodity-collector)))
-                        (debit 'merge pos-adjusting #f)
-                        (credit 'merge neg-adjusting #f)
-                        (if (double-col
-                             'credit-q pre-adjusting-bal
-                             report-commodity exchange-fn show-fcur?)
-                            (credit 'merge pre-adjusting-bal #f)
-                            (debit 'merge pre-adjusting-bal #f))
-                        (list debit credit))
-                      pre-closing-bal))
+                ;; atb is account-bal with adjusting entries separated
+                ;; into +ve and -ve columns, or pre-closing-bal. no
+                ;; explanation was offered in bug #150008.
 
                 (gnc:html-acct-table-set-cell!
                  acct-table row pa-col pre-adjusting-bal)
