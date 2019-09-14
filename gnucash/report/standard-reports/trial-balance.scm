@@ -318,57 +318,6 @@
 
     options))
 
-(define (account-get-pos-trans-total-interval
-         account-list type start-date end-date)
-  (let* ((str-query (qof-query-create-for-splits))
-         (sign-query (qof-query-create-for-splits))
-         (total-query #f)
-         (get-val (lambda (alist key)
-                    (let ((lst (assoc-ref alist key)))
-                      (and lst (car lst)))))
-         (matchstr (get-val type 'str))
-         (case-sens (and (get-val type 'cased) #t))
-         (regexp (and (get-val type 'regexp) #t))
-         (pos? (and (get-val type 'positive) #t))
-         (total (gnc:make-commodity-collector)))
-    (qof-query-set-book str-query (gnc-get-current-book))
-    (qof-query-set-book sign-query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! str-query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch str-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddAccountMatch sign-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT str-query
-                             (and start-date #t) (or start-date 0)
-                             (and end-date #t) (or end-date 0)
-                             QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT sign-query
-                             (and start-date #t) (or start-date 0)
-                             (and end-date #t) (or end-date 0)
-                             QOF-QUERY-AND)
-    (xaccQueryAddDescriptionMatch
-     str-query matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-AND)
-    (set! total-query
-      ;; this is a tad inefficient, but its a simple way to accomplish
-      ;; description match inversion...
-      (if pos?
-          (qof-query-merge-in-place sign-query str-query QOF-QUERY-AND)
-          (let ((inv-query (qof-query-invert str-query)))
-            (qof-query-merge-in-place
-             sign-query inv-query QOF-QUERY-AND)
-            (qof-query-destroy inv-query))))
-    (qof-query-destroy str-query)
-
-    (for-each
-     (lambda (split)
-       (let* ((shares (xaccSplitGetAmount split))
-              (acct-comm (xaccAccountGetCommodity
-                          (xaccSplitGetAccount split))))
-         (unless (negative? shares)
-           (total 'add acct-comm shares))))
-     (qof-query-run total-query))
-    (qof-query-destroy total-query)
-    total))
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; trial-balance-renderer
 ;; set up the document and add the table
@@ -706,35 +655,30 @@
                                       (list 'regexp adjusting-regexp))
                    start-date end-date)))
 
-            (define (sum-account-splits account splits)
+            (define (sum-account-splits account splits pos-filter?)
               (let ((total (gnc:make-commodity-collector))
                     (comm (xaccAccountGetCommodity account)))
                 (for-each
                  (lambda (s)
-                   (when (equal? (xaccSplitGetAccount s) account)
-                     (total 'add comm (xaccSplitGetAmount s))))
+                   (let ((amt (xaccSplitGetAmount s)))
+                     (when (and (equal? (xaccSplitGetAccount s) account)
+                                (or (not pos-filter?) (positive? amt)))
+                       (total 'add comm amt))))
                  splits)
                 total))
 
             (while (< row rows)
               (let* ((env (gnc:html-acct-table-get-row-env acct-table row))
                      (acct (get-val env 'account))
-                     (group (list acct))
                      (curr-bal (get-val env 'account-bal))
-                     (closing (sum-account-splits acct closing-splits))
-                     (adjusting (sum-account-splits acct adjusting-splits))
+                     (closing (sum-account-splits acct closing-splits #f))
+                     (adjusting (sum-account-splits acct adjusting-splits #f))
                      (is? (member acct all-is-accounts))
                      (ga-or-is? (or (member acct all-ga-accounts) is?))
                      (pos-adjusting
                       (and ga-or-is?
                            adjusting
-                           (account-get-pos-trans-total-interval
-                            group
-                            (list (list 'str adjusting-str)
-                                  (list 'cased adjusting-cased)
-                                  (list 'regexp adjusting-regexp)
-                                  (list 'positive #t))
-                            start-date end-date)))
+                           (sum-account-splits acct adjusting-splits #t)))
                      (neg-adjusting
                       (and pos-adjusting (gnc:make-commodity-collector)))
                      (pre-closing-bal (gnc:make-commodity-collector))
