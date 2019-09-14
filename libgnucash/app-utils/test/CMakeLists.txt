@@ -5,11 +5,9 @@ set(APP_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/engine # for qof.h
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
-  ${GIO_INCLUDE_DIRS}
-  ${GUILE_INCLUDE_DIRS}
 )
 
-set(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
+set(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core PkgConfig::GIO PkgConfig::GUILE)
 
 set(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 

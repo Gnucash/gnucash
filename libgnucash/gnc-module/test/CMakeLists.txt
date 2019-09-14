@@ -8,8 +8,6 @@ set(GNC_MODULE_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GLIB2_INCLUDE_DIRS}
-  ${GUILE_INCLUDE_DIRS}
 )
 
 set(GNC_MODULE_TEST_LIBS

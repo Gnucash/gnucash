@@ -8,13 +8,11 @@ set(XML_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
-  ${GLIB2_INCLUDE_DIRS}
-  ${LIBXML2_INCLUDE_DIRS}
-  ${ZLIB_INCLUDE_DIRS}
 )
 
 
-set(XML_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
+set(XML_TEST_LIBS gncmod-engine gncmod-test-engine test-core PkgConfig::GLIB2
+  PkgConfig::LIBXML2 -lz)
 
 function(add_xml_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" XML_TEST_INCLUDE_DIRS XML_TEST_LIBS ${ARGN})

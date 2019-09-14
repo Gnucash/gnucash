@@ -53,7 +53,7 @@ endif (BUILDING_FROM_VCS)
 target_link_libraries (gnucash
    gncmod-ledger-core gnc-gnome gncmod-gnome-utils gncmod-app-utils
    gncmod-engine gnc-module gnc-core-utils gncmod-report
-   PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
+   PkgConfig::GLIB2 PkgConfig::GTK3 PkgConfig::GUILE ${GTK_MAC_LDFLAGS}
 )
 
 # Get glib executable for generating the gresource file

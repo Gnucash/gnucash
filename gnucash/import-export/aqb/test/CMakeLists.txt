@@ -14,8 +14,6 @@ set(test_aqb_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
-  ${GLIB2_INCLUDE_DIRS}
-  ${GTK_INCLUDE_DIRS}
   ${AQBANKING_INCLUDE_DIRS}
 )
 
@@ -23,7 +21,7 @@ set(test_aqb_LIBS
   gncmod-aqbanking gncmod-generic-import gnc-gnome gncmod-gnome-utils
   gncmod-ledger-core gncmod-app-utils
   gncmod-backend-xml-utils gncmod-engine gnc-core-utils gnc-module
-  ${GLIB2_LDFLAGS}
+  PkgConfig::GLIB2 PkgConfig::GTK3
 )
 
 set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} file-book.gnucash

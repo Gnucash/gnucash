@@ -20,12 +20,10 @@ set(ofx_UI gnc-plugin-ofx-ui.xml)
 if (WITH_OFX)
   add_library(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
 
-  target_link_libraries(gncmod-ofx gncmod-generic-import gncmod-engine gncmod-app-utils gnc-core-utils
-                    gncmod-gnome-utils ${LIBOFX_LDFLAGS})
+  target_link_libraries(gncmod-ofx gncmod-generic-import gncmod-engine
+    gncmod-app-utils gnc-core-utils gncmod-gnome-utils PkgConfig::LIBOFX)
 
   target_compile_definitions(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
-
-  target_include_directories(gncmod-ofx PRIVATE ${LIBOFX_INCLUDE_DIRS})
 
 if (APPLE)
   set_target_properties (gncmod-ofx PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")

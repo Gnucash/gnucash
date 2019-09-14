@@ -8,9 +8,8 @@ set(BACKEND_DBI_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_SOURCE_DIR}/common/test-core
   ${LIBDBI_INCLUDE_PATH}
-  ${GLIB2_INCLUDE_DIRS}
 )
-set(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine test-core ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
+set(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine test-core PkgConfig::GLIB2 Boost::regex ${LIBDBI_LIBRARY})
 
 set(test_dbi_backend_SOURCES
   test-backend-dbi.cpp

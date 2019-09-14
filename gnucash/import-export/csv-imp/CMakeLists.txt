@@ -64,8 +64,8 @@ add_library(gncmod-csv-import ${csv_import_noinst_HEADERS}
 
 target_link_libraries(
   gncmod-csv-import
-  ${Boost_LIBRARIES}
-  ${ICU4C_I18N_LDFLAGS}
+  Boost::regex Boost::locale
+  ICU::i18n
   gncmod-generic-import
   gncmod-gnome-utils
   gncmod-app-utils
@@ -77,7 +77,6 @@ target_link_libraries(
 target_compile_definitions(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
 
 target_include_directories(gncmod-csv-import PRIVATE
-     ${ICU4C_I18N_INCLUDE_DIRS}
      ${CMAKE_SOURCE_DIR}/borrowed/goffice
 )
 

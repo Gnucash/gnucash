@@ -82,11 +82,11 @@ add_library	(gnc-backend-xml-utils
   ${backend_xml_utils_noinst_HEADERS}
 )
 
-target_link_libraries(gnc-backend-xml-utils gncmod-engine ${LIBXML2_LDFLAGS} ${ZLIB_LDFLAGS})
+target_link_libraries(gnc-backend-xml-utils gncmod-engine PkgConfig::LIBXML2
+  PkgConfig::ZLIB)
 
 target_include_directories (gnc-backend-xml-utils
-  PUBLIC  ${LIBXML2_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
-  PRIVATE ${ZLIB_INCLUDE_DIRS}
+  PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_compile_definitions (gnc-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
@@ -105,7 +105,7 @@ set_source_files_properties (${libgncmod_backend_xml_SOURCES} PROPERTIES OBJECT_
 
 add_library(gncmod-backend-xml MODULE ${libgncmod_backend_xml_SOURCES})
 target_link_libraries(gncmod-backend-xml gnc-backend-xml-utils gncmod-engine
-                        gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
+  gnc-core-utils PkgConfig::LIBXML2 PkgConfig::GLIB2 PkgConfig::ZLIB)
 
 target_compile_definitions (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
 
@@ -128,6 +128,7 @@ install(TARGETS gncmod-backend-xml
 
 # Special normal (non-MODULE) library for cutecash only
 add_library(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
-target_link_libraries(gncmod-backend-xml-utils gnc-backend-xml-utils gncmod-engine
-                        gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
+target_link_libraries(gncmod-backend-xml-utils gnc-backend-xml-utils
+  gncmod-engine gnc-core-utils PkgConfig::LIBXML2 PkgConfig::GLIB2
+  PkgConfig::ZLIB)
 target_compile_definitions (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
