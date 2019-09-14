@@ -42,7 +42,7 @@
         this.style = 'crosshair';
         this.previousCursor = 'auto';
         // prop: show
-        // wether to show the cursor or not.
+        // whether to show the cursor or not.
         this.show = $.jqplot.config.enablePlugins;
         // prop: showTooltip
         // show a cursor position tooltip.  Location of the tooltip
@@ -59,7 +59,7 @@
         // One of 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'
         this.tooltipLocation = 'se';
         // prop: tooltipOffset
-        // Pixel offset of tooltip from the grid boudaries or cursor center.
+        // Pixel offset of tooltip from the grid boundaries or cursor center.
         this.tooltipOffset = 6;
         // prop: showTooltipGridPosition
         // show the grid pixel coordinates of the mouse.

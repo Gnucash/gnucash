@@ -271,7 +271,7 @@
 
                 if (s.canvas._elem.is(':hidden') || !s.show) {
                     // Not sure if there is a better way to check for showSwatches and showLabels === true.
-                    // Test for "undefined" since default values for both showSwatches and showLables is true.
+                    // Test for "undefined" since default values for both showSwatches and showLabels is true.
                     if (typeof plot.options.legend.showSwatches === 'undefined' || plot.options.legend.showSwatches === true) {
                         plot.legend._elem.find('td').eq(sidx * 2).addClass('jqplot-series-hidden');
                     }

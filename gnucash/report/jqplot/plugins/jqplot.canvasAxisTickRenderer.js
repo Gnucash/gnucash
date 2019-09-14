@@ -34,7 +34,7 @@
     * Renderer to draw axis ticks with a canvas element to support advanced
     * featrues such as rotated text.  This renderer uses a separate rendering engine
     * to draw the text on the canvas.  Two modes of rendering the text are available.
-    * If the browser has native font support for canvas fonts (currently Mozila 3.5
+    * If the browser has native font support for canvas fonts (currently Mozilla 3.5
     * and Safari 4), you can enable text rendering with the canvas fillText method.
     * You do so by setting the "enableFontSupport" option to true. 
     * 
@@ -49,10 +49,10 @@
         // tick mark on the axis.  One of 'inside', 'outside', 'cross', '' or null.
         this.mark = 'outside';
         // prop: showMark
-        // wether or not to show the mark on the axis.
+        // whether or not to show the mark on the axis.
         this.showMark = true;
         // prop: showGridline
-        // wether or not to draw the gridline on the grid at this tick.
+        // whether or not to draw the gridline on the grid at this tick.
         this.showGridline = true;
         // prop: isMinorTick
         // if this is a minor tick.
@@ -65,10 +65,10 @@
         // will be stoked above and below axis, so total length will be twice this.
         this.markSize = 4;
         // prop: show
-        // wether or not to show the tick (mark and label).
+        // whether or not to show the tick (mark and label).
         this.show = true;
         // prop: showLabel
-        // wether or not to show the label.
+        // whether or not to show the label.
         this.showLabel = true;
         // prop: labelPosition
         // 'auto', 'start', 'middle' or 'end'.
@@ -115,7 +115,7 @@
         // around a label.  The labels text renderer has a default setting of 1.4, which 
         // should be suitable for most fonts.  Leave as null to use default.  If tops of
         // letters appear clipped, increase this.  If bounding box seems too big, decrease.
-        // This is an issue only with the native font renderering capabilities of Mozilla
+        // This is an issue only with the native font rendering capabilities of Mozilla
         // 3.5 and Safari 4 since they do not provide a method to determine the font height.
         this.pt2px = null;
         
@@ -210,15 +210,15 @@
             this._elem = null;
         }
 
-        // create a canvas here, but can't draw on it untill it is appended
-        // to dom for IE compatability.
+        // create a canvas here, but can't draw on it until it is appended
+        // to dom for IE compatibility.
 
         var elem = plot.canvasManager.getCanvas();
 
         this._textRenderer.setText(this.label, ctx);
         var w = this.getWidth(ctx);
         var h = this.getHeight(ctx);
-        // canvases seem to need to have width and heigh attributes directly set.
+        // canvases seem to need to have width and height attributes directly set.
         elem.width = w;
         elem.height = h;
         elem.style.width = w;

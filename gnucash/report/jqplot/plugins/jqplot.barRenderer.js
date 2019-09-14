@@ -59,7 +59,7 @@
         this.barWidth = null;
         // prop: shadowOffset
         // offset of the shadow from the slice and offset of 
-        // each succesive stroke of the shadow from the last.
+        // each successive stroke of the shadow from the last.
         this.shadowOffset = 2;
         // prop: shadowDepth
         // number of strokes to apply to the shadow, 
@@ -97,7 +97,7 @@
         // NOT IMPLEMENTED YET.  True if this is a horizontal bar plot and 
         // x and y values are "transposed".  Tranposed, or "swapped", data is 
         // required prior to rev. 894 builds of jqPlot with horizontal bars. 
-        // Allows backward compatability of bar renderer horizontal bars with 
+        // Allows backward compatibility of bar renderer horizontal bars with 
         // old style data sets.
         this.transposedData = true;
         this.renderer.animation = {
@@ -115,7 +115,7 @@
         
         //////
         // This is probably wrong here.
-        // After going back and forth on wether renderer should be the thing
+        // After going back and forth on whether renderer should be the thing
         // or extend the thing, it seems that it is best if it is a property
         // on the thing.  This should be something that is commonized 
         // among series renderers in the future.
@@ -148,7 +148,7 @@
             this._stackAxis = 'x';
             this.fillAxis = 'x';
         }
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         // total number of values for all bar series, total number of bar series, and position of this series
         this._plotSeriesInfo = null;
@@ -233,7 +233,7 @@
             }
             // is the series rendered as a bar?
             if (series.renderer.constructor == $.jqplot.BarRenderer) {
-                // gridData may not be computed yet, use data length insted
+                // gridData may not be computed yet, use data length instead
                 nvals += series.data.length;
                 nseries += 1;
             }
