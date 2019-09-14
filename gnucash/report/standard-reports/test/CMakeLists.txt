@@ -13,6 +13,7 @@ set(scm_test_with_srfi64_SOURCES
   test-income-gst.scm
   test-budget.scm
   test-register.scm
+  test-trial-balance.scm
   test-average-balance.scm
 )
 
