@@ -192,6 +192,7 @@ if (WIN32)
   set(CMAKE_EXE_LINKER_FLAGS -mwindows)
 endif(WIN32)
 
+find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 if (NOT PKG_CONFIG_FOUND)
