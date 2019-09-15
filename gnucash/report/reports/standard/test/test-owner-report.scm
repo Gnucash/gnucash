@@ -3,6 +3,7 @@
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash reports standard owner-report))
 (use-modules (gnucash reports standard job-report))
+(use-modules (gnucash report stylesheets plain))
 (use-modules (gnucash report))
 (use-modules (tests test-report-extras))
 (use-modules (srfi srfi-1))
