@@ -238,7 +238,7 @@ else()
 endif()
 
 target_link_libraries(gncmod-engine gnc-core-utils gnc-module
-  Boost::date_time Boost::regex ICU::i18n
+  Boost::date_time Boost::regex ICU::i18n ICU::uc
   ${BCRYPT} ${REGEX_LDFLAGS} PkgConfig::GMODULE PkgConfig::GLIB2
   PkgConfig::GOBJECT PkgConfig::GUILE)
 

@@ -95,14 +95,15 @@ set(core_utils_noinst_HEADERS
 )
 
 set(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
-set(core_utils_ALL_LIBRARIES Boost::regex Boost::locale Boost::filesystem PkgConfig::GUILE PkgConfig::GLIB2 PkgConfig::GOBJECT ${GTK_MAC_LDFLAGS})
+set(core_utils_ALL_LIBRARIES Boost::regex Boost::locale Boost::filesystem
+  PkgConfig::GUILE PkgConfig::GLIB2 PkgConfig::GOBJECT
+  $<$<BOOL:${GTK_MAC_FOUND}>:PkgConfig::GTK_MAC>)
 set(core_utils_ALL_INCLUDES
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${GTK_MAC_INCLUDE_DIRS})
-
+)
 set_local_dist(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt core-utils.i core-utils.scm gncla-dir.h.in)
 set(core_utils_DIST ${core_utils_DIST_local} ${test_core_utils_DIST} PARENT_SCOPE)
 

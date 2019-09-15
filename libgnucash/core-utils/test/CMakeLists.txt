@@ -4,7 +4,6 @@ set(CORE_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${MODULEPATH}
   ${CMAKE_SOURCE_DIR}/common/test-core
-  ${GTK_MAC_INCLUDE_DIRS}
 )
 set(CORE_UTILS_TEST_LIBS gnc-core-utils test-core)
 if (MAC_INTEGRATION)

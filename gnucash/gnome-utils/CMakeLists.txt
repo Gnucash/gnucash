@@ -203,8 +203,9 @@ add_library (gncmod-gnome-utils
 )
 
 target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine
-  gnc-backend-xml-utils PkgConfig::GTK3 ${CMAKE_DL_LIBS} $<$<BOOL:${LIBSECRET_FOUND}>:PkgConfig::LIBSECRET>
-  ${GTK_MAC_LDFLAGS})
+  gnc-backend-xml-utils PkgConfig::GTK3 ${CMAKE_DL_LIBS}
+  $<$<BOOL:${LIBSECRET_FOUND}>:PkgConfig::LIBSECRET>
+  $<$<BOOL:${GTK_MAC_FOUND}>:PkgConfig::GTK_MAC>)
 
 target_compile_options(gncmod-gnome-utils PRIVATE -Wno-deprecated-declarations)
 target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
@@ -223,7 +224,6 @@ target_include_directories(gncmod-gnome-utils
     PUBLIC
       ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
-      ${GTK_MAC_INCLUDE_DIRS}
       ${CMAKE_CURRENT_BINARY_DIR}
 )
 
