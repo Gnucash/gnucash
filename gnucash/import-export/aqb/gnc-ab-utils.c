@@ -379,10 +379,11 @@ gchar *
 gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 {
 #ifdef AQBANKING6
-    const char* ab_purpose;
-#else
-    const GWEN_STRINGLIST *ab_purpose;
+#  if AQBANKING_VERSION_INT < 59929
+#    error "You are using an old beta version of aqbanking > 5.99.0 but < 5.99.29, please upgrade to the latest 5.99.29 or newer."
+#  endif
 #endif
+    const GWEN_STRINGLIST *ab_purpose;
     const char *ab_transactionText = NULL;
     gchar *gnc_description = NULL;
 
@@ -398,17 +399,20 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
             gnc_description = g_strdup(ab_transactionText);
     }
 
-    ab_purpose = AB_Transaction_GetPurpose(ab_trans);
+    ab_purpose =
 #ifdef AQBANKING6
-    gnc_description = g_strdup(ab_purpose ? ab_purpose : "");
+            /* With aqbanking-5.99.29, the identical function as before is now available under this new name. */
+            AB_Transaction_GetPurposeAsStringList
 #else
+            AB_Transaction_GetPurpose
+#endif
+            (ab_trans);
     if (ab_purpose)
         GWEN_StringList_ForEach(ab_purpose, join_ab_strings_cb,
                                 &gnc_description);
 
     if (!gnc_description)
         gnc_description = g_strdup("");
-#endif
 
     return gnc_description;
 }
