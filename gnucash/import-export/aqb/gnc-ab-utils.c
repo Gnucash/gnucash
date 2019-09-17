@@ -382,8 +382,10 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 #  if AQBANKING_VERSION_INT < 59929
 #    error "You are using an old beta version of aqbanking > 5.99.0 but < 5.99.29, please upgrade to the latest 5.99.29 or newer."
 #  endif
+#else
+    const /* only const in aqbanking < 5.99 */
 #endif
-    const GWEN_STRINGLIST *ab_purpose;
+            GWEN_STRINGLIST *ab_purpose;
     const char *ab_transactionText = NULL;
     gchar *gnc_description = NULL;
 
@@ -410,6 +412,11 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
     if (ab_purpose)
         GWEN_StringList_ForEach(ab_purpose, join_ab_strings_cb,
                                 &gnc_description);
+
+#ifdef AQBANKING6
+    /* With aqbanking>=5.99, the return value must now be free'd */
+    GWEN_StringList_free(ab_purpose);
+#endif
 
     if (!gnc_description)
         gnc_description = g_strdup("");
