@@ -159,7 +159,8 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
-#if AQB_HAS_RUNTIME_CONFIG
+#if AQBANKING_VERSION_INT >= 59925 \
+    || (AQBANKING_VERSION_INT >= 50709 && AQBANKING_VERSION_INT < 59900)
         /* These two values must be set because newest bank regulation requires
         the bank servers to require it. The string itself results from our
         registration with the German bank association at
