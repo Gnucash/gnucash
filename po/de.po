@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-09-08 21:56+0200\n"
-"PO-Revision-Date: 2019-09-08 22:12+0200\n"
+"PO-Revision-Date: 2019-09-17 22:30+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -12304,7 +12304,7 @@ msgstr "Feste Breite"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:281
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:275
 msgid "Space"
-msgstr "Leerstelle"
+msgstr "Leerzeichen"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:297
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:291
@@ -12373,12 +12373,12 @@ msgstr "Zeichenkodierung: "
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:666
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:670
 msgid "Leading Lines to Skip"
-msgstr "Führende Zeilen überspringen"
+msgstr "Zeilen am Anfang ignorieren"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:678
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:682
 msgid "Trailing Lines to Skip"
-msgstr "Nachstehende Leerzeilen auslassen"
+msgstr "Zeilen am Ende ignorieren"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:759
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:763
@@ -12576,7 +12576,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:824
 msgid "<b>Account</b>"
-msgstr "<b>_Konto</b>"
+msgstr "<b>Konto</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:951
 msgid "Select a row to change the mappings:"
@@ -19705,12 +19705,11 @@ msgstr "Anzahl"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 msgid "Disc-type"
-msgstr "Art des Nachlasses"
+msgstr "Rabatt-Art"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
-#, fuzzy
 msgid "Disc-how"
-msgstr "Rabatt"
+msgstr "Rabatt-Berechnung"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:154
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:72
@@ -19726,37 +19725,32 @@ msgid "Taxable"
 msgstr "Steuerwirksam"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:156
-#, fuzzy
 msgid "Taxincluded"
-msgstr "_Inklusive Steuern"
+msgstr "Inklusive Steuern"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
-#, fuzzy
 msgid "Tax-table"
-msgstr "Steuerwirksam"
+msgstr "Steuersatz"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
-#, fuzzy
 msgid "Date-posted"
 msgstr "Buchungsdatum"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:160
 msgid "Due-date"
-msgstr ""
+msgstr "Fälligkeitsdatum"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
-#, fuzzy
 msgid "Account-posted"
-msgstr "Kontennotizen"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
 msgid "Memo-posted"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:163
-#, fuzzy
 msgid "Accu-splits"
-msgstr "Mehrzeilige Buchungen"
+msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:196
 msgid "Import Bills or Invoices from csv"
@@ -23595,9 +23589,8 @@ msgstr ""
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
 #: gnucash/report/business-reports/receipt.scm:162
-#, fuzzy
 msgid "%l:%M %P, %e %B %Y"
-msgstr "%A, %d. %B %Y"
+msgstr ""
 
 #: gnucash/report/business-reports/receipt.scm:192
 #: gnucash/report/business-reports/taxinvoice.scm:217
@@ -27641,9 +27634,8 @@ msgstr "Differenz"
 #. amounts from the beginning of budget, instead
 #. of only using the budget-period amounts.
 #: gnucash/report/standard-reports/budget.scm:712
-#, fuzzy
 msgid "using accumulated amounts"
-msgstr "Konten lesen..."
+msgstr ""
 
 #: gnucash/report/standard-reports/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
@@ -29430,7 +29422,6 @@ msgstr ""
 "brandneuen Bericht uns zu senden, wenden Sie sich an die Mailingliste ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:352
-#, fuzzy
 msgid ""
 "For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
@@ -29438,7 +29429,6 @@ msgstr ""
 "Einzelheiten zum Abonnieren der Liste siehe http://www.gnucash.org/de ."
 
 #: gnucash/report/utility-reports/hello-world.scm:353
-#, fuzzy
 msgid ""
 "You can learn more about writing scheme at &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
