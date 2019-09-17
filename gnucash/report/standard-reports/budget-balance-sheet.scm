@@ -250,7 +250,7 @@
 ;; requested, export it to a file
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (budget-balance-sheet-renderer report-obj choice filename)
+(define (budget-balance-sheet-renderer report-obj)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option 
@@ -899,14 +899,7 @@
                doc ;;(gnc:html-markup-p)
                (gnc:html-make-exchangerates 
                 report-commodity exchange-fn accounts)))
-	  (gnc:report-percent-done 100)
-	  
-	  ;; if sending the report to a file, do so now
-	  (if filename
-	      (let* ((port (open-output-file filename)))
-                (gnc:display-report-list-item
-                 (list doc) port " budget-balance-sheet.scm ")
-                (close-output-port port)))))))
+	  (gnc:report-percent-done 100)))))
     
     (gnc:report-finished)
     
@@ -918,8 +911,4 @@
  'report-guid "ecc35ea9dbfa4e20ba389fc85d59cb69"
  'menu-path (list gnc:menuname-budget)
  'options-generator budget-balance-sheet-options-generator
- 'renderer (lambda (report-obj)
-	     (budget-balance-sheet-renderer report-obj #f #f))
- 'export-types #f
- 'export-thunk (lambda (report-obj choice filename)
-		 (budget-balance-sheet-renderer report-obj #f filename)))
+ 'renderer budget-balance-sheet-renderer)

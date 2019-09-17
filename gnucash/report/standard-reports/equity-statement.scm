@@ -206,7 +206,7 @@
 ;; requested, export it to a file
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (equity-statement-renderer report-obj choice filename)
+(define (equity-statement-renderer report-obj)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option 
@@ -673,14 +673,7 @@
 		 )
 	       )
 	  
-	  (gnc:report-percent-done 100)
-	  
-	  ;; if sending the report to a file, do so now
-	  (if filename
-	      (let* ((port (open-output-file filename)))
-                (gnc:display-report-list-item
-                 (list doc) port " equity-statement.scm ")
-                (close-output-port port)))))
+	  (gnc:report-percent-done 100)))
     
     (gnc:report-finished)
     
@@ -694,11 +687,7 @@
  'report-guid "c2a996c8970f43448654ca84f17dda24"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator equity-statement-options-generator
- 'renderer (lambda (report-obj)
-	     (equity-statement-renderer report-obj #f #f))
- 'export-types #f
- 'export-thunk (lambda (report-obj choice filename)
-		 (equity-statement-renderer report-obj #f filename)))
+ 'renderer equity-statement-renderer)
 
 ;; END
 
