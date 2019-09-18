@@ -71,7 +71,7 @@ Account * gnc_account_select_combo_get_active (GtkWidget *combo);
 
 /* Create a combo box of available billing terms based on
  * the combo box If none_ok is true, then add "none" as a
- * choice (with data set to NULL).  If inital_choice is non-NULL,
+ * choice (with data set to NULL).  If initial_choice is non-NULL,
  * then that will be the default option setting when the menu is
  * created.
  *

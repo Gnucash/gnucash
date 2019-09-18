@@ -282,7 +282,7 @@ void gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant, gpointer u
  * generalizes the code shared whenever any QIF -> GNC mapper is
  * updating it's LIST STORE.  It asks the Scheme side to guess some account
  * translations and then shows the account name and suggested
- * translation in the Accounts page view (acount picker list).
+ * translation in the Accounts page view (account picker list).
  ****************************************************************/
 static void
 update_account_picker_page (QIFImportWindow * wind, SCM make_display,
@@ -347,7 +347,7 @@ update_account_picker_page (QIFImportWindow * wind, SCM make_display,
 
     gtk_tree_selection_select_path (selection, path);
 
-    /* scroll the tree view so the selection is visable if there are rows */
+    /* scroll the tree view so the selection is visible if there are rows */
     if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(store), NULL) > 0)
         gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0.0);
     gtk_tree_path_free (path);
@@ -2449,7 +2449,7 @@ gnc_ui_qif_import_account_rematch_cb (GtkButton *button, gpointer user_data)
 
 
 /*******************************************
- * Page 8 - Catagory Doc. Page Procedures
+ * Page 8 - Category Doc. Page Procedures
  *******************************************/
 
 /********************************************************************
@@ -2485,7 +2485,7 @@ gnc_ui_qif_import_catagory_doc_prepare (GtkAssistant *assistant,
 
 
 /******************************************
- * Page 9 - Catagory Match Page Procedures
+ * Page 9 - Category Match Page Procedures
  ******************************************/
 
 /****************************************************************
@@ -3510,12 +3510,12 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     }
     else if (!g_strcmp0 (pagename, "category_doc_page"))
     {
-        /* Current page is Catagory Doc. page */
+        /* Current page is Category Doc. page */
         gnc_ui_qif_import_catagory_doc_prepare (assistant, user_data);
     }
     else if (!g_strcmp0 (pagename, "category_match_page"))
     {
-        /* Current page is Catagory Match page */
+        /* Current page is Category Match page */
         gnc_ui_qif_import_catagory_match_prepare (assistant, user_data);
     }
     else if (!g_strcmp0 (pagename, "memo_doc_page"))

@@ -379,7 +379,7 @@
         }
         
         this._offsets = offsets;
-        // pixellength will be + for x axes and - for y axes becasue pixels always measured from top left.
+        // pixellength will be + for x axes and - for y axes because pixels always measured from top left.
         var pixellength = offmax - offmin;
         var unitlength = max - min;
         

@@ -933,7 +933,7 @@ gnc_sxed_save_sx (GncSxEditorDialog2 *sxed )
 
         autocreateState = gtk_toggle_button_get_active (sxed->autocreateOpt);
         notifyState = gtk_toggle_button_get_active (sxed->notifyOpt);
-        /* "Notify" only makes sense if AutoCreate is actived;
+        /* "Notify" only makes sense if AutoCreate is activated;
          * enforce that here. */
         xaccSchedXactionSetAutoCreate (sxed->sx,
                                        autocreateState,
@@ -1773,7 +1773,7 @@ gnc_ui_sx_initialize2 (void) //FIXME need to remove the 2 when live
     gnc_hook_add_dangler (HOOK_BOOK_OPENED,
                          (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
 
-    /* Add page to preferences page for Sheduled Transactions */
+    /* Add page to preferences page for Scheduled Transactions */
     /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
     gnc_preferences_add_page ("dialog-sx.glade",
                               "create_days_adj,remind_days_adj,sx_prefs",

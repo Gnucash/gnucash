@@ -359,7 +359,7 @@
                 }
             }
             
-            // for x axes, have number ot ticks equal to number of series and ticks placed
+            // for x axes, have number of ticks equal to number of series and ticks placed
             // at sum of y values for each series.
             else if (this.tickMode == 'bar') {
                 this.min = 0;
@@ -450,7 +450,7 @@
         }
         
         this._offsets = offsets;
-        // pixellength will be + for x axes and - for y axes becasue pixels always measured from top left.
+        // pixellength will be + for x axes and - for y axes because pixels always measured from top left.
         var pixellength = offmax - offmin;
         var unitlength = max - min;
         

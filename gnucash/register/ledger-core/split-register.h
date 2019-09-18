@@ -467,7 +467,7 @@ void gnc_split_register_void_current_trans (SplitRegister *reg,
  *    non-NULL. */
 void gnc_split_register_unvoid_current_trans (SplitRegister *reg);
 
-/** Deletes the non-transaction splits associated wih the current
+/** Deletes the non-transaction splits associated with the current
  *    cursor, if both are non-NULL. */
 void gnc_split_register_empty_current_trans_except_split  (SplitRegister *reg, Split *split);
 void gnc_split_register_empty_current_trans  (SplitRegister *reg);

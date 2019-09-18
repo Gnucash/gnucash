@@ -107,7 +107,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="qif_default_transation_status">
+          <object class="GtkLabel" id="qif_default_transaction_status">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>

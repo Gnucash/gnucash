@@ -174,7 +174,7 @@ void gxi_add_custom_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 void gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, GncXmlImportData *data);
 void gxi_remove_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 
-/* Translators: Run the assistent in your language to see GTK's translation of the button labels. */
+/* Translators: Run the assistant in your language to see GTK's translation of the button labels. */
 static const gchar *encodings_doc_string = N_(
             "\nThe file you are trying to load is from an older version of "
             "GnuCash. The file format in the older versions was missing the "

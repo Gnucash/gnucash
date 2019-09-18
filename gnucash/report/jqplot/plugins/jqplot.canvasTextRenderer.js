@@ -170,7 +170,7 @@
     };
     
     // w - height in pt
-    // set heigh in px
+    // set height in px
     $.jqplot.CanvasTextRenderer.prototype.setHeight = function(w) {
         if (!w) {
             //height = this.fontSize /0.75;

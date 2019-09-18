@@ -273,7 +273,7 @@ static void csv_import_assistant_enable_account_forward (CsvImportInfo *info)
 /*******************************************************
  * csv_import_sep_cb
  *
- * call back for type of separartor required
+ * call back for type of separator required
  *******************************************************/
 void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
 {

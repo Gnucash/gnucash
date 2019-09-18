@@ -1,7 +1,7 @@
 Title: jqPlot Options
 
 **This document is out of date.  While the options described here should still be 
-relavent and valid, it has not been updated for many new options.  Sorry for
+relevant and valid, it has not been updated for many new options.  Sorry for
 this inconvenience.**
 
 This document describes the options available to jqPlot.  These are set with the 
@@ -37,7 +37,7 @@ options =
     },
 
     axesDefaults: {
-        show: false,    // wether or not to renderer the axis.  Determined automatically.
+        show: false,    // whether or not to renderer the axis.  Determined automatically.
         min: null,      // minimum numerical value of the axis.  Determined automatically.
         max: null,      // maximum numverical value of the axis.  Determined automatically.
         pad: 1.2,       // a factor multiplied by the data range on the axis to give the 
@@ -52,15 +52,15 @@ options =
             mark: 'outside',    // Where to put the tick mark on the axis
                                 // 'outside', 'inside' or 'cross',
             showMark: true,
-            showGridline: true, // wether to draw a gridline (across the whole grid) at this tick,
+            showGridline: true, // whether to draw a gridline (across the whole grid) at this tick,
             markSize: 4,        // length the tick will extend beyond the grid in pixels.  For
                                 // 'cross', length will be added above and below the grid boundary,
-            show: true,         // wether to show the tick (mark and label),
-            showLabel: true,    // wether to show the text label at the tick,
+            show: true,         // whether to show the tick (mark and label),
+            showLabel: true,    // whether to show the text label at the tick,
             formatString: '',   // format string to use with the axis tick formatter
         }
-        showTicks: true,        // wether or not to show the tick labels,
-        showTickMarks: true,    // wether or not to show the tick marks
+        showTicks: true,        // whether or not to show the tick labels,
+        showTickMarks: true,    // whether or not to show the tick marks
     },
     
     axes: {
@@ -79,7 +79,7 @@ options =
     },
     
     seriesDefaults: {
-        show: true,     // wether to render the series.
+        show: true,     // whether to render the series.
         xaxis: 'xaxis', // either 'xaxis' or 'x2axis'.
         yaxis: 'yaxis', // either 'yaxis' or 'y2axis'.
         label: '',      // label to use in the legend for this line.
@@ -102,13 +102,13 @@ options =
         markerRenderer: $.jqplot.MarkerRenderer,    // renderer to use to draw the data 
                                                     // point markers.
         markerOptions: { 
-            show: true,             // wether to show data point markers.
+            show: true,             // whether to show data point markers.
             style: 'filledCircle',  // circle, diamond, square, filledCircle.
                                     // filledDiamond or filledSquare.
             lineWidth: 2,       // width of the stroke drawing the marker.
             size: 9,            // size (diameter, edge length, etc.) of the marker.
             color: '#666666'    // color of marker, set to color of line by default.
-            shadow: true,       // wether to draw shadow on marker or not.
+            shadow: true,       // whether to draw shadow on marker or not.
             shadowAngle: 45,    // angle of the shadow.  Clockwise from x axis.
             shadowOffset: 1,    // offset from the line of the shadow,
             shadowDepth: 3,     // Number of strokes to make when drawing shadow.  Each stroke 
@@ -130,7 +130,7 @@ options =
     },
     
     grid: {
-        drawGridLines: true,        // wether to draw lines across the grid or not.
+        drawGridLines: true,        // whether to draw lines across the grid or not.
         gridLineColor: '#cccccc'    // **Color of the grid lines.
         background: '#fffdf6',      // CSS color spec for background color of grid.
         borderColor: '#999999',     // CSS color spec for border around grid.
@@ -162,7 +162,7 @@ options =
             barDirection: 'vertical', // vertical or horizontal.
             barWidth: null,     // width of the bars.  null to calculate automatically.
             shadowOffset: 2,    // offset from the bar edge to stroke the shadow.
-            shadowDepth: 5,     // nuber of strokes to make for the shadow.
+            shadowDepth: 5,     // number of strokes to make for the shadow.
             shadowAlpha: 0.8,   // transparency of the shadow.
         }
     },
@@ -176,7 +176,7 @@ options =
                                 // cursor to when over plot.
         show: true, 
         showTooltip: true,      // show a tooltip showing cursor position.
-        followMouse: false,     // wether tooltip should follow the mouse or be stationary.
+        followMouse: false,     // whether tooltip should follow the mouse or be stationary.
         tooltipLocation: 'se',  // location of the tooltip either relative to the mouse 
                                 // (followMouse=true) or relative to the plot.  One of
                                 // the compass directions, n, ne, e, se, etc.
@@ -186,7 +186,7 @@ options =
         showTooltipUnitPosition: true,      // show the coordinates in data units of the mouse 
                                             // in the tooltip.
         tooltipFormatString: '%.4P',    // sprintf style format string for tooltip values.
-        useAxesFormatters: true,        // wether to use the same formatter and formatStrings
+        useAxesFormatters: true,        // whether to use the same formatter and formatStrings
                                         // as used by the axes, or to use the formatString
                                         // specified on the cursor with sprintf.
         tooltipAxesGroups: [],  // show only specified axes groups in tooltip.  Would specify like:

@@ -538,7 +538,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
         g_free(tmp);
     }
 
-    //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx! Notes=%s\n", notes);
+    //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADDRESS here once supported by libofx! Notes=%s\n", notes);
 
     /* Ideally, gnucash should process the corrected transactions */
     if (data.fi_id_corrected_valid)

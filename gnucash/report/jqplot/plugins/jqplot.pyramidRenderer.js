@@ -117,7 +117,7 @@
         }
         
         this.renderer.options = options;
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         // Array of actual data colors used for each data point.
         this._dataColors = [];
@@ -507,7 +507,7 @@
         }
     }
 
-    // Have to add hook here, becuase it needs called before series is inited.
+    // Have to add hook here, because it needs to be called before series is init'ed.
     $.jqplot.preInitHooks.push(preInit);
     
 

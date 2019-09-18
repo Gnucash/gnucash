@@ -217,7 +217,7 @@
             // keep a reference to these tick labels to use for redrawing plot (see bug #57)
             this.ticks = labels;
             
-            // now bin the data values to the right lables.
+            // now bin the data values to the right labels.
             for (var i=0; i<this._series.length; i++) {
                 var s = this._series[i];
                 for (var j=0; j<s.data.length; j++) {
@@ -438,7 +438,7 @@
         }
         
         this._offsets = offsets;
-        // pixellength will be + for x axes and - for y axes becasue pixels always measured from top left.
+        // pixellength will be + for x axes and - for y axes because pixels always measured from top left.
         var pixellength = offmax - offmin;
         var unitlength = max - min;
         

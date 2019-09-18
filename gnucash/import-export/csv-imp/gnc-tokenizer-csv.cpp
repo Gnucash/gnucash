@@ -89,7 +89,7 @@ int GncCsvTokenizer::tokenize()
                 // is by checking whether the character in front or after are either
                 // a field separator or the beginning or end of of the string.
                 if (!(((bs_pos == 0) ||                                          // quotes are at start of line
-                       (m_sep_str.find (line[bs_pos-1]) != std::string::npos))    // quotes preceeded by field separator
+                       (m_sep_str.find (line[bs_pos-1]) != std::string::npos))    // quotes preceded by field separator
                       &&
                       ((bs_pos + 2 >= line.length()) ||                          // quotes are at end of line
                        (m_sep_str.find (line[bs_pos+2]) != std::string::npos))))   // quotes followed by field separator

@@ -139,7 +139,7 @@
         // largest points below smaller points.
         this.radii = [];
         this.maxRadius = 0;
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         // array of jQuery labels.
         this.labels = [];
@@ -162,7 +162,7 @@
         
         this.autoscaleMultiplier = this.autoscaleMultiplier * Math.pow(this.data.length, this.autoscalePointsFactor);
         
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         
         // adjust the series colors for options colors passed in with data or for alpha.
@@ -327,7 +327,7 @@
             // color = (this.varyBubbleColors) ? this.colorGenerator.get(idx) : this.color;
             color = this.colorGenerator.get(idx);
             
-            // If we're drawing a shadow, expand the canvas dimensions to accomodate.
+            // If we're drawing a shadow, expand the canvas dimensions to accommodate.
             var canvasRadius = gd[2];
             var offset, depth;
             if (this.shadow) {
@@ -422,7 +422,7 @@
     $.jqplot.BubbleCanvas.prototype = new $.jqplot.ElemContainer();
     $.jqplot.BubbleCanvas.prototype.constructor = $.jqplot.BubbleCanvas;
     
-    // initialize with the x,y pont of bubble center and the bubble radius.
+    // initialize with the x,y point of bubble center and the bubble radius.
     $.jqplot.BubbleCanvas.prototype.createElement = function(x, y, r) {     
         var klass = 'jqplot-bubble-point';
 

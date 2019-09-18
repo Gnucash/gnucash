@@ -2134,7 +2134,7 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
     GdkRGBA color;
     gint response;
 
-    // check if we actualy do have sub accounts
+    // check if we actually do have sub accounts
     g_return_if_fail (gnc_account_n_children (account) > 0);
 
     builder = gtk_builder_new();

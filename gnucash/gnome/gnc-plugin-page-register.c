@@ -1294,7 +1294,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     gnc_ppr_update_status_query (page);
     gnc_ppr_update_date_query (page);
 
-    /* Now do the refresh if this is a new page instaed of restore */
+    /* Now do the refresh if this is a new page instead of restore */
     if (create_new_page)
     {
         priv->enable_refresh = TRUE;
@@ -2774,7 +2774,7 @@ get_filter_times(GncPluginPageRegister *page)
  *  function is responsible for setting the sensitivity of the widgets
  *  controlled by each radio button choice and updating the time
  *  limitation on the register query. This is handled by a helper
- *  function as potentialy all widgets will need to be examined.
+ *  function as potentially all widgets will need to be examined.
  *
  *  @param button A pointer to the "select range" radio button.
  *
@@ -2825,7 +2825,7 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
 /** This function is called when the "number of days" spin button is
  *  changed which is then saved and updates the time limitation on
  *  the register query. This is handled by a helper function as
- *  potentialy all widgets will need to be examined.
+ *  potentially all widgets will need to be examined.
  *
  *  @param button A pointer to the "number of days" spin button.
  *
@@ -3837,7 +3837,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
-    // hide the save button if appropiate
+    // hide the save button if appropriate
     gtk_widget_set_visible (GTK_WIDGET(button),
         gnc_plugin_page_register_show_fs_save (page));
 
@@ -3922,7 +3922,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
-    // hide the save button if appropiate
+    // hide the save button if appropriate
     gtk_widget_set_visible (GTK_WIDGET(button),
         gnc_plugin_page_register_show_fs_save (page));
 
@@ -4789,7 +4789,7 @@ gnc_plugin_page_register_close_cb (gpointer user_data)
 
 /** This function is called when an account has been edited and an
  *  "extreme" change has been made to it.  (E.G. Changing from a
- *  credit card account to an expense account.  This rouine is
+ *  credit card account to an expense account.  This routine is
  *  responsible for finding all open registers containing the account
  *  and closing them.
  *

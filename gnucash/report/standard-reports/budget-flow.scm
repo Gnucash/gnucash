@@ -201,7 +201,7 @@
             (gnc:html-table-add-budget-accounts!
              html-table value budget period exchange-fn report-currency)))))
      acct-table)
-    ;; Reutrn assoc list
+    ;; Return assoc list
     accounts-totals))
 
 ;; Displays type-totals

@@ -30,7 +30,7 @@
           <object class="GtkLabel" id="start_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">
+            <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">
 This assistant will help you import Accounts from a file.
 
 The file must be in the same format as that exported as this is a fixed format import which can be seen by looking at a file created by using the "Export Account Tree to CSV" export menu option.

@@ -129,7 +129,7 @@ utf8_caseequal_len (const char *s1, const char *s2, guint len)
     s2_bytes_len = s2_offset - s2;
 
     /* Test whether the number of characters might be too small anyway
-       (dont need to examine more than bytes_len bytes to check that) */
+       (don't need to examine more than bytes_len bytes to check that) */
     s1chars = g_utf8_strlen (s1, s1_bytes_len);
     s2chars = g_utf8_strlen (s2, s2_bytes_len);
     if ( (s1chars < len) || (s2chars < len) )

@@ -672,7 +672,7 @@ CsvImpTransAssist::~CsvImpTransAssist ()
     /* This function is safe to call on a null pointer */
     gnc_gen_trans_list_delete (gnc_csv_importer_gui);
     /* The call above frees gnc_csv_importer_gui but can't nullify it.
-     * Do it here so noone accidentally can access it still */
+     * Do it here so no one accidentally can access it still */
     gnc_csv_importer_gui = nullptr;
     gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
 }

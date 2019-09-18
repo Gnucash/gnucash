@@ -87,7 +87,7 @@
         // color of the close price tick mark.  Default is series color.
         this.closeColor = null;
         // prop: wickColor
-        // color of the hi-lo line thorugh the candlestick body.
+        // color of the hi-lo line through the candlestick body.
         // Default is the series color.
         this.wickColor = null;
         // prop: fillUpBody

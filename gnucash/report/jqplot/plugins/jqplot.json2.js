@@ -4,7 +4,7 @@
     Slightly modified version of the original json2.js to put JSON
     functions under the $.jqplot namespace.
     
-    licensing and orignal comments follow:
+    licensing and original comments follow:
     
     http://www.JSON.org/json2.js
     2010-08-25

@@ -107,7 +107,7 @@
             // color of the line
             color: '#666666',
             // prop: shadow
-            // wether or not to draw a shadow on the line
+            // whether or not to draw a shadow on the line
             shadow: true,
             // prop: shadowAngle
             // Shadow angle in degrees

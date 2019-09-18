@@ -80,7 +80,7 @@ balance at a given time"))
 (define optname-averaging (N_ "Show Average"))
 (define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
-;; The option-generator. The only dependance on the type of piechart
+;; The option-generator. The only dependence on the type of piechart
 ;; is the list of account types that the account selection option
 ;; accepts.
 (define (options-generator account-types reverse-balance? do-intervals? depth-based?)

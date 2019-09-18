@@ -1769,7 +1769,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
         // transaction ever not be the current trans?
         if (xaccTransIsOpen (pending_trans))
         {
-            g_warning("Impossible? commiting pending %p", pending_trans);
+            g_warning("Impossible? committing pending %p", pending_trans);
             xaccTransCommitEdit (pending_trans);
         }
         else if (pending_trans)
@@ -1950,7 +1950,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
         account = gnc_account_lookup_by_code(gnc_get_current_root_account(), name);
 
     /* if gnc_ui_new_accounts_from_name_window is used, there is a call to
-     * refresh which subsequently calls this function again, thats the
+     * refresh which subsequently calls this function again, that's the
      * reason for static creating_account. */
 
     if (!account && !creating_account)

@@ -83,7 +83,7 @@ def gnc_numeric_to_python_Decimal(numeric):
     copy = GncNumeric(numeric.num(), numeric.denom())
     result = copy.to_decimal(None)
     if not result:
-        raise Exception("gnc numeric value %s can't be converted to deciaml" %
+        raise Exception("gnc numeric value %s can't be converted to decimal" %
                         copy.to_string() )
     digit_tuple = tuple( int(char)
                          for char in str(copy.num())

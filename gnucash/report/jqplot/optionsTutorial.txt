@@ -127,7 +127,7 @@ and
 
 > optionsObj = {title:"My Plot"}
 
-Where things need more explaination is with renderers, plugins and
+Where things need more explanation is with renderers, plugins and
 their options.  Briefly, what's  renderer, what's a plugin.
 
 A renderer is an object that is used to draw something and gets
@@ -138,7 +138,7 @@ cursor, provide event driven functionality, etc.  I consider renderers
 plugins, but plugins don't have to be renderers.
 
 So, how do you use renderers, plugins, and specify their options?
-Some common renderes are for bar charts and category axes.  If you
+Some common renderers are for bar charts and category axes.  If you
 want to render your series as a bar chart with each set of bars
 showing up in a category on the x axis, you do:
 

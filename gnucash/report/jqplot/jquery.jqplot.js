@@ -62,7 +62,7 @@
  * > dataArray = [34,12,43,55,77];
  * > chart = $.jqplot('targetElemId', [dataArray, ...], {title:'My Plot', axes:{yaxis:{min:20, max:100}}});
  * 
- * For more inforrmation, see <jqPlot Usage>.
+ * For more information, see <jqPlot Usage>.
  * 
  * About: Usage
  * 
@@ -70,7 +70,7 @@
  * 
  * About: Available Options 
  * 
- * See <jqPlot Options> for a list of options available thorugh the options object (not complete yet!)
+ * See <jqPlot Options> for a list of options available through the options object (not complete yet!)
  * 
  * About: Options Usage
  * 
@@ -289,7 +289,7 @@
             return canvas;
         };
         
-        // this method has to be used after settings the dimesions
+        // this method has to be used after settings the dimensions
         // on the element returned by getCanvas()
         this.initCanvas = function(canvas) {
             if ($.jqplot.use_excanvas) {
@@ -315,7 +315,7 @@
                 var canvas = $.jqplot.CanvasManager.canvases[idx];
                 canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                 $(canvas).unbind().removeAttr('class').removeAttr('style');
-                // Style attributes seemed to be still hanging around.  wierd.  Some ticks
+                // Style attributes seemed to be still hanging around.  weird.  Some ticks
                 // still retained a left: 0px attribute after reusing a canvas.
                 $(canvas).css({left: '', top: '', position: ''});
                 // setting size to 0 may save memory of unused canvases?
@@ -328,7 +328,7 @@
     };
 
             
-    // Convienence function that won't hang IE or FF without FireBug.
+    // Convenience function that won't hang IE or FF without FireBug.
     $.jqplot.log = function() {
         if (window.console) {
             window.console.log.apply(window.console, arguments);
@@ -511,7 +511,7 @@
     /**
      * Class: Axis
      * An individual axis object.  Cannot be instantiated directly, but created
-     * by the Plot oject.  Axis properties can be set or overriden by the 
+     * by the Plot object.  Axis properties can be set or overridden by the 
      * options passed in from the user.
      * 
      */
@@ -534,7 +534,7 @@
         this.name = name;
         this._series = [];
         // prop: show
-        // Wether to display the axis on the graph.
+        // Whether to display the axis on the graph.
         this.show = false;
         // prop: tickRenderer
         // A class of a rendering engine for creating the ticks labels displayed on the plot, 
@@ -598,15 +598,15 @@
         // renderer specific options.  See <$.jqplot.LinearAxisRenderer> for options.
         this.rendererOptions = {};
         // prop: showTicks
-        // Wether to show the ticks (both marks and labels) or not.
+        // Whether to show the ticks (both marks and labels) or not.
         // Will not override showMark and showLabel options if specified on the ticks themselves.
         this.showTicks = true;
         // prop: showTickMarks
-        // Wether to show the tick marks (line crossing grid) or not.
+        // Whether to show the tick marks (line crossing grid) or not.
         // Overridden by showTicks and showMark option of tick itself.
         this.showTickMarks = true;
         // prop: showMinorTicks
-        // Wether or not to show minor ticks.  This is renderer dependent.
+        // Whether or not to show minor ticks.  This is renderer dependent.
         this.showMinorTicks = true;
         // prop: drawMajorGridlines
         // True to draw gridlines for major axis ticks.
@@ -848,7 +848,7 @@
     /**
      * Class: Legend
      * Legend object.  Cannot be instantiated directly, but created
-     * by the Plot oject.  Legend properties can be set or overriden by the 
+     * by the Plot object.  Legend properties can be set or overridden by the 
      * options passed in from the user.
      */
     function Legend(options) {
@@ -856,7 +856,7 @@
         // Group: Properties
         
         // prop: show
-        // Wether to display the legend on the graph.
+        // Whether to display the legend on the graph.
         this.show = false;
         // prop: location
         // Placement of the legend.  one of the compass directions: nw, n, ne, e, se, s, sw, w
@@ -874,9 +874,9 @@
         // prop: placement
         // "insideGrid" places legend inside the grid area of the plot.
         // "outsideGrid" places the legend outside the grid but inside the plot container, 
-        // shrinking the grid to accomodate the legend.
+        // shrinking the grid to accommodate the legend.
         // "inside" synonym for "insideGrid", 
-        // "outside" places the legend ouside the grid area, but does not shrink the grid which
+        // "outside" places the legend outside the grid area, but does not shrink the grid which
         // can cause the legend to overflow the plot container.
         this.placement = "insideGrid";
         // prop: xoffset
@@ -913,7 +913,7 @@
         // renderer specific options passed to the renderer.
         this.rendererOptions = {};
         // prop: predraw
-        // Wether to draw the legend before the series or not.
+        // Whether to draw the legend before the series or not.
         // Used with series specific legend renderers for pie, donut, mekko charts, etc.
         this.preDraw = false;
         // prop: marginTop
@@ -1077,7 +1077,7 @@
     /**
      * Class: Title
      * Plot Title object.  Cannot be instantiated directly, but created
-     * by the Plot oject.  Title properties can be set or overriden by the 
+     * by the Plot object.  Title properties can be set or overridden by the 
      * options passed in from the user.
      * 
      * Parameters:
@@ -1091,7 +1091,7 @@
         // text of the title;
         this.text = text;
         // prop: show
-        // wether or not to show the title
+        // whether or not to show the title
         this.show = true;
         // prop: fontFamily
         // css font-family spec for the text.
@@ -1140,7 +1140,7 @@
     /**
      * Class: Series
      * An individual data series object.  Cannot be instantiated directly, but created
-     * by the Plot oject.  Series properties can be set or overriden by the 
+     * by the Plot object.  Series properties can be set or overridden by the 
      * options passed in from the user.
      */
     function Series(options) {
@@ -1159,7 +1159,7 @@
         // > }
 
         // prop: show
-        // wether or not to draw the series.
+        // whether or not to draw the series.
         this.show = true;
         // prop: xaxis
         // which x axis to use with this series, either 'xaxis' or 'x2axis'.
@@ -1221,7 +1221,7 @@
         // Alpha channel transparency of shadow.  0 = transparent.
         this.shadowAlpha = '0.1';
         // prop: breakOnNull
-        // Wether line segments should be broken at null value.
+        // Whether line segments should be broken at null value.
         // False will join point on either side of line.
         this.breakOnNull = false;
         // prop: markerRenderer
@@ -1233,16 +1233,16 @@
         // see <$.jqplot.MarkerRenderer>.
         this.markerOptions = {};
         // prop: showLine
-        // wether to actually draw the line or not.  Series will still be renderered, even if no line is drawn.
+        // whether to actually draw the line or not.  Series will still be renderered, even if no line is drawn.
         this.showLine = true;
         // prop: showMarker
-        // wether or not to show the markers at the data points.
+        // whether or not to show the markers at the data points.
         this.showMarker = true;
         // prop: index
         // 0 based index of this series in the plot series array.
         this.index;
         // prop: fill
-        // true or false, wether to fill under lines or in bars.
+        // true or false, whether to fill under lines or in bars.
         // May not be implemented in all renderers.
         this.fill = false;
         // prop: fillColor
@@ -1524,15 +1524,15 @@
      * Object representing the grid on which the plot is drawn.  The grid in this
      * context is the area bounded by the axes, the area which will contain the series.
      * Note, the series are drawn on their own canvas.
-     * The Grid object cannot be instantiated directly, but is created by the Plot oject.  
-     * Grid properties can be set or overriden by the options passed in from the user.
+     * The Grid object cannot be instantiated directly, but is created by the Plot object.  
+     * Grid properties can be set or overridden by the options passed in from the user.
      */
     function Grid() {
         $.jqplot.ElemContainer.call(this);
         // Group: Properties
         
         // prop: drawGridlines
-        // wether to draw the gridlines on the plot.
+        // whether to draw the gridlines on the plot.
         this.drawGridlines = true;
         // prop: gridLineColor
         // color of the grid lines.
@@ -1553,7 +1553,7 @@
         // True to draw border around grid.
         this.drawBorder = true;
         // prop: shadow
-        // wether to show a shadow behind the grid.
+        // whether to show a shadow behind the grid.
         this.shadow = true;
         // prop: shadowAngle
         // shadow angle in degrees
@@ -1751,7 +1751,7 @@
         // prop: data
         // user's data.  Data should *NOT* be specified in the options object,
         // but be passed in as the second argument to the $.jqplot() function.
-        // The data property is described here soley for reference. 
+        // The data property is described here solely for reference. 
         // The data should be in the form of an array of 2D or 1D arrays like
         // > [ [[x1, y1], [x2, y2],...], [y1, y2, ...] ].
         this.data = [];
@@ -1785,7 +1785,7 @@
         // prop: drawIfHidden
         // True to execute the draw method even if the plot target is hidden.
         // Generally, this should be false.  Most plot elements will not be sized/
-        // positioned correclty if renderered into a hidden container.  To render into
+        // positioned correctly if renderered into a hidden container.  To render into
         // a hidden container, call the replot method when the container is shown.
         this.drawIfHidden = false;
         this.eventCanvas = new $.jqplot.GenericCanvas();
@@ -1839,7 +1839,7 @@
                 }
             }
         };
-        // container to hold all of the merged options.  Convienence for plugins.
+        // container to hold all of the merged options.  Convenience for plugins.
         this.options = {};
         this.previousSeriesStack = [];
         // Namespece to hold plugins.  Generally non-renderer plugins add themselves to here.
@@ -1848,7 +1848,7 @@
         // Array of series object options.
         // see <Series> for series specific options.
         this.series = [];
-        // array of series indicies. Keep track of order
+        // array of series indices. Keep track of order
         // which series canvases are displayed, lowest
         // to highest, back to front.
         this.seriesStack = [];
@@ -1884,7 +1884,7 @@
         // and this will create a new title object with the specified text.
         this.title = new Title();
         // Count how many times the draw method has been called while the plot is visible.
-        // Mostly used to test if plot has never been dran (=0), has been successfully drawn
+        // Mostly used to test if plot has never been drawn (=0), has been successfully drawn
         // into a visible container once (=1) or draw more than once into a visible container.
         // Can use this in tests to see if plot has been visibly drawn at least one time.
         // After plot has been visibly drawn once, it generally doesn't need redrawn if its
@@ -1895,7 +1895,7 @@
         this._sumy = 0;
         this._sumx = 0;
         // array to hold the cumulative stacked series data.
-        // used to ajust the individual series data, which won't have access to other
+        // used to adjust the individual series data, which won't have access to other
         // series data.
         this._stackData = [];
         // array that holds the data to be plotted. This will be the series data
@@ -2514,7 +2514,7 @@
                                 // only need to sum up the stack axis column of data
                                 // and only sum if it is of same sign.
                                 // if previous series isn't same sign, keep looking
-                                // at earlier series untill we find one of same sign.
+                                // at earlier series until we find one of same sign.
                                 if (temp * prevval >= 0) {
                                     this._plotData[index][k][sidx] += prevval;
                                     this._stackData[index][k][sidx] += prevval;
@@ -2727,7 +2727,7 @@
                 for (var j=0; j<this.preParseSeriesOptionsHooks.hooks.length; j++) {
                     this.preParseSeriesOptionsHooks.hooks[j].call(temp, this.options.seriesDefaults, this.options.series[i]);
                 }
-                // Now go back and apply the options to the series.  Really should just do this during initializaiton, but don't want to
+                // Now go back and apply the options to the series.  Really should just do this during initialization, but don't want to
                 // mess up preParseSeriesOptionsHooks at this point.
                 $.extend(true, temp, sopts);
                 var dir = 'vertical';
@@ -2889,7 +2889,7 @@
             if (clear) {
                 this.canvasManager.freeAllCanvases();
                 this.eventCanvas._elem.unbind();
-                // Dont think I bind any events to the target, this shouldn't be necessary.
+                // Don't think I bind any events to the target, this shouldn't be necessary.
                 // It will remove user's events.
                 // this.target.unbind();
                 this.target.empty();
@@ -4090,7 +4090,7 @@
         // name of the axis associated with this tick
         this.axis;
         // prop: show
-        // wether or not to show the tick (mark and label).
+        // whether or not to show the tick (mark and label).
         this.show = true;
         // prop: label
         // The text or html for the label.
@@ -4159,29 +4159,29 @@
         // name of the axis associated with this tick
         this.axis;
         // prop: showMark
-        // wether or not to show the mark on the axis.
+        // whether or not to show the mark on the axis.
         this.showMark = true;
         // prop: showGridline
-        // wether or not to draw the gridline on the grid at this tick.
+        // whether or not to draw the gridline on the grid at this tick.
         this.showGridline = true;
         // prop: isMinorTick
         // if this is a minor tick.
         this.isMinorTick = false;
         // prop: size
         // Length of the tick beyond the grid in pixels.
-        // DEPRECATED: This has been superceeded by markSize
+        // DEPRECATED: This has been superseded by markSize
         this.size = 4;
         // prop:  markSize
         // Length of the tick marks in pixels.  For 'cross' style, length
         // will be stoked above and below axis, so total length will be twice this.
         this.markSize = 6;
         // prop: show
-        // wether or not to show the tick (mark and label).
+        // whether or not to show the tick (mark and label).
         // Setting this to false requires more testing.  It is recommended
         // to set showLabel and showMark to false instead.
         this.show = true;
         // prop: showLabel
-        // wether or not to show the label.
+        // whether or not to show the label.
         this.showLabel = true;
         this.label = null;
         this.value = null;
@@ -4967,12 +4967,12 @@
 
         this.renderer.options = options;
 
-        // if we are given some band data, and bands aren't explicity set to false in options, turn them on.
+        // if we are given some band data, and bands aren't explicitly set to false in options, turn them on.
         if (this.renderer.bandData.length > 1 && (!options.bands || options.bands.show == null)) {
             this.renderer.bands.show = true;
         }
 
-        // if we are given an interval, and bands aren't explicity set to false in options, turn them on.
+        // if we are given an interval, and bands aren't explicitly set to false in options, turn them on.
         else if (options.bands && options.bands.show == null && options.bands.interval != null) {
             this.renderer.bands.show = true;
         }
@@ -6822,7 +6822,7 @@
         }
         
         this._offsets = offsets;
-        // pixellength will be + for x axes and - for y axes becasue pixels always measured from top left.
+        // pixellength will be + for x axes and - for y axes because pixels always measured from top left.
         var pixellength = offmax - offmin;
         var unitlength = max - min;
         
@@ -7099,7 +7099,7 @@
         }
     };
 
-    // Given a fixed minimum and maximum and a target number ot ticks
+    // Given a fixed minimum and maximum and a target number of ticks
     // figure out the best interval and 
     // return min, max, number ticks, format string and tick interval
     function bestConstrainedInterval(min, max, nttarget) {
@@ -7129,7 +7129,7 @@
                 bestPrec = sd.digitsRight;
             }
             else if (temp === badness) {
-                // let nicer ticks trump number ot ticks
+                // let nicer ticks trump number of ticks
                 if (sd.digitsRight < bestPrec) {
                     bestNT = currentNT;
                     bestPrec = sd.digitsRight;
@@ -7151,7 +7151,7 @@
     }
 
     // This will return an interval of form 2 * 10^n, 5 * 10^n or 10 * 10^n
-    // it is based soley on the range and number of ticks.  So if user specifies
+    // it is based solely on the range and number of ticks.  So if user specifies
     // number of ticks, use this.
     function bestInterval(range, numberTicks) {
         numberTicks = numberTicks || 7;
@@ -7202,7 +7202,7 @@
     }
 
     // This will return an interval of form 2 * 10^n, 5 * 10^n or 10 * 10^n
-    // it is based soley on the range of data, number of ticks must be computed later.
+    // it is based solely on the range of data, number of ticks must be computed later.
     function bestLinearInterval(range, scalefact) {
         scalefact = scalefact || 1;
         var expv = Math.floor(Math.log(range)/Math.LN10);
@@ -7313,7 +7313,7 @@
 
             // Figure out the axis min, max and number of ticks
             // the min and max will be some multiple of the tick interval,
-            // 1*10^n, 2*10^n or 5*10^n.  This gaurantees that, if the
+            // 1*10^n, 2*10^n or 5*10^n.  This guarantees that, if the
             // axis min is negative, 0 will be a tick.
             if (!keepMin && !keepMax) {
                 r[0] = Math.floor(axis_min / ss) * ss;  // min
@@ -7359,7 +7359,7 @@
 
             // Figure out the axis min, max and number of ticks
             // the min and max will be some multiple of the tick interval,
-            // 1*10^n, 2*10^n or 5*10^n.  This gaurantees that, if the
+            // 1*10^n, 2*10^n or 5*10^n.  This guarantees that, if the
             // axis min is negative, 0 will be a tick.
             tempr[0] = Math.floor(axis_min / ss) * ss;  // min
             tempr[1] = Math.ceil(axis_max / ss) * ss;   // max
@@ -7399,7 +7399,7 @@
         // Group: Properties
         
         // prop: show
-        // wether or not to show the marker.
+        // whether or not to show the marker.
         this.show = true;
         // prop: style
         // One of diamond, circle, square, x, plus, dash, filledDiamond, filledCircle, filledSquare
@@ -7414,7 +7414,7 @@
         // color of marker.  Will be set to color of series by default on init.
         this.color = '#666666';
         // prop: shadow
-        // wether or not to draw a shadow on the line
+        // whether or not to draw a shadow on the line
         this.shadow = true;
         // prop: shadowAngle
         // Shadow angle in degrees
@@ -7625,7 +7625,7 @@
         this.depth = 3;
         this.strokeStyle = 'rgba(0,0,0,0.1)';
         // prop: isarc
-        // wether the shadow is an arc or not.
+        // whether the shadow is an arc or not.
         this.isarc = false;
         
         $.extend(true, this, options);
@@ -7727,7 +7727,7 @@
         // whether to fill the shape.
         this.fill = false;
         // prop: isarc
-        // wether the shadow is an arc or not.
+        // whether the shadow is an arc or not.
         this.isarc = false;
         // prop: fillRect
         // true to draw shape as a filled rectangle.
@@ -8129,7 +8129,7 @@
 
     /**
      * Class: $.jqplot.ThemeEngine
-     * Theme Engine provides a programatic way to change some of the  more
+     * Theme Engine provides a programmatic way to change some of the  more
      * common jqplot styling options such as fonts, colors and grid options.
      * A theme engine instance is created with each plot.  The theme engine
      * manages a collection of themes which can be modified, added to, or 
@@ -9283,7 +9283,7 @@
         return str;
     };
 
-    // Not gauranteed to work, even on canvas supporting browsers due to 
+    // Not guaranteed to work, even on canvas supporting browsers due to 
     // limitations with location.href and browser support.
     $.fn.jqplotSaveImage = function() {
         var imgData = $(this).jqplotToImageStr({});
@@ -9293,7 +9293,7 @@
 
     };
 
-    // Not gauranteed to work, even on canvas supporting browsers due to
+    // Not guaranteed to work, even on canvas supporting browsers due to
     // limitations with window.open and arbitrary data.
     $.fn.jqplotViewImage = function() {
         var imgStr = $(this).jqplotToImageElemStr({});
@@ -9527,9 +9527,9 @@
     };
     
     /**
-     * Get the Day of week 1 (Monday) thru 7 (Sunday)
+     * Get the Day of week 1 (Monday) through 7 (Sunday)
      * 
-     * @returns {Integer} Day of week 1 (Monday) thru 7 (Sunday)
+     * @returns {Integer} Day of week 1 (Monday) through 7 (Sunday)
      */
     jsDate.prototype.getDayOfWeek = function() { 
         var dow = this.proxy.getDay(); 
@@ -10069,7 +10069,7 @@
             add: function(d, number) {
                 // add any years needed (increments of 12)
                 multipliers.year.add(d, Math[number > 0 ? 'floor' : 'ceil'](number / 12));
-                // ensure that we properly wrap betwen December and January
+                // ensure that we properly wrap between December and January
                 // 11 % 12 = 11
                 // 12 % 12 = 0
                 var prevMonth = d.getMonth() + (number % 12);
@@ -10419,7 +10419,7 @@
      * === Time ===                     
      * %H      00 through 23             Two digit representation of the hour in 24-hour format
      * %I      01 through 12             Two digit representation of the hour in 12-hour format
-     * %l      1 through 12              Hour in 12-hour format, with a space preceeding single digits
+     * %l      1 through 12              Hour in 12-hour format, with a space preceding single digits
      * %M      00 through 59             Two digit representation of the minute
      * %p      AM/PM                     UPPER-CASE 'AM' or 'PM' based on the given time
      * %P      am/pm                     lower-case 'am' or 'pm' based on the given time
@@ -10638,7 +10638,7 @@
      * @returns {Integer} Number of days in the month.
     */
     //
-    // handy utility method Borrowed right from Ken Snyder's Date Instance Mehtods.
+    // handy utility method Borrowed right from Ken Snyder's Date Instance Methods.
     // 
     jsDate.daysInMonth = function(year, month) {
         if (month == 2) {
@@ -11293,7 +11293,7 @@
                     }
                 }
 
-                // if the element is hiddden and mode is hide,
+                // if the element is hidden and mode is hide,
                 // or element is visible and mode is show
                 if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
                     done();

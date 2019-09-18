@@ -48,7 +48,7 @@ class ClassFromFunctions(object):
     add_method and add_methods_with_prefix.
     """
     def __new__(cls, *args, **kargs):
-        # why reimpliment __new__? Because later on we're going to
+        # why reimplement __new__? Because later on we're going to
         # use new to avoid creating new instances when existing instances
         # already exist with the same __instance value, or equivalent __instance
         # values, where this is desirable...

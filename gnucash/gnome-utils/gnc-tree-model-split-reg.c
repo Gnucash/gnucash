@@ -166,7 +166,7 @@ struct GncTreeModelSplitRegPrivate
 */
 
 /*FIXME I thought this would work, it does not ????????? */
-/* Do we need to test for a valid iter every where, is it enougth to test on make iter ? */
+/* Do we need to test for a valid iter every where, is it enough to test on make iter ? */
 #define VALID_ITER (model, iter) \
  (GNC_IS_TREE_MODEL_SPLIT_REG (model) && \
  ((iter).user_data != NULL) && ((iter).user_data2 != NULL) && (model->stamp == (gint)(iter).stamp) && \
@@ -687,7 +687,7 @@ gnc_tree_model_split_reg_move (GncTreeModelSplitReg *model, GncTreeModelSplitReg
 
     priv = model->priv;
 
-    // if list is not long enougth, return
+    // if list is not long enough, return
     if (g_list_length (priv->full_tlist) < NUM_OF_TRANS*3)
         return;
 
@@ -958,7 +958,7 @@ gnc_tree_model_split_reg_set_data (GncTreeModelSplitReg *model, gpointer user_da
 {
     GncTreeModelSplitRegPrivate *priv;
 
-/*FIXME This is used to get the parent window, mabe move to view */
+/*FIXME This is used to get the parent window, maybe move to view */
     priv = model->priv;
 
     priv->user_data = user_data;
@@ -1374,7 +1374,7 @@ gnc_tree_model_split_reg_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
         else if (tnode && snode)
         {
             /* Can not use snode position directly as slist length does not follow
-               number of splits exactly, especailly if you delete a split */
+               number of splits exactly, especially if you delete a split */
             spos = xaccTransGetSplitIndex (tnode->data, snode->data);
         }
 

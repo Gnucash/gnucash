@@ -491,7 +491,7 @@
 	  
 	  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	  ;; 
-	  ;; beleive it or not, i think this part is right...
+	  ;; believe it or not, i think this part is right...
 	  ;; 
 	  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	  

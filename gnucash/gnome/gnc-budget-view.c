@@ -880,7 +880,7 @@ budget_accum_helper(Account* account, gpointer data)
 
 /** \brief Function to calculate the accumulated budget amount in a given account at a specified period number.
 
-This function uses the \ref budget_accum_helper to calculate the accumulated budget amount in a given budget account for a specified period number. If the acocunt does not have children, then it simply returns the balance of the account.
+This function uses the \ref budget_accum_helper to calculate the accumulated budget amount in a given budget account for a specified period number. If the account does not have children, then it simply returns the balance of the account.
 */
 static gnc_numeric
 gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint period_num)

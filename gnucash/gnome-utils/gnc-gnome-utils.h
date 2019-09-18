@@ -39,7 +39,7 @@
 #include "dialog-options.h"
 
 /** Load a gtk resource configuration file to customize gtk
- *  appearance and behviour.
+ *  appearance and behaviour.
  */
 void gnc_add_css_file (void);
 

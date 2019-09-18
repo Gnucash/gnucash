@@ -1141,7 +1141,7 @@ def payBill(book, id, posted_account_guid, transfer_account_guid, payment_date,
 
     xfer_acc = account_guid.AccountLookup(session.book)
 
-    # We pay the negitive total as the bill as this seemed to cause issues
+    # We pay the negative total as the bill as this seemed to cause issues
     # with the split not being set correctly and not being marked as paid
     bill.ApplyPayment(None, xfer_acc, bill.GetTotal().neg(), GncNumeric(0),
         datetime.datetime.strptime(payment_date, '%Y-%m-%d'), memo, num)

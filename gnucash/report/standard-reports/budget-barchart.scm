@@ -169,7 +169,7 @@
       )
     )
 
-    ;; Prepair vars for running sums, and to loop though periods
+    ;; Prepare vars for running sums, and to loop though periods
     (let* (
         (num-periods (gnc-budget-get-num-periods budget))
         (period 0)

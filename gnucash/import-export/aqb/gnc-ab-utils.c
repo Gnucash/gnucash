@@ -1252,7 +1252,7 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
 #ifdef AQBANKING6
             bankmsg = AB_Message_List_Next(bankmsg);
 #else
-            bankmsg = AB_ImExporterContext_GetNextMessage(context); // The interator is incremented within aqbanking
+            bankmsg = AB_ImExporterContext_GetNextMessage(context); // The iterator is incremented within aqbanking
 #endif
         }
     }

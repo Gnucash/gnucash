@@ -36,7 +36,7 @@
      * 
      * > [[x1, y1, "label 1", {css}], [x2, y2, "label 2", {css}], ...]
      * 
-     * The label and css object are optional.  If the label is ommitted, the
+     * The label and css object are optional.  If the label is omitted, the
      * box will collapse unless a css height and/or width is specified.
      * 
      * The css object is an object specifying css properties 

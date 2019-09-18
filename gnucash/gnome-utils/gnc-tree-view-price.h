@@ -121,7 +121,7 @@ void gnc_tree_view_price_add_kvp_column (GncTreeViewPrice *view,
  *  thinks should possibly show.  The filter may perform any actions
  *  necessary on the price to decide whether it should be shown or
  *  not.  (I.E. Check type, placeholder status, etc.)  If the filter
- *  returns TRUE then the price wil be displayed.
+ *  returns TRUE then the price will be displayed.
  *
  *  @param price_view A pointer to an price tree view.
  *

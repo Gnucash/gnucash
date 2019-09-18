@@ -736,7 +736,7 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
     disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
     disc_how = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
 
-    /* Bills and exp-vouchers dont have discounts */
+    /* Bills and exp-vouchers don't have discounts */
     if (ledger->type == GNCENTRY_BILL_ENTRY ||
             ledger->type == GNCENTRY_BILL_VIEWER ||
             ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||

@@ -72,7 +72,7 @@
      * A funnel plot will trigger events on the plot target
      * according to user interaction.  All events return the event object,
      * the series index, the point (section) index, and the point data for 
-     * the appropriate section. *Note* the point index will referr to the ordered
+     * the appropriate section. *Note* the point index will refer to the ordered
      * data, not the original unordered data.
      * 
      * 'jqplotDataMouseOver' - triggered when mousing over a section.
@@ -81,7 +81,7 @@
      * 'jqplotDataUnhighlight' - triggered when a user moves the mouse out of
      * a highlighted section.
      * 'jqplotDataClick' - triggered when the user clicks on a section.
-     * 'jqplotDataRightClick' - tiggered when the user right clicks on a section if
+     * 'jqplotDataRightClick' - triggered when the user right clicks on a section if
      * the "captureRightClick" option is set to true on the plot.
      */
     $.jqplot.FunnelRenderer = function(){
@@ -102,11 +102,11 @@
         // spacing between funnel sections in pixels.
         this.sectionMargin = 6;
         // prop: fill
-        // true or false, wether to fill the areas.
+        // true or false, whether to fill the areas.
         this.fill = true;
         // prop: shadowOffset
         // offset of the shadow from the area and offset of 
-        // each succesive stroke of the shadow from the last.
+        // each successive stroke of the shadow from the last.
         this.shadowOffset = 2;
         // prop: shadowAlpha
         // transparency of the shadow (0 = transparent, 1 = opaque)
@@ -144,7 +144,7 @@
         // Format string for data labels.  If none, '%s' is used for "label" and for arrays, '%d' for value and '%d%%' for percentage.
         this.dataLabelFormatString = null;
         // prop: dataLabelThreshold
-        // Threshhold in percentage (0 - 100) of pie area, below which no label will be displayed.
+        // Threshold in percentage (0 - 100) of pie area, below which no label will be displayed.
         // This applies to all label types, not just to percentage labels.
         this.dataLabelThreshold = 3;
         this._type = 'funnel';
@@ -158,7 +158,7 @@
         
         $.extend(true, this, options);
         
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         
         // lengths of bases, or horizontal sides of areas of trapezoid.
@@ -511,7 +511,7 @@
         // I don't think I'm going to need _dataBounds here.
         // have to go Axis scaling in a way to fit chart onto plot area
         // and provide u2p and p2u functionality for mouse cursor, etc.
-        // for convienence set _dataBounds to 0 and 100 and
+        // for convenience set _dataBounds to 0 and 100 and
         // set min/max to 0 and 100.
         this._dataBounds = {min:0, max:100};
         this.min = 0;

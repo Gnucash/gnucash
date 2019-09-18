@@ -332,7 +332,7 @@
         else {
             if (this.name.charAt(0) === 'x') {
                 dim = this._plotDimensions.width;
-                // make sure x axis is symetric about 0.
+                // make sure x axis is symmetric about 0.
                 var tempmax = Math.max(db.max, Math.abs(db.min));
                 var tempmin = Math.min(db.min, -tempmax);
                 // min = ((this.min != null) ? this.min : tempmin);
@@ -428,7 +428,7 @@
                 t.label = t.prefix + t.formatter(t.formatString, labelval);
 
                 this._ticks.push(t);
-                // for x axis, if y axis is in middle, add a symetrical 0 tick
+                // for x axis, if y axis is in middle, add a symmetrical 0 tick
                 if (this.name.charAt(0) === 'x' && plot.axes.yMidAxis.show && this.tickOptions.value === 0) {
                     this._splitAxis = true;
                     this._splitLength = plot.axes.yMidAxis.getWidth();
@@ -537,7 +537,7 @@
         }
         
         this._offsets = offsets;
-        // pixellength will be + for x axes and - for y axes becasue pixels always measured from top left.
+        // pixellength will be + for x axes and - for y axes because pixels always measured from top left.
         var pixellength = offmax - offmin;
         var unitlength = max - min;
         var sl = this._splitLength;
