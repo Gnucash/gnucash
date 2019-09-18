@@ -51,7 +51,6 @@ set (qif_import_SCHEME
   qif-to-gnc.scm
   qif-utils.scm
   qif-import.scm # yes, included in both SETs
-  simple-obj.scm
 )
 
 set(qif_import_SCHEME_2

@@ -27,7 +27,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash reports standard general-journal))
-(export gnc:make-general-journal-report)
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -38,12 +37,6 @@
 (define regrptname (N_ "Register"))
 (define regrptguid "22104e02654c4adba844ee75a3f8d173")
 
-;; report constructor
-
-(define (gnc:make-general-journal-report)
-  (issue-deprecation-warning "gnc:make-general-journal-report is unused.")
-  (let* ((regrpt (gnc:make-report regrptguid)))
-    regrpt))
 
 ;; options generator
 

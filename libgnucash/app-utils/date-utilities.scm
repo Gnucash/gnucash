@@ -206,17 +206,6 @@
 (define (decdate adate delta) (moddate - adate delta ))
 (define (incdate adate delta) (moddate + adate delta ))
 
-;; date-granularity comparison functions.
-
-(define (gnc:time64-le-date t1 t2)
-  (issue-deprecation-warning "gnc:time64-le-date is unused")
-  (<= (time64CanonicalDayTime t1)
-      (time64CanonicalDayTime t2)))
-
-(define (gnc:time64-ge-date t1 t2)
-  (issue-deprecation-warning "gnc:time64-ge-date is unused")
-  (gnc:time64-le-date t2 t1))
-
 ;; returns #t if adding 1 to mday causes a month change.
 (define (end-month? date)
   (let ((nextdate (gnc-localtime date)))
@@ -425,21 +414,8 @@
 (define (gnc:reldate-get-desc x) (vector-ref x 2))
 (define (gnc:reldate-get-fn x) (vector-ref x 3))
 
-(define (gnc:make-reldate-hash hash reldate-list)
-  (issue-deprecation-warning "gnc:make-reldate-hash is deprecated.")
-  (map (lambda (reldate) (hash-set! 
-			  hash 
-			  (gnc:reldate-get-symbol reldate)
-			  reldate))
-       reldate-list))
-
-;; the following two variables will be inlined and can be deprecated
-(define gnc:reldate-string-db (gnc:make-string-database)) ;deprecate
-(define gnc:relative-date-values '())                     ;deprecate
-
 ;; the globally available hash of reldates (hash-key = reldate
-;; symbols, hash-value = a vector, reldate data). aim to deprecate it
-;; being exported.
+;; symbols, hash-value = a vector, reldate data).
 (define gnc:relative-date-hash (make-hash-table))
 
 (define (gnc:get-absolute-from-relative-date date-symbol)
@@ -454,13 +430,6 @@ Defaulting to today."))
                (uimsg (format #f (_ msg) date-symbol)))
           (gnc:gui-warn conmsg uimsg)
           (current-time)))))
-
-(define (gnc:get-relative-date-strings date-symbol)
-  (issue-deprecation-warning "gnc:get-relative-date-strings is unused.")
-  (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
-    
-    (cons (gnc:reldate-get-string rel-date-info)
-	  (gnc:relate-get-desc rel-date-info))))
 
 (define (gnc:get-relative-date-string date-symbol)
   ;; used in options.scm

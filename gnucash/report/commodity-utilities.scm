@@ -850,29 +850,6 @@
                      GNC-RND-ROUND))
                   (foreign 'format gnc:make-gnc-monetary #f))))))
 
-;; As above, but adds only the commodities of other stocks and
-;; mutual-funds. Returns a commodity-collector, (not a <gnc:monetary>)
-;; which (still) may have several different commodities in it -- if
-;; there have been different *currencies*, not only stocks.
-(define (gnc:sum-collector-stocks foreign domestic exchange-fn)
-  (issue-deprecation-warning
-   "gnc:sum-collector-stocks is never used in code.")
-  (and foreign
-       (let ((balance (gnc:make-commodity-collector)))
-         (foreign
-          'format
-          (lambda (curr val)
-            (if (gnc-commodity-equiv domestic curr)
-                (balance 'add domestic val)
-                (if (gnc-commodity-is-currency curr)
-                    (balance 'add curr val)
-                    (balance 'add domestic
-                             (gnc:gnc-monetary-amount
-                              (exchange-fn (gnc:make-gnc-monetary curr val)
-                                           domestic))))))
-          #f)
-         balance)))
-
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities

@@ -487,13 +487,6 @@
       5
       (gnc:get-current-account-tree-depth))
 
-    (test-equal "gnc:acccounts-get-all-subaccounts"
-      (list (account-lookup "Fuel")
-            (account-lookup "GBP Savings"))
-      (gnc:acccounts-get-all-subaccounts
-       (list (account-lookup "Expenses")
-             (account-lookup "GBP Bank"))))
-
     (test-equal "gnc:accounts-and-all-descendants"
       (list (account-lookup "GBP Bank")
             (account-lookup "GBP Savings")

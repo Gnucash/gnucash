@@ -498,12 +498,6 @@
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
 
-;; this is to work around a bug in the HTML export sytmem
-;; which causes COLSPAN= attributes not to be exported (!!)
-(define gnc:colspans-are-working-right
-  ;; should be deprecated
-  #f)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-acct-table> class
 ;;  utility class for generating account tables
@@ -911,10 +905,6 @@
 (define (gnc:html-acct-table-num-rows acct-table)
   (gnc:html-table-num-rows (gnc:_html-acct-table-matrix_ acct-table)))
 
-(define (gnc:html-acct-table-num-cols acct-table)
-  (issue-deprecation-warning "gnc:html-acct-table-num-cols is unused.")
-  (- (gnc:html-table-num-columns (gnc:_html-acct-table-matrix_ acct-table)) 1))
-
 (define (gnc:html-acct-table-get-cell acct-table row col)
   ;; we'll only ever store one object in an html-table-cell
   ;; returns the first object stored in that cell
@@ -937,50 +927,6 @@
 
 (define (gnc:html-acct-table-set-row-env! acct-table row env)
   (gnc:html-acct-table-set-cell! acct-table row -1 env))
-
-(define (gnc:html-acct-table-append-row! acct-table newrow)
-  (issue-deprecation-warning "gnc:html-acct-table-append-row! is unused.")
-  (gnc:html-table-append-row!
-   (gnc:_html-acct-table-matrix_ acct-table)
-   (map
-    (lambda (x) (gnc:make-html-table-cell (list x)))
-    newrow)))
-
-(define (gnc:html-acct-table-prepend-row! acct-table newrow)
-  (issue-deprecation-warning "gnc:html-acct-table-prepend-row! is unused.")
-  (gnc:html-table-prepend-row!
-   (gnc:_html-acct-table-matrix_ acct-table)
-   (map
-    (lambda (x) (gnc:make-html-table-cell (list x)))
-    newrow)))
-
-(define (gnc:html-acct-table-append-col! acct-table newcol)
-  (issue-deprecation-warning "gnc:html-acct-table-append-col! is unused.")
-  (gnc:html-table-append-col!
-   (gnc:_html-acct-table-matrix_ acct-table)
-   (map
-    (lambda (x) (gnc:make-html-table-cell (list x)))
-    newcol)))
-
-(define (gnc:html-acct-table-prepend-col! acct-table newrow)
-  (issue-deprecation-warning "gnc:html-acct-table-prepend-col! is unused.")
-  (gnc:html-table-prepend-col!
-   (gnc:_html-acct-table-matrix_ acct-table)
-   (map
-    (lambda (x) (gnc:make-html-table-cell (list x)))
-    newcol)))
-
-(define (gnc:html-acct-table-remove-last-row! acct-table)
-  (issue-deprecation-warning "gnc:html-acct-table-remove-last-row! is unused.")
-  (gnc:html-table-remove-last-row! (gnc:_html-acct-table-matrix_ acct-table)))
-
-(define (gnc:html-acct-table-render acct-table doc)
-  ;; this will be used if we ever decide to let the utility object
-  ;; render a document by calling thunks registered in the row-envs...
-  ;; but, for now, this (optional) feature is left unimplemented...
-  (issue-deprecation-warning "gnc:html-acct-table-render is unused.")
-  #f
-  )
 
 ;; 
 ;; Here are some standard functions to help process gnc:html-acct-tables.
@@ -1207,48 +1153,6 @@
     )
   )
 
-
-(define (gnc:second-html-build-acct-table
-         start-date end-date
-         tree-depth show-subaccts? accounts
-         start-percent delta-percent
-         show-col-headers?
-         show-total? get-total-fn
-         total-name group-types? show-parent-balance? show-parent-total?
-         show-other-curr? report-commodity exchange-fn show-zero-entries?)
-  ;; THIS NEW FUNCTION DOES NOT IMPLEMENT SOME FEATURES OF THE OLD ONE
-  ;; of these options: start-percent/delta-percent, the balance column
-  ;; header, show-total?/get-total-fn/total-name, and group-types? are
-  ;; presently unimplemented.  many of these functions are better left
-  ;; to the renderer, anyway.  but if you *really* need them, you may
-  ;; still use gnc:first-html-build-acct-table.
-  (issue-deprecation-warning
-   "gnc:second-html-build-acct-table is unused. use gnc:html-build-acct-table.")
-  (let* ((env (list
-	       (list 'start-date start-date)
-	       (list 'end-date end-date)
-	       (list 'display-tree-depth tree-depth)
-	       ;;(list 'progress-start-percent start-percent)
-	       ;;(list 'progress-length-percent delta-percent)
-	       (list 'column-header show-col-headers?)
-	       (list 'parent-account-subtotal-mode show-parent-total?)
-	       (list 'report-commodity report-commodity)
-	       (list 'exchange-fn exchange-fn)
-	       (list 'zero-balance-display-mode
-		     (if show-zero-entries?
-			 'show-balance
-			 'omit-balance))
-	       ))
-	 (html-table (gnc:make-html-table))
-	 (acct-table (gnc:make-html-acct-table/env/accts env accounts))
-	 (params (list
-		  (list 'parent-account-balance-mode
-			(if show-parent-balance? 'immediate-bal))
-		  ))
-	 )
-    (gnc:html-table-add-account-balances html-table acct-table params)
-    html-table
-    ))
 
 ;; END
 

@@ -203,8 +203,6 @@
 (export incdate)
 (export decdate)
 (export incdate)
-(export gnc:time64-le-date)
-(export gnc:time64-ge-date)
 (export gnc:make-date-interval-list)
 (export gnc:make-date-list)
 (export SecDelta)
@@ -226,12 +224,7 @@
 (export gnc:reldate-get-string)
 (export gnc:reldate-get-desc)
 (export gnc:reldate-get-fn)
-(export gnc:make-reldate-hash)          ;deprecate
-(export gnc:reldate-string-db)          ;deprecate
-(export gnc:relative-date-values)       ;deprecate
-(export gnc:relative-date-hash)         ;deprecate
 (export gnc:get-absolute-from-relative-date)
-(export gnc:get-relative-date-strings)  ;deprecate
 (export gnc:get-relative-date-string)
 (export gnc:get-relative-date-desc)
 (export gnc:get-start-cal-year)

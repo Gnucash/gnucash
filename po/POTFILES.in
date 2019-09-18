@@ -366,7 +366,6 @@ gnucash/import-export/qif-imp/qif-objects.scm
 gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
-gnucash/import-export/qif-imp/simple-obj.scm
 gnucash/import-export/qif-imp/string.scm
 gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c

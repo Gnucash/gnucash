@@ -94,12 +94,6 @@
        (gnc:owner-get-owner-id (gncJobGetOwner (gncOwnerGetJob owner))))
       (else ""))))
 
-(define (gnc:entry-type-percent-p type-val)
-  (issue-deprecation-warning
-   "gnc:entry-type-percent-p is deprecated.")
-  (let ((type type-val))
-    (equal? type GNC-AMT-TYPE-PERCENT)))
-
 ;; this function aims to find a split's owner. various splits are
 ;; supported: (1) any splits in the invoice posted transaction, in
 ;; APAR or income/expense accounts (2) any splits from invoice's
@@ -130,5 +124,4 @@
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
-(export gnc:entry-type-percent-p)
 (export gnc:owner-from-split)

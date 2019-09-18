@@ -135,13 +135,6 @@
   (let ((root (gnc-get-current-root-account)))
     (gnc-account-get-tree-depth root)))
 
-
-;; Get all children of this list of accounts.
-(define (gnc:acccounts-get-all-subaccounts accountlist)
-  (issue-deprecation-warning "gnc:acccounts-get-all-subaccounts is unused.")
-  (append-map gnc-account-get-descendants-sorted
-              accountlist))
-
 ;; Return accountslist *and* their descendant accounts
 (define (gnc:accounts-and-all-descendants accountslist)
   (sort-and-delete-duplicates

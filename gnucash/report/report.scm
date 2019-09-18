@@ -61,7 +61,6 @@
 (export gnc:case-exchange-fn)
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
-(export gnc:sum-collector-stocks)
 
 ;; options-utilities.scm
 
@@ -103,12 +102,6 @@
 (export gnc:owner-report-text)
 (export gnc:assign-colors)
 (export gnc:html-table-append-ruler!)
-(export gnc:html-table-append-ruler/markup!)
-(export gnc:html-acct-table-cell)       ;deprecated
-(export gnc:html-acct-table-row-helper! )
-(export gnc:html-acct-table-comm-row-helper!)
-(export gnc:html-build-acct-table)
-(export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
 (export gnc:html-render-options-changed)
 (export gnc:html-make-generic-warning)
@@ -508,7 +501,6 @@
 
 ;; html-acct-table.scm
 
-(export gnc:colspans-are-working-right)
 (export <html-acct-table>)
 (export gnc:html-acct-table?)
 (export gnc:_make-html-acct-table_)
@@ -521,25 +513,16 @@
 (export gnc:_html-acct-table-set-env!_)
 (export gnc:html-acct-table-add-accounts!)
 (export gnc:html-acct-table-num-rows)
-(export gnc:html-acct-table-num-cols)
 (export gnc:html-acct-table-get-row)
 (export gnc:html-acct-table-get-cell)
 (export gnc:html-acct-table-set-cell!)
 (export gnc:html-acct-table-get-row-env)
 (export gnc:html-acct-table-set-row-env!)
-(export gnc:html-acct-table-append-row!)
-(export gnc:html-acct-table-prepend-row!)
-(export gnc:html-acct-table-append-col!)
-(export gnc:html-acct-table-prepend-col!)
-(export gnc:html-acct-table-remove-last-row!)
-(export gnc:html-acct-table-render)
 (export gnc:account-code-less-p)
 (export gnc:account-name-less-p)
 (export gnc:account-path-less-p)
-;;(export gnc:identity)
 (export gnc:html-table-add-labeled-amount-line!)
 (export gnc:html-table-add-account-balances)
-(export gnc:second-html-build-acct-table)
 (export gnc-commodity-table)
 (export gnc:uniform-commodity?)
 
@@ -633,7 +616,6 @@
 (export gnc:html-table-set-cell!)
 (export gnc:html-table-set-cell/tag!)
 (export gnc:html-table-append-column!)
-(export gnc:html-table-prepend-column!)
 (export gnc:html-table-render)
 
 ;; html-anytag.scm
@@ -699,9 +681,7 @@
 (export gnc:accounts-get-commodities)
 (export gnc:get-current-account-tree-depth)
 (export gnc:accounts-and-all-descendants)
-(export gnc:acccounts-get-all-subaccounts) ;deprecated
 (export gnc:make-value-collector)
-(export gnc:make-number-collector)      ;deprecated
 (export gnc:make-commodity-collector)
 (export gnc:commodity-collector-get-negated)
 (export gnc:account-get-balances-at-dates)

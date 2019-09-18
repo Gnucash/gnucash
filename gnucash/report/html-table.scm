@@ -553,46 +553,6 @@
            remaining-elements)
           #f))))
 
-(define (gnc:html-table-prepend-column! table newcol)
-  ;; returns a pair, the car of which is the prepending of newcol
-  ;; and existing-data, and the cdr is the remaining elements of newcol
-  (define (prepend-to-element newcol existing-data length-to-append)
-    (if (= length-to-append 0)
-        (cons '() newcol)
-        (let* 
-            ((current-new (car newcol))
-             (current-existing (car existing-data))
-             (rest-new (cdr newcol))
-             (rest-existing (cdr existing-data))
-             (rest-result (prepend-to-element rest-new rest-existing 
-                                              (- length-to-append 1))))
-          (cons 
-           (cons (cons current-new current-existing) (car rest-result))
-           (cdr rest-result)))))
-  (issue-deprecation-warning "gnc:html-table-prepend-column! is unused.")
-  (let* ((existing-data (reverse (gnc:html-table-data table)))
-	 (existing-length (length existing-data))
-	 (newcol-length (length newcol)))
-    (if (<= newcol-length existing-length)
-        (gnc:html-table-set-data!
-         table
-         (reverse (car (prepend-to-element 
-                        newcol
-                        existing-data
-                        newcol-length))))
-        (let* ((temp-result (prepend-to-element
-                             newcol
-                             existing-data
-                             existing-length))
-               (joined-table-data (car temp-result))
-               (remaining-elements (cdr temp-result)))
-          ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse joined-table-data))
-          (for-each 
-           (lambda (element)
-             (gnc:html-table-append-row! table (list element)))
-           remaining-elements)
-          #f))))
 
 ;; 
 ;; It would be nice to have table row/col/cell accessor functions in here.
