@@ -731,7 +731,7 @@ gnc_tree_model_owner_iter_n_children (GtkTreeModel *tree_model,
 
     /* Owner lists don't have children, so always return 0, except for
      * the special case this request comes for the special "root" iter
-     * (NULL). For that exception we return the size of the ower list.
+     * (NULL). For that exception we return the size of the owner list.
      */
     if (iter == NULL)
         return (gint) g_list_length (priv->owner_list);

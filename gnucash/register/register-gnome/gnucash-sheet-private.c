@@ -245,7 +245,7 @@ static guint8 inc_intensity_byte(guint8 input, int numerator, int denominator)
 }
 
 /** For a given RGB value, increase the color intensity for each of the three
-colors indentically by 10 percent (i.e. make them "less black" and "more gray")
+colors identically by 10 percent (i.e. make them "less black" and "more gray")
 and return this changed RGB value. */
 static guint32 inc_intensity_10percent(guint32 argb)
 {
@@ -269,7 +269,7 @@ static guint8 dec_intensity_byte(guint8 input, int numerator, int denominator)
 }
 
 /** For a given RGB value, decrease the color intensity for each of the three
-colors indentically by 10 percent and return this changed RGB value. */
+colors identically by 10 percent and return this changed RGB value. */
 static guint32 dec_intensity_10percent(guint32 argb)
 {
     // Multiply each single byte by 9/10 i.e. by 0.9 which decreases the

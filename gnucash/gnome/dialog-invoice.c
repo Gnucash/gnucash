@@ -2591,7 +2591,7 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
     iw->type_choice = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_invoice"));
 
-    /* The default GUI lables are for invoices, so change them if it isn't. */
+    /* The default GUI labels are for invoices, so change them if it isn't. */
     owner_type = gncOwnerGetType (&iw->owner);
     switch(owner_type)
     {

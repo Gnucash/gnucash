@@ -65,7 +65,7 @@
 (define optname-plot-height (N_ "Plot Height"))
 (define optname-sort-method (N_ "Sort Method"))
 
-;; The option-generator. The only dependance on the type of piechart
+;; The option-generator. The only dependence on the type of piechart
 ;; is the list of account types that the account selection option
 ;; accepts.
 (define (options-generator account-types)

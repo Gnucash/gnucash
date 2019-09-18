@@ -80,7 +80,7 @@ libgncmod_python_gnc_module_init(int refcount)
 #endif
     Py_Initialize();
     PySys_SetArgv(0, &argv);
-    // I dont quite understand why these are loaded here
+    // I don't quite understand why these are loaded here
     // - these are python modules so should be able to just import them
     // in init.py
 #if PY_VERSION_HEX >= 0x03000000

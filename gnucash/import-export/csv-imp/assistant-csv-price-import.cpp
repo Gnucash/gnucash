@@ -66,7 +66,7 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 /* Note on memory management
  *
- * The same notes as for assistant-csv-trans-import.cpp appy to
+ * The same notes as for assistant-csv-trans-import.cpp apply to
  * this assistant as well. Please read the note at the top of that
  * file to understand important details about the use of several
  * memory management models in one file.

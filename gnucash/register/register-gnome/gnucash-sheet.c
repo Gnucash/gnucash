@@ -1709,7 +1709,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     new_virt_loc = cur_virt_loc;
 
     /* Don't process any keystrokes where a modifier key (Alt,
-     * Meta, etc.) is being held down.  This should't include
+     * Meta, etc.) is being held down.  This shouldn't include
          * MOD2, aka NUM LOCK. */
     if (event->state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         pass_on = TRUE;

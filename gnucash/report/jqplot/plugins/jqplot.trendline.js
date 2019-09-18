@@ -38,11 +38,11 @@
         // Group: Properties
         
         // prop: show
-        // Wether or not to show the trend line.
+        // Whether or not to show the trend line.
         this.show = $.jqplot.config.enablePlugins;
         // prop: color
         // CSS color spec for the trend line.
-        // By default this wil be the same color as the primary line.
+        // By default this will be the same color as the primary line.
         this.color = '#666666';
         // prop: renderer
         // Renderer to use to draw the trend line.
@@ -60,7 +60,7 @@
         // Either 'exponential', 'exp', or 'linear'.
         this.type = 'linear';
         // prop: shadow
-        // true or false, wether or not to show the shadow.
+        // true or false, whether or not to show the shadow.
         this.shadow = true;
         // prop: markerRenderer
         // Renderer to use to draw markers on the line.
@@ -89,7 +89,7 @@
     $.jqplot.postDrawSeriesHooks.push(drawTrendline);
     $.jqplot.addLegendRowHooks.push(addTrendlineLegend);
     
-    // called witin scope of the legend object
+    // called within scope of the legend object
     // current series passed in
     // must return null or an object {label:label, color:color}
     function addTrendlineLegend(series) {

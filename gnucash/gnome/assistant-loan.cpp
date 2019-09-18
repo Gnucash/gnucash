@@ -597,7 +597,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 GList *allowableAccounts;
             } gas_data[] =
             {
-                /* These ints are the GtkGrid boundries */
+                /* These ints are the GtkGrid boundaries */
                 { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 0, 1, 1, liabilityAcct },
                 { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 2, 1, 1, paymentFromAccts },
                 { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 3, 1, 1, paymentToAccts  },
@@ -656,7 +656,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 int left, top, width, height;
             } gde_data[] =
             {
-                /* These ints are the GtkGrid boundries */
+                /* These ints are the GtkGrid boundaries */
                 { &ldd->prmStartDateGDE, ldd->prmTable, 1, 4, 1, 1 },
                 { &ldd->revStartDate,    ldd->revTable, 1, 0, 1, 1 },
                 { &ldd->revEndDate,      ldd->revTable, 1, 1, 1, 1 },

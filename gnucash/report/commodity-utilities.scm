@@ -831,7 +831,7 @@
 ;; CAS: Previously, the exchange-fn was not optional -- we would crash
 ;; if it was invalid.  I've changed this so that when exchange-fn is
 ;; #f, #f is returned.  Since #f is already returned when foreign is
-;; #f, and since any previous dependance on some behavior for the case
+;; #f, and since any previous dependence on some behavior for the case
 ;; where exchange-fn was #f would've crashed, I think this change is
 ;; safe.
 ;;

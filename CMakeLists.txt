@@ -45,7 +45,6 @@ include (GncAddTest)
 include (MakeDistFiles)
 include (GNUInstallDirs)
 include (TestBigEndian)
-include (CheckSymbolExists)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
@@ -324,13 +323,6 @@ find_guile_dirs()
 if (WITH_AQBANKING)
   pkg_check_modules (GWENHYWFAR REQUIRED  IMPORTED_TARGET gwenhywfar>=4.9.99)
   pkg_check_modules (AQBANKING REQUIRED IMPORTED_TARGET aqbanking>=5.3.4)
-  set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
-    "${GWENHYWFAR_INCLUDE_DIRS}")
-  set(CMAKE_REQUIRED_LIBRARIES "-laqbanking")
-  check_symbol_exists("AB_Banking_RuntimeConfig_SetCharValue"
-    "aqbanking/banking.h" AQB_HAS_RUNTIME_CONFIG)
-  set(CMAKE_REQUIRED_INCLUDES)
-  set(CMAKE_REQUIRED_LIBRARIES)
   if(WITH_GNUCASH)
     pkg_check_modules (GWEN_GTK3 gwengui-gtk3)
     if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")
@@ -557,7 +549,7 @@ endif()
 set(BUILD_SHARED_LIBS ON)
 
 # Most libraries are installed to lib/gnucash, so set that as the default.
-# For the handful that are installed to lib, we override the properies below
+# For the handful that are installed to lib, we override the properties below
 # (after the targets have been read in).
 
 

@@ -75,7 +75,7 @@
         this.padding = null;
         // prop: shadowOffset
         // offset of the shadow from the gauge ring and offset of 
-        // each succesive stroke of the shadow from the last.
+        // each successive stroke of the shadow from the last.
         this.shadowOffset = 2;
         // prop: shadowAlpha
         // transparency of the shadow (0 = transparent, 1 = opaque)
@@ -223,7 +223,7 @@
             this.numberTicks = this.ticks.length;
             this.tickInterval = this.ticks[1][0] - this.ticks[0][0];
             this.tickFactor = Math.floor(parseFloat((Math.log(this.tickInterval)/Math.log(10)).toFixed(11)));
-            // use the first interal to calculate minor ticks;
+            // use the first internal to calculate minor ticks;
             this.numberMinorTicks = getnmt(this.tickPositions, this.tickInterval, this.tickFactor);
             if (!this.numberMinorTicks) {
                 this.numberMinorTicks = getnmt(this.tickPositions, this.tickInterval, this.tickFactor-1);
@@ -494,7 +494,7 @@
                     tmax += ti;
                     nt += 1;
                 }
-                // now tmax should always be mroe than dataMax
+                // now tmax should always be more than dataMax
                 if (tmax - max < 0.23*ti) { 
                     tmax += ti;
                     nt += 1;
@@ -841,7 +841,7 @@
         // I don't think I'm going to need _dataBounds here.
         // have to go Axis scaling in a way to fit chart onto plot area
         // and provide u2p and p2u functionality for mouse cursor, etc.
-        // for convienence set _dataBounds to 0 and 100 and
+        // for convenience set _dataBounds to 0 and 100 and
         // set min/max to 0 and 100.
         this._dataBounds = {min:0, max:100};
         this.min = 0;

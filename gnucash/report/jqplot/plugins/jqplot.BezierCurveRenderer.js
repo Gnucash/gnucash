@@ -32,7 +32,7 @@
     // Class: $.jqplot.BezierCurveRenderer.js
     // Renderer which draws lines as stacked bezier curves.
     // Data for the line will not be specified as an array of
-    // [x, y] data point values, but as a an array of [start piont, bezier curve]
+    // [x, y] data point values, but as a an array of [start point, bezier curve]
     // So, the line is specified as: [[xstart, ystart], [cp1x, cp1y, cp2x, cp2y, xend, yend]].
     $.jqplot.BezierCurveRenderer = function(){
         $.jqplot.LineRenderer.call(this);

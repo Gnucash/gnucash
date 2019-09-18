@@ -65,7 +65,7 @@
      * >    }
      * > }]
      * 
-     * A custom labels array in the options takes precendence over any labels
+     * A custom labels array in the options takes precedence over any labels
      * in the series data.  If you have a custom labels array in the options,
      * but still want to use values from the series array as labels, set the
      * "labelsFromSeries" option to true.

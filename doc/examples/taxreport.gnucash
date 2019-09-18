@@ -502,7 +502,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Company 50% match of S&amp;S, to 7% of salery.</act:description>
+  <act:description>Company 50% match of S&amp;S, to 7% of salary.</act:description>
   <act:slots>
     <slot>
       <slot:key>tax-US</slot:key>
@@ -1993,7 +1993,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>HomeMaintainance</act:name>
+  <act:name>HomeMaintenance</act:name>
   <act:id type="guid">2f46699ef618ac2e88c9a5201d4bff2d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2004,7 +2004,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>IRA Contribution, Non Deductable</act:name>
+  <act:name>IRA Contribution, Non Deductible</act:name>
   <act:id type="guid">911b7f106931fb26917aa2aa6662e70e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2081,7 +2081,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Morgage</act:name>
+  <act:name>Mortgage</act:name>
   <act:id type="guid">8d172831a7cee627802966332dc04411</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2139,7 +2139,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Restarant</act:name>
+  <act:name>Restaurant</act:name>
   <act:id type="guid">ab78940fcbc8e25834c57c92a0dadd0e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2162,7 +2162,7 @@
   <act:parent type="guid">ce8a0ff9cfc2c79c99e6c65d5e258a55</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Tax Deductable</act:name>
+  <act:name>Tax Deductible</act:name>
   <act:id type="guid">d7bfc2020fd8cb91e46a6cda6bdb6efd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2392,7 +2392,7 @@
   <act:parent type="guid">d7bfc2020fd8cb91e46a6cda6bdb6efd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Non Deductable</act:name>
+  <act:name>Non Deductible</act:name>
   <act:id type="guid">82119f5617cc4cbaf7f882a0883fd7df</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -2512,7 +2512,7 @@
   <act:parent type="guid">babd20035ed6cd6415d878a31675210c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>IRA mangement fee</act:name>
+  <act:name>IRA management fee</act:name>
   <act:id type="guid">380635c3d759d34529e0422ced08628c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -4008,7 +4008,7 @@ Witholding</act:name>
   <trn:date-entered>
     <ts:date>2000-10-21 16:41:40 +0200</ts:date>
   </trn:date-entered>
-  <trn:description>IRA Contrib, non Deductable</trn:description>
+  <trn:description>IRA Contrib, non Deductible</trn:description>
   <trn:splits>
     <trn:split>
       <split:id type="guid">d6d30e081d5da4f33d5248e8a6aae3c2</split:id>

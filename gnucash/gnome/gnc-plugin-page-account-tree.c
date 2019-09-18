@@ -1408,7 +1408,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER, filter);
         g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_ACCOUNT, account);
 
-        // Add the account selectors and enable sections as appropiate
+        // Add the account selectors and enable sections as appropriate
         // setup transactions selector
         trans_mas = gppat_setup_account_selector (builder, dialog, "trans_mas_hbox", DELETE_DIALOG_TRANS_MAS);
 

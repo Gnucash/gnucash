@@ -27,7 +27,7 @@
 # gnucash-env python simple_business_create.py \
 #                       sqlite3:///home/blah/blah.gnucash
 #
-# Specificically, this sets up a simple tree, creates a customer, job,
+# Specifically, this sets up a simple tree, creates a customer, job,
 # employee and vendor, creates an unposted invoice for each,
 # and posts the customer invoice with a few entries and a tax table.
 #

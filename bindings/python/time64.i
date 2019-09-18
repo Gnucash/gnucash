@@ -58,7 +58,7 @@
 // receiving this pointer is going to make a copy of the data. After the
 // function call, the memory for the time64 used to perform this conversion
 // is going to be lost, so make damn sure that the recipient of this pointer
-// is NOT going dereference it sometime after this function call takes place.
+// is NOT going to dereference it sometime after this function call takes place.
 //
 // As far as I know, the xaccTransSetDate[Posted|Entered|Due]TS functions
 // from Transaction.h are the only functions with time64 * that we re
@@ -71,7 +71,7 @@
 //
 // Mark Jenkins <mark@parit.ca>
 //
-// as far as I can see all occurences of pointers to time64 are now covered
+// as far as I can see all occurrences of pointers to time64 are now covered
 // by the named typemaps below (2019-04)
 //
 // Christoph Holtermann <mail@c-holtermann.net>

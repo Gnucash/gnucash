@@ -93,7 +93,7 @@
 
 %include <qofbackend.h>
 
-// this function is defined in qofsession.h, but isnt found in the libraries,
+// this function is defined in qofsession.h, but isn't found in the libraries,
 // ignored because SWIG attempts to link against (to create language bindings)
 %ignore qof_session_not_saved;
 %include <qofsession.h>

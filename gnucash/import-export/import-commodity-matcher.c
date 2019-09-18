@@ -127,7 +127,7 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
        it does not get overwritten - which is not consistent with the
        message - so Im adding it to do this.  Looks like this is all
        that was needed to fix the cash value used as stock units problem
-       for pre-defined commodities which didnt have the cusip defined! */
+       for pre-defined commodities which didn't have the cusip defined! */
     if (retval != NULL &&
             gnc_commodity_get_cusip(retval) != NULL &&
             cusip != NULL &&

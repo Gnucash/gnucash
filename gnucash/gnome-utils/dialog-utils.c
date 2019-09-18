@@ -149,7 +149,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
             if (wpos[1] - monitor_size.y + wsize[1] > monitor_size.y + monitor_size.height)
                 wpos[1] = monitor_size.y + monitor_size.height - wsize[1];
 
-            /* make sure the cordinates have not left the monitor */
+            /* make sure the coordinates have not left the monitor */
             if (wpos[0] < monitor_size.x)
                 wpos[0] = monitor_size.x;
 
@@ -292,7 +292,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     if (wpos[1] - monitor_size.y + height > monitor_size.y + monitor_size.height)
         wpos[1] = monitor_size.y + monitor_size.height - height;
 
-    /* make sure the cordinates have not left the monitor */
+    /* make sure the coordinates have not left the monitor */
     if (wpos[0] < monitor_size.x)
         wpos[0] = monitor_size.x;
 

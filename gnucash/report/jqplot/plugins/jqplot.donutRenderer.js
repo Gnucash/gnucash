@@ -65,7 +65,7 @@
      * 'jqplotDataUnhighlight' - triggered when a user moves the mouse out of
      * a highlighted slice.
      * 'jqplotDataClick' - triggered when the user clicks on a slice.
-     * 'jqplotDataRightClick' - tiggered when the user right clicks on a slice if
+     * 'jqplotDataRightClick' - triggered when the user right clicks on a slice if
      * the "captureRightClick" option is set to true on the plot.
      */
     $.jqplot.DonutRenderer = function(){
@@ -101,11 +101,11 @@
         // null will compute ringMargin based on sliceMargin.
         this.ringMargin = null;
         // prop: fill
-        // true or false, wether to fil the slices.
+        // true or false, whether to fill the slices.
         this.fill = true;
         // prop: shadowOffset
         // offset of the shadow from the slice and offset of 
-        // each succesive stroke of the shadow from the last.
+        // each successive stroke of the shadow from the last.
         this.shadowOffset = 2;
         // prop: shadowAlpha
         // transparency of the shadow (0 = transparent, 1 = opaque)
@@ -136,7 +136,7 @@
         // Format string for data labels.  If none, '%s' is used for "label" and for arrays, '%d' for value and '%d%%' for percentage.
         this.dataLabelFormatString = null;
         // prop: dataLabelThreshold
-        // Threshhold in percentage (0 - 100) of pie area, below which no label will be displayed.
+        // Threshold in percentage (0 - 100) of pie area, below which no label will be displayed.
         // This applies to all label types, not just to percentage labels.
         this.dataLabelThreshold = 3;
         // prop: dataLabelPositionFactor
@@ -151,7 +151,7 @@
         // According to orientation of canvas coordinate system:
         // 0 = on the positive x axis
         // -90 = on the positive y axis.
-        // 90 = on the negaive y axis.
+        // 90 = on the negative y axis.
         // 180 or - 180 = on the negative x axis.
         this.startAngle = 0;
         this.tickRenderer = $.jqplot.DonutTickRenderer;
@@ -179,7 +179,7 @@
         this._numberSeries = 1;
         // array of [start,end] angles arrays, one for each slice.  In radians.
         this._sliceAngles = [];
-        // index of the currenty highlighted point, if any
+        // index of the currently highlighted point, if any
         this._highlightedPoint = null;
         
         // set highlight colors if none provided
@@ -471,7 +471,7 @@
         // I don't think I'm going to need _dataBounds here.
         // have to go Axis scaling in a way to fit chart onto plot area
         // and provide u2p and p2u functionality for mouse cursor, etc.
-        // for convienence set _dataBounds to 0 and 100 and
+        // for convenience set _dataBounds to 0 and 100 and
         // set min/max to 0 and 100.
         this._dataBounds = {min:0, max:100};
         this.min = 0;

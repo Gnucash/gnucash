@@ -459,7 +459,7 @@
             }
 
             // If tickInterval is specified, we'll try to honor it.
-            // Not gauranteed to get this interval, but we'll get as close as
+            // Not guaranteed to get this interval, but we'll get as close as
             // we can.
             // tickInterval will be used before numberTicks, that is if
             // both are specified, numberTicks will be ignored.
@@ -468,7 +468,7 @@
             }
 
             // if numberTicks specified, try to honor it.
-            // Not gauranteed, but will try to get close.
+            // Not guaranteed, but will try to get close.
             else if (this.numberTicks) {
                 nttarget = this.numberTicks;
                 titarget = (max - min) / (nttarget - 1);

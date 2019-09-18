@@ -10,9 +10,9 @@ my @gnc_module_dirs=();
 my @guile_load_dirs=();
 my @library_dirs=();
 GetOptions ("exports!"       => \$define_exports,  # flag
-            "gnc-module-dir=s" => \@gnc_module_dirs, # arry of strings
-            "guile-load-dir=s" => \@guile_load_dirs, # arry of strings
-            "library-dir=s"    => \@library_dirs,    # arry of strings
+            "gnc-module-dir=s" => \@gnc_module_dirs, # array of strings
+            "guile-load-dir=s" => \@guile_load_dirs, # array of strings
+            "library-dir=s"    => \@library_dirs,    # array of strings
             "verbose" => \$verbose) # flag
 or die(
 "Usage: gnc-test-env.pl [ --exports | --noexports ]\n" .

@@ -42,7 +42,7 @@ from datetime import date
 
 # This script takes a gnucash url
 # and creates a new file/db at a second url that has the same
-# account tree and an equivilent opening balance on all the simple balance
+# account tree and an equivalent opening balance on all the simple balance
 # sheet accounts (not for income and expense accounts)
 #
 # This is done a per currency basis, one opening balance account for each
@@ -122,7 +122,7 @@ ACCOUNT_TYPES_TO_OPEN = ACCOUNT_TYPES_TO_OPEN.difference( set((
             )) )
 
 # this script isn't capable of properly setting up the transactions for
-# ACCT_TYPE_TRADING, you'll have to create opening balances for them mannually;
+# ACCT_TYPE_TRADING, you'll have to create opening balances for them manually;
 # so, they are not included in the set of accounts used for opening balances
 ACCOUNT_TYPES_TO_OPEN.remove(ACCT_TYPE_TRADING)
 

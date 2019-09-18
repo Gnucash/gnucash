@@ -387,7 +387,7 @@ We have three different kinds of style control information available:
    
            ;; if you want to set default markup and data styles for
            ;; documents using this stylesheet, do it here.  This 
-           ;; style element dosn't do anything, it's just there 
+           ;; style element doesn't do anything, it's just there 
            ;; as an example:
            (gnc:html-document-set-style! ssdoc "p" 'tag "p")
 

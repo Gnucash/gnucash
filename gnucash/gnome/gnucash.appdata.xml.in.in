@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright ${GNC_VCS_REV_YEAR}  Multiple Authors, see included AUTHORS file. -->
-<component>
+<component type="desktop-application">
   <id>org.gnucash.GnuCash</id>
   <name>GnuCash</name>
   <summary>Manage your finances, accounts, and investments</summary>

@@ -126,7 +126,7 @@
 ;;         the order in which they will be displayed.  the function
 ;;         must take two Account arguments and represent a total
 ;;         ordering on Account-space.  #t means to use the default
-;;         sorting function.  #f means to preform no sorting.  the
+;;         sorting function.  #f means to perform no sorting.  the
 ;;         default sorting function is gnc:account-code-less-p.
 ;; 
 ;;     start-date: time64
@@ -134,17 +134,17 @@
 ;;         the starting date of the reporting period over which to
 ;;         report balances for this account.  if start-date is #f,
 ;;         will be no limit on how early a counted transaction may
-;;         ocurr.
+;;         occur.
 ;; 
 ;;     end-date: time64
 ;; 
 ;;         the ending date of the reporting period over which to
 ;;         report balances for this account.  if end-date is #f, there
 ;;         will be no limit on how late a counted transaction may
-;;         ocurr. note: i do not know if GnuCash, right now, supports
+;;         occur. note: i do not know if GnuCash, right now, supports
 ;;         transactions in the future. so be prepared for the
 ;;         possibility that this may match transactions which haven't
-;;         ocurred, yet. [CAS: I don't think end-date of #f works.
+;;         occurred, yet. [CAS: I don't think end-date of #f works.
 ;;         It bombs.]
 ;; 
 ;;     report-commodity: commodity
@@ -338,7 +338,7 @@
 ;;         account-depth when depth-limit-behavior is 'flatten.
 ;;         unlike in gnc:html-build-acct-table, the first level of
 ;;         accounts is level 0. this means that display-depth is also
-;;         the number of empty cells which should preced the account
+;;         the number of empty cells which should precede the account
 ;;         name in the gnc:html-table being generated.
 ;; 
 ;;     indented-depth: integer
@@ -1008,7 +1008,7 @@
   ;; balance and its respective report balance.  note that this
   ;; shows report-commodity amounts twice: first as a commodity
   ;; and second in the report commodity.  though this may arguably
-  ;; be a bit redundant, i beleive that it makes the report more
+  ;; be a bit redundant, i believe that it makes the report more
   ;; readable.
   (let* ((table (gnc:make-html-table))
          (spacer (gnc:make-html-table-cell))

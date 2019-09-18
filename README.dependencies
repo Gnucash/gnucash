@@ -68,7 +68,7 @@ Libraries/Deps
   libxml2		2.5.10
   gettext               0.19.6
   libxslt, including xsltproc
-  ICU                                           International Compnents for
+  ICU                                           International Components for
                                                 Unicode
   boost			1.50.0                  locale and regex libs must be
                                                 built with ICU support.

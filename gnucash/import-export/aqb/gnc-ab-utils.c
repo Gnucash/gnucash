@@ -159,7 +159,8 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
-#if AQB_HAS_RUNTIME_CONFIG
+#if AQBANKING_VERSION_INT >= 59925 \
+    || (AQBANKING_VERSION_INT >= 50709 && AQBANKING_VERSION_INT < 59900)
         /* These two values must be set because newest bank regulation requires
         the bank servers to require it. The string itself results from our
         registration with the German bank association at
@@ -379,10 +380,13 @@ gchar *
 gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 {
 #ifdef AQBANKING6
-    const char* ab_purpose;
+#  if AQBANKING_VERSION_INT < 59929
+#    error "You are using an old beta version of aqbanking > 5.99.0 but < 5.99.29, please upgrade to the latest 5.99.29 or newer."
+#  endif
 #else
-    const GWEN_STRINGLIST *ab_purpose;
+    const /* only const in aqbanking < 5.99 */
 #endif
+            GWEN_STRINGLIST *ab_purpose;
     const char *ab_transactionText = NULL;
     gchar *gnc_description = NULL;
 
@@ -398,17 +402,25 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
             gnc_description = g_strdup(ab_transactionText);
     }
 
-    ab_purpose = AB_Transaction_GetPurpose(ab_trans);
+    ab_purpose =
 #ifdef AQBANKING6
-    gnc_description = g_strdup(ab_purpose ? ab_purpose : "");
+            /* With aqbanking-5.99.29, the identical function as before is now available under this new name. */
+            AB_Transaction_GetPurposeAsStringList
 #else
+            AB_Transaction_GetPurpose
+#endif
+            (ab_trans);
     if (ab_purpose)
         GWEN_StringList_ForEach(ab_purpose, join_ab_strings_cb,
                                 &gnc_description);
 
+#ifdef AQBANKING6
+    /* With aqbanking>=5.99, the return value must now be free'd */
+    GWEN_StringList_free(ab_purpose);
+#endif
+
     if (!gnc_description)
         gnc_description = g_strdup("");
-#endif
 
     return gnc_description;
 }
@@ -1240,7 +1252,7 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
 #ifdef AQBANKING6
             bankmsg = AB_Message_List_Next(bankmsg);
 #else
-            bankmsg = AB_ImExporterContext_GetNextMessage(context); // The interator is incremented within aqbanking
+            bankmsg = AB_ImExporterContext_GetNextMessage(context); // The iterator is incremented within aqbanking
 #endif
         }
     }

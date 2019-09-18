@@ -175,7 +175,7 @@ gncs_validate (GNCSearchCoreType *fe)
     if (fi->how == SEARCH_STRING_MATCHES_REGEX ||
             fi->how == SEARCH_STRING_NOT_MATCHES_REGEX)
     {
-        regex_t regexpat;        /* regex patern */
+        regex_t regexpat;        /* regex pattern */
         gint regerr;
         int flags = REG_EXTENDED;
 
