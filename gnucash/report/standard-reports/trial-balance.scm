@@ -316,6 +316,19 @@
 
     options))
 
+;; (coll-plus collectors ...) equiv to (+ collectors ...)
+(define (coll-plus . collectors)
+  (let ((res (gnc:make-commodity-collector)))
+    (for-each (lambda (coll) (res 'merge coll #f)) collectors)
+    res))
+
+;; (coll-minus collectors ...) equiv to (- collector0 collector1 ...)
+(define (coll-minus . collectors)
+  (let ((res (gnc:make-commodity-collector)))
+    (res 'merge (car collectors) #f)
+    (for-each (lambda (coll) (res 'minusmerge coll #f)) (cdr collectors))
+    res))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; trial-balance-renderer
 ;; set up the document and add the table
@@ -664,12 +677,6 @@
                        (total 'add comm amt))))
                  splits)
                 total))
-
-            (define (coll-minus . collectors)
-              (let ((res (gnc:make-commodity-collector)))
-                (res 'merge (car collectors) #f)
-                (for-each (lambda (mon) (res 'minusmerge mon #f)) (cdr collectors))
-                res))
 
             (while (< row rows)
               (let* ((env (gnc:html-acct-table-get-row-env acct-table row))
