@@ -152,9 +152,7 @@
          (amt (and sum (gnc:gnc-monetary-amount sum)))
          (neg? (and amt (negative? amt)))
          (bal (if neg?
-                  (let ((bal (gnc:make-commodity-collector)))
-                    (bal 'minusmerge signed-balance #f)
-                    bal)
+                  (gnc:commodity-collector-get-negated signed-balance)
                   signed-balance))
          (bal-sum (gnc:sum-collector-commodity
                    bal
