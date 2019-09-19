@@ -692,18 +692,14 @@
                       (and ga-or-is? (coll-minus adjusting pos-adjusting)))
                      (pre-closing-bal (coll-minus curr-bal closing))
                      (pre-adjusting-bal (coll-minus pre-closing-bal adjusting))
-                     (atb (if is?
-                              (let* ((debit (gnc:make-commodity-collector))
-                                     (credit (gnc:make-commodity-collector)))
-                                (debit 'merge pos-adjusting #f)
-                                (credit 'merge neg-adjusting #f)
-                                (if (double-col
-                                     'credit-q pre-adjusting-bal
-                                     report-commodity exchange-fn show-fcur?)
-                                    (credit 'merge pre-adjusting-bal #f)
-                                    (debit 'merge pre-adjusting-bal #f))
-                                (list debit credit))
-                              pre-closing-bal)))
+                     (atb (cond ((not is?) pre-closing-bal)
+                                ((double-col 'credit-q pre-adjusting-bal
+                                             report-commodity exchange-fn show-fcur?)
+                                 (list (coll-plus pos-adjusting)
+                                       (coll-plus neg-adjusting pre-adjusting-bal)))
+                                (else
+                                 (list (coll-plus pos-adjusting pre-adjusting-bal)
+                                       (coll-plus neg-adjusting))))))
 
                 ;; curr-bal = account-bal with closing & adj entries
                 ;; pre-closing-bal = account-bal with adj entries only
@@ -870,8 +866,8 @@
                  (tot-abs-amt-cell bs-credits))
                 '())))
           (if (eq? report-variant 'work-sheet)
-              (let* ((net-is (gnc:make-commodity-collector))
-                     (net-bs (gnc:make-commodity-collector))
+              (let* ((net-is (coll-minus is-debits is-credits))
+                     (net-bs (coll-minus bs-debits bs-credits))
                      (tot-is (gnc:make-commodity-collector))
                      (tot-bs (gnc:make-commodity-collector))
                      (is-entry #f)
@@ -880,10 +876,6 @@
                      (bs-credit? #f)
                      (tbl-width (+ account-cols (* 2 bs-col) 2))
                      (this-row (gnc:html-table-num-rows build-table)))
-                (net-is 'merge is-debits #f)
-                (net-is 'minusmerge is-credits #f)
-                (net-bs 'merge bs-debits #f)
-                (net-bs 'minusmerge bs-credits #f)
                 (set! is-entry
                   (double-col 'entry net-is report-commodity exchange-fn show-fcur?))
                 (set! is-credit?
