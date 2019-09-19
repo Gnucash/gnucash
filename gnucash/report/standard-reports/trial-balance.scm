@@ -523,36 +523,21 @@
           ;;
           ;; This procedure returns a commodity collector.
           (define (collect-unrealized-gains)
+            (define (acct->bal acct)
+              (gnc:account-get-comm-balance-at-date acct end-date #f))
             (if (eq? price-source 'average-cost)
                 ;; No need to calculate if doing valuation at cost.
                 (gnc:make-commodity-collector)
-                (let ((book-balance (gnc:make-commodity-collector))
-                      (unrealized-gain-collector (gnc:make-commodity-collector))
-                      (cost-fn (gnc:case-exchange-fn
-                                'average-cost report-commodity end-date)))
-
-                  ;; Calculate book balance.
-                  ;; assets - liabilities - equity; normally 0
-                  (for-each
-                   (lambda (acct)
-                     (book-balance
-                      'merge
-                      (gnc:account-get-comm-balance-at-date acct end-date #f)
-                      #f))
-                   all-accounts)
-
-                  (let ((value (gnc:gnc-monetary-amount
-                                (gnc:sum-collector-commodity
-                                 book-balance report-commodity exchange-fn)))
-                        (cost (gnc:gnc-monetary-amount
-                               (gnc:sum-collector-commodity
-                                book-balance report-commodity cost-fn))))
-
-                    ;; Get the unrealized gain or loss (value minus cost).
-                    (unrealized-gain-collector
-                     'add report-commodity (- value cost))
-                    unrealized-gain-collector))))
-
+                (let* ((cost-fn (gnc:case-exchange-fn
+                                 'average-cost report-commodity end-date))
+                       (acct-balances (map acct->bal all-accounts))
+                       (book-balance (apply coll-plus acct-balances))
+                       (value (gnc:sum-collector-commodity
+                               book-balance report-commodity exchange-fn))
+                       (cost (gnc:sum-collector-commodity
+                              book-balance report-commodity cost-fn)))
+                  ;; Get the unrealized gain or loss (value minus cost).
+                  (gnc:monetaries-add value (gnc:monetary-neg cost)))))
 
           ;; set default cell alignment
           (gnc:html-table-set-style!
