@@ -47,6 +47,7 @@
 (export gnc:debug)
 (export addto!)
 (export sort-and-delete-duplicates)
+(export gnc:list-flatten)
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
@@ -191,6 +192,17 @@
   (define (kons a b) (if (and (pair? b) (= a (car b))) b (cons a b)))
   (reverse (fold kons '() (sort lst <))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; flattens an arbitrary deep nested list into simple list.  this is
+;; probably the most efficient algorithm available. '(1 2 (3 4)) -->
+;; '(1 2 3 4)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (gnc:list-flatten . lst)
+  (reverse
+   (let lp ((e lst) (accum '()))
+     (if (list? e)
+         (fold lp accum e)
+         (cons e accum)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; compatibility hack for fixing guile-2.0 string handling. this code
