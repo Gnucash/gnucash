@@ -33,6 +33,7 @@ extern "C"
 }
 #include <libguile.h>
 #include <string>
+#include <exception>
 #include <boost/variant.hpp>
 
 /*
@@ -81,6 +82,34 @@ protected:
 };
 */
 
+enum GncOptionUIType
+{
+    INTERNAL,
+    BOOLEAN,
+    STRING,
+    TEXT,
+    CURRENCY,
+    COMMODITY,
+    MULTICHOICE,
+    DATE,
+    ACCOUNT_LIST,
+    ACCOUNT_SEL,
+    LIST,
+    NUMBER_RANGE,
+    COLOR,
+    FONT,
+    BUDGET,
+    PIXMAP,
+    RADIOBUTTON,
+    DATE_FORMAT,
+    OWNER,
+    CUSTOMER,
+    VENDOR,
+    EMPLOYEE,
+    INVOICE,
+    TAX_TABLE
+};
+
 struct OptionClassifier
 {
     std::string m_section;
@@ -90,18 +119,59 @@ struct OptionClassifier
     std::string m_doc_string;
 };
 
+/**
+ * Holds a pointer to the UI item which will control the option and an enum
+ * representing the type of the option for dispatch purposes; all of that
+ * happens in gnucash/gnome-utils/dialog-options and
+ * gnucash/gnome/business-option-gnome.
+ *
+ * This class takes no ownership responsibility, so calling code is responsible
+ * for ensuring that the UI_Item is alive. For convenience the public
+ * clear_ui_item function can be used as a weak_ptr's destruction callback to
+ * ensure that if the ui_item is destroyed elsewhere the ptr will be nulled and
+ * the type reset to OptionUIType::INTERNAL.
+ */
+class OptionUIItem
+{
+public:
+     GncOptionUIType get_ui_type() { return m_ui_type; }
+    const void* get_ui_item() {return m_ui_item; }
+    void set_ui_item(void* ui_item)
+    {
+        if (m_ui_type == GncOptionUIType::INTERNAL)
+        {
+            std::string error{"Can't set ui item with void ui type."};
+            throw std::logic_error(std::move(error));
+        }
+        m_ui_item = ui_item;
+    }
+protected:
+    OptionUIItem(GncOptionUIType ui_type) :
+        m_ui_item{nullptr}, m_ui_type{ui_type} {}
+    OptionUIItem(const OptionUIItem&) = default;
+    OptionUIItem(OptionUIItem&&) = default;
+    ~OptionUIItem() = default;
+    OptionUIItem& operator=(const OptionUIItem&) = default;
+    OptionUIItem& operator=(OptionUIItem&&) = default;
+private:
+    void* m_ui_item;
+    GncOptionUIType m_ui_type;
+};
+
 template <typename ValueType>
 SCM scm_from_value(ValueType);
 
 template <typename ValueType>
 class GncOptionValue :
-    public OptionClassifier
+    public OptionClassifier, public OptionUIItem
 {
 public:
     GncOptionValue<ValueType>(const char* section, const char* name,
                               const char* key, const char* doc_string,
-                              ValueType value) :
+                              ValueType value,
+                              GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type),
         m_value{value}, m_default_value{value} {}
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
@@ -121,14 +191,17 @@ private:
 
 template <typename ValueType>
 class GncOptionValidatedValue :
-    public OptionClassifier
+    public OptionClassifier, public OptionUIItem
 {
 public:
     GncOptionValidatedValue<ValueType>(const char* section, const char* name,
                                        const char* key, const char* doc_string,
                                        ValueType value,
-                                      std::function<bool(ValueType)>validator) :
+                                       std::function<bool(ValueType)>validator,
+                                       GncOptionUIType ui_type = GncOptionUIType::INTERNAL
+        ) :
         OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type),
         m_value{value}, m_default_value{value}, m_validator{validator}
         {
             if (!this->validate(value))
@@ -184,10 +257,10 @@ public:
     template <typename ValueType>
     GncOption(const char* section, const char* name,
               const char* key, const char* doc_string,
-              ValueType value) :
+              ValueType value,
+              GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         m_option{GncOptionValue<ValueType> {
-            section, name, key, doc_string, value
-                }} {}
+            section, name, key, doc_string, value, ui_type}} {}
 
     template <typename ValueType> ValueType get_value() const
     {
@@ -224,6 +297,18 @@ public:
     const std::string& get_docstring() const
     {
         return boost::apply_visitor(GetDocstringVisitor(), m_option);
+    }
+    void set_ui_item(void* ui_elem)
+    {
+        return boost::apply_visitor(SetUIItemVisitor(ui_elem), m_option);
+    }
+    const GncOptionUIType get_ui_type()
+    {
+        return boost::apply_visitor(GetUITypeVisitor(), m_option);
+    }
+    const void* get_ui_item()
+    {
+        return boost::apply_visitor(GetUIItemVisitor(), m_option);
     }
 private:
     template <typename ValueType>
@@ -313,6 +398,33 @@ private:
             return option.m_doc_string;
         }
     };
+    struct SetUIItemVisitor : public boost::static_visitor<>
+    {
+        SetUIItemVisitor(void* ui_item) : m_ui_item{ui_item} {}
+        template <class OptionType>
+        void operator()(OptionType& option) const {
+            option.set_ui_item(m_ui_item);
+        }
+    private:
+        void* m_ui_item;
+    };
+    struct GetUITypeVisitor :
+        public boost::static_visitor<GncOptionUIType>
+    {
+        template <class OptionType>
+        const GncOptionUIType operator()(OptionType& option) const {
+            return option.get_ui_type();
+        }
+    };
+    struct GetUIItemVisitor :
+        public boost::static_visitor<const void*>
+    {
+        template <class OptionType>
+        const void* operator()(OptionType& option) const {
+            return option.get_ui_item();
+        }
+    };
+
     GncOptionVariant m_option;
 };
 

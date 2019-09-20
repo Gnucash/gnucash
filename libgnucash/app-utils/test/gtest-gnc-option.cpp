@@ -192,3 +192,36 @@ TEST(GNCOption, test_currency_setter)
     gnc_commodity_table_destroy(table);
     qof_book_destroy(book);
 }
+
+class GncUIItem
+{
+public:
+    void set_value(const std::string& value) { m_value = value; }
+    const std::string& get_value() { return m_value; }
+private:
+    std::string m_value;
+};
+
+class GncOptionUITest : public ::testing::Test
+{
+protected:
+    GncOptionUITest() :
+        m_option{"foo", "bar", "baz", "Phony Option", std::string{"waldo"},
+            GncOptionUIType::STRING} {}
+
+    GncOption m_option;
+};
+
+using GncOptionUI = GncOptionUITest;
+
+TEST_F(GncOptionUI, test_option_ui_type)
+{
+    EXPECT_EQ(GncOptionUIType::STRING, m_option.get_ui_type());
+}
+
+TEST_F(GncOptionUI, test_set_option_ui_element)
+{
+    GncUIItem ui_item;
+    m_option.set_ui_item(&ui_item);
+    EXPECT_EQ(&ui_item, static_cast<const GncUIItem*>(m_option.get_ui_item()));
+}
