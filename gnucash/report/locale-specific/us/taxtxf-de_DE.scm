@@ -505,11 +505,7 @@
                                 (validate (reverse 
                                            (gnc-account-get-children-sorted
                                             (gnc-get-current-root-account))))))
-         (book (if selected-accounts
-                   (gnc-account-get-book (if (pair? selected-accounts)
-                                             (car selected-accounts)
-                                             selected-accounts))
-                   #f))
+         (book (gnc-get-current-book))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
