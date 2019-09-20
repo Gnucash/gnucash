@@ -396,6 +396,7 @@
                                budget acct total-periods))
                    (act-total (gnc:get-account-periodlist-actual-value
                                budget acct total-periods))
+                   (act-total (if reverse-balance? (- act-total) act-total))
                    (dif-total (if income-acct?
                                   (- act-total bgt-total)
                                   (- bgt-total act-total))))
