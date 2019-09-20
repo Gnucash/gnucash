@@ -693,6 +693,8 @@
 (export gnc:make-value-collector)
 (export gnc:make-number-collector)      ;deprecated
 (export gnc:make-commodity-collector)
+(export gnc:collector+)
+(export gnc:collector-)
 (export gnc:commodity-collector-get-negated)
 (export gnc:commodity-collectorlist-get-merged) ;deprecated
 (export gnc-commodity-collector-commodity-count)
