@@ -103,10 +103,15 @@ if (HAVE_SRFI64)
     ${MODULEPATH}
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_BINARY_DIR}/common # for config.h
+    ${GLIB2_INCLUDE_DIRS}
+    ${GUILE_INCLUDE_DIRS}
     )
 
   set(swig_gnc_optiondb_LIBS
-    gncmod-engine PkgConfig::GLIB2 PkgConfig::GUILE)
+    gncmod-engine
+    ${GLIB2_LDFLAGS}
+    ${GUILE_LDFLAGS}
+    )
 
   target_link_libraries(swig-gnc-optiondb ${swig_gnc_optiondb_LIBS})
   target_include_directories(swig-gnc-optiondb

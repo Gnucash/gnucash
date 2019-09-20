@@ -93,42 +93,9 @@ struct OptionClassifier
 template <typename ValueType>
 SCM scm_from_value(ValueType);
 
-/* This design pattern is called the Curiously Recursive Template Pattern, or
- * CRTP. See https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern
- * for a detailed explanation.
- */
-template <typename ValueType, class ValueClass>
-class GncOptionBase
-{
-public:
-    ValueType get_value() const
-    {
-        return static_cast<ValueClass const&>(*this).get_value();
-    }
-    void set_value(ValueType value)
-    {
-        static_cast<ValueClass&>(*this).set_value(value);
-    }
-    ValueType get_default_value() const
-    {
-        return static_cast<ValueClass const&>(*this).get_default_value();
-    }
-    SCM get_scm_value() const
-    {
-        ValueType value{static_cast<ValueClass const&>(*this).get_value()};
-        return scm_from_value<ValueType>(value);
-    }
-    SCM get_scm_default_value() const
-    {
-        ValueType value{static_cast<ValueClass const&>(*this).get_default_value()};
-        return scm_from_value<ValueType>(value);
-    }
-};
-
 template <typename ValueType>
 class GncOptionValue :
-    public OptionClassifier,
-    public GncOptionBase<ValueType, GncOptionValue<ValueType>>
+    public OptionClassifier
 {
 public:
     GncOptionValue<ValueType>(const char* section, const char* name,
@@ -138,6 +105,14 @@ public:
         m_value{value}, m_default_value{value} {}
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
+    SCM get_scm_value() const
+    {
+        return scm_from_value(m_value);
+    }
+    SCM get_scm_default_value() const
+    {
+        return scm_from_value(m_default_value);
+    }
     void set_value(ValueType new_value) { m_value = new_value; }
 private:
     ValueType m_value;
@@ -146,8 +121,7 @@ private:
 
 template <typename ValueType>
 class GncOptionValidatedValue :
-    public OptionClassifier,
-    public GncOptionBase<ValueType, GncOptionValidatedValue<ValueType>>
+    public OptionClassifier
 {
 public:
     GncOptionValidatedValue<ValueType>(const char* section, const char* name,
@@ -173,6 +147,14 @@ public:
     }
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
+    SCM get_scm_value() const
+    {
+        return scm_from_value(m_value);
+    }
+    SCM get_scm_default_value() const
+    {
+        return scm_from_value(m_default_value);
+    }
     bool validate(ValueType value) { return m_validator(value); }
     void set_value(ValueType value)
     {
