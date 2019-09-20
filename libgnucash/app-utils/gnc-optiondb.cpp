@@ -48,8 +48,7 @@ GncOptionDB::register_option(const char* section, GncOption&& option)
                                                GncOptionVec{}));
         db_section = std::prev(m_sections.end());
     }
-    auto wrapper = std::make_shared<GncOptionWrapper>(option, nullptr);
-    db_section->second.emplace_back(wrapper);
+    db_section->second.emplace_back(std::move(option));
 }
 
 void
@@ -66,9 +65,9 @@ GncOptionDB::unregister_option(const char* section, const char* name)
         db_section->second.erase(
             std::remove_if(
                 db_section->second.begin(), db_section->second.end(),
-                [name](GncOptionWrapperPtr option) -> bool
+                [name](const GncOption& option) -> bool
                 {
-                    return option->m_option.get_name() == std::string{name};
+                    return option.get_name() == std::string{name};
                 }));
     }
 }
@@ -91,13 +90,13 @@ GncOptionDB::lookup_option(const char* section, const char* name) const
         return SCM_BOOL_F;
     auto db_opt = std::find_if(
         db_section->second.begin(), db_section->second.end(),
-        [name](GncOptionWrapperPtr option) -> bool
+        [name](const GncOption& option) -> bool
         {
-            return option->m_option.get_name() == std::string{name};
+            return option.get_name() == std::string{name};
         });
-    if (db_opt == db_section->second.end() || !*db_opt)
+    if (db_opt == db_section->second.end())
         return SCM_BOOL_F;
-    return (*db_opt)->m_option.get_scm_value();
+    return db_opt->get_scm_value();
 }
 
 static const std::string empty_string;
@@ -114,13 +113,13 @@ GncOptionDB::lookup_string_option(const char* section, const char* name) const
         return empty_string;
     auto db_opt = std::find_if(
         db_section->second.begin(), db_section->second.end(),
-        [name](GncOptionWrapperPtr option) -> bool
+        [name](const GncOption& option) -> bool
         {
-            return option->m_option.get_name() == std::string{name};
+            return option.get_name() == std::string{name};
         });
-    if (db_opt == db_section->second.end() || !*db_opt)
+    if (db_opt == db_section->second.end())
         return empty_string;
-    return (*db_opt)->m_option.get_value<std::string>();
+    return db_opt->get_value<std::string>();
 }
 
 bool

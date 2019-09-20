@@ -12,7 +12,7 @@ extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %include <std_string.i>
 
 %ignore OptionClassifier;
+%ignore OptionUIItem;
 %ignore GncOption;
-%ignore GncOptionWrapper;
 
 %include "gnc-optiondb.hpp"

@@ -27,16 +27,8 @@
 #include "gnc-option.hpp"
 
 class GncOptionDB;
-struct GncOptionWrapper
-{
-    GncOptionWrapper(const GncOption& opt, void* ptr) : m_option{opt}, m_widget{ptr} {}
-    GncOptionWrapper(GncOption&& opt, void* ptr) : m_option{opt}, m_widget{ptr} {}
-    GncOption m_option;
-    void* m_widget; /* Don't want widget code in libgnucash! GObject closure?*/
-};
 
-using GncOptionWrapperPtr = std::shared_ptr<GncOptionWrapper>;
-using GncOptionVec = std::vector<GncOptionWrapperPtr>;
+using GncOptionVec = std::vector<GncOption>;
 using GncOptionSection = std::pair<std::string, GncOptionVec>;
 using GncOptionSectionPtr = std::shared_ptr<const GncOptionSection>;
 class GncOptionDB
