@@ -768,12 +768,7 @@
 	  (to-year    (gnc-print-time64 to-value "%Y"))
           (today-date (gnc-print-time64 (time64CanonicalDayTime (current-time))
                                         "%d.%m.%Y"))
-	  (tax-nr (unless book
-                      (or
-                       (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
-                       "")
-                      ""))
-	  )
+	  (tax-nr (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)))
 
       ;; Now, the main body
       ;; Reset all the balance collectors
