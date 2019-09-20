@@ -312,16 +312,3 @@ Fehlermeldungen + Dankschreiben an: stoll@bomhardt.de"))
    )
   )
 ))
-
-;;; Register global options in this book
-(define (book-options-generator options)
-  (define (reg-option new-option)
-    (gnc:register-option options new-option))
-
-  (reg-option
-   (gnc:make-string-option
-    gnc:*tax-label* gnc:*tax-nr-label*
-    "a" (N_ "The electronic tax number of your business") ""))
-  )
-
-(gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)

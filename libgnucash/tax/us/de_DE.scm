@@ -49,10 +49,5 @@
 (export txf-asset-categories)
 (export txf-liab-eq-categories)
 
-(define gnc:*tax-label* (N_ "Tax"))
-(define gnc:*tax-nr-label* (N_ "Tax Number"))
-
-(export gnc:*tax-label* gnc:*tax-nr-label*)
-
 (load-from-path "txf-de_DE")
 (load-from-path "txf-help-de_DE")

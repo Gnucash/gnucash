@@ -157,6 +157,12 @@
     gnc:*option-section-budgeting* gnc:*option-name-default-budget*
     "a" (N_ "Budget to be used when none has been otherwise specified.")))
 
+  ;; Tax Tab
+  (reg-option
+   (gnc:make-string-option
+    gnc:*tax-label* gnc:*tax-nr-label*
+    "a" (N_ "The electronic tax number of your business") ""))
+
   ;; Counters Tab
   (for-each
    (lambda (vals)
