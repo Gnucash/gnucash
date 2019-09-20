@@ -300,6 +300,8 @@
 (define gnc:*company-contact* (N_ "Company Contact Person"))
 (define gnc:*fancy-date-label* (N_ "Fancy Date Format"))
 (define gnc:*fancy-date-format* (N_ "custom"))
+(define gnc:*tax-label* (N_ "Tax"))
+(define gnc:*tax-nr-label* (N_ "Tax Number"))
 
 (define (gnc:company-info book key)
   ;; Access company info from key-value pairs for current book
@@ -328,6 +330,7 @@
         gnc:*option-name-currency-accounting* gnc:*option-name-book-currency*
         gnc:*option-name-default-gains-policy*
         gnc:*option-name-default-gain-loss-account*
+        gnc:*tax-label* gnc:*tax-nr-label*
         gnc:*option-name-auto-readonly-days* gnc:*option-name-num-field-source*)
 
 (define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)
