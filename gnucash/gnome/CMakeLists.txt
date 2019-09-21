@@ -138,8 +138,7 @@ set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core
   gncmod-html gncmod-report gncmod-register-gnome gncmod-register-core
-  gncmod-gnome-utils gncmod-engine PkgConfig::GTK3
-  $<$<BOOL:${GTK_MAC_FOUND}>:PkgConfig::GTK_MAC>)
+  gncmod-gnome-utils gncmod-engine PkgConfig::GTK3 ${GTK_MAC_LDFLAGS})
 
 target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
 target_compile_options(gnc-gnome PRIVATE -Wno-deprecated-declarations)

@@ -1,6 +1,7 @@
 
 set(REPORT_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
+  ${GUILE_INCLUDE_DIRS}
 )
 set(REPORT_TEST_LIBS gnc-module)
 

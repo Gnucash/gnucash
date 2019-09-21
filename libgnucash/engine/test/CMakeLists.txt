@@ -9,7 +9,7 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${GLIB2_INCLUDE_DIRS}
 )
 
-set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core PkgConfig::LIBXML2 -lm)
+set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
 
 macro(add_engine_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
@@ -90,17 +90,17 @@ add_engine_test(test-numeric "${test_numeric_SOURCES}")
 set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 set(gtest_old_engine_LIBS
   gncmod-engine
-  PkgConfig::GLIB2
-  Boost::regex
+  ${GLIB2_LDFLAGS}
+  ${Boost_LIBRARIES}
   gtest)
 
 set(gtest_qof_LIBS
-  PkgConfig::GLIB2
-  PkgConfig::GOBJECT
-  PkgConfig::GMODULE
-  PkgConfig::GTHREAD
-  ICU::i18n ICU::uc
-  Boost::regex Boost::date_time
+  ${GLIB2_LDFLAGS}
+  ${GOBJECT_LDFLAGS}
+  ${GMODULE_LDFLAGS}
+  ${GTHREAD_LDFLAGS}
+  ${ICU4C_I18N_LDFLAGS}
+  ${Boost_LIBRARIES}
   gtest)
 
 set(gtest_engine_INCLUDES
@@ -108,6 +108,7 @@ set(gtest_engine_INCLUDES
   ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
+  ${GLIB2_INCLUDE_DIRS}
   ../../../borrowed/libc
 )
 

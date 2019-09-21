@@ -41,7 +41,7 @@ add_library (gncmod-html
 )
 
 target_link_libraries(gncmod-html gncmod-engine gnc-module gncmod-gnome-utils
-  PkgConfig::GTK3 PkgConfig::WEBKIT PkgConfig::GUILE)
+  PkgConfig::GTK3 PkgConfig::WEBKIT ${GUILE_LDFLAGS})
 
 target_compile_definitions(gncmod-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 

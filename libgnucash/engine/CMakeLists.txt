@@ -237,10 +237,7 @@ else()
   set(BCRYPT "")
 endif()
 
-target_link_libraries(gncmod-engine gnc-core-utils gnc-module
-  Boost::date_time Boost::regex ICU::i18n ICU::uc
-  ${BCRYPT} ${REGEX_LDFLAGS} PkgConfig::GMODULE PkgConfig::GLIB2
-  PkgConfig::GOBJECT PkgConfig::GUILE)
+target_link_libraries(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES}  ${ICU4C_I18N_LDFLAGS} ${BCRYPT} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 
 target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 
@@ -250,6 +247,7 @@ target_include_directories (gncmod-engine
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/common # for config.h
         ${CMAKE_SOURCE_DIR}/common # for platform.h
+        ${GLIB2_INCLUDE_DIRS}
         ${LIBINTL_INCLUDE_PATH}
         ${REGEX_INCLUDE_PATH}
         ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h

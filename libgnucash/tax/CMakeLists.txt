@@ -6,10 +6,10 @@ set(locale_tax_SOURCES gncmod-locale-tax.c)
 set_source_files_properties (${locale_tax_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 add_library(gncmod-locale-tax ${locale_tax_SOURCES})
-target_link_libraries(gncmod-locale-tax gnc-module PkgConfig::GLIB2 PkgConfig::GUILE)
+target_link_libraries(gncmod-locale-tax gnc-module ${GLIB2_LDFLAGS} ${GUILE_LDFLAGS})
 
 target_include_directories(gncmod-locale-tax
-    PRIVATE ${CMAKE_BINARY_DIR}/common)
+    PRIVATE ${CMAKE_BINARY_DIR}/common ${GUILE_INCLUDE_DIRS})
 
 if (APPLE)
   set_target_properties (gncmod-locale-tax PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
