@@ -278,8 +278,7 @@
 
   (gnc:report-starting reportname)
 
-  (let* (
-         (report-title (get-option gnc:pagename-general optname-report-title))
+  (let* ((report-title (get-option gnc:pagename-general optname-report-title))
          (company-name (get-option gnc:pagename-general optname-party-name))
          (from-date (and sx?
                          (gnc:time64-start-day-time
@@ -393,16 +392,20 @@
                 (rowloop (1+ row))))
             (set! cur-col (1+ cur-col)))
 
+          (define (make-header str)
+            (gnc:make-html-table-cell/markup "number-header" str))
+
           (gnc:html-table-add-account-balances hold-table chart-table params)
 
           ;; place the column headers
           (gnc:html-table-append-row!
            build-table
-           (append
-            (if show-code? (list (_ "Code")) '())
-            (if show-type? (list (_ "Type")) '())
-            (if show-desc? (list (_ "Description")) '())
-            (list (_ "Account title"))))
+           (map make-header
+                (append
+                 (if show-code? (list (_ "Code")) '())
+                 (if show-type? (list (_ "Type")) '())
+                 (if show-desc? (list (_ "Description")) '())
+                 (list (_ "Account title")))))
           ;; add any fields to be displayed before the account name
           (if show-code? (add-col 'account-code))
           (if show-type? (add-col 'account-type-string))
@@ -429,7 +432,7 @@
           (set! cur-col (+ cur-col hold-table-width))
           (when show-notes?
             (gnc:html-table-set-cell/tag!
-             build-table 0 cur-col "text-cell" (_ "Notes"))
+             build-table 0 cur-col "number-header" (_ "Notes"))
             (add-col 'account-notes))
 
           (gnc:html-document-add-object! doc build-table)

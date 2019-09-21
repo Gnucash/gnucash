@@ -53,10 +53,10 @@
     (let* ((options (default-testing-options accsum-uuid))
            (sxml (options->sxml accsum-uuid options "accsum")))
       (test-equal "accsum col 1"
-        '("Code" "#608.00" "-#612.00" "#608.00" "-#612.00" "#608.00" "-#612.00")
+        '("#608.00" "-#612.00" "#608.00" "-#612.00" "#608.00" "-#612.00")
         (sxml->table-row-col sxml 1 #f 1))
       (test-equal "accsum col 2"
-        '("Account title" "Root" "Asset" "Bank" "GBP Bank" "Wallet"
+        '("Root" "Asset" "Bank" "GBP Bank" "Wallet"
           "Liabilities" "Income" "Income-GBP" "Expenses" "Equity")
         (sxml->table-row-col sxml 1 #f 2))
       (test-equal "accsum col 3"
@@ -69,10 +69,10 @@
     (let* ((options (default-testing-options fsts-uuid))
            (sxml (options->sxml fsts-uuid options "fsts")))
       (test-equal "fsts col 1"
-        '("Code")
+        '()
         (sxml->table-row-col sxml 1 #f 1))
       (test-equal "fsts col 2"
-        '("Account title" "Root" "Asset" "Bank" "GBP Bank" "Wallet"
+        '("Root" "Asset" "Bank" "GBP Bank" "Wallet"
           "Liabilities" "Income" "Income-GBP" "Expenses" "Equity")
         (sxml->table-row-col sxml 1 #f 2))
       (test-equal "fsts col 3"
