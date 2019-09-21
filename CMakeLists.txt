@@ -337,7 +337,8 @@ if (WITH_AQBANKING)
   pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.3.4)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
-  set(CMAKE_REQUIRED_LIBRARIES "-laqbanking")
+  set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")
+  include(CheckSymbolExists)
   check_symbol_exists("AB_Banking_RuntimeConfig_SetCharValue"
     "aqbanking/banking.h" AQB_HAS_RUNTIME_CONFIG)
   set(CMAKE_REQUIRED_INCLUDES)
