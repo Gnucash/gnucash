@@ -48,6 +48,11 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 2019: This report has merged in sx-summary.scm originally copied
+;; from account-summary.scm. The amounts for the accounts are drawn
+;; from the future Scheduled Transactions which will get realized in
+;; the respective time periods.
+
 (define-module (gnucash report standard-reports account-summary))
 
 (use-modules (srfi srfi-1))
@@ -61,7 +66,8 @@
 ;; optionally with clickable links to open the corresponding register
 ;; window.
 
-(define reportname (N_ "Account Summary"))
+(define accsum-reportname (N_ "Account Summary"))
+(define fsts-reportname (N_ "Future Scheduled Transactions Summary"))
 
 (define optname-report-title (N_ "Report Title"))
 (define opthelp-report-title (N_ "Title for this report."))
@@ -69,6 +75,11 @@
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual."))
 
+;; fsts:
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
+
+;; account-summary:
 (define optname-date (N_ "Date"))
 ;; FIXME this needs an indent option
 
@@ -125,7 +136,7 @@
 ;; options generator
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (accsum-options-generator)
+(define (accsum-options-generator sx? reportname)
   (let* ((options (gnc:new-options))
 	 (add-option 
           (lambda (new-option)
@@ -143,8 +154,12 @@
     ;; does anyone know the function to get the company name??
 
     ;; date at which to report balance
-    (gnc:options-add-report-date!
-     options gnc:pagename-general optname-date "c")
+    (if sx?
+        (gnc:options-add-date-interval!
+         options gnc:pagename-general
+         optname-from-date optname-to-date "c")
+        (gnc:options-add-report-date!
+         options gnc:pagename-general optname-date "c"))
 
     ;; accounts to work on
     (add-option
@@ -258,7 +273,7 @@
 ;; set up the table and put it in an html document
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (accsum-renderer report-obj)
+(define (accsum-renderer report-obj sx? reportname)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option 
@@ -269,10 +284,17 @@
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
-         (report-date (gnc:time64-end-day-time 
-                      (gnc:date-option-absolute-time
-                       (get-option gnc:pagename-general
-                                   optname-date))))
+         (from-date (and sx?
+                         (gnc:time64-start-day-time
+                          (gnc:date-option-absolute-time
+                           (get-option gnc:pagename-general
+                                       optname-from-date)))))
+         (to-date (gnc:time64-end-day-time
+                   (gnc:date-option-absolute-time
+                    (get-option gnc:pagename-general
+                                (if sx?
+                                    optname-to-date
+                                    optname-date)))))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
 	 (depth-limit (get-option gnc:pagename-accounts 
@@ -321,13 +343,17 @@
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity report-date))
+	  (gnc:case-exchange-fn price-source report-commodity to-date))
 	 )
     
     (gnc:html-document-set-title! 
-     doc (string-append company-name " " report-title " "
-			(qof-print-date report-date))
-     )
+     doc (if sx?
+             (format #f (string-append "~a ~a " (_ "For Period Covering ~a to ~a"))
+		     company-name report-title
+                     (qof-print-date from-date)
+                     (qof-print-date to-date))
+             (string-append company-name " " report-title " "
+			    (qof-print-date to-date))))
     
     (if (null? accounts)
 	
@@ -340,18 +366,17 @@
 	  reportname (gnc:report-id report-obj)))
 	
 	;; otherwise, generate the report...
-	(let* (
+	(let* ((sx-value-hash
+                (if sx?
+                    (gnc-sx-all-instantiate-cashflow-all from-date to-date)
+                    (make-hash-table)))
 	       (chart-table #f)                    ;; gnc:html-acct-table
 	       (hold-table (gnc:make-html-table))  ;; temporary gnc:html-table
 	       (build-table (gnc:make-html-table)) ;; gnc:html-table reported
-	       (get-total-balance-fn
-		(lambda (account)
-		  (gnc:account-get-comm-balance-at-date 
-		   account report-date #f)))
 	       (table-env                      ;; parameters for :make-
 		(list
-		 (list 'start-date #f)
-		 (list 'end-date report-date)
+		 (list 'start-date from-date)
+		 (list 'end-date to-date)
 		 (list 'display-tree-depth tree-depth)
 		 (list 'depth-limit-behavior bottom-behavior)
 		 (list 'report-commodity report-commodity)
@@ -363,8 +388,16 @@
 		 (list 'account-label-mode (if use-links?
 					       'anchor
 					       'name))
-		 )
-		)
+		 (list 'get-balance-fn
+                       (and sx?
+                            (lambda (account start-date end-date)
+                              (let* ((guid (gncAccountGetGUID account))
+                                     (num (hash-ref sx-value-hash guid)))
+                                (if num
+                                    (gnc:monetaries-add
+                                     (gnc:make-gnc-monetary
+                                      (xaccAccountGetCommodity account) num))
+                                    (gnc:make-commodity-collector))))))))
 	  (params                         ;; and -add-account-
 		(list
 		 (list 'parent-account-balance-mode parent-balance-mode)
@@ -506,10 +539,17 @@
 
 (gnc:define-report 
  'version 1
- 'name reportname
+ 'name accsum-reportname
  'report-guid "3298541c236b494998b236dfad6ad752"
- 'options-generator accsum-options-generator
- 'renderer accsum-renderer)
+ 'options-generator (lambda () (accsum-options-generator #f accsum-reportname))
+ 'renderer (lambda (obj) (accsum-renderer obj #f accsum-reportname)))
+
+(gnc:define-report
+ 'version 1
+ 'name fsts-reportname
+ 'report-guid "47f45d7d6d57b68518481c1fc8d4e4ba"
+ 'options-generator (lambda () (accsum-options-generator #t fsts-reportname))
+ 'renderer (lambda (obj) (accsum-renderer obj #t fsts-reportname)))
 
 ;; END
 

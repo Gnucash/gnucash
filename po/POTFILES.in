@@ -490,7 +490,6 @@ gnucash/report/standard-reports/price-scatter.scm
 gnucash/report/standard-reports/reconcile-report.scm
 gnucash/report/standard-reports/register.scm
 gnucash/report/standard-reports/standard-reports.scm
-gnucash/report/standard-reports/sx-summary.scm
 gnucash/report/standard-reports/transaction.scm
 gnucash/report/standard-reports/trial-balance.scm
 gnucash/report/stylesheets/gncmod-stylesheets.c
