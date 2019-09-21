@@ -69,7 +69,6 @@ option (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 set(COMPILE_GSCHEMAS ON CACHE BOOL "Compile the GSettings schema")
 
 set(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
-# GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
 
 # Check that all of the absolute install paths are inside
 # ${CMAKE_INSTALL_PREFIX}. If they're not, disable binreloc as it
@@ -158,10 +157,6 @@ endif()
 # And this file is needed in several other build rules, so we define its
 # location once here.
 set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
-
-# Determine whether to generate the swig wrappers.
-# By default they will only be generated when building from a git worktree
-set(GENERATE_SWIG_WRAPPERS ${BUILDING_FROM_VCS} CACHE BOOL "Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree")
 
 if (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
@@ -265,11 +260,9 @@ endif (WIN32)
 # ############################################################
 
 # SWIG
-if(GENERATE_SWIG_WRAPPERS)
-  find_package (SWIG 2.0.10 REQUIRED)
-  include (${SWIG_USE_FILE})
-  string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
-endif()
+find_package (SWIG 2.0.10 REQUIRED)
+include (${SWIG_USE_FILE})
+string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
 # Find Guile and determine which version we are using.
 # Look for guile versions in this order: 2.2 > 2.0
