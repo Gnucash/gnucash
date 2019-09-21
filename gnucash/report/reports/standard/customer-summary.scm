@@ -261,11 +261,6 @@
                  (member (xaccSplitGetAccount s) accounts))
                splits))))
 
-(define (coll-minus minuend subtrahend)
-  (let ((coll (gnc:make-commodity-collector)))
-    (coll 'merge minuend #f)
-    (coll 'minusmerge subtrahend #f)
-    coll))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -347,7 +342,7 @@
                                (sales (gnc:commodity-collector-get-negated
                                        (filter-splits splits sales-accounts)))
                                (expense (filter-splits splits expense-accounts))
-                               (profit (coll-minus sales expense)))
+                               (profit (gnc:collector- sales expense)))
                           (list owner profit sales expense)))
                       ownerlist))
             (sortingtable '()))
@@ -402,9 +397,10 @@
 
         ;; Add the "No Customer" lines to the sortingtable for sorting
         ;; as well
-        (let* ((other-sales (coll-minus toplevel-total-sales total-sales))
-               (other-expense (coll-minus toplevel-total-expense total-expense))
-               (other-profit (coll-minus other-sales  other-expense)))
+        (let* ((other-sales (gnc:collector- toplevel-total-sales total-sales))
+               (other-expense (gnc:collector- toplevel-total-expense
+                                                  total-expense))
+               (other-profit (gnc:collector- other-sales other-expense)))
           (for-each
            (lambda (comm)
              (let* ((profit (cadr (other-profit 'getpair comm #f)))
@@ -478,7 +474,8 @@
                  (gnc:make-html-text (gnc:html-markup/attr/no-end "hr" "noshade")))))
 
         ;; Summary lines - 1 per currency
-        (let ((total-profit (coll-minus toplevel-total-sales toplevel-total-expense)))
+        (let ((total-profit (gnc:collector- toplevel-total-sales
+                                            toplevel-total-expense)))
           (for-each
            (lambda (comm)
              (let* ((profit (cadr (total-profit 'getpair comm #f)))

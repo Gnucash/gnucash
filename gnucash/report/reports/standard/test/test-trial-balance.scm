@@ -62,13 +62,15 @@
 (define (test-trial-balance)
   (let* ((options (gnc:make-report-options uuid))
          (account-alist (create-test-data))
+         (gbp-bank (assoc-ref account-alist "GBP Bank"))
+         (usd-bank (assoc-ref account-alist "Bank"))
          (expense (assoc-ref account-alist "Expenses"))
          (equity (assoc-ref account-alist "Equity"))
          (income (assoc-ref account-alist "Income"))
          (bank (assoc-ref account-alist "Bank")))
 
     (gnc-commodity-set-user-symbol
-     (xaccAccountGetCommodity (assoc-ref account-alist "GBP Bank"))
+     (xaccAccountGetCommodity gbp-bank)
      "#")
 
     (let ((closing-txn (env-transfer #f 30 06 2003 expense equity
@@ -167,6 +169,18 @@
         (sxml->table-row-col sxml 1 #f 10))
 
       (test-equal "work-sheet bs credits"
-        ' ("$3.00" "$2,356.00" "$2,359.00" "$760.00" "$3,119.00")
+        '("$3.00" "$2,356.00" "$2,359.00" "$760.00" "$3,119.00")
         (sxml->table-row-col sxml 1 #f 11)))
-    ))
+
+    ;; A couple of transactions which involve foreign currency
+    ;; conversions. We'll set the currencies to GBP and USD.
+    (env-transfer-foreign #f 15 01 2000 gbp-bank usd-bank
+                          10 14 #:description "GBP 10 to USD 14")
+    (env-transfer-foreign #f 15 02 2000 usd-bank gbp-bank
+                          9  8 #:description "USD 9 to GBP 8")
+
+    (set-option options "General" "Report variation" 'current)
+    (let ((sxml (options->sxml options "test-unrealized-gain")))
+      (test-equal "unrealized losses"
+        '("Unrealized Gains" "$3.25")
+        (sxml->table-row-col sxml 1 -2 #f)))))

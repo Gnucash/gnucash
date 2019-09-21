@@ -152,9 +152,7 @@
          (amt (and sum (gnc:gnc-monetary-amount sum)))
          (neg? (and amt (negative? amt)))
          (bal (if neg?
-                  (let ((bal (gnc:make-commodity-collector)))
-                    (bal 'minusmerge signed-balance #f)
-                    bal)
+                  (gnc:commodity-collector-get-negated signed-balance)
                   signed-balance))
          (bal-sum (gnc:sum-collector-commodity
                    bal
@@ -512,36 +510,21 @@
           ;;
           ;; This procedure returns a commodity collector.
           (define (collect-unrealized-gains)
+            (define (acct->bal acct)
+              (gnc:account-get-comm-balance-at-date acct end-date #f))
             (if (eq? price-source 'average-cost)
                 ;; No need to calculate if doing valuation at cost.
                 (gnc:make-commodity-collector)
-                (let ((book-balance (gnc:make-commodity-collector))
-                      (unrealized-gain-collector (gnc:make-commodity-collector))
-                      (cost-fn (gnc:case-exchange-fn
-                                'average-cost report-commodity end-date)))
-
-                  ;; Calculate book balance.
-                  ;; assets - liabilities - equity; normally 0
-                  (for-each
-                   (lambda (acct)
-                     (book-balance
-                      'merge
-                      (gnc:account-get-comm-balance-at-date acct end-date #f)
-                      #f))
-                   all-accounts)
-
-                  (let ((value (gnc:gnc-monetary-amount
-                                (gnc:sum-collector-commodity
-                                 book-balance report-commodity exchange-fn)))
-                        (cost (gnc:gnc-monetary-amount
-                               (gnc:sum-collector-commodity
-                                book-balance report-commodity cost-fn))))
-
-                    ;; Get the unrealized gain or loss (value minus cost).
-                    (unrealized-gain-collector
-                     'add report-commodity (- value cost))
-                    unrealized-gain-collector))))
-
+                (let* ((cost-fn (gnc:case-exchange-fn
+                                 'average-cost report-commodity end-date))
+                       (acct-balances (map acct->bal all-accounts))
+                       (book-balance (apply gnc:collector+ acct-balances))
+                       (value (gnc:sum-collector-commodity
+                               book-balance report-commodity exchange-fn))
+                       (cost (gnc:sum-collector-commodity
+                              book-balance report-commodity cost-fn)))
+                  ;; Get the unrealized gain or loss (value minus cost).
+                  (gnc:monetaries-add value (gnc:monetary-neg cost)))))
 
           ;; set default cell alignment
           (gnc:html-table-set-style!
@@ -667,12 +650,6 @@
                  splits)
                 total))
 
-            (define (coll-minus . collectors)
-              (let ((res (gnc:make-commodity-collector)))
-                (res 'merge (car collectors) #f)
-                (for-each (lambda (mon) (res 'minusmerge mon #f)) (cdr collectors))
-                res))
-
             (while (< row rows)
               (let* ((env (gnc:html-acct-table-get-row-env acct-table row))
                      (acct (get-val env 'account))
@@ -684,21 +661,19 @@
                      (pos-adjusting
                       (and ga-or-is? (sum-account-splits acct adjusting-splits #t)))
                      (neg-adjusting
-                      (and ga-or-is? (coll-minus adjusting pos-adjusting)))
-                     (pre-closing-bal (coll-minus curr-bal closing))
-                     (pre-adjusting-bal (coll-minus pre-closing-bal adjusting))
-                     (atb (if is?
-                              (let* ((debit (gnc:make-commodity-collector))
-                                     (credit (gnc:make-commodity-collector)))
-                                (debit 'merge pos-adjusting #f)
-                                (credit 'merge neg-adjusting #f)
-                                (if (double-col
-                                     'credit-q pre-adjusting-bal
-                                     report-commodity exchange-fn show-fcur?)
-                                    (credit 'merge pre-adjusting-bal #f)
-                                    (debit 'merge pre-adjusting-bal #f))
-                                (list debit credit))
-                              pre-closing-bal)))
+                      (and ga-or-is? (gnc:collector- adjusting pos-adjusting)))
+                     (pre-closing-bal (gnc:collector- curr-bal closing))
+                     (pre-adjusting-bal (gnc:collector- pre-closing-bal
+                                                        adjusting))
+                     (atb (cond ((not is?) pre-closing-bal)
+                                ((double-col 'credit-q pre-adjusting-bal
+                                             report-commodity exchange-fn show-fcur?)
+                                 (list (gnc:collector+ pos-adjusting)
+                                       (gnc:collector+ neg-adjusting
+                                                       pre-adjusting-bal)))
+                                (else
+                                 (list (gnc:collector+ pos-adjusting pre-adjusting-bal)
+                                       (gnc:collector+ neg-adjusting))))))
 
                 ;; curr-bal = account-bal with closing & adj entries
                 ;; pre-closing-bal = account-bal with adj entries only
@@ -865,8 +840,8 @@
                  (tot-abs-amt-cell bs-credits))
                 '())))
           (if (eq? report-variant 'work-sheet)
-              (let* ((net-is (gnc:make-commodity-collector))
-                     (net-bs (gnc:make-commodity-collector))
+              (let* ((net-is (gnc:collector- is-debits is-credits))
+                     (net-bs (gnc:collector- bs-debits bs-credits))
                      (tot-is (gnc:make-commodity-collector))
                      (tot-bs (gnc:make-commodity-collector))
                      (is-entry #f)
@@ -875,10 +850,6 @@
                      (bs-credit? #f)
                      (tbl-width (+ account-cols (* 2 bs-col) 2))
                      (this-row (gnc:html-table-num-rows build-table)))
-                (net-is 'merge is-debits #f)
-                (net-is 'minusmerge is-credits #f)
-                (net-bs 'merge bs-debits #f)
-                (net-bs 'minusmerge bs-credits #f)
                 (set! is-entry
                   (double-col 'entry net-is report-commodity exchange-fn show-fcur?))
                 (set! is-credit?

@@ -961,9 +961,8 @@ also show overall period profit & loss."))
                               asset-liability
                               (lambda (acc)
                                 (gnc:account-get-comm-value-at-date acc date #f))))
-                            (unrealized (gnc:make-commodity-collector)))
-                       (unrealized 'merge asset-liability-basis #f)
-                       (unrealized 'minusmerge asset-liability-balance #f)
+                            (unrealized (gnc:collector- asset-liability-basis
+                                                        asset-liability-balance)))
                        (monetaries->exchanged
                         unrealized common-currency price-source date)))))
              (retained-earnings-fn

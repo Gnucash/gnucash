@@ -10,6 +10,7 @@
   (test-traverse-vec)
   (test-substring-replace)
   (test-sort-and-delete-duplicates)
+  (test-gnc:list-flatten)
   (test-begin "test-libgnucash-scm-utilities.scm"))
 
 (define (test-traverse-vec)
@@ -87,3 +88,14 @@
     '(1 2 3)
     (sort-and-delete-duplicates '(3 1 2) <))
   (test-end "sort-and-delete-duplicates"))
+
+(define (test-gnc:list-flatten)
+  (test-equal "gnc:list-flatten null"
+    '()
+    (gnc:list-flatten '()))
+  (test-equal "gnc:list-flatten noop"
+    '(1 2 3)
+    (gnc:list-flatten '(1 2 3)))
+  (test-equal "gnc:list-flatten deep"
+    '(1 2 3 4 5 6)
+    (gnc:list-flatten '(1 (2) (() () (((((3))) ())) 4 () ((5) (6)))))))

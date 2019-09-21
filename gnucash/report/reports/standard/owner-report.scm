@@ -746,8 +746,8 @@
      (end-date (gnc:time64-end-day-time 
                (gnc:date-option-absolute-time
                (opt-val gnc:pagename-general optname-to-date))))
-     (book (gnc-account-get-book account))
-     (date-format (if (not (null? book)) (gnc:options-fancy-date book)))
+     (book (gnc-get-current-book))
+     (date-format (gnc:options-fancy-date book))
      (type (opt-val "__reg" "owner-type"))
      (owner-descr (owner-string type))
      (date-type (opt-val gnc:pagename-general optname-date-driver))

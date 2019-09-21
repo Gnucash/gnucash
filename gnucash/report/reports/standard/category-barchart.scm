@@ -336,12 +336,6 @@ developing over time"))
                   c report-currency
                   (lambda (a b) (exchange-fn a b date)))))))
 
-          (define (collector-minus a b)
-            (let ((coll (gnc:make-commodity-collector)))
-              (coll 'merge a #f)
-              (coll 'minusmerge b #f)
-              coll))
-
           ;; copy of gnc:not-all-zeros using gnc-monetary
           (define (not-all-zeros data)
             (cond ((gnc:gnc-monetary? data) (not (zero? (gnc:gnc-monetary-amount data))))
@@ -396,8 +390,8 @@ developing over time"))
                           (cdr dates-list)
                           (cons (if do-intervals?
                                     (collector->monetary
-                                     (collector-minus (cadr list-of-mon-collectors)
-                                                      (car list-of-mon-collectors))
+                                     (gnc:collector- (cadr list-of-mon-collectors)
+                                                     (car list-of-mon-collectors))
                                      (cadr dates-list))
                                     (collector->monetary
                                      (car list-of-mon-collectors)

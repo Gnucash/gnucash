@@ -317,17 +317,6 @@
                   (gnc-budget-get-account-period-actual-value budget acct period))
                 periodlist)))
 
-    (define (flatten lst)
-      (reverse!
-       (let loop ((lst lst) (result '()))
-         (if (null? lst)
-             result
-             (let ((elt (car lst))
-                   (rest (cdr lst)))
-               (if (pair? elt)
-                   (loop rest (append (loop elt '()) result))
-                   (loop rest (cons elt result))))))))
-
     ;; Adds a line to the budget report.
     ;;
     ;; Parameters:
@@ -342,7 +331,7 @@
              column-list exchange-fn)
       (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
-             (allperiods (filter number? (flatten column-list)))
+             (allperiods (filter number? (gnc:list-flatten column-list)))
              (total-periods (if accumulate?
                                 (iota (1+ (apply max allperiods)))
                                 allperiods))
@@ -396,6 +385,7 @@
                                budget acct total-periods))
                    (act-total (gnc:get-account-periodlist-actual-value
                                budget acct total-periods))
+                   (act-total (if reverse-balance? (- act-total) act-total))
                    (dif-total (if income-acct?
                                   (- act-total bgt-total)
                                   (- bgt-total act-total))))
