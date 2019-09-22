@@ -174,7 +174,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; avoid using strftime, still broken in guile-2.2. see explanation at
-;; https://www.mail-archive.com/bug-guile@gnu.org/msg09778.html
+;; https://lists.gnu.org/archive/html/bug-guile/2019-05/msg00003.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (let ((strftime-old strftime))
   (set! strftime

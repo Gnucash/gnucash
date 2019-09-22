@@ -483,7 +483,6 @@ gnucash/report/reports/standard/receipt.scm
 gnucash/report/reports/standard/receivables.scm
 gnucash/report/reports/standard/reconcile-report.scm
 gnucash/report/reports/standard/register.scm
-gnucash/report/reports/standard/sx-summary.scm
 gnucash/report/reports/standard/taxinvoice.scm
 gnucash/report/reports/standard/transaction.scm
 gnucash/report/reports/standard/trial-balance.scm

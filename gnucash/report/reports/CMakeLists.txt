@@ -32,7 +32,6 @@ set (reports_standard_SCHEME
     standard/price-scatter.scm
     standard/reconcile-report.scm
     standard/register.scm
-    standard/sx-summary.scm
     standard/transaction.scm
     standard/trial-balance.scm
     standard/view-column.scm
@@ -214,7 +213,7 @@ gnc_add_scheme_deprecated_module ("gnucash report receipt" "gnucash reports stan
 gnc_add_scheme_deprecated_module ("gnucash report receivables" "gnucash reports standard receivables" "scm-reports-standard" "")
 gnc_add_scheme_deprecated_module ("gnucash report standard-reports reconcile-report" "gnucash reports standard reconcile-report" "scm-reports-standard" "")
 gnc_add_scheme_deprecated_module ("gnucash report standard-reports register" "gnucash reports standard register" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports sx-summary" "gnucash reports standard sx-summary" "scm-reports-standard" "")
+gnc_add_scheme_deprecated_module ("gnucash report standard-reports sx-summary" "gnucash reports standard account-summary" "scm-reports-standard" "")
 gnc_add_scheme_deprecated_module ("gnucash report taxinvoice" "gnucash reports standard taxinvoice" "scm-reports-standard" "")
 gnc_add_scheme_deprecated_module ("gnucash report standard-reports transaction" "gnucash reports standard transaction" "scm-reports-standard" "")
 gnc_add_scheme_deprecated_module ("gnucash report standard-reports trial-balance" "gnucash reports standard trial-balance" "scm-reports-standard" "")

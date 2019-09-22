@@ -9,6 +9,7 @@ set(scm_test_with_srfi64_SOURCES
   test-cashflow-barchart.scm
   test-charts.scm
   test-transaction.scm
+  test-account-summary.scm
   test-balsheet-pnl.scm
   test-income-gst.scm
   test-budget.scm
