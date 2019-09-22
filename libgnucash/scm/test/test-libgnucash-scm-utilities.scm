@@ -10,6 +10,7 @@
   (test-traverse-vec)
   (test-substring-replace)
   (test-sort-and-delete-duplicates)
+  (test-gnc:html-string-sanitize)
   (test-gnc:list-flatten)
   (test-begin "test-libgnucash-scm-utilities.scm"))
 
@@ -88,6 +89,40 @@
     '(1 2 3)
     (sort-and-delete-duplicates '(3 1 2) <))
   (test-end "sort-and-delete-duplicates"))
+
+(define (test-gnc:html-string-sanitize)
+  (test-begin "gnc:html-string-sanitize")
+  (test-equal "null test"
+              "abc"
+              (gnc:html-string-sanitize "abc"))
+
+  (test-equal "sanitize &copy;"
+              "&amp;copy;"
+              (gnc:html-string-sanitize "&copy;"))
+
+  (if (not (string=? (with-output-to-string (lambda () (display "🎃"))) "🎃"))
+      (test-skip 2))
+  (test-equal "emoji unchanged"
+              "🎃"
+              (gnc:html-string-sanitize "🎃"))
+
+  (test-equal "complex string"
+              "Smiley:\"🙂\" something"
+              (gnc:html-string-sanitize "Smiley:\"🙂\" something"))
+
+  (test-equal "sanitize <b>bold tags</b>"
+              "&lt;b&gt;bold tags&lt;/b&gt;"
+              (gnc:html-string-sanitize "<b>bold tags</b>"))
+
+  (test-equal "quotes are unchanged for html"
+              "\""
+              (gnc:html-string-sanitize "\""))
+
+  (test-equal "backslash is unchanged for html"
+              "\\"
+              (gnc:html-string-sanitize "\\"))
+
+  (test-end "gnc:html-string-sanitize"))
 
 (define (test-gnc:list-flatten)
   (test-equal "gnc:list-flatten null"
