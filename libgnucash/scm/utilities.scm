@@ -173,6 +173,23 @@
    (and (positive? end-after) (+ (max 0 (1- start)) (1- end-after)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; function to sanitize strings. the resulting string can be safely
+;; added to html.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-public (gnc:html-string-sanitize str)
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (case c
+            ((#\&) "&amp;")
+            ((#\<) "&lt;")
+            ((#\>) "&gt;")
+            (else c))))
+       str))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; avoid using strftime, still broken in guile-2.2. see explanation at
 ;; https://lists.gnu.org/archive/html/bug-guile/2019-05/msg00003.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

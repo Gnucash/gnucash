@@ -113,7 +113,6 @@
 (export gnc:html-make-options-link)
 (export gnc:html-js-include)
 (export gnc:html-css-include)
-(export gnc:html-string-sanitize)
 
 ;; report-core.scm
 (export gnc:menuname-reports)

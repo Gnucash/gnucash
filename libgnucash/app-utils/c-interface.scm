@@ -63,13 +63,16 @@
 (define (gnc:backtrace-if-exception proc . args)
   (let* ((apply-result (gnc:apply-with-error-handling proc args))
          (result (car apply-result))
-         (error (cadr apply-result)))
+         (captured-error (cadr apply-result)))
     (cond
-     (error
-      (display error (current-error-port))
+     (captured-error
+      (display captured-error (current-error-port))
+      (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
       (when (defined? 'gnc:warn)
-        (gnc:warn error)))
+        (gnc:warn captured-error)))
      (else result))))
+
+(define-public gnc:last-captured-error "")
 
 ;; This database can be used to store and retrieve translatable
 ;; strings. Strings that are returned by the lookup function are

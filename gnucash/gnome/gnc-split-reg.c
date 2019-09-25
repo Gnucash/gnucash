@@ -2353,15 +2353,21 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
             }
         }
     }
-
     /* First record the transaction. This will perform a refresh. */
     if (!gnc_split_reg_record (gsr))
     {
-        /* make sure the sheet has the focus if the record is FALSE
+        /* we may come here from the transfer cell if we decline to create a
+         * new account, make sure the sheet has the focus if the record is FALSE
          * which results in no cursor movement. */
         gnc_split_reg_focus_on_sheet (gsr);
-        LEAVE(" ");
-        return;
+
+        /* if there are no changes, just enter was pressed, proceed to move
+         * other wise lets not move. */
+        if (gnc_table_current_cursor_changed (sr->table, FALSE))
+        {
+            LEAVE(" ");
+            return;
+        }
     }
 
     if (!goto_blank && next_transaction)

@@ -29,6 +29,7 @@
 #include "file-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
+#include "gnc-guile-utils.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-report-system.h"
 #include "gnc-plugin-manager.h"
@@ -141,10 +142,16 @@ gnc_report_system_report_stream_cb (const char *location, char ** data, int *len
 
     if (!ok)
     {
+        SCM captured = scm_c_eval_string ("gnc:last-captured-error");
+        gchar *captured_str = gnc_scm_to_utf8_string(captured);
+
         *data = g_strdup_printf ("<html><body><h3>%s</h3>"
-        "<p>%s</p></body></html>",
-        _("Report error"),
-                                 _("An error occurred while running the report."));
+                                 "<p>%s</p><pre>%s</pre></body></html>",
+                                 _("Report error"),
+                                 _("An error occurred while running the report."),
+                                 captured_str);
+
+        g_free(captured_str);
 
         /* Make sure the progress bar is finished, which will also
          *           make the GUI sensitive again. Easier to do this via guile

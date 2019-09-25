@@ -18,6 +18,7 @@ set(scm_test_with_srfi64_SOURCES
   test-average-balance.scm
   test-invoice.scm
   test-owner-report.scm
+  test-portfolios.scm
 )
 
 set(scm_test_with_textual_ports_SOURCES

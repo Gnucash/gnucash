@@ -368,18 +368,5 @@
           "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///~a\" />\n"
           (gnc-path-find-localized-html-file file)))
 
-;; function to sanitize strings prior to sending to html
-(define (gnc:html-string-sanitize str)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (case c
-            ((#\&) "&amp;")
-            ((#\<) "&lt;")
-            ((#\>) "&gt;")
-            (else c))))
-       str))))
 
 
