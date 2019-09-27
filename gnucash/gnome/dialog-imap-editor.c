@@ -69,6 +69,8 @@ typedef struct
     GtkWidget    *filter_button;
     GtkWidget    *filter_text_entry;
     GtkWidget    *filter_label;
+    gboolean      apply_selection_filter;
+
 
     GtkWidget    *expand_button;
     GtkWidget    *collapse_button;
@@ -236,19 +238,17 @@ gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_
 }
 
 static gboolean
-filter_test_and_move_next (GtkTreeModel *model, GtkTreeIter *iter, ImapDialog *imap_dialog)
+filter_test_and_move_next (GtkTreeModel *model, GtkTreeIter *iter,
+                           const gchar *filter_text, ImapDialog *imap_dialog)
 {
     GtkTreePath *tree_path;
     gint         depth;
     gboolean     valid;
-    const gchar *filter_text;
     const gchar *match_string;
     const gchar *map_full_acc;
 
     // Read the row
     gtk_tree_model_get (model, iter, MATCH_STRING, &match_string, MAP_FULL_ACC, &map_full_acc, -1);
-
-    filter_text = gtk_entry_get_text (GTK_ENTRY(imap_dialog->filter_text_entry));
 
     // Get the level we are at in the tree-model
     tree_path = gtk_tree_model_get_path (model, iter);
@@ -258,7 +258,7 @@ filter_test_and_move_next (GtkTreeModel *model, GtkTreeIter *iter, ImapDialog *i
     gtk_tree_store_set (GTK_TREE_STORE(model), iter, FILTER, TRUE, -1);
 
     // Check for a filter_text entry
-    if (g_strcmp0 (filter_text, "") != 0)
+    if (filter_text && *filter_text != '\0')
     {
         if (match_string != NULL) // Check for match_string is not NULL, valid line
         {
@@ -295,19 +295,32 @@ filter_button_cb (GtkButton *button, ImapDialog *imap_dialog)
     GtkTreeModel *model, *filter;
     GtkTreeIter   iter;
     gboolean      valid;
+    const gchar  *filter_text;
 
     filter = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
     model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter));
 
+    filter_text = gtk_entry_get_text (GTK_ENTRY(imap_dialog->filter_text_entry));
+
     // Collapse all nodes
     gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap_dialog->view));
+    imap_dialog->apply_selection_filter = FALSE;
+
+    // clear any selection
+    gtk_tree_selection_unselect_all (gtk_tree_view_get_selection
+                                    (GTK_TREE_VIEW(imap_dialog->view)));
+
+    // do we have a filter, apply selection filter
+    if (filter_text && *filter_text != '\0')
+        imap_dialog->apply_selection_filter = TRUE;
 
     valid = gtk_tree_model_get_iter_first (model, &iter);
 
     while (valid)
     {
-        valid = filter_test_and_move_next (model, &iter, imap_dialog);
+        valid = filter_test_and_move_next (model, &iter, filter_text, imap_dialog);
     }
+    gtk_widget_grab_focus (GTK_WIDGET(imap_dialog->view));
 }
 
 static void
@@ -586,6 +599,7 @@ get_account_info (ImapDialog *imap_dialog)
 
     // Clear the filter
     gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    imap_dialog->apply_selection_filter = FALSE;
 
     // Hide Count Column
     show_count_column (imap_dialog, FALSE);
@@ -620,6 +634,34 @@ get_account_info (ImapDialog *imap_dialog)
     show_first_row (imap_dialog);
 
     g_list_free (accts);
+}
+
+static gboolean
+view_selection_function (GtkTreeSelection *selection,
+                         GtkTreeModel *model,
+                         GtkTreePath *path,
+                         gboolean path_currently_selected,
+                         gpointer user_data)
+{
+    ImapDialog *imap_dialog = user_data;
+    GtkTreeIter iter;
+
+    if (!imap_dialog->apply_selection_filter)
+        return TRUE;
+
+    // do we have a valid row
+    if (gtk_tree_model_get_iter (model, &iter, path))
+    {
+        const gchar *match_string;
+
+        // read the row
+        gtk_tree_model_get (model, &iter, MATCH_STRING, &match_string, -1);
+
+        // match_string NULL, top level can not be selected with a filter
+        if (match_string == NULL)
+            return FALSE;
+    }
+    return TRUE;
 }
 
 static void
@@ -686,6 +728,12 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap_dialog->view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+    /* add a select function  */
+    gtk_tree_selection_set_select_function (selection,
+                                            view_selection_function,
+                                            imap_dialog,
+                                            NULL);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, imap_dialog);
 
