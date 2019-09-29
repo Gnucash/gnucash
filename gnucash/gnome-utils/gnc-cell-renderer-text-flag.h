@@ -42,6 +42,7 @@ typedef struct _GtkCellRendererTextPrivate
 {
     guint size;
     GdkRGBA color;
+    GdkRGBA color_selected;
     gboolean flagged;
 } GncCellRendererTextFlagPrivate;
 

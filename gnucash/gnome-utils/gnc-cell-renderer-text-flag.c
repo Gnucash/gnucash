@@ -59,6 +59,8 @@ enum
     PROP_FLAG_COLOR,
     PROP_FLAG_COLOR_RGBA,
     PROP_FLAGGED,
+    PROP_FLAG_COLOR_SELECTED,
+    PROP_FLAG_COLOR_RGBA_SELECTED,
 
     LAST_PROP
 };
@@ -111,6 +113,18 @@ gnc_cell_renderer_text_flag_class_init(GncCellRendererTextFlagClass *class)
                            G_PARAM_READWRITE));
 
     g_object_class_install_property(
+        object_class, PROP_FLAG_COLOR_SELECTED,
+        g_param_spec_string("flag-color-selected", "Flag color name for selected rows",
+                            "Flag color as a string, to use in selected rows", "white",
+                            G_PARAM_WRITABLE));
+
+    g_object_class_install_property(
+        object_class, PROP_FLAG_COLOR_RGBA_SELECTED,
+        g_param_spec_boxed("flag-color-rgba-selected", "Flag color as RGBA for selected rows",
+                           "Flag color as a GdkRGBA, to use in selected rows", GDK_TYPE_RGBA,
+                           G_PARAM_READWRITE));                           
+
+    g_object_class_install_property(
         object_class, PROP_FLAGGED,
         g_param_spec_boolean("flagged", "Flag set",
                              "Flag indicator is set", FALSE,
@@ -138,6 +152,10 @@ gnc_cell_renderer_text_flag_get_property(GObject *object, guint param_id,
       g_value_set_boxed (value, &priv->color);
       break;
 
+    case PROP_FLAG_COLOR_RGBA_SELECTED:
+      g_value_set_boxed (value, &priv->color_selected);
+      break;
+
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
         break;
@@ -154,13 +172,19 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
     switch (param_id)
     {
     case PROP_FLAG_COLOR:
+    case PROP_FLAG_COLOR_SELECTED:
     {
         GdkRGBA rgba;
 
         if (!g_value_get_string(value))
             break;
-        else if (gdk_rgba_parse(&rgba, g_value_get_string(value)))
-            priv->color = rgba;
+        else if (gdk_rgba_parse(&rgba, g_value_get_string(value))) 
+        {
+            if (param_id == PROP_FLAG_COLOR_SELECTED)
+                priv->color = rgba;
+            else
+                priv->color_selected = rgba;
+        }
         else
             g_warning("Don't know color '%s'", g_value_get_string(value));
     }
@@ -173,6 +197,16 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
         rgba = g_value_get_boxed(value);
         if (rgba) 
             priv->color = *rgba;
+    }
+    break;
+
+    case PROP_FLAG_COLOR_RGBA_SELECTED:
+    {
+        GdkRGBA *rgba;
+
+        rgba = g_value_get_boxed(value);
+        if (rgba) 
+            priv->color_selected = *rgba;
     }
     break;
 
@@ -232,7 +266,9 @@ gnc_cell_renderer_text_flag_render(GtkCellRenderer *cell, cairo_t *cr,
         cairo_rel_line_to(cr, size, 0);
         cairo_rel_line_to(cr, 0, size);
         cairo_close_path(cr);
-        gdk_cairo_set_source_rgba(cr, &priv->color);
+        gdk_cairo_set_source_rgba(cr, (flags & GTK_CELL_RENDERER_SELECTED)
+                                          ? &priv->color_selected
+                                          : &priv->color);
         cairo_fill(cr);
     }
 }
