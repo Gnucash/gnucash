@@ -136,7 +136,7 @@ class OptionUIItem
 {
 public:
      GncOptionUIType get_ui_type() { return m_ui_type; }
-    const void* get_ui_item() {return m_ui_item; }
+    void* const get_ui_item() {return m_ui_item; }
     void set_ui_item(void* ui_item)
     {
         if (m_ui_type == GncOptionUIType::INTERNAL)
@@ -307,7 +307,7 @@ public:
     {
         return boost::apply_visitor(GetUITypeVisitor(), m_option);
     }
-    const void* get_ui_item()
+    void* const get_ui_item()
     {
         return boost::apply_visitor(GetUIItemVisitor(), m_option);
     }
@@ -418,10 +418,10 @@ private:
         }
     };
     struct GetUIItemVisitor :
-        public boost::static_visitor<const void*>
+        public boost::static_visitor<void* const >
     {
         template <class OptionType>
-        const void* operator()(OptionType& option) const {
+        void* const operator()(OptionType& option) const {
             return option.get_ui_item();
         }
     };
