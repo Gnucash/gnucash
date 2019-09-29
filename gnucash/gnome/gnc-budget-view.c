@@ -1033,23 +1033,6 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
 
     note = gnc_budget_get_account_period_note(budget, account, period_num);
     g_object_set(cell, "flagged", note != NULL, NULL);
-    if (note != NULL) 
-    {
-        GdkRGBA *c;
-        GtkStateFlags state;
-        GtkStyleContext *stylectxt =
-            gtk_widget_get_style_context(GTK_WIDGET(bview));
-
-        GList *sel = gnc_tree_view_account_get_selected_accounts(GNC_TREE_VIEW_ACCOUNT(bview));
-
-        state = g_list_find(sel, account) == NULL ? GTK_STATE_FLAG_SELECTED
-                                                  : GTK_STATE_FLAG_NORMAL;
-
-        gtk_style_context_get(stylectxt, state, "background-color", &c, NULL);
-        g_object_set(cell, "flag-color-rgba", c, NULL);
-        gdk_rgba_free (c);
-        g_list_free(sel);
-    }
 
     return g_strdup(amtbuff);
 }
@@ -1406,10 +1389,17 @@ gnc_budget_view_refresh(GncBudgetView *view)
     GtkTreeViewColumn *col;
     GList *col_list;
     GList *totals_col_list;
+    GdkRGBA *note_color, *note_color_selected;
+    GtkStyleContext *stylectxt;
+
     ENTER("view %p", view);
 
     g_return_if_fail(view != NULL);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
+
+    stylectxt = gtk_widget_get_style_context(GTK_WIDGET(priv->tree_view));
+    gtk_style_context_get(stylectxt, GTK_STATE_FLAG_SELECTED, "background-color", &note_color, NULL);
+    gtk_style_context_get(stylectxt, GTK_STATE_FLAG_NORMAL, "background-color", &note_color_selected, NULL);
 
     num_periods = gnc_budget_get_num_periods(priv->budget);
     col_list = priv->period_col_list;
@@ -1448,6 +1438,9 @@ gnc_budget_view_refresh(GncBudgetView *view)
     while (num_periods_visible < num_periods)
     {
         GtkCellRenderer *renderer = gnc_cell_renderer_text_flag_new ();
+        g_object_set(renderer, "flag-color-rgba", note_color, NULL);
+        g_object_set(renderer, "flag-color-rgba-selected", note_color_selected, NULL);
+
         col = gnc_tree_view_account_add_custom_column_renderer(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
                   budget_col_source, budget_col_edited, renderer);
@@ -1474,6 +1467,10 @@ gnc_budget_view_refresh(GncBudgetView *view)
 
         num_periods_visible = g_list_length(col_list);
     }
+    
+    gdk_rgba_free (note_color);
+    gdk_rgba_free (note_color_selected);
+
     priv->period_col_list = col_list;
     priv->totals_col_list = totals_col_list;
 
