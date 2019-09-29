@@ -156,7 +156,8 @@ gnc_register_string_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, std::string value)
 {
-    GncOption option{section, name, key, doc_string, value};
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::STRING};
     db->register_option(section, std::move(option));
 }
 
@@ -165,7 +166,10 @@ gnc_register_text_option(GncOptionDB* db, const char* section, const char* name,
                          const char* key, const char* doc_string,
                          std::string value)
 {
-    gnc_register_string_option(db, section, name, key, doc_string, value);
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::TEXT};
+    db->register_option(section, std::move(option));
+
 }
 
 void
@@ -173,7 +177,8 @@ gnc_register_budget_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value)};
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+            GncOptionUIType::BUDGET};
     db->register_option(section, std::move(option));
 }
 
@@ -182,7 +187,8 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value)};
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+            GncOptionUIType::COMMODITY};
     db->register_option(section, std::move(option));
 }
 
