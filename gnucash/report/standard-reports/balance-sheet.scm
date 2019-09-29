@@ -462,120 +462,84 @@
 	
         ;; Get all the balances for each of the account types.
         (let* ((asset-balance #f)
-               (neg-liability-balance #f) ;; credit balances are < 0
                (liability-balance #f)
-               (neg-equity-balance #f)
                (equity-balance #f)
-	       (neg-retained-earnings #f) ;; credit, income - expenses, < 0
-	       (retained-earnings #f)
-	       (neg-trading-balance #f)
-	       (trading-balance #f)
+               (retained-earnings #f)
+               (trading-balance #f)
                (unrealized-gain-collector #f)
                (total-equity-balance #f)
                (liability-plus-equity #f)
-	       
+
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
-	       (left-table (gnc:make-html-table)) ;; gnc:html-table
-	       (right-table (if report-form? left-table
-				(gnc:make-html-table)))
-	       (table-env #f)                      ;; parameters for :make-
-	       (params #f)                         ;; and -add-account-
+               (left-table (gnc:make-html-table)) ;; gnc:html-table
+               (right-table (if report-form?
+                                left-table
+                                (gnc:make-html-table)))
+               (table-env #f)                      ;; parameters for :make-
+               (params #f)                         ;; and -add-account-
                (asset-table #f)                    ;; gnc:html-acct-table
                (equity-table #f)                   ;; gnc:html-acct-table
-	       (get-total-balance-fn
-		(lambda (account)
-		  (gnc:account-get-comm-balance-at-date 
-		   account reportdate #f)))
+               (get-total-balance-fn
+                (lambda (account)
+                  (gnc:account-get-comm-balance-at-date
+                   account reportdate #f)))
                (get-total-value-fn
                 (lambda (account)
-                  (gnc:account-get-comm-value-at-date account reportdate #f)))
-	       )
-	  
-	  ;; If you ask me, any outstanding(TM) retained earnings and
-	  ;; unrealized gains should be added directly into equity,
-	  ;; since the balance sheet does not have a period over which
-	  ;; to report earnings....  See discussion on bugzilla.
-	  (gnc:report-percent-done 4)
-	  ;; sum assets
-	  (set! asset-balance (account-list-balance asset-accounts date-secs))
-	  (gnc:report-percent-done 6)
-	  ;; sum liabilities
-	  (set! neg-liability-balance (account-list-balance liability-accounts date-secs))
-	  (set! liability-balance
-                (gnc:make-commodity-collector))
-          (liability-balance 'minusmerge
-			     neg-liability-balance
-			     #f)
-	  (gnc:report-percent-done 8)
-	  ;; sum equities
-	  (set! neg-equity-balance (account-list-balance equity-accounts date-secs))
-	  (set! equity-balance (gnc:make-commodity-collector))
-	  (equity-balance 'minusmerge
-			  neg-equity-balance
-			  #f)
-	  (gnc:report-percent-done 12)
-	  ;; sum any retained earnings
-	  (set! neg-retained-earnings (account-list-balance income-expense-accounts date-secs))
-	  (set! retained-earnings (gnc:make-commodity-collector))
-	  (retained-earnings 'minusmerge
-			  neg-retained-earnings
-			  #f)
-	  (set! neg-trading-balance (account-list-balance trading-accounts date-secs))
-	  (set! trading-balance (gnc:make-commodity-collector))
-	  (trading-balance 'minusmerge
-	                   neg-trading-balance
-	                   #f)
-	  (gnc:report-percent-done 14)
-	  ;; sum any unrealized gains
-	  ;; 
-	  ;; Hm... unrealized gains....  This is when you purchase
-	  ;; something and its value increases/decreases (prior to
-	  ;; your selling it) and you have to reflect that on your
-	  ;; balance sheet.
-	  ;;
+                  (gnc:account-get-comm-value-at-date account reportdate #f))))
+
+          ;; If you ask me, any outstanding(TM) retained earnings and
+          ;; unrealized gains should be added directly into equity,
+          ;; since the balance sheet does not have a period over which
+          ;; to report earnings....  See discussion on bugzilla.
+          (gnc:report-percent-done 4)
+
+          ;; sum assets
+          (set! asset-balance (account-list-balance asset-accounts date-secs))
+          (gnc:report-percent-done 6)
+
+          ;; sum liabilities
+          (set! liability-balance
+            (gnc:collector- (account-list-balance liability-accounts date-secs)))
+          (gnc:report-percent-done 8)
+
+          ;; sum equities
+          (set! equity-balance
+            (gnc:collector- (account-list-balance equity-accounts date-secs)))
+          (gnc:report-percent-done 12)
+
+          ;; sum any retained earnings
+          (set! retained-earnings
+            (gnc:collector- (account-list-balance income-expense-accounts date-secs)))
+          (set! trading-balance
+            (gnc:collector- (account-list-balance trading-accounts date-secs)))
+          (gnc:report-percent-done 14)
+
+          ;; sum any unrealized gains
+          ;;
+          ;; Hm... unrealized gains....  This is when you purchase
+          ;; something and its value increases/decreases (prior to
+          ;; your selling it) and you have to reflect that on your
+          ;; balance sheet.
+          ;;
           ;; Don't calculate unrealized gains if we were asked not to.  If we are using
           ;; commodity trading accounts they will automatically accumulate the gains.
-          (set! unrealized-gain-collector (gnc:make-commodity-collector))
-          (if compute-unrealized-gains?
-              (let ((asset-basis (gnc:accounts-get-comm-total-assets
-                                  asset-accounts
-                                  get-total-value-fn))
-                    (neg-liability-basis (gnc:accounts-get-comm-total-assets
-                                          liability-accounts
-                                          get-total-value-fn)))
-                ;; Calculate unrealized gains from assets.
-                (unrealized-gain-collector 'merge asset-balance #f)
-                (unrealized-gain-collector 'minusmerge asset-basis #f)
-                ;; Combine with unrealized gains from liabilities
-                (unrealized-gain-collector 'merge neg-liability-balance #f)
-                (unrealized-gain-collector 'minusmerge neg-liability-basis #f)))
+          (set! unrealized-gain-collector
+            (if compute-unrealized-gains?
+                (gnc:collector- asset-balance
+                                liability-balance
+                                (gnc:accounts-get-comm-total-assets
+                                 (append asset-accounts liability-accounts)
+                                 get-total-value-fn))
+                (gnc:collector+)))
 
           ;; calculate equity and liability+equity totals
-	  (set! total-equity-balance (gnc:make-commodity-collector))
-	  (total-equity-balance 'merge
-				equity-balance
-				#f)
-	  (total-equity-balance 'merge
-				retained-earnings
-				#f)
-	  (total-equity-balance 'merge
-				unrealized-gain-collector
-				#f)
-	  (total-equity-balance 'merge
-	                        trading-balance
-	                        #f)
-	  (gnc:report-percent-done 18)
-	  (set! liability-plus-equity (gnc:make-commodity-collector))
-	  (liability-plus-equity 'merge
-				 liability-balance
-				 #f)
-	  (liability-plus-equity 'merge
-				 total-equity-balance
-				 #f)
-	  
-	  (gnc:report-percent-done 20)
-	  (gnc:report-percent-done 30)
+          (set! total-equity-balance
+            (gnc:collector+ equity-balance retained-earnings
+                            unrealized-gain-collector trading-balance))
+          (set! liability-plus-equity
+            (gnc:collector+ liability-balance total-equity-balance))
+          (gnc:report-percent-done 30)
 	  
 	  ;;; Arbitrarily declare that the building of these tables
 	  ;;; takes 50% of the total amount of time spent building
