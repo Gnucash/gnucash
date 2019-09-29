@@ -46,6 +46,14 @@ public:
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;
+    void set_ui_item(const char* section, const char* name, void* ui_item);
+    void* const get_ui_item(const char* section, const char* name);
+    GncOptionUIType get_ui_type(const char* section, const char* name);
+    void set_ui_from_option(const char* section, const char* name,
+                            std::function<void(GncOption&)> func);
+    void set_option_from_ui(const char* section, const char* name,
+                            std::function<void(GncOption&)> func);
+    SCM lookup_option(const char* section, const char* name);
     std::string lookup_string_option(const char* section,
                                             const char* name);
     bool set_option(const char* section, const char* name, SCM value);
@@ -78,8 +86,8 @@ void gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
                                 const char* doc_string, std::string value);
 
 void gnc_register_text_option(const GncOptionDBPtr& db, const char* section,
-                                const char* name, const char* key,
-                                const char* doc_string, std::string value);
+                              const char* name, const char* key,
+                              const char* doc_string, std::string value);
 
 void gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,

@@ -78,6 +78,50 @@ GncOptionDB::get_default_section() const noexcept
         return &(m_default_section.get());
     return nullptr;
 }
+
+void
+GncOptionDB::set_ui_item(const char* section, const char* name, void* ui_item)
+{
+    auto option = find_option(section, name);
+    if (!option) return;
+    option->set_ui_item(ui_item);
+}
+
+void* const
+GncOptionDB::get_ui_item(const char* section, const char* name)
+{
+    auto option = find_option(section, name);
+    if (!option) return nullptr;
+    return option->get_ui_item();
+}
+
+GncOptionUIType
+GncOptionDB::get_ui_type(const char* section, const char* name)
+{
+    auto option = find_option(section, name);
+    if (!option) return GncOptionUIType::INTERNAL;
+    return option->get_ui_type();
+}
+
+void
+GncOptionDB::set_ui_from_option(const char* section, const char* name,
+                        std::function<void(GncOption&)> func)
+{
+    auto option = find_option(section, name);
+    if (!option) return;
+    func(option.get());
+}
+
+void
+GncOptionDB::set_option_from_ui(const char* section, const char* name,
+                        std::function<void(GncOption&)> func)
+{
+    auto option = find_option(section, name);
+    if (!option) return;
+    func(option.get());
+}
+
+
 boost::optional<GncOptionSection&>
 GncOptionDB::find_section(const char* section)
 {
@@ -145,14 +189,14 @@ GncOptionDB::commit()
 {
 }
 
-GncOptionDB*
+GncOptionDBPtr
 gnc_option_db_new(void)
 {
-    return new GncOptionDB;
+    return GncOptionDBPtr{new GncOptionDB};
 }
 
 void
-gnc_register_string_option(GncOptionDB* db, const char* section,
+gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, std::string value)
 {
@@ -162,7 +206,7 @@ gnc_register_string_option(GncOptionDB* db, const char* section,
 }
 
 void
-gnc_register_text_option(GncOptionDB* db, const char* section, const char* name,
+gnc_register_text_option(const GncOptionDBPtr& db, const char* section, const char* name,
                          const char* key, const char* doc_string,
                          std::string value)
 {
@@ -173,7 +217,7 @@ gnc_register_text_option(GncOptionDB* db, const char* section, const char* name,
 }
 
 void
-gnc_register_budget_option(GncOptionDB* db, const char* section,
+gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
@@ -183,7 +227,7 @@ gnc_register_budget_option(GncOptionDB* db, const char* section,
 }
 
 void
-gnc_register_commodity_option(GncOptionDB* db, const char* section,
+gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
@@ -194,7 +238,7 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
 
 
 void
-gnc_register_currency_option(GncOptionDB* db, const char* section,
+gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, gnc_commodity *value)
 {

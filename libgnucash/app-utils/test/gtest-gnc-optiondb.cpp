@@ -68,3 +68,62 @@ TEST_F(GncOptionDBTest, test_register_string_option)
                                std::string{"waldo"});
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
+
+class GncUIType
+{
+public:
+    void set_value(const std::string& value) { m_value = value; }
+    const std::string& get_value() const { return m_value; }
+private:
+    std::string m_value;
+};
+
+class GncOptionDBUITest : public ::testing::Test
+{
+protected:
+    GncOptionDBUITest() : m_db{gnc_option_db_new()}
+    {
+        gnc_register_string_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                   std::string{"waldo"});
+        gnc_register_text_option(m_db, "foo", "sausage", "links",
+                                 "Phony Option", std::string{"waldo"});
+        gnc_register_string_option(m_db, "qux", "grault", "baz", "Phony Option",
+                                   std::string{""});
+        gnc_register_text_option(m_db, "qux", "garply", "fred",
+                                   "Phony Option", std::string{"waldo"});
+    }
+
+    GncOptionDBPtr m_db;
+};
+
+TEST_F(GncOptionDBUITest, test_set_ui_item)
+{
+    GncUIType entry;
+    m_db->set_ui_item("foo", "bar", &entry);
+    EXPECT_EQ(&entry, static_cast<GncUIType*>(m_db->get_ui_item("foo", "bar")));
+}
+
+TEST_F(GncOptionDBUITest, test_ui_value_from_option)
+{
+    GncUIType entry;
+    const char* value{"waldo"};
+    m_db->set_ui_item("foo", "bar", &entry);
+    m_db->set_ui_from_option("foo", "bar", [](GncOption& option){
+            auto ui_item = static_cast<GncUIType* const>(option.get_ui_item());
+            ui_item->set_value(option.get_value<std::string>());
+        });
+    EXPECT_STREQ(value, entry.get_value().c_str());
+}
+
+TEST_F(GncOptionDBUITest, test_option_value_from_ui)
+{
+    GncUIType entry;
+    const char* value{"pepper"};
+    m_db->set_ui_item("foo", "bar", &entry);
+    entry.set_value(value);
+    m_db->set_option_from_ui("foo", "bar", [](GncOption& option){
+            auto ui_item = static_cast<GncUIType* const>(option.get_ui_item());
+            option.set_value(ui_item->get_value());
+        });
+    EXPECT_STREQ(value, m_db->lookup_string_option("foo", "bar").c_str());
+}
