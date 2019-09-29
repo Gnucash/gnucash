@@ -23,7 +23,7 @@
 
 #include "gnc-optiondb.hpp"
 
-GncOptionDB::GncOptionDB() : m_default_section{nullptr} {}
+GncOptionDB::GncOptionDB() : m_default_section{boost::none} {}
 
 GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
 
@@ -35,32 +35,25 @@ GncOptionDB::save_to_book(QofBook* book, bool do_clear) const
 void
 GncOptionDB::register_option(const char* section, GncOption&& option)
 {
-    auto db_section = std::find_if(
-        m_sections.begin(), m_sections.end(),
-        [section](GncOptionSection sect) -> bool
-        {
-            return sect.first == std::string{section};
-        });
+    auto db_section = find_section(section);
 
-    if (db_section == m_sections.end())
+    if (db_section)
     {
-        m_sections.emplace_back(std::make_pair(std::string{section},
-                                               GncOptionVec{}));
-        db_section = std::prev(m_sections.end());
+        db_section->second.emplace_back(std::move(option));
+        return;
     }
-    db_section->second.emplace_back(std::move(option));
+
+    m_sections.emplace_back(std::make_pair(std::string{section},
+                                               GncOptionVec{}));
+    auto new_section = std::prev(m_sections.end());
+    new_section->second.emplace_back(std::move(option));
 }
 
 void
 GncOptionDB::unregister_option(const char* section, const char* name)
 {
-    auto db_section = std::find_if(
-        m_sections.begin(), m_sections.end(),
-        [section](GncOptionSection sect) -> bool
-        {
-            return sect.first == std::string{section};
-        });
-    if (db_section != m_sections.end())
+    auto db_section = find_section(section);
+    if (db_section)
     {
         db_section->second.erase(
             std::remove_if(
@@ -75,10 +68,18 @@ GncOptionDB::unregister_option(const char* section, const char* name)
 void
 GncOptionDB::set_default_section(const char* section)
 {
+    m_default_section = find_section(section);
 }
 
-SCM
-GncOptionDB::lookup_option(const char* section, const char* name) const
+const GncOptionSection* const
+GncOptionDB::get_default_section() const noexcept
+{
+    if (m_default_section)
+        return &(m_default_section.get());
+    return nullptr;
+}
+boost::optional<GncOptionSection&>
+GncOptionDB::find_section(const char* section)
 {
     auto db_section = std::find_if(
         m_sections.begin(), m_sections.end(),
@@ -87,37 +88,43 @@ GncOptionDB::lookup_option(const char* section, const char* name) const
             return sect.first == std::string{section};
         });
     if (db_section == m_sections.end())
-        return SCM_BOOL_F;
+        return boost::none;
+    return *db_section;
+}
+
+boost::optional<GncOption&>
+GncOptionDB::find_option(const char* section, const char* name)
+{
+    auto db_section = find_section(section);
+    if (!db_section)
+        return boost::none;
     auto db_opt = std::find_if(
         db_section->second.begin(), db_section->second.end(),
-        [name](const GncOption& option) -> bool
+        [name](GncOption& option) -> bool
         {
             return option.get_name() == std::string{name};
         });
     if (db_opt == db_section->second.end())
+        return boost::none;
+    return *db_opt;
+}
+
+SCM
+GncOptionDB::lookup_option(const char* section, const char* name)
+{
+    auto db_opt = find_option(section, name);
+    if (!db_opt)
         return SCM_BOOL_F;
     return db_opt->get_scm_value();
 }
 
-static const std::string empty_string;
 std::string
-GncOptionDB::lookup_string_option(const char* section, const char* name) const
+GncOptionDB::lookup_string_option(const char* section, const char* name)
 {
-    auto db_section = std::find_if(
-        m_sections.begin(), m_sections.end(),
-        [section](GncOptionSection sect) -> bool
-        {
-            return sect.first == std::string{section};
-        });
-    if (db_section == m_sections.end())
-        return empty_string;
-    auto db_opt = std::find_if(
-        db_section->second.begin(), db_section->second.end(),
-        [name](const GncOption& option) -> bool
-        {
-            return option.get_name() == std::string{name};
-        });
-    if (db_opt == db_section->second.end())
+    static const std::string empty_string{};
+
+    auto db_opt = find_option(section, name);
+    if (!db_opt)
         return empty_string;
     return db_opt->get_value<std::string>();
 }
@@ -191,7 +198,8 @@ gnc_register_currency_option(GncOptionDB* db, const char* section,
             {
                 return GNC_IS_COMMODITY (new_value) &&
                     gnc_commodity_is_currency(GNC_COMMODITY(new_value));
-            }
+            },
+            GncOptionUIType::CURRENCY
         }};
     db->register_option(section, std::move(option));
 }

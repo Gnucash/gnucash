@@ -25,12 +25,13 @@
 #define GNC_OPTIONDB_HPP_
 
 #include "gnc-option.hpp"
+#include <functional>
+#include <boost/optional.hpp>
 
 class GncOptionDB;
 
 using GncOptionVec = std::vector<GncOption>;
 using GncOptionSection = std::pair<std::string, GncOptionVec>;
-using GncOptionSectionPtr = std::shared_ptr<const GncOptionSection>;
 class GncOptionDB
 {
 public:
@@ -44,18 +45,17 @@ public:
     void register_option(const char* section, GncOption&& option);
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
-    const GncOptionSectionPtr get_default_section() const noexcept
-    {
-        return m_default_section;
-    }
-    SCM lookup_option(const char* section, const char* name) const;
+    const GncOptionSection* const get_default_section() const noexcept;
     std::string lookup_string_option(const char* section,
-                                            const char* name) const;
+                                            const char* name);
     bool set_option(const char* section, const char* name, SCM value);
     void set_selectable(const char* section, const char* name);
     void commit();
 private:
-    GncOptionSectionPtr m_default_section;
+    boost::optional<GncOptionSection&> find_section(const char* section);
+    boost::optional<GncOption&> find_option(const char* section, const char* name);
+
+    boost::optional<GncOptionSection&> m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
 
