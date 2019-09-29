@@ -24,44 +24,47 @@
 #include <gtest/gtest.h>
 #include <gnc-optiondb.hpp>
 
-TEST(GncOptionDB, test_ctor)
+class GncOptionDBTest : public ::testing::Test
+{
+protected:
+    GncOptionDBTest() : m_db{gnc_option_db_new()} {}
+
+    GncOptionDBPtr m_db;
+};
+
+TEST_F(GncOptionDBTest, test_ctor)
 {
     EXPECT_NO_THROW ({ GncOptionDB optiondb; });
 }
 
-TEST(GncOptionDB, test_register_option)
+TEST_F(GncOptionDBTest, test_register_option)
 {
-    GncOptionDB optiondb;
     GncOption option1{"foo", "bar", "baz", "Phony Option",
                       std::string{"waldo"}};
-    optiondb.register_option("foo", std::move(option1));
-    EXPECT_EQ(optiondb.num_sections(), 1);
+    m_db->register_option("foo", std::move(option1));
+    EXPECT_EQ(m_db->num_sections(), 1);
 }
 
-TEST(GncOptionDB, test_lookup_string_option)
+TEST_F(GncOptionDBTest, test_lookup_string_option)
 {
-    GncOptionDB optiondb;
     GncOption option1{"foo", "bar", "baz", "Phony Option",
                       std::string{"waldo"}};
-    optiondb.register_option("foo", std::move(option1));
-    EXPECT_STREQ("waldo", optiondb.lookup_string_option("foo", "bar").c_str());
+    m_db->register_option("foo", std::move(option1));
+    EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
-TEST(GncOptionDB, test_unregister_option)
+TEST_F(GncOptionDBTest, test_unregister_option)
 {
-    GncOptionDB optiondb;
     GncOption option1{"foo", "bar", "baz", "Phony Option",
                       std::string{"waldo"}};
-    optiondb.register_option("foo", std::move(option1));
-    optiondb.unregister_option("foo", "bar");
-    EXPECT_TRUE(optiondb.lookup_string_option("foo", "bar").empty());
+    m_db->register_option("foo", std::move(option1));
+    m_db->unregister_option("foo", "bar");
+    EXPECT_TRUE(m_db->lookup_string_option("foo", "bar").empty());
 }
 
-TEST(GncOptionDB, test_register_string_option)
+TEST_F(GncOptionDBTest, test_register_string_option)
 {
-    GncOptionDB* db = gnc_option_db_new();
-    gnc_register_string_option(db, "foo", "bar", "baz", "Phony Option",
+    gnc_register_string_option(m_db, "foo", "bar", "baz", "Phony Option",
                                std::string{"waldo"});
-    EXPECT_STREQ("waldo", db->lookup_string_option("foo", "bar").c_str());
-    delete db;
+    EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }

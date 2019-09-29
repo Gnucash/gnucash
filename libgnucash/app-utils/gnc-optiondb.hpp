@@ -63,6 +63,7 @@ private:
     std::function<void(void*)> m_set_ui_value;
 };
 
+using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 /**
  * Create an empty option database.
  *
@@ -70,33 +71,29 @@ private:
  * that for Guile.
  * @return A newly allocated GncOptionDB. Use delete to destroy it.
  */
-GncOptionDB *gnc_option_db_new(void);
+GncOptionDBPtr gnc_option_db_new(void);
 
-void gnc_register_string_option(GncOptionDB* db, const char* section,
+void gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);
 
-
-void gnc_register_string_option(GncOptionDB* db, const char* section,
+void gnc_register_text_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);
 
-void gnc_register_text_option(GncOptionDB* db, const char* section,
-                              const char* name, const char* key,
-                              const char* doc_string, std::string value);
-
-void gnc_register_budget_option(GncOptionDB* db, const char* section,
+void gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, GncBudget* value);
 
-void gnc_register_commodity_option(GncOptionDB* db, const char* section,
+void gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
                                    const char* name, const char* key,
                                    const char* doc_string,
                                    gnc_commodity* value);
 
-void gnc_register_currency_option(GncOptionDB* db, const char* section,
+void gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
                                   const char* name, const char* key,
                                   const char* doc_string, gnc_commodity* value);
+
 
 
 #endif //GNC_OPTIONDB_HPP_
