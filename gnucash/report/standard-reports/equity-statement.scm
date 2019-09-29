@@ -406,29 +406,11 @@
 	  ;; that though....
 	  ;; 
 	  (define (unrealized-gains-at-date book-balance exchange-fn date)
-	    (let* ((unrealized-gain-collector (gnc:make-commodity-collector))
-		   (weighted-fn
-		    (gnc:case-exchange-fn 'weighted-average
-					  report-commodity date))
-		   
-		   (value
-		    (gnc:gnc-monetary-amount
-		     (gnc:sum-collector-commodity book-balance
-						  report-commodity
-						  exchange-fn)))
-		   
-		   (cost
-		    (gnc:gnc-monetary-amount
-		     (gnc:sum-collector-commodity book-balance
-						  report-commodity
-						  weighted-fn)))
-		   
-		   (unrealized-gain (gnc-numeric-sub-fixed value cost)))
-	      
-	      (unrealized-gain-collector 'add report-commodity unrealized-gain)
-	      unrealized-gain-collector
-	      )
-	    )
+            (define weighted-fn
+	      (gnc:case-exchange-fn 'weighted-average report-commodity date))
+            (gnc:collector-
+             (gnc:sum-collector-commodity book-balance report-commodity exchange-fn)
+             (gnc:sum-collector-commodity book-balance report-commodity weighted-fn)))
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
 	  ;; unrealized gains should be added directly into equity,
@@ -553,7 +535,8 @@
 	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
 	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
 
-	  (set! withdrawals (account-get-total-flow 'in equity-accounts start-date end-date))
+	  (set! withdrawals
+            (account-get-total-flow 'in equity-accounts start-date end-date))
 
 	  (set! investments (gnc:make-commodity-collector))
 	  (investments 'merge net-investment #f)
