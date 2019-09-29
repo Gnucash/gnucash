@@ -303,24 +303,13 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
   
-  (define
-    (get-assoc-account-balances-budget
-      budget
-      accountlist
-      period-start
-      period-end
-      get-balance-fn)
+  (define (get-assoc-account-balances-budget
+           budget accountlist period-start period-end get-balance-fn)
     (gnc:get-assoc-account-balances
-      accountlist
-      (lambda (account)
-        (get-balance-fn budget account period-start period-end))))
+     accountlist (lambda (account)
+                   (get-balance-fn budget account period-start period-end))))
 
-  (define
-    (get-budget-account-budget-balance
-      budget
-      account
-      period-start
-      period-end)
+  (define (get-budget-account-budget-balance budget account period-start period-end)
     (gnc:budget-account-get-net budget account period-start period-end))
 
   (gnc:report-starting reportname)
@@ -429,9 +418,7 @@
 			   signed-balance report-commodity exchange-fn)))))
 	     (label (if neg? (or neg-label pos-label) pos-label))
 	     (balance (if neg?
-			  (let ((bal (gnc:make-commodity-collector)))
-			    (bal 'minusmerge signed-balance #f)
-			    bal)
+                          (gnc:collector- signed-balance)
 			  signed-balance))
 	     )
 	(gnc:html-table-add-labeled-amount-line!
@@ -530,20 +517,16 @@
 				 amount report-commodity exchange-fn)))))
 		   (label (if neg? (or neg-label pos-label) pos-label))
 		   (pos-bal (if neg?
-				(let ((bal (gnc:make-commodity-collector)))
-				  (bal 'minusmerge amount #f)
-				  bal)
+                                (gnc:collector- amount)
 				amount))
 		   (bal (gnc:sum-collector-commodity
-			 pos-bal report-commodity exchange-fn))
-		   (balance
-		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
-			     bal)
-			(and show-fcur?
-			     (gnc-commodity-table
-			      pos-bal report-commodity exchange-fn))
-			bal
-			))
+                         pos-bal report-commodity exchange-fn))
+                   (balance
+                    (cond
+                     ((gnc:uniform-commodity? pos-bal report-commodity) bal)
+                     (show-fcur? (gnc-commodity-table pos-bal report-commodity
+                                                      exchange-fn))
+                     (else bal)))
 		   (column (or col 0))
 		   )
 	      (gnc:html-table-add-labeled-amount-line!
@@ -553,9 +536,7 @@
 	      )
 	    )
 
-
 	  (gnc:report-percent-done 5)
-
 
           ;; Pre-fetch expense account balances.
           (set! expense-account-balances
@@ -575,9 +556,7 @@
             (lambda (account start-date end-date)
               (gnc:select-assoc-account-balance expense-account-balances account)))
 
-
 	  (gnc:report-percent-done 10)
-
 
           ;; Pre-fetch revenue account balances.
           (set! revenue-account-balances
@@ -599,15 +578,11 @@
               (gnc:commodity-collector-get-negated
                 (gnc:select-assoc-account-balance revenue-account-balances account))))
 
-
 	  (gnc:report-percent-done 20)
 
-
 	  ;; calculate net income
-	  (set! net-income (gnc:make-commodity-collector))
-	  (net-income 'merge revenue-total #f)
-	  (net-income 'minusmerge expense-total #f)
-	  
+	  (set! net-income
+            (gnc:collector- revenue-total expense-total))
 
 	  (gnc:report-percent-done 30)
 
