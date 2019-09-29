@@ -371,22 +371,17 @@
 				 amount report-commodity exchange-fn)))))
 		   (label (if neg? (or neg-label pos-label) pos-label))
 		   (pos-bal (if neg?
-				(let ((bal (gnc:make-commodity-collector)))
-				  (bal 'minusmerge amount #f)
-				  bal)
+                                (gnc:collector- amount)
 				amount))
 		   (bal (gnc:sum-collector-commodity
-			 pos-bal report-commodity exchange-fn))
-		   (balance
-		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
-			     bal)
-			(and show-fcur?
-			     (gnc-commodity-table
-			      pos-bal report-commodity exchange-fn))
-			bal
-			))
-		   (column (or col 0))
-		   )
+                         pos-bal report-commodity exchange-fn))
+                   (balance
+                    (cond
+                     ((gnc:uniform-commodity? pos-bal report-commodity) bal)
+                     (show-fcur? (gnc-commodity-table
+                                  pos-bal report-commodity exchange-fn))
+                     (else bal)))
+		   (column (or col 0)))
 	      (gnc:html-table-add-labeled-amount-line!
 	       table         3 row-style rule?
 	       label         0         1 "text-cell"
@@ -406,29 +401,13 @@
 	  ;; that though....
 	  ;; 
 	  (define (unrealized-gains-at-date book-balance exchange-fn date)
-	    (let* ((unrealized-gain-collector (gnc:make-commodity-collector))
-		   (weighted-fn
-		    (gnc:case-exchange-fn 'weighted-average
-					  report-commodity date))
-		   
-		   (value
-		    (gnc:gnc-monetary-amount
-		     (gnc:sum-collector-commodity book-balance
-						  report-commodity
-						  exchange-fn)))
-		   
-		   (cost
-		    (gnc:gnc-monetary-amount
-		     (gnc:sum-collector-commodity book-balance
-						  report-commodity
-						  weighted-fn)))
-		   
-		   (unrealized-gain (gnc-numeric-sub-fixed value cost)))
-	      
-	      (unrealized-gain-collector 'add report-commodity unrealized-gain)
-	      unrealized-gain-collector
-	      )
-	    )
+            (define weighted-fn
+	      (gnc:case-exchange-fn 'weighted-average report-commodity date))
+            (gnc:monetaries-add (gnc:sum-collector-commodity
+                                 book-balance report-commodity exchange-fn)
+                                (gnc:monetary-neg
+                                 (gnc:sum-collector-commodity
+                                  book-balance report-commodity weighted-fn))))
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
 	  ;; unrealized gains should be added directly into equity,
@@ -553,7 +532,8 @@
 	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
 	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
 
-	  (set! withdrawals (account-get-total-flow 'in equity-accounts start-date end-date))
+	  (set! withdrawals
+            (account-get-total-flow 'in equity-accounts start-date end-date))
 
 	  (set! investments (gnc:make-commodity-collector))
 	  (investments 'merge net-investment #f)
@@ -579,14 +559,10 @@
 	  
 	  (gnc:report-percent-done 30)
 	  
-	  ;; Workaround to force gtkhtml into displaying wide
-	  ;; enough columns.
-	  (gnc:html-table-append-row!
-	   build-table
-	   (make-list 2 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-	   )
+	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
+            (gnc:html-table-cell-set-style!
+             wide "text-cell" 'attribute '("style" "min-width:60px"))
+            (gnc:html-table-append-row! build-table (make-list 2 wide)))
 	  
 	  (gnc:report-percent-done 80)
 	  

@@ -571,18 +571,13 @@
 		  )
 		)
 	  
-	  ;; Workaround to force gtkhtml into displaying wide
-	  ;; enough columns.
-	  (let ((space
-		 (make-list tree-depth "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-		 ))
-	    (gnc:html-table-append-row! inc-table space)
-	    (gnc:html-table-append-row! exp-table space)
-	    (gnc:html-table-append-row! tra-table space))
+	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
+            (gnc:html-table-cell-set-style!
+             wide "text-cell" 'attribute '("style" "min-width:60px"))
+            (gnc:html-table-append-row! inc-table (make-list tree-depth wide))
+            (gnc:html-table-append-row! exp-table (make-list tree-depth wide))
+            (gnc:html-table-append-row! tra-table (make-list tree-depth wide)))
 
-	       
 	  (gnc:report-percent-done 80)
 	  (if label-revenue?
 	      (add-subtotal-line inc-table (_ "Revenues") #f #f))

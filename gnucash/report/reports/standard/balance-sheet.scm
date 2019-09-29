@@ -83,7 +83,6 @@
 (define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section."))
-;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
@@ -285,453 +284,287 @@
 (define (balance-sheet-renderer report-obj)
   (define (get-option pagename optname)
     (gnc:option-value
-     (gnc:lookup-option 
+     (gnc:lookup-option
       (gnc:report-options report-obj) pagename optname)))
-  
+
   (gnc:report-starting reportname)
-  
+
   ;; get all option's values
   (let* (
-	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (get-option gnc:pagename-general optname-party-name))
-         (reportdate (gnc:time64-end-day-time 
+         (report-title (get-option gnc:pagename-general optname-report-title))
+         (company-name (get-option gnc:pagename-general optname-party-name))
+         (reportdate (gnc:time64-end-day-time
                       (gnc:date-option-absolute-time
-                       (get-option gnc:pagename-general
-                                   optname-date))))
-         (date-secs reportdate)
-         (report-form? (get-option gnc:pagename-general
-                               optname-report-form))
-         (standard-order? (get-option gnc:pagename-general 
-                                      optname-standard-order))
-         (compute-unrealized-gains? (not (qof-book-use-trading-accounts 
-                                           (gnc-get-current-book))))
-         (accounts (get-option gnc:pagename-accounts
-                               optname-accounts))	 
-	 (depth-limit (get-option gnc:pagename-accounts 
-				  optname-depth-limit))
-	 (bottom-behavior (get-option gnc:pagename-accounts 
-				  optname-bottom-behavior))
-         (report-commodity (get-option pagename-commodities
-                                      optname-report-commodity))
-         (price-source (get-option pagename-commodities
-                                   optname-price-source))
-         (show-fcur? (get-option pagename-commodities
-                                 optname-show-foreign))
-         (show-rates? (get-option pagename-commodities
-                                  optname-show-rates))
+                       (get-option gnc:pagename-general optname-date))))
+         (report-form? (get-option gnc:pagename-general optname-report-form))
+         (standard-order? (get-option gnc:pagename-general optname-standard-order))
+         (use-trading-accts? (qof-book-use-trading-accounts (gnc-get-current-book)))
+         (accounts (get-option gnc:pagename-accounts optname-accounts))
+         (depth-limit (get-option gnc:pagename-accounts optname-depth-limit))
+         (bottom-behavior (get-option gnc:pagename-accounts optname-bottom-behavior))
+         (report-commodity (get-option pagename-commodities optname-report-commodity))
+         (price-source (get-option pagename-commodities optname-price-source))
+         (show-fcur? (get-option pagename-commodities optname-show-foreign))
+         (show-rates? (get-option pagename-commodities optname-show-rates))
          (parent-balance-mode (get-option gnc:pagename-display
-                                           optname-parent-balance-mode))
+                                          optname-parent-balance-mode))
          (parent-total-mode
-	  (assq-ref '((t . #t) (f . #f) (canonically-tabbed . canonically-tabbed))
-		    (get-option gnc:pagename-display
-				optname-parent-total-mode)))
-         (show-zb-accts? (get-option gnc:pagename-display
-				     optname-show-zb-accts))
-         (omit-zb-bals? (get-option gnc:pagename-display
-				    optname-omit-zb-bals))
-         (label-assets? (get-option gnc:pagename-display
-				    optname-label-assets))
-         (total-assets? (get-option gnc:pagename-display
-				    optname-total-assets))
-         (label-liabilities? (get-option gnc:pagename-display
-				    optname-label-liabilities))
-         (total-liabilities? (get-option gnc:pagename-display
-				    optname-total-liabilities))
-         (label-equity? (get-option gnc:pagename-display
-				    optname-label-equity))
-         (total-equity? (get-option gnc:pagename-display
-				    optname-total-equity))
-         (use-links? (get-option gnc:pagename-display
-				     optname-account-links))
-         (use-rules? (get-option gnc:pagename-display
-				    optname-use-rules))
-	 (indent 0)
-	 (tabbing #f)
-	 
+          (assq-ref '((t . #t) (f . #f) (canonically-tabbed . canonically-tabbed))
+                    (get-option gnc:pagename-display optname-parent-total-mode)))
+         (show-zb-accts? (get-option gnc:pagename-display optname-show-zb-accts))
+         (omit-zb-bals? (get-option gnc:pagename-display optname-omit-zb-bals))
+         (label-assets? (get-option gnc:pagename-display optname-label-assets))
+         (total-assets? (get-option gnc:pagename-display optname-total-assets))
+         (label-liabilities?
+          (get-option gnc:pagename-display optname-label-liabilities))
+         (total-liabilities?
+          (get-option gnc:pagename-display optname-total-liabilities))
+         (label-equity? (get-option gnc:pagename-display optname-label-equity))
+         (total-equity? (get-option gnc:pagename-display optname-total-equity))
+         (use-links? (get-option gnc:pagename-display optname-account-links))
+         (use-rules? (get-option gnc:pagename-display optname-use-rules))
+
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
-         (asset-accounts
-	  (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
-         (liability-accounts
-	  (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
+         (asset-accounts (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
+         (liability-accounts (assoc-ref split-up-accounts ACCT-TYPE-LIABILITY))
          (income-expense-accounts
           (append (assoc-ref split-up-accounts ACCT-TYPE-INCOME)
                   (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE)))
-         (equity-accounts
-          (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
-         (trading-accounts
-          (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
-	 
+         (equity-accounts (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
+         (trading-accounts (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
+
          (doc (gnc:make-html-document))
-	 ;; this can occasionally put extra (blank) columns in our
-	 ;; table (when there is one account at the maximum depth and
-	 ;; it has at least one of its ancestors deselected), but this
-	 ;; is the only simple way to ensure that all three tables
-	 ;; (asset, liability, equity) have the same width.
-         (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-account-tree-depth) 
-			 depth-limit))
+         ;; this can occasionally put extra (blank) columns in our
+         ;; table (when there is one account at the maximum depth and
+         ;; it has at least one of its ancestors deselected), but this
+         ;; is the only simple way to ensure that all three tables
+         ;; (asset, liability, equity) have the same width.
+         (tree-depth (if (eq? depth-limit 'all)
+                         (gnc:get-current-account-tree-depth)
+                         depth-limit))
          ;; exchange rates calculation parameters
          (exchange-fn
           (gnc:case-exchange-fn price-source report-commodity reportdate)))
-    
+
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
     ;; with the proper arguments.
     (define (add-subtotal-line table pos-label neg-label signed-balance)
-      (define allow-same-column-totals #t)
-      (let* ((neg? (and signed-balance
-			neg-label
-			(gnc-numeric-negative-p
-			 (gnc:gnc-monetary-amount
-			  (gnc:sum-collector-commodity
-			   signed-balance report-commodity exchange-fn)))))
-	     (label (if neg? (or neg-label pos-label) pos-label))
-	     (balance (if neg?
-			  (let ((bal (gnc:make-commodity-collector)))
-			    (bal 'minusmerge signed-balance #f)
-			    bal)
-			  signed-balance))
-	     )
-	(gnc:html-table-add-labeled-amount-line!
-	 table
-	 (+ indent (* tree-depth 2)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 "primary-subheading"
-	 (and (not allow-same-column-totals) balance use-rules?)
-	 label indent 1 "total-label-cell"
-	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
-	 (+ indent (* tree-depth 2) (- 0 1)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 1 "total-number-cell")
-	)
-      )
+      (let* ((neg? (and signed-balance neg-label
+                        (negative?
+                         (gnc:gnc-monetary-amount
+                          (gnc:sum-collector-commodity
+                           signed-balance report-commodity exchange-fn)))))
+             (label (if neg? (or neg-label pos-label) pos-label))
+             (balance (if neg?
+                          (gnc:collector- signed-balance)
+                          signed-balance)))
+        (gnc:html-table-add-labeled-amount-line!
+         table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
+         (gnc:sum-collector-commodity balance report-commodity exchange-fn)
+         (1- (* tree-depth 2)) 1 "total-number-cell")))
 
     ;; Wrapper around gnc:html-table-append-ruler! since we call it so
     ;; often.
     (define (add-rule table)
-      (gnc:html-table-append-ruler!
-       table
-       (+ (* 2 tree-depth)
-	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
-    
-    ;; Return a commodity collector containing the sum of the balance of all of 
-    ;; the accounts on acct-list as of the time given in date-secs 
-    (define (account-list-balance acct-list date-secs)
-      (let ((balance-collector (gnc:make-commodity-collector)))
-        (for-each
-          (lambda (x)
-            (balance-collector 'add (xaccAccountGetCommodity x)
-                                    (xaccAccountGetBalanceAsOfDate x date-secs)))
-          acct-list)
-      balance-collector))
+      (gnc:html-table-append-ruler! table (* 2 tree-depth)))
+
+    ;; Return a commodity collector containing the sum of the balance of all of
+    ;; the accounts on acct-list as of the time given in reportdate
+    (define (account-list-balance acct-list reportdate)
+      (define (acc->balance acc)
+        (gnc:make-gnc-monetary
+         (xaccAccountGetCommodity acc)
+         (xaccAccountGetBalanceAsOfDate acc reportdate)))
+      (apply gnc:monetaries-add (map acc->balance acct-list)))
 
     ;; Format the liabilities section of the report
-    (define (liability-block label-liabilities? parent-table table-env liability-accounts params
-                                       total-liabilities? liability-balance)
-      (let* ((liability-table #f))               ;; gnc:html-acct-table
-	      (if label-liabilities?
-		  (add-subtotal-line 
-		      parent-table (_ "Liabilities") #f #f))
-	      (set! liability-table
-		  (gnc:make-html-acct-table/env/accts
-		      table-env liability-accounts))
-	      (gnc:html-table-add-account-balances
-		  parent-table liability-table params)
-	      (if total-liabilities?
-		  (add-subtotal-line
-		      parent-table (_ "Total Liabilities") #f liability-balance))
+    (define (add-liability-block
+             label-liabilities? parent-table table-env liability-accounts params
+             total-liabilities? liability-balance)
+      (let* ((liability-table
+              (gnc:make-html-acct-table/env/accts table-env liability-accounts)))
+        (when label-liabilities?
+          (add-subtotal-line  parent-table (_ "Liabilities") #f #f))
+        (gnc:html-table-add-account-balances parent-table liability-table params)
+        (when total-liabilities?
+          (add-subtotal-line
+           parent-table (_ "Total Liabilities") #f liability-balance))
+        (add-rule parent-table)))
 
-	      (add-rule parent-table)))
-	      
-    ;;(gnc:warn "account names" liability-account-names)
-    (gnc:html-document-set-title! 
+    (define (get-total-value-fn account)
+      (gnc:account-get-comm-value-at-date account reportdate #f))
+
+    (gnc:html-document-set-title!
      doc (string-append company-name " " report-title " "
-                        (qof-print-date reportdate))
-     )
-    
+                        (qof-print-date reportdate)))
+
     (if (null? accounts)
-	
+
         ;; error condition: no accounts specified
-	;; is this *really* necessary??
-	;; i'd be fine with an all-zero balance sheet
-	;; that would, technically, be correct....
-        (gnc:html-document-add-object! 
-         doc 
-         (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
-	
+        ;; is this *really* necessary??
+        ;; i'd be fine with an all-zero balance sheet
+        ;; that would, technically, be correct....
+        (gnc:html-document-add-object!
+         doc (gnc:html-make-no-account-warning reportname (gnc:report-id report-obj)))
+
         ;; Get all the balances for each of the account types.
-        (let* ((asset-balance #f)
-               (neg-liability-balance #f) ;; credit balances are < 0
-               (liability-balance #f)
-               (neg-equity-balance #f)
-               (equity-balance #f)
-	       (neg-retained-earnings #f) ;; credit, income - expenses, < 0
-	       (retained-earnings #f)
-	       (neg-trading-balance #f)
-	       (trading-balance #f)
-               (unrealized-gain-collector #f)
-               (total-equity-balance #f)
-               (liability-plus-equity #f)
-	       
+        (let* ((asset-balance
+                (account-list-balance asset-accounts reportdate))
+
+               (liability-balance
+                (gnc:collector- (account-list-balance liability-accounts reportdate)))
+
+               (equity-balance
+                (gnc:collector- (account-list-balance equity-accounts reportdate)))
+
+               (retained-earnings
+                (gnc:collector-
+                 (account-list-balance income-expense-accounts reportdate)))
+
+               (trading-balance
+                (gnc:collector- (account-list-balance trading-accounts reportdate)))
+
+               (unrealized-gain-collector
+                (if use-trading-accts?
+                    (gnc:collector+)
+                    (gnc:collector- asset-balance
+                                    liability-balance
+                                    (gnc:accounts-get-comm-total-assets
+                                     (append asset-accounts liability-accounts)
+                                     get-total-value-fn))))
+
+               (total-equity-balance
+                (gnc:collector+ equity-balance retained-earnings
+                                unrealized-gain-collector trading-balance))
+
+               (liability-plus-equity
+                (gnc:collector+ liability-balance total-equity-balance))
+
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
-	       (left-table (gnc:make-html-table)) ;; gnc:html-table
-	       (right-table (if report-form? left-table
-				(gnc:make-html-table)))
-	       (table-env #f)                      ;; parameters for :make-
-	       (params #f)                         ;; and -add-account-
-               (asset-table #f)                    ;; gnc:html-acct-table
-               (equity-table #f)                   ;; gnc:html-acct-table
-	       (get-total-balance-fn
-		(lambda (account)
-		  (gnc:account-get-comm-balance-at-date 
-		   account reportdate #f)))
-               (get-total-value-fn
-                (lambda (account)
-                  (gnc:account-get-comm-value-at-date account reportdate #f)))
-	       )
-	  
-	  ;; If you ask me, any outstanding(TM) retained earnings and
-	  ;; unrealized gains should be added directly into equity,
-	  ;; since the balance sheet does not have a period over which
-	  ;; to report earnings....  See discussion on bugzilla.
-	  (gnc:report-percent-done 4)
-	  ;; sum assets
-	  (set! asset-balance (account-list-balance asset-accounts date-secs))
-	  (gnc:report-percent-done 6)
-	  ;; sum liabilities
-	  (set! neg-liability-balance (account-list-balance liability-accounts date-secs))
-	  (set! liability-balance
-                (gnc:make-commodity-collector))
-          (liability-balance 'minusmerge
-			     neg-liability-balance
-			     #f)
-	  (gnc:report-percent-done 8)
-	  ;; sum equities
-	  (set! neg-equity-balance (account-list-balance equity-accounts date-secs))
-	  (set! equity-balance (gnc:make-commodity-collector))
-	  (equity-balance 'minusmerge
-			  neg-equity-balance
-			  #f)
-	  (gnc:report-percent-done 12)
-	  ;; sum any retained earnings
-	  (set! neg-retained-earnings (account-list-balance income-expense-accounts date-secs))
-	  (set! retained-earnings (gnc:make-commodity-collector))
-	  (retained-earnings 'minusmerge
-			  neg-retained-earnings
-			  #f)
-	  (set! neg-trading-balance (account-list-balance trading-accounts date-secs))
-	  (set! trading-balance (gnc:make-commodity-collector))
-	  (trading-balance 'minusmerge
-	                   neg-trading-balance
-	                   #f)
-	  (gnc:report-percent-done 14)
-	  ;; sum any unrealized gains
-	  ;; 
-	  ;; Hm... unrealized gains....  This is when you purchase
-	  ;; something and its value increases/decreases (prior to
-	  ;; your selling it) and you have to reflect that on your
-	  ;; balance sheet.
-	  ;;
-          ;; Don't calculate unrealized gains if we were asked not to.  If we are using
-          ;; commodity trading accounts they will automatically accumulate the gains.
-          (set! unrealized-gain-collector (gnc:make-commodity-collector))
-          (if compute-unrealized-gains?
-              (let ((asset-basis (gnc:accounts-get-comm-total-assets
-                                  asset-accounts
-                                  get-total-value-fn))
-                    (neg-liability-basis (gnc:accounts-get-comm-total-assets
-                                          liability-accounts
-                                          get-total-value-fn)))
-                ;; Calculate unrealized gains from assets.
-                (unrealized-gain-collector 'merge asset-balance #f)
-                (unrealized-gain-collector 'minusmerge asset-basis #f)
-                ;; Combine with unrealized gains from liabilities
-                (unrealized-gain-collector 'merge neg-liability-balance #f)
-                (unrealized-gain-collector 'minusmerge neg-liability-basis #f)))
+               (left-table (gnc:make-html-table)) ;; gnc:html-table
+               (right-table (if report-form?
+                                left-table
+                                (gnc:make-html-table)))
 
-          ;; calculate equity and liability+equity totals
-	  (set! total-equity-balance (gnc:make-commodity-collector))
-	  (total-equity-balance 'merge
-				equity-balance
-				#f)
-	  (total-equity-balance 'merge
-				retained-earnings
-				#f)
-	  (total-equity-balance 'merge
-				unrealized-gain-collector
-				#f)
-	  (total-equity-balance 'merge
-	                        trading-balance
-	                        #f)
-	  (gnc:report-percent-done 18)
-	  (set! liability-plus-equity (gnc:make-commodity-collector))
-	  (liability-plus-equity 'merge
-				 liability-balance
-				 #f)
-	  (liability-plus-equity 'merge
-				 total-equity-balance
-				 #f)
-	  
-	  (gnc:report-percent-done 20)
-	  (gnc:report-percent-done 30)
-	  
-	  ;;; Arbitrarily declare that the building of these tables
-	  ;;; takes 50% of the total amount of time spent building
-	  ;;; this report. (from 30%-80%)
-	  
-	  (set! table-env
-		(list
-		 (list 'start-date #f)
-		 (list 'end-date reportdate)
-		 (list 'display-tree-depth tree-depth)
-		 (list 'depth-limit-behavior (if bottom-behavior
-						 'flatten
-						 'summarize))
-		 (list 'report-commodity report-commodity)
-		 (list 'exchange-fn exchange-fn)
-		 (list 'parent-account-subtotal-mode parent-total-mode)
-		 (list 'zero-balance-mode (if show-zb-accts?
-					      'show-leaf-acct
-					      'omit-leaf-acct))
-		 (list 'account-label-mode (if use-links?
-					       'anchor
-					       'name))
-		 )
-		)
-	  (set! params
-		(list
-		 (list 'parent-account-balance-mode parent-balance-mode)
-		 (list 'zero-balance-display-mode (if omit-zb-bals?
-						      'omit-balance
-						      'show-balance))
-		 (list 'multicommodity-mode (if show-fcur? 'table #f))
-		 (list 'rule-mode use-rules?)
-		  )
-		)
-	  
-	  ;(gnc:html-table-set-style!
-	  ; left-table "table" 'attribute '("rules" "rows"))
-	  ;(gnc:html-table-set-style!
-	  ; right-table "table" 'attribute '("rules" "rows"))
-	  ;; could also '("border" "1") or '("rules" "all")
-	  
-	  ;; Workaround to force gtkhtml into displaying wide
-	  ;; enough columns.
-	  (let ((space
-		 (make-list tree-depth "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-		 ))
-	    (gnc:html-table-append-row! left-table space)
-	    (if (not report-form?)
-		(gnc:html-table-append-row! right-table space))
-	    )
-	  
-	  (gnc:report-percent-done 80)
-	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
-	  (set! asset-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env asset-accounts))
-	  (gnc:html-table-add-account-balances
-	   left-table asset-table params)
-          (if total-assets? (add-subtotal-line 
-			     left-table (_ "Total Assets") #f asset-balance))
-	  
-	  (if report-form?
-	      (add-rule left-table))
-	  (if report-form?
-	      (add-rule left-table))
-	  
-	  (gnc:report-percent-done 85)
-          (if standard-order?
-	    (liability-block label-liabilities? right-table table-env
-	                          liability-accounts params
-                                  total-liabilities? liability-balance))
-  
-	  (gnc:report-percent-done 88)
-	  (if label-equity?
-	      (add-subtotal-line
-	       right-table (_ "Equity") #f #f))
-	  (set! equity-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env equity-accounts))
-	  (gnc:html-table-add-account-balances
-	   right-table equity-table params)
-	  ;; we omit retianed earnings & unrealized gains
-	  ;; from the balance report, if zero, since they
-	  ;; are not present on normal balance sheets
-	  (and (not (gnc-commodity-collector-allzero?
-		     retained-earnings))
-	       (add-subtotal-line right-table
-				  (_ "Retained Earnings")
-				  (_ "Retained Losses")
-				  retained-earnings))
-	  (and (not (gnc-commodity-collector-allzero?
-	             trading-balance))
-	       (add-subtotal-line right-table
-	                          (_ "Trading Gains")
-	                          (_ "Trading Losses")
-	                          trading-balance))
-	  (and (not (gnc-commodity-collector-allzero?
-		     unrealized-gain-collector))
-	       (add-subtotal-line right-table
-				  (_ "Unrealized Gains")
-				  (_ "Unrealized Losses")
-				  unrealized-gain-collector))
-	  (if total-equity?
-	      (add-subtotal-line
-	       right-table (_ "Total Equity") #f total-equity-balance))
-  
-	  (add-rule right-table)
-	  
-	  (if (not standard-order?)
-	    (liability-block label-liabilities? right-table table-env
-	                          liability-accounts params
-                                  total-liabilities? liability-balance))
+               (table-env
+                (list
+                 (list 'start-date #f)
+                 (list 'end-date reportdate)
+                 (list 'display-tree-depth tree-depth)
+                 (list 'depth-limit-behavior (if bottom-behavior 'flatten 'summarize))
+                 (list 'report-commodity report-commodity)
+                 (list 'exchange-fn exchange-fn)
+                 (list 'parent-account-subtotal-mode parent-total-mode)
+                 (list 'zero-balance-mode
+                       (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+                 (list 'account-label-mode (if use-links? 'anchor 'name))))
+
+               (params
+                (list
+                 (list 'parent-account-balance-mode parent-balance-mode)
+                 (list 'zero-balance-display-mode
+                       (if omit-zb-bals? 'omit-balance 'show-balance))
+                 (list 'multicommodity-mode (and show-fcur? 'table))
+                 (list 'rule-mode use-rules?)))
+
+               (asset-table
+                (gnc:make-html-acct-table/env/accts table-env asset-accounts))
+
+               (equity-table
+                (gnc:make-html-acct-table/env/accts table-env equity-accounts)))
+
+          (define (get-total-balance-fn account)
+            (gnc:account-get-comm-balance-at-date account reportdate #f))
+
+          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
+            (gnc:html-table-cell-set-style!
+             wide "text-cell" 'attribute '("style" "min-width:60px"))
+            (let ((space (make-list tree-depth wide)))
+              (gnc:html-table-append-row! left-table space)
+              (unless report-form?
+                (gnc:html-table-append-row! right-table space))))
+          (gnc:report-percent-done 80)
+
+          (when label-assets?
+            (add-subtotal-line left-table (_ "Assets") #f #f))
+          (gnc:html-table-add-account-balances left-table asset-table params)
+          (when total-assets?
+            (add-subtotal-line left-table (_ "Total Assets") #f asset-balance))
+
+          (when report-form?
+            (add-rule left-table)
+            (add-rule left-table))
+          (gnc:report-percent-done 85)
+
+          (when standard-order?
+            (add-liability-block label-liabilities? right-table table-env
+                                 liability-accounts params
+                                 total-liabilities? liability-balance))
+          (gnc:report-percent-done 88)
+
+          (when label-equity?
+            (add-subtotal-line right-table (_ "Equity") #f #f))
+          (gnc:html-table-add-account-balances right-table equity-table params)
+          ;; we omit retained earnings & unrealized gains
+          ;; from the balance report, if zero, since they
+          ;; are not present on normal balance sheets
+          (unless (gnc-commodity-collector-allzero? retained-earnings)
+            (add-subtotal-line right-table
+                               (_ "Retained Earnings")
+                               (_ "Retained Losses")
+                               retained-earnings))
+          (unless (gnc-commodity-collector-allzero? trading-balance)
+            (add-subtotal-line right-table
+                               (_ "Trading Gains")
+                               (_ "Trading Losses")
+                               trading-balance))
+          (unless (gnc-commodity-collector-allzero? unrealized-gain-collector)
+            (add-subtotal-line right-table
+                               (_ "Unrealized Gains")
+                               (_ "Unrealized Losses")
+                               unrealized-gain-collector))
+          (when total-equity?
+            (add-subtotal-line
+             right-table (_ "Total Equity") #f total-equity-balance))
+
+          (add-rule right-table)
+
+          (unless standard-order?
+            (add-liability-block label-liabilities? right-table table-env
+                                 liability-accounts params
+                                 total-liabilities? liability-balance))
 
           (add-subtotal-line
-           right-table (gnc:html-string-sanitize
-                        (_ "Total Liabilities & Equity"))
-	   #f liability-plus-equity)
-	  
-	  (gnc:html-document-add-object!
-	   doc
-	   (if report-form?
-	       left-table
-	       (let* ((build-table (gnc:make-html-table))
-		      )
-		 (gnc:html-table-append-row!
-		  build-table
-		  (list
-		   (gnc:make-html-table-cell left-table)
-		   (gnc:make-html-table-cell right-table)
-		   )
-		  )
-		 (gnc:html-table-set-style!
-		  build-table "td"
-		  'attribute '("align" "left")
-		  'attribute '("valign" "top"))
-		 build-table
-		 )
-	       )
-	   )
-	  
+           right-table (gnc:html-string-sanitize (_ "Total Liabilities & Equity"))
+           #f liability-plus-equity)
+
+          (gnc:html-document-add-object!
+           doc (if report-form?
+                   left-table
+                   (let ((build-table (gnc:make-html-table)))
+                     (gnc:html-table-append-row!
+                      build-table (list left-table right-table))
+                     (gnc:html-table-set-style!
+                      build-table "td"
+                      'attribute '("align" "left")
+                      'attribute '("valign" "top"))
+                     build-table)))
+
           ;; add currency information if requested
-	  (gnc:report-percent-done 90)
-          (if show-rates?
-              (gnc:html-document-add-object! 
-               doc ;;(gnc:html-markup-p)
-               (gnc:html-make-exchangerates 
-                report-commodity exchange-fn accounts)))
-	  (gnc:report-percent-done 100)))
-    
+          (gnc:report-percent-done 90)
+          (when show-rates?
+            (gnc:html-document-add-object!
+             doc (gnc:html-make-exchangerates report-commodity exchange-fn accounts)))
+
+          (gnc:report-percent-done 100)))
+
     (gnc:report-finished)
-    
+
     doc))
 
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name reportname
  'report-guid "c4173ac99b2b448289bf4d11c731af13"
@@ -740,4 +573,3 @@
  'renderer balance-sheet-renderer)
 
 ;; END
-
