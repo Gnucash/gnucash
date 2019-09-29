@@ -442,7 +442,10 @@
 		      parent-table (_ "Total Liabilities") #f liability-balance))
 
 	      (add-rule parent-table)))
-	      
+
+    (define (get-total-value-fn account)
+      (gnc:account-get-comm-value-at-date account reportdate #f))
+
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
@@ -461,14 +464,37 @@
 	  reportname (gnc:report-id report-obj)))
 	
         ;; Get all the balances for each of the account types.
-        (let* ((asset-balance #f)
-               (liability-balance #f)
-               (equity-balance #f)
-               (retained-earnings #f)
-               (trading-balance #f)
-               (unrealized-gain-collector #f)
-               (total-equity-balance #f)
-               (liability-plus-equity #f)
+        (let* ((asset-balance
+                (account-list-balance asset-accounts date-secs))
+
+               (liability-balance
+                (gnc:collector- (account-list-balance liability-accounts date-secs)))
+
+               (equity-balance
+                (gnc:collector- (account-list-balance equity-accounts date-secs)))
+
+               (retained-earnings
+                (gnc:collector-
+                 (account-list-balance income-expense-accounts date-secs)))
+
+               (trading-balance
+                (gnc:collector- (account-list-balance trading-accounts date-secs)))
+
+               (unrealized-gain-collector
+                (if compute-unrealized-gains?
+                    (gnc:collector- asset-balance
+                                    liability-balance
+                                    (gnc:accounts-get-comm-total-assets
+                                     (append asset-accounts liability-accounts)
+                                     get-total-value-fn))
+                    (gnc:collector+)))
+
+               (total-equity-balance
+                (gnc:collector+ equity-balance retained-earnings
+                                unrealized-gain-collector trading-balance))
+
+               (liability-plus-equity
+                (gnc:collector+ liability-balance total-equity-balance))
 
                ;; Create the account tables below where their
                ;; percentage time can be tracked.
@@ -476,112 +502,40 @@
                (right-table (if report-form?
                                 left-table
                                 (gnc:make-html-table)))
-               (table-env #f)                      ;; parameters for :make-
-               (params #f)                         ;; and -add-account-
-               (asset-table #f)                    ;; gnc:html-acct-table
-               (equity-table #f)                   ;; gnc:html-acct-table
+
+               (table-env
+                (list
+                 (list 'start-date #f)
+                 (list 'end-date reportdate)
+                 (list 'display-tree-depth tree-depth)
+                 (list 'depth-limit-behavior (if bottom-behavior 'flatten 'summarize))
+                 (list 'report-commodity report-commodity)
+                 (list 'exchange-fn exchange-fn)
+                 (list 'parent-account-subtotal-mode parent-total-mode)
+                 (list 'zero-balance-mode
+                       (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+                 (list 'account-label-mode (if use-links? 'anchor 'name))))
+
+               (params
+                (list
+                 (list 'parent-account-balance-mode parent-balance-mode)
+                 (list 'zero-balance-display-mode
+                       (if omit-zb-bals? 'omit-balance 'show-balance))
+                 (list 'multicommodity-mode (and show-fcur? 'table))
+                 (list 'rule-mode use-rules?)))
+
+               (asset-table
+                (gnc:make-html-acct-table/env/accts table-env asset-accounts))
+
+               (equity-table
+                (gnc:make-html-acct-table/env/accts table-env equity-accounts)))
+
                (get-total-balance-fn
                 (lambda (account)
                   (gnc:account-get-comm-balance-at-date
-                   account reportdate #f)))
-               (get-total-value-fn
-                (lambda (account)
-                  (gnc:account-get-comm-value-at-date account reportdate #f))))
+                   account reportdate #f))))
 
-          ;; If you ask me, any outstanding(TM) retained earnings and
-          ;; unrealized gains should be added directly into equity,
-          ;; since the balance sheet does not have a period over which
-          ;; to report earnings....  See discussion on bugzilla.
-          (gnc:report-percent-done 4)
-
-          ;; sum assets
-          (set! asset-balance (account-list-balance asset-accounts date-secs))
-          (gnc:report-percent-done 6)
-
-          ;; sum liabilities
-          (set! liability-balance
-            (gnc:collector- (account-list-balance liability-accounts date-secs)))
-          (gnc:report-percent-done 8)
-
-          ;; sum equities
-          (set! equity-balance
-            (gnc:collector- (account-list-balance equity-accounts date-secs)))
-          (gnc:report-percent-done 12)
-
-          ;; sum any retained earnings
-          (set! retained-earnings
-            (gnc:collector- (account-list-balance income-expense-accounts date-secs)))
-          (set! trading-balance
-            (gnc:collector- (account-list-balance trading-accounts date-secs)))
-          (gnc:report-percent-done 14)
-
-          ;; sum any unrealized gains
-          ;;
-          ;; Hm... unrealized gains....  This is when you purchase
-          ;; something and its value increases/decreases (prior to
-          ;; your selling it) and you have to reflect that on your
-          ;; balance sheet.
-          ;;
-          ;; Don't calculate unrealized gains if we were asked not to.  If we are using
-          ;; commodity trading accounts they will automatically accumulate the gains.
-          (set! unrealized-gain-collector
-            (if compute-unrealized-gains?
-                (gnc:collector- asset-balance
-                                liability-balance
-                                (gnc:accounts-get-comm-total-assets
-                                 (append asset-accounts liability-accounts)
-                                 get-total-value-fn))
-                (gnc:collector+)))
-
-          ;; calculate equity and liability+equity totals
-          (set! total-equity-balance
-            (gnc:collector+ equity-balance retained-earnings
-                            unrealized-gain-collector trading-balance))
-          (set! liability-plus-equity
-            (gnc:collector+ liability-balance total-equity-balance))
-          (gnc:report-percent-done 30)
-	  
-	  ;;; Arbitrarily declare that the building of these tables
-	  ;;; takes 50% of the total amount of time spent building
-	  ;;; this report. (from 30%-80%)
-	  
-	  (set! table-env
-		(list
-		 (list 'start-date #f)
-		 (list 'end-date reportdate)
-		 (list 'display-tree-depth tree-depth)
-		 (list 'depth-limit-behavior (if bottom-behavior
-						 'flatten
-						 'summarize))
-		 (list 'report-commodity report-commodity)
-		 (list 'exchange-fn exchange-fn)
-		 (list 'parent-account-subtotal-mode parent-total-mode)
-		 (list 'zero-balance-mode (if show-zb-accts?
-					      'show-leaf-acct
-					      'omit-leaf-acct))
-		 (list 'account-label-mode (if use-links?
-					       'anchor
-					       'name))
-		 )
-		)
-	  (set! params
-		(list
-		 (list 'parent-account-balance-mode parent-balance-mode)
-		 (list 'zero-balance-display-mode (if omit-zb-bals?
-						      'omit-balance
-						      'show-balance))
-		 (list 'multicommodity-mode (if show-fcur? 'table #f))
-		 (list 'rule-mode use-rules?)
-		  )
-		)
-	  
-	  ;(gnc:html-table-set-style!
-	  ; left-table "table" 'attribute '("rules" "rows"))
-	  ;(gnc:html-table-set-style!
-	  ; right-table "table" 'attribute '("rules" "rows"))
-	  ;; could also '("border" "1") or '("rules" "all")
-	  
-	  ;; Workaround to force gtkhtml into displaying wide
+          ;; Workaround to force gtkhtml into displaying wide
 	  ;; enough columns.
 	  (let ((space
 		 (make-list tree-depth "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
@@ -595,20 +549,17 @@
 	  
 	  (gnc:report-percent-done 80)
 	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
-	  (set! asset-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env asset-accounts))
+
 	  (gnc:html-table-add-account-balances
 	   left-table asset-table params)
           (if total-assets? (add-subtotal-line 
 			     left-table (_ "Total Assets") #f asset-balance))
 	  
-	  (if report-form?
-	      (add-rule left-table))
-	  (if report-form?
-	      (add-rule left-table))
-	  
-	  (gnc:report-percent-done 85)
+	  (when report-form?
+            (add-rule left-table)
+	    (add-rule left-table))
+
+          (gnc:report-percent-done 85)
           (if standard-order?
 	    (liability-block label-liabilities? right-table table-env
 	                          liability-accounts params
@@ -618,9 +569,6 @@
 	  (if label-equity?
 	      (add-subtotal-line
 	       right-table (_ "Equity") #f #f))
-	  (set! equity-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env equity-accounts))
 	  (gnc:html-table-add-account-balances
 	   right-table equity-table params)
 	  ;; we omit retianed earnings & unrealized gains
