@@ -34,6 +34,7 @@ extern "C"
 #include <libguile.h>
 #include <string>
 #include <exception>
+#include <functional>
 #include <boost/variant.hpp>
 
 /*
