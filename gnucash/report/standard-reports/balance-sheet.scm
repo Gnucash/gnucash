@@ -426,22 +426,18 @@
       balance-collector))
 
     ;; Format the liabilities section of the report
-    (define (liability-block label-liabilities? parent-table table-env liability-accounts params
-                                       total-liabilities? liability-balance)
-      (let* ((liability-table #f))               ;; gnc:html-acct-table
-	      (if label-liabilities?
-		  (add-subtotal-line 
-		      parent-table (_ "Liabilities") #f #f))
-	      (set! liability-table
-		  (gnc:make-html-acct-table/env/accts
-		      table-env liability-accounts))
-	      (gnc:html-table-add-account-balances
-		  parent-table liability-table params)
-	      (if total-liabilities?
-		  (add-subtotal-line
-		      parent-table (_ "Total Liabilities") #f liability-balance))
-
-	      (add-rule parent-table)))
+    (define (add-liability-block
+             label-liabilities? parent-table table-env liability-accounts params
+             total-liabilities? liability-balance)
+      (let* ((liability-table
+              (gnc:make-html-acct-table/env/accts table-env liability-accounts)))
+	(when label-liabilities?
+	  (add-subtotal-line  parent-table (_ "Liabilities") #f #f))
+	(gnc:html-table-add-account-balances parent-table liability-table params)
+	(when total-liabilities?
+	  (add-subtotal-line
+           parent-table (_ "Total Liabilities") #f liability-balance))
+	(add-rule parent-table)))
 
     (define (get-total-value-fn account)
       (gnc:account-get-comm-value-at-date account reportdate #f))
@@ -449,8 +445,7 @@
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-                        (qof-print-date reportdate))
-     )
+                        (qof-print-date reportdate)))
     
     (if (null? accounts)
 	
@@ -459,10 +454,8 @@
 	;; i'd be fine with an all-zero balance sheet
 	;; that would, technically, be correct....
         (gnc:html-document-add-object! 
-         doc 
-         (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
-	
+         doc (gnc:html-make-no-account-warning reportname (gnc:report-id report-obj)))
+
         ;; Get all the balances for each of the account types.
         (let* ((asset-balance
                 (account-list-balance asset-accounts date-secs))
@@ -530,114 +523,93 @@
                (equity-table
                 (gnc:make-html-acct-table/env/accts table-env equity-accounts)))
 
-               (get-total-balance-fn
-                (lambda (account)
-                  (gnc:account-get-comm-balance-at-date
-                   account reportdate #f))))
+          (define (get-total-balance-fn account)
+            (gnc:account-get-comm-balance-at-date account reportdate #f))
 
           ;; Workaround to force gtkhtml into displaying wide
 	  ;; enough columns.
-	  (let ((space
-		 (make-list tree-depth "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-		 ))
+	  (let ((space (make-list tree-depth "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")))
 	    (gnc:html-table-append-row! left-table space)
-	    (if (not report-form?)
-		(gnc:html-table-append-row! right-table space))
-	    )
-	  
+	    (unless report-form?
+	      (gnc:html-table-append-row! right-table space)))
 	  (gnc:report-percent-done 80)
-	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
 
-	  (gnc:html-table-add-account-balances
-	   left-table asset-table params)
-          (if total-assets? (add-subtotal-line 
-			     left-table (_ "Total Assets") #f asset-balance))
+          (when label-assets?
+            (add-subtotal-line left-table (_ "Assets") #f #f))
+	  (gnc:html-table-add-account-balances left-table asset-table params)
+          (when total-assets?
+            (add-subtotal-line  left-table (_ "Total Assets") #f asset-balance))
 	  
 	  (when report-form?
             (add-rule left-table)
 	    (add-rule left-table))
-
           (gnc:report-percent-done 85)
-          (if standard-order?
-	    (liability-block label-liabilities? right-table table-env
-	                          liability-accounts params
-                                  total-liabilities? liability-balance))
+
+          (when standard-order?
+	    (add-liability-block label-liabilities? right-table table-env
+	                         liability-accounts params
+                                 total-liabilities? liability-balance))
   
 	  (gnc:report-percent-done 88)
-	  (if label-equity?
-	      (add-subtotal-line
-	       right-table (_ "Equity") #f #f))
-	  (gnc:html-table-add-account-balances
-	   right-table equity-table params)
-	  ;; we omit retianed earnings & unrealized gains
+	  (when label-equity?
+	    (add-subtotal-line right-table (_ "Equity") #f #f))
+          (gnc:html-table-add-account-balances right-table equity-table params)
+          ;; we omit retained earnings & unrealized gains
 	  ;; from the balance report, if zero, since they
 	  ;; are not present on normal balance sheets
-	  (and (not (gnc-commodity-collector-allzero?
-		     retained-earnings))
-	       (add-subtotal-line right-table
-				  (_ "Retained Earnings")
-				  (_ "Retained Losses")
-				  retained-earnings))
-	  (and (not (gnc-commodity-collector-allzero?
-	             trading-balance))
-	       (add-subtotal-line right-table
-	                          (_ "Trading Gains")
-	                          (_ "Trading Losses")
-	                          trading-balance))
-	  (and (not (gnc-commodity-collector-allzero?
-		     unrealized-gain-collector))
-	       (add-subtotal-line right-table
-				  (_ "Unrealized Gains")
-				  (_ "Unrealized Losses")
-				  unrealized-gain-collector))
-	  (if total-equity?
-	      (add-subtotal-line
-	       right-table (_ "Total Equity") #f total-equity-balance))
-  
-	  (add-rule right-table)
-	  
-	  (if (not standard-order?)
-	    (liability-block label-liabilities? right-table table-env
-	                          liability-accounts params
-                                  total-liabilities? liability-balance))
+	  (unless (gnc-commodity-collector-allzero? retained-earnings)
+	    (add-subtotal-line right-table
+			       (_ "Retained Earnings")
+			       (_ "Retained Losses")
+			       retained-earnings))
+          (unless (gnc-commodity-collector-allzero? trading-balance)
+	    (add-subtotal-line right-table
+	                       (_ "Trading Gains")
+	                       (_ "Trading Losses")
+	                       trading-balance))
+          (unless (gnc-commodity-collector-allzero? unrealized-gain-collector)
+	    (add-subtotal-line right-table
+			       (_ "Unrealized Gains")
+			       (_ "Unrealized Losses")
+			       unrealized-gain-collector))
+	  (when total-equity?
+	    (add-subtotal-line
+	     right-table (_ "Total Equity") #f total-equity-balance))
+
+          (add-rule right-table)
+
+          (unless standard-order?
+	    (add-liability-block label-liabilities? right-table table-env
+	                         liability-accounts params
+                                 total-liabilities? liability-balance))
 
           (add-subtotal-line
-           right-table (gnc:html-string-sanitize
-                        (_ "Total Liabilities & Equity"))
+           right-table (gnc:html-string-sanitize (_ "Total Liabilities & Equity"))
 	   #f liability-plus-equity)
 	  
 	  (gnc:html-document-add-object!
-	   doc
-	   (if report-form?
-	       left-table
-	       (let* ((build-table (gnc:make-html-table))
-		      )
-		 (gnc:html-table-append-row!
-		  build-table
-		  (list
-		   (gnc:make-html-table-cell left-table)
-		   (gnc:make-html-table-cell right-table)
-		   )
-		  )
-		 (gnc:html-table-set-style!
-		  build-table "td"
-		  'attribute '("align" "left")
-		  'attribute '("valign" "top"))
-		 build-table
-		 )
-	       )
-	   )
+	   doc (if report-form?
+	           left-table
+	           (let* ((build-table (gnc:make-html-table)))
+		     (gnc:html-table-append-row!
+		      build-table
+		      (list
+		       (gnc:make-html-table-cell left-table)
+		       (gnc:make-html-table-cell right-table)))
+		     (gnc:html-table-set-style!
+		      build-table "td"
+		      'attribute '("align" "left")
+		      'attribute '("valign" "top"))
+		     build-table)))
 	  
           ;; add currency information if requested
 	  (gnc:report-percent-done 90)
-          (if show-rates?
-              (gnc:html-document-add-object! 
-               doc ;;(gnc:html-markup-p)
-               (gnc:html-make-exchangerates 
-                report-commodity exchange-fn accounts)))
-	  (gnc:report-percent-done 100)))
+          (when show-rates?
+            (gnc:html-document-add-object!
+             doc (gnc:html-make-exchangerates report-commodity exchange-fn accounts)))
+
+          (gnc:report-percent-done 100)))
     
     (gnc:report-finished)
     
