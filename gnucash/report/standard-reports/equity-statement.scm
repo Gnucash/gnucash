@@ -371,22 +371,17 @@
 				 amount report-commodity exchange-fn)))))
 		   (label (if neg? (or neg-label pos-label) pos-label))
 		   (pos-bal (if neg?
-				(let ((bal (gnc:make-commodity-collector)))
-				  (bal 'minusmerge amount #f)
-				  bal)
+                                (gnc:collector- amount)
 				amount))
 		   (bal (gnc:sum-collector-commodity
-			 pos-bal report-commodity exchange-fn))
-		   (balance
-		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
-			     bal)
-			(and show-fcur?
-			     (gnc-commodity-table
-			      pos-bal report-commodity exchange-fn))
-			bal
-			))
-		   (column (or col 0))
-		   )
+                         pos-bal report-commodity exchange-fn))
+                   (balance
+                    (cond
+                     ((gnc:uniform-commodity? pos-bal report-commodity) bal)
+                     (show-fcur? (gnc-commodity-table
+                                  pos-bal report-commodity exchange-fn))
+                     (else bal)))
+		   (column (or col 0)))
 	      (gnc:html-table-add-labeled-amount-line!
 	       table         3 row-style rule?
 	       label         0         1 "text-cell"
@@ -408,9 +403,11 @@
 	  (define (unrealized-gains-at-date book-balance exchange-fn date)
             (define weighted-fn
 	      (gnc:case-exchange-fn 'weighted-average report-commodity date))
-            (gnc:collector-
-             (gnc:sum-collector-commodity book-balance report-commodity exchange-fn)
-             (gnc:sum-collector-commodity book-balance report-commodity weighted-fn)))
+            (gnc:monetaries-add (gnc:sum-collector-commodity
+                                 book-balance report-commodity exchange-fn)
+                                (gnc:monetary-neg
+                                 (gnc:sum-collector-commodity
+                                  book-balance report-commodity weighted-fn))))
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
 	  ;; unrealized gains should be added directly into equity,
