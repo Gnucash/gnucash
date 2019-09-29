@@ -37,10 +37,9 @@
 
 (define (test-gnc-make-text-option)
   (test-begin "test-gnc-test-string-option")
-  (let* ((option-db (new-GncOptionDB))
+  (let* ((option-db (gnc-option-db-new))
          (string-opt (gnc-register-string-option option-db "foo" "bar" "baz"
                                                  "Phony Option" "waldo")))
-    (test-equal (GncOptionDB-lookup-option option-db "foo" "bar") "waldo")
-    (delete-GncOptionDB option-db))
+    (test-equal (GncOptionDB-lookup-option (GncOptionDBPtr-get option-db) "foo" "bar") "waldo"))
 
   (test-end "test-gnc-make-string-option"))
