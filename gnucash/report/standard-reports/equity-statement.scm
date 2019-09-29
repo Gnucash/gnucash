@@ -562,14 +562,10 @@
 	  
 	  (gnc:report-percent-done 30)
 	  
-	  ;; Workaround to force gtkhtml into displaying wide
-	  ;; enough columns.
-	  (gnc:html-table-append-row!
-	   build-table
-	   (make-list 2 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-	   )
+	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
+            (gnc:html-table-cell-set-style!
+             wide "text-cell" 'attribute '("style" "min-width:60px"))
+            (gnc:html-table-append-row! build-table (make-list 2 wide)))
 	  
 	  (gnc:report-percent-done 80)
 	  

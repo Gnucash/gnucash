@@ -559,15 +559,14 @@
           (let* ((env (gnc:html-acct-table-get-row-env acct-table 0)))
             (set! account-cols (get-val env 'account-cols)))
 
-          ;; Workaround to force gtkhtml into displaying wide
-          ;; enough columns.
-          (let ((space
-                 (make-list
-                  (+ account-cols
-                     (if (eq? report-variant 'work-sheet) 10 2))
-                  "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")))
-            (gnc:html-table-append-row! build-table space)
-            (set! header-rows (+ header-rows 1)))
+          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f))
+                (ncols (+ account-cols (if (eq? report-variant 'work-sheet) 10 2))))
+            (gnc:html-table-cell-set-style!
+             wide "text-cell" 'attribute '("style" "min-width:60px"))
+            (let ((space (make-list ncols wide)))
+              (gnc:html-table-append-row! build-table space)
+              (set! header-rows (1+ header-rows))))
+
           ;; add the double-column headers if required
           (if (eq? report-variant 'work-sheet)
               (let* ((headings
