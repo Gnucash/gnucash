@@ -18,7 +18,7 @@ gnc_add_scheme_targets(price-quotes
   FALSE)
 
 
-set_local_dist(scm_DIST_local CMakeLists.txt utilities.scm price-quotes.scm)
-set(scm_DIST ${scm_DIST_local} ${scm_gnumeric_DIST} ${test_scm_DIST} PARENT_SCOPE)
+set_local_dist(guile_DIST_local CMakeLists.txt utilities.scm price-quotes.scm)
+set(guile_DIST ${guile_DIST_local} ${test_guile_DIST} PARENT_SCOPE)
 
 

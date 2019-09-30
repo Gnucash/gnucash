@@ -1,5 +1,5 @@
 set(scm_test_SCHEME
-  test-libgnucash-scm-utilities.scm
+  test-scm-utilities.scm
   test-module-deprecation.scm
   )
 
@@ -24,7 +24,7 @@ if (HAVE_SRFI64)
 
 endif (HAVE_SRFI64)
 
-set_dist_list(test_scm_DIST
+set_dist_list(test_guile_DIST
   CMakeLists.txt
   ${scm_test_SCHEME}
   )
