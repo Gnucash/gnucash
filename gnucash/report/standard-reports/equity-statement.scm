@@ -532,31 +532,25 @@
 	  
           ;; add currency information if requested
 	  (gnc:report-percent-done 90)
-          (and show-rates?
-	       (let* ((curr-tbl (gnc:make-html-table))
-		      (headers (list
-				(qof-print-date start-date-printable)
-				(qof-print-date end-date)
-				)
-			       )
-		      (then (gnc:html-make-exchangerates
-			     report-commodity start-exchange-fn accounts))
-		      (now (gnc:html-make-exchangerates 
-			    report-commodity end-exchange-fn accounts))
-		      )
-		 
-		 (gnc:html-table-set-col-headers! curr-tbl headers)
-		 (gnc:html-table-set-style!
-		  curr-tbl "table" 'attribute '("border" "1"))
-		 (gnc:html-table-set-style!
-		  then "table" 'attribute '("border" "0"))
-		 (gnc:html-table-set-style!
-		  now "table" 'attribute '("border" "0"))
-		 (gnc:html-table-append-ruler! build-table 3)
-		 (gnc:html-table-append-row! curr-tbl (list then now))
-		 (gnc:html-document-add-object! doc curr-tbl)
-		 )
-	       )
+          (when show-rates?
+	    (let* ((curr-tbl (gnc:make-html-table))
+		   (headers (list
+			     (qof-print-date start-date-printable)
+			     (qof-print-date end-date)))
+		   (then (gnc:html-make-exchangerates
+			  report-commodity start-exchange-fn accounts))
+		   (now (gnc:html-make-exchangerates
+                         report-commodity end-exchange-fn accounts)))
+	      (gnc:html-table-set-col-headers! curr-tbl headers)
+	      (gnc:html-table-set-style!
+	       curr-tbl "table" 'attribute '("border" "1"))
+	      (gnc:html-table-set-style!
+	       then "table" 'attribute '("border" "0"))
+	      (gnc:html-table-set-style!
+	       now "table" 'attribute '("border" "0"))
+	      (gnc:html-table-append-ruler! build-table 3)
+	      (gnc:html-table-append-row! curr-tbl (list then now))
+	      (gnc:html-document-add-object! doc curr-tbl)))
 	  
 	  (gnc:report-percent-done 100)))
     
