@@ -442,28 +442,88 @@
 
      (else
       ;; Get all the balances for each of the account types.
-      (let* (
-             (revenue-account-balances #f)
-             (expense-account-balances #f)
+      (let* ((revenue-account-balances
+              (get-assoc-account-balances-budget
+               budget revenue-accounts period-start period-end
+               get-budget-account-budget-balance))
 
-             (revenue-total #f)
-             (revenue-get-balance-fn #f)
+             (expense-account-balances
+              (get-assoc-account-balances-budget
+               budget expense-accounts period-start period-end
+               get-budget-account-budget-balance))
 
-             (expense-total #f)
-             (expense-get-balance-fn #f)
+             (revenue-total
+              (gnc:get-assoc-account-balances-total revenue-account-balances))
 
-             (net-income #f)
+             (expense-total
+              (gnc:get-assoc-account-balances-total expense-account-balances))
 
-             ;; Create the account tables below where their
-             ;; percentage time can be tracked.
-             (inc-table (gnc:make-html-table)) ;; gnc:html-table
-             (exp-table (gnc:make-html-table))
+             (net-income
+              (gnc:collector- revenue-total expense-total))
 
-             (table-env #f)                      ;; parameters for :make-
-             (params #f)                         ;; and -add-account-
-             (revenue-table #f)                  ;; gnc:html-acct-table
-             (expense-table #f)                  ;; gnc:html-acct-table
+             (table-env
+              (list
+               (list 'display-tree-depth tree-depth)
+               (list 'depth-limit-behavior
+                     (if bottom-behavior 'flatten 'summarize))
+               (list 'report-commodity report-commodity)
+               (list 'exchange-fn exchange-fn)
+               (list 'parent-account-subtotal-mode parent-total-mode)
+               (list 'zero-balance-mode
+                     (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+               (list 'account-label-mode (if use-links? 'anchor 'name))))
+
+             (params
+              (list
+               (list 'parent-account-balance-mode parent-balance-mode)
+               (list 'zero-balance-display-mode
+                     (if omit-zb-bals? 'omit-balance 'show-balance))
+               (list 'multicommodity-mode (and show-fcur? 'table))
+               (list 'rule-mode use-rules?)))
+
+             (revenue-get-balance-fn
+              (lambda (acct start-date end-date)
+                (gnc:collector-
+                 (gnc:select-assoc-account-balance revenue-account-balances acct))))
+
+             (revenue-table
+              (gnc:make-html-acct-table/env/accts
+               (cons (list 'get-balance-fn revenue-get-balance-fn) table-env)
+               revenue-accounts))
+
+             (expense-get-balance-fn
+              (lambda (acct start-date end-date)
+                (gnc:select-assoc-account-balance expense-account-balances acct)))
+
+             (expense-table
+              (gnc:make-html-acct-table/env/accts
+               (cons (list 'get-balance-fn expense-get-balance-fn) table-env)
+               expense-accounts))
+
+             (space (make-list tree-depth (gnc:make-html-table-cell/min-width 60)))
+
+             (inc-table
+              (let ((table (gnc:make-html-table)))
+                (gnc:html-table-append-row! table space)
+                (when label-revenue?
+                  (add-subtotal-line table (_ "Revenues") #f #f))
+                (gnc:html-table-add-account-balances table revenue-table params)
+                (when total-revenue?
+                  (add-subtotal-line table (_ "Total Revenue") #f revenue-total))
+                table))
+
+             (exp-table
+              (let ((table (gnc:make-html-table)))
+                (gnc:html-table-append-row! table space)
+                (when label-expense?
+                  (add-subtotal-line table (_ "Expenses") #f #f))
+                (gnc:html-table-add-account-balances table expense-table params)
+                (when total-expense?
+                  (add-subtotal-line table (_ "Total Expenses") #f expense-total))
+                table))
+
              (budget-name (gnc-budget-get-name budget))
+
              (period-for
               (cond
                ((not use-budget-period-range?)
@@ -493,128 +553,17 @@
              label                0  1 "text-cell"
              bal           (1+ col)  1 "number-cell")))
 
-        (gnc:report-percent-done 5)
-
-        ;; Pre-fetch expense account balances.
-        (set! expense-account-balances
-          (get-assoc-account-balances-budget
-           budget
-           expense-accounts
-           period-start
-           period-end
-           get-budget-account-budget-balance))
-
-        ;; Total expenses.
-        (set! expense-total
-          (gnc:get-assoc-account-balances-total expense-account-balances))
-
-        ;; Function to get individual expense account total.
-        (set! expense-get-balance-fn
-          (lambda (account start-date end-date)
-            (gnc:select-assoc-account-balance expense-account-balances account)))
-
-        (gnc:report-percent-done 10)
-
-        ;; Pre-fetch revenue account balances.
-        (set! revenue-account-balances
-          (get-assoc-account-balances-budget
-           budget
-           revenue-accounts
-           period-start
-           period-end
-           get-budget-account-budget-balance))
-
-        ;; Total revenue.
-        (set! revenue-total
-          (gnc:get-assoc-account-balances-total revenue-account-balances))
-
-        ;; Function to get individual revenue account total.
-        ;; Budget revenue is always positive, so this must be negated.
-        (set! revenue-get-balance-fn
-          (lambda (account start-date end-date)
-            (gnc:commodity-collector-get-negated
-             (gnc:select-assoc-account-balance revenue-account-balances account))))
-
-        (gnc:report-percent-done 20)
-
-        ;; calculate net income
-        (set! net-income
-          (gnc:collector- revenue-total expense-total))
-
         (gnc:report-percent-done 30)
 
         (gnc:html-document-set-title!
-         doc
-         (format #f "~a ~a ~a" company-name report-title period-for))
-
-        (set! table-env
-          (list
-           (list 'display-tree-depth tree-depth)
-           (list 'depth-limit-behavior (if bottom-behavior
-                                           'flatten
-                                           'summarize))
-           (list 'report-commodity report-commodity)
-           (list 'exchange-fn exchange-fn)
-           (list 'parent-account-subtotal-mode parent-total-mode)
-           (list 'zero-balance-mode (if show-zb-accts?
-                                        'show-leaf-acct
-                                        'omit-leaf-acct))
-           (list 'account-label-mode (if use-links?
-                                         'anchor
-                                         'name))
-           )
-          )
-        (set! params
-          (list
-           (list 'parent-account-balance-mode parent-balance-mode)
-           (list 'zero-balance-display-mode (if omit-zb-bals?
-                                                'omit-balance
-                                                'show-balance))
-           (list 'multicommodity-mode (if show-fcur? 'table #f))
-           (list 'rule-mode use-rules?)
-           )
-          )
-
-        (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
-          (gnc:html-table-append-row! inc-table space)
-          (gnc:html-table-append-row! exp-table space))
-
-        (gnc:report-percent-done 80)
-        (if label-revenue?
-            (add-subtotal-line inc-table (_ "Revenues") #f #f))
-        (set! revenue-table
-          (gnc:make-html-acct-table/env/accts
-           (append table-env (list (list 'get-balance-fn revenue-get-balance-fn)))
-           revenue-accounts))
-        (gnc:html-table-add-account-balances
-         inc-table revenue-table params)
-        (if total-revenue?
-            (add-subtotal-line
-             inc-table (_ "Total Revenue") #f revenue-total))
-
-        (gnc:report-percent-done 85)
-        (if label-expense?
-            (add-subtotal-line
-             exp-table (_ "Expenses") #f #f))
-        (set! expense-table
-          (gnc:make-html-acct-table/env/accts
-           (append table-env (list (list 'get-balance-fn expense-get-balance-fn)))
-           expense-accounts))
-        (gnc:html-table-add-account-balances
-         exp-table expense-table params)
-        (if total-expense?
-            (add-subtotal-line
-             exp-table (_ "Total Expenses") #f expense-total))
+         doc (format #f "~a ~a ~a" company-name report-title period-for))
 
         (report-line
-         (if standard-order?
-             exp-table
-             inc-table)
+         (if standard-order? exp-table inc-table)
          (string-append (_ "Net income") " " period-for)
          (string-append (_ "Net loss") " " period-for)
          net-income
-         (* 2 (- tree-depth 1)) exchange-fn #f #f
-         )
+         (* 2 (1- tree-depth)) exchange-fn #f #f)
 
         (let ((build-table (gnc:make-html-table))
                 (inc-cell (gnc:make-html-table-cell inc-table))
