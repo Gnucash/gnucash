@@ -422,32 +422,71 @@
          doc 
          (gnc:html-make-no-account-warning 
 	  reportname (gnc:report-id report-obj)))
-	
-        ;; Get all the balances for each of the account types.
-        (let* ((revenue-closing #f)
-	       (expense-closing #f)
-	       (neg-revenue-total #f)
-	       (revenue-total #f)
-	       (expense-total #f)
-	       (trading-total #f)
-	       (net-income #f)
-	       
-               ;; Create the account tables below where their
-               ;; percentage time can be tracked.
-	       (inc-table (gnc:make-html-table)) ;; gnc:html-table
-	       (exp-table (gnc:make-html-table))
-	       (tra-table (gnc:make-html-table))
 
-	       (table-env #f)                      ;; parameters for :make-
-	       (params #f)                         ;; and -add-account-
-               (revenue-table #f)                  ;; gnc:html-acct-table
-               (expense-table #f)                  ;; gnc:html-acct-table
-               (trading-table #f)
+        ;; Get all the balances for each of the account types.
+        (let* ((expense-total
+                (gnc:collector-
+                 (gnc:accountlist-get-comm-balance-interval-with-closing
+                  expense-accounts start-date end-date)
+                 (gnc:account-get-trans-type-balance-interval-with-closing
+                  expense-accounts closing-pattern start-date end-date)))
+
+               (revenue-total
+                (gnc:collector-
+                 (gnc:account-get-trans-type-balance-interval-with-closing
+                  revenue-accounts closing-pattern start-date end-date)
+                 (gnc:accountlist-get-comm-balance-interval-with-closing
+                  revenue-accounts start-date end-date)))
+
+               (trading-total
+                (gnc:accountlist-get-comm-balance-interval-with-closing
+                 trading-accounts start-date end-date))
+
+               (net-income
+                (gnc:collector+ revenue-total
+                                trading-total
+                                (gnc:collector- expense-total)))
+
+               (inc-table (gnc:make-html-table))
+               (exp-table (gnc:make-html-table))
+               (tra-table (gnc:make-html-table))
+
+               (table-env
+                (list
+                 (list 'start-date start-date)
+                 (list 'end-date end-date)
+                 (list 'display-tree-depth tree-depth)
+                 (list 'depth-limit-behavior (if bottom-behavior 'flatten 'summarize))
+                 (list 'report-commodity report-commodity)
+                 (list 'exchange-fn exchange-fn)
+                 (list 'parent-account-subtotal-mode parent-total-mode)
+                 (list 'zero-balance-mode
+                       (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+                 (list 'account-label-mode (if use-links? 'anchor 'name))
+                 ;; we may, at some point, want to add an option to
+                 ;; generate a pre-adjustment income statement...
+                 (list 'balance-mode 'pre-closing)
+                 (list 'closing-pattern closing-pattern)))
+
+               (params
+                (list
+                 (list 'parent-account-balance-mode parent-balance-mode)
+                 (list 'zero-balance-display-mode
+                       (if omit-zb-bals? 'omit-balance 'show-balance))
+                 (list 'multicommodity-mode (and show-fcur? 'table))
+                 (list 'rule-mode use-rules?)))
+
+               (revenue-table
+                (gnc:make-html-acct-table/env/accts table-env revenue-accounts))
+               (expense-table
+                (gnc:make-html-acct-table/env/accts table-env expense-accounts))
+               (trading-table
+                (gnc:make-html-acct-table/env/accts table-env trading-accounts))
 
                (period-for (string-append " " (_ "for Period"))))
 
           ;; a helper to add a line to our report
-          (define (report-line
+          (define (add-report-line
                    table pos-label neg-label amount col
                    exchange-fn rule? row-style)
             (let* ((mon (gnc:sum-collector-commodity
@@ -461,123 +500,36 @@
                label                0  1 "text-cell"
                bal          (+ col 1)  1 "number-cell")))
 
-          ;; sum revenues and expenses
-	  (set! revenue-closing
-		(gnc:account-get-trans-type-balance-interval-with-closing
-		 revenue-accounts closing-pattern
-		 start-date end-date)
-		) ;; this is norm positive (debit)
-	  (set! expense-closing
-		(gnc:account-get-trans-type-balance-interval-with-closing
-		 expense-accounts closing-pattern
-		 start-date end-date)
-		) ;; this is norm negative (credit)
-	  (set! expense-total
-		(gnc:accountlist-get-comm-balance-interval-with-closing
-		 expense-accounts
-		 start-date end-date))
-	  (expense-total 'minusmerge expense-closing #f)
-	  (set! neg-revenue-total
-		(gnc:accountlist-get-comm-balance-interval-with-closing
-		 revenue-accounts
-		 start-date end-date))
-	  (neg-revenue-total 'minusmerge revenue-closing #f)
-	  (set! revenue-total (gnc:make-commodity-collector))
-	  (revenue-total 'minusmerge neg-revenue-total #f)
-          (set! trading-total 
-                (gnc:accountlist-get-comm-balance-interval-with-closing
-                 trading-accounts
-                 start-date end-date))
-	  ;; calculate net income
-	  (set! net-income (gnc:make-commodity-collector))
-	  (net-income 'merge revenue-total #f)
-	  (net-income 'merge trading-total #f)
-	  (net-income 'minusmerge expense-total #f)
-	  
-	  (set! table-env
-		(list
-		 (list 'start-date start-date)
-		 (list 'end-date end-date)
-		 (list 'display-tree-depth tree-depth)
-		 (list 'depth-limit-behavior (if bottom-behavior
-						 'flatten
-						 'summarize))
-		 (list 'report-commodity report-commodity)
-		 (list 'exchange-fn exchange-fn)
-		 (list 'parent-account-subtotal-mode parent-total-mode)
-		 (list 'zero-balance-mode (if show-zb-accts?
-					      'show-leaf-acct
-					      'omit-leaf-acct))
-		 (list 'account-label-mode (if use-links?
-					       'anchor
-					       'name))
-		 ;; we may, at some point, want to add an option to
-		 ;; generate a pre-adjustment income statement...
-		 (list 'balance-mode 'pre-closing)
-		 (list 'closing-pattern closing-pattern)
-		 )
-		)
-	  (set! params
-		(list
-		 (list 'parent-account-balance-mode parent-balance-mode)
-		 (list 'zero-balance-display-mode (if omit-zb-bals?
-						      'omit-balance
-						      'show-balance))
-		 (list 'multicommodity-mode (if show-fcur? 'table #f))
-		 (list 'rule-mode use-rules?)
-		  )
-		)
-	  
-	  (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+          (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
             (gnc:html-table-append-row! inc-table space)
             (gnc:html-table-append-row! exp-table space)
             (gnc:html-table-append-row! tra-table space))
+          (gnc:report-percent-done 80)
 
-	  (gnc:report-percent-done 80)
-	  (if label-revenue?
-	      (add-subtotal-line inc-table (_ "Revenues") #f #f))
-	  (set! revenue-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env revenue-accounts))
-	  (gnc:html-table-add-account-balances
-	   inc-table revenue-table params)
-          (if total-revenue?
-	      (add-subtotal-line 
-	       inc-table (_ "Total Revenue") #f revenue-total))
-	  
-	  (gnc:report-percent-done 85)
-	  (if label-expense?
-	      (add-subtotal-line 
-	       exp-table (_ "Expenses") #f #f))
-	  (set! expense-table
-		(gnc:make-html-acct-table/env/accts
-		 table-env expense-accounts))
-	  (gnc:html-table-add-account-balances
-	   exp-table expense-table params)
-	  (if total-expense?
-	      (add-subtotal-line
-	       exp-table (_ "Total Expenses") #f expense-total))
-	       
-	  (if label-trading?
-              (add-subtotal-line tra-table (_ "Trading") #f #f))
-	  (set! trading-table
-	        (gnc:make-html-acct-table/env/accts
-	         table-env trading-accounts))
-	  (gnc:html-table-add-account-balances
-	   tra-table trading-table params)
-	  (if total-trading?
-              (add-subtotal-line
-	       tra-table (_ "Total Trading") #f trading-total))
-	  
-	  (report-line
-	   (if standard-order? 
-	       exp-table 
-	       inc-table)
-	   (string-append (_ "Net income") period-for)
-	   (string-append (_ "Net loss") period-for)
-	   net-income
-	   (* 2 (- tree-depth 1)) exchange-fn #f #f
-	   )
+          (when label-revenue?
+            (add-subtotal-line inc-table (_ "Revenues") #f #f))
+          (gnc:html-table-add-account-balances inc-table revenue-table params)
+          (when total-revenue?
+            (add-subtotal-line inc-table (_ "Total Revenue") #f revenue-total))
+          (gnc:report-percent-done 85)
+
+          (when label-expense?
+            (add-subtotal-line exp-table (_ "Expenses") #f #f))
+          (gnc:html-table-add-account-balances exp-table expense-table params)
+          (when total-expense?
+            (add-subtotal-line exp-table (_ "Total Expenses") #f expense-total))
+
+          (when label-trading?
+            (add-subtotal-line tra-table (_ "Trading") #f #f))
+          (gnc:html-table-add-account-balances tra-table trading-table params)
+          (when total-trading?
+            (add-subtotal-line tra-table (_ "Total Trading") #f trading-total))
+
+          (add-report-line
+           (if standard-order? exp-table inc-table)
+           (string-append (_ "Net income") period-for)
+           (string-append (_ "Net loss") period-for)
+           net-income (* 2 (1- tree-depth)) exchange-fn #f #f)
 	  
 	  (gnc:html-document-add-object! 
 	   doc 
