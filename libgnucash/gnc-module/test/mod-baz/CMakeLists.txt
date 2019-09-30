@@ -1,7 +1,7 @@
 
 gnc_add_swig_guile_command (swig-baz-c
     SWIG_BAZ_C swig-baz.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/baz.i baz.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/baz.i "" baz.h
 )
 
 add_library(baz EXCLUDE_FROM_ALL baz.c baz.h)

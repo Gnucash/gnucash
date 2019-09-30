@@ -30,14 +30,14 @@ endif()
 # Command to generate the swig-unittest-support-guile.c wrapper file
 gnc_add_swig_guile_command (swig-unittest-support-guile-c
     SWIG_UNITTEST_SUPPORT_GUILE_C swig-unittest-support-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i "" ${test_core_HEADERS}
 )
 
 # Command to generate the swig-unittest-support-python.c wrapper file
 gnc_add_swig_python_command (swig-unittest-support-python
     SWIG_UNITTEST_SUPPORT_PYTHON_C SWIG_UNITTEST_SUPPORT_PYTHON_PY
     swig-unittest-support-python.c unittest_support.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ""
 )
 
 add_library(test-core-guile ${SWIG_UNITTEST_SUPPORT_GUILE_C})

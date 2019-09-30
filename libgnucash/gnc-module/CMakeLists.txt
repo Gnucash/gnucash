@@ -5,7 +5,7 @@ add_subdirectory(example)
 # Command to generate the swig-gnc-module.c wrapper file
 gnc_add_swig_guile_command (swig-gnc-module-c
     SWIG_GNC_MODULE_C swig-gnc-module.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i ""
 )
 
 set (gnc_module_SOURCES gnc-module.c)

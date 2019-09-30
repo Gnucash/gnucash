@@ -1,7 +1,7 @@
 
 gnc_add_swig_guile_command (swig-bar-c
     SWIG_BAR_C swig-bar.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/bar.i bar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/bar.i "" bar.h
 )
 
 add_library(bar EXCLUDE_FROM_ALL bar.c bar.h)

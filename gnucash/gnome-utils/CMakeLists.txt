@@ -5,7 +5,7 @@ add_subdirectory(test)
 # Command to generate the swig-gnome-utils.c wrapper file
 gnc_add_swig_guile_command (swig-gnome-utils-c
     SWIG_GNOME_UTILS_C swig-gnome-utils.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i ""
 )
 
 set (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.warnings.gschema.xml)
