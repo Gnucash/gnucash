@@ -437,8 +437,8 @@
 	       (period-for (string-append " " (_ "for Period"))))
 
 	  ;; a helper to add a line to our report
-	  (define (report-line
-		   table pos-label neg-label amount col
+	  (define (add-report-line
+                   table pos-label neg-label amount col
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
@@ -468,67 +468,56 @@
 
 	  (gnc:report-percent-done 30)
 
-	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
+          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
             (gnc:html-table-cell-set-style!
              wide "text-cell" 'attribute '("style" "min-width:60px"))
             (gnc:html-table-append-row! build-table (make-list 2 wide)))
-	  
-	  (gnc:report-percent-done 80)
-	  
-	  (report-line
-	   build-table
-	   (string-append (_ "Capital") ", "
-			  (qof-print-date start-date-printable))
-	   #f start-total-equity
-	   1 start-exchange-fn #f "primary-subheading"
-	   )
-	  (report-line
-	   build-table 
-	   (string-append (_ "Net income") period-for)
-	   (string-append (_ "Net loss") period-for)
-	   net-income
-	   0 end-exchange-fn #f #f
-	   )
-	  (report-line
-	   build-table 
-	   (string-append (_ "Investments") period-for)
-	   #f
-	   investments
-	   0 end-exchange-fn #f #f
-	   )
-	  (report-line
-	   build-table 
-	   (string-append (_ "Withdrawals") period-for)
-	   #f
-	   withdrawals
-	   0 end-exchange-fn #f #f
-	   )
-	  (or (gnc-commodity-collector-allzero? net-unrealized-gains)
-	      (report-line
-	       build-table 
-	       (_ "Unrealized Gains")
-	       (_ "Unrealized Losses")
-	       net-unrealized-gains
-	       0 end-exchange-fn #f #f
-	       )
-	   )
-	  (report-line
-	   build-table 
-	   (_ "Increase in capital")
-	   (_ "Decrease in capital")
-	   capital-increase
-	   1 end-exchange-fn use-rules? #f
-	   )
-	  (report-line
-	   build-table 
-	   (string-append (_ "Capital") ", "
-			  (qof-print-date end-date))
-	   #f
-	   end-total-equity
-	   1 end-exchange-fn #f "primary-subheading"
-	   )
-	  
-	  (gnc:html-document-add-object! doc build-table)
+
+          (gnc:report-percent-done 80)
+
+          (add-report-line
+           build-table
+           (string-append (_ "Capital") ", " (qof-print-date start-date-printable))
+           #f start-total-equity 1 start-exchange-fn #f "primary-subheading")
+
+          (add-report-line
+           build-table
+           (string-append (_ "Net income") period-for)
+           (string-append (_ "Net loss") period-for)
+           net-income 0 end-exchange-fn #f #f)
+
+          (add-report-line
+           build-table
+           (string-append (_ "Investments") period-for) #f
+           investments 0 end-exchange-fn #f #f)
+
+          (add-report-line
+           build-table
+           (string-append (_ "Withdrawals") period-for)
+           #f withdrawals 0 end-exchange-fn #f #f)
+
+          (unless (gnc-commodity-collector-allzero? net-unrealized-gains)
+            (add-report-line
+             build-table
+             (_ "Unrealized Gains")
+             (_ "Unrealized Losses")
+             net-unrealized-gains
+             0 end-exchange-fn #f #f))
+
+          (add-report-line
+           build-table
+           (_ "Increase in capital")
+           (_ "Decrease in capital")
+           capital-increase
+           1 end-exchange-fn use-rules? #f)
+
+          (add-report-line
+           build-table
+           (string-append (_ "Capital") ", " (qof-print-date end-date)) #f
+           end-total-equity
+           1 end-exchange-fn #f "primary-subheading")
+
+          (gnc:html-document-add-object! doc build-table)
 	  
           ;; add currency information if requested
 	  (gnc:report-percent-done 90)
