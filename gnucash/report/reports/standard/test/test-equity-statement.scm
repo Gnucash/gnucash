@@ -21,7 +21,7 @@
 (use-modules (srfi srfi-14))
 (use-modules (srfi srfi-64))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash engine test srfi64-extras))
+(use-modules (tests srfi64-extras))
 
 ;; Guile 2 needs to load external modules at compile time
 ;; otherwise the N_ syntax-rule won't be found at compile time
@@ -31,7 +31,6 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 
 (use-modules (gnucash utilities))
-(use-modules (gnucash report report-system))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
