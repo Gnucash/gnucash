@@ -15,6 +15,7 @@ set(scm_test_with_srfi64_SOURCES
   test-budget.scm
   test-register.scm
   test-trial-balance.scm
+  test-equity-statement.scm
   test-average-balance.scm
   test-invoice.scm
   test-owner-report.scm

@@ -71,8 +71,6 @@
 (define opthelp-budget-period-end
   (N_ "Select a budget period that ends the reporting range."))
 
-;; FIXME this could use an indent option
-
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
   (N_ "Report on these accounts, if display depth allows."))
@@ -384,8 +382,6 @@
 				  optname-two-column))
 	 (standard-order? (get-option gnc:pagename-display
 				      optname-standard-order))
-	 (indent 0)
-	 (tabbing #f)
 	 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -406,41 +402,23 @@
 	  (gnc:case-exchange-fn price-source report-commodity date-t64))
 	 )
     
-    ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
-    ;; with the proper arguments.
     (define (add-subtotal-line table pos-label neg-label signed-balance)
-      (define allow-same-column-totals #t)
-      (let* ((neg? (and signed-balance
-			neg-label
-			(gnc-numeric-negative-p
+      (let* ((neg? (and signed-balance neg-label
+			(negative?
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
 	     (label (if neg? (or neg-label pos-label) pos-label))
-	     (balance (if neg?
-                          (gnc:collector- signed-balance)
-			  signed-balance))
-	     )
+	     (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
 	(gnc:html-table-add-labeled-amount-line!
-	 table
-	 (+ indent (* tree-depth 2)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 "primary-subheading"
-	 (and (not allow-same-column-totals) balance use-rules?)
-	 label indent 1 "total-label-cell"
+	 table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
 	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
-	 (+ indent (* tree-depth 2) (- 0 1)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 1 "total-number-cell")
-	)
-      )
+	 (1- (* tree-depth 2)) 1 "total-number-cell")))
     
     ;; wrapper around gnc:html-table-append-ruler!
     (define (add-rule table)
       (gnc:html-table-append-ruler!
-       table
-       (+ (* 2 tree-depth)
-	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+       table (* 2 tree-depth)))
     
     (cond
       ((null? accounts)
@@ -507,34 +485,20 @@
 
 	  ;; a helper to add a line to our report
 	  (define (report-line
-		   table pos-label neg-label amount col
-		   exchange-fn rule? row-style)
-	    (let* ((neg? (and amount
-			      neg-label
-			      (gnc-numeric-negative-p
+		   table pos-label neg-label amount col exchange-fn rule? row-style)
+	    (let* ((neg? (and amount neg-label
+			      (negative?
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
 		   (label (if neg? (or neg-label pos-label) pos-label))
-		   (pos-bal (if neg?
-                                (gnc:collector- amount)
-				amount))
+		   (abs-amt (if neg? (gnc:collector- amount) amount))
 		   (bal (gnc:sum-collector-commodity
-                         pos-bal report-commodity exchange-fn))
-                   (balance
-                    (cond
-                     ((gnc:uniform-commodity? pos-bal report-commodity) bal)
-                     (show-fcur? (gnc-commodity-table pos-bal report-commodity
-                                                      exchange-fn))
-                     (else bal)))
-		   (column (or col 0))
-		   )
+                         abs-amt report-commodity exchange-fn)))
 	      (gnc:html-table-add-labeled-amount-line!
 	       table (* 2 tree-depth)  row-style rule?
 	       label                0  1 "text-cell"
-	       bal          (+ col 1)  1 "number-cell")
-	      )
-	    )
+	       bal           (1+ col)  1 "number-cell")))
 
 	  (gnc:report-percent-done 5)
 
@@ -618,11 +582,9 @@
 		  )
 		)
 	  
-	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (gnc:html-table-append-row! inc-table (make-list tree-depth wide))
-            (gnc:html-table-append-row! exp-table (make-list tree-depth wide)))
+	  (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! inc-table space)
+            (gnc:html-table-append-row! exp-table space))
 	       
 	  (gnc:report-percent-done 80)
 	  (if label-revenue?

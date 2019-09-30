@@ -356,9 +356,7 @@
                           (gnc:sum-collector-commodity
                            signed-balance report-commodity exchange-fn)))))
              (label (if neg? (or neg-label pos-label) pos-label))
-             (balance (if neg?
-                          (gnc:collector- signed-balance)
-                          signed-balance)))
+             (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
         (gnc:html-table-add-labeled-amount-line!
          table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
          (gnc:sum-collector-commodity balance report-commodity exchange-fn)
@@ -475,16 +473,10 @@
                (equity-table
                 (gnc:make-html-acct-table/env/accts table-env equity-accounts)))
 
-          (define (get-total-balance-fn account)
-            (gnc:account-get-comm-balance-at-date account reportdate #f))
-
-          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (let ((space (make-list tree-depth wide)))
-              (gnc:html-table-append-row! left-table space)
-              (unless report-form?
-                (gnc:html-table-append-row! right-table space))))
+          (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! left-table space)
+            (unless report-form?
+              (gnc:html-table-append-row! right-table space)))
           (gnc:report-percent-done 80)
 
           (when label-assets?

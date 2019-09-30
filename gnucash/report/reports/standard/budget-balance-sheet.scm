@@ -48,7 +48,6 @@
 (define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section."))
-;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
@@ -333,8 +332,6 @@
 				     optname-account-links))
          (use-rules? (get-option gnc:pagename-display
 				    optname-use-rules))
-	 (indent 0)
-	 (tabbing #f)
 	 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -359,42 +356,24 @@
 	  (gnc:case-exchange-fn price-source report-commodity date-t64))
 	 )
     
-    ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
-    ;; with the proper arguments.
     (define (add-subtotal-line table pos-label neg-label signed-balance)
-      (define allow-same-column-totals #t)
-      (let* ((neg? (and signed-balance
-			neg-label
-			(gnc-numeric-negative-p
+      (let* ((neg? (and signed-balance neg-label
+			(negative?
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
 	     (label (if neg? (or neg-label pos-label) pos-label))
-	     (balance (if neg?
-                          (gnc:collector- signed-balance)
-			  signed-balance))
-	     )
+	     (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
 	(gnc:html-table-add-labeled-amount-line!
-	 table
-	 (+ indent (* tree-depth 2)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 "primary-subheading"
-	 (and (not allow-same-column-totals) balance use-rules?)
-	 label indent 1 "total-label-cell"
+         table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
 	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
-	 (+ indent (* tree-depth 2) (- 0 1)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 1 "total-number-cell")
-	)
-      )
-    
+         (1- (* tree-depth 2)) 1 "total-number-cell")))
+
     ;; Wrapper around gnc:html-table-append-ruler! since we call it so
     ;; often.
     (define (add-rule table)
       (gnc:html-table-append-ruler!
-       table
-       (+ (* 2 tree-depth)
-	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+       table (* 2 tree-depth)))
 
     (cond
       ((null? accounts)
@@ -674,16 +653,13 @@
 		 (list 'rule-mode use-rules?)
 		  )
 		)
-	  
-	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (let ((space (make-list tree-depth wide)))
-              (gnc:html-table-append-row! left-table space)
-              (unless report-form?
-                (gnc:html-table-append-row! right-table space))))
-	  
-	  (gnc:report-percent-done 80)
+
+          (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! left-table space)
+            (unless report-form?
+              (gnc:html-table-append-row! right-table space)))
+
+          (gnc:report-percent-done 80)
 	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
 	  (set! asset-table
             (gnc:make-html-acct-table/env/accts
