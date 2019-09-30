@@ -383,45 +383,40 @@
 	 (exchange-fn
 	  (gnc:case-exchange-fn price-source report-commodity end-date))
 	 )
-    
+
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
     ;; with the proper arguments.
     (define (add-subtotal-line table pos-label neg-label signed-balance)
-      (let* ((neg? (and signed-balance
-			neg-label
-			(gnc-numeric-negative-p
-			 (gnc:gnc-monetary-amount
-			  (gnc:sum-collector-commodity
-			   signed-balance report-commodity exchange-fn)))))
-	     (label (if neg? (or neg-label pos-label) pos-label))
-	     (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
-	(gnc:html-table-add-labeled-amount-line!
-	 table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
-	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
-	 (1- (* tree-depth 2)) 1 "total-number-cell")))
-    
+      (let* ((neg? (and signed-balance neg-label
+                        (negative?
+                         (gnc:gnc-monetary-amount
+                          (gnc:sum-collector-commodity
+                           signed-balance report-commodity exchange-fn)))))
+             (label (if neg? (or neg-label pos-label) pos-label))
+             (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
+        (gnc:html-table-add-labeled-amount-line!
+         table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
+         (gnc:sum-collector-commodity balance report-commodity exchange-fn)
+         (1- (* tree-depth 2)) 1 "total-number-cell")))
+
     ;; wrapper around gnc:html-table-append-ruler!
     (define (add-rule table)
       (gnc:html-table-append-ruler! table (* 2 tree-depth)))
-    
-    (gnc:html-document-set-title! 
-     doc (format #f
-		  (string-append "~a ~a "
-				 (_ "For Period Covering ~a to ~a"))
-		  company-name report-title
+
+    (gnc:html-document-set-title!
+     doc (format #f (string-append "~a ~a " (_ "For Period Covering ~a to ~a"))
+                  company-name report-title
                   (qof-print-date start-date-printable)
                   (qof-print-date end-date)))
-    
+
     (if (null? accounts)
-	
-        ;; error condition: no accounts specified
-	;; is this *really* necessary??
-	;; i'd be fine with an all-zero P&L
-	;; that would, technically, be correct....
-        (gnc:html-document-add-object! 
-         doc 
-         (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
+
+        ;; error condition: no accounts specified is this *really*
+        ;; necessary??  i'd be fine with an all-zero P&L that would,
+        ;; technically, be correct....
+        (gnc:html-document-add-object!
+         doc (gnc:html-make-no-account-warning
+              reportname (gnc:report-id report-obj)))
 
         ;; Get all the balances for each of the account types.
         (let* ((expense-total
@@ -530,82 +525,48 @@
            (string-append (_ "Net income") period-for)
            (string-append (_ "Net loss") period-for)
            net-income (* 2 (1- tree-depth)) exchange-fn #f #f)
-	  
-	  (gnc:html-document-add-object! 
-	   doc 
-	   (let* ((build-table (gnc:make-html-table)))
-	     (if two-column?     
-		 (gnc:html-table-append-row!
-		  build-table
-		  (if standard-order?
-		      (list
-		       (gnc:make-html-table-cell inc-table)
-		       (if (null? trading-accounts)
-			   (gnc:html-make-empty-cell)
-		           (gnc:make-html-table-cell tra-table))
-		       (gnc:make-html-table-cell exp-table)
-		       )
-		      (list
-		       (gnc:make-html-table-cell exp-table)
-		       (gnc:make-html-table-cell inc-table)
-		       (if (null? trading-accounts)
-			   (gnc:html-make-empty-cell)
-		           (gnc:make-html-table-cell tra-table))
-		       )
-		      )
-		  )
-		 (if standard-order?
-		     (begin
-		       (gnc:html-table-append-row!
-			build-table
-			(list (gnc:make-html-table-cell inc-table)))
-		       (if (not (null? trading-accounts))
-		           (gnc:html-table-append-row!
-			    build-table
-			    (list (gnc:make-html-table-cell tra-table))))
-		       (gnc:html-table-append-row!
-			build-table
-			(list (gnc:make-html-table-cell exp-table)))
-		       )
-		     (begin
-		       (gnc:html-table-append-row!
-			build-table
-			(list (gnc:make-html-table-cell exp-table)))
-		       (gnc:html-table-append-row!
-			build-table
-			(list (gnc:make-html-table-cell inc-table)))
-		       (if (not (null? trading-accounts))
-		           (gnc:html-table-append-row!
-			    build-table
-			    (list (gnc:make-html-table-cell tra-table))))
-		       )
-		     )
-		 )
-	     
-	     (gnc:html-table-set-style!
-	      build-table "td"
-	      'attribute '("align" "left")
-	      'attribute '("valign" "top"))
-	     build-table
-	     )
-	   )
-  
-	  
-	  
+
+          ;; add the sections in the desired order to document
+          (let ((build-table (gnc:make-html-table))
+                (inc-cell (gnc:make-html-table-cell inc-table))
+                (tra-cell (if (null? trading-accounts)
+                              (gnc:html-make-empty-cell)
+                              (gnc:make-html-table-cell tra-table)))
+                (exp-cell (gnc:make-html-table-cell exp-table)))
+            (define (add-cells . lst) (gnc:html-table-append-row! build-table lst))
+            (cond
+             ((and two-column? standard-order?)
+              (add-cells inc-cell tra-cell exp-cell))
+
+             (two-column?
+              (add-cells exp-cell inc-cell tra-cell))
+
+             (standard-order?
+              (add-cells inc-cell)
+              (unless (null? trading-accounts) (add-cells tra-cell))
+              (add-cells exp-cell))
+
+             (else
+              (add-cells exp-cell)
+              (add-cells inc-cell)
+              (unless (null? trading-accounts) (add-cells tra-cell))))
+
+            (gnc:html-table-set-style!
+             build-table "td"
+             'attribute '("align" "left")
+             'attribute '("valign" "top"))
+            (gnc:html-document-add-object! doc build-table))
+
           ;; add currency information if requested
-	  (gnc:report-percent-done 90)
-          (if show-rates?
-              (gnc:html-document-add-object! 
-               doc ;;(gnc:html-markup-p)
-               (gnc:html-make-exchangerates 
-                report-commodity exchange-fn accounts)))
-	  (gnc:report-percent-done 100)
-	  
-	  )
-	)
-    
+          (gnc:report-percent-done 90)
+          (when show-rates?
+            (gnc:html-document-add-object!
+             doc (gnc:html-make-exchangerates
+                  report-commodity exchange-fn accounts)))
+          (gnc:report-percent-done 100)))
+
     (gnc:report-finished)
-    
+
     doc))
 
 (define is-reportname (N_ "Income Statement"))
