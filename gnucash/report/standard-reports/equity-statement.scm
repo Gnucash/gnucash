@@ -269,10 +269,7 @@
 	 ;; these must still be split-out and itemized separately
 	 (capital-accounts #f)
 	 (drawing-accounts #f)
-	 (investments #f)
-	 (withdrawals #f)
-	 (net-investment #f)
-	 (income-expense-closing #f)
+
 	 (closing-pattern
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
@@ -291,7 +288,21 @@
 	  (gnc:case-exchange-fn
 	   price-source report-commodity end-date))
 	 )
-    
+
+    (define (unrealized-gains-at-date book-balance exchange-fn date)
+      (define weighted-fn
+	(gnc:case-exchange-fn 'weighted-average report-commodity date))
+      (gnc:monetaries-add
+       (gnc:sum-collector-commodity book-balance report-commodity exchange-fn)
+       (gnc:monetary-neg
+        (gnc:sum-collector-commodity book-balance report-commodity weighted-fn))))
+
+    (define (get-start-balance-fn account)
+      (gnc:account-get-comm-balance-at-date account start-date #f))
+
+    (define (get-end-balance-fn account)
+      (gnc:account-get-comm-balance-at-date account end-date #f))
+
     (gnc:html-document-set-title! 
      doc (format #f
 		  (string-append "~a ~a "
@@ -311,54 +322,120 @@
 	  reportname (gnc:report-id report-obj)))
 	
         ;; Get all the balances for each account group.
-        (let* ((book-balance #f) ;; assets - liabilities - equity, norm 0
-	       (start-asset-balance #f)
-	       (end-asset-balance #f)
-	       (neg-start-liability-balance #f) ;; credit balances are < 0
-	       (neg-end-liability-balance #f)
-	       (neg-pre-start-retained-earnings #f)
-	       (neg-pre-end-retained-earnings #f)
-	       (neg-net-income #f)
-	       (net-income #f)
-	       
-               (neg-start-equity-balance #f)
-               (neg-end-equity-balance #f)
-	       
+        (let* ((start-asset-balance
+                (gnc:accounts-get-comm-total-assets
+                 asset-accounts get-start-balance-fn))
+
+               (end-asset-balance
+                (gnc:accounts-get-comm-total-assets
+                 asset-accounts get-end-balance-fn))
+
+               (neg-start-liability-balance
+                (gnc:accounts-get-comm-total-assets
+                 liability-accounts get-start-balance-fn))
+
+               (neg-end-liability-balance
+                (gnc:accounts-get-comm-total-assets
+                 liability-accounts get-end-balance-fn))
+
+               (neg-pre-start-retained-earnings
+                (gnc:accountlist-get-comm-balance-at-date-with-closing
+		 income-expense-accounts start-date))
+
+               (neg-pre-end-retained-earnings
+                (gnc:accountlist-get-comm-balance-at-date-with-closing
+		 income-expense-accounts end-date))
+
+               (income-expense-closing
+                (gnc:account-get-trans-type-balance-interval-with-closing
+                 income-expense-accounts closing-pattern start-date end-date))
+
+               (net-income
+                (gnc:collector-
+                 income-expense-closing
+	         (gnc:accountlist-get-comm-balance-interval-with-closing
+                  income-expense-accounts start-date end-date)))
+
+               (neg-start-equity-balance
+                (gnc:accounts-get-comm-total-assets
+                 equity-accounts get-start-balance-fn))
+
+               (neg-end-equity-balance
+                (gnc:accounts-get-comm-total-assets
+                 equity-accounts get-end-balance-fn))
+
 	       ;; these variables wont be used until gnucash gets
 	       ;; conta account types
                (start-capital-balance #f)
                (end-capital-balance #f)
                (start-drawing-balance #f)
                (end-drawing-balance #f)
-	       
-	       (start-book-balance #f)
-	       (end-book-balance #f)
-	       
-	       (start-unrealized-gains #f)
-	       (end-unrealized-gains #f)
-	       (net-unrealized-gains #f)
-	       
-	       (equity-closing #f)
-	       (neg-pre-closing-equity #f)
-	       
-	       (capital-increase #f)
-	       
-	       (start-total-equity #f)
-	       (end-total-equity #f)
-	       
+
+	       (start-book-balance
+                (gnc:collector+ start-asset-balance
+	                        neg-start-liability-balance
+	                        neg-start-equity-balance
+	                        neg-pre-start-retained-earnings))
+
+               (end-book-balance
+                (gnc:collector+ end-asset-balance
+                                neg-end-liability-balance
+                                neg-end-equity-balance
+                                neg-pre-end-retained-earnings))
+
+	       (start-unrealized-gains
+                (unrealized-gains-at-date start-book-balance
+				          start-exchange-fn
+				          start-date))
+
+	       (net-unrealized-gains
+                (unrealized-gains-at-date end-book-balance
+				          end-exchange-fn
+				          end-date))
+
+	       (equity-closing
+                (gnc:account-get-trans-type-balance-interval-with-closing
+                 equity-accounts closing-pattern start-date end-date))
+
+               (neg-pre-closing-equity
+                (gnc:collector- neg-end-equity-balance
+                                equity-closing))
+
+	       (net-investment
+                (gnc:collector- neg-start-equity-balance
+                                neg-pre-closing-equity))
+
+               ;; calculate investments & draws...
+	       ;; do a transaction query and classify the splits by dr/cr.
+	       ;; assume that positive shares on an equity account are debits
+	       ;;   withdrawals = investments - (investments - withdrawals)
+	       ;;   investments = withdrawals + (investments - withdrawals)
+	       (withdrawals
+                (account-get-total-flow 'in equity-accounts start-date end-date))
+
+               (investments
+                (gnc:collector+ net-investment withdrawals))
+
+               (capital-increase
+                (gnc:collector+ net-income
+                                investments
+                                net-unrealized-gains
+                                (gnc:collector- withdrawals)))
+
+	       (start-total-equity
+                (gnc:collector- start-unrealized-gains
+                                neg-start-equity-balance
+                                neg-pre-start-retained-earnings))
+
+	       (end-total-equity
+                (gnc:collector+ start-total-equity
+                                capital-increase))
+
 	       ;; Create the account table below where its
 	       ;; percentage time can be tracked.
 	       (build-table (gnc:make-html-table)) ;; gnc:html-table
-	       (get-start-balance-fn
-		(lambda (account)
-		  (gnc:account-get-comm-balance-at-date 
-		   account start-date #f)))
-	       (get-end-balance-fn
-		(lambda (account)
-		  (gnc:account-get-comm-balance-at-date 
-		   account end-date #f)))
 	       (period-for (string-append " " (_ "for Period"))))
-	  
+
 	  ;; a helper to add a line to our report
 	  (define (report-line
 		   table pos-label neg-label amount col
@@ -388,177 +465,9 @@
 	       bal   (+ col 1)         1 "number-cell")
 	      )
 	    )
-	  
-	  ;; sum any unrealized gains
-	  ;; 
-	  ;; Hm... unrealized gains....  This is when you purchase
-	  ;; something and its value increases/decreases (prior to
-	  ;; your selling it) and you have to reflect that on your
-	  ;; balance sheet.
-	  ;; 
-	  ;; I *think* a decrease in the value of a liability or
-	  ;; equity constitutes an unrealized loss.  I'm unsure about
-	  ;; that though....
-	  ;; 
-	  (define (unrealized-gains-at-date book-balance exchange-fn date)
-            (define weighted-fn
-	      (gnc:case-exchange-fn 'weighted-average report-commodity date))
-            (gnc:monetaries-add (gnc:sum-collector-commodity
-                                 book-balance report-commodity exchange-fn)
-                                (gnc:monetary-neg
-                                 (gnc:sum-collector-commodity
-                                  book-balance report-commodity weighted-fn))))
-	  
-	  ;; If you ask me, any outstanding(TM) retained earnings and
-	  ;; unrealized gains should be added directly into equity,
-	  ;; both at the start and end dates of the reporting period.
-	  (gnc:report-percent-done 4)
-	  
-	  ;; start and end asset balances
-	  (set! start-asset-balance 
-                (gnc:accounts-get-comm-total-assets 
-                 asset-accounts get-start-balance-fn)) ; OK
-	  (set! end-asset-balance 
-                (gnc:accounts-get-comm-total-assets 
-                 asset-accounts get-end-balance-fn)) ; OK
-	  
-	  ;; start and end liability balances
-	  (set! neg-start-liability-balance
-                (gnc:accounts-get-comm-total-assets 
-                 liability-accounts get-start-balance-fn)) ; OK
-	  (set! neg-end-liability-balance
-                (gnc:accounts-get-comm-total-assets 
-                 liability-accounts get-end-balance-fn)) ; OK
-	  
-	  ;; start and end retained earnings (income - expenses)
-	  (set! neg-pre-start-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts start-date)) ; OK
-	  (set! neg-pre-end-retained-earnings
-		(gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts end-date)) ; OK
-	  ;; neg-pre-end-retained-earnings is not used to calculate
-	  ;; profit but is used to calculate unrealized gains
-	  
-	  ;; calculate net income
-	  ;; first, ask out how much profit/loss was closed
-	  (set! income-expense-closing
-		(gnc:account-get-trans-type-balance-interval-with-closing
-		 income-expense-accounts closing-pattern
-		 start-date end-date)
-		)
-	  ;; find retained earnings for the period
-	  (set! neg-net-income
-		(gnc:accountlist-get-comm-balance-interval-with-closing
-		 income-expense-accounts
-		 start-date end-date)) ; OK
-	  ;; revert the income/expense to its pre-closing balance
-	  (neg-net-income 'minusmerge income-expense-closing #f)
-	  (set! net-income (gnc:make-commodity-collector))
-	  (net-income 'minusmerge neg-net-income #f)
-	  ;; now we know the net income for the period
-	  
-	  ;; start and end (unadjusted) equity balances
-	  (set! neg-start-equity-balance
-                (gnc:accounts-get-comm-total-assets 
-                 equity-accounts get-start-balance-fn)) ; OK
-	  (set! neg-end-equity-balance
-                (gnc:accounts-get-comm-total-assets 
-                 equity-accounts get-end-balance-fn)) ; OK
-	  ;; neg-end-equity-balance is used to calculate unrealized
-	  ;; gains and investments/withdrawals
-	  
-	  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	  ;; 
-	  ;; believe it or not, i think this part is right...
-	  ;; 
-	  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	  
-	  ;; start and end unrealized gains
-	  (set! start-book-balance (gnc:make-commodity-collector))
-	  (start-book-balance 'merge start-asset-balance #f)
-	  (start-book-balance 'merge neg-start-liability-balance #f)
-	  (start-book-balance 'merge neg-start-equity-balance #f)
-	  (start-book-balance 'merge neg-pre-start-retained-earnings #f) ; OK
-	  
-	  (set! end-book-balance (gnc:make-commodity-collector))
-	  (end-book-balance 'merge end-asset-balance #f)
-	  (end-book-balance 'merge neg-end-liability-balance #f)
-	  (end-book-balance 'merge neg-end-equity-balance #f)
-	  (end-book-balance 'merge neg-pre-end-retained-earnings #f) ; OK
-	  
-	  (set! start-unrealized-gains
-		(unrealized-gains-at-date start-book-balance
-					  start-exchange-fn
-					  start-date)) ; OK
-	  ;; I suspect that unrealized gains (since never realized)
-	  ;; must be counted from forever-ago....
-	  ;; ...yep, this appears to be correct.
-	  (set! start-unrealized-gains (gnc:make-commodity-collector))
-	  (set! end-unrealized-gains
-		(unrealized-gains-at-date end-book-balance
-					  end-exchange-fn
-					  end-date)) ; OK
-	  
-	  ;; unrealized gains accrued during the reporting period...
-	  (set! net-unrealized-gains (gnc:make-commodity-collector))
-	  (net-unrealized-gains 'merge end-unrealized-gains #f)
-	  (net-unrealized-gains 'minusmerge start-unrealized-gains #f) ; OK
-	  
-	  ;; 
-	  ;; calculate investments & draws...
-	  ;; 
-	  ;; since, as this time, GnuCash does not have any
-	  ;; contra-account types, i'm gonna have to fudge this a
-	  ;; bit...  i'll do a transaction query and classify the
-	  ;; splits by debit/credit.
-	  ;; 
-	  ;;   withdrawals = investments - (investments - withdrawals)
-	  ;;   investments = withdrawals + (investments - withdrawals)
-	  ;; 
-	  ;; assume that positive shares on an equity account are debits...
-	  ;; 
-	  
-	  (set! equity-closing 
-		(gnc:account-get-trans-type-balance-interval-with-closing
-		 equity-accounts closing-pattern
-		 start-date end-date)
-		)
-	  (set! neg-pre-closing-equity (gnc:make-commodity-collector))
-	  (neg-pre-closing-equity 'merge neg-end-equity-balance #f)
-	  (neg-pre-closing-equity 'minusmerge equity-closing #f)
-	  
-	  (set! net-investment (gnc:make-commodity-collector))  ;; 0
-	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
-	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
 
-	  (set! withdrawals
-            (account-get-total-flow 'in equity-accounts start-date end-date))
-
-	  (set! investments (gnc:make-commodity-collector))
-	  (investments 'merge net-investment #f)
-	  (investments 'merge withdrawals #f)
-	  
-	  ;; increase in equity
-	  (set! capital-increase (gnc:make-commodity-collector))
-	  (capital-increase 'merge net-income #f)
-	  (capital-increase 'merge investments #f)
-	  (capital-increase 'minusmerge withdrawals #f)
-	  (capital-increase 'merge net-unrealized-gains #f)
-	  
-	  ;; starting total equity
-	  (set! start-total-equity (gnc:make-commodity-collector))
-	  (start-total-equity 'minusmerge neg-start-equity-balance #f)
-	  (start-total-equity 'minusmerge neg-pre-start-retained-earnings #f)
-	  (start-total-equity 'merge start-unrealized-gains #f) ; OK
-	  
-	  ;; ending total equity
-	  (set! end-total-equity (gnc:make-commodity-collector))
-	  (end-total-equity 'merge start-total-equity #f)
-	  (end-total-equity 'merge capital-increase #f) ; OK
-	  
 	  (gnc:report-percent-done 30)
-	  
+
 	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
             (gnc:html-table-cell-set-style!
              wide "text-cell" 'attribute '("style" "min-width:60px"))
