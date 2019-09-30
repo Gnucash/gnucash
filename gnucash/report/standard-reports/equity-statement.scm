@@ -265,20 +265,13 @@
          (equity-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
 
-	 ;; N.B.: equity-accounts will also contain drawing accounts
-	 ;; these must still be split-out and itemized separately
-	 (capital-accounts #f)
-	 (drawing-accounts #f)
-
 	 (closing-pattern
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
 		(list 'regexp closing-regexp)
 		(list 'positive #f)
-		(list 'closing #t)
-		)
-	  )
-	 
+		(list 'closing #t)))
+
          (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
 	 (start-exchange-fn
@@ -364,14 +357,7 @@
                 (gnc:accounts-get-comm-total-assets
                  equity-accounts get-end-balance-fn))
 
-	       ;; these variables wont be used until gnucash gets
-	       ;; conta account types
-               (start-capital-balance #f)
-               (end-capital-balance #f)
-               (start-drawing-balance #f)
-               (end-drawing-balance #f)
-
-	       (start-book-balance
+               (start-book-balance
                 (gnc:collector+ start-asset-balance
 	                        neg-start-liability-balance
 	                        neg-start-equity-balance
@@ -440,31 +426,17 @@
 	  (define (add-report-line
                    table pos-label neg-label amount col
 		   exchange-fn rule? row-style)
-	    (let* ((neg? (and amount
-			      neg-label
-			      (gnc-numeric-negative-p
+	    (let* ((neg? (and amount neg-label
+			      (negative?
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
 		   (label (if neg? (or neg-label pos-label) pos-label))
-		   (pos-bal (if neg?
-                                (gnc:collector- amount)
-				amount))
-		   (bal (gnc:sum-collector-commodity
-                         pos-bal report-commodity exchange-fn))
-                   (balance
-                    (cond
-                     ((gnc:uniform-commodity? pos-bal report-commodity) bal)
-                     (show-fcur? (gnc-commodity-table
-                                  pos-bal report-commodity exchange-fn))
-                     (else bal)))
-		   (column (or col 0)))
+		   (pos-bal (if neg? (gnc:collector- amount) amount)))
 	      (gnc:html-table-add-labeled-amount-line!
-	       table         3 row-style rule?
-	       label         0         1 "text-cell"
-	       bal   (+ col 1)         1 "number-cell")
-	      )
-	    )
+               table 3 row-style rule? label 0 1 "text-cell"
+	       (gnc:sum-collector-commodity pos-bal report-commodity exchange-fn)
+               (1+ col) 1 "number-cell")))
 
 	  (gnc:report-percent-done 30)
 
