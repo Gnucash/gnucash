@@ -38,14 +38,14 @@ set (app_utils_HEADERS
 # Command to generate the swig-app-utils-guile.c wrapper file
 gnc_add_swig_guile_command (swig-apputils-guile-c
     SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
 )
 
 # Command to generate the swig-app-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-app-utils-python
     SWIG_APP_UTILS_PYTHON_C SWIG_APP_UTILS_PYTHON_PY
     swig-app-utils-python.c sw_app_utils.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
 )
 
 set (app_utils_SOURCES

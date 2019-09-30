@@ -121,7 +121,7 @@ set (engine_HEADERS
 # Command to generate the swig-engine.c wrapper file
 gnc_add_swig_guile_command (swig-engine-c
     SWIG_ENGINE_C swig-engine.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/engine.i "" ${engine_HEADERS}
 )
 
 # Command to generate the iso-4217-currencies.c file

@@ -11,7 +11,7 @@ set (report_HEADERS
 # Command to generate the swig-report.c wrapper file
 gnc_add_swig_guile_command (swig-report-c
     SWIG_REPORT_C swig-report.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/report.i ${report_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/report.i "" ${report_HEADERS}
 )
 
 set (report_SOURCES

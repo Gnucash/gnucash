@@ -12,7 +12,7 @@ set (html_HEADERS
 # Command to generate the swig-gnc-html.c wrapper file
 gnc_add_swig_guile_command (swig-gnc-html-c
     SWIG_GNC_HTML_C swig-gnc-html.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i "${gncmod_html_HEADERS}"
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i "" "${gncmod_html_HEADERS}"
 )
 
 set (html_SOURCES

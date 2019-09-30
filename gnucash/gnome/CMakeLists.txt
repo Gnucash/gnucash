@@ -64,7 +64,7 @@ set (gnc_gnome_noinst_HEADERS
 # Command to generate the swig-gnome.c wrapper file
 gnc_add_swig_guile_command (swig-gnome-c
     SWIG_GNOME_C swig-gnome.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i "" ${gnc_gnome_HEADERS}
 )
 
 set (gnc_gnome_SOURCES
