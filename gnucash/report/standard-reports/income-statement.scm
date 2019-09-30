@@ -445,43 +445,23 @@
                (trading-table #f)
 
                (period-for (string-append " " (_ "for Period"))))
-	  
-	  ;; a helper to add a line to our report
-	  (define (report-line
-		   table pos-label neg-label amount col
-		   exchange-fn rule? row-style)
-	    (let* ((neg? (and amount
-			      neg-label
-			      (gnc-numeric-negative-p
-			       (gnc:gnc-monetary-amount
-				(gnc:sum-collector-commodity
-				 amount report-commodity exchange-fn)))))
-		   (label (if neg? (or neg-label pos-label) pos-label))
-		   (pos-bal (if neg?
-				(let ((bal (gnc:make-commodity-collector)))
-				  (bal 'minusmerge amount #f)
-				  bal)
-				amount))
-		   (bal (gnc:sum-collector-commodity
-			 pos-bal report-commodity exchange-fn))
-		   (balance
-		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
-			     bal)
-			(and show-fcur?
-			     (gnc-commodity-table
-			      pos-bal report-commodity exchange-fn))
-			bal
-			))
-		   (column (or col 0))
-		   )
-	      (gnc:html-table-add-labeled-amount-line!
-	       table (* 2 tree-depth)  row-style rule?
-	       label                0  1 "text-cell"
-	       bal          (+ col 1)  1 "number-cell")
-	      )
-	    )
-	  
-	  ;; sum revenues and expenses
+
+          ;; a helper to add a line to our report
+          (define (report-line
+                   table pos-label neg-label amount col
+                   exchange-fn rule? row-style)
+            (let* ((mon (gnc:sum-collector-commodity
+                         amount report-commodity exchange-fn))
+                   (neg? (and amount neg-label
+                              (negative? (gnc:gnc-monetary-amount mon))))
+                   (label (if neg? (or neg-label pos-label) pos-label))
+                   (bal (if neg? (gnc:monetary-neg mon) mon)))
+              (gnc:html-table-add-labeled-amount-line!
+               table (* 2 tree-depth)  row-style rule?
+               label                0  1 "text-cell"
+               bal          (+ col 1)  1 "number-cell")))
+
+          ;; sum revenues and expenses
 	  (set! revenue-closing
 		(gnc:account-get-trans-type-balance-interval-with-closing
 		 revenue-accounts closing-pattern
