@@ -563,6 +563,7 @@
 (export gnc:make-html-table-header-cell)
 (export gnc:make-html-table-header-cell/markup)
 (export gnc:make-html-table-header-cell/size)
+(export gnc:make-html-table-cell/min-width)
 (export gnc:html-table-cell?)
 (export gnc:html-table-cell-rowspan)
 (export gnc:html-table-cell-set-rowspan!)

@@ -582,11 +582,9 @@
 		  )
 		)
 	  
-	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (gnc:html-table-append-row! inc-table (make-list tree-depth wide))
-            (gnc:html-table-append-row! exp-table (make-list tree-depth wide)))
+	  (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! inc-table space)
+            (gnc:html-table-append-row! exp-table space))
 	       
 	  (gnc:report-percent-done 80)
 	  (if label-revenue?

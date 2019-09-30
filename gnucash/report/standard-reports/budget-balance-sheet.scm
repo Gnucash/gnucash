@@ -653,16 +653,13 @@
 		 (list 'rule-mode use-rules?)
 		  )
 		)
-	  
-	  (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (let ((space (make-list tree-depth wide)))
-              (gnc:html-table-append-row! left-table space)
-              (unless report-form?
-                (gnc:html-table-append-row! right-table space))))
-	  
-	  (gnc:report-percent-done 80)
+
+          (let ((space (make-list tree-depth (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! left-table space)
+            (unless report-form?
+              (gnc:html-table-append-row! right-table space)))
+
+          (gnc:report-percent-done 80)
 	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
 	  (set! asset-table
             (gnc:make-html-acct-table/env/accts

@@ -557,13 +557,10 @@
           (let* ((env (gnc:html-acct-table-get-row-env acct-table 0)))
             (set! account-cols (get-val env 'account-cols)))
 
-          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f))
-                (ncols (+ account-cols (if (eq? report-variant 'work-sheet) 10 2))))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (let ((space (make-list ncols wide)))
-              (gnc:html-table-append-row! build-table space)
-              (set! header-rows (1+ header-rows))))
+          (let* ((ncols (+ account-cols (if (eq? report-variant 'work-sheet) 10 2)))
+                 (space (make-list ncols (gnc:make-html-table-cell/min-width 60))))
+            (gnc:html-table-append-row! build-table space)
+            (set! header-rows (1+ header-rows)))
 
           ;; add the double-column headers if required
           (if (eq? report-variant 'work-sheet)

@@ -73,6 +73,12 @@
   (gnc:make-html-table-cell-internal rowspan colspan markup
                                      objects (gnc:make-html-style-table)))
 
+(define (gnc:make-html-table-cell/min-width px)
+  (let ((cell (gnc:make-html-table-cell)))
+    (gnc:html-table-cell-set-style!
+     cell "td" 'attribute (list "style" (format #f "min-width:~apx" px)))
+    cell))
+
 (define (gnc:make-html-table-header-cell . objects)
   (gnc:make-html-table-cell-internal 1 1 "th" objects 
                                      (gnc:make-html-style-table)))

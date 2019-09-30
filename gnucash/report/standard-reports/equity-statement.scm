@@ -440,10 +440,8 @@
 
 	  (gnc:report-percent-done 30)
 
-          (let ((wide (gnc:make-html-table-cell/markup "text-cell" #f)))
-            (gnc:html-table-cell-set-style!
-             wide "text-cell" 'attribute '("style" "min-width:60px"))
-            (gnc:html-table-append-row! build-table (make-list 2 wide)))
+          (gnc:html-table-append-row!
+           build-table (make-list 2 (gnc:make-html-table-cell/min-width 60)))
 
           (gnc:report-percent-done 80)
 
