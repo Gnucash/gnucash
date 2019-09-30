@@ -58,7 +58,6 @@
 
 (define optname-start-date (N_ "Start Date"))
 (define optname-end-date (N_ "End Date"))
-;; FIXME this could use an indent option
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts
@@ -363,12 +362,8 @@
 	  (list (list 'str closing-str)
 		(list 'cased closing-cased)
 		(list 'regexp closing-regexp)
-		(list 'closing #t)
-		)
-	  )
-	 (indent 0)
-	 (tabbing #f)
-	 
+		(list 'closing #t)))
+
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
 	 (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
@@ -392,7 +387,6 @@
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
     ;; with the proper arguments.
     (define (add-subtotal-line table pos-label neg-label signed-balance)
-      (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
 			(gnc-numeric-negative-p
@@ -400,32 +394,15 @@
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
 	     (label (if neg? (or neg-label pos-label) pos-label))
-	     (balance (if neg?
-			  (let ((bal (gnc:make-commodity-collector)))
-			    (bal 'minusmerge signed-balance #f)
-			    bal)
-			  signed-balance))
-	     )
+	     (balance (if neg? (gnc:collector- signed-balance) signed-balance)))
 	(gnc:html-table-add-labeled-amount-line!
-	 table
-	 (+ indent (* tree-depth 2)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 "primary-subheading"
-	 (and (not allow-same-column-totals) balance use-rules?)
-	 label indent 1 "total-label-cell"
+	 table (* tree-depth 2) "primary-subheading" #f label 0 1 "total-label-cell"
 	 (gnc:sum-collector-commodity balance report-commodity exchange-fn)
-	 (+ indent (* tree-depth 2) (- 0 1)
-	    (if (equal? tabbing 'canonically-tabbed) 1 0))
-	 1 "total-number-cell")
-	)
-      )
+	 (1- (* tree-depth 2)) 1 "total-number-cell")))
     
     ;; wrapper around gnc:html-table-append-ruler!
     (define (add-rule table)
-      (gnc:html-table-append-ruler!
-       table
-       (+ (* 2 tree-depth)
-	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
+      (gnc:html-table-append-ruler! table (* 2 tree-depth)))
     
     (gnc:html-document-set-title! 
      doc (format #f
