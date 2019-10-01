@@ -49,12 +49,7 @@ SCM scm_init_sw_app_utils_module (void);
 #if defined(SWIGPYTHON)
 %{
 /* avoid no previous prototype warning/error */
-#if PY_VERSION_HEX >= 0x03000000
-PyObject*
-#else
-void
-#endif
-SWIG_init (void);
+PyObject* SWIG_init (void);
 %}
 #endif
 
