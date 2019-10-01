@@ -32,12 +32,17 @@ void gnc_guile_bindings_init(void);
 
 static int is_initialized = 0;
 
+extern SCM
+scm_init_sw_core_utils_module (void);
+
 void
 gnc_guile_bindings_init(void)
 {
     if (!is_initialized)
     {
         /* Do what's necessary to initialize the bindings */
+        scm_init_sw_core_utils_module();
+
         is_initialized = 1;
     }
 }

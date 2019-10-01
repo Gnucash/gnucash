@@ -29,7 +29,7 @@
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when
       (compile load eval expand)
-      (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module"))
+      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 
 (use-modules (sw_core_utils))
 
