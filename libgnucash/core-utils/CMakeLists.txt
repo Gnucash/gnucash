@@ -2,17 +2,11 @@
 
 add_subdirectory(test)
 
-# Command to generate the swig-core-utils-guile.c wrapper file
-gnc_add_swig_guile_command (swig-core-utils-guile-c
-    SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i ""
-)
-
 # Command to generate the swig-core-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-core-utils-python
     SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
     swig-core-utils-python.c sw_core_utils.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i ""
+    ${CMAKE_SOURCE_DIR}/bindings/core-utils.i ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 set (core_utils_SOURCES
@@ -93,25 +87,24 @@ set(core_utils_noinst_HEADERS
 )
 
 set(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
-set(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
+set(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
 set(core_utils_ALL_INCLUDES
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${GLIB2_INCLUDE_DIRS}
-  ${GUILE_INCLUDE_DIRS}
   ${GTK_MAC_INCLUDE_DIRS})
 
-set_local_dist(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt core-utils.i core-utils.scm gncla-dir.h.in)
+set_local_dist(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt gncla-dir.h.in)
 set(core_utils_DIST ${core_utils_DIST_local} ${test_core_utils_DIST} PARENT_SCOPE)
 
 if (MAC_INTEGRATION)
   list(APPEND core_utils_ALL_LIBRARIES ${OSX_EXTRA_LIBRARIES})
 endif()
 
-add_library(gnc-core-utils ${core_utils_ALL_SOURCES} ${SWIG_CORE_UTILS_GUILE_C})
-add_dependencies(gnc-core-utils gnc-vcs-info swig-runtime-h)
+add_library(gnc-core-utils ${core_utils_ALL_SOURCES})
+add_dependencies(gnc-core-utils gnc-vcs-info)
 
 target_link_libraries(gnc-core-utils ${core_utils_ALL_LIBRARIES})
 
@@ -169,18 +162,4 @@ if (WITH_PYTHON)
 endif()
 
 # No headers to install
-
-# Scheme
-
-set (core_utils_SCHEME core-utils.scm)
-
-set(GUILE_OUTPUT_DIR   gnucash)
-set(GUILE_DEPENDS      gnc-core-utils)
-
-gnc_add_scheme_targets(scm-core-utils
-    "${core_utils_SCHEME}"
-    ${GUILE_OUTPUT_DIR}
-    "${GUILE_DEPENDS}"
-    FALSE
-)
 
