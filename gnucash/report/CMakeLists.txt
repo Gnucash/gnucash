@@ -27,10 +27,15 @@ add_library (gncmod-report
 
 target_compile_definitions(gncmod-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 
-target_link_libraries(gncmod-report gnc-module gncmod-app-utils PkgConfig::GTK3 ${GUILE_LDFLAGS})
+target_link_libraries(gncmod-report
+    gnc-module
+    gncmod-app-utils
+    gnucash-guile
+    PkgConfig::GTK3
+    ${GUILE_LDFLAGS})
 
 target_include_directories (gncmod-report
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} 
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 

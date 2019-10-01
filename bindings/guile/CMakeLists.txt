@@ -1,15 +1,29 @@
 add_subdirectory(test)
 
-set(guile_HEADERS )
+set(guile_HEADERS
+    gnc-guile-utils.h)
 
 set(guile_SOURCES
-    gnc-guile-bindings.c)
-set(guile_bindings_ALL_INCLUDES
-    ${CMAKE_BINARY_DIR}/common
-    ${CMAKE_CURRENT_SOURCE_DIR})
+    gnc-guile-bindings.c
+    gnc-guile-utils.c)
+
 
 add_library(gnucash-guile SHARED ${guile_SOURCES} ${guile_HEADERS})
-target_include_directories(gnucash-guile PUBLIC ${guile_bindings_ALL_INCLUDES})
+
+target_include_directories(gnucash-guile
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/common
+        ${CMAKE_BINARY_DIR}/common
+        ${GLIB2_INCLUDE_DIRS}
+        ${GUILE_INCLUDE_DIRS}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(gnucash-guile
+    ${GUILE_LDFLAGS}
+    ${GLIB2_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
+    ${GTK_MAC_LDFLAGS})
 
 install(TARGETS gnucash-guile
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

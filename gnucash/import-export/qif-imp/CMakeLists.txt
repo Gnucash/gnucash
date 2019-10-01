@@ -20,7 +20,11 @@ set (qif_import_noinst_HEADERS
 
 add_library	(gncmod-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
 
-target_link_libraries(gncmod-qif-import gncmod-app-utils gncmod-gnome-utils gnc-gnome)
+target_link_libraries(gncmod-qif-import
+    gncmod-app-utils
+    gncmod-gnome-utils
+    gnc-gnome
+    gnucash-guile)
 
 target_compile_definitions(gncmod-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
 
