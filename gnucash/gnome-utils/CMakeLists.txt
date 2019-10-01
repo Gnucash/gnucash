@@ -204,9 +204,15 @@ add_library (gncmod-gnome-utils
   ${gnome_utils_noinst_HEADERS}
 )
 
-target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine
-  gnc-backend-xml-utils PkgConfig::GTK3 ${CMAKE_DL_LIBS} ${LIBSECRET_LDFLAGS}
-  ${GTK_MAC_LDFLAGS})
+target_link_libraries(gncmod-gnome-utils
+    gncmod-app-utils
+    gncmod-engine
+    gnc-backend-xml-utils
+    gnucash-guile
+    PkgConfig::GTK3
+    ${CMAKE_DL_LIBS}
+    ${LIBSECRET_LDFLAGS}
+    ${GTK_MAC_LDFLAGS})
 
 target_compile_options(gncmod-gnome-utils PRIVATE -Wno-deprecated-declarations)
 target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
