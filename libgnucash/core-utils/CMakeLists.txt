@@ -151,7 +151,7 @@ if (WITH_PYTHON)
   )
   target_compile_definitions (sw_core_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\")
 
-  if (CORELE)
+  if (APPLE)
     set_target_properties (sw_core_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
   endif()
 
