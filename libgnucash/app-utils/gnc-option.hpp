@@ -31,6 +31,7 @@ extern "C"
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 }
+#include <gnc-numeric.hpp>
 #include <libguile.h>
 #include <string>
 #include <exception>
@@ -108,7 +109,8 @@ enum GncOptionUIType
     VENDOR,
     EMPLOYEE,
     INVOICE,
-    TAX_TABLE
+    TAX_TABLE,
+    QUERY,
 };
 
 struct OptionClassifier
@@ -120,6 +122,9 @@ struct OptionClassifier
     std::string m_doc_string;
 };
 
+using GncMultiChoiceOptionEntry = std::pair<std::string, std::string>;
+using GncMultiChoiceOptionChoices = std::vector<GncMultiChoiceOptionEntry>;
+
 /**
  * Holds a pointer to the UI item which will control the option and an enum
  * representing the type of the option for dispatch purposes; all of that
@@ -129,22 +134,31 @@ struct OptionClassifier
  * This class takes no ownership responsibility, so calling code is responsible
  * for ensuring that the UI_Item is alive. For convenience the public
  * clear_ui_item function can be used as a weak_ptr's destruction callback to
- * ensure that if the ui_item is destroyed elsewhere the ptr will be nulled and
- * the type reset to OptionUIType::INTERNAL.
+ * ensure that the ptr will be nulled if the ui_item is destroyed elsewhere.
  */
 class OptionUIItem
 {
 public:
-     GncOptionUIType get_ui_type() { return m_ui_type; }
+    GncOptionUIType get_ui_type() { return m_ui_type; }
     void* const get_ui_item() {return m_ui_item; }
+    void clear_ui_item() { m_ui_item = nullptr; }
     void set_ui_item(void* ui_item)
     {
         if (m_ui_type == GncOptionUIType::INTERNAL)
         {
-            std::string error{"Can't set ui item with void ui type."};
+            std::string error{"INTERNAL option, setting the UI item forbidden."};
             throw std::logic_error(std::move(error));
         }
         m_ui_item = ui_item;
+    }
+    void make_internal()
+    {
+        if (m_ui_item != nullptr)
+        {
+            std::string error("Option has a UI Element, can't be INTERNAL.");
+            throw std::logic_error(std::move(error));
+        }
+        m_ui_type = GncOptionUIType::INTERNAL;
     }
 protected:
     OptionUIItem(GncOptionUIType ui_type) :
@@ -244,11 +258,57 @@ private:
     ValueType m_validation_data;
 };
 
+template <typename ValueType>
+class GncOptionRangeValue :
+    public OptionClassifier, public OptionUIItem
+{
+public:
+    GncOptionRangeValue<ValueType>(const char* section, const char* name,
+                                   const char* key, const char* doc_string,
+                                   ValueType value, ValueType min,
+                                   ValueType max, ValueType step) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(GncOptionUIType::NUMBER_RANGE),
+        m_value{value >= min && value <= max ? value : min},
+        m_default_value{value >= min && value <= max ? value : min},
+        m_min{min}, m_step{step} {}
+
+    ValueType get_value() const { return m_value; }
+    ValueType get_default_value() const { return m_default_value; }
+    SCM get_scm_value() const
+    {
+        return scm_from_value(m_value);
+    }
+    SCM get_scm_default_value() const
+    {
+        return scm_from_value(m_default_value);
+    }
+    bool validate(ValueType value) { return value >= m_min && value <= m_max; }
+    void set_value(ValueType value)
+    {
+        if (this->validate(value))
+            m_value = value;
+        else
+            throw std::invalid_argument("Validation failed, value not set.");
+    }
+private:
+    ValueType m_value;
+    ValueType m_default_value;
+    ValueType m_min;
+    ValueType m_max;
+    ValueType m_step;
+};
+
 using GncOptionVariant = boost::variant<GncOptionValue<std::string>,
-                                 GncOptionValue<bool>,
-                                 GncOptionValue<int64_t>,
-                                 GncOptionValue<QofInstance*>,
-                                 GncOptionValidatedValue<QofInstance*>>;
+                                        GncOptionValue<bool>,
+                                        GncOptionValue<int64_t>,
+                                        GncOptionValue<QofInstance*>,
+                                        GncOptionValue<QofQuery*>,
+                                        GncOptionValue<std::vector<GncGUID>>,
+                                    GncOptionValue<GncMultiChoiceOptionChoices>,
+                                        GncOptionRangeValue<int>,
+                                        GncOptionRangeValue<GncNumeric>,
+                                        GncOptionValidatedValue<QofInstance*>>;
 class GncOption
 {
 public:
@@ -310,6 +370,10 @@ public:
     void* const get_ui_item()
     {
         return boost::apply_visitor(GetUIItemVisitor(), m_option);
+    }
+    void make_internal()
+    {
+        return boost::apply_visitor(MakeInternalVisitor(), m_option);
     }
 private:
     template <typename ValueType>
@@ -423,6 +487,13 @@ private:
         template <class OptionType>
         void* const operator()(OptionType& option) const {
             return option.get_ui_item();
+        }
+    };
+    struct MakeInternalVisitor : public boost::static_visitor<>
+    {
+        template <class OptionType>
+        void operator()(OptionType& option) const {
+            return option.make_internal();
         }
     };
 

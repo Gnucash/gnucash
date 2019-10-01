@@ -185,6 +185,14 @@ GncOptionDB::set_selectable(const char* section, const char* name)
 }
 
 void
+GncOptionDB::make_internal(const char* section, const char* name)
+{
+    auto db_opt = find_option(section, name);
+    if (db_opt)
+        db_opt->make_internal();
+}
+
+void
 GncOptionDB::commit()
 {
 }
@@ -217,12 +225,32 @@ gnc_register_text_option(const GncOptionDBPtr& db, const char* section, const ch
 }
 
 void
+gnc_register_font_option(const GncOptionDBPtr& db, const char* section,
+                         const char* name, const char* key,
+                         const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::FONT};
+    db->register_option(section, std::move(option));
+}
+
+void
 gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
     GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
             GncOptionUIType::BUDGET};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_color_option(const GncOptionDBPtr& db, const char* section,
+                         const char* name, const char* key,
+                         const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::FONT};
     db->register_option(section, std::move(option));
 }
 
@@ -236,6 +264,197 @@ gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
     db->register_option(section, std::move(option));
 }
 
+void
+gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
+                                   const char* section, const char* name,
+                                   const char* key, const char* doc_string,
+                                   bool value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::INTERNAL};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_complex_boolean_option(const GncOptionDBPtr& db,
+                                    const char* section, const char* name,
+                                    const char* key, const char* doc_string,
+                                    bool value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::BOOLEAN};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
+                           const char* name, const char* key,
+                           const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::PIXMAP};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_account_liat_option(const GncOptionDBPtr& db, const char* section,
+                                 const char* name, const char* key,
+                                 const char* doc_string,
+                                 std::vector<GncGUID> value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::ACCOUNT_LIST};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_acount_list_limited_option(const GncOptionDBPtr& db,
+                                        const char* section, const char* name,
+                                        const char* key, const char* doc_string,
+                                        std::vector<GncGUID> value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::ACCOUNT_LIST};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
+                                        const char* section, const char* name,
+                                        const char* key, const char* doc_string,
+                                        std::vector<GncGUID> value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::ACCOUNT_SEL};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_multichoice_option(const GncOptionDBPtr& db, const char* section,
+                                const char* name, const char* key,
+                                const char* doc_string,
+                                GncMultiChoiceOptionChoices&& value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::MULTICHOICE};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
+                         const char* name, const char* key,
+                         const char* doc_string,
+                         GncMultiChoiceOptionChoices&& value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::LIST};
+    db->register_option(section, std::move(option));
+}
+
+/* Only balance-forecast.scm, hello-world.scm, and net-charts.scm
+ * use decimals and fractional steps and they can be worked around. */
+void
+gnc_register_number_range_option(const GncOptionDBPtr& db, const char* section,
+                                 const char* name, const char* key,
+                                 const char* doc_string, int value, int min,
+                                 int max, int step)
+{
+    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
+                value, min, max, step}};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
+                                     const char* section, const char* name,
+                                     const char* key, const char* doc_string,
+                                     int value)
+{
+    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
+                value, 100, 20000, 5}};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
+                          const char* name, const char* key,
+                          const char* doc_string, QofQuery* value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::QUERY};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_internal_option(const GncOptionDBPtr& db, const char* section,
+                             const char* name, const char* key,
+                             const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::INTERNAL};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_invoice_option(const GncOptionDBPtr& db, const char* section,
+                            const char* name, const char* key,
+                            const char* doc_string, GncInvoice* value)
+{
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+            GncOptionUIType::INVOICE};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_owner_option(const GncOptionDBPtr& db, const char* section,
+                          const char* name, const char* key,
+                          const char* doc_string, GncOwner* value)
+{
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+            GncOptionUIType::OWNER};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_taxtable_option(const GncOptionDBPtr& db, const char* section,
+                             const char* name, const char* key,
+                             const char* doc_string, GncTaxTable* value)
+{
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+            GncOptionUIType::TAX_TABLE};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_counter_option(const GncOptionDBPtr& db, const char* section,
+                            const char* name, const char* key,
+                            const char* doc_string, int value)
+{
+    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
+                value, 0, 999999999, 1}};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_counter_format_option(const GncOptionDBPtr& db,
+                                   const char* section, const char* name,
+                                   const char* key, const char* doc_string,
+                                   std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::STRING};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_dateformat_option(const GncOptionDBPtr& db, const char* section,
+                               const char* name, const char* key,
+                               const char* doc_string, std::string value)
+{
+    GncOption option{section, name, key, doc_string, value,
+            GncOptionUIType::DATE_FORMAT};
+    db->register_option(section, std::move(option));
+}
 
 void
 gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,

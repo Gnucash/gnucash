@@ -21,7 +21,7 @@ namespace std {
      void reset (pointer __p=pointer());
      void swap (unique_ptr &__u);
      pointer get () const;
-     operator bool () const;
+//     operator bool () const;
 
      ~unique_ptr();
   };

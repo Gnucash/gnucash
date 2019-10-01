@@ -219,7 +219,7 @@ TEST_F(GncOptionUI, test_option_ui_type)
     EXPECT_EQ(GncOptionUIType::STRING, m_option.get_ui_type());
 }
 
-TEST_F(GncOptionUI, test_set_option_ui_element)
+TEST_F(GncOptionUI, test_set_option_ui_item)
 {
     GncUIItem ui_item;
     m_option.set_ui_item(&ui_item);

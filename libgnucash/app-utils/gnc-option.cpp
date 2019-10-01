@@ -23,6 +23,7 @@
 
 //#include "options.h"
 #include "gnc-option.hpp"
+#include <engine-helpers-guile.h>
 
 template<> SCM
 scm_from_value<std::string>(std::string value)
@@ -43,6 +44,12 @@ scm_from_value<int64_t>(int64_t value)
 }
 
 template<> SCM
+scm_from_value<int>(int value)
+{
+    return scm_from_int(value);
+}
+
+template<> SCM
 scm_from_value<QofInstance*>(QofInstance* value)
 {
     auto guid = guid_to_string(qof_instance_get_guid(value));
@@ -51,3 +58,35 @@ scm_from_value<QofInstance*>(QofInstance* value)
     return scm_guid;
 }
 
+template<> SCM
+scm_from_value<QofQuery*>(QofQuery* value)
+{
+    return SCM_BOOL_F;
+}
+
+template<> SCM
+scm_from_value<GncNumeric>(GncNumeric value)
+{
+    return SCM_BOOL_F;
+}
+
+template<> SCM
+scm_from_value<std::vector<GncGUID>>(std::vector<GncGUID> value)
+{
+    SCM s_list;
+    for (auto guid : value)
+    {
+        auto guid_s = guid_to_string(qof_instance_get_guid(&guid));
+        auto scm_guid = scm_from_utf8_string(guid_s);
+        auto scm_guid_list1 = scm_list_1(scm_guid);
+        s_list = scm_append(scm_list_2(s_list, scm_guid_list1));
+        g_free(guid_s);
+    }
+    return s_list;
+}
+
+template<> SCM
+scm_from_value<GncMultiChoiceOptionChoices>(GncMultiChoiceOptionChoices value)
+{
+    return SCM_BOOL_F;
+}
