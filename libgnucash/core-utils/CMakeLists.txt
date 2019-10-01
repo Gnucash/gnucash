@@ -42,7 +42,7 @@ if (BUILDING_FROM_VCS)
 else()
   set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
 endif()
-set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h CACHE STRING "path to gnc-vcs-dir")
+set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h CACHE STRING "path to gnc-vcs-info.h file")
 
 ### Create gnc-vcs-info.h
 # This can only be done when building from a vcs (git/svn/bzr/svk) working directory.
@@ -87,38 +87,39 @@ set(core_utils_noinst_HEADERS
 )
 
 set(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
-set(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
-set(core_utils_ALL_INCLUDES
-  ${CMAKE_SOURCE_DIR}/common
-  ${CMAKE_BINARY_DIR}/common
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${GLIB2_INCLUDE_DIRS}
-  ${GTK_MAC_INCLUDE_DIRS})
 
 set_local_dist(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt gncla-dir.h.in)
 set(core_utils_DIST ${core_utils_DIST_local} ${test_core_utils_DIST} PARENT_SCOPE)
 
-if (MAC_INTEGRATION)
-  list(APPEND core_utils_ALL_LIBRARIES ${OSX_EXTRA_LIBRARIES})
-endif()
 
 add_library(gnc-core-utils ${core_utils_ALL_SOURCES})
 add_dependencies(gnc-core-utils gnc-vcs-info)
 
-target_link_libraries(gnc-core-utils ${core_utils_ALL_LIBRARIES})
+target_include_directories(gnc-core-utils
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/common
+        ${CMAKE_BINARY_DIR}/common
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${GLIB2_INCLUDE_DIRS}
+        ${GTK_MAC_INCLUDE_DIRS})
+
+target_link_libraries(gnc-core-utils
+    ${Boost_LIBRARIES}
+    ${GLIB2_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
+    ${GTK_MAC_LDFLAGS}
+    "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")
 
 target_compile_definitions(gnc-core-utils
-    PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\" ${GTK_MAC_CFLAGS_OTHER})
+    PRIVATE
+        G_LOG_DOMAIN=\"gnc.core-utils\"
+        $<$<BOOL:${BUILDING_FROM_VCS}>:GNC_VCS=\"git\">
+        ${GTK_MAC_CFLAGS_OTHER})
 
-target_include_directories(gnc-core-utils PUBLIC ${core_utils_ALL_INCLUDES})
-
-if (MAC_INTEGRATION)
-  target_compile_options(gnc-core-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-endif(MAC_INTEGRATION)
-if (BUILDING_FROM_VCS)
-  target_compile_definitions(gnc-core-utils PRIVATE -DGNC_VCS=\"git\")
-endif (BUILDING_FROM_VCS)
+target_compile_options(gnc-core-utils
+    PRIVATE
+        $<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_COMPILE_FLAGS}>)
 
 install(TARGETS gnc-core-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -129,7 +130,7 @@ install(TARGETS gnc-core-utils
 if (WITH_PYTHON)
   add_library (sw_core_utils MODULE ${SWIG_CORE_UTILS_PYTHON_C})
 
-  target_link_libraries(sw_core_utils gnc-core-utils ${core_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(sw_core_utils gnc-core-utils ${PYTHON_LIBRARIES})
   set_target_properties(sw_core_utils PROPERTIES PREFIX "_")
 
   if (HAVE_STRINGOP_TRUNCATION)
@@ -138,7 +139,7 @@ if (WITH_PYTHON)
 
   target_include_directories (sw_core_utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${core_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
+    PRIVATE ${PYTHON_INCLUDE_DIRS}
   )
   target_compile_definitions (sw_core_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\")
 
