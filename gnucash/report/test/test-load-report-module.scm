@@ -1,8 +1,6 @@
 (debug-enable 'backtrace)
 
 (debug-set! stack 500000)
-(if (< (string->number (major-version)) 2)
-    (debug-set! maxdepth 100000))
 
 (display "  testing report module load ... ")
 (setenv "GNC_UNINSTALLED" "1")

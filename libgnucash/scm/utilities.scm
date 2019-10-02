@@ -21,9 +21,8 @@
 ;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
 ;; This is the default value for auto-compilation-options without "unbound-variable".
 ;; See module/ice-9/boot-9.scm  */
-(if (>= (string->number (major-version)) 2)
-    (set! %auto-compilation-options 
-          '(#:warnings (arity-mismatch format duplicate-case-datum bad-case-datum))))
+(set! %auto-compilation-options
+  '(#:warnings (arity-mismatch format duplicate-case-datum bad-case-datum)))
 
 (use-modules (gnucash core-utils))
 

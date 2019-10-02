@@ -32,10 +32,6 @@
   (syntax-rules ()
     ((_ x) x)))
 
-
-(if (< (string->number (major-version)) 2)
-    (export-syntax N_))
-
 (export gnc:gettext)
 (export _)
 (export N_)
