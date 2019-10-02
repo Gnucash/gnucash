@@ -276,7 +276,8 @@
 
          ;; calculate the exchange rates
          (exchange-fn (gnc:case-exchange-fn
-                       price-source report-currency #f))
+                       price-source report-currency
+                       (gnc-budget-get-period-end-date budget period)))
 
          ;; The HTML document
          (doc (gnc:make-html-document)))
