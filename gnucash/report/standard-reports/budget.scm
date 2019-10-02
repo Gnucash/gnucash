@@ -537,7 +537,9 @@
     (define (calc-periods
              budget user-start user-end collapse-before? collapse-after? show-total?)
       (define (range start end)
-        (iota (- end start) start))
+        (if (< start end)
+            (iota (- end start) start)
+            (iota (- start end) end)))
       (let* ((num-periods (gnc-budget-get-num-periods budget))
              (range-start (or user-start 0))
              (range-end (if user-end (1+ user-end) num-periods))
