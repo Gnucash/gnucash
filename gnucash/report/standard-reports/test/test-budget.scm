@@ -31,18 +31,26 @@
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
 (use-modules (gnucash report standard-reports budget))
+(use-modules (gnucash report standard-reports budget-income-statement))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash engine test test-extras))
+(use-modules (sxml xpath))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
-(define uuid "810ed4b25ef0486ea43bbd3dddb32b11")
+(define budget-uuid "810ed4b25ef0486ea43bbd3dddb32b11")
+(define budget-is-uuid "583c313fcc484efc974c4c844404f454")
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "budget")
-  (test-budget)
+  (test-group-with-cleanup "budget.scm"
+    (test-budget)
+    (teardown))
+  (test-group-with-cleanup "budget-income-statement.scm"
+    (test-budget-income-statement)
+    (teardown))
   (test-end "budget"))
 
 (define (set-option options page tag value)
@@ -51,7 +59,7 @@
 (define (teardown)
   (gnc-clear-current-session))
 
-(define (options->sxml options test-title)
+(define (options->sxml options uuid test-title)
   (gnc:options->sxml uuid options "test-budget" test-title))
 
 (define (create-budget-and-transactions env account-alist)
@@ -88,15 +96,16 @@
   (let* ((env (create-test-env))
          (account-alist (create-test-data))
          (budget (create-budget-and-transactions env account-alist))
-         (options (gnc:make-report-options uuid))
+         (options (gnc:make-report-options budget-uuid))
          (bank (cdr (assoc "Bank" account-alist))))
 
+    (display "\nbudget.scm\n")
     (set-option options "Accounts" "Account Display Depth" 'all)
 
     (set-option options "Display" "Show Difference" #f)
     (set-option options "Display" "Show Budget" #f)
     (set-option options "Display" "Show Actual" #f)
-    (let ((sxml (options->sxml options "basic all display off")))
+    (let ((sxml (options->sxml options budget-uuid "basic all display off")))
       (test-equal "all display OFF, table has 15 cells"
         15
         (length (sxml->table-row-col sxml 1 #f #f))))
@@ -105,7 +114,7 @@
     (set-option options "Display" "Show Budget" #t)
     (set-option options "Display" "Show Actual" #t)
     (set-option options "Display" "Show Column with Totals" #t)
-    (let ((sxml (options->sxml options "basic")))
+    (let ((sxml (options->sxml options budget-uuid "basic")))
       (test-equal "all display ON, table has 226 cells"
         226
         (length (sxml->table-row-col sxml 1 #f #f)))
@@ -128,7 +137,7 @@
     (set-option options "General" "Report for range of budget periods" #t)
     (set-option options "General" "Range start" 'current)
     (set-option options "General" "Range end" 'next)
-    (let ((sxml (options->sxml options "only next period")))
+    (let ((sxml (options->sxml options budget-uuid "only next period")))
       (test-equal "only next period - 133 cells"
         133
         (length (sxml->table-row-col sxml 1 #f #f)))
@@ -140,7 +149,7 @@
 
     (set-option options "General" "Range start" 'last)
     (set-option options "General" "Range end" 'last)
-    (let ((sxml (options->sxml options "only last period")))
+    (let ((sxml (options->sxml options budget-uuid "only last period")))
       (test-equal "only last period - 102 cells"
         102
         (length (sxml->table-row-col sxml 1 #f #f)))
@@ -156,7 +165,7 @@
     (set-option options "General" "Exact end period" 4)
     (set-option options "General" "Include collapsed periods before selected." #f)
     (set-option options "General" "Include collapsed periods after selected." #f)
-    (let ((sxml (options->sxml options "exact periods")))
+    (let ((sxml (options->sxml options budget-uuid "exact periods")))
       (test-equal "exact periods - 133 cells"
         133
         (length (sxml->table-row-col sxml 1 #f #f)))
@@ -167,9 +176,33 @@
         (sxml->table-row-col sxml 1 5 #f)))
 
     (set-option options "General" "Use accumulated amounts" #t)
-    (let ((sxml (options->sxml options "Use accumulated amounts")))
+    (let ((sxml (options->sxml options budget-uuid "Use accumulated amounts")))
       (test-equal "use accumulated amounts"
         '("Bank" "$60.00" "$15.00" "$45.00" "$60.00" "$82.00" "-$22.00"
           "$120.00" "$159.00" "-$39.00" "$120.00" "$159.00" "-$39.00")
         (sxml->table-row-col sxml 1 5 #f)))
     ))
+
+(define (test-budget-income-statement)
+  (let* ((env (create-test-env))
+         (account-alist (create-test-data))
+         (budget (create-budget-and-transactions env account-alist))
+         (options (gnc:make-report-options budget-is-uuid))
+         (bank (assoc-ref account-alist "Bank")))
+
+    (display "\nbudget-income-statement.scm\n")
+    (let ((sxml (options->sxml options budget-is-uuid "budget-is-basic")))
+      (test-equal "basic test"
+        72
+        (length (sxml->table-row-col sxml 1 #f #f)))
+
+      (test-equal "budgeted income amounts"
+        '("$195.00" "Income")
+        ((sxpath '(// table // (tr 1) // table // (tr 3) // *text*))
+         sxml))
+
+      (test-equal "net loss for budget"
+        '("Net loss for Budget test budget" "$285.00")
+        ((sxpath '(// table // (tr 2) // table // (tr 5) // *text*))
+         sxml)))))
+
