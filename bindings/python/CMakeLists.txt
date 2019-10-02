@@ -47,10 +47,12 @@ gnc_add_swig_python_command (swig-gnucash-core
 )
 
 # Command to generate the swig-core-utils-python.c wrapper file
+gnc_swig_extract_header_files (gnc-core-utils CORE_UTILS_HEADERS)
 gnc_add_swig_python_command (swig-core-utils-python
     SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
     swig-core-utils-python.c sw_core_utils.py
     ${CMAKE_SOURCE_DIR}/bindings/core-utils.i ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
+    ${CORE_UTILS_HEADERS}
 )
 
 if(WITH_PYTHON)

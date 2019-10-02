@@ -90,3 +90,25 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
     )
     add_custom_target(${_target} ALL DEPENDS ${outfile} ${py_outfile} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${_input} ${ARGN})
 endmacro()
+
+
+# The swig wrappers need to know the header files ("the interface")
+# for the library they are wrapping.
+# We can extract those from the target's SOURCES property
+# Using a few ordinary cmake commands
+macro (gnc_swig_extract_header_files _target _variable)
+    set(${_variable} "")
+    get_target_property(_headers ${_target} SOURCES)
+    if(_headers)
+        list(FILTER _headers INCLUDE REGEX ".*[.]h(pp)?$")
+        get_target_property(_srcdir ${_target} SOURCE_DIR)
+        foreach (_header  ${_headers})
+            if(NOT IS_ABSOLUTE "${_header}")
+                set(_header_abs "${_srcdir}/${_header}")
+            else()
+                set(_header_abs "${_header}")
+            endif()
+            list (APPEND ${_variable} "${_header_abs}")
+        endforeach ()
+    endif()
+endmacro()

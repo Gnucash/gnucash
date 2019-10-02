@@ -1,9 +1,12 @@
 add_subdirectory(test)
 
 # Command to generate the swig-core-utils-guile.c wrapper file
+gnc_swig_extract_header_files (gnc-core-utils CORE_UTILS_HEADERS)
 gnc_add_swig_guile_command (swig-core-utils-guile-c
     SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c
-    ${CMAKE_SOURCE_DIR}/bindings/core-utils.i ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
+    ${CMAKE_SOURCE_DIR}/bindings/core-utils.i
+    ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
+    ${CORE_UTILS_HEADERS}
 )
 
 set(guile_HEADERS
