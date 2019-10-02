@@ -118,48 +118,6 @@ else(BUILDING_FROM_VCS)
 endif(BUILDING_FROM_VCS)
 dist_add_generated (${BUILDING_FROM_VCS} gnc-vcs-info.h)
 
-# Command to generate the swig-core-utils-python.c wrapper file
-gnc_add_swig_python_command (swig-core-utils-python
-    SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
-    swig-core-utils-python.c sw_core_utils.py
-    ${CMAKE_SOURCE_DIR}/bindings/core-utils.i ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-if (WITH_PYTHON)
-  add_library (sw_core_utils MODULE ${SWIG_CORE_UTILS_PYTHON_C})
-
-  target_link_libraries(sw_core_utils gnc-core-utils ${PYTHON_LIBRARIES})
-  set_target_properties(sw_core_utils PROPERTIES PREFIX "_")
-
-  if (HAVE_STRINGOP_TRUNCATION)
-    target_compile_options(sw_core_utils PRIVATE -Wno-error=stringop-truncation)
-  endif()
-
-  target_include_directories (sw_core_utils
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${PYTHON_INCLUDE_DIRS}
-  )
-  target_compile_definitions (sw_core_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\")
-
-  if (APPLE)
-    set_target_properties (sw_core_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-  endif()
-
-  install(TARGETS sw_core_utils
-    LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
-    ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
-  )
-
-  add_custom_target(sw-core-utils-py ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_CORE_UTILS_PYTHON_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
-    DEPENDS ${SWIG_CORE_UTILS_PYTHON_C})
-
-  add_custom_target(sw-core-utils-build ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_core_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
-    DEPENDS sw_core_utils)
-
-endif()
-
 # Dist files
 set_local_dist(core_utils_DIST_local
     ${core_utils_SOURCES}
