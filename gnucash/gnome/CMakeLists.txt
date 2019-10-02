@@ -146,6 +146,7 @@ target_link_libraries(gnc-gnome
     gncmod-gnome-utils
     gncmod-engine
     gnucash-guile
+    ${Boost_LIBRARIES}
     PkgConfig::GTK3
     ${GTK_MAC_LDFLAGS})
 

@@ -22,23 +22,20 @@ add_dependencies(gnucash-guile
     swig-runtime-h)
 
 target_include_directories(gnucash-guile
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/common
-        ${CMAKE_BINARY_DIR}/common
-        ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
-        ${CMAKE_BINARY_DIR}/libgnucash/core-utils # For gnc-version-info.h
-        ${GLIB2_INCLUDE_DIRS}
-        ${GTK_MAC_INCLUDE_DIRS}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${GUILE_INCLUDE_DIRS})
+        ${GUILE_INCLUDE_DIRS}
+        ${GLIB2_INCLUDE_DIRS}
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/common
+        ${CMAKE_BINARY_DIR}/common)
 
 target_link_libraries(gnucash-guile
-    gnc-core-utils
-    ${GUILE_LDFLAGS}
-    ${GLIB2_LDFLAGS}
-    ${GOBJECT_LDFLAGS}
-    ${GTK_MAC_LDFLAGS})
+    PUBLIC
+        ${GUILE_LDFLAGS}
+    PRIVATE
+        gnc-core-utils
+        ${GLIB2_LDFLAGS})
 
 install(TARGETS gnucash-guile
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -47,14 +47,16 @@ target_include_directories(gnc-core-utils
         ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${GLIB2_INCLUDE_DIRS}
+    PRIVATE
         ${GTK_MAC_INCLUDE_DIRS})
 
 target_link_libraries(gnc-core-utils
-    ${Boost_LIBRARIES}
-    ${GLIB2_LDFLAGS}
-    ${GOBJECT_LDFLAGS}
-    ${GTK_MAC_LDFLAGS}
-    "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")
+    PRIVATE
+        ${Boost_LIBRARIES}
+        ${GLIB2_LDFLAGS}
+        ${GOBJECT_LDFLAGS}
+        ${GTK_MAC_LDFLAGS}
+        "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")
 
 target_compile_definitions(gnc-core-utils
     PRIVATE
