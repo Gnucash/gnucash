@@ -332,7 +332,7 @@
       (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
              (allperiods (filter number? (gnc:list-flatten column-list)))
-             (total-periods (if accumulate?
+             (total-periods (if (and accumulate? (not (null? allperiods)))
                                 (iota (1+ (apply max allperiods)))
                                 allperiods))
              (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
