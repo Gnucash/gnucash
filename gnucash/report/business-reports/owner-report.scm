@@ -894,11 +894,12 @@ invoices and amounts.")))))
                         accounts-and-splits
                         (cons (cons (car accounts) acc-splits)
                               accounts-and-splits))
-                    other-acc-splits))))))))
+                    other-acc-splits))))))
 
-    (gnc:html-table-set-col-headers! table headings)
+      (gnc:html-table-set-col-headers! table headings)
 
-    (gnc:html-document-add-object! document table)
+      (gnc:html-document-add-object! document table)))
+
     document))
 
 (define* (find-first-account type #:key currency)
