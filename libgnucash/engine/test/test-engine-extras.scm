@@ -834,6 +834,36 @@
 
     (vector inv-1 inv-2 inv-3 inv-4 inv-5 inv-6 inv-7 inv-8)))
 
+(define-public (gnc:create-budget-and-transactions env account-alist)
+  (let* ((book (gnc-get-current-book))
+         (budget (gnc-budget-new book))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist))))
+    (gnc-budget-set-name budget "test budget")
+    (gnc-budget-begin-edit budget)
+    (gnc-budget-set-num-periods budget 6)
+    (gnc-budget-set-account-period-value budget bank 0 20)
+    (gnc-budget-set-account-period-value budget bank 1 40)
+    (gnc-budget-set-account-period-value budget bank 3 60)
+    (gnc-budget-set-account-period-value budget expense 1 30)
+    (gnc-budget-set-account-period-value budget expense 2 20)
+    (gnc-budget-set-account-period-value budget expense 3 40)
+    (gnc-budget-set-account-period-value budget income 0 -55)
+    (gnc-budget-set-account-period-value budget income 2 -65)
+    (gnc-budget-set-account-period-value budget income 3 -75)
+    (gnc-budget-commit-edit budget)
+    (let ((midperiod (lambda (period)
+                       (floor (/ (+ (gnc-budget-get-period-start-date budget period)
+                                    (gnc-budget-get-period-end-date budget period))
+                                 2)))))
+      (env-create-transaction env (midperiod 0) bank income 55)
+      (env-create-transaction env (midperiod 2) bank income 67)
+      (env-create-transaction env (midperiod 3) bank income 77)
+      (env-create-transaction env (midperiod 0) expense bank 20)
+      (env-create-transaction env (midperiod 1) expense bank 20))
+    budget))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; various stock transactions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

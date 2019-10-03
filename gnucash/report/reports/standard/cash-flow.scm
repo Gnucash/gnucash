@@ -196,8 +196,6 @@
         (let* ((tree-depth (if (equal? display-depth 'all)
                                (accounts-get-children-depth accounts)
                                display-depth))
-
-               (money-diff-collector (gnc:make-commodity-collector))
                (account-disp-list
                 (map
                  (lambda (account)
@@ -253,8 +251,6 @@
                                        account-full-name<?))
                   (money-out-alist (cdr (assq 'money-out-alist result)))
                   (money-out-collector (cdr (assq 'money-out-collector result))))
-              (money-diff-collector 'merge money-in-collector #f)
-              (money-diff-collector 'minusmerge money-out-collector #f)
 
               (gnc:html-document-add-object!
                doc
@@ -318,7 +314,8 @@
                 (gnc:make-html-table-header-cell/markup
                  "total-number-cell"
                  (gnc:sum-collector-commodity
-                  money-diff-collector report-currency exchange-fn))))
+                  (gnc:collector- money-in-collector money-out-collector)
+                  report-currency exchange-fn))))
 
               (gnc:html-document-add-object! doc table)
 
