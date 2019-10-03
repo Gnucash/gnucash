@@ -661,16 +661,16 @@ invoices and amounts.")))))
 (define (job-options-generator)
   (options-generator GNC-OWNER-JOB #f))
 
-(define (string-expand string character replace-string)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (if (char=? c character)
-              replace-string
-              c)))
-       string))))
+(define (multiline-to-html-text str)
+  ;; simple function - splits string containing #\newline into
+  ;; substrings, and convert to a gnc:make-html-text construct which
+  ;; adds gnc:html-markup-br after each substring.
+  (let loop ((list-of-substrings (string-split str #\newline))
+             (result '()))
+    (if (null? list-of-substrings)
+        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
+        (loop (cdr list-of-substrings)
+              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
 (define (setup-job-query q owner accounts end-date)
   (let ((guid (gncOwnerReturnGUID owner)))
@@ -710,17 +710,10 @@ invoices and amounts.")))))
      table "table"
      'attribute (list "border" 0)
      'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
-    (gnc:html-table-append-row!
-     table
-     (list "<br/>"))
-    (gnc:html-table-set-last-row-style!
-     table "td"
+     'attribute (list "cellpadding" 0)
      'attribute (list "valign" "top"))
+    (gnc:html-table-append-row!
+     table (multiline-to-html-text (gnc:owner-get-name-and-address-dep owner)))
     table))
 
 (define (make-date-row! table label date)
@@ -757,8 +750,7 @@ invoices and amounts.")))))
     (when name
       (gnc:html-table-append-row! table (list name)))
     (when addy
-      (gnc:html-table-append-row! table (list (string-expand addy #\newline "<br/>"))))
-
+      (gnc:html-table-append-row! table (multiline-to-html-text addy)))
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
     table))
