@@ -264,7 +264,7 @@
    optionslist))
 
 (define (tests)
-  ;; (run-tests "with empty book")
+  (run-tests "with empty book")
   (let ((env (create-test-env))
         (account-alist (create-test-data)))
     (gnc:create-budget-and-transactions env account-alist))
