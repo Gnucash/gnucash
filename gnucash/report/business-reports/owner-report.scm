@@ -716,24 +716,6 @@ invoices and amounts.")))))
      table (multiline-to-html-text (gnc:owner-get-name-and-address-dep owner)))
     table))
 
-(define (make-date-row! table label date)
-  (gnc:html-table-append-row!
-   table
-   (list
-    (string-append label ": ")
-    (qof-print-date date))))
-
-(define (make-date-table)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
-    table))
-
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
      (name (gnc:company-info book gnc:*company-name*))
