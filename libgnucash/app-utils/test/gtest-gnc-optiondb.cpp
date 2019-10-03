@@ -78,6 +78,23 @@ private:
     std::string m_value;
 };
 
+class GncOptionUIItem
+{
+public:
+    GncOptionUIItem(GncUIType* widget) : m_widget{widget} {}
+    GncUIType* m_widget;
+};
+
+class GncOptionUITest : public ::testing::Test
+{
+protected:
+    GncOptionUITest() :
+        m_option{"foo", "bar", "baz", "Phony Option", std::string{"waldo"},
+            GncOptionUIType::STRING} {}
+
+    GncOption m_option;
+};
+
 class GncOptionDBUITest : public ::testing::Test
 {
 protected:
@@ -99,18 +116,20 @@ protected:
 TEST_F(GncOptionDBUITest, test_set_ui_item)
 {
     GncUIType entry;
-    m_db->set_ui_item("foo", "bar", &entry);
-    EXPECT_EQ(&entry, static_cast<GncUIType*>(m_db->get_ui_item("foo", "bar")));
+    GncOptionUIItem ui_item(&entry);
+    m_db->set_ui_item("foo", "bar", &ui_item);
+    EXPECT_EQ(&entry, m_db->get_ui_item("foo", "bar")->m_widget);
 }
 
 TEST_F(GncOptionDBUITest, test_ui_value_from_option)
 {
     GncUIType entry;
+    GncOptionUIItem ui_item(&entry);
     const char* value{"waldo"};
-    m_db->set_ui_item("foo", "bar", &entry);
+    m_db->set_ui_item("foo", "bar", &ui_item);
     m_db->set_ui_from_option("foo", "bar", [](GncOption& option){
-            auto ui_item = static_cast<GncUIType* const>(option.get_ui_item());
-            ui_item->set_value(option.get_value<std::string>());
+            auto new_ui_item = option.get_ui_item();
+            new_ui_item->m_widget->set_value(option.get_value<std::string>());
         });
     EXPECT_STREQ(value, entry.get_value().c_str());
 }
@@ -118,12 +137,13 @@ TEST_F(GncOptionDBUITest, test_ui_value_from_option)
 TEST_F(GncOptionDBUITest, test_option_value_from_ui)
 {
     GncUIType entry;
+    GncOptionUIItem ui_item(&entry);
     const char* value{"pepper"};
-    m_db->set_ui_item("foo", "bar", &entry);
+    m_db->set_ui_item("foo", "bar", &ui_item);
     entry.set_value(value);
     m_db->set_option_from_ui("foo", "bar", [](GncOption& option){
-            auto ui_item = static_cast<GncUIType* const>(option.get_ui_item());
-            option.set_value(ui_item->get_value());
+            auto new_ui_item = option.get_ui_item()->m_widget;
+            option.set_value(new_ui_item->get_value());
         });
     EXPECT_STREQ(value, m_db->lookup_string_option("foo", "bar").c_str());
 }

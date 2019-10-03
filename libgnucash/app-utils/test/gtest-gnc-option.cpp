@@ -202,6 +202,13 @@ private:
     std::string m_value;
 };
 
+class GncOptionUIItem
+{
+public:
+    GncOptionUIItem(GncUIItem* widget) : m_widget{widget} {}
+    GncUIItem* m_widget;
+};
+
 class GncOptionUITest : public ::testing::Test
 {
 protected:
@@ -222,6 +229,7 @@ TEST_F(GncOptionUI, test_option_ui_type)
 TEST_F(GncOptionUI, test_set_option_ui_item)
 {
     GncUIItem ui_item;
-    m_option.set_ui_item(&ui_item);
-    EXPECT_EQ(&ui_item, static_cast<const GncUIItem*>(m_option.get_ui_item()));
+    GncOptionUIItem option_ui_item{&ui_item};
+    m_option.set_ui_item(&option_ui_item);
+    EXPECT_EQ(&ui_item, m_option.get_ui_item()->m_widget);
 }

@@ -80,14 +80,15 @@ GncOptionDB::get_default_section() const noexcept
 }
 
 void
-GncOptionDB::set_ui_item(const char* section, const char* name, void* ui_item)
+GncOptionDB::set_ui_item(const char* section, const char* name,
+                         GncOptionUIItem* ui_item)
 {
     auto option = find_option(section, name);
     if (!option) return;
     option->set_ui_item(ui_item);
 }
 
-void* const
+GncOptionUIItem* const
 GncOptionDB::get_ui_item(const char* section, const char* name)
 {
     auto option = find_option(section, name);

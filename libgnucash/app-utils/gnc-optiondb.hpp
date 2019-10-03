@@ -52,8 +52,8 @@ public:
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;
-    void set_ui_item(const char* section, const char* name, void* ui_item);
-    void* const get_ui_item(const char* section, const char* name);
+    void set_ui_item(const char* section, const char* name, GncOptionUIItem* ui_item);
+    GncOptionUIItem* const get_ui_item(const char* section, const char* name);
     GncOptionUIType get_ui_type(const char* section, const char* name);
     void set_ui_from_option(const char* section, const char* name,
                             std::function<void(GncOption&)> func);
@@ -74,8 +74,8 @@ private:
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
 
-    std::function<void*()> m_get_ui_value;
-    std::function<void(void*)> m_set_ui_value;
+    std::function<GncOptionUIItem*()> m_get_ui_value;
+    std::function<void(GncOptionUIItem*)> m_set_ui_value;
 };
 
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
