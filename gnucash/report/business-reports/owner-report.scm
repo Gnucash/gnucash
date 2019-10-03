@@ -817,88 +817,101 @@ invoices and amounts.")))))
           (setup-job-query query owner accounts end-date)
           (setup-query query owner accounts end-date))
 
-      (gnc:html-document-set-title!
-       document (string-append report-title ": " (gncOwnerGetName owner)))
-
-      (gnc:html-document-set-headline!
-       document (gnc:html-markup
-                 "span" (owner-string type) " " (_ "Report:") " "
-                 (gnc:html-markup-anchor
-                  (if (eqv? GNC-OWNER-JOB type)
-                      (gnc:job-anchor-text (gncOwnerGetJob owner))
-                      (gnc:owner-anchor-text owner))
-                  (gncOwnerGetName owner))))
-
-      (gnc:html-document-add-object!
-       document (make-myname-table book date-format))
-
-      (gnc:html-document-add-object!
-       document (make-owner-table owner))
-
-      (gnc:html-document-add-object!
-       document (gnc:make-html-text
-                 (string-append (_ "Date Range") ": " (qof-print-date start-date)
-                                " - " (qof-print-date end-date))))
-
-      (make-break! document)
-
       (let ((splits (sort (xaccQueryGetSplitsUniqueTrans query)
                           (lambda (a b) (< (xaccTransOrder
                                             (xaccSplitGetParent a)
                                             (xaccSplitGetParent b)) 0)))))
         (qof-query-destroy query)
 
-        ;; loops in 2 passes: 1st loop. for each APAR account, filter
-        ;; splits into each account. accumulate non-null results into
-        ;; accounts-and-splits accumulator.
-        (let loop ((accounts accounts)
-                   (accounts-and-splits '())
-                   (splits splits))
-          (cond
-           ((null? accounts)
+        (gnc:html-document-set-title!
+         document (string-append report-title ": " (gncOwnerGetName owner)))
 
-            ;; 2nd loop: for-each accounts-and-splits accumulator, add
-            ;; owner-txns into the html-table. only show header if >1
-            ;; account has splits.
-            (for-each
-             (lambda (acc-splits-pair)
-               (let* ((account (car acc-splits-pair))
-                      (splits (cdr acc-splits-pair)))
+        (gnc:html-document-set-headline!
+         document (gnc:html-markup
+                   "span" (owner-string type) " " (_ "Report:") " "
+                   (gnc:html-markup-anchor
+                    (if (eqv? GNC-OWNER-JOB type)
+                        (gnc:job-anchor-text (gncOwnerGetJob owner))
+                        (gnc:owner-anchor-text owner))
+                    (gncOwnerGetName owner))))
 
-                 (when (> (length accounts-and-splits) 1)
-                   (gnc:html-table-append-row!
-                    table (gnc:make-html-table-cell/size
-                           1 (length headings)
-                           (gnc:make-html-text
-                            (gnc:html-markup-h3
-                             (string-append (_ "Account") ": "
-                                            (xaccAccountGetName account)))))))
+        (cond
+         ((null? splits)
 
-                 (add-owner-table table splits account start-date end-date
-                                  date-type used-columns reverse? link-option)))
-             accounts-and-splits))
+          (gnc:html-document-add-object!
+           document
+           (gnc:make-html-text
+            (gnc:html-markup-h2 (_ "No transactions found."))
+            (gnc:html-markup-p
+             (format #f (_ "No transactions were found associated with the ~a.")
+                     (string-downcase (car (get-info type)))))
+            (gnc:html-make-options-link (gnc:report-id report-obj)))))
 
-           (else
-            ;; each 1st loop will slice splits into account-splits and
-            ;; non-account splits, add to accounts-and-splits; and send
-            ;; the non-account splits to be processed in the next loop
-            ;; iteration.
-            (let-values (((acc-splits other-acc-splits)
-                          (partition
-                           (lambda (split)
-                             (equal? (car accounts) (xaccSplitGetAccount split)))
-                           splits)))
+         (else
+          ;; loops in 2 passes: 1st loop. for each APAR account, filter
+          ;; splits into each account. accumulate non-null results into
+          ;; accounts-and-splits accumulator.
+          (let loop ((accounts accounts)
+                     (accounts-and-splits '())
+                     (splits splits))
+            (cond
+             ((null? accounts)
 
-              (loop (cdr accounts)
-                    (if (null? acc-splits)
-                        accounts-and-splits
-                        (cons (cons (car accounts) acc-splits)
-                              accounts-and-splits))
-                    other-acc-splits))))))
+              ;; 2nd loop: for-each accounts-and-splits accumulator, add
+              ;; owner-txns into the html-table. only show header if >1
+              ;; account has splits.
+              (for-each
+               (lambda (acc-splits-pair)
+                 (let* ((account (car acc-splits-pair))
+                        (splits (cdr acc-splits-pair)))
 
-      (gnc:html-table-set-col-headers! table headings)
+                   (when (> (length accounts-and-splits) 1)
+                     (gnc:html-table-append-row!
+                      table (gnc:make-html-table-cell/size
+                             1 (length headings)
+                             (gnc:make-html-text
+                              (gnc:html-markup-h3
+                               (string-append (_ "Account") ": "
+                                              (xaccAccountGetName account)))))))
 
-      (gnc:html-document-add-object! document table)))
+                   (add-owner-table table splits account start-date end-date
+                                    date-type used-columns reverse? link-option)))
+               accounts-and-splits))
+
+             (else
+              ;; each 1st loop will slice splits into account-splits and
+              ;; non-account splits, add to accounts-and-splits; and send
+              ;; the non-account splits to be processed in the next loop
+              ;; iteration.
+              (let-values (((acc-splits other-acc-splits)
+                            (partition
+                             (lambda (split)
+                               (equal? (car accounts) (xaccSplitGetAccount split)))
+                             splits)))
+
+                (loop (cdr accounts)
+                      (if (null? acc-splits)
+                          accounts-and-splits
+                          (cons (cons (car accounts) acc-splits)
+                                accounts-and-splits))
+                      other-acc-splits)))))
+
+          (gnc:html-document-add-object!
+           document (make-myname-table book date-format))
+
+          (gnc:html-document-add-object!
+           document (make-owner-table owner))
+
+          (gnc:html-document-add-object!
+           document (gnc:make-html-text
+                     (string-append (_ "Date Range") ": " (qof-print-date start-date)
+                                    " - " (qof-print-date end-date))))
+
+          (make-break! document)
+
+          (gnc:html-table-set-col-headers! table headings)
+
+          (gnc:html-document-add-object! document table))))))
 
     document))
 
