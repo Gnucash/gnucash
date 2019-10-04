@@ -262,7 +262,7 @@ endif (WIN32)
 # ############################################################
 
 # SWIG
-find_package (SWIG 2.0.10 REQUIRED)
+find_package (SWIG 3.0.12 REQUIRED)
 include (${SWIG_USE_FILE})
 string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
@@ -531,17 +531,6 @@ if (have_stringop_truncation)
     set(HAVE_STRINGOP_TRUNCATION TRUE)
 endif()
 
-if (SWIG_MAJOR LESS 3)
-check_cxx_compiler_flag(-Wno-register have_no_register)
-if (have_no_register)
-  set(REGISTER_CXXFLAG -Wno-register)
-else()
-  check_cxx_compiler_flag(-Wno-deprecated-register have_no_dep_register)
-  if (have_no_dep_register)
-    set(REGISTER_CXXFLAG -Wno-deprecated-register)
-  endif()
-endif()
-endif()
 add_definitions(-D_GNU_SOURCE)
 
 # Also, set the C++ version to c++11
