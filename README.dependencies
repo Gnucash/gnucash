@@ -62,6 +62,8 @@ Libraries/Deps
 --------------
   required		Version
   --------		_______
+  gcc or clang          8.0 (gcc)/6.0 (clang)   C/C++ compiler
+  cmake                 3.10                    Build system.
   glib2			2.40.0
   gtk+3			3.14.0
   guile			2.2.0 or 2.0.0
@@ -70,12 +72,12 @@ Libraries/Deps
   libxslt, including xsltproc
   ICU                                           International Components for
                                                 Unicode
-  boost			1.50.0                  locale and regex libs must be
+  boost			1.67.0                  locale and regex libs must be
                                                 built with ICU support.
-  swig			2.0.10			Only required to build from git.
+  swig			3.0.12			Makes Guile and Python Bindings.
   webkit		webkitgtk-3.0 (Windows, Mac)
                         webkit2gtk-3.0 (Everything Else)
-  googletest            1.7.0                   Some distros call it gtest.
+  googletest            1.8.0                   Some distros call it gtest.
                                                 Some distros also separate out
                                                 googlemock or gmock; both are
                                                 required.
