@@ -138,7 +138,7 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
     o_class->finalize = gnc_tree_view_account_finalize;
 
     gnc_hook_add_dangler(HOOK_CURRENCY_CHANGED,
-                         (GFunc)gtva_currency_changed_cb, NULL);
+                         (GFunc)gtva_currency_changed_cb, NULL, NULL);
 }
 
 /********************************************************************\

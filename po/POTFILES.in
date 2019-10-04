@@ -642,6 +642,7 @@ libgnucash/engine/gncEntry.c
 libgnucash/engine/gnc-event.c
 libgnucash/engine/gnc-features.c
 libgnucash/engine/gnc-hooks.c
+libgnucash/engine/gnc-hooks-scm.c
 libgnucash/engine/gncIDSearch.c
 libgnucash/engine/gnc-int128.cpp
 libgnucash/engine/gncInvoice.c

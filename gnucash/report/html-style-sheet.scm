@@ -122,7 +122,7 @@
 (define gnc:current-saved-stylesheets
   (gnc-build-userdata-path "stylesheets-2.0"))
 
-(define (gnc:save-style-sheet-options) 
+(define (gnc:save-style-sheet-options)
   (let ((port (false-if-exception
                (open gnc:current-saved-stylesheets
                      (logior O_WRONLY O_CREAT O_TRUNC)))))

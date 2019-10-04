@@ -160,6 +160,7 @@ set (engine_SOURCES
   gnc-event.c
   gnc-features.c
   gnc-hooks.c
+  gnc-hooks-scm.c
   gnc-int128.cpp
   gnc-lot.c
   gnc-numeric.cpp
