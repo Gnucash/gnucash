@@ -411,15 +411,15 @@ gnc_main_gui_init (void)
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         gnc_restore_all_state, NULL);
+                         gnc_restore_all_state, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
-                         gnc_save_all_state, NULL);
+                         gnc_save_all_state, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
-                         (GFunc)gnc_reports_flush_global, NULL);
+                         (GFunc)gnc_reports_flush_global, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
+                         (GFunc)gnc_invoice_remind_bills_due_cb, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_invoice_remind_invoices_due_cb, NULL);
+                         (GFunc)gnc_invoice_remind_invoices_due_cb, NULL, NULL);
 
     gnc_ui_sx_initialize();
 

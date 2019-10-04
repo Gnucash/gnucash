@@ -67,7 +67,7 @@ gnc_plugin_manager_get (void)
         singleton = g_object_new (GNC_TYPE_PLUGIN_MANAGER,
                                   NULL);
         gnc_hook_add_dangler (HOOK_SHUTDOWN,
-                              gnc_plugin_manager_shutdown, NULL);
+                              gnc_plugin_manager_shutdown, NULL, NULL);
     }
 
     return singleton;

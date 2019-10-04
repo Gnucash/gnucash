@@ -1822,7 +1822,7 @@ gnc_ui_sx_initialize (void)
     _sx_engine_event_handler_id = qof_event_register_handler(_sx_engine_event_handler, NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
+                         (GFunc)gnc_sx_sxsincelast_book_opened, NULL, NULL);
 
     /* Add page to preferences page for Scheduled Transactions */
     /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */

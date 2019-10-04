@@ -2542,9 +2542,9 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                            NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_SAVED,
-                         (GFunc)gnc_main_window_update_all_titles, NULL);
+                         (GFunc)gnc_main_window_update_all_titles, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_main_window_attach_to_book, NULL);
+                         (GFunc)gnc_main_window_attach_to_book, NULL, NULL);
 
 }
 
