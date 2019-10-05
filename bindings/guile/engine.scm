@@ -24,9 +24,11 @@
       (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_engine))
 
+; Export the swig-wrapped symbols in the public interface of this module
 (let ((i (module-public-interface (current-module))))
      (module-use! i (resolve-interface '(sw_engine))))
 
+;; gnc-numeric.scm
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)
 (export GNC-RND-TRUNC)
@@ -53,14 +55,13 @@
 (export gnc:gnc-monetary-amount)
 (export gnc:monetary-neg)
 
+;; commodity-table.scm
 (export GNC_COMMODITY_NS_CURRENCY)
 (export GNC_COMMODITY_NS_NASDAQ)
 (export GNC_COMMODITY_NS_NYSE)
 (export GNC_COMMODITY_NS_AMEX)
 (export GNC_COMMODITY_NS_EUREX)
 (export GNC_COMMODITY_NS_MUTUAL)
-
-(export gnc:url->loaded-session)
 
 ;; engine-utilities.scm
 (export gnc:account-map-descendants)
