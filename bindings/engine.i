@@ -38,7 +38,7 @@
 #include "gnc-engine-guile.h"
 #include "policy.h"
 #include "SX-book.h"
-#include "gnc-kvm-guile.h"
+#include "gnc-kvp-guile.h"
 #include "glib-guile.h"
 
 #include "gncAddress.h"
