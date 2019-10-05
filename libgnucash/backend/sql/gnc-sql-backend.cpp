@@ -325,7 +325,7 @@ GncSqlBackend::load (QofBook* book, QofBackendLoadType loadType)
                       gnc_commodity_begin_edit(comm);
                       gnc_commodity_commit_edit(comm);
                   });
-    m_postload_commodities.empty();
+    m_postload_commodities.clear();
 
     /* Mark the sessoion as clean -- though it should never be marked
      * dirty with this backend
