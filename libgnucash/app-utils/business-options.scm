@@ -24,6 +24,7 @@
 ;; invoice pointers may be used to set the value of the option. The
 ;; option always returns a single invoice pointer.
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 
 (define (gnc:make-invoice-option

@@ -178,7 +178,6 @@ set(GUILE_DEPENDS
   gncmod-app-utils
   scm-core-utils
   scm-engine
-  scm-scm
   scm-gnc-module
   )
 

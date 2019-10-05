@@ -18,9 +18,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash business-core))
-(use-modules (gnucash gnc-module))
 (use-modules (srfi srfi-1))
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash engine))
 
 (define (gnc:owner-get-address owner)
   (let ((type (gncOwnerGetType owner)))

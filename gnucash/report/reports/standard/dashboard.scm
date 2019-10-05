@@ -25,6 +25,7 @@
 (define-module (gnucash reports standard dashboard))
 (export gnc:make-dashboard)
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gettext))

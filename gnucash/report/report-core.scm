@@ -20,6 +20,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gettext))

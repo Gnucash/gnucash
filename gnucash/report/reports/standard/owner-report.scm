@@ -29,6 +29,8 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
+(use-modules (gnucash business-core))
+(use-modules (gnucash engine))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))

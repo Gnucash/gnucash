@@ -33,7 +33,6 @@
 #include "gnc-pricedb.h"
 #include "gnc-lot.h"
 #include "gnc-session.h"
-#include "gnc-hooks-scm.h"
 #include "engine-deprecated.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
@@ -53,7 +52,6 @@
 #include "gncOwner.h"
 #include "gncTaxTable.h"
 #include "gncVendor.h"
-#include "gncBusGuile.h"
 %}
 #if defined(SWIGGUILE)
 %{

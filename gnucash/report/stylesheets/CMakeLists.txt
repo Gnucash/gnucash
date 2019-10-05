@@ -10,7 +10,7 @@ set(GUILE_DEPENDS
   scm-gnc-module
   scm-core-utils
   scm-gettext
-  scm-scm
+  scm-engine
   gncmod-html
   scm-report
   )

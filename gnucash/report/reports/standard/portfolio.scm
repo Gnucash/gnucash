@@ -23,6 +23,7 @@
 
 (define-module (gnucash reports standard portfolio))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))

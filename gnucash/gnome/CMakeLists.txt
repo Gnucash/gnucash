@@ -232,7 +232,6 @@ set(GUILE_DEPENDS
     scm-gettext
     scm-gnome-utils
     scm-gnc-module
-    scm-scm
     scm-report
     scm-reports
 )

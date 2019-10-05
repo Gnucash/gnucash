@@ -22,6 +22,7 @@
 
 (define-module (gnucash reports standard register))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))

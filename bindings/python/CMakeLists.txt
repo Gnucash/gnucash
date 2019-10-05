@@ -39,10 +39,11 @@ set(GNUCASH_CORE_C_INCLUDES
 gnc_add_swig_python_command (swig-gnucash-core
     SWIG_GNUCASH_CORE_C SWIG_GNUCASH_CORE_PY
     gnucash_core.c gnucash_core_c.py
-    ${SWIG_FILES}
-    ""
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i
+    ${CMAKE_SOURCE_DIR}/bindings
+    ${CMAKE_CURRENT_SOURCE_DIR}/time64.i
     ${CMAKE_SOURCE_DIR}/common/base-typemaps.i
-    ${CMAKE_SOURCE_DIR}/libgnucash/engine/engine-common.i
+    ${CMAKE_SOURCE_DIR}/bindings/engine-common.i
     ${GNUCASH_CORE_C_INCLUDES}
 )
 

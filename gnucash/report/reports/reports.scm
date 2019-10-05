@@ -29,6 +29,7 @@
 (use-modules (srfi srfi-8))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
 (use-modules (gnucash report))
 (use-modules (gnucash utilities))
 
@@ -50,8 +51,7 @@
        (all-dirs (append report-dirs (list (list 'gnucash 'reports 'locale-specific loc-spec)))))
       (report-module-loader all-dirs))
 
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash engine))
 
 (define (gnc:register-report-create account split query journal? ledger-type?
                                     double? title debit-string credit-string)

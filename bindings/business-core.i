@@ -126,7 +126,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncTaxTable.h>
 %include <gncVendor.h>
 #if defined(SWIGGUILE)
-%include <gncBusGuile.h>
+%include <engine-helpers-guile.h>
 #endif
 /* Import query bindings for the below invoice query functions (but
  * don't generate bindings for them). */

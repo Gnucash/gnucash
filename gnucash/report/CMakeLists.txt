@@ -93,7 +93,7 @@ set(GUILE_DEPENDS
   scm-gnome-utils
   gncmod-report
   scm-app-utils
-  scm-scm
+  scm-engine
   scm-gnc-module
   guile-json
   )
