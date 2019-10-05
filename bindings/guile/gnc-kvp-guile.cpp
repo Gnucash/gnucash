@@ -11,7 +11,7 @@ extern "C"
 #include "guile-mappings.h"
 #include "gnc-engine-guile.h"
 #include "gnc-guile-utils.h"
-#include "gnc-kvm-guile.h"
+#include "gnc-kvp-guile.h"
 }
 
 /* NOTE: There are some problems with this approach. Currently,
