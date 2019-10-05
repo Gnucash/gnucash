@@ -3,14 +3,14 @@
 bindings/guile/business-core.scm
 bindings/guile/commodity-table.scm
 bindings/guile/core-utils.scm
-bindings/guile/engine-helpers-guile.c
 bindings/guile/engine.scm
 bindings/guile/engine-utilities.scm
-bindings/guile/glib-helpers.c
+bindings/guile/glib-guile.c
+bindings/guile/gnc-engine-guile.c
 bindings/guile/gnc-guile-bindings.c
 bindings/guile/gnc-guile-utils.c
+bindings/guile/gnc-kvp-guile.cpp
 bindings/guile/gnc-numeric.scm
-bindings/guile/kvp-scm.cpp
 bindings/guile/price-quotes.scm
 bindings/guile/utilities.scm
 borrowed/goffice/go-charmap-sel.c

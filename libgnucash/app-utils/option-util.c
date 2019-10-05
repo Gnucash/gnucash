@@ -29,7 +29,7 @@
 
 #include "Account.h"
 #include "option-util.h"
-#include "glib-helpers.h"
+#include "glib-guile.h"
 #include "gnc-guile-utils.h"
 #include "qof.h"
 #include "swig-runtime.h"

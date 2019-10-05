@@ -35,7 +35,7 @@
 #include <guile-util.h>
 #include <gnc-sx-instance-model.h>
 
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 %}
 
 #if defined(SWIGGUILE)

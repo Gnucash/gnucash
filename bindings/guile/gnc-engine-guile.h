@@ -1,7 +1,7 @@
 /********************************************************************\
- * glib-helpers.h -- gnucash glib helper functions                  *
- * Copyright (C) 2000 Linas Vepstas                                 *
- * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
+ * gnc-engine-guile.h -- engine helper functions for guile          *
+ * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,21 +22,45 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GLIB_HELPERS_H
-#define GLIB_HELPERS_H
+#ifndef GNC_ENGINE_GUILE_H
+#define GNC_ENGINE_GUILE_H
 
 #include <glib.h>
 #include <libguile.h>
 
-SCM gnc_glist_to_scm_list(GList *glist, gchar *wct);
-GList* gnc_scm_list_to_glist(SCM wcp_list);
+#include "gnc-engine.h"
+#include <gncTaxTable.h>	/* for GncAccountValue */
+#include "gnc-hooks.h"
 
-SCM     gnc_glist_string_to_scm(GList * list);
-GList * gnc_scm_to_glist_string(SCM list);
-int     gnc_glist_string_p(SCM list);
+/* Helpers for various conversions to and from guile */
 
-GSList * gnc_scm_to_gslist_string(SCM list);
+GDate    gnc_time64_to_GDate(SCM x);
 
+SCM  gnc_guid2scm(GncGUID guid);
+GncGUID gnc_scm2guid(SCM guid_scm);
+int  gnc_guid_p(SCM guid_scm);
 
+/* for a list of strings */
+GSList * gnc_query_scm2path (SCM path_scm);
 
+/* These two functions convert a query object into a scheme
+ * representation of the query and vice-versa. They do not
+ * simply convert a query pointer to a guile query pointer! */
+SCM gnc_query2scm (QofQuery * q);
+QofQuery * gnc_scm2query (SCM query_scm);
+
+SCM gnc_numeric_to_scm(gnc_numeric arg);
+gnc_numeric gnc_scm_to_numeric(SCM arg);
+gnc_commodity * gnc_scm_to_commodity(SCM scm);
+SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
+SCM gnc_book_to_scm (const QofBook *book);
+
+/* Conversion routines used with tax tables */
+GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg);
+SCM gnc_account_value_ptr_to_scm (GncAccountValue *);
+
+/**
+ * add Scheme-style danglers from a hook
+ */
+void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
 #endif

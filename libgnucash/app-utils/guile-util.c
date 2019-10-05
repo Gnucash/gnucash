@@ -50,8 +50,8 @@
 #endif
 
 #include "qof.h"
-#include "engine-helpers-guile.h"
-#include "glib-helpers.h"
+#include "gnc-engine-guile.h"
+#include "glib-guile.h"
 #include "gnc-glib-utils.h"
 #include "gnc-guile-utils.h"
 #include "gnc-prefs.h"

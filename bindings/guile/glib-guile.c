@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-helpers.c -- gnucash glib helper functions                   *
+ * glib-guile.c -- glib helper functions for guile                  *
  * Copyright (C) 2000 Linas Vepstas                                 *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
  *                                                                  *
@@ -30,7 +30,7 @@
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "glib-helpers.h"
+#include "glib-guile.h"
 
 
 static SCM
