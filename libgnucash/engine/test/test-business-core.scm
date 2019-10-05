@@ -5,7 +5,6 @@
 (use-modules (tests srfi64-extras))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash utilities))
-(use-modules (gnucash business-core))
 (use-modules (gnucash engine))
 
 (define (run-test)

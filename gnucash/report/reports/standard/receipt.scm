@@ -17,7 +17,6 @@
 (define-module (gnucash reports standard receipt))
 
 (use-modules (ice-9 local-eval))  ; for the-environment
-(use-modules (gnucash business-core))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gettext))

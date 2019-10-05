@@ -70,6 +70,15 @@
 (export account-full-name<?)
 (export accounts-get-children-depth)
 
+; business-core.scm
+(export gnc:owner-get-address)
+(export gnc:owner-get-name-dep)
+(export gnc:owner-get-address-dep)
+(export gnc:owner-get-name-and-address-dep)
+(export gnc:owner-get-owner-id)
+(export gnc:owner-from-split)
+
 (load-from-path "gnucash/engine/gnc-numeric")
 (load-from-path "gnucash/engine/commodity-table")
 (load-from-path "gnucash/engine/engine-utilities")
+(load-from-path "gnucash/engine/business-core")
