@@ -34,8 +34,8 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "engine-helpers-guile.h"
-#include "glib-helpers.h"
+#include "gnc-engine-guile.h"
+#include "glib-guile.h"
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-tree-model-account.h"

@@ -21,17 +21,17 @@ gnc_add_swig_guile_command (swig-engine-c
 )
 
 set(guile_HEADERS
-    engine-helpers-guile.h
-    glib-helpers.h
+    glib-guile.h
+    gnc-engine-guile.h
     gnc-guile-utils.h
-    kvp-scm.h)
+    gnc-kvp-guile.h)
 
 set(guile_SOURCES
-    engine-helpers-guile.c
-    glib-helpers.c
+    glib-guile.c
+    gnc-engine-guile.c
     gnc-guile-bindings.c
     gnc-guile-utils.c
-    kvp-scm.cpp)
+    gnc-kvp-guile.cpp)
 
 add_library(gnucash-guile SHARED
     ${guile_SOURCES}

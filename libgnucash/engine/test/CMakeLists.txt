@@ -6,7 +6,7 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
-  ${CMAKE_SOURCE_DIR}/bindings/guile # for engine-helpers-guile.h
+  ${CMAKE_SOURCE_DIR}/bindings/guile # for gnc-engine-guile.h
   ${GLIB2_INCLUDE_DIRS}
 )
 

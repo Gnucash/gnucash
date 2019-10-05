@@ -26,7 +26,7 @@ extern "C"
 #include <glib.h>
 #include "guile-mappings.h"
 
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 #include "gnc-module.h"
 #include "gnc-guile-utils.h"
 #include "test-engine-stuff.h"

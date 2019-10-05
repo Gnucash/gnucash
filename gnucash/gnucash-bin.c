@@ -54,7 +54,7 @@
 #include "gnc-plugin-report-system.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "window-report.h"

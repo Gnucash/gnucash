@@ -9,9 +9,9 @@ extern "C"
 #include <qof.h>
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 #include "gnc-guile-utils.h"
-#include "kvp-scm.h"
+#include "gnc-kvm-guile.h"
 }
 
 /* NOTE: There are some problems with this approach. Currently,

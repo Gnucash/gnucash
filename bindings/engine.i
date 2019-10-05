@@ -35,11 +35,11 @@
 #include "gnc-session.h"
 #include "engine-deprecated.h"
 #include "engine-helpers.h"
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 #include "policy.h"
 #include "SX-book.h"
-#include "kvp-scm.h"
-#include "glib-helpers.h"
+#include "gnc-kvm-guile.h"
+#include "glib-guile.h"
 
 #include "gncAddress.h"
 #include "gncBillTerm.h"
@@ -174,7 +174,7 @@ functions. */
 }
 
 %include <engine-helpers.h>
-%include <engine-helpers-guile.h>
+%include <gnc-engine-guile.h>
 %typemap(in) Transaction *trans;
 %typemap(in) Split *split;
 %typemap(in) char * num;

@@ -47,7 +47,7 @@
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "engine-helpers.h"
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 #include "QuickFill.h"
 #include <gnc-commodity.h>
 
