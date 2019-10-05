@@ -67,13 +67,6 @@ install(TARGETS gnucash-guile
 
 # Scheme
 
-# depends on main.scm
-gnc_add_scheme_targets(price-quotes
-  price-quotes.scm
-  gnucash
-  "scm-engine;scm-app-utils"
-  FALSE)
-
 set (core_utils_SCHEME core-utils.scm)
 
 set(GUILE_OUTPUT_DIR   gnucash)
@@ -134,6 +127,12 @@ gnc_add_scheme_targets(scm-engine-2
 )
 
 add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
+
+gnc_add_scheme_targets(price-quotes
+    price-quotes.scm
+    gnucash
+    "scm-engine;scm-app-utils"
+    FALSE)
 
 set_local_dist(guile_DIST_local
     CMakeLists.txt
