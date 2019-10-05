@@ -91,6 +91,7 @@ set (engine_SCHEME_0
     engine-interface.scm
     engine-utilities.scm
     gnc-numeric.scm
+    business-core.scm
 )
 
 set (engine_SCHEME_1
@@ -98,7 +99,6 @@ set (engine_SCHEME_1
 )
 
 set (engine_SCHEME_2
-    business-core.scm
     utilities.scm
 )
 

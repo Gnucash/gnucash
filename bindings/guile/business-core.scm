@@ -17,9 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash business-core))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash engine))
 
 (define (gnc:owner-get-address owner)
   (let ((type (gncOwnerGetType owner)))
@@ -116,11 +114,3 @@
     (cond (owner (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
                  result-owner)
           (else  '()))))
-
-
-(export gnc:owner-get-address)
-(export gnc:owner-get-name-dep)
-(export gnc:owner-get-address-dep)
-(export gnc:owner-get-name-and-address-dep)
-(export gnc:owner-get-owner-id)
-(export gnc:owner-from-split)
