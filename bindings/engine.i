@@ -286,6 +286,7 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
 %init {
   {
     char tmp[100];
+    char * no_args[1] = { NULL };
 
 #define SET_ENUM(e) snprintf(tmp, 100, "(set! %s (%s))", (e), (e));  \
     scm_c_eval_string(tmp);
@@ -433,6 +434,8 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
 
 
 #undef SET_ENUM
+
+    gnc_engine_init(0, no_args);
   }
 
 }
