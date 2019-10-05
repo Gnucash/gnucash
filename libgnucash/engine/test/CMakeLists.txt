@@ -6,10 +6,11 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/test-core
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core  # for unittest-support.h
+  ${CMAKE_SOURCE_DIR}/bindings/guile # for engine-helpers-guile.h
   ${GLIB2_INCLUDE_DIRS}
 )
 
-set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
+set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core gnucash-guile ${LIBXML2_LDFLAGS} -lm)
 
 macro(add_engine_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
@@ -214,7 +215,7 @@ set(engine_test_SCHEME
 
 #list(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
 
-set(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-scm scm-engine)
+set(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-engine)
 
 gnc_add_scheme_test_targets(scm-test-engine-extras
   "test-engine-extras.scm"

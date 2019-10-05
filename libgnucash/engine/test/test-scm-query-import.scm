@@ -21,11 +21,11 @@
 
 
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash engine))
 
 (define (run-test)
   (setenv "GNC_UNINSTALLED" "1")
   (gnc:module-system-init)
-  (gnc:module-load "gnucash/engine" 0)
 
   (display "\tTesting the Query Import interface... \n")
   (display "\tYou may see \"Error: xaccQueryAddGUIDMatch: Invalid match type\".\n")

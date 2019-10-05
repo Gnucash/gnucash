@@ -6,7 +6,7 @@ set(scm_test_SCHEME
 set(GUILE_DEPENDS
   scm-gnc-module
   scm-app-utils
-  scm-scm scm-engine
+  scm-engine
   scm-srfi64-extras
   scm-deprecated-gnucash-deprecated-module
   scm-deprecated-gnucash-superseded-module
@@ -31,4 +31,4 @@ set_dist_list(test_guile_DIST
 
 # Define two imaginary deprecated guile modules to test the compat file generation code
 gnc_add_scheme_deprecated_module ("gnucash deprecated-module" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash superseded-module" "gnucash utilities" "scm-scm" "")
+gnc_add_scheme_deprecated_module ("gnucash superseded-module" "gnucash utilities" "scm-engine" "")

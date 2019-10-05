@@ -35,7 +35,6 @@ set(GUILE_DEPENDS
   scm-core-utils
   scm-gnc-module
   scm-engine
-  scm-scm
   scm-gettext
   gncmod-backend-xml
 )

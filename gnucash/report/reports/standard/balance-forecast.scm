@@ -25,6 +25,7 @@
 
 (define-module (gnucash reports standard balance-forecast))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (srfi srfi-1))

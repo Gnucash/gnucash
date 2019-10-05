@@ -26,6 +26,7 @@
 
 (define-module (gnucash reports standard reconcile-report))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash gettext))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report" 0)

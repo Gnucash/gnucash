@@ -25,12 +25,14 @@
 (define-module (gnucash reports standard taxinvoice))
 
 (use-modules (ice-9 local-eval))  ; for the-environment
+(use-modules (gnucash engine))
+(use-modules (gnucash business-core))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/engine" 0)
 
 (use-modules (gnucash eguile))
 

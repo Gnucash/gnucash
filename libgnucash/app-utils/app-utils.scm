@@ -22,13 +22,8 @@
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash engine))
 (use-modules (gnucash gettext))
-
-;; Guile 2 needs to find the symbols from the c module at compile time already
-(eval-when
-      (compile load eval expand)
-      (gnc:module-load "gnucash/engine" 0))
 
 ;; gettext.scm
 (re-export gnc:gettext)

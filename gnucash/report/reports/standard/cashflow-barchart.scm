@@ -29,10 +29,10 @@
 
 (define-module (gnucash reports standard cashflow-barchart))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash engine))
 (use-modules (gnucash reports standard cash-flow))
 
 (gnc:module-load "gnucash/report" 0)

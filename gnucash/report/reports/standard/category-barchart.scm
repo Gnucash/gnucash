@@ -26,6 +26,7 @@
 (define-module (gnucash reports standard category-barchart))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

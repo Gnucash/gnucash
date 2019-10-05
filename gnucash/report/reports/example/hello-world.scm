@@ -24,6 +24,7 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash reports example hello-world))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

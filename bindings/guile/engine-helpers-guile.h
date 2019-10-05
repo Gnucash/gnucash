@@ -1,5 +1,5 @@
 /********************************************************************\
- * engine-helpers.h -- gnucash engine helper functions              *
+ * engine-helpers-guile.h -- engine helper functions for guile      *
  * Copyright (C) 2000 Linas Vepstas <linas@linas.org>               *
  * Copyright (C) 2001 Linux Developers Group, Inc.                  *
  *                                                                  *
@@ -29,6 +29,8 @@
 #include <libguile.h>
 
 #include "gnc-engine.h"
+#include <gncTaxTable.h>	/* for GncAccountValue */
+#include "gnc-hooks.h"
 
 /* Helpers for various conversions to and from guile */
 
@@ -53,4 +55,12 @@ gnc_commodity * gnc_scm_to_commodity(SCM scm);
 SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
 SCM gnc_book_to_scm (const QofBook *book);
 
+/* Conversion routines used with tax tables */
+GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg);
+SCM gnc_account_value_ptr_to_scm (GncAccountValue *);
+
+/**
+ * add Scheme-style danglers from a hook
+ */
+void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
 #endif

@@ -29,10 +29,10 @@
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-19))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash engine))
 
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)

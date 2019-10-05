@@ -1,5 +1,6 @@
 (use-modules (ice-9 textual-ports))
 (use-modules (ice-9 popen))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))

@@ -66,7 +66,6 @@ set(GUILE_DEPENDS
   gnc-gnome
   scm-core-utils
   scm-gnc-module
-  scm-scm
   scm-app-utils
   scm-engine
   scm-gnome-utils

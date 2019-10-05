@@ -30,6 +30,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-11))            ;let-values
 (use-modules (gnucash utilities))
+(use-modules (gnucash engine))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 

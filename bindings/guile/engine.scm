@@ -21,8 +21,11 @@
 
 (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
+      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_engine))
+
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_engine))))
 
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)

@@ -251,7 +251,7 @@ install(FILES ${gnome_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnu
 
 # Scheme
 
-set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-scm scm-app-utils)
+set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-engine scm-app-utils)
 
 gnc_add_scheme_targets(scm-gnome-utils-1
   gnome-utils.scm

@@ -13,7 +13,6 @@ set(engine_noinst_HEADERS
   engine-deprecated.h
   gnc-backend-prov.hpp
   gnc-date-p.h
-  gnc-hooks-scm.h
   gnc-int128.hpp
   gnc-lot.h
   gnc-lot-p.h
@@ -45,8 +44,6 @@ set (engine_HEADERS
   cap-gains.h
   cashobjects.h
   engine-helpers.h
-  engine-helpers-guile.h
-  glib-helpers.h
   gnc-aqbanking-templates.h
   gnc-budget.h
   gnc-commodity.h
@@ -68,7 +65,6 @@ set (engine_HEADERS
   gncAddressP.h
   gncBillTerm.h
   gncBillTermP.h
-  gncBusGuile.h
   gncBusiness.h
   gncCustomer.h
   gncCustomerP.h
@@ -92,7 +88,6 @@ set (engine_HEADERS
   guid.h
   guid.hpp
   kvp-frame.hpp
-  kvp-scm.h
   kvp-value.hpp
   policy.h
   qof.h
@@ -116,12 +111,6 @@ set (engine_HEADERS
   qofutil.h
   qof-gobject.h
   qof-string-cache.h
-)
-
-# Command to generate the swig-engine.c wrapper file
-gnc_add_swig_guile_command (swig-engine-c
-    SWIG_ENGINE_C swig-engine.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/engine.i "" ${engine_HEADERS}
 )
 
 # Command to generate the iso-4217-currencies.c file
@@ -160,7 +149,6 @@ set (engine_SOURCES
   gnc-event.c
   gnc-features.c
   gnc-hooks.c
-  gnc-hooks-scm.c
   gnc-int128.cpp
   gnc-lot.c
   gnc-numeric.cpp
@@ -170,14 +158,11 @@ set (engine_SOURCES
   gnc-timezone.cpp
   gnc-uri-utils.c
   gncmod-engine.c
-  kvp-scm.cpp
   engine-helpers.c
-  glib-helpers.c
   guid.cpp
   policy.c
   gncAddress.c
   gncBillTerm.c
-  gncBusGuile.c
   gncBusiness.c
   gncCustomer.c
   gncEmployee.c
@@ -226,12 +211,11 @@ set_source_files_properties (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_42
 add_library (gncmod-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
-  ${SWIG_ENGINE_C}
   ${engine_noinst_HEADERS}
 )
 
 # Add dependency on swig-runtime.h and iso-4217-currencies.c
-add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
+add_dependencies (gncmod-engine iso-4217-c)
 if (WIN32)
   set(BCRYPT "bcrypt.lib")
 else()
@@ -241,7 +225,6 @@ endif()
 target_link_libraries(gncmod-engine
     gnc-core-utils
     gnc-module
-    gnucash-guile
     ${Boost_DATE_TIME_LIBRARIES}
     ${Boost_REGEX_LIBRARIES}
     ${ICU4C_I18N_LDFLAGS}
@@ -257,6 +240,7 @@ target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 target_include_directories (gncmod-engine
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
+        ${GUILE_INCLUDE_DIRS}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/common # for config.h
@@ -278,51 +262,8 @@ install(TARGETS gncmod-engine
 
 install(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
-# Scheme
-
-set (engine_SCHEME_0
-    engine.scm
-    business-core.scm
-)
-
-set (engine_SCHEME_1
-    commodity-table.scm
-    engine-utilities.scm
-    gnc-numeric.scm
-)
-
-set(BACKEND_DEPENDS gncmod-backend-xml)
-if (WITH_SQL)
-    list(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
-endif(WITH_SQL)
-
-set(GUILE_DEPENDS
-  ${BACKEND_DEPENDS}
-  gncmod-engine
-  scm-gnc-module)
-
-
-gnc_add_scheme_targets(scm-engine-0
-  "${engine_SCHEME_0}"
-  gnucash
-  "${GUILE_DEPENDS}"
-  FALSE
-)
-
-gnc_add_scheme_targets(scm-engine-1
-  "${engine_SCHEME_1}"
-  "gnucash/engine"
-  "scm-engine-0;${GUILE_DEPENDS}"
-  TRUE
-)
-
-add_custom_target(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)
-
 set(engine_EXTRA_DIST
-        business-core.i
         design.txt
-        engine.i
-        engine-common.i
         extensions.txt
         iso-4217-currencies.xml
         iso-currencies-to-c.xsl
@@ -336,5 +277,5 @@ if (NOT WIN32)
   list(APPEND engine_EXTRA_DIST qof-win32.cpp)
 endif (NOT WIN32)
 set_local_dist(engine_DIST_local CMakeLists.txt ${engine_SOURCES} ${engine_HEADERS}
-                     ${engine_noinst_HEADERS} ${engine_SCHEME_0} ${engine_SCHEME_1} ${engine_EXTRA_DIST})
+                     ${engine_noinst_HEADERS} ${engine_EXTRA_DIST})
 set(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)

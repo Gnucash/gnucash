@@ -24,7 +24,7 @@
 
 (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
+      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_engine))
 
 (use-modules (srfi srfi-1)

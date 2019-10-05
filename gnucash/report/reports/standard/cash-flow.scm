@@ -28,10 +28,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash reports standard cash-flow))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash engine))
 
 (gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url

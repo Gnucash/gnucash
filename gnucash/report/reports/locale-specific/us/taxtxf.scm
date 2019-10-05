@@ -99,7 +99,8 @@
 
 
 (define-module (gnucash reports locale-specific us taxtxf))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

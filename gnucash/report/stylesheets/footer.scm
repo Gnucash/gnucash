@@ -36,6 +36,7 @@
 
 (define-module (gnucash report stylesheets footer))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

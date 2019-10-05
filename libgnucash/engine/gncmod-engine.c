@@ -27,7 +27,6 @@
 
 #include <config.h>
 #include <gmodule.h>
-#include <libguile.h>
 
 #include "gnc-engine.h"
 #include "gnc-module-api.h"
@@ -55,8 +54,6 @@ libgncmod_engine_gnc_module_description(void)
     return g_strdup("The GnuCash accounting engine");
 }
 
-extern SCM scm_init_sw_engine_module(void);
-
 int
 libgncmod_engine_gnc_module_init(int refcount)
 {
@@ -65,11 +62,6 @@ libgncmod_engine_gnc_module_init(int refcount)
         /* initialize the engine on the first load */
         gnc_engine_init(0, NULL);
     }
-
-    scm_init_sw_engine_module();
-    scm_c_eval_string("(use-modules (sw_engine))");
-    scm_c_eval_string("(use-modules (gnucash engine))");
-    scm_c_eval_string("(use-modules (gnucash business-core))");
 
     return TRUE;
 }

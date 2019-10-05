@@ -9,17 +9,35 @@ gnc_add_swig_guile_command (swig-core-utils-guile-c
     ${CORE_UTILS_HEADERS}
 )
 
+# Command to generate the swig-engine.c wrapper file
+gnc_swig_extract_header_files (gncmod-engine ENGINE_HEADERS)
+gnc_add_swig_guile_command (swig-engine-c
+    SWIG_ENGINE_C swig-engine.c
+    ${CMAKE_SOURCE_DIR}/bindings/engine.i
+    "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/libgnucash/engine"
+    ${ENGINE_HEADERS}
+    ${CMAKE_SOURCE_DIR}/bindings/business-core.i
+    ${CMAKE_SOURCE_DIR}/bindings/engine-common.i
+)
+
 set(guile_HEADERS
-    gnc-guile-utils.h)
+    engine-helpers-guile.h
+    glib-helpers.h
+    gnc-guile-utils.h
+    kvp-scm.h)
 
 set(guile_SOURCES
+    engine-helpers-guile.c
+    glib-helpers.c
     gnc-guile-bindings.c
-    gnc-guile-utils.c)
+    gnc-guile-utils.c
+    kvp-scm.cpp)
 
 add_library(gnucash-guile SHARED
     ${guile_SOURCES}
     ${guile_HEADERS}
-    ${SWIG_CORE_UTILS_GUILE_C})
+    ${SWIG_CORE_UTILS_GUILE_C}
+    ${SWIG_ENGINE_C})
 
 add_dependencies(gnucash-guile
     swig-runtime-h)
@@ -38,6 +56,7 @@ target_link_libraries(gnucash-guile
         ${GUILE_LDFLAGS}
     PRIVATE
         gnc-core-utils
+        gncmod-engine
         ${GLIB2_LDFLAGS})
 
 install(TARGETS gnucash-guile
@@ -48,20 +67,11 @@ install(TARGETS gnucash-guile
 
 # Scheme
 
-set(GUILE_DEPENDS      scm-core-utils scm-gnc-module gncmod-engine)
-
-gnc_add_scheme_targets(scm-scm
-  "utilities.scm"
-  gnucash
-  "${GUILE_DEPENDS}"
-  FALSE
-)
-
 # depends on main.scm
 gnc_add_scheme_targets(price-quotes
   price-quotes.scm
   gnucash
-  "scm-scm;scm-app-utils"
+  "scm-engine;scm-app-utils"
   FALSE)
 
 set (core_utils_SCHEME core-utils.scm)
@@ -76,13 +86,64 @@ gnc_add_scheme_targets(scm-core-utils
     FALSE
 )
 
+set (engine_SCHEME_0
+    commodity-table.scm
+    engine-utilities.scm
+    gnc-numeric.scm
+)
+
+set (engine_SCHEME_1
+    engine.scm
+)
+
+set (engine_SCHEME_2
+    business-core.scm
+    utilities.scm
+)
+
+set(BACKEND_DEPENDS gncmod-backend-xml)
+if (WITH_SQL)
+    list(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
+endif(WITH_SQL)
+
+set(GUILE_DEPENDS
+  ${BACKEND_DEPENDS}
+  gncmod-engine
+  gnucash-guile)
+
+
+gnc_add_scheme_targets(scm-engine-0
+    "${engine_SCHEME_0}"
+    "gnucash/engine"
+    "${GUILE_DEPENDS}"
+    TRUE
+)
+
+gnc_add_scheme_targets(scm-engine-1
+    "${engine_SCHEME_1}"
+    gnucash
+    "scm-engine-0;${GUILE_DEPENDS}"
+    FALSE
+)
+
+gnc_add_scheme_targets(scm-engine-2
+    "${engine_SCHEME_2}"
+    gnucash
+    "scm-engine-1;${GUILE_DEPENDS}"
+    FALSE
+)
+
+add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
+
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm
-    utilities.scm
     price-quotes.scm
     ${guile_SOURCES}
-    ${guile_HEADERS})
+    ${guile_HEADERS}
+    ${engine_SCHEME_0}
+    ${engine_SCHEME_1}
+    ${engine_SCHEME_2})
 set(guile_DIST ${guile_DIST_local} ${test_guile_DIST} PARENT_SCOPE)
 
 

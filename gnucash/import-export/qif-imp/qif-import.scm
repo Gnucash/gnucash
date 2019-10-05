@@ -25,7 +25,8 @@
 
 
 (define-module (gnucash qif-import))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
+(use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 
 ;; We do this initialization here because src/gnome isn't a real module.
@@ -35,13 +36,12 @@
 
 (use-modules (sw_gnome))
 
-(use-modules (gnucash gnc-module))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 
 (debug-enable 'backtrace)
 
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)
 
