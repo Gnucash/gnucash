@@ -47,11 +47,7 @@ install(FILES ${report_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 # Scheme
 
-set (report_SCHEME
-    report.scm
-)
-
-set (report_SCHEME_2
+set (report_SCHEME_1
     commodity-utilities.scm
     html-acct-table.scm
     html-chart.scm
@@ -74,6 +70,10 @@ set (report_SCHEME_2
     trep-engine.scm
 )
 
+set (report_SCHEME_2
+    report.scm
+)
+
 set (report_eguile_parts_SCHEME
     eguile-utilities.scm
     eguile-html-utilities.scm
@@ -94,15 +94,15 @@ set(GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-report-1
-  "${report_SCHEME}"
-  "gnucash"
+  "${report_SCHEME_1}"
+  "gnucash/report"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
 gnc_add_scheme_targets(scm-report-2
   "${report_SCHEME_2}"
-  "gnucash/report"
+  "gnucash"
   scm-report-1
   TRUE
 )
@@ -110,7 +110,7 @@ gnc_add_scheme_targets(scm-report-2
 gnc_add_scheme_targets(scm-report-eguile-parts
   "${report_eguile_parts_SCHEME}"
   "gnucash/eguile"
-  scm-report-1
+  scm-report-2
   FALSE
 )
 
@@ -125,7 +125,7 @@ gnc_add_scheme_targets(scm-report-eguile
 gnc_add_scheme_deprecated_module ("gnucash report eguile-gnc" "gnucash eguile" "scm-report-eguile" "")
 gnc_add_scheme_deprecated_module ("gnucash report eguile-html-utilities" "gnucash eguile" "scm-report-eguile" "")
 gnc_add_scheme_deprecated_module ("gnucash report eguile-utilities" "gnucash eguile" "scm-report-eguile" "")
-gnc_add_scheme_deprecated_module ("gnucash report report-system" "gnucash report" "scm-report-1" "")
+gnc_add_scheme_deprecated_module ("gnucash report report-system" "gnucash report" "scm-report-2" "")
 
 gnc_add_scheme_deprecated_module ("gnucash report business-reports" "" "" "")
 gnc_add_scheme_deprecated_module ("gnucash report report-system collectors" "" "" "")
