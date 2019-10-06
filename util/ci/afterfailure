@@ -1,12 +1,13 @@
 #!/bin/bash
 
-if [[ "$BUILDTYPE" == "cmake-make" ]] || [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
-    echo "########################";
-    echo "##### LastTest.log #####";
-    echo "########################";
-    cat /build/Testing/Temporary/LastTest.log;
+if [[ -d "/build/Testing" ]] ; then
+    echo	
+    echo "##################################################"
+    echo "##### Rerunning failed tests in verbose mode #####"
+    echo "##################################################"
+    ctest -V --rerun-failed
 else
-    echo "Unknown BUILDTYPE: \"$BUILDTYPE\", cannot create failure information.";
+    echo "Not rerunning tests. ctest hasn't run yet."
 fi
 # This script should fail so that the entire script will fail.
-exit 1;
+exit 1
