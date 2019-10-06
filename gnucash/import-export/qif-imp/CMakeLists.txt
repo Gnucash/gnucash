@@ -78,7 +78,7 @@ gnc_add_scheme_targets(scm-qif-import-0
 gnc_add_scheme_targets(scm-qif-import-2
   "${qif_import_SCHEME_2}"
   "gnucash"
-  "${GUILE_DEPENDS}"
+  "${GUILE_DEPENDS};scm-qif-import-0"
   FALSE
 )
 
