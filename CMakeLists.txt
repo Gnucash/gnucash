@@ -84,6 +84,8 @@ foreach(install_dir ${CMAKE_INSTALL_FULL_BINDIR}
     break()
   endif()
 endforeach()
+message(STATUS "CMAKE_INSTALL_FULL_DATADIR: ${CMAKE_INSTALL_FULL_DATADIR}")
+message(STATUS "DESTDIR: ${DESTDIR}")
 
 # GnuCash installs two files in ${CMAKE_INSTALL_SYSCONFDIR}
 set(BINDIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "user executables")
