@@ -350,25 +350,24 @@
         ;;   col - next column
         (define (disp-cols style-tag col0
                            bgt-val act-val dif-val)
-          (let* ((style-tag-neg (string-append style-tag "-neg"))
-                 (col1 (+ col0 (if show-budget? 1 0)))
+          (let* ((col1 (+ col0 (if show-budget? 1 0)))
                  (col2 (+ col1 (if show-actual? 1 0)))
                  (col3 (+ col2 (if show-diff? 1 0))))
             (if show-budget?
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col0
-                 (if (negative? bgt-val) style-tag-neg style-tag)
+                 style-tag
                  (if (zero? bgt-val) "."
                      (gnc:make-gnc-monetary comm bgt-val))))
             (if show-actual?
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col1
-                 (if (negative? act-val) style-tag-neg style-tag)
+                 style-tag
                  (gnc:make-gnc-monetary comm act-val)))
             (if show-diff?
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col2
-                 (if (negative? dif-val) style-tag-neg style-tag)
+                 style-tag
                  (if (and (zero? bgt-val) (zero? act-val)) "."
                      (gnc:make-gnc-monetary comm dif-val))))
             col3))
