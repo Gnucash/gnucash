@@ -191,12 +191,8 @@ set (engine_SOURCES
 )
 
 if (WIN32)
-  add_definitions (-DOS_WIN32)
-  set (engine_SOURCES ${engine_SOURCES}
-  qof-win32.cpp
-  ../../borrowed/libc/strptime.c
-  )
-endif (WIN32)
+    add_definitions ("-DOS_WIN32")
+endif()
 
 # Add dependency on config.h
 set_source_files_properties (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
@@ -204,21 +200,20 @@ set_source_files_properties (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFI
 # Add dependency on iso-4217-currencies.c
 set_source_files_properties (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
 
-
-
 add_library (gncmod-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
   ${engine_noinst_HEADERS}
 )
 
-# Add dependency on swig-runtime.h and iso-4217-currencies.c
+target_sources(gncmod-engine
+    PRIVATE
+        $<$<BOOL:${WIN32}>:qof-win32.cpp>
+        $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/borrowed/libc/strptime.c>
+)
+
+# Add dependency on iso-4217-currencies.c
 add_dependencies (gncmod-engine iso-4217-c)
-if (WIN32)
-  set(BCRYPT "bcrypt.lib")
-else()
-  set(BCRYPT "")
-endif()
 
 target_link_libraries(gncmod-engine
     gnc-core-utils
@@ -226,19 +221,17 @@ target_link_libraries(gncmod-engine
     ${Boost_DATE_TIME_LIBRARIES}
     ${Boost_REGEX_LIBRARIES}
     ${ICU4C_I18N_LDFLAGS}
-    ${BCRYPT}
     ${REGEX_LDFLAGS}
     ${GMODULE_LDFLAGS}
     ${GLIB2_LDFLAGS}
     ${GOBJECT_LDFLAGS}
-    ${GUILE_LDFLAGS})
+    $<$<BOOL:${WIN32}>:bcrypt.lib>)
 
 target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 
 target_include_directories (gncmod-engine
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
-        ${GUILE_INCLUDE_DIRS}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/common # for config.h
