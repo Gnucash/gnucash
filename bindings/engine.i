@@ -33,7 +33,6 @@
 #include "gnc-pricedb.h"
 #include "gnc-lot.h"
 #include "gnc-session.h"
-#include "engine-deprecated.h"
 #include "engine-helpers.h"
 #include "gnc-engine-guile.h"
 #include "policy.h"
@@ -80,7 +79,6 @@ engine-common.i */
 %newobject gnc_account_get_full_name;
 
 %include "engine-common.i"
-%include "engine-deprecated.h"
 
 #if defined(SWIGGUILE)
 %ignore QofLogModule;
