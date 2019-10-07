@@ -798,6 +798,31 @@ HTML Document Title</title></head><body></body>\n\
       )
     (test-end "HTML Table - Table Rendering")
 
+    (test-begin "html-table-cell renderers")
+    (let ((doc (gnc:make-html-document))
+          (cell (gnc:make-html-table-cell 4)))
+      (test-equal "html-table-cell renders correctly"
+        "<td rowspan=\"1\" colspan=\"1\"><number> 4</td>\n"
+        (string-concatenate
+         (gnc:html-document-tree-collapse
+          (gnc:html-table-cell-render cell doc)))))
+
+    ;; the following is tailor-made to test bug 797357. if the report
+    ;; system is refactored, this test will probably need fixing. it
+    ;; aims to ensure the table-cell class eg 'number-cell'
+    ;; 'total-number-cell' is augmented with a '-neg', and the
+    ;; resulting renderer renders as <td class='number-cell neg' ...>
+    (let* ((doc (gnc:make-html-document))
+           (comm-table (gnc-commodity-table-get-table (gnc-get-current-book)))
+           (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD"))
+           (cell (gnc:make-html-table-cell (gnc:make-gnc-monetary USD -10))))
+      (test-equal "html-table-cell negative-monetary -> tag gets -neg appended"
+        "td-neg"
+        (cadr
+         (gnc:html-document-tree-collapse
+          (gnc:html-table-cell-render cell doc)))))
+    (test-end "html-table-cell renderers")
+
   (test-end "HTML Tables - without style sheets")
 )
 

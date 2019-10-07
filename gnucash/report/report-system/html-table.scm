@@ -140,25 +140,30 @@
    cell (append (gnc:html-table-cell-data cell) objects)))
 
 (define (gnc:html-table-cell-render cell doc)
+  ;; This function renders a html-table-cell to a document tree
+  ;; segment. Note: if the html-table-cell datum is a negative
+  ;; gnc:monetary, it fixes the tag eg. "number-cell" becomes
+  ;; "number-cell-red". The gnc:monetary renderer does not have an
+  ;; automatic -neg tag modifier. See bug 759005 and bug 797357.
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
-         (style (gnc:html-table-cell-style cell)))
-    
-;    ;; why dont colspans export??!
-;    (gnc:html-table-cell-set-style! cell "td"
-;	'attribute (list "colspan"
-;	    (or (gnc:html-table-cell-colspan cell) 1)))
-    (gnc:html-document-push-style doc style)
-    (push (gnc:html-document-markup-start 
-           doc (gnc:html-table-cell-tag cell)  #t
+         (cell-tag (gnc:html-table-cell-tag cell))
+         (cell-data (gnc:html-table-cell-data cell))
+         (tag (if (and (= 1 (length cell-data))
+                       (gnc:gnc-monetary? (car cell-data))
+                       (negative? (gnc:gnc-monetary-amount (car cell-data))))
+                  (string-append cell-tag "-neg")
+                  cell-tag)))
+    (gnc:html-document-push-style doc (gnc:html-table-cell-style cell))
+    (push (gnc:html-document-markup-start
+           doc tag #t
            (format #f "rowspan=\"~a\"" (gnc:html-table-cell-rowspan cell))
            (format #f "colspan=\"~a\"" (gnc:html-table-cell-colspan cell))))
-    (for-each 
-     (lambda (child) 
+    (for-each
+     (lambda (child)
        (push (gnc:html-object-render child doc)))
-     (gnc:html-table-cell-data cell))
-    (push (gnc:html-document-markup-end 
-           doc (gnc:html-table-cell-tag cell)))
+     cell-data)
+    (push (gnc:html-document-markup-end doc cell-tag))
     (gnc:html-document-pop-style doc)
     retval))
 
