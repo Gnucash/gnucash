@@ -141,17 +141,19 @@
 
 (define (gnc:html-table-cell-render cell doc)
   ;; This function renders a html-table-cell to a document tree
-  ;; segment. Note: if the html-table-cell datum is a negative
-  ;; gnc:monetary, it fixes the tag eg. "number-cell" becomes
-  ;; "number-cell-red". The gnc:monetary renderer does not have an
-  ;; automatic -neg tag modifier. See bug 759005 and bug 797357.
+  ;; segment. Note: if the html-table-cell datum is a negative number
+  ;; or gnc:monetary, it fixes the tag eg. "number-cell" becomes
+  ;; "number-cell-red". The number and gnc:monetary renderers do not
+  ;; have an automatic -neg tag modifier. See bug 759005 and 797357.
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (cell-tag (gnc:html-table-cell-tag cell))
          (cell-data (gnc:html-table-cell-data cell))
          (tag (if (and (= 1 (length cell-data))
-                       (gnc:gnc-monetary? (car cell-data))
-                       (negative? (gnc:gnc-monetary-amount (car cell-data))))
+                       (or (and (gnc:gnc-monetary? (car cell-data))
+                                (negative? (gnc:gnc-monetary-amount (car cell-data))))
+                           (and (number? (car cell-data))
+                                (negative? (car cell-data)))))
                   (string-append cell-tag "-neg")
                   cell-tag)))
     (gnc:html-document-push-style doc (gnc:html-table-cell-style cell))
