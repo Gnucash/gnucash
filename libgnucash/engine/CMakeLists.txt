@@ -10,7 +10,6 @@ set(engine_noinst_HEADERS
   SX-book.h
   SX-ttinfo.h
   TransactionP.h
-  engine-deprecated.h
   gnc-backend-prov.hpp
   gnc-date-p.h
   gnc-int128.hpp
@@ -139,7 +138,6 @@ set (engine_SOURCES
   Transaction.c
   cap-gains.c
   cashobjects.c
-  engine-deprecated.c
   gnc-aqbanking-templates.cpp
   gnc-budget.c
   gnc-commodity.c

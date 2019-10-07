@@ -626,7 +626,6 @@ libgnucash/doc/doxygen_main_page.c
 libgnucash/engine/Account.cpp
 libgnucash/engine/cap-gains.c
 libgnucash/engine/cashobjects.c
-libgnucash/engine/engine-deprecated.c
 libgnucash/engine/engine-helpers.c
 libgnucash/engine/gncAddress.c
 libgnucash/engine/gnc-aqbanking-templates.cpp
