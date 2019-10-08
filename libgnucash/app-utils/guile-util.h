@@ -32,11 +32,6 @@
 #include "Account.h"
 #include "gnc-guile-utils.h"
 
-/* Don't use this to get hold of symbols that are considered private
- * to a given module unless the C code you're writing is considered
- * part of that module.  */
-SCM    gnc_scm_lookup(const char *module, const char *symbol);
-
 /* The next set of functions is for manipulating scheme
  * representations of splits and transactions. */
 gboolean gnc_is_split_scm(SCM scm);
