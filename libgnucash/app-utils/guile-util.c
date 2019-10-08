@@ -110,7 +110,6 @@ struct _Process
     gboolean detached;
 };
 
-
 static void
 initialize_scm_functions()
 {
@@ -242,7 +241,7 @@ gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
  * Args: scm - a scheme object                                      *
  * Returns: true if scm is a scheme split                           *
 \********************************************************************/
-gboolean
+static gboolean
 gnc_is_split_scm(SCM scm)
 {
     initialize_scm_functions();
@@ -258,7 +257,7 @@ gnc_is_split_scm(SCM scm)
  * Args: scm - a scheme object                                      *
  * Returns: true if scm is a scheme transaction                     *
 \********************************************************************/
-gboolean
+static gboolean
 gnc_is_trans_scm(SCM scm)
 {
     initialize_scm_functions();
@@ -417,56 +416,6 @@ gnc_split_scm_set_value(SCM split_scm, gnc_numeric value)
 
     arg = gnc_numeric_to_scm(value);
     scm_call_2(setters.split_scm_value, split_scm, arg);
-}
-
-
-/********************************************************************\
- * gnc_split_scm_get_memo                                           *
- *   return the newly allocated memo of a scheme split, or NULL.    *
- *                                                                  *
- * Args: split_scm - the scheme split                               *
- * Returns: newly allocated memo string, must be freed with g_free  *
-\********************************************************************/
-char *
-gnc_split_scm_get_memo(SCM split_scm)
-{
-    SCM result;
-
-    initialize_scm_functions();
-
-    if (!gnc_is_split_scm(split_scm))
-        return NULL;
-
-    result = scm_call_1(getters.split_scm_memo, split_scm);
-    if (!scm_is_string(result))
-        return NULL;
-
-    return gnc_scm_to_utf8_string(result);
-}
-
-
-/**********************************************************************\
- * gnc_split_scm_get_action                                           *
- *   return the newly allocated action of a scheme split, or NULL.    *
- *                                                                    *
- * Args: split_scm - the scheme split                                 *
- * Returns: newly allocated action string, must be freed with g_free  *
-\**********************************************************************/
-char *
-gnc_split_scm_get_action(SCM split_scm)
-{
-    SCM result;
-
-    initialize_scm_functions();
-
-    if (!gnc_is_split_scm(split_scm))
-        return NULL;
-
-    result = scm_call_1(getters.split_scm_action, split_scm);
-    if (!scm_is_string(result))
-        return NULL;
-
-    return gnc_scm_to_utf8_string(result);
 }
 
 
