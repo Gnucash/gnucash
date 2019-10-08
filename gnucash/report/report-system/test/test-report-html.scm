@@ -798,6 +798,40 @@ HTML Document Title</title></head><body></body>\n\
       )
     (test-end "HTML Table - Table Rendering")
 
+    (test-begin "html-table arbitrary row/col modification")
+    (let ((doc (gnc:make-html-document))
+          (table (gnc:make-html-table)))
+      (gnc:html-table-set-cell! table 0 0 "x")
+      (test-equal "html-table-set-cell! 0 0"
+        "<table><tbody><tr><td rowspan=\"1\" colspan=\"1\"><string> x</td>\n</tr>\n</tbody>\n</table>\n"
+        (string-concatenate
+         (gnc:html-document-tree-collapse
+          (gnc:html-table-render table doc))))
+
+      (gnc:html-table-set-cell! table 2 2 "y" "z")
+      (test-equal "html-table-set-cell! 2 2"
+        "<table><tbody><tr><td rowspan=\"1\" colspan=\"1\"><string> x</td>\n</tr>\n<tr></tr>\n<tr><td><string>  </td>\n<td><string>  </td>\n<td rowspan=\"1\" colspan=\"1\"><string> y<string> z</td>\n</tr>\n</tbody>\n</table>\n"
+        (string-concatenate
+         (gnc:html-document-tree-collapse
+          (gnc:html-table-render table doc))))
+
+      (let* ((table1 (gnc:make-html-table))
+             (cell (gnc:make-html-table-cell "ab")))
+        (gnc:html-table-set-cell! table1 1 4 cell)
+        (test-equal "html-table-set-cell! 1 4"
+          "<table><tbody><tr></tr>\n<tr><td><string>  </td>\n<td><string>  </td>\n<td><string>  </td>\n<td><string>  </td>\n<td rowspan=\"1\" colspan=\"1\"><string> ab</td>\n</tr>\n</tbody>\n</table>\n"
+          (string-concatenate
+           (gnc:html-document-tree-collapse
+            (gnc:html-table-render table1 doc))))
+
+        (gnc:html-table-set-cell/tag! table1 1 4 "tag" cell)
+        (test-equal "html-table-set-cell/tag! 1 4"
+          "<table><tbody><tr></tr>\n<tr><td><string>  </td>\n<td><string>  </td>\n<td><string>  </td>\n<td><string>  </td>\n<tag rowspan=\"1\" colspan=\"1\"><string> ab</tag>\n</tr>\n</tbody>\n</table>\n"
+          (string-concatenate
+           (gnc:html-document-tree-collapse
+            (gnc:html-table-render table1 doc))))))
+    (test-end "html-table arbitrary row/col modification")
+
     (test-begin "html-table-cell renderers")
     (let ((doc (gnc:make-html-document))
           (cell (gnc:make-html-table-cell 4)))
