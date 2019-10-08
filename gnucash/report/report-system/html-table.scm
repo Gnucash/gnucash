@@ -361,6 +361,7 @@
     new-num-rows))
 
 (define (gnc:html-table-remove-last-row! table)
+  (issue-deprecation-warning "gnc:html-table-remove-last-row! is unused.")
   (if (> (gnc:html-table-num-rows table) 0)
       (begin
 	(gnc:html-table-set-num-rows-internal! 
