@@ -23,6 +23,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-2))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 
 ;; NB: In this code, "markup" and "/markup" *do not* refer to
@@ -365,22 +367,14 @@
       (gnc:html-table-set-row-markup-table! table new-rowmarkup))
     new-num-rows))
 
-;; list-set! is 0-based...
-;;   (let ((a '(0 1 2))) (list-set! a 1 "x") a)
-;;    => (0 "x" 2)
 (define (gnc:html-table-get-cell table row col)
-  (let* ((row (gnc:html-table-get-row table row)))
-    (and row (list-ref-safe row col)))
-  )
+  (and-let* ((row (gnc:html-table-get-row table row)))
+    (list-ref-safe row col)))
 
 (define (gnc:html-table-get-row table row)
-  (let* ((dd (gnc:html-table-data table))
-	 (len (and dd (length dd)))
-	 )
-    (and len
-	 (list-ref-safe dd (- (- len 1) row))
-	 )
-    ))
+  (and-let* ((dd (gnc:html-table-data table))
+             (len (length dd)))
+    (list-ref-safe dd (- len row 1))))
 
 ;; if the 4th arg is a cell, overwrite the existing cell,
 ;; otherwise, append all remaining objects to the existing cell
