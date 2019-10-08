@@ -157,39 +157,6 @@ initialize_scm_functions()
     scm_funcs_inited = TRUE;
 }
 
-
-/********************************************************************\
-  gnc_scm_lookup
-
-    returns the SCM binding associated with the given symbol function,
-    or SCM_UNDEFINED if it couldn't be retrieved.
-
-    Don't use this to get hold of symbols that are considered private
-    to a given module unless the C code you're writing is considered
-    part of that module.
-
-  Args:
-
-    module - where to lookup the symbol, something like "ice-9 debug"
-    symbol - what to look up.
-
-  Returns: value bound to the symbol, if any.
-\********************************************************************/
-
-#if 0
-
-************ NOT TESTED YET **************
-
-SCM
-gnc_scm_lookup(const char *module, const char *symbol)
-{
-    SCM scm_module = scm_c_resolve_module(module);
-    SCM value = scm_c_module_lookup(scm_module, symbol);
-    return value;
-}
-
-#endif
-
 /********************************************************************\
  * gnc_copy_split                                                   *
  *   returns a scheme representation of a split. If the split is    *
