@@ -457,72 +457,36 @@
               row-loc rowdata)))))
 
 (define (gnc:html-table-append-column! table newcol)
-  (define (maxwidth table-data)
-    (if (null? table-data) 0
-	(max (length (car table-data)) (maxwidth (cdr table-data)))))
-	  
-  ;; widen an individual row to the required width and append element
-  (define (widen-and-append row element width)
-    (let ((current-width (length row))
-          (new-suffix (list element)))
-      (do 
-	  ((i current-width (+ i 1)))
-          ((>= 1 (- width i)))
-	(set! new-suffix (cons #f new-suffix)))
-      (append row new-suffix)))
 
-  ;; append the elements of newcol to each of the existing rows, widening
-  ;; to width-to-make if necessary 
-  (define (append-to-element newcol existing-data length-to-append 
-                             width-to-make)
-    (if (= length-to-append 0) 
+  ;; append the elements of newcol to each of the existing rows,
+  ;; widening to width-to-make if necessary
+  (define (append-to-element newcol existing-data length-to-append colnum)
+    (if (= length-to-append 0)
         (cons '() newcol)
-        (let* 
-            ((current-new (car newcol))
-             (current-existing (car existing-data))
-             (rest-new (cdr newcol))
-             (rest-existing (cdr existing-data))
-             (rest-result (append-to-element rest-new rest-existing 
-                                             (- length-to-append 1)
-                                             width-to-make)))
-          (cons (cons (widen-and-append 
-                       current-existing 
-                       current-new 
-                       width-to-make )
-                      (car rest-result))
-                (cdr rest-result)))))
-  
-  (let* ((existing-data (reverse (gnc:html-table-data table)))
-	 (existing-length (length existing-data))
-	 (width-to-make (+ (maxwidth existing-data) 1))
-	 (newcol-length (length newcol)))
-    (if (<= newcol-length existing-length)
-        (gnc:html-table-set-data! 
+        (let ((result (append-to-element
+                       (cdr newcol) (cdr existing-data) (1- length-to-append)
+                       colnum)))
+          (cons (cons (list-set-safe! (car existing-data) colnum (car newcol))
+                      (car result))
+                (cdr result)))))
+
+  (let* ((old-data (reverse (gnc:html-table-data table)))
+         (old-numrows (length old-data))
+         (old-numcols (apply max (cons 0 (map length old-data))))
+         (new-numrows (length newcol)))
+    (if (<= new-numrows old-numrows)
+        (gnc:html-table-set-data!
          table
-         (reverse (car (append-to-element 
-                         newcol
-                         existing-data
-                         newcol-length 
-                         width-to-make))))
-        (let* ((temp-result (append-to-element
-                             newcol
-                             existing-data
-                             existing-length
-                             width-to-make))
-               (joined-table-data (car temp-result))
-               (remaining-elements (cdr temp-result)))
+         (reverse (car (append-to-element newcol old-data new-numrows old-numcols))))
+        (let ((res (append-to-element newcol old-data old-numrows old-numcols)))
           ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse joined-table-data))
-          
-          (for-each 
+          (gnc:html-table-set-data! table (reverse (car res)))
+
+          (for-each
            (lambda (element)
-             (gnc:html-table-append-row! table 
-                                         (widen-and-append 
-                                          '() 
-                                          element 
-                                          width-to-make)))
-           remaining-elements)
-          #f))))
+             (gnc:html-table-append-row!
+              table (list-set-safe! '() old-numcols element)))
+           (cdr res))))))
 
 (define (gnc:html-table-prepend-column! table newcol)
   ;; returns a pair, the car of which is the prepending of newcol
