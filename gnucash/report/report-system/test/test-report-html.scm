@@ -849,9 +849,10 @@ HTML Document Title</title></head><body></body>\n\
     (let* ((doc (gnc:make-html-document))
            (comm-table (gnc-commodity-table-get-table (gnc-get-current-book)))
            (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD"))
-           (cell (gnc:make-html-table-cell (gnc:make-gnc-monetary USD -10))))
+           (USD-neg10 (gnc:make-gnc-monetary USD -10))
+           (cell (gnc:make-html-table-cell/markup "number-cell" USD-neg10)))
       (test-equal "html-table-cell negative-monetary -> tag gets -neg appended"
-        "td-neg"
+        "number-cell-neg"
         (cadr
          (gnc:html-document-tree-collapse
           (gnc:html-table-cell-render cell doc)))))

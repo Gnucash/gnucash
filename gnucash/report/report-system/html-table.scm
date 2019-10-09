@@ -146,6 +146,7 @@
          (cell-tag (gnc:html-table-cell-tag cell))
          (cell-data (gnc:html-table-cell-data cell))
          (tag (if (and (= 1 (length cell-data))
+                       (not (string=? cell-tag "td"))
                        (or (and (gnc:gnc-monetary? (car cell-data))
                                 (negative? (gnc:gnc-monetary-amount (car cell-data))))
                            (and (number? (car cell-data))
