@@ -529,144 +529,120 @@
            remaining-elements)
           #f))))
 
-;; 
-;; It would be nice to have table row/col/cell accessor functions in here.
-;; It would also be nice to have table juxtaposition functions, too.
-;; i.e., (gnc:html-table-nth-row table n)
-;;  [ CAS: how is that different from gnc:html-table-get-row ? ]
-
-;;       (gnc:html-table-append-table-horizontal table add-table)
-;; (An old merge-table used to exist inside balance-sheet.scm/GnuCash 1.8.9.)
-;; Feel free to contribute! :-)
-;; 
-
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))
-    
-    ;; compile the table style to make other compiles faster 
-    (gnc:html-style-table-compile 
-     (gnc:html-table-style table) (gnc:html-document-style-stack doc))
-    
+
+    ;; compile the table style to make other compiles faster
+    (gnc:html-style-table-compile (gnc:html-table-style table)
+                                  (gnc:html-document-style-stack doc))
+
     (gnc:html-document-push-style doc (gnc:html-table-style table))
     (push (gnc:html-document-markup-start doc "table" #t))
-    
-    ;; render the caption 
+
+    ;; render the caption
     (let ((c (gnc:html-table-caption table)))
-      (if c
-          (begin 
-            (push (gnc:html-document-markup-start doc "caption" #t))
-            (push (gnc:html-object-render c doc))
-            (push (gnc:html-document-markup-end doc "caption")))))
-    
+      (when c
+        (push (gnc:html-document-markup-start doc "caption" #t))
+        (push (gnc:html-object-render c doc))
+        (push (gnc:html-document-markup-end doc "caption"))))
+
     ;; the first row is the column headers.  Columns styles apply.
     ;; compile the col styles with the header style pushed; we'll
     ;; recompile them later, but this will have the benefit of
     ;; compiling in the col-header-style.
-    (let ((ch (gnc:html-table-col-headers table))
-          (colnum 0))
-      (if ch 
-          (begin 
-            (gnc:html-document-push-style 
-             doc (gnc:html-table-col-headers-style table))
-            
-            ;; compile the column styles just in case there's
-            ;; something interesting in the table header cells.
-            (hash-fold
-             (lambda (col style init)
-               (if style
-                   (gnc:html-style-table-compile 
-                    style (gnc:html-document-style-stack doc)))
-               #f)
-             #f (gnc:html-table-col-styles table))
-            
-            ;; render the headers 
-            (push (gnc:html-document-markup-start doc "thead" #t))
-            (push (gnc:html-document-markup-start doc "tr" #t))
-            (for-each 
-             (lambda (hdr) 
-               (gnc:html-document-push-style 
-                doc (gnc:html-table-col-style table colnum))
-               (if (not (gnc:html-table-cell? hdr))
-                   (push (gnc:html-document-markup-start doc "th" #t)))
-               (push (gnc:html-object-render hdr doc))
-               (if (not (gnc:html-table-cell? hdr))
-                   (push (gnc:html-document-markup-end doc "th")))
-               (gnc:html-document-pop-style doc)
-               (if (not (gnc:html-table-cell? hdr))
-                   (set! colnum (+ 1 colnum))
-                   (set! colnum (+ (gnc:html-table-cell-colspan hdr)
-                                   colnum))))
-             ch)
-            (push (gnc:html-document-markup-end doc "tr"))
-            (push (gnc:html-document-markup-end doc "thead"))
+    (let ((ch (gnc:html-table-col-headers table)))
+      (when ch
+        (gnc:html-document-push-style doc (gnc:html-table-col-headers-style table))
 
-            ;; pop the col header style 
-            (gnc:html-document-pop-style doc))))
-    
+        ;; compile the column styles just in case there's something
+        ;; interesting in the table header cells.
+        (hash-for-each
+         (lambda (col style)
+           (when style
+             (gnc:html-style-table-compile
+              style (gnc:html-document-style-stack doc))))
+         (gnc:html-table-col-styles table))
+
+        ;; render the headers
+        (push (gnc:html-document-markup-start doc "thead" #t))
+        (push (gnc:html-document-markup-start doc "tr" #t))
+        (let lp ((ch ch)
+                 (colnum 0))
+          (unless (null? ch)
+            (let ((hdr (car ch)))
+              (gnc:html-document-push-style
+               doc (gnc:html-table-col-style table colnum))
+              (unless (gnc:html-table-cell? hdr)
+                (push (gnc:html-document-markup-start doc "th" #t)))
+              (push (gnc:html-object-render hdr doc))
+              (unless (gnc:html-table-cell? hdr)
+                (push (gnc:html-document-markup-end doc "th")))
+              (gnc:html-document-pop-style doc)
+              (lp (cdr ch)
+                  (+ colnum
+                     (if (gnc:html-table-cell? hdr)
+                         (gnc:html-table-cell-colspan hdr)
+                         1))))))
+        (push (gnc:html-document-markup-end doc "tr"))
+        (push (gnc:html-document-markup-end doc "thead"))
+
+        ;; pop the col header style
+        (gnc:html-document-pop-style doc)))
+
     ;; recompile the column styles.  We won't worry about the row
     ;; styles; if they're there, we may lose, but not much, and they
     ;; will be pretty rare (I think).
-    (hash-fold
-     (lambda (col style init)
-       (if style
-           (gnc:html-style-table-compile 
-            style (gnc:html-document-style-stack doc)))
-       #f)
-     #f (gnc:html-table-col-styles table))
-    
+    (hash-for-each
+     (lambda (col style)
+       (when style
+         (gnc:html-style-table-compile style (gnc:html-document-style-stack doc))))
+     (gnc:html-table-col-styles table))
+
     (push (gnc:html-document-markup-start doc "tbody" #t))
-    ;; now iterate over the rows 
-    (let ((rownum 0) (colnum 0))
-      (for-each 
-       (lambda (row) 
-         (let ((rowstyle 
-                (gnc:html-table-row-style table rownum))
-               (rowmarkup 
-                (gnc:html-table-row-markup table rownum)))
-           ;; set default row markup
-           (if (not rowmarkup)
-               (set! rowmarkup "tr"))
-           
-           ;; push the style for this row and write the start tag, then 
-           ;; pop it again.
-           (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-start doc rowmarkup #t))
-           (if rowstyle (gnc:html-document-pop-style doc))
-           
-           ;; write the column data, pushing the right column style 
-           ;; each time, then the row style.  
-           (for-each 
-            (lambda (datum)
-              (let ((colstyle 
-                     (gnc:html-table-col-style table colnum)))
-                ;; push col and row styles 
-                (if colstyle (gnc:html-document-push-style doc colstyle))
-                (if rowstyle (gnc:html-document-push-style doc rowstyle))
-                
-                ;; render the cell contents 
-                (if (not (gnc:html-table-cell? datum))
-                    (push (gnc:html-document-markup-start doc "td" #t)))
+    ;; now iterate over the rows
+    (let rowloop ((rows (reverse (gnc:html-table-data table))) (rownum 0))
+      (unless (null? rows)
+        (let* ((row (car rows))
+               (rowstyle (gnc:html-table-row-style table rownum))
+               (rowmarkup (or (gnc:html-table-row-markup table rownum) "tr")))
+
+          ;; push the style for this row and write the start tag, then
+          ;; pop it again.
+          (when rowstyle (gnc:html-document-push-style doc rowstyle))
+          (push (gnc:html-document-markup-start doc rowmarkup #t))
+          (when rowstyle (gnc:html-document-pop-style doc))
+
+          ;; write the column data, pushing the right column style
+          ;; each time, then the row style.
+          (let colloop ((cols row) (colnum 0))
+            (unless (null? cols)
+              (let* ((datum (car cols))
+                     (colstyle (gnc:html-table-col-style table colnum)))
+                ;; push col and row styles
+                (when colstyle (gnc:html-document-push-style doc colstyle))
+                (when rowstyle (gnc:html-document-push-style doc rowstyle))
+
+                ;; render the cell contents
+                (unless (gnc:html-table-cell? datum)
+                  (push (gnc:html-document-markup-start doc "td" #t)))
                 (push (gnc:html-object-render datum doc))
-                (if (not (gnc:html-table-cell? datum))
-                    (push (gnc:html-document-markup-end doc "td")))
-                
-                ;; pop styles 
-                (if rowstyle (gnc:html-document-pop-style doc))
-                (if colstyle (gnc:html-document-pop-style doc))
-                (set! colnum (+ 1 colnum))))
-            row)
-           
-           ;; write the row end tag and pop the row style 
-           (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-end doc rowmarkup))
-           (if rowstyle (gnc:html-document-pop-style doc))
-           
-           (set! colnum 0)
-           (set! rownum (+ 1 rownum))))
-       (reverse (gnc:html-table-data table))))
+                (unless (gnc:html-table-cell? datum)
+                  (push (gnc:html-document-markup-end doc "td")))
+
+                ;; pop styles
+                (when rowstyle (gnc:html-document-pop-style doc))
+                (when colstyle (gnc:html-document-pop-style doc))
+                (colloop (cdr cols) (1+ colnum)))))
+
+          ;; write the row end tag and pop the row style
+          (when rowstyle (gnc:html-document-push-style doc rowstyle))
+          (push (gnc:html-document-markup-end doc rowmarkup))
+          (when rowstyle (gnc:html-document-pop-style doc))
+
+          (rowloop (cdr rows) (1+ rownum)))))
     (push (gnc:html-document-markup-end doc "tbody"))
-    
+
     ;; write the table end tag and pop the table style
     (push (gnc:html-document-markup-end doc "table"))
     (gnc:html-document-pop-style doc)
