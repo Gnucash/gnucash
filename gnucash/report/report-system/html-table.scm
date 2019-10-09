@@ -125,14 +125,10 @@
   (record-modifier <html-table-cell> 'style))
 
 (define (gnc:html-table-cell-set-style! cell tag . rest)
-  (let ((newstyle #f)
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest)))
         (styletable (gnc:html-table-cell-style cell)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
     (gnc:html-style-table-set! styletable tag newstyle)))
 
 (define (gnc:html-table-cell-append-objects! cell . objects)
@@ -250,81 +246,50 @@
   (record-accessor <html-table> 'col-headers-style))
 
 (define (gnc:html-table-set-col-headers-style! table tag . rest)
-  (let ((newstyle #f)
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest)))
         (style (gnc:html-table-col-headers-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define gnc:html-table-row-headers-style
   (record-accessor <html-table> 'row-headers-style))
 
 (define (gnc:html-table-set-row-headers-style! table tag . rest)
-  (let ((newstyle #f)
-        (style (gnc:html-table-row-headers-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (style (gnc:html-table-row-headers-style table)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define (gnc:html-table-set-style! table tag . rest)
-  (let ((newstyle #f)
-        (style (gnc:html-table-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (style (gnc:html-table-style table)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define (gnc:html-table-set-col-style! table col tag . rest)
-  (let ((newstyle #f)
-        (style #f)
-        (newhash #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
-    (set! style 
-          (gnc:html-table-col-style table col))
-    (if (not style)
-        (begin 
-          (set! style (gnc:make-html-style-table))
-          (set! newhash #t)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (newhash #f)
+         (style (or (gnc:html-table-col-style table col)
+                    (begin (set! newhash #t)
+                           (gnc:make-html-style-table)))))
     (gnc:html-style-table-set! style tag newstyle)
-    (if newhash 
-        (hash-set! (gnc:html-table-col-styles table) col style))))
+    (if newhash (hash-set! (gnc:html-table-col-styles table) col style))))
 
 (define (gnc:html-table-set-row-style! table row tag . rest)
-  (let ((newstyle #f)
-        (style #f)
-        (newhash #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
-    (set! style 
-          (gnc:html-table-row-style table row))
-    (if (not style)
-        (begin 
-          (set! style (gnc:make-html-style-table))
-          (set! newhash #t)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (newhash #f)
+         (style (or (gnc:html-table-row-style table row)
+                    (begin (set! newhash #t)
+                           (gnc:make-html-style-table)))))
     (gnc:html-style-table-set! style tag newstyle)
-    (if newhash 
-        (hash-set! 
-         (gnc:html-table-row-styles table) row style))))
+    (when newhash (hash-set! (gnc:html-table-row-styles table) row style))))
 
 (define (gnc:html-table-row-style table row)
   (hash-ref (gnc:html-table-row-styles table) row))
@@ -346,9 +311,8 @@
     (gnc:html-table-set-row-markup! table (- rownum 1) markup)))
 
 (define (gnc:html-table-prepend-row/markup! table markup newrow)
-  (begin
-    (gnc:html-table-prepend-row! table newrow)
-    (gnc:html-table-set-row-markup! table 0 markup)))
+  (gnc:html-table-prepend-row! table newrow)
+  (gnc:html-table-set-row-markup! table 0 markup))
     
 
 (define (gnc:html-table-append-row! table newrow)
