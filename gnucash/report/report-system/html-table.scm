@@ -340,35 +340,28 @@
       '()))
 
 (define (gnc:html-table-prepend-row! table newrow)
-  (let* ((dd (gnc:html-table-data table))
-	(current-num-rows (gnc:html-table-num-rows table))
-	(new-num-rows (+ current-num-rows 1))
-        (newrow-list (if (list? newrow) newrow (list newrow))))
-    (set! dd (append dd (list newrow-list)))
-    (gnc:html-table-set-num-rows-internal!
-     table
-     new-num-rows)
+  (let* ((new-num-rows (1+ (gnc:html-table-num-rows table)))
+         (newrow-list (if (list? newrow) newrow (list newrow)))
+         (dd (append (gnc:html-table-data table) (list newrow-list))))
+    (gnc:html-table-set-num-rows-internal! table new-num-rows)
     (gnc:html-table-set-data! table dd)
-    
+
     ;; have to bump up the row index of the row styles and row markup
     ;; table on a prepend.  just another reason you probably don't
     ;; want to prepend.
     (let ((new-rowstyles (make-hash-table 21)))
-      (hash-fold 
-       (lambda (row style prev)
-         (hash-set! new-rowstyles (+ 1 row) style)
-         #f)
-       #f (gnc:html-table-row-styles table))
+      (hash-for-each
+       (lambda (row style)
+         (hash-set! new-rowstyles (+ 1 row) style))
+       (gnc:html-table-row-styles table))
       (gnc:html-table-set-row-styles! table new-rowstyles))
 
     (let ((new-rowmarkup (make-hash-table 21)))
-      (hash-fold 
-       (lambda (row markup prev)
-         (hash-set! new-rowmarkup (+ 1 row) markup)
-         #f)
-       #f (gnc:html-table-row-markup-table table))
+      (hash-for-each
+       (lambda (row markup)
+         (hash-set! new-rowmarkup (+ 1 row) markup))
+       (gnc:html-table-row-markup-table table))
       (gnc:html-table-set-row-markup-table! table new-rowmarkup))
-    
     new-num-rows))
 
 ;; list-set! is 0-based...
