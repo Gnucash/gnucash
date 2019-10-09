@@ -54,17 +54,14 @@ required versions packaged, it was exceedingly painful for end users to
 upgrade to the anticipated release, leading to a reputation that gnucash
 still has.)
 
-This document serves to keep track of the major distributions, the date of
-their major release[s], and the relevant library versions as part of that
-release (or an official package-upgrade path)
-
 Libraries/Deps
 --------------
   required		Version
   --------		_______
   glib2			2.40.0
   gtk+3			3.14.0
-  guile			2.2.0 or 2.0.0
+  guile			2.2.0 or 2.0.0		Must be built with regex
+                                                support enabled
   libxml2		2.5.10
   gettext               0.19.6                  Can use older if you pass
                                                 -DALLOW_OLD_GETTEXT to cmake;
