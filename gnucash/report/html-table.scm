@@ -23,6 +23,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-2))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 
 ;; NB: In this code, "markup" and "/markup" *do not* refer to
@@ -125,14 +127,10 @@
   (record-modifier <html-table-cell> 'style))
 
 (define (gnc:html-table-cell-set-style! cell tag . rest)
-  (let ((newstyle #f)
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest)))
         (styletable (gnc:html-table-cell-style cell)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
     (gnc:html-style-table-set! styletable tag newstyle)))
 
 (define (gnc:html-table-cell-append-objects! cell . objects)
@@ -140,25 +138,33 @@
    cell (append (gnc:html-table-cell-data cell) objects)))
 
 (define (gnc:html-table-cell-render cell doc)
+  ;; This function renders a html-table-cell to a document tree
+  ;; segment. Note: if the html-table-cell datum is a negative number
+  ;; or gnc:monetary, it fixes the tag eg. "number-cell" becomes
+  ;; "number-cell-red". The number and gnc:monetary renderers do not
+  ;; have an automatic -neg tag modifier. See bug 759005 and 797357.
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
-         (style (gnc:html-table-cell-style cell)))
-    
-;    ;; why dont colspans export??!
-;    (gnc:html-table-cell-set-style! cell "td"
-;	'attribute (list "colspan"
-;	    (or (gnc:html-table-cell-colspan cell) 1)))
-    (gnc:html-document-push-style doc style)
-    (push (gnc:html-document-markup-start 
-           doc (gnc:html-table-cell-tag cell)  #t
+         (cell-tag (gnc:html-table-cell-tag cell))
+         (cell-data (gnc:html-table-cell-data cell))
+         (tag (if (and (= 1 (length cell-data))
+                       (not (string=? cell-tag "td"))
+                       (or (and (gnc:gnc-monetary? (car cell-data))
+                                (negative? (gnc:gnc-monetary-amount (car cell-data))))
+                           (and (number? (car cell-data))
+                                (negative? (car cell-data)))))
+                  (string-append cell-tag "-neg")
+                  cell-tag)))
+    (gnc:html-document-push-style doc (gnc:html-table-cell-style cell))
+    (push (gnc:html-document-markup-start
+           doc tag #t
            (format #f "rowspan=\"~a\"" (gnc:html-table-cell-rowspan cell))
            (format #f "colspan=\"~a\"" (gnc:html-table-cell-colspan cell))))
-    (for-each 
-     (lambda (child) 
+    (for-each
+     (lambda (child)
        (push (gnc:html-object-render child doc)))
-     (gnc:html-table-cell-data cell))
-    (push (gnc:html-document-markup-end 
-           doc (gnc:html-table-cell-tag cell)))
+     cell-data)
+    (push (gnc:html-document-markup-end doc cell-tag))
     (gnc:html-document-pop-style doc)
     retval))
 
@@ -243,81 +249,50 @@
   (record-accessor <html-table> 'col-headers-style))
 
 (define (gnc:html-table-set-col-headers-style! table tag . rest)
-  (let ((newstyle #f)
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest)))
         (style (gnc:html-table-col-headers-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define gnc:html-table-row-headers-style
   (record-accessor <html-table> 'row-headers-style))
 
 (define (gnc:html-table-set-row-headers-style! table tag . rest)
-  (let ((newstyle #f)
-        (style (gnc:html-table-row-headers-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (style (gnc:html-table-row-headers-style table)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define (gnc:html-table-set-style! table tag . rest)
-  (let ((newstyle #f)
-        (style (gnc:html-table-style table)))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (style (gnc:html-table-style table)))
     (gnc:html-style-table-set! style tag newstyle)))
 
 (define (gnc:html-table-set-col-style! table col tag . rest)
-  (let ((newstyle #f)
-        (style #f)
-        (newhash #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
-    (set! style 
-          (gnc:html-table-col-style table col))
-    (if (not style)
-        (begin 
-          (set! style (gnc:make-html-style-table))
-          (set! newhash #t)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (newhash #f)
+         (style (or (gnc:html-table-col-style table col)
+                    (begin (set! newhash #t)
+                           (gnc:make-html-style-table)))))
     (gnc:html-style-table-set! style tag newstyle)
-    (if newhash 
-        (hash-set! (gnc:html-table-col-styles table) col style))))
+    (if newhash (hash-set! (gnc:html-table-col-styles table) col style))))
 
 (define (gnc:html-table-set-row-style! table row tag . rest)
-  (let ((newstyle #f)
-        (style #f)
-        (newhash #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
-    (set! style 
-          (gnc:html-table-row-style table row))
-    (if (not style)
-        (begin 
-          (set! style (gnc:make-html-style-table))
-          (set! newhash #t)))
+  (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                       (apply gnc:make-html-data-style-info rest)
+                       (apply gnc:make-html-markup-style-info rest)))
+         (newhash #f)
+         (style (or (gnc:html-table-row-style table row)
+                    (begin (set! newhash #t)
+                           (gnc:make-html-style-table)))))
     (gnc:html-style-table-set! style tag newstyle)
-    (if newhash 
-        (hash-set! 
-         (gnc:html-table-row-styles table) row style))))
+    (when newhash (hash-set! (gnc:html-table-row-styles table) row style))))
 
 (define (gnc:html-table-row-style table row)
   (hash-ref (gnc:html-table-row-styles table) row))
@@ -339,9 +314,8 @@
     (gnc:html-table-set-row-markup! table (- rownum 1) markup)))
 
 (define (gnc:html-table-prepend-row/markup! table markup newrow)
-  (begin
-    (gnc:html-table-prepend-row! table newrow)
-    (gnc:html-table-set-row-markup! table 0 markup)))
+  (gnc:html-table-prepend-row! table newrow)
+  (gnc:html-table-set-row-markup! table 0 markup))
     
 
 (define (gnc:html-table-append-row! table newrow)
@@ -354,6 +328,7 @@
     new-num-rows))
 
 (define (gnc:html-table-remove-last-row! table)
+  (issue-deprecation-warning "gnc:html-table-remove-last-row! is unused.")
   (if (> (gnc:html-table-num-rows table) 0)
       (begin
 	(gnc:html-table-set-num-rows-internal! 
@@ -368,336 +343,215 @@
       '()))
 
 (define (gnc:html-table-prepend-row! table newrow)
-  (let* ((dd (gnc:html-table-data table))
-	(current-num-rows (gnc:html-table-num-rows table))
-	(new-num-rows (+ current-num-rows 1))
-        (newrow-list (if (list? newrow) newrow (list newrow))))
-    (set! dd (append dd (list newrow-list)))
-    (gnc:html-table-set-num-rows-internal!
-     table
-     new-num-rows)
+  (let* ((new-num-rows (1+ (gnc:html-table-num-rows table)))
+         (newrow-list (if (list? newrow) newrow (list newrow)))
+         (dd (append (gnc:html-table-data table) (list newrow-list))))
+    (gnc:html-table-set-num-rows-internal! table new-num-rows)
     (gnc:html-table-set-data! table dd)
-    
+
     ;; have to bump up the row index of the row styles and row markup
     ;; table on a prepend.  just another reason you probably don't
     ;; want to prepend.
     (let ((new-rowstyles (make-hash-table 21)))
-      (hash-fold 
-       (lambda (row style prev)
-         (hash-set! new-rowstyles (+ 1 row) style)
-         #f)
-       #f (gnc:html-table-row-styles table))
+      (hash-for-each
+       (lambda (row style)
+         (hash-set! new-rowstyles (+ 1 row) style))
+       (gnc:html-table-row-styles table))
       (gnc:html-table-set-row-styles! table new-rowstyles))
 
     (let ((new-rowmarkup (make-hash-table 21)))
-      (hash-fold 
-       (lambda (row markup prev)
-         (hash-set! new-rowmarkup (+ 1 row) markup)
-         #f)
-       #f (gnc:html-table-row-markup-table table))
+      (hash-for-each
+       (lambda (row markup)
+         (hash-set! new-rowmarkup (+ 1 row) markup))
+       (gnc:html-table-row-markup-table table))
       (gnc:html-table-set-row-markup-table! table new-rowmarkup))
-    
     new-num-rows))
 
-;; list-set! is 0-based...
-;;   (let ((a '(0 1 2))) (list-set! a 1 "x") a)
-;;    => (0 "x" 2)
 (define (gnc:html-table-get-cell table row col)
-  (let* ((row (gnc:html-table-get-row table row)))
-    (and row (list-ref-safe row col)))
-  )
+  (and-let* ((row (gnc:html-table-get-row table row)))
+    (list-ref-safe row col)))
 
 (define (gnc:html-table-get-row table row)
-  (let* ((dd (gnc:html-table-data table))
-	 (len (and dd (length dd)))
-	 )
-    (and len
-	 (list-ref-safe dd (- (- len 1) row))
-	 )
-    ))
+  (and-let* ((dd (gnc:html-table-data table))
+             (len (length dd)))
+    (list-ref-safe dd (- len row 1))))
 
-;; if the 4th arg is a cell, overwrite the existing cell,
-;; otherwise, append all remaining objects to the existing cell
+;; this function is not exported
+(define (gnc:html-table-set-cell-datum! table row col datum)
+  (let lp ((len (length (gnc:html-table-data table))))
+    (cond
+     ((< row len)
+      (let* ((row-loc (- len row 1))
+             (old-tbldata (gnc:html-table-data table))
+             (old-rowdata (list-ref old-tbldata row-loc))
+             (new-rowdata (list-set-safe! old-rowdata col datum))
+             (new-tbldata (list-set-safe! old-tbldata row-loc new-rowdata)))
+        ;; add the row-data back to the table
+        (gnc:html-table-set-data! table new-tbldata)))
+     (else
+      (gnc:html-table-append-row! table '())
+      (lp (1+ len))))))
+
 (define (gnc:html-table-set-cell! table row col . objects)
-  (let ((rowdata #f)
-        (row-loc #f)
-        (l (length (gnc:html-table-data table)))
-        (objs (length objects))
-        )
-    ;; ensure the row-data is there 
-    (if (>= row l)
-        (begin
-          (let loop ((i l))
-            (gnc:html-table-append-row! table (list))
-            (if (< i row)
-                (loop (+ i 1))))
-          (set! l (gnc:html-table-num-rows table))
-          (set! row-loc (- (- l 1) row))
-          (set! rowdata (list)))
-        (begin
-          (set! row-loc (- (- l 1) row))
-          (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
-    
-    ;; make a table-cell and set the data 
-    (let* ((tc (gnc:make-html-table-cell))
-           (first (car objects)))
-      (if (and (equal? objs 1) (gnc:html-table-cell? first))
-          (set! tc first)
-          (apply gnc:html-table-cell-append-objects! tc objects)
-          )
-      (set! rowdata (list-set-safe! rowdata col tc))
-      
-      ;; add the row-data back to the table 
-      (gnc:html-table-set-data! 
-       table (list-set-safe! 
-              (gnc:html-table-data table) 
-              row-loc rowdata)))))
+  (let ((tc (if (and (= (length objects) 1) (gnc:html-table-cell? (car objects)))
+                (car objects)
+                (apply gnc:make-html-table-cell objects))))
+    (gnc:html-table-set-cell-datum! table row col tc)))
 
-;; if the 4th arg is a cell, overwrite the existing cell,
-;; otherwise, append all remaining objects to the existing cell
 (define (gnc:html-table-set-cell/tag! table row col tag . objects)
-  (let ((rowdata #f)
-        (row-loc #f)
-        (l (length (gnc:html-table-data table)))
-        (num-objs (length objects))
-        )
-    ;; ensure the row-data is there 
-    (if (>= row l)
-        (begin
-          (let loop ((i l))
-            (gnc:html-table-append-row! table (list))
-            (if (< i row)
-                (loop (+ i 1))))
-          (set! l (gnc:html-table-num-rows table))
-          (set! row-loc (- (- l 1) row))
-          (set! rowdata (list)))
-        (begin
-          (set! row-loc (- (- l 1) row))
-          (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
-    
-    ;; make a table-cell and set the data 
-    (let* ((tc (gnc:make-html-table-cell))
-           (first (car objects)))
-      (if (and (equal? num-objs 1) (gnc:html-table-cell? first))
-          (set! tc first)
-          (apply gnc:html-table-cell-append-objects! tc objects)
-          )
-      (gnc:html-table-cell-set-tag! tc tag)
-      (set! rowdata (list-set-safe! rowdata col tc))
-      
-      ;; add the row-data back to the table 
-      (gnc:html-table-set-data! 
-       table (list-set-safe! 
-              (gnc:html-table-data table) 
-              row-loc rowdata)))))
+  (let ((tc (if (and (= (length objects) 1) (gnc:html-table-cell? (car objects)))
+                (car objects)
+                (apply gnc:make-html-table-cell objects))))
+    (gnc:html-table-cell-set-tag! tc tag)
+    (gnc:html-table-set-cell-datum! table row col tc)))
 
 (define (gnc:html-table-append-column! table newcol)
-  (define (maxwidth table-data)
-    (if (null? table-data) 0
-	(max (length (car table-data)) (maxwidth (cdr table-data)))))
-	  
-  ;; widen an individual row to the required width and append element
-  (define (widen-and-append row element width)
-    (let ((current-width (length row))
-          (new-suffix (list element)))
-      (do 
-	  ((i current-width (+ i 1)))
-          ((>= 1 (- width i)))
-	(set! new-suffix (cons #f new-suffix)))
-      (append row new-suffix)))
 
-  ;; append the elements of newcol to each of the existing rows, widening
-  ;; to width-to-make if necessary 
-  (define (append-to-element newcol existing-data length-to-append 
-                             width-to-make)
-    (if (= length-to-append 0) 
+  ;; append the elements of newcol to each of the existing rows,
+  ;; widening to width-to-make if necessary
+  (define (append-to-element newcol existing-data length-to-append colnum)
+    (if (= length-to-append 0)
         (cons '() newcol)
-        (let* 
-            ((current-new (car newcol))
-             (current-existing (car existing-data))
-             (rest-new (cdr newcol))
-             (rest-existing (cdr existing-data))
-             (rest-result (append-to-element rest-new rest-existing 
-                                             (- length-to-append 1)
-                                             width-to-make)))
-          (cons (cons (widen-and-append 
-                       current-existing 
-                       current-new 
-                       width-to-make )
-                      (car rest-result))
-                (cdr rest-result)))))
-  
-  (let* ((existing-data (reverse (gnc:html-table-data table)))
-	 (existing-length (length existing-data))
-	 (width-to-make (+ (maxwidth existing-data) 1))
-	 (newcol-length (length newcol)))
-    (if (<= newcol-length existing-length)
-        (gnc:html-table-set-data! 
+        (let ((result (append-to-element
+                       (cdr newcol) (cdr existing-data) (1- length-to-append)
+                       colnum)))
+          (cons (cons (list-set-safe! (car existing-data) colnum (car newcol))
+                      (car result))
+                (cdr result)))))
+
+  (let* ((old-data (reverse (gnc:html-table-data table)))
+         (old-numrows (length old-data))
+         (old-numcols (apply max (cons 0 (map length old-data))))
+         (new-numrows (length newcol)))
+    (if (<= new-numrows old-numrows)
+        (gnc:html-table-set-data!
          table
-         (reverse (car (append-to-element 
-                         newcol
-                         existing-data
-                         newcol-length 
-                         width-to-make))))
-        (let* ((temp-result (append-to-element
-                             newcol
-                             existing-data
-                             existing-length
-                             width-to-make))
-               (joined-table-data (car temp-result))
-               (remaining-elements (cdr temp-result)))
+         (reverse (car (append-to-element newcol old-data new-numrows old-numcols))))
+        (let ((res (append-to-element newcol old-data old-numrows old-numcols)))
           ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse joined-table-data))
-          
-          (for-each 
+          (gnc:html-table-set-data! table (reverse (car res)))
+
+          (for-each
            (lambda (element)
-             (gnc:html-table-append-row! table 
-                                         (widen-and-append 
-                                          '() 
-                                          element 
-                                          width-to-make)))
-           remaining-elements)
-          #f))))
+             (gnc:html-table-append-row!
+              table (list-set-safe! '() old-numcols element)))
+           (cdr res))))))
 
-
-;; 
-;; It would be nice to have table row/col/cell accessor functions in here.
-;; It would also be nice to have table juxtaposition functions, too.
-;; i.e., (gnc:html-table-nth-row table n)
-;;  [ CAS: how is that different from gnc:html-table-get-row ? ]
-
-;;       (gnc:html-table-append-table-horizontal table add-table)
-;; (An old merge-table used to exist inside balance-sheet.scm/GnuCash 1.8.9.)
-;; Feel free to contribute! :-)
-;; 
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))
-    
-    ;; compile the table style to make other compiles faster 
-    (gnc:html-style-table-compile 
-     (gnc:html-table-style table) (gnc:html-document-style-stack doc))
-    
+
+    ;; compile the table style to make other compiles faster
+    (gnc:html-style-table-compile (gnc:html-table-style table)
+                                  (gnc:html-document-style-stack doc))
+
     (gnc:html-document-push-style doc (gnc:html-table-style table))
     (push (gnc:html-document-markup-start doc "table" #t))
-    
-    ;; render the caption 
+
+    ;; render the caption
     (let ((c (gnc:html-table-caption table)))
-      (if c
-          (begin 
-            (push (gnc:html-document-markup-start doc "caption" #t))
-            (push (gnc:html-object-render c doc))
-            (push (gnc:html-document-markup-end doc "caption")))))
-    
+      (when c
+        (push (gnc:html-document-markup-start doc "caption" #t))
+        (push (gnc:html-object-render c doc))
+        (push (gnc:html-document-markup-end doc "caption"))))
+
     ;; the first row is the column headers.  Columns styles apply.
     ;; compile the col styles with the header style pushed; we'll
     ;; recompile them later, but this will have the benefit of
     ;; compiling in the col-header-style.
-    (let ((ch (gnc:html-table-col-headers table))
-          (colnum 0))
-      (if ch 
-          (begin 
-            (gnc:html-document-push-style 
-             doc (gnc:html-table-col-headers-style table))
-            
-            ;; compile the column styles just in case there's
-            ;; something interesting in the table header cells.
-            (hash-fold
-             (lambda (col style init)
-               (if style
-                   (gnc:html-style-table-compile 
-                    style (gnc:html-document-style-stack doc)))
-               #f)
-             #f (gnc:html-table-col-styles table))
-            
-            ;; render the headers 
-            (push (gnc:html-document-markup-start doc "thead" #t))
-            (push (gnc:html-document-markup-start doc "tr" #t))
-            (for-each 
-             (lambda (hdr) 
-               (gnc:html-document-push-style 
-                doc (gnc:html-table-col-style table colnum))
-               (if (not (gnc:html-table-cell? hdr))
-                   (push (gnc:html-document-markup-start doc "th" #t)))
-               (push (gnc:html-object-render hdr doc))
-               (if (not (gnc:html-table-cell? hdr))
-                   (push (gnc:html-document-markup-end doc "th")))
-               (gnc:html-document-pop-style doc)
-               (if (not (gnc:html-table-cell? hdr))
-                   (set! colnum (+ 1 colnum))
-                   (set! colnum (+ (gnc:html-table-cell-colspan hdr)
-                                   colnum))))
-             ch)
-            (push (gnc:html-document-markup-end doc "tr"))
-            (push (gnc:html-document-markup-end doc "thead"))
+    (let ((ch (gnc:html-table-col-headers table)))
+      (when ch
+        (gnc:html-document-push-style doc (gnc:html-table-col-headers-style table))
 
-            ;; pop the col header style 
-            (gnc:html-document-pop-style doc))))
-    
+        ;; compile the column styles just in case there's something
+        ;; interesting in the table header cells.
+        (hash-for-each
+         (lambda (col style)
+           (when style
+             (gnc:html-style-table-compile
+              style (gnc:html-document-style-stack doc))))
+         (gnc:html-table-col-styles table))
+
+        ;; render the headers
+        (push (gnc:html-document-markup-start doc "thead" #t))
+        (push (gnc:html-document-markup-start doc "tr" #t))
+        (let lp ((ch ch)
+                 (colnum 0))
+          (unless (null? ch)
+            (let ((hdr (car ch)))
+              (gnc:html-document-push-style
+               doc (gnc:html-table-col-style table colnum))
+              (unless (gnc:html-table-cell? hdr)
+                (push (gnc:html-document-markup-start doc "th" #t)))
+              (push (gnc:html-object-render hdr doc))
+              (unless (gnc:html-table-cell? hdr)
+                (push (gnc:html-document-markup-end doc "th")))
+              (gnc:html-document-pop-style doc)
+              (lp (cdr ch)
+                  (+ colnum
+                     (if (gnc:html-table-cell? hdr)
+                         (gnc:html-table-cell-colspan hdr)
+                         1))))))
+        (push (gnc:html-document-markup-end doc "tr"))
+        (push (gnc:html-document-markup-end doc "thead"))
+
+        ;; pop the col header style
+        (gnc:html-document-pop-style doc)))
+
     ;; recompile the column styles.  We won't worry about the row
     ;; styles; if they're there, we may lose, but not much, and they
     ;; will be pretty rare (I think).
-    (hash-fold
-     (lambda (col style init)
-       (if style
-           (gnc:html-style-table-compile 
-            style (gnc:html-document-style-stack doc)))
-       #f)
-     #f (gnc:html-table-col-styles table))
-    
+    (hash-for-each
+     (lambda (col style)
+       (when style
+         (gnc:html-style-table-compile style (gnc:html-document-style-stack doc))))
+     (gnc:html-table-col-styles table))
+
     (push (gnc:html-document-markup-start doc "tbody" #t))
-    ;; now iterate over the rows 
-    (let ((rownum 0) (colnum 0))
-      (for-each 
-       (lambda (row) 
-         (let ((rowstyle 
-                (gnc:html-table-row-style table rownum))
-               (rowmarkup 
-                (gnc:html-table-row-markup table rownum)))
-           ;; set default row markup
-           (if (not rowmarkup)
-               (set! rowmarkup "tr"))
-           
-           ;; push the style for this row and write the start tag, then 
-           ;; pop it again.
-           (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-start doc rowmarkup #t))
-           (if rowstyle (gnc:html-document-pop-style doc))
-           
-           ;; write the column data, pushing the right column style 
-           ;; each time, then the row style.  
-           (for-each 
-            (lambda (datum)
-              (let ((colstyle 
-                     (gnc:html-table-col-style table colnum)))
-                ;; push col and row styles 
-                (if colstyle (gnc:html-document-push-style doc colstyle))
-                (if rowstyle (gnc:html-document-push-style doc rowstyle))
-                
-                ;; render the cell contents 
-                (if (not (gnc:html-table-cell? datum))
-                    (push (gnc:html-document-markup-start doc "td" #t)))
+    ;; now iterate over the rows
+    (let rowloop ((rows (reverse (gnc:html-table-data table))) (rownum 0))
+      (unless (null? rows)
+        (let* ((row (car rows))
+               (rowstyle (gnc:html-table-row-style table rownum))
+               (rowmarkup (or (gnc:html-table-row-markup table rownum) "tr")))
+
+          ;; push the style for this row and write the start tag, then
+          ;; pop it again.
+          (when rowstyle (gnc:html-document-push-style doc rowstyle))
+          (push (gnc:html-document-markup-start doc rowmarkup #t))
+          (when rowstyle (gnc:html-document-pop-style doc))
+
+          ;; write the column data, pushing the right column style
+          ;; each time, then the row style.
+          (let colloop ((cols row) (colnum 0))
+            (unless (null? cols)
+              (let* ((datum (car cols))
+                     (colstyle (gnc:html-table-col-style table colnum)))
+                ;; push col and row styles
+                (when colstyle (gnc:html-document-push-style doc colstyle))
+                (when rowstyle (gnc:html-document-push-style doc rowstyle))
+
+                ;; render the cell contents
+                (unless (gnc:html-table-cell? datum)
+                  (push (gnc:html-document-markup-start doc "td" #t)))
                 (push (gnc:html-object-render datum doc))
-                (if (not (gnc:html-table-cell? datum))
-                    (push (gnc:html-document-markup-end doc "td")))
-                
-                ;; pop styles 
-                (if rowstyle (gnc:html-document-pop-style doc))
-                (if colstyle (gnc:html-document-pop-style doc))
-                (set! colnum (+ 1 colnum))))
-            row)
-           
-           ;; write the row end tag and pop the row style 
-           (if rowstyle (gnc:html-document-push-style doc rowstyle))
-           (push (gnc:html-document-markup-end doc rowmarkup))
-           (if rowstyle (gnc:html-document-pop-style doc))
-           
-           (set! colnum 0)
-           (set! rownum (+ 1 rownum))))
-       (reverse (gnc:html-table-data table))))
+                (unless (gnc:html-table-cell? datum)
+                  (push (gnc:html-document-markup-end doc "td")))
+
+                ;; pop styles
+                (when rowstyle (gnc:html-document-pop-style doc))
+                (when colstyle (gnc:html-document-pop-style doc))
+                (colloop (cdr cols) (1+ colnum)))))
+
+          ;; write the row end tag and pop the row style
+          (when rowstyle (gnc:html-document-push-style doc rowstyle))
+          (push (gnc:html-document-markup-end doc rowmarkup))
+          (when rowstyle (gnc:html-document-pop-style doc))
+
+          (rowloop (cdr rows) (1+ rownum)))))
     (push (gnc:html-document-markup-end doc "tbody"))
-    
+
     ;; write the table end tag and pop the table style
     (push (gnc:html-document-markup-end doc "table"))
     (gnc:html-document-pop-style doc)

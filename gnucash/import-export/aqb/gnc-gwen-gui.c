@@ -170,9 +170,16 @@ static gboolean keep_alive(GncGWENGui *gui);
 static void cm_close_handler(gpointer user_data);
 static void erase_password(gchar *password);
 static gchar *strip_html(gchar *text);
+#ifndef AQBANKING6
 static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                       const gchar *text, gchar **input, gint min_len,
                       gint max_len);
+#else
+static void get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
+                      const gchar *text, const char *mimeType,
+                      const char *pChallenge, uint32_t lChallenge,
+                      gchar **input, gint min_len, gint max_len);
+#endif
 static gint messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
                           const gchar *text, const gchar *b1, const gchar *b2,
                           const gchar *b3, guint32 guiid);
@@ -190,7 +197,7 @@ static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
 static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
-#ifndef GWENHYWFAR5
+#ifndef AQBANKING6
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              const gchar *token,
                                              const gchar *title,
@@ -977,8 +984,15 @@ strip_html(gchar *text)
 }
 
 static void
+#ifndef AQBANKING6
 get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
           gchar **input, gint min_len, gint max_len)
+#else
+get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
+                      const gchar *text, const char *mimeType,
+                      const char *pChallenge, uint32_t lChallenge,
+                      gchar **input, gint min_len, gint max_len)
+#endif
 {
     GtkBuilder *builder;
     GtkWidget *dialog;
@@ -987,6 +1001,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     GtkWidget *confirm_entry;
     GtkWidget *confirm_label;
     GtkWidget *remember_pin_checkbutton;
+    GtkImage *optical_challenge;
     const gchar *internal_input, *internal_confirmed;
     gboolean confirm = (flags & GWEN_GUI_INPUT_FLAGS_CONFIRM) != 0;
     gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
@@ -1006,6 +1021,14 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
     confirm_entry = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_entry"));
     confirm_label = GTK_WIDGET(gtk_builder_get_object (builder, "confirm_label"));
     remember_pin_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "remember_pin"));
+    optical_challenge = GTK_IMAGE(gtk_builder_get_object (builder, "optical_challenge"));
+    gtk_widget_set_visible(GTK_WIDGET(optical_challenge), FALSE);
+    #ifdef AQBANKING6
+    if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    {
+        gtk_widget_set_visible(GTK_WIDGET(optical_challenge), TRUE);
+    }
+    #endif
     if (is_tan)
     {
         gtk_widget_hide(remember_pin_checkbutton);
@@ -1034,6 +1057,35 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
         gtk_label_set_text(GTK_LABEL(heading_label), raw_text);
         g_free(raw_text);
     }
+
+    #ifdef AQBANKING6
+    //if (optical_challenge)
+    if(mimeType != NULL && pChallenge != NULL && lChallenge > 0)
+    {
+        // convert PNG and load into widget
+        // TBD: check mimeType?
+        guchar *gudata = (guchar*)pChallenge;
+
+        GError *error = NULL;
+        GdkPixbufLoader *loader = gdk_pixbuf_loader_new_with_mime_type(mimeType, &error);
+        GdkPixbuf *pixbuf;
+
+        if(error != NULL)
+        {
+            PERR("Pixbuf loader not loaded: %s, perhaps MIME type %s isn't supported.", error->message, mimeType);
+        }
+
+        gdk_pixbuf_loader_write(loader, gudata, lChallenge, NULL);
+        gdk_pixbuf_loader_close(loader, NULL);
+
+        pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
+
+        g_object_ref(pixbuf);
+        g_object_unref(loader);
+
+        gtk_image_set_from_pixbuf(optical_challenge, pixbuf);
+    }
+    #endif
 
     if (*input)
     {
@@ -1170,7 +1222,11 @@ inputbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
 
     ENTER("gui=%p, flags=%d", gui, flags);
 
+    #ifndef AQBANKING6
     get_input(gui, flags, title, text, &input, min_len, max_len);
+    #else
+    get_input(gui, flags, title, text, NULL, NULL, 0, &input, min_len, max_len);
+    #endif
 
     if (input)
     {
@@ -1406,7 +1462,7 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static gint GNC_GWENHYWFAR_CB
-#ifndef GWENHYWFAR5
+#ifndef AQBANKING6
 getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                const gchar *title, const gchar *text, gchar *buffer,
                gint min_len, gint max_len, guint32 guiid)
@@ -1421,7 +1477,45 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
     gchar *password = NULL;
     gboolean is_tan = (flags & GWEN_GUI_INPUT_FLAGS_TAN) != 0;
 
+    #ifdef AQBANKING6
+    int opticalMethodId;
+    const char *mimeType = NULL;
+    const char *pChallenge = NULL;
+    uint32_t lChallenge = 0;
+    #endif
+
     g_return_val_if_fail(gui, -1);
+
+    #ifdef AQBANKING6
+    // cf. https://www.aquamaniac.de/rdm/projects/aqbanking/wiki/ImplementTanMethods
+    if(is_tan && methodId == GWEN_Gui_PasswordMethod_OpticalHHD)
+    {
+        /**
+        * TODO: How to handle Flicker code (use WebView and JS???)
+        *
+        * use GWEN_Gui_PasswordMethod_Mask to get the basic method id
+        *  cf. gui/gui.h of gwenhywfar
+        */
+        opticalMethodId=GWEN_DB_GetIntValue(methodParams, "tanMethodId", 0, AB_BANKING_TANMETHOD_TEXT);
+        switch(opticalMethodId)
+        {
+            case AB_BANKING_TANMETHOD_PHOTOTAN:
+            case AB_BANKING_TANMETHOD_CHIPTAN_QR:
+            /**
+            * image data is in methodParams
+            */
+            mimeType=GWEN_DB_GetCharValue(methodParams, "mimeType", 0, NULL);
+            pChallenge=(const char*) GWEN_DB_GetBinValue(methodParams, "imageData", 0, NULL, 0, &lChallenge);
+            if (!(pChallenge && lChallenge)) {
+                /* empty optical data */
+                return GWEN_ERROR_NO_DATA;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    #endif
 
     ENTER("gui=%p, flags=%d, token=%s", gui, flags, token ? token : "(null");
 
@@ -1450,7 +1544,11 @@ getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
         }
     }
 
+    #ifndef AQBANKING6
     get_input(gui, flags, title, text, &password, min_len, max_len);
+    #else
+    get_input(gui, flags, title, text, mimeType, pChallenge, lChallenge, &password, min_len, max_len);
+    #endif
 
     if (password)
     {

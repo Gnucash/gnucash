@@ -137,7 +137,7 @@
   <act:parent type="new">9c566ece97799eda4e900b003ce48e48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>EC Reverse VAT Purchase</act:name>
+  <act:name>EU Reverse VAT Purchase</act:name>
   <act:id type="new">6708e3ff1292c2b5defd07da9f858b60</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -273,7 +273,7 @@
   <act:parent type="new">3352145930e40b21fee20532ad07501b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>EC</act:name>
+  <act:name>EU</act:name>
   <act:id type="new">37d726ec68d451d098496b7f5513f6f8</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
@@ -293,7 +293,7 @@
     <cmdty:id>GBP</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>All, including zero rate UK/EC and World  (Box 1)</act:description>
+  <act:description>All, including zero rate UK/EU and World  (Box 1)</act:description>
   <act:parent type="new">a46d9e9624070fcd2427973a4c725ed6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -483,7 +483,7 @@
   <act:parent type="new">86ef7451027dcb6223bb01204ac09a5e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>EEC</act:name>
+  <act:name>EU</act:name>
   <act:id type="new">af74692df15b1de7665d5dd7a197cdfb</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
@@ -491,7 +491,7 @@
     <cmdty:id>GBP</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sales in EEC</act:description>
+  <act:description>Sales in EU</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -509,7 +509,7 @@
     <cmdty:id>GBP</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sale of goods within EEC</act:description>
+  <act:description>Sale of goods within EU</act:description>
   <act:parent type="new">af74692df15b1de7665d5dd7a197cdfb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -521,7 +521,7 @@
     <cmdty:id>GBP</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Sale of services within EEC</act:description>
+  <act:description>Sale of services within EU</act:description>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -726,7 +726,7 @@
   <act:parent type="new">d77071fafc0de8455dd566b805bfcc40</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>EEC Reverse VAT</act:name>
+  <act:name>EU Reverse VAT</act:name>
   <act:id type="new">af9b5ef4814015a83053a4c991ca0c1a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>

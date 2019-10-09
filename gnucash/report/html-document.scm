@@ -105,20 +105,11 @@
        (apply gnc:make-html-data-style-info rest)
        (apply gnc:make-html-markup-style-info rest))))
 
-(define (gnc:html-document-tree-collapse tree)
-  (let ((retval '()))
-    (let loop ((lst tree))
-      (for-each
-       (lambda (elt)
-         (cond
-          ((string? elt)
-           (set! retval (cons elt retval)))
-          ((not (list? elt))
-           (set! retval (cons (object->string elt) retval)))
-          (else
-           (loop elt))))
-       lst))
-    retval))
+(define (gnc:html-document-tree-collapse . tree)
+  (let lp ((e tree) (accum '()))
+    (cond ((list? e) (fold lp accum e))
+          ((string? e) (cons e accum))
+          (else (cons (object->string e) accum)))))
 
 ;; first optional argument is "headers?"
 ;; returns the html document as a string, I think.

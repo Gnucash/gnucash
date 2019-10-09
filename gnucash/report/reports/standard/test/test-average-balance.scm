@@ -67,35 +67,35 @@
     (let* ((options (default-testing-options))
            (sxml (options->sxml options "default")))
       (test-equal "averages"
-        '("0.00" "50.00" "100.00" "150.00" "200.00" "200.00")
+        '("$0.00" "$50.00" "$100.00" "$150.00" "$200.00" "$200.00")
         (get-row-col sxml #f 3))
       (test-equal "maximums"
-        '("0.00" "100.00" "100.00" "200.00" "200.00" "200.00")
+        '("$0.00" "$100.00" "$100.00" "$200.00" "$200.00" "$200.00")
         (get-row-col sxml #f 4))
       (test-equal "minimums"
-        '("0.00" "0.00" "100.00" "100.00" "200.00" "200.00")
+        '("$0.00" "$0.00" "$100.00" "$100.00" "$200.00" "$200.00")
         (get-row-col sxml #f 5))
       (test-equal "net"
-        '("0.00" "100.00" "0.00" "100.00" "0.00" "0.00")
+        '("$0.00" "$100.00" "$0.00" "$100.00" "$0.00" "$0.00")
         (get-row-col sxml #f 8)))
 
     (env-transfer env 15 03 1979 bank bank2 25)
     (let* ((options (default-testing-options))
            (sxml (options->sxml options "include-internal")))
       (test-equal "gains-include-internal"
-        '("0.00" "100.00" "25.00" "100.00" "0.00" "0.00")
+        '("$0.00" "$100.00" "$25.00" "$100.00" "$0.00" "$0.00")
         (get-row-col sxml #f 6))
       (test-equal "loss-include-internal"
-        '("0.00" "0.00" "25.00" "0.00" "0.00" "0.00")
+        '("$0.00" "$0.00" "$25.00" "$0.00" "$0.00" "$0.00")
         (get-row-col sxml #f 7)))
 
     (let* ((options (default-testing-options)))
       (set-option! options "Accounts" "Exclude transactions between selected accounts" #t)
       (let ((sxml (options->sxml options "exclude-internal")))
         (test-equal "gain-exclude-internal"
-          '("0.00" "100.00" "0.00" "100.00" "0.00" "0.00")
+          '("$0.00" "$100.00" "$0.00" "$100.00" "$0.00" "$0.00")
           (get-row-col sxml #f 6))
         (test-equal "loss-exclude-internal"
-          '("0.00" "0.00" "0.00" "0.00" "0.00" "0.00")
+          '("$0.00" "$0.00" "$0.00" "$0.00" "$0.00" "$0.00")
           (get-row-col sxml #f 7))))
     (teardown)))

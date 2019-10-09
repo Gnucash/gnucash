@@ -467,7 +467,8 @@
           ;; make a table (optionally)
 	  (gnc:report-percent-done 80)
           (if show-table? 
-              (let ((table (gnc:make-html-table)))
+              (let ((table (gnc:make-html-table))
+                    (scu (gnc-commodity-get-fraction report-currency)))
                 (gnc:html-table-set-col-headers!
                  table columns)
                 (for-each
@@ -479,7 +480,14 @@
                      (list "date-cell" "date-cell"
                            "number-cell" "number-cell" "number-cell"
                            "number-cell" "number-cell" "number-cell")
-                     row)))
+                     (cons* (car row)
+                            (cadr row)
+                            (map
+                             (lambda (amt)
+                               (gnc:make-gnc-monetary
+                                report-currency
+                                (gnc-numeric-convert amt scu GNC-RND-ROUND)))
+                             (cddr row))))))
                  data)
                 (gnc:html-document-add-object! document table))))
 
