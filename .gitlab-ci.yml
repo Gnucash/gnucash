@@ -12,7 +12,7 @@ build:
     - mkdir build
     - ls
     - cd build
-    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build ~/build/dthompson2016/gnucash/.git/gnucash/
+    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build ~/builds/dthompson2016/gnucash/.git/gnucash/
     - Make
     - Make-install
   artifacts:
