@@ -395,6 +395,7 @@ gnucash/register/ledger-core/gncmod-ledger-core.c
 gnucash/register/ledger-core/split-register.c
 gnucash/register/ledger-core/split-register-control.c
 gnucash/register/ledger-core/split-register-copy-ops.c
+gnucash/register/ledger-core/split-register-copy-ops-internals.c
 gnucash/register/ledger-core/split-register-layout.c
 gnucash/register/ledger-core/split-register-load.c
 gnucash/register/ledger-core/split-register-model.c
