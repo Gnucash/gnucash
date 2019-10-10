@@ -2,7 +2,6 @@ before_script:
   - echo "installing dependancies"
   - apt-get update
   - apt-get install
-  - apt-get cmake
   - apt-get install cmake -y
   - apt-get install build-essential fakeroot -y
   - apt-get install libtool libltdl-dev libglib2.0 libglib2.0-dev icu-devtools libicu-dev libboost-all-dev guile-2.0 guile-2.0-dev swig libxml2 libxml++2.6-dev libxml2-utils libxslt1.1 libxslt1-dev xsltproc texinfo libsecret-1-0 gtk+3.0 libgtk-3-dev libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev libdbd-sqlite3 libdbd-pgsql libdbd-mysql aqbanking-tools libaqbanking-dev gwenhywfar-tools libgwenhywfar60 libgwenhywfar60-dev ktoblzcheck libktoblzcheck1-dev libofx-dev libdbi-dev google-mock libgtest-dev -y
