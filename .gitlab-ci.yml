@@ -13,7 +13,7 @@ build:
     - pwd
     - ls
     - cd build
-    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build {$PWD}/gnucash/
+    - cmake -D CMAKE_INSTALL_PREFIX=$PWD ~/gnucash/
     - Make
     - Make-install
   artifacts:
