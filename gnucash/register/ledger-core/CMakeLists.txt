@@ -8,6 +8,7 @@ set (ledger_core_SOURCES
   split-register.c
   split-register-control.c
   split-register-copy-ops.c
+  split-register-copy-ops-internals.c
   split-register-layout.c
   split-register-load.c
   split-register-model.c
@@ -28,6 +29,7 @@ set (ledger_core_HEADERS
   split-register.h
   split-register-control.h
   split-register-copy-ops.h
+  split-register-copy-ops-internals.h
   split-register-layout.h
   split-register-model.h
   split-register-model-save.h
