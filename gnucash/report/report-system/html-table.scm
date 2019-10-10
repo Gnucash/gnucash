@@ -406,77 +406,34 @@
     (gnc:html-table-set-cell-datum! table row col tc)))
 
 (define (gnc:html-table-append-column! table newcol)
-
-  ;; append the elements of newcol to each of the existing rows,
-  ;; widening to width-to-make if necessary
-  (define (append-to-element newcol existing-data length-to-append colnum)
-    (if (= length-to-append 0)
-        (cons '() newcol)
-        (let ((result (append-to-element
-                       (cdr newcol) (cdr existing-data) (1- length-to-append)
-                       colnum)))
-          (cons (cons (list-set-safe! (car existing-data) colnum (car newcol))
-                      (car result))
-                (cdr result)))))
-
-  (let* ((old-data (reverse (gnc:html-table-data table)))
-         (old-numrows (length old-data))
-         (old-numcols (apply max (cons 0 (map length old-data))))
-         (new-numrows (length newcol)))
-    (if (<= new-numrows old-numrows)
-        (gnc:html-table-set-data!
-         table
-         (reverse (car (append-to-element newcol old-data new-numrows old-numcols))))
-        (let ((res (append-to-element newcol old-data old-numrows old-numcols)))
-          ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse (car res)))
-
-          (for-each
-           (lambda (element)
-             (gnc:html-table-append-row!
-              table (list-set-safe! '() old-numcols element)))
-           (cdr res))))))
+  (define width (apply max (cons 0 (map length (gnc:html-table-data table)))))
+  (table-column-driver table newcol (lambda (a b) (list-set-safe! b width a))))
 
 (define (gnc:html-table-prepend-column! table newcol)
-  ;; returns a pair, the car of which is the prepending of newcol
-  ;; and existing-data, and the cdr is the remaining elements of newcol
-  (define (prepend-to-element newcol existing-data length-to-append)
-    (if (= length-to-append 0)
-        (cons '() newcol)
-        (let* 
-            ((current-new (car newcol))
-             (current-existing (car existing-data))
-             (rest-new (cdr newcol))
-             (rest-existing (cdr existing-data))
-             (rest-result (prepend-to-element rest-new rest-existing 
-                                              (- length-to-append 1))))
-          (cons 
-           (cons (cons current-new current-existing) (car rest-result))
-           (cdr rest-result)))))
-  (issue-deprecation-warning "gnc:html-table-prepend-column! is unused.")
-  (let* ((existing-data (reverse (gnc:html-table-data table)))
-	 (existing-length (length existing-data))
-	 (newcol-length (length newcol)))
-    (if (<= newcol-length existing-length)
-        (gnc:html-table-set-data!
-         table
-         (reverse (car (prepend-to-element 
-                        newcol
-                        existing-data
-                        newcol-length))))
-        (let* ((temp-result (prepend-to-element
-                             newcol
-                             existing-data
-                             existing-length))
-               (joined-table-data (car temp-result))
-               (remaining-elements (cdr temp-result)))
-          ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse joined-table-data))
-          (for-each 
-           (lambda (element)
-             (gnc:html-table-append-row! table (list element)))
-           remaining-elements)
-          #f))))
+  (table-column-driver table newcol cons))
+
+;; this is a helper function for gnc:html-table-append-column! and
+;; gnc:html-table-prepend-column! use only
+(define (table-column-driver table newcol add-fn)
+  (let lp ((newcol newcol)
+           (olddata (reverse (gnc:html-table-data table)))
+           (res '())
+           (numrows 0))
+    (cond
+     ((null? newcol)
+      (gnc:html-table-set-num-rows-internal! table numrows)
+      (gnc:html-table-set-data! table res))
+     ((null? olddata)
+      (lp (cdr newcol)
+          '()
+          (cons (add-fn (car newcol) '()) res)
+          (1+ numrows)))
+     (else
+      (lp (cdr newcol)
+          (cdr olddata)
+          (cons (add-fn (car newcol) (car olddata)) res)
+          (1+ numrows))))))
+
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
