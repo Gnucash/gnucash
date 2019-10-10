@@ -32,13 +32,6 @@
 #include "Account.h"
 #include "gnc-guile-utils.h"
 
-
-/* Two functions that return string synonyms for the terms 'debit' and
- * 'credit' as appropriate for the given account type and user preferences.
- * They should be g_freed when no longer needed. */
-char * gnc_get_debit_string(GNCAccountType account_type);
-char * gnc_get_credit_string(GNCAccountType account_type);
-
 /** An opaque process structure returned by gnc_spawn_process_async. */
 typedef struct _Process Process;
 

@@ -63,12 +63,6 @@
 /* This static indicates the debugging module this .o belongs to.  */
 static QofLogModule UNUSED_VAR log_module = GNC_MOD_GUILE;
 
-struct _getters
-{
-    SCM debit_string;
-    SCM credit_string;
-} getters;
-
 struct _Process
 {
     GPid pid;
@@ -78,83 +72,6 @@ struct _Process
     gboolean dead;
     gboolean detached;
 };
-
-static void
-initialize_scm_functions()
-{
-    static gboolean scm_funcs_inited = FALSE;
-
-    if (scm_funcs_inited)
-        return;
-
-    getters.debit_string = scm_c_eval_string("gnc:get-debit-string");
-    getters.credit_string = scm_c_eval_string("gnc:get-credit-string");
-
-    scm_funcs_inited = TRUE;
-}
-
-
-/********************************************************************\
- * gnc_get_debit_string                                             *
- *   return a debit string for a given account type                 *
- *                                                                  *
- * Args: account_type - type of account to get debit string for     *
- * Return: g_malloc'd debit string or NULL                          *
-\********************************************************************/
-char *
-gnc_get_debit_string(GNCAccountType account_type)
-{
-    SCM result;
-    SCM arg;
-
-    initialize_scm_functions();
-
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return g_strdup(_("Debit"));
-
-    if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
-        account_type = ACCT_TYPE_NONE;
-
-    arg = scm_from_long (account_type);
-
-    result = scm_call_1(getters.debit_string, arg);
-    if (!scm_is_string(result))
-        return NULL;
-
-    return scm_to_utf8_string(result);
-}
-
-
-/************************************************************************\
- * gnc_get_credit_string                                                *
- *   return a credit string for a given account type                    *
- *                                                                      *
- * Args: account_type - type of account to get credit string for        *
- * Return: g_malloc'd credit string or NULL, must be freed with g_free  *
-\************************************************************************/
-char *
-gnc_get_credit_string(GNCAccountType account_type)
-{
-    SCM result;
-    SCM arg;
-
-    initialize_scm_functions();
-
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return g_strdup(_("Credit"));
-
-    if ((account_type < ACCT_TYPE_NONE) || (account_type >= NUM_ACCOUNT_TYPES))
-        account_type = ACCT_TYPE_NONE;
-
-    arg = scm_from_long (account_type);
-
-    result = scm_call_1(getters.credit_string, arg);
-    if (!scm_is_string(result))
-        return NULL;
-
-    return gnc_scm_to_utf8_string(result);
-}
-
 
 static void
 on_child_exit (GPid pid, gint status, gpointer data)
