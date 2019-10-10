@@ -1936,11 +1936,13 @@ be excluded from periodic reporting.")
 
   (let* ((document (gnc:make-html-document))
          (account-matcher (opt-val pagename-filter optname-account-matcher))
-         (account-matcher-regexp (and (opt-val pagename-filter
-                                               optname-account-matcher-regex)
-                                      (catch 'regular-expression-syntax
-                                        (lambda () (make-regexp account-matcher))
-                                        (const 'invalid-regex))))
+         (account-matcher-regexp
+          (and (opt-val pagename-filter optname-account-matcher-regex)
+               (if (defined? 'make-regexp)
+                   (catch 'regular-expression-syntax
+                     (lambda () (make-regexp account-matcher))
+                     (const 'invalid-account-regex))
+                   'no-guile-regex-support)))
          (c_account_0 (or custom-source-accounts
                           (opt-val gnc:pagename-accounts optname-accounts)))
          (c_account_1 (filter
@@ -1962,9 +1964,11 @@ be excluded from periodic reporting.")
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
          (transaction-matcher-regexp
           (and (opt-val pagename-filter optname-transaction-matcher-regex)
-               (catch 'regular-expression-syntax
-                 (lambda () (make-regexp transaction-matcher))
-                 (const 'invalid-regex))))
+               (if (defined? 'make-regexp)
+                   (catch 'regular-expression-syntax
+                     (lambda () (make-regexp transaction-matcher))
+                     (const 'invalid-transaction-regex))
+                   'no-guile-regex-support)))
          (reconcile-status-filter
           (keylist-get-info reconcile-status-list
                             (opt-val pagename-filter optname-reconcile-status)
@@ -2042,14 +2046,26 @@ be excluded from periodic reporting.")
 
     (cond
      ((or (null? c_account_1)
-          (eq? account-matcher-regexp 'invalid-regex)
-          (eq? transaction-matcher-regexp 'invalid-regex))
+          (symbol? account-matcher-regexp)
+          (symbol? transaction-matcher-regexp))
 
-      ;; error condition: no accounts specified or obtained after filtering
       (gnc:html-document-add-object!
        document
-       (gnc:html-make-no-account-warning
-        report-title (gnc:report-id report-obj)))
+       (cond
+        ((null? c_account_1)
+         (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
+
+        ((symbol? account-matcher-regexp)
+         (gnc:html-make-generic-warning
+          report-title (gnc:report-id report-obj)
+          (string-append (_ "Error") " " (symbol->string account-matcher-regexp))
+          ""))
+
+        ((symbol? transaction-matcher-regexp)
+         (gnc:html-make-generic-warning
+          report-title (gnc:report-id report-obj)
+          (string-append (_ "Error") " " (symbol->string transaction-matcher-regexp))
+          ""))))
 
       ;; if an empty-report-message is passed by a derived report to
       ;; the renderer, display it here.
