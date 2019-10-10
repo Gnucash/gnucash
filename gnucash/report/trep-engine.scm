@@ -1264,8 +1264,8 @@ be excluded from periodic reporting.")
            (row-currency (lambda (s) (if (column-uses? 'common-currency)
                                          (opt-val gnc:pagename-general optname-currency)
                                          (split-currency s))))
-           (friendly-debit (lambda (a) (gnc:get-debit-string (xaccAccountGetType a))))
-           (friendly-credit (lambda (a) (gnc:get-credit-string (xaccAccountGetType a))))
+           (friendly-debit (lambda (a) (gnc-account-get-debit-string (xaccAccountGetType a))))
+           (friendly-credit (lambda (a) (gnc-account-get-credit-string (xaccAccountGetType a))))
            (header-commodity (lambda (str)
                                (string-append
                                 str

@@ -166,7 +166,6 @@ set (app_utils_SCHEME_1
     c-interface.scm
     date-utilities.scm
     options.scm
-    prefs.scm
     fin.scm
 )
 

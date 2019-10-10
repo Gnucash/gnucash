@@ -1238,6 +1238,17 @@ gint64 xaccAccountGetTaxUSCopyNumber (const Account *account);
 void xaccAccountSetTaxUSCopyNumber (Account *account, gint64 copy_number);
 /** @} */
 
+/** @name Account type debit/credit string getters
+ @ {      *
+ */
+
+/** Get the debit string associated with this account type */
+const char *gnc_account_get_debit_string (GNCAccountType acct_type);
+/** Get the credit string associated with this account type */
+const char *gnc_account_get_credit_string (GNCAccountType acct_type);
+
+/** @} */
+
 
 /** @name Account marking
 @{

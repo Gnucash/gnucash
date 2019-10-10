@@ -152,11 +152,6 @@
                            (list category key))))
 (export gnc:option-get-value)
 
-;; prefs.scm
-(export gnc:get-debit-string)
-(export gnc:get-credit-string)
-(export gnc:config-file-format-version)
-
 ;; gw-engine-spec.scm
 (re-export HOOK-SAVE-OPTIONS)
 
@@ -256,7 +251,6 @@
 
 (load-from-path "gnucash/app-utils/c-interface")
 (load-from-path "gnucash/app-utils/options")
-(load-from-path "gnucash/app-utils/prefs")
 (load-from-path "gnucash/app-utils/date-utilities")
 
 ;; Business options
@@ -311,3 +305,15 @@
 
 (load-from-path "gnucash/app-utils/business-options")
 (load-from-path "gnucash/app-utils/business-prefs")
+
+
+;; Symbols deprecated in 4.x, to remove for 5.x
+(define-public (gnc:get-debit-string acct-type)
+    (issue-deprecation-warning "gnc:get-debit-string is deprecated. Please use (gnucash engine)'s gnc-account-get-debit-string instead.")
+    (gnc-account-get-debit-string acct-type))
+(define-public (gnc:get-credit-string acct-type)
+    (issue-deprecation-warning "gnc:get-credit-string is deprecated. Please use (gnucash engine)'s gnc-account-get-credit-string instead.")
+    (gnc-account-get-debit-string acct-type))
+(define-public (gnc:config-file-format-version version)
+    (issue-deprecation-warning "gnc:config-file-format-version is deprecated and will be removed from a future version.")
+    #t)
