@@ -13,6 +13,6 @@ build:
     - Make
     - Make-install
   artifacts:
-  paths:
-    - build/
+    paths:
+      - build/
       
