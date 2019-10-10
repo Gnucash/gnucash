@@ -39,7 +39,7 @@
 #include "gnc-ui.h"
 #include "gnc-warnings.h"
 #include "guile-util.h"
-#include "split-register-copy-ops-internals.h"
+#include "split-register-copy-ops.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "quickfillcell.h"

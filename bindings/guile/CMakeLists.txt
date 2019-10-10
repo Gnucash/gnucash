@@ -81,7 +81,6 @@ gnc_add_scheme_targets(scm-core-utils
 
 set (engine_SCHEME_0
     commodity-table.scm
-    engine-interface.scm
     engine-utilities.scm
     gnc-numeric.scm
     business-core.scm
