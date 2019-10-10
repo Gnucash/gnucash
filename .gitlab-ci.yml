@@ -6,7 +6,13 @@ before_script:
   - mkdir build
   
 build:
-  - cd build
-  - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build ~/git/gnucash/gnucash/
-  - Make
-  - Make-install
+  stage: build
+  script:
+    - cd build
+    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build ~/git/gnucash/gnucash/
+    - Make
+    - Make-install
+      artifacts:
+        paths:
+          - build/
+      
