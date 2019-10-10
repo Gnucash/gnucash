@@ -13,7 +13,7 @@ build:
     - pwd
     - ls
     - cd build
-    - cmake -D CMAKE_INSTALL_PREFIX=$PWD ~$PWD/../
+    - cmake -D CMAKE_INSTALL_PREFIX=$PWD ../
     - Make
     - Make-install
   artifacts:
