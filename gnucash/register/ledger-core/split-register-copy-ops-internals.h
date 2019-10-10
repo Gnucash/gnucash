@@ -132,6 +132,7 @@ void gnc_float_txn_append_float_split (floating_txn *ft, floating_split *fs);
 floating_txn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics);
 
 /* Scheme: gnc:transaction-scm-onto-transaction */
-void gnc_float_txn_to_txn (const floating_txn *ft, Transaction *txn, GHashTable* account_map, gboolean commit, QofBook *book);
+void gnc_float_txn_to_txn (const floating_txn *ft, Transaction *txn, gboolean do_commit, QofBook *book);
+void gnc_float_txn_to_txn_swap_accounts (const floating_txn *ft, Transaction *txn, Account *acct1, Account *acct2, gboolean do_commit, QofBook *book);
 
 #endif

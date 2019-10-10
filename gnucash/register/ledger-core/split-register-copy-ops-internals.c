@@ -401,7 +401,12 @@ floating_txn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics
    Copy a scheme representation of a transaction onto a C transaction.
    guid-mapping must be an alist, mapping guids to guids. This list is
    used to use alternate account guids when creating splits. */
-void gnc_float_txn_to_txn (const floating_txn *ft, Transaction *txn, GHashTable* account_map, gboolean commit, QofBook *book)
+void gnc_float_txn_to_txn (const floating_txn *ft, Transaction *txn, gboolean do_commit, QofBook *book)
+{
+    gnc_float_txn_to_txn_swap_accounts (ft, txn, NULL, NULL, do_commit, book);
+}
+
+void gnc_float_txn_to_txn_swap_accounts (const floating_txn *ft, Transaction *txn, Account *acct1, Account *acct2, gboolean do_commit, QofBook *book)
 {
     GList *iter;
 
@@ -439,17 +444,22 @@ void gnc_float_txn_to_txn (const floating_txn *ft, Transaction *txn, GHashTable*
             continue;
 
         split = xaccMallocSplit (book);
-        old_acc = fs->m_account;
-        new_acc = g_hash_table_lookup (account_map, old_acc);
-        if (new_acc)
-            fs->m_account = new_acc;
 
+        old_acc = fs->m_account;
+        if (fs->m_account == acct1)
+            new_acc = acct2;
+        else if  (fs->m_account == acct2)
+            new_acc = acct1;
+        else
+            new_acc = fs->m_account;
+
+        fs->m_account = new_acc;
         gnc_float_split_to_split (fs, split);
         fs->m_account = old_acc;
         xaccSplitSetParent (split, txn);
     }
 
     /* close the transaction */
-    if (commit)
+    if (do_commit)
         xaccTransCommitEdit (txn);
 }

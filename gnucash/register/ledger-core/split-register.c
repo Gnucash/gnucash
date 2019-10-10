@@ -27,7 +27,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 
 #include "combocell.h"
 #include "datecell.h"
@@ -40,7 +39,7 @@
 #include "gnc-ui.h"
 #include "gnc-warnings.h"
 #include "guile-util.h"
-#include "split-register-copy-ops.h"
+#include "split-register-copy-ops-internals.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "quickfillcell.h"
@@ -63,13 +62,24 @@
 static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* The copied split or transaction, if any */
+typedef struct
+{
+    GType ftype;
+    union
+    {
+        floating_split *fs;
+        floating_txn *ft;
+    };
+} ft_fs_store;
+
+static ft_fs_store copied_item = { 0, { NULL } };
 static CursorClass copied_class = CURSOR_CLASS_NONE;
-static SCM copied_item = SCM_UNDEFINED;
 static GncGUID copied_leader_guid;
+
 /** static prototypes *****************************************************/
 
-static gboolean gnc_split_register_save_to_scm (SplitRegister *reg,
-        SCM trans_scm, SCM split_scm,
+static gboolean gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
+        floating_txn *ft, floating_split *fs,
         gboolean use_cut_semantics);
 static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
         Split *split);
@@ -77,38 +87,36 @@ static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
 
 /** implementations *******************************************************/
 
-/* Uses the scheme split copying routines */
 static void
 gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
 {
-    SCM split_scm;
+    floating_split *fs;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    split_scm = gnc_copy_split(from, use_cut_semantics);
-    if (split_scm == SCM_UNDEFINED)
+    fs = gnc_split_to_float_split (from);
+    if (!fs)
         return;
 
-    gnc_copy_split_scm_onto_split(split_scm, to, gnc_get_current_book ());
+    gnc_float_split_to_split (fs, to);
 }
 
-/* Uses the scheme transaction copying routines */
 void
 gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
                           gboolean use_cut_semantics,
                           gboolean do_commit)
 {
-    SCM trans_scm;
+    floating_txn *ft;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    trans_scm = gnc_copy_trans(from, use_cut_semantics);
-    if (trans_scm == SCM_UNDEFINED)
+    ft = gnc_txn_to_float_txn (from, use_cut_semantics);
+    if (!ft)
         return;
 
-    gnc_copy_trans_scm_onto_trans(trans_scm, to, do_commit,
+    gnc_float_txn_to_txn (ft, to, do_commit,
                                   gnc_get_current_book ());
 }
 
@@ -706,7 +714,8 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
     Split *blank_split;
     gboolean changed;
     Split *split;
-    SCM new_item;
+    floating_split *new_fs = NULL;
+    floating_txn *new_ft = NULL;
 
     g_return_if_fail(reg);
     ENTER("reg=%p, use_cut_semantics=%s", reg,
@@ -762,12 +771,12 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
     if (cursor_class == CURSOR_CLASS_SPLIT)
     {
         /* We are on a split in an expanded transaction. Just copy the split. */
-        new_item = gnc_copy_split(split, use_cut_semantics);
+        new_fs = gnc_split_to_float_split (split);
 
-        if (new_item != SCM_UNDEFINED)
+        if (new_fs)
         {
             if (changed)
-                gnc_split_register_save_to_scm (reg, SCM_UNDEFINED, new_item,
+                gnc_split_register_save_to_copy_buffer (reg, NULL, new_fs,
                                                 use_cut_semantics);
 
             copied_leader_guid = *guid_null();
@@ -776,22 +785,22 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
     else
     {
         /* We are on a transaction row. Copy the whole transaction. */
-        new_item = gnc_copy_trans(trans, use_cut_semantics);
+        new_ft = gnc_txn_to_float_txn (trans, use_cut_semantics);
 
-        if (new_item != SCM_UNDEFINED)
+        if (new_ft)
         {
             if (changed)
             {
                 int split_index;
-                SCM split_scm;
+                floating_split *fs;
 
                 split_index = xaccTransGetSplitIndex(trans, split);
                 if (split_index >= 0)
-                    split_scm = gnc_trans_scm_get_split_scm(new_item, split_index);
+                    fs = gnc_float_txn_get_float_split(new_ft, split_index);
                 else
-                    split_scm = SCM_UNDEFINED;
+                    fs = NULL;
 
-                gnc_split_register_save_to_scm (reg, new_item, split_scm,
+                gnc_split_register_save_to_copy_buffer (reg, new_ft, fs,
                                                 use_cut_semantics);
             }
 
@@ -799,7 +808,7 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
         }
     }
 
-    if (new_item == SCM_UNDEFINED)
+    if (!new_fs && !new_ft)
     {
         g_warning("BUG DETECTED: copy failed");
         LEAVE("copy failed");
@@ -807,11 +816,22 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
     }
 
     /* unprotect the old object, if any */
-    if (copied_item != SCM_UNDEFINED)
-        scm_gc_unprotect_object(copied_item);
+    if (copied_item.ftype == GNC_TYPE_SPLIT)
+        g_free (copied_item.fs);
+    if (copied_item.ftype == GNC_TYPE_TRANSACTION)
+        g_free (copied_item.ft);
+    copied_item.ftype = 0;
 
-    copied_item = new_item;
-    scm_gc_protect_object(copied_item);
+    if (new_fs)
+    {
+        copied_item.fs = new_fs;
+        copied_item.ftype = GNC_TYPE_SPLIT;
+    }
+    else if (new_ft)
+    {
+        copied_item.ft = new_ft;
+        copied_item.ftype = GNC_TYPE_TRANSACTION;
+    }
 
     copied_class = cursor_class;
     LEAVE("%s %s", use_cut_semantics ? "cut" : "copied",
@@ -970,8 +990,13 @@ gnc_split_register_paste_current (SplitRegister *reg)
             xaccSplitSetParent(split, trans);
         }
 
-        gnc_copy_split_scm_onto_split(copied_item, split,
-                                      gnc_get_current_book ());
+        if (copied_item.ftype != GNC_TYPE_SPLIT)
+        {
+            LEAVE("copy buffer doesn't represent a split");
+            return;
+        }
+
+        gnc_float_split_to_split (copied_item.fs, split);
     }
     else
     {
@@ -979,6 +1004,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
                                 "transaction. "
                                 "Are you sure you want to do that?");
         Account * copied_leader;
+        Account * default_account;
         const GncGUID *new_guid;
         int trans_split_index;
         int split_index;
@@ -987,6 +1013,13 @@ gnc_split_register_paste_current (SplitRegister *reg)
         if (copied_class == CURSOR_CLASS_SPLIT)
         {
             LEAVE("can't copy split to transaction");
+            return;
+        }
+
+
+        if (copied_item.ftype != GNC_TYPE_TRANSACTION)
+        {
+            LEAVE("copy buffer doesn't represent a transaction");
             return;
         }
 
@@ -1016,16 +1049,16 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
         copied_leader = xaccAccountLookup(&copied_leader_guid,
                                           gnc_get_current_book());
-        if (copied_leader && (gnc_split_register_get_default_account(reg) != NULL))
+        default_account = gnc_split_register_get_default_account(reg);
+        if (copied_leader && default_account)
         {
-            new_guid = &info->default_account;
-            gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
-                    &copied_leader_guid,
-                    new_guid, FALSE,
+            gnc_float_txn_to_txn_swap_accounts (copied_item.ft, trans,
+                    copied_leader,
+                    default_account, FALSE,
                     gnc_get_current_book ());
         }
         else
-            gnc_copy_trans_scm_onto_trans(copied_item, trans, FALSE,
+            gnc_float_txn_to_txn (copied_item.ft, trans, FALSE,
                                           gnc_get_current_book ());
 
         num_splits = xaccTransCountSplits(trans);
@@ -1445,11 +1478,11 @@ gnc_split_register_redraw (SplitRegister *reg)
 /* Copy from the register object to scheme. This needs to be
  * in sync with gnc_split_register_save and xaccSRSaveChangedCells. */
 static gboolean
-gnc_split_register_save_to_scm (SplitRegister *reg,
-                                SCM trans_scm, SCM split_scm,
+gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
+                                floating_txn *ft, floating_split *fs,
                                 gboolean use_cut_semantics)
 {
-    SCM other_split_scm = SCM_UNDEFINED;
+    floating_split *other_fs = NULL;
     Transaction *trans;
 
     /* use the changed flag to avoid heavy-weight updates
@@ -1519,7 +1552,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         cell = gnc_table_layout_get_cell (reg->table->layout, RECN_CELL);
         flag = gnc_recn_cell_get_flag ((RecnCell *) cell);
 
-        gnc_split_scm_set_reconcile_state(split_scm, flag);
+        gnc_float_split_set_reconcile_state (fs, flag);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, ACTN_CELL, TRUE))
@@ -1527,7 +1560,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, ACTN_CELL);
-        gnc_split_scm_set_action (split_scm, value);
+        gnc_float_split_set_action (fs, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, MEMO_CELL, TRUE))
@@ -1535,7 +1568,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, MEMO_CELL);
-        gnc_split_scm_set_memo (split_scm, value);
+        gnc_float_split_set_memo (fs, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, XFRM_CELL, TRUE))
@@ -1545,38 +1578,38 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         new_account = gnc_split_register_get_account (reg, XFRM_CELL);
 
         if (new_account != NULL)
-            gnc_split_scm_set_account (split_scm, new_account);
+            gnc_float_split_set_account (fs, new_account);
     }
 
     if (reg->style == REG_STYLE_LEDGER)
-        other_split_scm = gnc_trans_scm_get_other_split_scm (trans_scm, split_scm);
+        other_fs = gnc_float_txn_get_other_float_split (ft, fs);
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, MXFRM_CELL, TRUE))
     {
-        other_split_scm = gnc_trans_scm_get_other_split_scm (trans_scm, split_scm);
+        other_fs = gnc_float_txn_get_other_float_split (ft, fs);
 
-        if (other_split_scm == SCM_UNDEFINED)
+        if (!other_fs)
         {
-            if (gnc_trans_scm_get_num_splits(trans_scm) == 1)
+            if (g_list_length (ft->m_splits) == 1)
             {
                 Split *temp_split;
 
                 temp_split = xaccMallocSplit (gnc_get_current_book ());
-                other_split_scm = gnc_copy_split (temp_split, use_cut_semantics);
+                other_fs = gnc_split_to_float_split (temp_split);
                 xaccSplitDestroy (temp_split);
 
-                gnc_trans_scm_append_split_scm (trans_scm, other_split_scm);
+                gnc_float_txn_append_float_split (ft, other_fs);
             }
         }
 
-        if (other_split_scm != SCM_UNDEFINED)
+        if (other_fs)
         {
             Account *new_account;
 
             new_account = gnc_split_register_get_account (reg, MXFRM_CELL);
 
             if (new_account != NULL)
-                gnc_split_scm_set_account (other_split_scm, new_account);
+                gnc_float_split_set_account (other_fs, new_account);
         }
     }
 
@@ -1598,7 +1631,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         new_value = gnc_numeric_sub_fixed (debit, credit);
 
-        gnc_split_scm_set_value (split_scm, new_value);
+        gnc_float_split_set_value (fs, new_value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, PRIC_CELL, TRUE))
@@ -1615,7 +1648,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         shares = gnc_price_cell_get_value ((PriceCell *) cell);
 
-        gnc_split_scm_set_amount (split_scm, shares);
+        gnc_float_split_set_amount (fs, shares);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout,
@@ -1627,15 +1660,15 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
             gnc_table_layout_get_cell_changed (reg->table->layout,
                     SHRS_CELL, TRUE))
     {
-        if (other_split_scm != SCM_UNDEFINED)
+        if (other_fs)
         {
             gnc_numeric num;
 
-            num = gnc_split_scm_get_amount (split_scm);
-            gnc_split_scm_set_amount (other_split_scm, gnc_numeric_neg (num));
+            num = gnc_float_split_get_amount (fs);
+            gnc_float_split_set_amount (other_fs, gnc_numeric_neg (num));
 
-            num = gnc_split_scm_get_value (split_scm);
-            gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
+            num = gnc_float_split_get_value (fs);
+            gnc_float_split_set_value (other_fs, gnc_numeric_neg (num));
         }
     }
 
