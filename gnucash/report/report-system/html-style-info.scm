@@ -21,6 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-markup-style-info> class 
@@ -68,28 +69,19 @@
 
 (define (gnc:html-markup-style-info-set! style . rest)
   (let loop ((arglist rest))
-    (if (and (list? arglist)
-             (not (null? arglist))
-             (not (null? (cdr arglist))))
-        (let* ((field (car arglist))
-               (value (cadr arglist)))
-          (if (eq? field 'attribute)
-              (if (list? value)
-                  (gnc:html-markup-style-info-set-attribute!
-                   style (car value) 
-		   (if (null? (cdr value))
-		       #f
-		       (cadr value))))
-	      (begin 
-		(if (memq field '(font-size font-face font-color))
-		    (gnc:html-markup-style-info-set-closing-font-tag!
-		     style
-		     (not (eq? value #f))))
-		(let ((modifier 
-                     (record-modifier <html-markup-style-info> field)))
-                (modifier style value))))
-          (loop (cddr arglist)))))
-  style)
+    (match arglist
+      (('attribute (key . val) . rest)
+       (gnc:html-markup-style-info-set-attribute!
+        style key (and (pair? val) (car val)))
+       (loop rest))
+
+      ((field value . rest)
+       (when (memq field '(font-size font-face font-color))
+         (gnc:html-markup-style-info-set-closing-font-tag! style (and value #t)))
+       ((record-modifier <html-markup-style-info> field) style value)
+       (loop rest))
+
+      (else style))))
 
 (define gnc:html-markup-style-info-tag
   (record-accessor <html-markup-style-info> 'tag))
