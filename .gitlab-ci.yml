@@ -10,9 +10,10 @@ build:
   stage: build
   script:
     - mkdir build
+    - pwd
     - ls
     - cd build
-    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build ~/builds/dthompson2016/gnucash/.git/gnucash/
+    - cmake -D CMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build {$PWD}/gnucash/
     - Make
     - Make-install
   artifacts:
