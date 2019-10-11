@@ -263,6 +263,9 @@
 
     options))
 
+(define (html-markup-ol lst)
+  (apply gnc:html-markup "ol" (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
+
 ;; creates a footnotes collector. (make-footnote-collector) => coll
 ;; (coll elt) adds elt to store, returns html-text containing ref eg. [1]
 ;; (coll 'list) returns html-text containing <ul> of all elts
@@ -270,19 +273,18 @@
   (let ((notes '()) (num 0))
     (match-lambda
       ('list
-       (let lp ((num num) (notes notes) (res '()))
+       (let lp ((notes notes) (res '()))
          (match notes
-           (() (gnc:make-html-text (gnc:html-markup-ul res)))
-           ((note . rest)
-            (lp (1- num) rest (cons (format #f "~a. ~a" num note) res))))))
-      ((or #f "")
-       (gnc:make-html-table-cell/min-width 1))
+           (() (gnc:make-html-text (html-markup-ol res)))
+           ((note . rest) (lp rest (cons note res))))))
+      ((or #f "") "")
       (note
        (set! notes (cons (gnc:html-string-sanitize note) notes))
        (set! num (1+ num))
-       (let ((cell (gnc:make-html-table-cell (format #f "[~a]" num))))
-         (gnc:html-table-cell-set-style! cell "td" 'attribute `("title" ,note))
-         cell)))))
+       (let ((text (gnc:make-html-text
+                    (gnc:html-markup "sup" " " (number->string num)))))
+         (gnc:html-text-set-style! text "sup" 'attribute `("title" ,note))
+         text)))))
 
 ;; Create the html table for the budget report
 ;;
@@ -384,31 +386,26 @@
         (define (disp-cols style-tag col0
                            bgt-val act-val dif-val note)
           (let* ((col1 (+ col0 (if show-budget? 1 0)))
-                 (col2 (+ col1 (if show-note? 1 0)))
-                 (col3 (+ col2 (if show-actual? 1 0)))
-                 (col4 (+ col3 (if show-diff? 1 0))))
+                 (col2 (+ col1 (if show-actual? 1 0)))
+                 (col3 (+ col2 (if show-diff? 1 0))))
             (if show-budget?
                 (gnc:html-table-set-cell/tag!
-                 html-table rownum col0
-                 style-tag
+                 html-table rownum col0 style-tag
                  (if (zero? bgt-val) "."
-                     (gnc:make-gnc-monetary comm bgt-val))))
-            (if show-note?
-                (gnc:html-table-set-cell!
-                 html-table rownum col1
+                     (gnc:make-gnc-monetary comm bgt-val))
                  (footnotes note)))
             (if show-actual?
                 (gnc:html-table-set-cell/tag!
-                 html-table rownum col2
+                 html-table rownum col1
                  style-tag
                  (gnc:make-gnc-monetary comm act-val)))
             (if show-diff?
                 (gnc:html-table-set-cell/tag!
-                 html-table rownum col3
+                 html-table rownum col2
                  style-tag
                  (if (and (zero? bgt-val) (zero? act-val)) "."
                      (gnc:make-gnc-monetary comm dif-val))))
-            col4))
+            col3))
 
         (let loop ((column-list column-list)
                    (current-col (1+ colnum)))
@@ -464,8 +461,7 @@
              html-table colnum budget column-list)
       (let* ((current-col (1+ colnum))
              (col-span (max 1 (count identity
-                                     (list show-budget? show-actual?
-                                           show-diff? show-note?))))
+                                     (list show-budget? show-actual? show-diff?))))
              (period-to-date-string (lambda (p)
                                       (qof-print-date
                                        (gnc-budget-get-period-start-date budget p)))))
@@ -501,9 +497,8 @@
                    (col0 current-col))
           (unless (null? column-list)
             (let* ((col1 (+ col0 (if show-budget? 1 0)))
-                   (col2 (+ col1 (if show-note? 1 0)))
-                   (col3 (+ col2 (if show-actual? 1 0)))
-                   (col4 (+ col3 (if show-diff? 1 0))))
+                   (col2 (+ col1 (if show-actual? 1 0)))
+                   (col3 (+ col2 (if show-diff? 1 0))))
               (when show-budget?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col0 "centered-label-cell"
@@ -511,16 +506,16 @@
                  (_ "Bgt")))
               (when show-actual?
                 (gnc:html-table-set-cell/tag!
-                 html-table 1 col2 "centered-label-cell"
+                 html-table 1 col1 "centered-label-cell"
                  ;; Translators: Abbreviation for "Actual" amount
                  (_ "Act")))
               (when show-diff?
                 (gnc:html-table-set-cell/tag!
-                 html-table 1 col3 "centered-label-cell"
+                 html-table 1 col2 "centered-label-cell"
                  ;; Translators: Abbreviation for "Difference" amount
                  (_ "Diff")))
               (loop (cdr column-list)
-                    col4))))))
+                    col3))))))
 
     ;; Determines the budget period relative to current period. Budget
     ;; period is current if it start time <= current time and end time
@@ -764,6 +759,10 @@
           ;; clear out any unused columns to the right, out to the
           ;; table width, since the add-account-balance had put stuff
           ;; there, but it doesn't seem to matter.
+
+          (gnc:html-table-set-style!
+           html-table "td"
+           'attribute '("valign" "bottom"))
 
           (gnc:html-document-add-object! doc html-table)
 
