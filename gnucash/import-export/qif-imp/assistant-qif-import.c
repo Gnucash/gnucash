@@ -3877,6 +3877,13 @@ gnc_file_qif_import (void)
 {
     QIFImportWindow *qif_win;
     gint component_id;
+    SCM  has_regex = scm_c_eval_string ("(defined? 'make-regexp)");
+
+    if (scm_is_false(has_regex) == 1)
+    {
+        gnc_warning_dialog(NULL, _("QIF import requires guile with regex support."));
+        return;
+    }
 
     qif_win = g_new0 (QIFImportWindow, 1);
 

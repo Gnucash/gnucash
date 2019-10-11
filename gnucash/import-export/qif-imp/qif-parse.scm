@@ -26,6 +26,8 @@
 (use-modules (gnucash import-export string))
 (use-modules (srfi srfi-13))
 
+(define regexp-enabled?
+  (defined? 'make-regexp))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-split:parse-category
 ;;  this one just gets nastier and nastier.
@@ -40,7 +42,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define qif-category-compiled-rexp
-  (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
+  (and regexp-enabled?
+       (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$")))
+
 (define (qif-split:parse-category self value)
   ;; example category regex matches (excluding initial 'L'):
   ;; field1
@@ -267,13 +271,16 @@
 ;;  of possibilities.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define qif-date-compiled-rexp
-  (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$"))
+  (and regexp-enabled?
+       (make-regexp "^ *([0-9]+) *[-/.'] *([0-9]+) *[-/.'] *([0-9]+).*$|^ *([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]).*$")))
 
 (define qif-date-mdy-compiled-rexp
-  (make-regexp "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])"))
+  (and regexp-enabled?
+       (make-regexp "([0-9][0-9])([0-9][0-9])([0-9][0-9][0-9][0-9])")))
 
 (define qif-date-ymd-compiled-rexp
-  (make-regexp "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])"))
+  (and regexp-enabled?
+       (make-regexp "([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])")))
 
 (define (qif-parse:check-date-format date-string possible-formats)
   (and (string? date-string)
@@ -358,15 +365,18 @@
 
 ;; eg 1000.00 or 1,500.00 or 2'000.00
 (define decimal-radix-regexp
-  (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+\\.[0-9]*[+-]? *$"))
+  (and regexp-enabled?
+       (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([,'][0-9][0-9][0-9])*(\\.[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+\\.[0-9]*[+-]? *$")))
 
 ;; eg 5.000,00 or 4'500,00
 (define comma-radix-regexp
-  (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$"))
+  (and regexp-enabled?
+       (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$")))
 
 ;; eg 456 or 123
 (define integer-regexp
-  (make-regexp "^[$]?[+-]?[$]?[0-9]+[+-]? *$"))
+  (and regexp-enabled?
+       (make-regexp "^[$]?[+-]?[$]?[0-9]+[+-]? *$")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-parse:check-number-format
