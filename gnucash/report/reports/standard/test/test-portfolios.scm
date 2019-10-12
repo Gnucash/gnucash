@@ -56,9 +56,6 @@
         (test-assert (format #f "wrong-option ~a ~a" section name) #f))))
 
 (define (teardown)
-  (gnc-pricedb-destroy
-   (gnc-pricedb-get-db
-    (gnc-get-current-book)))
   (gnc-clear-current-session))
 
 (define (null-test variant uuid)
