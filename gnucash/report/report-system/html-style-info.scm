@@ -353,32 +353,26 @@
               (and (gnc:html-data-style-info? s)
                    (gnc:html-data-style-info-inheritable? s)))
           s #f)))
-  
+
   (define (fetch-worker style antecedents)
-    (if (null? antecedents)
-        style
-        (let ((parent (car antecedents)))
-          (if (not parent)
-              (fetch-worker style (cdr antecedents))
-              (if (gnc:html-style-table-compiled? parent)
-                  (gnc:html-style-info-merge 
-                   style 
-                   (hash-ref (gnc:html-style-table-inheritable parent) markup))
-                  (fetch-worker 
-                   (gnc:html-style-info-merge 
-                    style (get-inheritable-style 
-                           (gnc:html-style-table-primary parent)))
-                   (cdr antecedents)))))))
+    (cond
+     ((null? antecedents) style)
+     ((not (car antecedents)) (fetch-worker style (cdr antecedents)))
+     ((gnc:html-style-table-compiled? (car antecedents))
+      (gnc:html-style-info-merge
+       style (hash-ref (gnc:html-style-table-inheritable (car antecedents)) markup)))
+     (else
+      (fetch-worker
+       (gnc:html-style-info-merge
+        style (get-inheritable-style
+               (gnc:html-style-table-primary (car antecedents))))
+       (cdr antecedents)))))
 
   (if (and table (gnc:html-style-table-compiled? table))
       (hash-ref (gnc:html-style-table-compiled table) markup)
-      (fetch-worker 
+      (fetch-worker
        (and table (hash-ref (gnc:html-style-table-primary table) markup))
        antecedents)))
 
 (define (gnc:html-style-table-set! table markup style-info)
   (hash-set! (gnc:html-style-table-primary table) markup style-info))
-
-
-
-
