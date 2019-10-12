@@ -139,15 +139,16 @@
 
 (define (gnc:html-table-cell-render cell doc)
   ;; This function renders a html-table-cell to a document tree
-  ;; segment. Note: if the html-table-cell datum is a negative number
-  ;; or gnc:monetary, it fixes the tag eg. "number-cell" becomes
-  ;; "number-cell-red". The number and gnc:monetary renderers do not
-  ;; have an automatic -neg tag modifier. See bug 759005 and 797357.
+  ;; segment. Note: if the first element in a html-table-cell data is
+  ;; a negative number or gnc:monetary, it fixes the tag
+  ;; eg. "number-cell" becomes "number-cell-red". The number and
+  ;; gnc:monetary renderers do not have an automatic -neg tag
+  ;; modifier. See bug 759005 and bug 797357.
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (cell-tag (gnc:html-table-cell-tag cell))
          (cell-data (gnc:html-table-cell-data cell))
-         (tag (if (and (= 1 (length cell-data))
+         (tag (if (and (not (null? cell-data))
                        (not (string=? cell-tag "td"))
                        (or (and (gnc:gnc-monetary? (car cell-data))
                                 (negative? (gnc:gnc-monetary-amount (car cell-data))))
@@ -406,37 +407,26 @@
     (gnc:html-table-set-cell-datum! table row col tc)))
 
 (define (gnc:html-table-append-column! table newcol)
-
-  ;; append the elements of newcol to each of the existing rows,
-  ;; widening to width-to-make if necessary
-  (define (append-to-element newcol existing-data length-to-append colnum)
-    (if (= length-to-append 0)
-        (cons '() newcol)
-        (let ((result (append-to-element
-                       (cdr newcol) (cdr existing-data) (1- length-to-append)
-                       colnum)))
-          (cons (cons (list-set-safe! (car existing-data) colnum (car newcol))
-                      (car result))
-                (cdr result)))))
-
-  (let* ((old-data (reverse (gnc:html-table-data table)))
-         (old-numrows (length old-data))
-         (old-numcols (apply max (cons 0 (map length old-data))))
-         (new-numrows (length newcol)))
-    (if (<= new-numrows old-numrows)
-        (gnc:html-table-set-data!
-         table
-         (reverse (car (append-to-element newcol old-data new-numrows old-numcols))))
-        (let ((res (append-to-element newcol old-data old-numrows old-numcols)))
-          ;; Invariant maintained - table data in reverse order
-          (gnc:html-table-set-data! table (reverse (car res)))
-
-          (for-each
-           (lambda (element)
-             (gnc:html-table-append-row!
-              table (list-set-safe! '() old-numcols element)))
-           (cdr res))))))
-
+  (define width (apply max (cons 0 (map length (gnc:html-table-data table)))))
+  (define (add-fn a b) (list-set-safe! b width a))
+  (let lp ((newcol newcol)
+           (olddata (reverse (gnc:html-table-data table)))
+           (res '())
+           (numrows 0))
+    (cond
+     ((null? newcol)
+      (gnc:html-table-set-num-rows-internal! table numrows)
+      (gnc:html-table-set-data! table res))
+     ((null? olddata)
+      (lp (cdr newcol)
+          '()
+          (cons (add-fn (car newcol) '()) res)
+          (1+ numrows)))
+     (else
+      (lp (cdr newcol)
+          (cdr olddata)
+          (cons (add-fn (car newcol) (car olddata)) res)
+          (1+ numrows))))))
 
 (define (gnc:html-table-render table doc)
   (let* ((retval '())

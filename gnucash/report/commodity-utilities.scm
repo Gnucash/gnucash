@@ -20,6 +20,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 match))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
@@ -265,19 +267,14 @@
 ;; if pricelist was empty, #f.
 (define (gnc:pricelist-price-find-nearest pricelist date)
   (let lp ((pricelist pricelist))
-    (cond
-     ((null? pricelist) #f)
-     ((null? (cdr pricelist)) (cadr (car pricelist)))
-     (else
-      (let ((earlier (car pricelist))
-            (later (cadr pricelist)))
-        (cond
-         ((< (car later) date)
-          (lp (cdr pricelist)))
-         ((< (- date (car earlier)) (- (car later) date))
-          (cadr earlier))
-         (else
-          (cadr later))))))))
+    (match pricelist
+      (() #f)
+      (((date price)) price)
+      (((date1 price1) (date2 price2) . rest)
+       (cond
+        ((< date2 date) (lp (cdr pricelist)))
+        ((< (- date date1) (- date2 date)) price1)
+        (else price2))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get one price at a given time (i.e. not time-variant).

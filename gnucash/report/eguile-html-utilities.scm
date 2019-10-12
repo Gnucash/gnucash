@@ -85,7 +85,8 @@
 
 ;; (thanks to Peter Brett for this regexp and the use of match:prefix)
 (define fontre
-  (make-regexp "([[:space:]]+(bold|semi-bold|book|regular|medium|light))?([[:space:]]+(normal|roman|italic|oblique))?([[:space:]]+(condensed))?[[:space:]]+([[:digit:]]+)" regexp/icase))
+  (and (defined? 'make-regexp)
+       (make-regexp "([[:space:]]+(bold|semi-bold|book|regular|medium|light))?([[:space:]]+(normal|roman|italic|oblique))?([[:space:]]+(condensed))?[[:space:]]+([[:digit:]]+)" regexp/icase)))
 
 (define-public (font-name-to-style-info font-name)
   ;;; Convert a font name as return by a font option to CSS format.

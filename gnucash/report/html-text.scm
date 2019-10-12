@@ -60,13 +60,9 @@
   (record-modifier <html-text> 'style))
 
 (define (gnc:html-text-set-style! text tag . rest)
-  (let ((newstyle #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest))))
     (gnc:html-style-table-set! (gnc:html-text-style text) tag newstyle)))
 
 (define (gnc:html-text-append! text . body) 
@@ -221,34 +217,21 @@
     (gnc:html-style-table-uncompile (gnc:html-text-style p))
     retval))
 
-;; XXX It would be better to merge this with the original html-text-render-markup below it,
-;; but that would require a fair amount of work to refactor so that it works correctly.
 (define (gnc:html-text-render-markup-noclose doc markup attrib end-tag? . entities)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))
     (push (gnc:html-document-markup-start doc markup end-tag? attrib))
-    (for-each 
+    (for-each
      (lambda (elt)
-       (cond ((procedure? elt)
-              (push (elt doc)))
-             (#t 
-              (push (gnc:html-document-render-data doc elt)))))
+       (cond
+        ((procedure? elt) (push (elt doc)))
+        (else (push (gnc:html-document-render-data doc elt)))))
      entities)
     retval))
 
 (define (gnc:html-text-render-markup doc markup attrib end-tag? . entities)
-  (let* ((retval '())
+  (let* ((retval (apply gnc:html-text-render-markup-noclose doc markup
+                        attrib end-tag? entities))
          (push (lambda (l) (set! retval (cons l retval)))))
-    (push (gnc:html-document-markup-start doc markup end-tag? attrib))
-    (for-each 
-     (lambda (elt)
-       (cond ((procedure? elt)
-              (push (elt doc)))
-             (#t 
-              (push (gnc:html-document-render-data doc elt)))))
-     entities)
-    (if end-tag? 
-        (push (gnc:html-document-markup-end doc markup)))
+    (if end-tag? (push (gnc:html-document-markup-end doc markup)))
     retval))
-
-

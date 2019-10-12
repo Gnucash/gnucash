@@ -108,8 +108,8 @@
                                 (#\& . "&amp;"))))
 
 ;; regexps used to find start and end of code segments
-(define startre (make-regexp "<\\?scm(:d)?[[:space:]]"))
-(define endre   (make-regexp "(^|[[:space:]])\\?>"))
+(define startre (and (defined? 'make-regexp) (make-regexp "<\\?scm(:d)?[[:space:]]")))
+(define endre   (and (defined? 'make-regexp) (make-regexp "(^|[[:space:]])\\?>")))
 
 ;; Guile code to mark starting and stopping text or code modes
 (define textstart  "(display \"")
@@ -170,7 +170,9 @@
         (loop inp needle other code? "")))))
 
   (display textstart)
-  (loop (current-input-port) startre endre #f "")
+  (if (defined? 'make-regexp)
+      (loop (current-input-port) startre endre #f "")
+      (display "eguile requires guile with regex."))
   (display stop))
 
 ;end of (template->script)
