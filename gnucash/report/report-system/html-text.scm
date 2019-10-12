@@ -60,13 +60,9 @@
   (record-modifier <html-text> 'style))
 
 (define (gnc:html-text-set-style! text tag . rest)
-  (let ((newstyle #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
+  (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
+                      (apply gnc:make-html-data-style-info rest)
+                      (apply gnc:make-html-markup-style-info rest))))
     (gnc:html-style-table-set! (gnc:html-text-style text) tag newstyle)))
 
 (define (gnc:html-text-append! text . body) 
