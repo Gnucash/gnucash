@@ -60,7 +60,6 @@ public:
                             std::function<void(GncOption&)> func);
     void set_option_from_ui(const char* section, const char* name,
                             std::function<void(GncOption&)> func);
-    SCM lookup_option(const char* section, const char* name);
     std::string lookup_string_option(const char* section,
                                             const char* name);
     template <typename ValueType>
@@ -83,10 +82,9 @@ public:
 //    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
     void commit();
-private:
     boost::optional<GncOptionSection&> find_section(const char* section);
     boost::optional<GncOption&> find_option(const char* section, const char* name);
-
+private:
     boost::optional<GncOptionSection&> m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;

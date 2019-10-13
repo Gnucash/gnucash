@@ -154,15 +154,6 @@ GncOptionDB::find_option(const char* section, const char* name)
     return *db_opt;
 }
 
-SCM
-GncOptionDB::lookup_option(const char* section, const char* name)
-{
-    auto db_opt = find_option(section, name);
-    if (!db_opt)
-        return SCM_BOOL_F;
-    return db_opt->get_scm_value();
-}
-
 std::string
 GncOptionDB::lookup_string_option(const char* section, const char* name)
 {
