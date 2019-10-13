@@ -192,14 +192,6 @@ public:
         m_value{value}, m_default_value{value} {}
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
-    SCM get_scm_value() const
-    {
-        return scm_from_value(m_value);
-    }
-    SCM get_scm_default_value() const
-    {
-        return scm_from_value(m_default_value);
-    }
     void set_value(ValueType new_value) { m_value = new_value; }
 private:
     ValueType m_value;
@@ -237,14 +229,6 @@ public:
     }
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
-    SCM get_scm_value() const
-    {
-        return scm_from_value(m_value);
-    }
-    SCM get_scm_default_value() const
-    {
-        return scm_from_value(m_default_value);
-    }
     bool validate(ValueType value) { return m_validator(value); }
     void set_value(ValueType value)
     {
@@ -277,14 +261,6 @@ public:
 
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
-    SCM get_scm_value() const
-    {
-        return scm_from_value(m_value);
-    }
-    SCM get_scm_default_value() const
-    {
-        return scm_from_value(m_default_value);
-    }
     bool validate(ValueType value) { return value >= m_min && value <= m_max; }
     void set_value(ValueType value)
     {
@@ -431,14 +407,16 @@ private:
     {
         template <class OptionType>
         SCM operator()(OptionType& option) const {
-            return option.get_scm_value();
+            auto value{option.get_value()};
+            return scm_from_value<decltype(value)>(value);
         }
     };
     struct GetSCMDefaultVisitor : public boost::static_visitor<SCM>
     {
         template <class OptionType>
         SCM operator()(OptionType& option) const {
-            return option.get_scm_default_value();
+            auto value{option.get_value()};
+            return scm_from_value<decltype(value)>(value);
         }
     };
     struct GetSectionVisitor : public boost::static_visitor<const std::string&>
