@@ -418,6 +418,11 @@ private:
         }
         template <class OptionType>
         void operator()(OptionType& option) const {
+            std::string msg{"Attempt to set option of type "};
+            msg += typeid(OptionType).name();
+            msg += " with value of type ";
+            msg += typeid(m_value).name();
+            throw std::invalid_argument(msg);
         }
     private:
         ValueType m_value;
