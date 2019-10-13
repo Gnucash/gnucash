@@ -51,5 +51,9 @@ extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %ignore GncOption;
 
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
-
 %include "gnc-optiondb.hpp"
+
+%extend GncOptionDB {
+    %template(set_option_string) set_option<std::string>;
+    %template(set_option_int) set_option<int>;
+ };
