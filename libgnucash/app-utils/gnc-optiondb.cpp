@@ -174,17 +174,6 @@ GncOptionDB::lookup_string_option(const char* section, const char* name)
     return db_opt->get_value<std::string>();
 }
 
-bool
-GncOptionDB::set_option(const char* section, const char* name, SCM value)
-{
-    return false;
-}
-
-void
-GncOptionDB::set_selectable(const char* section, const char* name)
-{
-}
-
 void
 GncOptionDB::make_internal(const char* section, const char* name)
 {

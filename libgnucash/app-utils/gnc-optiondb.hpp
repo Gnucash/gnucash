@@ -26,6 +26,7 @@
 
 #include "gnc-option.hpp"
 #include <functional>
+#include <exception>
 #include <boost/optional.hpp>
 extern "C"
 {
@@ -62,8 +63,24 @@ public:
     SCM lookup_option(const char* section, const char* name);
     std::string lookup_string_option(const char* section,
                                             const char* name);
-    bool set_option(const char* section, const char* name, SCM value);
-    void set_selectable(const char* section, const char* name);
+    template <typename ValueType>
+    bool set_option(const char* section, const char* name, ValueType value)
+    {
+        try
+        {
+            auto option{find_option(section, name)};
+            if (!option)
+                return false;
+            option->set_value<ValueType>(value);
+            return true;
+        }
+        catch(const std::invalid_argument& err)
+        {
+            printf("Set Failed: %s\n", err.what());
+            return false;
+        }
+    }
+//    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
     void commit();
 private:
