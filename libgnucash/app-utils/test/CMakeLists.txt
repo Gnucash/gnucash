@@ -117,6 +117,12 @@ if (HAVE_SRFI64)
   target_include_directories(swig-gnc-optiondb
     PRIVATE ${swig_gnc_optiondb_INCLUDES})
 
+  install(TARGETS swig-gnc-optiondb
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+
   gnc_add_scheme_test_targets(scm-test-gnc-optiondb
     "test-gnc-optiondb.scm"
     "tests"
