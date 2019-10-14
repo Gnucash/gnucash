@@ -267,8 +267,9 @@
   (apply gnc:html-markup "ol" (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
 
 ;; creates a footnotes collector. (make-footnote-collector) => coll
-;; (coll elt) adds elt to store, returns html-text containing ref eg. [1]
-;; (coll 'list) returns html-text containing <ul> of all elts
+;; (coll elt) if elt is not null or "", adds elt to store, returns
+;; html-text containing ref eg. <sup title='note'>1</sup>. calling
+;; (coll 'list) returns html-text containing <ol> of all stored elts
 (define (make-footnote-collector)
   (let ((notes '()) (num 0))
     (match-lambda
@@ -282,7 +283,7 @@
        (set! notes (cons (gnc:html-string-sanitize note) notes))
        (set! num (1+ num))
        (let ((text (gnc:make-html-text
-                    (gnc:html-markup "sup" " " (number->string num)))))
+                    " " (gnc:html-markup "sup" (number->string num)))))
          (gnc:html-text-set-style! text "sup" 'attribute `("title" ,note))
          text)))))
 
@@ -393,7 +394,7 @@
                  html-table rownum col0 style-tag
                  (if (zero? bgt-val) "."
                      (gnc:make-gnc-monetary comm bgt-val))
-                 (footnotes note)))
+                 (if show-note? (footnotes note) "")))
             (if show-actual?
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col1
