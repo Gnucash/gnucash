@@ -1,6 +1,6 @@
 /*
  * gnc-tree-model-account.h -- GtkTreeModel implementation to
- *	display accounts in a GtkTreeView.
+ *  display accounts in a GtkTreeView.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
