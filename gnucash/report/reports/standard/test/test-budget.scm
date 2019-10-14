@@ -74,6 +74,7 @@
 
     (set-option options "Display" "Show Difference" #f)
     (set-option options "Display" "Show Budget" #f)
+    (set-option options "Display" "Show Budget Notes" #f)
     (set-option options "Display" "Show Actual" #f)
     (let ((sxml (options->sxml options budget-uuid "basic all display off")))
       (test-equal "all display OFF, table has 15 cells"
@@ -82,11 +83,12 @@
 
     (set-option options "Display" "Show Difference" #t)
     (set-option options "Display" "Show Budget" #t)
+    (set-option options "Display" "Show Budget Notes" #t)
     (set-option options "Display" "Show Actual" #t)
     (set-option options "Display" "Show Column with Totals" #t)
     (let ((sxml (options->sxml options budget-uuid "basic")))
-      (test-equal "all display ON, table has 226 cells"
-        226
+      (test-equal "all display ON, table has 228 cells"
+        228
         (length (sxml->table-row-col sxml 1 #f #f)))
       (test-equal "bank"
         '("Bank" "$20.00" "$35.00" "-$15.00" "$40.00" "-$20.00" "$60.00"
@@ -94,22 +96,26 @@
           "." "." "$0.00" "." "$120.00" "$159.00" "-$39.00")
         (sxml->table-row-col sxml 1 5 #f))
       (test-equal "income"
-        '("Income" "-$55.00" "-$55.00" "$0.00" "." "$0.00" "." "-$65.00"
-          "-$67.00" "-$2.00" "-$75.00" "-$77.00" "-$2.00" "." "$0.00" "."
-          "." "$0.00" "." "-$195.00" "-$199.00" "-$4.00")
+        '("Income" "-$55.00 " "1" "-$55.00" "$0.00" "." "$0.00" "."
+          "-$65.00" "-$67.00" "-$2.00" "-$75.00" "-$77.00" "-$2.00" "."
+          "$0.00" "." "." "$0.00" "." "-$195.00" "-$199.00" "-$4.00")
         (sxml->table-row-col sxml 1 9 #f))
       (test-equal "expense"
-        '("Expenses" "." "$20.00" "-$20.00" "$30.00" "$20.00" "$10.00"
-          "$20.00" "$0.00" "$20.00" "$40.00" "$0.00" "$40.00" "." "$0.00"
-          "." "." "$0.00" "." "$90.00" "$40.00" "$50.00")
-        (sxml->table-row-col sxml 1 11 #f)))
+        '("Expenses" "." "$20.00" "-$20.00" "$30.00 " "2" "$20.00"
+          "$10.00" "$20.00" "$0.00" "$20.00" "$40.00" "$0.00" "$40.00"
+          "." "$0.00" "." "." "$0.00" "." "$90.00" "$40.00" "$50.00")
+        (sxml->table-row-col sxml 1 11 #f))
+      (test-equal "budget notes"
+        '("income-0 -$60" "expense-1 $25")
+        ((sxpath '(// ol // li // *text*))
+         sxml)))
 
     (set-option options "General" "Report for range of budget periods" #t)
     (set-option options "General" "Range start" 'current)
     (set-option options "General" "Range end" 'next)
     (let ((sxml (options->sxml options budget-uuid "only next period")))
-      (test-equal "only next period - 133 cells"
-        133
+      (test-equal "only next period - 135 cells"
+        135
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "only next period- bank"
@@ -136,8 +142,8 @@
     (set-option options "General" "Include collapsed periods before selected." #f)
     (set-option options "General" "Include collapsed periods after selected." #f)
     (let ((sxml (options->sxml options budget-uuid "exact periods")))
-      (test-equal "exact periods - 133 cells"
-        133
+      (test-equal "exact periods - 134 cells"
+        134
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "exact periods - bank"

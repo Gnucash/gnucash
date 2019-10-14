@@ -862,6 +862,8 @@
       (env-create-transaction env (midperiod 3) bank income 77)
       (env-create-transaction env (midperiod 0) expense bank 20)
       (env-create-transaction env (midperiod 1) expense bank 20))
+    (gnc-budget-set-account-period-note budget income 0 "income-0 -$60")
+    (gnc-budget-set-account-period-note budget expense 1 "expense-1 $25")
     budget))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
