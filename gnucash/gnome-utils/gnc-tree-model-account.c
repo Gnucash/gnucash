@@ -97,6 +97,9 @@ typedef struct GncTreeModelAccountPrivate
     Account *root;
     gint event_handler_id;
     const gchar *negative_color;
+
+    GHashTable *account_values_hash;
+
 } GncTreeModelAccountPrivate;
 
 #define GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(o)  \
@@ -134,9 +137,16 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
     g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
     model = user_data;
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
+    // destroy/recreate the cached acount value hash to force update
+    g_hash_table_destroy (priv->account_values_hash);
+    priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       g_free, g_free);
+
     use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
     priv->negative_color = use_red ? get_negative_color () : NULL;
 }
+
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
@@ -181,6 +191,10 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
     priv->book = NULL;
     priv->root = NULL;
     priv->negative_color = red ? get_negative_color () : NULL;
+
+    // create the account values cache hash
+    priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       g_free, g_free);
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                           gnc_tree_model_account_update_color,
@@ -229,6 +243,9 @@ gnc_tree_model_account_dispose (GObject *object)
         qof_event_unregister_handler (priv->event_handler_id);
         priv->event_handler_id = 0;
     }
+
+    // destroy the cached acount values
+    g_hash_table_destroy (priv->account_values_hash);
 
     gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                                 gnc_tree_model_account_update_color,
@@ -561,6 +578,113 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
     return g_strdup(xaccPrintAmount(b3, gnc_account_print_info(acct, TRUE)));
 }
 
+void
+gnc_tree_model_account_clear_cache (GncTreeModelAccount *model)
+{
+    GncTreeModelAccountPrivate *priv;
+
+    if (model)
+    {
+        priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
+        // destroy the cached acount values and recreate
+        g_hash_table_destroy (priv->account_values_hash);
+        priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                           g_free, g_free);
+    }
+}
+
+static void
+clear_account_cached_values (GHashTable *hash, Account *account)
+{
+    gchar acct_guid_str[GUID_ENCODING_LENGTH + 1];
+
+    if (!account)
+        return;
+
+    guid_to_string_buff (xaccAccountGetGUID (account), acct_guid_str);
+
+    // loop over the columns and remove any found
+    for (gint col = 0; col <= GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS; col++)
+    {
+        gchar *key = g_strdup_printf ("%s,%d", acct_guid_str, col);
+
+        g_hash_table_remove (hash, key);
+        g_free (key);
+    }
+}
+
+static void
+gnc_tree_model_account_clear_cached_values (GncTreeModelAccount *model, Account *account)
+{
+    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+    Account *parent;
+
+    // no hash table or account, return
+    if ((!priv->account_values_hash) || (!account))
+        return;
+
+    clear_account_cached_values (priv->account_values_hash, account);
+    parent = gnc_account_get_parent (account);
+
+    // clear also all parent accounts, this will update any balances/totals
+    while (parent)
+    {
+        clear_account_cached_values (priv->account_values_hash, parent);
+        parent = gnc_account_get_parent (parent);
+    }
+}
+
+static gboolean
+gnc_tree_model_account_get_cached_value (GncTreeModelAccount *model, Account *account,
+                                         gint column, gchar **cached_string)
+{
+    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+    gchar acct_guid_str[GUID_ENCODING_LENGTH + 1];
+    gchar *key = NULL;
+    gpointer value;
+    gboolean found;
+
+    if ((!priv->account_values_hash) || (!account))
+        return FALSE;
+
+    guid_to_string_buff (xaccAccountGetGUID (account), acct_guid_str);
+    key = g_strdup_printf ("%s,%d", acct_guid_str, column);
+
+    found = g_hash_table_lookup_extended (priv->account_values_hash, key,
+                                          NULL, &value);
+
+     if (found)
+         *cached_string = g_strdup (value);
+
+    g_free (key);
+
+    return found;
+}
+
+static void
+gnc_tree_model_account_set_cached_value (GncTreeModelAccount *model, Account *account,
+                                         gint column, GValue *value)
+{
+    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
+    if ((!priv->account_values_hash) || (!account))
+        return;
+
+    // only interested in string values
+    if (G_VALUE_HOLDS_STRING(value))
+    {
+        gchar acct_guid_str[GUID_ENCODING_LENGTH + 1];
+        const gchar *str = g_value_get_string (value);
+        gchar *key = NULL;
+
+        guid_to_string_buff (xaccAccountGetGUID (account), acct_guid_str);
+        key = g_strdup_printf ("%s,%d", acct_guid_str, column);
+
+        g_hash_table_insert (priv->account_values_hash, key, g_strdup (str));
+    }
+}
+
 static void
 gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
                                   GtkTreeIter *iter,
@@ -572,6 +696,8 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     Account *account;
     gboolean negative; /* used to set "deficit style" also known as red numbers */
     gchar *string;
+    gchar *cached_string = NULL;
+
     time64 last_date;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
@@ -584,6 +710,14 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 
     account = (Account *) iter->user_data;
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
+    // lets see if the value is in the cache
+    if (gnc_tree_model_account_get_cached_value (model, account, column, &cached_string))
+    {
+        g_value_init (value, G_TYPE_STRING);
+        g_value_take_string (value, cached_string);
+        return;
+    }
 
     switch (column)
     {
@@ -797,6 +931,10 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
         g_assert_not_reached ();
         break;
     }
+
+    // save the value to the account values cache
+    gnc_tree_model_account_set_cached_value (model, account, column, value);
+
     LEAVE(" ");
 }
 
@@ -1272,6 +1410,10 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     account = GNC_ACCOUNT(entity);
+
+    /* clear the cached model values for account */
+    gnc_tree_model_account_clear_cached_values (model, account);
+
     if (gnc_account_get_book(account) != priv->book)
     {
         LEAVE("not in this book");
