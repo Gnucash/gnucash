@@ -23,7 +23,7 @@
 
 #include "gnc-optiondb.hpp"
 
-GncOptionDB::GncOptionDB() : m_default_section{boost::none} {}
+GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}
 
 GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
 
@@ -39,7 +39,7 @@ GncOptionDB::register_option(const char* section, GncOption&& option)
 
     if (db_section)
     {
-        db_section->second.emplace_back(std::move(option));
+        db_section->get().second.emplace_back(std::move(option));
         return;
     }
 
@@ -55,9 +55,9 @@ GncOptionDB::unregister_option(const char* section, const char* name)
     auto db_section = find_section(section);
     if (db_section)
     {
-        db_section->second.erase(
+        db_section->get().second.erase(
             std::remove_if(
-                db_section->second.begin(), db_section->second.end(),
+                db_section->get().second.begin(), db_section->get().second.end(),
                 [name](const GncOption& option) -> bool
                 {
                     return option.get_name() == std::string{name};
@@ -75,7 +75,7 @@ const GncOptionSection* const
 GncOptionDB::get_default_section() const noexcept
 {
     if (m_default_section)
-        return &(m_default_section.get());
+        return &(m_default_section.value().get());
     return nullptr;
 }
 
@@ -85,7 +85,7 @@ GncOptionDB::set_ui_item(const char* section, const char* name,
 {
     auto option = find_option(section, name);
     if (!option) return;
-    option->set_ui_item(ui_item);
+    option->get().set_ui_item(ui_item);
 }
 
 GncOptionUIItem* const
@@ -93,7 +93,7 @@ GncOptionDB::get_ui_item(const char* section, const char* name)
 {
     auto option = find_option(section, name);
     if (!option) return nullptr;
-    return option->get_ui_item();
+    return option->get().get_ui_item();
 }
 
 GncOptionUIType
@@ -101,7 +101,7 @@ GncOptionDB::get_ui_type(const char* section, const char* name)
 {
     auto option = find_option(section, name);
     if (!option) return GncOptionUIType::INTERNAL;
-    return option->get_ui_type();
+    return option->get().get_ui_type();
 }
 
 void
@@ -110,7 +110,7 @@ GncOptionDB::set_ui_from_option(const char* section, const char* name,
 {
     auto option = find_option(section, name);
     if (!option) return;
-    func(option.get());
+    func(option->get());
 }
 
 void
@@ -119,11 +119,11 @@ GncOptionDB::set_option_from_ui(const char* section, const char* name,
 {
     auto option = find_option(section, name);
     if (!option) return;
-    func(option.get());
+    func(option->get());
 }
 
 
-boost::optional<GncOptionSection&>
+std::optional<std::reference_wrapper<GncOptionSection>>
 GncOptionDB::find_section(const char* section)
 {
     auto db_section = std::find_if(
@@ -133,24 +133,24 @@ GncOptionDB::find_section(const char* section)
             return sect.first == std::string{section};
         });
     if (db_section == m_sections.end())
-        return boost::none;
+        return std::nullopt;
     return *db_section;
 }
 
-boost::optional<GncOption&>
+std::optional<std::reference_wrapper<GncOption>>
 GncOptionDB::find_option(const char* section, const char* name)
 {
     auto db_section = find_section(section);
     if (!db_section)
-        return boost::none;
+        return std::nullopt;
     auto db_opt = std::find_if(
-        db_section->second.begin(), db_section->second.end(),
+        db_section->get().second.begin(), db_section->get().second.end(),
         [name](GncOption& option) -> bool
         {
             return option.get_name() == std::string{name};
         });
-    if (db_opt == db_section->second.end())
-        return boost::none;
+    if (db_opt == db_section->get().second.end())
+        return std::nullopt;
     return *db_opt;
 }
 
@@ -162,7 +162,7 @@ GncOptionDB::lookup_string_option(const char* section, const char* name)
     auto db_opt = find_option(section, name);
     if (!db_opt)
         return empty_string;
-    return db_opt->get_value<std::string>();
+    return db_opt->get().get_value<std::string>();
 }
 
 void
@@ -170,7 +170,7 @@ GncOptionDB::make_internal(const char* section, const char* name)
 {
     auto db_opt = find_option(section, name);
     if (db_opt)
-        db_opt->make_internal();
+        db_opt->get().make_internal();
 }
 
 void

@@ -59,7 +59,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto db_opt = $self->find_option(section, name);
         if (!db_opt)
             return SCM_BOOL_F;
-        return db_opt->get_scm_value();
+        return db_opt->get().get_scm_value();
     }
 
     %template(set_option_string) set_option<std::string>;

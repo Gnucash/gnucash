@@ -27,7 +27,7 @@
 #include "gnc-option.hpp"
 #include <functional>
 #include <exception>
-#include <boost/optional.hpp>
+#include <optional>
 extern "C"
 {
 #include <gncInvoice.h>
@@ -70,7 +70,7 @@ public:
             auto option{find_option(section, name)};
             if (!option)
                 return false;
-            option->set_value<ValueType>(value);
+            option->get().set_value(value);
             return true;
         }
         catch(const std::invalid_argument& err)
@@ -82,10 +82,10 @@ public:
 //    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
     void commit();
-    boost::optional<GncOptionSection&> find_section(const char* section);
-    boost::optional<GncOption&> find_option(const char* section, const char* name);
+    std::optional<std::reference_wrapper<GncOptionSection>> find_section(const char* section);
+    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name);
 private:
-    boost::optional<GncOptionSection&> m_default_section;
+    std::optional<std::reference_wrapper<GncOptionSection>> m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
 

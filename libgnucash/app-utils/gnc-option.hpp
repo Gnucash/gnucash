@@ -32,11 +32,14 @@ extern "C"
 #include <gnc-commodity.h>
 }
 #include <gnc-numeric.hpp>
+#include <guid.hpp>
 #include <libguile.h>
 #include <string>
+#include <utility>
+#include <vector>
 #include <exception>
 #include <functional>
-#include <boost/variant.hpp>
+#include <variant>
 
 /*
  * Unused base class to document the structure of the current Scheme option
@@ -141,8 +144,8 @@ class GncOptionUIItem;
 class OptionUIItem
 {
 public:
-    GncOptionUIType get_ui_type() { return m_ui_type; }
-    GncOptionUIItem* const get_ui_item() {return m_ui_item; }
+    GncOptionUIType get_ui_type() const { return m_ui_type; }
+    GncOptionUIItem* const get_ui_item() const {return m_ui_item; }
     void clear_ui_item() { m_ui_item = nullptr; }
     void set_ui_item(GncOptionUIItem* ui_item)
     {
@@ -175,8 +178,71 @@ private:
     GncOptionUIType m_ui_type;
 };
 
-template <typename ValueType>
-SCM scm_from_value(ValueType);
+inline SCM
+scm_from_value(std::string value)
+{
+    return scm_from_utf8_string(value.c_str());
+}
+
+inline SCM
+scm_from_value(bool value)
+{
+    return value ? SCM_BOOL_T : SCM_BOOL_F;
+}
+
+inline SCM
+scm_from_value(int64_t value)
+{
+    return scm_from_int64(value);
+}
+
+inline SCM
+scm_from_value(int value)
+{
+    return scm_from_int(value);
+}
+
+inline SCM
+scm_from_value(QofInstance* value)
+{
+    auto guid = guid_to_string(qof_instance_get_guid(value));
+    auto scm_guid = scm_from_utf8_string(guid);
+    g_free(guid);
+    return scm_guid;
+}
+
+inline SCM
+scm_from_value(QofQuery* value)
+{
+    return SCM_BOOL_F;
+}
+
+inline SCM
+scm_from_value(GncNumeric value)
+{
+    return SCM_BOOL_F;
+}
+
+inline SCM
+scm_from_value(std::vector<GncGUID> value)
+{
+    SCM s_list;
+    for (auto guid : value)
+    {
+        auto guid_s = guid_to_string(qof_instance_get_guid(&guid));
+        auto scm_guid = scm_from_utf8_string(guid_s);
+        auto scm_guid_list1 = scm_list_1(scm_guid);
+        s_list = scm_append(scm_list_2(s_list, scm_guid_list1));
+        g_free(guid_s);
+    }
+    return s_list;
+}
+
+inline SCM
+scm_from_value(GncMultiChoiceOptionChoices value)
+{
+    return SCM_BOOL_F;
+}
 
 template <typename ValueType>
 class GncOptionValue :
@@ -190,6 +256,10 @@ public:
         OptionClassifier{section, name, key, doc_string},
         OptionUIItem(ui_type),
         m_value{value}, m_default_value{value} {}
+    GncOptionValue<ValueType>(const GncOptionValue<ValueType>&) = default;
+    GncOptionValue<ValueType>(GncOptionValue<ValueType>&&) = default;
+    GncOptionValue<ValueType>& operator=(const GncOptionValue<ValueType>&) = default;
+    GncOptionValue<ValueType>& operator=(GncOptionValue<ValueType>&&) = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
@@ -227,6 +297,10 @@ public:
             if (!this->validate(value))
             throw std::invalid_argument("Attempt to create GncValidatedOption with bad value.");
     }
+    GncOptionValidatedValue<ValueType>(const GncOptionValidatedValue<ValueType>&) = default;
+    GncOptionValidatedValue<ValueType>(GncOptionValidatedValue<ValueType>&&) = default;
+    GncOptionValidatedValue<ValueType>& operator=(const GncOptionValidatedValue<ValueType>&) = default;
+    GncOptionValidatedValue<ValueType>& operator=(GncOptionValidatedValue<ValueType>&&) = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     bool validate(ValueType value) { return m_validator(value); }
@@ -259,6 +333,10 @@ public:
         m_default_value{value >= min && value <= max ? value : min},
         m_min{min}, m_step{step} {}
 
+    GncOptionRangeValue<ValueType>(const GncOptionRangeValue<ValueType>&) = default;
+    GncOptionRangeValue<ValueType>(GncOptionRangeValue<ValueType>&&) = default;
+    GncOptionRangeValue<ValueType>& operator=(const GncOptionRangeValue<ValueType>&) = default;
+    GncOptionRangeValue<ValueType>& operator=(GncOptionRangeValue<ValueType>&&) = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     bool validate(ValueType value) { return value >= m_min && value <= m_max; }
@@ -277,7 +355,7 @@ private:
     ValueType m_step;
 };
 
-using GncOptionVariant = boost::variant<GncOptionValue<std::string>,
+using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                         GncOptionValue<bool>,
                                         GncOptionValue<int64_t>,
                                         GncOptionValue<QofInstance*>,
@@ -303,185 +381,93 @@ public:
 
     template <typename ValueType> ValueType get_value() const
     {
-        return boost::apply_visitor(GetValueVisitor<ValueType>(), m_option);
+        return std::visit([](const auto& option)->ValueType {
+                if constexpr (std::is_same_v<decltype(option.get_value()), ValueType>)
+                    return option.get_value();
+                else
+                    return ValueType {};
+            }, m_option);
     }
     template <typename ValueType> ValueType get_default_value() const
     {
-        return boost::apply_visitor(GetDefaultValueVisitor<ValueType>(), m_option);
+        return std::visit([](const auto& option)->ValueType {
+                if constexpr (std::is_same_v<decltype(option.get_value()), ValueType>)
+                    return option.get_default_value();
+                else
+                    return ValueType {};
+            }, m_option);
+
     }
     SCM get_scm_value() const
     {
-        return boost::apply_visitor(GetSCMVisitor(), m_option);
+        return std::visit([](const auto& option)->SCM {
+                auto value{option.get_value()};
+                return scm_from_value(value);
+            }, m_option);
     }
     SCM get_scm_default_value() const
     {
-        return boost::apply_visitor(GetSCMDefaultVisitor(), m_option);
+        return std::visit([](const auto& option)->SCM {
+                auto value{option.get_default_value()};
+                return scm_from_value(value);
+            }, m_option);
     }
     template <typename ValueType> void set_value(ValueType value)
     {
-        boost::apply_visitor(SetValueVisitor<ValueType>(value), m_option);
+        std::visit([value](auto& option) {
+                if constexpr (std::is_same_v<decltype(option.get_value()), ValueType>)
+                   option.set_value(value);
+            }, m_option);
     }
     const std::string& get_section() const
     {
-        return boost::apply_visitor(GetSectionVisitor(), m_option);
+        return std::visit([](const auto& option)->const std::string& {
+                return option.m_section;
+            }, m_option);
     }
     const std::string& get_name() const
     {
-        return boost::apply_visitor(GetNameVisitor(), m_option);
+        return std::visit([](const auto& option)->const std::string& {
+                return option.m_name;
+            }, m_option);
     }
     const std::string& get_key() const
     {
-        return boost::apply_visitor(GetKeyVisitor(), m_option);
+        return std::visit([](const auto& option)->const std::string& {
+                return option.m_sort_tag;
+            }, m_option);
     }
     const std::string& get_docstring() const
     {
-        return boost::apply_visitor(GetDocstringVisitor(), m_option);
+          return std::visit([](const auto& option)->const std::string& {
+                return option.m_doc_string;
+              }, m_option);
     }
     void set_ui_item(GncOptionUIItem* ui_elem)
     {
-        return boost::apply_visitor(SetUIItemVisitor(ui_elem), m_option);
+        std::visit([ui_elem](auto& option) {
+                option.set_ui_item(ui_elem);
+            }, m_option);
     }
-    const GncOptionUIType get_ui_type()
+    const GncOptionUIType get_ui_type() const
     {
-        return boost::apply_visitor(GetUITypeVisitor(), m_option);
+        return std::visit([](const auto& option)->GncOptionUIType {
+                return option.get_ui_type();
+            }, m_option);
     }
-    GncOptionUIItem* const get_ui_item()
+    GncOptionUIItem* const get_ui_item() const
     {
-        return boost::apply_visitor(GetUIItemVisitor(), m_option);
+        return std::visit([](const auto& option)->GncOptionUIItem* {
+                return option.get_ui_item();
+            }, m_option);
     }
     void make_internal()
     {
-        return boost::apply_visitor(MakeInternalVisitor(), m_option);
+        std::visit([](auto& option) {
+                option.make_internal();
+            }, m_option);
     }
 private:
-    template <typename ValueType>
-    struct GetValueVisitor : public boost::static_visitor<ValueType>
-    {
-        ValueType operator()(const GncOptionValue<ValueType>& option) const {
-            return option.get_value();
-        }
-        ValueType operator()(const GncOptionValidatedValue<ValueType>& option) const {
-            return option.get_value();
-        }
-        template <class OptionType>
-        ValueType operator()(OptionType& option) const {
-            return ValueType{};
-        }
-    };
-    template <typename ValueType>
-    struct GetDefaultValueVisitor : public boost::static_visitor<ValueType>
-    {
-        ValueType operator()(const GncOptionValue<ValueType>& option) const {
-            return option.get_default_value();
-        }
-        ValueType operator()(const GncOptionValidatedValue<ValueType>& option) const {
-            return option.get_default_value();
-        }
-        template <class OptionType>
-        ValueType operator()(OptionType& option) const {
-            return ValueType();
-        }
-    };
-    template <typename ValueType>
-    struct SetValueVisitor : public boost::static_visitor<>
-    {
-        SetValueVisitor(ValueType value) : m_value{value} {}
-        void operator()(GncOptionValue<ValueType>& option) const {
-            option.set_value(m_value);
-        }
-        void operator()(GncOptionValidatedValue<ValueType>& option) const {
-            option.set_value(m_value);
-        }
-        template <class OptionType>
-        void operator()(OptionType& option) const {
-            std::string msg{"Attempt to set option of type "};
-            msg += typeid(OptionType).name();
-            msg += " with value of type ";
-            msg += typeid(m_value).name();
-            throw std::invalid_argument(msg);
-        }
-    private:
-        ValueType m_value;
-    };
-    struct GetSCMVisitor : public boost::static_visitor<SCM>
-    {
-        template <class OptionType>
-        SCM operator()(OptionType& option) const {
-            auto value{option.get_value()};
-            return scm_from_value<decltype(value)>(value);
-        }
-    };
-    struct GetSCMDefaultVisitor : public boost::static_visitor<SCM>
-    {
-        template <class OptionType>
-        SCM operator()(OptionType& option) const {
-            auto value{option.get_value()};
-            return scm_from_value<decltype(value)>(value);
-        }
-    };
-    struct GetSectionVisitor : public boost::static_visitor<const std::string&>
-    {
-        template <class OptionType>
-        const std::string& operator()(OptionType& option) const {
-            return option.m_section;
-        }
-    };
-    struct GetNameVisitor : public boost::static_visitor<const std::string&>
-    {
-        template <class OptionType>
-        const std::string& operator()(OptionType& option) const {
-            return option.m_name;
-        }
-    };
-    struct GetKeyVisitor : public boost::static_visitor<const std::string&>
-    {
-        template <class OptionType>
-        const std::string& operator()(OptionType& option) const {
-            return option.m_sort_tag;
-        }
-    };
-    struct GetDocstringVisitor :
-        public boost::static_visitor<const std::string&>
-    {
-        template <class OptionType>
-        const std::string& operator()(OptionType& option) const {
-            return option.m_doc_string;
-        }
-    };
-    struct SetUIItemVisitor : public boost::static_visitor<>
-    {
-        SetUIItemVisitor(GncOptionUIItem* ui_item) : m_ui_item{ui_item} {}
-        template <class OptionType>
-        void operator()(OptionType& option) const {
-            option.set_ui_item(m_ui_item);
-        }
-    private:
-        GncOptionUIItem* m_ui_item;
-    };
-    struct GetUITypeVisitor :
-        public boost::static_visitor<GncOptionUIType>
-    {
-        template <class OptionType>
-        const GncOptionUIType operator()(OptionType& option) const {
-            return option.get_ui_type();
-        }
-    };
-    struct GetUIItemVisitor :
-        public boost::static_visitor<GncOptionUIItem* const >
-    {
-        template <class OptionType>
-        GncOptionUIItem* const operator()(OptionType& option) const {
-            return option.get_ui_item();
-        }
-    };
-    struct MakeInternalVisitor : public boost::static_visitor<>
-    {
-        template <class OptionType>
-        void operator()(OptionType& option) const {
-            return option.make_internal();
-        }
-    };
-
     GncOptionVariant m_option;
 };
 
