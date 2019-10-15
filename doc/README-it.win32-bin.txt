@@ -42,10 +42,9 @@ Informazioni sul programma:
 
 GnuCash è un programma di contabilità libero e a codice aperto rilasciato con
 licenza GNU Public Licence (GPL). E' sviluppato con la collaborazione di
-12 programmatori provenienti da oltre 6 paesi.
+200+ programmatori.
 
 La programmazione di GnuCash è iniziata nel 1997 e il primo rilascio risale al 1998. 
 
 -------------------
 
-Questo è il file LEGGIMI di GnuCash 2.2.x dei pacchetti binari per Windows.

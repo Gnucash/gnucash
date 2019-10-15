@@ -41,12 +41,11 @@ Detaljne informacije i upute za rad s GnuCashom možeš naći u izborniku
 
 O programu:
 
-GnuCash je slobodan softver za računovodstvo otvorenog koda, izdan pod GNU općom 
-javnom licencom (GPL). Razvijen je zajedničkim radom dvanaestero ljudi iz više 
-od šest zemalja.
+GnuCash je slobodan softver za računovodstvo otvorenog koda, izdan pod
+GNU općom javnom licencom (GPL). Razvijen je zajedničkim radom
+dvanaestero ljudi iz više od šest zemalja.
 
 Početak programiranja GnuCasha, 1997. Prvo izdanje, 1998.
 
 -------------------
 
-Ovo je GnuCash 2.2.x README datoteka za Windows binarne pakete.

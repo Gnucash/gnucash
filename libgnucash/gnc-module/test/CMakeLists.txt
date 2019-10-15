@@ -55,7 +55,7 @@ set(test_gnc_module_SCHEME
   test-gnc-module-scm-multi.scm
   )
 
-set(GUILE_DEPENDS
+set(CORE_GUILE_DEPENDS
   gnc-module
   scm-test-core
   scm-mod-foo
@@ -69,7 +69,7 @@ set(GUILE_DEPENDS
 gnc_add_scheme_targets(test-gnc-modules-scm
   "${test_gnc_module_SCHEME}"
   "gnucash/gnc-modules/test"
-  "${GUILE_DEPENDS}"
+  "${CORE_GUILE_DEPENDS}"
   TRUE
   )
 

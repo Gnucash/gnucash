@@ -41,11 +41,8 @@ in het "Hulp" menu onder het "Tutorial en concepten gids".
 Over het programma:
 
 GnuCash is a  vrij, open source boekhoudprogramma uitgegeven onder de
-GNU General Public License (GPL). Het wordt door 12 personen uit meer dan
-6 landen gezamelijk ontwikkeld.
+GNU General Public License (GPL). Het wordt door meer dan 200 personen.
 
 De ontwikkeling van GnuCash begon in 1997, de de eerste uitgave was in 1998. 
 
 -------------------
-
-Dit is het Nederlandstalige GnuCash 2.2.x LEESMIJ bestand voor het Windows installatie programma.

@@ -33,10 +33,9 @@ https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 關於程式:
 
-GnuCash 是一個自由、開放原始碼的帳務軟體，它使用 GNU 通用公共許可證(GPL)發布。它是由橫跨 6 國共 12 個開發人員共同合作開發而成。
+GnuCash 是一個自由、開放原始碼的帳務軟體，它使用 GNU 通用公共許可證(GPL)發布。它是由橫跨 6 國共 200+ 個開發人員共同合作開發而成。
 
 GnuCash 的程式撰寫始於 1997 年，第一版發布於 1998 年。
 
 -------------------
 
-這是 GnuCash 2.2.x 在 Windows 二進位套件的 README 檔案。

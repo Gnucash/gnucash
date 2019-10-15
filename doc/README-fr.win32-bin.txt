@@ -47,12 +47,9 @@ et guide des concepts" dans le menu d'aide.
 
 GnuCash est un logiciel de comptabilité gratuit et de source
 libre, émis sous licence GNU Public Licence (GPL). Il est développé
-en collaboration par 12 personnes provenant d'au moins 6 pays.
+en collaboration par plus de 200 personnes.
 
 La programmation de GnuCash a commencé en 1997, sa première version
 a été lancée en 1998.
 
 -------------------
-
-Ceci est le fichier README de GnuCash 2.2.x pour les paquetages en
-binaire pour Windows.
