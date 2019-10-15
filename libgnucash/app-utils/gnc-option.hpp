@@ -178,72 +178,6 @@ private:
     GncOptionUIType m_ui_type;
 };
 
-inline SCM
-scm_from_value(std::string value)
-{
-    return scm_from_utf8_string(value.c_str());
-}
-
-inline SCM
-scm_from_value(bool value)
-{
-    return value ? SCM_BOOL_T : SCM_BOOL_F;
-}
-
-inline SCM
-scm_from_value(int64_t value)
-{
-    return scm_from_int64(value);
-}
-
-inline SCM
-scm_from_value(int value)
-{
-    return scm_from_int(value);
-}
-
-inline SCM
-scm_from_value(QofInstance* value)
-{
-    auto guid = guid_to_string(qof_instance_get_guid(value));
-    auto scm_guid = scm_from_utf8_string(guid);
-    g_free(guid);
-    return scm_guid;
-}
-
-inline SCM
-scm_from_value(QofQuery* value)
-{
-    return SCM_BOOL_F;
-}
-
-inline SCM
-scm_from_value(GncNumeric value)
-{
-    return SCM_BOOL_F;
-}
-
-inline SCM
-scm_from_value(std::vector<GncGUID> value)
-{
-    SCM s_list;
-    for (auto guid : value)
-    {
-        auto guid_s = guid_to_string(qof_instance_get_guid(&guid));
-        auto scm_guid = scm_from_utf8_string(guid_s);
-        auto scm_guid_list1 = scm_list_1(scm_guid);
-        s_list = scm_append(scm_list_2(s_list, scm_guid_list1));
-        g_free(guid_s);
-    }
-    return s_list;
-}
-
-inline SCM
-scm_from_value(GncMultiChoiceOptionChoices value)
-{
-    return SCM_BOOL_F;
-}
-
 template <typename ValueType>
 class GncOptionValue :
     public OptionClassifier, public OptionUIItem
@@ -388,6 +322,7 @@ public:
                     return ValueType {};
             }, m_option);
     }
+
     template <typename ValueType> ValueType get_default_value() const
     {
         return std::visit([](const auto& option)->ValueType {
@@ -398,20 +333,7 @@ public:
             }, m_option);
 
     }
-    SCM get_scm_value() const
-    {
-        return std::visit([](const auto& option)->SCM {
-                auto value{option.get_value()};
-                return scm_from_value(value);
-            }, m_option);
-    }
-    SCM get_scm_default_value() const
-    {
-        return std::visit([](const auto& option)->SCM {
-                auto value{option.get_default_value()};
-                return scm_from_value(value);
-            }, m_option);
-    }
+
     template <typename ValueType> void set_value(ValueType value)
     {
         std::visit([value](auto& option) {
@@ -467,6 +389,7 @@ public:
                 option.make_internal();
             }, m_option);
     }
+    const GncOptionVariant& _get_option() const { return m_option; }
 private:
     GncOptionVariant m_option;
 };

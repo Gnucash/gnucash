@@ -67,19 +67,6 @@ TEST(GncOption, test_int64_t_value)
     EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
 }
 
-TEST(GncOption, test_string_scm_functions)
-{
-    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
-    auto scm_value = option.get_scm_value();
-    auto str_value = scm_to_utf8_string(scm_value);
-    EXPECT_STREQ("waldo", str_value);
-    g_free(str_value);
-    scm_value = option.get_scm_default_value();
-    str_value = scm_to_utf8_string(scm_value);
-    EXPECT_STREQ("waldo", str_value);
-    g_free(str_value);
-}
-
 TEST(GNCOption, test_budget_ctor)
 {
     auto book = qof_book_new();
@@ -88,21 +75,6 @@ TEST(GNCOption, test_budget_ctor)
             GncOption option("foo", "bar", "baz", "Phony Option",
                              QOF_INSTANCE(budget));
         });
-    gnc_budget_destroy(budget);
-    qof_book_destroy(book);
-}
-
-TEST(GNCOption, test_budget_scm_functions)
-{
-    auto book = qof_book_new();
-    auto budget = gnc_budget_new(book);
-    GncOption option("foo", "bar", "baz", "Phony Option",
-                     QOF_INSTANCE(budget));
-    auto scm_budget = option.get_scm_value();
-    auto str_value = scm_to_utf8_string(scm_budget);
-    auto guid = guid_to_string(qof_instance_get_guid(budget));
-    EXPECT_STREQ(guid, str_value);
-    g_free(guid);
     gnc_budget_destroy(budget);
     qof_book_destroy(book);
 }
