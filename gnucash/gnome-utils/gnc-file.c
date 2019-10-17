@@ -46,6 +46,7 @@
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "Scrub.h"
+#include "ScrubBudget.h"
 #include "TransLog.h"
 #include "gnc-session.h"
 #include "gnc-state.h"
@@ -716,7 +717,7 @@ gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readon
     gchar *password = NULL;
     gchar *path = NULL;
     gint32 port = 0;
-
+    gchar *budget_scrubbing_outcome;
 
     ENTER("filename %s", filename);
 RESTART:
@@ -1102,9 +1103,20 @@ RESTART:
         g_free ( message );
     }
 
-    // Fix account color slots being set to 'Not Set', should run once on a book
     qof_event_suspend();
+
+    // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (gnc_get_current_book());
+
+    /* Fix budget signs */
+    budget_scrubbing_outcome = gnc_scrub_budget_signs (new_book);
+
+    if (budget_scrubbing_outcome)
+    {
+        gnc_info_dialog (GTK_WINDOW (parent), "%s", budget_scrubbing_outcome);
+        g_free (budget_scrubbing_outcome);
+    }
+
     qof_event_resume();
 
     return TRUE;
