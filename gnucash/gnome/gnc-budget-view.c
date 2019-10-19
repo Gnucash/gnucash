@@ -901,6 +901,10 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
     {
         info.total = gnc_budget_get_account_period_value(budget, account, period_num);
     }
+
+    if (gnc_reverse_budget_balance (account, TRUE))
+        info.total = gnc_numeric_neg (info.total);
+
     return info.total;
 }
 
@@ -979,6 +983,9 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
         }
         else
         {
+            if (gnc_reverse_budget_balance (account, TRUE))
+                numeric = gnc_numeric_neg (numeric);
+
             xaccSPrintAmount(amtbuff, numeric,
                              gnc_account_print_info(account, FALSE));
             g_object_set(cell, "foreground",
@@ -1019,6 +1026,9 @@ bgv_get_total_for_account(Account* account, GncBudget* budget, gnc_commodity *ne
             {
                 numeric = gbv_get_accumulated_budget_amount(budget, account, period_num);
 
+                if (gnc_reverse_budget_balance (account, TRUE))
+                    numeric = gnc_numeric_neg (numeric);
+
                 if (new_currency)
                 {
                     numeric = gnc_pricedb_convert_balance_nearest_price_t64(
@@ -1043,6 +1053,10 @@ bgv_get_total_for_account(Account* account, GncBudget* budget, gnc_commodity *ne
             }
         }
     }
+
+    if (gnc_reverse_budget_balance (account, TRUE))
+        total = gnc_numeric_neg(total);
+
     return total;
 }
 
@@ -1093,8 +1107,12 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
     if (new_text && *new_text == '\0')
         gnc_budget_unset_account_period_value(budget, account, period_num);
     else
+    {
+        if (gnc_reverse_budget_balance (account, TRUE))
+            numeric = gnc_numeric_neg(numeric);
         gnc_budget_set_account_period_value(budget, account, period_num,
                                             numeric);
+    }
 }
 
 /** \brief Function to find the total in a column of budget provided and
@@ -1124,7 +1142,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     gint i;
     gint num_top_accounts;
-    gboolean neg, red;
+    gboolean red;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
 
@@ -1150,7 +1168,6 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     {
         account  = gnc_account_nth_child(priv->rootAcct, i);
         currency = gnc_account_get_currency_or_parent(account);
-        neg      = FALSE;
 
         switch (xaccAccountGetType(account))
         {
@@ -1166,16 +1183,14 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
                 continue;
             break;
         case ACCT_TYPE_EXPENSE:
-            if (row_type == TOTALS_TYPE_TOTAL)
-                neg = TRUE;
-            else if (row_type != TOTALS_TYPE_EXPENSES)
+            if ((row_type != TOTALS_TYPE_EXPENSES) &&
+                (row_type != TOTALS_TYPE_TOTAL))
                 continue;
             break;
         case ACCT_TYPE_ASSET:
             if (row_type != TOTALS_TYPE_TRANSFERS &&
                 row_type != TOTALS_TYPE_TOTAL)
                 continue;
-            neg = TRUE;
             break;
         default:
             continue;
@@ -1196,7 +1211,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         gnc_budget_get_period_start_date(budget, period_num));
         }
 
-        if (neg)
+        if (gnc_reverse_budget_balance (account, TRUE))
             total = gnc_numeric_sub(total, value, GNC_DENOM_AUTO,
                                     GNC_HOW_DENOM_LCD);
         else

@@ -46,6 +46,16 @@ typedef QofSession * (*QofSessionCB) (void);
 gchar *gnc_normalize_account_separator (const gchar* separator);
 gboolean gnc_reverse_balance(const Account *account);
 
+/* Backward compatibility *******************************************
+ * Return book's UNREVERSED_BUDGET feature check. */
+gboolean gnc_using_unreversed_budgets (QofBook* book);
+
+/* Backward compatibility *******************************************
+ * Compare book's UNREVERSED_BUDGET with unreverse_check. If they
+ * match, return account reversal according to global pref. If they
+ * don't match, return FALSE. */
+gboolean gnc_reverse_budget_balance (const Account *account, gboolean unreversed);
+
 /* Default directory sections ***************************************/
 #define GNC_PREFS_GROUP_OPEN_SAVE    "dialogs.open-save"
 #define GNC_PREFS_GROUP_EXPORT       "dialogs.export-accounts"
