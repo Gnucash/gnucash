@@ -69,6 +69,19 @@ TEST_F(GncOptionDBTest, test_register_string_option)
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
+TEST_F(GncOptionDBTest, test_register_multichoice_option)
+{
+    GncMultiChoiceOptionChoices choices{
+        { "plugh", "xyzzy", "thud"},
+        { "waldo", "pepper", "salt"},
+        { "pork", "sausage", "links"},
+        { "corge", "grault", "garply"}};
+    gnc_register_multichoice_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                    std::move(choices));
+    ASSERT_TRUE(m_db->set_option("foo", "bar", std::string{"corge"}));
+    EXPECT_STREQ("corge", m_db->lookup_string_option("foo", "bar").c_str());
+}
+
 class GncUIType
 {
 public:

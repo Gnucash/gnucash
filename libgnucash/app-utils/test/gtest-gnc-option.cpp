@@ -91,6 +91,7 @@ TEST(GNCOption, test_commodity_ctor)
     gnc_commodity_destroy(hpe);
     qof_book_destroy(book);
 }
+
 static GncOption
 make_currency_option (const char* section, const char* name,
                       const char* key, const char* doc_string,
@@ -204,4 +205,65 @@ TEST_F(GncOptionUI, test_set_option_ui_item)
     GncOptionUIItem option_ui_item{&ui_item};
     m_option.set_ui_item(&option_ui_item);
     EXPECT_EQ(&ui_item, m_option.get_ui_item()->m_widget);
+}
+
+class GncOptionMultichoiceTest : public ::testing::Test
+{
+protected:
+    GncOptionMultichoiceTest() :
+        m_option{"foo", "bar", "baz", "Phony Option",
+            {
+                {"plugh", "xyzzy", "thud"},
+                {"waldo", "pepper", "salt"},
+                {"pork", "sausage", "links"},
+                {"corge", "grault", "garply"}
+            }} {}
+    GncOptionMultichoiceValue m_option;
+};
+
+using GncMultichoiceOption = GncOptionMultichoiceTest;
+
+TEST_F(GncMultichoiceOption, test_option_ui_type)
+{
+    EXPECT_EQ(GncOptionUIType::MULTICHOICE, m_option.get_ui_type());
+}
+
+TEST_F(GncMultichoiceOption, test_validate)
+{
+    EXPECT_TRUE(m_option.validate("waldo"));
+    EXPECT_FALSE(m_option.validate("grault"));
+}
+
+TEST_F(GncMultichoiceOption, test_set_value)
+{
+    EXPECT_NO_THROW({
+            m_option.set_value("pork");
+            EXPECT_STREQ("pork", m_option.get_value().c_str());
+        });
+    EXPECT_THROW({ m_option.set_value("salt"); }, std::invalid_argument);
+    EXPECT_STREQ("pork", m_option.get_value().c_str());
+}
+
+TEST_F(GncMultichoiceOption, test_num_permissible)
+{
+    EXPECT_EQ(4, m_option.num_permissible_values());
+}
+
+TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
+{
+    EXPECT_NO_THROW({
+            EXPECT_EQ(3, m_option.permissible_value_index("corge"));
+            EXPECT_STREQ("waldo", m_option.permissible_value(1).c_str());
+            EXPECT_STREQ("sausage", m_option.permissible_value_name(2).c_str());
+            EXPECT_STREQ("thud",
+                         m_option.permissible_value_description(0).c_str());
+        });
+    EXPECT_THROW({ auto result = m_option.permissible_value(7); },
+                 std::out_of_range);
+    EXPECT_THROW({ auto result = m_option.permissible_value_name(9); },
+        std::out_of_range);
+    EXPECT_THROW({ auto result = m_option.permissible_value_description(4); },
+        std::out_of_range);
+    EXPECT_EQ(std::numeric_limits<std::size_t>::max(),
+              m_option.permissible_value_index("xyzzy"));
 }

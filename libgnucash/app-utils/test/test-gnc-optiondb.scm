@@ -33,6 +33,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-gnc-optiondb-scheme")
   (test-gnc-make-text-option)
+  (test-gnc-make-multichoice-option)
   (test-end "test-gnc-optiondb-scheme"))
 
 (define (test-gnc-make-text-option)
@@ -47,3 +48,36 @@
     (test-equal "pepper" (GncOptionDB-lookup-option
                           (GncOptionDBPtr-get option-db) "foo" "bar")))
   (test-end "test-gnc-make-string-option"))
+
+(define (test-gnc-make-multichoice-option)
+
+  (define (keylist->vectorlist keylist)
+  (map
+   (lambda (item)
+     (vector
+      (car item)
+      (keylist-get-info keylist (car item) 'text)
+      (keylist-get-info keylist (car item) 'tip)))
+   keylist))
+
+  (define (keylist-get-info keylist key info)
+  (assq-ref (assq-ref keylist key) info))
+
+  (test-begin "test-gnc-test-multichoice-option")
+  (let* ((option-db (gnc-option-db-new))
+         (multilist (list
+                       (list "plugh" (cons 'text "xyzzy") (cons 'tip "thud"))
+                       (list "waldo" (cons 'text "pepper") (cons 'tip "salt"))
+                       (list "pork" (cons 'text "sausage") (cons 'tip "links"))
+                       (list "corge" (cons 'text "grault") (cons 'tip "garply"))))
+         (multichoice (keylist->vectorlist multilist))
+         (multi-opt (gnc-register-multichoice-option option-db "foo" "bar" "baz"
+                                                     "Phony Option" multichoice)))
+
+    (GncOptionDB-set-option-string
+     (GncOptionDBPtr-get option-db) "foo" "bar" "corge")
+    (test-equal "corge" (GncOptionDB-lookup-option
+                         (GncOptionDBPtr-get option-db) "foo" "bar")))
+    (test-end "test-gnc-test-multichoice-option"))
+                         (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-end "test-gnc-test-multichoice-option")))

@@ -45,6 +45,7 @@ extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
 %include <std_string.i>
+%import <base-typemaps.i>
 
 
 %inline %{
@@ -117,6 +118,23 @@ inline SCM
 %ignore OptionClassifier;
 %ignore OptionUIItem;
 %nodefaultctor GncOption;
+%ignore GncOptionMultichoiceValue(GncOptionMultichoiceValue&&);
+%ignore GncOptionMultichoiceValue::operator=(const GncOptionMultichoiceValue&);
+%ignore GncOptionMultichoiceValue::operator=(GncOptionMultichoiceValue&&);
+
+%typemap(in) GncMultiChoiceOptionChoices&& (GncMultiChoiceOptionChoices choices)
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM vec = scm_list_ref($input, scm_from_size_t(i));
+        std::string key{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 0))};
+        std::string name{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 1))};
+        std::string desc{scm_to_utf8_string(SCM_SIMPLE_VECTOR_REF(vec, 2))};
+        choices.push_back({std::move(key), std::move(name), std::move(desc)});
+    }
+    $1 = &choices;
+ }
 
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %include "gnc-option.hpp"
@@ -151,6 +169,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
  };
+
 
 /*
 TEST(GncOption, test_string_scm_functions)
