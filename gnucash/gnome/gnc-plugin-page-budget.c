@@ -240,7 +240,6 @@ typedef struct GncPluginPageBudgetPrivate
     Recurrence r;
     gint sigFigs;
     gboolean useAvg;
-    gboolean ignClos;
 
     /* For the allPeriods value dialog */
     gnc_numeric allValue;
@@ -352,7 +351,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
 
     priv->sigFigs = 1;
     priv->useAvg = FALSE;
-    priv->ignClos = TRUE;
     recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
 
     LEAVE("page %p, priv %p, action group %p",
@@ -885,6 +883,7 @@ gnc_budget_gui_delete_budget(GncBudget *budget)
     }
 }
 
+
 static void
 estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
                        GtkTreeIter *iter, gpointer data)
@@ -904,14 +903,9 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 
     if (priv->useAvg && num_periods)
     {
-        if (priv->ignClos)
-            num = xaccAccountGetNoclosingBalanceChangeForPeriod
-              (acct, recurrenceGetPeriodTime(&priv->r, 0, FALSE),
-               recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
-        else
-            num = xaccAccountGetBalanceChangeForPeriod
-              (acct, recurrenceGetPeriodTime(&priv->r, 0, FALSE),
-               recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
+        num = xaccAccountGetNoclosingBalanceChangeForPeriod
+            (acct, recurrenceGetPeriodTime(&priv->r, 0, FALSE),
+             recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
 
         num = gnc_numeric_div(num, 
                               gnc_numeric_create(num_periods, 1), 
@@ -931,14 +925,9 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     {
         for (i = 0; i < num_periods; i++)
         {
-            if (priv->ignClos)
-                num = xaccAccountGetNoclosingBalanceChangeForPeriod
-                  (acct, recurrenceGetPeriodTime(&priv->r, i, FALSE),
-                   recurrenceGetPeriodTime(&priv->r, i, TRUE), TRUE);
-            else
-                num = xaccAccountGetBalanceChangeForPeriod
-                  (acct, recurrenceGetPeriodTime(&priv->r, i, FALSE),
-                   recurrenceGetPeriodTime(&priv->r, i, TRUE), TRUE);
+            num = xaccAccountGetNoclosingBalanceChangeForPeriod
+                (acct, recurrenceGetPeriodTime(&priv->r, i, FALSE),
+                 recurrenceGetPeriodTime(&priv->r, i, TRUE), TRUE);
 
             if (!gnc_numeric_check(num))
             {
@@ -964,7 +953,7 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 {
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
-    GtkWidget *dialog, *gde, *dtr, *hb, *avg, *ignclos;
+    GtkWidget *dialog, *gde, *dtr, *hb, *avg;
     gint result;
     GDate date;
     const Recurrence *r;
@@ -1011,9 +1000,6 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
     avg = GTK_WIDGET(gtk_builder_get_object(builder, "UseAverage"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(avg), priv->useAvg);
 
-    ignclos = GTK_WIDGET(gtk_builder_get_object(builder, "IgnClosing"));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ignclos), priv->ignClos);
-
     gtk_widget_show_all (dialog);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     switch (result)
@@ -1029,8 +1015,7 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(dtr));
 
         priv->useAvg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(avg));
-        priv->ignClos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ignclos));
-
+        
         gtk_tree_selection_selected_foreach(sel, estimate_budget_helper, page);
         break;
     default:
