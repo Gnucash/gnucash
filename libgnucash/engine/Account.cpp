@@ -63,7 +63,7 @@ static const std::string AB_ACCOUNT_UID("account-uid");
 static const std::string AB_BANK_CODE("bank-code");
 static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
-static gnc_numeric xaccAccountGetBalanceAsOfDate_priv (Account *acc, time64 date, gboolean ignclosing);
+static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
 using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
@@ -508,10 +508,6 @@ gnc_account_set_property (GObject         *object,
     case PROP_START_BALANCE:
         number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_account_set_start_balance(account, *number);
-        break;
-    case PROP_START_NOCLOSING_BALANCE:
-        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
-        gnc_account_set_start_noclosing_balance(account, *number);
         break;
     case PROP_START_CLEARED_BALANCE:
         number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
@@ -3299,19 +3295,6 @@ gnc_account_set_start_cleared_balance (Account *acc,
     priv->balance_dirty = TRUE;
 }
 
-void
-gnc_account_set_start_noclosing_balance (Account *acc,
-                                         const gnc_numeric start_baln)
-{
-    AccountPrivate *priv;
-
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    priv = GET_PRIVATE(acc);
-    priv->starting_noclosing_balance = start_baln;
-    priv->balance_dirty = TRUE;
-}
-
 
 void
 gnc_account_set_start_reconciled_balance (Account *acc,
@@ -3331,13 +3314,6 @@ xaccAccountGetBalance (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
     return GET_PRIVATE(acc)->balance;
-}
-
-gnc_numeric
-xaccAccountGetNoclosingBalance (const Account *acc)
-{
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
-    return GET_PRIVATE(acc)->noclosing_balance;
 }
 
 gnc_numeric
@@ -3393,7 +3369,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 \********************************************************************/
 
 static gnc_numeric
-xaccAccountGetBalanceAsOfDate_priv(Account *acc, time64 date, gboolean ignclosing)
+GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing)
 {
     /* Ideally this could use xaccAccountForEachSplit, but
      * it doesn't exist yet and I'm uncertain of exactly how
@@ -3434,7 +3410,10 @@ xaccAccountGetBalanceAsOfDate_priv(Account *acc, time64 date, gboolean ignclosin
             /* Since lp is now pointing to a split which was past the reconcile
              * date, get the running balance of the previous split.
              */
-            balance = xaccSplitGetBalance( (Split *)lp->prev->data );
+            if (ignclosing)
+                balance = xaccSplitGetNoclosingBalance( (Split *)lp->prev->data );
+            else
+                balance = xaccSplitGetBalance( (Split *)lp->prev->data );
         }
         else
         {
@@ -3453,13 +3432,13 @@ xaccAccountGetBalanceAsOfDate_priv(Account *acc, time64 date, gboolean ignclosin
 gnc_numeric
 xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
 {
-    return xaccAccountGetBalanceAsOfDate_priv (acc, date, FALSE);
+    return GetBalanceAsOfDate (acc, date, FALSE);
 }
 
 static gnc_numeric
 xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
 {
-    return xaccAccountGetBalanceAsOfDate_priv (acc, date, TRUE);
+    return GetBalanceAsOfDate (acc, date, TRUE);
 }
 
 /*
@@ -3737,16 +3716,6 @@ xaccAccountGetBalanceInCurrency (const Account *acc,
     return rc;
 }
 
-
-gnc_numeric
-xaccAccountGetNoclosingBalanceInCurrency (const Account *acc,
-                                          const gnc_commodity *report_commodity,
-                                          gboolean include_children)
-{
-    return xaccAccountGetXxxBalanceInCurrencyRecursive
-      (acc, xaccAccountGetNoclosingBalance, report_commodity,
-       include_children);
-}
 
 gnc_numeric
 xaccAccountGetClearedBalanceInCurrency (const Account *acc,
