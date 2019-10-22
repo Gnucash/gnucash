@@ -125,15 +125,6 @@
                                         sublist)
                                      accrec-printer))
 (define newaccrec-full (record-constructor accrectype))                ; requires all the fields
-(define newaccrec-empty (record-constructor accrectype '()))        ; all fields default to #f
-(define newaccrec (record-constructor accrectype '(account         ; most-likely-to-be-needed fields
-                                                    code
-                                                    placeholder?
-                                                    namelink
-                                                    commodity
-                                                    balance-num
-                                                    depth
-                                                    treedepth)))
 (define (newaccrec-clean)
   ;; Create a new accrec with 'clean' empty values, e.g. strings are "", not #f
   (newaccrec-full #f         ; account
