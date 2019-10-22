@@ -19001,7 +19001,7 @@ msgid ""
 "account number might contain an error."
 msgstr ""
 "Die interne Überprüfung der angegebenen IBAN »%s« ist fehlgeschlagen. Die "
-"Kontonummer enthält wahrscheinlich einen Fehler enthält."
+"Kontonummer enthält wahrscheinlich einen Fehler."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:549
 #, c-format

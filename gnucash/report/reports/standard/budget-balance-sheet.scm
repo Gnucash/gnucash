@@ -776,7 +776,7 @@
 	  
           (add-subtotal-line
             right-table
-            (_ "Total Liabilities & Equity")
+            (gnc:html-string-sanitize (_ "Total Liabilities & Equity"))
             #f
             liability-plus-equity)
 	  

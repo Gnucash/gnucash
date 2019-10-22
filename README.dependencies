@@ -90,7 +90,7 @@ Libraries/Deps
   optional
   --------
   aqbanking             5.3.4                    online banking; also requires
-                                                 gwehywfar.
+                                                 gwenhywfar.
 
   libdbi                0.8.3                    SQL backend; also requires at
                                                  least one of libdbd-sqlite3,

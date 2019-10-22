@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.7+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2019-09-26 18:31+0200\n"
-"PO-Revision-Date: 2019-09-17 01:02+0200\n"
+"POT-Creation-Date: 2019-10-19 07:26+0200\n"
+"PO-Revision-Date: 2019-10-19 21:04+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -76,7 +76,7 @@ msgstr "Vijetnamski"
 
 #: borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
-msgstr "Zapadnoeuropski"
+msgstr "Zapadni"
 
 #: borrowed/goffice/go-charmap-sel.c:84
 #: gnucash/gtkbuilder/assistant-loan.glade:1029
@@ -416,7 +416,7 @@ msgstr "Zapadni (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Jezik sustava: "
+msgstr "Jezik: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
@@ -424,7 +424,7 @@ msgstr "Smjer konverzije"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "Ova vrijednost određuje, koji će se iconv test provesti."
+msgstr "Ova vrijednost određuje koji će se iconv test provesti."
 
 #: borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
@@ -432,7 +432,7 @@ msgstr "Izbornik"
 
 #: borrowed/goffice/go-optionmenu.c:410
 msgid "The menu of options"
-msgstr "Izbornik za opcije"
+msgstr "Izbornik opcija"
 
 #: doc/tip_of_the_day.list.c:1
 msgid ""
@@ -492,9 +492,9 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Klikni desni gumb miša (kontrol-klik na Mac OS X) u glavnom prozoru za "
-"prikaz izbornika opcija konta. U svakom registru se pritiskom na desni gumb "
-"miša prikazuje izbornik opcija za transakcije."
+"Klikni desni gumb miša (ctrl-klik na Mac OS X) u glavnom prozoru za prikaz "
+"izbornika opcija konta. U svakom registru se pritiskom na desni gumb miša "
+"prikazuje izbornik opcija za transakcije."
 
 #: doc/tip_of_the_day.list.c:27
 msgid ""
@@ -625,8 +625,8 @@ msgid ""
 "Custom -> \"Custom Multicolumn Report\" report."
 msgstr ""
 "Možeš prikazati višestruke izvještaje u jednom prozoru, prikazujući sve "
-"financijske informacije koje želiš najednom. Za to koristi izvještaj „Uzorak "
-"i proizvoljno → Proizvoljan višestupčani izvještaj“."
+"financijske podatke koje želiš najednom. Za to koristi izvještaj „Uzorak i "
+"proizvoljno → Proizvoljan višestupčani izvještaj“."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
@@ -877,7 +877,7 @@ msgstr "Opcije za nove knjige"
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Taxes"
-msgstr "Porezi"
+msgstr "Porez"
 
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Tax Payment"
@@ -971,8 +971,8 @@ msgstr "Opcija za otplaćivanje kredita: „%s“"
 #: gnucash/report/report-system/trep-engine.scm:1122
 #: gnucash/report/standard-reports/account-summary.scm:83
 #: gnucash/report/standard-reports/advanced-portfolio.scm:72
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1037
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1042
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1033
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1038
 #: gnucash/report/standard-reports/cashflow-barchart.scm:337
 #: gnucash/report/standard-reports/category-barchart.scm:728
 #: gnucash/report/standard-reports/general-journal.scm:101
@@ -1150,7 +1150,7 @@ msgstr "Vaučer"
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1804
 #: libgnucash/app-utils/prefs.scm:75 libgnucash/engine/gncInvoice.c:1057
 msgid "Invoice"
-msgstr "Račun"
+msgstr "Izlazni račun"
 
 #: gnucash/gnome/business-gnome-utils.c:448 gnucash/gnome/gnc-split-reg.c:597
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -1166,7 +1166,7 @@ msgstr "Račun"
 #: gnucash/report/standard-reports/register.scm:227
 #: libgnucash/engine/Recurrence.c:495 libgnucash/engine/Recurrence.c:683
 msgid "None"
-msgstr "Ništa"
+msgstr "Bez"
 
 #: gnucash/gnome/business-gnome-utils.c:568
 msgid "Use Global"
@@ -1241,7 +1241,7 @@ msgstr "Dani"
 #: gnucash/gtkbuilder/dialog-billterms.glade:409
 #: gnucash/gtkbuilder/dialog-billterms.glade:801
 msgid "Proximo"
-msgstr "Sljedećeg mjeseca"
+msgstr "Sljedeći mjesec"
 
 #: gnucash/gnome/dialog-billterms.c:534 gnucash/gnome/dialog-trans-assoc.c:436
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:633
@@ -1389,8 +1389,8 @@ msgstr "Izbrisati robu?"
 #: gnucash/html/gnc-html-webkit1.c:1197
 #: gnucash/import-export/aqb/dialog-ab.glade:305
 #: gnucash/import-export/aqb/dialog-ab.glade:611
-#: gnucash/import-export/aqb/dialog-ab.glade:791
-#: gnucash/import-export/aqb/dialog-ab.glade:915
+#: gnucash/import-export/aqb/dialog-ab.glade:807
+#: gnucash/import-export/aqb/dialog-ab.glade:931
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:420
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2013
@@ -1668,8 +1668,8 @@ msgstr "Saldirano"
 #: gnucash/report/report-system/html-acct-table.scm:600
 #: gnucash/report/standard-reports/balsheet-pnl.scm:345
 #: gnucash/report/standard-reports/equity-statement.scm:169
-#: gnucash/report/standard-reports/income-statement.scm:269
-#: gnucash/report/standard-reports/trial-balance.scm:292
+#: gnucash/report/standard-reports/income-statement.scm:268
+#: gnucash/report/standard-reports/trial-balance.scm:291
 msgid "Closing Entries"
 msgstr "Zaključni unosi"
 
@@ -1709,7 +1709,7 @@ msgstr "Cijena dionice"
 #: gnucash/report/report-system/trep-engine.scm:1040
 #: gnucash/report/report-system/trep-engine.scm:1311
 #: gnucash/report/report-system/trep-engine.scm:1327
-#: gnucash/report/report-system/trep-engine.scm:1996
+#: gnucash/report/report-system/trep-engine.scm:2000
 #: gnucash/report/standard-reports/general-journal.scm:110
 #: gnucash/report/standard-reports/general-ledger.scm:88
 #: gnucash/report/standard-reports/general-ledger.scm:108
@@ -1919,33 +1919,33 @@ msgstr "Opis"
 msgid "Find Transaction"
 msgstr "Nađi transakciju"
 
-#: gnucash/gnome/dialog-imap-editor.c:381
+#: gnucash/gnome/dialog-imap-editor.c:394
 msgid "Map Account NOT found"
 msgstr "Mapirani konto NIJE nađen"
 
-#: gnucash/gnome/dialog-imap-editor.c:480
+#: gnucash/gnome/dialog-imap-editor.c:493
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:112
 msgid "Bayesian"
 msgstr "Bajesov"
 
 #. Description
-#: gnucash/gnome/dialog-imap-editor.c:495
+#: gnucash/gnome/dialog-imap-editor.c:508
 msgid "Description Field"
 msgstr "Polje opisa"
 
 #. Memo
-#: gnucash/gnome/dialog-imap-editor.c:498
+#: gnucash/gnome/dialog-imap-editor.c:511
 msgid "Memo Field"
 msgstr "Polje zabilješke"
 
 #. CSV Account Map
-#: gnucash/gnome/dialog-imap-editor.c:501
+#: gnucash/gnome/dialog-imap-editor.c:514
 msgid "CSV Account Map"
 msgstr "Mapa CSV konta"
 
-#: gnucash/gnome/dialog-imap-editor.c:538
+#: gnucash/gnome/dialog-imap-editor.c:551
 msgid "Online Id"
-msgstr "Internetski identifikacijski broj"
+msgstr "Internetski ID"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -1954,7 +1954,7 @@ msgstr "Internetski identifikacijski broj"
 #. * invoiced.
 #: gnucash/gnome/dialog-invoice.c:429 gnucash/gnome/dialog-order.c:181
 msgid "You need to supply Billing Information."
-msgstr "Moraš upisati informacije računa."
+msgstr "Moraš upisati podatke o primatelju računa."
 
 #: gnucash/gnome/dialog-invoice.c:616
 msgid "Are you sure you want to delete the selected entry?"
@@ -2111,7 +2111,7 @@ msgstr "Prikaži rashodni vaučer"
 
 #: gnucash/gnome/dialog-invoice.c:2420 gnucash/gnome/dialog-invoice.c:2599
 msgid "Bill Information"
-msgstr "Informacije ulaznog računa"
+msgstr "Podaci ulaznog računa"
 
 #: gnucash/gnome/dialog-invoice.c:2422 gnucash/gnome/dialog-invoice.c:2602
 #: gnucash/gnome/dialog-invoice.c:3164
@@ -2120,7 +2120,7 @@ msgstr "ID ulaznog računa"
 
 #: gnucash/gnome/dialog-invoice.c:2425 gnucash/gnome/dialog-invoice.c:2606
 msgid "Voucher Information"
-msgstr "Informacije vaučera"
+msgstr "Podaci vaučera"
 
 #: gnucash/gnome/dialog-invoice.c:2427 gnucash/gnome/dialog-invoice.c:2609
 #: gnucash/gnome/dialog-invoice.c:3198
@@ -2644,10 +2644,10 @@ msgid "Delete prices?"
 msgstr "Izbrisati cijene?"
 
 #: gnucash/gnome/dialog-price-edit-db.c:411
-#: gnucash/report/standard-reports/budget-income-statement.scm:125
+#: gnucash/report/standard-reports/budget-income-statement.scm:123
 #: gnucash/report/standard-reports/equity-statement.scm:85
-#: gnucash/report/standard-reports/income-statement.scm:118
-#: gnucash/report/standard-reports/trial-balance.scm:92
+#: gnucash/report/standard-reports/income-statement.scm:117
+#: gnucash/report/standard-reports/trial-balance.scm:91
 msgid "Entries"
 msgstr "Unosi"
 
@@ -2999,7 +2999,7 @@ msgstr "Zadnja valjana godina: "
 
 #: gnucash/gnome/dialog-tax-info.c:285
 msgid "Form Line Data: "
-msgstr "Podaci za redak obrasca: "
+msgstr "Podaci retka obrasca: "
 
 #: gnucash/gnome/dialog-tax-info.c:286
 #: gnucash/report/standard-reports/account-summary.scm:405
@@ -3136,7 +3136,7 @@ msgstr "Nađi dobavljača"
 #: gnucash/register/ledger-core/split-register.c:2673
 #: gnucash/report/report-system/report-utilities.scm:116
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1093
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1230
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1226
 #: gnucash/report/standard-reports/net-charts.scm:401
 #: gnucash/report/standard-reports/net-charts.scm:481
 #: libgnucash/app-utils/prefs.scm:89 libgnucash/engine/Account.cpp:4099
@@ -3148,8 +3148,8 @@ msgstr "Prihod"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:80
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
 #: gnucash/report/report-system/report-utilities.scm:117
-#: gnucash/report/standard-reports/budget-income-statement.scm:673
-#: gnucash/report/standard-reports/income-statement.scm:601
+#: gnucash/report/standard-reports/budget-income-statement.scm:519
+#: gnucash/report/standard-reports/income-statement.scm:512
 msgid "Expenses"
 msgstr "Rashod"
 
@@ -3173,7 +3173,7 @@ msgstr "Prijenosi"
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1058
 #: gnucash/report/standard-reports/budget-flow.scm:169
 #: gnucash/report/standard-reports/budget-flow.scm:248
-#: gnucash/report/standard-reports/budget.scm:443
+#: gnucash/report/standard-reports/budget.scm:442
 #: gnucash/report/standard-reports/portfolio.scm:278
 msgid "Total"
 msgstr "Ukupno"
@@ -3289,7 +3289,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
-msgstr "Otplata _hipoteke i kredita …"
+msgstr "Otplaćivanje _hipoteke i kredita …"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:177
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -3346,7 +3346,7 @@ msgstr "_Uređivač mapiranja unosa"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
-msgstr "Prikaži i Izbriši Bayesove i ne-Bayesove informacije"
+msgstr "Prikaži i izbriši Bayesove i ne-Bayesove podatke"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
@@ -3480,7 +3480,7 @@ msgstr "Odaberi proračun"
 #: gnucash/gtkbuilder/window-reconcile.glade:40
 #: gnucash/import-export/aqb/dialog-ab.glade:320
 #: gnucash/import-export/aqb/dialog-ab.glade:626
-#: gnucash/import-export/aqb/dialog-ab.glade:806
+#: gnucash/import-export/aqb/dialog-ab.glade:822
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:419
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:477
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:377
@@ -3679,11 +3679,11 @@ msgstr "Prikaži i uredi popis tablice poreza na dodanu vrijednost (PDV)"
 
 #: gnucash/gnome/gnc-plugin-business.c:280
 msgid "_Billing Terms Editor"
-msgstr "Uređivač uvjeta _plaćanja"
+msgstr "U_ređivač uvjeta plaćanja"
 
 #: gnucash/gnome/gnc-plugin-business.c:281
 msgid "View and edit the list of Billing Terms"
-msgstr "Prikaži i uredi popis uvjeta za plaćanja"
+msgstr "Prikaži i uredi popis uvjeta plaćanja"
 
 #: gnucash/gnome/gnc-plugin-business.c:285
 msgid "Bills _Due Reminder"
@@ -4006,14 +4006,10 @@ msgstr "Izbriši"
 
 #. Define the strings here to avoid typos and make changes easier.
 #. Accounts
-#. FIXME this needs an indent option
-#. FIXME this could use an indent option
 #. define all option's names so that they are properly defined
 #. in *one* place.
 #. Accounts
 #. Delete Accounts selector
-#. FIXME this could use an indent option
-#. FIXME this needs an indent option
 #.
 #. * Various option sections and options within those sections
 #. * The untranslated string is used for the key in the KVP
@@ -4037,21 +4033,21 @@ msgstr "Izbriši"
 #: gnucash/report/standard-reports/average-balance.scm:90
 #: gnucash/report/standard-reports/average-balance.scm:294
 #: gnucash/report/standard-reports/balance-forecast.scm:37
-#: gnucash/report/standard-reports/balance-sheet.scm:88
+#: gnucash/report/standard-reports/balance-sheet.scm:87
 #: gnucash/report/standard-reports/balsheet-pnl.scm:64
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:53
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:52
 #: gnucash/report/standard-reports/budget-barchart.scm:39
-#: gnucash/report/standard-reports/budget-income-statement.scm:76
+#: gnucash/report/standard-reports/budget-income-statement.scm:74
 #: gnucash/report/standard-reports/cashflow-barchart.scm:45
 #: gnucash/report/standard-reports/category-barchart.scm:72
 #: gnucash/report/standard-reports/daily-reports.scm:57
 #: gnucash/report/standard-reports/equity-statement.scm:68
 #: gnucash/report/standard-reports/income-gst-statement.scm:80
 #: gnucash/report/standard-reports/income-gst-statement.scm:86
-#: gnucash/report/standard-reports/income-statement.scm:63
+#: gnucash/report/standard-reports/income-statement.scm:62
 #: gnucash/report/standard-reports/net-charts.scm:46
 #: gnucash/report/standard-reports/portfolio.scm:69
-#: gnucash/report/standard-reports/trial-balance.scm:77
+#: gnucash/report/standard-reports/trial-balance.scm:76
 #: libgnucash/engine/qofbookslots.h:65
 msgid "Accounts"
 msgstr "Konti"
@@ -4169,7 +4165,7 @@ msgstr "Procijeni"
 #: gnucash/gnome/gnc-plugin-page-budget.c:276
 #: gnucash/gnome/gnc-plugin-page-budget.c:316
 #: gnucash/gnome/gnc-plugin-page-budget.c:827
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:111
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:110
 #: gnucash/report/standard-reports/budget-barchart.scm:40
 #: gnucash/report/standard-reports/budget-barchart.scm:153
 #: gnucash/report/standard-reports/budget-barchart.scm:166
@@ -4869,7 +4865,7 @@ msgstr "_Dvoredno"
 #: gnucash/gnome/gnc-plugin-page-register.c:437
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:305
 msgid "Show two lines of information for each transaction"
-msgstr "Prikaži dva retka s informacijama za svaku transakciju"
+msgstr "Prikaži dva retka podataka za svaku transakciju"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:416
 msgid "Show _Extra Dates"
@@ -5073,7 +5069,7 @@ msgstr "i podkonti"
 #: gnucash/report/report-system/trep-engine.scm:1337
 #: gnucash/report/standard-reports/general-journal.scm:90
 #: gnucash/report/standard-reports/register.scm:371
-#: gnucash/report/standard-reports/trial-balance.scm:601
+#: gnucash/report/standard-reports/trial-balance.scm:595
 #: libgnucash/app-utils/guile-util.c:850
 msgid "Credit"
 msgstr "Potražuje"
@@ -5088,7 +5084,7 @@ msgstr "Potražuje"
 #: gnucash/report/report-system/trep-engine.scm:1334
 #: gnucash/report/standard-reports/general-journal.scm:89
 #: gnucash/report/standard-reports/register.scm:369
-#: gnucash/report/standard-reports/trial-balance.scm:598
+#: gnucash/report/standard-reports/trial-balance.scm:592
 #: libgnucash/app-utils/guile-util.c:819
 msgid "Debit"
 msgstr "Duguje"
@@ -5295,7 +5291,7 @@ msgstr "_Terminirano"
 #: gnucash/gtkbuilder/dialog-tax-table.glade:147
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:745
 msgid "_New"
-msgstr "_Nova"
+msgstr "_Novo"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:138
 msgid "Create a new scheduled transaction"
@@ -5303,7 +5299,7 @@ msgstr "Stvori novu terminiranu transakciju"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:143
 msgid "_New 2"
-msgstr "_Nova 2"
+msgstr "_Novo 2"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:144
 msgid "Create a new scheduled transaction 2"
@@ -5802,7 +5798,7 @@ msgstr "Naplaćivanje kamata"
 #: gnucash/gtkbuilder/dialog-vendor.glade:782
 #: gnucash/gtkbuilder/dialog-vendor.glade:804
 msgid "Payment Information"
-msgstr "Informacije plaćanja"
+msgstr "Podaci plaćanja"
 
 #: gnucash/gnome/window-reconcile2.c:476 gnucash/gnome/window-reconcile.c:516
 msgid "Payment From"
@@ -5929,14 +5925,13 @@ msgstr "Po_moć"
 
 #: gnucash/gnome/window-reconcile2.c:2179 gnucash/gnome/window-reconcile.c:2263
 msgid "_Reconcile Information..."
-msgstr "_Informacije usklađivanja …"
+msgstr "_Podaci usklađivanja …"
 
 #: gnucash/gnome/window-reconcile2.c:2180 gnucash/gnome/window-reconcile.c:2264
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
-"Promijeni informacije usklađivanja, uključujući datum stanja i zaključni "
-"saldo."
+"Promijeni podatke usklađivanja, uključujući datum stanja i zaključni saldo."
 
 #: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2269
 msgid "_Finish"
@@ -6043,7 +6038,6 @@ msgid "New Split"
 msgstr "Nova podjela"
 
 #: gnucash/gnome-search/dialog-search.c:1097
-#, fuzzy
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,...)!"
@@ -6083,7 +6077,7 @@ msgid "matches no accounts"
 msgstr "ne poklapa se s nijednim kontom"
 
 #: gnucash/gnome-search/search-account.c:195
-#: gnucash/report/standard-reports/cash-flow.scm:261
+#: gnucash/report/standard-reports/cash-flow.scm:257
 msgid "Selected Accounts"
 msgstr "Odabrani konti"
 
@@ -6614,7 +6608,7 @@ msgstr "Uredi valutu"
 
 #: gnucash/gnome-utils/dialog-commodity.c:1002
 msgid "Currency Information"
-msgstr "Informacije valute"
+msgstr "Podaci valute"
 
 #: gnucash/gnome-utils/dialog-commodity.c:1007
 msgid "Edit security"
@@ -6626,7 +6620,7 @@ msgstr "Novi vrijednosni papir"
 
 #: gnucash/gnome-utils/dialog-commodity.c:1008
 msgid "Security Information"
-msgstr "Informacije vrijednosnog papira"
+msgstr "Podaci vrijednosnog papira"
 
 #: gnucash/gnome-utils/dialog-commodity.c:1286
 msgid "You may not create a new national currency."
@@ -6916,6 +6910,8 @@ msgid "Show the income and expense accounts"
 msgstr "Prikaži konta prihoda i rashoda"
 
 #: gnucash/gnome-utils/dialog-transfer.c:702
+#: gnucash/report/report-system/trep-engine.scm:2061
+#: gnucash/report/report-system/trep-engine.scm:2067
 msgid "Error"
 msgstr "Greška"
 
@@ -8128,7 +8124,7 @@ msgstr "Obje dotične valute su jednake."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1253
 #: gnucash/register/ledger-core/split-register.c:506
 msgid "New Split Information"
-msgstr "Informacije nove podjele"
+msgstr "Podaci nove podjele"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1303
 msgid ""
@@ -8160,15 +8156,15 @@ msgstr ""
 #. * attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1723
 msgid "Not enough information for Blank Transaction?"
-msgstr "Nema dovoljno informacija za praznu transakciju?"
+msgstr "Nema dovoljno podataka za praznu transakciju?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1725
 msgid ""
 "The blank transaction does not have enough information to save it. Would you "
 "like to return to the transaction to update, or cancel the save?"
 msgstr ""
-"Prazna transakcija nema dovoljno informacija za spremanje. Želiš li se "
-"vratiti na transakciju i aktualizirati je ili želiš odustati od spremanja?"
+"Prazna transakcija se ne može spremiti jer nema dovoljno podataka. Želiš li "
+"se vratiti na transakciju i aktualizirati je ili želiš odustati od spremanja?"
 
 #. Translators: Return to the transaction to update
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1737
@@ -8440,9 +8436,9 @@ msgstr "Isplatnica"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:72
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:76
 #: gnucash/register/ledger-core/split-register.c:2657
-#: gnucash/report/standard-reports/balance-sheet.scm:656
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1055
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:812
+#: gnucash/report/standard-reports/balance-sheet.scm:500
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1051
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:722
 #: libgnucash/app-utils/gnc-ui-util.c:1027 libgnucash/engine/Account.cpp:4101
 msgid "Equity"
 msgstr "Kapital"
@@ -8582,7 +8578,7 @@ msgstr "_Ponovo izračunaj"
 #: gnucash/report/report-system/trep-engine.scm:1047
 #: gnucash/report/standard-reports/general-ledger.scm:79
 #: gnucash/report/standard-reports/general-ledger.scm:99
-#: gnucash/report/standard-reports/trial-balance.scm:604
+#: gnucash/report/standard-reports/trial-balance.scm:598
 msgid "Account Name"
 msgstr "Naziv konta"
 
@@ -8959,7 +8955,7 @@ msgstr "Primi"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3061
 #: gnucash/report/business-reports/customer-summary.scm:140
 #: gnucash/report/business-reports/customer-summary.scm:338
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1234
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1230
 #: gnucash/report/standard-reports/net-charts.scm:401
 #: gnucash/report/standard-reports/net-charts.scm:481
 #: libgnucash/app-utils/prefs.scm:73 libgnucash/engine/Account.cpp:4100
@@ -10977,7 +10973,7 @@ msgid ""
 "the default setting for when a register is first opened. The setting can be "
 "changed at any time via the \"View->Double Line\" menu item."
 msgstr ""
-"Prikaži dva retka s informacijama za svaku transakciju u registru. Ovo je "
+"Prikaži dva retka podataka za svaku transakciju u registru. Ovo je "
 "standardna postavka, kad se registar po prvi puta otvara. Postavku možeš "
 "promijeniti u bilo koje doba, putem stavke u izborniku „Prikaz → Dvoredno”."
 
@@ -11968,8 +11964,8 @@ msgstr "Sažetak izvoza"
 msgid "CSV Price Import"
 msgstr "Uvoz CSV cijena"
 
+#. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
-#, fuzzy
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
 "\n"
@@ -12002,8 +11998,10 @@ msgid ""
 msgstr ""
 "Ovaj pomoćnik će ti pomoći uvesti cijene iz CSV datoteke.\n"
 "\n"
-"Za uspješan uvoz su potrebni barem ovi stupci: „Datum”, „Količina”, „Roba "
-"iz” i „Valuta u”.\n"
+"Za uspješan uvoz su potrebni barem ovi stupci: „Datum”, „Količina”, „Iz "
+"imenskog prostora”, „Iz simbola” i „Valuta u”. Ako se svi unosi odnose na "
+"istu dionicu/valutu, onda ih možeš odabrati te će onda stupci biti „Datum” i "
+"„Količina”.\n"
 "\n"
 "Postoje razne opcije za određivanje razdvojnog znaka i fiksne širine. Za "
 "željenu fiksnu širinu, klikni dvaput na prikazanu tablicu i ako treba, "
@@ -12296,17 +12294,17 @@ msgid ""
 "will consider this line part of the same transaction."
 msgstr ""
 "Uvoznik uobičajeno pretpostavlja, da svaki redak uvozne datoteke, "
-"predstavlja jednu transakciju. Svaki redak može sadržati informacije jedne "
+"predstavlja jednu transakciju. Svaki redak može sadržati podatke jedne "
 "transakcije te jednu ili dvije stavke.\n"
 "\n"
 "Ako je „Višedjelna” uključeno, uvoznik će pretpostaviti, da više uzastopnih "
-"redaka sadrže informacije za jednu transakciju. Svaki redak sadrži "
-"informacije za samo jednu stavku. Prvi redak bi također morao sadržati "
-"informacije za transakciju.\n"
+"redaka sadrže podatke za jednu transakciju. Svaki redak sadrži podatke za "
+"samo jednu stavku. Prvi redak bi također morao sadržati podatke za "
+"transakciju.\n"
 "Za pogađanje redaka, koji se odnose na zajedničku transakciju, uvoznik će "
-"usporediti informacije transakcije u svakom retku. Ako nema informacija ili "
-"je informacija jednaka prethodnom retku transakcije, uvoznik će "
-"pretpostaviti, da taj redak dio iste transakcije."
+"usporediti podatke transakcije u svakom retku. Ako nema podataka ili je "
+"podatak jednak prethodnom retku transakcije, uvoznik će pretpostaviti, da je "
+"taj redak dio iste transakcije."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:767
 msgid ""
@@ -12400,7 +12398,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1090
 msgid "Transaction Information"
-msgstr "Informacije transakcije"
+msgstr "Podaci transakcije"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1117
 msgid "Match Transactions"
@@ -12614,11 +12612,11 @@ msgid ""
 msgstr ""
 "Ovo je metoda korak-po-korak za stvaranje otplaćivanja kredita u GnuCashu. U "
 "ovom pomoćniku možeš upisati detalje o tvom kreditu/zajmu i njegovim "
-"otplaćivanjima, kao i detalje o njegovom povratu. Upotrebom tih informacija, "
+"otplaćivanjima, kao i detalje o njegovom povratu. Upotrebom tih podataka, "
 "stvorit će se odgovarajuće terminirane transakcije.\n"
 "\n"
-"Ako pogriješiš ili kasnije želiš upisati promjene, možeš neposredno "
-"izmijeniti stvorene terminirane transakcije."
+"Ako pogriješiš ili kasnije želiš upisati promjene, terminirane transakcije "
+"možeš direktno urediti."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:112
 msgid "Loan / Mortgage Repayment Setup"
@@ -13074,7 +13072,7 @@ msgid ""
 "you select a different account, it will be remembered for future QIF files. "
 msgstr ""
 "QIF datoteke preuzete od banaka i drugih financijskih institucija, možda "
-"nemaju informacije za konta i kategorije, koje bi im omogućile pravilno "
+"nemaju podatke za konta i kategorije, koje bi im omogućile pravilno "
 "dodijeljivanje GnuCash kontima.\n"
 "\n"
 "Na sljedećoj stranici ćeš vidjeti tekst, koji se pojavljuje u poljima "
@@ -13143,10 +13141,10 @@ msgid ""
 "If you don't see your exchange listed, or none of the available choices are "
 "appropriate, you can enter a new one."
 msgstr ""
-"Niže dolje će biti potrebno dostaviti informacije o dionicama, "
-"investicijskim fondovima i drugim ulaganjima, koja se javljaju u QIF "
-"datoteci, koju uvoziš. GnuCash treba neke dodatne detalje o ovim ulaganjima, "
-"koje QIF format ne pruža.\n"
+"Niže dolje će biti potrebno dostaviti podatke o dionicama, investicijskim "
+"fondovima i drugim ulaganjima, koja se javljaju u QIF datoteci, koju uvoziš. "
+"GnuCash treba neke dodatne detalje o ovim ulaganjima, koje QIF format ne "
+"pruža.\n"
 "\n"
 "Svaka dionica, investicijski fond ili drugo ulaganje mora imati naziv i "
 "kraticu, kao što je burzovna oznaka. Budući da neke nepovezane investicije "
@@ -13154,12 +13152,12 @@ msgstr ""
 "primjer, možeš odabrati burzu koja je dodijeliia oznaku (NASDAQ, NYSE, itd.) "
 "ili odaberi vrstu ulaganja.\n"
 "\n"
-"Ako na spisku ne vidiš tvoju burzu, ili nijedan od dostupnih izbora nije "
-"odgovarajući, možeš upisati novu."
+"Ako na spisku ne vidiš svoju burzu ili ako nijedna od dostupnih nije "
+"odgovarajuća, možeš upisati novu."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1024
 msgid "Enter Information about..."
-msgstr "Upiši informacije o …"
+msgstr "Upiši podatke o …"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1050
 msgid "All fields must be complete to continue..."
@@ -13844,8 +13842,8 @@ msgstr "<b>_Matični konto</b>"
 #: gnucash/report/standard-reports/equity-statement.scm:108
 #: gnucash/report/standard-reports/equity-statement.scm:112
 #: gnucash/report/standard-reports/register.scm:375
-#: gnucash/report/standard-reports/trial-balance.scm:186
-#: gnucash/report/standard-reports/trial-balance.scm:190
+#: gnucash/report/standard-reports/trial-balance.scm:185
+#: gnucash/report/standard-reports/trial-balance.scm:189
 #: gnucash/report/stylesheets/stylesheet-easy.scm:46
 #: gnucash/report/stylesheets/stylesheet-easy.scm:52
 #: gnucash/report/stylesheets/stylesheet-easy.scm:58
@@ -13910,7 +13908,7 @@ msgstr "Opće"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1453
 msgid "<b>Balance Information</b>"
-msgstr "<b>Informacije salda</b>"
+msgstr "<b>Podaci salda</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1467
 msgid "<b>Initial Balance Transfer</b>"
@@ -14103,7 +14101,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:176
 msgid "The percentage discount applied for early payment."
-msgstr "Postatak popusta, primijenjen za uranjeno plaćanje."
+msgstr "Postatak popusta, primijenjen za prerano plaćanje."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:237
 msgid "Due Day: "
@@ -14115,11 +14113,11 @@ msgstr "Dan popusta: "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:276
 msgid "Cutoff Day: "
-msgstr "Dan zaključenja: "
+msgstr "Dan prijalaza: "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:304
 msgid "The day of the month bills are due"
-msgstr "Dan mjeseca za dospijeća računa"
+msgstr "Dan u mjesecu za dospijeća računa"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:326
 msgid "The last day of the month for the early payment discount."
@@ -14127,7 +14125,7 @@ msgstr "Posljednji dan u mjesecu za popust zbog preranog plaćanja."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:348
 msgid "The discount percentage applied if paid early."
-msgstr "Primijenjeni postotak popusta, ako je plaćeno prerano."
+msgstr "Primijenjeni postotak popusta, ako je prerano plaćeno."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:370
 msgid ""
@@ -14135,9 +14133,9 @@ msgid ""
 "are applied to the following month. Negative values count backwards from the "
 "end of the month."
 msgstr ""
-"Dan prekida za primjenu ulaznih računa na sljedeći mjesec. Nakon prekida, "
-"ulazni računi se primijenjuju u narednom mjesecu. Negativnim vrijednostima "
-"se računa unatrag od kraja mjeseca."
+"Dan za primjenu računa u sljedećem mjesecu. Računi se nakon tog dana "
+"primijenjuju u sljedećem mjesecu. Negativnim vrijednostima se dan izračunava "
+"od kraja mjeseca natraške."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:434
 msgid "Table"
@@ -14312,11 +14310,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:226
 msgid "<b>Quote Source Information</b>"
-msgstr "<b>Informacije izvora tečaja</b>"
+msgstr "<b>Podaci izvora tečaja</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:239
 msgid "<b>Security Information</b>"
-msgstr "<b>Informacije vrijednosnog papira</b>"
+msgstr "<b>Podaci vrijednosnog papira</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
 msgid "Type of quote source:"
@@ -14357,8 +14355,7 @@ msgid ""
 "quotes."
 msgstr ""
 "Ovo su izvori tečajeva za „F::Q“, koji dohvaćaju informacije s jedne web "
-"stranice. Ako ta web stranica nije dostupna, nećeš biti u mogućnosti "
-"dohvatiti tečajeve."
+"stranice. Ako ta web stranica nije dostupna, nećeš moći dohvatiti tečajeve."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
 msgid "_Multiple:"
@@ -14370,9 +14367,9 @@ msgid ""
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
 msgstr ""
-"Ovo su izvori tečajeva za „F::Q“, koji dohvaćaju informacije s višestrukih "
-"web stranica. Ako jedna od tih web stranica nije dostupna, „F::Q“ će "
-"pokušati da dohvatiti podatke s neke druge stranice."
+"Ovo su izvori tečajeva za „F::Q“, koji dohvaćaju podatke s više web "
+"stranica. Ako jedna od tih web stranica nije dostupna, „F::Q“ će pokušati "
+"dohvatiti podatke s neke druge stranice."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
 msgid "_Unknown:"
@@ -14385,7 +14382,7 @@ msgid ""
 "multiple sites on the internet."
 msgstr ""
 "Ovo su izvori tečajeva, koji su nedavno dodani u „F::Q“. GnuCash ne zna, da "
-"li ti izvori dohvaćaju informacije s jedne ili s više web stranica."
+"li ti izvori dohvaćaju podatke s jedne ili s više web stranica."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
 msgid "Time_zone:"
@@ -14409,7 +14406,7 @@ msgstr "Odaberi vrijednosni papir/valutu "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:794
 msgid "Select user information here..."
-msgstr "Odaberi korisničke informacije ovdje …"
+msgstr "Odaberi korisničke podatke ovdje …"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:140
 msgid "Customer Number: "
@@ -14512,15 +14509,15 @@ msgstr "Zanemariti opću poreznu tablicu?"
 #: gnucash/gtkbuilder/dialog-order.glade:312
 #: gnucash/gtkbuilder/dialog-order.glade:660
 msgid "Billing Information"
-msgstr "Informacije računa"
+msgstr "Podaci računa"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:1136
 msgid "Shipping Information"
-msgstr "Informacije isporuke"
+msgstr "Podaci isporuke"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:1161
 msgid "Shipping Address"
-msgstr "Adresa za isporuku"
+msgstr "Adresa za isporuke"
 
 #. Title of dialog
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:9
@@ -14881,7 +14878,7 @@ msgstr "Uređivač mapiranja uvoza"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:95
 msgid "<b>What type of information to display?</b>"
-msgstr "<b>Koju vrstu informacija želiš prikazati?</b>"
+msgstr "<b>Koju vrstu podataka želiš prikazati?</b>"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:128
 msgid "Non-Bayesian"
@@ -14916,7 +14913,7 @@ msgid ""
 "Filter will be applied to 'Match String' and 'Mapped to Account Name' "
 "fields, case sensitive."
 msgstr ""
-"Filtar će biti primijenjen na polja „Usporedi znakovni niz” i „Mapirano na "
+"Filtar će se primijeniti na polja „Usporedi znakovni niz” i „Mapirano na "
 "naziv konta”, razlikuje velika/mala slova."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:302
@@ -14935,8 +14932,8 @@ msgstr "_Sklopi sve"
 msgid ""
 "Multiple rows can be selected and then deleted by pressing the delete button."
 msgstr ""
-"Moguće je odabrati više redaka istovremeno, te ih potom izbrisati pomoću "
-"gumba za brisanje."
+"Moguće je odabrati više redaka istovremeno te ih potom izbrisati pomoću "
+"gumba „Izbriši”."
 
 #: gnucash/gtkbuilder/dialog-import.glade:89
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -15191,7 +15188,7 @@ msgstr "Uknjiženi konto"
 #: gnucash/gtkbuilder/dialog-invoice.glade:213
 #: gnucash/gtkbuilder/dialog-invoice.glade:811
 msgid "Invoice Information"
-msgstr "Informacije izlaznog računa"
+msgstr "Podaci izlaznog računa"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:240
 msgid "(owner)"
@@ -15259,11 +15256,11 @@ msgstr "ID naloga. Ako ga ostaviš praznim, odabrat će se jedan razuman broj"
 
 #: gnucash/gtkbuilder/dialog-job.glade:165
 msgid "Job Information"
-msgstr "Informacije naloga"
+msgstr "Podaci naloga"
 
 #: gnucash/gtkbuilder/dialog-job.glade:273
 msgid "Owner Information"
-msgstr "Informacije vlasnika"
+msgstr "Podaci vlasnika"
 
 #: gnucash/gtkbuilder/dialog-job.glade:291
 msgid "Job Active"
@@ -15421,7 +15418,7 @@ msgstr "Zatvori _narudžbu"
 #: gnucash/gtkbuilder/dialog-order.glade:231
 #: gnucash/gtkbuilder/dialog-order.glade:577
 msgid "Order Information"
-msgstr "Informacije narudžbe"
+msgstr "Podaci narudžbe"
 
 #: gnucash/gtkbuilder/dialog-order.glade:392
 msgid "Order Entries"
@@ -15647,7 +15644,7 @@ msgstr "<b>Oznake</b>"
 #: gnucash/gtkbuilder/dialog-preferences.glade:497
 #: gnucash/gtkbuilder/dialog-price.glade:450
 msgid "_None"
-msgstr "_Ništa"
+msgstr "_Bez"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:517
 msgid "C_redit accounts"
@@ -16143,8 +16140,8 @@ msgid ""
 "Show two lines of information for each transaction instead of one. Does not "
 "affect expanded transactions."
 msgstr ""
-"Prikaži dva retka s informacijama za svaku transakciju, umjesto jednog. Ne "
-"utječe na rasklopljene transakcije."
+"Prikaži dva retka podataka za svaku transakciju, umjesto jednog. Ne utječe "
+"na rasklopljene transakcije."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2498
 msgid "Register opens in a new _window"
@@ -16318,16 +16315,16 @@ msgstr "Internetski tečajevi"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "Ponuđena cijena pri kupnji"
+msgstr "Ponuđena kupovna cijena"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "Ponuđena cijena u prodaji"
+msgstr "Ponuđena prodajna cijena"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 #: gnucash/report/standard-reports/budget.scm:125
 msgid "Last"
-msgstr "Posljednje"
+msgstr "Zadnja"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
@@ -17013,7 +17010,7 @@ msgstr "_Pregledaj stvorene transakcije"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:13
 msgid "Income Tax Information"
-msgstr "Informacije poreza na prihod"
+msgstr "Podaci poreza na prihod"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:82
 msgid "<b>Income Tax Identity</b>"
@@ -17045,7 +17042,7 @@ msgstr "_Obveze/Kapital"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:480
 msgid "<b>Account Tax Information</b>"
-msgstr "<b>Porezne informacije konta</b>"
+msgstr "<b>Porezni podaci konta</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:496
 msgid "Tax _Related"
@@ -17168,8 +17165,8 @@ msgid ""
 "     To jump to the Transaction, double click on the entry in the\n"
 "Description column or Association column to open the Association"
 msgstr ""
-" Za prijelaz na transakciju, klikni dvaput na unos u stupcu „Opis”\n"
-"        ili na unos u stupcu „Poveznica” za otvaranje poveznice"
+"  Za prijelaz na transakciju, klikni dvaput na unos u stupcu „Opis”,\n"
+"za otvaranje poveznice, klikni dvaput na unos u stupcu „Poveznica”"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:8
 msgid "Transfer Funds"
@@ -17177,7 +17174,7 @@ msgstr "Prijenos sredstva"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:81
 msgid "<b>Basic Information</b>"
-msgstr "<b>Osnovne informacije</b>"
+msgstr "<b>Osnovni podaci</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:142
 msgid "Date:"
@@ -17236,7 +17233,7 @@ msgid "_Username:"
 msgstr "_Korisničko ime:"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#: gnucash/import-export/aqb/dialog-ab.glade:678
+#: gnucash/import-export/aqb/dialog-ab.glade:694
 msgid "_Password:"
 msgstr "_Lozinka:"
 
@@ -17912,7 +17909,7 @@ msgstr "Dupliciraj transakciju"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:75
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:985
 msgid "<b>New Transaction Information</b>"
-msgstr "<b>Informacije nove transakcije</b>"
+msgstr "<b>Podaci nove transakcije</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
@@ -18155,7 +18152,7 @@ msgstr "Prikaži vlasnike sa saldom _nula"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:74
 msgid "<b>Auto-Clear Information</b>"
-msgstr "<b>Informacije automatske potvrde</b>"
+msgstr "<b>Podaci automatske potvrde</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
@@ -18164,7 +18161,7 @@ msgstr "_Zaključni saldo:"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
-msgstr "<b>Informacije usklađivanja</b>"
+msgstr "<b>Podaci usklađivanja</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
 msgid "Statement _Date:"
@@ -18255,7 +18252,6 @@ msgstr ""
 "bankarstvo."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:40
-#, fuzzy
 msgid ""
 "\n"
 "You first need to apply for Online Banking access at your bank. If your "
@@ -18297,7 +18293,7 @@ msgstr ""
 "* Korisnički ID, s kojim te banka identificira\n"
 "* Internet adresu servera tvoje banke za internet bankarstvo\n"
 "* Za HBCI internet bankarstvo, informacije o kriptografskom javnom ključu "
-"tvoje banke („Ovo pismo“).\n"
+"tvoje banke („INI pismo“ – pismo o inicijalizaciji).\n"
 "\n"
 "Ovi će podaci biti potrebni u nastavku. Sad klikni „Dalje“.\n"
 "\n"
@@ -18314,8 +18310,7 @@ msgstr ""
 "naziv postavke i pritisni gumb „Spremi postavke”. Napominjemo da ne možeš "
 "spremiti u ugrađene postave.\n"
 "\n"
-"Ovo je nepovratna operacija, stoga provjeri imaš li radnu sigurnosnu "
-"kopiju.\n"
+"Ovo je nepovratna operacija, stoga provjeri imaš li sigurnosnu kopiju.\n"
 "\n"
 "Klikni „Dalje” za nastavljanje ili „Odustani” za prekid uvoza."
 
@@ -18451,15 +18446,15 @@ msgstr "Upiši lozinku"
 msgid "Enter your password"
 msgstr "Upiši tvoju lozinku"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:693
+#: gnucash/import-export/aqb/dialog-ab.glade:709
 msgid "Con_firm Password:"
 msgstr "Potvrdi _lozinku:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:733
+#: gnucash/import-export/aqb/dialog-ab.glade:749
 msgid "_Remember the PIN in memory"
 msgstr "_Zapamti PIN u memoriji"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:739
+#: gnucash/import-export/aqb/dialog-ab.glade:755
 msgid ""
 "If active, the PIN for FinTS/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
@@ -18469,125 +18464,125 @@ msgstr ""
 "za vrijeme sesije. U protivnom ćeš ga u tijeku sesije, svaki put morati "
 "ponovo upisati."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:774
+#: gnucash/import-export/aqb/dialog-ab.glade:790
 msgid "Name for new template"
 msgstr "Naziv novog predloška"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:839
+#: gnucash/import-export/aqb/dialog-ab.glade:855
 msgid " _Name of the new template:"
 msgstr " _Naziv novog predloška:"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:853
+#: gnucash/import-export/aqb/dialog-ab.glade:869
 msgid "Enter a unique name for the new template."
 msgstr "Upiši jedinstveni naziv za novi predložak."
 
-#: gnucash/import-export/aqb/dialog-ab.glade:883
+#: gnucash/import-export/aqb/dialog-ab.glade:899
 msgid "Online Transaction"
 msgstr "Internetska transakcija"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:901
+#: gnucash/import-export/aqb/dialog-ab.glade:917
 msgid "Execute _later (unimpl.)"
 msgstr "Izvrši _kasnije (nije ugrađeno)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:930
+#: gnucash/import-export/aqb/dialog-ab.glade:946
 msgid "Execute _Now"
 msgstr "Izvrši _sad"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:938
+#: gnucash/import-export/aqb/dialog-ab.glade:954
 msgid "Execute this online transaction now"
 msgstr "Izvrši ovu internetsku transakciju sad"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:965
+#: gnucash/import-export/aqb/dialog-ab.glade:981
 msgid "Enter an Online Transaction"
 msgstr "Upiši internetsku transakciju"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1001
+#: gnucash/import-export/aqb/dialog-ab.glade:1017
 msgid "Recipient Account _Number"
 msgstr "Broj bankovnog računa _primatelja"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1030
+#: gnucash/import-export/aqb/dialog-ab.glade:1046
 msgid "Recipient _Bank Code"
 msgstr "Šifra _banke primatelja"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1060
+#: gnucash/import-export/aqb/dialog-ab.glade:1076
 msgid "_Recipient Name"
 msgstr "_Ime primatelja"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1076
-#: gnucash/import-export/aqb/dialog-ab.glade:1176
+#: gnucash/import-export/aqb/dialog-ab.glade:1092
+#: gnucash/import-export/aqb/dialog-ab.glade:1192
 msgid "at Bank"
 msgstr "pri banci"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1089
+#: gnucash/import-export/aqb/dialog-ab.glade:1105
 msgid "(filled in automatically)"
 msgstr "(popunjava se automatski)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1103
+#: gnucash/import-export/aqb/dialog-ab.glade:1119
 msgid "_Amount"
 msgstr "_Iznos"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1118
+#: gnucash/import-export/aqb/dialog-ab.glade:1134
 msgid "Payment _Purpose (only for recipient)"
 msgstr "Svrha _plaćanja (samo za primatelja)"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1134
+#: gnucash/import-export/aqb/dialog-ab.glade:1150
 msgid "Payment Purpose continued"
 msgstr "Svrha plaćanja, nastavak"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1148
+#: gnucash/import-export/aqb/dialog-ab.glade:1164
 msgid "_Originator Name"
 msgstr "Ime _platitelja"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1200
+#: gnucash/import-export/aqb/dialog-ab.glade:1216
 msgid "Originator Account Number"
 msgstr "Broj bankovnog računa platitelja"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1224
+#: gnucash/import-export/aqb/dialog-ab.glade:1240
 msgid "Bank Code"
 msgstr "Šifra banke"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1385
+#: gnucash/import-export/aqb/dialog-ab.glade:1401
 msgid "_Add current"
 msgstr "_Dodaj trenutačnu"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1391
+#: gnucash/import-export/aqb/dialog-ab.glade:1407
 msgid "Add the current online transaction as a new transaction template"
 msgstr ""
 "Dodaj trenutačnu internetsku transakciju kao novi predložak za transakcije"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1403
+#: gnucash/import-export/aqb/dialog-ab.glade:1419
 msgid "_Up"
 msgstr "_Gore"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1409
+#: gnucash/import-export/aqb/dialog-ab.glade:1425
 msgid "Move the selected transaction template one row up"
 msgstr "Premjesti odabrani predložak transakcije jedan redak prema gore"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1421
+#: gnucash/import-export/aqb/dialog-ab.glade:1437
 msgid "_Down"
 msgstr "_Dolje"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1427
+#: gnucash/import-export/aqb/dialog-ab.glade:1443
 msgid "Move the selected transaction template one row down"
 msgstr "Premjesti odabrani predložak transakcije jedan redak prema dolje"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1439
+#: gnucash/import-export/aqb/dialog-ab.glade:1455
 msgid "_Sort"
 msgstr "_Razvrstaj"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1445
+#: gnucash/import-export/aqb/dialog-ab.glade:1461
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "Razvrstaj popis predložaka za transakcije abecednim redom"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1457
+#: gnucash/import-export/aqb/dialog-ab.glade:1473
 msgid "D_elete"
 msgstr "_Izbriši"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1463
+#: gnucash/import-export/aqb/dialog-ab.glade:1479
 msgid "Delete the currently selected transaction template"
 msgstr "Izbriši trenutačno odabrani predložak za transakcije"
 
-#: gnucash/import-export/aqb/dialog-ab.glade:1512
+#: gnucash/import-export/aqb/dialog-ab.glade:1528
 msgid "_Templates"
 msgstr "_Predlošci"
 
@@ -18731,10 +18726,10 @@ msgid ""
 "execute the command line program \"aqhbci-tool\" for your account, as "
 "follows: aqhbci-tool4 getaccsepa -b %s -a %s"
 msgstr ""
-"Tvoj lokalni bankovni konto još uvijek nema spremljene informacije za SEPA "
+"Tvoj lokalni bankovni konto još uvijek nema spremljene podatke za SEPA "
 "konto. Žao nam je, ali u ovom razvojnom izdanju neophodan je dodatni korak, "
-"koji još nije direktno primijenjen u GnuCashu. Izvrši program linijske "
-"naredbe „aqhbci-tool“ za tvoj konto, kao što slijedi: aqhbci-tool4 "
+"koji još nije direktno primijenjen u GnuCashu. U naredbenom retku izvrši "
+"program „aqhbci-tool“ za tvoj konto na sljedeći način: aqhbci-tool4 "
 "getaccsepa -b %s -a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:564
@@ -18851,7 +18846,7 @@ msgstr ""
 "Promijenjen je popis predložaka za internetski prijenos, ali je prekinut "
 "dijalog prijenosa. Da li ipak želiš spremiti promjene?"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:182
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:184
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -18871,27 +18866,27 @@ msgstr ""
 "\n"
 "Želiš li ponovo upisati nalog?"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:208
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:210
 msgid "Online Banking Direct Debit Note"
 msgstr "Internet bankarstvo – izravno terećenje"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:213
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:215
 msgid "Online Banking Bank-Internal Transfer"
 msgstr "Internet bankarstvo – bankovno-interni prijenos"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:218
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:220
 msgid "Online Banking European (SEPA) Transfer"
 msgstr "Internet bankarstvo – SEPA prijenos"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:223
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:225
 msgid "Online Banking European (SEPA) Debit Note"
 msgstr "Internet bankarstvo – SEPA terećenje"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:229
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:231
 msgid "Online Banking Transaction"
 msgstr "Internet bankarstvo – transakcija"
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:300
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:302
 msgid ""
 "An error occurred while executing the job. Please check the log window for "
 "the exact error message.\n"
@@ -19072,7 +19067,7 @@ msgstr[2] ""
 "Svih %d naloga je uspješno izvršeno, ali za svaki slučaj provjeri log-prozor "
 "zbog potencijalnih grešaka."
 
-#: gnucash/import-export/aqb/gnc-gwen-gui.c:1084
+#: gnucash/import-export/aqb/gnc-gwen-gui.c:1136
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -19081,7 +19076,7 @@ msgstr ""
 "PIN mora imati barem %d znakova\n"
 "Želiš li ponovo pokušati?"
 
-#: gnucash/import-export/aqb/gnc-gwen-gui.c:1586
+#: gnucash/import-export/aqb/gnc-gwen-gui.c:1684
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
@@ -20738,6 +20733,10 @@ msgstr "QIF primaoc/zabilješka"
 msgid "Match?"
 msgstr "Se poklapa?"
 
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3884
+msgid "QIF import requires guile with regex support."
+msgstr "Za QIF uvoz je potreban guile kȏd s podrškom za regularne izraze."
+
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:235
 msgid "Enter a name for the account"
 msgstr "Upiši naziv za konto"
@@ -20777,8 +20776,8 @@ msgstr "Kapitalna dobit (kratkoročno)"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:73
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
 #: gnucash/report/business-reports/balsheet-eg.eguile.scm:195
-#: gnucash/report/standard-reports/balance-sheet.scm:668
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1060
+#: gnucash/report/standard-reports/balance-sheet.scm:507
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1056
 #: libgnucash/app-utils/gnc-ui-util.c:955
 msgid "Retained Earnings"
 msgstr "Zadržana dobit"
@@ -20937,17 +20936,17 @@ msgstr "Vrijednost „~a” bi mogla biti ~a ili ~a."
 msgid "Finding duplicate transactions"
 msgstr "Pronalaženje duplih transakcija"
 
-#: gnucash/import-export/qif-imp/qif-parse.scm:141
+#: gnucash/import-export/qif-imp/qif-parse.scm:145
 #, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
 msgstr "Neprepoznata vrsta konta ‚~s’. Upotrijebit će se konto „Banka”."
 
-#: gnucash/import-export/qif-imp/qif-parse.scm:204
+#: gnucash/import-export/qif-imp/qif-parse.scm:208
 #, scheme-format
 msgid "Unrecognized action '~a'."
 msgstr "Neprepoznata radnja „~a”."
 
-#: gnucash/import-export/qif-imp/qif-parse.scm:223
+#: gnucash/import-export/qif-imp/qif-parse.scm:227
 #, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
 msgstr "Neprepoznati status „~s”. Upotrijebit će se „nepotvrđeno”."
@@ -21669,21 +21668,21 @@ msgstr "Redoslijed razvrstavanja"
 #: gnucash/report/standard-reports/advanced-portfolio.scm:75
 #: gnucash/report/standard-reports/average-balance.scm:41
 #: gnucash/report/standard-reports/balance-forecast.scm:44
-#: gnucash/report/standard-reports/balance-sheet.scm:138
+#: gnucash/report/standard-reports/balance-sheet.scm:137
 #: gnucash/report/standard-reports/balsheet-pnl.scm:111
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:103
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:102
 #: gnucash/report/standard-reports/budget-flow.scm:46
-#: gnucash/report/standard-reports/budget-income-statement.scm:117
+#: gnucash/report/standard-reports/budget-income-statement.scm:115
 #: gnucash/report/standard-reports/cashflow-barchart.scm:58
 #: gnucash/report/standard-reports/cash-flow.scm:52
 #: gnucash/report/standard-reports/category-barchart.scm:69
 #: gnucash/report/standard-reports/daily-reports.scm:54
 #: gnucash/report/standard-reports/equity-statement.scm:77
-#: gnucash/report/standard-reports/income-statement.scm:110
+#: gnucash/report/standard-reports/income-statement.scm:109
 #: gnucash/report/standard-reports/net-charts.scm:43
 #: gnucash/report/standard-reports/portfolio.scm:54
 #: gnucash/report/standard-reports/price-scatter.scm:40
-#: gnucash/report/standard-reports/trial-balance.scm:130
+#: gnucash/report/standard-reports/trial-balance.scm:129
 msgid "Report's currency"
 msgstr "Valuta izvještaja"
 
@@ -21694,21 +21693,21 @@ msgstr "Valuta izvještaja"
 #: gnucash/report/standard-reports/advanced-portfolio.scm:39
 #: gnucash/report/standard-reports/average-balance.scm:42
 #: gnucash/report/standard-reports/balance-forecast.scm:45
-#: gnucash/report/standard-reports/balance-sheet.scm:139
+#: gnucash/report/standard-reports/balance-sheet.scm:138
 #: gnucash/report/standard-reports/balsheet-pnl.scm:113
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:104
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:103
 #: gnucash/report/standard-reports/budget-flow.scm:43
-#: gnucash/report/standard-reports/budget-income-statement.scm:118
+#: gnucash/report/standard-reports/budget-income-statement.scm:116
 #: gnucash/report/standard-reports/cashflow-barchart.scm:59
 #: gnucash/report/standard-reports/cash-flow.scm:53
 #: gnucash/report/standard-reports/category-barchart.scm:70
 #: gnucash/report/standard-reports/daily-reports.scm:55
 #: gnucash/report/standard-reports/equity-statement.scm:78
-#: gnucash/report/standard-reports/income-statement.scm:111
+#: gnucash/report/standard-reports/income-statement.scm:110
 #: gnucash/report/standard-reports/net-charts.scm:44
 #: gnucash/report/standard-reports/portfolio.scm:35
 #: gnucash/report/standard-reports/price-scatter.scm:42
-#: gnucash/report/standard-reports/trial-balance.scm:131
+#: gnucash/report/standard-reports/trial-balance.scm:130
 msgid "Price Source"
 msgstr "Izvor cijena"
 
@@ -21935,7 +21934,7 @@ msgid "Trading Accounts"
 msgstr "Konti burzovnog trgovanja"
 
 #: gnucash/report/business-reports/balsheet-eg.eguile.scm:194
-#: gnucash/report/standard-reports/balance-sheet.scm:669
+#: gnucash/report/standard-reports/balance-sheet.scm:508
 msgid "Retained Losses"
 msgstr "Zadržani gubici"
 
@@ -22000,43 +21999,43 @@ msgstr ""
 
 #: gnucash/report/business-reports/balsheet-eg.scm:198
 #: gnucash/report/standard-reports/account-summary.scm:88
-#: gnucash/report/standard-reports/balance-sheet.scm:91
+#: gnucash/report/standard-reports/balance-sheet.scm:90
 #: gnucash/report/standard-reports/balsheet-pnl.scm:67
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:56
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:55
 #: gnucash/report/standard-reports/budget-barchart.scm:49
-#: gnucash/report/standard-reports/budget-income-statement.scm:79
-#: gnucash/report/standard-reports/income-statement.scm:66
-#: gnucash/report/standard-reports/trial-balance.scm:80
+#: gnucash/report/standard-reports/budget-income-statement.scm:77
+#: gnucash/report/standard-reports/income-statement.scm:65
+#: gnucash/report/standard-reports/trial-balance.scm:79
 msgid "Levels of Subaccounts"
 msgstr "Razine podkonta"
 
 #: gnucash/report/business-reports/balsheet-eg.scm:199
 #: gnucash/report/standard-reports/account-summary.scm:90
-#: gnucash/report/standard-reports/balance-sheet.scm:93
+#: gnucash/report/standard-reports/balance-sheet.scm:92
 #: gnucash/report/standard-reports/balsheet-pnl.scm:68
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:58
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:57
 #: gnucash/report/standard-reports/budget-barchart.scm:51
-#: gnucash/report/standard-reports/budget-income-statement.scm:81
-#: gnucash/report/standard-reports/income-statement.scm:68
-#: gnucash/report/standard-reports/trial-balance.scm:82
+#: gnucash/report/standard-reports/budget-income-statement.scm:79
+#: gnucash/report/standard-reports/income-statement.scm:67
+#: gnucash/report/standard-reports/trial-balance.scm:81
 msgid "Maximum number of levels in the account tree displayed."
 msgstr "Najveći broj razina kontnog plana, koje se prikazuju."
 
 #: gnucash/report/business-reports/balsheet-eg.scm:200
-#: gnucash/report/standard-reports/balance-sheet.scm:94
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:59
-#: gnucash/report/standard-reports/budget-income-statement.scm:82
+#: gnucash/report/standard-reports/balance-sheet.scm:93
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:58
+#: gnucash/report/standard-reports/budget-income-statement.scm:80
 #: gnucash/report/standard-reports/budget.scm:90
-#: gnucash/report/standard-reports/income-statement.scm:69
+#: gnucash/report/standard-reports/income-statement.scm:68
 msgid "Flatten list to depth limit"
 msgstr "Rasklopi popis na ograničenu razinu"
 
 #: gnucash/report/business-reports/balsheet-eg.scm:202
-#: gnucash/report/standard-reports/balance-sheet.scm:96
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:61
-#: gnucash/report/standard-reports/budget-income-statement.scm:84
+#: gnucash/report/standard-reports/balance-sheet.scm:95
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:60
+#: gnucash/report/standard-reports/budget-income-statement.scm:82
 #: gnucash/report/standard-reports/budget.scm:92
-#: gnucash/report/standard-reports/income-statement.scm:71
+#: gnucash/report/standard-reports/income-statement.scm:70
 msgid "Displays accounts which exceed the depth limit at the depth limit."
 msgstr "Prikazuje konta, koji se nalaze izvan zadane ograničene razine."
 
@@ -22054,23 +22053,23 @@ msgstr ""
 
 #: gnucash/report/business-reports/balsheet-eg.scm:208
 #: gnucash/report/standard-reports/account-summary.scm:109
-#: gnucash/report/standard-reports/balance-sheet.scm:112
+#: gnucash/report/standard-reports/balance-sheet.scm:111
 #: gnucash/report/standard-reports/balsheet-pnl.scm:82
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:77
-#: gnucash/report/standard-reports/budget-income-statement.scm:100
-#: gnucash/report/standard-reports/income-statement.scm:87
-#: gnucash/report/standard-reports/trial-balance.scm:126
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:76
+#: gnucash/report/standard-reports/budget-income-statement.scm:98
+#: gnucash/report/standard-reports/income-statement.scm:86
+#: gnucash/report/standard-reports/trial-balance.scm:125
 msgid "Display accounts as hyperlinks"
 msgstr "Prikaži konta kao hiperpoveznice"
 
 #: gnucash/report/business-reports/balsheet-eg.scm:209
 #: gnucash/report/standard-reports/account-summary.scm:111
-#: gnucash/report/standard-reports/balance-sheet.scm:113
+#: gnucash/report/standard-reports/balance-sheet.scm:112
 #: gnucash/report/standard-reports/balsheet-pnl.scm:83
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:78
-#: gnucash/report/standard-reports/budget-income-statement.scm:101
-#: gnucash/report/standard-reports/income-statement.scm:88
-#: gnucash/report/standard-reports/trial-balance.scm:127
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:77
+#: gnucash/report/standard-reports/budget-income-statement.scm:99
+#: gnucash/report/standard-reports/income-statement.scm:87
+#: gnucash/report/standard-reports/trial-balance.scm:126
 msgid "Shows each account in the table as a hyperlink to its register window."
 msgstr ""
 "Prikaži svaki konto u tablici kao hiperpoveznicu na njegov prozor registra."
@@ -22147,36 +22146,36 @@ msgstr "Napomene dodane na kraj izlaznog računa; mogu sadržati HTML oznake."
 
 #: gnucash/report/business-reports/balsheet-eg.scm:230
 #: gnucash/report/standard-reports/account-summary.scm:127
-#: gnucash/report/standard-reports/balance-sheet.scm:140
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:105
-#: gnucash/report/standard-reports/budget-income-statement.scm:119
+#: gnucash/report/standard-reports/balance-sheet.scm:139
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:104
+#: gnucash/report/standard-reports/budget-income-statement.scm:117
 #: gnucash/report/standard-reports/equity-statement.scm:79
-#: gnucash/report/standard-reports/income-statement.scm:112
-#: gnucash/report/standard-reports/trial-balance.scm:132
+#: gnucash/report/standard-reports/income-statement.scm:111
+#: gnucash/report/standard-reports/trial-balance.scm:131
 msgid "Show Foreign Currencies"
 msgstr "Prikaži strane valute"
 
 #: gnucash/report/business-reports/balsheet-eg.scm:232
 #: gnucash/report/standard-reports/account-summary.scm:129
-#: gnucash/report/standard-reports/balance-sheet.scm:142
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:107
-#: gnucash/report/standard-reports/budget-income-statement.scm:121
+#: gnucash/report/standard-reports/balance-sheet.scm:141
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:106
+#: gnucash/report/standard-reports/budget-income-statement.scm:119
 #: gnucash/report/standard-reports/equity-statement.scm:81
-#: gnucash/report/standard-reports/income-statement.scm:114
-#: gnucash/report/standard-reports/trial-balance.scm:134
+#: gnucash/report/standard-reports/income-statement.scm:113
+#: gnucash/report/standard-reports/trial-balance.scm:133
 msgid "Display any foreign currency amount in an account."
 msgstr "Prikaži iznos bilo koje strane valute u kontu."
 
 #. commodities
 #: gnucash/report/business-reports/balsheet-eg.scm:235
 #: gnucash/report/standard-reports/account-summary.scm:124
-#: gnucash/report/standard-reports/balance-sheet.scm:137
+#: gnucash/report/standard-reports/balance-sheet.scm:136
 #: gnucash/report/standard-reports/balsheet-pnl.scm:104
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:102
-#: gnucash/report/standard-reports/budget-income-statement.scm:116
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:101
+#: gnucash/report/standard-reports/budget-income-statement.scm:114
 #: gnucash/report/standard-reports/equity-statement.scm:76
-#: gnucash/report/standard-reports/income-statement.scm:109
-#: gnucash/report/standard-reports/trial-balance.scm:129
+#: gnucash/report/standard-reports/income-statement.scm:108
+#: gnucash/report/standard-reports/trial-balance.scm:128
 msgid "Commodities"
 msgstr "Roba"
 
@@ -22604,7 +22603,7 @@ msgstr "Primatelj"
 
 #: gnucash/report/business-reports/invoice.scm:282
 msgid "Display the Payable to: information."
-msgstr "Prikaži informacije za „Primatelj:“."
+msgstr "Prikaži podatke za „Primatelj:“."
 
 #: gnucash/report/business-reports/invoice.scm:289
 msgid "Payable to string"
@@ -22624,7 +22623,7 @@ msgstr "Kontakt poduzeća"
 
 #: gnucash/report/business-reports/invoice.scm:296
 msgid "Display the Company contact information."
-msgstr "Prikaži kontaktne informacije poduzeća."
+msgstr "Prikaži podatke kontakta poduzeća."
 
 #: gnucash/report/business-reports/invoice.scm:302
 msgid "Company contact string"
@@ -22668,7 +22667,7 @@ msgstr "Prikazati reference izlaznog računa?"
 
 #: gnucash/report/business-reports/invoice.scm:326
 msgid "Billing Terms"
-msgstr "Uvjeti plaćanja"
+msgstr "Uvjeti računa"
 
 #: gnucash/report/business-reports/invoice.scm:327
 msgid "Display the invoice billing terms?"
@@ -22988,7 +22987,7 @@ msgstr ""
 #: gnucash/report/business-reports/receipt.scm:67
 #: gnucash/report/business-reports/taxinvoice.scm:74
 msgid "n/a"
-msgstr " / "
+msgstr "--"
 
 #. neither
 #.
@@ -23820,11 +23819,11 @@ msgstr "Sadržaj"
 
 #: gnucash/report/report-gnome/dialog-report-column-view.c:418
 msgid "Rows"
-msgstr "Redovi"
+msgstr "Redaka"
 
 #: gnucash/report/report-gnome/dialog-report-column-view.c:424
 msgid "Cols"
-msgstr "Stupci"
+msgstr "Stupaca"
 
 #: gnucash/report/report-gnome/dialog-report-style-sheet.c:162
 #, c-format
@@ -24048,17 +24047,17 @@ msgstr "Neispravne opcije URL adrese: %s"
 msgid "Badly-formed report id: %s"
 msgstr "Neispravni id izvještaja: %s"
 
-#: gnucash/report/report-system/eguile-gnc.scm:200
+#: gnucash/report/report-system/eguile-gnc.scm:202
 msgid "An error occurred when processing the template:"
 msgstr "Došlo je do greške prilikom obrade predloška:"
 
-#: gnucash/report/report-system/eguile-gnc.scm:253
+#: gnucash/report/report-system/eguile-gnc.scm:255
 #, scheme-format
 msgid "Template file \"~a\" can not be read"
 msgstr "Nije moguće učitati datoteku predloška „~a”"
 
 #: gnucash/report/report-system/html-acct-table.scm:606
-#: gnucash/report/standard-reports/trial-balance.scm:280
+#: gnucash/report/standard-reports/trial-balance.scm:279
 msgid "Adjusting Entries"
 msgstr "Podešavajući unosi"
 
@@ -24320,11 +24319,11 @@ msgstr "Zanemariti odabir konta i prikazati podkonta svih odabranih konta?"
 
 #: gnucash/report/report-system/options-utilities.scm:117
 #: gnucash/report/standard-reports/account-summary.scm:87
-#: gnucash/report/standard-reports/balance-sheet.scm:90
+#: gnucash/report/standard-reports/balance-sheet.scm:89
 #: gnucash/report/standard-reports/balsheet-pnl.scm:65
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:55
-#: gnucash/report/standard-reports/budget-income-statement.scm:78
-#: gnucash/report/standard-reports/income-statement.scm:65
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:54
+#: gnucash/report/standard-reports/budget-income-statement.scm:76
+#: gnucash/report/standard-reports/income-statement.scm:64
 msgid "Report on these accounts, if display depth allows."
 msgstr "Izvijesti o ovim kontima, ako dubina prikaza to dozvoljava."
 
@@ -24348,7 +24347,7 @@ msgstr "Prikazati iznos konta u stranoj valuti?"
 #: gnucash/report/standard-reports/advanced-portfolio.scm:80
 #: gnucash/report/standard-reports/price-scatter.scm:87
 msgid "The source of price information."
-msgstr "Izvor informacija za cijene."
+msgstr "Izvor podataka za cijene."
 
 #: gnucash/report/report-system/options-utilities.scm:179
 msgid "Average Cost"
@@ -24625,8 +24624,8 @@ msgstr "stilski predložak."
 
 #: gnucash/report/report-system/report-utilities.scm:111
 #: gnucash/report/standard-reports/account-piecharts.scm:60
-#: gnucash/report/standard-reports/balance-sheet.scm:633
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:753
+#: gnucash/report/standard-reports/balance-sheet.scm:483
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:663
 #: gnucash/report/standard-reports/net-charts.scm:402
 #: gnucash/report/standard-reports/net-charts.scm:482
 msgid "Assets"
@@ -24634,8 +24633,8 @@ msgstr "Imovina"
 
 #: gnucash/report/report-system/report-utilities.scm:112
 #: gnucash/report/standard-reports/account-piecharts.scm:62
-#: gnucash/report/standard-reports/balance-sheet.scm:434
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:783
+#: gnucash/report/standard-reports/balance-sheet.scm:386
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:693
 #: gnucash/report/standard-reports/net-charts.scm:402
 #: gnucash/report/standard-reports/net-charts.scm:482
 msgid "Liabilities"
@@ -25234,7 +25233,7 @@ msgstr ""
 #: gnucash/report/standard-reports/budget-flow.scm:88
 #: gnucash/report/standard-reports/cashflow-barchart.scm:88
 #: gnucash/report/standard-reports/income-gst-statement.scm:86
-#: gnucash/report/standard-reports/trial-balance.scm:79
+#: gnucash/report/standard-reports/trial-balance.scm:78
 msgid "Report on these accounts."
 msgstr "Izvijesti o ovim kontima."
 
@@ -25504,8 +25503,8 @@ msgid "Transfer from/to"
 msgstr "Prijenos iz/u"
 
 #: gnucash/report/report-system/trep-engine.scm:1522
-#: gnucash/report/standard-reports/balsheet-pnl.scm:508
-#: gnucash/report/standard-reports/balsheet-pnl.scm:659
+#: gnucash/report/standard-reports/balsheet-pnl.scm:504
+#: gnucash/report/standard-reports/balsheet-pnl.scm:655
 msgid "Total For "
 msgstr "Ukupno za "
 
@@ -25532,13 +25531,13 @@ msgstr "CSV onemogućen za iznose u dvostrukim stupcima"
 msgid "Average"
 msgstr "Prosjek"
 
-#: gnucash/report/report-system/trep-engine.scm:2153
+#: gnucash/report/report-system/trep-engine.scm:2169
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "Iz ~a u ~a"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2196
+#: gnucash/report/report-system/trep-engine.scm:2212
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr "greška ~a prilikom izrađivanja csv-a u ~a: ~s"
@@ -25727,8 +25726,8 @@ msgstr "Tjedni prosjek"
 
 #: gnucash/report/standard-reports/account-piecharts.scm:565
 #: gnucash/report/standard-reports/balance-forecast.scm:259
-#: gnucash/report/standard-reports/balsheet-pnl.scm:887
-#: gnucash/report/standard-reports/budget.scm:445
+#: gnucash/report/standard-reports/balsheet-pnl.scm:883
+#: gnucash/report/standard-reports/budget.scm:444
 #: gnucash/report/standard-reports/cashflow-barchart.scm:294
 #: gnucash/report/standard-reports/cash-flow.scm:191
 #: gnucash/report/standard-reports/category-barchart.scm:529
@@ -25787,18 +25786,18 @@ msgstr ""
 "Što raditi s kontima, koji prelaze navedeno ograničenje dubine (ako postoje)."
 
 #: gnucash/report/standard-reports/account-summary.scm:95
-#: gnucash/report/standard-reports/balance-sheet.scm:98
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:63
-#: gnucash/report/standard-reports/budget-income-statement.scm:86
-#: gnucash/report/standard-reports/income-statement.scm:73
+#: gnucash/report/standard-reports/balance-sheet.scm:97
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:62
+#: gnucash/report/standard-reports/budget-income-statement.scm:84
+#: gnucash/report/standard-reports/income-statement.scm:72
 msgid "Parent account balances"
 msgstr "Salda matičnih konta"
 
 #: gnucash/report/standard-reports/account-summary.scm:96
-#: gnucash/report/standard-reports/balance-sheet.scm:99
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:64
-#: gnucash/report/standard-reports/budget-income-statement.scm:87
-#: gnucash/report/standard-reports/income-statement.scm:74
+#: gnucash/report/standard-reports/balance-sheet.scm:98
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:63
+#: gnucash/report/standard-reports/budget-income-statement.scm:85
+#: gnucash/report/standard-reports/income-statement.scm:73
 msgid "Parent account subtotals"
 msgstr "Podzbrojevi matičnih konta"
 
@@ -25808,61 +25807,61 @@ msgstr "Podzbrojevi matičnih konta"
 #. the fix for this really should involve passing thunks to
 #. gnc:make-html-acct-table
 #: gnucash/report/standard-reports/account-summary.scm:98
-#: gnucash/report/standard-reports/balance-sheet.scm:101
+#: gnucash/report/standard-reports/balance-sheet.scm:100
 #: gnucash/report/standard-reports/balsheet-pnl.scm:76
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:66
-#: gnucash/report/standard-reports/budget-income-statement.scm:89
-#: gnucash/report/standard-reports/income-statement.scm:76
-#: gnucash/report/standard-reports/trial-balance.scm:122
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:65
+#: gnucash/report/standard-reports/budget-income-statement.scm:87
+#: gnucash/report/standard-reports/income-statement.scm:75
+#: gnucash/report/standard-reports/trial-balance.scm:121
 msgid "Include accounts with zero total balances"
 msgstr "Uključi konta, čija su ukupna salda nula"
 
 #: gnucash/report/standard-reports/account-summary.scm:100
-#: gnucash/report/standard-reports/balance-sheet.scm:103
+#: gnucash/report/standard-reports/balance-sheet.scm:102
 #: gnucash/report/standard-reports/balsheet-pnl.scm:77
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:68
-#: gnucash/report/standard-reports/budget-income-statement.scm:91
-#: gnucash/report/standard-reports/income-statement.scm:78
-#: gnucash/report/standard-reports/trial-balance.scm:124
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:67
+#: gnucash/report/standard-reports/budget-income-statement.scm:89
+#: gnucash/report/standard-reports/income-statement.scm:77
+#: gnucash/report/standard-reports/trial-balance.scm:123
 msgid "Include accounts with zero total (recursive) balances in this report."
 msgstr ""
 "U ovaj izvještaj uključi konta, čija su ukupna (rekurzivna) salda nula."
 
 #: gnucash/report/standard-reports/account-summary.scm:101
-#: gnucash/report/standard-reports/balance-sheet.scm:104
+#: gnucash/report/standard-reports/balance-sheet.scm:103
 #: gnucash/report/standard-reports/balsheet-pnl.scm:79
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:69
-#: gnucash/report/standard-reports/budget-income-statement.scm:92
-#: gnucash/report/standard-reports/income-statement.scm:79
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:68
+#: gnucash/report/standard-reports/budget-income-statement.scm:90
+#: gnucash/report/standard-reports/income-statement.scm:78
 msgid "Omit zero balance figures"
 msgstr "Izostavi salda s iznosom od nula"
 
 #: gnucash/report/standard-reports/account-summary.scm:103
-#: gnucash/report/standard-reports/balance-sheet.scm:106
+#: gnucash/report/standard-reports/balance-sheet.scm:105
 #: gnucash/report/standard-reports/balsheet-pnl.scm:80
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:71
-#: gnucash/report/standard-reports/budget-income-statement.scm:94
-#: gnucash/report/standard-reports/income-statement.scm:81
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:70
+#: gnucash/report/standard-reports/budget-income-statement.scm:92
+#: gnucash/report/standard-reports/income-statement.scm:80
 msgid "Show blank space in place of any zero balances which would be shown."
 msgstr ""
 "Prikaži prazan prostor na mjestima bilo kojeg nula salda, koji bi se inače "
 "prikazivali."
 
 #: gnucash/report/standard-reports/account-summary.scm:105
-#: gnucash/report/standard-reports/balance-sheet.scm:108
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:73
-#: gnucash/report/standard-reports/budget-income-statement.scm:96
+#: gnucash/report/standard-reports/balance-sheet.scm:107
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:72
+#: gnucash/report/standard-reports/budget-income-statement.scm:94
 #: gnucash/report/standard-reports/equity-statement.scm:72
-#: gnucash/report/standard-reports/income-statement.scm:83
+#: gnucash/report/standard-reports/income-statement.scm:82
 msgid "Show accounting-style rules"
 msgstr "Prikaži pravila u stilu računovodstva"
 
 #: gnucash/report/standard-reports/account-summary.scm:107
-#: gnucash/report/standard-reports/balance-sheet.scm:110
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:75
-#: gnucash/report/standard-reports/budget-income-statement.scm:98
+#: gnucash/report/standard-reports/balance-sheet.scm:109
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:74
+#: gnucash/report/standard-reports/budget-income-statement.scm:96
 #: gnucash/report/standard-reports/equity-statement.scm:74
-#: gnucash/report/standard-reports/income-statement.scm:85
+#: gnucash/report/standard-reports/income-statement.scm:84
 msgid "Use rules beneath columns of added numbers like accountants do."
 msgstr ""
 "Koristi pravila ispod stupaca dodanih brojeva, kao što to rade računovođe."
@@ -25896,26 +25895,26 @@ msgid "Show an account's notes."
 msgstr "Prikaži napomene konta."
 
 #: gnucash/report/standard-reports/account-summary.scm:130
-#: gnucash/report/standard-reports/balance-sheet.scm:143
+#: gnucash/report/standard-reports/balance-sheet.scm:142
 #: gnucash/report/standard-reports/balsheet-pnl.scm:122
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:108
-#: gnucash/report/standard-reports/budget-income-statement.scm:122
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:107
+#: gnucash/report/standard-reports/budget-income-statement.scm:120
 #: gnucash/report/standard-reports/cash-flow.scm:54
 #: gnucash/report/standard-reports/equity-statement.scm:82
-#: gnucash/report/standard-reports/income-statement.scm:115
-#: gnucash/report/standard-reports/trial-balance.scm:135
+#: gnucash/report/standard-reports/income-statement.scm:114
+#: gnucash/report/standard-reports/trial-balance.scm:134
 msgid "Show Exchange Rates"
 msgstr "Prikaži tečajeve"
 
 #: gnucash/report/standard-reports/account-summary.scm:131
-#: gnucash/report/standard-reports/balance-sheet.scm:144
+#: gnucash/report/standard-reports/balance-sheet.scm:143
 #: gnucash/report/standard-reports/balsheet-pnl.scm:123
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:109
-#: gnucash/report/standard-reports/budget-income-statement.scm:123
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:108
+#: gnucash/report/standard-reports/budget-income-statement.scm:121
 #: gnucash/report/standard-reports/cash-flow.scm:80
 #: gnucash/report/standard-reports/equity-statement.scm:83
-#: gnucash/report/standard-reports/income-statement.scm:116
-#: gnucash/report/standard-reports/trial-balance.scm:136
+#: gnucash/report/standard-reports/income-statement.scm:115
+#: gnucash/report/standard-reports/trial-balance.scm:135
 msgid "Show the exchange rates used."
 msgstr "Prikaži korištene tečajeve."
 
@@ -25948,9 +25947,9 @@ msgid "Disregard completely any accounts deeper than the depth limit."
 msgstr "Zanemari u potpunosti sva konta, dublje od ograničenja dubine."
 
 #: gnucash/report/standard-reports/account-summary.scm:324
-#: gnucash/report/standard-reports/equity-statement.scm:298
-#: gnucash/report/standard-reports/income-statement.scm:433
-#: gnucash/report/standard-reports/trial-balance.scm:414
+#: gnucash/report/standard-reports/equity-statement.scm:302
+#: gnucash/report/standard-reports/income-statement.scm:407
+#: gnucash/report/standard-reports/trial-balance.scm:412
 #, scheme-format
 msgid "For Period Covering ~a to ~a"
 msgstr "Za razdoblje od ~a do ~a"
@@ -26103,14 +26102,14 @@ msgstr "Osnova"
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1087
 #: gnucash/report/standard-reports/cashflow-barchart.scm:313
 #: gnucash/report/standard-reports/cashflow-barchart.scm:338
-#: gnucash/report/standard-reports/cash-flow.scm:284
+#: gnucash/report/standard-reports/cash-flow.scm:280
 msgid "Money In"
 msgstr "Primici"
 
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1088
 #: gnucash/report/standard-reports/cashflow-barchart.scm:314
 #: gnucash/report/standard-reports/cashflow-barchart.scm:339
-#: gnucash/report/standard-reports/cash-flow.scm:305
+#: gnucash/report/standard-reports/cash-flow.scm:301
 msgid "Money Out"
 msgstr "Izdaci"
 
@@ -26340,7 +26339,7 @@ msgid "Reserve"
 msgstr "Rezerva"
 
 #: gnucash/report/standard-reports/balance-sheet.scm:72
-#: gnucash/report/standard-reports/trial-balance.scm:579
+#: gnucash/report/standard-reports/trial-balance.scm:573
 msgid "Balance Sheet"
 msgstr "Bilanca"
 
@@ -26358,31 +26357,31 @@ msgstr ""
 "Ispiši odjeljak obveza/kapitala u istom stupcu ispod odjeljka imovine, "
 "umjesto u drugom stupcu desno od odjeljka imovine."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:115
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:80
+#: gnucash/report/standard-reports/balance-sheet.scm:114
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:79
 msgid "Label the assets section"
 msgstr "Označi odjeljak imovine"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:117
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:82
+#: gnucash/report/standard-reports/balance-sheet.scm:116
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:81
 msgid "Whether or not to include a label for the assets section."
 msgstr "Da li uključiti oznaku za odjeljak imovine."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:118
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:83
+#: gnucash/report/standard-reports/balance-sheet.scm:117
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:82
 msgid "Include assets total"
 msgstr "Uključi ukupni iznos aktive"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:120
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:85
+#: gnucash/report/standard-reports/balance-sheet.scm:119
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:84
 msgid "Whether or not to include a line indicating total assets."
 msgstr "Da li uključiti redak, koji pokazuje ukupni iznos imovine."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:121
+#: gnucash/report/standard-reports/balance-sheet.scm:120
 msgid "Use standard US layout"
 msgstr "Koristi uobičajeni američki raspored"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:123
+#: gnucash/report/standard-reports/balance-sheet.scm:122
 msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
@@ -26390,86 +26389,86 @@ msgstr ""
 "Redoslijed odjeljaka u izvještaju je imovina/obveze/kapital (umjesto imovina/"
 "kapital/obveze)."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:124
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:86
+#: gnucash/report/standard-reports/balance-sheet.scm:123
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:85
 msgid "Label the liabilities section"
 msgstr "Označi odjeljak obveza"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:126
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:88
+#: gnucash/report/standard-reports/balance-sheet.scm:125
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:87
 msgid "Whether or not to include a label for the liabilities section."
 msgstr "Da li uključiti oznaku za odjeljak obveza."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:127
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:89
+#: gnucash/report/standard-reports/balance-sheet.scm:126
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:88
 msgid "Include liabilities total"
 msgstr "Uključi ukupni iznos pasive"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:129
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:91
+#: gnucash/report/standard-reports/balance-sheet.scm:128
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:90
 msgid "Whether or not to include a line indicating total liabilities."
 msgstr "Da li uključiti redak, koji pokazuje ukupni iznos obveza."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:130
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:92
+#: gnucash/report/standard-reports/balance-sheet.scm:129
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:91
 msgid "Label the equity section"
 msgstr "Označi odjeljak kapitala"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:132
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:94
+#: gnucash/report/standard-reports/balance-sheet.scm:131
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:93
 msgid "Whether or not to include a label for the equity section."
 msgstr "Da li uključiti oznaku za odjeljak kapitala."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:133
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:95
+#: gnucash/report/standard-reports/balance-sheet.scm:132
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:94
 msgid "Include equity total"
 msgstr "Uključi ukupni iznos kapitala"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:135
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:97
+#: gnucash/report/standard-reports/balance-sheet.scm:134
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:96
 msgid "Whether or not to include a line indicating total equity."
 msgstr "Da li uključiti redak, koji pokazuje ukupni iznos kapitala."
 
-#: gnucash/report/standard-reports/balance-sheet.scm:442
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:805
+#: gnucash/report/standard-reports/balance-sheet.scm:390
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:715
 msgid "Total Liabilities"
 msgstr "Ukupno obveze"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:640
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:774
+#: gnucash/report/standard-reports/balance-sheet.scm:486
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:684
 msgid "Total Assets"
 msgstr "Ukupno imovina"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:674
+#: gnucash/report/standard-reports/balance-sheet.scm:512
 msgid "Trading Gains"
 msgstr "Dobici burzovnog trgovanja"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:675
+#: gnucash/report/standard-reports/balance-sheet.scm:513
 msgid "Trading Losses"
 msgstr "Gubici burzovnog trgovanja"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:680
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1058
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:847
-#: gnucash/report/standard-reports/equity-statement.scm:624
-#: gnucash/report/standard-reports/trial-balance.scm:740
+#: gnucash/report/standard-reports/balance-sheet.scm:517
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1054
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:757
+#: gnucash/report/standard-reports/equity-statement.scm:472
+#: gnucash/report/standard-reports/trial-balance.scm:734
 msgid "Unrealized Gains"
 msgstr "Neostvareni dobici"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:681
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:848
-#: gnucash/report/standard-reports/equity-statement.scm:625
-#: gnucash/report/standard-reports/trial-balance.scm:741
+#: gnucash/report/standard-reports/balance-sheet.scm:518
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:758
+#: gnucash/report/standard-reports/equity-statement.scm:473
+#: gnucash/report/standard-reports/trial-balance.scm:735
 msgid "Unrealized Losses"
 msgstr "Neostvareni gubici"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:685
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:863
+#: gnucash/report/standard-reports/balance-sheet.scm:522
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:773
 msgid "Total Equity"
 msgstr "Ukupno kapital"
 
-#: gnucash/report/standard-reports/balance-sheet.scm:696
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:869
+#: gnucash/report/standard-reports/balance-sheet.scm:532
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:779
 msgid "Total Liabilities & Equity"
 msgstr "Ukupno obveze i kapital"
 
@@ -26480,9 +26479,9 @@ msgid ""
 "without notice. Bug reports are very welcome at\n"
 "https://bugs.gnucash.org/"
 msgstr ""
-"UPOZORENJE: Pretvaranje stranih valuta i računanje nerealiziranih\n"
+"UPOZORENJE: Pretvaranja stranih valuta i računanja nerealiziranih\n"
 "dobitaka nisu potvrđeni kao točni. Ovaj se izvještaj može izmijeniti\n"
-"bez obavijesti. Izvještaji o greškama su dobrodošli na\n"
+"bez obaviještavanja. Izvještaji o greškama su dobrodošli na\n"
 "https://bugs.gnucash.org/"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:48
@@ -26553,43 +26552,43 @@ msgstr ""
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:90
 #: gnucash/report/standard-reports/equity-statement.scm:86
-#: gnucash/report/standard-reports/income-statement.scm:119
-#: gnucash/report/standard-reports/trial-balance.scm:105
+#: gnucash/report/standard-reports/income-statement.scm:118
+#: gnucash/report/standard-reports/trial-balance.scm:104
 msgid "Closing Entries pattern"
 msgstr "Uzorak zaključnih unosa"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:91
 #: gnucash/report/standard-reports/equity-statement.scm:88
-#: gnucash/report/standard-reports/income-statement.scm:121
-#: gnucash/report/standard-reports/trial-balance.scm:107
+#: gnucash/report/standard-reports/income-statement.scm:120
+#: gnucash/report/standard-reports/trial-balance.scm:106
 msgid "Any text in the Description column which identifies closing entries."
 msgstr "Bilo koji tekst u stupcu opisa, koji određuje zaključne unose."
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:92
 #: gnucash/report/standard-reports/equity-statement.scm:90
-#: gnucash/report/standard-reports/income-statement.scm:123
-#: gnucash/report/standard-reports/trial-balance.scm:109
+#: gnucash/report/standard-reports/income-statement.scm:122
+#: gnucash/report/standard-reports/trial-balance.scm:108
 msgid "Closing Entries pattern is case-sensitive"
 msgstr "Uzorak zaključnih unosa razlikuje velika/mala slova"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:93
 #: gnucash/report/standard-reports/equity-statement.scm:92
-#: gnucash/report/standard-reports/income-statement.scm:125
-#: gnucash/report/standard-reports/trial-balance.scm:111
+#: gnucash/report/standard-reports/income-statement.scm:124
+#: gnucash/report/standard-reports/trial-balance.scm:110
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr "Ovime će uzorak zaključnih unosa razlikovati velika/mala slova."
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:94
 #: gnucash/report/standard-reports/equity-statement.scm:94
-#: gnucash/report/standard-reports/income-statement.scm:127
-#: gnucash/report/standard-reports/trial-balance.scm:113
+#: gnucash/report/standard-reports/income-statement.scm:126
+#: gnucash/report/standard-reports/trial-balance.scm:112
 msgid "Closing Entries Pattern is regular expression"
 msgstr "Uzorak zaključnih unosa je regularni izraz"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:95
 #: gnucash/report/standard-reports/equity-statement.scm:96
-#: gnucash/report/standard-reports/income-statement.scm:129
-#: gnucash/report/standard-reports/trial-balance.scm:115
+#: gnucash/report/standard-reports/income-statement.scm:128
+#: gnucash/report/standard-reports/trial-balance.scm:114
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
 msgstr "Ovime će se uzorak zaključnih unosa obraditi kao regularni izraz."
@@ -26639,50 +26638,50 @@ msgstr ""
 msgid "One year."
 msgstr "Jedna godina."
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:833
+#: gnucash/report/standard-reports/balsheet-pnl.scm:829
 msgid "missing"
 msgstr "nedostaje"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1048
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1044
 #: libgnucash/engine/Account.cpp:4093
 msgid "Asset"
 msgstr "Imovina"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1051
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1047
 #: libgnucash/engine/Account.cpp:4095
 msgid "Liability"
 msgstr "Obveze"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1065
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1245
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1061
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1241
 msgid "Exchange Rates"
 msgstr "Tečajevi"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1075
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1071
 #: gnucash/report/standard-reports/budget-barchart.scm:107
 msgid "Barchart"
 msgstr "Stupčani dijagram"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1177
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1173
 msgid " to "
 msgstr " do "
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1219
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1224
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1215
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1220
 #: gnucash/report/standard-reports/budget-flow.scm:45
 msgid "Period"
 msgstr "Razdoblje"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1238
-#: gnucash/report/standard-reports/trial-balance.scm:866
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1234
+#: gnucash/report/standard-reports/trial-balance.scm:860
 msgid "Net Income"
 msgstr "Neto prihod"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1274
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1270
 msgid "Balance Sheet (Multicolumn)"
 msgstr "Bilanca (višestupčana)"
 
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1275
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1271
 msgid "Income Statement (Multicolumn)"
 msgstr "Stanje prihoda (višestupčano)"
 
@@ -26690,11 +26689,11 @@ msgstr "Stanje prihoda (višestupčano)"
 msgid "Budget Balance Sheet"
 msgstr "Bilanca proračuna"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:98
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:97
 msgid "Include new/existing totals"
 msgstr "Uključi nove/postojeće ukupne iznose"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:100
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:99
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
@@ -26702,7 +26701,7 @@ msgstr ""
 "Da li uključiti retke, koji pokazuju promjenu u iznosima, nastalih "
 "proračunom."
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:112
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:111
 #: gnucash/report/standard-reports/budget-barchart.scm:66
 #: gnucash/report/standard-reports/budget-flow.scm:57
 #: gnucash/report/standard-reports/budget-income-statement.scm:59
@@ -26710,55 +26709,55 @@ msgstr ""
 msgid "Budget to use."
 msgstr "Proračun, koji će se koristiti."
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:765
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:675
 msgid "Existing Assets"
 msgstr "Postojeća imovina"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:767
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:677
 msgid "Allocated Assets"
 msgstr "Raspoređena imovina"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:771
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:681
 msgid "Unallocated Assets"
 msgstr "Neraspoređena imovina"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:797
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:707
 msgid "Existing Liabilities"
 msgstr "Postojeće obveze"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:802
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:712
 msgid "New Liabilities"
 msgstr "Nove obveze"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:828
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:738
 msgid "Existing Retained Earnings"
 msgstr "Postojeća zadržana dobit"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:829
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:739
 msgid "Existing Retained Losses"
 msgstr "Postojeći zadržani gubici"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:834
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:744
 msgid "New Retained Earnings"
 msgstr "Nova zadržana dobit"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:835
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:745
 msgid "New Retained Losses"
 msgstr "Novi zadržani gubici"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:840
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:750
 msgid "Total Retained Earnings"
 msgstr "Ukupno zadržana zarada"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:841
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:751
 msgid "Total Retained Losses"
 msgstr "Ukupno zadržani gubitak"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:857
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:767
 msgid "Existing Equity"
 msgstr "Postojeći kapital"
 
-#: gnucash/report/standard-reports/budget-balance-sheet.scm:860
+#: gnucash/report/standard-reports/budget-balance-sheet.scm:770
 msgid "New Equity"
 msgstr "Novi kapital"
 
@@ -26819,7 +26818,7 @@ msgstr "Proračun novčanog toka"
 msgid "Period number."
 msgstr "Broj razdoblja."
 
-#: gnucash/report/standard-reports/budget-flow.scm:306
+#: gnucash/report/standard-reports/budget-flow.scm:307
 #, scheme-format
 msgid "~a: ~a - ~a"
 msgstr "~a: ~a – ~a"
@@ -26854,63 +26853,63 @@ msgstr "Kraj raspona"
 msgid "Select a budget period that ends the reporting range."
 msgstr "Odaberi proračunsko razdoblje s kojim završava raspon izvještavanja."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:103
-#: gnucash/report/standard-reports/income-statement.scm:90
+#: gnucash/report/standard-reports/budget-income-statement.scm:101
+#: gnucash/report/standard-reports/income-statement.scm:89
 msgid "Label the revenue section"
 msgstr "Označi odjeljak prihoda"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:105
-#: gnucash/report/standard-reports/income-statement.scm:92
+#: gnucash/report/standard-reports/budget-income-statement.scm:103
+#: gnucash/report/standard-reports/income-statement.scm:91
 msgid "Whether or not to include a label for the revenue section."
 msgstr "Da li uključiti oznaku za odjeljak prihoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:106
-#: gnucash/report/standard-reports/income-statement.scm:93
+#: gnucash/report/standard-reports/budget-income-statement.scm:104
+#: gnucash/report/standard-reports/income-statement.scm:92
 msgid "Include revenue total"
 msgstr "Uključi ukupni iznos prihoda"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:108
-#: gnucash/report/standard-reports/income-statement.scm:95
+#: gnucash/report/standard-reports/budget-income-statement.scm:106
+#: gnucash/report/standard-reports/income-statement.scm:94
 msgid "Whether or not to include a line indicating total revenue."
 msgstr "Da li uključiti redak, koji pokazuje ukupni iznos prihoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:109
-#: gnucash/report/standard-reports/income-statement.scm:102
+#: gnucash/report/standard-reports/budget-income-statement.scm:107
+#: gnucash/report/standard-reports/income-statement.scm:101
 msgid "Label the expense section"
 msgstr "Označi odjeljak rashoda"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:111
-#: gnucash/report/standard-reports/income-statement.scm:104
+#: gnucash/report/standard-reports/budget-income-statement.scm:109
+#: gnucash/report/standard-reports/income-statement.scm:103
 msgid "Whether or not to include a label for the expense section."
 msgstr "Da li uključiti oznaku za odjeljak rashoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:112
-#: gnucash/report/standard-reports/income-statement.scm:105
+#: gnucash/report/standard-reports/budget-income-statement.scm:110
+#: gnucash/report/standard-reports/income-statement.scm:104
 msgid "Include expense total"
 msgstr "Uključi ukupni iznos rashoda"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:114
-#: gnucash/report/standard-reports/income-statement.scm:107
+#: gnucash/report/standard-reports/budget-income-statement.scm:112
+#: gnucash/report/standard-reports/income-statement.scm:106
 msgid "Whether or not to include a line indicating total expense."
 msgstr "Da li uključiti redak, koji pokazuje ukupni iznos rashoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:127
-#: gnucash/report/standard-reports/income-statement.scm:131
+#: gnucash/report/standard-reports/budget-income-statement.scm:125
+#: gnucash/report/standard-reports/income-statement.scm:130
 msgid "Display as a two column report"
 msgstr "Prikaži kao dvostupčani izvještaj"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:129
-#: gnucash/report/standard-reports/income-statement.scm:133
+#: gnucash/report/standard-reports/budget-income-statement.scm:127
+#: gnucash/report/standard-reports/income-statement.scm:132
 msgid "Divides the report into an income column and an expense column."
 msgstr "Dijeli izvještaj u stupac prihoda i stupac rashoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:131
-#: gnucash/report/standard-reports/income-statement.scm:135
+#: gnucash/report/standard-reports/budget-income-statement.scm:129
+#: gnucash/report/standard-reports/income-statement.scm:134
 msgid "Display in standard, income first, order"
 msgstr "Prikaži uobičajeni redoslijed, najprije prihod"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:133
-#: gnucash/report/standard-reports/income-statement.scm:137
+#: gnucash/report/standard-reports/budget-income-statement.scm:131
+#: gnucash/report/standard-reports/income-statement.scm:136
 msgid ""
 "Causes the report to display in the standard order, placing income before "
 "expenses."
@@ -26918,59 +26917,59 @@ msgstr ""
 "Prikazuje izvještaj uobičajenim redoslijedom, postavljajući prihode ispred "
 "rashoda."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:476
+#: gnucash/report/standard-reports/budget-income-statement.scm:441
 msgid "Reporting range end period cannot be less than start period."
 msgstr ""
 "Krajnje vrijeme u rasponu izvještavanja ne može biti manje od početnog "
 "vremena."
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:506
-#, scheme-format
-msgid "for Budget ~a Period ~d"
-msgstr "za proračun ~a razdoblje ~d"
+#: gnucash/report/standard-reports/budget-income-statement.scm:509
+#: gnucash/report/standard-reports/income-statement.scm:505
+msgid "Revenues"
+msgstr "Prihod"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:511
-#, scheme-format
-msgid "for Budget ~a Periods ~d - ~d"
-msgstr "za proračun ~a razdoblja ~d – ~d"
+#: gnucash/report/standard-reports/budget-income-statement.scm:512
+#: gnucash/report/standard-reports/income-statement.scm:508
+msgid "Total Revenue"
+msgstr "Ukupno prihod"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:517
+#: gnucash/report/standard-reports/budget-income-statement.scm:522
+#: gnucash/report/standard-reports/income-statement.scm:515
+msgid "Total Expenses"
+msgstr "Ukupno rashod"
+
+#: gnucash/report/standard-reports/budget-income-statement.scm:530
 #, scheme-format
 msgid "for Budget ~a"
 msgstr "za proračun ~a"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:659
-#: gnucash/report/standard-reports/income-statement.scm:588
-msgid "Revenues"
-msgstr "Prihod"
+#: gnucash/report/standard-reports/budget-income-statement.scm:532
+#, scheme-format
+msgid "for Budget ~a Period ~d"
+msgstr "za proračun ~a razdoblje ~d"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:668
-#: gnucash/report/standard-reports/income-statement.scm:596
-msgid "Total Revenue"
-msgstr "Ukupno prihod"
+#: gnucash/report/standard-reports/budget-income-statement.scm:535
+#, scheme-format
+msgid "for Budget ~a Periods ~d - ~d"
+msgstr "za proračun ~a razdoblja ~d – ~d"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:682
-#: gnucash/report/standard-reports/income-statement.scm:609
-msgid "Total Expenses"
-msgstr "Ukupno rashod"
-
-#: gnucash/report/standard-reports/budget-income-statement.scm:688
-#: gnucash/report/standard-reports/equity-statement.scm:602
-#: gnucash/report/standard-reports/income-statement.scm:626
+#: gnucash/report/standard-reports/budget-income-statement.scm:563
+#: gnucash/report/standard-reports/equity-statement.scm:455
+#: gnucash/report/standard-reports/income-statement.scm:525
 msgid "Net income"
 msgstr "Neto prihod"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:689
-#: gnucash/report/standard-reports/equity-statement.scm:603
-#: gnucash/report/standard-reports/income-statement.scm:627
+#: gnucash/report/standard-reports/budget-income-statement.scm:564
+#: gnucash/report/standard-reports/equity-statement.scm:456
+#: gnucash/report/standard-reports/income-statement.scm:526
 msgid "Net loss"
 msgstr "Neto gubitak"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:757
+#: gnucash/report/standard-reports/budget-income-statement.scm:604
 msgid "Budget Income Statement"
 msgstr "Proračun stanja prihoda"
 
-#: gnucash/report/standard-reports/budget-income-statement.scm:758
+#: gnucash/report/standard-reports/budget-income-statement.scm:605
 msgid "Budget Profit & Loss"
 msgstr "Proračun dobiti i gubitka"
 
@@ -27137,17 +27136,17 @@ msgid "Explicitly select period value with spinner below"
 msgstr "Odaberi razdoblje datumskim odabiračem"
 
 #. Translators: Abbreviation for "Budget" amount
-#: gnucash/report/standard-reports/budget.scm:469
+#: gnucash/report/standard-reports/budget.scm:468
 msgid "Bgt"
 msgstr "Proračun"
 
 #. Translators: Abbreviation for "Actual" amount
-#: gnucash/report/standard-reports/budget.scm:474
+#: gnucash/report/standard-reports/budget.scm:473
 msgid "Act"
 msgstr "Stvarno"
 
 #. Translators: Abbreviation for "Difference" amount
-#: gnucash/report/standard-reports/budget.scm:479
+#: gnucash/report/standard-reports/budget.scm:478
 msgid "Diff"
 msgstr "Razlika"
 
@@ -27155,7 +27154,7 @@ msgstr "Razlika"
 #. budget will report on budgeted and actual
 #. amounts from the beginning of budget, instead
 #. of only using the budget-period amounts.
-#: gnucash/report/standard-reports/budget.scm:702
+#: gnucash/report/standard-reports/budget.scm:703
 msgid "using accumulated amounts"
 msgstr "upotreba akumuliranih iznosa"
 
@@ -27227,25 +27226,25 @@ msgstr "Prikaži cjelokupne nazive konta"
 msgid "Show full account names (including parent accounts)."
 msgstr "Prikaži cjelokupne nazive konta (uključujući matična konta)"
 
-#: gnucash/report/standard-reports/cash-flow.scm:208
+#: gnucash/report/standard-reports/cash-flow.scm:206
 #, scheme-format
 msgid "~a and subaccounts"
 msgstr "~a i podkonti"
 
-#: gnucash/report/standard-reports/cash-flow.scm:209
+#: gnucash/report/standard-reports/cash-flow.scm:207
 #, scheme-format
 msgid "~a and selected subaccounts"
 msgstr "~a i odabrani podkonti"
 
-#: gnucash/report/standard-reports/cash-flow.scm:275
+#: gnucash/report/standard-reports/cash-flow.scm:271
 msgid "Money into selected accounts comes from"
 msgstr "Primici odabranih konta dolaze iz"
 
-#: gnucash/report/standard-reports/cash-flow.scm:296
+#: gnucash/report/standard-reports/cash-flow.scm:292
 msgid "Money out of selected accounts goes to"
 msgstr "Izdaci odabranih konta idu u"
 
-#: gnucash/report/standard-reports/cash-flow.scm:317
+#: gnucash/report/standard-reports/cash-flow.scm:313
 msgid "Difference"
 msgstr "Razlika"
 
@@ -27384,30 +27383,33 @@ msgstr "Stanje kapitala"
 msgid "Report only on these accounts."
 msgstr "Izvijesti samo o ovim kontima."
 
-#: gnucash/report/standard-reports/equity-statement.scm:360
-#: gnucash/report/standard-reports/income-statement.scm:470
-#: gnucash/report/standard-reports/trial-balance.scm:406
+#. Create the account table below where its
+#. percentage time can be tracked.
+#. gnc:html-table
+#: gnucash/report/standard-reports/equity-statement.scm:423
+#: gnucash/report/standard-reports/income-statement.scm:481
+#: gnucash/report/standard-reports/trial-balance.scm:404
 msgid "for Period"
 msgstr "za razdoblje"
 
-#: gnucash/report/standard-reports/equity-statement.scm:595
-#: gnucash/report/standard-reports/equity-statement.scm:639
+#: gnucash/report/standard-reports/equity-statement.scm:450
+#: gnucash/report/standard-reports/equity-statement.scm:486
 msgid "Capital"
 msgstr "Kapital"
 
-#: gnucash/report/standard-reports/equity-statement.scm:609
+#: gnucash/report/standard-reports/equity-statement.scm:461
 msgid "Investments"
 msgstr "Ulaganja"
 
-#: gnucash/report/standard-reports/equity-statement.scm:616
+#: gnucash/report/standard-reports/equity-statement.scm:466
 msgid "Withdrawals"
 msgstr "Isplate"
 
-#: gnucash/report/standard-reports/equity-statement.scm:632
+#: gnucash/report/standard-reports/equity-statement.scm:479
 msgid "Increase in capital"
 msgstr "Povećanje kapitala"
 
-#: gnucash/report/standard-reports/equity-statement.scm:633
+#: gnucash/report/standard-reports/equity-statement.scm:480
 msgid "Decrease in capital"
 msgstr "Smanjenje kapitala"
 
@@ -27568,39 +27570,39 @@ msgstr "Neto kupovina"
 msgid "Tax on Purchases"
 msgstr "PDV na kupovinu"
 
-#: gnucash/report/standard-reports/income-statement.scm:96
+#: gnucash/report/standard-reports/income-statement.scm:95
 msgid "Label the trading accounts section"
 msgstr "Označi odjeljak konta trgovanja"
 
-#: gnucash/report/standard-reports/income-statement.scm:98
+#: gnucash/report/standard-reports/income-statement.scm:97
 msgid "Whether or not to include a label for the trading accounts section."
 msgstr "Da li uključiti oznaku za odjeljak konta trgovanja."
 
-#: gnucash/report/standard-reports/income-statement.scm:99
+#: gnucash/report/standard-reports/income-statement.scm:98
 msgid "Include trading accounts total"
 msgstr "Uključi ukupni iznos konta burzovnog trgovanja"
 
-#: gnucash/report/standard-reports/income-statement.scm:101
+#: gnucash/report/standard-reports/income-statement.scm:100
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr "Da li uključiti redak, koji pokazuje ukupni saldo konta trgovanja."
 
-#: gnucash/report/standard-reports/income-statement.scm:612
+#: gnucash/report/standard-reports/income-statement.scm:518
 #: libgnucash/engine/Account.cpp:4105 libgnucash/engine/Scrub.c:430
 #: libgnucash/engine/Scrub.c:495
 msgid "Trading"
 msgstr "Burzovno trgovanje"
 
-#: gnucash/report/standard-reports/income-statement.scm:620
+#: gnucash/report/standard-reports/income-statement.scm:521
 msgid "Total Trading"
 msgstr "Ukupno burzovno trgovanje"
 
-#: gnucash/report/standard-reports/income-statement.scm:709
-#: gnucash/report/standard-reports/trial-balance.scm:578
+#: gnucash/report/standard-reports/income-statement.scm:572
+#: gnucash/report/standard-reports/trial-balance.scm:572
 msgid "Income Statement"
 msgstr "Stanje prihoda"
 
-#: gnucash/report/standard-reports/income-statement.scm:710
+#: gnucash/report/standard-reports/income-statement.scm:573
 msgid "Profit & Loss"
 msgstr "Račun dobiti i gubitka"
 
@@ -27778,7 +27780,7 @@ msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr ""
-"Nema dostupnih informacija o cijeni za odabranu robu, u odabranom razdoblju."
+"Nema dostupnih podataka o cijeni za odabranu robu, u odabranom razdoblju."
 
 #: gnucash/report/standard-reports/price-scatter.scm:336
 msgid "Identical commodities"
@@ -27869,7 +27871,7 @@ msgid "Value Change"
 msgstr "Vrijednosna promjena"
 
 #: gnucash/report/standard-reports/trial-balance.scm:61
-#: gnucash/report/standard-reports/trial-balance.scm:575
+#: gnucash/report/standard-reports/trial-balance.scm:569
 msgid "Trial Balance"
 msgstr "Probna bilanca"
 
@@ -27889,15 +27891,15 @@ msgstr "Varijanta izvještaja"
 msgid "Kind of trial balance to generate."
 msgstr "Vrsta probne bilance."
 
-#: gnucash/report/standard-reports/trial-balance.scm:84
+#: gnucash/report/standard-reports/trial-balance.scm:83
 msgid "Merchandising"
 msgstr "Trgovanje"
 
-#: gnucash/report/standard-reports/trial-balance.scm:85
+#: gnucash/report/standard-reports/trial-balance.scm:84
 msgid "Gross adjustment accounts."
 msgstr "Konti bruto podešavanja."
 
-#: gnucash/report/standard-reports/trial-balance.scm:87
+#: gnucash/report/standard-reports/trial-balance.scm:86
 msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
@@ -27906,11 +27908,11 @@ msgstr ""
 "kontima. Trgovačka poduzeća će ovdje uobičajeno odabrati svoja konta "
 "inventara."
 
-#: gnucash/report/standard-reports/trial-balance.scm:88
+#: gnucash/report/standard-reports/trial-balance.scm:87
 msgid "Income summary accounts"
 msgstr "Zaključni konti prihoda"
 
-#: gnucash/report/standard-reports/trial-balance.scm:90
+#: gnucash/report/standard-reports/trial-balance.scm:89
 msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
@@ -27920,64 +27922,64 @@ msgstr ""
 "Podešavanja, Podešena probna bilanca i Stanje prihoda. Ovo je uglavnom "
 "korisno za trgovačka poduzeća."
 
-#: gnucash/report/standard-reports/trial-balance.scm:93
+#: gnucash/report/standard-reports/trial-balance.scm:92
 msgid "Adjusting Entries pattern"
 msgstr "Uzorak za podešavajuće unose"
 
-#: gnucash/report/standard-reports/trial-balance.scm:95
+#: gnucash/report/standard-reports/trial-balance.scm:94
 msgid "Any text in the Description column which identifies adjusting entries."
 msgstr "Bilo koji tekst u stupcu opisa, koji određuje podešavajuće unose."
 
-#: gnucash/report/standard-reports/trial-balance.scm:97
+#: gnucash/report/standard-reports/trial-balance.scm:96
 msgid "Adjusting Entries pattern is case-sensitive"
 msgstr "Uzorak za podešavajuće unose razlikuje velika/mala slova"
 
-#: gnucash/report/standard-reports/trial-balance.scm:99
+#: gnucash/report/standard-reports/trial-balance.scm:98
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
 msgstr "Ovime će uzorak za podešavajuće unose razlikovati velika/mala slova."
 
-#: gnucash/report/standard-reports/trial-balance.scm:101
+#: gnucash/report/standard-reports/trial-balance.scm:100
 msgid "Adjusting Entries Pattern is regular expression"
 msgstr "Uzorak za podešavajuće unose je regularni izraz"
 
-#: gnucash/report/standard-reports/trial-balance.scm:103
+#: gnucash/report/standard-reports/trial-balance.scm:102
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression."
 msgstr "Ovime će se uzorak za podešavajuće unose obraditi kao regularni izraz."
 
-#: gnucash/report/standard-reports/trial-balance.scm:205
+#: gnucash/report/standard-reports/trial-balance.scm:204
 msgid "Current Trial Balance"
 msgstr "Trenutačna probna bilanca"
 
-#: gnucash/report/standard-reports/trial-balance.scm:206
+#: gnucash/report/standard-reports/trial-balance.scm:205
 msgid "Uses the exact balances in the general journal"
 msgstr "Koristi točna salda u općem dnevniku"
 
-#: gnucash/report/standard-reports/trial-balance.scm:208
+#: gnucash/report/standard-reports/trial-balance.scm:207
 msgid "Pre-adjustment Trial Balance"
 msgstr "Pred-podešena probna bilanca"
 
-#: gnucash/report/standard-reports/trial-balance.scm:209
+#: gnucash/report/standard-reports/trial-balance.scm:208
 msgid "Ignores Adjusting/Closing entries"
 msgstr "Zanemaruje podešavajuće/zaključne unose"
 
-#: gnucash/report/standard-reports/trial-balance.scm:211
+#: gnucash/report/standard-reports/trial-balance.scm:210
 msgid "Work Sheet"
 msgstr "Radni list"
 
-#: gnucash/report/standard-reports/trial-balance.scm:212
+#: gnucash/report/standard-reports/trial-balance.scm:211
 msgid "Creates a complete end-of-period work sheet"
 msgstr "Stvori potpuni radni list za kraj razdoblja"
 
-#: gnucash/report/standard-reports/trial-balance.scm:576
+#: gnucash/report/standard-reports/trial-balance.scm:570
 msgid "Adjustments"
 msgstr "Podešavanja"
 
-#: gnucash/report/standard-reports/trial-balance.scm:577
+#: gnucash/report/standard-reports/trial-balance.scm:571
 msgid "Adjusted Trial Balance"
 msgstr "Podešena probna bilanca"
 
-#: gnucash/report/standard-reports/trial-balance.scm:866
+#: gnucash/report/standard-reports/trial-balance.scm:860
 msgid "Net Loss"
 msgstr "Neto gubitak"
 
@@ -28602,7 +28604,7 @@ msgstr "Dodatni komentari"
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:104
 msgid "String for additional report information."
-msgstr "Znakovni niz za dodatne informacije u izvještaju."
+msgstr "Znakovni niz za dodatne podatke u izvještaju."
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:109
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:267
@@ -28881,8 +28883,8 @@ msgid ""
 "scm/report directory for details on writing your own reports, or extending "
 "existing reports."
 msgstr ""
-"Ovo je primjer za GnuCash izvještaj. Pogledaj izvorni guile kȏd (shemu) u "
-"mapi „scm/report“ o tome kako napisati vlastiti izvještaj ili kako proširiti "
+"Ovo je primjer GnuCash izvještaja. Pogledaj izvorni guile kȏd (shemu) u mapi "
+"„scm/report“ o tome kako napisati vlastiti izvještaj ili kako proširiti "
 "postojeće izvještaje."
 
 #: gnucash/report/utility-reports/hello-world.scm:347
@@ -28891,7 +28893,7 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"Za pomoć pri pisanju izvještaja, ili ako želiš doprinjeti s novim oblicima "
+"Za pomoć pri pisanju izvještaja, ili ako želiš dodati nove oblike "
 "izvještaja, koristi pretplatničku listu ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:352
@@ -29901,7 +29903,7 @@ msgstr ""
 
 #: libgnucash/engine/commodity-table.scm:36
 msgid "ALL NON-CURRENCY"
-msgstr "SVE NE-VALUTNE"
+msgstr "SVI NE-VALUTNI"
 
 #. The default date format for use with strftime in Win32.
 #: libgnucash/engine/gnc-date.cpp:79
@@ -30179,182 +30181,3 @@ msgstr "Nađen je Finance::Quote verzije ~A."
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Pomoć nije dostupna."
-
-#~ msgid "GnuCash Project"
-#~ msgstr "GnuCash projekt"
-
-#~ msgid "Action Column|Split"
-#~ msgstr "Podjela"
-
-# U = Usklađeno
-#~ msgid "Reconciled:R"
-#~ msgstr "Reconciled:Uskl"
-
-#~ msgid ""
-#~ "Item represents an unknown object type (in the sense of bill, customer, "
-#~ "invoice, transaction, split,...)|New item"
-#~ msgstr "Nova stavka"
-
-# R = Rezervirano
-#~ msgid "Column letter for 'Placeholder'|P"
-#~ msgstr "R"
-
-#~ msgid "Action Column|Deposit"
-#~ msgstr "Uplata"
-
-# T = Tečajevi
-#~ msgid "Column letter for 'Get Quotes'|Q"
-#~ msgstr "T"
-
-# A = Aktivno
-#~ msgid "Column letter for 'Active'|A"
-#~ msgstr "A"
-
-#~ msgid "Single-character short column-title form of 'Enabled'|E"
-#~ msgstr "U"
-
-#~ msgid "_Clear"
-#~ msgstr "_Ukloni"
-
-#~ msgid "sample:X"
-#~ msgstr "sample:X"
-
-#~ msgid "sample:Action"
-#~ msgstr "sample:Radnja"
-
-#~ msgid "sample(DT):+%"
-#~ msgstr "sample(DT):+%"
-
-#~ msgid "sample(DH):+%"
-#~ msgstr "sample(DH):+%"
-
-# P = Porez
-#~ msgid "sample:T?"
-#~ msgstr "sample:P?"
-
-# UP = Uključen porez
-#~ msgid "sample:TI"
-#~ msgstr "sample:UP"
-
-#~ msgid "sample:Tax Table 1"
-#~ msgstr "sample:Porezna tablica 1"
-
-# IR = Informacije o računu
-#~ msgid "sample:BI"
-#~ msgstr "sample:IR"
-
-#~ msgid "sample:Payment"
-#~ msgstr "sample:Plaćanje"
-
-#~ msgid "sample:99999"
-#~ msgstr "sample:99999"
-
-# P = Poveznica
-#~ msgid "Associate:A"
-#~ msgstr "Associate:P"
-
-# V = Vrsta
-#~ msgid "Type:T"
-#~ msgstr "Type:V"
-
-#~ msgid "Report Currency"
-#~ msgstr "Valuta za izvještaj"
-
-#~ msgid "~a: ~a"
-#~ msgstr "~a: ~a"
-
-#~ msgid "Tax Payable"
-#~ msgstr "Porezna dugovanja"
-
-# n = nepotvrđeno
-#~ msgid "not cleared:n"
-#~ msgstr "n"
-
-# p = potvrđeno
-#~ msgid "cleared:c"
-#~ msgstr "p"
-
-# d = da
-#~ msgid "reconciled:y"
-#~ msgstr "d"
-
-# z = zamrznuto
-#~ msgid "frozen:f"
-#~ msgstr "z"
-
-# s = storno
-#~ msgid "void:v"
-#~ msgstr "s"
-
-#~ msgid ""
-#~ "Displayed account code of the other account in a multi-split transaction|"
-#~ "Split"
-#~ msgstr "Protustavka"
-
-#~ msgid ""
-#~ "You have selected a placeholder account, which is shown so that child "
-#~ "accounts are displayed, but is invalid. Please select another account. "
-#~ "(You can expand the tree below the placeholder account by clicking on the "
-#~ "arrow to the left.)"
-#~ msgstr ""
-#~ "Odabran je rezervirani konto, koji se prikazuje kako bi se prikazala "
-#~ "podređena konta, ali nije valjan. Odaberi neki drugi konto. (Možeš "
-#~ "rasklopiti stablo ispod rezerviranog konta, pritiskom na strelicu na "
-#~ "lijevoj strani.)"
-
-#~ msgid "label"
-#~ msgstr "označi"
-
-#~ msgid "Whether to display the list of Invoices Due at startup."
-#~ msgstr ""
-#~ "Da li prikazati popis dospjelih izlaznih računa prilikom pokretanja "
-#~ "programa."
-
-#~ msgid "total"
-#~ msgstr "ukupno"
-
-#~ msgid "()"
-#~ msgstr "()"
-
-#~ msgid "_Back"
-#~ msgstr "_Natrag"
-
-#~ msgid "_Forward"
-#~ msgstr "_Naprijed"
-
-#~ msgid "December 31, 2000"
-#~ msgstr "31. prosinca 2000."
-
-#~ msgid "_Now"
-#~ msgstr "_Sad"
-
-#~ msgid "Password:"
-#~ msgstr "Lozinka:"
-
-#~ msgid "something"
-#~ msgstr "nešto"
-
-#~ msgid "Commodity From"
-#~ msgstr "Roba iz"
-
-#~ msgid "'Commodity From' can not be the same as 'Currency To' column type."
-#~ msgstr "„Roba iz” ne smije biti ista, kao vrsta stupca „Roba u”."
-
-#~ msgid "_New Account"
-#~ msgstr "_Novi konto"
-
-#~ msgid "Roll up budget amounts to parent"
-#~ msgstr "Akumuliraj proračunske iznose na matični"
-
-#~ msgid ""
-#~ "If parent account does not have its own budget value, use the sum of the "
-#~ "child account budget values."
-#~ msgstr ""
-#~ "Ako matični konto nema vlastitu vrijednost proračuna, koristi zbroj "
-#~ "vrijednosti proračuna podkonta."
-
-#~ msgid "Continuing with good quotes."
-#~ msgstr "Nastavljanje s upotrebljivim tečajevima."
-
-#~ msgid "Adding remaining good quotes."
-#~ msgstr "Dodaj preostale upotrebljive tečajeve."

@@ -32,6 +32,7 @@
 (use-modules (sw_engine))
 (use-modules (gnucash reports standard budget))
 (use-modules (gnucash reports standard budget-income-statement))
+(use-modules (gnucash reports standard budget-balance-sheet))
 (use-modules (tests test-report-extras))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (tests test-engine-extras))
@@ -41,6 +42,7 @@
 (setlocale LC_ALL "C")
 (define budget-uuid "810ed4b25ef0486ea43bbd3dddb32b11")
 (define budget-is-uuid "583c313fcc484efc974c4c844404f454")
+(define budget-bs-uuid "ecc35ea9dbfa4e20ba389fc85d59cb69")
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
@@ -50,6 +52,9 @@
     (teardown))
   (test-group-with-cleanup "budget-income-statement.scm"
     (test-budget-income-statement)
+    (teardown))
+  (test-group-with-cleanup "budget-balance-sheet.scm"
+    (test-budget-balance-sheet)
     (teardown))
   (test-end "budget"))
 
@@ -181,4 +186,73 @@
         '("Net loss for Budget test budget" "$285.00")
         ((sxpath '(// table // (tr 2) // table // (tr 5) // *text*))
          sxml)))))
+
+(define (test-budget-balance-sheet)
+  (let* ((env (create-test-env))
+         (account-alist (create-test-data))
+         (budget (gnc:create-budget-and-transactions env account-alist))
+         (options (gnc:make-report-options budget-bs-uuid))
+         (bank (assoc-ref account-alist "Bank")))
+
+    (display "\nbudget-balance-sheet.scm\n")
+    (let ((sxml (options->sxml options budget-bs-uuid "budget-bs-basic")))
+      (test-equal "basic test"
+        52
+        (length (sxml->table-row-col sxml 1 #f #f)))
+
+      (test-equal "existing assets"
+        '("Existing Assets" "$3,118.00")
+        (sxml->table-row-col sxml 1 8 #f))
+
+      (test-equal "allocated assets"
+        '("Allocated Assets" "$120.00")
+        (sxml->table-row-col sxml 1 9 #f))
+
+      (test-equal "unallocated assets"
+        '("Unallocated Assets" "-$405.00")
+        (sxml->table-row-col sxml 1 10 #f))
+
+      (test-equal "total assets"
+        '("Total Assets" "$2,833.00")
+        (sxml->table-row-col sxml 1 11 #f))
+
+      (test-equal "existing liab"
+        '("Existing Liabilities" "$3.00")
+        (sxml->table-row-col sxml 1 16 #f))
+
+      (test-equal "new liab"
+        '("New Liabilities" "$0.00")
+        (sxml->table-row-col sxml 1 17 #f))
+
+      (test-equal "total liab"
+        '("Total Liabilities" "$3.00")
+        (sxml->table-row-col sxml 1 18 #f))
+
+      (test-equal "retained earnings"
+        '("Existing Retained Earnings" "$3,227.00")
+        (sxml->table-row-col sxml 1 22 #f))
+
+      (test-equal "retained losses"
+        '("New Retained Losses" "$285.00")
+        (sxml->table-row-col sxml 1 23 #f))
+
+      (test-equal "unrealized losses"
+        '("Unrealized Losses" "$1.00")
+        (sxml->table-row-col sxml 1 24 #f))
+
+      (test-equal "existing equity"
+        '("Existing Equity" "$3,115.00")
+        (sxml->table-row-col sxml 1 25 #f))
+
+      (test-equal "new equity"
+        '("New Equity" "-$285.00")
+        (sxml->table-row-col sxml 1 26 #f))
+
+      (test-equal "total equity"
+        '("Total Equity" "$2,830.00")
+        (sxml->table-row-col sxml 1 27 #f))
+
+      (test-equal "total liab and equity"
+        '("Total Liabilities & Equity" "$2,833.00")
+        (sxml->table-row-col sxml 1 29 #f)))))
 

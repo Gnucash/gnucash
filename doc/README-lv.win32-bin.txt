@@ -43,10 +43,9 @@ Par šo programmu:
 
 GnuCash ir bezmaksas grāmatvedības programma, ko izplata saskaņā ar 
 GNU General Public License (GPL) licenci. Tās galvenie izstrādātāji ir
-12 cilvēki, kas sadarbojas ar atbalstītājiem vairāk kā 6 valstīs.
+200+ cilvēki.
 
 GnuCash izstrāde sākās 1997. gadā un tās pirmais laidiens bija 1998. gadā.
 
 -------------------
 
-Šis ir GnuCash 2.2.x README fails Windows binārajai pakotnei.

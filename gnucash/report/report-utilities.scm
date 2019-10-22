@@ -874,13 +874,13 @@
               (xaccAccountGetName (xaccSplitGetAccount spl))
               (gnc:monetary->string
                (gnc:make-gnc-monetary
-                (xaccTransGetCurrency txn)
-                (xaccSplitGetValue spl)))
-              (gnc:monetary->string
-               (gnc:make-gnc-monetary
                 (xaccAccountGetCommodity
                  (xaccSplitGetAccount spl))
-                (xaccSplitGetAmount spl))))))
+                (xaccSplitGetAmount spl)))
+              (gnc:monetary->string
+               (gnc:make-gnc-monetary
+                (xaccTransGetCurrency txn)
+                (xaccSplitGetValue spl))))))
   (define (trans->str txn)
     (format #f "Txn<d:~a>" (qof-print-date (xaccTransGetDate txn))))
   (define (account->str acc)

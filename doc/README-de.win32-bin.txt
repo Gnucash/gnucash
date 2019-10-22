@@ -44,7 +44,7 @@ Kurs und Konzepte«.
 Über GnuCash:
 
 GnuCash ist eine freie OpenSource-Finanzverwaltung, kostenlos
-erhältlich unter der GNU GPL Lizenz. Das Programm wird von 12
+erhältlich unter der GNU GPL Lizenz. Das Programm wird von 200+
 Programmierern aus mehr als 6 Ländern gemeinsam weiterentwickelt.
 
 Die Anfänge von GnuCash reichen ins Jahr 1997 zurück. Die erste
@@ -52,5 +52,3 @@ Veröffentlichung war im Jahr 1998.
 
 -------------------
 
-This is the German GnuCash 2.2.x README file for Windows binary
-packages.
