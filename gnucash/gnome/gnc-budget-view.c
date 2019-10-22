@@ -94,8 +94,9 @@ enum
 {
     TOTALS_TYPE_INCOME, /**< This total is Income type*/
     TOTALS_TYPE_EXPENSES, /**< This total is Expenses type*/
-    TOTALS_TYPE_TRANSFERS, /**< This total is Transfers type*/
-    TOTALS_TYPE_TOTAL /**< This total is for Totals*/
+    TOTALS_TYPE_ASSET, /**< This total is Assets type*/
+    TOTALS_TYPE_LIABILITY, /**< This total is Liabilities type*/
+    TOTALS_TYPE_EQUITY /**< This total is for Equity type*/
 };
 /**< \brief ENUM for different budget totals types.
 
@@ -420,9 +421,11 @@ gbv_create_widget(GncBudgetView *view)
     gtk_list_store_append(totals_tree_model, &iter);
     gtk_list_store_set(totals_tree_model, &iter, 0, _("Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, _("Transfers"), 1, TOTALS_TYPE_TRANSFERS, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Assets"), 1, TOTALS_TYPE_ASSET, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, _("Total"), 1, TOTALS_TYPE_TOTAL, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Liabilities"), 1, TOTALS_TYPE_LIABILITY, -1);
+    gtk_list_store_append(totals_tree_model, &iter);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Equity"), 1, TOTALS_TYPE_EQUITY, -1);
 
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
@@ -1172,24 +1175,23 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
         switch (xaccAccountGetType(account))
         {
         case ACCT_TYPE_INCOME:
-            if (row_type != TOTALS_TYPE_INCOME &&
-                row_type != TOTALS_TYPE_TOTAL)
-                continue;
-            break;
-        case ACCT_TYPE_LIABILITY:
-        case ACCT_TYPE_EQUITY:
-            if (row_type != TOTALS_TYPE_TRANSFERS &&
-                row_type != TOTALS_TYPE_TOTAL)
+            if (row_type != TOTALS_TYPE_INCOME)
                 continue;
             break;
         case ACCT_TYPE_EXPENSE:
-            if ((row_type != TOTALS_TYPE_EXPENSES) &&
-                (row_type != TOTALS_TYPE_TOTAL))
+            if (row_type != TOTALS_TYPE_EXPENSES)
                 continue;
             break;
         case ACCT_TYPE_ASSET:
-            if (row_type != TOTALS_TYPE_TRANSFERS &&
-                row_type != TOTALS_TYPE_TOTAL)
+            if (row_type != TOTALS_TYPE_ASSET)
+                continue;
+            break;
+        case ACCT_TYPE_LIABILITY:
+            if (row_type != TOTALS_TYPE_LIABILITY)
+                continue;
+            break;
+        case ACCT_TYPE_EQUITY:
+            if (row_type != TOTALS_TYPE_EQUITY)
                 continue;
             break;
         default:
@@ -1203,20 +1205,14 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
         }
         else
         {
-            value =
-                gbv_get_accumulated_budget_amount(budget, account, period_num);
+            value = gbv_get_accumulated_budget_amount(budget, account, period_num);
 
             value = gnc_pricedb_convert_balance_nearest_price_t64(
                         pdb, value, currency, total_currency,
                         gnc_budget_get_period_start_date(budget, period_num));
         }
 
-        if (gnc_reverse_budget_balance (account, TRUE))
-            total = gnc_numeric_sub(total, value, GNC_DENOM_AUTO,
-                                    GNC_HOW_DENOM_LCD);
-        else
-            total = gnc_numeric_add(total, value, GNC_DENOM_AUTO,
-                                    GNC_HOW_DENOM_LCD);
+        total = gnc_numeric_add(total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
     xaccSPrintAmount(amtbuff, total,
