@@ -17,7 +17,7 @@ build:
     - pwd
     - ls
     - cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=$PWD ../
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD ../gnucash
     - make
     - make install
   artifacts:
