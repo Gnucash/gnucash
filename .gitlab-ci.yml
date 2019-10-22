@@ -18,8 +18,8 @@ build:
     - ls
     - cd build
     - cmake -D CMAKE_INSTALL_PREFIX=$PWD ../
-    - Make
-    - Make-install
+    - make
+    - make-install
   artifacts:
     paths:
       - build/
