@@ -936,6 +936,8 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 
         split10->balance = split00->balance;
         split11->balance = split01->balance;
+        split10->noclosing_balance = split00->noclosing_balance;
+        split11->noclosing_balance = split01->noclosing_balance;
         g_assert (xaccTransEqual (txn1, txn0, TRUE, TRUE, TRUE, TRUE));
     }
     g_free (check3->msg);
