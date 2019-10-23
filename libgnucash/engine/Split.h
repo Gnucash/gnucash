@@ -297,6 +297,15 @@ gnc_numeric xaccSplitGetBaseValue (const Split *split,
 gnc_numeric xaccSplitGetBalance (const Split *split);
 
 /**
+ * The noclosing-balance is the currency-denominated balance of all
+ * transactions except 'closing' transactions. It is correctly
+ * adjusted for price fluctuations.
+ *
+ * Returns the running balance up to & including the indicated split.
+ */
+gnc_numeric xaccSplitGetNoclosingBalance (const Split *split);
+
+/**
  * The cleared-balance is the currency-denominated balance
  * of all transactions that have been marked as cleared or reconciled.
  * It is correctly adjusted for price fluctuations.

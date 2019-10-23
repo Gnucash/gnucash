@@ -903,9 +903,10 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 
     if (priv->useAvg && num_periods)
     {
-        num = xaccAccountGetBalanceChangeForPeriod(acct, 
-                recurrenceGetPeriodTime(&priv->r, 0, FALSE),
-                recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
+        num = xaccAccountGetNoclosingBalanceChangeForPeriod
+            (acct, recurrenceGetPeriodTime(&priv->r, 0, FALSE),
+             recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
+
         num = gnc_numeric_div(num, 
                               gnc_numeric_create(num_periods, 1), 
                               GNC_DENOM_AUTO,
@@ -924,7 +925,10 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     {
         for (i = 0; i < num_periods; i++)
         {
-            num = recurrenceGetAccountPeriodValue(&priv->r, acct, i);
+            num = xaccAccountGetNoclosingBalanceChangeForPeriod
+                (acct, recurrenceGetPeriodTime(&priv->r, i, FALSE),
+                 recurrenceGetPeriodTime(&priv->r, i, TRUE), TRUE);
+
             if (!gnc_numeric_check(num))
             {
                 if (gnc_reverse_balance(acct))
