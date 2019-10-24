@@ -42,6 +42,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 #include "dialog-utils.h"
+#include "gncInvoice.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
