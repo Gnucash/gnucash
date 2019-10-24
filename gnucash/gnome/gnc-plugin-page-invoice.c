@@ -92,7 +92,6 @@ static void gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action, GncPluginP
 /************************************************************
  *                          Actions                         *
  ************************************************************/
-// FIXME:  The texts are wrong if we have a Bill or Expence Voucher.
 static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 {
     /* Toplevel */
@@ -106,7 +105,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
     {
-        "FilePrintAction", "document-print", N_("Print Invoice"), "<primary>p",
+        "FilePrintAction", "document-print", N_("_Print Invoice"), "<primary>p",
         N_("Make a printable invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_print)
     },
@@ -195,7 +194,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     /* Business menu */
     {
         "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), "",
-        N_("Create a new invoice for the same owner as the current one"),
+        N_("Create a new Invoice for the same owner as the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
@@ -261,22 +260,113 @@ static const gchar *can_unpost_actions[] =
     NULL
 };
 
-/** Short labels for use on the toolbar buttons. */
-static action_toolbar_labels toolbar_labels[] =
+static action_toolbar_labels invoice_action_labels[] =
 {
-    { "RecordEntryAction",    N_("Enter") },
-    { "CancelEntryAction",    N_("Cancel") },
-    { "DeleteEntryAction",    N_("Delete") },
-    { "DuplicateEntryAction", N_("Duplicate") },
-    { "EntryUpAction",        N_("Up") },
-    { "EntryDownAction",      N_("Down") },
-    { "BlankEntryAction",           N_("Blank") },
-    { "EditPostInvoiceAction",      N_("Post") },
-    { "EditUnpostInvoiceAction",    N_("Unpost") },
-    { "ToolsProcessPaymentAction",    N_("Pay") },
-    { NULL, NULL },
+    {"FilePrintAction", N_("_Print Invoice")},
+    {"EditEditInvoiceAction", N_("_Edit Invoice")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Invoice")},
+    {"EditPostInvoiceAction", N_("_Post Invoice")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
+    {"BusinessNewInvoiceAction", N_("New _Invoice")},
+    {"ToolsProcessPaymentAction", N_("_Pay Invoice")}
 };
 
+static action_toolbar_labels bill_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Bill")},
+    {"EditEditInvoiceAction", N_("_Edit Bill")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Bill")},
+    {"EditPostInvoiceAction", N_("_Post Bill")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
+    {"BusinessNewInvoiceAction", N_("New _Bill")},
+    {"ToolsProcessPaymentAction", N_("_Pay Bill")}
+};
+
+static action_toolbar_labels voucher_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Voucher")},
+    {"EditEditInvoiceAction", N_("_Edit Voucher")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Voucher")},
+    {"EditPostInvoiceAction", N_("_Post Voucher")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
+    {"BusinessNewInvoiceAction", N_("New _Voucher")},
+    {"ToolsProcessPaymentAction", N_("_Pay Voucher")}
+};
+
+static action_toolbar_labels creditnote_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Credit Note")},
+    {"EditEditInvoiceAction", N_("_Edit Credit Note")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Credit Note")},
+    {"EditPostInvoiceAction", N_("_Post Credit Note")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
+    {"BusinessNewInvoiceAction", N_("New _Credit Note")},
+    {"ToolsProcessPaymentAction", N_("_Pay Credit Note")}
+};
+
+
+static action_toolbar_labels invoice_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable invoice")},
+    {"EditEditInvoiceAction", N_("Edit this invoice")},
+    {"EditDuplicateInvoiceAction", N_("Create a new invoice as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this Invoice to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this Invoice and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new Invoice for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the Invoice")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this Invoice") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this Invoice") }
+};
+
+static action_toolbar_labels bill_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable bill")},
+    {"EditEditInvoiceAction", N_("Edit this bill")},
+    {"EditDuplicateInvoiceAction", N_("Create a new bill as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this bill to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this bill and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new bill for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") }
+};
+
+static action_toolbar_labels voucher_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable Voucher")},
+    {"EditEditInvoiceAction", N_("Edit this Voucher")},
+    {"EditDuplicateInvoiceAction", N_("Create a new Voucher as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this Voucher to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this Voucher and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new Voucher for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the Voucher")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this Voucher") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this Voucher") }
+};
+
+static action_toolbar_labels creditnote_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable credit note")},
+    {"EditEditInvoiceAction", N_("Edit this credit note")},
+    {"EditDuplicateInvoiceAction", N_("Create a new credit note as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this credit note to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this credit note and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new credit note for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") }
+};
+
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
+    {"RecordEntryAction", N_("Enter")},
+    {"CancelEntryAction", N_("Cancel")},
+    {"DeleteEntryAction", N_("Delete")},
+    {"DuplicateEntryAction", N_("Duplicate")},
+    {"EntryUpAction", N_("Up")},
+    {"EntryDownAction", N_("Down")},
+    {"BlankEntryAction", N_("Blank")},
+    {"EditPostInvoiceAction", N_("Post")},
+    {"EditUnpostInvoiceAction", N_("Unpost")},
+    {"ToolsProcessPaymentAction", N_("Pay")},
+    {NULL, NULL},
+};
 
 /************************************************************/
 /*                      Data Structures                     */
@@ -401,7 +491,40 @@ void
 gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost)
 {
     GtkActionGroup *action_group;
+    GncPluginPageInvoicePrivate *priv;
+    GncInvoiceType invoice_type;
+    GtkAction *action;
+    gint i, j;
+    action_toolbar_labels *label_list;
+    action_toolbar_labels *tooltip_list;
+
     gboolean is_readonly = qof_book_is_readonly(gnc_get_current_book());
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
+    invoice_type = gnc_invoice_get_type_from_window(priv->iw);
+
+    switch (invoice_type) {
+        case GNC_INVOICE_CUST_INVOICE:
+            label_list = invoice_action_labels;
+            tooltip_list = invoice_action_tooltips;
+            break;
+        case GNC_INVOICE_VEND_INVOICE:
+            label_list = bill_action_labels;
+            tooltip_list = bill_action_tooltips;
+            break;
+        case GNC_INVOICE_EMPL_INVOICE:
+            label_list = voucher_action_labels;
+            tooltip_list = voucher_action_tooltips;
+            break;
+        case GNC_INVOICE_CUST_CREDIT_NOTE:  // fallthrough
+        case GNC_INVOICE_VEND_CREDIT_NOTE:  // fallthrough
+        case GNC_INVOICE_EMPL_CREDIT_NOTE:  // fallthrough
+            label_list = creditnote_action_labels;
+            tooltip_list = creditnote_action_tooltips;
+            break;
+        default: // catches GNC_INVOICE_UNDEFINED, use invoice by default
+            label_list = invoice_action_labels;
+            tooltip_list = invoice_action_tooltips;
+    }
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
@@ -421,6 +544,22 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
                                "sensitive", can_unpost);
     gnc_plugin_update_actions (action_group, invoice_book_readwrite_actions,
                                "sensitive", !is_readonly);
+
+    for (i = 0; label_list[i].action_name; i++)
+    {
+        /* update the action labels */
+        action = gtk_action_group_get_action(action_group,
+                                             label_list[i].action_name);
+        gtk_action_set_label(action, _(label_list[i].label));
+    }
+
+    for (i = 0; tooltip_list[i].action_name; i++)
+    {
+        /* update the action tooltips */
+        action = gtk_action_group_get_action(action_group,
+                                             tooltip_list[i].action_name);
+        gtk_action_set_tooltip(action, _(tooltip_list[i].label));
+    }
 }
 
 
