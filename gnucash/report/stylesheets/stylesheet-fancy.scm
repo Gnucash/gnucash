@@ -370,23 +370,12 @@
            (gnc:make-html-text
             (gnc:html-markup-img (make-file-url logopixmap)))) )
 
-      (if (and headpixmap
-               (not (string=? headpixmap "")))
-          ;; check for header image file name nonblank
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 headcolumn
-             (gnc:make-html-text
-              ;; XX: isn't there some way to apply the alignment to
-              ;; (gnc:html-markup-img headpixmap)?
-              (string-append
-               "<div align=\"" align "\">"
-               "<img src=\"" (make-file-url headpixmap) "\">"
-               "</div>")))
-            )
-          (gnc:html-table-set-cell!
-           t 0 headcolumn
-           (gnc:make-html-text "&nbsp;")))
+      (if (and headpixmap (> (string-length headpixmap) 0))
+          (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))
+                 (cell (gnc:make-html-table-cell (gnc:make-html-text div))))
+            (gnc:html-table-cell-set-style! cell "td" 'attribute `("align" ,align))
+            (gnc:html-table-set-cell! t 0 headcolumn cell))
+          (gnc:html-table-set-cell! t 0 headcolumn (gnc:make-html-text " ")))
 
       (apply
        gnc:html-table-set-cell!

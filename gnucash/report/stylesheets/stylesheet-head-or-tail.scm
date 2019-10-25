@@ -496,17 +496,11 @@
               (gnc:html-markup-img (make-file-url logopixmap))))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 headcolumn
-             (gnc:make-html-text
-              (string-append
-               "<div align=\"" align "\">"
-               "<img src=\"" (make-file-url headpixmap) "\">"
-               "</div>"))))
-          (gnc:html-table-set-cell!
-           t 0 headcolumn
-           (gnc:make-html-text "&nbsp;")))
+          (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))
+                 (cell (gnc:make-html-table-cell (gnc:make-html-text div))))
+            (gnc:html-table-cell-set-style! cell "td" 'attribute `("align" ,align))
+            (gnc:html-table-set-cell! t 0 headcolumn cell))
+          (gnc:html-table-set-cell! t 0 headcolumn (gnc:make-html-text " ")))
 
       (apply
        gnc:html-table-set-cell!
