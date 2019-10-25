@@ -140,7 +140,8 @@ time64 recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
 
 /**
  * @return the amount that an Account's value changed between the beginning
- * and end of the nth instance of the Recurrence.
+ * and end of the nth instance of the Recurrence. Please note this function
+ * is only used in budget reports and will exclude closing entries.
  **/
 gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r,
         Account *acct, guint n);

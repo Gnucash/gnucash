@@ -145,8 +145,12 @@ void gnc_budget_unset_account_period_value(
 gboolean gnc_budget_is_account_period_value_set(
     const GncBudget *budget, const Account *account, guint period_num);
 
+/* get the budget account period's budgeted value */
 gnc_numeric gnc_budget_get_account_period_value(
     const GncBudget *budget, const Account *account, guint period_num);
+
+/* get the budget account period's actual value, including children,
+   excluding closing entries */
 gnc_numeric gnc_budget_get_account_period_actual_value(
     const GncBudget *budget, Account *account, guint period_num);
 

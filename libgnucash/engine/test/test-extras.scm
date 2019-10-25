@@ -839,6 +839,7 @@
          (budget (gnc-budget-new book))
          (bank (cdr (assoc "Bank" account-alist)))
          (income (cdr (assoc "Income" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist)))
          (expense (cdr (assoc "Expenses" account-alist))))
     (gnc-budget-set-name budget "test budget")
     (gnc-budget-begin-edit budget)
@@ -861,7 +862,9 @@
       (env-create-transaction env (midperiod 2) bank income 67)
       (env-create-transaction env (midperiod 3) bank income 77)
       (env-create-transaction env (midperiod 0) expense bank 20)
-      (env-create-transaction env (midperiod 1) expense bank 20))
+      (env-create-transaction env (midperiod 1) expense bank 20)
+      (let ((clos (env-create-transaction env (midperiod 1) income equity 55)))
+        (xaccTransSetIsClosingTxn clos #t)))
     budget))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
