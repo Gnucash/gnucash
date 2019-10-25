@@ -211,8 +211,6 @@
          (border (opt-val "Tables" "Table border width"))
          (headcolumn 0))
 
-    ;; center the document without elements inheriting anything
-    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "<center>"))
 
     (gnc:html-document-set-style!
      ssdoc "body"
@@ -331,6 +329,7 @@
       (gnc:html-table-set-style!
        t "table"
        'attribute (list "border" 0)
+       'attribute (list "style" "margin-left:auto; margin-right:auto")
        'inheritable? #f)
 
       ;; set the header column to be the 2nd when we have a logo
@@ -387,8 +386,6 @@
        t 2 headcolumn
        (gnc:html-document-objects doc))
       (gnc:html-document-add-object! ssdoc t))
-    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "</center>"))
-    ;;TODO: make this a div instead of <center> (deprecated)
     ssdoc))
 
 (gnc:define-html-style-sheet
