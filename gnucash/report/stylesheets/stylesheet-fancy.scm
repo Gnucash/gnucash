@@ -210,7 +210,6 @@
      'attribute (list "bgcolor" bgcolor)
      'attribute (list "text" textcolor)
      'attribute (list "link" linkcolor))
-
 ;;;;
 ;;;;
 ;;;;
@@ -328,15 +327,14 @@
        'attribute (list "style" "margin-left:auto; margin-right:auto")
        'inheritable? #f)
 
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      ;; set the header column to be the 2nd when we have a logo
+      ;; do this so that when logo is not present, the document
+      ;; is perfectly centered
+      (if (and logopixmap (> (string-length logopixmap) 0))
+          (set! headcolumn 1))
 
-        ;; set the header column to be the 2nd when we have a logo
-        ;; do this so that when logo is not present, the document
-        ;; is perfectly centered
-        (if (and logopixmap (> (string-length logopixmap) 0))
-            (set! headcolumn 1))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -360,13 +358,12 @@
               (gnc:html-markup-h3 headline))))
         )
 
-      (if (and logopixmap
-               (not (string=? logopixmap "")))
-          ;; check for logo image file name non blank
+      ;; only setup an image if we specified one
+      (if (and logopixmap (> (string-length logopixmap) 0))
           (gnc:html-table-set-cell!
            t 0 0
            (gnc:make-html-text
-            (gnc:html-markup-img (make-file-url logopixmap)))) )
+            (gnc:html-markup-img (make-file-url logopixmap)))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
           (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))
@@ -379,7 +376,6 @@
        gnc:html-table-set-cell!
        t 2 headcolumn
        (gnc:html-document-objects doc))
-
       (gnc:html-document-add-object! ssdoc t))
     ssdoc))
 

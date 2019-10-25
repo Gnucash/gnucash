@@ -219,7 +219,7 @@
          (bgpixmap (opt-val "Images" "Background Tile"))
          (headpixmap (opt-val "Images" "Heading Banner"))
          (logopixmap (opt-val "Images" "Logo"))
-         (align (gnc:value->string(opt-val "Images" "Heading Alignment")))
+         (align (gnc:value->string (opt-val "Images" "Heading Alignment")))
          (spacing (opt-val "Tables" "Table cell spacing"))
          (padding (opt-val "Tables" "Table cell padding"))
          (border (opt-val "Tables" "Table border width"))
@@ -333,7 +333,8 @@
 
     ;; don't surround marked-up links with <a> </a>
     (if (not links?)
-        (gnc:html-document-set-style! ssdoc "a" 'tag ""))
+        (gnc:html-document-set-style!
+         ssdoc "a" 'tag ""))
 
     (add-css-information-to-doc options ssdoc doc)
 
@@ -352,9 +353,8 @@
       (if (and logopixmap (> (string-length logopixmap) 0))
           (set! headcolumn 1))
 
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -380,11 +380,10 @@
 
       ;; only setup an image if we specified one
       (if (and logopixmap (> (string-length logopixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 0
-             (gnc:make-html-text
-              (gnc:html-markup-img (make-file-url logopixmap))))))
+          (gnc:html-table-set-cell!
+           t 0 0
+           (gnc:make-html-text
+            (gnc:html-markup-img (make-file-url logopixmap)))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
           (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))

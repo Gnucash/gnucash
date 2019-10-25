@@ -211,7 +211,6 @@
          (border (opt-val "Tables" "Table border width"))
          (headcolumn 0))
 
-
     (gnc:html-document-set-style!
      ssdoc "body"
      'attribute (list "bgcolor" bgcolor)
@@ -323,6 +322,8 @@
         (gnc:html-document-set-style!
          ssdoc "a" 'tag ""))
 
+    (add-css-information-to-doc options ssdoc doc)
+
     (let ((t (gnc:make-html-table)))
       ;; we don't want a bevel for this table, but we don't want
       ;; that to propagate
@@ -338,11 +339,8 @@
       (if (and logopixmap (> (string-length logopixmap) 0))
           (set! headcolumn 1))
 
-      (add-css-information-to-doc options ssdoc doc)
-
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -368,11 +366,10 @@
 
       ;; only setup an image if we specified one
       (if (and logopixmap (> (string-length logopixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 0
-             (gnc:make-html-text
-              (gnc:html-markup-img (make-file-url logopixmap))))))
+          (gnc:html-table-set-cell!
+           t 0 0
+           (gnc:make-html-text
+            (gnc:html-markup-img (make-file-url logopixmap)))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
           (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))

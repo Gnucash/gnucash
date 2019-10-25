@@ -285,7 +285,7 @@
          (bgpixmap (opt-val "Images" "Background Tile"))
          (headpixmap (opt-val "Images" "Heading Banner"))
          (logopixmap (opt-val "Images" "Logo"))
-         (align (gnc:value->string(opt-val "Images" "Heading Alignment")))
+         (align (gnc:value->string (opt-val "Images" "Heading Alignment")))
          (spacing (opt-val "Tables" "Table cell spacing"))
          (padding (opt-val "Tables" "Table cell padding"))
          (border (opt-val "Tables" "Table border width"))
@@ -418,9 +418,8 @@
       (if (and logopixmap (> (string-length logopixmap) 0))
           (set! headcolumn 1))
 
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
