@@ -1137,6 +1137,17 @@ flawed. see report-utilities.scm. please update reports.")
   (define (monetary->string mon)
     (format #f "[~a]"
             (gnc:monetary->string mon)))
+  (define (owner->str owner)
+    (define (fn s . rest) (format #f "[~a:~a]" s ((apply compose rest) owner)))
+    (let ((t (gncOwnerGetType owner)))
+      (cond
+       ((eqv? t GNC-OWNER-NONE) "[None]")
+       ((eqv? t GNC-OWNER-UNDEFINED) "[Undefined]")
+       ((eqv? t GNC-OWNER-JOB) (fn "Job" owner->str gncOwnerGetEndOwner))
+       ((eqv? t GNC-OWNER-CUSTOMER) (fn "Cust" gncCustomerGetName gncOwnerGetCustomer))
+       ((eqv? t GNC-OWNER-VENDOR) (fn "Vend" gncVendorGetName gncOwnerGetVendor))
+       ((eqv? t GNC-OWNER-EMPLOYEE) (fn "Emp" gncEmployeeGetName gncOwnerGetEmployee))
+       (else (format #f "[unknown:~a]" owner)))))
   (define (try proc)
     ;; Try proc with d as a parameter, catching exceptions to return
     ;; #f to the (or) evaluator below.
@@ -1165,6 +1176,7 @@ flawed. see report-utilities.scm. please update reports.")
       (try trans->str)
       (try monetary->string)
       (try gnc-budget-get-name)
+      (try owner->str)
       (object->string d)))
 
 (define (pair->num pair)
