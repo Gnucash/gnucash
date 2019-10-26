@@ -64,7 +64,7 @@ exist but have no suitable transactions."))
 
 (export optname-show-zeros)
 
-(define num-buckets 5)
+(define num-buckets 6)
 
 (define (setup-query query accounts date)
   (qof-query-set-book query (gnc-get-current-book))
@@ -228,17 +228,17 @@ copying this report to a spreadsheet for use in a mail merge.")
 (define (gnc-owner-equal? a b)
   (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
 
-(define (split->invoice split)
-  (gncInvoiceGetInvoiceFromLot
-   (xaccSplitGetLot
-    (gnc-lot-get-earliest-split
-     (xaccSplitGetLot split)))))
-
 ;; simpler version of gnc:owner-from-split.
+;; must be gncOwnerFree after use!
 (define (split->owner split)
-  (gncOwnerGetEndOwner
-   (gncInvoiceGetOwner
-    (split->invoice split))))
+  (let* ((lot (xaccSplitGetLot (gnc-lot-get-earliest-split (xaccSplitGetLot split))))
+         (owner (gncOwnerNew))
+         (use-lot-owner? (gncOwnerGetOwnerFromLot lot owner)))
+    (unless use-lot-owner?
+      (gncOwnerCopy (gncOwnerGetEndOwner
+                     (gncInvoiceGetOwner (gncInvoiceGetInvoiceFromLot lot)))
+                    owner))
+    owner))
 
 (define (owner-splits->aging-list splits to-date date-type reverse?)
   (gnc:debug 'processing: (qof-print-date to-date) date-type 'reverse? reverse?)
@@ -265,6 +265,18 @@ copying this report to a spreadsheet for use in a mail merge.")
                  (loop (1+ idx) (cdr bucket-dates)))))
          (gnc:debug '* buckets bal invoice date)))
      lots)
+
+    ;; process prepayments, i.e. payments without associated invoices
+    (let lp ((splits (filter (compose txn-is-payment? xaccSplitGetParent) splits))
+             (prepayments 0))
+      (cond
+       ((null? splits)
+        (vector-set! buckets (1- num-buckets) prepayments))
+       ((null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot (car splits))))
+        (lp (cdr splits) (+ prepayments (xaccSplitGetAmount (car splits)))))
+       (else
+        (lp (cdr splits) prepayments))))
+
     (vector->list buckets)))
 
 (define (aging-renderer report-obj reportname APARaccount reverse?)
@@ -279,6 +291,7 @@ copying this report to a spreadsheet for use in a mail merge.")
     (list
      ""
      (_ "Company")
+     (_ "Prepayments")
      (_ "Current")
      (_ "0-30 days")
      (_ "31-60 days")
@@ -410,8 +423,10 @@ copying this report to a spreadsheet for use in a mail merge.")
                       (let-values (((owner-splits other-owner-splits)
                                     (partition
                                      (lambda (split)
-                                       (gnc-owner-equal? (car acc-owners)
-                                                         (split->owner split)))
+                                       (let* ((owner (split->owner split))
+                                              (match? (gnc-owner-equal? (car acc-owners) owner)))
+                                         (gncOwnerFree owner)
+                                         match?))
                                      acc-splits)))
                         (let* ((owner (car acc-owners))
                                (aging (owner-splits->aging-list
@@ -443,8 +458,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 			          (gnc:owner-report-text owner account)
 			          (gnc:make-gnc-monetary
                                    (xaccAccountGetCommodity account)
-                                   aging-total)))))
-                              (list))))
+                                   aging-total))))))))
                           (lp (cdr acc-owners)
                               other-owner-splits
                               (map + acc-totals
