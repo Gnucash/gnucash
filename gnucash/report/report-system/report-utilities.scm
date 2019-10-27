@@ -1147,7 +1147,7 @@ flawed. see report-utilities.scm. please update reports.")
             (cons GNC-OWNER-EMPLOYEE "Emp")))
     (format #f "[~a:~a]"
             (or (assv-ref owner-alist (gncOwnerGetType owner)) "Owner")
-            (gncOwnerGetName owner))))
+            (gncOwnerGetName owner)))
   (define (invoice->str inv)
     (format #f "~a<Post:~a,Owner:~a,Notes:~a,Total:~a>"
             (gncInvoiceGetTypeString inv)
