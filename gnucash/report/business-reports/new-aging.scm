@@ -103,19 +103,6 @@ exist but have no suitable transactions."))
     (gnc:options-set-default-section options "General")
     options))
 
-(define (make-interval-list to-date)
-  (let* ((begindate to-date)
-         (begindate (decdate begindate ThirtyDayDelta))
-         (begindate (decdate begindate ThirtyDayDelta))
-         (begindate (decdate begindate ThirtyDayDelta)))
-    (gnc:make-date-list begindate to-date ThirtyDayDelta)))
-
-;; Have make-list create a stepped list, then add a date in the future
-;; for the "current" bucket
-(define (make-extended-interval-list to-date)
-  (append (make-interval-list to-date)
-          (list +inf.0)))
-
 (define (txn-is-invoice? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-INVOICE))
 
@@ -149,55 +136,6 @@ exist but have no suitable transactions."))
                      (gncInvoiceGetOwner (gncInvoiceGetInvoiceFromLot lot)))
                     owner))
     owner))
-
-(define (owner-splits->aging-list splits to-date date-type receivable)
-  (gnc:debug 'processing: (qof-print-date to-date) date-type 'receivable receivable)
-  (for-each gnc:debug splits)
-  (let ((bucket-dates (make-extended-interval-list to-date))
-        (buckets (make-vector num-buckets 0)))
-    (define (addbucket! idx amt)
-      (vector-set! buckets idx (+ amt (vector-ref buckets idx))))
-    (let lp ((splits splits))
-      (cond
-       ((null? splits)
-        (vector->list buckets))
-
-       ;; next split is an invoice posting split. note we don't need
-       ;; to handle invoice payments because these payments will
-       ;; reduce the lot balance automatically.
-       ((txn-is-invoice? (xaccSplitGetParent (car splits)))
-        (let* ((lot (gncInvoiceGetPostedLot
-                     (gncInvoiceGetInvoiceFromTxn
-                      (xaccSplitGetParent (car splits)))))
-               (invoice (gncInvoiceGetInvoiceFromLot lot))
-               (bal (gnc-lot-get-balance lot))
-               (bal (if receivable bal (- bal)))
-               (date (if (eq? date-type 'postdate)
-                         (gncInvoiceGetDatePosted invoice)
-                         (gncInvoiceGetDateDue invoice))))
-          (gnc:pk 'next=invoice (car splits) invoice bal)
-          (let loop ((idx 0)
-                     (bucket-dates bucket-dates))
-            (gnc:debug idx buckets bal invoice date)
-            (if (< date (car bucket-dates))
-                (addbucket! idx bal)
-                (loop (1+ idx) (cdr bucket-dates))))
-          (gnc:debug '* buckets bal invoice date))
-        (lp (cdr splits)))
-
-       ;; next split is a prepayment
-       ((and (txn-is-payment? (xaccSplitGetParent (car splits)))
-             (null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot (car splits)))))
-        (let* ((prepay (xaccSplitGetAmount (car splits)))
-               (prepay (if receivable prepay (- prepay))))
-          (gnc:pk 'next=prepay (car splits) prepay)
-          (addbucket! (1- num-buckets) prepay))
-        (lp (cdr splits)))
-
-       ;; not invoice/prepayment. regular or payment split.
-       (else
-        (gnc:pk 'next=skipped (car splits))
-        (lp (cdr splits)))))))
 
 (define (aging-renderer report-obj receivable)
   (define (op-value section name)
@@ -314,8 +252,9 @@ exist but have no suitable transactions."))
                                                           owner))
                            (owner-splits (car splits-own-others))
                            (other-owner-splits (cdr splits-own-others))
-                           (aging (owner-splits->aging-list
-                                   owner-splits report-date date-type receivable))
+                           (aging (gnc:owner-splits->aging-list
+                                   owner-splits num-buckets report-date
+                                   date-type receivable))
                            (aging-total (apply + aging)))
                       (when (or show-zeros (not (every zero? aging)))
                         (gnc:html-table-append-row!
