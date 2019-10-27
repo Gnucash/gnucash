@@ -188,36 +188,28 @@
           (lambda (section name)
             (gnc:color-option->html
              (gnc:lookup-option options section name))))
-         (preparer (opt-val (N_ "General") (N_ "Preparer")))
-         (prepared-for (opt-val (N_ "General") (N_ "Prepared for")))
-         (show-preparer? (opt-val (N_ "General") (N_ "Show preparer info")))
-         (links? (opt-val (N_ "General") (N_ "Enable Links")))
-         (bgcolor (color-val (N_ "Colors") (N_ "Background Color")))
-         (textcolor (color-val (N_ "Colors") (N_ "Text Color")))
-         (linkcolor (color-val (N_ "Colors") (N_ "Link Color")))
-         (normal-row-color (color-val (N_ "Colors") (N_ "Table Cell Color")))
-         (alternate-row-color (color-val (N_ "Colors")
-                                         (N_ "Alternate Table Cell Color")))
+         (preparer (opt-val "General" "Preparer"))
+         (prepared-for (opt-val "General" "Prepared for"))
+         (show-preparer? (opt-val "General" "Show preparer info"))
+         (links? (opt-val "General" "Enable Links"))
+         (bgcolor (color-val "Colors" "Background Color"))
+         (textcolor (color-val "Colors" "Text Color"))
+         (linkcolor (color-val "Colors" "Link Color"))
+         (normal-row-color (color-val "Colors" "Table Cell Color"))
+         (alternate-row-color (color-val "Colors" "Alternate Table Cell Color"))
          (primary-subheading-color
-          (color-val (N_ "Colors")
-                     (N_ "Subheading/Subtotal Cell Color")))
+          (color-val "Colors" "Subheading/Subtotal Cell Color"))
          (secondary-subheading-color
-          (color-val (N_ "Colors")
-                     (N_ "Sub-subheading/total Cell Color")))
-         (grand-total-color (color-val (N_ "Colors")
-                                       (N_ "Grand Total Cell Color")))
-         (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
-         (headpixmap (opt-val (N_ "Images") (N_ "Heading Banner")))
-         (logopixmap (opt-val (N_ "Images") (N_ "Logo")))
-         (align (gnc:value->string(opt-val (N_ "Images") (N_ "Heading Alignment"))))
-         (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
-         (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
-         (border (opt-val (N_ "Tables") (N_ "Table border width")))
+          (color-val "Colors" "Sub-subheading/total Cell Color"))
+         (grand-total-color (color-val "Colors" "Grand Total Cell Color"))
+         (bgpixmap (opt-val "Images" "Background Tile"))
+         (headpixmap (opt-val "Images" "Heading Banner"))
+         (logopixmap (opt-val "Images" "Logo"))
+         (align (gnc:value->string (opt-val "Images" "Heading Alignment")))
+         (spacing (opt-val "Tables" "Table cell spacing"))
+         (padding (opt-val "Tables" "Table cell padding"))
+         (border (opt-val "Tables" "Table border width"))
          (headcolumn 0))
-
-                                        ; center the document without elements inheriting anything
-    (gnc:html-document-add-object! ssdoc
-                                   (gnc:make-html-text "<center>"))
 
     (gnc:html-document-set-style!
      ssdoc "body"
@@ -330,25 +322,25 @@
         (gnc:html-document-set-style!
          ssdoc "a" 'tag ""))
 
+    (add-css-information-to-doc options ssdoc doc)
+
     (let ((t (gnc:make-html-table)))
       ;; we don't want a bevel for this table, but we don't want
       ;; that to propagate
       (gnc:html-table-set-style!
        t "table"
        'attribute (list "border" 0)
+       'attribute (list "style" "margin-left:auto; margin-right:auto")
        'inheritable? #f)
 
-                                        ; set the header column to be the 2nd when we have a logo
-                                        ; do this so that when logo is not present, the document
-                                        ; is perfectly centered
+      ;; set the header column to be the 2nd when we have a logo
+      ;; do this so that when logo is not present, the document
+      ;; is perfectly centered
       (if (and logopixmap (> (string-length logopixmap) 0))
           (set! headcolumn 1))
 
-      (add-css-information-to-doc options ssdoc doc)
-
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -372,34 +364,25 @@
               (gnc:html-markup-h3 headline))))
         )
 
-                                        ; only setup an image if we specified one
+      ;; only setup an image if we specified one
       (if (and logopixmap (> (string-length logopixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 0
-             (gnc:make-html-text
-              (gnc:html-markup-img (make-file-url logopixmap))))))
+          (gnc:html-table-set-cell!
+           t 0 0
+           (gnc:make-html-text
+            (gnc:html-markup-img (make-file-url logopixmap)))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 headcolumn
-             (gnc:make-html-text
-              (string-append
-               "<div align=\"" align "\">"
-               "<img src=\"" (make-file-url headpixmap) "\">"
-               "</div>")))
-            )
-          (gnc:html-table-set-cell!
-           t 0 headcolumn
-           (gnc:make-html-text "&nbsp;")))
+          (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))
+                 (cell (gnc:make-html-table-cell (gnc:make-html-text div))))
+            (gnc:html-table-cell-set-style! cell "td" 'attribute `("align" ,align))
+            (gnc:html-table-set-cell! t 0 headcolumn cell))
+          (gnc:html-table-set-cell! t 0 headcolumn (gnc:make-html-text " ")))
 
       (apply
        gnc:html-table-set-cell!
        t 2 headcolumn
        (gnc:html-document-objects doc))
       (gnc:html-document-add-object! ssdoc t))
-    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "</center>")) ;;TODO: make this a div instead of <center> (deprecated)
     ssdoc))
 
 (gnc:define-html-style-sheet

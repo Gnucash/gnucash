@@ -852,6 +852,68 @@
        (total 'merge (cadr account-balance) #f))
      account-balances)
     total))
+
+
+;; ***************************************************************************
+;; Business Functions
+
+;; create a stepped list, then add a date in the infinite future for
+;; the "current" bucket
+(define (make-extended-interval-list to-date num-buckets)
+  (let lp ((begindate to-date) (num-buckets num-buckets))
+    (if (zero? num-buckets)
+        (append (gnc:make-date-list begindate to-date ThirtyDayDelta) (list +inf.0))
+        (lp (decdate begindate ThirtyDayDelta) (1- num-buckets)))))
+
+;; Outputs: aging list of numbers
+(define-public (gnc:owner-splits->aging-list splits num-buckets
+                                             to-date date-type receivable?)
+  (gnc:pk 'processing: (qof-print-date to-date) date-type 'receivable? receivable?)
+  (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 2)))
+        (buckets (make-vector num-buckets 0)))
+    (define (addbucket! idx amt)
+      (vector-set! buckets idx (+ amt (vector-ref buckets idx))))
+    (let lp ((splits splits))
+      (cond
+       ((null? splits)
+        (vector->list buckets))
+
+       ;; next split is an invoice posting split. note we don't need
+       ;; to handle invoice payments because these payments will
+       ;; reduce the lot balance automatically.
+       ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
+              TXN-TYPE-INVOICE)
+        (let* ((lot (gncInvoiceGetPostedLot
+                     (gncInvoiceGetInvoiceFromTxn
+                      (xaccSplitGetParent (car splits)))))
+               (invoice (gncInvoiceGetInvoiceFromLot lot))
+               (bal (gnc-lot-get-balance lot))
+               (bal (if receivable? bal (- bal)))
+               (date (if (eq? date-type 'postdate)
+                         (gncInvoiceGetDatePosted invoice)
+                         (gncInvoiceGetDateDue invoice))))
+          (gnc:pk 'next=invoice (car splits) invoice bal)
+          (let loop ((idx 0) (bucket-dates bucket-dates))
+            (if (< date (car bucket-dates))
+                (addbucket! idx bal)
+                (loop (1+ idx) (cdr bucket-dates)))))
+        (lp (cdr splits)))
+
+       ;; next split is a prepayment
+       ((and (eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
+                   TXN-TYPE-PAYMENT)
+             (null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot (car splits)))))
+        (let* ((prepay (xaccSplitGetAmount (car splits)))
+               (prepay (if receivable? prepay (- prepay))))
+          (gnc:pk 'next=prepay (car splits) prepay)
+          (addbucket! (1- num-buckets) prepay))
+        (lp (cdr splits)))
+
+       ;; not invoice/prepayment. regular or payment split.
+       (else
+        (gnc:pk 'next=skipped (car splits))
+        (lp (cdr splits)))))))
+
 ;; ***************************************************************************
 
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
@@ -896,6 +958,26 @@
   (define (monetary->string mon)
     (format #f "[~a]"
             (gnc:monetary->string mon)))
+  (define (owner->str owner)
+    (define owner-alist
+      (list (cons GNC-OWNER-NONE "None")
+            (cons GNC-OWNER-UNDEFINED "Undefined")
+            (cons GNC-OWNER-JOB "Job")
+            (cons GNC-OWNER-CUSTOMER "Cust")
+            (cons GNC-OWNER-VENDOR "Vend")
+            (cons GNC-OWNER-EMPLOYEE "Emp")))
+    (format #f "[~a:~a]"
+            (or (assv-ref owner-alist (gncOwnerGetType owner)) "Owner")
+            (gncOwnerGetName owner)))
+  (define (invoice->str inv)
+    (format #f "~a<Post:~a,Owner:~a,Notes:~a,Total:~a>"
+            (gncInvoiceGetTypeString inv)
+            (qof-print-date (gncInvoiceGetDatePosted inv))
+            (gncOwnerGetName (gncInvoiceGetOwner inv))
+            (gncInvoiceGetNotes inv)
+            (monetary->string (gnc:make-gnc-monetary
+                               (gncInvoiceGetCurrency inv)
+                               (gncInvoiceGetTotal inv)))))
   (define (try proc)
     ;; Try proc with d as a parameter, catching exceptions to return
     ;; #f to the (or) evaluator below.
@@ -924,6 +1006,8 @@
       (try trans->str)
       (try monetary->string)
       (try gnc-budget-get-name)
+      (try owner->str)
+      (try invoice->str)
       (object->string d)))
 
 (define (pair->num pair)

@@ -28,6 +28,7 @@ set (reports_standard_SCHEME
     standard/income-gst-statement.scm
     standard/income-statement.scm
     standard/net-charts.scm
+    standard/new-owner-report.scm
     standard/portfolio.scm
     standard/price-scatter.scm
     standard/reconcile-report.scm
@@ -47,6 +48,7 @@ set (reports_standard_SCHEME
 
 set (reports_standard_SCHEME_2
     standard/customer-summary.scm # Depends on owner-report
+    standard/new-aging.scm        # ditto
 )
 
 set(reports_example_SCHEME

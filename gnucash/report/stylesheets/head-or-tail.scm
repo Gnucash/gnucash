@@ -257,46 +257,39 @@
           (lambda (section name)
             (gnc:color-option->html
              (gnc:lookup-option options section name))))
-         (preparer (opt-val (N_ "General") (N_ "Preparer")))
-         (prepared-for (opt-val (N_ "General") (N_ "Prepared for")))
-         (show-preparer? (opt-val (N_ "General") (N_ "Show preparer info")))
-         (show-receiver? (opt-val (N_ "General") (N_ "Show receiver info")))
-         (show-date? (opt-val (N_ "General") (N_ "Show date")))
-         (show-time? (opt-val (N_ "General") (N_ "Show time in addition to date")))
-         (show-gnucash-version? (opt-val (N_ "General") (N_ "Show GnuCash Version")))
-         (show-preparer-at-bottom? (opt-val (N_ "General") (N_ "Show preparer info at bottom")))
-         (show-receiver-at-bottom? (opt-val (N_ "General") (N_ "Show receiver info at bottom")))
-         (show-date-time-at-bottom? (opt-val (N_ "General") (N_ "Show date/time at bottom")))
-         (show-comments-at-bottom? (opt-val (N_ "General") (N_ "Show comments at bottom")))
-         (show-gnucash-version-at-bottom? (opt-val (N_ "General") (N_ "Show GnuCash version at bottom")))
-         (links? (opt-val (N_ "General") (N_ "Enable Links")))
-         (additional-comments (opt-val (N_ "General") (N_ "Additional Comments")))
-         (bgcolor (color-val (N_ "Colors") (N_ "Background Color")))
-         (textcolor (color-val (N_ "Colors") (N_ "Text Color")))
-         (linkcolor (color-val (N_ "Colors") (N_ "Link Color")))
-         (normal-row-color (color-val (N_ "Colors") (N_ "Table Cell Color")))
-         (alternate-row-color (color-val (N_ "Colors")
-                                         (N_ "Alternate Table Cell Color")))
+         (preparer (opt-val "General" "Preparer"))
+         (prepared-for (opt-val "General" "Prepared for"))
+         (show-preparer? (opt-val "General" "Show preparer info"))
+         (show-receiver? (opt-val "General" "Show receiver info"))
+         (show-date? (opt-val "General" "Show date"))
+         (show-time? (opt-val "General" "Show time in addition to date"))
+         (show-gnucash-version? (opt-val "General" "Show GnuCash Version"))
+         (show-preparer-at-bottom? (opt-val "General" "Show preparer info at bottom"))
+         (show-receiver-at-bottom? (opt-val "General" "Show receiver info at bottom"))
+         (show-date-time-at-bottom? (opt-val "General" "Show date/time at bottom"))
+         (show-comments-at-bottom? (opt-val "General" "Show comments at bottom"))
+         (show-gnucash-version-at-bottom?
+          (opt-val "General" "Show GnuCash version at bottom"))
+         (links? (opt-val "General" "Enable Links"))
+         (additional-comments (opt-val "General" "Additional Comments"))
+         (bgcolor (color-val "Colors" "Background Color"))
+         (textcolor (color-val "Colors" "Text Color"))
+         (linkcolor (color-val "Colors" "Link Color"))
+         (normal-row-color (color-val "Colors" "Table Cell Color"))
+         (alternate-row-color (color-val "Colors" "Alternate Table Cell Color"))
          (primary-subheading-color
-          (color-val (N_ "Colors")
-                     (N_ "Subheading/Subtotal Cell Color")))
+          (color-val "Colors" "Subheading/Subtotal Cell Color"))
          (secondary-subheading-color
-          (color-val (N_ "Colors")
-                     (N_ "Sub-subheading/total Cell Color")))
-         (grand-total-color (color-val (N_ "Colors")
-                                       (N_ "Grand Total Cell Color")))
-         (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
-         (headpixmap (opt-val (N_ "Images") (N_ "Heading Banner")))
-         (logopixmap (opt-val (N_ "Images") (N_ "Logo")))
-         (align (gnc:value->string(opt-val (N_ "Images") (N_ "Heading Alignment"))))
-         (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
-         (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
-         (border (opt-val (N_ "Tables") (N_ "Table border width")))
+          (color-val "Colors" "Sub-subheading/total Cell Color"))
+         (grand-total-color (color-val "Colors" "Grand Total Cell Color"))
+         (bgpixmap (opt-val "Images" "Background Tile"))
+         (headpixmap (opt-val "Images" "Heading Banner"))
+         (logopixmap (opt-val "Images" "Logo"))
+         (align (gnc:value->string (opt-val "Images" "Heading Alignment")))
+         (spacing (opt-val "Tables" "Table cell spacing"))
+         (padding (opt-val "Tables" "Table cell padding"))
+         (border (opt-val "Tables" "Table border width"))
          (headcolumn 0))
-
-    ;; center the document without elements inheriting anything
-    (gnc:html-document-add-object! ssdoc
-                                   (gnc:make-html-text "<center>"))
 
     (gnc:html-document-set-style!
      ssdoc "body"
@@ -416,6 +409,7 @@
       (gnc:html-table-set-style!
        t "table"
        'attribute (list "border" 0)
+       'attribute (list "style" "margin-left:auto; margin-right:auto")
        'inheritable? #f)
 
       ;; set the header column to be the 2nd when we have a logo
@@ -424,9 +418,8 @@
       (if (and logopixmap (> (string-length logopixmap) 0))
           (set! headcolumn 1))
 
-      (let* ((title (gnc:html-document-title doc))
-             (doc-headline (gnc:html-document-headline doc))
-             (headline (if (eq? doc-headline #f) title doc-headline)))
+      (let* ((headline (or (gnc:html-document-headline doc)
+                           (gnc:html-document-title doc))))
 
         (gnc:html-table-set-cell!
          t 1 headcolumn
@@ -438,23 +431,17 @@
              (gnc:make-html-text
               (gnc:html-markup-i
                (_ "Prepared by: ")
-               (gnc:html-markup-b preparer)
-               )
-              (gnc:html-markup-br)
-              )
-             " "
-             )
+               (gnc:html-markup-b preparer))
+              (gnc:html-markup-br))
+             " ")
          (if (and show-receiver? (not show-receiver-at-bottom?))
              ;; print receiver info as additional header info
              (gnc:make-html-text
               (gnc:html-markup-i
                (_ "Prepared for: ")
                (gnc:html-markup-b prepared-for)
-               (gnc:html-markup-br)
-               )
-              )
-             " "
-             )
+               (gnc:html-markup-br)))
+             " ")
          (if (and show-date? (not show-date-time-at-bottom?))
              ;; print date/time info as additional header info
              (if show-time?
@@ -463,55 +450,39 @@
                    (_ "Report Creation Date: ")
                    (qof-print-date (gnc:get-today))
                    " "
-                   (gnc-print-time64 (current-time) "%X %Z")
-                   )
-                  (gnc:html-markup-br)
-                  )
+                   (gnc-print-time64 (current-time) "%X %Z"))
+                  (gnc:html-markup-br))
                  (gnc:make-html-text
                   (gnc:html-markup-i
                    (_ "Report Creation Date: ")
-                   (qof-print-date (gnc:get-today))
-                   )
-                  (gnc:html-markup-br)
-                  )
-                 )
-             " "
-             )
+                   (qof-print-date (gnc:get-today)))
+                  (gnc:html-markup-br)))
+             " ")
          (if (and show-gnucash-version? (not show-gnucash-version-at-bottom?))
              ;; print the GnuCash version string as additional header info
              (gnc:make-html-text
               (gnc:html-markup-i
                "GnuCash "
-               gnc:version
-               )
-              (gnc:html-markup-br)
-              )
-             " "
-             )
+               gnc:version)
+              (gnc:html-markup-br))
+             " ")
          (if (not show-comments-at-bottom?)
              ;; print additional comments as additional header info
              (gnc:make-html-text
               (gnc:html-markup-br)
               (gnc:html-markup-i additional-comments)
-              (gnc:html-markup-br)
-              )
-             " "
-             )
+              (gnc:html-markup-br))
+             " ")
          ;; add separator line if any additional header info is printed
          (if (or
               (and show-preparer? (not show-preparer-at-bottom?))
               (and show-receiver? (not show-receiver-at-bottom?))
               (and show-date? (not show-date-time-at-bottom?))
               (and show-gnucash-version? (not show-gnucash-version-at-bottom?))
-              (not show-comments-at-bottom?)
-              )
+              (not show-comments-at-bottom?))
              (gnc:make-html-text
-              (gnc:html-markup-br)
-              )
-             " "
-             )
-         )
-        )
+              (gnc:html-markup-br))
+             " ")))
 
       ;; only setup an image if we specified one
       (if (and logopixmap (> (string-length logopixmap) 0))
@@ -522,18 +493,11 @@
               (gnc:html-markup-img (make-file-url logopixmap))))))
 
       (if (and headpixmap (> (string-length headpixmap) 0))
-          (begin
-            (gnc:html-table-set-cell!
-             t 0 headcolumn
-             (gnc:make-html-text
-              (string-append
-               "<div align=\"" align "\">"
-               "<img src=\"" (make-file-url headpixmap) "\">"
-               "</div>")))
-            )
-          (gnc:html-table-set-cell!
-           t 0 headcolumn
-           (gnc:make-html-text "&nbsp;")))
+          (let* ((div (gnc:html-markup-img (make-file-url headpixmap)))
+                 (cell (gnc:make-html-table-cell (gnc:make-html-text div))))
+            (gnc:html-table-cell-set-style! cell "td" 'attribute `("align" ,align))
+            (gnc:html-table-set-cell! t 0 headcolumn cell))
+          (gnc:html-table-set-cell! t 0 headcolumn (gnc:make-html-text " ")))
 
       (apply
        gnc:html-table-set-cell!
@@ -550,36 +514,28 @@
             (and show-preparer? show-preparer-at-bottom?)
             (and show-receiver? show-receiver-at-bottom?)
             (and show-date? show-date-time-at-bottom?)
-            (and show-gnucash-version? show-gnucash-version-at-bottom?)
-            show-comments-at-bottom?
-            )
+            (and show-gnucash-version?
+                 show-gnucash-version-at-bottom?)
+            show-comments-at-bottom?)
            (gnc:make-html-text
-            (gnc:html-markup-br)
-            )
-           " "
-           )
+            (gnc:html-markup-br))
+           " ")
        (if (and show-preparer? show-preparer-at-bottom?)
            ;; print preparer info as additional header info
            (gnc:make-html-text
             (gnc:html-markup-i
              (_ "Prepared by: ")
-             (gnc:html-markup-b preparer)
-             )
-            (gnc:html-markup-br)
-            )
-           " "
-           )
+             (gnc:html-markup-b preparer))
+            (gnc:html-markup-br))
+           " ")
        (if (and show-receiver? show-receiver-at-bottom?)
            ;; print receiver info as additional header info
            (gnc:make-html-text
             (gnc:html-markup-i
              (_ "Prepared for: ")
-             (gnc:html-markup-b prepared-for)
-             )
-            (gnc:html-markup-br)
-            )
-           " "
-           )
+             (gnc:html-markup-b prepared-for))
+            (gnc:html-markup-br))
+           " ")
        (if (and show-date? show-date-time-at-bottom?)
            ;; print date/time info as additional header info
            (if show-time?
@@ -588,42 +544,29 @@
                  (_ "Report Creation Date: ")
                  (qof-print-date (gnc:get-today))
                  " "
-                 (gnc-print-time64 (current-time) "%X %Z")
-                 )
-                (gnc:html-markup-br)
-                )
+                 (gnc-print-time64 (current-time) "%X %Z"))
+                (gnc:html-markup-br))
                (gnc:make-html-text
                 (gnc:html-markup-i
                  (_ "Report Creation Date: ")
                  (qof-print-date (gnc:get-today))
-                 (gnc:html-markup-br)
-                 )
-                )
-               )
-           " "
-           )
+                 (gnc:html-markup-br))))
+           " ")
        (if (and show-gnucash-version? show-gnucash-version-at-bottom?)
            ;; print the GnuCash version string as additional header info
            (gnc:make-html-text
             (gnc:html-markup-i
              (_ "GnuCash ")
-             gnc:version
-             )
-            (gnc:html-markup-br)
-            )
-           " "
-           )
+             gnc:version)
+            (gnc:html-markup-br))
+           " ")
        (if show-comments-at-bottom?
            ;; print additional comments as additional header info
            (gnc:make-html-text
             (gnc:html-markup-br)
             (gnc:html-markup-i additional-comments)
-            (gnc:html-markup-br)
-            )
-           " "
-           )
-       ))
-    (gnc:html-document-add-object! ssdoc (gnc:make-html-text "</center>")) ;;TODO: make this a div instead of <center> (deprecated)
+            (gnc:html-markup-br))
+           " ")))
     ssdoc))
 
 (gnc:define-html-style-sheet
