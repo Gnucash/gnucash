@@ -8,6 +8,7 @@ set (business_reports_SCHEME
   invoice.scm
   job-report.scm
   new-aging.scm
+  new-owner-report.scm
   owner-report.scm
   payables.scm
   receivables.scm
