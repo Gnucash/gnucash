@@ -223,13 +223,17 @@ copying this report to a spreadsheet for use in a mail merge.")
 (define (txn-is-payment? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 
-;; this is required because (equal? owner-a owner-b) doesn't always
-;; return #t even if owner-a and owner-b refer to the same owner
 (define (gnc-owner-equal? a b)
   (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
 
+(define (split-has-owner? split owner)
+  (let* ((split-owner (split->owner split))
+         (retval (gnc-owner-equal? split-owner owner)))
+    (gncOwnerFree split-owner)
+    retval))
+
 ;; simpler version of gnc:owner-from-split.
-;; must be gncOwnerFree after use!
+;; must be gncOwnerFree after use! see above...
 (define (split->owner split)
   (let* ((lot (xaccSplitGetLot (gnc-lot-get-earliest-split (xaccSplitGetLot split))))
          (owner (gncOwnerNew))
@@ -244,40 +248,50 @@ copying this report to a spreadsheet for use in a mail merge.")
   (gnc:debug 'processing: (qof-print-date to-date) date-type 'reverse? reverse?)
   (for-each gnc:debug splits)
   (let ((bucket-dates (make-extended-interval-list to-date))
-        (buckets (make-vector num-buckets 0))
-        (lots (map (compose gncInvoiceGetPostedLot gncInvoiceGetInvoiceFromTxn)
-                   (filter txn-is-invoice? (map xaccSplitGetParent splits)))))
-    (for-each
-     (lambda (lot)
-       (let* ((invoice (gncInvoiceGetInvoiceFromLot lot))
-              (bal (gnc-lot-get-balance lot))
-              ;; (bal ((if reverse? - identity) bal))
-              ;; (bal ((if (gncInvoiceGetIsCreditNote invoice) - identity) bal))
-              (date (if (eq? date-type 'postdate)
-                        (gncInvoiceGetDatePosted invoice)
-                        (gncInvoiceGetDateDue invoice))))
-         (unless (null? invoice)
-           (let loop ((idx 0)
-                      (bucket-dates bucket-dates))
-             (gnc:debug idx buckets bal invoice date)
-             (if (< date (car bucket-dates))
-                 (vector-set! buckets idx (+ bal (vector-ref buckets idx)))
-                 (loop (1+ idx) (cdr bucket-dates)))))
-         (gnc:debug '* buckets bal invoice date)))
-     lots)
-
-    ;; process prepayments, i.e. payments without associated invoices
-    (let lp ((splits (filter (compose txn-is-payment? xaccSplitGetParent) splits))
-             (prepayments 0))
+        (buckets (make-vector num-buckets 0)))
+    (define (addbucket! idx amt)
+      (vector-set! buckets idx (+ amt (vector-ref buckets idx))))
+    (let lp ((splits splits))
       (cond
        ((null? splits)
-        (vector-set! buckets (1- num-buckets) prepayments))
-       ((null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot (car splits))))
-        (lp (cdr splits) (+ prepayments (xaccSplitGetAmount (car splits)))))
-       (else
-        (lp (cdr splits) prepayments))))
+        (vector->list buckets))
 
-    (vector->list buckets)))
+       ;; next split is an invoice posting split. note we don't need
+       ;; to handle invoice payments because these payments will
+       ;; reduce the lot balance automatically.
+       ((txn-is-invoice? (xaccSplitGetParent (car splits)))
+        (let* ((lot (gncInvoiceGetPostedLot
+                     (gncInvoiceGetInvoiceFromTxn
+                      (xaccSplitGetParent (car splits)))))
+               (invoice (gncInvoiceGetInvoiceFromLot lot))
+               (bal (gnc-lot-get-balance lot))
+               (bal (if reverse? bal (- bal)))
+               (date (if (eq? date-type 'postdate)
+                         (gncInvoiceGetDatePosted invoice)
+                         (gncInvoiceGetDateDue invoice))))
+          (gnc:pk 'next=invoice (car splits) invoice bal)
+          (let loop ((idx 0)
+                     (bucket-dates bucket-dates))
+            (gnc:debug idx buckets bal invoice date)
+            (if (< date (car bucket-dates))
+                (addbucket! idx bal)
+                (loop (1+ idx) (cdr bucket-dates))))
+          (gnc:debug '* buckets bal invoice date))
+        (lp (cdr splits)))
+
+       ;; next split is a prepayment
+       ((and (txn-is-payment? (xaccSplitGetParent (car splits)))
+             (null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot (car splits)))))
+        (let* ((prepay (xaccSplitGetAmount (car splits)))
+               (prepay (if reverse? prepay (- prepay))))
+          (gnc:pk 'next=prepay (car splits) prepay)
+          (addbucket! (1- num-buckets) prepay))
+        (lp (cdr splits)))
+
+       ;; not invoice/prepayment. regular or payment split.
+       (else
+        (gnc:pk 'next=skipped (car splits))
+        (lp (cdr splits)))))))
 
 (define (aging-renderer report-obj reportname APARaccount reverse?)
   (define (get-op section name)
@@ -388,12 +402,10 @@ copying this report to a spreadsheet for use in a mail merge.")
                   (gnc:make-html-table-cell/size
                    1 (+ 2 num-buckets)
                    (xaccAccountGetName account))))
-                (let* ((acc-owners
+                (let* ((split-owners (map split->owner acc-splits))
+                       (acc-owners
                         (sort-and-delete-duplicates
-                         (map (compose gncOwnerGetEndOwner gncInvoiceGetOwner
-                                       gncInvoiceGetInvoiceFromTxn xaccSplitGetParent)
-                              (filter (compose txn-is-invoice? xaccSplitGetParent)
-                                      acc-splits))
+                         split-owners
                          (lambda (a b)
                            ((if (eq? sort-order 'increasing) string<? string>?)
                             (gncOwnerGetName a) (gncOwnerGetName b)))
@@ -404,6 +416,7 @@ copying this report to a spreadsheet for use in a mail merge.")
                            (acc-totals (make-list (1+ num-buckets) 0)))
                     (cond
                      ((null? acc-owners)
+                      (for-each gncOwnerFree split-owners)
                       (gnc:html-table-append-row!
                        table
                        (cons*
@@ -422,11 +435,8 @@ copying this report to a spreadsheet for use in a mail merge.")
                      (else
                       (let-values (((owner-splits other-owner-splits)
                                     (partition
-                                     (lambda (split)
-                                       (let* ((owner (split->owner split))
-                                              (match? (gnc-owner-equal? (car acc-owners) owner)))
-                                         (gncOwnerFree owner)
-                                         match?))
+                                     (lambda (s)
+                                       (split-has-owner? s (car acc-owners)))
                                      acc-splits)))
                         (let* ((owner (car acc-owners))
                                (aging (owner-splits->aging-list
