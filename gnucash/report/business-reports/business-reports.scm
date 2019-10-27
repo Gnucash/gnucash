@@ -116,6 +116,7 @@
 (use-modules (gnucash report receipt))
 (use-modules (gnucash report owner-report))
 (use-modules (gnucash report job-report))
+(use-modules (gnucash report new-aging))
 (use-modules (gnucash report payables))
 (use-modules (gnucash report receivables))
 (use-modules (gnucash report customer-summary))

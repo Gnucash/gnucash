@@ -418,6 +418,7 @@ gnucash/report/business-reports/business-reports.scm
 gnucash/report/business-reports/customer-summary.scm
 gnucash/report/business-reports/invoice.scm
 gnucash/report/business-reports/job-report.scm
+gnucash/report/business-reports/new-aging.scm
 gnucash/report/business-reports/owner-report.scm
 gnucash/report/business-reports/payables.scm
 gnucash/report/business-reports/receipt.eguile.scm
