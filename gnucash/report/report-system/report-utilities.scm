@@ -1200,15 +1200,8 @@ flawed. see report-utilities.scm. please update reports.")
     (format #f "[~a]"
             (gnc:monetary->string mon)))
   (define (owner->str owner)
-    (define owner-alist
-      (list (cons GNC-OWNER-NONE "None")
-            (cons GNC-OWNER-UNDEFINED "Undefined")
-            (cons GNC-OWNER-JOB "Job")
-            (cons GNC-OWNER-CUSTOMER "Cust")
-            (cons GNC-OWNER-VENDOR "Vend")
-            (cons GNC-OWNER-EMPLOYEE "Emp")))
     (format #f "[~a:~a]"
-            (or (assv-ref owner-alist (gncOwnerGetType owner)) "Owner")
+            (gncOwnerGetTypeString owner)
             (gncOwnerGetName owner)))
   (define (invoice->str inv)
     (format #f "~a<Post:~a,Owner:~a,Notes:~a,Total:~a>"
