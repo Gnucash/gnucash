@@ -139,12 +139,12 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     },
     {
         "EditPostInvoiceAction", GNC_ICON_INVOICE_POST, N_("_Post Invoice"), NULL,
-        N_("Post this Invoice to your Chart of Accounts"),
+        N_("Post this invoice to your Chart of Accounts"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_post)
     },
     {
         "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
-        N_("Unpost this Invoice and make it editable"),
+        N_("Unpost this invoice and make it editable"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_unpost)
     },
 
@@ -195,19 +195,19 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     /* Business menu */
     {
         "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), "",
-        N_("Create a new Invoice for the same owner as the current one"),
+        N_("Create a new invoice for the same owner as the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
         "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, N_("_Pay Invoice"), NULL,
-        N_("Enter a payment for the owner of this Invoice"),
+        N_("Enter a payment for the owner of this invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
     },
 
     /* Reports menu */
     {
         "ReportsCompanyReportAction", NULL, N_("_Company Report"), NULL,
-        N_("Open a company report window for the owner of this Invoice"),
+        N_("Open a company report window for the owner of this invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_company_report)
     },
 };
@@ -310,12 +310,12 @@ static action_toolbar_labels invoice_action_tooltips[] = {
     {"FilePrintAction", N_("Make a printable invoice")},
     {"EditEditInvoiceAction", N_("Edit this invoice")},
     {"EditDuplicateInvoiceAction", N_("Create a new invoice as a duplicate of the current one")},
-    {"EditPostInvoiceAction", N_("Post this Invoice to your Chart of Accounts")},
-    {"EditUnpostInvoiceAction", N_("Unpost this Invoice and make it editable")},
-    {"BusinessNewInvoiceAction", N_("Create a new Invoice for the same owner as the current one")},
-    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the Invoice")},
-    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this Invoice") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this Invoice") }
+    {"EditPostInvoiceAction", N_("Post this invoice to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this invoice and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new invoice for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") }
 };
 
 static action_toolbar_labels bill_action_tooltips[] = {
@@ -331,15 +331,15 @@ static action_toolbar_labels bill_action_tooltips[] = {
 };
 
 static action_toolbar_labels voucher_action_tooltips[] = {
-    {"FilePrintAction", N_("Make a printable Voucher")},
-    {"EditEditInvoiceAction", N_("Edit this Voucher")},
-    {"EditDuplicateInvoiceAction", N_("Create a new Voucher as a duplicate of the current one")},
-    {"EditPostInvoiceAction", N_("Post this Voucher to your Chart of Accounts")},
-    {"EditUnpostInvoiceAction", N_("Unpost this Voucher and make it editable")},
-    {"BusinessNewInvoiceAction", N_("Create a new Voucher for the same owner as the current one")},
-    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the Voucher")},
-    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this Voucher") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this Voucher") }
+    {"FilePrintAction", N_("Make a printable voucher")},
+    {"EditEditInvoiceAction", N_("Edit this voucher")},
+    {"EditDuplicateInvoiceAction", N_("Create a new voucher as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this voucher to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this voucher and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new voucher for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the voucher")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this voucher") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") }
 };
 
 static action_toolbar_labels creditnote_action_tooltips[] = {
