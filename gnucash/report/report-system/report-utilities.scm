@@ -1212,6 +1212,13 @@ flawed. see report-utilities.scm. please update reports.")
             (monetary->string (gnc:make-gnc-monetary
                                (gncInvoiceGetCurrency inv)
                                (gncInvoiceGetTotal inv)))))
+  (define (lot->str lot)
+    (format #f "Lot<Acc:~a,Title:~a,Notes:~a,Balance:~a,NSplits:~a>"
+            (gnc:strify (xaccAccountGetName (gnc-lot-get-account lot)))
+            (gnc-lot-get-title lot)
+            (gnc-lot-get-notes lot)
+            (gnc-lot-get-balance lot)
+            (gnc-lot-count-splits lot)))
   (define (try proc)
     ;; Try proc with d as a parameter, catching exceptions to return
     ;; #f to the (or) evaluator below.
@@ -1242,6 +1249,7 @@ flawed. see report-utilities.scm. please update reports.")
       (try gnc-budget-get-name)
       (try owner->str)
       (try invoice->str)
+      (try lot->str)
       (object->string d)))
 
 (define (pair->num pair)
