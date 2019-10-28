@@ -27,6 +27,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;
+;; Merged with easy/fancy/footer stylesheets
+;; by Christopher Lam in 2019
 ;; Modified by Graham Billiau to include a text footer
 ;; with small adjustments by Frank H. Ellenberger 2010
 ;
@@ -41,36 +43,40 @@
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define (footer-options)
+(define (easy-fancy-footer-options)
   (let* ((options (gnc:new-options))
          (opt-register
           (lambda (opt)
             (gnc:register-option options opt))))
+
     (opt-register
      (gnc:make-string-option
       (N_ "General")
       (N_ "Preparer") "a"
       (N_ "Name of person preparing the report.")
       ""))
+
     (opt-register
      (gnc:make-string-option
       (N_ "General")
       (N_ "Prepared for") "b"
       (N_ "Name of organization or company prepared for.")
       ""))
+
     (opt-register
      (gnc:make-simple-boolean-option
       (N_ "General")
       (N_ "Show preparer info") "c"
       (N_ "Name of organization or company.")
       #f))
+
     (opt-register
      (gnc:make-simple-boolean-option
       (N_ "General")
       (N_ "Enable Links") "d"
       (N_ "Enable hyperlinks in reports.")
       #t))
-    ;; FIXME: put this in a more sensible tab like Text or Header/Footer
+
     (opt-register
      (gnc:make-text-option
       (N_ "General")
@@ -83,12 +89,14 @@
       (N_ "Images")
       (N_ "Background Tile") "a" (N_ "Background tile for reports.")
       ""))
+
     (opt-register
      (gnc:make-pixmap-option
       (N_ "Images")
 ;;; Translators: Banner is an image like Logo.
       (N_ "Heading Banner") "b" (N_ "Banner for top of report.")
       ""))
+
     (opt-register
      (gnc:make-multichoice-option
       (N_ "Images")
@@ -102,8 +110,8 @@
                     (N_ "Align the banner in the center."))
             (vector 'right
                     (N_ "Right")
-                    (N_ "Align the banner to the right."))
-            )))
+                    (N_ "Align the banner to the right.")))))
+
     (opt-register
      (gnc:make-pixmap-option
       (N_ "Images")
@@ -191,7 +199,7 @@
 
     options))
 
-(define (footer-renderer options doc)
+(define (easy-fancy-footer-renderer options doc)
   (let* ((ssdoc (gnc:make-html-document))
          (opt-val
           (lambda (section name)
@@ -222,8 +230,7 @@
          (align (gnc:value->string (opt-val "Images" "Heading Alignment")))
          (spacing (opt-val "Tables" "Table cell spacing"))
          (padding (opt-val "Tables" "Table cell padding"))
-         (border (opt-val "Tables" "Table border width"))
-         (headcolumn 0))
+         (border (opt-val "Tables" "Table border width")))
 
     (gnc:html-document-set-style!
      ssdoc "body"
@@ -314,18 +321,22 @@
      ssdoc "normal-row"
      'attribute (list "bgcolor" normal-row-color)
      'tag "tr")
+
     (gnc:html-document-set-style!
      ssdoc "alternate-row"
      'attribute (list "bgcolor" alternate-row-color)
      'tag "tr")
+
     (gnc:html-document-set-style!
      ssdoc "primary-subheading"
      'attribute (list "bgcolor" primary-subheading-color)
      'tag "tr")
+
     (gnc:html-document-set-style!
      ssdoc "secondary-subheading"
      'attribute (list "bgcolor" secondary-subheading-color)
      'tag "tr")
+
     (gnc:html-document-set-style!
      ssdoc "grand-total"
      'attribute (list "bgcolor" grand-total-color)
@@ -338,7 +349,13 @@
 
     (add-css-information-to-doc options ssdoc doc)
 
-    (let ((t (gnc:make-html-table)))
+    (let ((t (gnc:make-html-table))
+          ;; set the header column to be the 2nd when we have a logo
+          ;; do this so that when logo is not present, the document is
+          ;; perfectly centered
+          (headcolumn (if (and logopixmap (> (string-length logopixmap) 0))
+                          1 0)))
+
       ;; we don't want a bevel for this table, but we don't want
       ;; that to propagate
       (gnc:html-table-set-style!
@@ -346,12 +363,6 @@
        'attribute (list "border" 0)
        'attribute (list "style" "margin-left:auto; margin-right:auto")
        'inheritable? #f)
-
-      ;; set the header column to be the 2nd when we have a logo
-      ;; do this so that when logo is not present, the document
-      ;; is perfectly centered
-      (if (and logopixmap (> (string-length logopixmap) 0))
-          (set! headcolumn 1))
 
       (let* ((headline (or (gnc:html-document-headline doc)
                            (gnc:html-document-title doc))))
@@ -375,8 +386,7 @@
 
              ;; title only
              (gnc:make-html-text
-              (gnc:html-markup-h3 headline))))
-        )
+              (gnc:html-markup-h3 headline)))))
 
       ;; only setup an image if we specified one
       (if (and logopixmap (> (string-length logopixmap) 0))
@@ -396,9 +406,9 @@
        gnc:html-table-set-cell!
        t 2 headcolumn
        (gnc:html-document-objects doc))
+
       (gnc:html-document-add-object! ssdoc t)
 
-      ;; I think this is the correct place to put the footer
       (gnc:html-table-set-cell!
        t 3 headcolumn
        (gnc:make-html-text footer-text)))
@@ -406,8 +416,22 @@
 
 (gnc:define-html-style-sheet
  'version 1
- 'name (N_ "Footer")
- 'renderer footer-renderer
- 'options-generator footer-options)
+ 'name (N_ "Easy")
+ 'renderer easy-fancy-footer-renderer
+ 'options-generator easy-fancy-footer-options)
 
+(gnc:define-html-style-sheet
+ 'version 1.01
+ 'name (N_ "Fancy")
+ 'renderer easy-fancy-footer-renderer
+ 'options-generator easy-fancy-footer-options)
+
+(gnc:define-html-style-sheet
+ 'version 1
+ 'name (N_ "Footer")
+ 'renderer easy-fancy-footer-renderer
+ 'options-generator easy-fancy-footer-options)
+
+(gnc:make-html-style-sheet "Easy" (N_ "Easy"))
+(gnc:make-html-style-sheet "Fancy" (N_ "Technicolor"))
 (gnc:make-html-style-sheet "Footer" (N_ "Footer"))
