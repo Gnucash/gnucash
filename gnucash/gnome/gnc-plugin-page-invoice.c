@@ -106,8 +106,8 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
     {
-        "FilePrintAction", "document-print", N_("_Print Invoice"), "<primary>p",
-        N_("Make a printable invoice"),
+        "FilePrintAction", "document-print", "_Print Invoice", "<primary>p",
+        "Make a printable invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_print)
     },
 
@@ -128,23 +128,23 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_paste)
     },
     {
-        "EditEditInvoiceAction", GNC_ICON_INVOICE_EDIT, N_("_Edit Invoice"), NULL,
-        N_("Edit this invoice"),
+        "EditEditInvoiceAction", GNC_ICON_INVOICE_EDIT, "_Edit Invoice", NULL,
+        "Edit this invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_edit)
     },
     {
-        "EditDuplicateInvoiceAction", GNC_ICON_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
-        NULL, N_("Create a new invoice as a duplicate of the current one"),
+        "EditDuplicateInvoiceAction", GNC_ICON_INVOICE_DUPLICATE, "_Duplicate Invoice",
+        NULL, "Create a new invoice as a duplicate of the current one",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateInvoice)
     },
     {
-        "EditPostInvoiceAction", GNC_ICON_INVOICE_POST, N_("_Post Invoice"), NULL,
-        N_("Post this invoice to your Chart of Accounts"),
+        "EditPostInvoiceAction", GNC_ICON_INVOICE_POST, "_Post Invoice", NULL,
+        "Post this invoice to your Chart of Accounts",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_post)
     },
     {
-        "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
-        N_("Unpost this invoice and make it editable"),
+        "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, "_Unpost Invoice", NULL,
+        "Unpost this invoice and make it editable",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_unpost)
     },
 
@@ -173,7 +173,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     },
     {
         "BlankEntryAction", "go-bottom", N_("_Blank"), NULL,
-        N_("Move to the blank entry at the bottom of the Invoice"),
+        "Move to the blank entry at the bottom of the Invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_blank)
     },
     {
@@ -194,20 +194,20 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* Business menu */
     {
-        "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), "",
-        N_("Create a new invoice for the same owner as the current one"),
+        "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, "New _Invoice", "",
+        "Create a new invoice for the same owner as the current one",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, N_("_Pay Invoice"), NULL,
-        N_("Enter a payment for the owner of this invoice"),
+        "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, "_Pay Invoice", NULL,
+        "Enter a payment for the owner of this invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
     },
 
     /* Reports menu */
     {
         "ReportsCompanyReportAction", NULL, N_("_Company Report"), NULL,
-        N_("Open a company report window for the owner of this invoice"),
+        "Open a company report window for the owner of this invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_company_report)
     },
 };
@@ -269,7 +269,8 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditPostInvoiceAction", N_("_Post Invoice")},
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
-    {"ToolsProcessPaymentAction", N_("_Pay Invoice")}
+    {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
+    {NULL, NULL},
 };
 
 static action_toolbar_labels bill_action_labels[] =
@@ -280,7 +281,8 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditPostInvoiceAction", N_("_Post Bill")},
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
-    {"ToolsProcessPaymentAction", N_("_Pay Bill")}
+    {"ToolsProcessPaymentAction", N_("_Pay Bill")},
+    {NULL, NULL},
 };
 
 static action_toolbar_labels voucher_action_labels[] =
@@ -291,7 +293,8 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditPostInvoiceAction", N_("_Post Voucher")},
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
-    {"ToolsProcessPaymentAction", N_("_Pay Voucher")}
+    {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
+    {NULL, NULL},
 };
 
 static action_toolbar_labels creditnote_action_labels[] =
@@ -302,7 +305,8 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditPostInvoiceAction", N_("_Post Credit Note")},
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
-    {"ToolsProcessPaymentAction", N_("_Pay Credit Note")}
+    {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
+    {NULL, NULL},
 };
 
 
@@ -315,7 +319,8 @@ static action_toolbar_labels invoice_action_tooltips[] = {
     {"BusinessNewInvoiceAction", N_("Create a new invoice for the same owner as the current one")},
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") }
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") },
+    {NULL, NULL},
 };
 
 static action_toolbar_labels bill_action_tooltips[] = {
@@ -327,7 +332,8 @@ static action_toolbar_labels bill_action_tooltips[] = {
     {"BusinessNewInvoiceAction", N_("Create a new bill for the same owner as the current one")},
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") }
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") },
+    {NULL, NULL},
 };
 
 static action_toolbar_labels voucher_action_tooltips[] = {
@@ -339,7 +345,8 @@ static action_toolbar_labels voucher_action_tooltips[] = {
     {"BusinessNewInvoiceAction", N_("Create a new voucher for the same owner as the current one")},
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the voucher")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this voucher") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") }
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") },
+    {NULL, NULL},
 };
 
 static action_toolbar_labels creditnote_action_tooltips[] = {
@@ -351,7 +358,8 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BusinessNewInvoiceAction", N_("Create a new credit note for the same owner as the current one")},
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") }
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
+    {NULL, NULL},
 };
 
 /** Short labels for use on the toolbar buttons. */
