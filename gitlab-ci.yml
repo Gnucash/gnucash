@@ -17,9 +17,9 @@ build:
     - pwd
     - ls
     - cd build
-    - cmake -DCMAKE_INSTALL_PREFIX=$HOME/builds/dthompson2016/gnucash ~/builds/dthompson2016/gnucash/gnucash/ 
-    - make
-    - make install
+    - cmake -GNinja -DCMAKE_INSTALL_PREFIX=$HOME/git/gnucash/build~/git/gnucash/gnucash/    
+    - ninja
+    - ninja install
   artifacts:
     paths:
       - build/
