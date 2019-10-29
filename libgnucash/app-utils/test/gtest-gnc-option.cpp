@@ -23,6 +23,11 @@
 
 #include <gtest/gtest.h>
 #include <gnc-option.hpp>
+extern "C"
+{
+#include <gnc-date.h>
+#include <time.h>
+}
 
 TEST(GncOption, test_string_ctor)
 {
@@ -267,3 +272,164 @@ TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
     EXPECT_EQ(std::numeric_limits<std::size_t>::max(),
               m_option.permissible_value_index("xyzzy"));
 }
+
+class GncOptionDateOptionTest : public ::testing::Test
+{
+protected:
+    GncOptionDateOptionTest() :
+        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option"}} {}
+
+    GncOptionDateValue m_option;
+};
+
+using GncDateOption = GncOptionDateOptionTest;
+
+static time64
+time64_from_gdate(const GDate* g_date, DayPart when)
+{
+    GncDate date{g_date_get_year(g_date), g_date_get_month(g_date),
+            g_date_get_day(g_date)};
+    GncDateTime time{date, when};
+    return static_cast<time64>(time);
+}
+
+TEST_F(GncDateOption, test_set_and_get_absolute)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+    DateSetterValue value1{DateType::ABSOLUTE, time1};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_month_start)
+{
+    GDate month_start;
+    g_date_set_time_t(&month_start, time(nullptr));
+    gnc_gdate_set_month_start(&month_start);
+    time64 time1{time64_from_gdate(&month_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_month_end)
+{
+    GDate month_end;
+    g_date_set_time_t(&month_end, time(nullptr));
+    gnc_gdate_set_month_end(&month_end);
+    time64 time1{time64_from_gdate(&month_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_month_start)
+{
+    GDate prev_month_start;
+    g_date_set_time_t(&prev_month_start, time(nullptr));
+    gnc_gdate_set_prev_month_start(&prev_month_start);
+    time64 time1{time64_from_gdate(&prev_month_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_month_end)
+{
+    GDate prev_month_end;
+    g_date_set_time_t(&prev_month_end, time(nullptr));
+    gnc_gdate_set_prev_month_end(&prev_month_end);
+    time64 time1{time64_from_gdate(&prev_month_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_quarter_start)
+{
+    GDate quarter_start;
+    g_date_set_time_t(&quarter_start, time(nullptr));
+    gnc_gdate_set_quarter_start(&quarter_start);
+    time64 time1{time64_from_gdate(&quarter_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_quarter_end)
+{
+    GDate quarter_end;
+    g_date_set_time_t(&quarter_end, time(nullptr));
+    gnc_gdate_set_quarter_end(&quarter_end);
+    time64 time1{time64_from_gdate(&quarter_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_quarter_start)
+{
+    GDate prev_quarter_start;
+    g_date_set_time_t(&prev_quarter_start, time(nullptr));
+    gnc_gdate_set_prev_quarter_start(&prev_quarter_start);
+    time64 time1{time64_from_gdate(&prev_quarter_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_quarter_end)
+{
+    GDate prev_quarter_end;
+    g_date_set_time_t(&prev_quarter_end, time(nullptr));
+    gnc_gdate_set_prev_quarter_end(&prev_quarter_end);
+    time64 time1{time64_from_gdate(&prev_quarter_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_year_start)
+{
+    GDate year_start;
+    g_date_set_time_t(&year_start, time(nullptr));
+    gnc_gdate_set_year_start(&year_start);
+    time64 time1{time64_from_gdate(&year_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_year_end)
+{
+    GDate year_end;
+    g_date_set_time_t(&year_end, time(nullptr));
+    gnc_gdate_set_year_end(&year_end);
+    time64 time1{time64_from_gdate(&year_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_year_start)
+{
+    GDate prev_year_start;
+    g_date_set_time_t(&prev_year_start, time(nullptr));
+    gnc_gdate_set_prev_year_start(&prev_year_start);
+    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
+    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_set_and_get_prev_year_end)
+{
+    GDate prev_year_end;
+    g_date_set_time_t(&prev_year_end, time(nullptr));
+    gnc_gdate_set_prev_year_end(&prev_year_end);
+    time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
+    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
+    m_option.set_value(value1);
+    EXPECT_EQ(time1, m_option.get_value());
+}
+

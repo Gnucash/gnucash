@@ -82,6 +82,14 @@ TEST_F(GncOptionDBTest, test_register_multichoice_option)
     EXPECT_STREQ("corge", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
+TEST_F(GncOptionDBTest, test_register_date_interval_option)
+{
+    gnc_register_date_interval_option(m_db, "foo", "bar", "baz", "Phony Option");
+    auto time{gnc_dmy2time64(11, 7, 2019)};
+    ASSERT_TRUE(m_db->set_option("foo", "bar", time));
+    EXPECT_EQ(time, m_db->find_option("foo", "bar")->get().get_value<time64>());
+}
+
 class GncUIType
 {
 public:

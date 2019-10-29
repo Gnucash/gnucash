@@ -278,5 +278,7 @@ void gnc_register_dateformat_option(const GncOptionDBPtr& db,
                                     const char* key, const char* doc_string,
                                     std::string value);
 
-
+void gnc_register_date_interval_option(const GncOptionDBPtr& db,
+                                       const char* section, const char* name,
+                                       const char* key, const char* doc_string);
 #endif //GNC_OPTIONDB_HPP_

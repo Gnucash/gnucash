@@ -121,6 +121,13 @@ inline SCM
 %ignore GncOptionMultichoiceValue(GncOptionMultichoiceValue&&);
 %ignore GncOptionMultichoiceValue::operator=(const GncOptionMultichoiceValue&);
 %ignore GncOptionMultichoiceValue::operator=(GncOptionMultichoiceValue&&);
+%ignore GncOptionDateValue(GncOptionDateValue&&);
+%ignore GncOptionDateValue::operator=(const GncOptionDateValue&);
+%ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
+
+%typemap(typecheck, precedence=SWIG_TYPECHECK_INT64) time64 {
+    $1 = scm_is_signed_integer($input, INT64_MAX, INT64_MIN);
+}
 
 %typemap(in) GncMultiChoiceOptionChoices&& (GncMultiChoiceOptionChoices choices)
 {
@@ -168,6 +175,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
+    %template(set_option_time64) set_option<time64>;
  };
 
 

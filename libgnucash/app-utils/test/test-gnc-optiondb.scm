@@ -23,10 +23,12 @@
 
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
-
+(use-modules (gnucash gnc-module))
 (eval-when
  (compile load eval expand)
  (load-extension "libswig-gnc-optiondb" "scm_init_sw_gnc_optiondb_module"))
+
+(gnc:module-load "gnucash/engine" 0)
 (use-modules (sw_gnc_optiondb))
 
 (define (run-test)
@@ -34,6 +36,7 @@
   (test-begin "test-gnc-optiondb-scheme")
   (test-gnc-make-text-option)
   (test-gnc-make-multichoice-option)
+  (test-gnc-make-date-option)
   (test-end "test-gnc-optiondb-scheme"))
 
 (define (test-gnc-make-text-option)
@@ -79,5 +82,16 @@
     (test-equal "corge" (GncOptionDB-lookup-option
                          (GncOptionDBPtr-get option-db) "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
-                         (GncOptionDBPtr-get option-db) "foo" "bar"))
-    (test-end "test-gnc-test-multichoice-option")))
+
+(define (test-gnc-make-date-option)
+  (test-begin "test-gnc-test-date-option")
+  (let* ((option-db (gnc-option-db-new))
+         (date-opt (gnc-register-date-interval-option option-db "foo" "bar"
+                                                      "baz" "Phony Option"))
+         (a-time (gnc-dmy2time64 2019 07 11)))
+    (test-equal (current-time) (GncOptionDB-lookup-option
+                                (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (GncOptionDB-set-option-time64 (GncOptionDBPtr-get option-db) "foo" "bar" a-time)
+    (test-equal a-time (GncOptionDB-lookup-option
+                        (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-end "test-gnc-test-date-option")))

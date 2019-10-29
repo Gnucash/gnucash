@@ -31,6 +31,7 @@ extern "C"
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 }
+#include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
 #include <guid.hpp>
 #include <libguile.h>
@@ -295,7 +296,6 @@ private:
  *
  *
  */
-
 using GncMultiChoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
                                              const std::string>;
@@ -306,7 +306,7 @@ class GncOptionMultichoiceValue :
 {
 public:
     GncOptionMultichoiceValue(const char* section, const char* name,
-                                   const char* key, const char* doc_string,
+                              const char* key, const char* doc_string,
                               GncMultiChoiceOptionChoices&& choices,
                               GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
         OptionClassifier{section, name, key, doc_string},
@@ -378,16 +378,75 @@ private:
     GncMultiChoiceOptionChoices m_choices;
 };
 
+/** Date options
+ * A legal date value is a pair of either  and a RelativeDatePeriod, the absolute flag and a time64, or for legacy purposes the absolute flag and a timespec.
+ * The original design allowed custom RelativeDatePeriods, but that facility is unused so we'll go with compiled-in enums.
+
+gnc-date-option-show-time? -- option_data[1]
+gnc-date-option-get-subtype -- option_data[0]
+gnc-date-option-value-type m_value
+gnc-date-option-absolute-time 
+gnc-date-option-relative-time
+ */
+
+enum class DateType
+{
+    ABSOLUTE,
+    STARTING,
+    ENDING,
+};
+
+enum class RelativeDatePeriod : int64_t
+{
+    TODAY,
+    THIS_MONTH,
+    PREV_MONTH,
+    CURRENT_QUARTER,
+    PREV_QUARTER,
+    CAL_YEAR,
+    PREV_YEAR,
+    ACCOUNTING_PERIOD
+};
+
+using DateSetterValue = std::pair<DateType, int64_t>;
+class GncOptionDateValue : public OptionClassifier, public OptionUIItem
+{
+public:
+    GncOptionDateValue(const char* section, const char* name,
+                              const char* key, const char* doc_string) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(GncOptionUIType::DATE),
+        m_type{DateType::ABSOLUTE}, m_period{RelativeDatePeriod::TODAY},
+        m_date{static_cast<time64>(GncDateTime())} {}
+        GncOptionDateValue(const GncOptionDateValue&) = default;
+        GncOptionDateValue(GncOptionDateValue&&) = default;
+        GncOptionDateValue& operator=(const GncOptionDateValue&) = default;
+        GncOptionDateValue& operator=(GncOptionDateValue&&) = default;
+    time64 get_value() const;
+    time64 get_default_value() const { return static_cast<time64>(GncDateTime()); }
+    void set_value(DateSetterValue);
+    void set_value(time64 time) {
+        m_type = DateType::ABSOLUTE;
+        m_period = RelativeDatePeriod::TODAY;
+        m_date = time;
+    }
+private:
+    DateType m_type;
+    RelativeDatePeriod m_period;
+    time64 m_date;
+};
+
 using GncOptionVariant = std::variant<GncOptionValue<std::string>,
-                                        GncOptionValue<bool>,
-                                        GncOptionValue<int64_t>,
-                                        GncOptionValue<QofInstance*>,
-                                        GncOptionValue<QofQuery*>,
-                                        GncOptionValue<std::vector<GncGUID>>,
-                                        GncOptionMultichoiceValue,
-                                        GncOptionRangeValue<int>,
-                                        GncOptionRangeValue<GncNumeric>,
-                                        GncOptionValidatedValue<QofInstance*>>;
+                                      GncOptionValue<bool>,
+                                      GncOptionValue<int64_t>,
+                                      GncOptionValue<QofInstance*>,
+                                      GncOptionValue<QofQuery*>,
+                                      GncOptionValue<std::vector<GncGUID>>,
+                                      GncOptionMultichoiceValue,
+                                      GncOptionRangeValue<int>,
+                                      GncOptionRangeValue<GncNumeric>,
+                                      GncOptionValidatedValue<QofInstance*>,
+                                      GncOptionDateValue>;
 
 class GncOption
 {
@@ -408,7 +467,7 @@ public:
         return std::visit([](const auto& option)->ValueType {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
                     return option.get_value();
-                    return ValueType {};
+                return ValueType {};
             }, m_option);
     }
 
@@ -417,7 +476,7 @@ public:
         return std::visit([](const auto& option)->ValueType {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
                     return option.get_default_value();
-                    return ValueType {};
+                return ValueType {};
             }, m_option);
 
     }
@@ -426,7 +485,7 @@ public:
     {
         std::visit([value](auto& option) {
                 if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
-                   option.set_value(value);
+                                 option.set_value(value);
             }, m_option);
     }
     const std::string& get_section() const

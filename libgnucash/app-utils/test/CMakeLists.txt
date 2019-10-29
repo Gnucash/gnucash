@@ -43,6 +43,7 @@ set(gtest_gnc_option_INCLUDES
   ${GUILE_INCLUDE_DIRS})
 
 set(gtest_gnc_option_LIBS
+  gncmod-app-utils
   gncmod-engine
   ${GLIB2_LDFLAGS}
   ${GUILE_LDFLAGS}
@@ -109,6 +110,7 @@ if (HAVE_SRFI64)
 
   set(swig_gnc_optiondb_LIBS
     gncmod-engine
+    gncmod-app-utils
     ${GLIB2_LDFLAGS}
     ${GUILE_LDFLAGS}
     )
