@@ -122,6 +122,11 @@ typedef struct
  */
 GType gnc_tree_model_account_get_type (void);
 
+/** Clear the tree model account cached values.
+ *
+ *  @param model A pointer to the account tree model.
+ */
+void gnc_tree_model_account_clear_cache (GncTreeModelAccount *model);
 
 /** @name Account Tree Model Constructors
  @{ */
