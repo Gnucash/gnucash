@@ -21,6 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 match))
 (use-modules (gnucash gettext))
 
 (define *gnc:_style-sheet-templates_* (make-hash-table 23))
@@ -67,23 +68,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:define-html-style-sheet . args)
-  (let ((ss 
-         ((record-constructor <html-style-sheet-template>) #f #f #f #f)))
-    (let loop ((left args))
-      (if (and (list? left)
-               (not (null? left))
-               (not (null? (cdr left))))
-          (let* ((field (car left))
-                 (value (cadr left))
-                 (mod (record-modifier <html-style-sheet-template> field)))
-            (mod ss value)
-            (loop (cddr left)))))
-    
-    ;; store the style sheet template 
-    (hash-set! *gnc:_style-sheet-templates_* 
-               (gnc:html-style-sheet-template-name ss) 
-               ss)))
-
+  (let loop ((args args)
+             (ss ((record-constructor <html-style-sheet-template>) #f #f #f #f)))
+    (match args
+      ((field value . rest)
+       ((record-modifier <html-style-sheet-template> field) ss value)
+       (loop rest ss))
+      (else ;; store the style sheet template
+       (hash-set! *gnc:_style-sheet-templates_*
+                  (gnc:html-style-sheet-template-name ss) ss)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-style-sheet> methods 
