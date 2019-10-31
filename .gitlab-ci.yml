@@ -22,4 +22,7 @@ build:
   artifacts:
     paths:
       - build/
+
+after_script:
+  - echo "Build successful"
       
