@@ -1076,6 +1076,17 @@ gnc_tree_view_account_count_children (GncTreeViewAccount *view,
     return num_children;
 }
 
+void
+gnc_tree_view_account_clear_model_cache (GncTreeViewAccount *view)
+{
+    GtkTreeModel *model, *f_model, *s_model;
+
+    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+    f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(s_model));
+    model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(f_model));
+
+    gnc_tree_model_account_clear_cache (GNC_TREE_MODEL_ACCOUNT(model));
+}
 
 /************************************************************/
 /*            Account Tree View Filter Functions            */

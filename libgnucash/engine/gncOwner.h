@@ -65,6 +65,8 @@ to QOF as they can be used by objects like GncInvoice.
 */
 /** return the type for the collection. */
 QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
+/** return the type for the owner as an untranslated string. */
+const char * gncOwnerGetTypeString (const GncOwner *owner);
 /** return the owner itself as an entity. */
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 /** set the owner from the entity. */

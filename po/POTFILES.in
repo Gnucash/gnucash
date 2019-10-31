@@ -495,8 +495,6 @@ gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
 gnucash/report/report.scm
 gnucash/report/report-utilities.scm
-gnucash/report/stylesheets/easy.scm
-gnucash/report/stylesheets/fancy.scm
 gnucash/report/stylesheets/footer.scm
 gnucash/report/stylesheets/head-or-tail.scm
 gnucash/report/stylesheets/plain.scm

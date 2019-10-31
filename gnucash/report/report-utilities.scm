@@ -959,15 +959,8 @@
     (format #f "[~a]"
             (gnc:monetary->string mon)))
   (define (owner->str owner)
-    (define owner-alist
-      (list (cons GNC-OWNER-NONE "None")
-            (cons GNC-OWNER-UNDEFINED "Undefined")
-            (cons GNC-OWNER-JOB "Job")
-            (cons GNC-OWNER-CUSTOMER "Cust")
-            (cons GNC-OWNER-VENDOR "Vend")
-            (cons GNC-OWNER-EMPLOYEE "Emp")))
     (format #f "[~a:~a]"
-            (or (assv-ref owner-alist (gncOwnerGetType owner)) "Owner")
+            (gncOwnerGetTypeString owner)
             (gncOwnerGetName owner)))
   (define (invoice->str inv)
     (format #f "~a<Post:~a,Owner:~a,Notes:~a,Total:~a>"
@@ -978,6 +971,13 @@
             (monetary->string (gnc:make-gnc-monetary
                                (gncInvoiceGetCurrency inv)
                                (gncInvoiceGetTotal inv)))))
+  (define (lot->str lot)
+    (format #f "Lot<Acc:~a,Title:~a,Notes:~a,Balance:~a,NSplits:~a>"
+            (gnc:strify (xaccAccountGetName (gnc-lot-get-account lot)))
+            (gnc-lot-get-title lot)
+            (gnc-lot-get-notes lot)
+            (gnc-lot-get-balance lot)
+            (gnc-lot-count-splits lot)))
   (define (try proc)
     ;; Try proc with d as a parameter, catching exceptions to return
     ;; #f to the (or) evaluator below.
@@ -1008,6 +1008,7 @@
       (try gnc-budget-get-name)
       (try owner->str)
       (try invoice->str)
+      (try lot->str)
       (object->string d)))
 
 (define (pair->num pair)

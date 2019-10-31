@@ -346,6 +346,13 @@ void gnc_tree_view_account_refilter (GncTreeViewAccount *view);
 gint gnc_tree_view_account_count_children (GncTreeViewAccount *view,
         Account *account);
 
+/** This function clears the tree model account cache so the values will
+ *  be updated/refreshed.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ */
+void gnc_tree_view_account_clear_model_cache (GncTreeViewAccount *view);
 
 
 /** This function returns the account associated with the specified

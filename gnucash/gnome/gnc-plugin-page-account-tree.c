@@ -602,6 +602,8 @@ gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
         return;
 
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+
+    gnc_tree_view_account_clear_model_cache (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
     gtk_widget_queue_draw(priv->widget);
 }
 
@@ -1671,6 +1673,8 @@ gnc_plugin_page_account_tree_cmd_refresh (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+
+    gnc_tree_view_account_clear_model_cache (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
     gtk_widget_queue_draw (priv->widget);
 }
 
