@@ -1124,10 +1124,9 @@ flawed. see report-utilities.scm. please update reports.")
        ;; reduce the lot balance automatically.
        ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
               TXN-TYPE-INVOICE)
-        (let* ((lot (gncInvoiceGetPostedLot
-                     (gncInvoiceGetInvoiceFromTxn
-                      (xaccSplitGetParent (car splits)))))
-               (invoice (gncInvoiceGetInvoiceFromLot lot))
+        (let* ((invoice (gncInvoiceGetInvoiceFromTxn
+                         (xaccSplitGetParent (car splits))))
+               (lot (gncInvoiceGetPostedLot invoice))
                (bal (gnc-lot-get-balance lot))
                (bal (if receivable? bal (- bal)))
                (date (if (eq? date-type 'postdate)
