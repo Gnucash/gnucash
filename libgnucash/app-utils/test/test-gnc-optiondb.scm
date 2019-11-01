@@ -45,12 +45,10 @@
   (let* ((option-db (gnc-option-db-new))
          (string-opt (gnc-register-string-option option-db "foo" "bar" "baz"
                                                  "Phony Option" "waldo")))
-    (test-equal "waldo" (GncOptionDB-lookup-option
-                         (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-equal "waldo" (gnc-option-value option-db "foo" "bar"))
 
     (GncOptionDB-set-option-string (GncOptionDBPtr-get option-db) "foo" "bar" "pepper")
-    (test-equal "pepper" (GncOptionDB-lookup-option
-                          (GncOptionDBPtr-get option-db) "foo" "bar")))
+    (test-equal "pepper" (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-make-string-option"))
 
 (define (test-gnc-make-multichoice-option)
@@ -80,8 +78,7 @@
 
     (GncOptionDB-set-option-string
      (GncOptionDBPtr-get option-db) "foo" "bar" "corge")
-    (test-equal "corge" (GncOptionDB-lookup-option
-                         (GncOptionDBPtr-get option-db) "foo" "bar")))
+    (test-equal "corge" (gnc-option-value option-db "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
 
 (define (test-gnc-make-date-option)
@@ -90,11 +87,9 @@
          (date-opt (gnc-register-date-interval-option option-db "foo" "bar"
                                                       "baz" "Phony Option"))
          (a-time (gnc-dmy2time64 11 07 2019)))
-    (test-equal (current-time) (GncOptionDB-lookup-option
-                                (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
     (GncOptionDB-set-option-time64 (GncOptionDBPtr-get option-db) "foo" "bar" a-time)
-    (test-equal a-time (GncOptionDB-lookup-option
-                        (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-equal a-time (gnc-option-value option-db "foo" "bar"))
     (test-end "test-gnc-test-date-option")))
 
 (define (test-gnc-make-number-range-option)
@@ -103,9 +98,7 @@
          (number-opt (gnc-register-number-range-option option-db "foo" "bar"
                                                        "baz" "Phony Option"
                                                        15 5 30 1)))
-    (test-equal 15 (GncOptionDB-lookup-option
-                                (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (test-equal 15 (gnc-option-value option-db "foo" "bar"))
     (GncOptionDB-set-option-int (GncOptionDBPtr-get option-db) "foo" "bar" 20)
-    (test-equal 20 (GncOptionDB-lookup-option
-                        (GncOptionDBPtr-get option-db) "foo" "bar")))
+    (test-equal 20 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-number-range-option"))

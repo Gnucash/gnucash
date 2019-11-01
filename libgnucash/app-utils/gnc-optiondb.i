@@ -180,20 +180,22 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 };
 
 %extend GncOptionDB {
-    SCM lookup_option(const char* section, const char* name)
-    {
-        auto db_opt = $self->find_option(section, name);
-        if (!db_opt)
-            return SCM_BOOL_F;
-        return GncOption_get_scm_value(&(db_opt->get()));
-    }
-
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
     %template(set_option_time64) set_option<time64>;
  };
 
+%inline %{
+    SCM gnc_option_value(const GncOptionDBPtr& optiondb, const char* section,
+                         const char* name)
+    {
+        auto db_opt = optiondb->find_option(section, name);
+        if (!db_opt)
+            return SCM_BOOL_F;
+        return GncOption_get_scm_value(&(db_opt->get()));
+    }
 
+%}
 /*
 TEST(GncOption, test_string_scm_functions)
 {
