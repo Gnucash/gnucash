@@ -47,34 +47,52 @@ extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %include <std_string.i>
 %import <base-typemaps.i>
 
-
+ /* Implementation Note: Plain overloads failed to compile because
+  *    auto value{option.get_value()};
+  *    return scm_from_value(value);
+  * applied implicit conversions among bool, int, and int64_t and ranked them as
+  * equal to the non-converted types in overload resolution. Template type
+  * resolution is more strict so the overload prefers the exact decltype(value)
+  * to implicit conversion candidates.
+  */
 %inline %{
-inline SCM
-scm_from_value(std::string value)
+template <typename ValueType> inline SCM
+scm_from_value(ValueType value)
+{
+    return SCM_BOOL_F;
+}
+template <> inline SCM
+scm_from_value<std::string>(std::string value)
 {
     return scm_from_utf8_string(value.c_str());
 }
 
-inline SCM
-scm_from_value(bool value)
+template <> inline SCM
+scm_from_value<bool>(bool value)
 {
     return value ? SCM_BOOL_T : SCM_BOOL_F;
 }
 
-inline SCM
-scm_from_value(int64_t value)
+template <> inline SCM
+scm_from_value<int64_t>(int64_t value)
 {
     return scm_from_int64(value);
 }
 
-inline SCM
-scm_from_value(int value)
+template <> inline SCM
+scm_from_value<int>(int value)
 {
     return scm_from_int(value);
 }
 
-inline SCM
-scm_from_value(QofInstance* value)
+template <> inline SCM
+scm_from_value<double>(double value)
+{
+    return scm_from_double(value);
+}
+
+template <> inline SCM
+scm_from_value<const QofInstance*>(const QofInstance* value)
 {
     auto guid = guid_to_string(qof_instance_get_guid(value));
     auto scm_guid = scm_from_utf8_string(guid);
@@ -82,20 +100,16 @@ scm_from_value(QofInstance* value)
     return scm_guid;
 }
 
-inline SCM
-scm_from_value(QofQuery* value)
+/* Not needed now, the default template will do this
+template <> inline SCM
+scm_from_value<QofQuer*>(const QofQuery* value)
 {
     return SCM_BOOL_F;
 }
+*/
 
-inline SCM
-scm_from_value(GncNumeric value)
-{
-    return SCM_BOOL_F;
-}
-
-inline SCM
-scm_from_value(std::vector<GncGUID> value)
+template <>inline SCM
+scm_from_value<const std::vector<GncGUID>&>(const std::vector<GncGUID>& value)
 {
     SCM s_list;
     for (auto guid : value)
@@ -108,12 +122,13 @@ scm_from_value(std::vector<GncGUID> value)
     }
     return s_list;
 }
-
-inline SCM
-    scm_from_value(std::vector<std::pair<std::string, std::string>>)
+/* default template
+template <>inline SCM
+    scm_from_value<(const std::vector<std::pair<std::string, std::string>>&)
 {
     return SCM_BOOL_F;
 }
+*/
 %}
 %ignore OptionClassifier;
 %ignore OptionUIItem;
@@ -152,14 +167,14 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_value()};
-                return scm_from_value(value);
+                return scm_from_value(static_cast<decltype(value)>(value));
             }, $self->_get_option());
     }
     SCM get_scm_default_value() const
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_default_value()};
-                return scm_from_value(value);
+                return scm_from_value(static_cast<decltype(value)>(value));
             }, $self->_get_option());
     }
 };
