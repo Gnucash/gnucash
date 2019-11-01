@@ -47,7 +47,7 @@
                                                  "Phony Option" "waldo")))
     (test-equal "waldo" (gnc-option-value option-db "foo" "bar"))
 
-    (GncOptionDB-set-option-string (GncOptionDBPtr-get option-db) "foo" "bar" "pepper")
+    (gnc-set-option option-db "foo" "bar" "pepper")
     (test-equal "pepper" (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-make-string-option"))
 
@@ -76,8 +76,7 @@
          (multi-opt (gnc-register-multichoice-option option-db "foo" "bar" "baz"
                                                      "Phony Option" multichoice)))
 
-    (GncOptionDB-set-option-string
-     (GncOptionDBPtr-get option-db) "foo" "bar" "corge")
+    (gnc-set-option option-db "foo" "bar" "corge")
     (test-equal "corge" (gnc-option-value option-db "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
 
@@ -88,7 +87,7 @@
                                                       "baz" "Phony Option"))
          (a-time (gnc-dmy2time64 11 07 2019)))
     (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
-    (GncOptionDB-set-option-time64 (GncOptionDBPtr-get option-db) "foo" "bar" a-time)
+    (gnc-set-option option-db "foo" "bar" a-time)
     (test-equal a-time (gnc-option-value option-db "foo" "bar"))
     (test-end "test-gnc-test-date-option")))
 
@@ -99,6 +98,6 @@
                                                        "baz" "Phony Option"
                                                        15 5 30 1)))
     (test-equal 15 (gnc-option-value option-db "foo" "bar"))
-    (GncOptionDB-set-option-int (GncOptionDBPtr-get option-db) "foo" "bar" 20)
+    (gnc-set-option option-db "foo" "bar" 20)
     (test-equal 20 (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-number-range-option"))

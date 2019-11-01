@@ -540,9 +540,9 @@ public:
                 option.make_internal();
             }, m_option);
     }
-    const GncOptionVariant& _get_option() const { return m_option; }
+    GncOptionVariant& _get_option() const { return m_option; }
 private:
-    GncOptionVariant m_option;
+    mutable GncOptionVariant m_option;
 };
 
 #endif //GNC_OPTION_HPP_

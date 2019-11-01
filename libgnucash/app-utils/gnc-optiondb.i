@@ -100,6 +100,7 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
     return scm_guid;
 }
 
+
 /* Not needed now, the default template will do this
 template <> inline SCM
 scm_from_value<QofQuer*>(const QofQuery* value)
@@ -129,6 +130,44 @@ template <>inline SCM
     return SCM_BOOL_F;
 }
 */
+
+template <typename ValueType> inline ValueType
+scm_to_value(SCM new_value)
+{
+    return ValueType{};
+}
+
+template <> inline std::string
+scm_to_value<std::string>(SCM new_value)
+{
+    auto strval = scm_to_utf8_stringn(new_value, nullptr);
+    std::string retval{strval};
+    free(strval);
+    return retval;
+}
+/*
+template <> inline std::string
+scm_to_value<char*>(SCM new_value)
+{
+    auto strval = scm_to_utf8_stringn(new_value, nullptr);
+    std::string retval{strval};
+    free(strval);
+    return retval;
+}
+*/
+template <> inline int
+scm_to_value<int>(SCM new_value)
+{
+    return scm_to_int(new_value);
+}
+
+template <> inline int64_t
+scm_to_value<int64_t>(SCM new_value)
+{
+    return scm_to_int64(new_value);
+}
+
+
 %}
 %ignore OptionClassifier;
 %ignore OptionUIItem;
@@ -177,6 +216,12 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                 return scm_from_value(static_cast<decltype(value)>(value));
             }, $self->_get_option());
     }
+    void set_value_from_scm(SCM new_value)
+    {
+        std::visit([new_value](auto& option) {
+                option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
+            }, $self->_get_option());
+    }
 };
 
 %extend GncOptionDB {
@@ -195,6 +240,17 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return GncOption_get_scm_value(&(db_opt->get()));
     }
 
+    void gnc_set_option(const GncOptionDBPtr& optiondb, const char* section,
+                        const char* name, SCM new_value)
+    {
+        auto db_opt = optiondb->find_option(section, name);
+        if (!db_opt)
+        {
+//          PWARN("Attempt to write non-existent option %s/%s", section, name);
+            return;
+        }
+        GncOption_set_value_from_scm(&(db_opt->get()), new_value);
+    }
 %}
 /*
 TEST(GncOption, test_string_scm_functions)
