@@ -37,6 +37,7 @@
   (test-gnc-make-text-option)
   (test-gnc-make-multichoice-option)
   (test-gnc-make-date-option)
+  (test-gnc-make-number-range-option)
   (test-end "test-gnc-optiondb-scheme"))
 
 (define (test-gnc-make-text-option)
@@ -88,10 +89,23 @@
   (let* ((option-db (gnc-option-db-new))
          (date-opt (gnc-register-date-interval-option option-db "foo" "bar"
                                                       "baz" "Phony Option"))
-         (a-time (gnc-dmy2time64 2019 07 11)))
+         (a-time (gnc-dmy2time64 11 07 2019)))
     (test-equal (current-time) (GncOptionDB-lookup-option
                                 (GncOptionDBPtr-get option-db) "foo" "bar"))
     (GncOptionDB-set-option-time64 (GncOptionDBPtr-get option-db) "foo" "bar" a-time)
     (test-equal a-time (GncOptionDB-lookup-option
                         (GncOptionDBPtr-get option-db) "foo" "bar"))
     (test-end "test-gnc-test-date-option")))
+
+(define (test-gnc-make-number-range-option)
+  (test-begin "test-gnc-number-range-option")
+  (let* ((option-db (gnc-option-db-new))
+         (number-opt (gnc-register-number-range-option option-db "foo" "bar"
+                                                       "baz" "Phony Option"
+                                                       15 5 30 1)))
+    (test-equal 15 (GncOptionDB-lookup-option
+                                (GncOptionDBPtr-get option-db) "foo" "bar"))
+    (GncOptionDB-set-option-int (GncOptionDBPtr-get option-db) "foo" "bar" 20)
+    (test-equal 20 (GncOptionDB-lookup-option
+                        (GncOptionDBPtr-get option-db) "foo" "bar")))
+  (test-end "test-gnc-number-range-option"))

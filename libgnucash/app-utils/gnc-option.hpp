@@ -250,6 +250,10 @@ private:
     ValueType m_validation_data;
 };
 
+/**
+ * Used for numeric ranges and plot sizes.
+ */
+
 template <typename ValueType>
 class GncOptionRangeValue :
     public OptionClassifier, public OptionUIItem
@@ -263,7 +267,7 @@ public:
         OptionUIItem(GncOptionUIType::NUMBER_RANGE),
         m_value{value >= min && value <= max ? value : min},
         m_default_value{value >= min && value <= max ? value : min},
-        m_min{min}, m_step{step} {}
+        m_min{min}, m_max{max}, m_step{step} {}
 
     GncOptionRangeValue<ValueType>(const GncOptionRangeValue<ValueType>&) = default;
     GncOptionRangeValue<ValueType>(GncOptionRangeValue<ValueType>&&) = default;
@@ -444,7 +448,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<std::vector<GncGUID>>,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
-                                      GncOptionRangeValue<GncNumeric>,
+                                      GncOptionRangeValue<double>,
                                       GncOptionValidatedValue<QofInstance*>,
                                       GncOptionDateValue>;
 

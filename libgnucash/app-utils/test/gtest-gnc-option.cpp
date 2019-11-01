@@ -212,6 +212,41 @@ TEST_F(GncOptionUI, test_set_option_ui_item)
     EXPECT_EQ(&ui_item, m_option.get_ui_item()->m_widget);
 }
 
+class GncOptionRangeTest : public ::testing::Test
+{
+protected:
+    GncOptionRangeTest() :
+        m_intoption{"foo", "bar", "baz", "Phony Option", 15, 1, 30, 1},
+        m_doubleoption{"waldo", "pepper", "salt", "Phonier Option",
+                1.5, 1.0, 3.0, 0.1} {}
+
+    GncOptionRangeValue<int> m_intoption;
+    GncOptionRangeValue<double> m_doubleoption;
+};
+
+using GncRangeOption = GncOptionRangeTest;
+
+TEST_F(GncRangeOption, test_initialization)
+{
+    EXPECT_EQ(15, m_intoption.get_value());
+    EXPECT_EQ(1.5, m_doubleoption.get_value());
+    EXPECT_EQ(15, m_intoption.get_default_value());
+    EXPECT_EQ(1.5, m_doubleoption.get_default_value());
+}
+
+TEST_F(GncRangeOption, test_setter)
+{
+    EXPECT_THROW({ m_intoption.set_value(45); }, std::invalid_argument);
+    EXPECT_NO_THROW({ m_intoption.set_value(20); });
+    EXPECT_EQ(20, m_intoption.get_value());
+    EXPECT_EQ(15, m_intoption.get_default_value());
+    EXPECT_THROW({ m_doubleoption.set_value(4.5); }, std::invalid_argument);
+    EXPECT_NO_THROW({ m_doubleoption.set_value(2.0); });
+    EXPECT_EQ(2.0, m_doubleoption.get_value());
+    EXPECT_EQ(1.5, m_doubleoption.get_default_value());
+}
+
+
 class GncOptionMultichoiceTest : public ::testing::Test
 {
 protected:
