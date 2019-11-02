@@ -311,11 +311,22 @@ class GncOptionMultichoiceValue :
 public:
     GncOptionMultichoiceValue(const char* section, const char* name,
                               const char* key, const char* doc_string,
+                              const char* value,
                               GncMultiChoiceOptionChoices&& choices,
                               GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
         OptionClassifier{section, name, key, doc_string},
         OptionUIItem(ui_type),
-        m_value{}, m_default_value{}, m_choices{std::move(choices)} {}
+        m_value{}, m_default_value{}, m_choices{std::move(choices)} {
+            if (value)
+            {
+                if (auto index = find_key(value);
+                    index != std::numeric_limits<std::size_t>::max())
+                {
+                    m_value = index;
+                    m_default_value = index;
+                }
+            }
+        }
 
     GncOptionMultichoiceValue(const GncOptionMultichoiceValue&) = default;
     GncOptionMultichoiceValue(GncOptionMultichoiceValue&&) = default;

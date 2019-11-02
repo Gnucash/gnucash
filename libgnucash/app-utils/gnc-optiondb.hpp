@@ -211,8 +211,8 @@ void gnc_register_multichoice_option(const GncOptionDBPtr& db,
  */
 void gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
                               const char* name, const char* key,
-                              const char* doc_string,
-                              GncMultiChoiceOptionChoices&& value);
+                              const char* doc_string, const char* value,
+                              GncMultiChoiceOptionChoices&& list);
 
 /* Number range options use the option-data as a list whose elements are:
  * (lower-bound upper-bound step-size). 

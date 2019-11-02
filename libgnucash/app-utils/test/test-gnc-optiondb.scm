@@ -36,6 +36,7 @@
   (test-begin "test-gnc-optiondb-scheme")
   (test-gnc-make-text-option)
   (test-gnc-make-multichoice-option)
+  (test-gnc-make-list-option)
   (test-gnc-make-date-option)
   (test-gnc-make-number-range-option)
   (test-end "test-gnc-optiondb-scheme"))
@@ -79,6 +80,20 @@
     (gnc-set-option option-db "foo" "bar" "corge")
     (test-equal "corge" (gnc-option-value option-db "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
+
+(define (test-gnc-make-list-option)
+  (test-begin "test-gnc-test-list-option")
+  (let* ((option-db (gnc-option-db-new))
+         (value-list (list (vector "AvgBalPlot" "Average" "Average Balance")
+                           (vector "GainPlot" "Profit" "Profit (Gain minus Loss)")
+                           (vector "GLPlot" "Gain/Loss" "Gain and Loss")))
+         (list-op (gnc-register-list-option option-db "foo" "bar" "baz"
+                                            "Phony Option" "AvgBalPlot"
+                                            value-list)))
+    (test-equal "AvgBalPlot" (gnc-option-value option-db "foo" "bar"))
+    (gnc-set-option option-db "foo" "bar" "GLPlot")
+    (test-equal "GLPlot" (gnc-option-value option-db "foo" "bar"))
+  (test-end "test-gnc-test-list-option"))
 
 (define (test-gnc-make-date-option)
   (test-begin "test-gnc-test-date-option")

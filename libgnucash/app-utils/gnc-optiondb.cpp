@@ -314,21 +314,21 @@ void
 gnc_register_multichoice_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string,
-                                GncMultiChoiceOptionChoices&& value)
+                                GncMultiChoiceOptionChoices&& choices)
 {
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
-                std::move(value)}};
+                std::get<0>(choices.at(0)).c_str(), std::move(choices)}};
     db->register_option(section, std::move(option));
 }
 
 void
 gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
                          const char* name, const char* key,
-                         const char* doc_string,
-                         GncMultiChoiceOptionChoices&& value)
+                         const char* doc_string, const char* value,
+                         GncMultiChoiceOptionChoices&& list)
 {
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
-                std::move(value), GncOptionUIType::LIST}};
+                value,  std::move(list), GncOptionUIType::LIST}};
     db->register_option(section, std::move(option));
 }
 
@@ -362,7 +362,7 @@ gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
                           const char* doc_string, QofQuery* value)
 {
     GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::QUERY};
+            GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }
 
