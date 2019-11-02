@@ -77,8 +77,10 @@
          (multi-opt (gnc-register-multichoice-option option-db "foo" "bar" "baz"
                                                      "Phony Option" multichoice)))
 
+    (test-equal "plugh" (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" "corge")
-    (test-equal "corge" (gnc-option-value option-db "foo" "bar")))
+    (test-equal "corge" (gnc-option-value option-db "foo" "bar"))
+    (test-equal "plugh" (gnc-option-default-value option-db "foo" "bar")))
     (test-end "test-gnc-test-multichoice-option"))
 
 (define (test-gnc-make-list-option)
@@ -93,6 +95,7 @@
     (test-equal "AvgBalPlot" (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" "GLPlot")
     (test-equal "GLPlot" (gnc-option-value option-db "foo" "bar"))
+    (test-equal "AvgBalPlot" (gnc-option-default-value option-db "foo" "bar")))
   (test-end "test-gnc-test-list-option"))
 
 (define (test-gnc-make-date-option)

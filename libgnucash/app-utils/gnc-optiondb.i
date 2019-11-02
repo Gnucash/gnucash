@@ -240,6 +240,15 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         return GncOption_get_scm_value(&(db_opt->get()));
     }
 
+    SCM gnc_option_default_value(const GncOptionDBPtr& optiondb,
+                                 const char* section, const char* name)
+    {
+        auto db_opt = optiondb->find_option(section, name);
+        if (!db_opt)
+            return SCM_BOOL_F;
+        return GncOption_get_scm_default_value(&(db_opt->get()));
+    }
+
     void gnc_set_option(const GncOptionDBPtr& optiondb, const char* section,
                         const char* name, SCM new_value)
     {
