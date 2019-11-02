@@ -132,6 +132,8 @@
 ;; colspan at, optionally, the specified column.
 (define (gnc:html-table-append-ruler/at! table colskip colspan)
   (define empty-cell '())
+  (issue-deprecation-warning
+   "gnc:html-table-append-ruler/at! is deprecated.")
   (gnc:html-table-append-row! 
    table
    (append (make-list colskip empty-cell)
@@ -141,6 +143,8 @@
      
 (define (gnc:html-table-append-ruler/at/markup! table markup colskip colspan)
   (define empty-cell "")
+  (issue-deprecation-warning
+   "gnc:html-table-append-ruler/at/markup! is deprecated.")
   (gnc:html-table-append-row/markup! 
    table
    markup
@@ -150,7 +154,9 @@
       1 colspan (gnc:make-html-text (gnc:html-markup-hr)))))))
 
 (define (gnc:html-table-append-ruler! table colspan)
-  (gnc:html-table-append-ruler/at! table 0 colspan))
+  (gnc:html-table-append-row!
+   table (list (gnc:make-html-table-cell/size
+                1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
 
 (define (gnc:html-table-append-ruler/markup! table markup colspan)
   (issue-deprecation-warning
