@@ -65,22 +65,18 @@
      (gnc:make-multichoice-option
       (N_ "Hello, World!") (N_ "Multi Choice Option")
       "b" (N_ "This is a multi choice option.") 'third
-      (list (list->vector
-             (list 'first
-                   (N_ "First Option")
-                   (N_ "Help for first option.")))
-            (list->vector
-             (list 'second
-                   (N_ "Second Option")
-                   (N_ "Help for second option.")))
-            (list->vector
-             (list 'third
-                   (N_ "Third Option")
-                   (N_ "Help for third option.")))
-            (list->vector
-             (list 'fourth
-                   (N_ "Fourth Options")
-                   (N_ "The fourth option rules!"))))))
+      (list (vector 'first
+                    (N_ "First Option")
+                    (N_ "Help for first option."))
+            (vector 'second
+                    (N_ "Second Option")
+                    (N_ "Help for second option."))
+            (vector 'third
+                    (N_ "Third Option")
+                    (N_ "Help for third option."))
+            (vector 'fourth
+                    (N_ "Fourth Options")
+                    (N_ "The fourth option rules!")))))
     
     ;; This is a string option. Users can type anything they want
     ;; as a value. The default value is "Hello, World". This is
@@ -196,19 +192,16 @@
      (gnc:make-list-option
       (N_ "Hello Again") (N_ "A list option")
       "h" (N_ "This is a list option.")
-      (list 'good)
-      (list (list->vector
-             (list 'good
+      'good
+      (list (vector 'good
                    (N_ "The Good")
-                   (N_ "Good option.")))
-            (list->vector
-             (list 'bad
+                   (N_ "Good option."))
+            (vector 'bad
                    (N_ "The Bad")
-                   (N_ "Bad option.")))
-            (list->vector
-             (list 'ugly
+                   (N_ "Bad option."))
+            (vector 'ugly
                    (N_ "The Ugly")
-                   (N_ "Ugly option."))))))
+                   (N_ "Ugly option.")))))
     
     ;; This option is for testing. When true, the report generates
     ;; an exception.

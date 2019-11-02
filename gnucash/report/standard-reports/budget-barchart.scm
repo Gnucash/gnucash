@@ -102,21 +102,12 @@
         (N_ "This is a multi choice option.") ;; option help text
         'bars                                 ;; default selectioin
         (list
-          (list->vector
-            (list 'bars
+          (vector 'bars
                   (N_ "Barchart")
-                  (N_ "Show the report as a bar chart.")
-            )
-          )
-          (list->vector
-            (list 'lines
+                  (N_ "Show the report as a bar chart."))
+          (vector 'lines
                   (N_ "Linechart")
-                  (N_ "Show the report as a line chart.")
-            )
-          )
-        )
-      )
-    )
+                  (N_ "Show the report as a line chart.")))))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 

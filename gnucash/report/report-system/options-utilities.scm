@@ -66,24 +66,14 @@
   (gnc:register-option 
    options  
    (gnc:make-multichoice-option
-    pagename name-display-depth
-    sort-tag 
-    help-string
-    default-depth
-    (list (list->vector
-	   (list 'all (N_ "All") (N_ "All accounts")))
-	  (list->vector
-	   (list 1 "1" (N_ "Top-level.")))
-	  (list->vector
-	   (list 2 "2" (N_ "Second-level.")))
-	  (list->vector
-	   (list 3 "3" (N_ "Third-level.")))
-	  (list->vector
-	   (list 4 "4" (N_ "Fourth-level.")))
-	  (list->vector
-	   (list 5 "5" (N_ "Fifth-level.")))
-	  (list->vector
-	   (list 6 "6" (N_ "Sixth-level.")))))))
+    pagename name-display-depth sort-tag help-string default-depth
+    (list (vector 'all (N_ "All") (N_ "All accounts"))
+	  (vector 1 "1" (N_ "Top-level."))
+	  (vector 2 "2" (N_ "Second-level."))
+	  (vector 3 "3" (N_ "Third-level."))
+	  (vector 4 "4" (N_ "Fourth-level."))
+	  (vector 5 "5" (N_ "Fifth-level."))
+	  (vector 6 "6" (N_ "Sixth-level."))))))
 
 ;; These help for selecting a bunch of accounts.
 (define (gnc:options-add-account-selection! 
