@@ -38,7 +38,6 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
-(use-modules (gnucash report new-aging)) ;for gnc:owner-splits->aging-list
 
 ;; Option names
 (define optname-from-date (N_ "From"))
