@@ -331,7 +331,7 @@ join_ab_strings_cb(const gchar *str, gpointer user_data)
  
     tmp = g_strdup(str);
     g_strstrip(tmp);
-    gnc_utf8_strip_invalid(tmp);
+    gnc_utf8_strip_invalid_and_controls(tmp);
 
     if (*acc)
     {
