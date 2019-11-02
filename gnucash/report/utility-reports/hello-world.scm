@@ -192,16 +192,16 @@
      (gnc:make-list-option
       (N_ "Hello Again") (N_ "A list option")
       "h" (N_ "This is a list option.")
-      'good
+      '(good)
       (list (vector 'good
-                   (N_ "The Good")
-                   (N_ "Good option."))
+                    (N_ "The Good")
+                    (N_ "Good option."))
             (vector 'bad
-                   (N_ "The Bad")
-                   (N_ "Bad option."))
+                    (N_ "The Bad")
+                    (N_ "Bad option."))
             (vector 'ugly
-                   (N_ "The Ugly")
-                   (N_ "Ugly option.")))))
+                    (N_ "The Ugly")
+                    (N_ "Ugly option.")))))
     
     ;; This option is for testing. When true, the report generates
     ;; an exception.
