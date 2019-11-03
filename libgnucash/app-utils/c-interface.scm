@@ -69,7 +69,8 @@
       (display captured-error (current-error-port))
       (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
       (when (defined? 'gnc:warn)
-        (gnc:warn captured-error)))
+        (gnc:warn captured-error))
+      #f)
      (else result))))
 
 (define-public gnc:last-captured-error "")
