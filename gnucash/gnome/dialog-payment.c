@@ -81,6 +81,7 @@ struct _payment_window
     GtkWidget   * dialog;
 
     GtkWidget   * payment_warning;
+    GtkWidget   * conflict_message;
     GtkWidget   * ok_button;
     GtkWidget   * num_entry;
     GtkWidget   * memo_entry;
@@ -288,7 +289,7 @@ update_cleanup:
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(pw->print_check), pw->print_check_state);
 
     /* Check if there are issues preventing a successful payment */
-    gtk_widget_set_tooltip_text (pw->payment_warning, conflict_msg);
+    gtk_label_set_text (GTK_LABEL(pw->conflict_message), conflict_msg);
     gtk_widget_set_sensitive (pw->ok_button, allow_payment);
     if (conflict_msg)
     {
@@ -1192,6 +1193,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     /* Grab the widgets and build the dialog */
     pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));
+    pw->conflict_message = GTK_WIDGET (gtk_builder_get_object (builder, "conflict_message"));
     pw->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
     pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
     pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
