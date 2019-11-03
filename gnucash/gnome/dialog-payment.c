@@ -218,6 +218,8 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
     const char *conflict_msg = NULL;
     gnc_numeric amount_deb, amount_cred;
     gboolean enable_xfer_acct = TRUE;
+    gboolean allow_payment = TRUE;
+    GtkTreeSelection *selection;
 
     if (!pw)
         return FALSE;
@@ -226,6 +228,7 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
     if (!pw->post_acct)
     {
         conflict_msg = _("You must enter a valid account name for posting.");
+        allow_payment = FALSE;
         goto update_cleanup;
     }
 
@@ -234,6 +237,7 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
     if (!gncOwnerIsValid(&pw->owner))
     {
         conflict_msg = _("You must select a company for payment processing.");
+        allow_payment = FALSE;
         goto update_cleanup;
     }
 
@@ -255,8 +259,20 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
         if (!pw->xfer_acct)
         {
             conflict_msg = _("You must select a transfer account from the account tree.");
+            allow_payment = FALSE;
+            goto update_cleanup;
         }
     }
+
+    /* this last test checks whether documents were selected. if none,
+       emit warning but still allow as an unattached payment. */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    if (gtk_tree_selection_count_selected_rows (selection) == 0)
+    {
+        conflict_msg = _("No documents were selected to assign this payment to. This may create an unattached payment.");
+        allow_payment = TRUE;
+    }
+
 
 update_cleanup:
     gtk_widget_set_sensitive (pw->acct_tree, enable_xfer_acct);
@@ -273,19 +289,17 @@ update_cleanup:
 
     /* Check if there are issues preventing a successful payment */
     gtk_widget_set_tooltip_text (pw->payment_warning, conflict_msg);
+    gtk_widget_set_sensitive (pw->ok_button, allow_payment);
     if (conflict_msg)
     {
         gtk_widget_show (pw->payment_warning);
-        gtk_widget_set_sensitive (pw->ok_button, FALSE);
-        return FALSE;
     }
     else
     {
         gtk_widget_hide (pw->payment_warning);
-        gtk_widget_set_sensitive (pw->ok_button, TRUE);
     }
 
-    return TRUE;
+    return allow_payment;
 }
 
 static void
