@@ -892,9 +892,9 @@ HTML Document Title</title></head><body></body>\n\
       (gnc:html-document-set-style-sheet! doc (gnc:html-style-sheet-find "Default"))
       (gnc:html-document-add-object! doc table)
       (let ((render (gnc:html-document-render doc)))
-        (with-output-to-file (format #f "/tmp/html-acct-table-~a.html" prefix)
-          (lambda ()
-            (display render)))
+        (call-with-output-file (format #f "/tmp/html-acct-table-~a.html" prefix)
+          (lambda (p)
+            (display render p)))
         (xml->sxml render
                    #:trim-whitespace? #t
                    #:entities '((nbsp . "\xa0")

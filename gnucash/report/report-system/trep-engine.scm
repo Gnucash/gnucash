@@ -2204,9 +2204,9 @@ be excluded from periodic reporting.")
               (if (list? csvlist)
                   (catch #t
                     (lambda ()
-                      (with-output-to-file filename
-                        (lambda ()
-                          (display (lists->csv (append infolist csvlist))))))
+                      (call-with-output-file filename
+                        (lambda (p)
+                          (display (lists->csv (append infolist csvlist)) p))))
                     (lambda (key . args)
                       ;; Translators: ~a error type, ~a filename, ~s error details
                       (let ((fmt (N_ "error ~a during csv output to ~a: ~s")))
