@@ -25,6 +25,8 @@
       <menuitem name="AssociateTransactionFile" action="AssociateTransactionFileAction"/>
       <menuitem name="AssociateTransactionLocation" action="AssociateTransactionLocationAction"/>
       <menuitem name="ExecAssociateTransaction" action="ExecAssociatedTransactionAction"/>
+      <separator name="TransactionSep4"/>
+      <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">
@@ -101,6 +103,8 @@
       <menuitem name="AssociateTransactionLocation" action="AssociateTransactionLocationAction"/>
       <menuitem name="ExecAssociateTransaction" action="ExecAssociatedTransactionAction"/>
       <separator name="PopupSep4"/>
+      <menuitem name="JumpAssociateInvoice"    action="JumpAssociatedInvoiceAction"/>
+      <separator name="PopupSep5"/>
       <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
       <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
       <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
