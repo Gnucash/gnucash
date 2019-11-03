@@ -937,14 +937,6 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
         gtk_tree_selection_selected_foreach (selection, get_selected_lots, &selected_lots);
 
-        if ((gtk_tree_selection_count_selected_rows (selection) == 0) &&
-            !(gnc_verify_dialog ( GTK_WINDOW(pw->dialog), FALSE,
-                                  _("No documents were selected to assign this payment to. This may create an unattached payment. Do you wish to continue?"))))
-        {
-            gnc_resume_gui_refresh ();
-            return;
-        }
-
         /* When the payment amount is 0, the selected documents cancel each other out
          * so no money is actually transferred.
          * For non-zero payments money will be transferred between the post account
