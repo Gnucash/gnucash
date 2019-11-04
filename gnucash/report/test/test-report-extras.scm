@@ -53,11 +53,11 @@
     (if test-title
         (gnc:html-document-set-title! document test-title))
     (let ((render (gnc:html-document-render document)))
-      (with-output-to-file (format #f "/tmp/~a-~a.html"
+      (call-with-output-file (format #f "/tmp/~a-~a.html"
                                    (string-map sanitize-char prefix)
                                    (string-map sanitize-char test-title))
-        (lambda ()
-          (display render)))
+        (lambda (p)
+          (display render p)))
       render)))
 
 (define (strip-string s1 s2)

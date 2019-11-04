@@ -138,9 +138,9 @@
 	     (gnc:html-table-cell-append-objects!
 	      contents-cell
 	      (gnc:make-html-text
-	       (string-append
-		"<h3>" (_ "Report error") "</h3><p>"
-		(_ "An error occurred while running the report.")))))
+	       (gnc:html-markup-h3 (_ "Report error"))
+               (_ "An error occurred while running the report.")
+               (gnc:html-markup "pre" gnc:last-captured-error))))
 
 	 ;; increment the alloc number for each occupied row
 	 (let loop ((row current-row-num))

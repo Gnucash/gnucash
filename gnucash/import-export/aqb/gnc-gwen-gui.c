@@ -1045,9 +1045,17 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
         gtk_widget_set_visible(input_entry, TRUE);
     }
 
-    if (gui->parent)
+    if (gui->dialog)
+    {
         gtk_window_set_transient_for(GTK_WINDOW(dialog),
-                                     GTK_WINDOW(gui->parent));
+                                     GTK_WINDOW(gui->dialog));
+    }
+    else
+    {
+        if (gui->parent)
+            gtk_window_set_transient_for(GTK_WINDOW(dialog),
+                                         GTK_WINDOW(gui->parent));
+    }
     if (title)
         gtk_window_set_title(GTK_WINDOW(dialog), title);
 

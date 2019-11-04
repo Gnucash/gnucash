@@ -152,33 +152,24 @@
     gnc:pagename-general (N_ "Alternate Period")
     "c" (N_ "Override or modify From: & To:.")
     (if after-tax-day 'from-to 'last-year)
-    (list (list->vector
-           (list 'from-to (N_ "Use From - To") (N_ "Use From - To period.")))
-          (list->vector
-           (list '1st-est (N_ "1st Est Tax Quarter") (N_ "Jan 1 - Mar 31.")))
-          (list->vector
-           (list '2nd-est (N_ "2nd Est Tax Quarter") (N_ "Apr 1 - May 31.")))
-          (list->vector
-	   ;; Translators: The US tax quarters are different from
-	   ;; actual year's quarters! See the definition of
-	   ;; tax-qtr-real-qtr-year variable above.
-           (list '3rd-est (N_ "3rd Est Tax Quarter") (N_ "Jun 1 - Aug 31.")))
-          (list->vector
-           (list '4th-est (N_ "4th Est Tax Quarter") (N_ "Sep 1 - Dec 31.")))
-          (list->vector
-           (list 'last-year (N_ "Last Year") (N_ "Last Year.")))
-          (list->vector
-           (list '1st-last (N_ "Last Yr 1st Est Tax Qtr")
-                 (N_ "Jan 1 - Mar 31, Last year.")))
-          (list->vector
-           (list '2nd-last (N_ "Last Yr 2nd Est Tax Qtr")
-                 (N_ "Apr 1 - May 31, Last year.")))
-          (list->vector
-           (list '3rd-last (N_ "Last Yr 3rd Est Tax Qtr")
-                 (N_ "Jun 1 - Aug 31, Last year.")))
-          (list->vector
-           (list '4th-last (N_ "Last Yr 4th Est Tax Qtr")
-                 (N_ "Sep 1 - Dec 31, Last year."))))))
+    (list (vector 'from-to (N_ "Use From - To") (N_ "Use From - To period."))
+          (vector '1st-est (N_ "1st Est Tax Quarter") (N_ "Jan 1 - Mar 31."))
+          (vector '2nd-est (N_ "2nd Est Tax Quarter") (N_ "Apr 1 - May 31."))
+          (vector '3rd-est (N_ "3rd Est Tax Quarter") (N_ "Jun 1 - Aug 31."))
+          (vector '4th-est (N_ "4th Est Tax Quarter") (N_ "Sep 1 - Dec 31."))
+          (vector 'last-year (N_ "Last Year") (N_ "Last Year."))
+          (vector '1st-last
+                  (N_ "Last Yr 1st Est Tax Qtr")
+                  (N_ "Jan 1 - Mar 31, Last year."))
+          (vector '2nd-last
+                  (N_ "Last Yr 2nd Est Tax Qtr")
+                  (N_ "Apr 1 - May 31, Last year."))
+          (vector '3rd-last
+                  (N_ "Last Yr 3rd Est Tax Qtr")
+                  (N_ "Jun 1 - Aug 31, Last year."))
+          (vector '4th-last
+                  (N_ "Last Yr 4th Est Tax Qtr")
+                  (N_ "Sep 1 - Dec 31, Last year.")))))
 
   (gnc:register-tax-option
    (gnc:make-account-list-option

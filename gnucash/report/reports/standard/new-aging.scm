@@ -44,6 +44,22 @@
 (define optname-show-zeros (N_ "Show zero balance items"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
+;; Display tab options
+(define optname-addr-source (N_ "Address Source"))
+
+(define addr-options-list
+  (list (list (N_ "Address Name") "b"
+              (N_ "Display Address Name. This, and other fields, may be useful if \
+copying this report to a spreadsheet for use in a mail merge."))
+        (list (N_ "Address 1") "c" (N_ "Display Address 1."))
+        (list (N_ "Address 2") "d" (N_ "Display Address 2."))
+        (list (N_ "Address 3") "e" (N_ "Display Address 3."))
+        (list (N_ "Address 4") "f" (N_ "Display Address 4."))
+        (list (N_ "Address Phone") "g" (N_ "Display Phone."))
+        (list (N_ "Address Fax") "h" (N_ "Display Fax."))
+        (list (N_ "Address Email") "i" (N_ "Display Email."))
+        (list (N_ "Active") "j" (N_ "Display Active status."))))
+
 (define no-APAR-account (_ "No valid A/Payable or A/Receivable \
 account found. Please ensure valid AP/AR account exists."))
 
@@ -100,7 +116,40 @@ exist but have no suitable transactions."))
                (N_ "Post date is leading.")))))
 
     (gnc:options-set-default-section options "General")
+
+    (for-each
+     (lambda (opt)
+       (add-option
+        (gnc:make-simple-boolean-option
+         gnc:pagename-display (car opt) (cadr opt) (caddr opt) #f)))
+     addr-options-list)
+
     options))
+
+(define (options->address options receivable? owner)
+  (define (op-value name)
+    (gnc:option-value (gnc:lookup-option options gnc:pagename-display name)))
+  (let* ((address-list-names (map car addr-options-list))
+         (address-list-options (map op-value address-list-names))
+         (addr-source (if receivable? (op-value optname-addr-source) 'billing))
+         (result-list
+          (cond
+           (owner
+            (let ((addr (if (eq? addr-source 'shipping)
+                            (gncCustomerGetShipAddr (gncOwnerGetCustomer owner))
+                            (gncOwnerGetAddr owner))))
+              (list (gncAddressGetName addr)
+                    (gncAddressGetAddr1 addr)
+                    (gncAddressGetAddr2 addr)
+                    (gncAddressGetAddr3 addr)
+                    (gncAddressGetAddr4 addr)
+                    (gncAddressGetPhone addr)
+                    (gncAddressGetFax addr)
+                    (gncAddressGetEmail addr)
+                    (if (gncOwnerGetActive owner) (_ "Y") (_ "N")))))
+           (else address-list-names))))
+    (fold-right (lambda (opt elt prev) (if opt (cons elt prev) prev))
+                '() address-list-options result-list)))
 
 (define (txn-is-invoice? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-INVOICE))
@@ -137,9 +186,9 @@ exist but have no suitable transactions."))
     owner))
 
 (define (aging-renderer report-obj receivable)
+  (define options (gnc:report-options report-obj))
   (define (op-value section name)
-    (gnc:option-value
-     (gnc:lookup-option (gnc:report-options report-obj) section name)))
+    (gnc:option-value (gnc:lookup-option options section name)))
 
   (define make-heading-list
     (list ""
@@ -200,7 +249,9 @@ exist but have no suitable transactions."))
                             splits)))
           (cond
            ((null? accounts)
-            (gnc:html-table-set-col-headers! table make-heading-list)
+            (gnc:html-table-set-col-headers!
+             table (append make-heading-list
+                           (options->address options receivable #f)))
             (gnc:html-document-add-object!
              document (if (null? (gnc:html-table-data table))
                           (gnc:make-html-text empty-APAR-accounts)
@@ -276,7 +327,8 @@ exist but have no suitable transactions."))
                             (gnc:make-html-text
                              (gnc:html-markup-anchor
                               (gnc:owner-report-text owner account)
-                              (gnc:make-gnc-monetary comm aging-total))))))))
+                              (gnc:make-gnc-monetary comm aging-total)))))
+                          (options->address options receivable owner))))
                       (lp (cdr acc-owners)
                           other-owner-splits
                           (map + acc-totals
@@ -288,7 +340,21 @@ exist but have no suitable transactions."))
   (aging-options-generator (gnc:new-options)))
 
 (define (receivable-options-generator)
-  (aging-options-generator (gnc:new-options)))
+  (let ((options (aging-options-generator (gnc:new-options))))
+    (define (add-option new-option)
+      (gnc:register-option options new-option))
+
+    (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-display optname-addr-source "a" (N_ "Address source.") 'billing
+      (list
+       (vector 'billing
+               (N_ "Billing")
+               (N_ "Address fields from billing address."))
+       (vector 'shipping
+               (N_ "Shipping")
+               (N_ "Address fields from shipping address.")))))
+    options))
 
 (define (payables-renderer report-obj)
   (aging-renderer report-obj #f))

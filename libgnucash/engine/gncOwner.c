@@ -210,17 +210,17 @@ const char * gncOwnerGetTypeString (const GncOwner *owner)
     switch (type)
     {
     case GNC_OWNER_NONE:
-        return "None";
+        return N_("None");
     case GNC_OWNER_UNDEFINED:
-        return "Undefined";
+        return N_("Undefined");
     case GNC_OWNER_CUSTOMER:
-        return "Customer";
+        return N_("Customer");
     case GNC_OWNER_JOB:
-        return "Job";
+        return N_("Job");
     case GNC_OWNER_VENDOR:
-        return "Vendor";
+        return N_("Vendor");
     case GNC_OWNER_EMPLOYEE:
-        return "Employee";
+        return N_("Employee");
     default:
         PWARN ("Unknown owner type");
         return NULL;

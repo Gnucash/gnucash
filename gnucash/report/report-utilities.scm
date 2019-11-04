@@ -883,10 +883,9 @@
        ;; reduce the lot balance automatically.
        ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
               TXN-TYPE-INVOICE)
-        (let* ((lot (gncInvoiceGetPostedLot
-                     (gncInvoiceGetInvoiceFromTxn
-                      (xaccSplitGetParent (car splits)))))
-               (invoice (gncInvoiceGetInvoiceFromLot lot))
+        (let* ((invoice (gncInvoiceGetInvoiceFromTxn
+                         (xaccSplitGetParent (car splits))))
+               (lot (gncInvoiceGetPostedLot invoice))
                (bal (gnc-lot-get-balance lot))
                (bal (if receivable? bal (- bal)))
                (date (if (eq? date-type 'postdate)
@@ -944,7 +943,9 @@
                 (xaccTransGetCurrency txn)
                 (xaccSplitGetValue spl))))))
   (define (trans->str txn)
-    (format #f "Txn<d:~a>" (qof-print-date (xaccTransGetDate txn))))
+    (format #f "Txn<d:~a,desc:~a>"
+            (qof-print-date (xaccTransGetDate txn))
+            (xaccTransGetDescription txn)))
   (define (account->str acc)
     (format #f "Acc<~a>" (xaccAccountGetName acc)))
   (define (monetary-collector->str coll)
@@ -973,7 +974,7 @@
                                (gncInvoiceGetTotal inv)))))
   (define (lot->str lot)
     (format #f "Lot<Acc:~a,Title:~a,Notes:~a,Balance:~a,NSplits:~a>"
-            (gnc:strify (xaccAccountGetName (gnc-lot-get-account lot)))
+            (xaccAccountGetName (gnc-lot-get-account lot))
             (gnc-lot-get-title lot)
             (gnc-lot-get-notes lot)
             (gnc-lot-get-balance lot)

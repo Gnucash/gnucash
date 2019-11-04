@@ -54,6 +54,7 @@
 #include "dialog-find-account.h"
 #include "dialog-find-transactions.h"
 #include "dialog-print-check.h"
+#include "dialog-invoice.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "assistant-stock-split.h"
@@ -184,6 +185,7 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 static void gnc_plugin_page_register_cmd_associate_file_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_associate_location_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_popup_menu_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
@@ -197,6 +199,8 @@ static void gnc_plugin_page_register_event_handler (QofInstance *entity,
         GncPluginPageRegister *page,
         GncEventData *ed);
 
+static GncInvoice * invoice_from_trans (Transaction *trans);
+
 /************************************************************/
 /*                          Actions                         */
 /************************************************************/
@@ -209,6 +213,7 @@ static void gnc_plugin_page_register_event_handler (QofInstance *entity,
 #define ASSOCIATE_TRANSACTION_FILE_LABEL      N_("_Associate File with Transaction")
 #define ASSOCIATE_TRANSACTION_LOCATION_LABEL  N_("_Associate Location with Transaction")
 #define EXECASSOCIATED_TRANSACTION_LABEL N_("_Open Associated File/Location")
+#define JUMP_ASSOCIATED_INVOICE_LABEL     N_("Open Associated Invoice")
 #define CUT_SPLIT_LABEL                  N_("Cu_t Split")
 #define COPY_SPLIT_LABEL                 N_("_Copy Split")
 #define PASTE_SPLIT_LABEL                N_("_Paste Split")
@@ -222,6 +227,7 @@ static void gnc_plugin_page_register_event_handler (QofInstance *entity,
 #define ASSOCIATE_TRANSACTION_FILE_TIP   N_("Associate a file with the current transaction")
 #define ASSOCIATE_TRANSACTION_LOCATION_TIP    N_("Associate a location with the current transaction")
 #define EXECASSOCIATED_TRANSACTION_TIP   N_("Open the associated file or location with the current transaction")
+#define JUMP_ASSOCIATED_INVOICE_TIP      N_("Open the associated invoice")
 #define CUT_SPLIT_TIP                    N_("Cut the selected split into clipboard")
 #define COPY_SPLIT_TIP                   N_("Copy the selected split into clipboard")
 #define PASTE_SPLIT_TIP                  N_("Paste the split from the clipboard")
@@ -338,6 +344,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         "ExecAssociatedTransactionAction", NULL, EXECASSOCIATED_TRANSACTION_LABEL, NULL,
         EXECASSOCIATED_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_execassociated_transaction)
+    },
+    {
+        "JumpAssociatedInvoiceAction", NULL, JUMP_ASSOCIATED_INVOICE_LABEL, NULL,
+        JUMP_ASSOCIATED_INVOICE_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_jump_associated_invoice)
     },
 
     /* View menu */
@@ -513,6 +524,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "AssociateTransactionFileAction",     N_("Associate File") },
     { "AssociateTransactionLocationAction", N_("Associate Location") },
     { "ExecAssociatedTransactionAction",    N_("Open File/Location") },
+    { "JumpAssociatedInvoiceAction",        N_("Open Invoice") },
     { NULL, NULL },
 };
 
@@ -890,6 +902,7 @@ static const char* tran_action_labels[] =
     ASSOCIATE_TRANSACTION_FILE_LABEL,
     ASSOCIATE_TRANSACTION_LOCATION_LABEL,
     EXECASSOCIATED_TRANSACTION_LABEL,
+    JUMP_ASSOCIATED_INVOICE_LABEL,
     NULL
 };
 
@@ -904,6 +917,7 @@ static const char* tran_action_tips[] =
     ASSOCIATE_TRANSACTION_FILE_TIP,
     ASSOCIATE_TRANSACTION_LOCATION_TIP,
     EXECASSOCIATED_TRANSACTION_TIP,
+    JUMP_ASSOCIATED_INVOICE_TIP,
     NULL
 };
 
@@ -937,6 +951,7 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     GtkAction *action;
     gboolean expanded, voided, read_only = FALSE;
     Transaction *trans;
+    GncInvoice *inv;
     CursorClass cursor_class;
     const char *uri;
 
@@ -1008,6 +1023,12 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "ExecAssociatedTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION(action), (uri && *uri));
+
+    /* Set 'ExecAssociatedInvoice' */
+    inv = invoice_from_trans(trans);
+    action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+                                         "JumpAssociatedInvoiceAction");
+    gtk_action_set_sensitive (GTK_ACTION(action), (!(!inv)));
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
 
@@ -4305,6 +4326,60 @@ gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action,
     gsr_default_execassociated_handler(priv->gsr, NULL);
     LEAVE(" ");
 
+}
+
+static GncInvoice * invoice_from_trans (Transaction *trans)
+{
+    GncInvoice *invoice;
+    SplitList *splits;
+
+    g_return_if_fail (GNC_IS_TRANSACTION(trans));
+    invoice = gncInvoiceGetInvoiceFromTxn(trans);
+
+    if (invoice)
+        return invoice;
+
+    for (splits = xaccTransGetSplitList (trans); splits; splits = splits->next)
+    {
+        Split *split = splits->data;
+        GNCLot *lot;
+
+        if (!split)
+            continue;
+
+        lot = xaccSplitGetLot (split);
+        if (!lot)
+            continue;
+
+        invoice = gncInvoiceGetInvoiceFromLot (lot);
+        if (!invoice)
+            continue;
+
+        return invoice;
+    }
+
+    return NULL;
+}
+
+static void
+gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction *action,
+        GncPluginPageRegister *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+    GncInvoice *invoice;
+
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
+    invoice = invoice_from_trans (xaccSplitGetParent
+                                  (gnc_split_register_get_current_split (reg)));
+    if (invoice)
+        gnc_ui_invoice_edit (NULL, invoice);
+
+    LEAVE(" ");
 }
 
 static void
