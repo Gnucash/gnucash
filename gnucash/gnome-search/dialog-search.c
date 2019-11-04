@@ -991,6 +991,16 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 static void
 add_criterion (GtkWidget *button, GNCSearchWindow *sw)
 {
+    gint number_of_buttons = g_list_length (sw->crit_list) + 1;
+    gint button_height = gtk_widget_get_allocated_height (button);
+    gint min_height = MIN (number_of_buttons * button_height, 5 * button_height);
+
+    // this sets the minimum content height for the criteria scroll
+    // window, it is set to a max of 5 buttons visible without scrolling
+    gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW(
+                                                sw->criteria_scroll_window),
+                                                min_height + (button_height/2));
+
     gnc_search_dialog_add_criterion (sw);
 }
 
