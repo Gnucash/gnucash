@@ -190,29 +190,10 @@
      ((null? colors)    (lp (1+ i) (cons (car base-colors) result) (cdr base-colors)))
      (else              (lp (1+ i) (cons (car colors) result) (cdr colors))))))
 
-;; Appends a horizontal ruler to a html-table with the specified
-;; colspan at, optionally, the specified column.
-(define (gnc:html-table-append-ruler/at! table colskip colspan)
-  (define empty-cell '())
-  (gnc:html-table-append-row! 
-   table
-   (append (make-list colskip empty-cell)
-    (list
-     (gnc:make-html-table-cell/size
-      1 colspan (gnc:make-html-text (gnc:html-markup-hr)))))))
-     
-(define (gnc:html-table-append-ruler/at/markup! table markup colskip colspan)
-  (define empty-cell "")
-  (gnc:html-table-append-row/markup! 
-   table
-   markup
-   (append (make-list colskip empty-cell)
-    (list
-     (gnc:make-html-table-cell/size
-      1 colspan (gnc:make-html-text (gnc:html-markup-hr)))))))
-
 (define (gnc:html-table-append-ruler! table colspan)
-  (gnc:html-table-append-ruler/at! table 0 colspan))
+  (gnc:html-table-append-row!
+   table (list (gnc:make-html-table-cell/size
+                1 colspan (gnc:make-html-text (gnc:html-markup-hr))))))
 
 ;; Create a html-table of all exchange rates. The report-commodity is
 ;; 'common-commodity', the exchange rates are given through the
