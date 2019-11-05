@@ -695,7 +695,7 @@ invoices and amounts.")))))
    (gnc:make-html-text
     (gnc:html-markup-br))))
 
-(define (reg-renderer report-obj type payable?)
+(define (reg-renderer report-obj type)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
     (gnc:option-value
@@ -719,6 +719,8 @@ invoices and amounts.")))))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
+         (payable? (memv (gncOwnerGetType (gncOwnerGetEndOwner owner))
+                         (list GNC-OWNER-VENDOR GNC-OWNER-EMPLOYEE)))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
@@ -842,16 +844,16 @@ invoices and amounts.")))))
     document))
 
 (define (customer-renderer obj)
-  (reg-renderer obj GNC-OWNER-CUSTOMER #f))
+  (reg-renderer obj GNC-OWNER-CUSTOMER))
 
 (define (vendor-renderer  obj)
-  (reg-renderer obj GNC-OWNER-VENDOR #t))
+  (reg-renderer obj GNC-OWNER-VENDOR))
 
 (define (employee-renderer obj)
-  (reg-renderer obj GNC-OWNER-EMPLOYEE #t))
+  (reg-renderer obj GNC-OWNER-EMPLOYEE))
 
 (define (job-renderer obj)
-  (reg-renderer obj GNC-OWNER-JOB #f))
+  (reg-renderer obj GNC-OWNER-JOB))
 
 (gnc:define-report
  'version 1
