@@ -268,7 +268,11 @@ exist but have no suitable transactions."))
               (gnc:debug 'account account)
               (gnc:html-table-append-row!
                table (list (gnc:make-html-table-cell/size
-                            1 (+ 2 num-buckets) (xaccAccountGetName account))))
+                            1 (+ 2 num-buckets)
+                            (gnc:make-html-text
+                             (gnc:html-markup-anchor
+                              (gnc:account-anchor-text account)
+                              (xaccAccountGetName account))))))
 
               (let* ((split-owners (map split->owner acc-splits))
                      (acc-owners (sort (sort-and-delete-duplicates
