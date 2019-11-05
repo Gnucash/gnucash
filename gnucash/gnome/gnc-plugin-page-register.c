@@ -1028,7 +1028,7 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     inv = invoice_from_trans(trans);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "JumpAssociatedInvoiceAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), (!(!inv)));
+    gtk_action_set_sensitive (GTK_ACTION(action), inv != NULL);
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
 
@@ -4333,7 +4333,7 @@ static GncInvoice * invoice_from_trans (Transaction *trans)
     GncInvoice *invoice;
     SplitList *splits;
 
-    g_return_if_fail (GNC_IS_TRANSACTION(trans));
+    g_return_val_if_fail (GNC_IS_TRANSACTION(trans), NULL);
     invoice = gncInvoiceGetInvoiceFromTxn(trans);
 
     if (invoice)
