@@ -180,10 +180,10 @@
 (define (txn-is-payment? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 
-(define (make-aging-table splits to-date reverse? date-type currency)
+(define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
         (aging-list (gnc:owner-splits->aging-list
-                     splits num-buckets to-date date-type reverse?)))
+                     splits num-buckets to-date date-type (not payable?))))
 
     (gnc:html-table-set-col-headers!
      table (list (_ "Prepayments")
@@ -247,7 +247,7 @@
       (lp (cdr link-rows) #f))))
 
 (define (add-owner-table table splits acc start-date end-date date-type
-                         used-columns reverse? link-option)
+                         used-columns payable? link-option)
   (define currency (xaccAccountGetCommodity acc))
   (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
   (define (print-totals total debit credit tax sale)
@@ -296,7 +296,7 @@
             1 (+ columns-used-size link-cols)
             (make-aging-table splits
                               end-date
-                              reverse? date-type currency)))))
+                              payable? date-type currency)))))
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
@@ -448,7 +448,7 @@
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
              (value (xaccSplitGetAmount split))
-             (value (if reverse? (- value) value))
+             (value (if payable? (- value) value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn))
              (invoice-splits
               (and (txn-is-invoice? txn)
@@ -695,7 +695,7 @@ invoices and amounts.")))))
    (gnc:make-html-text
     (gnc:html-markup-br))))
 
-(define (reg-renderer report-obj type reverse?)
+(define (reg-renderer report-obj type payable?)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
     (gnc:option-value
@@ -801,7 +801,7 @@ invoices and amounts.")))))
                                               (xaccAccountGetName account)))))))
 
                    (add-owner-table table splits account start-date end-date
-                                    date-type used-columns reverse? link-option)))
+                                    date-type used-columns payable? link-option)))
                accounts-and-splits))
 
              (else
