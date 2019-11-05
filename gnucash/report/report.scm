@@ -610,7 +610,6 @@
 (export gnc:html-table-append-row/markup!)
 (export gnc:html-table-prepend-row/markup!)
 (export gnc:html-table-append-row!)
-(export gnc:html-table-remove-last-row!)
 (export gnc:html-table-prepend-row!)
 (export gnc:html-table-get-cell)
 (export gnc:html-table-set-cell!)

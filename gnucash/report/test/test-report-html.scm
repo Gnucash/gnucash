@@ -655,32 +655,6 @@ HTML Document Title</title></head><body></body>\n\
           )
         )
       (test-end "HTML Table - Append Rows")
-      (test-begin "HTML Table - Remove Rows")
-        (let (
-               (test-doc (gnc:make-html-document))
-               (test-table (gnc:make-html-table))
-             )
-          ;; change the default settings just to see what effect it has
-          ;;(gnc:html-table-set-col-headers! test-table #t)
-          ;; -> this make (gnc:html-table-render test-table test-doc) crash
-          ;; col-headers must be #f or a list
-          (gnc:html-table-set-row-headers! test-table #t)
-          (gnc:html-table-set-caption! test-table #t)
-          (gnc:html-table-append-row! test-table "Row 1")
-          (gnc:html-table-append-row! test-table "Row 2")
-          (gnc:html-table-remove-last-row! test-table)
-          (test-equal "HTML Table - Check Num Rows after remove row"
-            1
-            (gnc:html-table-num-rows test-table)
-          )
-          (test-equal "HTML Table - Check data after remove row"
-            '(("Row 1"))
-            (gnc:html-table-data test-table)
-          )
-          (gnc:html-table-remove-last-row! test-table)
-          (test-equal "HTML Table - Negative Test: Remove non-existing rows" '() (gnc:html-table-remove-last-row! test-table))
-        )
-      (test-end "HTML Table - Remove Rows")
       (test-begin "HTML Table - Prepend Rows")
         (let (
                (test-doc (gnc:make-html-document))
