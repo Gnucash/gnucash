@@ -447,7 +447,7 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (value (xaccSplitGetAmount split))
+             (value (xaccTransGetAccountValue txn acc))
              (value (if payable? (- value) value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn))
              (invoice-splits
