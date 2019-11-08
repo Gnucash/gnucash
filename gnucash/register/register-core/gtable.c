@@ -83,7 +83,8 @@ g_table_destroy (GTable *gtable)
 gpointer
 g_table_index (GTable *gtable, int row, int col)
 {
-    guint index;
+     guint index = row * gtable->cols + col;
+     guint offset = index * gtable->entry_size;
 
     if (gtable == NULL)
         return NULL;
@@ -94,9 +95,9 @@ g_table_index (GTable *gtable, int row, int col)
     if (col >= gtable->cols)
         return NULL;
 
-    index = ((row * gtable->cols) + col) * gtable->entry_size;
-
-    return &gtable->array->data[index];
+    g_return_val_if_fail (gtable->array != NULL, NULL);
+    g_return_val_if_fail (gtable->array->len > index, NULL);
+    return &gtable->array->data[offset];
 }
 
 void
