@@ -543,7 +543,6 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                            new_split, new_class, &vcell_loc))
         {
 
-            gnc_table_get_virtual_cell (reg->table, vcell_loc);
             new_virt_loc.vcell_loc = vcell_loc;
         }
         else

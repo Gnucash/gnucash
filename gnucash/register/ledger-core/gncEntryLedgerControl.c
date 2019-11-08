@@ -234,7 +234,6 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
          * then it may have moved. Find out where it is now. */
         if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc))
         {
-            gnc_table_get_virtual_cell (ledger->table, vcell_loc);
             new_virt_loc.vcell_loc = vcell_loc;
         }
         else
