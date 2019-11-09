@@ -237,8 +237,7 @@ exist but have no suitable transactions."))
       (setup-query query accounts report-date)
       (let* ((splits (qof-query-run query))
              (accounts (sort-and-delete-duplicates (map xaccSplitGetAccount splits)
-                                                   gnc:account-path-less-p equal?))
-             (table (gnc:make-html-table)))
+                                                   gnc:account-path-less-p equal?)))
         (qof-query-destroy query)
 
         ;; loop into each APAR account
@@ -247,32 +246,88 @@ exist but have no suitable transactions."))
                             (lambda (split)
                               (or (txn-is-invoice? (xaccSplitGetParent split))
                                   (txn-is-payment? (xaccSplitGetParent split))))
-                            splits)))
+                            splits))
+                   (accounts-and-owners '())
+                   (tofree '()))
           (cond
            ((null? accounts)
-            (gnc:html-table-set-col-headers!
-             table (append make-heading-list
-                           (options->address options receivable #f)))
-            (gnc:html-document-add-object!
-             document (if (null? (gnc:html-table-data table))
-                          (gnc:make-html-text empty-APAR-accounts)
-                          table)))
+
+            (cond
+             ((null? accounts-and-owners)
+              (gnc:html-document-add-object!
+               document (gnc:make-html-text empty-APAR-accounts)))
+
+             (else
+              (let ((table (gnc:make-html-table)))
+
+                (gnc:html-table-set-col-headers!
+                 table (append make-heading-list
+                               (options->address options receivable #f)))
+
+                (for-each
+                 (lambda (account-and-owners)
+                   (let* ((account (car account-and-owners))
+                          (owners-and-aging (cadr account-and-owners))
+                          (acc-totals (caddr account-and-owners))
+                          (comm (xaccAccountGetCommodity account)))
+
+                     (gnc:html-table-append-row!
+                      table (list (gnc:make-html-table-cell/size
+                                   1 (+ 2 num-buckets)
+                                   (gnc:make-html-text
+                                    (gnc:html-markup-anchor
+                                     (gnc:account-anchor-text account)
+                                     (xaccAccountGetName account))))))
+
+                     (for-each
+                      (lambda (owner-and-aging)
+                        (let ((owner (car owner-and-aging))
+                              (aging (cadr owner-and-aging))
+                              (aging-total (caddr owner-and-aging)))
+                          (gnc:html-table-append-row!
+                           table
+                           (append
+                            (list #f)
+                            (cons
+                             (gnc:make-html-text
+                              (gnc:html-markup-anchor
+                               (gnc:owner-anchor-text owner)
+                               (gncOwnerGetName owner)))
+                             (map
+                              (lambda (amt)
+                                (gnc:make-html-table-cell/markup
+                                 "number-cell" (gnc:make-gnc-monetary comm amt)))
+                              (reverse aging)))
+                            (list
+                             (gnc:make-html-table-cell/markup
+                              "number-cell"
+                              (gnc:make-html-text
+                               (gnc:html-markup-anchor
+                                (gnc:owner-report-text owner account)
+                                (gnc:make-gnc-monetary comm aging-total)))))
+                            (options->address options receivable owner)))))
+                      owners-and-aging)
+                     (gnc:html-table-append-row!
+                      table
+                      (cons* #f
+                             (gnc:make-html-table-cell/markup
+                              "total-label-cell" (_ "Total"))
+                             (map
+                              (lambda (amt)
+                                (gnc:make-html-table-cell/markup
+                                 "total-number-cell" (gnc:make-gnc-monetary comm amt)))
+                              acc-totals)))))
+                 accounts-and-owners)
+                (for-each gncOwnerFree tofree)
+                (gnc:html-document-add-object! document table)))))
 
            (else
             (let* ((account (car accounts))
-                   (comm (xaccAccountGetCommodity account))
                    (splits-acc-others (list-split splits split-from-acct? account))
                    (acc-splits (car splits-acc-others))
                    (other-acc-splits (cdr splits-acc-others)))
 
               (gnc:debug 'account account)
-              (gnc:html-table-append-row!
-               table (list (gnc:make-html-table-cell/size
-                            1 (+ 2 num-buckets)
-                            (gnc:make-html-text
-                             (gnc:html-markup-anchor
-                              (gnc:account-anchor-text account)
-                              (xaccAccountGetName account))))))
 
               (let* ((split-owners (map split->owner acc-splits))
                      (acc-owners (sort (sort-and-delete-duplicates
@@ -284,22 +339,17 @@ exist but have no suitable transactions."))
                 ;; loop into each APAR account split
                 (let lp ((acc-owners acc-owners)
                          (acc-splits acc-splits)
-                         (acc-totals (make-list (1+ num-buckets) 0)))
+                         (acc-totals (make-list (1+ num-buckets) 0))
+                         (owners-and-aging '()))
                   (cond
                    ((null? acc-owners)
-                    (for-each gncOwnerFree split-owners)
-                    (gnc:html-table-append-row!
-                     table
-                     (cons* #f
-                            (gnc:make-html-table-cell/markup
-                             "total-label-cell" (_ "Total"))
-                            (map
-                             (lambda (amt)
-                               (gnc:make-html-table-cell/markup
-                                "total-number-cell" (gnc:make-gnc-monetary comm amt)))
-                             acc-totals)))
                     (loop (cdr accounts)
-                          other-acc-splits))
+                          other-acc-splits
+                          (if (null? owners-and-aging)
+                              accounts-and-owners
+                              (cons (list account owners-and-aging acc-totals)
+                                    accounts-and-owners))
+                          (append-reverse tofree split-owners)))
 
                    (else
                     (let* ((owner (car acc-owners))
@@ -311,33 +361,14 @@ exist but have no suitable transactions."))
                                    owner-splits num-buckets report-date
                                    date-type receivable))
                            (aging-total (apply + aging)))
-                      (when (or show-zeros (not (every zero? aging)))
-                        (gnc:html-table-append-row!
-                         table
-                         (append
-                          (list #f)
-                          (cons
-                           (gnc:make-html-text
-                            (gnc:html-markup-anchor
-                             (gnc:owner-anchor-text owner)
-                             (gncOwnerGetName owner)))
-                           (map
-                            (lambda (amt)
-                              (gnc:make-html-table-cell/markup
-                               "number-cell" (gnc:make-gnc-monetary comm amt)))
-                            (reverse aging)))
-                          (list
-                           (gnc:make-html-table-cell/markup
-                            "number-cell"
-                            (gnc:make-html-text
-                             (gnc:html-markup-anchor
-                              (gnc:owner-report-text owner account)
-                              (gnc:make-gnc-monetary comm aging-total)))))
-                          (options->address options receivable owner))))
                       (lp (cdr acc-owners)
                           other-owner-splits
                           (map + acc-totals
-                               (reverse (cons aging-total aging))))))))))))))))
+                               (reverse (cons aging-total aging)))
+                          (if (or show-zeros (not (every zero? aging)))
+                              (cons (list owner aging aging-total)
+                                    owners-and-aging)
+                              owners-and-aging))))))))))))))
     (gnc:report-finished)
     document))
 
