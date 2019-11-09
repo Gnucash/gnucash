@@ -251,7 +251,7 @@ class GncOptionMultichoiceTest : public ::testing::Test
 {
 protected:
     GncOptionMultichoiceTest() :
-        m_option{"foo", "bar", "baz", "Phony Option",
+        m_option{"foo", "bar", "baz", "Phony Option", "plugh",
             {
                 {"plugh", "xyzzy", "thud"},
                 {"waldo", "pepper", "salt"},
