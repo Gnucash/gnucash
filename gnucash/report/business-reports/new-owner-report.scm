@@ -252,7 +252,7 @@
   (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
   (define (print-totals total debit credit tax sale)
     (define (total-cell cell)
-      (gnc:make-html-table-cell/markup "total-number-cell" cell))
+      (gnc:make-html-table-cell/markup "total-label-cell" cell))
     (define (make-cell amt)
       (total-cell (gnc:make-gnc-monetary currency amt)))
     (define span
@@ -447,7 +447,7 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (value (xaccTransGetAccountValue txn acc))
+             (value (xaccTransGetAccountAmount txn acc))
              (value (if payable? (- value) value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn))
              (invoice-splits
