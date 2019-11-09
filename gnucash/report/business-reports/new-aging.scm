@@ -192,8 +192,7 @@ exist but have no suitable transactions."))
     (gnc:option-value (gnc:lookup-option options section name)))
 
   (define make-heading-list
-    (list ""
-          (_ "Company")
+    (list (_ "Company")
           (_ "Prepayments")
           (_ "Current")
           (_ "0-30 days")
@@ -258,10 +257,12 @@ exist but have no suitable transactions."))
                document (gnc:make-html-text empty-APAR-accounts)))
 
              (else
-              (let ((table (gnc:make-html-table)))
+              (let ((table (gnc:make-html-table))
+                    (accounts>1? (> (length accounts-and-owners) 1)))
 
                 (gnc:html-table-set-col-headers!
-                 table (append make-heading-list
+                 table (append (if accounts>1? '(#f) '())
+                               make-heading-list
                                (options->address options receivable #f)))
 
                 (for-each
@@ -271,13 +272,14 @@ exist but have no suitable transactions."))
                           (acc-totals (caddr account-and-owners))
                           (comm (xaccAccountGetCommodity account)))
 
-                     (gnc:html-table-append-row!
-                      table (list (gnc:make-html-table-cell/size
-                                   1 (+ 2 num-buckets)
-                                   (gnc:make-html-text
-                                    (gnc:html-markup-anchor
-                                     (gnc:account-anchor-text account)
-                                     (xaccAccountGetName account))))))
+                     (when accounts>1?
+                       (gnc:html-table-append-row!
+                        table (list (gnc:make-html-table-cell/size
+                                     1 (+ 2 num-buckets)
+                                     (gnc:make-html-text
+                                      (gnc:html-markup-anchor
+                                       (gnc:account-anchor-text account)
+                                       (xaccAccountGetName account)))))))
 
                      (for-each
                       (lambda (owner-and-aging)
@@ -287,7 +289,7 @@ exist but have no suitable transactions."))
                           (gnc:html-table-append-row!
                            table
                            (append
-                            (list #f)
+                            (if accounts>1? '(#f) '())
                             (cons
                              (gnc:make-html-text
                               (gnc:html-markup-anchor
@@ -309,14 +311,15 @@ exist but have no suitable transactions."))
                       owners-and-aging)
                      (gnc:html-table-append-row!
                       table
-                      (cons* #f
-                             (gnc:make-html-table-cell/markup
-                              "total-label-cell" (_ "Total"))
-                             (map
-                              (lambda (amt)
-                                (gnc:make-html-table-cell/markup
-                                 "total-number-cell" (gnc:make-gnc-monetary comm amt)))
-                              acc-totals)))))
+                      (append
+                       (if accounts>1? '(#f) '())
+                       (list (gnc:make-html-table-cell/markup
+                              "total-label-cell" (_ "Total")))
+                       (map
+                        (lambda (amt)
+                          (gnc:make-html-table-cell/markup
+                           "total-number-cell" (gnc:make-gnc-monetary comm amt)))
+                        acc-totals)))))
                  accounts-and-owners)
                 (for-each gncOwnerFree tofree)
                 (gnc:html-document-add-object! document table)))))
