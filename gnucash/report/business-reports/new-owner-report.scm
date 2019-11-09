@@ -622,33 +622,17 @@ invoices and amounts.")))))
         (loop (cdr list-of-substrings)
               (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
-(define (setup-job-query q owner accounts end-date)
-  (let ((guid (gncOwnerReturnGUID owner)))
+(define (setup-query q owner accounts end-date job?)
+  (let ((guid (gncOwnerReturnGUID (if job? owner (gncOwnerGetEndOwner owner))))
+        (last-param (if job? QOF-PARAM-GUID OWNER-PARENTG)))
     (qof-query-add-guid-match
-     q  (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER QOF-PARAM-GUID)
+     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER last-param)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q (list SPLIT-LOT OWNER-FROM-LOT QOF-PARAM-GUID)
+     q (list SPLIT-LOT OWNER-FROM-LOT last-param)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER QOF-PARAM-GUID)
-     guid QOF-QUERY-OR)
-    (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
-    (qof-query-set-book q (gnc-get-current-book))
-    (qof-query-set-sort-order q (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())
-    q))
-
-(define (setup-query q owner accounts end-date)
-  (let ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
-    (qof-query-add-guid-match
-     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER OWNER-PARENTG)
-     guid QOF-QUERY-OR)
-    (qof-query-add-guid-match
-     q (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
-     guid QOF-QUERY-OR)
-    (qof-query-add-guid-match
-     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER OWNER-PARENTG)
+     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER last-param)
      guid QOF-QUERY-OR)
     (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
@@ -744,15 +728,10 @@ invoices and amounts.")))))
         (_ "This report requires a valid AP/AR account to be available."))))
 
      (else
-      (if (eqv? GNC-OWNER-JOB type)
-          (setup-job-query query owner accounts end-date)
-          (setup-query query owner accounts end-date))
+      (setup-query query owner accounts end-date (eqv? GNC-OWNER-JOB type))
 
       (let ((splits (xaccQueryGetSplitsUniqueTrans query)))
         (qof-query-destroy query)
-
-        (gnc:html-document-set-title!
-         document (string-append report-title ": " (gncOwnerGetName owner)))
 
         (gnc:html-document-set-headline!
          document (gnc:html-markup
