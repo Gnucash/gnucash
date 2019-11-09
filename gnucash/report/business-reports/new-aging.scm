@@ -325,50 +325,45 @@ exist but have no suitable transactions."))
             (let* ((account (car accounts))
                    (splits-acc-others (list-split splits split-from-acct? account))
                    (acc-splits (car splits-acc-others))
-                   (other-acc-splits (cdr splits-acc-others)))
+                   (other-acc-splits (cdr splits-acc-others))
+                   (split-owners (map split->owner acc-splits))
+                   (acc-owners (sort (sort-and-delete-duplicates
+                                      split-owners ownerGUID<? gnc-owner-equal?)
+                                     owner<?)))
 
-              (gnc:debug 'account account)
+              ;; loop into each APAR account split
+              (let lp ((acc-owners acc-owners)
+                       (acc-splits acc-splits)
+                       (acc-totals (make-list (1+ num-buckets) 0))
+                       (owners-and-aging '()))
+                (cond
+                 ((null? acc-owners)
+                  (loop (cdr accounts)
+                        other-acc-splits
+                        (if (null? owners-and-aging)
+                            accounts-and-owners
+                            (cons (list account owners-and-aging acc-totals)
+                                  accounts-and-owners))
+                        (append-reverse tofree split-owners)))
 
-              (let* ((split-owners (map split->owner acc-splits))
-                     (acc-owners (sort (sort-and-delete-duplicates
-                                        split-owners ownerGUID<? gnc-owner-equal?)
-                                       owner<?)))
-
-                (gnc:debug 'owners acc-owners)
-
-                ;; loop into each APAR account split
-                (let lp ((acc-owners acc-owners)
-                         (acc-splits acc-splits)
-                         (acc-totals (make-list (1+ num-buckets) 0))
-                         (owners-and-aging '()))
-                  (cond
-                   ((null? acc-owners)
-                    (loop (cdr accounts)
-                          other-acc-splits
-                          (if (null? owners-and-aging)
-                              accounts-and-owners
-                              (cons (list account owners-and-aging acc-totals)
-                                    accounts-and-owners))
-                          (append-reverse tofree split-owners)))
-
-                   (else
-                    (let* ((owner (car acc-owners))
-                           (splits-own-others (list-split acc-splits split-has-owner?
-                                                          owner))
-                           (owner-splits (car splits-own-others))
-                           (other-owner-splits (cdr splits-own-others))
-                           (aging (gnc:owner-splits->aging-list
-                                   owner-splits num-buckets report-date
-                                   date-type receivable))
-                           (aging-total (apply + aging)))
-                      (lp (cdr acc-owners)
-                          other-owner-splits
-                          (map + acc-totals
-                               (reverse (cons aging-total aging)))
-                          (if (or show-zeros (not (every zero? aging)))
-                              (cons (list owner aging aging-total)
-                                    owners-and-aging)
-                              owners-and-aging))))))))))))))
+                 (else
+                  (let* ((owner (car acc-owners))
+                         (splits-own-others (list-split acc-splits split-has-owner?
+                                                        owner))
+                         (owner-splits (car splits-own-others))
+                         (other-owner-splits (cdr splits-own-others))
+                         (aging (gnc:owner-splits->aging-list
+                                 owner-splits num-buckets report-date
+                                 date-type receivable))
+                         (aging-total (apply + aging)))
+                    (lp (cdr acc-owners)
+                        other-owner-splits
+                        (map + acc-totals
+                             (reverse (cons aging-total aging)))
+                        (if (or show-zeros (not (every zero? aging)))
+                            (cons (list owner aging aging-total)
+                                  owners-and-aging)
+                            owners-and-aging)))))))))))))
     (gnc:report-finished)
     document))
 
