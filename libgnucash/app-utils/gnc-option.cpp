@@ -81,6 +81,13 @@ GncOptionDateValue::get_value() const
     struct tm now{static_cast<tm>(GncDateTime())};
     struct tm period{static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()))};
 
+    if (period.tm_mon == now.tm_mon && period.tm_mday == now.tm_mday)
+    {
+        //No set accounting period, use the calendar year
+        period.tm_mon = 0;
+        period.tm_mday = 0;
+    }
+
     if (m_period == RelativeDatePeriod::CAL_YEAR ||
         m_period == RelativeDatePeriod::PREV_YEAR)
     {
@@ -91,7 +98,9 @@ GncOptionDateValue::get_value() const
     else if (m_period == RelativeDatePeriod::PREV_QUARTER ||
              m_period == RelativeDatePeriod::CURRENT_QUARTER)
     {
-        now.tm_mon = now.tm_mon - (now.tm_mon - period.tm_mon) % 3;
+        auto offset = (now.tm_mon > period.tm_mon ? now.tm_mon - period.tm_mon :
+                       period.tm_mon - now.tm_mon) % 3;
+        now.tm_mon = now.tm_mon - offset;
         if (m_period == RelativeDatePeriod::PREV_QUARTER)
             now.tm_mon -= 3;
         if (m_type == DateType::ENDING)
