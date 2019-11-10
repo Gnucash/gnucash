@@ -23,7 +23,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-report" "scm_init_sw_report_module"))
 (use-modules (sw_report))

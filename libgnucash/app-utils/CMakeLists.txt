@@ -22,7 +22,6 @@ set (app_utils_HEADERS
   gnc-entry-quickfill.h
   gnc-euro.h
   gnc-exp-parser.h
-  gnc-gettext-util.h
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-helpers.h
@@ -62,7 +61,6 @@ set (app_utils_SOURCES
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c
-  gnc-gettext-util.c
   gnc-gsettings.c
   gnc-helpers.c
   gnc-prefs-utils.c
@@ -180,17 +178,10 @@ set(GUILE_DEPENDS
   scm-gnc-module
   )
 
-gnc_add_scheme_targets(scm-gettext
-  gettext.scm
-  gnucash
-  gncmod-app-utils
-  TRUE
-)
-
 gnc_add_scheme_targets(scm-app-utils-1
   "${app_utils_SCHEME_1}"
   "gnucash/app-utils"
-  "scm-gettext;${GUILE_DEPENDS}"
+  "${GUILE_DEPENDS}"
   TRUE
 )
 
@@ -204,10 +195,11 @@ gnc_add_scheme_targets(scm-app-utils-2
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("migrate-prefs" "" "" "")
 gnc_add_scheme_deprecated_module ("migrate-prefs-user" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash gettext" "gnucash core-utils" "scm-core-utils" "")
 
-add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1 scm-gettext)
+add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
 set_local_dist(app_utils_DIST_local
-        ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
+        ${app_utils_ALL_SOURCES} ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
         app-utils.i CMakeLists.txt gnc-help-utils.c README)
 set(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

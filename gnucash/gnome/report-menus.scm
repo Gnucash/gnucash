@@ -30,7 +30,6 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
-(use-modules (gnucash gettext))
 (use-modules (gnucash reports standard dashboard))
 
 (eval-when (compile load eval expand)

@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (define (string-strip s1 s2)
   (let ((idx (string-contains-ci s1 s2)))

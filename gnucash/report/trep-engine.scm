@@ -39,7 +39,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-1))
 

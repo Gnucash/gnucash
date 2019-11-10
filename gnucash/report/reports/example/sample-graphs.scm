@@ -31,7 +31,7 @@
 ;; Add this module to enable translatable strings
 ;; Use (N_ string) to mark string for translation (it won't be translated on the spot)
 ;; Use (_ string) to use a translation of this string if it exists.
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (gnc:module-load "gnucash/report" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url

@@ -75,7 +75,7 @@ set(scm_rpts_GUILE_DEPENDS
   gncmod-html
   scm-core-utils
   scm-engine
-  scm-gettext
+  scm-core-utils
   scm-gnome-utils
   scm-report
   )
@@ -84,7 +84,7 @@ set(scm_rpt_example_GUILE_DEPENDS
   gncmod-html
   scm-app-utils
   scm-core-utils
-  scm-gettext
+  scm-core-utils
   scm-gnc-module
   scm-engine
   scm-reports-example-links
@@ -95,7 +95,7 @@ set(scm_rpt_example_GUILE_DEPENDS
 set(scm_rpt_locale_specific_GUILE_DEPENDS
   gncmod-html
   scm-core-utils
-  scm-gettext
+  scm-core-utils
   scm-gnc-module
   scm-engine
   scm-test-core

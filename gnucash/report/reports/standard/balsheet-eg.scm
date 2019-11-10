@@ -35,7 +35,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (use-modules (gnucash eguile))
 
 (use-modules (ice-9 local-eval))  ; for the-environment

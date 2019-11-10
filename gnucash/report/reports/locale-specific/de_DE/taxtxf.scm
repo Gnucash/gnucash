@@ -70,8 +70,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash core-utils)) ; for gnc:version
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
 (use-modules (gnucash locale de_DE tax))
 
 (use-modules (gnucash gnc-module))
