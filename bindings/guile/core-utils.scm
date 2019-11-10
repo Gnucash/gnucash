@@ -37,3 +37,9 @@
      (module-use! i (resolve-interface '(sw_core_utils))))
 
 (define-public gnc:version (gnc-version))
+;; gettext functions
+(define-public _ gettext)
+(define-syntax N_
+    (syntax-rules ()
+        ((_ x) x)))
+(export N_)

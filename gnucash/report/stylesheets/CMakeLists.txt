@@ -9,7 +9,7 @@ set(GUILE_OUTPUT_DIR gnucash/report/stylesheets)
 set(GUILE_DEPENDS
   scm-gnc-module
   scm-core-utils
-  scm-gettext
+  scm-core-utils
   scm-engine
   gncmod-html
   scm-report

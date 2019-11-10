@@ -26,7 +26,6 @@
 #include <gnc-euro.h>
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
-#include <gnc-gettext-util.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
@@ -65,9 +64,6 @@ QofSession * gnc_get_current_session (void);
 const gchar * gnc_get_current_book_tax_name (void);
 const gchar * gnc_get_current_book_tax_type (void);
 Account * gnc_get_current_root_account (void);
-
-%newobject gnc_gettext_helper;
-char * gnc_gettext_helper(const char *string);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void gnc_option_db_destroy(GNCOptionDB *odb);

@@ -23,12 +23,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash engine))
-(use-modules (gnucash gettext))
-
-;; gettext.scm
-(re-export gnc:gettext)
-(re-export _)
-(re-export N_)
+(use-modules (gnucash core-utils))
 
 ;; c-interface.scm
 (export gnc:apply-with-error-handling)

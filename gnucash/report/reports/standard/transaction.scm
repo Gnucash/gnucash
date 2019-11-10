@@ -25,7 +25,7 @@
 (define-module (gnucash reports standard transaction))
 
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (gnc:module-load "gnucash/report" 0)
 
 (gnc:define-report

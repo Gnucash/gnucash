@@ -21,8 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 
-(use-modules (gnucash core-utils)
-             (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)

@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (ice-9 match))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (define *gnc:_style-sheet-templates_* (make-hash-table 23))
 (define *gnc:_style-sheets_* (make-hash-table 23))

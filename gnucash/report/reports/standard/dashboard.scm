@@ -27,8 +27,7 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash core-utils)) ; for gnc:version
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
 (use-modules (gnucash gnc-module))
 (eval-when
       (compile load eval expand)

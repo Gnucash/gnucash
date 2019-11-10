@@ -27,7 +27,7 @@
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report" 0)

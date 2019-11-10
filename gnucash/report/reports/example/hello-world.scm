@@ -27,7 +27,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (debug-enable 'backtrace)
 

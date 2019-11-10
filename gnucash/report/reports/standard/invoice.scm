@@ -27,7 +27,7 @@
 (use-modules (gnucash engine))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (use-modules (gnucash utilities))
 
 (gnc:module-load "gnucash/report" 0)

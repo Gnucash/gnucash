@@ -24,7 +24,8 @@ gnc_add_test_with_guile(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DI
 # Scheme tests
 
 
-set(engine_test_SCHEME
+set(bindings_test_SCHEME
+    test-core-utils.scm
     test-create-account.scm
 )
 
@@ -33,6 +34,7 @@ set(engine_test_SCHEME
 set(GUILE_DEPENDS
     scm-gnc-module
     scm-app-utils
+    scm-core-utils
     scm-engine)
 
 gnc_add_scheme_test_targets(scm-test-engine-extras
@@ -46,7 +48,7 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
 gnc_add_scheme_deprecated_module ("gnucash engine test test-extras" "tests test-engine-extras" "scm-test-engine-extras" "")
 
 gnc_add_scheme_test_targets(scm-test-engine
-    "${engine_test_SCHEME}"
+    "${bindings_test_SCHEME}"
     "tests"
     "${GUILE_DEPENDS};scm-test-engine-extras"
     FALSE
@@ -113,7 +115,7 @@ endif (HAVE_SRFI64)
 
 set(test_engine_SCHEME_DIST
     srfi64-extras.scm
-    test-create-account.scm
+    ${bindings_test_SCHEME}
     test-engine-extras.scm
     test-scm-query-import.scm
     test-business-core.scm

@@ -229,7 +229,7 @@ set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS
     gncmod-gnome-utils
     scm-engine
-    scm-gettext
+    scm-core-utils
     scm-gnome-utils
     scm-gnc-module
     scm-report

@@ -523,7 +523,6 @@ libgnucash/app-utils/c-interface.scm
 libgnucash/app-utils/date-utilities.scm
 libgnucash/app-utils/file-utils.c
 libgnucash/app-utils/fin.scm
-libgnucash/app-utils/gettext.scm
 libgnucash/app-utils/gfec.c
 libgnucash/app-utils/gnc-accounting-period.c
 libgnucash/app-utils/gnc-account-merge.c
@@ -532,7 +531,6 @@ libgnucash/app-utils/gnc-component-manager.c
 libgnucash/app-utils/gnc-entry-quickfill.c
 libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c
-libgnucash/app-utils/gnc-gettext-util.c
 libgnucash/app-utils/gnc-gsettings.c
 libgnucash/app-utils/gnc-helpers.c
 libgnucash/app-utils/gnc-help-utils.c
