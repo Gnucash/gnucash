@@ -286,6 +286,7 @@ exist but have no suitable transactions."))
                         (let ((owner (car owner-and-aging))
                               (aging (cadr owner-and-aging))
                               (aging-total (caddr owner-and-aging)))
+
                           (gnc:html-table-append-row!
                            table
                            (append
@@ -308,7 +309,8 @@ exist but have no suitable transactions."))
                                 (gnc:owner-report-text owner account)
                                 (gnc:make-gnc-monetary comm aging-total)))))
                             (options->address options receivable owner)))))
-                      owners-and-aging)
+                      (reverse owners-and-aging))
+
                      (gnc:html-table-append-row!
                       table
                       (append
@@ -320,7 +322,8 @@ exist but have no suitable transactions."))
                           (gnc:make-html-table-cell/markup
                            "total-number-cell" (gnc:make-gnc-monetary comm amt)))
                         acc-totals)))))
-                 accounts-and-owners)
+                 (reverse accounts-and-owners))
+
                 (for-each gncOwnerFree tofree)
                 (gnc:html-document-add-object! document table)))))
 
