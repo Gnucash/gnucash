@@ -1320,6 +1320,14 @@ gnc_search_dialog_create (GtkWindow *parent,
     gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
     gtk_widget_show(sw->dialog);
 
+    /* For some reason on Ubuntu 18.04 that uses Gtk3.22.30 and maybe others we
+     * have to set the scroll window content min height after the dialog has been
+     * shown to get the correct scroll window height */
+    gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW(
+                                                sw->criteria_scroll_window),
+                                                gtk_widget_get_allocated_height (
+                                                GTK_WIDGET(sw->grouping_combo)) * 1.5);
+
     // Set the style context for this dialog so it can be easily manipulated with css
     if (style_class == NULL)
         gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");

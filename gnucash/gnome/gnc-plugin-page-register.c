@@ -199,7 +199,7 @@ static void gnc_plugin_page_register_event_handler (QofInstance *entity,
         GncPluginPageRegister *page,
         GncEventData *ed);
 
-static GncInvoice * invoice_from_trans (Transaction *trans);
+static GncInvoice * invoice_from_split (Split *split);
 
 /************************************************************/
 /*                          Actions                         */
@@ -1025,10 +1025,10 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     gtk_action_set_sensitive (GTK_ACTION(action), (uri && *uri));
 
     /* Set 'ExecAssociatedInvoice' */
-    inv = invoice_from_trans(trans);
+    inv = invoice_from_split (gnc_split_register_get_current_split (reg));
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "JumpAssociatedInvoiceAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), (!(!inv)));
+    gtk_action_set_sensitive (GTK_ACTION(action), inv != NULL);
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
 
@@ -4328,37 +4328,23 @@ gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action,
 
 }
 
-static GncInvoice * invoice_from_trans (Transaction *trans)
+static GncInvoice * invoice_from_split (Split *split)
 {
     GncInvoice *invoice;
-    SplitList *splits;
+    GNCLot *lot;
 
-    g_return_if_fail (GNC_IS_TRANSACTION(trans));
-    invoice = gncInvoiceGetInvoiceFromTxn(trans);
+    if (!split)
+        return NULL;
 
-    if (invoice)
-        return invoice;
+    lot = xaccSplitGetLot (split);
+    if (!lot)
+        return NULL;
 
-    for (splits = xaccTransGetSplitList (trans); splits; splits = splits->next)
-    {
-        Split *split = splits->data;
-        GNCLot *lot;
+    invoice = gncInvoiceGetInvoiceFromLot (lot);
+    if (!invoice)
+        return NULL;
 
-        if (!split)
-            continue;
-
-        lot = xaccSplitGetLot (split);
-        if (!lot)
-            continue;
-
-        invoice = gncInvoiceGetInvoiceFromLot (lot);
-        if (!invoice)
-            continue;
-
-        return invoice;
-    }
-
-    return NULL;
+    return invoice;
 }
 
 static void
@@ -4374,8 +4360,7 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
-    invoice = invoice_from_trans (xaccSplitGetParent
-                                  (gnc_split_register_get_current_split (reg)));
+    invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
     if (invoice)
         gnc_ui_invoice_edit (NULL, invoice);
 

@@ -350,8 +350,8 @@ find_resize_col (GncHeader *header, int col)
     /* skip to the right over zero-width columns */
     while ((col + 1 < style->ncols) &&
             (cd = gnucash_style_get_cell_dimensions (style, 0, col + 1)) &&
-            (cd->pixel_width == 0))
-        col++;
+            cd && (cd->pixel_width == 0))
+        ++col;
 
     /* now go back left till we have a resizable column */
     while (col >= start)

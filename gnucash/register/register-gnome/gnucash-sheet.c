@@ -564,7 +564,8 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     height = alloc.height;
 
     block = gnucash_sheet_get_block (sheet, vcell_loc);
-
+    if (!block)
+        return;
     y = block->origin_y;
     block_height = block->style->dimensions->height;
 
@@ -644,6 +645,8 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
 
     start_block = gnucash_sheet_get_block (sheet, start_loc);
     end_block = gnucash_sheet_get_block (sheet, end_loc);
+    if (!(start_block && end_block))
+        return;
 
     y = start_block->origin_y;
     block_height = (end_block->origin_y +
@@ -2228,7 +2231,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
     block = gnucash_sheet_get_block (sheet, vcell_loc);
     style = gnucash_sheet_get_style_from_table (sheet, vcell_loc);
 
-    if (block == NULL)
+    if (!block)
         return FALSE;
 
     table = sheet->table;
@@ -2275,6 +2278,9 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
         VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
         block = gnucash_sheet_get_block (sheet, vcell_loc);
+        if (!block)
+            continue;
+
         style = block->style;
 
         if (!style)
@@ -2409,6 +2415,9 @@ gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
             VirtualCellLocation vcell_loc = { i, j };
 
             block = gnucash_sheet_get_block (sheet, vcell_loc);
+
+            if (!block)
+                continue;
 
             block->origin_x = width;
             block->origin_y = height;

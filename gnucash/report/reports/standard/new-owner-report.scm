@@ -179,10 +179,10 @@
 (define (txn-is-payment? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 
-(define (make-aging-table splits to-date reverse? date-type currency)
+(define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
         (aging-list (gnc:owner-splits->aging-list
-                     splits num-buckets to-date date-type reverse?)))
+                     splits num-buckets to-date date-type (not payable?))))
 
     (gnc:html-table-set-col-headers!
      table (list (_ "Prepayments")
@@ -246,12 +246,12 @@
       (lp (cdr link-rows) #f))))
 
 (define (add-owner-table table splits acc start-date end-date date-type
-                         used-columns reverse? link-option)
+                         used-columns payable? link-option)
   (define currency (xaccAccountGetCommodity acc))
   (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
   (define (print-totals total debit credit tax sale)
     (define (total-cell cell)
-      (gnc:make-html-table-cell/markup "total-number-cell" cell))
+      (gnc:make-html-table-cell/markup "total-label-cell" cell))
     (define (make-cell amt)
       (total-cell (gnc:make-gnc-monetary currency amt)))
     (define span
@@ -295,7 +295,7 @@
             1 (+ columns-used-size link-cols)
             (make-aging-table splits
                               end-date
-                              reverse? date-type currency)))))
+                              payable? date-type currency)))))
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
@@ -446,8 +446,8 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (value (xaccSplitGetAmount split))
-             (value (if reverse? (- value) value))
+             (value (xaccTransGetAccountAmount txn acc))
+             (value (if payable? (- value) value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn))
              (invoice-splits
               (and (txn-is-invoice? txn)
@@ -621,33 +621,17 @@ invoices and amounts.")))))
         (loop (cdr list-of-substrings)
               (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
-(define (setup-job-query q owner accounts end-date)
-  (let ((guid (gncOwnerReturnGUID owner)))
+(define (setup-query q owner accounts end-date job?)
+  (let ((guid (gncOwnerReturnGUID (if job? owner (gncOwnerGetEndOwner owner))))
+        (last-param (if job? QOF-PARAM-GUID OWNER-PARENTG)))
     (qof-query-add-guid-match
-     q  (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER QOF-PARAM-GUID)
+     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER last-param)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q (list SPLIT-LOT OWNER-FROM-LOT QOF-PARAM-GUID)
+     q (list SPLIT-LOT OWNER-FROM-LOT last-param)
      guid QOF-QUERY-OR)
     (qof-query-add-guid-match
-     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER QOF-PARAM-GUID)
-     guid QOF-QUERY-OR)
-    (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
-    (qof-query-set-book q (gnc-get-current-book))
-    (qof-query-set-sort-order q (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())
-    q))
-
-(define (setup-query q owner accounts end-date)
-  (let ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
-    (qof-query-add-guid-match
-     q (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER OWNER-PARENTG)
-     guid QOF-QUERY-OR)
-    (qof-query-add-guid-match
-     q (list SPLIT-LOT OWNER-FROM-LOT OWNER-PARENTG)
-     guid QOF-QUERY-OR)
-    (qof-query-add-guid-match
-     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER OWNER-PARENTG)
+     q (list SPLIT-LOT INVOICE-FROM-LOT INVOICE-OWNER last-param)
      guid QOF-QUERY-OR)
     (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
@@ -694,7 +678,7 @@ invoices and amounts.")))))
    (gnc:make-html-text
     (gnc:html-markup-br))))
 
-(define (reg-renderer report-obj type reverse?)
+(define (reg-renderer report-obj type)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
     (gnc:option-value
@@ -718,6 +702,8 @@ invoices and amounts.")))))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
+         (payable? (memv (gncOwnerGetType (gncOwnerGetEndOwner owner))
+                         (list GNC-OWNER-VENDOR GNC-OWNER-EMPLOYEE)))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
@@ -741,15 +727,10 @@ invoices and amounts.")))))
         (_ "This report requires a valid AP/AR account to be available."))))
 
      (else
-      (if (eqv? GNC-OWNER-JOB type)
-          (setup-job-query query owner accounts end-date)
-          (setup-query query owner accounts end-date))
+      (setup-query query owner accounts end-date (eqv? GNC-OWNER-JOB type))
 
       (let ((splits (xaccQueryGetSplitsUniqueTrans query)))
         (qof-query-destroy query)
-
-        (gnc:html-document-set-title!
-         document (string-append report-title ": " (gncOwnerGetName owner)))
 
         (gnc:html-document-set-headline!
          document (gnc:html-markup
@@ -800,7 +781,7 @@ invoices and amounts.")))))
                                               (xaccAccountGetName account)))))))
 
                    (add-owner-table table splits account start-date end-date
-                                    date-type used-columns reverse? link-option)))
+                                    date-type used-columns payable? link-option)))
                accounts-and-splits))
 
              (else
@@ -841,16 +822,16 @@ invoices and amounts.")))))
     document))
 
 (define (customer-renderer obj)
-  (reg-renderer obj GNC-OWNER-CUSTOMER #f))
+  (reg-renderer obj GNC-OWNER-CUSTOMER))
 
 (define (vendor-renderer  obj)
-  (reg-renderer obj GNC-OWNER-VENDOR #t))
+  (reg-renderer obj GNC-OWNER-VENDOR))
 
 (define (employee-renderer obj)
-  (reg-renderer obj GNC-OWNER-EMPLOYEE #t))
+  (reg-renderer obj GNC-OWNER-EMPLOYEE))
 
 (define (job-renderer obj)
-  (reg-renderer obj GNC-OWNER-JOB #f))
+  (reg-renderer obj GNC-OWNER-JOB))
 
 (gnc:define-report
  'version 1

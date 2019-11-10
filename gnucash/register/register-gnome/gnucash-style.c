@@ -158,6 +158,10 @@ compute_row_width (BlockDimensions *dimensions, int row, int col1, int col2)
     {
         CellDimensions *cd;
         cd = g_table_index (dimensions->cell_dimensions, row, j);
+
+        if (!cd)
+            continue;
+
         width += cd->pixel_width;
     }
 
@@ -190,7 +194,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                                 row, col);
 
             cell = gnc_cellblock_get_cell (cursor, row, col);
-            if (!cell)
+            if (!cell || !cd)
                 continue;
 
             text = cell->sample_text;
@@ -228,7 +232,6 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
             cd->pixel_width = MAX (cd->pixel_width, width);
         }
 
-        g_table_index (dimensions->cell_dimensions, row, 0);
         dimensions->height += max_height;
     }
 
@@ -238,6 +241,9 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
         {
             cd = g_table_index (dimensions->cell_dimensions,
                                 row, col);
+            if (!cd)
+                continue;
+
             cd->pixel_height = max_height;
         }
     }
@@ -277,6 +283,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
     {
         cd = g_table_index (cd_table, 0, col);
 
+        if (!cd)
+            continue;
+
         widths[col] = cd->pixel_width;
         width += cd->pixel_width;
     }
@@ -292,6 +301,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                 continue;
 
             cd = g_table_index (cd_table, 0, col);
+
+            if (!cd)
+                continue;
 
             cd->pixel_width += (default_width - width);
             widths[col] = cd->pixel_width;
@@ -314,6 +326,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                 continue;
 
             cd = g_table_index (cd_table, 0, col);
+
+            if (!cd)
+                continue;
 
             cd->pixel_width += (default_width - width);
 
@@ -354,6 +369,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
             {
                 cd = g_table_index (cd_table, row, col);
 
+                if (!cd)
+                    continue;
+
                 cd->pixel_width = widths[col];
             }
     }
@@ -390,7 +408,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                     continue;
                 }
 
-                if (!cd->can_span_over)
+                if (!cd || !cd->can_span_over)
                     continue;
 
                 if (cd_span == NULL)
@@ -440,6 +458,9 @@ compute_cell_origins_x (BlockDimensions *dimensions)
 
             cd = g_table_index (dimensions->cell_dimensions, i, j);
 
+            if (!cd)
+                continue;
+
             cd->origin_x = x;
             x += cd->pixel_width;
         }
@@ -458,9 +479,17 @@ compute_cell_origins_y (BlockDimensions *dimensions)
         for (j = 0; j < dimensions->ncols; j++)
         {
             cd = g_table_index (dimensions->cell_dimensions, i, j);
+
+            if (!cd)
+                continue;
+
             cd->origin_y = y;
         }
         cd = g_table_index (dimensions->cell_dimensions, i, 0);
+
+        if (!cd)
+            continue;
+
         y += cd->pixel_height;
     }
 }
@@ -773,6 +802,9 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
     table = sheet->table;
 
     vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+
+    if (!vcell)
+        return NULL;
 
     cursor = vcell->cellblock;
 
