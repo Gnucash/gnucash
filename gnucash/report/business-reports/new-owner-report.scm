@@ -348,29 +348,33 @@
             #f)))
         payment-splits)))))
 
-  (define (make-payment->invoices-table split payment-splits currency)
-    (if (null? payment-splits)
-        (list (list (gnc:make-html-table-cell/size 1 2 (_ "Prepayments"))
-                    (make-cell
-                     (gnc:make-gnc-monetary
-                      currency (- (xaccSplitGetAmount split))))))
-        (map
-         (lambda (inv-splits)
-           (let ((inv (car inv-splits))
-                 (inv-split (cadr inv-splits)))
-             (list
-              (qof-print-date
-               (gncInvoiceGetDatePosted inv))
-              (gnc:make-html-text
-               (gnc:html-markup-anchor
-                (gnc:invoice-anchor-text inv)
-                (gnc-get-num-action
-                 (gncInvoiceGetPostedTxn inv) #f)))
-              (make-cell
-               (gnc:make-gnc-monetary
-                currency
-                (- (xaccSplitGetAmount inv-split)))))))
-         payment-splits)))
+  (define (make-payment->invoices-table amount payment-splits currency)
+    (let lp ((payment-splits payment-splits)
+             (amount (- amount))
+             (result '()))
+      (cond
+       ((null? payment-splits)
+        (reverse
+         (if (positive? amount)
+             (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Prepayments"))
+                         (make-cell (gnc:make-gnc-monetary currency amount)))
+                   result)
+             result)))
+       (else
+        (let* ((payment-split (car payment-splits))
+               (inv (car payment-split))
+               (inv-split (cadr payment-split))
+               (inv-amount (xaccSplitGetAmount inv-split)))
+          (lp (cdr payment-splits)
+              (- amount inv-amount)
+              (cons (list
+                     (qof-print-date (gncInvoiceGetDatePosted inv))
+                     (gnc:make-html-text
+                      (gnc:html-markup-anchor
+                       (gnc:invoice-anchor-text inv)
+                       (gnc-get-num-action (gncInvoiceGetPostedTxn inv) #f)))
+                     (make-cell (gnc:make-gnc-monetary currency inv-amount)))
+                    result)))))))
 
   (define (split->type-str split)
     (let* ((txn (xaccSplitGetParent split))
@@ -494,7 +498,7 @@
             ((and payment-splits (eq? link-option 'simple))
              (make-payment->invoices-list invoice payment-splits))
             ((and payment-splits (eq? link-option 'detailed))
-             (make-payment->invoices-table split payment-splits currency))
+             (make-payment->invoices-table value payment-splits currency))
             ;; some error occurred, show 1 line containing empty-list
             (else '(()))))
 
