@@ -252,7 +252,7 @@
   (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
   (define (print-totals total debit credit tax sale)
     (define (total-cell cell)
-      (gnc:make-html-table-cell/markup "total-label-cell" cell))
+      (gnc:make-html-table-cell/markup "total-number-cell" cell))
     (define (make-cell amt)
       (total-cell (gnc:make-gnc-monetary currency amt)))
     (define span
@@ -264,7 +264,8 @@
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (append
-          (list (total-cell (_ "Period Totals")))
+          (list (gnc:make-html-table-cell/markup
+                 "total-label-cell" (_ "Period Totals")))
           (addif (>= span 2) (gnc:make-html-table-cell/size 1 (1- span) ""))
           (addif (sale-col used-columns)   (make-cell sale))
           (addif (tax-col used-columns)    (make-cell tax))
@@ -278,7 +279,8 @@
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (append
-          (list (total-cell
+          (list (gnc:make-html-table-cell/markup
+                 "total-label-cell"
                  (if (negative? total)
                      (_ "Total Credit")
                      (_ "Total Due")))
