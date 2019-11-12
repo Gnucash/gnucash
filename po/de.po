@@ -25,8 +25,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-09-29 21:34+0200\n"
-"PO-Revision-Date: 2019-09-29 21:44+0200\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
+"PO-Revision-Date: 2019-11-12 21:44+0200\n"
+"Last-Translator: pianoslum <pianoslum@mailbox.org>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -27429,11 +27429,11 @@ msgstr "Eine Spalte mit der Differenz zwischen Budget (Soll) und Ist anzeigen."
 
 #: gnucash/report/standard-reports/budget.scm:58
 msgid "Use accumulated amounts"
-msgstr ""
+msgstr "Aufsummierte Buchungen anzeigen"
 
 #: gnucash/report/standard-reports/budget.scm:59
 msgid "Values are accumulated across periods."
-msgstr ""
+msgstr "Werte werden über Perioden aufsummiert."
 
 #: gnucash/report/standard-reports/budget.scm:60
 msgid "Show Column with Totals"
@@ -27565,7 +27565,7 @@ msgstr "Differenz"
 #. of only using the budget-period amounts.
 #: gnucash/report/standard-reports/budget.scm:702
 msgid "using accumulated amounts"
-msgstr ""
+msgstr "aufsummierte Beträge verwenden"
 
 #: gnucash/report/standard-reports/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
