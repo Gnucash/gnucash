@@ -1147,14 +1147,14 @@ flawed. see report-utilities.scm. please update reports.")
               TXN-TYPE-PAYMENT)
         (let* ((txn (xaccSplitGetParent (car splits)))
                (payment (apply + (map xaccSplitGetAmount
-                                      (xaccTransGetPaymentAcctSplitList txn))))
+                                      (xaccTransGetAPARAcctSplitList txn #f))))
                (overpayment
                 (fold
                  (lambda (inv-and-splits payment-left)
                    (if (member txn (map xaccSplitGetParent (cdr inv-and-splits)))
                        (- payment-left (gncInvoiceGetTotal (car inv-and-splits)))
                        payment-left))
-                 (if receivable? payment (- payment)) invoices-and-splits)))
+                 (if receivable? (- payment) payment) invoices-and-splits)))
           (gnc:pk 'payment (car splits) payment "->" overpayment)
           (when (positive? overpayment)
             (addbucket! (1- num-buckets) (- overpayment)))
