@@ -395,10 +395,12 @@
           (gnc:invoice-anchor-text invoice)
           (gncInvoiceGetTypeString invoice))))
        ((txn-is-payment? txn)
-        (gnc:make-html-text
-         (gnc:html-markup-anchor
-          (gnc:split-anchor-text split)
-          (_ "Payment"))))
+        (apply gnc:make-html-text
+               (map (lambda (pmt-split)
+                      (gnc:html-markup-anchor
+                       (gnc:split-anchor-text pmt-split)
+                       (_ "Payment")))
+                    (xaccTransGetPaymentAcctSplitList txn))))
        (else (_ "Unknown")))))
 
   (define (invoice->sale invoice)
