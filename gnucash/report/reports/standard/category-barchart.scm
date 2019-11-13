@@ -25,6 +25,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 (define-module (gnucash reports standard category-barchart))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-9))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -353,7 +354,7 @@ developing over time"))
                (let ((ignore-closing? (not (gnc:account-is-inc-exp? acc))))
                  (cons acc
                        (map
-                        (if (reverse-balance? acc) gnc:monetary-neg identity)
+                        (if reverse-balance? gnc:monetary-neg identity)
                         (gnc:account-get-balances-at-dates
                          acc dates-list
                          #:split->amount
@@ -682,39 +683,62 @@ developing over time"))
     (gnc:report-finished)
     document))
 
+(define-record-type :variant
+  (make-variant reportname acct-types intervals? menuname menutip reverse? uuid)
+  variant?
+  (reportname get-reportname)
+  (acct-types get-acct-types)
+  (intervals? get-intervals?)
+  (menuname   get-menuname)
+  (menutip    get-menutip)
+  (reverse?   get-reverse?)
+  (uuid       get-uuid))
+
+(define variants
+  (list
+   (make-variant reportname-income
+                 (list ACCT-TYPE-INCOME)
+                 #t menuname-income menutip-income
+                 #t category-barchart-income-uuid)
+
+   (make-variant reportname-expense
+                 (list ACCT-TYPE-EXPENSE)
+                 #t menuname-expense menutip-expense
+                 #f category-barchart-expense-uuid)
+
+   (make-variant reportname-assets
+                 (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+                       ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+                       ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+                       ACCT-TYPE-CURRENCY)
+                 #f menuname-assets menutip-assets
+                 #f category-barchart-asset-uuid)
+
+   (make-variant reportname-liabilities
+                 (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+                       ACCT-TYPE-CREDITLINE)
+                 #f menuname-liabilities menutip-liabilities
+                 #t category-barchart-liability-uuid)))
+
 (for-each
- (lambda (l)
-   (let ((tip-and-rev (cddddr l)))
-     (gnc:define-report
-      'version 1
-      'name (car l)
-      'report-guid (car (reverse l))
-      'menu-path (if (caddr l)
-                     (list gnc:menuname-income-expense)
-                     (list gnc:menuname-asset-liability))
-      'menu-name (cadddr l)
-      'menu-tip (car tip-and-rev)
-      'options-generator (lambda () (options-generator (cadr l)
-                                                       (cadr tip-and-rev)
-                                                       (caddr l)))
-      'renderer (lambda (report-obj)
-                  (category-barchart-renderer report-obj
-                                              (car l)
-                                              (car (reverse l))
-                                              (cadr l)
-                                              (caddr l))))))
- (list
-  ;; reportname, account-types, do-intervals?,
-  ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) category-barchart-income-uuid)
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) category-barchart-expense-uuid)
-  (list reportname-assets
-        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
-              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
-              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
-              ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f) category-barchart-asset-uuid)
-  (list reportname-liabilities
-        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
-              ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t) category-barchart-liability-uuid)))
+ (lambda (variant)
+   (gnc:define-report
+    'version 1
+    'name (get-reportname variant)
+    'report-guid (get-uuid variant)
+    'menu-path (if (get-intervals? variant)
+                   (list gnc:menuname-income-expense)
+                   (list gnc:menuname-asset-liability))
+    'menu-name (get-menuname variant)
+    'menu-tip (get-menutip variant)
+    'options-generator (lambda ()
+                         (options-generator (get-acct-types variant)
+                                            (get-reverse? variant)
+                                            (get-intervals? variant)))
+    'renderer (lambda (report-obj)
+                (category-barchart-renderer report-obj
+                                            (get-reportname variant)
+                                            (get-uuid variant)
+                                            (get-acct-types variant)
+                                            (get-intervals? variant)))))
+ variants)
