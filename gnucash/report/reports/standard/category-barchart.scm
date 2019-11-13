@@ -470,38 +470,28 @@ developing over time"))
           (set! work-to-do (count-accounts 1 topl-accounts))
 
           ;; Sort the account list according to the account code field.
-          (set! all-data (sort
-                          (filter (lambda (l)
-                                    (not (zero?
-                                          (gnc:gnc-monetary-amount
-                                           (apply gnc:monetary+ (cadr l))))))
-                                  (traverse-accounts 1 topl-accounts))
-                          (cond
-                           ((eq? sort-method 'acct-code)
-                            (lambda (a b)
-                              (string<? (xaccAccountGetCode (car a))
-                                        (xaccAccountGetCode (car b)))))
-                           ((eq? sort-method 'alphabetical)
-                            (lambda (a b)
-                              (string<? ((if show-fullname?
-                                             gnc-account-get-full-name
-                                             xaccAccountGetName) (car a))
-                                        ((if show-fullname?
-                                             gnc-account-get-full-name
-                                             xaccAccountGetName) (car b)))))
-                           (else
-                            (lambda (a b)
-                              (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
-                                 (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
-          ;; Or rather sort by total amount?
-          ;;(< (apply + (cadr a))
-          ;;   (apply + (cadr b))))))
-          ;; Other sort criteria: max. amount, standard deviation of amount,
-          ;; min. amount; ascending, descending. FIXME: Add user options to
-          ;; choose sorting.
-
-
-          ;;(gnc:warn "all-data" all-data)
+          (set! all-data
+            (sort
+             (filter (lambda (l)
+                       (not (zero? (gnc:gnc-monetary-amount
+                                    (apply gnc:monetary+ (cadr l))))))
+                     (traverse-accounts 1 topl-accounts))
+             (case sort-method
+               ((alphabetical)
+                (lambda (a b)
+                  (if show-fullname?
+                      (string<? (gnc-account-get-full-name (car a))
+                                (gnc-account-get-full-name (car b)))
+                      (string<? (xaccAccountGetName (car a))
+                                (xaccAccountGetName (car b))))))
+               ((acct-code)
+                (lambda (a b)
+                  (string<? (xaccAccountGetCode (car a))
+                            (xaccAccountGetCode (car b)))))
+               ((amount)
+                (lambda (a b)
+                  (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
+                     (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
 
           ;; Proceed if the data is non-zeros
           (if
