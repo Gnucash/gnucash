@@ -261,7 +261,6 @@ developing over time"))
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-chart))
-         (table (gnc:make-html-table))
          (topl-accounts (gnc:filter-accountlist-type
                          account-types
                          (gnc-account-get-children-sorted
@@ -611,62 +610,51 @@ developing over time"))
 
              (gnc:report-percent-done 98)
              (gnc:html-document-add-object! document chart)
-             (if show-table?
-                 (let ((scu (gnc-commodity-get-fraction report-currency)))
-                   (gnc:html-table-append-column! table date-string-list)
 
-                   (for-each
+             (when show-table?
+               (let ((table (gnc:make-html-table))
+                     (scu (gnc-commodity-get-fraction report-currency))
+                     (cols>1? (> (length all-data) 1)))
+
+                 (define (make-cell contents)
+                   (gnc:make-html-table-cell/markup "number-cell" contents))
+
+                 (define (monetary-round mon)
+                   (gnc:make-gnc-monetary
+                    report-currency
+                    (gnc-numeric-convert
+                     (gnc:gnc-monetary-amount mon)
+                     scu GNC-HOW-RND-ROUND)))
+
+                 (for-each
+                  (lambda (date row)
+                    (gnc:html-table-append-row!
+                     table (map make-cell (append (list date)
+                                                  (map monetary-round row)
+                                                  (if cols>1?
+                                                      (list
+                                                       (monetary-round
+                                                        (apply gnc:monetary+ row)))
+                                                      '())))))
+                  date-string-list
+                  (apply zip (map cadr all-data)))
+
+                 (gnc:html-table-set-col-headers!
+                  table
+                  (append
+                   (list (_ "Date"))
+                   (map
                     (lambda (col)
-                      (gnc:html-table-append-column!
-                       table
-                       (map
-                        (lambda (mon)
-                          (gnc:make-gnc-monetary
-                           report-currency
-                           (gnc-numeric-convert
-                            (gnc:gnc-monetary-amount mon)
-                            scu GNC-HOW-RND-ROUND)))
-                        col)))
-                    (map cadr all-data))
+                      (cond
+                       ((string? col) col)
+                       (show-fullname? (gnc-account-get-full-name col))
+                       (else (xaccAccountGetName col))))
+                    (map car all-data))
+                   (if cols>1?
+                       (list (_ "Grand Total"))
+                       '())))
 
-                   (gnc:html-table-set-col-headers!
-                    table
-                    (append
-                     (list (_ "Date"))
-                     (map (lambda (pair)
-                            (if (string? (car pair))
-                                (car pair)
-                                ((if show-fullname?
-                                     gnc-account-get-full-name
-                                     xaccAccountGetName) (car pair))))
-                          all-data)
-                     (if (> (gnc:html-table-num-columns table) 2)
-                         (list (_ "Grand Total"))
-                         '())))
-
-                   (if (> (gnc:html-table-num-columns table) 2)
-                       (letrec
-                           ((sumtot
-                             (lambda (row)
-                               (if (null? row)
-                                   '()
-                                   (cons (sumrow (car row)) (sumtot (cdr row))))))
-                            (sumrow
-                             (lambda (row)
-                               (if (not (null? row))
-                                   (gnc:monetary+ (car row) (sumrow (cdr row)))
-                                   (gnc:make-gnc-monetary report-currency 0)))))
-                         (gnc:html-table-append-column!
-                          table
-                          (sumtot (apply zip (map cadr all-data))))))
-                   ;; set numeric columns to align right
-                   (for-each
-                    (lambda (col)
-                      (gnc:html-table-set-col-style!
-                       table col "td"
-                       'attribute (list "class" "number-cell")))
-                    '(1 2 3 4 5 6 7 8 9 10 11 12 13 14))
-                   (gnc:html-document-add-object! document table))))
+                 (gnc:html-document-add-object! document table))))
 
            ;; else if empty data
            (gnc:html-document-add-object!
