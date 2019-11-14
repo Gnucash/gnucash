@@ -89,6 +89,8 @@
 (define optname-transaction-matcher (N_ "Transaction Filter"))
 (define optname-transaction-matcher-regex
   (N_ "Use regular expressions for transaction filter"))
+(define optname-transaction-matcher-exclude
+  (N_ "Transaction Filter excludes matched strings"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-closing-transactions (N_ "Closing transactions"))
@@ -602,6 +604,13 @@ blank, which will disable the filter.")
     (_ "By default the transaction filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
 tags within description, notes or memo. ")
+    #f))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    pagename-filter optname-transaction-matcher-exclude
+    "i3"
+    (_ "If this option is selected, transactions matching filter are excluded.")
     #f))
 
   (gnc:register-trep-option
@@ -1969,6 +1978,8 @@ be excluded from periodic reporting.")
                      (lambda () (make-regexp transaction-matcher))
                      (const 'invalid-transaction-regex))
                    'no-guile-regex-support)))
+         (transaction-filter-exclude?
+          (opt-val pagename-filter optname-transaction-matcher-exclude))
          (reconcile-status-filter
           (keylist-get-info reconcile-status-list
                             (opt-val pagename-filter optname-reconcile-status)
@@ -2043,6 +2054,11 @@ be excluded from periodic reporting.")
     ;; This will, by default, sort the split list by ascending posted-date.
     (define (date-comparator? X Y)
       (generic-less? X Y 'date 'none #t))
+
+    (define (transaction-filter-match split)
+      (or (match? (xaccTransGetDescription (xaccSplitGetParent split)))
+          (match? (xaccTransGetNotes (xaccSplitGetParent split)))
+          (match? (xaccSplitGetMemo split))))
 
     (cond
      ((or (null? c_account_1)
@@ -2129,9 +2145,9 @@ be excluded from periodic reporting.")
                     ((include) (is-filter-member split c_account_2))
                     ((exclude) (not (is-filter-member split c_account_2))))
                   (or (string-null? transaction-matcher)
-                      (match? (xaccTransGetDescription trans))
-                      (match? (xaccTransGetNotes trans))
-                      (match? (xaccSplitGetMemo split)))
+                      (if transaction-filter-exclude?
+                          (not (transaction-filter-match split))
+                          (transaction-filter-match split)))
                   (or (not custom-split-filter)
                       (custom-split-filter split)))))
          splits))
