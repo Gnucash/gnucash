@@ -45,7 +45,8 @@
 )
 
 (define html-doc-header-no-title
-"<html dir='auto'>\n\
+"<!DOCTYPE html>
+<html dir='auto'>\n\
 <head>\n\
 <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n\
 </head><body>")
@@ -87,7 +88,8 @@
 
     (gnc:html-document-set-title! test-doc "HTML Document Title")
     (test-equal "HTML Document - Render with title"
-"<html dir='auto'>\n\
+"<!DOCTYPE html>
+<html dir='auto'>\n\
 <head>\n\
 <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n\
 <title>\n\
