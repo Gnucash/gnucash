@@ -143,6 +143,7 @@
                 "body, p, table, tr, td { vertical-align: top; " text-cell-font-info " }\n"
                 "tr.alternate-row { background: " alternate-row-color " }\n"
                 "tr { page-break-inside: avoid !important;}\n"
+                "td, th { border-color: grey }\n"
                 "th.column-heading-left { text-align: left; " number-header-font-info " }\n"
                 "th.column-heading-center { text-align: center; " number-header-font-info " }\n"
                 "th.column-heading-right { text-align: right; " number-header-font-info " }\n"
