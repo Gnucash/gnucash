@@ -283,7 +283,7 @@ set_account (xmlNodePtr node, struct entry_pdata* pdata,
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (acc, FALSE);
 
     if (func)
@@ -314,7 +314,7 @@ set_taxtable (xmlNodePtr node, struct entry_pdata* pdata,
         gncTaxTableDecRef (taxtable);
 
     func (pdata->entry, taxtable);
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 
@@ -339,7 +339,7 @@ entry_guid_handler (xmlNodePtr node, gpointer entry_pdata)
         gncEntrySetGUID (pdata->entry, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -579,7 +579,7 @@ entry_order_handler (xmlNodePtr node, gpointer entry_pdata)
     gncOrderAddEntry (order, pdata->entry);
     gncOrderCommitEdit (order);
 
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 
@@ -604,7 +604,7 @@ entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
     gncInvoiceAddEntry (invoice, pdata->entry);
     gncInvoiceCommitEdit (invoice);
 
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 
@@ -629,7 +629,7 @@ entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
     gncBillAddEntry (invoice, pdata->entry);
     gncInvoiceCommitEdit (invoice);
 
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 

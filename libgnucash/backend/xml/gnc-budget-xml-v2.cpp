@@ -109,7 +109,7 @@ budget_id_handler (xmlNodePtr node, gpointer bgt)
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     qof_instance_set_guid (QOF_INSTANCE (bgt), guid);
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 

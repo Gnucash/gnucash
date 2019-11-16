@@ -214,7 +214,7 @@ invoice_guid_handler (xmlNodePtr node, gpointer invoice_pdata)
         gncInvoiceSetGUID (pdata->invoice, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -296,7 +296,7 @@ invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
     g_return_val_if_fail (guid, FALSE);
     term = gnc_billterm_xml_find_or_create (pdata->book, guid);
     g_assert (term);
-    g_free (guid);
+    guid_free (guid);
     gncInvoiceSetTerms (pdata->invoice, term);
 
     return TRUE;
@@ -312,7 +312,7 @@ invoice_posttxn_handler (xmlNodePtr node, gpointer invoice_pdata)
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     txn = xaccTransLookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (txn, FALSE);
 
     gncInvoiceSetPostedTxn (pdata->invoice, txn);
@@ -329,7 +329,7 @@ invoice_postlot_handler (xmlNodePtr node, gpointer invoice_pdata)
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     lot = gnc_lot_lookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (lot, FALSE);
 
     gncInvoiceSetPostedLot (pdata->invoice, lot);
@@ -346,7 +346,7 @@ invoice_postacc_handler (xmlNodePtr node, gpointer invoice_pdata)
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (acc, FALSE);
 
     gncInvoiceSetPostedAcc (pdata->invoice, acc);

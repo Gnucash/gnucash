@@ -121,7 +121,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
 
     guid = dom_tree_to_guid (node);
     qof_instance_set_guid (QOF_INSTANCE (book), guid);
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }

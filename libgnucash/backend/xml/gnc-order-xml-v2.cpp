@@ -161,7 +161,7 @@ order_guid_handler (xmlNodePtr node, gpointer order_pdata)
         gncOrderSetGUID (pdata->order, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }

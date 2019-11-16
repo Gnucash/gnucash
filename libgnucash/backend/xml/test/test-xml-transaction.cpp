@@ -90,7 +90,7 @@ find_appropriate_node (xmlNodePtr node, Split* spl)
                 {
                     account_guid_good = TRUE;
                 }
-                g_free (accid);
+                guid_free (accid);
             }
 
             if (account_guid_good && amount_good)
@@ -116,10 +116,10 @@ equals_node_val_vs_split_internal (xmlNodePtr node, Split* spl)
 
             if (!guid_equal (id, xaccSplitGetGUID (spl)))
             {
-                g_free (id);
+                guid_free (id);
                 return "ids differ";
             }
-            g_free (id);
+            guid_free (id);
         }
         else if (g_strcmp0 ((char*)mark->name, "split:memo") == 0)
         {
@@ -191,10 +191,10 @@ equals_node_val_vs_split_internal (xmlNodePtr node, Split* spl)
 
             if (!guid_equal (id, xaccAccountGetGUID (account)))
             {
-                g_free (id);
+                guid_free (id);
                 return "accounts differ";
             }
-            g_free (id);
+            guid_free (id);
         }
     }
     return NULL;
