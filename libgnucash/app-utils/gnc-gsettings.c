@@ -28,8 +28,6 @@
 #include <string.h>
 #include "gnc-gsettings.h"
 #include "gnc-path.h"
-#include "guile-mappings.h"
-#include <libguile.h>
 #include "qof.h"
 #include "gnc-prefs-p.h"
 
