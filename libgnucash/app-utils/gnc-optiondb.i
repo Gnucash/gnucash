@@ -112,15 +112,6 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
     return scm_guid;
 }
 
-
-/* Not needed now, the default template will do this
-template <> inline SCM
-scm_from_value<QofQuery*>(const QofQuery* value)
-{
-    return SCM_BOOL_F;
-}
-*/
-
 /* Account is actually a typedef for struct account_s and SWIG insists on using
  * the struct name (i.e. account_s) in C++ and the alias (i.e. Account) in
  * C. Oddly the compiler's type resolution also fails to consider them the same
@@ -141,14 +132,6 @@ scm_from_value<GncOptionAccount_sList>(GncOptionAccount_sList value)
 
     return s_list;
 }
-/* default template
-template <>inline SCM
-    scm_from_value<(const std::vector<std::pair<std::string, std::string>>&)
-{
-    return SCM_BOOL_F;
-}
-*/
-
 
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
@@ -164,16 +147,7 @@ scm_to_value<std::string>(SCM new_value)
     free(strval);
     return retval;
 }
-/*
-template <> inline std::string
-scm_to_value<char*>(SCM new_value)
-{
-    auto strval = scm_to_utf8_stringn(new_value, nullptr);
-    std::string retval{strval};
-    free(strval);
-    return retval;
-}
-*/
+
 template <> inline int
 scm_to_value<int>(SCM new_value)
 {
@@ -363,33 +337,5 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         GncOption_set_value_from_scm(&(db_opt->get()), new_value);
     }
 %}
-/*
-TEST(GncOption, test_string_scm_functions)
-{
-    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
-    auto scm_value = option.get_scm_value();
-    auto str_value = scm_to_utf8_string(scm_value);
-    EXPECT_STREQ("waldo", str_value);
-    g_free(str_value);
-    scm_value = option.get_scm_default_value();
-    str_value = scm_to_utf8_string(scm_value);
-    EXPECT_STREQ("waldo", str_value);
-    g_free(str_value);
-}
-
-TEST(GNCOption, test_budget_scm_functions)
-{
-    auto book = qof_book_new();
-    auto budget = gnc_budget_new(book);
-    GncOption option("foo", "bar", "baz", "Phony Option",
-                     QOF_INSTANCE(budget));
-    auto scm_budget = option.get_scm_value();
-    auto str_value = scm_to_utf8_string(scm_budget);
-    auto guid = guid_to_string(qof_instance_get_guid(budget));
-    EXPECT_STREQ(guid, str_value);
-    g_free(guid);
-    gnc_budget_destroy(budget);
-    qof_book_destroy(book);
-}
 
 */
