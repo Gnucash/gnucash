@@ -33,7 +33,6 @@
              (srfi srfi-1))
 
 (gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
-(gnc:module-load "gnucash/app-utils" 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

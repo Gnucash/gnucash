@@ -50,7 +50,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
-#include "guile-util.h"
 #include "gnc-guile-utils.h"
 #include "option-util.h"
 #include "guile-mappings.h"

@@ -30,7 +30,6 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-#include "guile-util.h"
 #include "gnc-guile-utils.h"
 #include "gnc-module.h"
 
