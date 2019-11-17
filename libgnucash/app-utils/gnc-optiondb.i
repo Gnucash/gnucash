@@ -72,11 +72,6 @@ scm_from_value<QofInstance*>(QofInstance* value)
 {
         return SCM_BOOL_F;
 }
-template <> inline SCM
-    scm_from_value<std::vector<GncGUID>>(std::vector<GncGUID> value)
-{
-        return SCM_BOOL_F;
-}
 
 template <> inline SCM
 scm_from_value<std::string>(std::string value)

@@ -34,7 +34,6 @@ extern "C"
 }
 #include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
-#include <guid.hpp>
 #include <libguile.h>
 #include <string>
 #include <utility>
@@ -533,7 +532,6 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<int64_t>,
                                       GncOptionValue<QofInstance*>,
                                       GncOptionValue<QofQuery*>,
-                                      GncOptionValue<std::vector<GncGUID>>,
                                       GncOptionAccountValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
