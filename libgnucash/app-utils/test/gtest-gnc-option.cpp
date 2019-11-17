@@ -246,6 +246,149 @@ TEST_F(GncRangeOption, test_setter)
     EXPECT_EQ(1.5, m_doubleoption.get_default_value());
 }
 
+using AccountPair = std::pair<GncOptionAccountList&,
+                              const GncOptionAccountTypeList&>;
+static void
+find_children(Account* account, void* data)
+{
+    auto datapair =
+        (AccountPair*)data;
+    GncOptionAccountList& list = datapair->first;
+    const GncOptionAccountTypeList& types = datapair->second;
+    if (std::find(types.begin(), types.end(),
+                  xaccAccountGetType(account)) != types.end())
+        list.push_back(account);
+}
+
+class GncOptionAccountTest : public ::testing::Test
+{
+protected:
+    GncOptionAccountTest() :
+        m_book{qof_book_new()}, m_root{gnc_account_create_root(m_book)}
+    {
+        auto create_account = [this](Account* parent, GNCAccountType type,
+                                       const char* name)->Account* {
+            auto account = xaccMallocAccount(this->m_book);
+            xaccAccountBeginEdit(account);
+            xaccAccountSetType(account, type);
+            xaccAccountSetName(account, name);
+            xaccAccountBeginEdit(parent);
+            gnc_account_append_child(parent, account);
+            xaccAccountCommitEdit(parent);
+            xaccAccountCommitEdit(account);
+            return account;
+        };
+        auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
+        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
+        auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
+        create_account(assets, ACCT_TYPE_BANK, "Bank");
+        auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
+        auto stocks = create_account(broker, ACCT_TYPE_STOCK, "Stocks");
+        create_account(stocks, ACCT_TYPE_STOCK, "AAPL");
+        create_account(stocks, ACCT_TYPE_STOCK, "MSFT");
+        create_account(stocks, ACCT_TYPE_STOCK, "HPE");
+        create_account(broker, ACCT_TYPE_BANK, "Cash Management");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Food");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Gas");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Rent");
+   }
+    ~GncOptionAccountTest()
+    {
+        xaccAccountBeginEdit(m_root);
+        xaccAccountDestroy(m_root); //It does the commit
+        qof_book_destroy(m_book);
+    }
+    GncOptionAccountList list_of_types(const GncOptionAccountTypeList& types)
+    {
+        GncOptionAccountList list;
+        AccountPair funcdata{list, types};
+        gnc_account_foreach_descendant(m_root, (AccountCb)find_children,
+                                       &funcdata);
+        return list;
+    }
+
+    QofBook* m_book;
+    Account* m_root;
+};
+
+TEST_F(GncOptionAccountTest, test_test_constructor_and_destructor)
+{
+    EXPECT_TRUE(m_book != NULL);
+    EXPECT_TRUE(QOF_IS_BOOK(m_book));
+    EXPECT_TRUE(m_root != NULL);
+    EXPECT_TRUE(GNC_IS_ACCOUNT(m_root));
+    GncOptionAccountList list{list_of_types({ACCT_TYPE_BANK})};
+    EXPECT_EQ(2, list.size());
+    list = list_of_types({ACCT_TYPE_ASSET, ACCT_TYPE_STOCK});
+    EXPECT_EQ(6, list.size());
+}
+
+TEST_F(GncOptionAccountTest, test_option_no_value_constructor)
+{
+    GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST};
+    EXPECT_TRUE(option.get_value().empty());
+    EXPECT_TRUE(option.get_default_value().empty());
+}
+
+TEST_F(GncOptionAccountTest, test_option_value_constructor)
+{
+    GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
+    GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST, acclist};
+    EXPECT_EQ(2, option.get_value().size());
+    EXPECT_EQ(2, option.get_default_value().size());
+    EXPECT_EQ(acclist[0], option.get_value()[0]);
+}
+
+TEST_F(GncOptionAccountTest, test_option_no_value_limited_constructor)
+{
+    GncOptionAccountList acclistgood{list_of_types({ACCT_TYPE_BANK})};
+    GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
+    GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST, {ACCT_TYPE_BANK}};
+    EXPECT_TRUE(option.get_value().empty());
+    EXPECT_TRUE(option.get_default_value().empty());
+    EXPECT_EQ(true, option.validate(acclistgood));
+    EXPECT_EQ(false, option.validate(acclistbad));
+}
+
+TEST_F(GncOptionAccountTest, test_option_value_limited_constructor)
+{
+    GncOptionAccountList acclistgood{list_of_types({ACCT_TYPE_BANK})};
+    GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
+    EXPECT_THROW({
+            GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
+                                         GncOptionUIType::ACCOUNT_LIST,
+                                         acclistbad, {ACCT_TYPE_BANK});
+        }, std::invalid_argument);
+
+    EXPECT_THROW({
+            GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
+                                         GncOptionUIType::ACCOUNT_SEL,
+                                         acclistgood, {ACCT_TYPE_BANK});
+        }, std::invalid_argument);
+
+    EXPECT_NO_THROW({
+            GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
+                                         GncOptionUIType::ACCOUNT_LIST,
+                                         acclistgood, {ACCT_TYPE_BANK});
+        });
+
+    EXPECT_NO_THROW({
+            GncOptionAccountList accsel{acclistgood[0]};
+            GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
+                                         GncOptionUIType::ACCOUNT_LIST,
+                                         accsel, {ACCT_TYPE_BANK});
+        });
+    GncOptionAccountValue option {"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST, acclistgood, {ACCT_TYPE_BANK}};
+    EXPECT_FALSE(option.get_value().empty());
+    EXPECT_FALSE(option.get_default_value().empty());
+    EXPECT_EQ(true, option.validate(acclistgood));
+    EXPECT_EQ(false, option.validate(acclistbad));
+}
+
 
 class GncOptionMultichoiceTest : public ::testing::Test
 {

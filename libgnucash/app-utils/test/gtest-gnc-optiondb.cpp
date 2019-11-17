@@ -69,6 +69,100 @@ TEST_F(GncOptionDBTest, test_register_string_option)
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
+/* Note: The following test-fixture code is also present in slightly different
+ * form in gtest-gnc-option.cpp.
+ */
+
+
+struct AccountTestBook
+{
+    AccountTestBook() :
+        m_book{qof_book_new()}, m_root{gnc_account_create_root(m_book)}
+    {
+        auto create_account = [this](Account* parent, GNCAccountType type,
+                                       const char* name)->Account* {
+            auto account = xaccMallocAccount(this->m_book);
+            xaccAccountBeginEdit(account);
+            xaccAccountSetType(account, type);
+            xaccAccountSetName(account, name);
+            xaccAccountBeginEdit(parent);
+            gnc_account_append_child(parent, account);
+            xaccAccountCommitEdit(parent);
+            xaccAccountCommitEdit(account);
+            return account;
+        };
+        auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
+        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
+        auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
+        create_account(assets, ACCT_TYPE_BANK, "Bank");
+        auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
+        auto stocks = create_account(broker, ACCT_TYPE_STOCK, "Stocks");
+        create_account(stocks, ACCT_TYPE_STOCK, "AAPL");
+        create_account(stocks, ACCT_TYPE_STOCK, "MSFT");
+        create_account(stocks, ACCT_TYPE_STOCK, "HPE");
+        create_account(broker, ACCT_TYPE_BANK, "Cash Management");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Food");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Gas");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Rent");
+   }
+    ~AccountTestBook()
+    {
+        xaccAccountBeginEdit(m_root);
+        xaccAccountDestroy(m_root); //It does the commit
+        qof_book_destroy(m_book);
+    }
+
+    QofBook* m_book;
+    Account* m_root;
+};
+
+TEST_F(GncOptionDBTest, test_register_account_list_option)
+{
+    AccountTestBook book;
+    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    gnc_register_account_list_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                    acclist);
+    EXPECT_EQ(4, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(3));
+}
+
+TEST_F(GncOptionDBTest, test_register_account_list_limited_option)
+{
+    AccountTestBook book;
+    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
+                                             "Phony Option", acclist,
+                                             {ACCT_TYPE_STOCK});
+    EXPECT_EQ(4, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(3));
+}
+
+TEST_F(GncOptionDBTest, test_register_account_sel_limited_option)
+{
+    AccountTestBook book;
+    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    GncOptionAccountList accsel{acclist[2]};
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
+                                             "Phony Option", accsel,
+                                             {ACCT_TYPE_STOCK});
+    EXPECT_EQ(1, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(accsel[0], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(0));
+}
+
+TEST_F(GncOptionDBTest, test_register_account_sel_limited_option_fail_construct)
+{
+    AccountTestBook book;
+    auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
+    GncOptionAccountList accsel{acclist[2]};
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                     accsel, {ACCT_TYPE_BANK});
+    EXPECT_FALSE(m_db->find_option("foo", "bar"));
+    gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
+                                             "Phony Option", acclist,
+                                             {ACCT_TYPE_BANK});
+    EXPECT_FALSE(m_db->find_option("foo", "bar"));
+}
+
 TEST_F(GncOptionDBTest, test_register_multichoice_option)
 {
     GncMultiChoiceOptionChoices choices{

@@ -93,6 +93,26 @@ private:
     std::function<void(GncOptionUIItem*)> m_set_ui_value;
 };
 
+/**
+ * Extract a list of accounts in the book having one of the GNCAccountTypes in
+ * types.
+ *
+ * Note that in Scheme it's important to use this function and not to create a
+ * list of accounts using gnc-get-descendants-sorted because the latter method
+ * produces a SWIGTYPE for the accounts that's incompatible with the SWIGTYPE
+ * used in this module.
+ *
+ * @param book The book whose accounts to search
+ * @param types A std::vector of GNCAccountType containing the Account types to
+ *             include in ther result
+ * @return A std::vector<const Account*> of all accounts in the book having the
+ *         Account types in the types parameter.
+ */
+GncOptionAccountList
+gnc_account_list_from_types(QofBook *book,
+                            const GncOptionAccountTypeList& types);
+
+
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
 /**
  * Create an empty option database.
@@ -160,20 +180,21 @@ void gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
  * of guids. Externally, both guids and account pointers may be used to set the
  * value of the option. The option always returns a list of account pointers.
  */
-void gnc_register_acount_list_limited_option(const GncOptionDBPtr& db,
+void gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
                                              const char* section,
                                              const char* name, const char* key,
                                              const char* doc_string,
-                                             std::vector<GncGUID> value);
+                                             const GncOptionAccountList& value,
+                                             GncOptionAccountTypeList&& allowed);
 
 /* Just like gnc:make-account-list-limited-option except it does not limit the
  * types of accounts that are available to the user.
  */
-void gnc_register_account_liat_option(const GncOptionDBPtr& db,
+void gnc_register_account_list_option(const GncOptionDBPtr& db,
                                       const char* section,
                                       const char* name, const char* key,
                                       const char* doc_string,
-                                      std::vector<GncGUID> value);
+                                      const GncOptionAccountList& value);
 
 /* account-sel options use the option-data as a pair; the car is ignored, the
  * cdr is a list of account-types. If the cdr is an empty list, then all account
@@ -185,7 +206,8 @@ void gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
                                              const char* section,
                                              const char* name, const char* key,
                                              const char* doc_string,
-                                             std::vector<GncGUID> value);
+                                             const GncOptionAccountList& value,
+                                             GncOptionAccountTypeList&& allowed);
 
 /* Multichoice options use the option-data as a list of vectors. Each vector
  * contains a permissible value (scheme symbol), a name, and a description

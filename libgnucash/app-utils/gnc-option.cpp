@@ -29,6 +29,23 @@ extern "C"
 #include "gnc-accounting-period.h"
 }
 
+bool
+GncOptionAccountValue::validate(const GncOptionAccountList& values) const
+{
+    if (values.empty())
+        return false;
+    if (get_ui_type() == GncOptionUIType::ACCOUNT_SEL && values.size() != 1)
+        return false;
+    if (m_allowed.empty())
+        return true;
+    for(auto account : values) {
+        if (std::find(m_allowed.begin(), m_allowed.end(),
+                      xaccAccountGetType(account)) == m_allowed.end())
+            return false;
+    }
+    return true;
+}
+
 static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 static void

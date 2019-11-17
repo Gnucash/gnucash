@@ -35,6 +35,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-gnc-optiondb-scheme")
   (test-gnc-make-text-option)
+  (test-gnc-make-account-list-options)
   (test-gnc-make-multichoice-option)
   (test-gnc-make-list-option)
   (test-gnc-make-date-option)
@@ -51,6 +52,86 @@
     (gnc-set-option option-db "foo" "bar" "pepper")
     (test-equal "pepper" (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-make-string-option"))
+
+(define (test-gnc-make-account-list-options)
+  (define (create-account book parent type name)
+    (let ((account (xaccMallocAccount book)))
+      (xaccAccountBeginEdit account)
+      (xaccAccountSetType account type)
+      (xaccAccountSetName account name)
+      (xaccAccountBeginEdit parent)
+      (gnc-account-append-child parent account)
+      (xaccAccountCommitEdit parent)
+      (xaccAccountCommitEdit account)
+      account))
+
+  (define (make-account-tree book root)
+    (let* ((assets (create-account book root ACCT-TYPE-ASSET "Assets"))
+           (liabilities  (create-account book root ACCT-TYPE-LIABILITY "Liabilities"))
+           (equity  (create-account book root ACCT-TYPE-EQUITY "Equity"))
+           (expenses  (create-account book root ACCT-TYPE-EXPENSE "Expenses"))
+           (equity  (create-account book root ACCT-TYPE-INCOME "Income"))
+           (broker  (create-account book assets ACCT-TYPE-EQUITY "broker"))
+           (stocks  (create-account book broker ACCT-TYPE-STOCK "Stocks")))
+      (create-account book assets ACCT-TYPE-BANK "Bank")
+      (create-account book stocks ACCT-TYPE-STOCK "AAPL")
+      (create-account book stocks ACCT-TYPE-STOCK "MSFT")
+      (create-account book stocks ACCT-TYPE-STOCK "HPE")
+      (create-account book broker ACCT-TYPE-BANK "Cash Management")
+      (create-account book expenses ACCT-TYPE-EXPENSE "Food")
+      (create-account book expenses ACCT-TYPE-EXPENSE "Gas")
+      (create-account book expenses ACCT-TYPE-EXPENSE "Rent")))
+
+  (define (cleanup book root)
+    (xaccAccountBeginEdit root)
+    (xaccAccountDestroy root)
+    (qof-book-destroy book))
+
+  (define (test-make-account-list-option book)
+    (test-group "test-make-account-list-option"
+    (let ((optiondb (gnc-option-db-new))
+          (acctlist (gnc-account-list-from-types book
+                               (list ACCT-TYPE-STOCK))))
+      (gnc-register-account-list-option optiondb "foo" "bar" "baz"
+                                        "Phony Option" acctlist)
+      (let ((acct-list (gnc-option-value optiondb "foo" "bar")))
+        (test-equal (length acctlist) (length acct-list))
+        (test-equal (car acctlist) (car acct-list))) )))
+
+  (define (test-make-account-list-limited-option book)
+    (test-group "test-make-account-list-option"
+    (let ((optiondb (gnc-option-db-new))
+          (acctlist (gnc-account-list-from-types book
+                               (list ACCT-TYPE-STOCK))))
+      (gnc-register-account-list-limited-option optiondb "foo" "bar" "baz"
+                                        "Phony Option" acctlist (list ACCT-TYPE-STOCK))
+      (let ((acct-list (gnc-option-value optiondb "foo" "bar")))
+        (test-equal (length acctlist) (length acct-list))
+        (test-equal (cadr acctlist) (cadr acct-list)))
+      (gnc-register-account-list-limited-option optiondb "waldo" "pepper" "baz"
+                                        "Phony Option" acctlist (list ACCT-TYPE-BANK))
+      (let ((acct-list (gnc-option-value optiondb "waldo" "pepper")))
+        (test-equal #f (length acct-list))))))
+
+  (define (test-make-account-sel-limited-option book)
+    (test-group "test-make-account-list-option"
+    (let ((optiondb (gnc-option-db-new))
+          (acctlist (gnc-account-list-from-types book
+                               (list ACCT-TYPE-STOCK))))
+      (gnc-register-account-sel-limited-option optiondb "salt" "pork" "baz"
+                                        "Phony Option" (list (cadr acctlist)) (list ACCT-TYPE-STOCK))
+      (let ((acct (gnc-option-value optiondb "salt" "pork")))
+        (test-equal (list (cadr acctlist)) acct)))))
+
+  (let* ((book (qof-book-new))
+         (root-account (gnc-account-create-root book)))
+    (test-group-with-cleanup "test-gnc-make-account-list-options"
+                             (make-account-tree book root-account)
+                             (test-make-account-list-option book)
+                             (test-make-account-list-limited-option book)
+                             (test-make-account-sel-limited-option book)
+                             (cleanup book root-account))))
+
 
 (define (test-gnc-make-multichoice-option)
 

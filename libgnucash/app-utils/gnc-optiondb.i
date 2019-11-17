@@ -57,10 +57,27 @@ extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
   */
 %inline %{
 template <typename ValueType> inline SCM
-scm_from_value(ValueType value)
-{
+    scm_from_value(ValueType value);
+/*{
     return SCM_BOOL_F;
+    }*/
+template <> inline SCM
+scm_from_value<QofQuery*>(QofQuery* value)
+{
+        return SCM_BOOL_F;
 }
+
+template <> inline SCM
+scm_from_value<QofInstance*>(QofInstance* value)
+{
+        return SCM_BOOL_F;
+}
+template <> inline SCM
+    scm_from_value<std::vector<GncGUID>>(std::vector<GncGUID> value)
+{
+        return SCM_BOOL_F;
+}
+
 template <> inline SCM
 scm_from_value<std::string>(std::string value)
 {
@@ -103,24 +120,30 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
 
 /* Not needed now, the default template will do this
 template <> inline SCM
-scm_from_value<QofQuer*>(const QofQuery* value)
+scm_from_value<QofQuery*>(const QofQuery* value)
 {
     return SCM_BOOL_F;
 }
 */
 
+/* Account is actually a typedef for struct account_s and SWIG insists on using
+ * the struct name (i.e. account_s) in C++ and the alias (i.e. Account) in
+ * C. Oddly the compiler's type resolution also fails to consider them the same
+ * so we have to use the struct name here to get the template to resolve
+ * correctly.
+ */
+using GncOptionAccount_sList = std::vector<const account_s*>;
+
 template <>inline SCM
-scm_from_value<const std::vector<GncGUID>&>(const std::vector<GncGUID>& value)
+scm_from_value<GncOptionAccount_sList>(GncOptionAccount_sList value)
 {
-    SCM s_list;
-    for (auto guid : value)
+    SCM s_list = SCM_EOL;
+    for (auto acct : value)
     {
-        auto guid_s = guid_to_string(qof_instance_get_guid(&guid));
-        auto scm_guid = scm_from_utf8_string(guid_s);
-        auto scm_guid_list1 = scm_list_1(scm_guid);
-        s_list = scm_append(scm_list_2(s_list, scm_guid_list1));
-        g_free(guid_s);
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
+        s_list = scm_append(scm_list_2(s_list, elem));
     }
+
     return s_list;
 }
 /* default template
@@ -130,6 +153,7 @@ template <>inline SCM
     return SCM_BOOL_F;
 }
 */
+
 
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
@@ -167,8 +191,21 @@ scm_to_value<int64_t>(SCM new_value)
     return scm_to_int64(new_value);
 }
 
+QofBook*
+qof_book_new()
+{
+    return static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
+}
 
+void
+qof_book_destroy(QofBook* book)
+{
+    g_object_unref(book);
+}
+
+using Account = struct account_s;
 %}
+
 %ignore OptionClassifier;
 %ignore OptionUIItem;
 %nodefaultctor GncOption;
@@ -197,7 +234,77 @@ scm_to_value<int64_t>(SCM new_value)
     $1 = &choices;
  }
 
+%typemap(in) GncOptionAccountTypeList& (GncOptionAccountTypeList types)
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_type = scm_list_ref($input, scm_from_size_t(i));
+        GNCAccountType type = (GNCAccountType)scm_to_int(s_type);
+        types.push_back(type);
+    }
+    $1 = &types;
+}
+
+%typemap(in) GncOptionAccountTypeList&& (GncOptionAccountTypeList types)
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_type = scm_list_ref($input, scm_from_size_t(i));
+        GNCAccountType type = (GNCAccountType)scm_to_int(s_type);
+        types.push_back(type);
+    }
+    $1 = &types;
+}
+
+%typemap(in) GncOptionAccountList
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_account = scm_list_ref($input, scm_from_size_t(i));
+        Account* acct = (Account*)SWIG_MustGetPtr(s_account,
+                                                  SWIGTYPE_p_account_s, 1, 0);
+        $1.push_back(acct);
+    }
+}
+
+%typemap(in) GncOptionAccountList& (GncOptionAccountList acclist)
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_account = scm_list_ref($input, scm_from_size_t(i));
+        Account* acct = (Account*)SWIG_MustGetPtr(s_account,
+                                                  SWIGTYPE_p_account_s, 1, 0);
+        acclist.push_back(acct);
+    }
+    $1 = &acclist;
+}
+
+%typemap(out) GncOptionAccountList
+{
+    $result = SCM_EOL;
+    for (auto acct : $1)
+    {
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
+        $result = scm_append(scm_list_2($result, elem));
+    }
+}
+
+%typemap(out) GncOptionAccountList&
+{
+    $result = SCM_EOL;
+    for (auto acct : *$1)
+    {
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
+        $result = scm_append(scm_list_2($result, elem));
+    }
+}
+
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
+
 %include "gnc-option.hpp"
 %include "gnc-optiondb.hpp"
 

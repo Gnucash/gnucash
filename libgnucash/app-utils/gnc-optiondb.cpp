@@ -231,7 +231,7 @@ gnc_register_color_option(const GncOptionDBPtr& db, const char* section,
                          const char* doc_string, std::string value)
 {
     GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::FONT};
+            GncOptionUIType::COLOR};
     db->register_option(section, std::move(option));
 }
 
@@ -278,36 +278,80 @@ gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_account_liat_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_account_list_option(const GncOptionDBPtr& db, const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string,
-                                 std::vector<GncGUID> value)
+                                 const GncOptionAccountList& value)
 {
-    GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::ACCOUNT_LIST};
+    GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+                GncOptionUIType::ACCOUNT_LIST, value}};
     db->register_option(section, std::move(option));
 }
 
 void
-gnc_register_acount_list_limited_option(const GncOptionDBPtr& db,
-                                        const char* section, const char* name,
-                                        const char* key, const char* doc_string,
-                                        std::vector<GncGUID> value)
+gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
+                                         const char* section, const char* name,
+                                         const char* key,
+                                         const char* doc_string,
+                                         const GncOptionAccountList& value,
+                                         GncOptionAccountTypeList&& allowed)
 {
-    GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::ACCOUNT_LIST};
-    db->register_option(section, std::move(option));
+    try
+    {
+        GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+                    GncOptionUIType::ACCOUNT_LIST, value, std::move(allowed)}};
+        db->register_option(section, std::move(option));
+    }
+    catch (const std::invalid_argument& err)
+    {
+        std::cerr << "Account List Limited Option, value failed validation, option not registerd.\n";
+    }
 }
+
+using AccountPair = std::pair<GncOptionAccountList&,
+                              const GncOptionAccountTypeList&>;
+static void
+find_children(Account* account, void* data)
+{
+    auto datapair =
+        (AccountPair*)data;
+    GncOptionAccountList& list = datapair->first;
+    const GncOptionAccountTypeList& types = datapair->second;
+    if (std::find(types.begin(), types.end(),
+                  xaccAccountGetType(account)) != types.end())
+        list.push_back(account);
+}
+
+GncOptionAccountList
+gnc_account_list_from_types(QofBook *book,
+                            const GncOptionAccountTypeList& types)
+{
+    GncOptionAccountList list;
+    AccountPair funcdata{list, types};
+    Account* base_acct = gnc_book_get_root_account(book);
+    gnc_account_foreach_descendant(base_acct, (AccountCb)find_children,
+                                   &funcdata);
+    return list;
+}
+
 
 void
 gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
-                                        std::vector<GncGUID> value)
+                                        const GncOptionAccountList& value,
+                                        GncOptionAccountTypeList&& allowed)
 {
-    GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::ACCOUNT_SEL};
+    try
+    {
+        GncOption option{GncOptionAccountValue{section, name, key, doc_string,
+                    GncOptionUIType::ACCOUNT_SEL, value, std::move(allowed)}};
     db->register_option(section, std::move(option));
+    }
+    catch (const std::invalid_argument& err)
+    {
+        std::cerr <<"Account Sel Limited Option, value failed validation, option not registerd.\n";
+    }
 }
 
 void

@@ -28,6 +28,7 @@ extern "C"
 {
 #include <config.h>
 #include <qof.h>
+#include <Account.h>
 #include <gnc-budget.h>
 #include <gnc-commodity.h>
 }
@@ -393,6 +394,82 @@ private:
     GncMultiChoiceOptionChoices m_choices;
 };
 
+/** Account options
+ *
+ * Set one or more accounts on which to report, optionally restricted to certain
+ * account types. Many calls to make-account-list-option will pass a get-default
+ * function that retrieves all of the accounts of a list of types.
+ *
+ * Some reports (examples/daily-reports.scm and standard/ account-piechart.scm,
+ * advanced-portfolio.scm, category-barchart.scm, net-charts.scm, and
+ * portfolio.scm) also provide a validator that rejects accounts that don't meet
+ * an account-type criterion.
+ *
+ * There are two types of option, account-list which permits more than one
+ * account selection and account-sel, which doesn't.
+ *
+
+ */
+
+using GncOptionAccountList = std::vector<const Account*>;
+using GncOptionAccountTypeList = std::vector<GNCAccountType>;
+
+class GncOptionAccountValue :
+    public OptionClassifier, public OptionUIItem
+{
+public:
+    GncOptionAccountValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type), m_value{}, m_default_value{}, m_allowed{} {}
+
+    GncOptionAccountValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          const GncOptionAccountList& value) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type),
+        m_value{value},
+        m_default_value{std::move(value)}, m_allowed{} {}
+    GncOptionAccountValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          GncOptionAccountTypeList&& allowed) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type),
+        m_value{},
+        m_default_value{}, m_allowed{std::move(allowed)} {}
+    GncOptionAccountValue(const char* section, const char* name,
+                          const char* key, const char* doc_string,
+                          GncOptionUIType ui_type,
+                          const GncOptionAccountList& value,
+                          GncOptionAccountTypeList&& allowed) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(ui_type),
+        m_value{},
+        m_default_value{}, m_allowed{std::move(allowed)} {
+            if (!validate(value))
+                throw std::invalid_argument("Supplied Value not in allowed set.");
+            m_value = value;
+            m_default_value = std::move(value);
+        }
+
+    const GncOptionAccountList& get_value() const { return m_value; }
+    const GncOptionAccountList& get_default_value() const { return m_default_value; }
+    bool validate (const GncOptionAccountList& values) const;
+    void set_value (const GncOptionAccountList& values) {
+        if (validate(values))
+            //throw!
+            m_value = values;
+    }
+
+private:
+    GncOptionAccountList m_value;
+    GncOptionAccountList m_default_value;
+    GncOptionAccountTypeList m_allowed;
+};
+
 /** Date options
  * A legal date value is a pair of either  and a RelativeDatePeriod, the absolute flag and a time64, or for legacy purposes the absolute flag and a timespec.
  * The original design allowed custom RelativeDatePeriods, but that facility is unused so we'll go with compiled-in enums.
@@ -457,6 +534,7 @@ using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<QofInstance*>,
                                       GncOptionValue<QofQuery*>,
                                       GncOptionValue<std::vector<GncGUID>>,
+                                      GncOptionAccountValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
                                       GncOptionRangeValue<double>,
