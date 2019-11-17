@@ -470,14 +470,18 @@ private:
 };
 
 /** Date options
- * A legal date value is a pair of either  and a RelativeDatePeriod, the absolute flag and a time64, or for legacy purposes the absolute flag and a timespec.
- * The original design allowed custom RelativeDatePeriods, but that facility is unused so we'll go with compiled-in enums.
-
+ * A legal date value is a pair of either and a RelativeDatePeriod, the absolute
+ * flag and a time64, or for legacy purposes the absolute flag and a timespec.
+ *
+ * The original design allowed custom RelativeDatePeriods, but that facility is
+ * unused so we'll go with compiled-in enums.
+ */
+/*
 gnc-date-option-show-time? -- option_data[1]
 gnc-date-option-get-subtype -- option_data[0]
 gnc-date-option-value-type m_value
-gnc-date-option-absolute-time 
-gnc-date-option-relative-time
+gnc-date-option-absolute-time m_type == DateTyupe::Absolute
+gnc-date-option-relative-time m_type != DateTyupe::Absolute
  */
 
 enum class DateType
