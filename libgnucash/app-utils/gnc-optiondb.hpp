@@ -144,20 +144,6 @@ void gnc_register_commodity_option(const GncOptionDBPtr& db,
                                    const char* key, const char* doc_string,
                                    gnc_commodity* value);
 
-/* Complex boolean options are the same as simple boolean options with the
- * addition of two function arguments. (If both of them are #f, you have exactly
- * a simple-boolean-option.) Both functions should expect one boolean argument.
- * When the option's value is changed, the function option-widget-changed-cb
- * will be called with the new option value at the time that the GUI widget
- * representing the option is changed, and the function
- * setter-function-called-cb will be called when the option's setter is called
- * (that is, when the user selects "OK" or "Apply").
-
- * The option-widget-changed-cb is tested for procedurehood before it is called,
- * so it is not validated to be a procedure here. However, since there could be
- * an option-widget-changed-cb but not a setter-function-called-cb, the
- * procedurehood of the setter-function-called-cb is checked here.
- */
 void gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
@@ -173,13 +159,6 @@ void gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);
 
-/* account-list options use the option-data as a pair; the car is a boolean
- * value, the cdr is a list of account-types. If the boolean is true, the gui
- * should allow the user to select multiple accounts. If the cdr is an empty
- * list, then all account types are shown. Internally, values are always a list
- * of guids. Externally, both guids and account pointers may be used to set the
- * value of the option. The option always returns a list of account pointers.
- */
 void gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
                                              const char* section,
                                              const char* name, const char* key,
@@ -187,21 +166,12 @@ void gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
                                              const GncOptionAccountList& value,
                                              GncOptionAccountTypeList&& allowed);
 
-/* Just like gnc:make-account-list-limited-option except it does not limit the
- * types of accounts that are available to the user.
- */
 void gnc_register_account_list_option(const GncOptionDBPtr& db,
                                       const char* section,
                                       const char* name, const char* key,
                                       const char* doc_string,
                                       const GncOptionAccountList& value);
 
-/* account-sel options use the option-data as a pair; the car is ignored, the
- * cdr is a list of account-types. If the cdr is an empty list, then all account
- * types are shown.  Internally, the value is always a guid.  Externally, both
- * guids and account pointers may be used to set the value of the option. The
- * option always returns the "current" account pointer.
- */
 void gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
                                              const char* section,
                                              const char* name, const char* key,
@@ -209,44 +179,21 @@ void gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
                                              const GncOptionAccountList& value,
                                              GncOptionAccountTypeList&& allowed);
 
-/* Multichoice options use the option-data as a list of vectors. Each vector
- * contains a permissible value (scheme symbol), a name, and a description
- * string.
- *
- * The multichoice-option with callback function is the same as the usual
- * multichoice options (see above), with the addition of two function
- * arguments. (If both of them are #f, you have exactly a multichoice-option.)
- * Both functions should expect one argument. When the option's value is
- * changed, the function option-widget-changed-cb will be called with the new
- * option value at the time that the GUI widget representing the option is
- * changed, and the function setter-function-called-cb will be called when the
- * option's setter is called (that is, when the user selects "OK" or "Apply").
- */
-
 void gnc_register_multichoice_option(const GncOptionDBPtr& db,
                                      const char* section, const char* name,
                                      const char* key, const char* doc_string,
                                      GncMultiChoiceOptionChoices&& value);
 
-/* List options use the option-data in the same way as multichoice options. List
- * options allow the user to select more than one option.
- */
 void gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, const char* value,
                               GncMultiChoiceOptionChoices&& list);
 
-/* Number range options use the option-data as a list whose elements are:
- * (lower-bound upper-bound step-size). 
-*/
 void gnc_register_number_range_option(const GncOptionDBPtr& db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
                                       int value, int min, int max, int step);
 
-/* Number plot size options are a convenience wrapper on number range options
- * with fixed min, max, and step.
-*/
 void gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
                                           const char* section, const char* name,
                                           const char* key,
@@ -257,10 +204,6 @@ void gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, QofQuery* value);
 
-/* Color options store rgba values in a list. The option-data is a list, whose
- * first element is the range of possible rgba values and whose second element
- * is a boolean indicating whether to use alpha transparency.
- */
 void gnc_register_color_option(const GncOptionDBPtr& db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, std::string value);
