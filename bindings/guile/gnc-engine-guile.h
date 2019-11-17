@@ -63,4 +63,14 @@ SCM gnc_account_value_ptr_to_scm (GncAccountValue *);
  * add Scheme-style danglers from a hook
  */
 void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
+
+/** Convert a time string to calendar time representation.  Combine strptime and
+ *  mktime into a single function to avoid the need to wrap struct tm *.
+ *
+ *  @param s String representation of time.
+ *
+ *  @param format Format specification.
+ *
+ *  @return The time in seconds since unix epoch, or -1 on error */
+time64 gnc_parse_time_to_time64 (const gchar *s, const gchar *format);
 #endif

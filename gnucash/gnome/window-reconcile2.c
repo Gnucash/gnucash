@@ -54,7 +54,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
 #include "gnc-window.h"
-#include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile2.h"
 

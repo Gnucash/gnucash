@@ -48,7 +48,6 @@
 #include "gnc-warnings.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "guile-util.h"
 #include "gnc-engine-guile.h"
 
 

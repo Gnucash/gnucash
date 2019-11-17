@@ -70,7 +70,6 @@
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
-#include "guile-util.h"
 #include "search-core-type.h"
 #include "search-owner.h"
 #include "top-level.h"

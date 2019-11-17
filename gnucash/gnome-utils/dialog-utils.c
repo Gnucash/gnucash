@@ -43,7 +43,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
 #include "gnc-combott.h"
-#include "guile-util.h"
 #include "gnc-main-window.h"
 
 /* This static indicates the debugging module that this .o belongs to. */

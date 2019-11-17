@@ -40,6 +40,11 @@
 #include <qof.h>
 #include <qofbookslots.h>
 
+
+#ifndef HAVE_STRPTIME
+#    include "strptime.h"
+#endif
+
 /** \todo Code dependent on the private query headers
 qofquery-p.h and qofquerycore-p.h may need to be modified.
 These files are temporarily exported for QOF 0.6.0 but
@@ -1887,3 +1892,17 @@ gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
                          (GDestroyNotify) delete_scm_hook, scm);
     LEAVE("");
 }
+
+time64
+gnc_parse_time_to_time64 (const gchar *s, const gchar *format)
+{
+    struct tm tm;
+
+    g_return_val_if_fail(s && format, -1);
+
+    if (!strptime(s, format, &tm))
+        return -1;
+
+    return gnc_mktime(&tm);
+}
+

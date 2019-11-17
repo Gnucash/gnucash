@@ -40,7 +40,6 @@
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 
-#include "guile-util.h"
 #include "gnc-engine.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
