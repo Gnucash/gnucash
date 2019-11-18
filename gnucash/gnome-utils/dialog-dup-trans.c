@@ -242,7 +242,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent, const char* title,
     if (!show_date && !tnum)
     {
         // The "date" and the "tnum" fields aren't being asked for, this is a split copy
-        gtk_label_set_markup(GTK_LABEL (dt_dialog->num_label), _("Action/Number:"));
+        gtk_label_set_markup(GTK_LABEL (dt_dialog->num_label), _("Action/Number"));
     }
 
     if (tnum)

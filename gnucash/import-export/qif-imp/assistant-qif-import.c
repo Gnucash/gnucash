@@ -903,7 +903,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     comm_nb_page->name_entry = gtk_entry_new ();
     gtk_entry_set_text (GTK_ENTRY(comm_nb_page->name_entry),
                         gnc_commodity_get_fullname (comm));
-    label = gtk_label_new_with_mnemonic (_("_Name or description:"));
+    label = gtk_label_new_with_mnemonic (_("_Name or description"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->name_entry);
     gnc_label_set_alignment (label, 0, 0.5);
 
@@ -927,7 +927,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_entry_set_text (GTK_ENTRY(comm_nb_page->mnemonic_entry),
                        gnc_commodity_get_mnemonic (comm));
     label = gtk_label_new_with_mnemonic (
-                _("_Ticker symbol or other abbreviation:"));
+                _("_Ticker symbol or other abbreviation"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->mnemonic_entry);
     gnc_label_set_alignment (label, 0, 0.5);
 
@@ -961,7 +961,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
 
     gnc_cbwe_add_completion (GTK_COMBO_BOX(comm_nb_page->namespace_combo));
     label = gtk_label_new_with_mnemonic (
-                _("_Exchange or abbreviation type:"));
+                _("_Exchange or abbreviation type"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->namespace_combo);
     gnc_label_set_alignment (label, 0, 0.5);
 

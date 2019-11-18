@@ -2039,12 +2039,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         if (use_accounting_labels)
         {
             gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
-                               _("Debit Amount:"));
+                               _("Debit Amount"));
         }
         else
         {
             gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(xferData->amount_radio))),
-                               _("To Amount:"));
+                               _("To Amount"));
         }
     }
 
