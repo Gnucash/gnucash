@@ -212,14 +212,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; flattens an arbitrary deep nested list into simple list.  this is
 ;; probably the most efficient algorithm available. '(1 2 (3 4)) -->
-;; '(1 2 3 4)
+;; '(1 2 3 4) thanks to manumanumanu on #guile
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (gnc:list-flatten . lst)
-  (reverse
-   (let lp ((e lst) (accum '()))
-     (if (list? e)
-         (fold lp accum e)
-         (cons e accum)))))
+  (let loop ((lst lst) (acc '()))
+    (cond
+     ((null? lst) acc)
+     ((pair? lst) (loop (car lst) (loop (cdr lst) acc)))
+     (else (cons lst acc)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; compatibility hack for fixing guile-2.0 string handling. this code

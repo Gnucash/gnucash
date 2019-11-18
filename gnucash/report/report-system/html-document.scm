@@ -107,7 +107,8 @@
 
 (define (gnc:html-document-tree-collapse . tree)
   (let lp ((e tree) (accum '()))
-    (cond ((list? e) (fold lp accum e))
+    (cond ((null? e) accum)
+          ((pair? e) (fold lp accum e))
           ((string? e) (cons e accum))
           (else (cons (object->string e) accum)))))
 
