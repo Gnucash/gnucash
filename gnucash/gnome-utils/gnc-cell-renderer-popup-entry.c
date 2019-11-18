@@ -41,12 +41,28 @@ static void     gnc_popup_entry_init       (GncPopupEntry        *entry);
 static void     gnc_popup_entry_class_init (GncPopupEntryClass   *klass);
 static void     gpw_cell_editable_init     (GtkCellEditableIface *iface);
 static gboolean gpw_key_press_event        (GtkWidget            *box,
-        GdkEventKey          *key_event);
+                                            GdkEventKey          *key_event);
+
+static void     gpw_set_property            (GObject             *object,
+                                             guint                param_id,
+                                             const GValue        *value,
+                                             GParamSpec          *pspec);
+
+static void     gpw_get_property            (GObject             *object,
+                                             guint                param_id,
+                                             GValue              *value,
+                                             GParamSpec          *pspec);
 
 enum
 {
     ARROW_CLICKED,
     LAST_SIGNAL
+};
+
+enum
+{
+    PROP_0,
+    PROP_EDITING_CANCELED,
 };
 
 static GtkEventBoxClass *parent_class;
@@ -97,6 +113,8 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 {
     GtkWidget *arrow;
 
+    widget->editing_canceled = FALSE;
+
     widget->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (widget->hbox), FALSE);
     gtk_widget_show (widget->hbox);
@@ -130,10 +148,18 @@ static void
 gnc_popup_entry_class_init (GncPopupEntryClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+    GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
 
     widget_class->key_press_event = gpw_key_press_event;
 
+    gobject_class->set_property = gpw_set_property;
+    gobject_class->get_property = gpw_get_property;
+
     parent_class = GTK_EVENT_BOX_CLASS (g_type_class_peek_parent (klass));
+
+    g_object_class_override_property (gobject_class,
+                                      PROP_EDITING_CANCELED,
+                                      "editing-canceled");
 
     signals[ARROW_CLICKED] = g_signal_new
                              ("arrow-clicked",
@@ -144,6 +170,42 @@ gnc_popup_entry_class_init (GncPopupEntryClass *klass)
                               g_cclosure_marshal_VOID__VOID,
                               G_TYPE_NONE, 0);
 
+}
+
+static void
+gpw_set_property (GObject *object, guint param_id,
+                  const GValue *value, GParamSpec *pspec)
+{
+    GncPopupEntry *pe = GNC_POPUP_ENTRY(object);
+
+    switch (param_id)
+    {
+        case PROP_EDITING_CANCELED:
+            pe->editing_canceled = g_value_get_boolean (value);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
+    }
+}
+
+static void
+gpw_get_property (GObject *object, guint param_id,
+                  GValue *value, GParamSpec *pspec)
+{
+    GncPopupEntry *pe = GNC_POPUP_ENTRY(object);
+
+    switch (param_id)
+    {
+        case PROP_EDITING_CANCELED:
+            g_value_set_boolean (value, pe->editing_canceled);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
+    }
 }
 
 static void
