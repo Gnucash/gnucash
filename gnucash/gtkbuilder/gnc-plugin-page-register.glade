@@ -141,7 +141,7 @@ If 0, all previous days included</property>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="filter_show_range">
-                    <property name="label" translatable="yes">Select _Range:</property>
+                    <property name="label" translatable="yes">Select _Range</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -166,7 +166,7 @@ If 0, all previous days included</property>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start:</property>
+                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -191,7 +191,7 @@ If 0, all previous days included</property>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="end_date_choose">
-                        <property name="label" translatable="yes">Choo_se Date:</property>
+                        <property name="label" translatable="yes">Choo_se Date</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -253,7 +253,7 @@ If 0, all previous days included</property>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End:</property>
+                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -262,7 +262,7 @@ If 0, all previous days included</property>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="start_date_choose">
-                        <property name="label" translatable="yes">C_hoose Date:</property>
+                        <property name="label" translatable="yes">C_hoose Date</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1007,7 +1007,7 @@ If 0, all previous days included</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Date:</property>
+                    <property name="label" translatable="yes">_Date</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>
@@ -1021,7 +1021,7 @@ If 0, all previous days included</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Number:</property>
+                    <property name="label" translatable="yes">_Number</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">num_spin</property>
@@ -1064,7 +1064,7 @@ If 0, all previous days included</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Transaction Number:</property>
+                    <property name="label" translatable="yes">_Transaction Number</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">tnum_spin</property>
@@ -1215,7 +1215,7 @@ If 0, all previous days included</property>
               <object class="GtkLabel" id="label847671">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Reason for voiding transaction:</property>
+                <property name="label" translatable="yes">Reason for voiding transaction</property>
                 <property name="justify">center</property>
               </object>
               <packing>

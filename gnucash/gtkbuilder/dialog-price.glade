@@ -131,7 +131,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Namespace:</property>
+                <property name="label" translatable="yes">_Namespace</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">namespace_cbwe</property>
@@ -146,7 +146,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Security:</property>
+                <property name="label" translatable="yes">_Security</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">commodity_cbwe</property>
@@ -161,7 +161,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Cu_rrency:</property>
+                <property name="label" translatable="yes">Cu_rrency</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -175,7 +175,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Date:</property>
+                <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -188,7 +188,7 @@
               <object class="GtkLabel" id="source_label">
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">S_ource:</property>
+                <property name="label" translatable="yes">S_ource</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">source_entry</property>
@@ -203,7 +203,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Type:</property>
+                <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">type_combobox</property>
@@ -218,7 +218,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Price:</property>
+                <property name="label" translatable="yes">_Price</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -615,7 +615,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">From these Commodities:</property>
+                <property name="label" translatable="yes">From these Commodities</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -628,7 +628,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Keeping the last available price for option:</property>
+                <property name="label" translatable="yes">Keeping the last available price for option</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -643,7 +643,7 @@
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="hexpand">False</property>
-                <property name="label" translatable="yes">Source:</property>
+                <property name="label" translatable="yes">Source</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -747,7 +747,7 @@ These prices were added so that there's always a "nearest in time" price for eve
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Before _Date:</property>
+                <property name="label" translatable="yes">Before _Date</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

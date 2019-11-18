@@ -247,7 +247,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/window.pages.account-tree.summary/start-choice-relative">
-                    <property name="label" translatable="yes">_Relative:</property>
+                    <property name="label" translatable="yes">_Relative</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -267,7 +267,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/window.pages.account-tree.summary/start-choice-absolute">
-                    <property name="label" translatable="yes">_Absolute:</property>
+                    <property name="label" translatable="yes">_Absolute</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -287,7 +287,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/window.pages.account-tree.summary/end-choice-relative">
-                    <property name="label" translatable="yes">Re_lative:</property>
+                    <property name="label" translatable="yes">Re_lative</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -307,7 +307,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/window.pages.account-tree.summary/end-choice-absolute">
-                    <property name="label" translatable="yes">Ab_solute:</property>
+                    <property name="label" translatable="yes">Ab_solute</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -616,7 +616,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="pref/general/currency-choice-other">
-                        <property name="label" translatable="yes">Ch_oose:</property>
+                        <property name="label" translatable="yes">Ch_oose</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -653,7 +653,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Character:</property>
+                    <property name="label" translatable="yes">Character</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -666,7 +666,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Sample:</property>
+                    <property name="label" translatable="yes">Sample</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -753,7 +753,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="pref/general/currency-choice-locale">
-                        <property name="label" translatable="yes">Loc_ale:</property>
+                        <property name="label" translatable="yes">Loc_ale</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1428,7 +1428,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">New search _limit:</property>
+                    <property name="label" translatable="yes">New search _limit</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/dialogs.search/new-search-limit</property>
                   </object>
@@ -1480,7 +1480,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Auto-save time _interval:</property>
+                    <property name="label" translatable="yes">Auto-save time _interval</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
@@ -1581,7 +1581,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="pref/general/retain-type-days">
-                    <property name="label" translatable="yes">For:</property>
+                    <property name="label" translatable="yes">For</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1641,7 +1641,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Time to _wait for answer:</property>
+                    <property name="label" translatable="yes">Time to _wait for answer</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
@@ -1926,7 +1926,7 @@ many months before the current month:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Default _font:</property>
+                        <property name="label" translatable="yes">Default _font</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pref/dialogs.checkprinting/default-font</property>
@@ -2444,7 +2444,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Number of _transactions:</property>
+                    <property name="label" translatable="yes">Number of _transactions</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general.register/max-transactions</property>
                   </object>
@@ -2537,7 +2537,7 @@ many months before the current month:</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes" comments="Register2 feature">Number of _characters for auto complete:</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">Number of _characters for auto complete</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general.register/key-length</property>
                   </object>
@@ -2715,7 +2715,7 @@ many months before the current month:</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkRadioButton" id="pref/general.report/currency-choice-other">
-                        <property name="label" translatable="yes">Ch_oose:</property>
+                        <property name="label" translatable="yes">Ch_oose</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -2741,7 +2741,7 @@ many months before the current month:</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkRadioButton" id="pref/general.report/currency-choice-locale">
-                        <property name="label" translatable="yes">Loc_ale:</property>
+                        <property name="label" translatable="yes">Loc_ale</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -3193,7 +3193,7 @@ many months before the current month:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Width:</property>
+                        <property name="label" translatable="yes">_Width</property>
                         <property name="use_underline">True</property>
                         <property name="ellipsize">middle</property>
                       </object>
