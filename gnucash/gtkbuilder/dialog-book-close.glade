@@ -77,12 +77,13 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Closing Date:</property>
+                <property name="label" translatable="yes">Closing Date</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -94,7 +95,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Income Total:</property>
+                <property name="label" translatable="yes">Income Total</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -106,7 +107,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Expense Total:</property>
+                <property name="label" translatable="yes">Expense Total</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -157,7 +158,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Description:</property>
+                <property name="label" translatable="yes">Description</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

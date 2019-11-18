@@ -363,7 +363,7 @@ Please enter a name for the account. If the file was exported from another accou
               <object class="GtkLabel" id="label824">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Account name:</property>
+                <property name="label" translatable="yes">Account name</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -550,7 +550,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
           <object class="GtkLabel" id="label7609">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+            <property name="label" translatable="yes">_Select the matchings you want to change</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">account_page_view</property>
           </object>
@@ -591,7 +591,7 @@ Note that GnuCash will be creating many accounts that did not exist on your othe
               <object class="GtkLabel" id="label7610">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Matchings selected:</property>
+                <property name="label" translatable="yes">Matchings selected</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -682,7 +682,7 @@ If you change your mind later, you can reorganize the account structure safely w
           <object class="GtkLabel" id="label7611">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+            <property name="label" translatable="yes">_Select the matchings you want to change</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">category_page_view</property>
           </object>
@@ -723,7 +723,7 @@ If you change your mind later, you can reorganize the account structure safely w
               <object class="GtkLabel" id="label7613">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Matchings selected:</property>
+                <property name="label" translatable="yes">Matchings selected</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -812,7 +812,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
           <object class="GtkLabel" id="label7614">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Select the matchings you want to change:</property>
+            <property name="label" translatable="yes">_Select the matchings you want to change</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">memo_page_view</property>
           </object>
@@ -853,7 +853,7 @@ In the following page, you will see the text that appears in the Payee and Memo 
               <object class="GtkLabel" id="label7616">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Matchings selected:</property>
+                <property name="label" translatable="yes">Matchings selected</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -1281,7 +1281,7 @@ Click "Next" to review the possible matches.</property>
                   <object class="GtkLabel" id="label847716">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Imported transactions needing review:</property>
+                    <property name="label" translatable="yes">_Imported transactions needing review</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">new_transaction_view</property>
                   </object>
@@ -1320,7 +1320,7 @@ Click "Next" to review the possible matches.</property>
                   <object class="GtkLabel" id="label847717">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Possible matches for the selected transaction:</property>
+                    <property name="label" translatable="yes">_Possible matches for the selected transaction</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">old_transaction_view</property>
                   </object>

@@ -167,7 +167,7 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
-            <property name="label" translatable="yes">Report for printing:</property>
+            <property name="label" translatable="yes">Report for printing</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -296,7 +296,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Days in ad_vance:</property>
+            <property name="label" translatable="yes">Days in ad_vance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.business.bill/days-in-advance</property>
           </object>
@@ -361,7 +361,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Days in advance:</property>
+            <property name="label" translatable="yes">_Days in advance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.business.invoice/days-in-advance</property>
           </object>
