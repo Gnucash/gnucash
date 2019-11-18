@@ -1286,7 +1286,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_grid_set_column_spacing (GTK_GRID (book_currency_data->book_currency_table), 6);
 
             tip = gnc_currency_accounting_option_currency_documentation(option);
-            widget_label = gtk_label_new( _("Book currency:") );
+            widget_label = gtk_label_new( _("Book currency") );
             gtk_widget_set_tooltip_text(book_currency_data->book_currency_table,
                         tip && *tip ? _(tip) : "");
 
@@ -1315,7 +1315,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_grid_set_column_spacing (GTK_GRID (policy_table), 6);
 
             tip = gnc_currency_accounting_option_policy_documentation(option);
-            widget_label = gtk_label_new( _("Default lot tracking policy:") );
+            widget_label = gtk_label_new( _("Default lot tracking policy") );
             gtk_widget_set_tooltip_text(policy_table, tip && *tip ? _(tip) : "");
 
             gtk_widget_set_halign (GTK_WIDGET(widget_label), GTK_ALIGN_START);
@@ -1343,7 +1343,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_grid_set_column_spacing (GTK_GRID (book_currency_data->gain_loss_account_table), 6);
 
             tip = gnc_currency_accounting_option_gain_loss_account_documentation(option);
-            widget_label = gtk_label_new( _("Default gain/loss account:") );
+            widget_label = gtk_label_new( _("Default gain/loss account") );
             gnc_label_set_alignment (GTK_WIDGET(widget_label), 0.0, 0.5);
 
             gtk_widget_set_tooltip_text(book_currency_data->gain_loss_account_table,
@@ -2451,12 +2451,9 @@ gnc_option_set_ui_widget_string (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2523,12 +2520,9 @@ gnc_option_set_ui_widget_currency (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2554,12 +2548,9 @@ gnc_option_set_ui_widget_commodity (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2592,12 +2583,9 @@ gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2623,10 +2611,8 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
     gchar *colon_name;
     GtkWidget *eventbox;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2692,12 +2678,9 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
     GList *acct_type_list;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     acct_type_list = gnc_option_get_account_type_list(option);
     value = gnc_account_sel_new();
@@ -2752,17 +2735,14 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
     GtkAdjustment *adj;
     gdouble lower_bound = G_MINDOUBLE;
     gdouble upper_bound = G_MAXDOUBLE;
     gdouble step_size = 1.0;
     int num_decimals = 0;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2818,13 +2798,10 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
     gboolean use_alpha;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2855,12 +2832,9 @@ gnc_option_set_ui_widget_font (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2893,13 +2867,10 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
     GtkWidget *button;
-    gchar *colon_name;
 
     ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -3029,17 +3000,14 @@ gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkBox *page_box,
     GtkWidget *label;
     GtkWidget *px_butt, *p_butt;
     GtkWidget *hbox;
-    gchar *colon_name;
     GtkAdjustment *adj_px, *adj_percent;
     gdouble lower_bound = G_MINDOUBLE;
     gdouble upper_bound = G_MAXDOUBLE;
     gdouble step_size = 1.0;
     int num_decimals = 0;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
@@ -3125,12 +3093,9 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
     GtkWidget *label;
-    gchar *colon_name;
 
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
+    label = gtk_label_new(name);
     gnc_label_set_alignment(label, 1.0, 0.5);
-    g_free(colon_name);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);

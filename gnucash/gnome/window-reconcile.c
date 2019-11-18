@@ -1195,7 +1195,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
-    label = gtk_label_new(_("Total:"));
+    label = gtk_label_new(_("Total"));
     gnc_label_set_alignment(label, 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
@@ -1886,7 +1886,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
 
             /* statement date title/value */
-            title = gtk_label_new(_("Statement Date:"));
+            title = gtk_label_new(_("Statement Date"));
             gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
@@ -1896,7 +1896,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* starting balance title/value */
-            title = gtk_label_new(_("Starting Balance:"));
+            title = gtk_label_new(_("Starting Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
 
@@ -1906,7 +1906,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
 
             /* ending balance title/value */
-            title = gtk_label_new(_("Ending Balance:"));
+            title = gtk_label_new(_("Ending Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
@@ -1916,7 +1916,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* reconciled balance title/value */
-            title = gtk_label_new(_("Reconciled Balance:"));
+            title = gtk_label_new(_("Reconciled Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
@@ -1926,7 +1926,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* difference title/value */
-            title = gtk_label_new(_("Difference:"));
+            title = gtk_label_new(_("Difference"));
             gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 

@@ -91,13 +91,13 @@ void gnc_frequency_save_to_recurrence(GncFrequency *gf, GList **recurrences, GDa
 
 /**
  * Set the label text for the frequency option menu.  In the current
- * implementation, the default label text is "Frequency:"
+ * implementation, the default label text is "Frequency"
  */
 void gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt);
 
 /**
  * Set the label text for the date entry widget. In the current
- * impelmentation, the default label text is "Start Date:"
+ * impelmentation, the default label text is "Start Date"
  */
 void gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt);
 
