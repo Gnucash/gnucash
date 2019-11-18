@@ -90,7 +90,7 @@
                     <property name="can_focus">False</property>
                     <property name="border_width">10</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">4</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="start_value">
                         <property name="visible">True</property>
@@ -107,7 +107,7 @@
                       <object class="GtkLabel" id="date_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Statement _Date:</property>
+                        <property name="label" translatable="yes">Statement _Date</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -119,7 +119,7 @@
                       <object class="GtkLabel" id="start_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Starting Balance:</property>
+                        <property name="label" translatable="yes">Starting Balance</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -130,7 +130,7 @@
                       <object class="GtkLabel" id="end_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Ending Balance:</property>
+                        <property name="label" translatable="yes">_Ending Balance</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>

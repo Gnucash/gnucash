@@ -585,12 +585,13 @@
               <object class="GtkGrid" id="gncfreq_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="freq_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">Frequency:</property>
+                    <property name="label" translatable="yes">Frequency</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -603,7 +604,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">Start Date:</property>
+                    <property name="label" translatable="yes">Start Date</property>
                     <property name="justify">center</property>
                   </object>
                   <packing>
@@ -1090,13 +1091,14 @@
                           <object class="GtkBox" id="hbox127">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847759">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="margin_right">12</property>
-                                <property name="label" translatable="yes">First on the:</property>
+                                <property name="label" translatable="yes">First on the</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -1131,7 +1133,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="margin_right">12</property>
-                                <property name="label" translatable="yes">except on weekends:</property>
+                                <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -1169,13 +1171,14 @@
                           <object class="GtkBox" id="hbox128">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847760">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="margin_right">12</property>
-                                <property name="label" translatable="yes">then on the:</property>
+                                <property name="label" translatable="yes">then on the</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -1210,7 +1213,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="margin_right">12</property>
-                                <property name="label" translatable="yes">except on weekends:</property>
+                                <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -1341,12 +1344,12 @@
                           <object class="GtkBox" id="hbox125">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label847756">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_right">12</property>
                                 <property name="label" translatable="yes">On the</property>
                                 <property name="justify">right</property>
                               </object>
@@ -1361,7 +1364,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_right">12</property>
                                 <property name="model">liststore4</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="cellrenderertext4"/>
@@ -1382,8 +1384,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="margin_right">12</property>
-                                <property name="label" translatable="yes">except on weekends:</property>
+                                <property name="label" translatable="yes">except on weekends</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>

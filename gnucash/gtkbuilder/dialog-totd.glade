@@ -95,7 +95,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Tip of the Day:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Tip of the Day&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                     <property name="use_underline">True</property>
                   </object>
