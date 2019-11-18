@@ -412,12 +412,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">3</property>
-                <property name="spacing">2</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Customer: </property>
+                    <property name="label" translatable="yes">Customer</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -444,7 +444,7 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Job: </property>
+                    <property name="label" translatable="yes">Job</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -495,12 +495,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">3</property>
-                <property name="spacing">2</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label31">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Additional to Card:</property>
+                    <property name="label" translatable="yes">Additional to Card</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>

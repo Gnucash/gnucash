@@ -306,7 +306,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Type of quote source:</property>
+                    <property name="label" translatable="yes">Type of quote source</property>
                     <property name="justify">right</property>
                   </object>
                 </child>
@@ -326,7 +326,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Full name:</property>
+                    <property name="label" translatable="yes">_Full name</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">fullname_entry</property>
@@ -348,7 +348,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Symbol/abbreviation:</property>
+                    <property name="label" translatable="yes">_Symbol/abbreviation</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">mnemonic_entry</property>
@@ -370,7 +370,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="label" translatable="yes">_Type</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>
@@ -391,7 +391,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">ISIN, CUSI_P or other code:</property>
+                    <property name="label" translatable="yes">ISIN, CUSI_P or other code</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                     <property name="mnemonic_widget">code_entry</property>
@@ -413,7 +413,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">F_raction traded:</property>
+                    <property name="label" translatable="yes">F_raction traded</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>
@@ -509,7 +509,7 @@
                 <property name="left_padding">24</property>
                 <child>
                   <object class="GtkRadioButton" id="single_source_button">
-                    <property name="label" translatable="yes">Si_ngle:</property>
+                    <property name="label" translatable="yes">Si_ngle</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -536,7 +536,7 @@
                 <property name="left_padding">24</property>
                 <child>
                   <object class="GtkRadioButton" id="multi_source_button">
-                    <property name="label" translatable="yes">_Multiple:</property>
+                    <property name="label" translatable="yes">_Multiple</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -563,7 +563,7 @@
                 <property name="left_padding">24</property>
                 <child>
                   <object class="GtkRadioButton" id="unknown_source_button">
-                    <property name="label" translatable="yes">_Unknown:</property>
+                    <property name="label" translatable="yes">_Unknown</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -593,7 +593,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Time_zone:</property>
+                    <property name="label" translatable="yes">Time_zone</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                   </object>
@@ -702,9 +702,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">help_button</action-widget>
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
+      <action-widget response="-11">help_button</action-widget>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="security_selector_dialog">
@@ -810,7 +810,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="label" translatable="yes">_Type</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>
@@ -831,7 +831,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label">_Security/currency:</property>
+                    <property name="label">_Security/currency</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
                   </object>

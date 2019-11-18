@@ -148,7 +148,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Interest Rate:</property>
+                <property name="label" translatable="yes">Interest Rate</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -161,7 +161,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Start Date:</property>
+                <property name="label" translatable="yes">Start Date</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -174,7 +174,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Length:</property>
+                <property name="label" translatable="yes">Length</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -187,7 +187,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Amount:</property>
+                <property name="label" translatable="yes">Amount</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -200,7 +200,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Loan Account:</property>
+                <property name="label" translatable="yes">Loan Account</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -351,7 +351,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Type:</property>
+                <property name="label" translatable="yes">Type</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -364,7 +364,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Months Remaining:</property>
+                <property name="label" translatable="yes">Months Remaining</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
               </object>
@@ -519,7 +519,7 @@ Do you utilise an escrow account, if so an account must be specified...</propert
                       <object class="GtkLabel" id="label847963">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Escrow Account:</property>
+                        <property name="label" translatable="yes">Escrow Account</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -594,7 +594,7 @@ All accounts must have valid entries to continue.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Payment From:</property>
+                <property name="label" translatable="yes">Payment From</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -607,7 +607,7 @@ All accounts must have valid entries to continue.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Principal To:</property>
+                <property name="label" translatable="yes">Principal To</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -620,7 +620,7 @@ All accounts must have valid entries to continue.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Name:</property>
+                <property name="label" translatable="yes">Name</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -633,7 +633,7 @@ All accounts must have valid entries to continue.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Amount:</property>
+                <property name="label" translatable="yes">Amount</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -646,7 +646,7 @@ All accounts must have valid entries to continue.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Interest To:</property>
+                <property name="label" translatable="yes">Interest To</property>
                 <property name="justify">right</property>
               </object>
               <packing>
@@ -801,7 +801,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Amount:</property>
+                        <property name="label" translatable="yes">Amount</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -814,7 +814,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Payment From:</property>
+                        <property name="label" translatable="yes">Payment From</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -827,7 +827,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Name:</property>
+                        <property name="label" translatable="yes">Name</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -840,7 +840,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Payment To (Escrow):</property>
+                        <property name="label" translatable="yes">Payment To (Escrow)</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -895,7 +895,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Payment From (Escrow):</property>
+                        <property name="label" translatable="yes">Payment From (Escrow)</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -908,7 +908,7 @@ All enabled option pages must contain valid entries to continue.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Payment To:</property>
+                        <property name="label" translatable="yes">Payment To</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -1170,7 +1170,7 @@ Review the details below and if correct press Apply to create the schedule.</pro
                       <object class="GtkLabel" id="label847973">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Range: </property>
+                        <property name="label" translatable="yes">Range</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -1233,7 +1233,7 @@ Review the details below and if correct press Apply to create the schedule.</pro
                           <object class="GtkLabel" id="label847971">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Start Date:</property>
+                            <property name="label" translatable="yes">Start Date</property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
@@ -1245,7 +1245,7 @@ Review the details below and if correct press Apply to create the schedule.</pro
                           <object class="GtkLabel" id="label847972">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">End Date:</property>
+                            <property name="label" translatable="yes">End Date</property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
