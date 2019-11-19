@@ -105,9 +105,8 @@
         (for-each
          (lambda (disp-col-name)
            (set-option! options "Display" disp-col-name setting))
-         '("My Company" "My Company ID" "Due Date"
-           "Use Detailed Tax Summary" "Totals" "Subtotal" "References"
-           "Billing Terms" "Billing ID" "Invoice Notes"
+         '("Due Date" "Use Detailed Tax Summary" "Totals" "Subtotal"
+           "References" "Billing Terms" "Billing ID" "Invoice Notes"
            "Payments" "Job Details"))
         options))
 
