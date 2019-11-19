@@ -20,6 +20,15 @@ gnc_add_swig_guile_command (swig-engine-c
     ${CMAKE_SOURCE_DIR}/bindings/engine-common.i
 )
 
+# Command to generate the swig-gnc-module.c wrapper file
+gnc_swig_extract_header_files (gnc-module GNC_MODULE_HEADERS)
+gnc_add_swig_guile_command (swig-gnc-module-c
+    SWIG_GNC_MODULE_C swig-gnc-module.c
+    ${CMAKE_SOURCE_DIR}/bindings/gnc-module.i
+    "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/libgnucash/gnc-module"
+    ${GNC_MODULE_HEADERS}
+)
+
 set(guile_HEADERS
     glib-guile.h
     gnc-engine-guile.h
@@ -37,7 +46,8 @@ add_library(gnucash-guile SHARED
     ${guile_SOURCES}
     ${guile_HEADERS}
     ${SWIG_CORE_UTILS_GUILE_C}
-    ${SWIG_ENGINE_C})
+    ${SWIG_ENGINE_C}
+    ${SWIG_GNC_MODULE_C})
 
 add_dependencies(gnucash-guile
     swig-runtime-h)
@@ -57,6 +67,7 @@ target_link_libraries(gnucash-guile
     PRIVATE
         gnc-core-utils
         gncmod-engine
+        gnc-module
         ${GLIB2_LDFLAGS})
 
 install(TARGETS gnucash-guile
@@ -128,6 +139,17 @@ gnc_add_scheme_targets(scm-engine-2
 
 add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
 
+set(scm_gnc_module_DEPENDS
+    gnc-module
+    gnucash-guile)
+
+gnc_add_scheme_targets(scm-gnc-module
+    gnc-module.scm
+    gnucash
+    "${scm_gnc_module_DEPENDS}"
+    FALSE
+)
+
 gnc_add_scheme_targets(price-quotes
     price-quotes.scm
     gnucash
@@ -137,6 +159,7 @@ gnc_add_scheme_targets(price-quotes
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm
+    gnc-module.scm
     price-quotes.scm
     ${guile_SOURCES}
     ${guile_HEADERS}

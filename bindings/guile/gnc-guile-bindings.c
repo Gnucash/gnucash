@@ -34,6 +34,7 @@ static int is_initialized = 0;
 
 extern SCM scm_init_sw_core_utils_module (void);
 extern SCM scm_init_sw_engine_module (void);
+extern SCM scm_init_sw_gnc_module_module (void);
 
 void
 gnc_guile_bindings_init(void)
@@ -43,6 +44,7 @@ gnc_guile_bindings_init(void)
         /* Do what's necessary to initialize the bindings */
         scm_init_sw_core_utils_module();
         scm_init_sw_engine_module();
+        scm_init_sw_gnc_module_module();
 
         is_initialized = 1;
     }

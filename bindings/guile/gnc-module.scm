@@ -30,23 +30,20 @@
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when
       (compile load eval expand)
-      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module"))
-
+      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_gnc_module))
 
-(define gnc:module-system-init gnc-module-system-init)
-(define gnc:module-system-refresh gnc-module-system-refresh)
-(define gnc:module-load gnc-module-load)
-(define gnc:module-load-optional gnc-module-load-optional)
-(define gnc:module-unload gnc-module-unload)
+; Export the swig-wrapped symbols in the public interface of this module
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_gnc_module))))
 
-(export gnc:module-system-init)
-(export gnc:module-system-refresh)
-(export gnc:module-load)
-(export gnc:module-load-optional)
-(export gnc:module-unload)
-(export gnc:module-begin-syntax)
+(define-public gnc:module-system-init gnc-module-system-init)
+(define-public gnc:module-system-refresh gnc-module-system-refresh)
+(define-public gnc:module-load gnc-module-load)
+(define-public gnc:module-load-optional gnc-module-load-optional)
+(define-public gnc:module-unload gnc-module-unload)
 
 ;; Guile 2 needs to load external modules at compile time
 (define-syntax-rule (gnc:module-begin-syntax form ...)
       (eval-when (load compile eval expand) (begin form ...)))
+(export gnc:module-begin-syntax)
