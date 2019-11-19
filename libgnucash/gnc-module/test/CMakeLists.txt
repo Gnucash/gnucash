@@ -1,7 +1,4 @@
 
-add_subdirectory(mod-foo)
-add_subdirectory(mod-bar)
-add_subdirectory(mod-baz)
 add_subdirectory(misc-mods)
 
 set(GNC_MODULE_TEST_INCLUDE_DIRS
@@ -21,6 +18,7 @@ set(GNC_MODULE_TEST_LIBS
   gncmod-agedver
   gncmod-futuremodsys
   gncmod-incompatdep
+  gncmod-ordinarymod
   )
 
 gnc_add_test_with_guile(test-load-c test-load-c.c GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test")
@@ -45,46 +43,6 @@ gnc_add_test(test-dynload test-dynload.c
   LIBDIR=${_LIBDIR}
 )
 
-set(test_gnc_module_SCHEME
-  test-gnc-module-scm-init.scm
-  test-gnc-module-load-scm.scm
-  test-gnc-module-swigged-c.scm
-  test-gnc-module-load-deps.scm
-  test-gnc-module-scm-dynload.scm
-  test-gnc-module-scm-module.scm
-  test-gnc-module-scm-multi.scm
-  )
-
-set(CORE_GUILE_DEPENDS
-  scm-gnc-module
-  scm-test-core
-  scm-mod-foo
-  gncmod-bar
-  scm-mod-baz
-  gncmod-agedver
-  gncmod-incompatdep
-  gncmod-futuremodsys
-  )
-
-gnc_add_scheme_test_targets(test-gnc-modules-scm
-  "${test_gnc_module_SCHEME}"
-  "tests"
-  "${CORE_GUILE_DEPENDS}"
-  TRUE
-  )
-
-gnc_add_scheme_tests("${test_gnc_module_SCHEME}")
-if(NOT WIN32)
-  # This little dance is needed because gnc_module_init will assert if
-  # it finds libgncmod-futuremod.so outside of a test that expects it.
-  get_guile_env()
-  set(_GNC_MODULE_PATH "${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${LIBDIR_BUILD}/gnucash/test")
-  foreach(test_file ${test_gnc_module_SCHEME})
-    get_filename_component(basename ${test_file} NAME_WE)
-    set_tests_properties(${basename} PROPERTIES ENVIRONMENT "${GUILE_ENV};GNC_MODULE_PATH=${_GNC_MODULE_PATH}")
-  endforeach()
-endif()
-
 set(test_gnc_module_SOURCE_DIST
   test-agedver.c
   test-dynload.c
@@ -95,7 +53,6 @@ set(test_gnc_module_SOURCE_DIST
 
 set(test_gnc_module_EXTRA_DIST
   README
-  ${test_gnc_module_SCHEME}
 )
 
 set_local_dist(test_gnc_module_DIST_local CMakeLists.txt README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})

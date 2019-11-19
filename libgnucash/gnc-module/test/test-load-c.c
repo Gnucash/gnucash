@@ -29,7 +29,7 @@
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
-    GNCModule foo;
+    GNCModule ordinarymod;
     gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod-futuremodsys.so' requires newer module system\n";
     gchar *logdomain = "gnc.module";
     guint loglevel = G_LOG_LEVEL_WARNING;
@@ -41,17 +41,17 @@ guile_main(void *closure, int argc, char ** argv)
 
     gnc_module_system_init();
 
-    foo = gnc_module_load("gnucash/foo", 0);
+    ordinarymod = gnc_module_load("gnucash/ordinarymod", 0);
 
-    if (!foo)
+    if (!ordinarymod)
     {
-        g_test_message("  Failed to load foo\n");
+        g_test_message("  Failed to load ordinarymod\n");
         exit(-1);
     }
 
-    if (!gnc_module_unload(foo))
+    if (!gnc_module_unload(ordinarymod))
     {
-        g_test_message("  Failed to unload foo\n");
+        g_test_message("  Failed to unload ordinarymod\n");
         exit(-1);
     }
     g_test_message(" successful.\n");
