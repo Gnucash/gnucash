@@ -6,7 +6,7 @@ gnc_add_swig_guile_command (swig-baz-c
 
 add_library(baz EXCLUDE_FROM_ALL baz.c baz.h)
 target_include_directories(baz PRIVATE
-  ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module/test/mod-foo
+  ${CMAKE_SOURCE_DIR}/bindings/guile/test/mod-foo
 )
 target_link_libraries(baz foo)
 
