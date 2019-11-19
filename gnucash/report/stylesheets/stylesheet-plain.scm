@@ -213,7 +213,7 @@
 
     (let ((headline (or (gnc:html-document-headline doc)
                         (gnc:html-document-title doc))))
-      (if headline
+      (if (and headline (not (equal? headline "")))
           (gnc:html-document-add-object!
            ssdoc
            (gnc:make-html-text
