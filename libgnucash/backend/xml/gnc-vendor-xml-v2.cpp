@@ -190,7 +190,7 @@ vendor_guid_handler (xmlNodePtr node, gpointer vendor_pdata)
         gncVendorSetGUID (pdata->vendor, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -222,7 +222,7 @@ vendor_terms_handler (xmlNodePtr node, gpointer vendor_pdata)
     g_return_val_if_fail (guid, FALSE);
     term = gnc_billterm_xml_find_or_create (pdata->book, guid);
     g_assert (term);
-    g_free (guid);
+    guid_free (guid);
     gncVendorSetTerms (pdata->vendor, term);
 
     return TRUE;
@@ -298,7 +298,7 @@ vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
         gncTaxTableDecRef (taxtable);
 
     gncVendorSetTaxTable (pdata->vendor, taxtable);
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 

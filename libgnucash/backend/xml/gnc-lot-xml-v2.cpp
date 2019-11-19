@@ -91,7 +91,7 @@ lot_id_handler (xmlNodePtr node, gpointer p)
     guid = dom_tree_to_guid (node);
     gnc_lot_set_guid (pdata->lot, *guid);
 
-    g_free (guid);
+    guid_free (guid);
 
     LEAVE ("");
     return TRUE;

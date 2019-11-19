@@ -207,7 +207,7 @@ account_id_handler (xmlNodePtr node, gpointer act_pdata)
 
     xaccAccountSetGUID (pdata->account, guid);
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -384,7 +384,7 @@ account_parent_handler (xmlNodePtr node, gpointer act_pdata)
 
     gnc_account_append_child (parent, pdata->account);
 
-    g_free (gid);
+    guid_free (gid);
 
     return TRUE;
 }

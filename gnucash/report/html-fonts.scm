@@ -60,104 +60,96 @@
 
 ;; Registers font options
 (define (register-font-options options)
-    (let*
-        (
-            (opt-register 
-                (lambda (opt) (gnc:register-option options opt)))
-            (font-family (gnc-get-default-report-font-family))
-        )
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Title") "a" (N_ "Font info for the report title.")
-                (string-append font-family " Bold 15")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Account link") "b" (N_ "Font info for account name.")
-                (string-append font-family " Italic 10")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Number cell") "c" (N_ "Font info for regular number cells.")
-                (string-append font-family " 10")))
-        (opt-register
-            (gnc:make-simple-boolean-option
-                (N_ "Fonts")
-                (N_ "Negative Values in Red") "d" (N_ "Display negative values in red.")
-                #t))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Number header") "e" (N_ "Font info for number headers.")
-                (string-append font-family " 10")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Text cell") "f" (N_ "Font info for regular text cells.")
-                (string-append font-family " 10")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Total number cell") "g" (N_ "Font info for number cells containing a total.")
-                (string-append font-family " Bold 12")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Total label cell") "h" (N_ "Font info for cells containing total labels.")
-                (string-append font-family " Bold 12")))
-        (opt-register
-            (gnc:make-font-option
-                (N_ "Fonts")
-                (N_ "Centered label cell") "i" (N_ "Font info for centered label cells.")
-                (string-append font-family " Bold 12")))
-    )
-)
+  (define (opt-register opt)
+    (gnc:register-option options opt))
+  (let ((font-family (gnc-get-default-report-font-family)))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Title") "a" (N_ "Font info for the report title.")
+      (string-append font-family " Bold 15")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Account link") "b" (N_ "Font info for account name.")
+      (string-append font-family " Italic 10")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Number cell") "c" (N_ "Font info for regular number cells.")
+      (string-append font-family " 10")))
+    (opt-register
+     (gnc:make-simple-boolean-option
+      (N_ "Fonts")
+      (N_ "Negative Values in Red") "d" (N_ "Display negative values in red.")
+      #t))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Number header") "e" (N_ "Font info for number headers.")
+      (string-append font-family " 10")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Text cell") "f" (N_ "Font info for regular text cells.")
+      (string-append font-family " 10")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Total number cell") "g"
+      (N_ "Font info for number cells containing a total.")
+      (string-append font-family " Bold 12")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Total label cell") "h"
+      (N_ "Font info for cells containing total labels.")
+      (string-append font-family " Bold 12")))
+    (opt-register
+     (gnc:make-font-option
+      (N_ "Fonts")
+      (N_ "Centered label cell") "i" (N_ "Font info for centered label cells.")
+      (string-append font-family " Bold 12")))))
 
 ;; Adds CSS style information to an html document
 (define (add-css-information-to-doc options ssdoc doc)
-    (let*
-        ((opt-val 
-            (lambda (section name)
-                (gnc:option-value (gnc:lookup-option options section name))))
-        (negative-red? (opt-val "Fonts" "Negative Values in Red"))
-        (alternate-row-color
-         (gnc:color-option->html
-          (gnc:lookup-option options
-                     "Colors"
-                     "Alternate Table Cell Color")))
-        (title-font-info (font-name-to-style-info (opt-val "Fonts" "Title")))
-        (account-link-font-info (font-name-to-style-info (opt-val "Fonts" "Account link")))
-        (number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Number cell")))
-        (number-header-font-info (font-name-to-style-info (opt-val "Fonts" "Number header")))
-        (text-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Text cell")))
-        (total-number-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Total number cell")))
-        (total-label-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Total label cell")))
-        (centered-label-cell-font-info (font-name-to-style-info (opt-val "Fonts" "Centered label cell"))))
+  (define (opt-font-val name)
+    (gnc:option-value (gnc:lookup-option options "Fonts" name)))
+  (define (opt-style-info name) (font-name-to-style-info (opt-font-val name)))
+  (let* ((negative-red? (opt-font-val "Negative Values in Red"))
+         (alternate-row-color
+          (gnc:color-option->html
+           (gnc:lookup-option options "Colors" "Alternate Table Cell Color")))
+         (title-info (opt-style-info "Title"))
+         (account-link-info (opt-style-info "Account link"))
+         (number-cell-info (opt-style-info "Number cell"))
+         (number-header-info (opt-style-info "Number header"))
+         (text-cell-info (opt-style-info "Text cell"))
+         (total-number-cell-info (opt-style-info "Total number cell"))
+         (total-label-cell-info (opt-style-info "Total label cell"))
+         (centered-label-cell-info (opt-style-info "Centered label cell")))
 
-        (gnc:html-document-set-style-text!
-            ssdoc
-            (string-append
-                "h3 { " title-font-info " }\n"
-                "a { " account-link-font-info " }\n"
-                "body, p, table, tr, td { vertical-align: top; " text-cell-font-info " }\n"
-                "tr.alternate-row { background: " alternate-row-color " }\n"
-                "tr { page-break-inside: avoid !important;}\n"
-                "th.column-heading-left { text-align: left; " number-header-font-info " }\n"
-                "th.column-heading-center { text-align: center; " number-header-font-info " }\n"
-                "th.column-heading-right { text-align: right; " number-header-font-info " }\n"
-                "td.neg { " (if negative-red? "color: red; " "") " }\n"
-                "td.number-cell, td.total-number-cell { text-align: right; white-space: nowrap; }\n"
-                "td.date-cell { white-space: nowrap; }\n"
-                "td.anchor-cell { white-space: nowrap; " text-cell-font-info " }\n"
-                "td.number-cell { " number-cell-font-info " }\n"
-                "td.number-header { text-align: right; " number-header-font-info " }\n"
-                "td.text-cell { " text-cell-font-info " }\n"
-                "td.total-number-cell { " total-number-cell-font-info " }\n"
-                "td.total-label-cell { " total-label-cell-font-info " }\n"
-                "td.centered-label-cell { text-align: center; " centered-label-cell-font-info " }\n"
-                (or (gnc:html-document-style-text doc) "")
-            )
-        )
-    )
-)
+    (gnc:html-document-set-style-text!
+     ssdoc
+     (string-append
+      "h3 { " title-info " }\n"
+      "a { " account-link-info " }\n"
+      "body, p, table, tr, td { vertical-align: top; " text-cell-info " }\n"
+      "tr.alternate-row { background: " alternate-row-color " }\n"
+      "tr { page-break-inside: avoid !important;}\n"
+      "html, body { height: 100vh; margin: 0; }\n"
+      "td, th { border-color: grey }\n"
+      "th.column-heading-left { text-align: left; " number-header-info " }\n"
+      "th.column-heading-center { text-align: center; " number-header-info " }\n"
+      "th.column-heading-right { text-align: right; " number-header-info " }\n"
+      "td.neg { " (if negative-red? "color: red; " "") " }\n"
+      "td.number-cell, td.total-number-cell { text-align: right; white-space: nowrap; }\n"
+      "td.date-cell { white-space: nowrap; }\n"
+      "td.anchor-cell { white-space: nowrap; " text-cell-info " }\n"
+      "td.number-cell { " number-cell-info " }\n"
+      "td.number-header { text-align: right; " number-header-info " }\n"
+      "td.text-cell { " text-cell-info " }\n"
+      "td.total-number-cell { " total-number-cell-info " }\n"
+      "td.total-label-cell { " total-label-cell-info " }\n"
+      "td.centered-label-cell { text-align: center; " centered-label-cell-info " }\n"
+      (or (gnc:html-document-style-text doc) "")))))

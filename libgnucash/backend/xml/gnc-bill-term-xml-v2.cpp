@@ -279,7 +279,7 @@ set_parent_child (xmlNodePtr node, struct billterm_pdata* pdata,
         gncBillTermSetGUID (term, guid);
         gncBillTermCommitEdit (term);
     }
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (term, FALSE);
     func (pdata->term, term);
 
@@ -318,7 +318,7 @@ billterm_guid_handler (xmlNodePtr node, gpointer billterm_pdata)
         gncBillTermSetGUID (pdata->term, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }

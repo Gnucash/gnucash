@@ -247,6 +247,8 @@
 
 (define (add-owner-table table splits acc start-date end-date date-type
                          used-columns payable? link-option)
+  (define (AP-negate num)
+    (if payable? (- num) num))
   (define currency (xaccAccountGetCommodity acc))
   (define link-cols (assq-ref '((none . 0) (simple . 1) (detailed . 3)) link-option))
   (define (print-totals total debit credit tax sale)
@@ -313,8 +315,9 @@
              (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Outstanding"))
                          (make-cell
                           (gnc:make-gnc-monetary
-                           currency (gnc-lot-get-balance
-                                     (gncInvoiceGetPostedLot invoice)))))
+                           currency
+                           (AP-negate (gnc-lot-get-balance
+                                       (gncInvoiceGetPostedLot invoice))))))
                    result))))
        (else
         (let* ((lot-split (car invoice-splits))
@@ -328,7 +331,7 @@
               (let* ((tfr-split (car tfr-splits))
                      (tfr-acct (xaccSplitGetAccount tfr-split))
                      (tfr-curr (xaccAccountGetCommodity tfr-acct))
-                     (tfr-amt (xaccSplitGetAmount tfr-split)))
+                     (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
                 (lp1 (cdr tfr-splits)
                      (cons (list
                             (qof-print-date (xaccTransGetDate lot-txn))
@@ -371,7 +374,7 @@
         (let* ((payment-split (car payment-splits))
                (inv (car payment-split))
                (inv-split (cadr payment-split))
-               (inv-amount (xaccSplitGetAmount inv-split)))
+               (inv-amount (AP-negate (xaccSplitGetAmount inv-split))))
           (lp (cdr payment-splits)
               (- amount inv-amount)
               (cons (list

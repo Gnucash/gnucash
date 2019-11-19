@@ -59,6 +59,8 @@ typedef struct
     GtkWidget    *sub_label;
 
     gboolean      jump_close;
+    gchar        *saved_filter_text;
+    gint          event_handler_id;
 
 }FindAccountDialog;
 
@@ -194,7 +196,7 @@ fill_model (GtkTreeModel *model, Account *account)
 }
 
 static void
-get_account_info (FindAccountDialog *facc_dialog)
+get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
 {
     Account      *root;
     GList        *accts;
@@ -214,7 +216,10 @@ get_account_info (FindAccountDialog *facc_dialog)
 
     accts = gnc_account_get_descendants_sorted (root);
 
-    filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
+    if (use_saved_filter)
+        filter_text = g_ascii_strdown (facc_dialog->saved_filter_text, -1);
+    else
+        filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
 
     /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
@@ -250,10 +255,53 @@ get_account_info (FindAccountDialog *facc_dialog)
 static void
 filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
 {
-    get_account_info (facc_dialog);
+    get_account_info (facc_dialog, FALSE);
+
+    if (facc_dialog->saved_filter_text)
+        g_free (facc_dialog->saved_filter_text);
+
+    // save the filter incase of an account event
+    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+                                     (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     // Clear the filter
     gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+}
+
+static void
+gnc_find_account_event_handler (QofInstance *entity,
+                                QofEventId event_type,
+                                FindAccountDialog *facc_dialog,
+                                gpointer evt_data)
+{
+    Account *account = NULL;
+
+    g_return_if_fail (facc_dialog);    /* Required */
+
+    if (!GNC_IS_ACCOUNT(entity))
+        return;
+
+    ENTER("entity %p of type %d, dialog %p, event_data %p",
+          entity, event_type, facc_dialog, evt_data);
+
+    account = GNC_ACCOUNT(entity);
+
+    switch (event_type)
+    {
+    case QOF_EVENT_ADD:
+    case QOF_EVENT_REMOVE:
+    case QOF_EVENT_MODIFY:
+        DEBUG("account change on %p (%s)", account, xaccAccountGetName (account));
+        get_account_info (facc_dialog, TRUE);
+        LEAVE(" ");
+        break;
+
+    default:
+        LEAVE("unknown event type");
+        return;
+    }
+    LEAVE(" ");
+    return;
 }
 
 static void
@@ -280,6 +328,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     facc_dialog->session = gnc_get_current_session();
     facc_dialog->parent = parent;
+    facc_dialog->saved_filter_text = g_strdup ("");
 
     gtk_window_set_title (GTK_WINDOW(facc_dialog->window), _("Find Account"));
 
@@ -400,7 +449,11 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     // Set the filter to Wildcard
     gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 
-    get_account_info (facc_dialog);
+    // add a handler to listen for account events
+    facc_dialog->event_handler_id = qof_event_register_handler
+                             ((QofEventHandler)gnc_find_account_event_handler, facc_dialog);
+
+    get_account_info (facc_dialog, FALSE);
     LEAVE(" ");
 }
 
@@ -410,6 +463,16 @@ close_handler (gpointer user_data)
     FindAccountDialog *facc_dialog = user_data;
 
     ENTER(" ");
+
+    if (facc_dialog->event_handler_id)
+    {
+        qof_event_unregister_handler (facc_dialog->event_handler_id);
+        facc_dialog->event_handler_id = 0;
+    }
+
+    if (facc_dialog->saved_filter_text)
+        g_free (facc_dialog->saved_filter_text);
+
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(facc_dialog->window));
     gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
     LEAVE(" ");

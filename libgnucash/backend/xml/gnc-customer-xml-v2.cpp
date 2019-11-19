@@ -205,7 +205,7 @@ customer_guid_handler (xmlNodePtr node, gpointer cust_pdata)
         gncCustomerSetGUID (pdata->customer, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -237,7 +237,7 @@ customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
     g_return_val_if_fail (guid, FALSE);
     term = gnc_billterm_xml_find_or_create (pdata->book, guid);
     g_assert (term);
-    g_free (guid);
+    guid_free (guid);
     gncCustomerSetTerms (pdata->customer, term);
 
     return TRUE;
@@ -353,7 +353,7 @@ customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
         gncTaxTableDecRef (taxtable);
 
     gncCustomerSetTaxTable (pdata->customer, taxtable);
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 

@@ -209,12 +209,12 @@ equals_node_val_vs_guid (xmlNodePtr node, const GncGUID* id)
 
     if (guid_compare (cmpid, id) == 0)
     {
-        g_free (cmpid);
+        guid_free (cmpid);
         return TRUE;
     }
     else
     {
-        g_free (cmpid);
+        guid_free (cmpid);
         return FALSE;
     }
 }

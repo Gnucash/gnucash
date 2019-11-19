@@ -237,7 +237,7 @@ spl_id_handler (xmlNodePtr node, gpointer data)
 
     xaccSplitSetGUID (pdata->split, tmp);
 
-    g_free (tmp);
+    guid_free (tmp);
     return TRUE;
 }
 
@@ -316,7 +316,7 @@ spl_account_handler (xmlNodePtr node, gpointer data)
 
     xaccAccountInsertSplit (account, pdata->split);
 
-    g_free (id);
+    guid_free (id);
 
     return TRUE;
 }
@@ -340,7 +340,7 @@ spl_lot_handler (xmlNodePtr node, gpointer data)
 
     gnc_lot_add_split (lot, pdata->split);
 
-    g_free (id);
+    guid_free (id);
 
     return TRUE;
 }
@@ -455,7 +455,7 @@ trn_id_handler (xmlNodePtr node, gpointer trans_pdata)
 
     xaccTransSetGUID ((Transaction*)trn, tmp);
 
-    g_free (tmp);
+    guid_free (tmp);
 
     return TRUE;
 }

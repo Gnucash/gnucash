@@ -178,7 +178,7 @@ employee_guid_handler (xmlNodePtr node, gpointer employee_pdata)
         gncEmployeeSetGUID (pdata->employee, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }
@@ -282,7 +282,7 @@ employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
     g_return_val_if_fail (guid, FALSE);
 
     ccard_acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
 
     g_return_val_if_fail (ccard_acc, FALSE);
     gncEmployeeSetCCard (pdata->employee, ccard_acc);

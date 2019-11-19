@@ -64,7 +64,7 @@ GType        gnc_popup_entry_get_type   (void) G_GNUC_CONST;
 GtkWidget   *gnc_popup_entry_new        (void);
 
 void         gnc_popup_entry_set_text   (GncPopupEntry *popup,
-        const gchar  *text);
+                                         const gchar  *text);
 
 const gchar *gnc_popup_entry_get_text   (GncPopupEntry *popup);
 

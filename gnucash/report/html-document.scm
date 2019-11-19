@@ -107,7 +107,8 @@
 
 (define (gnc:html-document-tree-collapse . tree)
   (let lp ((e tree) (accum '()))
-    (cond ((list? e) (fold lp accum e))
+    (cond ((null? e) accum)
+          ((pair? e) (fold lp accum e))
           ((string? e) (cons e accum))
           (else (cons (object->string e) accum)))))
 
@@ -142,6 +143,7 @@
             ;;<guile-sitedir>/gnucash/reports/data/balsheet-eg.eguile.scm:<html>
             ;;<guile-sitedir>/gnucash/reports/data/receipt.eguile.scm:<html>
 
+            (push "<!DOCTYPE html>\n")
             (push "<html dir='auto'>\n")
             (push "<head>\n")
             (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")

@@ -182,11 +182,11 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     }
     default:
         PWARN ("Invalid owner type: %d\n", gncOwnerGetType (pdata->owner));
-        g_free (guid);
+        guid_free (guid);
         return FALSE;
     }
 
-    g_free (guid);
+    guid_free (guid);
     return TRUE;
 }
 

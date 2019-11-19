@@ -146,7 +146,7 @@ job_guid_handler (xmlNodePtr node, gpointer job_pdata)
         gncJobSetGUID (pdata->job, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }

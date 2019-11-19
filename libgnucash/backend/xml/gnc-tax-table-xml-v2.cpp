@@ -155,7 +155,7 @@ ttentry_acct_handler (xmlNodePtr node, gpointer ttentry_pdata)
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
     acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (acc, FALSE);
 
     gncTaxTableEntrySetAccount (pdata->ttentry, acc);
@@ -257,7 +257,7 @@ set_parent_child (xmlNodePtr node, struct taxtable_pdata* pdata,
         gncTaxTableSetGUID (table, guid);
         gncTaxTableCommitEdit (table);
     }
-    g_free (guid);
+    guid_free (guid);
     g_return_val_if_fail (table, FALSE);
     func (pdata->table, table);
 
@@ -285,7 +285,7 @@ taxtable_guid_handler (xmlNodePtr node, gpointer taxtable_pdata)
         gncTaxTableSetGUID (pdata->table, guid);
     }
 
-    g_free (guid);
+    guid_free (guid);
 
     return TRUE;
 }

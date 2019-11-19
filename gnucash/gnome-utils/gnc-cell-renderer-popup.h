@@ -45,50 +45,50 @@ typedef struct _GncCellRendererPopupClass GncCellRendererPopupClass;
 
 struct _GncCellRendererPopup
 {
-	GtkCellRendererText  parent;
+    GtkCellRendererText  parent;
 
-	/* Cached width of the popup button. */
-	gint                 button_width;
-	
-	/* The popup window. */
-	GtkWidget           *popup_window;
+    /* Cached width of the popup button. */
+    gint                 button_width;
 
-	/* The widget that should grab focus on popup. */
-	GtkWidget           *focus_window;
+    /* The popup window. */
+    GtkWidget           *popup_window;
 
-	/* The editable entry. */
-	GtkWidget           *editable;
+    /* The widget that should grab focus on popup. */
+    GtkWidget           *focus_window;
 
-	gboolean             shown;
-	gboolean             editing_canceled;
-        gchar                *cell_text;
+    /* The editable entry. */
+    GtkWidget           *editable;
+
+    gboolean             shown;
+    gboolean             editing_canceled;
+    gchar               *cell_text;
 };
 
 struct _GncCellRendererPopupClass
 {
-	GtkCellRendererTextClass parent_class;
-	
-	void   (* show_popup) (GncCellRendererPopup *cell,
-			       const gchar         *path,
-			       gint                 x1,
-			       gint                 y1,
-			       gint                 x2,
-			       gint                 y2);
-	
-	void   (* hide_popup) (GncCellRendererPopup *cell);
+    GtkCellRendererTextClass parent_class;
+
+    void   (* show_popup) (GncCellRendererPopup *cell,
+                           const gchar          *path,
+                           gint                  x1,
+                           gint                  y1,
+                           gint                  x2,
+                           gint                  y2);
+
+    void   (* hide_popup) (GncCellRendererPopup *cell);
 };
 
-GType            gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
+GType gnc_cell_renderer_popup_get_type (void) G_GNUC_CONST;
 
-GtkCellRenderer *gnc_cell_renderer_popup_new      (void);
+GtkCellRenderer *gnc_cell_renderer_popup_new (void);
 
-void             gnc_cell_renderer_popup_show     (GncCellRendererPopup *cell,
-						  const gchar         *path,
-						  gint                 x1,
-						  gint                 y1,
-						  gint                 x2,
-						  gint                 y2);
+void gnc_cell_renderer_popup_show (GncCellRendererPopup *cell,
+                                   const gchar          *path,
+                                   gint                  x1,
+                                   gint                  y1,
+                                   gint                  x2,
+                                   gint                  y2);
 
-void             gnc_cell_renderer_popup_hide     (GncCellRendererPopup *cell);
+void gnc_cell_renderer_popup_hide (GncCellRendererPopup *cell);
 
 #endif /* __GNC_CELL_RENDERER_POPUP_H__ */

@@ -349,6 +349,12 @@
           '("-$23.00")
           (get-row-col sxml -1 -1)))
 
+      (set-option! options "Filter" "Transaction Filter excludes matched strings" #t)
+      (let ((sxml (options->sxml options "negate transaction filter not.s?")))
+        (test-equal "transaction filter in bank to 'not.s?' and switch regex, sum = -$23.00"
+          '("$24.00")
+          (get-row-col sxml -1 -1)))
+
       ;; Test Reconcile Status Filters
       (set! options (default-testing-options))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
