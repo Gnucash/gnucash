@@ -56,7 +56,7 @@ set(test_gnc_module_SCHEME
   )
 
 set(CORE_GUILE_DEPENDS
-  gnc-module
+  scm-gnc-module
   scm-test-core
   scm-mod-foo
   gncmod-bar

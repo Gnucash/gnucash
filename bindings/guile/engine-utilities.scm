@@ -20,8 +20,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 ;; Copyright 2000 Rob Browning <rlb@cs.utexas.edu>
-(use-modules (gnucash gnc-module))
-
 (eval-when
       (compile load eval expand)
       (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
