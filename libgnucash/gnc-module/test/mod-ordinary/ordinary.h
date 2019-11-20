@@ -1,5 +1,4 @@
-/* incompatdep.c : a gnucash module that depends on an incompatible
- * version of another module. the initialization should fail. */
+/* ordinary.h: header for a dependency-free, guile-free client lib */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,42 +20,9 @@
 \********************************************************************/
 
 
-#include <stdio.h>
-#include <gmodule.h>
+#ifndef ORDINARY_H
+#define ORDINARY_H
 
-#include "gnc-module.h"
-#include "gnc-module-api.h"
+int ordinary_hello(void);
 
-GNC_MODULE_API_DECL(libgncmod_incompatdep)
-
-int libgncmod_incompatdep_gnc_module_system_interface = 0;
-
-int libgncmod_incompatdep_gnc_module_current = 0;
-int libgncmod_incompatdep_gnc_module_age = 0;
-int libgncmod_incompatdep_gnc_module_revision = 0;
-
-
-char *
-libgncmod_incompatdep_gnc_module_path(void)
-{
-    return g_strdup("gnucash/incompatdep");
-}
-
-char *
-libgncmod_incompatdep_gnc_module_description(void)
-{
-    return g_strdup("this is a broken module");
-}
-
-int
-libgncmod_incompatdep_gnc_module_init(int refcount)
-{
-    if (gnc_module_load("gnucash/ordinary", 25))
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
+#endif
