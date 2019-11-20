@@ -573,7 +573,10 @@ also show overall period profit & loss."))
                                                     col-datum
                                                     #t)
                                col-datum
-                               #f)))
+                               (and get-cell-anchor-fn
+                                    (get-cell-anchor-fn
+                                     (account-and-descendants lvl-acct)
+                                     col-datum)))))
                            cols-data))))
 
   (define* (add-account-row lvl-curr curr #:key
@@ -903,13 +906,14 @@ also show overall period profit & loss."))
                        (list-ref account-balance-list (1+ col-idx))))))
              (get-cell-anchor-fn
               (lambda (account col-idx)
-                (let* ((splits (xaccAccountGetSplitList account))
-                       (split-date (compose xaccTransGetDate xaccSplitGetParent))
-                       (date (list-ref report-dates col-idx))
-                       (valid-split? (lambda (s) (< (split-date s) date)))
-                       (valid-splits (filter valid-split? splits)))
-                  (and (pair? valid-splits)
-                       (gnc:split-anchor-text (last valid-splits))))))
+                (and (not (pair? account))
+                     (let* ((splits (xaccAccountGetSplitList account))
+                            (split-date (compose xaccTransGetDate xaccSplitGetParent))
+                            (date (list-ref report-dates col-idx))
+                            (valid-split? (lambda (s) (< (split-date s) date)))
+                            (valid-splits (filter valid-split? splits)))
+                       (and (pair? valid-splits)
+                            (gnc:split-anchor-text (last valid-splits)))))))
 
              (asset-liability-balances
               (let ((asset-liab-balances
@@ -1149,7 +1153,9 @@ also show overall period profit & loss."))
                                            (or common-currency book-main-currency))
                                      (list "Display" "Amount" 'double)
                                      (list "Accounts" "Accounts"
-                                           (list account))))))
+                                           (if (pair? account)
+                                               account
+                                               (list account)))))))
 
              (chart (and include-chart?
                          (gnc:make-report-anchor
