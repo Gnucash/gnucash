@@ -109,6 +109,7 @@ set(scm_rpt_std_GUILE_DEPENDS
   ${scm_rpts_GUILE_DEPENDS}
   scm-app-utils
   scm-gnc-module
+  scm-rpt-reports
   scm-reports-common-links
   scm-reports-standard-links
   )
@@ -117,6 +118,13 @@ gnc_add_scheme_targets(scm-reports-common
   "${reports_common_SCHEME}"
   "gnucash/reports"
   "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
+  TRUE
+)
+
+gnc_add_scheme_targets(scm-rpt-reports
+  "${reports_SCHEME}"
+  "gnucash"
+  "${scm_rpts_GUILE_DEPENDS}"
   TRUE
 )
 
@@ -145,13 +153,6 @@ gnc_add_scheme_targets(scm-reports-de_DE
   "${reports_de_DE_SCHEME}"
   "gnucash/reports/locale-specific/de_DE"
   "${scm_rpt_locale_specific_GUILE_DEPENDS}"
-  TRUE
-)
-
-gnc_add_scheme_targets(scm-rpt-reports
-  "${reports_SCHEME}"
-  "gnucash"
-  "scm-reports-standard;scm-reports-example;scm-reports-us;scm-reports-de_DE;${scm_rpts_GUILE_DEPENDS};"
   TRUE
 )
 
