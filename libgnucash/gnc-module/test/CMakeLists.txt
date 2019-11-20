@@ -1,5 +1,7 @@
 
 add_subdirectory(misc-mods)
+add_subdirectory(mod-ordinary)
+add_subdirectory(mod-withdep)
 
 set(GNC_MODULE_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
@@ -18,7 +20,8 @@ set(GNC_MODULE_TEST_LIBS
   gncmod-agedver
   gncmod-futuremodsys
   gncmod-incompatdep
-  gncmod-ordinarymod
+  gncmod-ordinary
+  gncmod-withdep
   )
 
 gnc_add_test_with_guile(test-load-c test-load-c.c GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test")
@@ -58,4 +61,4 @@ set(test_gnc_module_EXTRA_DIST
 set_local_dist(test_gnc_module_DIST_local CMakeLists.txt README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})
 
 set(test_gnc_module_DIST ${test_gnc_module_DIST_local} ${misc_mods_DIST}
-                         ${mod_bar_DIST} ${mod_baz_DIST} ${mod_foo_DIST} PARENT_SCOPE)
+                         ${mod_ordinary_DIST} ${mod_withdep_DIST} PARENT_SCOPE)

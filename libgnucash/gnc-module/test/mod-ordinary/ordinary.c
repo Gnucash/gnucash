@@ -1,4 +1,6 @@
-/* ordinarymod.c : ordinary module */
+/* libordinary.  this is a dependency-free client library, equivalent to
+ * the engine or some other core component that's ignorant of guile
+ * and the module system */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,39 +23,11 @@
 
 
 #include <stdio.h>
-#include <gmodule.h>
 
-#include "gnc-module.h"
-#include "gnc-module-api.h"
-
-GNC_MODULE_API_DECL(libgncmod_ordinarymod)
-
-int libgncmod_ordinarymod_gnc_module_system_interface = 0;
-
-int libgncmod_ordinarymod_gnc_module_current = 0;
-int libgncmod_ordinarymod_gnc_module_age = 0;
-int libgncmod_ordinarymod_gnc_module_revision = 0;
-
-char *
-libgncmod_ordinarymod_gnc_module_path(void)
-{
-    return g_strdup("gnucash/ordinarymod");
-}
-
-char *
-libgncmod_ordinarymod_gnc_module_description(void)
-{
-    return g_strdup("this is a very ordinary module");
-}
+#include "ordinary.h"
 
 int
-libgncmod_ordinarymod_gnc_module_init(int refcount)
+ordinary_hello(void)
 {
-    return TRUE;
-}
-
-int
-libgncmod_ordinarymod_gnc_module_end(int refcount)
-{
-    return TRUE;
+    return 10;
 }
