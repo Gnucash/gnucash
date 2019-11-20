@@ -24,7 +24,6 @@
 #include <config.h>
 #include <stdio.h>
 #include <gmodule.h>
-#include <libguile.h>
 
 #include "gnc-module-api.h"
 
