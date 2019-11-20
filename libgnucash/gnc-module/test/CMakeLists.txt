@@ -62,11 +62,7 @@ set(test_gnc_module_SOURCE_DIST
   test-modsysver.c
 )
 
-set(test_gnc_module_EXTRA_DIST
-  README
-)
-
-set_local_dist(test_gnc_module_DIST_local CMakeLists.txt README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})
+set_local_dist(test_gnc_module_DIST_local CMakeLists.txt README ${test_gnc_module_SOURCE_DIST})
 
 set(test_gnc_module_DIST ${test_gnc_module_DIST_local} ${misc_mods_DIST}
                          ${mod_ordinary_DIST} ${mod_withdep_DIST} PARENT_SCOPE)
