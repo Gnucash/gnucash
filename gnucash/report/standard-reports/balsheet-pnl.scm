@@ -30,6 +30,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -901,19 +902,25 @@ also show overall period profit & loss."))
      ((eq? report-type 'balsheet)
       (let* ((get-cell-monetary-fn
               (lambda (account col-idx)
-                (let ((account-balance-list (assoc account accounts-balances)))
+                (let ((account-balance-list (assoc-ref accounts-balances account)))
                   (and account-balance-list
-                       (list-ref account-balance-list (1+ col-idx))))))
+                       (list-ref account-balance-list col-idx)))))
+
+             ;; an alist of account->last-split at date boundary
+             (accounts-splits-dates
+              (map
+               (lambda (acc)
+                 (cons acc (list->vector
+                            (gnc:account-accumulate-at-dates
+                             acc report-dates #:split->elt identity))))
+               accounts))
+
              (get-cell-anchor-fn
               (lambda (account col-idx)
-                (and (not (pair? account))
-                     (let* ((splits (xaccAccountGetSplitList account))
-                            (split-date (compose xaccTransGetDate xaccSplitGetParent))
-                            (date (list-ref report-dates col-idx))
-                            (valid-split? (lambda (s) (< (split-date s) date)))
-                            (valid-splits (filter valid-split? splits)))
-                       (and (pair? valid-splits)
-                            (gnc:split-anchor-text (last valid-splits)))))))
+                (and-let* (((not (pair? account)))
+                           (date-splits (assoc-ref accounts-splits-dates account))
+                           (split (vector-ref date-splits col-idx)))
+                  (gnc:split-anchor-text split))))
 
              (asset-liability-balances
               (let ((asset-liab-balances
