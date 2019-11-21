@@ -653,6 +653,11 @@
            (dates (gnc:make-date-list (gnc-dmy2time64 01 01 1970)
                                       (gnc-dmy2time64 01 04 1970)
                                       MonthDelta)))
+
+      (test-equal "empty account"
+        '(#f #f #f #f)
+        (gnc:account-accumulate-at-dates bank1 dates))
+
       (env-transfer env 15 01 1970 income bank1 10)
       (env-transfer env 15 02 1970 income bank1 10)
       (env-transfer env 15 03 1970 income bank1 10)
@@ -690,5 +695,21 @@
 
       (test-equal "1 txn in early slot"
         '(("USD" . 0) ("USD" . 10) ("USD" . 10) ("USD" . 10))
-        (map monetary->pair (gnc:account-get-balances-at-dates bank4 dates))))
+        (map monetary->pair (gnc:account-get-balances-at-dates bank4 dates)))
+
+      (test-equal "1 txn in each slot"
+        '(#f 10 20 40)
+        (gnc:account-accumulate-at-dates bank1 dates))
+
+      (test-equal "2 txn before start, 1 in middle"
+        '(20 20 30 30)
+        (gnc:account-accumulate-at-dates bank2 dates))
+
+      (test-equal "1 txn in late slot"
+        '(#f #f #f 10)
+        (gnc:account-accumulate-at-dates bank3 dates))
+
+      (test-equal "1 txn in early slot"
+        '(#f 10 10 10)
+        (gnc:account-accumulate-at-dates bank4 dates)))
     (teardown)))

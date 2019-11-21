@@ -19,6 +19,7 @@
 
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 format))
+(use-modules (ice-9 match))
 
 (define (list-ref-safe list elt)
   (and (> (length list) elt)
@@ -468,53 +469,63 @@ flawed. see report-utilities.scm. please update reports.")
 (define* (gnc:account-get-balances-at-dates
           account dates-list #:key (split->amount xaccSplitGetAmount))
   (define (amount->monetary bal)
-    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
-  (let loop ((splits (xaccAccountGetSplitList account))
-             (dates-list (sort dates-list <))
-             (currentbal 0)
-             (lastbal 0)
-             (balancelist '()))
-    (cond
+    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) (or bal 0)))
+  (define balance 0)
+  (map amount->monetary
+       (gnc:account-accumulate-at-dates
+        account dates-list #:split->elt
+        (lambda (s)
+          (if s (set! balance (+ balance (or (split->amount s) 0))))
+          balance))))
 
-     ;; end of dates. job done!
-     ((null? dates-list)
-      (map amount->monetary (reverse balancelist)))
 
-     ;; end of splits, but still has dates. pad with last-bal
-     ;; until end of dates.
-     ((null? splits)
-      (loop '()
-            (cdr dates-list)
-            currentbal
-            lastbal
-            (cons lastbal balancelist)))
+;; this function will scan through account splitlist, building a list
+;; of split->elt results along the way at dates specified in dates.
+;; in: acc   - account
+;;     dates - a list of time64 -- it will be sorted
+;;     split->date - an unary lambda. result to compare with dates list.
+;;     split->elt - an unary lambda. it will be called successfully for each
+;;                  split in the account until the last date. the result
+;;                  will be accumulated onto the resulting list. the default
+;;                  xaccSplitGetBalance makes it similar to
+;;                  gnc:account-get-balances-at-dates.
+;; out: (list elt0 elt1 ...), each entry is the result of split->elt
+(define* (gnc:account-accumulate-at-dates
+          acc dates #:key
+          (split->date (compose xaccTransGetDate xaccSplitGetParent))
+          (split->elt xaccSplitGetBalance))
+  (let lp ((splits (xaccAccountGetSplitList acc))
+           (dates (sort dates <))
+           (result '())
+           (last-result #f))
+    (match dates
 
-     (else
-      (let* ((this (car splits))
-             (rest (cdr splits))
-             (currentbal (+ (or (split->amount this) 0) currentbal))
-             (next (and (pair? rest) (car rest))))
+      ;; end of dates. job done!
+      (() (reverse result))
 
-        (cond
-         ;; the next split is still before date
-         ((and next (< (xaccTransGetDate (xaccSplitGetParent next)) (car dates-list)))
-          (loop rest dates-list currentbal lastbal balancelist))
+      ((date . rest)
+       (match splits
 
-         ;; this split after date, add previous bal to balancelist
-         ((< (car dates-list) (xaccTransGetDate (xaccSplitGetParent this)))
-          (loop splits
-                (cdr dates-list)
-                lastbal
-                lastbal
-                (cons lastbal balancelist)))
+         ;; end of splits, but still has dates. pad with last-result
+         ;; until end of dates.
+         (() (lp '() rest (cons last-result result) last-result))
 
-         ;; this split before date, next split after date, or end.
-         (else
-          (loop rest
-                (cdr dates-list)
-                currentbal
-                currentbal
-                (cons currentbal balancelist)))))))))
+         ((head . tail)
+          (let ((next (and (pair? tail) (car tail))))
+            (cond
+
+             ;; the next split is still before date.
+             ((and next (< (split->date next) date))
+              (lp tail dates result (split->elt head)))
+
+             ;; head split after date, accumulate previous result
+             ((< date (split->date head))
+              (lp splits rest (cons last-result result) last-result))
+
+             ;; head split before date, next split after date, or end.
+             (else
+              (let ((head-result (split->elt head)))
+                (lp tail rest (cons head-result result) head-result)))))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.

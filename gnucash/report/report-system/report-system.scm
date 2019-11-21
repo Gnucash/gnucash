@@ -698,6 +698,7 @@
 (export gnc:commodity-collector-get-negated)
 (export gnc:commodity-collectorlist-get-merged) ;deprecated
 (export gnc-commodity-collector-commodity-count)
+(export gnc:account-accumulate-at-dates)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-balances-at-dates)
 (export gnc:account-get-comm-balance-at-date)
