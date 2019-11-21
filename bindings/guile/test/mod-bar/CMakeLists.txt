@@ -29,7 +29,7 @@ gnc_add_scheme_test_targets(scm-mod-bar
 set_target_properties(bar gncmod-bar PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
   ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test
   )
 
 set_dist_list(mod_bar_DIST CMakeLists.txt bar.c gnucash/bar.scm bar.h bar.i gnc-mod-bar.c)
