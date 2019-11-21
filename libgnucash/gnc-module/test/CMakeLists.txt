@@ -24,7 +24,8 @@ gnc_add_test(test-load-c
     test-load-c.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
-    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test")
+    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
+)
 
 gnc_add_test(test-modsysver
     test-modsysver.c
@@ -36,6 +37,7 @@ gnc_add_test(test-incompatdep
     test-incompatdep.c
     GNC_MODULE_TEST_INCLUDE_DIRS
     GNC_MODULE_TEST_LIBS
+    "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
 )
 gnc_add_test(test-agedver
     test-agedver.c
