@@ -29,6 +29,6 @@ gnc_add_scheme_test_targets(scm-mod-foo
 set_target_properties(foo gncmod-foo PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 set_dist_list(mod_foo_DIST CMakeLists.txt foo.i gnucash/foo.scm foo.c foo.h gnc-mod-foo.c)

@@ -29,14 +29,11 @@ int
 main(int argc, char ** argv)
 {
     GNCModule foo;
-    gchar *msg1 = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
-    gchar *msg2 = "Could not locate module gnucash/incompatdep interface v.0";
+    gchar *msg = "Could not locate module gnucash/incompatdep interface v.0";
     gchar *logdomain = "gnc.module";
     guint loglevel = G_LOG_LEVEL_WARNING;
-    TestErrorStruct check1 = { loglevel, logdomain, msg1 };
-    TestErrorStruct check2 = { loglevel, logdomain, msg2 };
-    test_add_error (&check1);
-    test_add_error (&check2);
+    TestErrorStruct check = { loglevel, logdomain, msg };
+    test_add_error (&check);
     g_log_set_handler (logdomain, loglevel,
                        (GLogFunc)test_list_handler, NULL);
 

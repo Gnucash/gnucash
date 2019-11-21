@@ -35,6 +35,6 @@ gnc_add_scheme_test_targets(scm-mod-baz
 set_target_properties(baz gncmod-baz PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 set_dist_list(mod_baz_DIST CMakeLists.txt baz.c gnucash/baz.scm baz.h baz.i gnc-mod-baz.c)

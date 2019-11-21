@@ -29,12 +29,6 @@ int
 main(int argc, char ** argv)
 {
     GNCModule testmod;
-    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
-    gchar *logdomain = "gnc.module";
-    guint loglevel = G_LOG_LEVEL_WARNING;
-    TestErrorStruct check = { loglevel, logdomain, msg };
-    g_log_set_handler (logdomain, loglevel,
-                       (GLogFunc)test_checked_handler, &check);
     g_test_message("  test-agedver.c:  asking for an old but supported interface ...");
 
     gnc_module_system_init();

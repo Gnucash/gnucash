@@ -16,6 +16,6 @@ target_include_directories(gncmod-ordinary PRIVATE
 set_target_properties(ordinary gncmod-ordinary PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 set_dist_list(mod_ordinary_DIST CMakeLists.txt ordinary.c ordinary.h gnc-mod-ordinary.c)

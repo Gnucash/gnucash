@@ -132,9 +132,6 @@ set (test_gnc_module_DEPENDS
     scm-mod-foo
     gncmod-bar
     scm-mod-baz
-    gncmod-agedver
-    gncmod-incompatdep
-    gncmod-futuremodsys
 )
 
 gnc_add_scheme_test_targets (test-gnc-modules-scm

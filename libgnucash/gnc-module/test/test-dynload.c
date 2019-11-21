@@ -35,14 +35,8 @@ int
 main(int argc, char ** argv)
 {
     GModule *gmodule;
-    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
-    gchar *logdomain = "gnc.module";
     gchar *modpath;
-    guint loglevel = G_LOG_LEVEL_WARNING;
     const char *libdir = g_getenv("LIBDIR");
-    TestErrorStruct check = { loglevel, logdomain, msg };
-    g_log_set_handler (logdomain, loglevel,
-                       (GLogFunc)test_checked_handler, &check);
 
     if (libdir == NULL)
     {
