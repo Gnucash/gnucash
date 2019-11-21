@@ -29,19 +29,19 @@ int
 main(int argc, char ** argv)
 {
     GNCModule foo;
-    gchar *msg = "Could not locate module gnucash/incompatdep interface v.0";
-    gchar *logdomain = "gnc.module";
-    guint loglevel = G_LOG_LEVEL_WARNING;
-    TestErrorStruct check = { loglevel, logdomain, msg };
-    test_add_error (&check);
-    g_log_set_handler (logdomain, loglevel,
-                       (GLogFunc)test_list_handler, NULL);
+    gchar *msg1 = "Could not locate module gnucash/ordinary interface v.25";
+    gchar *msg2 = "Initialization failed for module gnucash/incompatdep";
 
     g_test_message("  test-incompatdep.c:  loading a module with bad deps ...\n");
+
+    g_test_expect_message ("gnc.module", G_LOG_LEVEL_WARNING, msg1);
+    g_test_expect_message ("gnc.module", G_LOG_LEVEL_WARNING, msg2);
 
     gnc_module_system_init();
 
     foo = gnc_module_load("gnucash/incompatdep", 0);
+
+    g_test_assert_expected_messages();
 
     if (!foo)
     {
