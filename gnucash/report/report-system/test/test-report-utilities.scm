@@ -24,6 +24,7 @@
   (test-monetary-adders)
   (test-make-stats-collector)
   (test-utility-functions)
+  (test-get-account-at-dates)
   (test-end "report-utilities"))
 
 (define (NDayDelta t64 n)
@@ -625,3 +626,69 @@
       0
       (s 'numitems #f)))
   (test-end "gnc:make-stats-collector"))
+
+(define (monetary->pair mon)
+  (cons (gnc-commodity-get-mnemonic (gnc:gnc-monetary-commodity mon))
+        (gnc:gnc-monetary-amount mon)))
+
+(define (split->amount split)
+  (and split (xaccSplitGetAmount split)))
+
+(define (test-get-account-at-dates)
+  (test-group-with-cleanup "test-get-balance-at-dates"
+    (let* ((env (create-test-env))
+           (structure (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
+                            (list "Asset"
+                                  (list "Bank1")
+                                  (list "Bank2")
+                                  (list "Bank3")
+                                  (list "Bank4"))
+                            (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))))
+           (accounts (env-create-account-structure-alist env structure))
+           (bank1 (assoc-ref accounts "Bank1"))
+           (bank2 (assoc-ref accounts "Bank2"))
+           (bank3 (assoc-ref accounts "Bank3"))
+           (bank4 (assoc-ref accounts "Bank4"))
+           (income (assoc-ref accounts "Income"))
+           (dates (gnc:make-date-list (gnc-dmy2time64 01 01 1970)
+                                      (gnc-dmy2time64 01 04 1970)
+                                      MonthDelta)))
+      (env-transfer env 15 01 1970 income bank1 10)
+      (env-transfer env 15 02 1970 income bank1 10)
+      (env-transfer env 15 03 1970 income bank1 10)
+      (let ((clos (env-transfer env 18 03 1970 income bank1 10)))
+        (xaccTransSetIsClosingTxn clos #t))
+
+      (env-transfer env 15 12 1969 income bank2 10)
+      (env-transfer env 17 12 1969 income bank2 10)
+      (env-transfer env 15 02 1970 income bank2 10)
+
+      (env-transfer env 15 03 1970 income bank3 10)
+
+      (env-transfer env 15 01 1970 income bank4 10)
+
+      (test-equal "1 txn in each slot"
+        '(("USD" . 0) ("USD" . 10) ("USD" . 20) ("USD" . 40))
+        (map monetary->pair (gnc:account-get-balances-at-dates bank1 dates)))
+
+      (test-equal "1 txn in each slot, tests #:split->amount to ignore closing"
+        '(("USD" . 0) ("USD" . 10) ("USD" . 20) ("USD" . 30))
+        (map monetary->pair
+             (gnc:account-get-balances-at-dates
+              bank1 dates #:split->amount
+              (lambda (s)
+                (and (not (xaccTransGetIsClosingTxn (xaccSplitGetParent s)))
+                     (xaccSplitGetAmount s))))))
+
+      (test-equal "2 txn before start, 1 in middle"
+        '(("USD" . 20) ("USD" . 20) ("USD" . 30) ("USD" . 30))
+        (map monetary->pair (gnc:account-get-balances-at-dates bank2 dates)))
+
+      (test-equal "1 txn in late slot"
+        '(("USD" . 0) ("USD" . 0) ("USD" . 0) ("USD" . 10))
+        (map monetary->pair (gnc:account-get-balances-at-dates bank3 dates)))
+
+      (test-equal "1 txn in early slot"
+        '(("USD" . 0) ("USD" . 10) ("USD" . 10) ("USD" . 10))
+        (map monetary->pair (gnc:account-get-balances-at-dates bank4 dates))))
+    (teardown)))
