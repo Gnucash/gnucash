@@ -709,6 +709,14 @@
         '(#f #f #f 10)
         (gnc:account-accumulate-at-dates bank3 dates))
 
+      (test-equal "1 txn in late slot, tests #:nosplit->elt"
+        '(x x x 10)
+        (gnc:account-accumulate-at-dates bank3 dates #:nosplit->elt 'x))
+
+      (test-equal "1 txn in late slot, tests #:split->elt"
+        '(#f #f #f y)
+        (gnc:account-accumulate-at-dates bank3 dates #:split->elt (const 'y)))
+
       (test-equal "1 txn in early slot"
         '(#f 10 10 10)
         (gnc:account-accumulate-at-dates bank4 dates)))

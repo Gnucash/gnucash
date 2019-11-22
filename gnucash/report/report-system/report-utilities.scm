@@ -483,6 +483,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; of split->elt results along the way at dates specified in dates.
 ;; in: acc   - account
 ;;     dates - a list of time64 -- it will be sorted
+;;     nosplit->elt - if report-dates occur *before* earliest split, the
+;;                    result list will be padded with this value
 ;;     split->date - an unary lambda. result to compare with dates list.
 ;;     split->elt - an unary lambda. it will be called successfully for each
 ;;                  split in the account until the last date. the result
@@ -490,14 +492,16 @@ flawed. see report-utilities.scm. please update reports.")
 ;;                  xaccSplitGetBalance makes it similar to
 ;;                  gnc:account-get-balances-at-dates.
 ;; out: (list elt0 elt1 ...), each entry is the result of split->elt
+;;      or nosplit->elt
 (define* (gnc:account-accumulate-at-dates
           acc dates #:key
+          (nosplit->elt #f)
           (split->date (compose xaccTransGetDate xaccSplitGetParent))
           (split->elt xaccSplitGetBalance))
   (let lp ((splits (xaccAccountGetSplitList acc))
            (dates (sort dates <))
            (result '())
-           (last-result #f))
+           (last-result nosplit->elt))
     (match dates
 
       ;; end of dates. job done!
