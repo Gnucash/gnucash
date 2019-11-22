@@ -251,16 +251,14 @@
     ;; gets an account alist balances
     ;; output: (list acc bal0 bal1 bal2 ...)
     (define (account->balancelist account)
-      (let ((ignore-closing? (not (gnc:account-is-inc-exp? account))))
+      (let ((comm (xaccAccountGetCommodity account)))
         (cons account
-              (gnc:account-get-balances-at-dates
+              (gnc:account-accumulate-at-dates
                account dates-list
-               #:split->amount
-               (lambda (s)
-                 (and (or ignore-closing?
-                          (not (xaccTransGetIsClosingTxn
-                                (xaccSplitGetParent s))))
-                      (xaccSplitGetAmount s)))))))
+               #:split->elt (lambda (s)
+                              (gnc:make-gnc-monetary
+                               comm (xaccSplitGetNoclosingBalance s)))
+               #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
 
     ;; This calculates the balances for all the 'account-balances' for
     ;; each element of the list 'dates'. Uses the collector->monetary
