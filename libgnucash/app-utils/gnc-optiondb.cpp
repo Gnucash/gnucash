@@ -138,9 +138,9 @@ GncOptionDB::find_section(const char* section)
 }
 
 std::optional<std::reference_wrapper<GncOption>>
-GncOptionDB::find_option(const char* section, const char* name)
+GncOptionDB::find_option(const char* section, const char* name) const
 {
-    auto db_section = find_section(section);
+    auto db_section = const_cast<GncOptionDB*>(this)->find_section(section);
     if (!db_section)
         return std::nullopt;
     auto db_opt = std::find_if(
@@ -171,6 +171,36 @@ GncOptionDB::make_internal(const char* section, const char* name)
     auto db_opt = find_option(section, name);
     if (db_opt)
         db_opt->get().make_internal();
+}
+
+std::ostream&
+GncOptionDB::serialize_option_scheme(std::ostream& oss,
+                                     const char* option_prolog,
+                                     const char* section, const char* name) const noexcept
+{
+    auto db_opt = find_option(section, name);
+    if (!db_opt || !db_opt->get().is_changed())
+        return oss;
+    oss << c_scheme_serialization_elements[0] << option_prolog;
+    oss << c_scheme_serialization_elements[1] << section;
+    oss << c_scheme_serialization_elements[1] << name; //repeats, not an error!
+//    oss << c_scheme_serialization_elements[2] << db_opt->get();
+    oss << c_scheme_serialization_elements[3];
+
+    return oss;
+}
+
+std::ostream&
+GncOptionDB::serialize_option_key_value(std::ostream& oss,
+                                        const char* section,
+                                        const char* name) const noexcept
+{
+
+    auto db_opt = find_option(section, name);
+    if (!db_opt || !db_opt->get().is_changed())
+        return oss;
+    oss << section << ":" << name << "=" /* << db_opt->get() */ << ";";
+    return oss;
 }
 
 void
@@ -304,7 +334,7 @@ gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
     }
     catch (const std::invalid_argument& err)
     {
-        std::cerr << "Account List Limited Option, value failed validation, option not registerd.\n";
+        std::cerr << "Account List Limited Option, value failed validation, option not registered.\n";
     }
 }
 
@@ -405,7 +435,7 @@ gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
                           const char* name, const char* key,
                           const char* doc_string, QofQuery* value)
 {
-    GncOption option{section, name, key, doc_string, value,
+    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }

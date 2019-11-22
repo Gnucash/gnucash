@@ -28,6 +28,7 @@
 #include <functional>
 #include <exception>
 #include <optional>
+#include <iostream>
 extern "C"
 {
 #include <gncInvoice.h>
@@ -83,14 +84,33 @@ public:
     void make_internal(const char* section, const char* name);
     void commit();
     std::optional<std::reference_wrapper<GncOptionSection>> find_section(const char* section);
-    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name);
+    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name) {
+        return static_cast<const GncOptionDB&>(*this).find_option(section, name);
+    }
+    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name) const;
 private:
+    std::ostream& serialize_option_scheme(std::ostream& oss,
+                                          const char* option_prolog,
+                                          const char* section, const char* name) const noexcept;
+    std::ostream& serialize_option_key_value(std::ostream& oss,
+                                             const char* section,
+                                             const char* name) const noexcept;
+    void load_option_scheme(std::istream iss);
+    void load_option_key_value(std::istream iss);
     std::optional<std::reference_wrapper<GncOptionSection>> m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
 
     std::function<GncOptionUIItem*()> m_get_ui_value;
     std::function<void(GncOptionUIItem*)> m_set_ui_value;
+    static constexpr char const* const c_scheme_serialization_elements[]
+    {
+        "(let ((option (gnc:lookup-option ",
+        "\n                                 ",
+        ")))\n   ((lambda (o) (if o (gnc:option-set-value o",
+        "))) option))\n\n"
+        };
+
 };
 
 /**

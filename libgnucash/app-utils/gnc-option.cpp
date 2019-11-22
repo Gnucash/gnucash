@@ -24,9 +24,11 @@
 //#include "options.h"
 #include "gnc-option.hpp"
 #include <gnc-datetime.hpp>
+#include <guid.hpp>
 extern "C"
 {
 #include "gnc-accounting-period.h"
+#include "gnc-ui-util.h"
 }
 
 bool
@@ -129,6 +131,72 @@ GncOptionDateValue::get_value() const
     set_day_and_time(now, m_type == DateType::STARTING);
     return static_cast<time64>(GncDateTime(now));
 }
+static const char* date_type_str[] {"absolute", "relative"};
+static const std::array<const char*, 16> date_period_str
+{
+    "today", "today",
+    "start-this-month", "end-this-month",
+    "start-prev-month", "end-prev-month",
+    "start-current-quarter", "end-current-quarter",
+    "start-prev-quarter", "end-prev-quarter",
+    "start-cal-year", "end-cal-year",
+    "start-prev-year", "end-prev-year",
+    "start-prev-fin-year", "end-prev-fin-year"
+};
+
+
+std::ostream&
+GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
+{
+    if (m_type == DateType::ABSOLUTE)
+        oss << date_type_str[0] << " . " << m_date;
+    else
+    {
+        int n{ m_type == DateType::STARTING ? 0 : 1};
+        n += 2 * static_cast<int>(m_period);
+        oss << date_type_str[1] << " . " << date_period_str[n];
+    }
+    return oss;
+}
+
+std::istream&
+GncOptionDateValue::in_stream(std::istream& iss)
+{
+    std::string type_str;
+    std::getline(iss, type_str, '.');
+    if (type_str == "absolute ")
+    {
+        time64 time;
+        iss >> time;
+        set_value(time);
+    }
+    else if (type_str == "relative ")
+    {
+        std::string period_str;
+        iss >> period_str;
+        auto period = std::find(date_period_str.begin(), date_period_str.end(),
+                                period_str);
+        if (period == date_period_str.end())
+        {
+            std::string err{"Unknown period string in date option: '"};
+            err += period_str;
+            err += "'";
+            throw std::invalid_argument(err);
+        }
+
+        int64_t index = period - date_period_str.begin();
+        DateType type = index % 2 ? DateType::ENDING : DateType::STARTING;
+        set_value(std::make_pair(type, index / 2));
+    }
+    else
+    {
+        std::string err{"Unknown date type string in date option: '"};
+        err += type_str;
+        err += "'";
+        throw std::invalid_argument{err};
+    }
+    return iss;
+}
 
 void
 GncOptionDateValue::set_value(DateSetterValue value)
@@ -144,4 +212,58 @@ GncOptionDateValue::set_value(DateSetterValue value)
 
     m_period = static_cast<RelativeDatePeriod>(val);
     m_date = 0;
+}
+
+
+QofInstance*
+qof_instance_from_string(const std::string& str, GncOptionUIType type)
+{
+    auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
+    QofIdType qof_type;
+    switch(type)
+    {
+        case GncOptionUIType::CURRENCY:
+        case GncOptionUIType::COMMODITY:
+            qof_type = "Commodity";
+            break;
+        case GncOptionUIType::BUDGET:
+            qof_type = "Budget";
+            break;
+        case GncOptionUIType::OWNER:
+            qof_type = "gncOwner";
+            break;
+        case GncOptionUIType::CUSTOMER:
+            qof_type = "gncCustomer";
+            break;
+        case GncOptionUIType::VENDOR:
+            qof_type = "gncVendor";
+            break;
+        case GncOptionUIType::EMPLOYEE:
+            qof_type = "gncEmployee";
+            break;
+        case GncOptionUIType::INVOICE:
+            qof_type = "gncInvoice";
+            break;
+        case GncOptionUIType::TAX_TABLE:
+            qof_type = "gncTaxtable";
+            break;
+        case GncOptionUIType::QUERY:
+            qof_type = "gncQuery";
+            break;
+        case GncOptionUIType::ACCOUNT_LIST:
+        case GncOptionUIType::ACCOUNT_SEL:
+        default:
+            qof_type = "Account";
+            break;
+    }
+    auto book{gnc_get_current_book()};
+    auto col{qof_book_get_collection(book, qof_type)};
+    return QOF_INSTANCE(qof_collection_lookup_entity(col, &guid));
+}
+
+std::string
+qof_instance_to_string(const QofInstance* inst)
+{
+    gnc::GUID guid{*qof_instance_get_guid(inst)};
+    return guid.to_string();
 }

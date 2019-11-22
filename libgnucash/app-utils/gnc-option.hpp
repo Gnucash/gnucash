@@ -33,7 +33,6 @@ extern "C"
 #include <gnc-commodity.h>
 }
 #include <gnc-datetime.hpp>
-#include <gnc-numeric.hpp>
 #include <libguile.h>
 #include <string>
 #include <utility>
@@ -41,6 +40,7 @@ extern "C"
 #include <exception>
 #include <functional>
 #include <variant>
+#include <iostream>
 
 /*
  * Unused base class to document the structure of the current Scheme option
@@ -176,6 +176,28 @@ private:
     GncOptionUIType m_ui_type;
 };
 
+/* These will work when m_value is a built-in class; GnuCash class and container
+ * values will need specialization unless they happen to define operators << and
+ * >>.
+ * Note that SWIG 3.0.12 chokes on the typename = std::enable_if_t<> form so we
+ * have to use the non-type parameter form.
+ */
+template<class OptionValueClass, typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>>, int> = 0>
+std::ostream& operator<<(std::ostream& oss, const OptionValueClass& opt)
+{
+    oss << opt.get_value();
+    return oss;
+}
+
+template<class OptionValueClass, typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>>, int> = 0>
+std::istream& operator>>(std::istream& iss, OptionValueClass& opt)
+{
+    std::decay_t<decltype(opt.get_value())> value;
+    iss >> value;
+    opt.set_value(value);
+    return iss;
+}
+
 template <typename ValueType>
 class GncOptionValue :
     public OptionClassifier, public OptionUIItem
@@ -195,10 +217,51 @@ public:
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
+    bool is_changed() const noexcept { return m_value != m_default_value; }
 private:
     ValueType m_value;
     ValueType m_default_value;
 };
+
+QofInstance* qof_instance_from_string(const std::string& str,
+                                      GncOptionUIType type);
+std::string qof_instance_to_string(const QofInstance* inst);
+
+template<> inline std::ostream&
+operator<< <GncOptionValue<bool>>(std::ostream& oss,
+                                  const GncOptionValue<bool>& opt)
+{
+    oss << (opt.get_value() ? "#t" : "#f");
+    return oss;
+}
+
+template<> inline std::ostream&
+operator<< <GncOptionValue<QofInstance*>>(std::ostream& oss,
+                                       const GncOptionValue<QofInstance*>& opt)
+{
+    oss << qof_instance_to_string(opt.get_value());
+    return oss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionValue<bool>>(std::istream& iss,
+                                  GncOptionValue<bool>& opt)
+{
+    std::string instr;
+    iss >> instr;
+    opt.set_value(instr == "#t" ? true : false);
+    return iss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionValue<QofInstance*>>(std::istream& iss,
+                                       GncOptionValue<QofInstance*>& opt)
+{
+    std::string instr;
+    iss >> instr;
+    opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
+    return iss;
+}
 
 template <typename ValueType>
 class GncOptionValidatedValue :
@@ -243,12 +306,32 @@ public:
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
+    bool is_changed() const noexcept { return m_value != m_default_value; }
 private:
     ValueType m_value;
     ValueType m_default_value;
     std::function<bool(ValueType)> m_validator;                         //11
     ValueType m_validation_data;
 };
+
+template<> inline std::ostream&
+operator<< <GncOptionValidatedValue<QofInstance*>>(std::ostream& oss,
+                                       const GncOptionValidatedValue<QofInstance*>& opt)
+{
+        oss << qof_instance_to_string(opt.get_value());
+        std::cerr << qof_instance_to_string(opt.get_value());
+        return oss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionValidatedValue<QofInstance*>>(std::istream& iss,
+                                       GncOptionValidatedValue<QofInstance*>& opt)
+{
+    std::string instr;
+    iss >> instr;
+    opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
+    return iss;
+}
 
 /**
  * Used for numeric ranges and plot sizes.
@@ -283,6 +366,7 @@ public:
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
+    bool is_changed() const noexcept { return m_value != m_default_value; }
 private:
     ValueType m_value;
     ValueType m_default_value;
@@ -376,6 +460,7 @@ public:
     {
         return std::get<2>(m_choices.at(index));
     }
+    bool is_changed() const noexcept { return m_value != m_default_value; }
 private:
     std::size_t find_key (const std::string& key) const noexcept
     {
@@ -462,13 +547,41 @@ public:
             //throw!
             m_value = values;
     }
-
+    bool is_changed() const noexcept { return m_value != m_default_value; }
 private:
     GncOptionAccountList m_value;
     GncOptionAccountList m_default_value;
     GncOptionAccountTypeList m_allowed;
 };
 
+template<> inline std::ostream&
+operator<< <GncOptionAccountValue>(std::ostream& oss,
+                                       const GncOptionAccountValue& opt)
+{
+    auto values{opt.get_value()};
+    for (auto value : values)
+        oss << qof_instance_to_string(QOF_INSTANCE(value)) << " ";
+    return oss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionAccountValue>(std::istream& iss,
+                                   GncOptionAccountValue& opt)
+{
+    GncOptionAccountList values;
+    while (true)
+    {
+        std::string str;
+        std::getline(iss, str, ' ');
+        if (!str.empty())
+            values.emplace_back((Account*)qof_instance_from_string(str, opt.get_ui_type()));
+        else
+            break;
+    }
+    opt.set_value(values);
+    iss.clear();
+    return iss;
+}
 /** Date options
  * A legal date value is a pair of either and a RelativeDatePeriod, the absolute
  * flag and a time64, or for legacy purposes the absolute flag and a timespec.
@@ -503,7 +616,7 @@ enum class RelativeDatePeriod : int64_t
     ACCOUNTING_PERIOD
 };
 
-using DateSetterValue = std::pair<DateType, int64_t>;
+using DateSetterValue = std::tuple<DateType, int64_t>;
 class GncOptionDateValue : public OptionClassifier, public OptionUIItem
 {
 public:
@@ -519,23 +632,39 @@ public:
         GncOptionDateValue& operator=(GncOptionDateValue&&) = default;
     time64 get_value() const;
     time64 get_default_value() const { return static_cast<time64>(GncDateTime()); }
+    std::ostream& out_stream(std::ostream& oss) const noexcept;
+    std::istream& in_stream(std::istream& iss);
     void set_value(DateSetterValue);
     void set_value(time64 time) {
         m_type = DateType::ABSOLUTE;
         m_period = RelativeDatePeriod::TODAY;
         m_date = time;
     }
+    bool is_changed() const noexcept { return true; }
 private:
     DateType m_type;
     RelativeDatePeriod m_period;
     time64 m_date;
 };
 
+template<> inline std::ostream&
+operator<< <GncOptionDateValue>(std::ostream& oss,
+                                       const GncOptionDateValue& opt)
+{
+    return opt.out_stream(oss);
+}
+
+template<> inline std::istream&
+operator>> <GncOptionDateValue>(std::istream& iss,
+                                   GncOptionDateValue& opt)
+{
+    return opt.in_stream(iss);
+}
+
 using GncOptionVariant = std::variant<GncOptionValue<std::string>,
                                       GncOptionValue<bool>,
                                       GncOptionValue<int64_t>,
                                       GncOptionValue<QofInstance*>,
-                                      GncOptionValue<QofQuery*>,
                                       GncOptionAccountValue,
                                       GncOptionMultichoiceValue,
                                       GncOptionRangeValue<int>,
@@ -631,9 +760,43 @@ public:
                 option.make_internal();
             }, m_option);
     }
+    bool is_changed()
+    {
+        return std::visit([](const auto& option)->bool {
+                return option.is_changed();
+            }, m_option);
+    }
+
+    std::ostream& out_stream(std::ostream& oss) const
+    {
+            return std::visit([&oss](auto& option) -> std::ostream& {
+            oss << option;
+            return oss;
+        }, m_option);
+    }
+    std::istream& in_stream(std::istream& iss)
+    {
+    return std::visit([&iss](auto& option) -> std::istream& {
+            iss >> option;
+            return iss;
+        }, m_option);
+    }
+
     GncOptionVariant& _get_option() const { return m_option; }
 private:
     mutable GncOptionVariant m_option;
 };
+
+inline std::ostream&
+operator<<(std::ostream& oss, const GncOption& opt)
+{
+    return opt.out_stream(oss);
+}
+
+inline std::istream&
+operator>>(std::istream& iss, GncOption& opt)
+{
+    return opt.in_stream(iss);
+}
 
 #endif //GNC_OPTION_HPP_

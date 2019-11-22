@@ -23,10 +23,13 @@
 
 #include <gtest/gtest.h>
 #include <gnc-option.hpp>
+#include <guid.hpp>
 extern "C"
 {
 #include <gnc-date.h>
 #include <time.h>
+#include <gnc-ui-util.h>
+#include <gnc-session.h>
 }
 
 TEST(GncOption, test_string_ctor)
@@ -64,6 +67,23 @@ TEST(GncOption, test_string_value)
         });
 }
 
+TEST(GncOption, test_string_stream_out)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_EQ(oss.str(), option.get_value<std::string>());
+}
+
+TEST(GncOption, test_string_stream_in)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
+    std::string pepper{"pepper"};
+    std::istringstream iss{pepper};
+    iss >> option;
+    EXPECT_EQ(pepper, option.get_value<std::string>());
+}
+
 TEST(GncOption, test_int64_t_value)
 {
     GncOption option("foo", "bar", "baz", "Phony Option", INT64_C(123456789));
@@ -72,35 +92,81 @@ TEST(GncOption, test_int64_t_value)
     EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
 }
 
-TEST(GNCOption, test_budget_ctor)
+TEST(GncOption, test_int64_stream_out)
 {
-    auto book = qof_book_new();
-    auto budget = gnc_budget_new(book);
+    GncOption option("foo", "bar", "baz", "Phony Option",  INT64_C(123456789));
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_STREQ(oss.str().c_str(), "123456789");
+}
+
+TEST(GncOption, test_int64_stream_in)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option",  INT64_C(123456789));
+    std::string number{"987654321"};
+    std::istringstream iss{number};
+    iss >> option;
+    EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
+}
+
+TEST(GncOption, test_bool_stream_out)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", false);
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_STREQ(oss.str().c_str(), "#f");
+    oss.str("");
+    option.set_value(true);
+    oss << option;
+    EXPECT_STREQ(oss.str().c_str(), "#t");
+}
+
+TEST(GncOption, test_bool_stream_in)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", false);
+    std::istringstream iss("#t");
+    iss >> option;
+    EXPECT_TRUE(option.get_value<bool>());
+    iss.str("#f");
+    iss >> option;
+    EXPECT_FALSE(option.get_value<bool>());
+}
+
+class GncOptionTest : public ::testing::Test
+{
+protected:
+    GncOptionTest() : m_session{gnc_get_current_session()}, m_book{gnc_get_current_book()} {}
+    ~GncOptionTest() { gnc_clear_current_session(); }
+
+    QofSession* m_session;
+    QofBook* m_book;
+};
+
+TEST_F(GncOptionTest, test_budget_ctor)
+{
+    auto budget = gnc_budget_new(m_book);
     EXPECT_NO_THROW({
             GncOption option("foo", "bar", "baz", "Phony Option",
                              QOF_INSTANCE(budget));
         });
     gnc_budget_destroy(budget);
-    qof_book_destroy(book);
 }
 
-TEST(GNCOption, test_commodity_ctor)
+TEST_F(GncOptionTest, test_commodity_ctor)
 {
-    auto book = qof_book_new();
-    auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
+    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_NO_THROW({
             GncOption option("foo", "bar", "baz", "Phony Option",
                              QOF_INSTANCE(hpe));
         });
     gnc_commodity_destroy(hpe);
-    qof_book_destroy(book);
 }
 
 static GncOption
 make_currency_option (const char* section, const char* name,
                       const char* key, const char* doc_string,
-                      gnc_commodity *value)
+                      gnc_commodity *value, bool is_currency=false)
 {
     GncOption option{GncOptionValidatedValue<QofInstance*>{
         section, name, key, doc_string, QOF_INSTANCE(value),
@@ -108,52 +174,48 @@ make_currency_option (const char* section, const char* name,
             {
                 return GNC_IS_COMMODITY (new_value) &&
                     gnc_commodity_is_currency(GNC_COMMODITY(new_value));
-            }
-        }};
+            }, is_currency ? GncOptionUIType::CURRENCY : GncOptionUIType::COMMODITY}
+    };
     return option;
 }
 
-TEST(GNCOption, test_currency_ctor)
+TEST_F(GncOptionTest, test_currency_ctor)
 {
-    auto book = qof_book_new();
     auto table = gnc_commodity_table_new();
-    qof_book_set_data(book, GNC_COMMODITY_TABLE, table);
-    auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
+    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option", hpe);
+                                               "Phony Option", hpe, false);
         }, std::invalid_argument);
     gnc_commodity_destroy(hpe);
-    auto eur = gnc_commodity_new(book, "Euro", "ISO4217", "EUR", NULL, 100);
+    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
     EXPECT_NO_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option", eur);
+                                               "Phony Option", eur, true);
         });
     gnc_commodity_destroy(eur);
-    auto usd = gnc_commodity_new(book, "United States Dollar",
+    auto usd = gnc_commodity_new(m_book, "United States Dollar",
                                  "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option",usd);
+                                               "Phony Option", usd, true);
         });
     gnc_commodity_destroy(usd);
-    qof_book_set_data(book, GNC_COMMODITY_TABLE, nullptr);
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
     gnc_commodity_table_destroy(table);
-    qof_book_destroy(book);
 }
 
-TEST(GNCOption, test_currency_setter)
+TEST_F(GncOptionTest, test_currency_setter)
 {
-    auto book = qof_book_new();
     auto table = gnc_commodity_table_new();
-    qof_book_set_data(book, GNC_COMMODITY_TABLE, table);
-    auto hpe = gnc_commodity_new(book, "Hewlett Packard Enterprise, Inc.",
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
+    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
                                     "NYSE", "HPE", NULL, 1);
-    auto eur = gnc_commodity_new(book, "Euro", "ISO4217", "EUR", NULL, 100);
-            auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option",eur);
-    auto usd = gnc_commodity_new(book, "United States Dollar",
+    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
+    auto usd = gnc_commodity_new(m_book, "United States Dollar",
                                  "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
             option.set_value(QOF_INSTANCE(usd));
@@ -166,9 +228,52 @@ TEST(GNCOption, test_currency_setter)
     gnc_commodity_destroy(hpe);
     gnc_commodity_destroy(usd);
     gnc_commodity_destroy(eur);
-    qof_book_set_data(book, GNC_COMMODITY_TABLE, nullptr);
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
     gnc_commodity_table_destroy(table);
-    qof_book_destroy(book);
+}
+
+TEST_F(GncOptionTest, test_qofinstance_out)
+{
+    auto table = gnc_commodity_table_new();
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
+    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
+
+    std::string eur_guid{gnc::GUID{*qof_instance_get_guid(eur)}.to_string()};
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_EQ(eur_guid, oss.str());
+    gnc_commodity_destroy(eur);
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
+    gnc_commodity_table_destroy(table);
+}
+
+TEST_F(GncOptionTest, test_qofinstance_in)
+{
+    auto table = gnc_commodity_table_new();
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
+    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
+    auto usd = gnc_commodity_new(m_book, "United States Dollar",
+                                 "CURRENCY", "USD", NULL, 100);
+    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
+                                    "NYSE", "HPE", NULL, 1);
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
+
+    EXPECT_THROW({
+            std::string hpe_guid{gnc::GUID{*qof_instance_get_guid(hpe)}.to_string()};
+            std::istringstream iss{hpe_guid};
+            iss >> option;
+        }, std::invalid_argument);
+    EXPECT_NO_THROW({
+            std::string usd_guid{gnc::GUID{*qof_instance_get_guid(usd)}.to_string()};
+            std::istringstream iss{usd_guid};
+            iss >> option;
+            EXPECT_EQ(QOF_INSTANCE(usd), option.get_value<QofInstance*>());
+        });
+    gnc_commodity_destroy(eur);
+    gnc_commodity_destroy(usd);
+    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
+    gnc_commodity_table_destroy(table);
 }
 
 class GncUIItem
@@ -246,6 +351,24 @@ TEST_F(GncRangeOption, test_setter)
     EXPECT_EQ(1.5, m_doubleoption.get_default_value());
 }
 
+TEST_F(GncRangeOption, test_range_out)
+{
+    std::ostringstream oss;
+    oss << "Integer " << m_intoption << " Double " << m_doubleoption << ".";
+    EXPECT_STREQ("Integer 15 Double 1.5.", oss.str().c_str());
+}
+
+TEST_F(GncRangeOption, test_range_in)
+{
+    std::istringstream iss{std::string{"45 4.5 20 2.0"}};
+    EXPECT_THROW({ iss >> m_intoption; }, std::invalid_argument);
+    EXPECT_THROW({ iss >> m_doubleoption; }, std::invalid_argument);
+    EXPECT_NO_THROW({ iss >> m_intoption; });
+    EXPECT_NO_THROW({ iss >> m_doubleoption; });
+    EXPECT_EQ(20, m_intoption.get_value());
+    EXPECT_EQ(2.0, m_doubleoption.get_value());
+}
+
 using AccountPair = std::pair<GncOptionAccountList&,
                               const GncOptionAccountTypeList&>;
 static void
@@ -264,7 +387,8 @@ class GncOptionAccountTest : public ::testing::Test
 {
 protected:
     GncOptionAccountTest() :
-        m_book{qof_book_new()}, m_root{gnc_account_create_root(m_book)}
+        m_session{gnc_get_current_session()}, m_book{gnc_get_current_book()},
+        m_root{gnc_account_create_root(m_book)}
     {
         auto create_account = [this](Account* parent, GNCAccountType type,
                                        const char* name)->Account* {
@@ -296,7 +420,7 @@ protected:
     {
         xaccAccountBeginEdit(m_root);
         xaccAccountDestroy(m_root); //It does the commit
-        qof_book_destroy(m_book);
+        gnc_clear_current_session();
     }
     GncOptionAccountList list_of_types(const GncOptionAccountTypeList& types)
     {
@@ -307,6 +431,7 @@ protected:
         return list;
     }
 
+    QofSession* m_session;
     QofBook* m_book;
     Account* m_root;
 };
@@ -389,6 +514,65 @@ TEST_F(GncOptionAccountTest, test_option_value_limited_constructor)
     EXPECT_EQ(false, option.validate(acclistbad));
 }
 
+TEST_F(GncOptionAccountTest, test_account_list_out)
+{
+    GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
+    GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST, acclist};
+    std::ostringstream oss;
+    std::string acc_guids{gnc::GUID{*qof_instance_get_guid(acclist[0])}.to_string()};
+    acc_guids += " ";
+    acc_guids += gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    acc_guids += " ";
+
+    oss << option;
+    EXPECT_EQ(acc_guids, oss.str());
+
+    GncOptionAccountList accsel{acclist[0]};
+    GncOptionAccountValue sel_option("foo", "bar", "baz", "Bogus Option",
+                                 GncOptionUIType::ACCOUNT_LIST,
+                                 accsel, {ACCT_TYPE_BANK});
+    acc_guids = gnc::GUID{*qof_instance_get_guid(accsel[0])}.to_string();
+    acc_guids += " ";
+
+    oss.str("");
+    oss << sel_option;
+    EXPECT_EQ(acc_guids, oss.str());
+}
+
+TEST_F(GncOptionAccountTest, test_account_list_in)
+{
+    GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
+    GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
+            GncOptionUIType::ACCOUNT_LIST, acclist};
+    std::string acc_guids{gnc::GUID{*qof_instance_get_guid(acclist[0])}.to_string()};
+    acc_guids += " ";
+    acc_guids += gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    acc_guids += " ";
+
+    std::istringstream iss{acc_guids};
+    iss >> option;
+    EXPECT_EQ(acclist, option.get_value());
+
+    GncOptionAccountList accsel{acclist[0]};
+    GncOptionAccountValue sel_option("foo", "bar", "baz", "Bogus Option",
+                                 GncOptionUIType::ACCOUNT_LIST,
+                                 accsel, {ACCT_TYPE_BANK});
+    GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
+    acc_guids = gnc::GUID{*qof_instance_get_guid(acclistbad[1])}.to_string();
+    acc_guids += " ";
+
+    iss.str(acc_guids);
+    iss >> sel_option;
+    EXPECT_EQ(accsel, sel_option.get_value());
+
+    acc_guids = gnc::GUID{*qof_instance_get_guid(acclist[1])}.to_string();
+    EXPECT_NO_THROW({
+            iss.str(acc_guids);
+            iss >> sel_option;
+        });
+    EXPECT_EQ(acclist[1], sel_option.get_value()[0]);
+}
 
 class GncOptionMultichoiceTest : public ::testing::Test
 {
@@ -611,3 +795,258 @@ TEST_F(GncDateOption, test_set_and_get_prev_year_end)
     EXPECT_EQ(time1, m_option.get_value());
 }
 
+TEST_F(GncDateOption, test_stream_out)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+    DateSetterValue value1{DateType::ABSOLUTE, time1};
+    m_option.set_value(value1);
+    std::ostringstream oss;
+    oss << time1;
+    std::string timestr{"absolute . "};
+    timestr += oss.str();
+    oss.str("");
+    oss << m_option;
+    EXPECT_EQ(oss.str(), timestr);
+
+    DateSetterValue value2{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::TODAY)};
+    m_option.set_value(value2);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . today");
+
+    DateSetterValue value3{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::TODAY)};
+    m_option.set_value(value3);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . today");
+
+    DateSetterValue value4{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
+    m_option.set_value(value4);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-this-month");
+
+    DateSetterValue value5{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
+    m_option.set_value(value5);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-this-month");
+
+    DateSetterValue value6{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
+    m_option.set_value(value6);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-month");
+
+    DateSetterValue value7{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
+    m_option.set_value(value7);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-month");
+
+    DateSetterValue value8{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
+    m_option.set_value(value8);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-current-quarter");
+
+    DateSetterValue value9{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
+    m_option.set_value(value9);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-current-quarter");
+
+    DateSetterValue value10{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
+    m_option.set_value(value10);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-quarter");
+
+    DateSetterValue value11{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
+    m_option.set_value(value11);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-quarter");
+
+    DateSetterValue value12{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
+    m_option.set_value(value12);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-cal-year");
+
+    DateSetterValue value13{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
+    m_option.set_value(value13);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-cal-year");
+
+    DateSetterValue value14{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
+    m_option.set_value(value14);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-year");
+
+    DateSetterValue value15{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
+    m_option.set_value(value15);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-year");
+
+    DateSetterValue value16{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::ACCOUNTING_PERIOD)};
+    m_option.set_value(value16);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-fin-year");
+
+    DateSetterValue value17{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::ACCOUNTING_PERIOD)};
+    m_option.set_value(value17);
+    oss.str("");
+    oss << m_option;
+    EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-fin-year");
+}
+
+TEST_F(GncDateOption, test_stream_in_absolute)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+    std::ostringstream oss;
+    oss << time1;
+    std::string timestr{"absolute . "};
+    timestr += oss.str();
+
+    std::istringstream iss{timestr};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_month_start)
+{
+    GDate month_start;
+    g_date_set_time_t(&month_start, time(nullptr));
+    gnc_gdate_set_month_start(&month_start);
+    time64 time1{time64_from_gdate(&month_start, DayPart::start)};
+    std::istringstream iss{"relative . start-this-month"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+
+TEST_F(GncDateOption, test_stream_in_month_end)
+{
+    GDate month_end;
+    g_date_set_time_t(&month_end, time(nullptr));
+    gnc_gdate_set_month_end(&month_end);
+    time64 time1{time64_from_gdate(&month_end, DayPart::end)};
+    std::istringstream iss{"relative . end-this-month"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_month_start)
+{
+    GDate prev_month_start;
+    g_date_set_time_t(&prev_month_start, time(nullptr));
+    gnc_gdate_set_prev_month_start(&prev_month_start);
+    time64 time1{time64_from_gdate(&prev_month_start, DayPart::start)};
+    std::istringstream iss{"relative . start-prev-month"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_month_end)
+{
+    GDate prev_month_end;
+    g_date_set_time_t(&prev_month_end, time(nullptr));
+    gnc_gdate_set_prev_month_end(&prev_month_end);
+    time64 time1{time64_from_gdate(&prev_month_end, DayPart::end)};
+    std::istringstream iss{"relative . end-prev-month"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_quarter_start)
+{
+    GDate quarter_start;
+    g_date_set_time_t(&quarter_start, time(nullptr));
+    gnc_gdate_set_quarter_start(&quarter_start);
+    time64 time1{time64_from_gdate(&quarter_start, DayPart::start)};
+    std::istringstream iss{"relative . start-current-quarter"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_quarter_end)
+{
+    GDate quarter_end;
+    g_date_set_time_t(&quarter_end, time(nullptr));
+    gnc_gdate_set_quarter_end(&quarter_end);
+    time64 time1{time64_from_gdate(&quarter_end, DayPart::end)};
+    std::istringstream iss{"relative . end-current-quarter"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_quarter_start)
+{
+    GDate prev_quarter_start;
+    g_date_set_time_t(&prev_quarter_start, time(nullptr));
+    gnc_gdate_set_prev_quarter_start(&prev_quarter_start);
+    time64 time1{time64_from_gdate(&prev_quarter_start, DayPart::start)};
+    std::istringstream iss{"relative . start-prev-quarter"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_quarter_end)
+{
+    GDate prev_quarter_end;
+    g_date_set_time_t(&prev_quarter_end, time(nullptr));
+    gnc_gdate_set_prev_quarter_end(&prev_quarter_end);
+    time64 time1{time64_from_gdate(&prev_quarter_end, DayPart::end)};
+    std::istringstream iss{"relative . end-prev-quarter"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_year_start)
+{
+    GDate year_start;
+    g_date_set_time_t(&year_start, time(nullptr));
+    gnc_gdate_set_year_start(&year_start);
+    time64 time1{time64_from_gdate(&year_start, DayPart::start)};
+    std::istringstream iss{"relative . start-cal-year"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_year_end)
+{
+    GDate year_end;
+    g_date_set_time_t(&year_end, time(nullptr));
+    gnc_gdate_set_year_end(&year_end);
+    time64 time1{time64_from_gdate(&year_end, DayPart::end)};
+    std::istringstream iss{"relative . end-cal-year"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_year_start)
+{
+    GDate prev_year_start;
+    g_date_set_time_t(&prev_year_start, time(nullptr));
+    gnc_gdate_set_prev_year_start(&prev_year_start);
+    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
+    std::istringstream iss{"relative . start-prev-year"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}
+
+TEST_F(GncDateOption, test_stream_in_prev_year_end)
+{
+    GDate prev_year_end;
+    g_date_set_time_t(&prev_year_end, time(nullptr));
+    gnc_gdate_set_prev_year_end(&prev_year_end);
+    time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
+    std::istringstream iss{"relative . end-prev-year"};
+    iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value());
+}

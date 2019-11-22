@@ -337,5 +337,3 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         GncOption_set_value_from_scm(&(db_opt->get()), new_value);
     }
 %}
-
-*/
