@@ -24,11 +24,10 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))

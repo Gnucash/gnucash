@@ -28,11 +28,10 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
 (use-modules (gnucash gnome-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash report))
 
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))

@@ -28,14 +28,12 @@
 
 (define-module (gnucash reports standard net-charts))
 
-(use-modules (srfi srfi-1))
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
-
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 (define optname-from-date (N_ "Start Date"))
 (define optname-to-date (N_ "End Date"))

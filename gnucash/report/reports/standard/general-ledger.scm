@@ -31,11 +31,10 @@
 
 (define-module (gnucash reports standard general-ledger))
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define reportname (N_ "General Ledger"))
 (define xactrptguid "2fe3b9833af044abb929a88d5a59620f")

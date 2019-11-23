@@ -65,10 +65,9 @@
 (define-module (gnucash reports standard balance-sheet))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define reportname (N_ "Balance Sheet"))
 

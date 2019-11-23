@@ -17,9 +17,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/report" 0)
-
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))

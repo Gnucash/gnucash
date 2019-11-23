@@ -17,10 +17,9 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash gnc-module))
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 (use-modules (gnucash engine))
-(use-modules (sw_engine))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-64))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering

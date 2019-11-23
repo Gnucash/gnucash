@@ -415,7 +415,7 @@
 
 ;; the globally available hash of reldates (hash-key = reldate
 ;; symbols, hash-value = a vector, reldate data).
-(define gnc:relative-date-hash (make-hash-table))
+(define gnc:relative-date-hash #f)
 
 (define (gnc:get-absolute-from-relative-date date-symbol)
   ;; used in options.scm
@@ -792,10 +792,9 @@ Defaulting to today."))
 ;;one-month-ago three-months-ago six-months-ago one-year-ago
 ;;start-cur-fin-year start-prev-fin-year end-prev-fin-year
 
-(define (gnc:reldate-initialize)
-  (define gnc:reldate-string-db (gnc:make-string-database))
-  (define gnc:relative-date-values #f)
-
+(define gnc:reldate-string-db (gnc:make-string-database))
+(define gnc:relative-date-values #f)
+(unless gnc:relative-date-hash
   (gnc:reldate-string-db 
    'store 'start-cal-year-string 
    (N_ "Start of this year"))
@@ -1120,6 +1119,7 @@ Defaulting to today."))
 		 gnc:get-one-year-ahead)))
 
   ;; initialise gnc:relative-date-hash
+  (set! gnc:relative-date-hash (make-hash-table))
   (for-each
    (lambda (reldate)
      (hash-set! gnc:relative-date-hash (gnc:reldate-get-symbol reldate) reldate))

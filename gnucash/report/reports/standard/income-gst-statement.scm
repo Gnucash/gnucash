@@ -28,11 +28,11 @@
 (define-module (gnucash reports standard income-gst-statement))
 
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
-(use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Income and GST Statement"))

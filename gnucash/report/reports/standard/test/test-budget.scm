@@ -20,16 +20,12 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-14))
 (use-modules (srfi srfi-64))
-(use-modules (gnucash gnc-module))
 (use-modules (tests srfi64-extras))
-
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash report))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
-(use-modules (sw_engine))
 (use-modules (gnucash reports standard budget))
 (use-modules (gnucash reports standard budget-income-statement))
 (use-modules (gnucash reports standard budget-balance-sheet))

@@ -1,5 +1,3 @@
-(use-modules (gnucash gnc-module))
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash reports example average-balance))
 (use-modules (gnucash report))
@@ -11,6 +9,7 @@
 (use-modules (srfi srfi-64))
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")

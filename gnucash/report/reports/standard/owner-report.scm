@@ -30,11 +30,10 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
 (use-modules (gnucash engine))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 ;; Option names
 (define optname-from-date (N_ "From"))

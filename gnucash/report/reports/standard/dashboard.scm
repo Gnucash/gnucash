@@ -28,13 +28,8 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
-(use-modules (gnucash gnc-module))
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgncmod-report" "scm_init_sw_report_module"))
-(use-modules (sw_report))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define multicolumn-guid "d8ba4a2e89e8479ca9f6eccdeb164588")
 (define acct-summary-guid "3298541c236b494998b236dfad6ad752")

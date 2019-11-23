@@ -24,14 +24,16 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash reports example hello-world))
+
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (debug-enable 'backtrace)
 
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/html" 0) ;for gnc-build-url
 
 ;; This function will generate a set of options that GnuCash

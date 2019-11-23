@@ -37,11 +37,11 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash report))
 
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report" 0)
 
 (define (head-or-tail-options)
   (let* ((options (gnc:new-options))

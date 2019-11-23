@@ -28,6 +28,10 @@
   (load-extension "libgncmod-report" "scm_init_sw_report_module"))
 (use-modules (sw_report))
 
+; Export the swig-wrapped symbols in the public interface of this module
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_report))))
+
 ;; Terminology in this file:
 ;; report-template: a report definition of some form. This can be a report
 ;;      included in gnucash by default, or a new report definition added by
