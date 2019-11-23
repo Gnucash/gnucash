@@ -89,7 +89,7 @@ set (report_eguile_SCHEME
 )
 
 set(GUILE_DEPENDS
-  gncmod-html
+  scm-gnc-html
   scm-gnome-utils
   gncmod-report
   scm-app-utils

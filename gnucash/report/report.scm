@@ -33,9 +33,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gnome-utils))
-
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/html" 0)
+(use-modules (gnucash html))
 
 ;; commodity-utilities.scm
 (export gnc:get-match-commodity-splits)

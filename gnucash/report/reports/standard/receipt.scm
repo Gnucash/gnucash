@@ -22,9 +22,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
-
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/html" 0)
+(use-modules (gnucash html))
 
 (use-modules (gnucash eguile))
 
