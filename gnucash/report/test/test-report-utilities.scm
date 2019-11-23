@@ -1,6 +1,3 @@
-(use-modules (gnucash gnc-module))
-(gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
-
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))

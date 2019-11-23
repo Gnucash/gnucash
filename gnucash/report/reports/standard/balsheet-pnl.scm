@@ -28,13 +28,12 @@
 (define-module (gnucash reports standard balsheet-pnl))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
-
-(gnc:module-load "gnucash/report" 0)
 
 ;; the column-data record. the gnc:account-accumulate-at-dates will
 ;; create a record for each report-date with split-data as follows:

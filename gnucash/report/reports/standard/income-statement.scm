@@ -43,11 +43,10 @@
 
 (define-module (gnucash reports standard income-statement))
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.

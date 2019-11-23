@@ -101,15 +101,15 @@
 (define-module (gnucash reports locale-specific us taxtxf))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (srfi srfi-1))
 (use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash app-utils))
 (use-modules (gnucash locale us tax))
 (use-modules (gnucash gnome-utils))
-
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report" 0)
 
 (define reportname (N_ "Tax Schedule Report/TXF Export"))
 

@@ -26,13 +26,13 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-14))
 
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report" 0)
 
 ;; plain style sheet
 ;; this should generally be the default style sheet for most reports.
