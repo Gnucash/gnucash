@@ -30,11 +30,9 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
+(use-modules (gnucash html))
 
 (debug-enable 'backtrace)
-
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/html" 0) ;for gnc-build-url
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select

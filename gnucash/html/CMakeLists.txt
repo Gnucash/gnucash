@@ -32,7 +32,21 @@ else ()
   set(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
 endif ()
 
-set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST})
+
+
+set (gnc_html_SCHEME html.scm)
+
+set(GUILE_OUTPUT_DIR   gnucash)
+set(GUILE_DEPENDS      gncmod-html gnucash-guile)
+
+gnc_add_scheme_targets(scm-gnc-html
+    "${gnc_html_SCHEME}"
+    ${GUILE_OUTPUT_DIR}
+    "${GUILE_DEPENDS}"
+    FALSE
+)
+
+set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST} html.scm)
 
 add_library (gncmod-html
   ${html_SOURCES}
