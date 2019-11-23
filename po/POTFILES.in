@@ -4,7 +4,6 @@ bindings/guile/business-core.scm
 bindings/guile/commodity-table.scm
 bindings/guile/core-utils.scm
 bindings/guile/engine.scm
-bindings/guile/engine-utilities.scm
 bindings/guile/glib-guile.c
 bindings/guile/gnc-engine-guile.c
 bindings/guile/gnc-guile-bindings.c
