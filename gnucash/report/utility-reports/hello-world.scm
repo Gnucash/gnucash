@@ -153,13 +153,6 @@
       (list #xf6 #xff #xdb #xff)
       255
       #f))
-    (add-option
-     (gnc:make-color-option
-      (N_ "Hello, World!") (N_ "Text Color")
-      "f" (N_ "This is a color option.")
-      (list #x00 #x00 #x00 #xff)
-      255
-      #f))
     
     ;; This is an account list option. The user can select one
     ;; or (possibly) more accounts from the list of accounts
@@ -247,7 +240,6 @@ option like this.")
                          (op-value "Hello, World!" "Combo Date Option")))
         (num-val      (op-value "Hello, World!" "Number Option"))
         (bg-color-op  (get-op   "Hello, World!" "Background Color"))
-        (txt-color-op (get-op   "Hello, World!" "Text Color"))
         (accounts     (op-value "Hello Again"   "An account list option"))
         (list-val     (op-value "Hello Again"   "A list option"))
         (crash-val    (op-value "Testing"       "Crash the report"))
@@ -304,8 +296,7 @@ option like this.")
       
       (gnc:html-document-set-style!
        document "body" 
-       'attribute (list "bgcolor" (gnc:color-option->html bg-color-op))
-       'font-color (gnc:color-option->html txt-color-op))
+       'attribute (list "bgcolor" (gnc:color-option->html bg-color-op)))
       
       ;; the title of the report will be rendered by the 
       ;; selected style sheet.  All we have to do is set it in the
