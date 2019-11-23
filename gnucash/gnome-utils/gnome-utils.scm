@@ -27,6 +27,10 @@
   (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
 (use-modules (sw_gnome_utils))
 
+; Export the swig-wrapped symbols in the public interface of this module
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_gnome_utils))))
+
 ;; from gnc-menu-extensions.scm
 (export gnc:extension-type)
 (export gnc:extension-name)
