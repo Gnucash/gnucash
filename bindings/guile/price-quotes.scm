@@ -26,13 +26,11 @@
 (export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash gnome-utils))
 (use-modules (srfi srfi-11)
              (srfi srfi-1))
-
-(gnc:module-load "gnucash/gnome-utils" 0) ;; for gnucash-ui-is-running
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

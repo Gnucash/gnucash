@@ -30,9 +30,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
-(eval-when (compile load eval expand)
-  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
-(use-modules (sw_gnome_utils))
+(use-modules (gnucash gnome-utils))
 
 (gnc:module-load "gnucash/report" 0)
 

@@ -102,16 +102,12 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
 (use-modules (gnucash locale us tax))
-
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
-(use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
+(use-modules (gnucash gnome-utils))
 
 
+(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/report" 0)
 

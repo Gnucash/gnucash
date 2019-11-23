@@ -28,7 +28,6 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash reports standard dashboard))
 
@@ -36,7 +35,7 @@
   (load-extension "libgnc-gnome" "scm_init_sw_gnome_module"))
 (use-modules (sw_gnome))
 
-(gnc:module-load "gnucash/gnome-utils" 0)
+(use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report" 0))
 
 (export gnc:report-menu-setup)
