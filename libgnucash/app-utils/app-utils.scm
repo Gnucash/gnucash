@@ -20,6 +20,11 @@
       (compile load eval expand)
       (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
+
+; Export the swig-wrapped symbols in the public interface of this module
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_app_utils))))
+
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
 (use-modules (gnucash engine))
