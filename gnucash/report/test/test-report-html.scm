@@ -1,15 +1,12 @@
-(use-modules (gnucash gnc-module))
-
-(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
-
 (use-modules (gnucash engine))
-(use-modules (tests test-engine-extras))
+(use-modules (gnucash app-utils))
 (use-modules (gnucash report))
-(use-modules (tests test-report-extras))
 (use-modules (gnucash report stylesheets plain))
 (use-modules (srfi srfi-64))
 (use-modules (ice-9 pretty-print))
 (use-modules (sxml simple))
+(use-modules (tests test-engine-extras))
+(use-modules (tests test-report-extras))
 (use-modules (tests srfi64-extras))
 (use-modules (system vm coverage))
 

@@ -21,13 +21,11 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash app-utils))
 
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
-
 (use-modules (sw_gnome_utils))
-(gnc:module-load "gnucash/app-utils" 0)
 
 ;; from gnc-menu-extensions.scm
 (export gnc:extension-type)

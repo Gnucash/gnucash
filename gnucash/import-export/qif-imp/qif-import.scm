@@ -42,7 +42,6 @@
 (debug-enable 'backtrace)
 
 (use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)
 
 (load-from-path "gnucash/qif-import/qif-objects")      ;; class definitions

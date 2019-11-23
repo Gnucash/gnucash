@@ -18,12 +18,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash gnc-module))
-
-(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (gnc:module-load "gnucash/report" 0)
 
 (use-modules (gnucash engine))
-(use-modules (sw_engine))
+(use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))
 (use-modules (tests srfi64-extras))
 (use-modules (gnucash report))
