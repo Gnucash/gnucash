@@ -10,7 +10,7 @@ gnc_add_swig_guile_command (swig-core-utils-guile-c
 )
 
 # Command to generate the swig-engine.c wrapper file
-gnc_swig_extract_header_files (gncmod-engine ENGINE_HEADERS)
+gnc_swig_extract_header_files (gnc-engine ENGINE_HEADERS)
 gnc_add_swig_guile_command (swig-engine-c
     SWIG_ENGINE_C swig-engine.c
     ${CMAKE_SOURCE_DIR}/bindings/engine.i
@@ -66,7 +66,7 @@ target_link_libraries(gnucash-guile
         ${GUILE_LDFLAGS}
     PRIVATE
         gnc-core-utils
-        gncmod-engine
+        gnc-engine
         gnc-module
         ${GLIB2_LDFLAGS})
 
@@ -111,7 +111,7 @@ endif(WITH_SQL)
 
 set(GUILE_DEPENDS
   ${BACKEND_DEPENDS}
-  gncmod-engine
+  gnc-engine
   gnucash-guile)
 
 

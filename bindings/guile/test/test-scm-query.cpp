@@ -84,8 +84,7 @@ run_tests (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
-    gnc_module_system_init ();
-    gnc_module_load("gnucash/engine", 0);
+    gnc_engine_init (0, NULL);
 
     xaccLogDisable ();
 

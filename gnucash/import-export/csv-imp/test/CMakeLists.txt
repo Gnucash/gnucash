@@ -7,7 +7,7 @@ set(CSV_IMP_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/lib
   ${GLIB2_INCLUDE_DIRS}
 )
-set(CSV_IMP_TEST_LIBS gncmod-csv-import gncmod-engine test-core)
+set(CSV_IMP_TEST_LIBS gncmod-csv-import gnc-engine test-core)
 
 # This test does not run in Win32
 if (NOT WIN32)

@@ -144,7 +144,7 @@ target_link_libraries(gnc-gnome
     gncmod-register-gnome
     gncmod-register-core
     gncmod-gnome-utils
-    gncmod-engine
+    gnc-engine
     gnucash-guile
     ${Boost_LIBRARIES}
     PkgConfig::GTK3

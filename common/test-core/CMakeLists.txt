@@ -22,7 +22,7 @@ set_dist_list(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CM
         unittest-support.i unittest-support.scm)
 
 add_library(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
-target_link_libraries(test-core gncmod-engine ${GLIB2_LDFLAGS})
+target_link_libraries(test-core gnc-engine ${GLIB2_LDFLAGS})
 if (UNIX)
   target_compile_options(test-core PRIVATE -fPIC)
 endif()

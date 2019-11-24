@@ -77,7 +77,6 @@ main_helper (void *closure, int argc, char **argv)
 {
     int count = 50;
 
-    gnc_module_load("gnucash/engine", 0);
     gnc_module_load("gnucash/app-utils", 0);
 
     if (argc > 1)

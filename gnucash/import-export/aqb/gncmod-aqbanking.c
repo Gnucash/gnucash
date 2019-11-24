@@ -62,8 +62,7 @@ gint
 libgncmod_aqbanking_gnc_module_init(gint refcount)
 {
     /* Load modules we depend on */
-    if (!gnc_module_load("gnucash/engine", 0)
-            || !gnc_module_load("gnucash/app-utils", 0)
+    if (!gnc_module_load("gnucash/app-utils", 0)
             || !gnc_module_load("gnucash/gnome-utils", 0)
             || !gnc_module_load("gnucash/import-export", 0))
     {

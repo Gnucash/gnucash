@@ -644,7 +644,6 @@ libgnucash/engine/gnc-int128.cpp
 libgnucash/engine/gncInvoice.c
 libgnucash/engine/gncJob.c
 libgnucash/engine/gnc-lot.c
-libgnucash/engine/gncmod-engine.c
 libgnucash/engine/gnc-numeric.cpp
 libgnucash/engine/gncOrder.c
 libgnucash/engine/gncOwner.c

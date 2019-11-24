@@ -15,7 +15,7 @@ set(ENGINE_TEST_INCLUDE_DIRS
 )
 
 set(ENGINE_TEST_LIBS
-    gncmod-engine
+    gnc-engine
     gncmod-test-engine
     test-core
     gnucash-guile
@@ -80,7 +80,7 @@ if (HAVE_SRFI64)
     gnc_add_scheme_test_targets (scm-test-with-srfi64
         "${scm_tests_with_srfi64_SOURCES}"
         "tests"
-        "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras;gncmod-engine"
+        "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras;gnc-engine"
         FALSE
     )
 

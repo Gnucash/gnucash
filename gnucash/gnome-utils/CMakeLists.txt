@@ -206,7 +206,7 @@ add_library (gncmod-gnome-utils
 
 target_link_libraries(gncmod-gnome-utils
     gncmod-app-utils
-    gncmod-engine
+    gnc-engine
     gnc-backend-xml-utils
     gnucash-guile
     PkgConfig::GTK3

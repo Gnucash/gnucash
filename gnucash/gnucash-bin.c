@@ -487,7 +487,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/engine", 0, FALSE },
         { "gnucash/app-utils", 0, FALSE },
         { "gnucash/gnome-utils", 0, FALSE },
         { "gnucash/gnome-search", 0, FALSE },
@@ -517,15 +516,6 @@ load_gnucash_modules()
         else
             gnc_module_load(modules[i].name, modules[i].version);
         DEBUG("Loading module %s finished", modules[i].name);
-    }
-    if (!gnc_engine_is_initialized())
-    {
-        /* On Windows this check used to fail anyway, see
-         * https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
-         * but more recently it seems to work as expected
-         * again. 2006-12-20, cstim. */
-        g_warning("GnuCash engine failed to initialize.  Exiting.\n");
-        exit(1);
     }
 }
 
@@ -900,6 +890,7 @@ main(int argc, char ** argv)
         g_print("\n\n%s\n", userdata_migration_msg);
 
     gnc_log_init();
+    gnc_engine_init (0, NULL);
 
     /* Write some locale details to the log to simplify debugging */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");

@@ -78,8 +78,7 @@ main (int argc, char** argv)
         location = "../../../../data/accounts/C";
     }
 
-    gnc_module_system_init ();
-    gnc_module_load ("gnucash/engine", 0);
+    gnc_engine_init (0, NULL);
 
     if ((ea_dir = g_dir_open (location, 0, NULL)) == NULL)
     {

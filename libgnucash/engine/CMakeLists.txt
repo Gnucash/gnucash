@@ -155,7 +155,6 @@ set (engine_SOURCES
   gnc-session.c
   gnc-timezone.cpp
   gnc-uri-utils.c
-  gncmod-engine.c
   engine-helpers.c
   guid.cpp
   policy.c
@@ -200,22 +199,22 @@ set_source_files_properties (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFI
 # Add dependency on iso-4217-currencies.c
 set_source_files_properties (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
 
-add_library (gncmod-engine
+add_library (gnc-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
   ${engine_noinst_HEADERS}
 )
 
-target_sources(gncmod-engine
+target_sources(gnc-engine
     PRIVATE
         $<$<BOOL:${WIN32}>:qof-win32.cpp>
         $<$<BOOL:${WIN32}>:${CMAKE_SOURCE_DIR}/borrowed/libc/strptime.c>
 )
 
 # Add dependency on iso-4217-currencies.c
-add_dependencies (gncmod-engine iso-4217-c)
+add_dependencies (gnc-engine iso-4217-c)
 
-target_link_libraries(gncmod-engine
+target_link_libraries(gnc-engine
     gnc-core-utils
     gnc-module
     ${Boost_DATE_TIME_LIBRARIES}
@@ -227,9 +226,9 @@ target_link_libraries(gncmod-engine
     ${GOBJECT_LDFLAGS}
     $<$<BOOL:${WIN32}>:bcrypt.lib>)
 
-target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
+target_compile_definitions (gnc-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 
-target_include_directories (gncmod-engine
+target_include_directories (gnc-engine
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
     PUBLIC
@@ -243,12 +242,12 @@ target_include_directories (gncmod-engine
 )
 
 if (APPLE)
-  set_target_properties (gncmod-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gnc-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif()
 
-install(TARGETS gncmod-engine
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+install(TARGETS gnc-engine
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)

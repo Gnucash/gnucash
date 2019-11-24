@@ -22,7 +22,7 @@ target_link_libraries(gncmod-bi-import
   gncmod-gnome-utils
   gncmod-gnome-search
   gncmod-app-utils
-  gncmod-engine
+  gnc-engine
   gnc-core-utils
   gnc-module
   gnc-gnome

@@ -75,7 +75,7 @@ set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 
 set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
 set(app_utils_ALL_LIBRARIES
-    gncmod-engine
+    gnc-engine
     gnc-module
     gnucash-guile
     ${GIO_LDFLAGS}
