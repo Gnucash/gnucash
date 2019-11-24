@@ -69,7 +69,7 @@ target_link_libraries(
   gncmod-generic-import
   gncmod-gnome-utils
   gncmod-app-utils
-  gncmod-engine
+  gnc-engine
   gnc-core-utils
   gnc-module)
 

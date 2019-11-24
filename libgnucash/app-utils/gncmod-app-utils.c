@@ -80,12 +80,6 @@ extern SCM scm_init_sw_app_utils_module(void);
 int
 libgncmod_app_utils_gnc_module_init(int refcount)
 {
-    /* load the engine (we depend on it) */
-    if (!gnc_module_load("gnucash/engine", 0))
-    {
-        return FALSE;
-    }
-
     scm_init_sw_app_utils_module();
     /* publish swig bindings */
     /* load the scheme code */

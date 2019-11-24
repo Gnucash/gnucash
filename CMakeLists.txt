@@ -868,7 +868,7 @@ configure_file(
 add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-set(_MODULES gnc-core-utils gnc-module gnc-backend-xml-utils gnucash-guile)
+set(_MODULES gnc-core-utils gnc-engine gnc-module gnc-backend-xml-utils gnucash-guile)
 
 if (WITH_SQL)
   list(APPEND _MODULES gnc-backend-sql)

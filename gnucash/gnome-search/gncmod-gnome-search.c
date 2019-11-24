@@ -60,12 +60,6 @@ libgncmod_gnome_search_gnc_module_description(void)
 int
 libgncmod_gnome_search_gnc_module_init(int refcount)
 {
-    /* load the engine (we depend on it) */
-    if (!gnc_module_load("gnucash/engine", 0))
-    {
-        return FALSE;
-    }
-
     if (!gnc_module_load("gnucash/gnome-utils", 0))
     {
         return FALSE;

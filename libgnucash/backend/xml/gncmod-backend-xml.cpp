@@ -62,9 +62,6 @@ extern "C"
     int
     libgncmod_backend_file_gnc_module_init (int refcount)
     {
-        engine = gnc_module_load ("gnucash/engine", 0);
-        if (!engine) return FALSE;
-
         return TRUE;
     }
 

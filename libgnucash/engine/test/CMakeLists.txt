@@ -9,7 +9,7 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${GLIB2_INCLUDE_DIRS}
 )
 
-set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
+set(ENGINE_TEST_LIBS gnc-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
 
 macro(add_engine_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
@@ -89,7 +89,7 @@ add_engine_test(test-numeric "${test_numeric_SOURCES}")
 
 set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 set(gtest_old_engine_LIBS
-  gncmod-engine
+  gnc-engine
   ${GLIB2_LDFLAGS}
   ${Boost_LIBRARIES}
   gtest)
