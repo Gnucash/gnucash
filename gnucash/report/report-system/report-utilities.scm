@@ -1260,6 +1260,10 @@ flawed. see report-utilities.scm. please update reports.")
                       "(list "
                       (string-join (map gnc:strify d) " ")
                       ")"))
+      (and (vector? d) (string-append
+                        "(vector "
+                        (string-join (map gnc:strify (vector->list d)) " ")
+                        ")"))
       (and (pair? d) (format #f "(~a . ~a)"
                              (gnc:strify (car d))
                              (if (eq? (car d) 'absolute)
