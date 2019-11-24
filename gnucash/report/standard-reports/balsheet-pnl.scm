@@ -814,24 +814,20 @@ also show overall period profit & loss."))
          ;; into report-currency if the latter exists. The price
          ;; applicable the the col-idx column is used. If the monetary
          ;; cannot be converted (eg. missing price) then it is not converted.
-         (convert-curr-fn (lambda (monetary col-idx)
-                            (and common-currency
-                                 (not (gnc-commodity-equal
-                                       (gnc:gnc-monetary-commodity monetary)
-                                       common-currency))
-                                 (has-price? (gnc:gnc-monetary-commodity monetary))
-                                 (let ((date
-                                        (cond
-                                         ((eq? price-source 'pricedb-latest)
-                                          (current-time))
-                                         ((eq? col-idx 'overall-period)
-                                          (last report-dates))
-                                         (else
-                                          (list-ref report-dates
-                                                    (case report-type
-                                                      ((balsheet) col-idx)
-                                                      ((pnl) (1+ col-idx))))))))
-                                   (exchange-fn monetary common-currency date)))))
+         (convert-curr-fn
+          (lambda (monetary col-idx)
+            (and common-currency
+                 (not (gnc-commodity-equal
+                       (gnc:gnc-monetary-commodity monetary)
+                       common-currency))
+                 (has-price? (gnc:gnc-monetary-commodity monetary))
+                 (exchange-fn
+                  monetary common-currency
+                  (cond
+                   ((eq? price-source 'pricedb-latest) (current-time))
+                   ((eq? col-idx 'overall-period) (last report-dates))
+                   ((eq? report-type 'balsheet) (list-ref report-dates col-idx))
+                   ((eq? report-type 'pnl) (list-ref report-dates (1+ col-idx))))))))
 
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
@@ -930,9 +926,7 @@ also show overall period profit & loss."))
      ((eq? report-type 'balsheet)
       (let* ((get-cell-monetary-fn
               (lambda (account col-idx)
-                (let ((account-balance-list (assoc-ref accounts-balances account)))
-                  (and account-balance-list
-                       (list-ref account-balance-list col-idx)))))
+                (list-ref (assoc-ref accounts-balances account) col-idx)))
 
              ;; an alist of (cons account vector-of-splits) where each
              ;; split is the last one at date boundary
@@ -1017,6 +1011,7 @@ also show overall period profit & loss."))
                       (map
                        gnc:monetary-neg
                        (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
+
              (chart (and include-chart? incr
                          (gnc:make-report-anchor
                           networth-barchart-uuid report-obj
