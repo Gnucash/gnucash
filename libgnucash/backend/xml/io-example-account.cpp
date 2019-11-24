@@ -425,8 +425,6 @@ gnc_write_example_account (GncExampleAccount* gea, const gchar* filename)
 
     fprintf (out, "</" GNC_ACCOUNT_STRING ">\n\n");
 
-    write_emacs_trailer (out);
-
     fclose (out);
 
     return TRUE;
