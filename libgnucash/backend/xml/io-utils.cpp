@@ -33,23 +33,6 @@ extern "C"
 #include "gnc-xml.h"
 #include "io-utils.h"
 #include "sixtp.h"
-/*
-  <!-- Local variables: -->
-  <!-- mode: C          -->
-  <!-- End:             -->
-*/
-
-static const gchar* emacs_trailer =
-    "<!-- Local variables: -->\n"
-    "<!-- mode: xml        -->\n"
-    "<!-- End:             -->\n";
-
-
-gboolean
-write_emacs_trailer (FILE* out)
-{
-    return fprintf (out, "%s", emacs_trailer) >= 0;
-}
 
 static gboolean
 write_one_account (FILE* out,
@@ -66,7 +49,7 @@ write_one_account (FILE* out,
     xmlFreeNode (accnode);
 
     g_return_val_if_fail(gd, FALSE);
-    
+
     if (ferror (out) || fprintf (out, "\n") < 0)
         return FALSE;
 
