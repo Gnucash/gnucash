@@ -1284,6 +1284,13 @@ flawed. see report-utilities.scm. please update reports.")
       (try owner->str)
       (try invoice->str)
       (try lot->str)
+      (and (record? d)
+           (let ((rtd (record-type-descriptor d)))
+             (define (fld->str fld)
+               (format #f "~a=~a" fld (gnc:strify ((record-accessor rtd fld) d))))
+             (format #f "Rec:~a{~a}"
+                     (record-type-name rtd)
+                     (string-join (map fld->str (record-type-fields rtd)) ", "))))
       (object->string d)))
 
 (define (pair->num pair)
