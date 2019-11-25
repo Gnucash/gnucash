@@ -658,8 +658,7 @@ time64_from_gdate(const GDate* g_date, DayPart when)
 TEST_F(GncDateOption, test_set_and_get_absolute)
 {
     time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
-    DateSetterValue value1{DateType::ABSOLUTE, time1};
-    m_option.set_value(value1);
+    m_option.set_value(time1);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -669,8 +668,7 @@ TEST_F(GncDateOption, test_set_and_get_month_start)
     g_date_set_time_t(&month_start, time(nullptr));
     gnc_gdate_set_month_start(&month_start);
     time64 time1{time64_from_gdate(&month_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -680,8 +678,7 @@ TEST_F(GncDateOption, test_set_and_get_month_end)
     g_date_set_time_t(&month_end, time(nullptr));
     gnc_gdate_set_month_end(&month_end);
     time64 time1{time64_from_gdate(&month_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_THIS_MONTH);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -691,8 +688,7 @@ TEST_F(GncDateOption, test_set_and_get_prev_month_start)
     g_date_set_time_t(&prev_month_start, time(nullptr));
     gnc_gdate_set_prev_month_start(&prev_month_start);
     time64 time1{time64_from_gdate(&prev_month_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_PREV_MONTH);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -702,8 +698,7 @@ TEST_F(GncDateOption, test_set_and_get_prev_month_end)
     g_date_set_time_t(&prev_month_end, time(nullptr));
     gnc_gdate_set_prev_month_end(&prev_month_end);
     time64 time1{time64_from_gdate(&prev_month_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_PREV_MONTH);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -713,8 +708,7 @@ TEST_F(GncDateOption, test_set_and_get_quarter_start)
     g_date_set_time_t(&quarter_start, time(nullptr));
     gnc_gdate_set_quarter_start(&quarter_start);
     time64 time1{time64_from_gdate(&quarter_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_CURRENT_QUARTER);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -724,8 +718,7 @@ TEST_F(GncDateOption, test_set_and_get_quarter_end)
     g_date_set_time_t(&quarter_end, time(nullptr));
     gnc_gdate_set_quarter_end(&quarter_end);
     time64 time1{time64_from_gdate(&quarter_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_CURRENT_QUARTER);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -735,8 +728,7 @@ TEST_F(GncDateOption, test_set_and_get_prev_quarter_start)
     g_date_set_time_t(&prev_quarter_start, time(nullptr));
     gnc_gdate_set_prev_quarter_start(&prev_quarter_start);
     time64 time1{time64_from_gdate(&prev_quarter_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_PREV_QUARTER);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -746,8 +738,7 @@ TEST_F(GncDateOption, test_set_and_get_prev_quarter_end)
     g_date_set_time_t(&prev_quarter_end, time(nullptr));
     gnc_gdate_set_prev_quarter_end(&prev_quarter_end);
     time64 time1{time64_from_gdate(&prev_quarter_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_PREV_QUARTER);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -757,8 +748,7 @@ TEST_F(GncDateOption, test_set_and_get_year_start)
     g_date_set_time_t(&year_start, time(nullptr));
     gnc_gdate_set_year_start(&year_start);
     time64 time1{time64_from_gdate(&year_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_CAL_YEAR);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -768,8 +758,7 @@ TEST_F(GncDateOption, test_set_and_get_year_end)
     g_date_set_time_t(&year_end, time(nullptr));
     gnc_gdate_set_year_end(&year_end);
     time64 time1{time64_from_gdate(&year_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_CAL_YEAR);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -779,8 +768,7 @@ TEST_F(GncDateOption, test_set_and_get_prev_year_start)
     g_date_set_time_t(&prev_year_start, time(nullptr));
     gnc_gdate_set_prev_year_start(&prev_year_start);
     time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
-    DateSetterValue value1{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::START_PREV_YEAR);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
@@ -790,16 +778,14 @@ TEST_F(GncDateOption, test_set_and_get_prev_year_end)
     g_date_set_time_t(&prev_year_end, time(nullptr));
     gnc_gdate_set_prev_year_end(&prev_year_end);
     time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
-    DateSetterValue value1{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
-    m_option.set_value(value1);
+    m_option.set_value(RelativeDatePeriod::END_PREV_YEAR);
     EXPECT_EQ(time1, m_option.get_value());
 }
 
 TEST_F(GncDateOption, test_stream_out)
 {
     time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
-    DateSetterValue value1{DateType::ABSOLUTE, time1};
-    m_option.set_value(value1);
+    m_option.set_value(time1);
     std::ostringstream oss;
     oss << time1;
     std::string timestr{"absolute . "};
@@ -808,98 +794,77 @@ TEST_F(GncDateOption, test_stream_out)
     oss << m_option;
     EXPECT_EQ(oss.str(), timestr);
 
-    DateSetterValue value2{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::TODAY)};
-    m_option.set_value(value2);
+    m_option.set_value(RelativeDatePeriod::TODAY);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . today");
 
-    DateSetterValue value3{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::TODAY)};
-    m_option.set_value(value3);
-    oss.str("");
-    oss << m_option;
-    EXPECT_STREQ(oss.str().c_str(), "relative . today");
-
-    DateSetterValue value4{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
-    m_option.set_value(value4);
+    m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-this-month");
 
-    DateSetterValue value5{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::THIS_MONTH)};
-    m_option.set_value(value5);
+    m_option.set_value(RelativeDatePeriod::END_THIS_MONTH);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-this-month");
 
-    DateSetterValue value6{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
-    m_option.set_value(value6);
+    m_option.set_value(RelativeDatePeriod::START_PREV_MONTH);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-month");
 
-    DateSetterValue value7{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_MONTH)};
-    m_option.set_value(value7);
+    m_option.set_value(RelativeDatePeriod::END_PREV_MONTH);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-month");
 
-    DateSetterValue value8{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
-    m_option.set_value(value8);
+    m_option.set_value(RelativeDatePeriod::START_CURRENT_QUARTER);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-current-quarter");
 
-    DateSetterValue value9{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CURRENT_QUARTER)};
-    m_option.set_value(value9);
+    m_option.set_value(RelativeDatePeriod::END_CURRENT_QUARTER);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-current-quarter");
 
-    DateSetterValue value10{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
-    m_option.set_value(value10);
+    m_option.set_value(RelativeDatePeriod::START_PREV_QUARTER);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-quarter");
 
-    DateSetterValue value11{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_QUARTER)};
-    m_option.set_value(value11);
+    m_option.set_value(RelativeDatePeriod::END_PREV_QUARTER);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-quarter");
 
-    DateSetterValue value12{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
-    m_option.set_value(value12);
+    m_option.set_value(RelativeDatePeriod::START_CAL_YEAR);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-cal-year");
 
-    DateSetterValue value13{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::CAL_YEAR)};
-    m_option.set_value(value13);
+    m_option.set_value(RelativeDatePeriod::END_CAL_YEAR);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-cal-year");
 
-    DateSetterValue value14{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
-    m_option.set_value(value14);
+    m_option.set_value(RelativeDatePeriod::START_PREV_YEAR);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-year");
 
-    DateSetterValue value15{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::PREV_YEAR)};
-    m_option.set_value(value15);
+    m_option.set_value(RelativeDatePeriod::END_PREV_YEAR);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-year");
 
-    DateSetterValue value16{DateType::STARTING, static_cast<int64_t>(RelativeDatePeriod::ACCOUNTING_PERIOD)};
-    m_option.set_value(value16);
+    m_option.set_value(RelativeDatePeriod::START_ACCOUNTING_PERIOD);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . start-prev-fin-year");
 
-    DateSetterValue value17{DateType::ENDING, static_cast<int64_t>(RelativeDatePeriod::ACCOUNTING_PERIOD)};
-    m_option.set_value(value17);
+    m_option.set_value(RelativeDatePeriod::END_ACCOUNTING_PERIOD);
     oss.str("");
     oss << m_option;
     EXPECT_STREQ(oss.str().c_str(), "relative . end-prev-fin-year");

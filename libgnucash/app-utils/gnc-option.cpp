@@ -88,18 +88,32 @@ set_day_and_time(struct tm& now, bool starting)
 time64
 GncOptionDateValue::get_value() const
 {
-    if (m_type == DateType::ABSOLUTE)
+    if (m_period == RelativeDatePeriod::ABSOLUTE)
         return m_date;
     if (m_period == RelativeDatePeriod::TODAY)
         return static_cast<time64>(GncDateTime());
-    if (m_period == RelativeDatePeriod::ACCOUNTING_PERIOD)
-        return m_type == DateType::STARTING ?
-            gnc_accounting_period_fiscal_start() :
-            gnc_accounting_period_fiscal_end();
+    if (m_period == RelativeDatePeriod::START_ACCOUNTING_PERIOD)
+        return gnc_accounting_period_fiscal_start();
+    if (m_period == RelativeDatePeriod::END_ACCOUNTING_PERIOD)
+        return gnc_accounting_period_fiscal_end();
 
-    struct tm now{static_cast<tm>(GncDateTime())};
+    GncDateTime now_t;
+    if (m_period == RelativeDatePeriod::TODAY)
+        return static_cast<time64>(now_t);
+    struct tm now{static_cast<tm>(now_t)};
     struct tm period{static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()))};
+    bool starting =  m_period == RelativeDatePeriod::START_PREV_MONTH ||
+        m_period == RelativeDatePeriod::START_THIS_MONTH ||
+        m_period == RelativeDatePeriod::START_CAL_YEAR ||
+        m_period == RelativeDatePeriod::START_PREV_YEAR ||
+        m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
+        m_period == RelativeDatePeriod::START_PREV_QUARTER;
 
+    bool prev = m_period == RelativeDatePeriod::START_PREV_YEAR ||
+        m_period == RelativeDatePeriod::END_PREV_YEAR ||
+        m_period == RelativeDatePeriod::START_PREV_QUARTER ||
+        m_period == RelativeDatePeriod::END_PREV_QUARTER;
+    
     if (period.tm_mon == now.tm_mon && period.tm_mday == now.tm_mday)
     {
         //No set accounting period, use the calendar year
@@ -107,34 +121,40 @@ GncOptionDateValue::get_value() const
         period.tm_mday = 0;
     }
 
-    if (m_period == RelativeDatePeriod::CAL_YEAR ||
-        m_period == RelativeDatePeriod::PREV_YEAR)
+    if (m_period == RelativeDatePeriod::START_CAL_YEAR ||
+        m_period == RelativeDatePeriod::END_CAL_YEAR ||
+        m_period == RelativeDatePeriod::START_PREV_YEAR ||
+        m_period == RelativeDatePeriod::END_PREV_YEAR)
     {
-        if (m_period == RelativeDatePeriod::PREV_YEAR)
+
+        if (prev)
             --now.tm_year;
-        now.tm_mon = m_type == DateType::STARTING ? 0 : 11;
+        now.tm_mon = starting ? 0 : 11;
     }
-    else if (m_period == RelativeDatePeriod::PREV_QUARTER ||
-             m_period == RelativeDatePeriod::CURRENT_QUARTER)
+    else if (m_period == RelativeDatePeriod::START_PREV_QUARTER ||
+             m_period == RelativeDatePeriod::END_PREV_QUARTER ||
+             m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
+             m_period == RelativeDatePeriod::END_CURRENT_QUARTER)
     {
         auto offset = (now.tm_mon > period.tm_mon ? now.tm_mon - period.tm_mon :
                        period.tm_mon - now.tm_mon) % 3;
         now.tm_mon = now.tm_mon - offset;
-        if (m_period == RelativeDatePeriod::PREV_QUARTER)
+        if (prev)
             now.tm_mon -= 3;
-        if (m_type == DateType::ENDING)
+        if (!starting)
             now.tm_mon += 2;
     }
-    else if (m_period == RelativeDatePeriod::PREV_MONTH)
+    else if (m_period == RelativeDatePeriod::START_PREV_MONTH ||
+             m_period == RelativeDatePeriod::END_PREV_MONTH)
         --now.tm_mon;
     normalize_month(now);
-    set_day_and_time(now, m_type == DateType::STARTING);
+    set_day_and_time(now, starting);
     return static_cast<time64>(GncDateTime(now));
 }
 static const char* date_type_str[] {"absolute", "relative"};
 static const std::array<const char*, 16> date_period_str
 {
-    "today", "today",
+    "today",
     "start-this-month", "end-this-month",
     "start-prev-month", "end-prev-month",
     "start-current-quarter", "end-current-quarter",
@@ -148,14 +168,11 @@ static const std::array<const char*, 16> date_period_str
 std::ostream&
 GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
 {
-    if (m_type == DateType::ABSOLUTE)
+    if (m_period == RelativeDatePeriod::ABSOLUTE)
         oss << date_type_str[0] << " . " << m_date;
     else
-    {
-        int n{ m_type == DateType::STARTING ? 0 : 1};
-        n += 2 * static_cast<int>(m_period);
-        oss << date_type_str[1] << " . " << date_period_str[n];
-    }
+        oss << date_type_str[1] << " . " <<
+            date_period_str[static_cast<int>(m_period)];
     return oss;
 }
 
@@ -185,8 +202,7 @@ GncOptionDateValue::in_stream(std::istream& iss)
         }
 
         int64_t index = period - date_period_str.begin();
-        DateType type = index % 2 ? DateType::ENDING : DateType::STARTING;
-        set_value(std::make_pair(type, index / 2));
+        set_value(static_cast<RelativeDatePeriod>(index));
     }
     else
     {
@@ -197,23 +213,6 @@ GncOptionDateValue::in_stream(std::istream& iss)
     }
     return iss;
 }
-
-void
-GncOptionDateValue::set_value(DateSetterValue value)
-{
-    auto [type, val] = value;
-    m_type = type;
-    if (type == DateType::ABSOLUTE)
-    {
-        m_period = RelativeDatePeriod::TODAY;
-        m_date = static_cast<time64>(val);
-        return;
-    }
-
-    m_period = static_cast<RelativeDatePeriod>(val);
-    m_date = 0;
-}
-
 
 QofInstance*
 qof_instance_from_string(const std::string& str, GncOptionUIType type)

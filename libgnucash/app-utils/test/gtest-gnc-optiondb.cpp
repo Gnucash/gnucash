@@ -176,10 +176,24 @@ TEST_F(GncOptionDBTest, test_register_multichoice_option)
     EXPECT_STREQ("corge", m_db->lookup_string_option("foo", "bar").c_str());
 }
 
+static time64
+time64_from_gdate(const GDate* g_date, DayPart when)
+{
+    GncDate date{g_date_get_year(g_date), g_date_get_month(g_date),
+            g_date_get_day(g_date)};
+    GncDateTime time{date, when};
+    return static_cast<time64>(time);
+}
+
+
 TEST_F(GncOptionDBTest, test_register_date_interval_option)
 {
-    gnc_register_date_interval_option(m_db, "foo", "bar", "baz", "Phony Option");
-    auto time{gnc_dmy2time64(11, 7, 2019)};
+    gnc_register_date_interval_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                      RelativeDatePeriod::START_ACCOUNTING_PERIOD);
+    GDate prev_year_start;
+    g_date_set_time_t(&prev_year_start, time(nullptr));
+    gnc_gdate_set_prev_year_start(&prev_year_start);
+    time64 time{time64_from_gdate(&prev_year_start, DayPart::start)};
     ASSERT_TRUE(m_db->set_option("foo", "bar", time));
     EXPECT_EQ(time, m_db->find_option("foo", "bar")->get().get_value<time64>());
 }

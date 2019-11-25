@@ -530,9 +530,10 @@ gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
 
 void
 gnc_register_date_interval_option(const GncOptionDBPtr& db, const char* section,
-                             const char* name, const char* key,
-                             const char* doc_string)
+                                  const char* name, const char* key,
+                                  const char* doc_string,
+                                  RelativeDatePeriod period)
 {
-    GncOption option{GncOptionDateValue(section, name, key, doc_string)};
+    GncOption option{GncOptionDateValue(section, name, key, doc_string, period)};
     db->register_option(section, std::move(option));
 }

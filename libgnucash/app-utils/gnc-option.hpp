@@ -597,26 +597,26 @@ gnc-date-option-absolute-time m_type == DateTyupe::Absolute
 gnc-date-option-relative-time m_type != DateTyupe::Absolute
  */
 
-enum class DateType
+enum class RelativeDatePeriod : int
 {
-    ABSOLUTE,
-    STARTING,
-    ENDING,
-};
-
-enum class RelativeDatePeriod : int64_t
-{
+    ABSOLUTE = -1,
     TODAY,
-    THIS_MONTH,
-    PREV_MONTH,
-    CURRENT_QUARTER,
-    PREV_QUARTER,
-    CAL_YEAR,
-    PREV_YEAR,
-    ACCOUNTING_PERIOD
+    START_THIS_MONTH,
+    END_THIS_MONTH,
+    START_PREV_MONTH,
+    END_PREV_MONTH,
+    START_CURRENT_QUARTER,
+    END_CURRENT_QUARTER,
+    START_PREV_QUARTER,
+    END_PREV_QUARTER,
+    START_CAL_YEAR,
+    END_CAL_YEAR,
+    START_PREV_YEAR,
+    END_PREV_YEAR,
+    START_ACCOUNTING_PERIOD,
+    END_ACCOUNTING_PERIOD
 };
 
-using DateSetterValue = std::tuple<DateType, int64_t>;
 class GncOptionDateValue : public OptionClassifier, public OptionUIItem
 {
 public:
@@ -624,8 +624,24 @@ public:
                               const char* key, const char* doc_string) :
         OptionClassifier{section, name, key, doc_string},
         OptionUIItem(GncOptionUIType::DATE),
-        m_type{DateType::ABSOLUTE}, m_period{RelativeDatePeriod::TODAY},
-        m_date{static_cast<time64>(GncDateTime())} {}
+        m_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
+        m_date{INT64_MAX},
+        m_default_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
+        m_default_date{INT64_MAX} {}
+    GncOptionDateValue(const char* section, const char* name,
+                       const char* key, const char* doc_string,
+                       time64 time) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(GncOptionUIType::DATE),
+        m_period{RelativeDatePeriod::ABSOLUTE}, m_date{time},
+        m_default_period{RelativeDatePeriod::ABSOLUTE}, m_default_date{time} {}
+    GncOptionDateValue(const char* section, const char* name,
+                       const char* key, const char* doc_string,
+                       const RelativeDatePeriod period) :
+        OptionClassifier{section, name, key, doc_string},
+        OptionUIItem(GncOptionUIType::DATE),
+        m_period{period}, m_date{INT64_MAX},
+        m_default_period{period}, m_default_date{INT64_MAX} {}
         GncOptionDateValue(const GncOptionDateValue&) = default;
         GncOptionDateValue(GncOptionDateValue&&) = default;
         GncOptionDateValue& operator=(const GncOptionDateValue&) = default;
@@ -634,17 +650,21 @@ public:
     time64 get_default_value() const { return static_cast<time64>(GncDateTime()); }
     std::ostream& out_stream(std::ostream& oss) const noexcept;
     std::istream& in_stream(std::istream& iss);
-    void set_value(DateSetterValue);
+    void set_value(RelativeDatePeriod value) {
+        m_period = value;
+        m_date = INT64_MAX;
+    }
     void set_value(time64 time) {
-        m_type = DateType::ABSOLUTE;
-        m_period = RelativeDatePeriod::TODAY;
+        m_period = RelativeDatePeriod::ABSOLUTE;
         m_date = time;
     }
-    bool is_changed() const noexcept { return true; }
+    bool is_changed() const noexcept { return m_period != m_default_period &&
+            m_date != m_default_date; }
 private:
-    DateType m_type;
     RelativeDatePeriod m_period;
     time64 m_date;
+    RelativeDatePeriod m_default_period;
+    time64 m_default_date;
 };
 
 template<> inline std::ostream&
