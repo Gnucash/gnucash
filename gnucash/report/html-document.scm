@@ -225,10 +225,7 @@
         (extra-attrib (and (pair? rest) rest)))
     ;; now generate the start tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
-          (attr  (gnc:html-markup-style-info-attributes childinfo))
-          (face  (gnc:html-markup-style-info-font-face childinfo))
-          (size  (gnc:html-markup-style-info-font-size childinfo))
-          (color (gnc:html-markup-style-info-font-color childinfo)))
+          (attr  (gnc:html-markup-style-info-attributes childinfo)))
 
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
@@ -263,33 +260,12 @@
                   (build-first-tag (car tag))
                   (for-each add-internal-tag (cdr tag)))
                 (build-first-tag tag)))
-        ;; XXX Font styling should be done through CSS, NOT html code
-        ;; XXX Also, why is this even here?  'Font' is an html tag just like anything else,
-        ;;       so why does it have it's own custom pseudo code here?  It should be built
-        ;;       as a call to this function just like any other tag, passing face/size/color as attributes.
-        (if (or face size color)
-            (begin
-              (issue-deprecation-warning
-               "this section is unreachable in code")
-              (push "<font ")
-              (if face
-                  (begin
-                    (push "face=\"") (push face) (push "\" ")))
-              (if size
-                  (begin
-                    (push "size=\"") (push size) (push "\" ")))
-              (if color
-                  (begin
-                    (push "color=\"") (push color) (push "\" ")))
-              (push ">")))
         retval))))
 
 (define (gnc:html-document-markup-end doc markup)
   (let ((childinfo (gnc:html-document-fetch-markup-style doc markup)))
     ;; now generate the end tag
-    (let ((tag (gnc:html-markup-style-info-tag childinfo))
-          (closing-font-tag
-           (gnc:html-markup-style-info-closing-font-tag childinfo)))
+    (let ((tag (gnc:html-markup-style-info-tag childinfo)))
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
              (set! tag markup))
@@ -297,8 +273,6 @@
              (set! tag #f)))
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval)))))
-        (if closing-font-tag
-            (push "</font>\n"))
         (if tag
             (let ((addtag (lambda (t)
                             (push "</")

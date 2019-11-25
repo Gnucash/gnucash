@@ -415,17 +415,6 @@
 (export gnc:html-markup-style-info-set-tag!)
 (export gnc:html-markup-style-info-attributes)
 (export gnc:html-markup-style-info-set-attributes!)
-(export gnc:html-markup-style-info-font-face)               ;deprecated
-(export gnc:html-markup-style-info-set-font-face-internal!) ;deprecated
-(export gnc:html-markup-style-info-set-font-face!)          ;deprecated
-(export gnc:html-markup-style-info-font-size)               ;deprecated
-(export gnc:html-markup-style-info-set-font-size-internal!) ;deprecated
-(export gnc:html-markup-style-info-set-font-size!)          ;deprecated
-(export gnc:html-markup-style-info-font-color)              ;deprecated
-(export gnc:html-markup-style-info-set-font-color-internal!) ;deprecated
-(export gnc:html-markup-style-info-set-font-color!)          ;deprecated
-(export gnc:html-markup-style-info-closing-font-tag)         ;deprecated
-(export gnc:html-markup-style-info-set-closing-font-tag!)    ;deprecated
 (export gnc:html-markup-style-info-inheritable?)
 (export gnc:html-markup-style-info-set-inheritable?!)
 (export gnc:html-markup-style-info-set-attribute!)
