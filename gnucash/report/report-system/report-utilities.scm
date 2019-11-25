@@ -1124,7 +1124,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; Outputs: aging list of numbers
 (define-public (gnc:owner-splits->aging-list splits num-buckets
                                              to-date date-type receivable?)
-  (gnc:pk 'processing: (qof-print-date to-date) date-type 'receivable? receivable?)
+  (gnc:msg "processing " (qof-print-date to-date) " date-type " date-type
+           "receivable? " receivable?)
   (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 2)))
         (buckets (make-vector num-buckets 0)))
     (define (addbucket! idx amt)
@@ -1148,7 +1149,8 @@ flawed. see report-utilities.scm. please update reports.")
                (date (if (eq? date-type 'postdate)
                          (gncInvoiceGetDatePosted invoice)
                          (gncInvoiceGetDateDue invoice))))
-          (gnc:pk 'next=invoice (car splits) invoice bal)
+          (gnc:msg "next " (gnc:strify (car splits))
+                   " invoice " (gnc:strify invoice) " bal " bal)
           (let loop ((idx 0) (bucket-dates bucket-dates))
             (if (< date (car bucket-dates))
                 (addbucket! idx bal)
@@ -1170,14 +1172,15 @@ flawed. see report-utilities.scm. please update reports.")
                        (- payment-left (gncInvoiceGetTotal (car inv-and-splits)))
                        payment-left))
                  (if receivable? (- payment) payment) invoices-and-splits)))
-          (gnc:pk 'payment (car splits) payment "->" overpayment)
+          (gnc:msg "next " (gnc:strify (car splits)) " payment " payment
+                   " overpayment " overpayment)
           (when (positive? overpayment)
             (addbucket! (1- num-buckets) (- overpayment)))
           (lp (cdr splits) invoices-and-splits)))
 
        ;; not invoice/prepayment. regular or payment split.
        (else
-        (gnc:pk 'next=skipped (car splits))
+        (gnc:msg "next " (gnc:strify (car splits)) " skipped")
         (lp (cdr splits) invoices-and-splits))))))
 
 ;; ***************************************************************************
