@@ -205,13 +205,13 @@
 
   (gnc:register-inv-option
    (gnc:make-text-option
-    (N_ "Layout") (N_ "CSS") "zz" "CSS code. This field specifies the CSS code
-for styling the invoice. Please see the exported report for the CSS class names."
+    (N_ "Layout") (N_ "CSS") "zz" (N_ "CSS code. This field specifies the CSS code \
+for styling the invoice. Please see the exported report for the CSS class names.")
     (keylist-get-info variant-list variant 'css)))
 
   (gnc:register-inv-option
    (gnc:make-pixmap-option
-    (N_ "Layout") (N_ "Picture Location") "zy" "Location for Picture"
+    (N_ "Layout") (N_ "Picture Location") "zy" (N_ "Location for Picture")
     ""))
 
   (gnc:register-inv-option
@@ -258,11 +258,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Total")
     "n" (N_ "Display the entry's value?") #t))
-
-  ;; company details can now be toggled via Layout tab
-  ;; and IMHO company-tax-id should be rendered if present
-  (gnc:register-inv-option (gnc:make-internal-option "Display" "My Company" #f))
-  (gnc:register-inv-option (gnc:make-internal-option "Display" "My Company ID" #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

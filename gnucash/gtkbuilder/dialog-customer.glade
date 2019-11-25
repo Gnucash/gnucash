@@ -126,6 +126,7 @@
                         <property name="margin_top">5</property>
                         <property name="margin_bottom">5</property>
                         <property name="border_width">2</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="vbox11">
                             <property name="visible">True</property>
@@ -137,7 +138,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Customer Number: </property>
+                                <property name="label" translatable="yes">Customer Number</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -151,7 +152,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Company Name: </property>
+                                <property name="label" translatable="yes">Company Name</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -279,7 +280,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Name: </property>
+                                <property name="label" translatable="yes">Name</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -293,7 +294,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Address: </property>
+                                <property name="label" translatable="yes">Address</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -343,7 +344,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Phone: </property>
+                                <property name="label" translatable="yes">Phone</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -357,7 +358,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Fax: </property>
+                                <property name="label" translatable="yes">Fax</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -371,7 +372,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Email: </property>
+                                <property name="label" translatable="yes">Email</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -595,6 +596,7 @@
                         <property name="margin_right">5</property>
                         <property name="margin_top">5</property>
                         <property name="margin_bottom">5</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="vbox7">
                             <property name="visible">True</property>
@@ -606,7 +608,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Currency: </property>
+                                <property name="label" translatable="yes">Currency</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -620,7 +622,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Terms: </property>
+                                <property name="label" translatable="yes">Terms</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -634,7 +636,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Discount: </property>
+                                <property name="label" translatable="yes">Discount</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -648,7 +650,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Credit Limit: </property>
+                                <property name="label" translatable="yes">Credit Limit</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -662,7 +664,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Tax Included: </property>
+                                <property name="label" translatable="yes">Tax Included</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -676,7 +678,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Tax Table: </property>
+                                <property name="label" translatable="yes">Tax Table</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -901,7 +903,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Name: </property>
+                                <property name="label" translatable="yes">Name</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -915,7 +917,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Address: </property>
+                                <property name="label" translatable="yes">Address</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -965,7 +967,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Phone: </property>
+                                <property name="label" translatable="yes">Phone</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -979,7 +981,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Fax: </property>
+                                <property name="label" translatable="yes">Fax</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -993,7 +995,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Email: </property>
+                                <property name="label" translatable="yes">Email</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>

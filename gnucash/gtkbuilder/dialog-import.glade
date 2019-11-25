@@ -260,12 +260,12 @@
                   <object class="GtkBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">3</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label847775">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Format:</property>
+                        <property name="label" translatable="yes">Format</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -659,7 +659,7 @@
               <object class="GtkLabel" id="label847772">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Imported transaction's first split:</property>
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Imported transaction's first split</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -694,7 +694,7 @@
               <object class="GtkLabel" id="label847766">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Potential splits matching the selected transaction: </property>
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Potential splits matching the selected transaction</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -1153,7 +1153,7 @@
       <object class="GtkLabel" id="heading_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">List of downloaded transactions (source split shown):</property>
+        <property name="label" translatable="yes">List of downloaded transactions (source split shown)</property>
         <property name="justify">center</property>
       </object>
       <packing>

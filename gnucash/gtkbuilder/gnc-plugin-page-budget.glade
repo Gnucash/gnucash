@@ -99,12 +99,13 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Value:</property>
+                <property name="label" translatable="yes">Value</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -126,6 +127,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Action</property>
               </object>
               <packing>
@@ -145,6 +147,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Replace the budget for all periods with new 'value'. Use empty value to unset budget for the accounts.</property>
+                    <property name="halign">start</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -161,6 +164,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Add 'value' to current budget for each period</property>
+                    <property name="halign">start</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_Replace</property>
@@ -178,6 +182,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Multiply current budget for each period by 'value'</property>
+                    <property name="halign">start</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_Replace</property>
@@ -218,7 +223,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Significant Digits:</property>
+                <property name="label" translatable="yes">Significant Digits</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -329,12 +334,13 @@
           <object class="GtkGrid" id="table6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label96">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Start Date:</property>
+                <property name="label" translatable="yes">Start Date</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -346,7 +352,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Significant Digits:</property>
+                <property name="label" translatable="yes">Significant Digits</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -391,6 +397,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Use the average value over all actual periods for all projected periods</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -492,14 +499,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">3</property>
-                <property name="column_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label85">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">5</property>
-                    <property name="label" translatable="yes">Budget Name:</property>
+                    <property name="label" translatable="yes">Budget Name</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -526,7 +533,7 @@
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="margin_left">5</property>
-                    <property name="label" translatable="yes">Notes:</property>
+                    <property name="label" translatable="yes">Notes</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -575,7 +582,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">5</property>
-                    <property name="label" translatable="yes">Number of Periods:</property>
+                    <property name="label" translatable="yes">Number of Periods</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -604,7 +611,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">5</property>
-                    <property name="label" translatable="yes">Budget Period:</property>
+                    <property name="label" translatable="yes">Budget Period</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

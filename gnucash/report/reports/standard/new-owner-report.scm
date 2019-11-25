@@ -373,8 +373,7 @@
        (else
         (let* ((payment-split (car payment-splits))
                (inv (car payment-split))
-               (inv-split (cadr payment-split))
-               (inv-amount (AP-negate (xaccSplitGetAmount inv-split))))
+               (inv-amount (gncInvoiceGetTotal inv)))
           (lp (cdr payment-splits)
               (- amount inv-amount)
               (cons (list

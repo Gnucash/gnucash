@@ -171,7 +171,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
     if (user_message != NULL)
         initial = user_message;
     else if ((cusip != NULL) || (fullname != NULL) || (mnemonic != NULL))
-        initial = _("\nPlease select a commodity to match:");
+        initial = _("\nPlease select a commodity to match");
     else
         initial = "";
 
@@ -285,17 +285,17 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     {
     case DIAG_COMM_ALL:
         title = _("Select security/currency");
-        text = _("_Security/currency:");
+        text = _("_Security/currency");
         break;
     case DIAG_COMM_NON_CURRENCY:
     case DIAG_COMM_NON_CURRENCY_SELECT:
         title = _("Select security");
-        text = _("_Security:");
+        text = _("_Security");
         break;
     case DIAG_COMM_CURRENCY:
     default:
         title = _("Select currency");
-        text = _("Cu_rrency:");
+        text = _("Cu_rrency");
         button = GTK_WIDGET(gtk_builder_get_object (builder, "ss_new_button"));
         gtk_widget_destroy(button);
         break;

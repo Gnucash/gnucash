@@ -36,12 +36,12 @@
 ;;  tag         : string for start tag
 ;;  attributes  : hash of attribute to value (unsafe!)
 ;;  attribute   : single attribute-value pair in a list 
-;;  font-face   : string for <font face="">
-;;  font-size   : string for <font size="">
-;;  font-color  : color (a valid HTML color spec)
+;;  font-face   : string for <font face=""> (deprecate)
+;;  font-size   : string for <font size=""> (deprecate)
+;;  font-color  : color (a valid HTML color spec) (deprecate)
 ;;  closing-font-tag: private data (computed from font-face,
 ;;                                  font-size, font-color)
-;;                    don't set directly, please!
+;;                    don't set directly, please! (deprecate)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -77,6 +77,7 @@
 
       ((field value . rest)
        (when (memq field '(font-size font-face font-color))
+         (issue-deprecation-warning "font-face/size/color deprecated.")
          (gnc:html-markup-style-info-set-closing-font-tag! style (and value #t)))
        ((record-modifier <html-markup-style-info> field) style value)
        (loop rest))
@@ -96,40 +97,55 @@
   (record-modifier <html-markup-style-info> 'attributes))
 
 (define gnc:html-markup-style-info-font-face
+  ;; deprecated
   (record-accessor <html-markup-style-info> 'font-face))
 
 (define gnc:html-markup-style-info-set-font-face-internal!
+  ;; deprecated
   (record-modifier <html-markup-style-info> 'font-face))
 
 (define (gnc:html-markup-style-info-set-font-face! record value)
+  (issue-deprecation-warning
+   "gnc:html-markup-style-info-set-font-face! is unused")
   (gnc:html-markup-style-info-set-closing-font-tag! record value)
   (gnc:html-markup-style-info-set-font-face-internal! record value))
 
 (define gnc:html-markup-style-info-font-size
+  ;; deprecated
   (record-accessor <html-markup-style-info> 'font-size))
 
 (define gnc:html-markup-style-info-set-font-size-internal!
+  ;; deprecated
   (record-modifier <html-markup-style-info> 'font-size))
 
 (define (gnc:html-markup-style-info-set-font-size! record value)
+  (issue-deprecation-warning
+   "gnc:html-markup-style-info-set-font-size! is unused")
   (gnc:html-markup-style-info-set-closing-font-tag! record value)
   (gnc:html-markup-style-info-set-font-size-internal! record value))
 
 (define gnc:html-markup-style-info-font-color
+  ;; deprecated
   (record-accessor <html-markup-style-info> 'font-color))
 
 (define gnc:html-markup-style-info-set-font-color-internal!
+  ;; deprecated
   (record-modifier <html-markup-style-info> 'font-color))
 
 (define (gnc:html-markup-style-info-set-font-color! record value)
+  (issue-deprecation-warning
+   "gnc:html-markup-style-info-set-font-color! is unused")
   (begin
     (gnc:html-markup-style-info-set-closing-font-tag!
      record (not (eq? value #f)))
     (gnc:html-markup-style-info-set-font-color-internal! record value)))
 
 (define gnc:html-markup-style-info-closing-font-tag
+  ;; deprecated
   (record-accessor <html-markup-style-info> 'closing-font-tag?))
+
 (define gnc:html-markup-style-info-set-closing-font-tag!
+  ;; deprecated
   (record-modifier <html-markup-style-info> 'closing-font-tag?))
 
 (define gnc:html-markup-style-info-inheritable? 

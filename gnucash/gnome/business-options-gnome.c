@@ -80,13 +80,8 @@ create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
 static GtkWidget *
 make_name_label (char *name)
 {
-    GtkWidget *label;
-    gchar *colon_name;
-
-    colon_name = g_strconcat (name, ":", (char *)NULL);
-    label = gtk_label_new (colon_name);
+    GtkWidget *label = gtk_label_new (name);
     gnc_label_set_alignment (label, 1.0, 0.5);
-    g_free (colon_name);
 
     return label;
 }

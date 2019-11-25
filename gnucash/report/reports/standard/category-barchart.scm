@@ -350,18 +350,19 @@ developing over time"))
           (define account-balances-alist
             (map
              (lambda (acc)
-               (let ((ignore-closing? (not (gnc:account-is-inc-exp? acc))))
+               (let* ((comm (xaccAccountGetCommodity acc))
+                      (split->elt (if reverse-balance?
+                                      (lambda (s)
+                                        (gnc:make-gnc-monetary
+                                         comm (- (xaccSplitGetNoclosingBalance s))))
+                                      (lambda (s)
+                                        (gnc:make-gnc-monetary
+                                         comm (xaccSplitGetNoclosingBalance s))))))
                  (cons acc
-                       (map
-                        (if reverse-balance? gnc:monetary-neg identity)
-                        (gnc:account-get-balances-at-dates
-                         acc dates-list
-                         #:split->amount
-                         (lambda (s)
-                           (and (or ignore-closing?
-                                    (not (xaccTransGetIsClosingTxn
-                                          (xaccSplitGetParent s))))
-                                (xaccSplitGetAmount s))))))))
+                       (gnc:account-accumulate-at-dates
+                        acc dates-list
+                        #:split->elt split->elt
+                        #:nosplit->elt (gnc:make-gnc-monetary comm 0)))))
              ;; all selected accounts (of report-specific type), *and*
              ;; their descendants (of any type) need to be scanned.
              (gnc:accounts-and-all-descendants accounts)))

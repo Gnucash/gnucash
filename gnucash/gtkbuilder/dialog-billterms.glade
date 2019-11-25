@@ -64,6 +64,7 @@
               <object class="GtkBox" id="hbox9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkBox" id="vbox7">
                     <property name="visible">True</property>
@@ -75,7 +76,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Due Days: </property>
+                        <property name="label" translatable="yes">Due Days</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -89,7 +90,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Discount Days: </property>
+                        <property name="label" translatable="yes">Discount Days</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -103,7 +104,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Discount %: </property>
+                        <property name="label" translatable="yes">Discount %</property>
                         <property name="justify">right</property>
                       </object>
                       <packing>
@@ -651,7 +652,7 @@
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">De_scription:</property>
+                            <property name="label" translatable="yes">De_scription</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
                             <property name="mnemonic_widget">desc_entry</property>
@@ -665,7 +666,7 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Type:</property>
+                            <property name="label" translatable="yes">_Type</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
                           </object>
@@ -893,7 +894,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">De_scription:</property>
+                    <property name="label" translatable="yes">De_scription</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">entry_desc</property>
@@ -934,7 +935,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="label" translatable="yes">_Type</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">type_combo</property>
@@ -1161,7 +1162,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Name:</property>
+                    <property name="label" translatable="yes">_Name</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">name_entry</property>
@@ -1184,7 +1185,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">De_scription:</property>
+                    <property name="label" translatable="yes">De_scription</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">description_entry</property>
@@ -1207,7 +1208,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="label" translatable="yes">_Type</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">type_combobox</property>

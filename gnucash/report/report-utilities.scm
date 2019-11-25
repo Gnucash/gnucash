@@ -19,6 +19,7 @@
 
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 format))
+(use-modules (ice-9 match))
 
 (define (list-ref-safe list elt)
   (and (> (length list) elt)
@@ -358,53 +359,67 @@
 (define* (gnc:account-get-balances-at-dates
           account dates-list #:key (split->amount xaccSplitGetAmount))
   (define (amount->monetary bal)
-    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
-  (let loop ((splits (xaccAccountGetSplitList account))
-             (dates-list (sort dates-list <))
-             (currentbal 0)
-             (lastbal 0)
-             (balancelist '()))
-    (cond
+    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) (or bal 0)))
+  (define balance 0)
+  (map amount->monetary
+       (gnc:account-accumulate-at-dates
+        account dates-list #:split->elt
+        (lambda (s)
+          (if s (set! balance (+ balance (or (split->amount s) 0))))
+          balance))))
 
-     ;; end of dates. job done!
-     ((null? dates-list)
-      (map amount->monetary (reverse balancelist)))
 
-     ;; end of splits, but still has dates. pad with last-bal
-     ;; until end of dates.
-     ((null? splits)
-      (loop '()
-            (cdr dates-list)
-            currentbal
-            lastbal
-            (cons lastbal balancelist)))
+;; this function will scan through account splitlist, building a list
+;; of split->elt results along the way at dates specified in dates.
+;; in: acc   - account
+;;     dates - a list of time64 -- it will be sorted
+;;     nosplit->elt - if report-dates occur *before* earliest split, the
+;;                    result list will be padded with this value
+;;     split->date - an unary lambda. result to compare with dates list.
+;;     split->elt - an unary lambda. it will be called successfully for each
+;;                  split in the account until the last date. the result
+;;                  will be accumulated onto the resulting list. the default
+;;                  xaccSplitGetBalance makes it similar to
+;;                  gnc:account-get-balances-at-dates.
+;; out: (list elt0 elt1 ...), each entry is the result of split->elt
+;;      or nosplit->elt
+(define* (gnc:account-accumulate-at-dates
+          acc dates #:key
+          (nosplit->elt #f)
+          (split->date (compose xaccTransGetDate xaccSplitGetParent))
+          (split->elt xaccSplitGetBalance))
+  (let lp ((splits (xaccAccountGetSplitList acc))
+           (dates (sort dates <))
+           (result '())
+           (last-result nosplit->elt))
+    (match dates
 
-     (else
-      (let* ((this (car splits))
-             (rest (cdr splits))
-             (currentbal (+ (or (split->amount this) 0) currentbal))
-             (next (and (pair? rest) (car rest))))
+      ;; end of dates. job done!
+      (() (reverse result))
 
-        (cond
-         ;; the next split is still before date
-         ((and next (< (xaccTransGetDate (xaccSplitGetParent next)) (car dates-list)))
-          (loop rest dates-list currentbal lastbal balancelist))
+      ((date . rest)
+       (match splits
 
-         ;; this split after date, add previous bal to balancelist
-         ((< (car dates-list) (xaccTransGetDate (xaccSplitGetParent this)))
-          (loop splits
-                (cdr dates-list)
-                lastbal
-                lastbal
-                (cons lastbal balancelist)))
+         ;; end of splits, but still has dates. pad with last-result
+         ;; until end of dates.
+         (() (lp '() rest (cons last-result result) last-result))
 
-         ;; this split before date, next split after date, or end.
-         (else
-          (loop rest
-                (cdr dates-list)
-                currentbal
-                currentbal
-                (cons currentbal balancelist)))))))))
+         ((head . tail)
+          (let ((next (and (pair? tail) (car tail))))
+            (cond
+
+             ;; the next split is still before date.
+             ((and next (< (split->date next) date))
+              (lp tail dates result (split->elt head)))
+
+             ;; head split after date, accumulate previous result
+             ((< date (split->date head))
+              (lp splits rest (cons last-result result) last-result))
+
+             ;; head split before date, next split after date, or end.
+             (else
+              (let ((head-result (split->elt head)))
+                (lp tail rest (cons head-result result) head-result)))))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -868,7 +883,8 @@
 ;; Outputs: aging list of numbers
 (define-public (gnc:owner-splits->aging-list splits num-buckets
                                              to-date date-type receivable?)
-  (gnc:pk 'processing: (qof-print-date to-date) date-type 'receivable? receivable?)
+  (gnc:msg "processing " (qof-print-date to-date) " date-type " date-type
+           "receivable? " receivable?)
   (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 2)))
         (buckets (make-vector num-buckets 0)))
     (define (addbucket! idx amt)
@@ -892,7 +908,8 @@
                (date (if (eq? date-type 'postdate)
                          (gncInvoiceGetDatePosted invoice)
                          (gncInvoiceGetDateDue invoice))))
-          (gnc:pk 'next=invoice (car splits) invoice bal)
+          (gnc:msg "next " (gnc:strify (car splits))
+                   " invoice " (gnc:strify invoice) " bal " bal)
           (let loop ((idx 0) (bucket-dates bucket-dates))
             (if (< date (car bucket-dates))
                 (addbucket! idx bal)
@@ -914,14 +931,15 @@
                        (- payment-left (gncInvoiceGetTotal (car inv-and-splits)))
                        payment-left))
                  (if receivable? (- payment) payment) invoices-and-splits)))
-          (gnc:pk 'payment (car splits) payment "->" overpayment)
+          (gnc:msg "next " (gnc:strify (car splits)) " payment " payment
+                   " overpayment " overpayment)
           (when (positive? overpayment)
             (addbucket! (1- num-buckets) (- overpayment)))
           (lp (cdr splits) invoices-and-splits)))
 
        ;; not invoice/prepayment. regular or payment split.
        (else
-        (gnc:pk 'next=skipped (car splits))
+        (gnc:msg "next " (gnc:strify (car splits)) " skipped")
         (lp (cdr splits) invoices-and-splits))))))
 
 ;; ***************************************************************************
@@ -1004,6 +1022,10 @@
                       "(list "
                       (string-join (map gnc:strify d) " ")
                       ")"))
+      (and (vector? d) (string-append
+                        "(vector "
+                        (string-join (map gnc:strify (vector->list d)) " ")
+                        ")"))
       (and (pair? d) (format #f "(~a . ~a)"
                              (gnc:strify (car d))
                              (if (eq? (car d) 'absolute)

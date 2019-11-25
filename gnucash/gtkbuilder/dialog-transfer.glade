@@ -112,7 +112,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">Amount:</property>
+                        <property name="label" translatable="yes">Amount</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -139,7 +139,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">Date:</property>
+                        <property name="label" translatable="yes">Date</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -167,7 +167,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">Num:</property>
+                        <property name="label" translatable="yes">Num</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -192,7 +192,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">Description:</property>
+                        <property name="label" translatable="yes">Description</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -219,7 +219,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
-                        <property name="label" translatable="yes">Memo:</property>
+                        <property name="label" translatable="yes">Memo</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -281,7 +281,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Currency:</property>
+                        <property name="label" translatable="yes">Currency</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -369,7 +369,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Currency:</property>
+                        <property name="label" translatable="yes">Currency</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -512,7 +512,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="price_radio">
-                        <property name="label" translatable="yes">Exchange Rate:</property>
+                        <property name="label" translatable="yes">Exchange Rate</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -552,7 +552,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="amount_radio">
-                        <property name="label" translatable="yes">To Amount:</property>
+                        <property name="label" translatable="yes">To Amount</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

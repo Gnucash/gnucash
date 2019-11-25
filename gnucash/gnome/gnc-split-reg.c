@@ -1353,11 +1353,11 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     // add a label and set entry text if required
     if (have_uri)
     {
-        label = gtk_label_new (_("Amend URL:"));
+        label = gtk_label_new (_("Amend URL"));
         gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
     }
     else
-        label = gtk_label_new (_("Enter URL like https://www.gnucash.org:"));
+        label = gtk_label_new (_("Enter URL like https://www.gnucash.org"));
 
     // pack label and entry to content area
     gnc_label_set_alignment (label, 0.0, 0.5);
@@ -2482,7 +2482,7 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
 
     gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);
     gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By: "), gsr->sort_arrow);
+    gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By:"), gsr->sort_arrow);
 
     gnc_widget_style_context_add_class (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");
     gnc_widget_style_context_add_class (GTK_WIDGET(gsr->sort_arrow), "gnc-class-highlight");

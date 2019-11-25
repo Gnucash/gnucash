@@ -166,7 +166,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Months:</property>
+            <property name="label" translatable="yes">Months</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -178,7 +178,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Years:</property>
+            <property name="label" translatable="yes">Years</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -190,7 +190,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Format:</property>
+            <property name="label" translatable="yes">Format</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -203,7 +203,7 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_right">5</property>
-            <property name="label" translatable="yes">Sample:</property>
+            <property name="label" translatable="yes">Sample</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -221,7 +221,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Date format:</property>
+                <property name="label" translatable="yes">Date format</property>
               </object>
               <packing>
                 <property name="expand">False</property>

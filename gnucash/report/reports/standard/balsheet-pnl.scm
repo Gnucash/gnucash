@@ -30,8 +30,18 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-2))
+(use-modules (srfi srfi-9))
 
 (gnc:module-load "gnucash/report" 0)
+
+;; the column-data record. the gnc:account-accumulate-at-dates will
+;; create a record for each report-date with split-data as follows:
+(define-record-type :col-datum
+  (make-datum last-split split-balance)
+  col-datum?
+  (last-split col-datum-get-last-split)
+  (split-balance col-datum-get-split-balance))
 
 (define FOOTER-TEXT
   (gnc:make-html-text
@@ -573,7 +583,10 @@ also show overall period profit & loss."))
                                                     col-datum
                                                     #t)
                                col-datum
-                               #f)))
+                               (and get-cell-anchor-fn
+                                    (get-cell-anchor-fn
+                                     (account-and-descendants lvl-acct)
+                                     col-datum)))))
                            cols-data))))
 
   (define* (add-account-row lvl-curr curr #:key
@@ -766,12 +779,31 @@ also show overall period profit & loss."))
            ((eq? report-type 'pnl) (list startdate enddate))
            (else (list enddate))))
 
-         (accounts-balances (map
-                             (lambda (acc)
-                               (cons acc
-                                     (gnc:account-get-balances-at-dates
-                                      acc report-dates)))
-                             accounts))
+         ;; an alist of (cons account account-cols-data) whereby
+         ;; account-cols-data is a list of col-datum records
+         (accounts-cols-data
+          (map
+           (lambda (acc)
+             (let* ((comm (xaccAccountGetCommodity acc))
+                    (amt->monetary (lambda (amt) (gnc:make-gnc-monetary comm amt))))
+               (cons acc
+                     (gnc:account-accumulate-at-dates
+                      acc report-dates
+                      #:nosplit->elt (make-datum #f (amt->monetary 0))
+                      #:split->elt
+                      (lambda (s)
+                        (make-datum s (amt->monetary (xaccSplitGetBalance s))))))))
+           accounts))
+
+         ;; an alist of (cons account account-balances) whereby
+         ;; account-balances is a list of monetary amounts
+         (accounts-balances
+          (map
+           (lambda (acc)
+             (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
+                         (map col-datum-get-split-balance cols-data))))
+           accounts))
+
          (exchange-fn (and common-currency
                            (gnc:case-exchange-time-fn
                             price-source common-currency
@@ -782,24 +814,20 @@ also show overall period profit & loss."))
          ;; into report-currency if the latter exists. The price
          ;; applicable the the col-idx column is used. If the monetary
          ;; cannot be converted (eg. missing price) then it is not converted.
-         (convert-curr-fn (lambda (monetary col-idx)
-                            (and common-currency
-                                 (not (gnc-commodity-equal
-                                       (gnc:gnc-monetary-commodity monetary)
-                                       common-currency))
-                                 (has-price? (gnc:gnc-monetary-commodity monetary))
-                                 (let ((date
-                                        (cond
-                                         ((eq? price-source 'pricedb-latest)
-                                          (current-time))
-                                         ((eq? col-idx 'overall-period)
-                                          (last report-dates))
-                                         (else
-                                          (list-ref report-dates
-                                                    (case report-type
-                                                      ((balsheet) col-idx)
-                                                      ((pnl) (1+ col-idx))))))))
-                                   (exchange-fn monetary common-currency date)))))
+         (convert-curr-fn
+          (lambda (monetary col-idx)
+            (and common-currency
+                 (not (gnc-commodity-equal
+                       (gnc:gnc-monetary-commodity monetary)
+                       common-currency))
+                 (has-price? (gnc:gnc-monetary-commodity monetary))
+                 (exchange-fn
+                  monetary common-currency
+                  (cond
+                   ((eq? price-source 'pricedb-latest) (current-time))
+                   ((eq? col-idx 'overall-period) (last report-dates))
+                   ((eq? report-type 'balsheet) (list-ref report-dates col-idx))
+                   ((eq? report-type 'pnl) (list-ref report-dates (1+ col-idx))))))))
 
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
@@ -898,18 +926,24 @@ also show overall period profit & loss."))
      ((eq? report-type 'balsheet)
       (let* ((get-cell-monetary-fn
               (lambda (account col-idx)
-                (let ((account-balance-list (assoc account accounts-balances)))
-                  (and account-balance-list
-                       (list-ref account-balance-list (1+ col-idx))))))
+                (list-ref (assoc-ref accounts-balances account) col-idx)))
+
+             ;; an alist of (cons account vector-of-splits) where each
+             ;; split is the last one at date boundary
+             (accounts-splits-dates
+              (map
+               (lambda (acc)
+                 (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
+                             (list->vector
+                              (map col-datum-get-last-split cols-data)))))
+               accounts))
+
              (get-cell-anchor-fn
               (lambda (account col-idx)
-                (let* ((splits (xaccAccountGetSplitList account))
-                       (split-date (compose xaccTransGetDate xaccSplitGetParent))
-                       (date (list-ref report-dates col-idx))
-                       (valid-split? (lambda (s) (< (split-date s) date)))
-                       (valid-splits (filter valid-split? splits)))
-                  (and (pair? valid-splits)
-                       (gnc:split-anchor-text (last valid-splits))))))
+                (and-let* (((not (pair? account)))
+                           (date-splits (assoc-ref accounts-splits-dates account))
+                           (split (vector-ref date-splits col-idx)))
+                  (gnc:split-anchor-text split))))
 
              (asset-liability-balances
               (let ((asset-liab-balances
@@ -977,6 +1011,7 @@ also show overall period profit & loss."))
                       (map
                        gnc:monetary-neg
                        (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
+
              (chart (and include-chart? incr
                          (gnc:make-report-anchor
                           networth-barchart-uuid report-obj
@@ -1149,7 +1184,9 @@ also show overall period profit & loss."))
                                            (or common-currency book-main-currency))
                                      (list "Display" "Amount" 'double)
                                      (list "Accounts" "Accounts"
-                                           (list account))))))
+                                           (if (pair? account)
+                                               account
+                                               (list account)))))))
 
              (chart (and include-chart?
                          (gnc:make-report-anchor

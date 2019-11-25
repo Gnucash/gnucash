@@ -548,7 +548,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Row span:</property>
+                <property name="label" translatable="yes">_Row span</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">row_spin</property>
@@ -563,7 +563,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Column span:</property>
+                <property name="label" translatable="yes">_Column span</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">col_spin</property>
@@ -799,7 +799,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Name:</property>
+                <property name="label" translatable="yes">_Name</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">name_entry</property>
@@ -814,7 +814,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Template:</property>
+                <property name="label" translatable="yes">_Template</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">template_combobox</property>

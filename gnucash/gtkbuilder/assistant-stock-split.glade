@@ -107,7 +107,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Date:</property>
+                <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -121,7 +121,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Shares:</property>
+                <property name="label" translatable="yes">_Shares</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -135,7 +135,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Desc_ription:</property>
+                <property name="label" translatable="yes">Desc_ription</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">description_entry</property>
@@ -188,7 +188,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">New _Price:</property>
+                <property name="label" translatable="yes">New _Price</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -202,7 +202,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Currenc_y:</property>
+                <property name="label" translatable="yes">Currenc_y</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -267,7 +267,7 @@
               <object class="GtkLabel" id="cash_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Amount:</property>
+                <property name="label" translatable="yes">_Amount</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
               </object>
@@ -280,7 +280,7 @@
               <object class="GtkLabel" id="memo_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Memo:</property>
+                <property name="label" translatable="yes">_Memo</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
                 <property name="mnemonic_widget">memo_entry</property>

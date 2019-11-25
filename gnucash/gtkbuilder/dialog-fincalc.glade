@@ -601,7 +601,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Payment Total:</property>
+                            <property name="label" translatable="yes">Payment Total</property>
                             <property name="justify">center</property>
                           </object>
                           <packing>
@@ -685,7 +685,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Type:</property>
+                                <property name="label" translatable="yes">Type</property>
                               </object>
                             </child>
                           </object>
@@ -704,7 +704,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Frequency:</property>
+                                <property name="label" translatable="yes">Frequency</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -724,7 +724,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Frequency:</property>
+                                <property name="label" translatable="yes">Frequency</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -744,7 +744,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">When paid:</property>
+                                <property name="label" translatable="yes">When paid</property>
                               </object>
                             </child>
                           </object>

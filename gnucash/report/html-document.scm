@@ -269,6 +269,8 @@
         ;;       as a call to this function just like any other tag, passing face/size/color as attributes.
         (if (or face size color)
             (begin
+              (issue-deprecation-warning
+               "this section is unreachable in code")
               (push "<font ")
               (if face
                   (begin

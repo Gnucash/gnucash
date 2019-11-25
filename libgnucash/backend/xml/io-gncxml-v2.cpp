@@ -1601,8 +1601,7 @@ gnc_book_write_to_xml_file_v2 (
 
     /* Try to write as much as possible */
     if (!out
-        || !gnc_book_write_to_xml_filehandle_v2 (book, out)
-        || !write_emacs_trailer (out))
+        || !gnc_book_write_to_xml_filehandle_v2 (book, out))
         success = FALSE;
 
     /* Close the output stream */
@@ -1633,8 +1632,7 @@ gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
 
     /* Try to write as much as possible */
     if (!out
-        || !gnc_book_write_accounts_to_xml_filehandle_v2 (qof_be, book, out)
-        || !write_emacs_trailer (out))
+        || !gnc_book_write_accounts_to_xml_filehandle_v2 (qof_be, book, out))
         success = FALSE;
 
     /* Close the output stream */
@@ -2153,7 +2151,7 @@ gnc_xml2_parse_with_subst (GncXmlBackend* xml_be, QofBook* book, GHashTable* sub
                   xml_be, book, (sixtp_push_handler) parse_with_subst_push_handler,
                   push_data, GNC_BOOK_XML2_FILE);
     g_free (push_data);
-    
+
     if (success)
         qof_instance_set_dirty (QOF_INSTANCE (book));
 

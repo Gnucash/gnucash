@@ -212,6 +212,7 @@ exist but have no suitable transactions."))
          (show-zeros (op-value gnc:pagename-general optname-show-zeros))
          (date-type (op-value gnc:pagename-general optname-date-driver))
          (query (qof-query-create-for-splits))
+         (invalid-splits '())
          (document (gnc:make-html-document)))
 
     ;; for sorting and delete-duplicates. compare GUIDs
@@ -222,6 +223,10 @@ exist but have no suitable transactions."))
     (define (owner<? a b)
       ((if (eq? sort-order 'increasing) string<? string>?)
        (gncOwnerGetName a) (gncOwnerGetName b)))
+
+    (define (html-markup-ol lst)
+      (apply gnc:html-markup "ol"
+             (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
 
     ;; set default title
     (gnc:html-document-set-title! document report-title)
@@ -324,14 +329,45 @@ exist but have no suitable transactions."))
                  (reverse accounts-and-owners))
 
                 (for-each gncOwnerFree tofree)
-                (gnc:html-document-add-object! document table)))))
+                (gnc:html-document-add-object! document table)
+
+                (unless (null? invalid-splits)
+                  (gnc:html-document-add-object!
+                   document (gnc:make-html-text (gnc:html-markup-br)))
+
+                  (gnc:html-document-add-object!
+                   document
+                   (gnc:make-html-text
+                    (_ "Please note some transactions were not processed")
+                    (html-markup-ol
+                     (map
+                      (lambda (invalid-split)
+                        (gnc:html-markup-anchor
+                         (gnc:split-anchor-text (cadr invalid-split))
+                         (car invalid-split)))
+                      invalid-splits)))))))))
 
            (else
             (let* ((account (car accounts))
                    (splits-acc-others (list-split splits split-from-acct? account))
                    (acc-splits (car splits-acc-others))
                    (other-acc-splits (cdr splits-acc-others))
-                   (split-owners (map split->owner acc-splits))
+                   (split-owners
+                    (fold
+                     (lambda (a b)
+                       (let ((owner (split->owner a)))
+                         (cond
+                          ((gncOwnerIsValid owner) (cons owner b))
+                          ;; some payment splits may have no owner in
+                          ;; this account. skip. see bug 797506.
+                          (else
+                           (gnc:warn "split " (gnc:strify a) " has no owner")
+                           (set! invalid-splits
+                             (cons (list (_ "Payment has no owner") a)
+                                   invalid-splits))
+                           (gncOwnerFree owner)
+                           b))))
+                     '() acc-splits))
                    (acc-owners (sort (sort-and-delete-duplicates
                                       split-owners ownerGUID<? gnc-owner-equal?)
                                      owner<?)))
