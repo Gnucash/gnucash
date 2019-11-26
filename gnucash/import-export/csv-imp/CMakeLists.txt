@@ -68,7 +68,7 @@ target_link_libraries(
   ${ICU4C_I18N_LDFLAGS}
   gncmod-generic-import
   gncmod-gnome-utils
-  gncmod-app-utils
+  gnc-app-utils
   gnc-engine
   gnc-core-utils
   gnc-module)

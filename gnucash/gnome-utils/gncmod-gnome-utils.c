@@ -26,17 +26,12 @@
 
 
 #include <config.h>
-
-#include <gmodule.h>
 #include <libguile.h>
 
-#include "gnc-module.h"
 #include "gnc-module-api.h"
 
 #include "gnc-component-manager.h"
 #include "dialog-options.h"
-#include "qof.h"
-#include "gnc-gui-query.h"
 
 GNC_MODULE_API_DECL(libgncmod_gnome_utils)
 
@@ -74,11 +69,6 @@ extern SCM scm_init_sw_gnome_utils_module(void);
 int
 libgncmod_gnome_utils_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
-
     scm_init_sw_gnome_utils_module();
     lmod("(sw_gnome_utils)");
     lmod("(gnucash gnome-utils)");

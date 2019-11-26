@@ -73,11 +73,6 @@ extern SCM scm_init_sw_gnc_html_module( void );
 int
 libgncmod_html_gnc_module_init( int refcount )
 {
-    if ( !gnc_module_load( "gnucash/app-utils", 0 ) )
-    {
-        return FALSE;
-    }
-
     scm_init_sw_gnc_html_module();
     gnc_html_initialize();
     lmod( "(sw_gnc_html)" );

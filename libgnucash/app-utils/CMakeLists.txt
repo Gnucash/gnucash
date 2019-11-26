@@ -65,7 +65,6 @@ set (app_utils_SOURCES
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
-  gncmod-app-utils.c
   option-util.c
 )
 
@@ -94,22 +93,22 @@ if (WIN32)
 endif()
 
 
-add_library (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
-target_link_libraries(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
+add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 
-target_include_directories (gncmod-app-utils
+target_include_directories (gnc-app-utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${app_utils_ALL_INCLUDES}
 )
-target_compile_definitions (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+target_compile_definitions (gnc-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
 if (APPLE)
-  set_target_properties (gncmod-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gnc-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gncmod-app-utils
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+install(TARGETS gnc-app-utils
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
@@ -117,7 +116,7 @@ if (WITH_PYTHON)
   set(PYEXEC_FILES sw_app_utils.py)
   add_library (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
 
-  target_link_libraries(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(sw_app_utils gnc-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
   set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
   if (HAVE_STRINGOP_TRUNCATION)
     target_compile_options(sw_app_utils PRIVATE -Wno-error=stringop-truncation)
@@ -130,7 +129,7 @@ if (WITH_PYTHON)
   target_compile_definitions (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
   if (APPLE)
-    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
   endif()
 
   install(TARGETS sw_app_utils
@@ -168,7 +167,7 @@ set (app_utils_SCHEME_2
 )
 
 set(GUILE_DEPENDS
-  gncmod-app-utils
+  gnc-app-utils
   scm-core-utils
   scm-engine
   scm-gnc-module
@@ -197,5 +196,5 @@ add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
 set_local_dist(app_utils_DIST_local
         ${app_utils_ALL_SOURCES} ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
-        app-utils.i CMakeLists.txt gnc-help-utils.c README)
+        app-utils.i CMakeLists.txt gnc-help-utils.c)
 set(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

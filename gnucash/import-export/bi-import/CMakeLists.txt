@@ -21,7 +21,7 @@ add_library(gncmod-bi-import ${bi_import_noinst_HEADERS} ${bi_import_SOURCES})
 target_link_libraries(gncmod-bi-import
   gncmod-gnome-utils
   gncmod-gnome-search
-  gncmod-app-utils
+  gnc-app-utils
   gnc-engine
   gnc-core-utils
   gnc-module

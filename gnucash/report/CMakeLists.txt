@@ -29,7 +29,7 @@ target_compile_definitions(gncmod-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.cor
 
 target_link_libraries(gncmod-report
     gnc-module
-    gncmod-app-utils
+    gnc-app-utils
     gnucash-guile
     PkgConfig::GTK3
     ${GUILE_LDFLAGS})

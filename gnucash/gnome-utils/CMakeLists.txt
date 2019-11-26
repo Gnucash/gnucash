@@ -207,7 +207,7 @@ add_library (gncmod-gnome-utils
 )
 
 target_link_libraries(gncmod-gnome-utils
-    gncmod-app-utils
+    gnc-app-utils
     gnc-engine
     gnc-backend-xml-utils
     gnucash-guile

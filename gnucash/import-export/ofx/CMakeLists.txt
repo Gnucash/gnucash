@@ -20,7 +20,7 @@ set(ofx_UI gnc-plugin-ofx-ui.xml)
 if (WITH_OFX)
   add_library(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
 
-  target_link_libraries(gncmod-ofx gncmod-generic-import gnc-engine gncmod-app-utils gnc-core-utils
+  target_link_libraries(gncmod-ofx gncmod-generic-import gnc-engine gnc-app-utils gnc-core-utils
                     gncmod-gnome-utils ${LIBOFX_LDFLAGS})
 
   target_compile_definitions(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
