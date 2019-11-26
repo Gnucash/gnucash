@@ -38,10 +38,11 @@
 ;; the column-data record. the gnc:account-accumulate-at-dates will
 ;; create a record for each report-date with split-data as follows:
 (define-record-type :col-datum
-  (make-datum last-split split-balance)
+  (make-datum last-split split-balance split-value-balance)
   col-datum?
   (last-split col-datum-get-last-split)
-  (split-balance col-datum-get-split-balance))
+  (split-balance col-datum-get-split-balance)
+  (split-value-balance col-datum-get-split-value-balance))
 
 (define FOOTER-TEXT
   (gnc:make-html-text
@@ -785,14 +786,20 @@ also show overall period profit & loss."))
           (map
            (lambda (acc)
              (let* ((comm (xaccAccountGetCommodity acc))
+                    (val-coll (gnc:make-commodity-collector))
                     (amt->monetary (lambda (amt) (gnc:make-gnc-monetary comm amt))))
                (cons acc
                      (gnc:account-accumulate-at-dates
                       acc report-dates
-                      #:nosplit->elt (make-datum #f (amt->monetary 0))
+                      #:nosplit->elt (make-datum #f (amt->monetary 0)
+                                                 (gnc:make-commodity-collector))
                       #:split->elt
                       (lambda (s)
-                        (make-datum s (amt->monetary (xaccSplitGetBalance s))))))))
+                        (val-coll 'add
+                                  (xaccTransGetCurrency (xaccSplitGetParent s))
+                                  (xaccSplitGetValue s))
+                        (make-datum s (amt->monetary (xaccSplitGetBalance s))
+                                    (gnc:collector+ val-coll)))))))
            accounts))
 
          ;; an alist of (cons account account-balances) whereby
@@ -945,6 +952,8 @@ also show overall period profit & loss."))
                            (split (vector-ref date-splits col-idx)))
                   (gnc:split-anchor-text split))))
 
+             ;; a list of collectors whereby collector is the sum of
+             ;; asset and liabilities at report dates
              (asset-liability-balances
               (let ((asset-liab-balances
                      (map cdr (filter
@@ -955,6 +964,8 @@ also show overall period profit & loss."))
                     (map (const (gnc:make-commodity-collector)) report-dates)
                     (apply map gnc:monetaries-add asset-liab-balances))))
 
+             ;; a list of collectors whereby collector is the sum of
+             ;; incomes and expenses at report dates
              (income-expense-balances
               (let ((inc-exp-balances
                      (map cdr
@@ -967,6 +978,30 @@ also show overall period profit & loss."))
                     (map gnc:commodity-collector-get-negated
                          (apply map gnc:monetaries-add inc-exp-balances)))))
 
+             ;; an (cons account list-of-collectors) whereby each
+             ;; collector is the split-value-balances at report
+             ;; dates. split-value-balance determined by transaction currency.
+             (accounts-value-balances
+              (map
+               (lambda (acc)
+                 (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
+                             (map col-datum-get-split-value-balance cols-data))))
+               accounts))
+
+             ;; a list of collectors whereby each collector is the sum
+             ;; of asset and liability split-value-balances at report
+             ;; dates
+             (asset-liability-value-balances
+              (let ((asset-liab-value-balances
+                     (map cdr (filter
+                               (lambda (acc-balances)
+                                 (member (car acc-balances) asset-liability))
+                               accounts-value-balances))))
+                (if (null? asset-liab-value-balances)
+                    (map (const (gnc:make-commodity-collector)) report-dates)
+                    (apply map gnc:collector+ asset-liab-value-balances))))
+
+             ;; converts monetaries to common currency
              (monetaries->exchanged
               (lambda (monetaries target-currency price-source date)
                 (let ((exchange-fn (gnc:case-exchange-fn
@@ -978,6 +1013,10 @@ also show overall period profit & loss."))
                                   (exchange-fn mon target-currency))
                                 (monetaries 'format gnc:make-gnc-monetary #f)))))))
 
+             ;; the unrealized gain calculator retrieves the
+             ;; asset-and-liability report-date balance and
+             ;; value-balance, and calculates the difference,
+             ;; converted to report currency.
              (unrealized-gain-fn
               (lambda (col-idx)
                 (and common-currency
@@ -987,14 +1026,15 @@ also show overall period profit & loss."))
                             (asset-liability-balance
                              (list-ref asset-liability-balances col-idx))
                             (asset-liability-basis
-                             (gnc:accounts-get-comm-total-assets
-                              asset-liability
-                              (lambda (acc)
-                                (gnc:account-get-comm-value-at-date acc date #f))))
+                             (list-ref asset-liability-value-balances col-idx))
                             (unrealized (gnc:collector- asset-liability-basis
                                                         asset-liability-balance)))
                        (monetaries->exchanged
                         unrealized common-currency price-source date)))))
+
+             ;; the retained earnings calculator retrieves the
+             ;; income-and-expense report-date balance, and converts
+             ;; to report currency.
              (retained-earnings-fn
               (lambda (col-idx)
                 (let* ((date (case price-source
