@@ -74,6 +74,7 @@ set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_
 set(app_utils_ALL_LIBRARIES
     gnc-engine
     gnc-module
+    gnc-locale-tax
     gnucash-guile
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}

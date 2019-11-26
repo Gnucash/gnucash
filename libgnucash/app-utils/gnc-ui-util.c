@@ -53,6 +53,7 @@
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-hooks.h"
+#include "gnc-locale-tax.h"
 #include "gnc-session.h"
 #include "engine-helpers.h"
 #include "gnc-locale-utils.h"
@@ -625,14 +626,9 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 
         if (get_form == SCM_UNDEFINED)
         {
-            GNCModule module;
             const gchar *tax_module;
-            /* load the tax info
-               Note that the module "gnucash/locale/tax" will handle selecting
-               the proper locale specific tax info */
-            module = gnc_module_load ("gnucash/locale/tax", 0);
-
-            g_return_val_if_fail (module, NULL);
+            /* load the tax info */
+            gnc_locale_tax_init ();
 
             get_form = scm_c_eval_string
                        ("(false-if-exception gnc:txf-get-form)");
