@@ -32,7 +32,6 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
-#include "gnc-component-manager.h"
 #include "gnc-hooks.h"
 #include "gnc-exp-parser.h"
 
@@ -88,7 +87,6 @@ libgncmod_app_utils_gnc_module_init(int refcount)
 
     if (refcount == 0)
     {
-        gnc_component_manager_init ();
         gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL, NULL);
         gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL, NULL);
     }
@@ -99,8 +97,5 @@ libgncmod_app_utils_gnc_module_init(int refcount)
 int
 libgncmod_app_utils_gnc_module_end(int refcount)
 {
-    if (refcount == 0)
-        gnc_component_manager_shutdown ();
-
     return TRUE;
 }
