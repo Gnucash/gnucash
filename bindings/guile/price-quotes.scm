@@ -28,6 +28,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
 (use-modules (gnucash gnome-utils))
 (use-modules (srfi srfi-11)
              (srfi srfi-1))

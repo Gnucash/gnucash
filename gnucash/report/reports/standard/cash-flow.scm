@@ -32,7 +32,6 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash gnome-utils)) ;for gnc-build-url
 (use-modules (gnucash report))
 
 (export cash-flow-calc-money-in-out)

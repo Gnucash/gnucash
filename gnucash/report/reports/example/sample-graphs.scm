@@ -28,7 +28,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash gnome-utils)) ;for gnc-build-url
+(use-modules (gnucash html))
 (use-modules (gnucash report))
 
 ;; Add this module to enable translatable strings
