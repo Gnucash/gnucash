@@ -66,13 +66,6 @@ lmod(char * mn)
     g_free(form);
 }
 
-static void
-app_utils_shutdown(void)
-{
-    gnc_exp_parser_shutdown();
-    gnc_hook_run(HOOK_SAVE_OPTIONS, NULL);
-}
-
 
 extern SCM scm_init_sw_app_utils_module(void);
 
@@ -84,12 +77,6 @@ libgncmod_app_utils_gnc_module_init(int refcount)
     /* load the scheme code */
     lmod("(sw_app_utils)");
     lmod("(gnucash app-utils)");
-
-    if (refcount == 0)
-    {
-        gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL, NULL);
-        gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL, NULL);
-    }
 
     return TRUE;
 }

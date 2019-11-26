@@ -32,6 +32,7 @@
 #include "fin_spl_protos.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
 #include "gnc-locale-utils.h"
@@ -107,6 +108,8 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         }
         g_free(filename);
     }
+
+    gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)gnc_exp_parser_shutdown, NULL, NULL);
 }
 
 static gboolean
@@ -157,6 +160,8 @@ gnc_exp_parser_shutdown (void)
     last_gncp_error = NO_ERR;
 
     parser_inited = FALSE;
+
+    gnc_hook_run(HOOK_SAVE_OPTIONS, NULL);
 }
 
 void
