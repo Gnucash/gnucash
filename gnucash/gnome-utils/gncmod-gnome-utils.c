@@ -33,6 +33,7 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "gnc-component-manager.h"
 #include "dialog-options.h"
 #include "qof.h"
 #include "gnc-gui-query.h"
@@ -85,6 +86,7 @@ libgncmod_gnome_utils_gnc_module_init(int refcount)
     /* Initialize the options-ui database */
     if (refcount == 0)
     {
+        gnc_component_manager_init ();
         gnc_options_ui_initialize ();
     }
 
@@ -94,5 +96,8 @@ libgncmod_gnome_utils_gnc_module_init(int refcount)
 int
 libgncmod_gnome_utils_gnc_module_end(int refcount)
 {
+    if (refcount == 0)
+        gnc_component_manager_shutdown ();
+
     return TRUE;
 }

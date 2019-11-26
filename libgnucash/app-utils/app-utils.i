@@ -30,7 +30,6 @@
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
-#include <gnc-component-manager.h>
 #include <gnc-sx-instance-model.h>
 
 #include "gnc-engine-guile.h"

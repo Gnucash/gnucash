@@ -157,6 +157,7 @@ gnucash/gnome-utils/gnc-cell-renderer-popup-entry.c
 gnucash/gnome-utils/gnc-cell-renderer-text-flag.c
 gnucash/gnome-utils/gnc-combott.c
 gnucash/gnome-utils/gnc-commodity-edit.c
+gnucash/gnome-utils/gnc-component-manager.c
 gnucash/gnome-utils/gnc-currency-edit.c
 gnucash/gnome-utils/gnc-date-delta.c
 gnucash/gnome-utils/gnc-date-edit.c
@@ -528,7 +529,6 @@ libgnucash/app-utils/gfec.c
 libgnucash/app-utils/gnc-accounting-period.c
 libgnucash/app-utils/gnc-account-merge.c
 libgnucash/app-utils/gnc-addr-quickfill.c
-libgnucash/app-utils/gnc-component-manager.c
 libgnucash/app-utils/gnc-entry-quickfill.c
 libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c

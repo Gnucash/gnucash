@@ -18,7 +18,6 @@ set (app_utils_HEADERS
   gnc-account-merge.h
   gnc-accounting-period.h
   gnc-addr-quickfill.h
-  gnc-component-manager.h
   gnc-entry-quickfill.h
   gnc-euro.h
   gnc-exp-parser.h
@@ -56,7 +55,6 @@ set (app_utils_SOURCES
   gnc-account-merge.c
   gnc-accounting-period.c
   gnc-addr-quickfill.c
-  gnc-component-manager.c
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c

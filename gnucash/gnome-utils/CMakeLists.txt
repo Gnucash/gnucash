@@ -53,6 +53,7 @@ set (gnome_utils_SOURCES
   gnc-cell-renderer-text-flag.c
   gnc-combott.c
   gnc-commodity-edit.c
+  gnc-component-manager.c
   gnc-currency-edit.c
   gnc-date-delta.c
   gnc-date-edit.c
@@ -141,6 +142,7 @@ set (gnome_utils_HEADERS
   gnc-cell-renderer-text-flag.h
   gnc-combott.h
   gnc-commodity-edit.h
+  gnc-component-manager.h
   gnc-currency-edit.h
   gnc-date-delta.h
   gnc-date-edit.h
