@@ -60,10 +60,6 @@ extern SCM scm_init_sw_report_module(void);
 int
 libgncmod_report_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
     scm_init_sw_report_module();
 
     scm_c_eval_string("(use-modules (gnucash report))");

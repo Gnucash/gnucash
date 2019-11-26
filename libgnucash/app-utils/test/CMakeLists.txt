@@ -9,7 +9,7 @@ set(APP_UTILS_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-set(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
+set(APP_UTILS_TEST_LIBS gnc-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
 
 set(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 
@@ -20,7 +20,6 @@ endmacro()
 gnc_add_test_with_guile(test-exp-parser test-exp-parser.c
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
  )
-gnc_add_test_with_guile(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 add_app_utils_test(test-print-parse-amount test-print-parse-amount.cpp)
 # FIXME Why is this test not run ?
 #gnc_add_test_with_guile(test-print-queries test-print-queries.cpp APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
@@ -33,7 +32,6 @@ set(GUILE_DEPENDS
   scm-test-engine
   scm-app-utils
   scm-core-utils
-  scm-gnc-module
   scm-engine
   scm-core-utils
   gncmod-backend-xml
@@ -83,7 +81,6 @@ set_dist_list(test_app_utils_DIST
   CMakeLists.txt
   
   test-exp-parser.c
-  test-link-module.c
   test-print-parse-amount.cpp
   test-print-queries.cpp
   test-scm-query-string.cpp

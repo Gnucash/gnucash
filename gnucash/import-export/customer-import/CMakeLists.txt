@@ -17,7 +17,7 @@ set(customer_import_noinst_HEADERS
 
 add_library(gncmod-customer-import ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
 
-target_link_libraries(gncmod-customer-import gnc-gnome gncmod-gnome-utils gncmod-app-utils
+target_link_libraries(gncmod-customer-import gnc-gnome gncmod-gnome-utils gnc-app-utils
      gnc-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
 
 target_include_directories(gncmod-customer-import

@@ -487,7 +487,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/app-utils", 0, FALSE },
         { "gnucash/gnome-utils", 0, FALSE },
         { "gnucash/gnome-search", 0, FALSE },
         { "gnucash/register/ledger-core", 0, FALSE },
@@ -602,10 +601,12 @@ inner_main (void *closure, int argc, char **argv)
     SCM main_mod;
     char* fn = NULL;
 
+
     scm_c_eval_string("(debug-set! stack 200000)");
 
     main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
+    scm_c_use_module("gnucash app-utils");
 
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();

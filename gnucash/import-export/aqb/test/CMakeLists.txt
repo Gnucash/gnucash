@@ -21,7 +21,7 @@ set(test_aqb_INCLUDE_DIRS
 
 set(test_aqb_LIBS
   gncmod-aqbanking gncmod-generic-import gnc-gnome gncmod-gnome-utils
-  gncmod-ledger-core gncmod-app-utils
+  gncmod-ledger-core gnc-app-utils
   gncmod-backend-xml-utils gnc-engine gnc-core-utils gnc-module
   ${GLIB2_LDFLAGS}
 )
