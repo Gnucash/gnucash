@@ -3,6 +3,8 @@
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report standard-reports balance-sheet))
 (use-modules (gnucash report standard-reports income-statement))
+(use-modules (gnucash report standard-reports balsheet-pnl))
+(use-modules (gnucash report standard-reports transaction))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
@@ -15,6 +17,8 @@
 
 (define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13")
 (define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
+(define multicol-balsheet-uuid "065d5d5a77ba11e8b31e83ada73c5eea")
+(define multicol-pnl-uuid "0e94fd0277ba11e8825d43e27232c9d4")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
@@ -26,6 +30,8 @@
   (create-test-data)
   (balance-sheet-tests)
   (pnl-tests)
+  (multicol-balsheet-tests)
+  (multicol-pnl-tests)
   (test-end "balsheet and profit&loss"))
 
 (define (options->sxml uuid options test-title)
@@ -465,3 +471,113 @@
     ;;make-multilevel
     (set-option! pnl-options "Display" "Parent account balances" 'immediate-bal)
     (set-option! pnl-options "Display" "Parent account subtotals" 't)))
+
+(define (multicol-balsheet-tests)
+  (define (default-testing-options)
+    (let ((options (gnc:make-report-options multicol-balsheet-uuid)))
+      (set-option! options "General" "Start Date"
+                   (cons 'absolute (gnc-dmy2time64 1 1 1970)))
+      (set-option! options "General" "End Date"
+                   (cons 'absolute (gnc-dmy2time64 1 1 1972)))
+      (set-option! options "General" "Enable dual columns" #f)
+      (set-option! options "General" "Disable amount indenting" #t)
+      (set-option! options "Display" "Account full name instead of indenting" #t)
+      (set-option! options "Accounts" "Levels of Subaccounts" 'all)
+      (set-option! options "Commodities" "Show Exchange Rates" #t)
+      options))
+  (display "\n\n multicol-balsheet tests\n\n")
+  (let* ((multi-bs-options (default-testing-options))
+         (sxml (options->sxml multicol-balsheet-uuid multi-bs-options
+                              "multicol-balsheet-default")))
+    (test-equal "default row headers"
+      '("Asset" "Root" "Root.Asset" "Root.Asset.Bank1" "Root.Asset.Bank1.Bonds"
+        "Root.Asset.Bank1.Current" "Root.Asset.Bank1.Empty" "Root.Asset.Bank1.Savings"
+        "Root.Asset.Broker" "Root.Asset.Broker" "Root.Asset.Broker.Funds"
+        "Root.Asset.ForeignBank" "Root.Asset.ForeignBank.ForeignSavings"
+        "Root.Asset.House" "Total For Asset" "Liability" "Root.Liability"
+        "Root.Liability.Bank2" "Root.Liability.Bank2.CreditCard"
+        "Root.Liability.Bank2.Loan" "Total For Liability" "Equity" "Root.Equity"
+        "Unrealized Gains" "Retained Earnings" "Total For Equity")
+      (sxml->table-row-col sxml 1 #f 1))
+    (test-equal "default balances"
+      '("#200.00" "$106,709.00" "30 FUNDS" "#200.00" "$106,709.00" "30 FUNDS"
+        "$4,709.00" "$2,000.00" "$2,609.00" "$0.00" "$100.00" "$2,000.00"
+        "30 FUNDS" "$2,000.00" "30 FUNDS" "#200.00" "#200.00" "$100,000.00"
+        "30 FUNDS" "#200.00" "$106,709.00" "$9,500.00" "$9,500.00" "$500.00"
+        "$9,000.00" "$9,500.00" "$103,600.00" "$0.00" "#0.00" "$103,600.00"
+        "#0.00")
+      (sxml->table-row-col sxml 1 #f 2))
+
+    ;; the following tests many parts of multicolumn balance sheet:
+    ;; multiple-dates balances, unrealized-gain calculator, pricelists
+    (set-option! multi-bs-options "General" "Period duration" 'YearDelta)
+    (set-option! multi-bs-options "Commodities" "Common Currency" #t)
+    (set-option! multi-bs-options "Commodities" "Report's currency" USD)
+    (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
+                               "multicol-balsheet-halfyear")))
+      (test-equal "bal-1/1/70"
+        '("01/01/70" "$113,100.00" "$113,100.00" "$8,970.00" "$2,000.00" "$6,870.00"
+          "$0.00" "$100.00" "$4,000.00" "$2,000.00" "$2,000.00" "10 FUNDS " "$130.00"
+          "$130.00" "#100.00 " "$100,000.00" "$113,100.00" "$9,500.00" "$9,500.00"
+          "$500.00" "$9,000.00" "$9,500.00" "$103,600.00" "$0.00" "$0.00"
+          "$103,600.00" "1 FUNDS $200.00" "#1.00 $1.30")
+        (sxml->table-row-col sxml 1 #f 2))
+      (test-equal "bal-1/1/71"
+        '("01/01/71" "$116,009.00" "$116,009.00" "$4,709.00" "$2,000.00" "$2,609.00"
+          "$0.00" "$100.00" "$11,000.00" "$2,000.00" "$9,000.00" "30 FUNDS " "$300.00"
+          "$300.00" "#200.00 " "$100,000.00" "$116,009.00" "$9,500.00" "$9,500.00"
+          "$500.00" "$9,000.00" "$9,500.00" "$103,600.00" "$2,909.00" "$0.00"
+          "$106,509.00" "1 FUNDS $300.00" "#1.00 $1.50")
+        (sxml->table-row-col sxml 1 #f 3))
+      (test-equal "bal-1/1/72"
+        '("01/01/72" "$117,529.00" "$117,529.00" "$4,709.00" "$2,000.00" "$2,609.00"
+          "$0.00" "$100.00" "$12,500.00" "$2,000.00" "$10,500.00" "30 FUNDS " "$320.00"
+          "$320.00" "#200.00 " "$100,000.00" "$117,529.00" "$9,500.00" "$9,500.00"
+          "$500.00" "$9,000.00" "$9,500.00" "$103,600.00" "$4,429.00" "$0.00"
+          "$108,029.00" "1 FUNDS $350.00" "#1.00 $1.60")
+        (sxml->table-row-col sxml 1 #f 4)))))
+
+(define (multicol-pnl-tests)
+  (define (default-testing-options)
+    (let ((options (gnc:make-report-options multicol-pnl-uuid)))
+      (set-option! options "General" "Start Date"
+                   (cons 'absolute (gnc-dmy2time64 1 1 1980)))
+      (set-option! options "General" "End Date"
+                   (cons 'absolute (gnc-dmy2time64 31 3 1980)))
+      (set-option! options "General" "Enable dual columns" #f)
+      (set-option! options "General" "Disable amount indenting" #t)
+      (set-option! options "Display" "Account full name instead of indenting" #t)
+      (set-option! options "Accounts" "Levels of Subaccounts" 'all)
+      (set-option! options "Commodities" "Show Exchange Rates" #t)
+      options))
+  (display "\n\n multicol-pnl tests\n\n")
+  (let* ((multi-bs-options (default-testing-options))
+         (sxml (options->sxml multicol-pnl-uuid multi-bs-options
+                              "multicol-pnl-default")))
+    (test-equal "default row headers"
+      '("Income" "Root.Income" "Root.Income" "Root.Income.Income-GBP"
+        "Total For Income")
+      (sxml->table-row-col sxml 1 #f 1))
+    (test-equal "default pnl"
+      '("$250.00" "#600.00" "$250.00" "#600.00" "$250.00" "#600.00")
+      (sxml->table-row-col sxml 1 #f 2))
+
+    ;; the following tests many parts of multicolumn pnl:
+    ;; multiple-dates pnl
+    (set-option! multi-bs-options "General" "Period duration" 'MonthDelta)
+    (set-option! multi-bs-options "Commodities" "Common Currency" #t)
+    (set-option! multi-bs-options "Commodities" "Report's currency" USD)
+    (let ((sxml (options->sxml multicol-pnl-uuid multi-bs-options
+                               "multicol-pnl-halfyear")))
+      (test-equal "pnl-1/80"
+        '("01/01/80" " to 01/31/80" "$1,100.00" "$250.00" "$850.00" "#500.00 "
+          "$1,100.00" "#1.00 $1.70")
+        (sxml->table-row-col sxml 1 #f 2))
+      (test-equal "pnl-2/80"
+        '("02/01/80" " to 02/29/80" "$170.00" "$0.00" "$170.00" "#100.00 "
+          "$170.00" "#1.00 $1.70")
+        (sxml->table-row-col sxml 1 #f 3))
+      (test-equal "pnl-3/80"
+        '("03/01/80" " to 03/31/80" "$0.00" "$0.00" "$0.00" "#0.00 "
+          "$0.00" "#1.00 $1.70")
+        (sxml->table-row-col sxml 1 #f 4)))))
