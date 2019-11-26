@@ -30,7 +30,6 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash gnome-utils))
 (use-modules (gnucash report))
 
 (define optname-to-date (N_ "To"))
