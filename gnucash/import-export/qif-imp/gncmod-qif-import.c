@@ -76,7 +76,7 @@ libgncmod_qif_import_gnc_module_init(int refcount)
         ((void (*)())gnc_file_qif_import);
     }
 
-    scm_c_eval_string("(use-modules (gnucash qif-import))");
+    scm_c_use_module("gnucash qif-import");
 
     gnc_plugin_qif_import_create_plugin();
 
