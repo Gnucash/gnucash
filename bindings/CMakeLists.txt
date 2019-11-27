@@ -6,6 +6,5 @@ set_local_dist(bindings_DIST_local
     business-core.i
     core-utils.i
     engine.i
-    engine-common.i
-    gnc-module.i)
+    engine-common.i)
 set(bindings_DIST ${bindings_DIST_local} ${guile_DIST} ${python_bindings_DIST} PARENT_SCOPE)
