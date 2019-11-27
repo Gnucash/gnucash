@@ -27,23 +27,50 @@
 
 (define-module (gnucash gnc-module))
 
-;; Guile 2 needs to find the symbols from the extension at compile time already
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
-(use-modules (sw_gnc_module))
+(define (no-op-deprecation-warning)
+    (issue-deprecation-warning "* WARNING * Guile wrappers for the gnc module system have been deprecated.")
+    (issue-deprecation-warning "This particular function call is now a no-op. Please use equivalent (use-modules ...) calls instead."))
 
-; Export the swig-wrapped symbols in the public interface of this module
-(let ((i (module-public-interface (current-module))))
-     (module-use! i (resolve-interface '(sw_gnc_module))))
-
-(define-public gnc:module-system-init gnc-module-system-init)
-(define-public gnc:module-system-refresh gnc-module-system-refresh)
-(define-public gnc:module-load gnc-module-load)
-(define-public gnc:module-load-optional gnc-module-load-optional)
-(define-public gnc:module-unload gnc-module-unload)
-
-;; Guile 2 needs to load external modules at compile time
-(define-syntax-rule (gnc:module-begin-syntax form ...)
-      (eval-when (load compile eval expand) (begin form ...)))
-(export gnc:module-begin-syntax)
+(define-public (gnc:module-system-init)
+    (no-op-deprecation-warning))
+(define-public (gnc:module-system-refresh)
+    (no-op-deprecation-warning))
+(define-public (gnc:module-load-optional)
+    (no-op-deprecation-warning))
+(define-public (gnc:module-unload)
+    (no-op-deprecation-warning))
+(define-public (gnc:module-load gnc-mod-name mod-sys-version)
+    (let* ((mod-name-split (string-split gnc-mod-name #\/))
+           (mod-name-str (string-join mod-name-split " "))
+           (scm-mod-name (map string->symbol mod-name-split)))
+        (cond
+            ((string=? gnc-mod-name "gnucash/app-utils")
+             (issue-deprecation-warning "* WARNING * 'gnc:module-load (\"gnucash/app-utils\" 0)' has been deprecated and will be removed in gnucash 5.0.")
+             (issue-deprecation-warning "Use '(use-modules (gnucash engine)(gnucash app-utils))' instead.")
+             (issue-deprecation-warning "Use of the '(gnucash engine)' guile module is optional and depends on whether or not you use functions from this module in your code or not.")
+             (use-modules (gnucash engine)(gnucash app-utils)))
+            ((or
+                (string=? gnc-mod-name "gnucash/tax/de_DE")
+                (string=? gnc-mod-name "gnucash/tax/us"))
+             (set! scm-mod-name (list 'gnucash 'locale (list-ref scm-mod-name 2) 'tax))
+             (set! mod-name-str (string-join (map symbol->string scm-mod-name) " "))
+             (issue-deprecation-warning (string-concatenate (list "* WARNING * '(gnc:module-load \"" gnc-mod-name "\" 0)' has been deprecated.")))
+             (issue-deprecation-warning (string-concatenate (list "Use '(use-modules (" mod-name-str "))' instead.")))
+             (module-use! (current-module) (resolve-interface scm-mod-name)))
+            ((or
+                (string=? gnc-mod-name "gnucash/gnome-utils")
+                (string=? gnc-mod-name "gnucash/html")
+                (string=? gnc-mod-name "gnucash/report/report-system"))
+             (when (string=? gnc-mod-name"gnucash/report/report-system")
+                (set! mod-name-str "gnucash report"))
+                (set! scm-mod-name (list 'gnucash 'report))
+             (issue-deprecation-warning (string-concatenate (list "* WARNING * '(gnc:module-load \"" gnc-mod-name "\" 0)' has been deprecated.")))
+             (issue-deprecation-warning (string-concatenate (list "Use '(use-modules (gnucash engine)(gnucash app-utils)(" mod-name-str "))' instead.")))
+             (issue-deprecation-warning "Use of the '(gnucash engine)' or '(gnucash app-utils)' guile modules is optional and depends on whether or not you use functions from this module in your code or not.")
+             (use-modules (gnucash engine)(gnucash app-utils))
+             (module-use! (current-module) (resolve-interface scm-mod-name)))
+            (else
+             (issue-deprecation-warning (string-concatenate (list "* WARNING * '(gnc:module-load \"" gnc-mod-name "\" 0)' has been deprecated.")))
+             (issue-deprecation-warning (string-concatenate ( list "Use '(use-modules (" mod-name-str "))' instead.")))
+             (issue-deprecation-warning "Additional guile modules may have to be loaded depending on your specific code.")
+             (module-use! (current-module) (resolve-interface scm-mod-name))))))

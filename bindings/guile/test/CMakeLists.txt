@@ -1,9 +1,5 @@
 # C(++) tests requiring a proper guile environment set up
 
-add_subdirectory(mod-foo)
-add_subdirectory(mod-bar)
-add_subdirectory(mod-baz)
-
 set(ENGINE_TEST_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/libgnucash/backend/xml
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
@@ -115,43 +111,6 @@ if (HAVE_SRFI64)
 
 endif (HAVE_SRFI64)
 
-
-set (test_gnc_module_SCHEME
-    test-gnc-module-scm-init.scm
-    test-gnc-module-load-scm.scm
-    test-gnc-module-swigged-c.scm
-    test-gnc-module-load-deps.scm
-    test-gnc-module-scm-dynload.scm
-    test-gnc-module-scm-module.scm
-    test-gnc-module-scm-multi.scm
-)
-
-set (test_gnc_module_DEPENDS
-    scm-gnc-module
-    scm-test-core
-    scm-mod-foo
-    gncmod-bar
-    scm-mod-baz
-)
-
-gnc_add_scheme_test_targets (test-gnc-modules-scm
-    "${test_gnc_module_SCHEME}"
-    "tests"
-    "${test_gnc_module_DEPENDS}"
-    TRUE
-)
-gnc_add_scheme_tests ("${test_gnc_module_SCHEME}")
-if(NOT WIN32)
-  # This little dance is needed because gnc_module_init will assert if
-  # it finds libgncmod-futuremod.so outside of a test that expects it.
-  get_guile_env()
-  set(_GNC_MODULE_PATH "${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${LIBDIR_BUILD}/gnucash/test")
-  foreach(test_file ${test_gnc_module_SCHEME})
-    get_filename_component(basename ${test_file} NAME_WE)
-    set_tests_properties(${basename} PROPERTIES ENVIRONMENT "${GUILE_ENV};GNC_MODULE_PATH=${_GNC_MODULE_PATH}")
-  endforeach()
-endif()
-
 set(test_engine_SCHEME_DIST
     srfi64-extras.scm
     ${bindings_test_SCHEME}
@@ -164,14 +123,10 @@ set_local_dist(test_guile_DIST_local
     CMakeLists.txt
     test-scm-query.cpp
     ${test_engine_SCHEME_DIST}
-    ${test_gnc_module_SCHEME}
     ${test_scm_SCHEME}
 )
 set(test_guile_DIST
     ${test_guile_DIST_local}
-    ${mod_bar_DIST}
-    ${mod_baz_DIST}
-    ${mod_foo_DIST}
     PARENT_SCOPE
 )
 
