@@ -86,7 +86,8 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     const gchar * current_online_id = gnc_import_get_acc_online_id(acct);
     if ( (current_online_id != NULL
             && param_online_id != NULL )
-            && strcmp( current_online_id, param_online_id ) == 0 )
+	 && strncmp( current_online_id, param_online_id,
+		     strlen( current_online_id ) ) == 0 )
     {
         return (gpointer *) acct;
     }
