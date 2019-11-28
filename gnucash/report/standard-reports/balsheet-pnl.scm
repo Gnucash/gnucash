@@ -1125,11 +1125,14 @@ also show overall period profit & loss."))
         (add-to-table
          multicol-table-right (_ "Equity")
          (append equity-accounts
-                 (list
-                  (vector (_ "Unrealized Gains")
-                          unrealized-gain-fn)
-                  (vector (_ "Retained Earnings")
-                          retained-earnings-fn)))
+                 (if common-currency
+                     (list (vector (_ "Unrealized Gains")
+                                   unrealized-gain-fn))
+                     '())
+                 (if (null? income-expense)
+                     '()
+                     (list (vector (_ "Retained Earnings")
+                                   retained-earnings-fn))))
          #:negate-amounts? #t)
 
         (if (and common-currency show-rates?)

@@ -497,7 +497,7 @@
         "Root.Asset.House" "Total For Asset" "Liability" "Root.Liability"
         "Root.Liability.Bank2" "Root.Liability.Bank2.CreditCard"
         "Root.Liability.Bank2.Loan" "Total For Liability" "Equity" "Root.Equity"
-        "Unrealized Gains" "Retained Earnings" "Total For Equity")
+        "Retained Earnings" "Total For Equity")
       (sxml->table-row-col sxml 1 #f 1))
     (test-equal "default balances"
       '("#200.00" "$106,709.00" "30 FUNDS" "#200.00" "$106,709.00" "30 FUNDS"
