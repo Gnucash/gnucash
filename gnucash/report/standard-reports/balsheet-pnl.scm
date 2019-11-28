@@ -917,7 +917,7 @@ also show overall period profit & loss."))
              (if (or incr (eq? report-type 'pnl))
                  (format #t (_ "~a to ~a")
                          (qof-print-date startdate) (qof-print-date enddate))
-                 (qof-print-date enddate)))))
+                 (display (qof-print-date enddate))))))
 
     (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
         (gnc:html-document-add-object!
