@@ -909,6 +909,15 @@ also show overall period profit & loss."))
          (maxindent (1+ (apply max (cons 0 (map gnc-account-get-current-depth
                                                 accounts))))))
 
+    (define (sum-balances-of-accounts alist accts adder)
+      (let ((balances
+             (fold (lambda (a b) (if (member (car a) accts) (cons (cdr a) b) b))
+                   '() alist)))
+        (list->vector
+         (if (null? balances)
+             (map (const (adder)) report-dates)
+             (apply map adder balances)))))
+
     (gnc:html-document-set-title!
      doc (with-output-to-string
            (lambda ()
@@ -952,33 +961,19 @@ also show overall period profit & loss."))
                            (split (vector-ref date-splits col-idx)))
                   (gnc:split-anchor-text split))))
 
-             ;; a list of collectors whereby collector is the sum of
+             ;; a vector of collectors whereby collector is the sum of
              ;; asset and liabilities at report dates
              (asset-liability-balances
-              (let ((asset-liab-balances
-                     (map cdr (filter
-                               (lambda (acc-balances)
-                                 (member (car acc-balances) asset-liability))
-                               accounts-balances))))
-                (if (null? asset-liab-balances)
-                    (map (const (gnc:make-commodity-collector)) report-dates)
-                    (apply map gnc:monetaries-add asset-liab-balances))))
+              (sum-balances-of-accounts
+               accounts-balances asset-liability gnc:monetaries-add))
 
-             ;; a list of collectors whereby collector is the sum of
+             ;; a vector of collectors whereby collector is the sum of
              ;; incomes and expenses at report dates
              (income-expense-balances
-              (let ((inc-exp-balances
-                     (map cdr
-                          (filter
-                           (lambda (acc-balances)
-                             (member (car acc-balances) income-expense))
-                           accounts-balances))))
-                (if (null? inc-exp-balances)
-                    (map (const (gnc:make-commodity-collector)) report-dates)
-                    (map gnc:commodity-collector-get-negated
-                         (apply map gnc:monetaries-add inc-exp-balances)))))
+              (sum-balances-of-accounts
+               accounts-balances income-expense gnc:monetaries-add))
 
-             ;; an (cons account list-of-collectors) whereby each
+             ;; an alist of (cons account list-of-collectors) whereby each
              ;; collector is the split-value-balances at report
              ;; dates. split-value-balance determined by transaction currency.
              (accounts-value-balances
@@ -988,18 +983,12 @@ also show overall period profit & loss."))
                              (map col-datum-get-split-value-balance cols-data))))
                accounts))
 
-             ;; a list of collectors whereby each collector is the sum
+             ;; a vector of collectors whereby each collector is the sum
              ;; of asset and liability split-value-balances at report
              ;; dates
              (asset-liability-value-balances
-              (let ((asset-liab-value-balances
-                     (map cdr (filter
-                               (lambda (acc-balances)
-                                 (member (car acc-balances) asset-liability))
-                               accounts-value-balances))))
-                (if (null? asset-liab-value-balances)
-                    (map (const (gnc:make-commodity-collector)) report-dates)
-                    (apply map gnc:collector+ asset-liab-value-balances))))
+              (sum-balances-of-accounts
+               accounts-value-balances asset-liability gnc:collector+))
 
              ;; converts monetaries to common currency
              (monetaries->exchanged
@@ -1024,9 +1013,9 @@ also show overall period profit & loss."))
                                    ((pricedb-latest) (current-time))
                                    (else (list-ref report-dates col-idx))))
                            (asset-liability-balance
-                            (list-ref asset-liability-balances col-idx))
+                            (vector-ref asset-liability-balances col-idx))
                            (asset-liability-basis
-                            (list-ref asset-liability-value-balances col-idx))
+                            (vector-ref asset-liability-value-balances col-idx))
                            (unrealized (gnc:collector- asset-liability-basis
                                                        asset-liability-balance)))
                   (monetaries->exchanged
@@ -1041,7 +1030,7 @@ also show overall period profit & loss."))
                                ((pricedb-latest) (current-time))
                                (else (list-ref report-dates col-idx))))
                        (income-expense-balance
-                        (list-ref income-expense-balances col-idx)))
+                        (vector-ref income-expense-balances col-idx)))
                   (if (and common-currency
                            (every has-price?
                                   (gnc:accounts-get-commodities income-expense #f)))
