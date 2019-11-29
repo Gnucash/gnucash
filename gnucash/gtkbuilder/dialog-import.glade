@@ -334,6 +334,8 @@
       <object class="GtkGrid" id="matcher_prefs">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="row_spacing">3</property>
+        <property name="column_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
             <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable skip transaction action</property>
@@ -802,8 +804,8 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="row_spacing">3</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label847790">
                 <property name="visible">True</property>
@@ -1315,9 +1317,9 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">matcher__help</action-widget>
       <action-widget response="-6">matcher_cancel</action-widget>
       <action-widget response="-5">matcher_ok</action-widget>
-      <action-widget response="-11">matcher__help</action-widget>
     </action-widgets>
   </object>
 </interface>
