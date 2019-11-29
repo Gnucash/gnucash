@@ -139,7 +139,8 @@ Enter file name and location for the Import...
               <object class="GtkGrid" id="table4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">12</property>
+                <property name="border_width">6</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="radio_comma">
                     <property name="label" translatable="yes">Comma Separated</property>
@@ -185,7 +186,7 @@ Enter file name and location for the Import...
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -203,15 +204,6 @@ Enter file name and location for the Import...
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>

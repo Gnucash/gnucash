@@ -18,8 +18,9 @@
       <object class="GtkLabel" id="intro_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
+        <property name="valign">start</property>
+        <property name="margin_left">12</property>
+        <property name="margin_right">12</property>
         <property name="label" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
 
 You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
@@ -370,8 +371,8 @@ Select categories that correspond to the ways that you foresee you will use GnuC
           <object class="GtkLabel" id="finalAccountLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
+            <property name="margin_left">12</property>
+            <property name="margin_right">12</property>
             <property name="label" translatable="yes">
 If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
 
