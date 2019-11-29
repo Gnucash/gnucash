@@ -179,6 +179,13 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->initDone = TRUE;
 }
 
+void
+gnc_account_sel_set_hexpand ( GNCAccountSel *gas, gboolean expand )
+{
+    gtk_widget_set_hexpand( GTK_WIDGET(gas), expand );
+    gtk_widget_set_hexpand( GTK_WIDGET(gas->combo), expand );
+}
+
 typedef struct
 {
     GNCAccountSel *gas;

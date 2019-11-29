@@ -1327,6 +1327,7 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, hbox));
 
     gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
+    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(selector), TRUE);
     g_object_set_data(G_OBJECT(dialog), sel_name, selector);
 
     gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);

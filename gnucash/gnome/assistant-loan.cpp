@@ -636,7 +636,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   gas_data[i].height);
 
                 gtk_widget_set_halign (GTK_WIDGET(gas), GTK_ALIGN_FILL);
-                gtk_widget_set_hexpand (GTK_WIDGET(gas), FALSE);
+                gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(gas), true);
                 g_object_set (GTK_WIDGET(gas), "margin", 2, NULL);
                 *(gas_data[i].loc) = gas;
             }
@@ -729,6 +729,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                           G_CALLBACK(loan_opt_escrow_toggle_cb), ldd );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), FALSE );
         ldd->optEscrowGAS = GNC_ACCOUNT_SEL(gnc_account_sel_new());
+        gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ldd->optEscrowGAS), true);
         gnc_account_sel_set_new_account_ability( ldd->optEscrowGAS, TRUE );
         gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
                            GTK_WIDGET(ldd->optEscrowGAS) );
