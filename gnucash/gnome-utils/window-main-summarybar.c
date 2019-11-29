@@ -443,7 +443,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 }
 
 static gchar*
-get_negative_color (void)
+get_negative_color_str (void)
 {
     GdkRGBA color;
     GdkRGBA *rgba;
@@ -467,7 +467,7 @@ summarybar_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
     GNCMainSummary *summary = user_data;
 
-    summary->negative_color = get_negative_color();
+    summary->negative_color = get_negative_color_str();
     summary->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     gnc_main_window_summary_refresh (summary);
@@ -640,7 +640,7 @@ gnc_main_window_summary_new (void)
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
     g_object_unref (retval->datamodel);
 
-    retval->negative_color = get_negative_color();
+    retval->negative_color = get_negative_color_str();
     retval->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                           summarybar_update_color, retval);
