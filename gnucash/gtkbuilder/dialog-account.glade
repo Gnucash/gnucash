@@ -157,6 +157,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Delete Account</property>
     <property name="modal">True</property>
+    <property name="default_width">500</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <child>
@@ -1000,7 +1001,7 @@
                           <object class="GtkLabel" id="label301">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Account _name</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">name_entry</property>
@@ -1015,7 +1016,7 @@
                           <object class="GtkLabel" id="label302">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">_Account code</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">code_entry</property>
@@ -1029,7 +1030,7 @@
                           <object class="GtkLabel" id="label304">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">_Description</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">description_entry</property>
@@ -1043,7 +1044,7 @@
                           <object class="GtkLabel" id="security_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">_Security/currency</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -1069,7 +1070,7 @@
                           <object class="GtkLabel" id="label305">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Smallest _fraction</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">account_scu</property>
@@ -1083,7 +1084,7 @@
                           <object class="GtkLabel" id="label306">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Account _Color</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">color_entry_button</property>
@@ -1135,7 +1136,7 @@
                           <object class="GtkLabel" id="label307">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="valign">start</property>
                             <property name="label" translatable="yes">No_tes</property>
                             <property name="use_underline">True</property>
@@ -1274,7 +1275,7 @@
                           <object class="GtkLabel" id="label401">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">H_idden</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">hidden_button</property>
@@ -1288,7 +1289,7 @@
                           <object class="GtkLabel" id="label40">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Placeholde_r</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">placeholder_button</property>
@@ -1303,7 +1304,7 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Ta_x related</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">tax_related_button</property>
@@ -1520,7 +1521,7 @@
                       <object class="GtkLabel" id="balance_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">_Balance</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
@@ -1534,7 +1535,7 @@
                       <object class="GtkLabel" id="date_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">_Date</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
@@ -1726,7 +1727,7 @@
               <object class="GtkLabel" id="label402">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Prefix</property>
               </object>
               <packing>
@@ -1762,7 +1763,7 @@
               <object class="GtkLabel" id="label403">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="valign">start</property>
                 <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Examples</property>
@@ -1776,7 +1777,7 @@
               <object class="GtkLabel" id="label404">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Interval</property>
               </object>
               <packing>

@@ -102,7 +102,7 @@
                       <object class="GtkLabel" id="label8877424">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Current _Job</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
@@ -144,7 +144,7 @@
                       <object class="GtkLabel" id="label8877426">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Progress</property>
                         <property name="justify">center</property>
                         <property name="xalign">0</property>
@@ -158,7 +158,7 @@
                       <object class="GtkLabel" id="label8877425">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Current _Action</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
@@ -660,8 +660,8 @@
                   <object class="GtkLabel" id="label8877456">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Password:</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">_Password</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">input_entry</property>
                     <property name="xalign">0</property>
@@ -675,8 +675,8 @@
                   <object class="GtkLabel" id="confirm_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Con_firm Password:</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Con_firm Password</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">confirm_entry</property>
                     <property name="xalign">0</property>

@@ -230,6 +230,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">8</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -351,7 +352,7 @@
               <object class="GtkLabel" id="user_symbol_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Display symbol</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -366,7 +367,7 @@
               <object class="GtkLabel" id="quote_tz_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Time_zone</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
@@ -459,7 +460,7 @@
               <object class="GtkLabel" id="label813">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">F_raction traded</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -473,7 +474,7 @@
               <object class="GtkLabel" id="label811">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">ISIN, CUSI_P or other code</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -488,7 +489,7 @@
               <object class="GtkLabel" id="label812">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -503,7 +504,7 @@
               <object class="GtkLabel" id="label810">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Symbol/abbreviation</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -518,7 +519,7 @@
               <object class="GtkLabel" id="label809">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Full name</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -603,9 +604,6 @@
                 <property name="top_attach">16</property>
                 <property name="width">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -771,7 +769,7 @@
               <object class="GtkLabel" id="label807">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -786,7 +784,7 @@
               <object class="GtkLabel" id="item_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label">_Security/currency</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>

@@ -77,7 +77,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Value</property>
               </object>
               <packing>
@@ -100,7 +100,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="valign">start</property>
                 <property name="label" translatable="yes">Action</property>
               </object>
@@ -196,7 +196,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Significant Digits</property>
               </object>
               <packing>
@@ -334,7 +334,7 @@
               <object class="GtkLabel" id="label97">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Significant Digits</property>
               </object>
               <packing>
@@ -346,7 +346,7 @@
               <object class="GtkLabel" id="label96">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Start Date</property>
               </object>
               <packing>
@@ -389,7 +389,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Use Average</property>
               </object>
               <packing>
@@ -488,7 +488,7 @@
                   <object class="GtkLabel" id="label85">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Budget Name</property>
                   </object>
@@ -514,7 +514,7 @@
                   <object class="GtkLabel" id="label86">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Notes</property>
@@ -552,7 +552,7 @@
                   <object class="GtkLabel" id="label87">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="margin_left">5</property>
                     <property name="label" translatable="yes">Number of Periods</property>
                   </object>
@@ -581,7 +581,7 @@
                   <object class="GtkLabel" id="label94">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="margin_left">5</property>
                     <property name="margin_top">12</property>

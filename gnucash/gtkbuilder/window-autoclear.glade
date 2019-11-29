@@ -91,7 +91,7 @@
                   <object class="GtkLabel" id="end_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Ending Balance</property>
                     <property name="use_underline">True</property>
                   </object>

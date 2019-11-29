@@ -906,6 +906,7 @@
                       <object class="GtkGrid" id="table2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="row_spacing">3</property>
                         <property name="column_spacing">6</property>
                         <child>
@@ -942,12 +943,12 @@
                           <object class="GtkBox" id="remind_hbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
                               <object class="GtkSpinButton" id="remind_days">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <property name="adjustment">remind_days_adj</property>
@@ -1001,12 +1002,12 @@
                           <object class="GtkBox" id="advance_hbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
                               <object class="GtkSpinButton" id="advance_days">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <property name="adjustment">advance_days_adj</property>

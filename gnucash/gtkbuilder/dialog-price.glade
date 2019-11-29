@@ -130,7 +130,7 @@
               <object class="GtkLabel" id="namespace_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Namespace</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -145,7 +145,7 @@
               <object class="GtkLabel" id="commodity_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Security</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -160,7 +160,7 @@
               <object class="GtkLabel" id="currency_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Cu_rrency</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -174,7 +174,7 @@
               <object class="GtkLabel" id="date__label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -187,7 +187,7 @@
             <child>
               <object class="GtkLabel" id="source_label">
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">S_ource</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -202,7 +202,7 @@
               <object class="GtkLabel" id="type_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -217,7 +217,7 @@
               <object class="GtkLabel" id="price_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Price</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -642,7 +642,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="valign">start</property>
                 <property name="margin_top">6</property>
                 <property name="hexpand">False</property>
@@ -750,7 +750,7 @@ These prices were added so that there's always a "nearest in time" price for eve
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Before _Date</property>
                 <property name="use_underline">True</property>

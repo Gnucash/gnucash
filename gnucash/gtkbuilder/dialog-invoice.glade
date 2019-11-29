@@ -733,7 +733,7 @@
                       <object class="GtkBox" id="dialog_date_opened_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -928,6 +928,7 @@
                       <object class="GtkBox" id="dialog_owner_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -941,6 +942,7 @@
                       <object class="GtkBox" id="dialog_job_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -967,7 +969,7 @@
                       <object class="GtkComboBox" id="dialog_terms_menu">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
                         <property name="model">terms_store</property>
                         <signal name="changed" handler="gnc_invoice_terms_changed_cb" swapped="no"/>
                         <child>
@@ -1040,6 +1042,7 @@
                       <object class="GtkBox" id="dialog_proj_cust_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1053,6 +1056,7 @@
                       <object class="GtkBox" id="dialog_proj_job_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1203,6 +1207,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="icon_name">dialog-question</property>
+                    <property name="icon_size">3</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

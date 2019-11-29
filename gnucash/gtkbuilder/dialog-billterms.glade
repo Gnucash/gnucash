@@ -611,7 +611,7 @@
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">De_scription</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
@@ -626,7 +626,7 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">_Type</property>
                             <property name="use_underline">True</property>
                             <property name="justify">right</property>
@@ -919,7 +919,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">De_scription</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
@@ -934,7 +934,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
@@ -1141,7 +1141,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Name</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
@@ -1156,7 +1156,7 @@
               <object class="GtkLabel" id="label22">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">De_scription</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
@@ -1171,7 +1171,7 @@
               <object class="GtkLabel" id="label21">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>

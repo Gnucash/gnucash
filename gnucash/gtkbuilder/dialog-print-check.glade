@@ -385,7 +385,7 @@
                   <object class="GtkLabel" id="label847677">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Check _format</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -400,7 +400,7 @@
                   <object class="GtkLabel" id="label847678">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Check po_sition</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -415,7 +415,7 @@
                   <object class="GtkLabel" id="label847679">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes">_Date format</property>
                     <property name="use_underline">True</property>
@@ -534,7 +534,7 @@
                     <property name="tooltip_text" translatable="yes">Check format must have an
 ADDRESS item defined in order
 to print an address on the check.</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Address</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">check_address_name</property>
@@ -561,7 +561,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="first_page_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Checks on first _page</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">first_page_count_entry</property>
@@ -685,7 +685,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label701">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Pa_yee</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -700,7 +700,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label705">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Date</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -715,7 +715,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label706">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Amount (_words)</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -730,7 +730,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label707">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Amount (_numbers)</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -745,7 +745,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label708">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Notes</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -938,7 +938,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label709">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Units</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -969,7 +969,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="translation_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Translation</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -984,7 +984,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label847680">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Rotation</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">check_rotation_entry</property>
@@ -1083,7 +1083,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Address</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -1128,7 +1128,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">_Memo</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -1175,7 +1175,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Splits Memo</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -1190,7 +1190,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Splits Amount</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>
@@ -1205,7 +1205,7 @@ to print an address on the check.</property>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Splits Account</property>
                     <property name="use_underline">True</property>
                     <property name="justify">center</property>

@@ -549,7 +549,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Row span</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -564,7 +564,7 @@
               <object class="GtkLabel" id="label847730">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Column span</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -800,7 +800,7 @@
               <object class="GtkLabel" id="label847669">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Name</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -815,7 +815,7 @@
               <object class="GtkLabel" id="label847670">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Template</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -830,6 +830,7 @@
               <object class="GtkEntry" id="name_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
                 <property name="invisible_char">●</property>
                 <property name="activates_default">True</property>
                 <property name="primary_icon_activatable">False</property>
@@ -844,6 +845,7 @@
               <object class="GtkComboBox" id="template_combobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="model">template_liststore</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>

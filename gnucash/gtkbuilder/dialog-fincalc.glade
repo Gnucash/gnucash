@@ -522,7 +522,7 @@
                       <object class="GtkLabel" id="some_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Payment Total</property>
                         <property name="justify">center</property>
                       </object>
@@ -726,7 +726,7 @@
                       <object class="GtkLabel" id="label816">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Type</property>
                       </object>
                       <packing>
@@ -738,7 +738,7 @@
                       <object class="GtkLabel" id="label815">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Frequency</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -751,7 +751,7 @@
                       <object class="GtkLabel" id="label811">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Frequency</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -764,7 +764,7 @@
                       <object class="GtkLabel" id="label812">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">When paid</property>
                       </object>
                       <packing>

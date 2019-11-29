@@ -161,11 +161,13 @@ If 0, all previous days included</property>
                   <object class="GtkGrid" id="select_range_table">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">12</property>
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start</property>
                       </object>
                       <packing>
@@ -253,6 +255,7 @@ If 0, all previous days included</property>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End</property>
                       </object>
                       <packing>

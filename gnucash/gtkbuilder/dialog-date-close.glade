@@ -195,7 +195,6 @@
                   <object class="GtkBox" id="post_date_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <child>
                       <placeholder/>
@@ -210,7 +209,6 @@
                   <object class="GtkBox" id="date_hbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <child>
                       <placeholder/>

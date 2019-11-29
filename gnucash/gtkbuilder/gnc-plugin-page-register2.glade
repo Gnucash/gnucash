@@ -93,7 +93,7 @@
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -107,7 +107,7 @@
               <object class="GtkLabel" id="num_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Number</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -269,13 +269,14 @@
                   <object class="GtkGrid" id="select_range_table">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">12</property>
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Start</property>
                       </object>
                       <packing>
@@ -363,7 +364,7 @@
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">End</property>
                       </object>
                       <packing>
