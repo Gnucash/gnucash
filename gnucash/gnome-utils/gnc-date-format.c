@@ -60,6 +60,7 @@ struct _GNCDateFormatPrivate
     GtkWidget*	format_combobox;
 
     GtkWidget*  label;
+    GtkWidget*  table;
 
     GtkWidget*	months_label;
     GtkWidget*	months_number;
@@ -118,7 +119,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
 {
     GNCDateFormatPrivate *priv;
     GtkBuilder *builder;
-    GtkWidget *dialog, *table;
+    GtkWidget *dialog;
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
@@ -159,11 +160,11 @@ gnc_date_format_init (GNCDateFormat *gdf)
     /* pull in the dialog and table widgets and play the reconnect game */
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnc_date_format_window"));
 
-    table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
-    g_object_ref(G_OBJECT(table));
-    gtk_container_remove(GTK_CONTAINER(dialog), table);
-    gtk_container_add(GTK_CONTAINER(gdf), table);
-    g_object_unref(G_OBJECT(table));
+    priv->table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
+    g_object_ref (G_OBJECT(priv->table));
+    gtk_container_remove (GTK_CONTAINER(dialog), priv->table);
+    gtk_container_add (GTK_CONTAINER(gdf), priv->table);
+    g_object_unref (G_OBJECT(priv->table));
 
     g_object_unref(G_OBJECT(builder));
 
@@ -205,9 +206,9 @@ gnc_date_format_new_without_label (void)
     GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
     GNCDateFormatPrivate *priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
 
-    gtk_widget_destroy(priv->label);
+    // remove the first column which has the label
+    gtk_grid_remove_column (GTK_GRID(priv->table), 0);
     priv->label = NULL;
-
     return widget;
 }
 
