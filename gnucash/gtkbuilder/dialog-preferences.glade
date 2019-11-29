@@ -169,6 +169,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label91">
                     <property name="visible">True</property>
@@ -437,7 +439,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
@@ -612,32 +615,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkRadioButton" id="pref/general/currency-choice-other">
-                        <property name="label" translatable="yes">Ch_oose</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Use the specified currency for all newly created accounts.</property>
-                        <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created accounts.</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">pref/general/currency-choice-locale</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">14</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="sample_account">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -749,32 +726,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkRadioButton" id="pref/general/currency-choice-locale">
-                        <property name="label" translatable="yes">Loc_ale</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Use the system locale currency for all newly created accounts.</property>
-                        <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created accounts.</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">13</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox" id="hbox6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -814,6 +765,45 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general/currency-choice-other">
+                    <property name="label" translatable="yes">Ch_oose</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the specified currency for all newly created accounts.</property>
+                    <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created accounts.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general/currency-choice-locale">
+                    <property name="label" translatable="yes">Loc_ale</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the system locale currency for all newly created accounts.</property>
+                    <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created accounts.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -877,6 +867,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label104">
                     <property name="can_focus">False</property>
@@ -1127,6 +1119,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label50">
                     <property name="visible">True</property>
@@ -1878,7 +1872,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label115">
                     <property name="visible">True</property>
@@ -1890,53 +1885,6 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="alignment7">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="pref/dialogs.checkprinting/print-date-format">
-                        <property name="label" translatable="yes">Print _date format</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Below the actual date, print the format of that date in 8 point type.</property>
-                        <property name="tooltip_text" translatable="yes">Below the actual date, print the format of that date in 8 point type.</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="alignment6">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label116">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Default _font</property>
-                        <property name="use_markup">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">pref/dialogs.checkprinting/default-font</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -1955,28 +1903,57 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment8">
+                  <object class="GtkCheckButton" id="pref/dialogs.checkprinting/print-date-format">
+                    <property name="label" translatable="yes">Print _date format</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="pref/dialogs.checkprinting/blocking-chars">
-                        <property name="label" translatable="yes">Print _blocking chars</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Print &amp;apos;***&amp;apos; before and after each text field on the check.</property>
-                        <property name="tooltip_text" translatable="yes">Print '***' before and after each text field on the check.</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Below the actual date, print the format of that date in 8 point type.</property>
+                    <property name="tooltip_text" translatable="yes">Below the actual date, print the format of that date in 8 point type.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.checkprinting/blocking-chars">
+                    <property name="label" translatable="yes">Print _blocking chars</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Print &amp;apos;***&amp;apos; before and after each text field on the check.</property>
+                    <property name="tooltip_text" translatable="yes">Print '***' before and after each text field on the check.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label116">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="label" translatable="yes">Default _font</property>
+                    <property name="use_markup">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pref/dialogs.checkprinting/default-font</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -2010,7 +1987,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
@@ -2343,6 +2321,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label63">
                     <property name="visible">True</property>
@@ -2697,6 +2677,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="locale_currency2">
                     <property name="visible">True</property>
@@ -2706,58 +2688,6 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="alignment5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkRadioButton" id="pref/general.report/currency-choice-other">
-                        <property name="label" translatable="yes">Ch_oose</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Use the specified currency for all newly created reports.</property>
-                        <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created reports.</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="alignment4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkRadioButton" id="pref/general.report/currency-choice-locale">
-                        <property name="label" translatable="yes">Loc_ale</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">Use the system locale currency for all newly created reports.</property>
-                        <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created reports.</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">pref/general.report/currency-choice-other</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
                   </packing>
                 </child>
@@ -2879,6 +2809,45 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkRadioButton" id="pref/general.report/currency-choice-other">
+                    <property name="label" translatable="yes">Ch_oose</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the specified currency for all newly created reports.</property>
+                    <property name="tooltip_text" translatable="yes">Use the specified currency for all newly created reports.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pref/general.report/currency-choice-locale">
+                    <property name="label" translatable="yes">Loc_ale</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the system locale currency for all newly created reports.</property>
+                    <property name="tooltip_text" translatable="yes">Use the system locale currency for all newly created reports.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
                   <placeholder/>
                 </child>
                 <child>
@@ -2921,7 +2890,8 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label72">
                     <property name="visible">True</property>
@@ -3185,27 +3155,6 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment9">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label117">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Width</property>
-                        <property name="use_underline">True</property>
-                        <property name="ellipsize">middle</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox" id="hbox3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -3244,6 +3193,21 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
+                    <property name="top_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label117">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="label" translatable="yes">_Width</property>
+                    <property name="use_underline">True</property>
+                    <property name="ellipsize">middle</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">6</property>
                   </packing>
                 </child>
@@ -3287,7 +3251,7 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="row_spacing">6</property>
+                <property name="row_spacing">3</property>
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="apilabel">

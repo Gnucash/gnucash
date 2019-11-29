@@ -124,8 +124,8 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="row_spacing">3</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="namespace_label">
                 <property name="visible">True</property>
@@ -424,8 +424,8 @@
           <object class="GtkGrid" id="table2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">10</property>
-            <property name="column_spacing">12</property>
+            <property name="row_spacing">3</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="label8477429">
                 <property name="visible">True</property>
@@ -615,6 +615,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">From these Commodities</property>
               </object>
               <packing>
@@ -628,6 +629,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Keeping the last available price for option</property>
               </object>
               <packing>
@@ -642,6 +644,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
+                <property name="margin_top">6</property>
                 <property name="hexpand">False</property>
                 <property name="label" translatable="yes">Source</property>
               </object>
@@ -665,6 +668,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">If activated, prices added by Finance::Quote will be included.</property>
                     <property name="halign">start</property>
+                    <property name="margin_top">6</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -721,7 +725,7 @@ These prices were added so that there's always a "nearest in time" price for eve
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="stock">gtk-dialog-warning</property>
+                        <property name="icon_name">dialog-warning</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -747,6 +751,7 @@ These prices were added so that there's always a "nearest in time" price for eve
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Before _Date</property>
                 <property name="use_underline">True</property>
               </object>
@@ -760,6 +765,7 @@ These prices were added so that there's always a "nearest in time" price for eve
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="margin_top">6</property>
                 <property name="hexpand">True</property>
                 <child>
                   <placeholder/>

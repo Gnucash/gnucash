@@ -128,6 +128,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Save Custom Check Format</property>
     <property name="window_position">center-on-parent</property>
+    <property name="default_width">500</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -182,23 +183,38 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label847683">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="label" translatable="yes">Enter a title for this custom format. This title will appear in the "Check format" selector of the Print Check dialog. Using the title of an existing custom format will cause that format to be overwritten.</property>
-            <property name="wrap">True</property>
-            <property name="selectable">True</property>
+            <property name="can_focus">False</property>
+            <property name="valign">start</property>
+            <child>
+              <object class="GtkLabel" id="label847683">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Enter a title for this custom format. This title will appear in the "Check format" selector of the Print Check dialog. Using the title of an existing custom format will cause that format to be overwritten.</property>
+                <property name="wrap">True</property>
+                <property name="selectable">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="format_title">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="valign">start</property>
+            <property name="margin_top">12</property>
             <property name="invisible_char">•</property>
             <property name="activates_default">True</property>
             <property name="primary_icon_activatable">False</property>
@@ -207,8 +223,8 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -360,9 +376,11 @@
               <object class="GtkGrid" id="options_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">5</property>
-                <property name="row_spacing">1</property>
-                <property name="column_spacing">12</property>
+                <property name="halign">center</property>
+                <property name="margin_top">6</property>
+                <property name="hexpand">True</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label847677">
                     <property name="visible">True</property>
@@ -530,6 +548,8 @@ to print an address on the check.</property>
                   <object class="GtkSeparator" id="hseparator1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -575,6 +595,8 @@ to print an address on the check.</property>
                   <object class="GtkSeparator" id="hseparator3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -632,8 +654,9 @@ to print an address on the check.</property>
               <object class="GtkGrid" id="custom_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">5</property>
-                <property name="column_spacing">5</property>
+                <property name="border_width">6</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label703">
                     <property name="visible">True</property>
@@ -1299,6 +1322,8 @@ to print an address on the check.</property>
                   <object class="GtkSeparator" id="hseparator2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">3</property>
+                    <property name="margin_bottom">3</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
