@@ -206,7 +206,22 @@
 Your reports probably shouldn't have an \
 option like this.") 
       #f))
-    
+
+    ;; This is a Radio Button option. The user can only select one 
+    ;; value from the list of buttons.
+    (add-option
+     (gnc:make-radiobutton-option
+      (N_ "Hello Again") "A Radio Button option" "z" (N_ "This is a Radio Button option.") 'good
+      (list (vector 'good
+                    (N_ "The Good")
+                    (N_ "Good option."))
+            (vector 'bad
+                    (N_ "The Bad")
+                    (N_ "Bad option."))
+            (vector 'ugly
+                    (N_ "The Ugly")
+                    (N_ "Ugly option.")))))
+
     (gnc:options-set-default-section options "Hello, World!")      
     options))
 
@@ -242,6 +257,7 @@ option like this.")
         (bg-color-op  (get-op   "Hello, World!" "Background Color"))
         (accounts     (op-value "Hello Again"   "An account list option"))
         (list-val     (op-value "Hello Again"   "A list option"))
+        (radio-val    (op-value "Hello Again"   "A Radio Button option"))
         (crash-val    (op-value "Testing"       "Crash the report"))
         
         ;; document will be the HTML document that we return.
@@ -348,6 +364,11 @@ new, totally cool report, consult the mailing list ~a.")
 
         (gnc:html-markup-p
          (gnc:html-markup/format
+          (_ "The radio button option is ~a.")
+          (gnc:html-markup-b radio-val)))
+
+        (gnc:html-markup-p
+         (gnc:html-markup/format
           (_ "The multi-choice option is ~a.")
           (gnc:html-markup-b (symbol->string mult-val))))
 
@@ -407,6 +428,8 @@ new, totally cool report, consult the mailing list ~a.")
           (let ((table (gnc:make-html-table)))
             (gnc:html-table-append-column! 
              table (map symbol->string list-val))
+            (gnc:html-table-set-style! table "table"
+             'attribute (list "style" "width:200px"))
             (gnc:html-table-set-caption! table 
                                          (_ "List items selected"))
             (gnc:html-document-add-object! document table))
@@ -439,11 +462,11 @@ new, totally cool report, consult the mailing list ~a.")
              (map 
               (lambda (acct)
                 (gnc:html-markup-anchor 
-		 (gnc-build-url URL-TYPE-REGISTER
-				     (string-append "account=" 
-						    (gnc-account-get-full-name
-						     acct))
-				     "")
+                 (gnc-build-url URL-TYPE-REGISTER
+                   (string-append "account=" 
+                     (gnc-account-get-full-name
+                        acct))
+                     "")
                  (xaccAccountGetName acct)))
               accounts))))
           (gnc:html-document-add-object!

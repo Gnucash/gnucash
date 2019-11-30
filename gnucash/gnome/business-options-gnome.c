@@ -102,19 +102,15 @@ get_owner_type_from_option (GNCOption *option)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-owner_set_widget (GNCOption *option, GtkBox *page_box,
-                  char *name, char *documentation,
+owner_set_widget (GNCOption *option, GtkGrid *page_box,
+                  GtkLabel *name_label, char *documentation,
                   /* Return values */
                   GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_owner_widget (option, get_owner_type_from_option (option),
                                  *enclosing);
@@ -173,19 +169,15 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-customer_set_widget (GNCOption *option, GtkBox *page_box,
-                     char *name, char *documentation,
+customer_set_widget (GNCOption *option, GtkGrid *page_box,
+                     GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_owner_widget (option, GNC_OWNER_CUSTOMER, *enclosing);
 
@@ -233,19 +225,15 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-vendor_set_widget (GNCOption *option, GtkBox *page_box,
-                   char *name, char *documentation,
+vendor_set_widget (GNCOption *option, GtkGrid *page_box,
+                   GtkLabel *name_label, char *documentation,
                    /* Return values */
                    GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_owner_widget (option, GNC_OWNER_VENDOR, *enclosing);
 
@@ -292,19 +280,15 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-employee_set_widget (GNCOption *option, GtkBox *page_box,
-                     char *name, char *documentation,
+employee_set_widget (GNCOption *option, GtkGrid *page_box,
+                     GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_owner_widget (option, GNC_OWNER_EMPLOYEE, *enclosing);
 
@@ -368,19 +352,15 @@ create_invoice_widget (GNCOption *option, GtkWidget *hbox)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-invoice_set_widget (GNCOption *option, GtkBox *page_box,
-                    char *name, char *documentation,
+invoice_set_widget (GNCOption *option, GtkGrid *page_box,
+                    GtkLabel *name_label, char *documentation,
                     /* Return values */
                     GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_invoice_widget (option, *enclosing);
 
@@ -448,19 +428,15 @@ create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
 
 /* Function to set the UI widget based upon the option */
 static GtkWidget *
-taxtable_set_widget (GNCOption *option, GtkBox *page_box,
-                     char *name, char *documentation,
+taxtable_set_widget (GNCOption *option, GtkGrid *page_box,
+                     GtkLabel *name_label, char *documentation,
                      /* Return values */
                      GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label;
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    label = make_name_label (name);
-    gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
     value = create_taxtable_widget (option, *enclosing);
 
