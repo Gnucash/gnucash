@@ -45,7 +45,7 @@ if len(argv) < 2:
     print('not enough parameters')
     print('usage: test_imbalance_transaction.py {book_url}')
     print('examples:')
-    print("gnucash-env python test_imbalance_transaction.py '/home/username/test.gnucash'")
+    print("python3 test_imbalance_transaction.py '/home/username/test.gnucash'")
     exit()
 
 

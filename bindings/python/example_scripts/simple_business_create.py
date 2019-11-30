@@ -24,7 +24,7 @@
 # Creates a new book file (or *overwrites* an existing one) that has elements
 # in it for business use -- intended as a demonstration program.
 # Syntax:
-# gnucash-env python simple_business_create.py \
+# python3 simple_business_create.py \
 #                       sqlite3:///home/blah/blah.gnucash
 #
 # Specifically, this sets up a simple tree, creates a customer, job,
@@ -65,7 +65,7 @@ if len(argv) < 2:
     print('not enough parameters')
     print('usage: simple_business_create.py {new_book_url}')
     print('example:')
-    print("gnucash-env python simple_business_create.py sqlite3:///home/blah/blah.gnucash")
+    print("python3 simple_business_create.py sqlite3:///home/blah/blah.gnucash")
     exit()
     
 
