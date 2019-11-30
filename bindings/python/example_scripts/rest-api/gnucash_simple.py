@@ -34,14 +34,14 @@ def addressToDict(address):
         return None
     else:
         simple_address = {}
-        simple_address['name'] = address.GetName();
-        simple_address['line_1'] = address.GetAddr1();
-        simple_address['line_2'] = address.GetAddr2();
-        simple_address['line_3'] = address.GetAddr3();
-        simple_address['line_4'] = address.GetAddr4();
-        simple_address['phone'] = address.GetPhone();
-        simple_address['fax'] = address.GetFax();
-        simple_address['email'] = address.GetEmail();
+        simple_address['name'] = address.GetName()
+        simple_address['line_1'] = address.GetAddr1()
+        simple_address['line_2'] = address.GetAddr2()
+        simple_address['line_3'] = address.GetAddr3()
+        simple_address['line_4'] = address.GetAddr4()
+        simple_address['phone'] = address.GetPhone()
+        simple_address['fax'] = address.GetFax()
+        simple_address['email'] = address.GetEmail()
 
         return simple_address
 

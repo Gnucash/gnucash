@@ -619,7 +619,7 @@ methods_return_instance(GncLot, gnclot_dict)
 
 # Transaction
 Transaction.add_methods_with_prefix('xaccTrans')
-Transaction.add_method('gncTransGetGUID', 'GetGUID');
+Transaction.add_method('gncTransGetGUID', 'GetGUID')
 
 Transaction.add_method('xaccTransGetDescription', 'GetDescription')
 Transaction.add_method('xaccTransDestroy', 'Destroy')
@@ -648,7 +648,7 @@ Transaction.decorate_functions(
 
 # Split
 Split.add_methods_with_prefix('xaccSplit')
-Split.add_method('gncSplitGetGUID', 'GetGUID');
+Split.add_method('gncSplitGetGUID', 'GetGUID')
 Split.add_method('xaccSplitDestroy', 'Destroy')
 
 split_dict =    {
@@ -677,7 +677,7 @@ Split.parent = property( Split.GetParent, Split.SetParent )
 # Account
 Account.add_methods_with_prefix('xaccAccount')
 Account.add_methods_with_prefix('gnc_account_')
-Account.add_method('gncAccountGetGUID', 'GetGUID');
+Account.add_method('gncAccountGetGUID', 'GetGUID')
 Account.add_method('xaccAccountGetPlaceholder', 'GetPlaceholder')
 
 account_dict =  {
