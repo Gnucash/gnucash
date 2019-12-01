@@ -225,10 +225,6 @@ exist but have no suitable transactions."))
       ((if (eq? sort-order 'increasing) string<? string>?)
        (gncOwnerGetName a) (gncOwnerGetName b)))
 
-    (define (html-markup-ol lst)
-      (apply gnc:html-markup "ol"
-             (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
-
     ;; set default title
     (gnc:html-document-set-title! document report-title)
 
@@ -340,7 +336,7 @@ exist but have no suitable transactions."))
                    document
                    (gnc:make-html-text
                     (_ "Please note some transactions were not processed")
-                    (html-markup-ol
+                    (gnc:html-markup-ol
                      (map
                       (lambda (invalid-split)
                         (gnc:html-markup-anchor
