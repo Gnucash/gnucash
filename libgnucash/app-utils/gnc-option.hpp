@@ -728,7 +728,13 @@ public:
     template <typename ValueType> void set_value(ValueType value)
     {
         std::visit([value](auto& option) {
-                if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
+                if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                      std::decay_t<ValueType>> ||
+                     (std::is_same_v<std::decay_t<decltype(option)>,
+                      GncOptionDateValue> &&
+                      std::is_same_v<std::decay_t<ValueType>,
+                      RelativeDatePeriod>))
                                  option.set_value(value);
             }, m_option);
     }
