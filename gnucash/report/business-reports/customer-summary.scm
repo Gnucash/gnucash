@@ -179,17 +179,6 @@
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (string-expand string character replace-string)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (if (char=? c character)
-              replace-string
-              c)))
-       string))))
-
 (define (query owner account-list start-date end-date)
   (let* ((q (qof-query-create-for-splits))
          (guid (and owner
@@ -232,8 +221,7 @@
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
     (if name (gnc:html-table-append-row! table (list name)))
-    (if addy (gnc:html-table-append-row!
-              table (list (string-expand addy #\newline "<br/>"))))
+    (if addy (gnc:html-table-append-row! table (gnc:multiline-to-html-text addy)))
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
     (let ((table-outer (gnc:make-html-table)))

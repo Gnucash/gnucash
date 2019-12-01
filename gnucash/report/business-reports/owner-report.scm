@@ -627,24 +627,6 @@
 (define (employee-options-generator)
   (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
-(define (string-expand string character replace-string)
-  (define (car-line chars)
-    (take-while (lambda (c) (not (eqv? c character))) chars))
-  (define (cdr-line chars)
-    (let ((rest (drop-while (lambda (c) (not (eqv? c character))) chars)))
-      (if (null? rest)
-          '()
-          (cdr rest))))
-  (define (line-helper chars)
-    (if (null? chars)
-        ""
-        (let ((first (car-line chars))
-              (rest (cdr-line chars)))
-          (string-append (list->string first)
-                         (if (null? rest) "" replace-string)
-                         (line-helper rest)))))
-  (line-helper (string->list string)))
-
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
@@ -675,16 +657,17 @@
      'attribute (list "border" 0)
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
+
     (gnc:html-table-append-row!
-     table
-     (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
+     table (gnc:multiline-to-html-text (gnc:owner-get-name-and-address-dep owner)))
+
     (gnc:html-table-append-row!
-     table
-     (list "<br/>"))
+     table (gnc:make-html-text (gnc:html-markup-br)))
+
     (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
+
     table))
 
 (define (make-date-row! table label date)
@@ -718,12 +701,14 @@
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
 
-    (gnc:html-table-append-row! table (list (if name name "")))
-    (gnc:html-table-append-row! table (list (string-expand
-                         (if addy addy "")
-                         #\newline "<br/>")))
+    (gnc:html-table-append-row! table (list (or name "")))
+
+    (gnc:html-table-append-row!
+     table (list (gnc:multiline-to-html-text (or addy ""))))
+
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
+
     table))
 
 (define (make-break! document)
