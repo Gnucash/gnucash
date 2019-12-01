@@ -801,6 +801,58 @@ public:
                            return false;
                    }, m_option);
     }
+
+    std::size_t num_permissible_values() const {
+        return std::visit([] (const auto& option) -> size_t {
+                              if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                                    GncOptionMultichoiceValue>)
+                                        return option.num_permissible_values();
+                       else
+                           return std::numeric_limits<std::size_t>::max();
+                   }, m_option);
+    }
+
+    std::size_t permissible_value_index(const std::string& value) const {
+        return std::visit([&value] (const auto& option) -> size_t {
+                              std::cerr << typeid(option).name() << std::endl;
+                              if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                                    GncOptionMultichoiceValue>)
+                                        return option.permissible_value_index(value);
+                       else
+                           return std::numeric_limits<std::size_t>::max();;
+                   }, m_option);
+    }
+
+    const std::string& permissible_value(std::size_t index) const {
+        return std::visit([index] (const auto& option) -> const std::string& {
+                              if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                     GncOptionMultichoiceValue>)
+                                        return option.permissible_value(index);
+                       else
+                           return c_empty_string;
+                   }, m_option);
+    }
+
+    const std::string& permissible_value_name(std::size_t index) const {
+        return std::visit([index] (const auto& option) -> const std::string& {
+                              if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                     GncOptionMultichoiceValue>)
+                                        return option.permissible_value_name(index);
+                       else
+                           return c_empty_string;
+                   }, m_option);
+    }
+
+    const std::string& permissible_value_description(std::size_t index) const {
+        return std::visit([index] (const auto& option) -> const std::string& {
+                              if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                     GncOptionMultichoiceValue>)
+                                        return option.permissible_value_description(index);
+                       else
+                           return c_empty_string;
+                   }, m_option);
+    }
+
     std::ostream& out_stream(std::ostream& oss) const
     {
             return std::visit([&oss](auto& option) -> std::ostream& {

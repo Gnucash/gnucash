@@ -608,14 +608,15 @@ class GncOptionMultichoiceTest : public ::testing::Test
 {
 protected:
     GncOptionMultichoiceTest() :
-        m_option{"foo", "bar", "baz", "Phony Option", "plugh",
+        m_option{GncOptionMultichoiceValue{"foo", "bar", "baz",
+                                           "Phony Option", "plugh",
             {
                 {"plugh", "xyzzy", "thud"},
                 {"waldo", "pepper", "salt"},
                 {"pork", "sausage", "links"},
                 {"corge", "grault", "garply"}
-            }} {}
-    GncOptionMultichoiceValue m_option;
+                                           }}} {}
+    GncOption m_option;
 };
 
 using GncMultichoiceOption = GncOptionMultichoiceTest;
@@ -627,18 +628,20 @@ TEST_F(GncMultichoiceOption, test_option_ui_type)
 
 TEST_F(GncMultichoiceOption, test_validate)
 {
-    EXPECT_TRUE(m_option.validate("waldo"));
-    EXPECT_FALSE(m_option.validate("grault"));
+    EXPECT_TRUE(
+        m_option.validate(std::string{"waldo"})
+        );
+    EXPECT_FALSE(m_option.validate(std::string{"grault"}));
 }
 
 TEST_F(GncMultichoiceOption, test_set_value)
 {
     EXPECT_NO_THROW({
-            m_option.set_value("pork");
-            EXPECT_STREQ("pork", m_option.get_value().c_str());
+            m_option.set_value(std::string{"pork"});
+            EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
         });
-    EXPECT_THROW({ m_option.set_value("salt"); }, std::invalid_argument);
-    EXPECT_STREQ("pork", m_option.get_value().c_str());
+    EXPECT_THROW({ m_option.set_value(std::string{"salt"}); }, std::invalid_argument);
+    EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
 }
 
 TEST_F(GncMultichoiceOption, test_num_permissible)
