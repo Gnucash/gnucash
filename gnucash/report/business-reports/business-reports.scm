@@ -71,29 +71,17 @@
 
 (define (gnc:owner-report-text owner acc)
   (let* ((end-owner (gncOwnerGetEndOwner owner))
-	 (type (gncOwnerGetType end-owner))
-	 (ref #f))
-
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (set! ref "owner=c:"))
-
-      ((eqv? type GNC-OWNER-VENDOR)
-       (set! ref "owner=v:"))
-
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (set! ref "owner=e:"))
-
-      (else (set! ref "unknown-type=")))
-
-    (if ref
-	(begin
-	  (set! ref (string-append ref (gncOwnerReturnGUID end-owner)))
-	  (if (not (null? acc))
-	      (set! ref (string-append ref "&acct="
-				       (gncAccountGetGUID acc))))
-	  (gnc-build-url URL-TYPE-OWNERREPORT ref ""))
-	ref)))
+         (type (gncOwnerGetType end-owner)))
+    (gnc-build-url
+     URL-TYPE-OWNERREPORT
+     (string-append
+      (cond ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
+            ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
+            ((eqv? type GNC-OWNER-EMPLOYEE) "owner=e:")
+            (else "unknown-type="))
+      (gncOwnerReturnGUID end-owner)
+      (if (null? acc) "" (string-append "&acct=" (gncAccountGetGUID acc))))
+     "")))
 
 ;; Creates a new report instance for the given invoice. The given
 ;; report-template-id must refer to an existing report template, which
