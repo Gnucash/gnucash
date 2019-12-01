@@ -163,6 +163,48 @@ TEST_F(GncOptionTest, test_commodity_ctor)
     gnc_commodity_destroy(hpe);
 }
 
+class GncOptionCommodityTest : public ::testing::Test
+{
+protected:
+    GncOptionCommodityTest() : m_session{gnc_get_current_session()},
+                               m_book{gnc_get_current_book()},
+                               m_table{gnc_commodity_table_new()}
+    {
+/* We can't initialize the commodities with their values because we first must
+ * set the book's commodity table.
+ */
+        qof_book_set_data(m_book, GNC_COMMODITY_TABLE, m_table);
+        m_eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
+        gnc_commodity_table_insert(m_table, m_eur);
+        m_usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY",
+                                  "USD", NULL, 100);
+        gnc_commodity_table_insert(m_table, m_usd);
+        m_aapl = gnc_commodity_new(m_book, "Apple", "NASDAQ", "AAPL", NULL, 1);
+        gnc_commodity_table_insert(m_table, m_aapl);
+        m_hpe = gnc_commodity_new(m_book, "Hewlett Packard", "NYSE", "HPE",
+                                  NULL, 1);
+        gnc_commodity_table_insert(m_table, m_hpe);
+    }
+    ~GncOptionCommodityTest()
+    {
+        gnc_commodity_destroy(m_hpe);
+        gnc_commodity_destroy(m_aapl);
+        gnc_commodity_destroy(m_usd);
+        gnc_commodity_destroy(m_eur);
+        qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
+        gnc_commodity_table_destroy(m_table);
+        gnc_clear_current_session();
+    }
+
+    QofSession* m_session;
+    QofBook* m_book;
+    gnc_commodity_table * m_table;
+    gnc_commodity *m_eur;
+    gnc_commodity *m_usd;
+    gnc_commodity *m_aapl;
+    gnc_commodity *m_hpe;
+};
+
 static GncOption
 make_currency_option (const char* section, const char* name,
                       const char* key, const char* doc_string,
@@ -179,57 +221,37 @@ make_currency_option (const char* section, const char* name,
     return option;
 }
 
-TEST_F(GncOptionTest, test_currency_ctor)
+TEST_F(GncOptionCommodityTest, test_currency_ctor)
 {
-    auto table = gnc_commodity_table_new();
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
-    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
-                                    "NYSE", "HPE", NULL, 1);
     EXPECT_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option", hpe, false);
+                                               "Phony Option", m_hpe, false);
         }, std::invalid_argument);
-    gnc_commodity_destroy(hpe);
-    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
     EXPECT_NO_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option", eur, true);
+                                               "Phony Option", m_eur, true);
         });
-    gnc_commodity_destroy(eur);
-    auto usd = gnc_commodity_new(m_book, "United States Dollar",
-                                 "CURRENCY", "USD", NULL, 100);
     EXPECT_NO_THROW({
             auto option = make_currency_option("foo", "bar", "baz",
-                                               "Phony Option", usd, true);
+                                               "Phony Option", m_usd, true);
         });
-    gnc_commodity_destroy(usd);
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
-    gnc_commodity_table_destroy(table);
 }
 
-TEST_F(GncOptionTest, test_currency_setter)
+TEST_F(GncOptionCommodityTest, test_currency_setter)
 {
-    auto table = gnc_commodity_table_new();
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
-    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
-                                    "NYSE", "HPE", NULL, 1);
-    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
-    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
-    auto usd = gnc_commodity_new(m_book, "United States Dollar",
-                                 "CURRENCY", "USD", NULL, 100);
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", m_eur, true);
     EXPECT_NO_THROW({
-            option.set_value(QOF_INSTANCE(usd));
+            option.set_value(QOF_INSTANCE(m_usd));
         });
-    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option.get_value<QofInstance*>()));
+    EXPECT_PRED2(gnc_commodity_equal, m_usd,
+                 GNC_COMMODITY(option.get_value<QofInstance*>()));
     EXPECT_THROW({
-            option.set_value(QOF_INSTANCE(hpe));
+            option.set_value(QOF_INSTANCE(m_hpe));
         }, std::invalid_argument);
-    EXPECT_PRED2(gnc_commodity_equal, usd, GNC_COMMODITY(option.get_value<QofInstance*>()));
-    gnc_commodity_destroy(hpe);
-    gnc_commodity_destroy(usd);
-    gnc_commodity_destroy(eur);
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
-    gnc_commodity_table_destroy(table);
+    EXPECT_PRED2(gnc_commodity_equal, m_usd,
+                 GNC_COMMODITY(option.get_value<QofInstance*>()));
+}
+
 }
 
 TEST_F(GncOptionTest, test_qofinstance_out)
