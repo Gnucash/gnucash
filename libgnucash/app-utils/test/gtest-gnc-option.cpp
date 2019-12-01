@@ -252,6 +252,14 @@ TEST_F(GncOptionCommodityTest, test_currency_setter)
                  GNC_COMMODITY(option.get_value<QofInstance*>()));
 }
 
+TEST_F(GncOptionCommodityTest, test_currency_validator)
+{
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                       m_eur, true);
+    EXPECT_TRUE(option.validate(QOF_INSTANCE(m_usd)));
+    EXPECT_FALSE(option.validate(QOF_INSTANCE(m_aapl)));
+}
+
 }
 
 TEST_F(GncOptionTest, test_qofinstance_out)

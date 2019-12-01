@@ -298,7 +298,7 @@ public:
     GncOptionValidatedValue<ValueType>& operator=(GncOptionValidatedValue<ValueType>&&) = default;
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
-    bool validate(ValueType value) { return m_validator(value); }
+    bool validate(ValueType value) const { return m_validator(value); }
     void set_value(ValueType value)
     {
         if (this->validate(value))
@@ -787,6 +787,20 @@ public:
             }, m_option);
     }
 
+    template<typename ValueType>
+    bool validate(ValueType value) const {
+        return std::visit([value] (const auto& option) -> bool {
+                              if constexpr ((std::is_same_v<std::decay_t<decltype(option)>,
+                                                   GncOptionMultichoiceValue> &&
+                                      std::is_same_v<std::decay_t<ValueType>,
+                                                     std::string>) ||
+                                            std::is_same_v<std::decay_t<decltype(option)>,
+                                            GncOptionValidatedValue<ValueType>>)
+                                        return option.validate(value);
+                       else
+                           return false;
+                   }, m_option);
+    }
     std::ostream& out_stream(std::ostream& oss) const
     {
             return std::visit([&oss](auto& option) -> std::ostream& {
