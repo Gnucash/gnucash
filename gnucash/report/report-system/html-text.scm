@@ -182,6 +182,9 @@
             (gnc:html-markup "li" obj))
           items)))
 
+(define (gnc:html-markup-ol lst)
+  (apply gnc:html-markup "ol"
+         (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
 
 (define (gnc:html-markup-anchor href . rest)
   (apply gnc:html-markup/attr 

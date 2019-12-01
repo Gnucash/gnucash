@@ -1109,6 +1109,16 @@ flawed. see report-utilities.scm. please update reports.")
      account-balances)
     total))
 
+(define (gnc:multiline-to-html-text str)
+  ;; simple function - splits string containing #\newline into
+  ;; substrings, and convert to a gnc:make-html-text construct which
+  ;; adds gnc:html-markup-br after each substring.
+  (let loop ((list-of-substrings (string-split str #\newline))
+             (result '()))
+    (if (null? list-of-substrings)
+        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
+        (loop (cdr list-of-substrings)
+              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
 ;; ***************************************************************************
 ;; Business Functions
