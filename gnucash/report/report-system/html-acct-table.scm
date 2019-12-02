@@ -850,12 +850,9 @@
 (define (gnc:html-acct-table-get-cell acct-table row col)
   ;; we'll only ever store one object in an html-table-cell
   ;; returns the first object stored in that cell
-  (let* ((cell (gnc:html-table-get-cell
-		(gnc:_html-acct-table-matrix_ acct-table)
-		row (+ col 1))))
-    (and cell (car (gnc:html-table-cell-data cell)))
-    )
-  )
+  (and-let* ((cell (gnc:html-table-get-cell
+                    (gnc:_html-acct-table-matrix_ acct-table) row (1+ col))))
+    (car (gnc:html-table-cell-data cell))))
 
 (define (gnc:html-acct-table-set-cell! acct-table row col obj)
   (gnc:html-table-set-cell!
