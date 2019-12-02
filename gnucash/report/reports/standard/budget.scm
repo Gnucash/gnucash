@@ -263,9 +263,6 @@
 
     options))
 
-(define (html-markup-ol lst)
-  (apply gnc:html-markup "ol" (map (lambda (elt) (gnc:html-markup "li" elt)) lst)))
-
 ;; creates a footnotes collector. (make-footnote-collector) => coll
 ;; (coll elt) if elt is not null or "", adds elt to store, returns
 ;; html-text containing ref eg. <sup title='note'>1</sup>. calling
@@ -276,7 +273,7 @@
       ('list
        (let lp ((notes notes) (res '()))
          (match notes
-           (() (gnc:make-html-text (html-markup-ol res)))
+           (() (gnc:make-html-text (gnc:html-markup-ol res)))
            ((note . rest) (lp rest (cons note res))))))
       ((or #f "") "")
       (note
