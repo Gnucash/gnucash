@@ -151,6 +151,16 @@
     (test-equal "gnc:strify <val-coll 10>"
       "coll<10>"
       (gnc:strify coll)))
+
+  (let ((ht (make-hash-table)))
+    (test-equal "gnc:strify Hash()"
+      "Hash()"
+      (gnc:strify ht))
+    (hash-set! ht 'one "uno")
+    (test-equal "gnc:strify Hash(one=uno)"
+      "Hash(one=uno)"
+      (gnc:strify ht)))
+
   (test-end "debugging tools"))
 
 (define (test-commodity-collector)

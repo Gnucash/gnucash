@@ -38,10 +38,11 @@
 ;; the column-data record. the gnc:account-accumulate-at-dates will
 ;; create a record for each report-date with split-data as follows:
 (define-record-type :col-datum
-  (make-datum last-split split-balance)
+  (make-datum last-split split-balance split-value-balance)
   col-datum?
   (last-split col-datum-get-last-split)
-  (split-balance col-datum-get-split-balance))
+  (split-balance col-datum-get-split-balance)
+  (split-value-balance col-datum-get-split-value-balance))
 
 (define FOOTER-TEXT
   (gnc:make-html-text
@@ -785,14 +786,20 @@ also show overall period profit & loss."))
           (map
            (lambda (acc)
              (let* ((comm (xaccAccountGetCommodity acc))
+                    (val-coll (gnc:make-commodity-collector))
                     (amt->monetary (lambda (amt) (gnc:make-gnc-monetary comm amt))))
                (cons acc
                      (gnc:account-accumulate-at-dates
                       acc report-dates
-                      #:nosplit->elt (make-datum #f (amt->monetary 0))
+                      #:nosplit->elt (make-datum #f (amt->monetary 0)
+                                                 (gnc:make-commodity-collector))
                       #:split->elt
                       (lambda (s)
-                        (make-datum s (amt->monetary (xaccSplitGetBalance s))))))))
+                        (val-coll 'add
+                                  (xaccTransGetCurrency (xaccSplitGetParent s))
+                                  (xaccSplitGetValue s))
+                        (make-datum s (amt->monetary (xaccSplitGetBalance s))
+                                    (gnc:collector+ val-coll)))))))
            accounts))
 
          ;; an alist of (cons account account-balances) whereby
@@ -902,6 +909,15 @@ also show overall period profit & loss."))
          (maxindent (1+ (apply max (cons 0 (map gnc-account-get-current-depth
                                                 accounts))))))
 
+    (define (sum-balances-of-accounts alist accts adder)
+      (let ((balances
+             (fold (lambda (a b) (if (member (car a) accts) (cons (cdr a) b) b))
+                   '() alist)))
+        (list->vector
+         (if (null? balances)
+             (map (const (adder)) report-dates)
+             (apply map adder balances)))))
+
     (gnc:html-document-set-title!
      doc (with-output-to-string
            (lambda ()
@@ -910,7 +926,7 @@ also show overall period profit & loss."))
              (if (or incr (eq? report-type 'pnl))
                  (format #t (_ "~a to ~a")
                          (qof-print-date startdate) (qof-print-date enddate))
-                 (qof-print-date enddate)))))
+                 (display (qof-print-date enddate))))))
 
     (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
         (gnc:html-document-add-object!
@@ -945,28 +961,36 @@ also show overall period profit & loss."))
                            (split (vector-ref date-splits col-idx)))
                   (gnc:split-anchor-text split))))
 
+             ;; a vector of collectors whereby collector is the sum of
+             ;; asset and liabilities at report dates
              (asset-liability-balances
-              (let ((asset-liab-balances
-                     (map cdr (filter
-                               (lambda (acc-balances)
-                                 (member (car acc-balances) asset-liability))
-                               accounts-balances))))
-                (if (null? asset-liab-balances)
-                    (map (const (gnc:make-commodity-collector)) report-dates)
-                    (apply map gnc:monetaries-add asset-liab-balances))))
+              (sum-balances-of-accounts
+               accounts-balances asset-liability gnc:monetaries-add))
 
+             ;; a vector of collectors whereby collector is the sum of
+             ;; incomes and expenses at report dates
              (income-expense-balances
-              (let ((inc-exp-balances
-                     (map cdr
-                          (filter
-                           (lambda (acc-balances)
-                             (member (car acc-balances) income-expense))
-                           accounts-balances))))
-                (if (null? inc-exp-balances)
-                    (map (const (gnc:make-commodity-collector)) report-dates)
-                    (map gnc:commodity-collector-get-negated
-                         (apply map gnc:monetaries-add inc-exp-balances)))))
+              (sum-balances-of-accounts
+               accounts-balances income-expense gnc:monetaries-add))
 
+             ;; an alist of (cons account list-of-collectors) whereby each
+             ;; collector is the split-value-balances at report
+             ;; dates. split-value-balance determined by transaction currency.
+             (accounts-value-balances
+              (map
+               (lambda (acc)
+                 (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
+                             (map col-datum-get-split-value-balance cols-data))))
+               accounts))
+
+             ;; a vector of collectors whereby each collector is the sum
+             ;; of asset and liability split-value-balances at report
+             ;; dates
+             (asset-liability-value-balances
+              (sum-balances-of-accounts
+               accounts-value-balances asset-liability gnc:collector+))
+
+             ;; converts monetaries to common currency
              (monetaries->exchanged
               (lambda (monetaries target-currency price-source date)
                 (let ((exchange-fn (gnc:case-exchange-fn
@@ -978,30 +1002,35 @@ also show overall period profit & loss."))
                                   (exchange-fn mon target-currency))
                                 (monetaries 'format gnc:make-gnc-monetary #f)))))))
 
+             ;; the unrealized gain calculator retrieves the
+             ;; asset-and-liability report-date balance and
+             ;; value-balance, and calculates the difference,
+             ;; converted to report currency.
              (unrealized-gain-fn
               (lambda (col-idx)
-                (and common-currency
-                     (let* ((date (case price-source
-                                    ((pricedb-latest) (current-time))
-                                    (else (list-ref report-dates col-idx))))
-                            (asset-liability-balance
-                             (list-ref asset-liability-balances col-idx))
-                            (asset-liability-basis
-                             (gnc:accounts-get-comm-total-assets
-                              asset-liability
-                              (lambda (acc)
-                                (gnc:account-get-comm-value-at-date acc date #f))))
-                            (unrealized (gnc:collector- asset-liability-basis
-                                                        asset-liability-balance)))
-                       (monetaries->exchanged
-                        unrealized common-currency price-source date)))))
+                (and-let* (common-currency
+                           (date (case price-source
+                                   ((pricedb-latest) (current-time))
+                                   (else (list-ref report-dates col-idx))))
+                           (asset-liability-balance
+                            (vector-ref asset-liability-balances col-idx))
+                           (asset-liability-basis
+                            (vector-ref asset-liability-value-balances col-idx))
+                           (unrealized (gnc:collector- asset-liability-basis
+                                                       asset-liability-balance)))
+                  (monetaries->exchanged
+                   unrealized common-currency price-source date))))
+
+             ;; the retained earnings calculator retrieves the
+             ;; income-and-expense report-date balance, and converts
+             ;; to report currency.
              (retained-earnings-fn
               (lambda (col-idx)
                 (let* ((date (case price-source
                                ((pricedb-latest) (current-time))
                                (else (list-ref report-dates col-idx))))
                        (income-expense-balance
-                        (list-ref income-expense-balances col-idx)))
+                        (vector-ref income-expense-balances col-idx)))
                   (if (and common-currency
                            (every has-price?
                                   (gnc:accounts-get-commodities income-expense #f)))
@@ -1012,26 +1041,30 @@ also show overall period profit & loss."))
                        gnc:monetary-neg
                        (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
 
-             (chart (and include-chart? incr
-                         (gnc:make-report-anchor
-                          networth-barchart-uuid report-obj
-                          (list (list "General" "Start Date" (cons 'absolute startdate))
-                                (list "General" "End Date" (cons 'absolute enddate))
-                                (list "General" "Report's currency"
-                                      (or common-currency book-main-currency))
-                                (list "General" "Step Size" incr)
-                                (list "General" "Price Source"
-                                      (or price-source 'pricedb-nearest))
-                                (list "Accounts" "Accounts" asset-liability)))))
-             (get-col-header-fn (lambda (accounts col-idx)
-                                  (let* ((date (list-ref report-dates col-idx))
-                                         (header (qof-print-date date))
-                                         (cell (gnc:make-html-table-cell/markup
-                                                "total-label-cell" header)))
-                                    (gnc:html-table-cell-set-style!
-                                     cell "total-label-cell"
-                                     'attribute '("style" "text-align:right"))
-                                    cell)))
+             (chart (and-let* (include-chart?
+                               incr
+                               (curr (or common-currency book-main-currency))
+                               (price (or price-source 'pricedb-nearest)))
+                      (gnc:make-report-anchor
+                       networth-barchart-uuid report-obj
+                       (list (list "General" "Start Date" (cons 'absolute startdate))
+                             (list "General" "End Date" (cons 'absolute enddate))
+                             (list "General" "Report's currency" curr)
+                             (list "General" "Step Size" incr)
+                             (list "General" "Price Source" price)
+                             (list "Accounts" "Accounts" asset-liability)))))
+
+             (get-col-header-fn
+              (lambda (accounts col-idx)
+                (let* ((date (list-ref report-dates col-idx))
+                       (header (qof-print-date date))
+                       (cell (gnc:make-html-table-cell/markup
+                              "total-label-cell" header)))
+                  (gnc:html-table-cell-set-style!
+                   cell "total-label-cell"
+                   'attribute '("style" "text-align:right"))
+                  cell)))
+
              (add-to-table (lambda* (table title accounts #:key
                                            (get-col-header-fn #f)
                                            (show-accounts? #t)
@@ -1085,11 +1118,14 @@ also show overall period profit & loss."))
         (add-to-table
          multicol-table-right (_ "Equity")
          (append equity-accounts
-                 (list
-                  (vector (_ "Unrealized Gains")
-                          unrealized-gain-fn)
-                  (vector (_ "Retained Earnings")
-                          retained-earnings-fn)))
+                 (if common-currency
+                     (list (vector (_ "Unrealized Gains")
+                                   unrealized-gain-fn))
+                     '())
+                 (if (null? income-expense)
+                     '()
+                     (list (vector (_ "Retained Earnings")
+                                   retained-earnings-fn))))
          #:negate-amounts? #t)
 
         (if (and common-currency show-rates?)
@@ -1127,6 +1163,7 @@ also show overall period profit & loss."))
                                           (cons (car balancelist) (last balancelist))
                                           (cons (list-ref balancelist idx)
                                                 (list-ref balancelist (1+ idx))))))
+
              (closing-entries (let ((query (qof-query-create-for-splits)))
                                 (qof-query-set-book query (gnc-get-current-book))
                                 (xaccQueryAddAccountMatch
@@ -1140,6 +1177,7 @@ also show overall period profit & loss."))
                                 (let ((splits (qof-query-run query)))
                                   (qof-query-destroy query)
                                   splits)))
+
              ;; this function will query the above closing-entries for
              ;; splits within the date range, and produce the total
              ;; amount for these closing entries
@@ -1155,52 +1193,49 @@ also show overall period profit & loss."))
                   (gnc:make-gnc-monetary
                    (xaccAccountGetCommodity account)
                    (apply + (map xaccSplitGetAmount account-closing-splits))))))
+
              (get-cell-monetary-fn
               (lambda (account col-idx)
-                (let ((account-balance-list (assoc account accounts-balances)))
-                  (and account-balance-list
-                       (let ((monetarypair (col-idx->monetarypair
-                                            (cdr account-balance-list)
-                                            col-idx)))
-                         (monetary-less
-                          (cdr monetarypair)
-                          (car monetarypair)
-                          (closing-adjustment account col-idx)))))))
+                (let* ((balances (assoc-ref accounts-balances account))
+                       (monetarypair (col-idx->monetarypair balances col-idx)))
+                  (monetary-less
+                   (cdr monetarypair)
+                   (car monetarypair)
+                   (closing-adjustment account col-idx)))))
 
-             (get-cell-anchor-fn (lambda (account col-idx)
-                                   (define datepair (col-idx->datepair col-idx))
-                                   (gnc:make-report-anchor
-                                    trep-uuid report-obj
-                                    (list
-                                     (list "General" "Start Date"
-                                           (cons 'absolute (car datepair)))
-                                     (list "General" "End Date"
-                                           (cons 'absolute (cdr datepair)))
-                                     (list "General" "Show original currency amount"
-                                           (and common-currency #t))
-                                     (list "General" "Common Currency"
-                                           common-currency)
-                                     (list "General" "Report's currency"
-                                           (or common-currency book-main-currency))
-                                     (list "Display" "Amount" 'double)
-                                     (list "Accounts" "Accounts"
-                                           (if (pair? account)
-                                               account
-                                               (list account)))))))
+             (get-cell-anchor-fn
+              (lambda (account col-idx)
+                (let ((datepair (col-idx->datepair col-idx))
+                      (show-orig? (and common-currency #t))
+                      (curr (or common-currency book-main-currency))
+                      (delta (or incr 'MonthDelta))
+                      (price (or price-source 'pricedb-nearest))
+                      (accts (if (pair? account) account (list account))))
+                  (gnc:make-report-anchor
+                   trep-uuid report-obj
+                   (list
+                    (list "General" "Start Date" (cons 'absolute (car datepair)))
+                    (list "General" "End Date" (cons 'absolute (cdr datepair)))
+                    (list "General" "Show original currency amount" show-orig?)
+                    (list "General" "Common Currency" common-currency)
+                    (list "General" "Report's currency" curr)
+                    (list "Display" "Amount" 'double)
+                    (list "Accounts" "Accounts" accts))))))
 
-             (chart (and include-chart?
-                         (gnc:make-report-anchor
-                          pnl-barchart-uuid report-obj
-                          (list (list "General" "Start Date"
-                                      (cons 'absolute startdate))
-                                (list "General" "End Date"
-                                      (cons 'absolute enddate))
-                                (list "General" "Report's currency"
-                                      (or common-currency book-main-currency))
-                                (list "General" "Step Size" (or incr 'MonthDelta))
-                                (list "General" "Price Source"
-                                      (or price-source 'pricedb-nearest))
-                                (list "Accounts" "Accounts" income-expense)))))
+             (chart
+              (and-let* (include-chart?
+                         (curr (or common-currency book-main-currency))
+                         (delta (or incr 'MonthDelta))
+                         (price (or price-source 'pricedb-nearest)))
+                (gnc:make-report-anchor
+                 pnl-barchart-uuid report-obj
+                 (list (list "General" "Start Date" (cons 'absolute startdate))
+                       (list "General" "End Date" (cons 'absolute enddate))
+                       (list "General" "Report's currency" curr)
+                       (list "General" "Step Size" delta)
+                       (list "General" "Price Source" price)
+                       (list "Accounts" "Accounts" income-expense)))))
+
              (get-col-header-fn
               (lambda (accounts col-idx)
                 (let* ((datepair (col-idx->datepair col-idx))
@@ -1215,6 +1250,7 @@ also show overall period profit & loss."))
                    cell "total-label-cell"
                    'attribute '("style" "text-align:right"))
                   cell)))
+
              (add-to-table (lambda* (table title accounts #:key
                                            (get-col-header-fn #f)
                                            (show-accounts? #t)

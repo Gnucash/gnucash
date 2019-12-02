@@ -51,11 +51,11 @@ from datetime import date
 # mutual, and trading, you'll have to put the opening balance in yourself
 #
 # Invocation examples:
-# gnucash-env python new_book_with_opening_balances.py \
+# python3 new_book_with_opening_balances.py \
 #   '/home/mark/test.gnucash'
 #   'sqlite3:///home/mark/new_test.gnucash'
 #
-# gnucash-env python new_book_with_opening_balances.py \
+# python3 new_book_with_opening_balances.py \
 #   '/home/mark/test.gnucash' \
 #   'xml:///crypthome/mark/parit-financial-system/new_test.gnucash'
 #
@@ -293,8 +293,8 @@ def main():
         print('not enough parameters')
         print('usage: new_book_with_opening_balances.py {source_book_url} {destination_book_url}')
         print('examples:')
-        print("gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'sqlite3:///home/username/new_test.gnucash'")
-        print("gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'xml:///crypthome/username/finances/new_test.gnucash'")
+        print("python3 new_book_with_opening_balances.py '/home/username/test.gnucash' 'sqlite3:///home/username/new_test.gnucash'")
+        print("python3 new_book_with_opening_balances.py '/home/username/test.gnucash' 'xml:///crypthome/username/finances/new_test.gnucash'")
         return
 
     #have everything in a try block to unable us to release our hold on stuff to the extent possible

@@ -30,7 +30,7 @@
 # this to become an invoice importer for your own books
 #
 # Syntax:
-# gnucash-env python simple_invoice_insert.py \
+# python3 simple_invoice_insert.py \
 #          /home/blah/blah.gnucash
 #          dda2ec8e3e63c7715097f852851d6b22 1001 'The Goods' 201.43
 #

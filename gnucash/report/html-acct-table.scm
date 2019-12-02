@@ -610,7 +610,6 @@
 	 )
 
     ;; the following function was adapted from html-utilities.scm
-    ;; 
 
     ;; helper to calculate the balances for all required accounts
     (define (calculate-balances accts start-date end-date get-balance-fn)
@@ -667,19 +666,18 @@
     (define (traverse-accounts! accts acct-depth logi-depth new-balances)
 
       (define (use-acct? acct)
-	;; BUG?  when depth-limit is not integer but boolean?
-	(and (or (eq? limit-behavior 'flatten)
+        (and (or (eq? limit-behavior 'flatten)
                  (< logi-depth depth-limit))
-	     (member acct accounts)))
-      
-      ;; helper function to return a cached balance from a list of 
+             (member acct accounts)))
+
+      ;; helper function to return a cached balance from a list of
       ;; ( acct . balance ) cells
       (define (get-balance acct-balances acct)
-	(let ((this-collector (gnc:make-commodity-collector))
+        (let ((this-collector (gnc:make-commodity-collector))
               (acct-coll (hash-ref acct-balances (gncAccountGetGUID acct)
                                    (gnc:make-commodity-collector))))
-	  (this-collector 'merge acct-coll #f)
-	  this-collector))
+          (this-collector 'merge acct-coll #f)
+          this-collector))
 
       ;; helper function that returns a cached balance from a list of
       ;; ( acct . balance) cells for the given account *and* its
@@ -690,217 +688,151 @@
            (lambda (acct)
              (this-collector 'merge (get-balance acct-balances acct) #f))
            (gnc:accounts-and-all-descendants (list account)))
-	  this-collector))
+          this-collector))
 
-      (let ((disp-depth (if (integer? depth-limit)
-		            (min (- depth-limit 1) logi-depth)
-		            logi-depth))
-            (row-added? #f))
-	
-	(for-each
-	 (lambda (acct)
-	   (let* ((subaccts (gnc-account-get-children-sorted acct))
-		  ;; assign output parameters
-		  (account acct)
-		  (account-name (xaccAccountGetName acct))
-		  (account-code (xaccAccountGetCode acct))
-		  (account-path (gnc-account-get-full-name acct))
-		  (account-anchor (gnc:html-account-anchor acct))
-		  (account-parent (gnc-account-get-parent acct))
-		  (account-children subaccts)
-		  (account-depth acct-depth)
-		  (logical-depth logi-depth)
-		  (account-commodity (xaccAccountGetCommodity acct))
-		  (account-type (xaccAccountGetType acct))
-		  ;; N.B.: xaccAccountGetTypeStr really should be
-		  ;; called gnc:account-type-get-string
-		  (account-type-string (xaccAccountGetTypeStr
-					(xaccAccountGetType acct)))
-		  (account-guid (gncAccountGetGUID acct))
-		  (account-description (xaccAccountGetDescription acct))
-		  (account-notes (xaccAccountGetNotes acct))
-		  ;; These next two are commodity-collectors.
-		  (account-bal (get-balance
-				new-balances acct))
-		  (recursive-bal (get-balance-sub
-				  new-balances acct))
-		  ;; These next two are of type <gnc:monetary>, right?
-		  (report-comm-account-bal
-		   (gnc:sum-collector-commodity
-		    account-bal report-commodity exchange-fn))
-		  (report-comm-recursive-bal
-		   (gnc:sum-collector-commodity
-		    recursive-bal report-commodity exchange-fn))
-		  (grp-env
-		   (append env
-			   (list
-			    (list 'initial-indent indent)
-			    (list 'account account)
-			    (list 'account-name account-name)
-			    (list 'account-code account-code)
-			    (list 'account-type account-type)
-			    (list 'account-type-string account-type-string)
-			    (list 'account-guid account-guid)
-			    (list 'account-description account-description)
-			    (list 'account-notes account-notes)
-			    (list 'account-path account-path)
-			    (list 'account-parent account-parent)
-			    (list 'account-children account-children)
-			    (list 'account-depth account-depth)
-			    (list 'logical-depth logical-depth)
-			    (list 'account-commodity account-commodity)
-			    (list 'account-anchor account-anchor)
-			    (list 'account-bal account-bal)
-			    (list 'recursive-bal recursive-bal)
-			    (list 'report-comm-account-bal
-				  report-comm-account-bal)
-			    (list 'report-comm-recursive-bal
-				  report-comm-recursive-bal)
-			    (list 'report-commodity report-commodity)
-			    (list 'exchange-fn exchange-fn)
-			    )))
-		  (row-env #f)
-		  (label (case label-mode
-                           ((anchor) account-anchor)
-			   ((name) (gnc:make-html-text account-name))))
-                  (row #f)
-                  (children-displayed? #f)
-		  )
+      (let lp ((accounts (if less-p (sort accts less-p) accts))
+               (row-added? #f)
+               (disp-depth (if (integer? depth-limit)
+                               (min (1- depth-limit) logi-depth)
+                               logi-depth)))
 
-	     (set! acct-depth-reached (max acct-depth-reached acct-depth))
-	     (set! logi-depth-reached (max logi-depth-reached logi-depth))
-	     (set! disp-depth-reached (max disp-depth-reached disp-depth))
+        (cond
 
-	     (or (not (use-acct? acct))
-		 ;; ok, so we'll consider parent accounts with zero
-		 ;; recursive-bal to be zero balance leaf accounts
-		 (and (gnc-commodity-collector-allzero? recursive-bal)
-		      (or (not report-budget)
-             		  (gnc-numeric-zero-p
-				(gnc:budget-account-get-rolledup-net 
-					report-budget account #f #f)))
-		      (equal? zero-mode 'omit-leaf-acct))
-		 (begin
-		   (set! row-env
-			 (append grp-env
-				 (list
-				  (list 'account-label label)
-				  (list 'row-type 'account-row)
-				  (list 'display-depth disp-depth)
-				  (list 'indented-depth
-					(+ disp-depth indent))
-				  )
-				 ))
-		   (set! row (add-row row-env))
-		   )
-		 )
-	     ;; Recurse:
-	     ;; Dive into an account even if it isn't selected!
-	     ;; why? because some subaccts may be selected.
-	     (set! children-displayed?
-	           (traverse-accounts! subaccts
-				       (+ acct-depth 1)
-				       (if (use-acct? acct)
-				           (+ logi-depth 1)
-				           logi-depth)
-				       new-balances))
+         ((null? accounts) row-added?)
 
-	     ;; record whether any children were displayed
-	     (if row (append-to-row row (list (list 'children-displayed? children-displayed?))))
+         (else
+          (let* ((acct (car accounts))
+                 (subaccts (gnc-account-get-children-sorted acct))
 
-	     ;; after the return from recursion: subtotals
-	     (or (not (use-acct? acct))
-		 (not subtotal-mode)
-		 ;; ditto that remark concerning zero recursive-bal...
-		 (and (gnc-commodity-collector-allzero? recursive-bal)
-		      (equal? zero-mode 'omit-leaf-acct))
-		 ;; ignore use-acct for subtotals...?
-		 ;; (not (use-acct? acct))
-		 (not children-displayed?)
-		 (let* ((lbl-txt (gnc:make-html-text (_ "Total") " ")))
-		   (apply gnc:html-text-append! lbl-txt
-			  (gnc:html-text-body label))
-		   (if (equal? subtotal-mode 'canonically-tabbed)
-		       (set! disp-depth (+ disp-depth 1))
-		       (set! disp-depth-reached
-			     (max disp-depth-reached disp-depth))
-		       )
-		   (set! row-env
-			 (append grp-env
-				 (list
-				  (list 'account-label lbl-txt)
-				  (list 'row-type 'subtotal-row)
-				  (list 'display-depth disp-depth)
-				  (list 'indented-depth
-					(+ disp-depth indent))
-				  )
-				 ))
-		   (add-row row-env)
-		   )
-		 )
-	     (if (or row-added? children-displayed? row) (set! row-added? #t))
-	     )) ;; end of (lambda (acct) ...)
-	 ;; lambda is applied to each item in the (sorted) account list
-	 (if less-p
-	     (sort accts less-p)
-	     accts)
-	 ) ;; end of for-each
-	 row-added?
-	)
-      ) ;; end of definition of traverse-accounts!
+                 ;; These next two are commodity-collectors.
+                 (account-bal (get-balance new-balances acct))
+                 (recursive-bal (get-balance-sub new-balances acct))
+
+                 ;; These next two are of type <gnc:monetary>
+                 (report-comm-account-bal
+                  (gnc:sum-collector-commodity
+                   account-bal report-commodity exchange-fn))
+                 (report-comm-recursive-bal
+                  (gnc:sum-collector-commodity
+                   recursive-bal report-commodity exchange-fn))
+
+                 (grp-env
+                  (cons*
+                   (list 'initial-indent indent)
+                   (list 'account acct)
+                   (list 'account-name (xaccAccountGetName acct))
+                   (list 'account-code (xaccAccountGetCode acct))
+                   (list 'account-type (xaccAccountGetType acct))
+                   (list 'account-type-string (xaccAccountGetTypeStr
+                                               (xaccAccountGetType acct)))
+                   (list 'account-guid (gncAccountGetGUID acct))
+                   (list 'account-description (xaccAccountGetDescription acct))
+                   (list 'account-notes (xaccAccountGetNotes acct))
+                   (list 'account-path (gnc-account-get-full-name acct))
+                   (list 'account-parent (gnc-account-get-parent acct))
+                   (list 'account-children subaccts)
+                   (list 'account-depth acct-depth)
+                   (list 'logical-depth logi-depth)
+                   (list 'account-commodity (xaccAccountGetCommodity acct))
+                   (list 'account-anchor (gnc:html-account-anchor acct))
+                   (list 'account-bal account-bal)
+                   (list 'recursive-bal recursive-bal)
+                   (list 'report-comm-account-bal report-comm-account-bal)
+                   (list 'report-comm-recursive-bal report-comm-recursive-bal)
+                   (list 'report-commodity report-commodity)
+                   (list 'exchange-fn exchange-fn)
+                   env))
+                 (label (case label-mode
+                          ((anchor) (gnc:html-account-anchor acct))
+                          ((name) (gnc:make-html-text (xaccAccountGetName acct)))))
+                 (row #f)
+                 (children-displayed? #f))
+
+            (set! acct-depth-reached (max acct-depth-reached acct-depth))
+            (set! logi-depth-reached (max logi-depth-reached logi-depth))
+            (set! disp-depth-reached (max disp-depth-reached disp-depth))
+
+            (unless (or (not (use-acct? acct))
+                        ;; ok, so we'll consider parent accounts with zero
+                        ;; recursive-bal to be zero balance leaf accounts
+                        (and (gnc-commodity-collector-allzero? recursive-bal)
+                             (eq? zero-mode 'omit-leaf-acct)
+                             (or (not report-budget)
+                                 (zero? (gnc:budget-account-get-rolledup-net
+                                         report-budget acct #f #f)))))
+              (set! row
+                (add-row
+                 (cons* (list 'account-label label)
+                        (list 'row-type 'account-row)
+                        (list 'display-depth disp-depth)
+                        (list 'indented-depth (+ disp-depth indent))
+                        grp-env))))
+
+            ;; Recurse:
+            ;; Dive into an account even if it isn't selected!
+            ;; why? because some subaccts may be selected.
+            (set! children-displayed?
+              (traverse-accounts! subaccts
+                                  (1+ acct-depth)
+                                  (if (use-acct? acct)
+                                      (1+ logi-depth)
+                                      logi-depth)
+                                  new-balances))
+
+            ;; record whether any children were displayed
+            (when row
+              (append-to-row
+               row (list (list 'children-displayed? children-displayed?))))
+
+            ;; after the return from recursion: subtotals
+            (unless (or (not (use-acct? acct))
+                        (not subtotal-mode)
+                        (not children-displayed?)
+                        (and (gnc-commodity-collector-allzero? recursive-bal)
+                             (eq? zero-mode 'omit-leaf-acct)))
+              (let ((lbl-txt (gnc:make-html-text (_ "Total") " ")))
+                (apply gnc:html-text-append! lbl-txt (gnc:html-text-body label))
+                (if (eq? subtotal-mode 'canonically-tabbed)
+                    (set! disp-depth (+ disp-depth 1))
+                    (set! disp-depth-reached (max disp-depth-reached disp-depth)))
+                (add-row
+                 (cons* (list 'account-label lbl-txt)
+                        (list 'row-type 'subtotal-row)
+                        (list 'display-depth disp-depth)
+                        (list 'indented-depth (+ disp-depth indent))
+                        grp-env))))
+
+            (lp (cdr accounts)
+                (or row-added? children-displayed? row)
+                disp-depth))))))
 
     ;; do it
-    (traverse-accounts! toplvl-accts 0 0
-                        (calculate-balances accounts start-date end-date get-balance-fn))
-    
+    (traverse-accounts!
+     toplvl-accts 0 0
+     (calculate-balances accounts start-date end-date get-balance-fn))
+
     ;; now set the account-colspan entries
-    ;; he he... (let ((x 0)) (while (< x 5) (display x) (set! x (+ x 1))))
-    ;; now I know how to loop in scheme... yay!
-    (let ((row 0)
-	  (rows (gnc:html-acct-table-num-rows acct-table)))
-      (while (< row rows)
-	     (let* ((orig-env
-		     (gnc:html-acct-table-get-row-env acct-table row))
-		    (display-depth (get-val orig-env 'display-depth))
-		    (depth-limit (get-val orig-env 'display-tree-depth))
-		    (indent (get-val orig-env 'initial-indent))
-		    (indented-depth (get-val orig-env 'indented-depth))
-		    (subtotal-mode
-		     (get-val orig-env 'parent-account-subtotal-mode))
-		    (label-cols (+ disp-depth-reached 1))
-		    (logical-cols (if depth-limit
-				      (min
-				       (+ logi-depth-reached 1)
-                                       ;; BUG?  when depth-limit is not integer?
-				       depth-limit)
-				      (+ logi-depth-reached 1)))
-		    (colspan (- label-cols display-depth))
-		    ;; these parameters *should* always, by now, be set...
-		    (new-env
-		     (append
-		      orig-env
-		      (list
-		       (list 'account-colspan colspan)
-		       (list 'label-cols label-cols)
-		       (list 'logical-cols logical-cols)
-		       (list 'account-cols
-			     (+ indent
-				(max label-cols
-				     (if depth-limit depth-limit 0)
-				     )
-				)
-			     )
-		       )
-		      ))
-		    )
-	       (gnc:html-acct-table-set-row-env! acct-table row new-env)
-	       (set! row (+ row 1))))
-      )
-    
-    ;; done
-    
-    )
-  )
+    (let lp ((row 0)
+             (rows (gnc:html-acct-table-num-rows acct-table)))
+      (when (< row rows)
+        (let* ((orig-env (gnc:html-acct-table-get-row-env acct-table row))
+               (display-depth (get-val orig-env 'display-depth))
+               (depth-limit (get-val orig-env 'display-tree-depth))
+               (indent (get-val orig-env 'initial-indent))
+               (indented-depth (get-val orig-env 'indented-depth))
+               (subtotal-mode (get-val orig-env 'parent-account-subtotal-mode))
+               (label-cols (+ disp-depth-reached 1))
+               ;; these parameters *should* always, by now, be set...
+               (new-env
+                (cons*
+                 (list 'account-colspan (- label-cols display-depth))
+                 (list 'label-cols label-cols)
+                 (list 'account-cols (+ indent (max label-cols (or depth-limit 0))))
+                 (list 'logical-cols (min (+ logi-depth-reached)
+                                          (or depth-limit +inf.0)))
+                 orig-env)))
+          (gnc:html-acct-table-set-row-env! acct-table row new-env)
+          (lp (1+ row) rows))))))
 
 (define (gnc:html-acct-table-num-rows acct-table)
   (gnc:html-table-num-rows (gnc:_html-acct-table-matrix_ acct-table)))
@@ -908,12 +840,9 @@
 (define (gnc:html-acct-table-get-cell acct-table row col)
   ;; we'll only ever store one object in an html-table-cell
   ;; returns the first object stored in that cell
-  (let* ((cell (gnc:html-table-get-cell
-		(gnc:_html-acct-table-matrix_ acct-table)
-		row (+ col 1))))
-    (and cell (car (gnc:html-table-cell-data cell)))
-    )
-  )
+  (and-let* ((cell (gnc:html-table-get-cell
+                    (gnc:_html-acct-table-matrix_ acct-table) row (1+ col))))
+    (car (gnc:html-table-cell-data cell))))
 
 (define (gnc:html-acct-table-set-cell! acct-table row col obj)
   (gnc:html-table-set-cell!

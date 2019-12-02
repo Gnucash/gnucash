@@ -5,8 +5,9 @@
 # before running this.
 # Adding to a calling bash script would be better
 # Although calling it from here would be even better!
-#  OR:  export PYTHONPATH=$HOME/progs/lib/python2.6/site-packages
-# Then: gnucash-env ipython
+#  OR:  export PYTHONPATH=<path-to-gnucash-inst-dir>/lib/python3.7/site-packages:$PYTHONPATH
+# You may have to adjust the above path to your local system (lib->lib64, python3.7->...)
+# Then: ipython3
 # The account file is not saved but always use a disposable copy.
 # Change, FILE, CURRENCY and STOCK to those defined in your test account.
 
