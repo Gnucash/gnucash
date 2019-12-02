@@ -1259,6 +1259,18 @@ flawed. see report-utilities.scm. please update reports.")
             (gnc-lot-get-notes lot)
             (gnc-lot-get-balance lot)
             (gnc-lot-count-splits lot)))
+  (define (record->str rec)
+    (let ((rtd (record-type-descriptor rec)))
+      (define (fld->str fld)
+        (format #f "~a=~a" fld (gnc:strify ((record-accessor rtd fld) rec))))
+      (format #f "Rec:~a{~a}"
+              (record-type-name rtd)
+              (string-join (map fld->str (record-type-fields rtd)) ", "))))
+  (define (hash-table->str hash)
+    (string-append
+     "Hash(" (string-join
+              (hash-map->list (lambda (k v) (format #f "~a=~a" k v)) hash) ",")
+     ")"))
   (define (try proc)
     ;; Try proc with d as a parameter, catching exceptions to return
     ;; #f to the (or) evaluator below.
@@ -1294,13 +1306,8 @@ flawed. see report-utilities.scm. please update reports.")
       (try owner->str)
       (try invoice->str)
       (try lot->str)
-      (and (record? d)
-           (let ((rtd (record-type-descriptor d)))
-             (define (fld->str fld)
-               (format #f "~a=~a" fld (gnc:strify ((record-accessor rtd fld) d))))
-             (format #f "Rec:~a{~a}"
-                     (record-type-name rtd)
-                     (string-join (map fld->str (record-type-fields rtd)) ", "))))
+      (try hash-table->str)
+      (try record->str)
       (object->string d)))
 
 (define (pair->num pair)
