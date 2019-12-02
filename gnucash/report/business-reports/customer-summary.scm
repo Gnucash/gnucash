@@ -203,6 +203,7 @@
     ;;  guid QOF-QUERY-OR)
     (xaccQueryAddAccountMatch q account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT q #t start-date #t end-date QOF-QUERY-AND)
+    (xaccQueryAddClosingTransMatch q #f QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     (let ((result (qof-query-run q)))
       (qof-query-destroy q)
