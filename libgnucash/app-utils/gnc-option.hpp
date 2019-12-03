@@ -176,31 +176,8 @@ private:
     GncOptionUIType m_ui_type;
 };
 
-/* These will work when m_value is a built-in class; GnuCash class and container
- * values will need specialization unless they happen to define operators << and
- * >>.
- * Note that SWIG 3.0.12 chokes on the typename = std::enable_if_t<> form so we
- * have to use the non-type parameter form.
- */
-template<class OptionValueClass, typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>>, int> = 0>
-std::ostream& operator<<(std::ostream& oss, const OptionValueClass& opt)
-{
-    oss << opt.get_value();
-    return oss;
-}
-
-template<class OptionValueClass, typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>>, int> = 0>
-std::istream& operator>>(std::istream& iss, OptionValueClass& opt)
-{
-    std::decay_t<decltype(opt.get_value())> value;
-    iss >> value;
-    opt.set_value(value);
-    return iss;
-}
-
 template <typename ValueType>
-class GncOptionValue :
-    public OptionClassifier, public OptionUIItem
+class GncOptionValue : public OptionClassifier, public OptionUIItem
 {
 public:
     GncOptionValue<ValueType>(const char* section, const char* name,
@@ -223,49 +200,8 @@ private:
     ValueType m_default_value;
 };
 
-QofInstance* qof_instance_from_string(const std::string& str,
-                                      GncOptionUIType type);
-std::string qof_instance_to_string(const QofInstance* inst);
-
-template<> inline std::ostream&
-operator<< <GncOptionValue<bool>>(std::ostream& oss,
-                                  const GncOptionValue<bool>& opt)
-{
-    oss << (opt.get_value() ? "#t" : "#f");
-    return oss;
-}
-
-template<> inline std::ostream&
-operator<< <GncOptionValue<QofInstance*>>(std::ostream& oss,
-                                       const GncOptionValue<QofInstance*>& opt)
-{
-    oss << qof_instance_to_string(opt.get_value());
-    return oss;
-}
-
-template<> inline std::istream&
-operator>> <GncOptionValue<bool>>(std::istream& iss,
-                                  GncOptionValue<bool>& opt)
-{
-    std::string instr;
-    iss >> instr;
-    opt.set_value(instr == "#t" ? true : false);
-    return iss;
-}
-
-template<> inline std::istream&
-operator>> <GncOptionValue<QofInstance*>>(std::istream& iss,
-                                       GncOptionValue<QofInstance*>& opt)
-{
-    std::string instr;
-    iss >> instr;
-    opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
-    return iss;
-}
-
 template <typename ValueType>
-class GncOptionValidatedValue :
-    public OptionClassifier, public OptionUIItem
+class GncOptionValidatedValue : public OptionClassifier, public OptionUIItem
 {
 public:
     GncOptionValidatedValue<ValueType>(const char* section, const char* name,
@@ -314,24 +250,176 @@ private:
     ValueType m_validation_data;
 };
 
-template<> inline std::ostream&
-operator<< <GncOptionValidatedValue<QofInstance*>>(std::ostream& oss,
-                                       const GncOptionValidatedValue<QofInstance*>& opt)
+QofInstance* qof_instance_from_string(const std::string& str,
+                                      GncOptionUIType type);
+std::string qof_instance_to_string(const QofInstance* inst);
+
+/* These will work when m_value is a built-in class; GnuCash class and container
+ * values will need specialization unless they happen to define operators << and
+ * >>.
+ * Note that SWIG 3.0.12 chokes on elaborate enable_if so just hide the
+ * following templates from SWIG. (Ignoring doesn't work because SWIG still has
+ * to parse the templates to figure out the symbols.
+ */
+#ifndef SWIG
+template<class OptionValueClass,
+         typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
+                                                     std::decay_t<OptionValueClass>> &&
+                                   !(std::is_same_v<std::decay_t<OptionValueClass>,
+                                     GncOptionValue<QofInstance*>> ||
+                                     std::is_same_v<std::decay_t<OptionValueClass>,
+                                     GncOptionValidatedValue<QofInstance*>>), int> = 0>
+std::ostream& operator<<(std::ostream& oss, const OptionValueClass& opt)
 {
-        oss << qof_instance_to_string(opt.get_value());
-        std::cerr << qof_instance_to_string(opt.get_value());
+    oss << opt.get_value();
+    return oss;
+}
+
+template<> inline std::ostream&
+operator<< <GncOptionValue<bool>>(std::ostream& oss,
+                                  const GncOptionValue<bool>& opt)
+{
+    oss << (opt.get_value() ? "#t" : "#f");
         return oss;
 }
 
-template<> inline std::istream&
-operator>> <GncOptionValidatedValue<QofInstance*>>(std::istream& iss,
-                                       GncOptionValidatedValue<QofInstance*>& opt)
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<QofInstance*> >, int> = 0>
+inline std::ostream&
+operator<< (std::ostream& oss, const OptType& opt)
+{
+    auto value = opt.get_value();
+    if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY ||
+        type == GncOptionUIType::CURRENCY)
+    {
+        if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY)
+        {
+            oss << gnc_commodity_get_namespace(GNC_COMMODITY(value)) << " ";
+        }
+        oss << gnc_commodity_get_mnemonic(GNC_COMMODITY(value));
+    }
+    else
+    {
+        oss << qof_instance_to_string(value);
+    }
+    return oss;
+}
+
+template<class OptionValueClass,
+         typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>> &&
+                                   !(std::is_same_v<std::decay_t<OptionValueClass>,
+                                     GncOptionValue<QofInstance*>> ||
+                                     std::is_same_v<std::decay_t<OptionValueClass>,
+                                     GncOptionValidatedValue<QofInstance*>>), int> = 0>
+std::istream& operator>>(std::istream& iss, OptionValueClass& opt)
+{
+    std::decay_t<decltype(opt.get_value())> value;
+    iss >> value;
+    opt.set_value(value);
+    return iss;
+}
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<QofInstance*> >, int> = 0>
+std::istream&
+operator>> (std::istream& iss, OptType& opt)
 {
     std::string instr;
-    iss >> instr;
+    if (auto type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY ||
+        type == GncOptionUIType::CURRENCY)
+    {
+        std::string name_space, mnemonic;
+        if (type = opt.get_ui_type(); type == GncOptionUIType::COMMODITY)
+        {
+            iss >> name_space;
+        }
+        else
+            name_space = GNC_COMMODITY_NS_CURRENCY;
+        iss >> mnemonic;
+        instr = name_space + ":";
+        instr += mnemonic;
+     }
+    else
+    {
+        iss >> instr;
+    }
     opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
     return iss;
 }
+
+template<> inline std::istream&
+operator>> <GncOptionValue<bool>>(std::istream& iss,
+                                  GncOptionValue<bool>& opt)
+{
+    std::string instr;
+    iss >> instr;
+    opt.set_value(instr == "#t" ? true : false);
+    return iss;
+}
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<QofInstance*>>, int> = 0>
+inline std::ostream&
+gnc_option_to_scheme (std::ostream& oss, const OptType& opt)
+{
+    auto value = opt.get_value();
+    auto type = opt.get_ui_type();
+    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
+    {
+        if (type == GncOptionUIType::COMMODITY)
+        {
+            oss << commodity_scm_intro;
+            oss << "\"" <<
+                gnc_commodity_get_namespace(GNC_COMMODITY(value)) << "\" ";
+        }
+
+        oss << "\"" << gnc_commodity_get_mnemonic(GNC_COMMODITY(value)) << "\"";
+
+        if (type == GncOptionUIType::COMMODITY)
+        {
+            oss << ")";
+        }
+    }
+    else
+    {
+        oss << "\"" << qof_instance_to_string(value) << "\"";
+    }
+    return oss;
+}
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<QofInstance*>>, int> = 0>
+inline std::istream&
+gnc_option_from_scheme (std::istream& iss, OptType& opt)
+{
+    std::string instr;
+    auto type = opt.get_ui_type();
+    if (type == GncOptionUIType::COMMODITY || type == GncOptionUIType::CURRENCY)
+    {
+        std::string name_space, mnemonic;
+        if (type == GncOptionUIType::COMMODITY)
+        {
+            iss.ignore(strlen(commodity_scm_intro) + 1, '"');
+            std::getline(iss, name_space, '"');
+            iss.ignore(1, '"');
+        }
+        else
+            name_space = GNC_COMMODITY_NS_CURRENCY;
+        iss.ignore(1, '"');
+        std::getline(iss, mnemonic, '"');
+
+        if (type == GncOptionUIType::COMMODITY)
+            iss.ignore(2, ')');
+        else
+            iss.ignore(1, '"');
+
+        instr = name_space + ":";
+        instr += mnemonic;
+     }
+    else
+    {
+        iss.ignore(1, '"');
+        std::getline(iss, instr, '"');
+    }
+    opt.set_value(qof_instance_from_string(instr, opt.get_ui_type()));
+    return iss;
+}
+#endif // SWIG
 
 /**
  * Used for numeric ranges and plot sizes.
@@ -559,8 +647,15 @@ operator<< <GncOptionAccountValue>(std::ostream& oss,
                                        const GncOptionAccountValue& opt)
 {
     auto values{opt.get_value()};
+    bool first = true;
     for (auto value : values)
-        oss << qof_instance_to_string(QOF_INSTANCE(value)) << " ";
+    {
+        if (first)
+            first = false;
+        else
+            oss << " ";
+        oss << qof_instance_to_string(QOF_INSTANCE(value));
+    }
     return oss;
 }
 
