@@ -260,50 +260,90 @@ TEST_F(GncOptionCommodityTest, test_currency_validator)
     EXPECT_FALSE(option.validate(QOF_INSTANCE(m_aapl)));
 }
 
+static inline std::string make_currency_str(gnc_commodity* cur)
+{
+    std::string cur_str{gnc_commodity_get_mnemonic(cur)};
+    return cur_str;
 }
 
-TEST_F(GncOptionTest, test_qofinstance_out)
+static inline std::string make_commodity_str(gnc_commodity* com)
 {
-    auto table = gnc_commodity_table_new();
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
-    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
-    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
+    std::string com_str{gnc_commodity_get_namespace(com)};
+    com_str += " ";
+    com_str += gnc_commodity_get_mnemonic(com);
+    return com_str;
+}
 
-    std::string eur_guid{gnc::GUID{*qof_instance_get_guid(eur)}.to_string()};
+static inline std::string make_currency_SCM_str(gnc_commodity* cur)
+{
+    std::string cur_str{gnc_commodity_get_mnemonic(cur)};
+    cur_str.insert(0, "\"");
+    cur_str += "\"";
+    return cur_str;
+}
+
+static inline std::string make_commodity_SCM_str(gnc_commodity* com)
+{
+    std::string com_str{commodity_scm_intro};
+    com_str += "\"";
+    com_str += gnc_commodity_get_namespace(com);
+    com_str += "\" \"";
+    com_str += gnc_commodity_get_mnemonic(com);
+    com_str += "\")";
+    return com_str;
+}
+
+TEST_F(GncOptionCommodityTest, test_currency_out)
+{
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                       m_eur, true);
+
+    std::string eur_str{make_currency_str(m_eur)};
     std::ostringstream oss;
     oss << option;
-    EXPECT_EQ(eur_guid, oss.str());
-    gnc_commodity_destroy(eur);
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
-    gnc_commodity_table_destroy(table);
+    EXPECT_EQ(eur_str, oss.str());
 }
 
-TEST_F(GncOptionTest, test_qofinstance_in)
+TEST_F(GncOptionCommodityTest, test_commodity_out)
 {
-    auto table = gnc_commodity_table_new();
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, table);
-    auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
-    auto usd = gnc_commodity_new(m_book, "United States Dollar",
-                                 "CURRENCY", "USD", NULL, 100);
-    auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
-                                    "NYSE", "HPE", NULL, 1);
-    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", eur, true);
+    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_hpe),
+                     GncOptionUIType::COMMODITY};
+    std::string hpe_str{make_commodity_str(m_hpe)};
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_EQ(hpe_str, oss.str());
+}
+
+TEST_F(GncOptionCommodityTest, test_currency_in)
+{
+
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                       m_eur, true);
 
     EXPECT_THROW({
-            std::string hpe_guid{gnc::GUID{*qof_instance_get_guid(hpe)}.to_string()};
-            std::istringstream iss{hpe_guid};
+            std::string hpe_str{make_commodity_str(m_hpe)};
+            std::istringstream iss{hpe_str};
             iss >> option;
         }, std::invalid_argument);
     EXPECT_NO_THROW({
-            std::string usd_guid{gnc::GUID{*qof_instance_get_guid(usd)}.to_string()};
-            std::istringstream iss{usd_guid};
+            std::string usd_str{make_currency_str(m_usd)};
+            std::istringstream iss{usd_str};
             iss >> option;
-            EXPECT_EQ(QOF_INSTANCE(usd), option.get_value<QofInstance*>());
+            EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<QofInstance*>());
         });
-    gnc_commodity_destroy(eur);
-    gnc_commodity_destroy(usd);
-    qof_book_set_data(m_book, GNC_COMMODITY_TABLE, nullptr);
-    gnc_commodity_table_destroy(table);
+}
+
+TEST_F(GncOptionCommodityTest, test_commodity_in)
+{
+    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_aapl),
+                     GncOptionUIType::COMMODITY};
+
+    std::string hpe_str{make_commodity_str(m_hpe)};
+    std::istringstream iss{hpe_str};
+    iss >> option;
+    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<QofInstance*>());
+}
+
 }
 
 class GncUIItem

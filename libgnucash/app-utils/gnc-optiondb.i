@@ -184,6 +184,9 @@ using Account = struct account_s;
 %ignore GncOptionDateValue(GncOptionDateValue&&);
 %ignore GncOptionDateValue::operator=(const GncOptionDateValue&);
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
+%ignore operator<<(std::ostream&, const GncOption&);
+%ignore operator>>(std::istream&, GncOption&);
+
 %rename(absolute) RelativeDatePeriod::ABSOLUTE;
 %rename(today) RelativeDatePeriod::TODAY;
 %rename(start_this_month) RelativeDatePeriod::START_THIS_MONTH;

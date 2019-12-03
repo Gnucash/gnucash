@@ -113,7 +113,7 @@ GncOptionDateValue::get_value() const
         m_period == RelativeDatePeriod::END_PREV_YEAR ||
         m_period == RelativeDatePeriod::START_PREV_QUARTER ||
         m_period == RelativeDatePeriod::END_PREV_QUARTER;
-    
+
     if (period.tm_mon == now.tm_mon && period.tm_mday == now.tm_mday)
     {
         //No set accounting period, use the calendar year
@@ -217,13 +217,14 @@ GncOptionDateValue::in_stream(std::istream& iss)
 QofInstance*
 qof_instance_from_string(const std::string& str, GncOptionUIType type)
 {
-    auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
     QofIdType qof_type;
+    bool commodity_type{false};
     switch(type)
     {
         case GncOptionUIType::CURRENCY:
         case GncOptionUIType::COMMODITY:
             qof_type = "Commodity";
+            commodity_type = true;
             break;
         case GncOptionUIType::BUDGET:
             qof_type = "Budget";
@@ -256,6 +257,17 @@ qof_instance_from_string(const std::string& str, GncOptionUIType type)
             break;
     }
     auto book{gnc_get_current_book()};
+    if (commodity_type)
+    {
+        auto sep{str.find(":")};
+        auto name_space{str.substr(0, sep)};
+        auto mnemonic{str.substr(sep + 1, -1)};
+        auto table = gnc_commodity_table_get_table(book);
+        return QOF_INSTANCE(gnc_commodity_table_lookup(table,
+                                                       name_space.c_str(),
+                                                       mnemonic.c_str()));
+    }
+    auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
     auto col{qof_book_get_collection(book, qof_type)};
     return QOF_INSTANCE(qof_collection_lookup_entity(col, &guid));
 }
