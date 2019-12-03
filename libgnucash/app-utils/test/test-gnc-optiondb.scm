@@ -183,12 +183,13 @@
   (test-begin "test-gnc-test-date-option")
   (let* ((option-db (gnc-option-db-new))
          (date-opt (gnc-register-date-interval-option option-db "foo" "bar"
-                                                      "baz" "Phony Option"))
+                                                      "baz" "Phony Option"
+                                                      (RelativeDatePeriod-today)))
          (a-time (gnc-dmy2time64 11 07 2019)))
     (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" a-time)
-    (test-equal a-time (gnc-option-value option-db "foo" "bar"))
-    (test-end "test-gnc-test-date-option")))
+    (test-equal a-time (gnc-option-value option-db "foo" "bar")))
+  (test-end "test-gnc-test-date-option"))
 
 (define (test-gnc-make-number-range-option)
   (test-begin "test-gnc-number-range-option")

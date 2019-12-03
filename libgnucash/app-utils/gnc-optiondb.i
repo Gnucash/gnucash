@@ -184,6 +184,22 @@ using Account = struct account_s;
 %ignore GncOptionDateValue(GncOptionDateValue&&);
 %ignore GncOptionDateValue::operator=(const GncOptionDateValue&);
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
+%rename(absolute) RelativeDatePeriod::ABSOLUTE;
+%rename(today) RelativeDatePeriod::TODAY;
+%rename(start_this_month) RelativeDatePeriod::START_THIS_MONTH;
+%rename(end_this_month) RelativeDatePeriod::END_THIS_MONTH;
+%rename(start_prev_month) RelativeDatePeriod::START_PREV_MONTH;
+%rename(end_prev_month) RelativeDatePeriod::END_PREV_MONTH;
+%rename(start_current_quarter) RelativeDatePeriod::START_CURRENT_QUARTER;
+%rename(end_current_quarter) RelativeDatePeriod::END_CURRENT_QUARTER;
+%rename(start_prev_quarter) RelativeDatePeriod::START_PREV_QUARTER;
+%rename(end_prev_quarter) RelativeDatePeriod::END_PREV_QUARTER;
+%rename(start_cal_year) RelativeDatePeriod::START_CAL_YEAR;
+%rename(end_cal_yea) RelativeDatePeriod::END_CAL_YEAR;
+%rename(start_prev_year) RelativeDatePeriod::START_PREV_YEAR;
+%rename(end_prev_year) RelativeDatePeriod::END_PREV_YEAR;
+%rename(start_accounting_period) RelativeDatePeriod::START_ACCOUNTING_PERIOD;
+%rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
 %typemap(typecheck, precedence=SWIG_TYPECHECK_INT64) time64 {
     $1 = scm_is_signed_integer($input, INT64_MAX, INT64_MIN);

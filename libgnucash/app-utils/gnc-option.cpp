@@ -152,7 +152,7 @@ GncOptionDateValue::get_value() const
     return static_cast<time64>(GncDateTime(now));
 }
 static const char* date_type_str[] {"absolute", "relative"};
-static const std::array<const char*, 16> date_period_str
+static const std::array<const char*, 15> date_period_str
 {
     "today",
     "start-this-month", "end-this-month",
