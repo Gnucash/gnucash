@@ -117,6 +117,8 @@ enum GncOptionUIType
     QUERY,
 };
 
+static const char* commodity_scm_intro{"'(commodity-scm "};
+
 struct OptionClassifier
 {
     std::string m_section;
@@ -243,6 +245,8 @@ public:
             throw std::invalid_argument("Validation failed, value not set.");
     }
     bool is_changed() const noexcept { return m_value != m_default_value; }
+    std::ostream& to_scheme(std::ostream&) const;
+    std::istream& from_scheme(std::istream&);
 private:
     ValueType m_value;
     ValueType m_default_value;
@@ -280,7 +284,7 @@ operator<< <GncOptionValue<bool>>(std::ostream& oss,
                                   const GncOptionValue<bool>& opt)
 {
     oss << (opt.get_value() ? "#t" : "#f");
-        return oss;
+    return oss;
 }
 
 template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<QofInstance*> >, int> = 0>
@@ -677,6 +681,49 @@ operator>> <GncOptionAccountValue>(std::istream& iss,
     iss.clear();
     return iss;
 }
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionAccountValue>, int> = 0>
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
+{
+    auto values{opt.get_value()};
+    oss << "'(\"";
+    bool first = true;
+    for (auto value : values)
+    {
+        if (first)
+            first = false;
+        else
+            oss << " \"";
+        oss << qof_instance_to_string(QOF_INSTANCE(value)) << '"';
+    }
+    oss << ')';
+    return oss;
+}
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionAccountValue>, int> = 0>
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, OptType& opt)
+{
+    GncOptionAccountList values;
+    iss.ignore(3, '"');
+    while (true)
+    {
+        std::string str;
+        std::getline(iss, str, '"');
+        if (!str.empty())
+        {
+            values.emplace_back((Account*)qof_instance_from_string(str, opt.get_ui_type()));
+            iss.ignore(2, '"');
+        }
+        else
+            break;
+    }
+    opt.set_value(values);
+    iss.ignore(1, ')');
+    return iss;
+}
+
 /** Date options
  * A legal date value is a pair of either and a RelativeDatePeriod, the absolute
  * flag and a time64, or for legacy purposes the absolute flag and a timespec.
@@ -969,8 +1016,83 @@ public:
         }, m_option);
     }
 
+    std::ostream& to_scheme(std::ostream& oss) const
+    {
+        return std::visit([&oss](auto& option) ->std::ostream& {
+                if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionAccountValue>)
+                        gnc_option_to_scheme(oss, option);
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionMultichoiceValue>)
+                        oss << "'" << option;
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionValue<QofInstance*>> ||
+                     std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionValidatedValue<QofInstance*>>)
+                        gnc_option_to_scheme(oss, option);
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionDateValue>)
+                        oss << "'(" << option << ")";
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                     std::string>)
+                        oss << '"' << option << '"';
+                else
+                    oss << option;
+                return oss;
+            }, m_option);
+    }
+
+    std::istream& from_scheme(std::istream& iss)
+    {
+        return std::visit([&iss](auto& option) ->std::istream& {
+                if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionAccountValue>)
+                        gnc_option_from_scheme(iss, option);
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionMultichoiceValue>)
+                    {
+                         iss.ignore(1, '\'');
+                         iss >> option;
+                    }
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionValue<QofInstance*>> ||
+                     std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionValidatedValue<QofInstance*>>)
+                        gnc_option_from_scheme(iss, option);
+                else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option)>,
+                     GncOptionDateValue>)
+                    {
+                         iss.ignore(2, '(');
+                         iss >> option;
+                         //operator >> clears the trailing ')'
+                    }
+                 else if constexpr
+                    (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                     std::string>)
+                    {
+                         iss.ignore(1, '"');
+                         std::string input;
+                         std::getline(iss, input, '"');
+                         option.set_value(input);
+                    }
+                else
+                    iss >> option;
+                return iss;
+            }, m_option);
+    }
+
     GncOptionVariant& _get_option() const { return m_option; }
 private:
+    inline static const std::string c_empty_string{""};
     mutable GncOptionVariant m_option;
 };
 

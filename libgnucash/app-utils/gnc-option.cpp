@@ -186,11 +186,15 @@ GncOptionDateValue::in_stream(std::istream& iss)
         time64 time;
         iss >> time;
         set_value(time);
+        if (iss.get() != ')')
+            iss.unget();
     }
     else if (type_str == "relative ")
     {
         std::string period_str;
         iss >> period_str;
+        if (period_str.back() == ')')
+            period_str.pop_back();
         auto period = std::find(date_period_str.begin(), date_period_str.end(),
                                 period_str);
         if (period == date_period_str.end())

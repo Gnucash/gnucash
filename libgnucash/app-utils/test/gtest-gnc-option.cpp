@@ -84,6 +84,26 @@ TEST(GncOption, test_string_stream_in)
     EXPECT_EQ(pepper, option.get_value<std::string>());
 }
 
+TEST(GncOption, test_string_to_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
+    std::ostringstream oss;
+    option.to_scheme(oss);
+    std::string scheme_str{"\""};
+    scheme_str += option.get_value<std::string>() + "\"";
+    EXPECT_EQ(oss.str(), scheme_str);
+}
+
+TEST(GncOption, test_string_from_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", std::string{"waldo"});
+    std::string pepper{"pepper"};
+    std::string scheme_str{"\"pepper\""};
+    std::istringstream iss{scheme_str};
+    option.from_scheme(iss);
+    EXPECT_EQ(pepper, option.get_value<std::string>());
+}
+
 TEST(GncOption, test_int64_t_value)
 {
     GncOption option("foo", "bar", "baz", "Phony Option", INT64_C(123456789));
@@ -109,6 +129,23 @@ TEST(GncOption, test_int64_stream_in)
     EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
 }
 
+TEST(GncOption, test_int64_to_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option",  INT64_C(123456789));
+    std::ostringstream oss;
+    option.to_scheme(oss);
+    EXPECT_STREQ(oss.str().c_str(), "123456789");
+}
+
+TEST(GncOption, test_int64_from_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option",  INT64_C(123456789));
+    std::string number{"987654321"};
+    std::istringstream iss{number};
+    option.from_scheme(iss);
+    EXPECT_EQ(INT64_C(987654321), option.get_value<int64_t>());
+}
+
 TEST(GncOption, test_bool_stream_out)
 {
     GncOption option("foo", "bar", "baz", "Phony Option", false);
@@ -129,6 +166,29 @@ TEST(GncOption, test_bool_stream_in)
     EXPECT_TRUE(option.get_value<bool>());
     iss.str("#f");
     iss >> option;
+    EXPECT_FALSE(option.get_value<bool>());
+}
+
+TEST(GncOption, test_bool_to_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", false);
+    std::ostringstream oss;
+    oss << option;
+    EXPECT_STREQ(oss.str().c_str(), "#f");
+    oss.str("");
+    option.set_value(true);
+    option.to_scheme(oss);
+    EXPECT_STREQ(oss.str().c_str(), "#t");
+}
+
+TEST(GncOption, test_bool_from_scheme)
+{
+    GncOption option("foo", "bar", "baz", "Phony Option", false);
+    std::istringstream iss("#t");
+    iss >> option;
+    EXPECT_TRUE(option.get_value<bool>());
+    iss.str("#f");
+    option.from_scheme(iss);
     EXPECT_FALSE(option.get_value<bool>());
 }
 
@@ -174,6 +234,34 @@ TEST_F(GncOptionTest, test_budget_in)
     EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<QofInstance*>());
     gnc_budget_destroy(budget);
 }
+
+TEST_F(GncOptionTest, test_budget_to_scheme)
+{
+    auto budget = gnc_budget_new(m_book);
+    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(budget)};
+
+    auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
+    std::ostringstream oss;
+    budget_guid.insert(0, "\"");
+    budget_guid += "\"";
+    option.to_scheme(oss);
+    EXPECT_EQ(budget_guid, oss.str());
+    gnc_budget_destroy(budget);
+}
+
+TEST_F(GncOptionTest, test_budget_from_scheme)
+{
+    auto budget = gnc_budget_new(m_book);
+    auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
+    budget_guid.insert(0, "\"");
+    budget_guid += "\"";
+    std::istringstream iss{budget_guid};
+    GncOption option{GncOptionValue<QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
+    option.from_scheme(iss);
+    EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<QofInstance*>());
+    gnc_budget_destroy(budget);
+}
+
 TEST_F(GncOptionTest, test_commodity_ctor)
 {
     auto hpe = gnc_commodity_new(m_book, "Hewlett Packard Enterprise, Inc.",
@@ -366,6 +454,48 @@ TEST_F(GncOptionCommodityTest, test_commodity_in)
     EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<QofInstance*>());
 }
 
+TEST_F(GncOptionCommodityTest, test_currency_to_scheme)
+{
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                       m_eur, true);
+
+    std::string eur_str{make_currency_SCM_str(m_eur)};
+    std::ostringstream oss;
+    option.to_scheme(oss);
+    EXPECT_EQ(eur_str, oss.str());
+}
+
+TEST_F(GncOptionCommodityTest, test_commodity_to_scheme)
+{
+    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_hpe),
+                     GncOptionUIType::COMMODITY};
+
+    std::string hpe_str{make_commodity_SCM_str(m_hpe)};
+    std::ostringstream oss;
+    option.to_scheme(oss);
+    EXPECT_EQ(hpe_str, oss.str());
+}
+
+TEST_F(GncOptionCommodityTest, test_currency_from_scheme)
+{
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                       m_eur, true);
+
+    std::string usd_str{make_currency_SCM_str(m_usd)};
+    std::istringstream iss{usd_str};
+    option.from_scheme(iss);
+    EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<QofInstance*>());
+}
+
+TEST_F(GncOptionCommodityTest, test_commodity_from_scheme)
+{
+    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_aapl),
+                     GncOptionUIType::COMMODITY};
+
+    std::string hpe_str{make_commodity_SCM_str(m_hpe)};
+    std::istringstream iss{hpe_str};
+    option.from_scheme(iss);
+    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<QofInstance*>());
 }
 
 class GncUIItem
@@ -459,8 +589,8 @@ TEST_F(GncRangeOption, test_range_in)
     EXPECT_THROW({ iss >> m_doubleoption; }, std::invalid_argument);
     EXPECT_NO_THROW({ iss >> m_intoption; });
     EXPECT_NO_THROW({ iss >> m_doubleoption; });
-    EXPECT_EQ(20, m_intoption.get_value());
-    EXPECT_EQ(2.0, m_doubleoption.get_value());
+    EXPECT_EQ(20, m_intoption.get_value<int>());
+    EXPECT_EQ(2.0, m_doubleoption.get_value<double>());
 }
 
 using AccountPair = std::pair<GncOptionAccountList&,
@@ -625,7 +755,7 @@ TEST_F(GncOptionAccountTest, test_account_list_out)
     GncOptionAccountList accsel{acclist[0]};
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
-                                 GncOptionUIType::ACCOUNT_LIST,
+                                               GncOptionUIType::ACCOUNT_LIST,
                                                accsel, {ACCT_TYPE_BANK}}};
     acc_guids = gnc::GUID{*qof_instance_get_guid(accsel[0])}.to_string();
 
@@ -651,7 +781,7 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
     GncOptionAccountList accsel{acclist[0]};
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
-                                 GncOptionUIType::ACCOUNT_LIST,
+                                               GncOptionUIType::ACCOUNT_LIST,
                                                accsel, {ACCT_TYPE_BANK}}};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
     acc_guids = gnc::GUID{*qof_instance_get_guid(acclistbad[1])}.to_string();
@@ -670,6 +800,81 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
     EXPECT_EQ(acclist[1], sel_option.get_value<GncOptionAccountList>()[0]);
 }
 
+static inline std::string
+make_account_list_SCM_str(const GncOptionAccountList& acclist)
+{
+    std::string retval{"'("};
+    bool first = true;
+    for (auto acc : acclist)
+    {
+        if (first)
+        {
+            first = false;
+            retval += '"';
+        }
+        else
+            retval += " \"";
+        retval += gnc::GUID{*qof_instance_get_guid(acc)}.to_string();
+        retval += '"';
+    }
+    retval += ')';
+    return retval;
+}
+
+TEST_F(GncOptionAccountTest, test_account_list_to_scheme)
+{
+    GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
+    GncOption option{GncOptionAccountValue {"foo", "bar", "baz", "Bogus Option",
+                                            GncOptionUIType::ACCOUNT_LIST,
+                                            acclist}};
+    std::ostringstream oss;
+    std::string acc_guids{make_account_list_SCM_str(acclist)};
+
+    option.to_scheme(oss);
+    EXPECT_EQ(acc_guids, oss.str());
+
+    GncOptionAccountList accsel{acclist[0]};
+    GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
+                                               "Bogus Option",
+                                               GncOptionUIType::ACCOUNT_LIST,
+                                               accsel, {ACCT_TYPE_BANK}}};
+    acc_guids = make_account_list_SCM_str(accsel);
+
+    oss.str("");
+    sel_option.to_scheme(oss);
+    EXPECT_EQ(acc_guids, oss.str());
+}
+
+TEST_F(GncOptionAccountTest, test_account_list_from_scheme)
+{
+    GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
+    GncOption option{GncOptionAccountValue{"foo", "bar", "baz", "Bogus Option",
+                                           GncOptionUIType::ACCOUNT_LIST,
+                                           acclist}};
+
+    std::string acc_guids{make_account_list_SCM_str(acclist)};
+    std::istringstream iss{acc_guids};
+    option.from_scheme(iss);
+    EXPECT_EQ(acclist, option.get_value<GncOptionAccountList>());
+
+    GncOptionAccountList accsel{acclist[0]};
+    GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
+                                               "Bogus Option",
+                                               GncOptionUIType::ACCOUNT_LIST,
+                                               accsel, {ACCT_TYPE_BANK}}};
+    GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
+    acc_guids = make_account_list_SCM_str(acclistbad);
+    iss.str(acc_guids);
+    sel_option.from_scheme(iss);
+    EXPECT_EQ(accsel, sel_option.get_value<GncOptionAccountList>());
+
+    iss.clear();  //Reset the failedbit from the invalid selection type.
+    acc_guids = make_account_list_SCM_str(GncOptionAccountList{acclist[1]});
+    EXPECT_NO_THROW({
+            iss.str(acc_guids);
+            sel_option.from_scheme(iss);
+        });
+    EXPECT_EQ(acclist[1], sel_option.get_value<GncOptionAccountList>()[0]);
 }
 
 class GncOptionMultichoiceTest : public ::testing::Test
@@ -678,11 +883,11 @@ protected:
     GncOptionMultichoiceTest() :
         m_option{GncOptionMultichoiceValue{"foo", "bar", "baz",
                                            "Phony Option", "plugh",
-            {
-                {"plugh", "xyzzy", "thud"},
-                {"waldo", "pepper", "salt"},
-                {"pork", "sausage", "links"},
-                {"corge", "grault", "garply"}
+                                           {
+                                               {"plugh", "xyzzy", "thud"},
+                                               {"waldo", "pepper", "salt"},
+                                               {"pork", "sausage", "links"},
+                                               {"corge", "grault", "garply"}
                                            }}} {}
     GncOption m_option;
 };
@@ -754,6 +959,23 @@ TEST_F(GncMultichoiceOption, test_multichoice_in)
     iss >> m_option;
     EXPECT_EQ(iss.str(), m_option.get_value<std::string>());
 }
+
+TEST_F(GncMultichoiceOption, test_multichoice_scheme_out)
+{
+    std::ostringstream oss;
+    m_option.to_scheme(oss);
+    std::string scm_str{'\''};
+    scm_str += m_option.get_value<std::string>();
+    EXPECT_EQ(scm_str, oss.str());
+}
+
+TEST_F(GncMultichoiceOption, test_multichoice_scheme_in)
+{
+    std::istringstream iss{"'pork"};
+    m_option.from_scheme(iss);
+    EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
+}
+
 class GncOptionDateOptionTest : public ::testing::Test
 {
 protected:
@@ -1132,5 +1354,66 @@ TEST_F(GncDateOption, test_stream_in_prev_year_end)
     time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
     std::istringstream iss{"relative . end-prev-year"};
     iss >> m_option;
+    EXPECT_EQ(time1, m_option.get_value<time64>());
+}
+
+/* We only need wiggle tests for to_scheme and from_scheme as they just wrap or
+unwrap the normal stream output with "'(" and ")".
+*/
+
+TEST_F(GncDateOption, test_date_option_to_scheme)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+    m_option.set_value(time1);
+    std::ostringstream oss;
+    oss << time1;
+    std::string timestr{"'(absolute . "};
+    timestr += oss.str();
+    timestr += ')';
+    oss.str("");
+    m_option.to_scheme(oss);
+    EXPECT_EQ(oss.str(), timestr);
+
+    m_option.set_value(RelativeDatePeriod::TODAY);
+    oss.str("");
+    m_option.to_scheme(oss);
+    EXPECT_STREQ(oss.str().c_str(), "'(relative . today)");
+
+    m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
+    oss.str("");
+    m_option.to_scheme(oss);
+    EXPECT_STREQ(oss.str().c_str(), "'(relative . start-this-month)");
+
+}
+
+TEST_F(GncDateOption, test_date_option_from_scheme)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+    std::ostringstream oss;
+    oss << time1;
+    std::string timestr{"'(absolute . "};
+    timestr += oss.str();
+    timestr += ')';
+
+    std::istringstream iss{timestr};
+    m_option.from_scheme(iss);
+    EXPECT_EQ(time1, m_option.get_value<time64>());
+
+    GDate month_start;
+    g_date_set_time_t(&month_start, time(nullptr));
+    gnc_gdate_set_month_start(&month_start);
+    time1 = time64_from_gdate(&month_start, DayPart::start);
+    iss.clear();
+    iss.str("'(relative . start-this-month)");
+    m_option.from_scheme(iss);
+    EXPECT_EQ(time1, m_option.get_value<time64>());
+
+    GDate month_end;
+    g_date_set_time_t(&month_end, time(nullptr));
+    gnc_gdate_set_month_end(&month_end);
+    time1 = time64_from_gdate(&month_end, DayPart::end);
+    iss.clear();
+    iss.str("'(relative . end-this-month)");
+    m_option.from_scheme(iss);
     EXPECT_EQ(time1, m_option.get_value<time64>());
 }
