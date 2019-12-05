@@ -676,15 +676,25 @@ Transaction *
 xaccTransClone (const Transaction *from)
 {
     Transaction *to = xaccTransCloneNoKvp (from);
-    int i = 0;
-    int length = g_list_length (from->splits);
+    GList *lfrom, *lto;
 
     xaccTransBeginEdit (to);
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
-    g_assert (g_list_length (to->splits) == length);
-    for (i = 0; i < length; ++i)
-	xaccSplitCopyKvp (g_list_nth_data (from->splits, i),
-			    g_list_nth_data (to->splits, i));
+    g_return_val_if_fail (g_list_length (to->splits) == g_list_length (from->splits),
+                          NULL);
+
+    lfrom = from->splits;
+    lto = to->splits;
+
+    /* lfrom and lto are known to be of equal length via above
+       g_return_val_if_fail */
+    while (lfrom != NULL)
+    {
+        xaccSplitCopyKvp (lfrom->data, lto->data);
+        lfrom = lfrom->next;
+        lto = lto->next;
+    }
+
     xaccTransCommitEdit (to);
     return to;
 }
