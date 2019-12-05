@@ -268,12 +268,12 @@ typedef char gchar;
 
 %typemap(out) GList *, CommodityList *, SplitList *, AccountList *, LotList *,
     MonetaryList *, PriceList *, EntryList * {
-    guint i;
     gpointer data;
+    GList *l;
     PyObject *list = PyList_New(0);
-    for (i = 0; i < g_list_length($1); i++)
+    for (l = $1; l != NULL; l = l->next)
     {
-        data = g_list_nth_data($1, i);
+        data = l->data;
         if (GNC_IS_ACCOUNT(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Account, 0));
         else if (GNC_IS_SPLIT(data))
