@@ -119,6 +119,9 @@ enum GncOptionUIType
 
 static const char* commodity_scm_intro{"'(commodity-scm "};
 
+size_t constexpr classifier_size_max{50};
+size_t constexpr sort_tag_size_max{10};
+
 struct OptionClassifier
 {
     std::string m_section;

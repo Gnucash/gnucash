@@ -83,13 +83,13 @@ public:
 //    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
     void commit();
-    std::optional<std::reference_wrapper<GncOptionSection>> find_section(const char* section);
-    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name) {
+    std::optional<std::reference_wrapper<GncOptionSection>> find_section(const std::string& section);
+    std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) {
         return static_cast<const GncOptionDB&>(*this).find_option(section, name);
     }
-    std::optional<std::reference_wrapper<GncOption>> find_option(const char* section, const char* name) const;
 private:
     std::ostream& serialize_option_scheme(std::ostream& oss,
+    std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) const;
                                           const char* option_prolog,
                                           const char* section, const char* name) const noexcept;
     std::ostream& serialize_option_key_value(std::ostream& oss,

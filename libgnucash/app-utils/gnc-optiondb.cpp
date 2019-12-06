@@ -124,13 +124,13 @@ GncOptionDB::set_option_from_ui(const char* section, const char* name,
 
 
 std::optional<std::reference_wrapper<GncOptionSection>>
-GncOptionDB::find_section(const char* section)
+GncOptionDB::find_section(const std::string& section)
 {
     auto db_section = std::find_if(
         m_sections.begin(), m_sections.end(),
-        [section](GncOptionSection sect) -> bool
+        [&section](GncOptionSection sect) -> bool
         {
-            return sect.first == std::string{section};
+            return section.compare(0, classifier_size_max, sect.first) == 0;
         });
     if (db_section == m_sections.end())
         return std::nullopt;
@@ -138,16 +138,17 @@ GncOptionDB::find_section(const char* section)
 }
 
 std::optional<std::reference_wrapper<GncOption>>
-GncOptionDB::find_option(const char* section, const char* name) const
+GncOptionDB::find_option(const std::string& section, const std::string& name) const
 {
     auto db_section = const_cast<GncOptionDB*>(this)->find_section(section);
     if (!db_section)
         return std::nullopt;
     auto db_opt = std::find_if(
         db_section->get().second.begin(), db_section->get().second.end(),
-        [name](GncOption& option) -> bool
+        [&name](GncOption& option) -> bool
         {
-            return option.get_name() == std::string{name};
+            return name.compare(0, classifier_size_max - 1,
+                                  option.get_name()) == 0;
         });
     if (db_opt == db_section->get().second.end())
         return std::nullopt;
