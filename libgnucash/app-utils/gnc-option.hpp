@@ -178,6 +178,8 @@ private:
     GncOptionUIType m_ui_type;
 };
 
+auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
+
 template <typename ValueType>
 class GncOptionValue : public OptionClassifier, public OptionUIItem
 {
@@ -496,7 +498,7 @@ public:
             if (value)
             {
                 if (auto index = find_key(value);
-                    index != std::numeric_limits<std::size_t>::max())
+                    index != size_t_max)
                 {
                     m_value = index;
                     m_default_value = index;
@@ -520,13 +522,13 @@ public:
      bool validate(const std::string& value) const noexcept
     {
         auto index = find_key(value);
-        return index != std::numeric_limits<std::size_t>::max();
+        return index != size_t_max;
 
     }
     void set_value(const std::string& value)
     {
         auto index = find_key(value);
-        if (index != std::numeric_limits<std::size_t>::max())
+        if (index != size_t_max)
             m_value = index;
         else
             throw std::invalid_argument("Value not a valid choice.");
@@ -562,7 +564,7 @@ private:
         if (iter != m_choices.end())
             return iter - m_choices.begin();
         else
-            return std::numeric_limits<std::size_t>::max();
+            return size_t_max;
 
     }
     std::size_t m_value;
@@ -956,7 +958,7 @@ public:
                                                     GncOptionMultichoiceValue>)
                                         return option.num_permissible_values();
                        else
-                           return std::numeric_limits<std::size_t>::max();
+                           return size_t_max;
                    }, m_option);
     }
 
@@ -967,7 +969,7 @@ public:
                                                     GncOptionMultichoiceValue>)
                                         return option.permissible_value_index(value);
                        else
-                           return std::numeric_limits<std::size_t>::max();;
+                           return size_t_max;;
                    }, m_option);
     }
 
