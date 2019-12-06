@@ -179,9 +179,12 @@ GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
 std::istream&
 GncOptionDateValue::in_stream(std::istream& iss)
 {
-    std::string type_str;
-    std::getline(iss, type_str, '.');
-    if (type_str == "absolute ")
+    char type_str[10]; //The length of both "absolute" and "relative" plus 1.
+    iss.getline(type_str, sizeof(type_str), '.');
+    if(!iss)
+        throw std::invalid_argument("Date Type separator missing");
+    /* strcmp is safe, istream::getline null terminates the buffer. */
+    if (strcmp(type_str, "absolute ") == 0)
     {
         time64 time;
         iss >> time;
@@ -189,7 +192,7 @@ GncOptionDateValue::in_stream(std::istream& iss)
         if (iss.get() != ')')
             iss.unget();
     }
-    else if (type_str == "relative ")
+    else if (strcmp(type_str, "relative ") == 0)
     {
         std::string period_str;
         iss >> period_str;
