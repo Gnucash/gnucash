@@ -94,6 +94,8 @@ typedef struct
 
     GtkWidget   *language_combo;
     GtkWidget   *region_combo;
+    GtkWidget   *region_label;
+
     const gchar *gnc_accounts_dir;
 
     GtkTreeView *categories_tree;
@@ -315,6 +317,7 @@ region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
     if (gtk_combo_box_get_active_iter (widget, &filter_iter))
     {
         GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
+        GtkTreeModel *cat_model = gtk_tree_view_get_model (data->categories_tree);
         GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(data->categories_tree));
         GSList *list;
         GtkTreePath *path;
@@ -325,13 +328,22 @@ region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
 
         gtk_tree_model_get (region_model, &region_iter, LANG_REG_STRING, &lang_reg, -1);
 
+        gnc_suspend_gui_refresh ();
+
+        /* Remove the old account tree */
+        if (data->category_accounts_tree)
+            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+        data->category_accounts_tree = NULL;
+
         // clear the categories list store in prep for new load
         if (cat_list)
             gtk_list_store_clear (cat_list);
 
         account_path = g_build_filename (data->gnc_accounts_dir, lang_reg, NULL);
 
+        qof_event_suspend ();
         list = gnc_load_example_account_list (account_path);
+        qof_event_resume ();
 
         if (data->initial_category)
         {
@@ -356,6 +368,10 @@ region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
 
         // now load the account tree
         categories_tree_selection_changed (selection, data);
+
+        gnc_resume_gui_refresh ();
+
+        g_slist_free (list);
     }
     g_free (account_path);
     g_free (lang_reg);
@@ -368,6 +384,7 @@ region_combo_change_filter_cb (GtkComboBox *widget, hierarchy_data  *data)
     GtkTreeModel *filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->region_combo));
     GtkTreeModel *region_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter_model));
     GtkTreeIter language_iter, region_iter, sorted_iter;
+    gboolean have_one_region = FALSE;
 
     if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX(data->language_combo), &sorted_iter))
     {
@@ -411,20 +428,41 @@ region_combo_change_filter_cb (GtkComboBox *widget, hierarchy_data  *data)
             valid = gtk_tree_model_iter_next (region_model, &region_iter);
         }
 
-        // clear the categories list store in prep for new load
-        if (cat_list)
-            gtk_list_store_clear (cat_list);
-
         // if we only have a language or just one region activate it
         if (count == 1)
         {
+            gchar *region_label = NULL;
             GtkTreeIter filter_iter;
             gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
                                                               &filter_iter,
                                                               iter);
 
             gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
+
+            have_one_region = TRUE;
+
+            gtk_tree_model_get (region_model, iter, REGION_STRING, &region_label, -1);
+
+            gtk_label_set_text (GTK_LABEL(data->region_label), region_label);
+            g_free (region_label);
         }
+        else
+        {
+            // if the combo is not already active, set it to first on in filtered list
+            if (gtk_combo_box_get_active (GTK_COMBO_BOX(data->region_combo)) == -1)
+            {
+                GtkTreeIter filter_iter;
+
+                gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
+                                                                  &filter_iter,
+                                                                  iter);
+
+                gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
+            }
+        }
+        gtk_widget_set_visible (GTK_WIDGET(data->region_label), have_one_region);
+        gtk_widget_set_visible (GTK_WIDGET(data->region_combo), !have_one_region);
+
         gtk_tree_iter_free (iter);
         g_free (language);
     }
@@ -687,7 +725,9 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
     data->gnc_accounts_dir = gnc_path_get_accountsdir ();
     locale_dir = gnc_get_ea_locale_dir (data->gnc_accounts_dir);
 
+    qof_event_suspend ();
     list = gnc_load_example_account_list (locale_dir);
+    qof_event_resume ();
 
     update_language_region_combos (data, locale_dir);
 
@@ -740,14 +780,20 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
                                           COL_TITLE,
                                           GTK_SORT_ASCENDING);
 
+    selection = gtk_tree_view_get_selection (tree_view);
+
     if (data->initial_category)
     {
-        path = gtk_tree_row_reference_get_path(data->initial_category);
-        selection = gtk_tree_view_get_selection(tree_view);
-        gtk_tree_view_scroll_to_cell(tree_view, path, NULL, TRUE, 0.5, 0.5);
-        gtk_tree_selection_select_path(selection, path);
-        gtk_tree_path_free(path);
+        path = gtk_tree_row_reference_get_path (data->initial_category);
+        gtk_tree_view_scroll_to_cell (tree_view, path, NULL, TRUE, 0.5, 0.5);
     }
+    else
+        path = gtk_tree_path_new_first ();
+
+    gtk_tree_selection_select_path (selection, path);
+    gtk_tree_path_free (path);
+
+    g_slist_free (list);
 }
 
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
@@ -1566,6 +1612,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     data->language_combo = GTK_WIDGET(gtk_builder_get_object (builder, "language_combo"));
     data->region_combo = GTK_WIDGET(gtk_builder_get_object (builder, "region_combo"));
+    data->region_label = GTK_WIDGET(gtk_builder_get_object (builder, "region_label"));
 
     data->category_accounts_label = GTK_LABEL(gtk_builder_get_object (builder, "accounts_in_category_label"));
     data->category_accounts_container = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_in_category"));
