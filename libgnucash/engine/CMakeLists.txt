@@ -273,7 +273,6 @@ set (engine_SCHEME_0
 
 set (engine_SCHEME_1
     commodity-table.scm
-    engine-interface.scm
     engine-utilities.scm
     gnc-numeric.scm
 )
