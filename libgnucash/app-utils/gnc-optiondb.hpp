@@ -87,30 +87,31 @@ public:
     std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) {
         return static_cast<const GncOptionDB&>(*this).find_option(section, name);
     }
-private:
-    std::ostream& serialize_option_scheme(std::ostream& oss,
     std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) const;
-                                          const char* option_prolog,
-                                          const char* section, const char* name) const noexcept;
-    std::ostream& serialize_option_key_value(std::ostream& oss,
+    std::ostream& save_option_scheme(std::ostream& oss,
+                                     const char* option_prolog,
+                                     const std::string& section,
+                                     const std::string& name) const noexcept;
+    std::istream& load_option_scheme(std::istream& iss) noexcept;
+    std::ostream& save_option_key_value(std::ostream& oss,
                                              const char* section,
                                              const char* name) const noexcept;
-    void load_option_scheme(std::istream iss);
-    void load_option_key_value(std::istream iss);
+    std::istream& load_option_key_value(std::istream& iss);
+private:
     std::optional<std::reference_wrapper<GncOptionSection>> m_default_section;
     std::vector<GncOptionSection> m_sections;
     bool m_dirty = false;
 
     std::function<GncOptionUIItem*()> m_get_ui_value;
     std::function<void(GncOptionUIItem*)> m_set_ui_value;
-    static constexpr char const* const c_scheme_serialization_elements[]
+    static constexpr char const* const scheme_tags[]
     {
         "(let ((option (gnc:lookup-option ",
-        "\n                                 ",
-        ")))\n   ((lambda (o) (if o (gnc:option-set-value o",
-        "))) option))\n\n"
+        "                                 ",
+        ")))",
+        "   ((lambda (o) (if o (gnc:option-set-value o ",
+        "))) option))"
         };
-
 };
 
 /**

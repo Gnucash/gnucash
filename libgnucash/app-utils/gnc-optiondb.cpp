@@ -22,7 +22,10 @@
 \********************************************************************/
 
 #include "gnc-optiondb.hpp"
+#include <limits>
+#include <sstream>
 
+auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
 GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}
 
 GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
@@ -175,24 +178,53 @@ GncOptionDB::make_internal(const char* section, const char* name)
 }
 
 std::ostream&
-GncOptionDB::serialize_option_scheme(std::ostream& oss,
-                                     const char* option_prolog,
-                                     const char* section, const char* name) const noexcept
+GncOptionDB::save_option_scheme(std::ostream& oss,
+                                const char* option_prolog,
+                                const std::string& section,
+                                const std::string& name) const noexcept
 {
     auto db_opt = find_option(section, name);
+
     if (!db_opt || !db_opt->get().is_changed())
         return oss;
-    oss << c_scheme_serialization_elements[0] << option_prolog;
-    oss << c_scheme_serialization_elements[1] << section;
-    oss << c_scheme_serialization_elements[1] << name; //repeats, not an error!
-//    oss << c_scheme_serialization_elements[2] << db_opt->get();
-    oss << c_scheme_serialization_elements[3];
+    oss << scheme_tags[0] << option_prolog << "\n";
+    oss << scheme_tags[1] << '"' << section.substr(0, classifier_size_max) << "\"\n";
+    oss << scheme_tags[1] << '"' << name.substr(0, classifier_size_max) << '"';
+    oss  <<  scheme_tags[2] << "\n" << scheme_tags[3];
+    db_opt->get().to_scheme(oss);
+    oss << scheme_tags[4] << "\n\n";
 
     return oss;
 }
+std::istream&
+GncOptionDB::load_option_scheme(std::istream& iss) noexcept
+{
+    std::string section{classifier_size_max};
+    std::string name{classifier_size_max};
+    iss.ignore(strlen(scheme_tags[0]) + 7, '\n'); //throw away the scheme noise;
+    iss >> section; // Whitespace automatically discarded.
+    iss >> name; // Ditto
+    if (section.size() > 2)
+        section = section.substr(1, section.size() - 2); //Trim the quotes
+    if (name.size() > 2 + strlen(scheme_tags[2]))
+    name = name.substr(1, name.size() - (2 + strlen(scheme_tags[2])));
+    auto option = find_option(section.c_str(), name.c_str());
+    if (!option)
+    {
+        std::cerr << "Option " << section << ":" << name << " not found." << std::endl;
+        iss.ignore(stream_max, '\n'); // No option, discard the line
+        iss.ignore(stream_max, '\n'); // And the trailing newline
+        return iss;
+    }
+    iss.ignore(strlen(scheme_tags[2]) +1, '\n');
+    iss.ignore(strlen(scheme_tags[3]));
+    option->get().from_scheme(iss);
+    iss.ignore(strlen(scheme_tags[4]) + 2, '\n'); //discard the noise at the end.
+    return iss;
+}
 
 std::ostream&
-GncOptionDB::serialize_option_key_value(std::ostream& oss,
+GncOptionDB::save_option_key_value(std::ostream& oss,
                                         const char* section,
                                         const char* name) const noexcept
 {
@@ -200,13 +232,30 @@ GncOptionDB::serialize_option_key_value(std::ostream& oss,
     auto db_opt = find_option(section, name);
     if (!db_opt || !db_opt->get().is_changed())
         return oss;
-    oss << section << ":" << name << "=" /* << db_opt->get() */ << ";";
+    oss << section << ":" << name << "=" << db_opt->get() << ";";
     return oss;
 }
 
-void
-GncOptionDB::commit()
+std::istream&
+GncOptionDB::load_option_key_value(std::istream& iss)
 {
+
+    char section[classifier_size_max], name[classifier_size_max];
+    iss.getline(section, classifier_size_max, ':');
+    iss.getline(name, classifier_size_max, '=');
+    if (!iss)
+        throw std::invalid_argument("Section or name delimiter not found or values too long");
+    auto option = find_option(section, name);
+    if (!option)
+        iss.ignore(stream_max, ';');
+    else
+    {
+        std::string value;
+        std::getline(iss, value, ';');
+        std::istringstream item_iss{value};
+        item_iss >> option->get();
+    }
+    return iss;
 }
 
 GncOptionDBPtr

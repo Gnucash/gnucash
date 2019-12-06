@@ -276,3 +276,72 @@ TEST_F(GncOptionDBUITest, test_option_value_from_ui)
         });
     EXPECT_STREQ(value, m_db->lookup_string_option("foo", "bar").c_str());
 }
+
+class GncOptionDBIOTest : public ::testing::Test
+{
+protected:
+    GncOptionDBIOTest() : m_db{gnc_option_db_new()}
+    {
+        gnc_register_string_option(m_db, "foo", "bar", "baz", "Phony Option",
+                                   std::string{"waldo"});
+        gnc_register_text_option(m_db, "foo", "sausage", "links",
+                                 "Phony Option", std::string{"waldo"});
+        gnc_register_string_option(m_db, "qux", "grault", "baz", "Phony Option",
+                                   std::string{""});
+        gnc_register_text_option(m_db, "qux", "garply", "fred",
+                                   "Phony Option", std::string{"waldo"});
+    }
+
+    GncOptionDBPtr m_db;
+};
+
+TEST_F(GncOptionDBIOTest, test_option_scheme_output)
+{
+    std::ostringstream oss;
+    m_db->save_option_scheme(oss, "option", "foo", "sausage");
+    EXPECT_STREQ("", oss.str().c_str());
+    oss.clear();
+    m_db->set_option("foo", "sausage", std::string{"pepper"});
+    EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+    EXPECT_TRUE(m_db->find_option("foo", "sausage")->get().is_changed());
+    oss.flush();
+    m_db->save_option_scheme(oss, "option", "foo", "sausage");
+    EXPECT_STREQ("(let ((option (gnc:lookup-option option\n"
+                 "                                 \"foo\"\n"
+                 "                                 \"sausage\")))\n"
+                 "   ((lambda (o) (if o (gnc:option-set-value o \"pepper\""
+                 "))) option))\n\n", oss.str().c_str());
+}
+
+TEST_F(GncOptionDBIOTest, test_option_scheme_input)
+{
+    const char* input{"(let ((option (gnc:lookup-option option\n"
+                 "                                 \"foo\"\n"
+                 "                                 \"sausage\")))\n"
+                 "   ((lambda (o) (if o (gnc:option-set-value o \"pepper\""
+            "))) option))\n\n"};
+    std::istringstream iss{input};
+    EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "sausage").c_str());
+    m_db->load_option_scheme(iss);
+    EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+}
+
+TEST_F(GncOptionDBIOTest, test_option_key_value_output)
+{
+    std::ostringstream oss;
+    m_db->save_option_key_value(oss, "foo", "sausage");
+    EXPECT_STREQ("", oss.str().c_str());
+    m_db->set_option("foo", "sausage", std::string{"pepper"});
+//    EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+//    EXPECT_TRUE(m_db->find_option("foo", "sausage")->get().is_changed());
+    m_db->save_option_key_value(oss, "foo", "sausage");
+    EXPECT_STREQ("foo:sausage=pepper;", oss.str().c_str());
+}
+
+TEST_F(GncOptionDBIOTest, test_option_key_value_input)
+{
+    std::istringstream iss{"foo:sausage=pepper;"};
+    EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "sausage").c_str());
+    m_db->load_option_key_value(iss);
+    EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+}
