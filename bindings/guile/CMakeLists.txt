@@ -137,17 +137,10 @@ gnc_add_scheme_targets(scm-gnc-module
     FALSE
 )
 
-gnc_add_scheme_targets(price-quotes
-    price-quotes.scm
-    gnucash
-    "scm-engine;scm-app-utils;scm-gnome-utils"
-    FALSE)
-
 set_local_dist(guile_DIST_local
     CMakeLists.txt
     core-utils.scm
     gnc-module.scm
-    price-quotes.scm
     ${guile_SOURCES}
     ${guile_HEADERS}
     ${engine_SCHEME_0}

@@ -11,7 +11,6 @@ bindings/guile/gnc-guile-utils.c
 bindings/guile/gnc-kvp-guile.cpp
 bindings/guile/gnc-module.scm
 bindings/guile/gnc-numeric.scm
-bindings/guile/price-quotes.scm
 bindings/guile/utilities.scm
 borrowed/goffice/go-charmap-sel.c
 borrowed/goffice/go-glib-extras.c
@@ -383,6 +382,7 @@ gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
 gnucash/import-export/qif-imp/string.scm
+gnucash/price-quotes.scm
 gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c
 gnucash/register/ledger-core/gncEntryLedgerControl.c
