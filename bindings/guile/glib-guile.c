@@ -293,7 +293,7 @@ gnc_process_get_fd (const Process *proc, const gint std_fd)
         g_return_val_if_reached (-1);
 
     if (*retptr == -1)
-        g_warning ("Pipe to childs file descriptor %d is -1", std_fd);
+        g_warning ("Pipe to child's file descriptor %d is -1", std_fd);
     return *retptr;
 }
 
@@ -306,21 +306,21 @@ gnc_detach_process (Process *proc, const gboolean kill_it)
     close (proc->fd_stdin);
     if (errno)
     {
-        g_message ("Close of childs stdin (%d) failed: %s", proc->fd_stdin,
+        g_message ("Close of child's stdin (%d) failed: %s", proc->fd_stdin,
                    g_strerror (errno));
         errno = 0;
     }
     close (proc->fd_stdout);
     if (errno)
     {
-        g_message ("Close of childs stdout (%d) failed: %s", proc->fd_stdout,
+        g_message ("Close of child's stdout (%d) failed: %s", proc->fd_stdout,
                    g_strerror(errno));
         errno = 0;
     }
     close (proc->fd_stderr);
     if (errno)
     {
-        g_message ("Close of childs stderr (%d) failed: %s", proc->fd_stderr,
+        g_message ("Close of child's stderr (%d) failed: %s", proc->fd_stderr,
                    g_strerror(errno));
         errno = 0;
     }
