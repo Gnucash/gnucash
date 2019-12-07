@@ -19,8 +19,6 @@
 
 (define-module (tests test-engine-extras))
 
-(use-modules (gnucash gnc-module))
-
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (srfi srfi-1))

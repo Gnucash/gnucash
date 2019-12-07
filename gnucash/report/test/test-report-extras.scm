@@ -19,7 +19,6 @@
 
 (define-module (tests test-report-extras))
 
-(use-modules (gnucash gnc-module))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash report))
 (use-modules (sxml simple))

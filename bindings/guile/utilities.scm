@@ -31,7 +31,6 @@
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
-(use-modules (gnucash gnc-module))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
