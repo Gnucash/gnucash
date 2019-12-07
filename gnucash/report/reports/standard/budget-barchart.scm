@@ -32,7 +32,6 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report" 0)
-(use-modules (gnucash reports))
 
 (define reportname
   (N_ "Budget Chart"))

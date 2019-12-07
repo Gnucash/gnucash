@@ -34,6 +34,7 @@ set(GUILE_DEPENDS
   scm-scm
   scm-report-2
   scm-test-report
+  scm-report-stylesheets
   )
 gnc_add_scheme_tests("${scm_test_report_SOURCES}")
 
