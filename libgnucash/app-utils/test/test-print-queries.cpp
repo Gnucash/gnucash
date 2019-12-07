@@ -26,8 +26,7 @@ extern "C"
 #include <glib.h>
 #include "guile-mappings.h"
 
-#include "engine-helpers-guile.h"
-#include "gnc-module.h"
+#include "gnc-engine-guile.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"
@@ -77,8 +76,7 @@ main_helper (void *closure, int argc, char **argv)
 {
     int count = 50;
 
-    gnc_module_load("gnucash/engine", 0);
-    gnc_module_load("gnucash/app-utils", 0);
+    scm_c_use_module("gnucash app-utils");
 
     if (argc > 1)
         count = atoi (argv[1]);

@@ -60,25 +60,14 @@ extern SCM scm_init_sw_report_module(void);
 int
 libgncmod_report_gnc_module_init(int refcount)
 {
-    /* load the engine (we depend on it) */
-    if (!gnc_module_load("gnucash/engine", 0))
-    {
-        return FALSE;
-    }
-
-    if (!gnc_module_load("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
     scm_init_sw_report_module();
 
-    scm_c_eval_string("(use-modules (gnucash report))");
+    scm_c_use_module ("gnucash report");
 
     /* if this is the first time the module's being loaded, initialize
      * the relative date system */
     if (refcount == 0)
     {
-        scm_c_eval_string("(gnc:reldate-initialize)");
         scm_c_eval_string("(report-module-loader (list '(gnucash report stylesheets)))");
     }
 

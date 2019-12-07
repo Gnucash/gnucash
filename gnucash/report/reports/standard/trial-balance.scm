@@ -52,11 +52,11 @@
 
 (define-module (gnucash reports standard trial-balance))
 (use-modules (srfi srfi-1))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define reportname (N_ "Trial Balance"))
 

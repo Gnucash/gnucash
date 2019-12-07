@@ -25,12 +25,12 @@
 
 (define-module (gnucash reports standard account-piecharts))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/report" 0)
 
 (define menuname-income (N_ "Income Piechart"))
 (define menuname-expense (N_ "Expense Piechart"))

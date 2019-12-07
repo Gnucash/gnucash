@@ -29,12 +29,12 @@
 (define-module (gnucash reports standard customer-summary))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))                ; for gnc:debug
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (gnucash reports))
-
-(gnc:module-load "gnucash/report" 0)
 
 ;; Option names
 (define optname-from-date (N_ "From"))

@@ -31,8 +31,7 @@ set(GUILE_DEPENDS
   scm-app-utils
   scm-engine
   scm-test-engine
-  scm-gettext
-  scm-scm
+  scm-core-utils
   scm-test-report
   scm-reports
   scm-report-stylesheets

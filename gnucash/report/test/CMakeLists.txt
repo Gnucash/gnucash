@@ -28,10 +28,9 @@ set(GUILE_DEPENDS
   scm-gnc-module
   scm-app-utils
   scm-core-utils
-  scm-gettext
+  scm-core-utils
   scm-engine
   scm-test-engine
-  scm-scm
   scm-report-2
   scm-test-report
   scm-report-stylesheets

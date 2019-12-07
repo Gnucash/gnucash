@@ -1366,5 +1366,5 @@ void
 gnc_ui_hierarchy_assistant_initialize (void)
 {
     gnc_hook_add_dangler(HOOK_NEW_BOOK,
-                         (GFunc)gnc_ui_hierarchy_assistant_hook, NULL);
+                         (GFunc)gnc_ui_hierarchy_assistant_hook, NULL, NULL);
 }

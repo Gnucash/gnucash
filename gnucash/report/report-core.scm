@@ -20,12 +20,17 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-report" "scm_init_sw_report_module"))
 (use-modules (sw_report))
+
+; Export the swig-wrapped symbols in the public interface of this module
+(let ((i (module-public-interface (current-module))))
+     (module-use! i (resolve-interface '(sw_report))))
 
 ;; Terminology in this file:
 ;; report-template: a report definition of some form. This can be a report

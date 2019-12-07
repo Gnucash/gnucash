@@ -18,11 +18,9 @@ set (app_utils_HEADERS
   gnc-account-merge.h
   gnc-accounting-period.h
   gnc-addr-quickfill.h
-  gnc-component-manager.h
   gnc-entry-quickfill.h
   gnc-euro.h
   gnc-exp-parser.h
-  gnc-gettext-util.h
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-helpers.h
@@ -31,21 +29,20 @@ set (app_utils_HEADERS
   gnc-sx-instance-model.h
   gnc-ui-util.h
   gnc-ui-balances.h
-  guile-util.h
   option-util.h
 )
 
 # Command to generate the swig-app-utils-guile.c wrapper file
 gnc_add_swig_guile_command (swig-apputils-guile-c
     SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
 )
 
 # Command to generate the swig-app-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-app-utils-python
     SWIG_APP_UTILS_PYTHON_C SWIG_APP_UTILS_PYTHON_PY
     swig-app-utils-python.c sw_app_utils.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
 )
 
 set (app_utils_SOURCES
@@ -58,11 +55,9 @@ set (app_utils_SOURCES
   gnc-account-merge.c
   gnc-accounting-period.c
   gnc-addr-quickfill.c
-  gnc-component-manager.c
   gnc-entry-quickfill.c
   gnc-euro.c
   gnc-exp-parser.c
-  gnc-gettext-util.c
   gnc-gsettings.c
   gnc-helpers.c
   gnc-prefs-utils.c
@@ -70,17 +65,27 @@ set (app_utils_SOURCES
   gnc-state.c
   gnc-ui-util.c
   gnc-ui-balances.c
-  gncmod-app-utils.c
-  guile-util.c
   option-util.c
 )
 
 set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
-set(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GIO_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
-set(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation ${GIO_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIRS}
-    ${LIBXSLT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libgnucash/backend ${CMAKE_SOURCE_DIR}/libgnucash/engine)
+set(app_utils_ALL_LIBRARIES
+    gnc-engine
+    gnc-module
+    gnc-locale-tax
+    gnucash-guile
+    ${GIO_LDFLAGS}
+    ${LIBXML2_LDFLAGS}
+    ${LIBXSLT_LDFLAGS})
+set(app_utils_ALL_INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}/calculation
+    ${GIO_INCLUDE_DIRS}
+    ${LIBXML2_INCLUDE_DIRS}
+    ${LIBXSLT_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/libgnucash/backend
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 
 if (WIN32)
   list(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
@@ -89,22 +94,22 @@ if (WIN32)
 endif()
 
 
-add_library (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
-target_link_libraries(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
+add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 
-target_include_directories (gncmod-app-utils
+target_include_directories (gnc-app-utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${app_utils_ALL_INCLUDES}
 )
-target_compile_definitions (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+target_compile_definitions (gnc-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
 if (APPLE)
-  set_target_properties (gncmod-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gnc-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gncmod-app-utils
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+install(TARGETS gnc-app-utils
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
@@ -112,7 +117,7 @@ if (WITH_PYTHON)
   set(PYEXEC_FILES sw_app_utils.py)
   add_library (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
 
-  target_link_libraries(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(sw_app_utils gnc-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
   set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
   if (HAVE_STRINGOP_TRUNCATION)
     target_compile_options(sw_app_utils PRIVATE -Wno-error=stringop-truncation)
@@ -125,7 +130,7 @@ if (WITH_PYTHON)
   target_compile_definitions (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
   if (APPLE)
-    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
   endif()
 
   install(TARGETS sw_app_utils
@@ -155,7 +160,6 @@ set (app_utils_SCHEME_1
     c-interface.scm
     date-utilities.scm
     options.scm
-    prefs.scm
     fin.scm
 )
 
@@ -164,24 +168,16 @@ set (app_utils_SCHEME_2
 )
 
 set(GUILE_DEPENDS
-  gncmod-app-utils
+  gnc-app-utils
   scm-core-utils
   scm-engine
-  scm-scm
   scm-gnc-module
   )
-
-gnc_add_scheme_targets(scm-gettext
-  gettext.scm
-  gnucash
-  gncmod-app-utils
-  TRUE
-)
 
 gnc_add_scheme_targets(scm-app-utils-1
   "${app_utils_SCHEME_1}"
   "gnucash/app-utils"
-  "scm-gettext;${GUILE_DEPENDS}"
+  "${GUILE_DEPENDS}"
   TRUE
 )
 
@@ -195,10 +191,11 @@ gnc_add_scheme_targets(scm-app-utils-2
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("migrate-prefs" "" "" "")
 gnc_add_scheme_deprecated_module ("migrate-prefs-user" "" "" "")
+gnc_add_scheme_deprecated_module ("gnucash gettext" "gnucash core-utils" "scm-core-utils" "")
 
-add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1 scm-gettext)
+add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 
 set_local_dist(app_utils_DIST_local
-        ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
-        app-utils.i CMakeLists.txt gnc-help-utils.c README)
+        ${app_utils_ALL_SOURCES} ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
+        app-utils.i CMakeLists.txt gnc-help-utils.c)
 set(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

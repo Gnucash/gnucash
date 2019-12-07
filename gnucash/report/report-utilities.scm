@@ -609,15 +609,15 @@
 (define (gnc:report-starting report-name)
   (gnc-window-show-progress (format #f
 				     (_ "Building '~a' report ...")
-				     (gnc:gettext report-name))
+				     (_ report-name))
 			    0))
 
 (define (gnc:report-render-starting report-name)
   (gnc-window-show-progress (format #f
 				     (_ "Rendering '~a' report ...")
 				     (if (string-null? report-name)
-					 (gnc:gettext "Untitled")
-					 (gnc:gettext report-name)))
+					 (_ "Untitled")
+					 (_ report-name)))
 			    0))
 
 (define (gnc:report-percent-done percent)

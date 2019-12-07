@@ -27,17 +27,14 @@
 
 (define-module (gnucash reports standard budget))
 
-(use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-
 (use-modules (gnucash engine))
+(use-modules (gnucash utilities))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 match))
-
-(gnc:module-load "gnucash/report" 0)
-(gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
 (define reportname (N_ "Budget Report"))
 

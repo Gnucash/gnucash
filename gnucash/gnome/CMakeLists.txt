@@ -64,7 +64,7 @@ set (gnc_gnome_noinst_HEADERS
 # Command to generate the swig-gnome.c wrapper file
 gnc_add_swig_guile_command (swig-gnome-c
     SWIG_GNOME_C swig-gnome.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i "" ${gnc_gnome_HEADERS}
 )
 
 set (gnc_gnome_SOURCES
@@ -136,9 +136,20 @@ set (gnc_gnome_SOURCES
 set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
-target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core
-  gncmod-html gncmod-report gncmod-register-gnome gncmod-register-core
-  gncmod-gnome-utils gncmod-engine PkgConfig::GTK3 ${GTK_MAC_LDFLAGS})
+target_link_libraries(gnc-gnome
+    gncmod-gnome-search
+    gncmod-ledger-core
+    gncmod-html
+    gncmod-report
+    gncmod-register-gnome
+    gncmod-register-core
+    gncmod-gnome-utils
+    gnc-engine
+    gnc-locale-tax
+    gnucash-guile
+    ${Boost_LIBRARIES}
+    PkgConfig::GTK3
+    ${GTK_MAC_LDFLAGS})
 
 target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
 target_compile_options(gnc-gnome PRIVATE -Wno-deprecated-declarations)
@@ -219,10 +230,9 @@ set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS
     gncmod-gnome-utils
     scm-engine
-    scm-gettext
+    scm-core-utils
     scm-gnome-utils
     scm-gnc-module
-    scm-scm
     scm-report
     scm-reports
 )

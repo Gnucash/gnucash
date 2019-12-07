@@ -35,13 +35,12 @@
 
 (define-module (gnucash report stylesheets head-or-tail))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash core-utils)) ; for gnc:version
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/html" 0)
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
+(use-modules (gnucash html))
 
 (define (head-or-tail-options)
   (let* ((options (gnc:new-options))

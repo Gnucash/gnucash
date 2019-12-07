@@ -31,9 +31,9 @@ set(GUILE_DEPENDS
   scm-gnome-utils
   test-core
   gncmod-test-engine
-  gncmod-app-utils
+  gnc-app-utils
   gnc-core-utils
-  gncmod-engine
+  gnc-engine
 )
 
 gnc_add_scheme_test_targets(scm-test-load-gnome-utils-module

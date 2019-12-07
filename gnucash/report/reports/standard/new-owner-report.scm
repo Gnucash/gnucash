@@ -31,12 +31,11 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
 (use-modules (srfi srfi-11))             ;for let-values
-(use-modules (gnucash gnc-module))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))        ; for gnc:debug
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/report" 0)
-(use-modules (gnucash reports))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 ;; Option names
 (define optname-from-date (N_ "From"))

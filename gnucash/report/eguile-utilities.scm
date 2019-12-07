@@ -24,12 +24,11 @@
 
 ; using all of these seems like overkill -- 
 ; not sure which are really required
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
-(gnc:module-load "gnucash/report" 0)
-(gnc:module-load "gnucash/app-utils" 0)
+(use-modules (gnucash report))
 
 (define-public (fmtnumber n)
   ;; Format a number (integer or real) into something printable

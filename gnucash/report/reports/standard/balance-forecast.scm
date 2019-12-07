@@ -25,11 +25,11 @@
 
 (define-module (gnucash reports standard balance-forecast))
 
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash engine))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-1))
-
-(gnc:module-load "gnucash/report" 0)
 
 ; Name definitions
 (define reportname           (N_ "Balance Forecast"))

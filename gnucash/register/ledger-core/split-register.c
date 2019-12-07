@@ -38,7 +38,6 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-warnings.h"
-#include "guile-util.h"
 #include "split-register-copy-ops.h"
 #include "numcell.h"
 #include "pricecell.h"
@@ -2500,7 +2499,7 @@ gnc_split_register_get_debit_string (SplitRegister *reg)
         return info->debit_str;
 
     info->debit_str =
-        gnc_get_debit_string
+        gnc_account_get_debit_string
         (gnc_split_register_type_to_account_type (reg->type));
 
     if (info->debit_str)
@@ -2523,7 +2522,7 @@ gnc_split_register_get_credit_string (SplitRegister *reg)
         return info->credit_str;
 
     info->credit_str =
-        gnc_get_credit_string
+        gnc_account_get_credit_string
         (gnc_split_register_type_to_account_type (reg->type));
 
     if (info->credit_str)
@@ -2798,9 +2797,7 @@ split_register_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
     if (g_str_has_suffix(pref, GNC_PREF_ACCOUNTING_LABELS))
     {
         /* Release current strings. Will be reloaded at next reference. */
-        g_free (info->debit_str);
         g_free (info->tdebit_str);
-        g_free (info->credit_str);
         g_free (info->tcredit_str);
 
         info->debit_str = NULL;
@@ -3033,9 +3030,7 @@ gnc_split_register_destroy_info (SplitRegister *reg)
     if (!info)
         return;
 
-    g_free (info->debit_str);
     g_free (info->tdebit_str);
-    g_free (info->credit_str);
     g_free (info->tcredit_str);
 
     info->debit_str = NULL;

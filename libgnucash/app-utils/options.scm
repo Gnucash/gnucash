@@ -17,7 +17,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 (use-modules (ice-9 regex))
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils))
 
 (define (rpterror-earlier type newoption fallback)
   ;; Translators: the 3 ~a below refer to (1) option type (2) unknown

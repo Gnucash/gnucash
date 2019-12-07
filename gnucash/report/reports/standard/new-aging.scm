@@ -30,12 +30,10 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-11))            ;let-values
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/report" 0)
-
-(use-modules (gnucash reports))
+(use-modules (gnucash engine))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define optname-to-date (N_ "To"))
 (define optname-sort-order (N_ "Sort Order"))

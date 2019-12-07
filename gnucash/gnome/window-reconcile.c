@@ -55,7 +55,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
 #include "gnc-window.h"
-#include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
 #ifdef MAC_INTEGRATION
@@ -1104,30 +1103,13 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
 static void
 gnc_reconcile_window_set_titles(RecnWindow *recnData)
 {
-    gboolean formal;
-    gchar *title;
+    const gchar *title;
 
-    formal = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
-
-    if (formal)
-        title = _("Debits");
-    else
-        title = gnc_get_debit_string(ACCT_TYPE_NONE);
-
+    title = gnc_account_get_debit_string(ACCT_TYPE_NONE);
     gtk_frame_set_label(GTK_FRAME(recnData->debit_frame), title);
 
-    if (!formal)
-        g_free(title);
-
-    if (formal)
-        title = _("Credits");
-    else
-        title = gnc_get_credit_string(ACCT_TYPE_NONE);
-
+    title = gnc_account_get_credit_string(ACCT_TYPE_NONE);
     gtk_frame_set_label(GTK_FRAME(recnData->credit_frame), title);
-
-    if (!formal)
-        g_free(title);
 }
 
 

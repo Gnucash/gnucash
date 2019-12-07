@@ -60,34 +60,14 @@ libgncmod_html_gnc_module_description( void )
     return g_strdup( "Utilities for using HTML with GnuCash" );
 }
 
-static void
-lmod( char* mn )
-{
-    char* form = g_strdup_printf( "(use-modules %s)\n", mn );
-    scm_c_eval_string( form );
-    g_free( form );
-}
-
 extern SCM scm_init_sw_gnc_html_module( void );
 
 int
 libgncmod_html_gnc_module_init( int refcount )
 {
-    /* load the engine (we depend on it) */
-    if ( !gnc_module_load( "gnucash/engine", 0 ) )
-    {
-        return FALSE;
-    }
-
-    if ( !gnc_module_load( "gnucash/app-utils", 0 ) )
-    {
-        return FALSE;
-    }
-
     scm_init_sw_gnc_html_module();
     gnc_html_initialize();
-    lmod( "(sw_gnc_html)" );
-//	lmod( "(gnucash gnc_html)" );
+    scm_c_use_module( "sw_gnc_html" );
 
     return TRUE;
 }

@@ -27,12 +27,12 @@
 
 (define-module (gnucash reports example daily-reports))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash engine))
+(use-modules (gnucash utilities))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-
-(gnc:module-load "gnucash/report" 0)
 
 (define menuname-income (N_ "Income vs. Day of Week"))
 (define menuname-expense (N_ "Expenses vs. Day of Week"))

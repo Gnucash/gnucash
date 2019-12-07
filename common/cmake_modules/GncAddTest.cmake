@@ -32,9 +32,6 @@ function(get_guile_env)
   list(APPEND env "GUILE=${GUILE_EXECUTABLE}")
 
   set(guile_load_paths "")
-  list(APPEND guile_load_paths "${CMAKE_CURRENT_SOURCE_DIR}/mod-foo")
-  list(APPEND guile_load_paths "${CMAKE_CURRENT_SOURCE_DIR}/mod-bar")
-  list(APPEND guile_load_paths "${CMAKE_CURRENT_SOURCE_DIR}/mod-baz")
   #list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}")
   list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/deprecated") # Path to gnucash' deprecated modules
   set(guile_load_path "${guile_load_paths}")

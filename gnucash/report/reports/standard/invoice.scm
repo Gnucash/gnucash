@@ -24,12 +24,12 @@
 
 (define-module (gnucash reports standard invoice))
 
-(use-modules (srfi srfi-1))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
+(use-modules (gnucash engine))
+(use-modules (gnucash core-utils))
 (use-modules (gnucash utilities))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 (define (addif pred . data) (if pred data '()))
 

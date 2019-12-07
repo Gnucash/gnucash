@@ -26,9 +26,10 @@
 
 (define-module (gnucash reports standard reconcile-report))
 
-(use-modules (gnucash gettext))
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash engine))
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define (reconcile-report-options-generator)
   (let ((options (gnc:trep-options-generator)))

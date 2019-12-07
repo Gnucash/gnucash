@@ -67,15 +67,13 @@
 ;; depends must be outside module scope -- and should eventually go away.
 
 (define-module (gnucash reports locale-specific de_DE taxtxf))
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
-(use-modules (srfi srfi-1))
-(use-modules (gnucash core-utils)) ; for gnc:version
-(use-modules (gnucash gettext))
+(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash app-utils))
 (use-modules (gnucash locale de_DE tax))
-
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/report" 0)
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash report))
+(use-modules (srfi srfi-1))
 
 (define reportname (N_ "Tax Report / TXF Export"))
 

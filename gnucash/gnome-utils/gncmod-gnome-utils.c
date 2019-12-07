@@ -26,16 +26,12 @@
 
 
 #include <config.h>
-
-#include <gmodule.h>
 #include <libguile.h>
 
-#include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "gnc-component-manager.h"
 #include "dialog-options.h"
-#include "qof.h"
-#include "gnc-gui-query.h"
 
 GNC_MODULE_API_DECL(libgncmod_gnome_utils)
 
@@ -60,37 +56,19 @@ libgncmod_gnome_utils_gnc_module_description(void)
     return g_strdup("Utilities for using Gnome/Gtk with GnuCash");
 }
 
-static void
-lmod(char * mn)
-{
-    char * form = g_strdup_printf("(use-modules %s)\n", mn);
-    scm_c_eval_string(form);
-    g_free(form);
-}
-
 extern SCM scm_init_sw_gnome_utils_module(void);
 
 int
 libgncmod_gnome_utils_gnc_module_init(int refcount)
 {
-    /* load the engine (we depend on it) */
-    if (!gnc_module_load("gnucash/engine", 0))
-    {
-        return FALSE;
-    }
-
-    if (!gnc_module_load("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
-
     scm_init_sw_gnome_utils_module();
-    lmod("(sw_gnome_utils)");
-    lmod("(gnucash gnome-utils)");
+    scm_c_use_module ("sw_gnome_utils");
+    scm_c_use_module("gnucash gnome-utils");
 
     /* Initialize the options-ui database */
     if (refcount == 0)
     {
+        gnc_component_manager_init ();
         gnc_options_ui_initialize ();
     }
 
@@ -100,5 +78,8 @@ libgncmod_gnome_utils_gnc_module_init(int refcount)
 int
 libgncmod_gnome_utils_gnc_module_end(int refcount)
 {
+    if (refcount == 0)
+        gnc_component_manager_shutdown ();
+
     return TRUE;
 }

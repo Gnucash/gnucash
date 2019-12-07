@@ -65,18 +65,7 @@ libgncmod_customer_import_gnc_module_description (void)
 int
 libgncmod_customer_import_gnc_module_init (int refcount)
 {
-    if (!gnc_module_load ("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
     if (!gnc_module_load ("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-    //if (!gnc_module_load ("gnucash/business-core", 0)) {
-    //    return FALSE;
-    //}
-    if (!gnc_module_load ("gnucash/engine", 0))
     {
         return FALSE;
     }

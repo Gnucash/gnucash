@@ -1,14 +1,21 @@
+(define exit-code 0)
 (setenv "GNC_UNINSTALLED" "1")
-(use-modules (gnucash gnc-module))
-(gnc:module-system-init)
 
 (display "  testing gnome-utils module load ... ")
-(if (gnc:module-load "gnucash/gnome-utils" 0)
+(use-modules (gnucash gnome-utils))
 
-   (begin 
-      (display "ok\n")
-      (exit 0))
-    (begin 
-      (display "failed\n")
-      (exit 1)))
+(cond
+    ((defined? 'gnc:make-menu)
+        (display "Procedure gnc:make-menu found\n"))
+    (else
+        (display "Failed - procedure gnc:make-menu not found\n")
+        (set! exit-code -1)))
 
+(cond
+    ((defined? 'gnc:set-ui-status)
+        (display "Procedure gnc:set-ui-status found\n"))
+    (else
+        (display "Failed - procedure gnc:set-ui-status not found\n")
+        (set! exit-code -1)))
+
+(exit exit-code)

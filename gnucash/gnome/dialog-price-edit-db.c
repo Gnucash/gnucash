@@ -48,8 +48,7 @@
 #include "gnc-warnings.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "guile-util.h"
-#include "engine-helpers-guile.h"
+#include "gnc-engine-guile.h"
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"

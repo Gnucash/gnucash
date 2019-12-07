@@ -11,7 +11,7 @@ set (report_HEADERS
 # Command to generate the swig-report.c wrapper file
 gnc_add_swig_guile_command (swig-report-c
     SWIG_REPORT_C swig-report.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/report.i ${report_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/report.i "" ${report_HEADERS}
 )
 
 set (report_SOURCES
@@ -27,10 +27,15 @@ add_library (gncmod-report
 
 target_compile_definitions(gncmod-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 
-target_link_libraries(gncmod-report gnc-module gncmod-app-utils PkgConfig::GTK3 ${GUILE_LDFLAGS})
+target_link_libraries(gncmod-report
+    gnc-module
+    gnc-app-utils
+    gnucash-guile
+    PkgConfig::GTK3
+    ${GUILE_LDFLAGS})
 
 target_include_directories (gncmod-report
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} 
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 
@@ -84,11 +89,11 @@ set (report_eguile_SCHEME
 )
 
 set(GUILE_DEPENDS
-  gncmod-html
+  scm-gnc-html
   scm-gnome-utils
   gncmod-report
   scm-app-utils
-  scm-scm
+  scm-engine
   scm-gnc-module
   guile-json
   )

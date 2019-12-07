@@ -19,13 +19,7 @@
 
 (define-module (gnucash locale de_DE tax))
 
-(use-modules (gnucash gnc-module))
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")
-      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
-(use-modules (sw_app_utils))
-(use-modules (sw_engine))
+(use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 
 (export gnc:txf-get-payer-name-source)

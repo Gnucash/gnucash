@@ -37,7 +37,6 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
-#include "guile-util.h"
 #include "window-autoclear.h"
 
 #define WINDOW_AUTOCLEAR_CM_CLASS "window-autoclear"

@@ -14,8 +14,7 @@ set (GUILE_DEPENDS
   scm-app-utils
   scm-engine
   scm-test-engine
-  scm-gettext
-  scm-scm
+  scm-core-utils
   scm-qif-import
 )
 gnc_add_test(test-link-qif-imp test-link.c QIF_IMP_TEST_INCLUDE_DIRS QIF_IMP_TEST_LIBS)

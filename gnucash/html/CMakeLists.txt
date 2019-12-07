@@ -12,7 +12,7 @@ set (html_HEADERS
 # Command to generate the swig-gnc-html.c wrapper file
 gnc_add_swig_guile_command (swig-gnc-html-c
     SWIG_GNC_HTML_C swig-gnc-html.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i "${gncmod_html_HEADERS}"
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i "" "${gncmod_html_HEADERS}"
 )
 
 set (html_SOURCES
@@ -32,7 +32,21 @@ else ()
   set(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
 endif ()
 
-set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST})
+
+
+set (gnc_html_SCHEME html.scm)
+
+set(GUILE_OUTPUT_DIR   gnucash)
+set(GUILE_DEPENDS      gncmod-html gnucash-guile)
+
+gnc_add_scheme_targets(scm-gnc-html
+    "${gnc_html_SCHEME}"
+    ${GUILE_OUTPUT_DIR}
+    "${GUILE_DEPENDS}"
+    FALSE
+)
+
+set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST} html.scm)
 
 add_library (gncmod-html
   ${html_SOURCES}
@@ -40,7 +54,7 @@ add_library (gncmod-html
   ${html_HEADERS}
 )
 
-target_link_libraries(gncmod-html gncmod-engine gnc-module gncmod-gnome-utils
+target_link_libraries(gncmod-html gnc-engine gnc-module gncmod-gnome-utils
   PkgConfig::GTK3 PkgConfig::WEBKIT ${GUILE_LDFLAGS})
 
 target_compile_definitions(gncmod-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")

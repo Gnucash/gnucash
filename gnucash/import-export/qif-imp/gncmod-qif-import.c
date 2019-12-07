@@ -62,16 +62,6 @@ libgncmod_qif_import_gnc_module_description(void)
 int
 libgncmod_qif_import_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/engine", 0))
-    {
-        return FALSE;
-    }
-
-    if (!gnc_module_load("gnucash/app-utils", 0))
-    {
-        return FALSE;
-    }
-
     if (!gnc_module_load("gnucash/gnome-utils", 0))
     {
         return FALSE;
@@ -86,7 +76,7 @@ libgncmod_qif_import_gnc_module_init(int refcount)
         ((void (*)())gnc_file_qif_import);
     }
 
-    scm_c_eval_string("(use-modules (gnucash qif-import))");
+    scm_c_use_module("gnucash qif-import");
 
     gnc_plugin_qif_import_create_plugin();
 

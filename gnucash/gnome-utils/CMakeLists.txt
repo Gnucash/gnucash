@@ -5,7 +5,7 @@ add_subdirectory(test)
 # Command to generate the swig-gnome-utils.c wrapper file
 gnc_add_swig_guile_command (swig-gnome-utils-c
     SWIG_GNOME_UTILS_C swig-gnome-utils.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i ""
 )
 
 set (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.warnings.gschema.xml)
@@ -53,6 +53,7 @@ set (gnome_utils_SOURCES
   gnc-cell-renderer-text-flag.c
   gnc-combott.c
   gnc-commodity-edit.c
+  gnc-component-manager.c
   gnc-currency-edit.c
   gnc-date-delta.c
   gnc-date-edit.c
@@ -141,6 +142,7 @@ set (gnome_utils_HEADERS
   gnc-cell-renderer-text-flag.h
   gnc-combott.h
   gnc-commodity-edit.h
+  gnc-component-manager.h
   gnc-currency-edit.h
   gnc-date-delta.h
   gnc-date-edit.h
@@ -204,9 +206,15 @@ add_library (gncmod-gnome-utils
   ${gnome_utils_noinst_HEADERS}
 )
 
-target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine
-  gnc-backend-xml-utils PkgConfig::GTK3 ${CMAKE_DL_LIBS} ${LIBSECRET_LDFLAGS}
-  ${GTK_MAC_LDFLAGS})
+target_link_libraries(gncmod-gnome-utils
+    gnc-app-utils
+    gnc-engine
+    gnc-backend-xml-utils
+    gnucash-guile
+    PkgConfig::GTK3
+    ${CMAKE_DL_LIBS}
+    ${LIBSECRET_LDFLAGS}
+    ${GTK_MAC_LDFLAGS})
 
 target_compile_options(gncmod-gnome-utils PRIVATE -Wno-deprecated-declarations)
 target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
@@ -245,7 +253,7 @@ install(FILES ${gnome_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnu
 
 # Scheme
 
-set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-scm scm-app-utils)
+set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-engine scm-app-utils)
 
 gnc_add_scheme_targets(scm-gnome-utils-1
   gnome-utils.scm

@@ -18,9 +18,30 @@
  *                                                                  *
 \********************************************************************/
 
-int
-main(int argc, char ** argv)
+#include "gnc-locale-tax.h"
+
+#include <config.h>
+#include <glib.h>
+#include <qof.h>
+#include <libguile.h>
+
+static void
+guile_main (void *closure, int argc, char **argv)
 {
-    return 0;
+    gnc_locale_tax_init();
+
+    scm_c_lookup ("gnc:txf-get-description");
 }
 
+int
+main (int argc, char *argv[])
+{
+    qof_init (); 			/* Initialize the GObject system */
+    qof_log_init_filename_special ("stderr"); /* Init the log system */
+    g_test_init (&argc, &argv, NULL); 	/* initialize test program */
+    //qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
+    g_test_bug_base("https://bugs.gnucash.org/show_bug.cgi?id="); /* init the bugzilla URL */
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
+    scm_boot_guile (argc, argv, guile_main, NULL);
+    return 0;
+}

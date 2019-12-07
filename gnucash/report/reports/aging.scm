@@ -26,14 +26,11 @@
 
 (define-module (gnucash reports aging))
 
+(use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash gettext))
-(eval-when (compile load eval expand)
-  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
-(use-modules (sw_gnome_utils))
-
-(gnc:module-load "gnucash/report" 0)
+(use-modules (gnucash core-utils))
+(use-modules (gnucash app-utils))
+(use-modules (gnucash report))
 
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))

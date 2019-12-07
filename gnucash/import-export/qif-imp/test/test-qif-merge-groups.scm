@@ -1,5 +1,5 @@
-(use-modules (gnucash gnc-module))
-(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
+(use-modules (gnucash engine))
+(use-modules (gnucash app-utils))
 (use-modules (srfi srfi-64))
 (use-modules (tests srfi64-extras))
 (use-modules (gnucash qif-import))

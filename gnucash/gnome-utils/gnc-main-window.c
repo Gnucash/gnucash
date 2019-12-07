@@ -48,9 +48,11 @@
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "engine-helpers.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-features.h"
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
@@ -2542,9 +2544,9 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                            NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_SAVED,
-                         (GFunc)gnc_main_window_update_all_titles, NULL);
+                         (GFunc)gnc_main_window_update_all_titles, NULL, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_main_window_attach_to_book, NULL);
+                         (GFunc)gnc_main_window_attach_to_book, NULL, NULL);
 
 }
 
@@ -4109,6 +4111,44 @@ gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
 
     gnc_options_dialog_destroy(optionwin);
     gnc_option_db_destroy(options);
+}
+
+/** Calls gnc_book_option_num_field_source_change to initiate registered
+ * callbacks when num_field_source book option changes so that
+ * registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_num_field_source_change_cb (gboolean num_action)
+{
+    gnc_suspend_gui_refresh ();
+    if (num_action)
+    {
+        /* Set a feature flag in the book for use of the split action field as number.
+         * This will prevent older GnuCash versions that don't support this feature
+         * from opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                               GNC_FEATURE_NUM_FIELD_SOURCE);
+    }
+    gnc_book_option_num_field_source_change (num_action);
+    gnc_resume_gui_refresh ();
+}
+
+/** Calls gnc_book_option_book_currency_selected to initiate registered
+ * callbacks when currency accounting book option changes to book-currency so
+ * that registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
+{
+    gnc_suspend_gui_refresh ();
+    if (use_book_currency)
+    {
+        /* Set a feature flag in the book for use of book currency. This will
+         * prevent older GnuCash versions that don't support this feature from
+         * opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                               GNC_FEATURE_BOOK_CURRENCY);
+    }
+    gnc_book_option_book_currency_selected (use_book_currency);
+    gnc_resume_gui_refresh ();
 }
 
 static gboolean
