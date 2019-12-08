@@ -2994,7 +2994,7 @@
   namespace="ISO4217"
   exchange-code="999"
   parts-per-unit="1"
-  smallest-fraction="1000000"
+  smallest-fraction="100000000"
   local-symbol=""
 />
 
