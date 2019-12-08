@@ -41,6 +41,7 @@
 .company-table > table * { padding: 0px; }
 .client-table > table * { padding: 0px; }
 .invoice-details-table > table * { padding: 0px; }
+@media print { .main-table > table { width: 100%; }}
 ")
 
 (define (date-col columns-used)

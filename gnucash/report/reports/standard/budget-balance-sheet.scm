@@ -256,7 +256,8 @@
       (gnc:report-options report-obj) pagename optname)))
 
   (define (get-budget-account-budget-balance budget account)
-    (gnc:budget-account-get-net budget account #f #f))
+    (let ((bal (gnc:budget-account-get-net budget account #f #f)))
+      (if (gnc-reverse-budget-balance account #t) (gnc:collector- bal) bal)))
 
   (define (get-budget-account-initial-balance budget account)
     (gnc:budget-account-get-initial-balance budget account))

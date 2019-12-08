@@ -308,7 +308,8 @@
                    (get-balance-fn budget account period-start period-end))))
 
   (define (get-budget-account-budget-balance budget account period-start period-end)
-    (gnc:budget-account-get-net budget account period-start period-end))
+    (let ((bal (gnc:budget-account-get-net budget account period-start period-end)))
+      (if (gnc-reverse-budget-balance account #t) (gnc:collector- bal) bal)))
 
   (gnc:report-starting reportname)
   

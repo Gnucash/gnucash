@@ -32,6 +32,7 @@
 #include "gnc-tree-model-account.h"
 #include "gnc-component-manager.h"
 #include "Account.h"
+#include "dialog-utils.h"
 #include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-prefs.h"
@@ -96,7 +97,7 @@ typedef struct GncTreeModelAccountPrivate
     QofBook *book;
     Account *root;
     gint event_handler_id;
-    const gchar *negative_color;
+    gchar *negative_color;
 
     GHashTable *account_values_hash;
 
@@ -109,17 +110,7 @@ typedef struct GncTreeModelAccountPrivate
 /************************************************************/
 /*           Account Tree Model - Misc Functions            */
 /************************************************************/
-static gchar*
-get_negative_color (void)
-{
-    GdkRGBA color;
-    GtkWidget *label = gtk_label_new ("Color");
-    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
-    gtk_style_context_add_class (context, "negative-numbers");
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
 
-    return gdk_rgba_to_string (&color);
-}
 
 /** Tell the GncTreeModelAccount code to update the color that it will
  *  use for negative numbers.  This function will iterate over all
@@ -144,7 +135,14 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
                                                        g_free, g_free);
 
     use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    priv->negative_color = use_red ? get_negative_color () : NULL;
+
+    if (priv->negative_color)
+        g_free (priv->negative_color);
+
+    if (use_red)
+        priv->negative_color = get_negative_color ();
+    else
+        priv->negative_color = NULL;
 }
 
 /************************************************************/
@@ -190,7 +188,14 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     priv->book = NULL;
     priv->root = NULL;
-    priv->negative_color = red ? get_negative_color () : NULL;
+
+    if (priv->negative_color)
+        g_free (priv->negative_color);
+
+    if (red)
+        priv->negative_color = get_negative_color ();
+    else
+        priv->negative_color = NULL;
 
     // create the account values cache hash
     priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -243,6 +248,9 @@ gnc_tree_model_account_dispose (GObject *object)
         qof_event_unregister_handler (priv->event_handler_id);
         priv->event_handler_id = 0;
     }
+
+    if (priv->negative_color)
+        g_free (priv->negative_color);
 
     // destroy the cached acount values
     g_hash_table_destroy (priv->account_values_hash);

@@ -913,7 +913,7 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
                               GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | 
                               GNC_HOW_RND_ROUND_HALF_UP);
 
-        if (gnc_reverse_balance(acct))
+        if (gnc_reverse_budget_balance(acct, FALSE))
             num = gnc_numeric_neg(num);
 
         for (i = 0; i < num_periods; i++)
@@ -931,7 +931,7 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 
             if (!gnc_numeric_check(num))
             {
-                if (gnc_reverse_balance(acct))
+                if (gnc_reverse_budget_balance(acct, FALSE))
                     num = gnc_numeric_neg(num);
 
                 num = gnc_numeric_convert(num, GNC_DENOM_AUTO,
@@ -1031,7 +1031,7 @@ allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 {
     Account *acct;
     guint num_periods, i;
-    gnc_numeric num;
+    gnc_numeric num, allvalue;
     GncPluginPageBudgetPrivate *priv;
     GncPluginPageBudget *page = data;
 
@@ -1039,7 +1039,9 @@ allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
     acct = gnc_budget_view_get_account_from_path(priv->budget_view, path);
     num_periods = gnc_budget_get_num_periods(priv->budget);
-    num = priv->allValue;
+    allvalue = priv->allValue;
+    if (gnc_reverse_budget_balance(acct, TRUE))
+        allvalue = gnc_numeric_neg(allvalue);
 
     for (i = 0; i < num_periods; i++)
     {
@@ -1047,7 +1049,7 @@ allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
         {
         case ADD:
             num = gnc_budget_get_account_period_value(priv->budget, acct, i);
-            num = gnc_numeric_add(num, priv->allValue, GNC_DENOM_AUTO,
+            num = gnc_numeric_add(num, allvalue, GNC_DENOM_AUTO,
                                   GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
                                   GNC_HOW_RND_ROUND_HALF_UP);
             gnc_budget_set_account_period_value(priv->budget, acct, i, num);
@@ -1064,7 +1066,7 @@ allperiods_budget_helper(GtkTreeModel *model, GtkTreePath *path,
             break;
         default:
             gnc_budget_set_account_period_value(priv->budget, acct, i,
-                                                priv->allValue);
+                                                allvalue);
             break;
         }
     }
