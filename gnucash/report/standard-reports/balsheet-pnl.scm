@@ -1034,12 +1034,9 @@ also show overall period profit & loss."))
                   (if (and common-currency
                            (every has-price?
                                   (gnc:accounts-get-commodities income-expense #f)))
-                      (gnc:monetary-neg
-                       (monetaries->exchanged income-expense-balance
-                                              common-currency price-source date))
-                      (map
-                       gnc:monetary-neg
-                       (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
+                      (monetaries->exchanged income-expense-balance
+                                             common-currency price-source date)
+                      (income-expense-balance 'format gnc:make-gnc-monetary #f)))))
 
              (chart (and-let* (include-chart?
                                incr
