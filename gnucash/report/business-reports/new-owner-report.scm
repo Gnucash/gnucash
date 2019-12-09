@@ -725,7 +725,7 @@ invoices and amounts.")))))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (headings (make-heading-list used-columns link-option))
-         (report-title (string-append (owner-string type) " " (_ "Report"))))
+         (report-title (string-append (_ (owner-string type)) " " (_ "Report"))))
 
     (cond
      ((not (gncOwnerIsValid owner))
@@ -751,7 +751,7 @@ invoices and amounts.")))))
 
         (gnc:html-document-set-headline!
          document (gnc:html-markup
-                   "span" (owner-string type) " " (_ "Report:") " "
+                   "span" report-title ": "
                    (gnc:html-markup-anchor
                     (if (eqv? GNC-OWNER-JOB type)
                         (gnc:job-anchor-text (gncOwnerGetJob owner))
