@@ -64,7 +64,7 @@ msgstr ""
 # Quantity → [Inventario], Cantidad
 # Quotes → Cotización, Entrecomillado
 # Record → Registrar
-# Revenue →
+# Revenue → Ingresos
 # Scheduled Transaction
 #    → Calendario Transaccional.
 #    → Registro Transaccional.
@@ -73,7 +73,7 @@ msgstr ""
 # Skip Errors → Saltar errores
 # Statement → Declaración
 # Stoke → mercancía
-# Tax Invoice
+# Tax Invoice: Factura Fiscal
 #  reconciled balance : Balance conciliado
 # Voucher: Comprobante
 # Withdrawal: Retirada (de fondos)

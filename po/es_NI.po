@@ -429,7 +429,7 @@ msgstr "El menú de opciones"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "El libro fue cerrado satisfactoriamente"
 
 #. Translators: %s is a date string. %d is the number of books
 #. * that will be created. This is a ngettext(3) message (but
@@ -442,8 +442,10 @@ msgid ""
 msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La fecha de transacción más temprana que se encuentra en este libro es% s. Basado en la "
+"selección realizada anteriormente, este libro se dividirá en% d libro."
+msgstr[1] "La fecha de transacción más temprana que se encuentra en este libro es% s. Basado en la "
+"selección realizada anteriormente, este libro se dividirá en% d libros."
 
 #: ../gnucash/gnome/assistant-acct-period.c:369
 #, c-format
@@ -467,6 +469,8 @@ msgid ""
 "The book will be created with the title %s when you click on 'Apply'. Click "
 "on 'Back' to adjust, or 'Cancel' to not create any book."
 msgstr ""
+"El libro será creado cuando el título %s cuando pinches en 'Aplicar'. Pincha"
+"en 'Volver' para ajustar o 'Cancelar' para no crear ningún libro."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
@@ -478,6 +482,8 @@ msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
+"%s\n"
+"¡Enhorabuena! ¡Has acabado cerrado los libros!\n"
 
 #. Change the text so that its more mainingful for this assistant
 #: ../gnucash/gnome/assistant-acct-period.c:592
@@ -518,12 +524,12 @@ msgstr "Tipo de Cuenta"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:792
 msgid "zero"
-msgstr ""
+msgstr "cero"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:805
 #, fuzzy
 msgid "existing account"
-msgstr "Editar Cuenta"
+msgstr "Cuenta existente"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:916
 #: ../gnucash/gnome/business-gnome-utils.c:564
@@ -539,7 +545,7 @@ msgstr "No"
 #: ../gnucash/gnome-utils/dialog-options.c:690
 #: ../gnucash/gnome-utils/gnc-tree-view-account.c:903
 msgid "Placeholder"
-msgstr ""
+msgstr "Contenedor"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1008
 #: ../gnucash/gnome-utils/dialog-account.c:306
@@ -551,7 +557,7 @@ msgstr "Balance de Apertura"
 #: ../gnucash/gnome/assistant-hierarchy.c:1022
 #, fuzzy
 msgid "Use Existing"
-msgstr "boletín"
+msgstr "Usar existente"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1135
 msgid ""
@@ -582,12 +588,12 @@ msgstr "Impuestos"
 #: ../gnucash/gnome/assistant-loan.c:114
 #, fuzzy
 msgid "Tax Payment"
-msgstr "Pago"
+msgstr "Pago de impuestos"
 
 #: ../gnucash/gnome/assistant-loan.c:115
 #, fuzzy
 msgid "Insurance"
-msgstr "Interéses"
+msgstr "Intereses"
 
 #: ../gnucash/gnome/assistant-loan.c:115
 #, fuzzy
@@ -607,7 +613,7 @@ msgstr "Pago"
 #: ../gnucash/gnome/assistant-loan.c:118
 #, fuzzy
 msgid "Other Expense"
-msgstr "Egreso"
+msgstr "Otro gasto"
 
 #: ../gnucash/gnome/assistant-loan.c:118
 #, fuzzy
@@ -730,7 +736,7 @@ msgstr "Pago"
 #: ../gnucash/gnome/assistant-loan.c:1846
 #: ../gnucash/gnome/assistant-loan.c:2843
 msgid "Principal"
-msgstr ""
+msgstr "Principal"
 
 #: ../gnucash/gnome/assistant-loan.c:1852
 #: ../gnucash/gnome/assistant-loan.c:2863
@@ -748,7 +754,7 @@ msgstr ""
 #: ../gnucash/register/ledger-core/split-register.c:2547
 #: ../gnucash/register/ledger-core/split-register.c:2574
 msgid "Interest"
-msgstr "Interéses"
+msgstr "Interes"
 
 #: ../gnucash/gnome/assistant-loan.c:2749
 #, fuzzy
@@ -820,7 +826,7 @@ msgstr "Acciones"
 
 #: ../gnucash/gnome/assistant-stock-split.c:781
 msgid "You don't have any stock accounts with balances!"
-msgstr "¡No tiene ningúna cuenta de valores con balances!"
+msgstr "¡No tiene ninguna cuenta de valores con dinero!"
 
 #: ../gnucash/gnome/business-gnome-utils.c:73
 #: ../gnucash/gnome/business-gnome-utils.c:260
@@ -923,33 +929,33 @@ msgstr "URL opciones-gnc: mal formados."
 #: ../gnucash/gnome/top-level.c:98
 #, c-format
 msgid "Bad URL: %s"
-msgstr ""
+msgstr "URL errónea: %s"
 
 #: ../gnucash/gnome/business-urls.c:82
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "No existe la entidad"
 
 #. =================================================================
 #: ../gnucash/gnome/business-urls.c:170
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "No existe el dueño de la entidad"
 
 #: ../gnucash/gnome/business-urls.c:279
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "Tipo de entidad no concuerda %s: %s"
 
 #: ../gnucash/gnome/business-urls.c:289
 #, c-format
 msgid "Bad URL %s"
-msgstr ""
+msgstr "URL errónea %s"
 
 #: ../gnucash/gnome/business-urls.c:302
 #, c-format
 msgid "No such Account entity: %s"
-msgstr ""
+msgstr "No existe entidad de la cuenta"
 
 #: ../gnucash/gnome/dialog-billterms.c:267
 msgid "Discount days cannot be more than due days."
@@ -1009,12 +1015,16 @@ msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
 msgstr ""
+"Esta transacción debe asignarse a un Cliente. Elija el"
+"Cliente a continuación".
 
 #: ../gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
 msgstr ""
+"Esta transacción debe asignarse a un Vendedor. Elija el"
+"Vendedor a continuación".
 
 #: ../gnucash/gnome/dialog-commodities.c:156
 #, fuzzy
