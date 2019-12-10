@@ -60,16 +60,16 @@ GType gnc_budget_view_get_type (void);
  *
  *  @return The newly created widget
  */
-GncBudgetView *gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd);
-void gnc_budget_view_save(GncBudgetView* view, GKeyFile *key_file, const gchar* group_name);
-void gnc_budget_view_refresh(GncBudgetView* view);
-void gnc_budget_view_delete_budget(GncBudgetView* view);
-void gnc_budget_view_save_account_filter(GncBudgetView *view);
-gboolean gnc_budget_view_restore(GncBudgetView* view, GKeyFile *key_file, const gchar* group_name);
-GtkTreeSelection* gnc_budget_view_get_selection(GncBudgetView* view);
-Account* gnc_budget_view_get_account_from_path(GncBudgetView* view, GtkTreePath* path);
-GList* gnc_budget_view_get_selected_accounts(GncBudgetView* view);
-GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView* view);
+GncBudgetView *gnc_budget_view_new (GncBudget *budget, AccountFilterDialog* fd);
+void gnc_budget_view_save (GncBudgetView* budget_view, GKeyFile *key_file, const gchar* group_name);
+void gnc_budget_view_refresh (GncBudgetView* budget_view);
+void gnc_budget_view_delete_budget (GncBudgetView* budget_view);
+void gnc_budget_view_save_account_filter (GncBudgetView *budget_view);
+gboolean gnc_budget_view_restore (GncBudgetView* budget_view, GKeyFile *key_file, const gchar* group_name);
+GtkTreeSelection* gnc_budget_view_get_selection (GncBudgetView* budget_view);
+Account* gnc_budget_view_get_account_from_path (GncBudgetView* budget_view, GtkTreePath* path);
+GList* gnc_budget_view_get_selected_accounts (GncBudgetView* budget_view);
+GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView* budget_view);
 
 G_END_DECLS
 
