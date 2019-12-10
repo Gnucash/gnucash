@@ -498,7 +498,7 @@ flawed. see report-utilities.scm. please update reports.")
           (nosplit->elt #f)
           (split->date (compose xaccTransGetDate xaccSplitGetParent))
           (split->elt xaccSplitGetBalance))
-  (let lp ((splits (xaccAccountGetSplitList acc))
+  (let lp ((splits (gnc-account-get-splits acc))
            (dates (sort dates <))
            (result '())
            (last-result nosplit->elt))
@@ -516,9 +516,9 @@ flawed. see report-utilities.scm. please update reports.")
          (lp '() rest (cons last-result result) last-result))
 
         (else
-         (let* ((head (car splits))
-                (tail (cdr splits))
-                (next (and (not (null? tail)) (car tail))))
+         (let* ((head (SplitListNode-split-get splits))
+                (tail (SplitListNode-next-get splits))
+                (next (and (not (null? tail)) (SplitListNode-split-get tail))))
            (cond
 
             ;; the next split is still before date.
