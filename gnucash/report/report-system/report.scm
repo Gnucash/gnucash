@@ -23,6 +23,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gettext))
+(use-modules (statprof))
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module"))
 (use-modules (sw_report_system))
@@ -753,7 +754,9 @@ not found.")))
         (and template
              (let* ((renderer (gnc:report-template-renderer template))
                     (stylesheet (gnc:report-stylesheet report))
-                    (doc (renderer report))
+                    (doc (statprof
+                          (lambda ()
+                            (renderer report))))
                     (html (cond
                            ((string? doc) doc)
                            (else
