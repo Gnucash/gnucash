@@ -322,6 +322,26 @@ gbv_totals_scrollbar_value_changed_cb (GtkAdjustment *adj, GncBudgetView* budget
     gtk_adjustment_set_value (priv->hadj, gtk_adjustment_get_value (adj));
 }
 
+static gboolean
+gbv_totals_tree_view_redraw_idle (GtkTreeView *view)
+{
+    gtk_widget_queue_draw (GTK_WIDGET(view));
+    return FALSE;
+}
+
+static void
+gbv_tree_view_model_row_changed_cb (GtkTreeModel *tree_model, GtkTreePath *path,
+                                    GtkTreeIter *iter, gpointer user_data)
+{
+    GncBudgetView *budget_view = user_data;
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+
+    // The model row-changed signal can be emmitted multiple times so we
+    // use an idle_add to do a redraw of the totals tree view once
+    g_idle_remove_by_data (priv->totals_tree_view);
+    g_idle_add ((GSourceFunc)gbv_totals_tree_view_redraw_idle, priv->totals_tree_view);
+}
+
 /****************************
  * GncPluginPage Functions  *
  ***************************/
@@ -469,6 +489,10 @@ gbv_create_widget (GncBudgetView *budget_view)
     // Read account filter state information from budget section
     gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), priv->fd,
        gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
+
+    // use the model row-changed signal to do a redraw on the totals tree view
+    g_signal_connect (G_OBJECT(gtk_tree_view_get_model (GTK_TREE_VIEW(tree_view))), "row-changed",
+                      G_CALLBACK(gbv_tree_view_model_row_changed_cb), budget_view);
 
     gnc_budget_view_refresh (budget_view);
 }
