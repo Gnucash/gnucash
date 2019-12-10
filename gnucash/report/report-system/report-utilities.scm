@@ -508,28 +508,31 @@ flawed. see report-utilities.scm. please update reports.")
       (() (reverse result))
 
       ((date . rest)
-       (match splits
+       (cond
 
-         ;; end of splits, but still has dates. pad with last-result
-         ;; until end of dates.
-         (() (lp '() rest (cons last-result result) last-result))
+        ;; end of splits, but still has dates. pad with last-result
+        ;; until end of dates.
+        ((null? splits)
+         (lp '() rest (cons last-result result) last-result))
 
-         ((head . tail)
-          (let ((next (and (pair? tail) (car tail))))
-            (cond
+        (else
+         (let* ((head (car splits))
+                (tail (cdr splits))
+                (next (and (not (null? tail)) (car tail))))
+           (cond
 
-             ;; the next split is still before date.
-             ((and next (< (split->date next) date))
-              (lp tail dates result (split->elt head)))
+            ;; the next split is still before date.
+            ((and next (< (split->date next) date))
+             (lp tail dates result (split->elt head)))
 
-             ;; head split after date, accumulate previous result
-             ((< date (split->date head))
-              (lp splits rest (cons last-result result) last-result))
+            ;; head split after date, accumulate previous result
+            ((< date (split->date head))
+             (lp splits rest (cons last-result result) last-result))
 
-             ;; head split before date, next split after date, or end.
-             (else
-              (let ((head-result (split->elt head)))
-                (lp tail rest (cons head-result result) head-result)))))))))))
+            ;; head split before date, next split after date, or end.
+            (else
+             (let ((head-result (split->elt head)))
+               (lp tail rest (cons head-result result) head-result)))))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
