@@ -66,9 +66,9 @@ GType gnc_plugin_page_budget_get_type (void);
  *
  *  @return The newly created plugin page.
  */
-GncPluginPage *gnc_plugin_page_budget_new  (GncBudget *budget);
+GncPluginPage *gnc_plugin_page_budget_new (GncBudget *budget);
 
-void gnc_budget_gui_delete_budget(GncBudget *budget);
+void gnc_budget_gui_delete_budget (GncBudget *budget);
 
 /** Given a pointer to a budget plugin page, set the focus to
  *  the Account GtkTreeView. This is used in a g_idle_add so
