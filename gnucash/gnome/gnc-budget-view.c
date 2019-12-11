@@ -47,6 +47,7 @@
 
 #include "gnc-budget-view.h"
 #include "gnc-budget.h"
+#include "gnc-features.h"
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
@@ -367,6 +368,7 @@ gbv_create_widget (GncBudgetView *budget_view)
     GtkTreeViewColumn    *totals_title_col;
     GtkTreeIter           iter;
     GtkWidget            *h_separator;
+    GKeyFile             *state_file = gnc_state_get_current ();
     gchar                *state_section;
     gchar                 guidstr[GUID_ENCODING_LENGTH+1];
 
@@ -388,6 +390,17 @@ gbv_create_widget (GncBudgetView *budget_view)
     guid_to_string_buff (&priv->key, guidstr);
     state_section = g_strjoin (" ", STATE_SECTION_PREFIX, guidstr, NULL);
     g_object_set (G_OBJECT(tree_view), "state-section", state_section, NULL);
+
+    // make sure any extra account columns are hidden, there will be an option to
+    // show code and description in 4.0 which will disrupt the display of the table
+    if (gnc_features_check_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS))
+    {
+        if (g_key_file_has_group (state_file, state_section))
+        {
+            g_key_file_set_boolean (state_file, state_section, "account-code_visible", FALSE);
+            g_key_file_set_boolean (state_file, state_section, "description_visible", FALSE);
+        }
+    }
     g_free (state_section);
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view));
