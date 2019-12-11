@@ -55,11 +55,11 @@ typedef struct
 } GncPluginBudgetClass;
 
 /* function prototypes */
-GType gnc_plugin_budget_get_type(void);
-GncPlugin *gnc_plugin_budget_new(void);
+GType gnc_plugin_budget_get_type (void);
+GncPlugin *gnc_plugin_budget_new (void);
 
 /* Launch the budget list dialog.*/
-GncBudget * gnc_budget_gui_select_budget(GtkWindow *parent, QofBook *book);
+GncBudget * gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book);
 
 
 G_END_DECLS
