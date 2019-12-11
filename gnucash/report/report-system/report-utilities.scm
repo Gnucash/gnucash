@@ -1166,7 +1166,7 @@ flawed. see report-utilities.scm. please update reports.")
           (lp (cdr splits))))
 
        ;; next split is a payment. analyse its sister APAR splits. any
-       ;; split whose lot-balance is negative is an overpayment.
+       ;; split whose lot has no invoice is an overpayment.
        ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
               TXN-TYPE-PAYMENT)
         (let* ((txn (xaccSplitGetParent (car splits)))
@@ -1181,7 +1181,7 @@ flawed. see report-utilities.scm. please update reports.")
                  0 splitlist)))
           (gnc:msg "next " (gnc:strify (car splits)) " payment " payment
                    " overpayment " overpayment)
-          (addbucket! (1- num-buckets) (- overpayment))
+          (addbucket! (1- num-buckets) (if receivable? (- overpayment) overpayment))
           (lp (cdr splits))))
 
        ;; not invoice/prepayment. regular or payment split.
