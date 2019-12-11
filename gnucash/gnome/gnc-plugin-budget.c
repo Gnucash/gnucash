@@ -289,8 +289,8 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
 
     dlg = GTK_DIALOG(gtk_dialog_new_with_buttons (
                          _("Select a Budget"), parent, GTK_DIALOG_MODAL,
-                         _("_OK"), GTK_RESPONSE_OK,
-                         _("_Cancel"), GTK_RESPONSE_CANCEL, NULL));
+                         _("_Cancel"), GTK_RESPONSE_CANCEL,
+                         _("_OK"), GTK_RESPONSE_OK, NULL));
 
     tv = GTK_TREE_VIEW(gtk_tree_view_new ());
     sel = gtk_tree_view_get_selection (tv);
