@@ -937,6 +937,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
             g_warning("error reading group %s key %s: %s",
                       group_name, keys[i], error->message);
             g_error_free(error);
+            g_strfreev (keys);
             LEAVE("bad value");
             return NULL;
         }
@@ -946,6 +947,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
         if (!scm_integer_p(scm_id))
         {
             DEBUG("report id not an integer for key %s", keys[i]);
+            g_strfreev (keys);
             return NULL;
         }
 
@@ -957,6 +959,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
             }
         }
     }
+    g_strfreev (keys);
 
     if (final_id == SCM_BOOL_F)
     {

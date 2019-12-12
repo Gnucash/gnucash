@@ -54,6 +54,7 @@ extern "C" {
 #define GNC_FEATURE_SQLITE3_ISO_DATES "ISO-8601 formatted date strings in SQLite3 databases."
 #define GNC_FEATURE_REG_SORT_FILTER "Register sort and filter settings stored in .gcm file"
 #define GNC_FEATURE_BUDGET_UNREVERSED "Use natural signs in budget amounts"
+#define GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS "Show extra account columns in the Budget View"
 
 /** @} */
 

@@ -535,7 +535,22 @@
           "$320.00" "#200.00 " "$100,000.00" "$117,529.00" "$9,500.00" "$9,500.00"
           "$500.00" "$9,000.00" "$9,500.00" "$103,600.00" "$4,429.00" "$0.00"
           "$108,029.00" "1 FUNDS $350.00" "#1.00 $1.60")
-        (sxml->table-row-col sxml 1 #f 4)))))
+        (sxml->table-row-col sxml 1 #f 4)))
+
+    ;; the following includes non-zero retained earnings of $1,270
+    (set-option! multi-bs-options "General" "End Date"
+                 (cons 'absolute (gnc-dmy2time64 1 3 1980)))
+    (set-option! multi-bs-options "General" "Period duration" #f)
+    (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
+                               "multicol-balsheet-retained")))
+      (test-equal "bal-1/3/80"
+        '("$123,319.00" "$123,319.00" "$5,129.00" "$2,000.00" "$3,029.00"
+          "$0.00" "$100.00" "$17,000.00" "$2,000.00" "$15,000.00" "30 FUNDS "
+          "$1,190.00" "$1,190.00" "#700.00 " "$100,000.00" "$123,319.00"
+          "$9,500.00" "$9,500.00" "$500.00" "$9,000.00" "$9,500.00"
+          "$103,600.00" "$8,949.00" "$1,270.00" "$113,819.00" "1 FUNDS $500.00"
+          "#1.00 $1.70")
+        (sxml->table-row-col sxml 1 #f 2)))))
 
 (define (multicol-pnl-tests)
   (define (default-testing-options)

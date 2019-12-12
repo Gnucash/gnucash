@@ -895,23 +895,21 @@
                                              to-date date-type receivable?)
   (gnc:msg "processing " (qof-print-date to-date) " date-type " date-type
            "receivable? " receivable?)
-  (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 2)))
+  (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 3)))
         (buckets (make-vector num-buckets 0)))
     (define (addbucket! idx amt)
       (vector-set! buckets idx (+ amt (vector-ref buckets idx))))
-    (let lp ((splits splits)
-             (invoices-and-splits '()))
+    (let lp ((splits splits))
       (cond
        ((null? splits)
         (vector->list buckets))
 
        ;; next split is an invoice posting split. add its balance to
-       ;; bucket, and add splits to invoices-and-splits for payments.
+       ;; bucket
        ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
               TXN-TYPE-INVOICE)
         (let* ((invoice (gncInvoiceGetInvoiceFromTxn
                          (xaccSplitGetParent (car splits))))
-               (inv-splits (gnc-lot-get-split-list (gncInvoiceGetPostedLot invoice)))
                (lot (gncInvoiceGetPostedLot invoice))
                (bal (gnc-lot-get-balance lot))
                (bal (if receivable? bal (- bal)))
@@ -924,33 +922,31 @@
             (if (< date (car bucket-dates))
                 (addbucket! idx bal)
                 (loop (1+ idx) (cdr bucket-dates))))
-          (lp (cdr splits)
-              (cons (cons invoice inv-splits) invoices-and-splits))))
+          (lp (cdr splits))))
 
-       ;; next split is a payment. find the associated invoices,
-       ;; deduct their totals. the remaining is an overpayment.
+       ;; next split is a payment. analyse its sister APAR splits. any
+       ;; split whose lot has no invoice is an overpayment.
        ((eqv? (xaccTransGetTxnType (xaccSplitGetParent (car splits)))
               TXN-TYPE-PAYMENT)
         (let* ((txn (xaccSplitGetParent (car splits)))
-               (payment (apply + (map xaccSplitGetAmount
-                                      (xaccTransGetAPARAcctSplitList txn #f))))
+               (splitlist (xaccTransGetAPARAcctSplitList txn #f))
+               (payment (apply + (map xaccSplitGetAmount splitlist)))
                (overpayment
                 (fold
-                 (lambda (inv-and-splits payment-left)
-                   (if (member txn (map xaccSplitGetParent (cdr inv-and-splits)))
-                       (- payment-left (gncInvoiceGetTotal (car inv-and-splits)))
-                       payment-left))
-                 (if receivable? (- payment) payment) invoices-and-splits)))
+                 (lambda (a b)
+                   (if (null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot a)))
+                       (- b (xaccSplitGetAmount a))
+                       b))
+                 0 splitlist)))
           (gnc:msg "next " (gnc:strify (car splits)) " payment " payment
                    " overpayment " overpayment)
-          (when (positive? overpayment)
-            (addbucket! (1- num-buckets) (- overpayment)))
-          (lp (cdr splits) invoices-and-splits)))
+          (addbucket! (1- num-buckets) (if receivable? (- overpayment) overpayment))
+          (lp (cdr splits))))
 
        ;; not invoice/prepayment. regular or payment split.
        (else
         (gnc:msg "next " (gnc:strify (car splits)) " skipped")
-        (lp (cdr splits) invoices-and-splits))))))
+        (lp (cdr splits)))))))
 
 ;; ***************************************************************************
 

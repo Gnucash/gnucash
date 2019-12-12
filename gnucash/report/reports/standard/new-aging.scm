@@ -232,7 +232,7 @@ exist but have no suitable transactions."))
 
      (else
       (setup-query query accounts report-date)
-      (let* ((splits (qof-query-run query))
+      (let* ((splits (xaccQueryGetSplitsUniqueTrans query))
              (accounts (sort-and-delete-duplicates (map xaccSplitGetAccount splits)
                                                    gnc:account-path-less-p equal?)))
         (qof-query-destroy query)

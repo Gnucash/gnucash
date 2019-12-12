@@ -18,6 +18,7 @@
   (list (cons 'employee "08ae9c2e884b4f9787144f47eacd7f44")
         (cons 'vendor "d7d1e53505ee4b1b82efad9eacedaea0")
         (cons 'customer "c146317be32e4948a561ec7fc89d15c1")
+        (cons 'customer-new "c146317be32e4948a561ec7fc89d15c1-new")
         (cons 'job "5518ac227e474f47a34439f2d4d049de")))
 
 (setlocale LC_ALL "C")
@@ -207,13 +208,18 @@
         (set-option! options "General"
                      (case variant
                        ((customer) "Customer")
+                       ((customer-new) "Customer")
                        ((job) "Job"))
                      owner)
         (set-option! options "General" "From"
                      (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! options "General" "To"
                      (cons 'absolute (gnc-dmy2time64 1 7 1980)))
-        (set-option! options "General" "Account" account)
+        (cond
+         ((eq? variant 'customer-new)
+          (set-option! options "Display Columns" "Links" 'detailed))
+         (else
+          (set-option! options "General" "Account" account)))
         options))
 
     ;; inv-1 $6, due 18.7.1980 after report-date i.e. "current"
@@ -321,6 +327,42 @@
         ((sxpath `(// (table 3) // (tr -1) // table // tbody // tr // *text*))
          sxml)))
     (test-end "customer-report")
+
+    (test-begin "new-customer-report")
+    (let* ((options (default-testing-options 'customer-new
+                      owner-1 (get-acct "AR-USD")))
+           (sxml (options->sxml 'customer-new options "new-customer-report basic")))
+      (test-equal "inv-descriptions"
+        '("inv >90 $11.50" "inv 60-90 $7.50" "inv 30-60 $8.50"
+          "inv >90 payment" "inv >90 payment" "inv <30days $4.00"
+          "inv $200" "inv $200" "inv current $6.75" "inv $3 CN"
+          "$31.75" "$7.50")
+        ((sxpath `(// (table 3) // tr (td 5) // *text*))
+         sxml))
+      (test-equal "credit-amounts"
+        '("$11.50" "$7.50" "$8.50" "$4.00" "$200.00" "$6.75" "$8.00")
+        ((sxpath `(// (table 3) // tr (td 6) // *text*))
+         sxml))
+      (test-equal "debit-amounts"
+        '("$1.50" "$2.00" "$200.00" "$3.00" "$31.75")
+        ((sxpath `(// (table 3) // tr (td 7) // *text*))
+         sxml))
+      (test-equal "balance-amounts"
+        '("$11.50" "$19.00" "$27.50" "$26.00" "$24.00" "$28.00"
+          "$228.00" "$28.00" "$34.75" "$31.75")
+        ((sxpath `(// (table 3) // tr (td 8) // *text*))
+         sxml))
+      (test-equal "link-amounts"
+        '("$1.50" "$11.50" "$11.50" "$200.00" "$200.00")
+        ((sxpath `(// (table 3) // tr (td 11) // *text*))
+         sxml))
+      ;; from the report, find the 3rd table, last row, find embedded
+      ;; table, retrieve tr contents
+      (test-equal "aging-table"
+        '("$0.00" "$6.75" "$1.00" "$8.50" "$7.50" "$8.00" "$31.75")
+        ((sxpath `(// (table 3) // (tr -1) // table // tbody // tr // *text*))
+         sxml)))
+    (test-end "new-customer-report")
 
     (display "job-report tests:\n")
     ;; inv for job
