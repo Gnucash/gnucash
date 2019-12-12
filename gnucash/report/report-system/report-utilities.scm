@@ -1136,7 +1136,7 @@ flawed. see report-utilities.scm. please update reports.")
                                              to-date date-type receivable?)
   (gnc:msg "processing " (qof-print-date to-date) " date-type " date-type
            "receivable? " receivable?)
-  (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 2)))
+  (let ((bucket-dates (make-extended-interval-list to-date (- num-buckets 3)))
         (buckets (make-vector num-buckets 0)))
     (define (addbucket! idx amt)
       (vector-set! buckets idx (+ amt (vector-ref buckets idx))))
