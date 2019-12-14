@@ -88,11 +88,18 @@ public:
         return static_cast<const GncOptionDB&>(*this).find_option(section, name);
     }
     std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) const;
+    std::ostream& save_to_scheme(std::ostream& oss,
+                                 const char* options_prolog) const noexcept;
+    std::istream& load_from_scheme(std::istream& iss) noexcept;
+    std::ostream& save_to_key_value(std::ostream& oss) const noexcept;
+    std::istream& load_from_key_value(std::istream& iss) noexcept;
+    void save_to_kvp() const noexcept;
+    void load_from_kvp() noexcept;
     std::ostream& save_option_scheme(std::ostream& oss,
                                      const char* option_prolog,
                                      const std::string& section,
                                      const std::string& name) const noexcept;
-    std::istream& load_option_scheme(std::istream& iss) noexcept;
+    std::istream& load_option_scheme(std::istream& iss);
     std::ostream& save_option_key_value(std::ostream& oss,
                                              const char* section,
                                              const char* name) const noexcept;
