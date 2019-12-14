@@ -967,7 +967,6 @@ public:
 
     std::size_t permissible_value_index(const std::string& value) const {
         return std::visit([&value] (const auto& option) -> size_t {
-                              std::cerr << typeid(option).name() << std::endl;
                               if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                                     GncOptionMultichoiceValue>)
                                         return option.permissible_value_index(value);
