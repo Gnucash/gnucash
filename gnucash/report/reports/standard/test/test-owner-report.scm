@@ -1,8 +1,7 @@
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))
-(use-modules (gnucash reports standard owner-report))
-(use-modules (gnucash reports standard job-report))
+(use-modules (gnucash reports))
 (use-modules (gnucash report stylesheets plain))
 (use-modules (gnucash report))
 (use-modules (tests test-report-extras))
@@ -328,6 +327,7 @@
          sxml)))
     (test-end "customer-report")
 
+    (display "new-owner-report tests:\n")
     (test-begin "new-customer-report")
     (let* ((options (default-testing-options 'customer-new
                       owner-1 (get-acct "AR-USD")))
@@ -352,9 +352,18 @@
           "$228.00" "$28.00" "$34.75" "$31.75")
         ((sxpath `(// (table 3) // tr (td 8) // *text*))
          sxml))
-      (test-equal "link-amounts"
-        '("$1.50" "$11.50" "$11.50" "$200.00" "$200.00")
-        ((sxpath `(// (table 3) // tr (td 11) // *text*))
+      (test-equal "positive-link-amounts"
+        '("$1.50" "$2.00" "$8.00" "$7.50" "$8.50" "$11.50" "$11.50"
+          "$4.00" "$200.00" "$200.00" "$6.75")
+        ((sxpath `(// (table 3) // tr
+                      (td -1 (@ (equal? (class "number-cell")))) //
+                      *text*))
+         sxml))
+      (test-equal "negative-link-amounts"
+        '("-$3.00")
+        ((sxpath `(// (table 3) // tr
+                      (td -1 (@ (equal? (class "number-cell neg")))) //
+                      *text*))
          sxml))
       ;; from the report, find the 3rd table, last row, find embedded
       ;; table, retrieve tr contents

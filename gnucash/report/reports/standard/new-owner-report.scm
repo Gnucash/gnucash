@@ -31,6 +31,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
 (use-modules (srfi srfi-11))             ;for let-values
+(use-modules (ice-9 match))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash core-utils))
@@ -304,97 +305,104 @@
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
              currency total #f #f #f #f (list (make-list link-cols #f))))
 
-  (define (make-invoice->payments-table invoice invoice-splits currency txn)
-    (let lp ((invoice-splits invoice-splits) (result '()))
-      (cond
-       ((null? invoice-splits)
-        (reverse
-         (if (gncInvoiceIsPaid invoice)
-             result
-             (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Outstanding"))
-                         (make-cell
-                          (gnc:make-gnc-monetary
-                           currency
-                           (AP-negate (gnc-lot-get-balance
-                                       (gncInvoiceGetPostedLot invoice))))))
-                   result))))
-       (else
-        (let* ((lot-split (car invoice-splits))
-               (lot-txn (xaccSplitGetParent lot-split))
-               (tfr-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
-          (let lp1 ((tfr-splits tfr-splits) (result result))
-            (cond
-             ((equal? lot-txn txn) (lp (cdr invoice-splits) result))
-             ((null? tfr-splits) (lp (cdr invoice-splits) result))
-             (else
-              (let* ((tfr-split (car tfr-splits))
-                     (tfr-acct (xaccSplitGetAccount tfr-split))
-                     (tfr-curr (xaccAccountGetCommodity tfr-acct))
-                     (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
-                (lp1 (cdr tfr-splits)
-                     (cons (list
-                            (qof-print-date (xaccTransGetDate lot-txn))
-                            (let ((num (gnc-get-num-action lot-txn lot-split)))
-                              (if (string-null? num) (_ "Payment") num))
-                            (make-cell
-                             (gnc:make-html-text
-                              (gnc:html-markup-anchor
-                               (gnc:split-anchor-text tfr-split)
-                               (gnc:make-gnc-monetary tfr-curr tfr-amt)))))
-                           result)))))))))))
+  (define (make-invoice->payments-table invoice)
+    (define lot (gncInvoiceGetPostedLot invoice))
+    (let lp ((invoice-splits (delete (gnc-lot-get-earliest-split lot)
+                                     (gnc-lot-get-split-list lot)))
+             (result '()))
+      (match invoice-splits
+        ;; finished. test for underpayment and add outstanding balance
+        (() (reverse
+             (if (gncInvoiceIsPaid invoice)
+                 result
+                 (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Outstanding"))
+                             (make-cell
+                              (gnc:make-gnc-monetary
+                               currency (AP-negate (gnc-lot-get-balance lot)))))
+                       result))))
 
-  (define (make-payment->invoices-list invoice payment-splits)
+        ;; invoice's lot's payment splits
+        ((lot-split . rest-lot-splits)
+         (let* ((lot-txn (xaccSplitGetParent lot-split))
+                (tfr-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
+           (let lp1 ((tfr-splits tfr-splits) (result result))
+             (match tfr-splits
+               (() (lp rest-lot-splits result))
+               ((tfr-split . rest-tfr-splits)
+                (let* ((tfr-acct (xaccSplitGetAccount tfr-split))
+                       (tfr-curr (xaccAccountGetCommodity tfr-acct))
+                       (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
+                  (lp1 rest-tfr-splits
+                       (cons (list
+                              (qof-print-date (xaccTransGetDate lot-txn))
+                              (let ((num (gnc-get-num-action lot-txn lot-split)))
+                                (if (string-null? num) (_ "Payment") num))
+                              (make-cell
+                               (gnc:make-html-text
+                                (gnc:html-markup-anchor
+                                 (gnc:split-anchor-text tfr-split)
+                                 (gnc:make-gnc-monetary tfr-curr tfr-amt)))))
+                             result)))))))))))
+
+  (define (payment-txn->overpayment-and-invoices txn)
+    (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
+             (overpayment 0)
+             (invoices '()))
+      (match splits
+        (() (cons (AP-negate overpayment) invoices))
+        ((split . rest)
+         (let ((invoice (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
+           (if (null? invoice)
+               (lp rest
+                   (- overpayment (xaccSplitGetAmount split))
+                   invoices)
+               (lp rest
+                   overpayment
+                   (cons invoice invoices))))))))
+
+  (define (make-payment->invoices-list txn)
     (list
      (list
       (apply
        gnc:make-html-text
        (map
-        (lambda (inv-splits)
+        (lambda (inv)
           (gnc:html-markup-anchor
-           (gnc:invoice-anchor-text (car inv-splits))
+           (gnc:invoice-anchor-text inv)
            (gnc-get-num-action
-            (gncInvoiceGetPostedTxn (car inv-splits))
+            (gncInvoiceGetPostedTxn inv)
             #f)))
-        payment-splits)))))
+        (cdr (payment-txn->overpayment-and-invoices txn)))))))
 
-  (define (make-payment->invoices-table txn payment-splits currency)
-    (let lp ((payment-splits payment-splits)
+  (define (make-payment->invoices-table txn)
+    (define overpayment-and-invoices (payment-txn->overpayment-and-invoices txn))
+    (let lp ((invoices (cdr overpayment-and-invoices))
              (result '()))
-      (cond
-       ((null? payment-splits)
-        (let ((overpayment
-               (fold
-                (lambda (a b)
-                  (if (null? (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot a)))
-                      (- b (xaccSplitGetAmount a))
-                      b))
-                0 (xaccTransGetAPARAcctSplitList txn #f))))
-          (reverse
-           (if (positive? overpayment)
-               (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Prepayments"))
-                           (make-cell (gnc:make-gnc-monetary currency overpayment)))
-                     result)
-               result))))
-       (else
-        (let* ((payment-split (car payment-splits))
-               (inv (car payment-split))
-               (inv-amount (gncInvoiceGetTotal inv)))
-          (lp (cdr payment-splits)
-              (cons (list
-                     (qof-print-date (gncInvoiceGetDatePosted inv))
-                     (gnc:make-html-text
-                      (gnc:html-markup-anchor
-                       (gnc:invoice-anchor-text inv)
-                       (gnc-get-num-action (gncInvoiceGetPostedTxn inv) #f)))
-                     (make-cell (gnc:make-gnc-monetary currency inv-amount)))
-                    result)))))))
+      (match invoices
+        (()
+         (let ((overpayment (car overpayment-and-invoices)))
+           (reverse
+            (if (zero? overpayment)
+                result
+                (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Prepayments"))
+                            (make-cell (gnc:make-gnc-monetary currency overpayment)))
+                      result)))))
+        ((inv . rest)
+         (lp rest
+             (cons (list
+                    (qof-print-date (gncInvoiceGetDatePosted inv))
+                    (gnc:make-html-text
+                     (gnc:html-markup-anchor
+                      (gnc:invoice-anchor-text inv)
+                      (gnc-get-num-action (gncInvoiceGetPostedTxn inv) #f)))
+                    (make-cell (gnc:make-gnc-monetary currency (invoice->total inv))))
+                   result))))))
 
   (define (split->type-str split)
     (let* ((txn (xaccSplitGetParent split))
            (invoice (gncInvoiceGetInvoiceFromTxn txn)))
       (cond
-       ((and (txn-is-invoice? txn)
-             (not (null? invoice)))
+       ((txn-is-invoice? txn)
         (gnc:make-html-text
          (gnc:html-markup-anchor
           (gnc:invoice-anchor-text invoice)
@@ -418,6 +426,11 @@
          ((if (gncInvoiceGetIsCreditNote invoice) - identity)
           (gncInvoiceGetTotalTax invoice))))
 
+  (define (invoice->total invoice)
+    (and (not (null? invoice))
+         ((if (gncInvoiceGetIsCreditNote invoice) - identity)
+          (gncInvoiceGetTotal invoice))))
+
   (define (invoice->due-date invoice)
     (and (not (null? invoice))
          (gncInvoiceIsPosted invoice)
@@ -430,8 +443,7 @@
            (debit 0)
            (credit 0)
            (tax 0)
-           (sale 0)
-           (links '()))
+           (sale 0))
     (cond
 
      ((null? splits)
@@ -450,7 +462,7 @@
      ;; not an invoice/payment. skip transaction.
      ((not (or (txn-is-invoice? (xaccSplitGetParent (car splits)))
                (txn-is-payment? (xaccSplitGetParent (car splits)))))
-      (lp printed? odd-row? (cdr splits) total debit credit tax sale links))
+      (lp printed? odd-row? (cdr splits) total debit credit tax sale))
 
      ;; invalid case: txn-type-invoice but no associated invoice, nor lot
      ((let* ((txn (xaccSplitGetParent (car splits)))
@@ -459,26 +471,15 @@
              (or (null? invoice)
                  (null? (gncInvoiceGetPostedLot invoice)))))
       (gnc:warn "sanity check fail" txn)
-      (lp printed? odd-row? (cdr splits) total debit credit tax sale links))
+      (lp printed? odd-row? (cdr splits) total debit credit tax sale))
 
      ;; start printing txns.
      (else
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (value (xaccTransGetAccountAmount txn acc))
-             (value (if payable? (- value) value))
-             (invoice (gncInvoiceGetInvoiceFromTxn txn))
-             (invoice-splits
-              (and (txn-is-invoice? txn)
-                   (gnc-lot-get-split-list
-                    (gncInvoiceGetPostedLot invoice))))
-             (payment-splits
-              (and (txn-is-payment? txn)
-                   (filter
-                    (lambda (inv-split)
-                      (member txn (map xaccSplitGetParent (cdr inv-split))))
-                    links))))
+             (value (AP-negate (xaccTransGetAccountAmount txn acc)))
+             (invoice (gncInvoiceGetInvoiceFromTxn txn)))
 
         (cond
          ;; txn-date < start-date. skip display, accumulate amounts
@@ -486,15 +487,14 @@
           (lp printed? odd-row? (cdr splits) (+ total value)
               (if (negative? value) (+ debit value) debit)
               (if (negative? value) credit (+ credit value))
-              tax sale (if (null? invoice) links
-                           (acons invoice invoice-splits links))))
+              tax sale))
 
          ;; if balance row hasn't been rendered, consider
          ;; adding here.  skip if value=0.
          ((not printed?)
           (let ((print? (and (value-col used-columns) (not (zero? total)))))
             (if print? (add-balance-row odd-row? total))
-            (lp #t (not print?) splits total debit credit tax sale links)))
+            (lp #t (not print?) splits total debit credit tax sale)))
 
          (else
           (add-row
@@ -504,26 +504,23 @@
            (and (>= value 0) value) (and (< value 0) value)
            (invoice->sale invoice) (invoice->tax invoice)
            (cond
-            ((and invoice-splits (eq? link-option 'simple))
-             (if (gnc-lot-is-closed (gncInvoiceGetPostedLot invoice))
+            ((and (txn-is-invoice? txn) (eq? link-option 'simple))
+             (if (gncInvoiceIsPaid invoice)
                  (list (list (_ "Paid")))
                  (list (list #f))))
-            ((and invoice-splits (eq? link-option 'detailed))
-             (make-invoice->payments-table invoice invoice-splits currency txn))
-            ((and payment-splits (eq? link-option 'simple))
-             (make-payment->invoices-list invoice payment-splits))
-            ((and payment-splits (eq? link-option 'detailed))
-             (make-payment->invoices-table txn payment-splits currency))
-            ;; some error occurred, show 1 line containing empty-list
+            ((and (txn-is-invoice? txn) (eq? link-option 'detailed))
+             (make-invoice->payments-table invoice))
+            ((and (txn-is-payment? txn) (eq? link-option 'simple))
+             (make-payment->invoices-list txn))
+            ((and (txn-is-payment? txn) (eq? link-option 'detailed))
+             (make-payment->invoices-table txn currency))
             (else '(()))))
 
           (lp printed? (not odd-row?) (cdr splits) (+ total value)
               (if (negative? value) (+ debit value) debit)
               (if (negative? value) credit (+ credit value))
               (+ tax (or (invoice->tax invoice) 0))
-              (+ sale (or (invoice->sale invoice) 0))
-              (if (null? invoice) links
-                  (acons invoice invoice-splits links))))))))))
+              (+ sale (or (invoice->sale invoice) 0))))))))))
 
 (define (options-generator owner-type)
 
@@ -630,17 +627,6 @@ invoices and amounts.")))))
 
   gnc:*report-options*)
 
-(define (multiline-to-html-text str)
-  ;; simple function - splits string containing #\newline into
-  ;; substrings, and convert to a gnc:make-html-text construct which
-  ;; adds gnc:html-markup-br after each substring.
-  (let loop ((list-of-substrings (string-split str #\newline))
-             (result '()))
-    (if (null? list-of-substrings)
-        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
-        (loop (cdr list-of-substrings)
-              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
-
 (define (setup-query q owner accounts end-date job?)
   (let ((guid (gncOwnerReturnGUID (if job? owner (gncOwnerGetEndOwner owner))))
         (last-param (if job? QOF-PARAM-GUID OWNER-PARENTG)))
@@ -668,7 +654,7 @@ invoices and amounts.")))))
      'attribute (list "cellpadding" 0)
      'attribute (list "valign" "top"))
     (gnc:html-table-append-row!
-     table (multiline-to-html-text (gnc:owner-get-name-and-address-dep owner)))
+     table (gnc:multiline-to-html-text (gnc:owner-get-name-and-address-dep owner)))
     table))
 
 (define (make-myname-table book date-format)
@@ -687,7 +673,7 @@ invoices and amounts.")))))
     (when name
       (gnc:html-table-append-row! table (list name)))
     (when addy
-      (gnc:html-table-append-row! table (multiline-to-html-text addy)))
+      (gnc:html-table-append-row! table (gnc:multiline-to-html-text addy)))
     (gnc:html-table-append-row!
      table (list (gnc-print-time64 (gnc:get-today) date-format)))
     table))
@@ -728,7 +714,7 @@ invoices and amounts.")))))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (headings (make-heading-list used-columns link-option))
-         (report-title (string-append (_ (owner-string type)) " " (_ "Report"))))
+         (report-title (string-append (_ owner-descr) " " (_ "Report"))))
 
     (cond
      ((not (gncOwnerIsValid owner))
