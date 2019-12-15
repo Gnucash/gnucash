@@ -406,24 +406,47 @@ unquote_scheme_string(const std::string& str)
     return str;
 }
 
+static inline bool
+string_equal_charptr(const std::string& str, const char* chars)
+{
+    if (!chars || str.empty() || strlen(chars) != str.size())
+        return false;
+    return strcmp(str.c_str(), chars) == 0;
+}
+
+static std::optional<std::reference_wrapper<const SchemeId>>
+find_form(const SchemeId& toplevel, IdentType type, const char* name)
+{
+    if (toplevel.m_type == type &&
+        string_equal_charptr(toplevel.m_name.c_str(), name))
+        return std::ref(toplevel);
+    for (const auto& id : toplevel.m_ids)
+    {
+        if (id.m_type == type && string_equal_charptr(id.m_name.c_str(), name))
+            return std::ref(id);
+        auto child{find_form(id, type, name)};
+        if (child)
+            return child;
+    }
+    return std::nullopt;
+}
+
 std::istream&
 GncOptionDB::load_option_scheme(std::istream& iss)
 {
     auto sbuf{iss.rdbuf()};
     SchemeId toplevel;
+    std::optional<std::reference_wrapper<const SchemeId>> lookup_id;
     bool form_found = false;
-    while (sbuf->in_avail()  && !form_found)
+    while (sbuf->in_avail()  && !lookup_id)
     {
         scan_scheme_id_from_streambuf(sbuf, toplevel);
-        if (toplevel.m_type == IdentType::FORM &&
-            toplevel.m_name == "let" && toplevel.m_ids.size() == 2)
-            if (const auto& let_block{toplevel.m_ids[0]};
-                let_block.m_ids.size() == 1)
-                if (const auto& first_form{let_block.m_ids[0]};
-                    first_form.m_name == "option")
-                    form_found = true;
+        lookup_id = find_form(toplevel, IdentType::FORM, "gnc:lookup-option");
     }
-    const auto& classifier = toplevel.m_ids[0].m_ids[0].m_ids[0].m_ids;
+
+    if (!lookup_id)
+        throw std::runtime_error("No gnc:lookup-option found");
+    const auto& classifier = lookup_id->get().m_ids;
     if (classifier.size() != 3)
         throw std::runtime_error("Malformed option classifier.");
     const auto& section = unquote_scheme_string(classifier[1].m_name);
@@ -438,22 +461,14 @@ GncOptionDB::load_option_scheme(std::istream& iss)
         err += option_str;
         throw std::runtime_error(err);
     }
-    if (!(toplevel.m_type == IdentType::FORM && toplevel.m_ids.size() == 2 &&
-          toplevel.m_ids[1].m_type == IdentType::FORM &&
-          toplevel.m_ids[1].m_ids.size() == 2 &&
-          toplevel.m_ids[1].m_ids[0].m_type == IdentType::FORM &&
-          toplevel.m_ids[1].m_ids[0].m_ids.size() == 2 &&
-          toplevel.m_ids[1].m_ids[0].m_ids[1].m_type == IdentType::FORM &&
-          toplevel.m_ids[1].m_ids[0].m_ids[1].m_ids.size() == 2 &&
-          toplevel.m_ids[1].m_ids[0].m_ids[1].m_ids[1].m_type == IdentType::FORM &&
-          toplevel.m_ids[1].m_ids[0].m_ids[1].m_ids[1].m_ids.size() == 2))
+    auto value_id = find_form(toplevel, IdentType::FORM, "gnc:option-set-value");
+    if (!(value_id && value_id->get().m_ids.size() == 2))
     {
         std::string err{"Option "};
         err += option_str;
         throw std::runtime_error(err + " malformed value lambda form.");
     }
-    auto value_id = toplevel.m_ids[1].m_ids[0].m_ids[1].m_ids[1].m_ids[1];
-    std::istringstream value_iss{value_id.m_name};
+    std::istringstream value_iss{value_id->get().m_ids[1].m_name};
     option->get().from_scheme(value_iss);
     return iss;
 }
