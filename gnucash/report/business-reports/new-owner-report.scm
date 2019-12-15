@@ -309,8 +309,7 @@
 
   (define (make-invoice->payments-table invoice)
     (define lot (gncInvoiceGetPostedLot invoice))
-    (let lp ((invoice-splits (delete (gnc-lot-get-earliest-split lot)
-                                     (gnc-lot-get-split-list lot)))
+    (let lp ((invoice-splits (gnc-lot-get-split-list lot))
              (result '()))
       (match invoice-splits
         ;; finished. test for underpayment and add outstanding balance
