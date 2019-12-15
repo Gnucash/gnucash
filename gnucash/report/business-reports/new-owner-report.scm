@@ -515,7 +515,7 @@
             ((and (txn-is-payment? txn) (eq? link-option 'simple))
              (make-payment->invoices-list txn))
             ((and (txn-is-payment? txn) (eq? link-option 'detailed))
-             (make-payment->invoices-table txn currency))
+             (make-payment->invoices-table txn))
             (else '(()))))
 
           (lp printed? (not odd-row?) (cdr splits) (+ total value)
