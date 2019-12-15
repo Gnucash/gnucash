@@ -345,12 +345,16 @@
                                  (gnc:make-gnc-monetary tfr-curr tfr-amt)))))
                              result)))))))))))
 
+  (define (invoice<? a b)
+    (string<? (gncInvoiceGetGUID a) (gncInvoiceGetGUID b)))
+
   (define (payment-txn->overpayment-and-invoices txn)
     (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
              (overpayment 0)
              (invoices '()))
       (match splits
-        (() (cons (AP-negate overpayment) invoices))
+        (() (cons (AP-negate overpayment)
+                  (sort-and-delete-duplicates invoices invoice<? equal?)))
         ((split . rest)
          (let ((invoice (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
            (if (null? invoice)
