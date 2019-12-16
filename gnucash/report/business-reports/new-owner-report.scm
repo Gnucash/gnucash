@@ -180,6 +180,11 @@
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-INVOICE))
 (define (txn-is-payment? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
+(define (split<? a b)
+  (< (xaccTransGetDate (xaccSplitGetParent a))
+     (xaccTransGetDate (xaccSplitGetParent b))))
+(define (split-is-payment? split)
+  (txn-is-payment? (xaccSplitGetParent split)))
 
 (define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
@@ -308,42 +313,33 @@
              currency total #f #f #f #f (list (make-list link-cols #f))))
 
   (define (make-invoice->payments-table invoice)
-    (define lot (gncInvoiceGetPostedLot invoice))
-    (let lp ((invoice-splits (gnc-lot-get-split-list lot))
-             (result '()))
-      (match invoice-splits
-        ;; finished. test for underpayment and add outstanding balance
-        (() (reverse
-             (if (gncInvoiceIsPaid invoice)
-                 result
-                 (cons (list (gnc:make-html-table-cell/size 1 2 (_ "Outstanding"))
-                             (make-cell
-                              (gnc:make-gnc-monetary
-                               currency (AP-negate (gnc-lot-get-balance lot)))))
-                       result))))
-
-        ;; invoice's lot's payment splits
-        ((lot-split . rest-lot-splits)
-         (let* ((lot-txn (xaccSplitGetParent lot-split))
-                (tfr-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
-           (let lp1 ((tfr-splits tfr-splits) (result result))
-             (match tfr-splits
-               (() (lp rest-lot-splits result))
-               ((tfr-split . rest-tfr-splits)
-                (let* ((tfr-acct (xaccSplitGetAccount tfr-split))
-                       (tfr-curr (xaccAccountGetCommodity tfr-acct))
-                       (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
-                  (lp1 rest-tfr-splits
-                       (cons (list
-                              (qof-print-date (xaccTransGetDate lot-txn))
-                              (let ((num (gnc-get-num-action lot-txn lot-split)))
-                                (if (string-null? num) (_ "Payment") num))
-                              (make-cell
-                               (gnc:make-html-text
-                                (gnc:html-markup-anchor
-                                 (gnc:split-anchor-text tfr-split)
-                                 (gnc:make-gnc-monetary tfr-curr tfr-amt)))))
-                             result)))))))))))
+    (define (tfr-split->row tfr-split)
+      (let* ((pmt-txn (xaccSplitGetParent tfr-split))
+             (tfr-acct (xaccSplitGetAccount tfr-split))
+             (tfr-curr (xaccAccountGetCommodity tfr-acct))
+             (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
+        (list
+         (qof-print-date (xaccTransGetDate pmt-txn))
+         (let ((num (gnc-get-num-action pmt-txn tfr-split)))
+           (if (string-null? num) (_ "Payment") num))
+         (make-cell
+          (gnc:make-html-text
+           (gnc:html-markup-anchor
+            (gnc:split-anchor-text tfr-split)
+            (gnc:make-gnc-monetary tfr-curr tfr-amt)))))))
+    (let* ((lot (gncInvoiceGetPostedLot invoice))
+           (pmt-splits (append-map
+                        (compose xaccTransGetPaymentAcctSplitList xaccSplitGetParent)
+                        (filter split-is-payment? (gnc-lot-get-split-list lot))))
+           (dedupe-splits (sort-and-delete-duplicates pmt-splits split<? equal?)))
+      (if (gncInvoiceIsPaid invoice)
+          (map tfr-split->row dedupe-splits)
+          (append (map tfr-split->row dedupe-splits)
+                  (list
+                   (list (gnc:make-html-table-cell/size 1 2 (_ "Outstanding"))
+                         (make-cell
+                          (gnc:make-gnc-monetary
+                           currency (AP-negate (gnc-lot-get-balance lot))))))))))
 
   (define (payment-txn->overpayment-and-invoices txn)
     (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
