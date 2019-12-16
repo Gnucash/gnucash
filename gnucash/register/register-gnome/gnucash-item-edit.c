@@ -565,7 +565,8 @@ draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
     gint height = gtk_widget_get_allocated_height (widget);
     gint size;
 
-    gtk_render_background (context, cr, 0, 0, width, height);
+    // allow room for a border
+    gtk_render_background (context, cr, 2, 2, width - 4, height - 4);
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 
