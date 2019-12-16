@@ -56,6 +56,8 @@ enum
     TARGET_COMPOUND_TEXT
 };
 
+#define MIN_BUTT_WIDTH 22 // minimum size for a button
+
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
@@ -114,9 +116,10 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
     gint x, y, w, h = 2, width = 0;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
-    if (width < 22) // minimum size for a button
-        width = 22;
+    if (width < MIN_BUTT_WIDTH)
+        width = MIN_BUTT_WIDTH;
     *minimal_width = *natural_width = width;
+    item_edit->button_width = width;
 }
 
 static void
@@ -319,6 +322,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->popup_user_data = NULL;
 
     item_edit->style = NULL;
+    item_edit->button_width = MIN_BUTT_WIDTH;
 
     gnc_virtual_location_init(&item_edit->virt_loc);
 }
@@ -795,6 +799,15 @@ gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side)
     default:
         return 2;
     }
+}
+
+gint
+gnc_item_edit_get_button_width (GncItemEdit *item_edit)
+{
+    if (item_edit)
+        return item_edit->button_width;
+    else
+        return MIN_BUTT_WIDTH;
 }
 
 static gboolean

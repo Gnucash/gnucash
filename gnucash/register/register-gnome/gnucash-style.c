@@ -207,8 +207,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
                 g_object_unref (layout);
                 width += gnc_item_edit_get_margin (item_edit, left_right) +
-                         gnc_item_edit_get_padding_border (item_edit, left_right);
-
+                         gnc_item_edit_get_padding_border (item_edit, left_right) + 2;
                 cd->pixel_height += gnc_item_edit_get_margin (item_edit, top_bottom) +
                                     gnc_item_edit_get_padding_border (item_edit, top_bottom);
             }
@@ -227,7 +226,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
             // This is used on new account popup cells to get the default
             // width of text plus toggle button.
             if (cell && cell->is_popup)
-                width += cd->pixel_height; // toggle button is square, use cell height
+                width += gnc_item_edit_get_button_width (item_edit);
 
             cd->pixel_width = MAX (cd->pixel_width, width);
         }

@@ -2268,6 +2268,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
     SheetBlockStyle *style;
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), "");
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    const gchar *type_name;
 
     g_return_val_if_fail (virt_col >= 0, 0);
     g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
@@ -2313,6 +2314,14 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 width += (gnc_item_edit_get_margin (item_edit, left_right) +
                           gnc_item_edit_get_padding_border (item_edit, left_right));
 
+                // get the cell type so we can add the button width to the
+                // text width if required.
+                type_name = gnc_table_get_cell_type_name (sheet->table, virt_loc);
+                if ((g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
+                    || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0))
+                {
+                    width += gnc_item_edit_get_button_width (item_edit);
+                }
                 max = MAX (max, width);
             }
     }

@@ -94,6 +94,7 @@ typedef struct
     GtkBorder        padding;
     GtkBorder        margin;
     GtkBorder        border;
+    gint             button_width;
 
     /* Where are we */
     VirtualLocation virt_loc;
@@ -161,6 +162,8 @@ void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 
 gint gnc_item_edit_get_margin (GncItemEdit *item_edit, Sides side);
 gint gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side);
+gint gnc_item_edit_get_button_width (GncItemEdit *item_edit);
+
 
 GType gnc_item_edit_tb_get_type (void);
 GtkWidget *gnc_item_edit_tb_new (GnucashSheet *sheet);
