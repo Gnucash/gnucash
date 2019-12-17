@@ -161,6 +161,9 @@ exist but have no suitable transactions."))
 (define (gnc-owner-equal? a b)
   (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
 
+(define (account<? a b)
+  (< (xaccAccountOrder a b) 0))
+
 (define (split-has-owner? split owner)
   (let* ((split-owner (split->owner split))
          (retval (gnc-owner-equal? split-owner owner)))
@@ -237,7 +240,7 @@ exist but have no suitable transactions."))
       (setup-query query accounts report-date)
       (let* ((splits (xaccQueryGetSplitsUniqueTrans query))
              (accounts (sort-and-delete-duplicates (map xaccSplitGetAccount splits)
-                                                   gnc:account-path-less-p equal?)))
+                                                   account<? equal?)))
         (qof-query-destroy query)
 
         ;; loop into each APAR account

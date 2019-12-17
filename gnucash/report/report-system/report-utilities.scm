@@ -133,8 +133,8 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 	  (sort-and-delete-duplicates
            (map xaccAccountGetCommodity accounts)
            (lambda (a b)
-	     (string<? (gnc-commodity-get-mnemonic a)
-                       (gnc-commodity-get-mnemonic b)))
+             (string<? (gnc-commodity-get-unique-name a)
+                       (gnc-commodity-get-unique-name b)))
            gnc-commodity-equiv)))
 
 
@@ -155,8 +155,7 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 (define (gnc:accounts-and-all-descendants accountslist)
   (sort-and-delete-duplicates
    (apply append accountslist (map gnc-account-get-descendants accountslist))
-   (lambda (a b)
-     (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
+   (lambda (a b) (< (xaccAccountOrder a b) 0))
    equal?))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes

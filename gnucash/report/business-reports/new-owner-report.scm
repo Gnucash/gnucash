@@ -181,8 +181,7 @@
 (define (txn-is-payment? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 (define (split<? a b)
-  (< (xaccTransGetDate (xaccSplitGetParent a))
-     (xaccTransGetDate (xaccSplitGetParent b))))
+  (< (xaccSplitOrder a b) 0))
 (define (split-is-payment? split)
   (txn-is-payment? (xaccSplitGetParent split)))
 
