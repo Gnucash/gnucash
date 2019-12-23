@@ -277,7 +277,7 @@ void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
  *  contained in this group.
  *
  *  @param action_names A NULL terminated list of actions names that
- *  should modified.
+ *  should be modified.
  *
  *  @param property_name The property name to be changed on the
  *  specified actions. The only two GtkAction properties that it makes
