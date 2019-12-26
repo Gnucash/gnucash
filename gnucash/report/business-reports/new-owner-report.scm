@@ -132,11 +132,15 @@
 (define (bal-col columns-used)
   (vector-ref columns-used 9))
 (define (num-link-cols columns-used)
-  (+ (if (date-col columns-used) 1 0)
+  (+ (if (or (date-col columns-used) (type-col columns-used)
+             (ref-col columns-used) (credit-col columns-used)
+             (desc-col columns-used) (debit-col columns-used))
+         1 0)
+     (if (date-col columns-used) 1 0)
      (if (ref-col columns-used) 1 0)
      (if (type-col columns-used) 1 0)
      (if (desc-col columns-used) 1 0)
-     (if (bal-col columns-used) 1 0)))
+     (if (or (credit-col columns-used) (debit-col columns-used)) 1 0)))
 (define columns-used-size 10)
 
 (define (build-column-used options)
@@ -192,6 +196,10 @@
       ((simple)
        (addto! heading-list (_ linked-txns-header)))
       ((detailed)
+       (if (or (date-col column-vector) (type-col column-vector)
+               (ref-col column-vector) (credit-col column-vector)
+               (desc-col column-vector) (debit-col column-vector))
+           (addto! heading-list #f))
        (if (date-col column-vector) (addto! heading-list (_ "Date")))
        (if (ref-col column-vector) (addto! heading-list (_ "Reference")))
        (if (type-col column-vector) (addto! heading-list (_ "Type")))
@@ -291,7 +299,8 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
-                 desc currency amt credit debit sale tax anchor-split link-rows)
+                 desc currency amt credit debit sale tax anchor-split
+                 link-option link-rows)
   (define empty-cols
     (count identity
            (map (lambda (f) (f column-vector))
@@ -312,16 +321,15 @@
                "number-cell" (link-data-amount link-data)))))
 
      ((link-desc-amount? link-data)
-      (append
-       (list
-        (gnc:make-html-table-cell/size
-         1 (count identity
-                  (map (lambda (f) (f column-vector))
-                       (list date-col ref-col type-col desc-col)))
-         (link-desc-amount-desc link-data)))
-       (addif (or (debit-col column-vector) (credit-col column-vector))
-              (gnc:make-html-table-cell/markup
-               "number-cell" (link-desc-amount-amount link-data)))))
+      (let ((cols (count identity
+                         (map (lambda (f) (f column-vector))
+                              (list date-col ref-col type-col desc-col)))))
+        (append
+         (addif (< 0 cols) (gnc:make-html-table-cell/size
+                            1 cols (link-desc-amount-desc link-data)))
+         (addif (or (debit-col column-vector) (credit-col column-vector))
+                (gnc:make-html-table-cell/markup
+                 "number-cell" (link-desc-amount-amount link-data))))))
 
      ((link-blank? link-data)
       (make-list (count identity
@@ -338,6 +346,11 @@
           (gnc:html-markup-anchor
            (gnc:split-anchor-text anchor-split)
            (gnc:make-gnc-monetary currency amt)))))
+  (define cell-nohoriz
+    (let ((cell (gnc:make-html-table-cell/size nrows 1 #f)))
+      (gnc:html-table-cell-set-style!
+       cell "td" 'attribute '("style" "border-bottom: none; border-top: none;"))
+      cell))
   (let lp ((link-rows link-rows)
            (first-row? #t))
     (unless (null? link-rows)
@@ -364,6 +377,7 @@
               (addif (credit-col column-vector)  (cell-anchor credit))
               (addif (debit-col column-vector)   (cell-anchor (and debit (- debit))))
               (addif (bal-col column-vector)     (cell amt))))
+            (addif (eq? link-option 'detailed) cell-nohoriz)
             (link-data->cols (car link-rows))))
           (gnc:html-table-append-row/markup!
            table (if odd-row? "normal-row" "alternate-row")
@@ -432,7 +446,7 @@
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
              currency total #f #f #f #f (list (make-list link-cols #f))
-             (list (make-link-blank))))
+             link-option (list (make-link-blank))))
 
   (define (make-invoice->payments-table invoice)
     (define (tfr-split->row tfr-split)
@@ -686,6 +700,7 @@
            (and (>= value 0) value) (and (< value 0) value)
            (invoice->sale invoice) (invoice->tax invoice)
            (txn->transfer-split txn)
+           link-option
            (cond
             ((and (txn-is-invoice? txn) (eq? link-option 'simple))
              (if (gncInvoiceIsPaid invoice)
