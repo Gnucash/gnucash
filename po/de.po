@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-12-26 16:42+0100\n"
-"PO-Revision-Date: 2019-11-12 21:44+0200\n"
+"PO-Revision-Date: 2019-12-26 18:34+0100\n"
 "Last-Translator: pianoslum <pianoslum@mailbox.org>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -4486,9 +4486,8 @@ msgid "Sort by description"
 msgstr "Sortieren nach Beschreibung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:266
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "Rechnung drucken"
+msgstr "Rechnung _drucken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
 msgid "_Edit Invoice"
@@ -4496,7 +4495,7 @@ msgstr "Rechnung be_arbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:268
 msgid "_Duplicate Invoice"
-msgstr "Rechnung _duplizieren"
+msgstr "Rechnung d_uplizieren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:269
 msgid "_Post Invoice"
@@ -4515,109 +4514,88 @@ msgid "_Pay Invoice"
 msgstr "Rechnung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:278
-#, fuzzy
 msgid "_Print Bill"
-msgstr "D_rucken"
+msgstr "Rechnung _drucken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:279
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Lieferantenrechnung bearbeiten"
+msgstr "Rechnung be_arbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:280
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Duplizieren"
+msgstr "Rechnung d_uplizieren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:281
-#, fuzzy
 msgid "_Post Bill"
-msgstr "Rechnung zahlen"
+msgstr "Rechnung _buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:282
-#, fuzzy
 msgid "_Unpost Bill"
 msgstr "Rechnungsbuchung _rückgängig"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
-#, fuzzy
 msgid "New _Bill"
-msgstr "Neue Lieferantenrechnung"
+msgstr "_Neue Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "Rechnung zahlen"
+msgstr "Rechnung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:290
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "Schec_ks drucken"
+msgstr "Auslagenerstattung _drucken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:291
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "Auslagenerstattung anzeigen/bearbeiten"
+msgstr "Auslagenerstattung be_arbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "Rechnung _duplizieren"
+msgstr "Auslagenerstattung d_uplizieren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:293
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "Auslagenerstattung"
+msgstr "Auslagenerstattung _buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:294
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "Rechnungsbuchung _rückgängig"
+msgstr "Auslagenerstattung-Buchung _rückgängig"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:295
-#, fuzzy
 msgid "New _Voucher"
-msgstr "Neue Auslagenerstattung"
+msgstr "_Neue Auslagenerstattung"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "Auslagenerstattung"
+msgstr "Auslagenerstattung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Gutschrift _drucken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:303
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Gutschrift be_arbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:304
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Gutschrift d_uplizieren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:305
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Gutschrift bu_chen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:306
-#, fuzzy
 msgid "_Unpost Credit Note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Gutschrift-Buchung _rückgängig"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:307
-#, fuzzy
 msgid "New _Credit Note"
-msgstr "Neue Gutschrift"
+msgstr "_Neue Gutschrift"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:308
-#, fuzzy
 msgid "_Pay Credit Note"
-msgstr "Gutschrift"
+msgstr "Gutschrift be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:314
 msgid "Make a printable invoice"
@@ -4632,12 +4610,10 @@ msgid "Create a new invoice as a duplicate of the current one"
 msgstr "Eine neue Rechnung als Kopie der aktuellen Rechnung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "Diese Rechnung in Ihre Konten buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "Unpost this invoice and make it editable"
 msgstr ""
 "Buchung dieser Rechnung löschen und dadurch die Rechnung zum Bearbeiten "
@@ -4650,166 +4626,128 @@ msgstr ""
 "erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
 msgstr "Zur freien Zeile am Ende dieser Rechnung gehen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:321
-#, fuzzy
 msgid "Enter a payment for the owner of this invoice"
 msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:322
-#, fuzzy
 msgid "Open a company report window for the owner of this invoice"
 msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:327
-#, fuzzy
 msgid "Make a printable bill"
 msgstr "Eine druckbare Rechnung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:328
-#, fuzzy
 msgid "Edit this bill"
 msgstr "Diese Rechnung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:329
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
 msgstr "Eine neue Rechnung als Kopie der aktuellen Rechnung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:330
-#, fuzzy
 msgid "Post this bill to your Chart of Accounts"
 msgstr "Diese Rechnung in Ihre Konten buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
-#, fuzzy
 msgid "Unpost this bill and make it editable"
 msgstr ""
 "Buchung dieser Rechnung löschen und dadurch die Rechnung zum Bearbeiten "
 "freigeben"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
-#, fuzzy
 msgid "Create a new bill for the same owner as the current one"
 msgstr ""
 "Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung "
 "erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:333
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the bill"
 msgstr "Zur freien Zeile am Ende dieser Rechnung gehen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:334
-#, fuzzy
 msgid "Enter a payment for the owner of this bill"
 msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:335
-#, fuzzy
 msgid "Open a company report window for the owner of this bill"
 msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "Eine druckbare Rechnung erstellen"
+msgstr "Eine druckbare Auslagenerstattung erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "Diese Rechnung bearbeiten"
+msgstr "Diese Auslagenerstattung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:342
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Eine neue Rechnung als Kopie der aktuellen Rechnung erstellen"
+msgstr "Eine neue Auslagenerstattung als Kopie der aktuellen erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:343
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Diese Rechnung in Ihre Konten buchen"
+msgstr "Diese Auslagenerstattung in Ihre Konten buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr ""
-"Buchung dieser Rechnung löschen und dadurch die Rechnung zum Bearbeiten "
-"freigeben"
+msgstr "Buchung dieser Auslagenerstattung löschen und sie dadurch zum Bearbeiten freigeben"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:345
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr ""
-"Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung "
-"erstellen"
+msgstr "Eine neue Auslagenerstattung für den gleichen Mandanten wie bei der aktuellen erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Zur freien Zeile am Ende dieser Rechnung gehen"
+msgstr "Zur freien Zeile am Ende dieser Auslagenerstattung gehen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:347
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
+msgstr "Geben Sie eine Zahlung für den Mandanten dieser Auslagenerstattung ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:348
-#, fuzzy
 msgid "Open a company report window for the owner of this voucher"
-msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
+msgstr "Einen Firmenbericht für den Mandanten dieser Auslagenerstattung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
-#, fuzzy
 msgid "Make a printable credit note"
-msgstr "Eine druckbare Rechnung erstellen"
+msgstr "Eine druckbare Gutschrift erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:354
-#, fuzzy
 msgid "Edit this credit note"
 msgstr "Gutschrift bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:355
-#, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "Eine neue Rechnung als Kopie der aktuellen Rechnung erstellen"
+msgstr "Eine neue Gutschrift als Kopie der aktuellen erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:356
-#, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "Diese Rechnung in Ihre Konten buchen"
+msgstr "Diese Gutschrift in Ihre Konten buchen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:357
-#, fuzzy
 msgid "Unpost this credit note and make it editable"
-msgstr ""
-"Buchung dieser Rechnung löschen und dadurch die Rechnung zum Bearbeiten "
-"freigeben"
+msgstr "Buchung dieser Gutschrift löschen und sie dadurch zum Bearbeiten freigeben"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:358
-#, fuzzy
 msgid "Create a new credit note for the same owner as the current one"
-msgstr ""
-"Eine neue Rechnung für den gleichen Mandanten wie bei der aktuellen Rechnung "
-"erstellen"
+msgstr "Eine neue Gutschrift für den gleichen Mandanten wie bei der aktuellen erstellen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr "Zur freien Zeile am Ende dieser Rechnung gehen"
+msgstr "Zur freien Zeile am Ende dieser Gutschrift gehen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:360
-#, fuzzy
 msgid "Enter a payment for the owner of this credit note"
-msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
+msgstr "Geben Sie eine Zahlung für den Mandanten dieser Gutschrift ein"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:361
-#, fuzzy
 msgid "Open a company report window for the owner of this credit note"
-msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
+msgstr "Einen Firmenbericht für den Mandanten dieser Gutschrift öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register2.c:484
@@ -23788,9 +23726,8 @@ msgid "Display a period debits column?"
 msgstr "Soll-Spalte pro Periode anzeigen?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:785
-#, fuzzy
 msgid "Show linked transactions"
-msgstr "Nur stornierte Buchungssätze anzeigen."
+msgstr ""
 
 #: gnucash/report/business-reports/new-owner-report.scm:787
 #: gnucash/report/report-system/html-utilities.scm:788
@@ -23800,14 +23737,12 @@ msgid "Disabled"
 msgstr "Inaktiv"
 
 #: gnucash/report/business-reports/new-owner-report.scm:788
-#, fuzzy
 msgid "Linked transactions are hidden."
-msgstr "Finde Buchungssätze"
+msgstr ""
 
 #: gnucash/report/business-reports/new-owner-report.scm:790
-#, fuzzy
 msgid "Simple"
-msgstr "Beispiel:"
+msgstr "Einfach"
 
 #: gnucash/report/business-reports/new-owner-report.scm:791
 msgid "Invoices show if paid, payments show invoice numbers."
@@ -30630,9 +30565,8 @@ msgid " (closed)"
 msgstr " (geschlossen)"
 
 #: libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Benutzerdefiniert"
+msgstr "Undefiniert"
 
 #: libgnucash/engine/gncOwner.c:1013
 msgid "Offset between documents: "
@@ -30843,343 +30777,3 @@ msgstr "Finance::Quote Version ~A wurde gefunden."
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "Period:"
-#~ msgstr "Periode:"
-
-#~ msgid "Transfers"
-#~ msgstr "Überweisungen"
-
-#~ msgid "Statement Date:"
-#~ msgstr "Datum des Kontoauszugs:"
-
-#~ msgid "Difference:"
-#~ msgstr "Differenz:"
-
-#~ msgid "View:"
-#~ msgstr "Ansicht:"
-
-#~ msgid "Title:"
-#~ msgstr "Titel:"
-
-#~ msgid "Notes:"
-#~ msgstr "Bemerkung:"
-
-#~ msgid "End:"
-#~ msgstr "Ende:"
-
-# Fixme: Source without accelerator
-#~ msgid "Interest Rate:"
-#~ msgstr "Zinssatz:"
-
-#~ msgid "Amount:"
-#~ msgstr "Betrag:"
-
-#~ msgid "Type:"
-#~ msgstr "Typ:"
-
-#~ msgid "Payment From:"
-#~ msgstr "Zahlung von:"
-
-#~ msgid "Name:"
-#~ msgstr "Name:"
-
-#~ msgid "Payment To:"
-#~ msgstr "Zahlung an:"
-
-#~ msgid "Account name:"
-#~ msgstr "Kontobezeichnung:"
-
-#~ msgid "_Date:"
-#~ msgstr "_Datum:"
-
-#~ msgid "_Shares:"
-#~ msgstr "_Anteile:"
-
-#~ msgid "_Amount:"
-#~ msgstr "_Betrag:"
-
-#~ msgid "_Memo:"
-#~ msgstr "Buchungs_text:"
-
-#~ msgid "_Balance:"
-#~ msgstr "_Saldo:"
-
-#~ msgid "Interval:"
-#~ msgstr "Intervall:"
-
-#~ msgid "Description:"
-#~ msgstr "Beschreibung:"
-
-#~ msgid "Customer Number: "
-#~ msgstr "Kundennummer: "
-
-#~ msgid "Company Name: "
-#~ msgstr "Firmenname: "
-
-#~ msgid "Name: "
-#~ msgstr "Name: "
-
-#~ msgid "Address: "
-#~ msgstr "Adresse: "
-
-#~ msgid "Phone: "
-#~ msgstr "Telefon: "
-
-#~ msgid "Fax: "
-#~ msgstr "Fax: "
-
-#~ msgid "Email: "
-#~ msgstr "E-Mail: "
-
-#~ msgid "Currency: "
-#~ msgstr "Währung: "
-
-#~ msgid "Terms: "
-#~ msgstr "Bedingungen: "
-
-#~ msgid "Discount: "
-#~ msgstr "Rabatt: "
-
-#~ msgid "Tax Included: "
-#~ msgstr "Inkl. Steuern: "
-
-#~ msgid "Tax Table: "
-#~ msgstr "Steuertabelle: "
-
-#~ msgid "Employee Number: "
-#~ msgstr "Mitarbeiternummer: "
-
-#~ msgid "Username: "
-#~ msgstr "Benutzername: "
-
-#~ msgid "Frequency:"
-#~ msgstr "Häufigkeit:"
-
-#~ msgid "Customer: "
-#~ msgstr "Kunde: "
-
-#~ msgid "Job: "
-#~ msgstr "Auftrag: "
-
-#~ msgid "Invoice Entries"
-#~ msgstr "Rechnungseinträge"
-
-#~ msgid "For:"
-#~ msgstr "Für:"
-
-#~ msgid "_Price:"
-#~ msgstr "_Preis:"
-
-#~ msgid "Source:"
-#~ msgstr "Quelle:"
-
-#~ msgid "_Notes:"
-#~ msgstr "_Bemerkung:"
-
-#~ msgid "_Address:"
-#~ msgstr "_Adresse:"
-
-#~ msgid "End: "
-#~ msgstr "Ende: "
-
-#~ msgid "_Account:"
-#~ msgstr "_Konto:"
-
-#~ msgid "_Value: "
-#~ msgstr "_Wert: "
-
-#~ msgid "_Type: "
-#~ msgstr "_Typ: "
-
-#~ msgid "_Name: "
-#~ msgstr "_Name: "
-
-#~ msgid "Date:"
-#~ msgstr "Datum:"
-
-#~ msgid "Num:"
-#~ msgstr "Nummer:"
-
-#~ msgid "Memo:"
-#~ msgstr "Buchungstext:"
-
-#~ msgid "Currency:"
-#~ msgstr "Währung:"
-
-#~ msgid "Vendor Number: "
-#~ msgstr "Lieferantennummer: "
-
-#~ msgid "Tax Table:"
-#~ msgstr "Steuertabelle:"
-
-#~ msgid "Months:"
-#~ msgstr "Monate:"
-
-#~ msgid "Years:"
-#~ msgstr "Jahre:"
-
-#~ msgid "Value:"
-#~ msgstr "Wert:"
-
-#~ msgid "Action Column|Split"
-#~ msgstr "Aktienteilung"
-
-#~ msgid "Reconciled:R"
-#~ msgstr "Reconciled:A"
-
-#~ msgid ""
-#~ "Item represents an unknown object type (in the sense of bill, customer, "
-#~ "invoice, transaction, split,...)|New item"
-#~ msgstr ""
-#~ "Item represents an unknown object type (in the sense of bill, customer, "
-#~ "invoice, transaction, split,...)|Neues Element"
-
-#~ msgid "Column letter for 'Placeholder'|P"
-#~ msgstr "P"
-
-#~ msgid "Action Column|Deposit"
-#~ msgstr "Einzahlung"
-
-#~ msgid "Column letter for 'Get Quotes'|Q"
-#~ msgstr "K"
-
-#~ msgid "Column letter for 'Active'|A"
-#~ msgstr "A"
-
-#~ msgid "Single-character short column-title form of 'Enabled'|E"
-#~ msgstr "A"
-
-#~ msgid "sample:X"
-#~ msgstr "sample:X"
-
-#~ msgid "sample:Action"
-#~ msgstr "sample:Aktion"
-
-#~ msgid "sample(DT):+%"
-#~ msgstr "sample(DT):+%"
-
-#~ msgid "sample(DH):+%"
-#~ msgstr "sample(DH):+%"
-
-#~ msgid "sample:T?"
-#~ msgstr "sample:T?"
-
-#~ msgid "sample:TI"
-#~ msgstr "sample:TI"
-
-#~ msgid "sample:Tax Table 1"
-#~ msgstr "sample:Steuertabelle Eins"
-
-#~ msgid "sample:BI"
-#~ msgstr "sample:BI"
-
-#~ msgid "sample:Payment"
-#~ msgstr "sample:Zahlung"
-
-#~ msgid "sample:99999"
-#~ msgstr "sample:99999"
-
-#~ msgid "Associate:A"
-#~ msgstr "Associate:Z"
-
-#~ msgid "Type:T"
-#~ msgstr "Type:T"
-
-#~ msgid "Tax Payable"
-#~ msgstr "Zu zahlende Steuer"
-
-#~ msgid "not cleared:n"
-#~ msgstr "not cleared:n"
-
-#~ msgid "cleared:c"
-#~ msgstr "cleared:b"
-
-#~ msgid "reconciled:y"
-#~ msgstr "reconciled:j"
-
-#~ msgid "frozen:f"
-#~ msgstr "frozen:f"
-
-#~ msgid "void:v"
-#~ msgstr "void:u"
-
-#~ msgid ""
-#~ "Displayed account code of the other account in a multi-split transaction|"
-#~ "Split"
-#~ msgstr "Mehrteilig"
-
-#~ msgid "Enter URL:"
-#~ msgstr "URL eingeben:"
-
-#~ msgid "Whether to display the list of Invoices Due at startup."
-#~ msgstr ""
-#~ "Wählen Sie, ob die Liste der fälligen Rechnungen bei Programmstart "
-#~ "angezeigt werden soll."
-
-#~ msgid "_Clear"
-#~ msgstr "_Zurücksetzen"
-
-#~ msgid "total"
-#~ msgstr "Summe"
-
-#~ msgid "_Back"
-#~ msgstr "_Zurück"
-
-#~ msgid "_Forward"
-#~ msgstr "_Vorwärts"
-
-#~ msgid "Password:"
-#~ msgstr "_Passwort:"
-
-#~ msgid "Enter name for new template:"
-#~ msgstr "Name für neue Überweisungsvorlage:"
-
-#~ msgid "Import a MT940 file into GnuCash"
-#~ msgstr ""
-#~ "Importiere Buchungen aus einer traditionellen deutschen DTAUS-Datei."
-
-#~ msgid "Import a MT942 file into GnuCash"
-#~ msgstr ""
-#~ "Importiere Buchungen aus einer traditionellen deutschen DTAUS-Datei."
-
-#~ msgid ""
-#~ "Please select a 'Commodity from' column or set a Commodity in the "
-#~ "'Commodity From' field."
-#~ msgstr ""
-#~ "Bitte wählen Sie eine Spalte für das Herkunfts-Wertpapier oder geben Sie "
-#~ "ein Wertpapier im Feld Herkunfts-Wertpapier ein."
-
-#~ msgid ""
-#~ "No 'Commodity from' column selected and no selected Commodity specified "
-#~ "either.\n"
-#~ "This should never happen. Please report this as a bug."
-#~ msgstr ""
-#~ "Entschuldigung: Keine Zielwährungsspalte ausgewählt und auch keine "
-#~ "Zeilwährung angegeben.\n"
-#~ "Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
-
-#~ msgid "Commodity From"
-#~ msgstr "<b>Von Devise/Wertpapier</b>"
-
-#~ msgid "'Commodity From' can not be the same as 'Currency To' column type."
-#~ msgstr ""
-#~ "Das 'Herkunfts-Wertpapier' darf nicht identisch mit 'Zielwährung' sein."
-
-#~ msgid "_New Account"
-#~ msgstr "Neues _Konto"
-
-#~ msgid "Report Currency"
-#~ msgstr "Berichtswährung"
-
-#~ msgid "Roll up budget amounts to parent"
-#~ msgstr "Budgetbetrag des Kontos"
-
-#~ msgid "~a: ~a"
-#~ msgstr "~a: ~a"
-
-#~ msgid "Continuing with good quotes."
-#~ msgstr "Mit den benutzbaren Kursen fortsetzen."
-
-#~ msgid "Adding remaining good quotes."
-#~ msgstr "Weitere benutzbare Kurse eintragen."
