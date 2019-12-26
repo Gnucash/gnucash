@@ -5922,9 +5922,8 @@ msgid "Associate Location with Transaction"
 msgstr "关联位置到交易事项"
 
 #: gnucash/gnome/gnc-split-reg.c:1356
-#, fuzzy
 msgid "Amend URL"
-msgstr "修改 URL:"
+msgstr "修改 URL"
 
 #: gnucash/gnome/gnc-split-reg.c:1360
 msgid "Enter URL like https://www.gnucash.org"
