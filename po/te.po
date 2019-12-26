@@ -779,9 +779,8 @@ msgstr "అవధి"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "ముగింపు తేదీ:"
+msgstr "ముగింపు తేదీ"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5772,9 +5771,8 @@ msgstr "నమోదు_తేదీ"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "ప్రకటన తేదీ:"
+msgstr "ప్రకటన తేదీ"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6195,21 +6193,18 @@ msgstr "ఎంచుకున్న లావాదేవీని మీరు 
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "ప్రారంభ నిల్వ:"
+msgstr "ప్రారంభ నిల్వ"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "ముగింపు నిల్వ:"
+msgstr "ముగింపు నిల్వ"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "సమన్వయ నిల్వ:"
+msgstr "సమన్వయ నిల్వ"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6908,9 +6903,8 @@ msgstr "భద్రత/ కరెన్సీ ఎంచుకో"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_భద్రత/కరెన్సీ:"
+msgstr "_భద్రత/కరెన్సీ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6918,9 +6912,8 @@ msgstr "భద్రత ఎంచుకో"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_భద్రత:"
+msgstr "_భద్రత"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6990,9 +6983,8 @@ msgstr "సరుకు కోసం మీరు  ఖాళీ లేని\"�
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "చర్య/సంఖ్య:"
+msgstr "చర్య/సంఖ్య"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -7060,9 +7052,8 @@ msgid ""
 msgstr "%s ఖాతా అనేది  స్థలదారు ఖాతా, లావాదేవీలను అనుమతించదు. దయచేసి  భిన్నమైన ఖాతాను ఎంచుకో. "
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "కరెన్సీ:"
+msgstr "కరెన్సీ"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7327,15 +7318,13 @@ msgid "Transfer To"
 msgstr "కు బదిలీ"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "ఖర్చుపద్దు మొత్తం:"
+msgstr "ఖర్చుపద్దు మొత్తం"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "కు మొత్తం:"
+msgstr "కు మొత్తం"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -12068,17 +12057,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "విస్తృతిని ఎంచుకో:"
+msgstr "విస్తృతిని ఎంచుకో"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "ఆరంభం:"
+msgstr "ఆరంభం"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12087,9 +12074,8 @@ msgid "_Earliest"
 msgstr "_అతిత్వరిత"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "తేదీ ఎం_చుకో:"
+msgstr "తేదీ ఎం_చుకో"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12115,9 +12101,8 @@ msgstr "ముగింపు"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "తేదీ ఎం_చుకో:"
+msgstr "తేదీ ఎం_చుకో"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12780,9 +12765,8 @@ msgid "Length"
 msgstr "పొడవు"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "ఋణ ఖాతా:"
+msgstr "ఋణ ఖాతా"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12803,9 +12787,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "మిగిలిన నెలలు:"
+msgstr "మిగిలిన నెలలు"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12845,14 +12828,12 @@ msgstr ""
 "కొనసాగించడానికి అన్ని ఖాతాలూ చెల్లుబాటు ఎంట్రీలను కలిగి ఉండాలి.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "అసలు గమ్యం:"
+msgstr "అసలు గమ్యం"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "వడ్డీకి:"
+msgstr "వడ్డీకి"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12871,14 +12852,12 @@ msgstr ""
 "కొనసాగించడానికి అన్ని చేతనపరచిన ఐచ్చిక పేజీలూ చెల్లుబాటు ఎంట్రీలను కలిగి ఉండాలి.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "చెల్లింపు గమ్యం (ప్రతిబంధకం):"
+msgstr "చెల్లింపు గమ్యం (ప్రతిబంధకం)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "చెల్లింపు ప్రారంభం (ప్రతిబంధకం):"
+msgstr "చెల్లింపు ప్రారంభం (ప్రతిబంధకం)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13149,9 +13128,8 @@ msgstr "_మీరు మార్చాలని కోరుకున్న �
 #: gnucash/gtkbuilder/assistant-qif-import.glade:594
 #: gnucash/gtkbuilder/assistant-qif-import.glade:726
 #: gnucash/gtkbuilder/assistant-qif-import.glade:856
-#, fuzzy
 msgid "Matchings selected"
-msgstr "సరిపోలికలు ఎంచుకోబడినవి:"
+msgstr "సరిపోలికలు ఎంచుకోబడినవి"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:642
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13348,9 +13326,8 @@ msgid "_Imported transactions needing review"
 msgstr "_సమీక్ష కావాల్సిన లావాదేవీలను దిగుమతి చేస్తోంది;"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
-#, fuzzy
 msgid "_Possible matches for the selected transaction"
-msgstr "_ఎంచుకున్న లావాదేవీ కోసం _సాధ్యపడే సరిపోలికలు:"
+msgstr "_ఎంచుకున్న లావాదేవీ కోసం _సాధ్యపడే సరిపోలికలు"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Select possible duplicates"
@@ -13420,9 +13397,8 @@ msgstr ""
 "ప్రవేశపెట్టగలరు లేదా  అప్రమేయాన్ని సమ్మతించగలరు.."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "వివ_రణ:"
+msgstr "వివ_రణ"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13442,9 +13418,8 @@ msgid "New _Price"
 msgstr "కొత్త_ధర"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "ద్ర_వ్యం:"
+msgstr "ద్ర_వ్యం"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13630,9 +13605,8 @@ msgid "Whether to display the list of Bills Due at startup."
 msgstr "ప్రారంభంలో బాకీ బిల్లుల జాబితాను ప్రదర్శించాలా"
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "ముద్రణ కోసం నివేదిక:"
+msgstr "ముద్రణ కోసం నివేదిక"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -13679,9 +13653,8 @@ msgid "Pro_cess payments on posting"
 msgstr "పోస్టింగ్‌లో స్వీయ_చెల్లింపు"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "_ముందస్తుగా రోజులు:"
+msgstr "_ముందస్తుగా రోజులు"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13693,9 +13666,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "బిల్లులు బాకీ పడడం గురించి భవిష్యత్తులో ఎన్ని రోజుల ముందు హెచ్చరించాలి?"
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "_ముందస్తుగా రోజులు:"
+msgstr "_ముందస్తుగా రోజులు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13737,9 +13709,8 @@ msgid ""
 msgstr "ఈ ఖాతాకు ఉప-ఖాతాలున్నాయి. ఈ ఉప-ఖాతాలతో మీరు ఏం చేయాలనుకుంటున్నారు?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_కు తరలించు:"
+msgstr "_కు తరలించు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13751,9 +13722,8 @@ msgstr "<b>లావాదేవీలు</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "కు త_రలించు:"
+msgstr "కు త_రలించు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13882,34 +13852,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>గుర్తింపు</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "ఖాతా_పేరు:"
+msgstr "ఖాతా_పేరు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_ఖాతా సంకేతం:"
+msgstr "_ఖాతా సంకేతం"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_ వివరణ:"
+msgstr "_ వివరణ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "అత్యంత చిన్న_భాగం:"
+msgstr "అత్యంత చిన్న_భాగం"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "ఖాతా_రంగు:"
+msgstr "ఖాతా_రంగు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "గమ_నికలు:"
+msgstr "గమ_నికలు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -14026,14 +13990,12 @@ msgid "_Renumber"
 msgstr "_తిరిగి సంఖ్యపరచు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "ప్రిఫిక్స్:"
+msgstr "ప్రిఫిక్స్"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "ఉదాహరణలు:"
+msgstr "ఉదాహరణలు"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14267,9 +14229,8 @@ msgstr "<b> నియమం నిర్వచనం</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "వి_వరణ:"
+msgstr "వి_వరణ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14278,9 +14239,8 @@ msgstr "వి_వరణ:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_రకం:"
+msgstr "_రకం"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14313,19 +14273,16 @@ msgstr "<b>కొత్త బిల్లింగ్ నియమం</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_పేరు:"
+msgstr "_పేరు"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "ఆదాయం మొత్తం:"
+msgstr "ఆదాయం మొత్తం"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "వ్యయం మొత్తం:"
+msgstr "వ్యయం మొత్తం"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14411,29 +14368,24 @@ msgid "<b>Security Information</b>"
 msgstr "భద్రత సమాచారం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "ధర అంచనా మూలం రకం:"
+msgstr "ధర అంచనా మూలం రకం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "_పూర్తిపేరు:"
+msgstr "_పూర్తిపేరు"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_చిహ్నం/సంక్షేపం:"
+msgstr "_చిహ్నం/సంక్షేపం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P లేదా ఇతర సంకేతం:"
+msgstr "ISIN, CUSI_P లేదా ఇతర సంకేతం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "వ_ర్తకం చేసిన భాగం:"
+msgstr "వ_ర్తకం చేసిన భాగం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14444,9 +14396,8 @@ msgid "_Get Online Quotes"
 msgstr "_ఆన్‌లైన్ ధర అంచనాలను పొందు"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "ఒ_క:"
+msgstr "ఒ_క"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14458,9 +14409,8 @@ msgstr ""
 "లేకుంటే, మీరు కోట్లను తిరిగి పొందడం సాధ్యం కాదు.  "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_ బహుళ:"
+msgstr "_ బహుళ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14472,9 +14422,8 @@ msgstr ""
 "అందుబాటులో లేకుంటే, మరో సైట్ నుంచి సమాచారాన్ని తిరిగి పొందడానికి F::Q ప్రయత్నిస్తుంది. "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_తెలియనిది:"
+msgstr "_తెలియనిది"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14486,9 +14435,8 @@ msgstr ""
 "సమాచారాన్ని తిరిగి పొందుతుందా అని Gnuక్యాష్‌కు తెలియదు.    "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "కాల_మండలం:"
+msgstr "కాల_మండలం"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14558,9 +14506,8 @@ msgstr "జమపద్దు పరిమితి:"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "పన్నుతో సహా:"
+msgstr "పన్నుతో సహా"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14853,9 +14800,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>చెల్లింపు ఐచ్ఛికాలు</b> "
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "చెల్లింపు మొత్తం:"
+msgstr "చెల్లింపు మొత్తం"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -14866,9 +14812,8 @@ msgid "Continuous"
 msgstr "నిరంతర"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "చెల్లించినది ఎప్పుడు:"
+msgstr "చెల్లించినది ఎప్పుడు"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15013,9 +14958,8 @@ msgstr " ఆకృతిని ఎంచుకో"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "ఆకృతి:"
+msgstr "ఆకృతి"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15249,9 +15193,8 @@ msgid "Default Chargeback Project"
 msgstr "అప్రమేయ చార్జ్‌వెనుకకు ప్రాజెక్ట్ "
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "కార్డుకు అదనం:"
+msgstr "కార్డుకు అదనం"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15614,27 +15557,24 @@ msgid "<b>End Date</b>"
 msgstr "<b>ముగింపు తేదీ</b> "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_సాపేక్షితం:"
+msgstr "_సాపేక్షితం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "లాభ/నష్ట లెక్కింపు కోసం నిర్దేశించిన సాపేక్ష ప్రారంభ తేదీని ఉపయోగించు."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_సంపూర్ణం:"
+msgstr "_సంపూర్ణం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "లాభ/నష్ట లెక్కింపుల కోసం నిర్దేశించిన సంపూర్ణ ప్రారంభ తేదీని ఉపయోగించు."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "సం_బంధితం:"
+msgstr "సం_బంధితం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15645,9 +15585,8 @@ msgstr ""
 "ఈ తేదీని ఈ తేదీని ఉపయోగించు. "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "సం_పూర్ణం:"
+msgstr "సం_పూర్ణం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15705,20 +15644,17 @@ msgstr "US డాలర్లు(USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "ఎం_చుకో:"
+msgstr "ఎం_చుకో"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "అక్షరం:"
+msgstr "అక్షరం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "నమునా:"
+msgstr "నమునా"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -15742,9 +15678,8 @@ msgstr "ట్యాబ్ నేపథ్యంగా ఖాతా రంగు
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "స్థా_నికం:"
+msgstr "స్థా_నికం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -15892,9 +15827,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>సంభాషణను శోధించు</b> "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "కొత్త శోధన_పరిమితి:"
+msgstr "కొత్త శోధన_పరిమితి"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -15909,9 +15843,8 @@ msgid "Show splash screen at startup."
 msgstr "ప్రారంభంలో స్ప్లాష్ తెరను చూపించు "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "స్వీయ-భద్రం సమయ _విరామం:"
+msgstr "స్వీయ-భద్రం సమయ _విరామం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -15941,9 +15874,8 @@ msgid "Forever"
 msgstr "శాశ్వతంగా"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "సమాధానం కోసం వేచి చూసే సమయం:"
+msgstr "సమాధానం కోసం వేచి చూసే సమయం"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -15993,9 +15925,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "వాస్తవ తేదీ కింద, 8 అంకెల రకంలో ఆ తేదీ ఆకృతిని ముద్రించు"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "అప్రమేయ_ అక్షరశైలి:"
+msgstr "అప్రమేయ_ అక్షరశైలి"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -16157,9 +16088,8 @@ msgid "_Auto-split ledger"
 msgstr "_స్వయం-చీలిక ఆవర్జా "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "_లావాదేవీల_సంఖ్య:"
+msgstr "_లావాదేవీల_సంఖ్య"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16201,9 +16131,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "స్వయం పూర్తి కోసం క్యారెక్టర్ల_సంఖ్య:"
+msgstr "స్వయం పూర్తి కోసం క్యారెక్టర్ల_సంఖ్య"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16319,9 +16248,8 @@ msgstr ""
 "ప్రతి నోట్‌బుక్ ట్యాబ్‌లో మూసివేత బటన్‌ను చూపించు. ఇవి 'మూసివేయి' మెనూ బటన్‌కు ఒకే రకంగా పని చేస్తాయి. "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_వెడల్పు:"
+msgstr "_వెడల్పు"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16366,14 +16294,12 @@ msgid "Price Editor"
 msgstr "ధర సవరణ కర్త"
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "_నామాంతరం:"
+msgstr "_నామాంతరం"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "మూ_లం:"
+msgstr "మూ_లం"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16490,9 +16416,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_తేదీ:"
+msgstr "_తేదీ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16580,19 +16505,16 @@ msgid "_Print"
 msgstr "ముద్రించు"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "ఆకృతి _పరిశీలన:"
+msgstr "ఆకృతి _పరిశీలన"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "స్థి_తి పరిశీలన:"
+msgstr "స్థి_తి పరిశీలన"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "_తేదీ ఆకృతి:"
+msgstr "_తేదీ ఆకృతి"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16610,9 +16532,8 @@ msgid "_Address"
 msgstr "_చిరునామా"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
-#, fuzzy
 msgid "Checks on first _page"
-msgstr "మొదటి _పేజిపై పరిశీలన‌లు:"
+msgstr "మొదటి _పేజిపై పరిశీలన‌లు"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:640
 msgid "x"
@@ -16623,9 +16544,8 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "చెల్లింపు_గ్రహీత:"
+msgstr "చెల్లింపు_గ్రహీత"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
 #, fuzzy
@@ -16633,9 +16553,8 @@ msgid "Amount (_words)"
 msgstr "మొత్తం(_పదాలు)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "మొత్తం(_సంఖ్యలు):"
+msgstr "మొత్తం(_సంఖ్యలు)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16648,9 +16567,8 @@ msgid "_Units"
 msgstr "_యూనిట్లు: "
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "_అనువాదం:"
+msgstr "_అనువాదం"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16746,14 +16664,12 @@ msgid "Enter report row/column span"
 msgstr "నివేదిక అడ్డువరుస/నిలువువరుస పరిమాణాన్ని ప్రవేశపెట్టు"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "_అడ్డు వరుస పరిమాణం:"
+msgstr "_అడ్డు వరుస పరిమాణం"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "_నిలువువరుస పరిమాణం:"
+msgstr "_నిలువువరుస పరిమాణం"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16768,9 +16684,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>కొత్త శైలి పత్ర సమాచారం</b> "
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "_టెంప్లేట్‌:"
+msgstr "_టెంప్లేట్‌"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -16900,9 +16815,8 @@ msgid "Never End"
 msgstr "ముగింపు లేనిది"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "సంఘటనల సంఖ్య:"
+msgstr "సంఘటనల సంఖ్య"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -16943,14 +16857,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "కొత్తగా సృష్టించిన నిర్ధారిత లావాదేవీపై ‘స్వయం-సృష్టి’ఫ్లాగ్‌ని ఏర్పరచు."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "ముందస్తుగా సృష్టిం_చు:"
+msgstr "ముందస్తుగా సృష్టిం_చు"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "ముం_దస్తుగా గుర్తు చేయి:"
+msgstr "ముం_దస్తుగా గుర్తు చేయి"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -16981,14 +16893,12 @@ msgid "<b>Options</b>"
 msgstr "<b>ఐచ్ఛికాలు</b> "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "ముందస్తుగా సృష్టించు:"
+msgstr "ముందస్తుగా సృష్టించు"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "ముందస్తుగా గుర్తు చేయి:"
+msgstr "ముందస్తుగా గుర్తు చేయి"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17020,9 +16930,8 @@ msgid "Repeats:"
 msgstr "పునరావృతాలు:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "వరకు:"
+msgstr "వరకు"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17227,9 +17136,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b> కరెన్సీ బదిలీ</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "ఎక్స్‌చేంజ్ రేటు:"
+msgstr "ఎక్స్‌చేంజ్ రేటు"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17244,14 +17152,12 @@ msgid "Enter your username and password"
 msgstr "వాడుకరి పేరు, అనుమతిపదం ప్రవేశపెట్టు"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "_వాడుకరి పేరు:"
+msgstr "_వాడుకరి పేరు"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_అనుమతిపదం:"
+msgstr "_అనుమతిపదం"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17297,9 +17203,8 @@ msgid "Abbreviation"
 msgstr "సంక్షేపం"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "తేదీ ఆకృతి:"
+msgstr "తేదీ ఆకృతి"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -17766,21 +17671,18 @@ msgid "months."
 msgstr "నెలలు"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "మొదట:"
+msgstr "మొదట"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "వారాంతాలు తప్పించి:"
+msgstr "వారాంతాలు తప్పించి"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "తర్వాత దీనిపై:"
+msgstr "తర్వాత దీనిపై"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -17842,9 +17744,8 @@ msgstr "తిరిగేటప్పుడు, పట్టుకోవడా�
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "ప్రాముఖ్య అంకెలు:"
+msgstr "ప్రాముఖ్య అంకెలు"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -17866,19 +17767,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "బడ్జెట్ పేరు:"
+msgstr "బడ్జెట్ పేరు"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "అవధుల సంఖ్య:"
+msgstr "అవధుల సంఖ్య"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "బడ్జెట్ అవధి:"
+msgstr "బడ్జెట్ అవధి"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -17917,9 +17815,8 @@ msgstr "<b>కొత్త లావాదేవీ సమాచారం</b> "
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_సంఖ్య:"
+msgstr "_సంఖ్య"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -17977,9 +17874,8 @@ msgstr "నిరర్థక లావాదేవీ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "రద్దయ్యే లావాదేవీకి కారణం:"
+msgstr "రద్దయ్యే లావాదేవీకి కారణం"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -18081,9 +17977,8 @@ msgid "Sort in descending order."
 msgstr "అవరోహణ క్రమంలో కూర్చు. "
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1067
-#, fuzzy
 msgid "_Transaction Number"
-msgstr "_లావాదేవీ సంఖ్య:"
+msgstr "_లావాదేవీ సంఖ్య"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1101
 msgid "Keep Associated Entry"
@@ -18155,18 +18050,16 @@ msgstr "<b>స్వయం-శుభ్రపరచు సమాచారం</b>
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_ముగింపు నిల్వ:"
+msgstr "_ముగింపు నిల్వ"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>సమన్వయ సమాచారం</b> "
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "ప్రకటన_తేదీ:"
+msgstr "ప్రకటన_తేదీ"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20589,19 +20482,16 @@ msgstr ""
 "ప్రవేశపెట్టగలరు. "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_పేరు లేదా వివరణ:"
+msgstr "_పేరు లేదా వివరణ"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_టిక్కర్ చిహ్నం లేక ఇతర సంక్షేపం:"
+msgstr "_టిక్కర్ చిహ్నం లేక ఇతర సంక్షేపం"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "_ఎక్స్‌చేంజ్ లేక సంక్షేపం రకం:"
+msgstr "_ఎక్స్‌చేంజ్ లేక సంక్షేపం రకం"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

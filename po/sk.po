@@ -727,9 +727,8 @@ msgstr "Obdobie"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "Závierkový deň:"
+msgstr "Závierkový deň"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5820,9 +5819,8 @@ msgstr "Dátumu po_ložky"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Dátum výkazu:"
+msgstr "Dátum výkazu"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6224,21 +6222,18 @@ msgstr "Ste si istý, že chcete odstrániť zvolenú transakciu?"
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "Počiatočný stav:"
+msgstr "Počiatočný stav"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "Koncový stav:"
+msgstr "Koncový stav"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "Vysporiadaná bilancia:"
+msgstr "Vysporiadaná bilancia"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6932,9 +6927,8 @@ msgstr "Zvoliť menu/cenný papier"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_Cenný papier/mena:"
+msgstr "_Cenný papier/mena"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6942,9 +6936,8 @@ msgstr "Zvoliť cenný papier"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_Cenný papier:"
+msgstr "_Cenný papier"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6952,9 +6945,8 @@ msgstr "Zvoliť menu"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "M_ena:"
+msgstr "M_ena"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7014,9 +7006,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "_Číslo:"
+msgstr "_Číslo"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -7084,9 +7075,8 @@ msgstr ""
 "Účet %s drží miesto a nepovoľuje účtovné položky. Zvoľte prosím iný účet."
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "Mena:"
+msgstr "Mena"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7353,15 +7343,13 @@ msgid "Transfer To"
 msgstr "Prevod do"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "Debetný účet:"
+msgstr "Debetný účet"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "na sumu:"
+msgstr "na sumu"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9050,9 +9038,8 @@ msgstr "Číslo odberateľa: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "Číslo dodávateľa: "
+msgstr "Číslo dodávateľa"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -11881,17 +11868,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "Vybrať rozsah:"
+msgstr "Vybrať rozsah"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Začiatok:"
+msgstr "Začiatok"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -11900,9 +11885,8 @@ msgid "_Earliest"
 msgstr "Naj_starší"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "_Vyberte dátum:"
+msgstr "_Vyberte dátum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -11928,9 +11912,8 @@ msgstr "Koniec"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "_Vyberte dátum:"
+msgstr "_Vyberte dátum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12563,14 +12546,12 @@ msgid "Start Date"
 msgstr "Dátum od"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Dĺžka:"
+msgstr "Dĺžka"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "Účet úveru:"
+msgstr "Účet úveru"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12591,9 +12572,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "Zostávajúce mesiace:"
+msgstr "Zostávajúce mesiace"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12614,9 +12594,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "Používate pre platby escrow účet?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Escrow účet:"
+msgstr "Escrow účet"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 #, fuzzy
@@ -12630,14 +12609,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "Hlavná časť do:"
+msgstr "Hlavná časť do"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Úrok k:"
+msgstr "Úrok k"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12655,14 +12632,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "Platba do (escrow):"
+msgstr "Platba do (escrow)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "Platba z (escrow):"
+msgstr "Platba z (escrow)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13058,9 +13033,8 @@ msgid "Match existing transactions"
 msgstr "<b>Transakcie podúčtov</b>"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "Importované prvé rozdelenie transakcie:"
+msgstr "Importované prvé rozdelenie transakcie"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
 #, fuzzy
@@ -13130,9 +13104,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "_Popis:"
+msgstr "_Popis"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13145,14 +13118,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "Nová _cena:"
+msgstr "Nová _cena"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "_Mena:"
+msgstr "_Mena"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13218,9 +13189,8 @@ msgid "_Edit list of encodings"
 msgstr "_Upraviť zoznam kódovaní"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "Štandardné kódovanie:"
+msgstr "Štandardné kódovanie"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13446,9 +13416,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_Posunúť:"
+msgstr "_Posunúť"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13460,9 +13429,8 @@ msgstr "<b>Transakcie</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "Presunúť d_o:"
+msgstr "Presunúť d_o"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13595,34 +13563,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>Identifikácia</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "_Názov účtu:"
+msgstr "_Názov účtu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_Kód účtu:"
+msgstr "_Kód účtu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "P_opis:"
+msgstr "P_opis"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "Najmenšia po_ložka:"
+msgstr "Najmenšia po_ložka"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "_Farba účtu:"
+msgstr "_Farba účtu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "_Poznámky:"
+msgstr "_Poznámky"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -13737,14 +13699,12 @@ msgid "_Renumber"
 msgstr "P_rečíslovať"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "Prefix:"
+msgstr "Prefix"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "Príklady:"
+msgstr "Príklady"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -13998,9 +13958,8 @@ msgstr "<b>Definícia podmienok</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "Popi_s:"
+msgstr "Popi_s"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14009,9 +13968,8 @@ msgstr "Popi_s:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Typ:"
+msgstr "_Typ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14044,19 +14002,16 @@ msgstr "<b>Nové platobné podmienky</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_Názov:"
+msgstr "_Názov"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "Príjem spolu:"
+msgstr "Príjem spolu"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "Výdavky celkom:"
+msgstr "Výdavky celkom"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14141,9 +14096,8 @@ msgid "<b>Security Information</b>"
 msgstr "Informácie o cennom papieri"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "Typ zdroja cien:"
+msgstr "Typ zdroja cien"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 #, fuzzy
@@ -14151,19 +14105,16 @@ msgid "_Full name"
 msgstr "Úp_lný názov"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_Symbol/skratka:"
+msgstr "_Symbol/skratka"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P alebo iný kód:"
+msgstr "ISIN, CUSI_P alebo iný kód"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "O_bchodovateľný podiel:"
+msgstr "O_bchodovateľný podiel"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14174,9 +14125,8 @@ msgid "_Get Online Quotes"
 msgstr "Stia_hnuť online údaje"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "Jede_n:"
+msgstr "Jede_n"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14186,9 +14136,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_Viac:"
+msgstr "_Viac"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14198,9 +14147,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_Neznámy:"
+msgstr "_Neznámy"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14210,9 +14158,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "Časová _zóna:"
+msgstr "Časová _zóna"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14288,9 +14235,8 @@ msgstr "Kreditný limit: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "S daňou:"
+msgstr "S daňou"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14592,9 +14538,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>Možnosti platby:</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "Celkové platby:"
+msgstr "Celkové platby"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -14605,9 +14550,8 @@ msgid "Continuous"
 msgstr "Spojité"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "Kedy zaplatené:"
+msgstr "Kedy zaplatené"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -14753,9 +14697,8 @@ msgstr "Vybrať formát"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "Formát:"
+msgstr "Formát"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -14863,9 +14806,8 @@ msgstr "Vysporiadané"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "Importované prvé rozdelenie transakcie:"
+msgstr "Importované prvé rozdelenie transakcie"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15383,9 +15325,8 @@ msgid "<b>End Date</b>"
 msgstr "<b>Dátum do</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_Relatívne od:"
+msgstr "_Relatívne od"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
@@ -15393,9 +15334,8 @@ msgstr ""
 "Používať špecifikovaný relatívny počiatočný dátum pre výpočet zisku/straty."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_Absolútne:"
+msgstr "_Absolútne"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
@@ -15403,9 +15343,8 @@ msgstr ""
 "Používať špecifikovaný absolútny počiatočný dátum pre výpočet zisku/straty."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "Re_latívne do:"
+msgstr "Re_latívne do"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 #, fuzzy
@@ -15416,9 +15355,8 @@ msgstr ""
 "Používať špecifikovaný relatívny počiatočný dátum pre výpočet zisku/straty."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "Ab_solútne:"
+msgstr "Ab_solútne"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 #, fuzzy
@@ -15477,20 +15415,17 @@ msgstr "US Dollars (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "Vy_berte:"
+msgstr "Vy_berte"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "Znak:"
+msgstr "Znak"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "Ukážka:"
+msgstr "Ukážka"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 #, fuzzy
@@ -15518,9 +15453,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "Loc_ale:"
+msgstr "Loc_ale"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -15669,9 +15603,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>Vyhľadávací dialóg</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "Nový _limit hľadania:"
+msgstr "Nový _limit hľadania"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -15686,9 +15619,8 @@ msgid "Show splash screen at startup."
 msgstr "Zobraziť úvodný obrázok pri spustení"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "_Interval automatického ukladania:"
+msgstr "_Interval automatického ukladania"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -15766,9 +15698,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "Š_tandardné písmo:"
+msgstr "Š_tandardné písmo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 #, fuzzy
@@ -15928,9 +15859,8 @@ msgid "_Auto-split ledger"
 msgstr "_Automaticky delená účtovná kniha"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "Počet _transakcií:"
+msgstr "Počet _transakcií"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -15973,9 +15903,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "Počet _riadkov:"
+msgstr "Počet _riadkov"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16094,9 +16023,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_Šírka:"
+msgstr "_Šírka"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16146,9 +16074,8 @@ msgid "_Namespace"
 msgstr "Označenie"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "Zdr_oj:"
+msgstr "Zdr_oj"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16262,9 +16189,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_Dátum:"
+msgstr "_Dátum"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16352,19 +16278,16 @@ msgid "_Print"
 msgstr "Tlač"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "_Formát šeku:"
+msgstr "_Formát šeku"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "Po_zícia šeku:"
+msgstr "Po_zícia šeku"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "Formát _dátumu:"
+msgstr "Formát _dátumu"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16392,19 +16315,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "Prí_jemca platby:"
+msgstr "Prí_jemca platby"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "S_uma (slová):"
+msgstr "S_uma (slová)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Su_ma (čísla):"
+msgstr "Su_ma (čísla)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16412,14 +16332,12 @@ msgid "_Notes"
 msgstr "_Poznámky"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "_Jednotky:"
+msgstr "_Jednotky"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "Pre_klad:"
+msgstr "Pre_klad"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16518,14 +16436,12 @@ msgid "Enter report row/column span"
 msgstr "Vložte vzdialenosti medzi riadkami/stĺpcami vo výkaze"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "Pokrytie _riadkov:"
+msgstr "Pokrytie _riadkov"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "Pokrytie _stĺpcov:"
+msgstr "Pokrytie _stĺpcov"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16540,9 +16456,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>Informácia o novom štýle</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "Ša_blóna:"
+msgstr "Ša_blóna"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -16677,9 +16592,8 @@ msgid "Never End"
 msgstr "Bez konca"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "Počet výskytov:"
+msgstr "Počet výskytov"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -16720,14 +16634,12 @@ msgstr ""
 "transakcií."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "Vy_tvoriť vopred:"
+msgstr "Vy_tvoriť vopred"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "Pripom_enúť vopred:"
+msgstr "Pripom_enúť vopred"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -16758,14 +16670,12 @@ msgid "<b>Options</b>"
 msgstr "<b>Možnosti</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "Vopred vytvoriť:"
+msgstr "Vopred vytvoriť"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "Pripomenúť skôr:"
+msgstr "Pripomenúť skôr"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -16797,9 +16707,8 @@ msgid "Repeats:"
 msgstr "Opakovať:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "Do:"
+msgstr "Do"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17008,9 +16917,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "Prenos zložky"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "Výmenný kurz:"
+msgstr "Výmenný kurz"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 #, fuzzy
@@ -17026,14 +16934,12 @@ msgid "Enter your username and password"
 msgstr "Vložte svoje užívateľské meno a heslo"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "Po_užívateľ:"
+msgstr "Po_užívateľ"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_Heslo:"
+msgstr "_Heslo"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 #, fuzzy
@@ -17082,9 +16988,8 @@ msgid "Abbreviation"
 msgstr "Skratka"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "Formát dátumu:"
+msgstr "Formát dátumu"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -17563,9 +17468,8 @@ msgid "months."
 msgstr "mesiace."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "Prvé na:"
+msgstr "Prvé na"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
@@ -17575,9 +17479,8 @@ msgid "except on weekends"
 msgstr "okrem víkendov: "
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "potom:"
+msgstr "potom"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -17639,9 +17542,8 @@ msgstr "Počet počiatočných číslic, ktoré sa majú zachovať pri zaokrúh�
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "Významné číslice:"
+msgstr "Významné číslice"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -17664,19 +17566,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Názov rozpočtu:"
+msgstr "Názov rozpočtu"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "Počet periód:"
+msgstr "Počet periód"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "Obdobie rozpočtu:"
+msgstr "Obdobie rozpočtu"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -17736,9 +17635,8 @@ msgstr "Vybrať rozsah:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "_Vyberte dátum:"
+msgstr "_Vyberte dátum"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -17775,9 +17673,8 @@ msgstr "Zrušenie platnosti"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "Dôvod pre zrušenie platnosti:"
+msgstr "Dôvod pre zrušenie platnosti"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -17967,18 +17864,16 @@ msgstr "Všeobecné informácie o systéme"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_Konečný stav:"
+msgstr "_Konečný stav"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>Informácie o vysporiadaní</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Dátum výkazu:"
+msgstr "Dátum výkazu"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20338,9 +20233,8 @@ msgstr ""
 "Skratka (burzový symbol alebo podobný): "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "Vým_enný kurz:"
+msgstr "Vým_enný kurz"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

@@ -797,9 +797,8 @@ msgstr "Laikotarpis"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "Uždarymo data:"
+msgstr "Uždarymo data"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5847,9 +5846,8 @@ msgstr "Į_vedimo data"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Išrašo data:"
+msgstr "Išrašo data"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6272,21 +6270,18 @@ msgstr "Ar tikrai norite pašalinti pasirinktą operaciją?"
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "Pradžios likutis:"
+msgstr "Pradžios likutis"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "Pabaigos likutis:"
+msgstr "Pabaigos likutis"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "Suderintas likutis:"
+msgstr "Suderintas likutis"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6998,9 +6993,8 @@ msgstr "Pasirinkite vertybinį popierių/valiutą"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_Vertybinis popierius/valiuta:"
+msgstr "_Vertybinis popierius/valiuta"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -7008,9 +7002,8 @@ msgstr "Pasirinkite vertybinį popierių"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_Vertybinis popierius:"
+msgstr "_Vertybinis popierius"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -7018,9 +7011,8 @@ msgstr "Pasirinkite valiutą"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "_Valiuta:"
+msgstr "_Valiuta"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7082,9 +7074,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "Veiksmas/numeris:"
+msgstr "Veiksmas/numeris"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -7154,9 +7145,8 @@ msgstr ""
 "jokių operacijų. Pasirinkite kitą sąskaitą."
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "Valiuta:"
+msgstr "Valiuta"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7422,15 +7412,13 @@ msgid "Transfer To"
 msgstr "Pervesti į"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "Debeto suma:"
+msgstr "Debeto suma"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "Į sumą:"
+msgstr "Į sumą"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9196,9 +9184,8 @@ msgstr "Kliento numeris: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "Tiekėjo numeris: "
+msgstr "Tiekėjo numeris"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -12183,17 +12170,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "Intervalo parinkimas:"
+msgstr "Intervalo parinkimas"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Pradžia:"
+msgstr "Pradžia"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12202,9 +12187,8 @@ msgid "_Earliest"
 msgstr "_Anksčiausia"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "Pasirinkite _datą:"
+msgstr "Pasirinkite _datą"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12230,9 +12214,8 @@ msgstr "Pabaigoje"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "Pasirinkite _datą:"
+msgstr "Pasirinkite _datą"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12901,14 +12884,12 @@ msgid "Start Date"
 msgstr "Pradžios data"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Trukmė:"
+msgstr "Trukmė"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "Paskolos sąskaita:"
+msgstr "Paskolos sąskaita"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12929,9 +12910,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "Liko mėnesių:"
+msgstr "Liko mėnesių"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12955,9 +12935,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... naudojate sąlyginio įsipareigojimo sąskaitą mokėjimams?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Sąlyginio įsipareigojimo sąskaita:"
+msgstr "Sąlyginio įsipareigojimo sąskaita"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -12972,14 +12951,12 @@ msgstr ""
 "Visos sąskaitos privalo turėti teisingus įrašus, kad būtų galima tęsti.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "Pagrindinė suma į:"
+msgstr "Pagrindinė suma į"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Palūkanos į:"
+msgstr "Palūkanos į"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12999,14 +12976,12 @@ msgstr ""
 "tęsti.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "Mokėjimas į (sąlyginis įsipareigojimas):"
+msgstr "Mokėjimas į (sąlyginis įsipareigojimas)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "Mokėjimas iš (sąlyginis įsipareigojimas):"
+msgstr "Mokėjimas iš (sąlyginis įsipareigojimas)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13459,14 +13434,12 @@ msgid "Match existing transactions"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "_Importuotos operacijos, kurias reikia peržvelgti:"
+msgstr "_Importuotos operacijos, kurias reikia peržvelgti"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
-#, fuzzy
 msgid "_Possible matches for the selected transaction"
-msgstr "_Galimi atitikmenys pasirinktai operacijai:"
+msgstr "_Galimi atitikmenys pasirinktai operacijai"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Select possible duplicates"
@@ -13539,9 +13512,8 @@ msgstr ""
 "aprašą, ar priimti numatytąjį."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "_Aprašas:"
+msgstr "_Aprašas"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13556,14 +13528,12 @@ msgstr ""
 "palikti nepildytą."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "_Nauja kaina:"
+msgstr "_Nauja kaina"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "_Valiuta:"
+msgstr "_Valiuta"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13634,9 +13604,8 @@ msgid "_Edit list of encodings"
 msgstr "_Redaguoti koduočių sąrašą"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "Numatytoji koduotė:"
+msgstr "Numatytoji koduotė"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13751,9 +13720,8 @@ msgid "Whether to display the list of Bills Due at startup."
 msgstr "Ar rodyti apmokėtinų gautų sąskaitų sąrašą paleidus."
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "Ataskaita spausdinimui:"
+msgstr "Ataskaita spausdinimui"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -13800,9 +13768,8 @@ msgid "Pro_cess payments on posting"
 msgstr "Automatiškai apmokėti re_gistruojant"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "_Prieš kiek dienų:"
+msgstr "_Prieš kiek dienų"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13814,9 +13781,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "Prieš kiek dienų įspėti apie apmokėtinas gautas sąskaitas."
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "_Prieš kiek dienų:"
+msgstr "_Prieš kiek dienų"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13860,9 +13826,8 @@ msgstr ""
 "sąskaitomis?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_Perkelti į:"
+msgstr "_Perkelti į"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13874,9 +13839,8 @@ msgstr "<b>Operacijos</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "P_erkelti į:"
+msgstr "P_erkelti į"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -14009,34 +13973,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>Identifikavimas</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "_Sąskaitos pavadinimas:"
+msgstr "_Sąskaitos pavadinimas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_Sąskaitos kodas:"
+msgstr "_Sąskaitos kodas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_Aprašas:"
+msgstr "_Aprašas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "Mažiausia _dalis:"
+msgstr "Mažiausia _dalis"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "Sąskaitos _spalva:"
+msgstr "Sąskaitos _spalva"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "P_astabos:"
+msgstr "P_astabos"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -14156,14 +14114,12 @@ msgid "_Renumber"
 msgstr "_Pernumeruoti"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "Priešdėlis:"
+msgstr "Priešdėlis"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "Pavyzdžiai:"
+msgstr "Pavyzdžiai"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14398,9 +14354,8 @@ msgstr "<b>Termino apibrėžimas</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "_Aprašas:"
+msgstr "_Aprašas"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14409,9 +14364,8 @@ msgstr "_Aprašas:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Tipas:"
+msgstr "_Tipas"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14444,19 +14398,16 @@ msgstr "<b>Naujas atsiskaitymo terminas</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_Pavadinimas:"
+msgstr "_Pavadinimas"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "Iš viso pajamų:"
+msgstr "Iš viso pajamų"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "Iš viso sąnaudų:"
+msgstr "Iš viso sąnaudų"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14545,29 +14496,24 @@ msgid "<b>Security Information</b>"
 msgstr "Vertybinio popieriaus informacija"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "Pasiūlymų šaltinio tipas:"
+msgstr "Pasiūlymų šaltinio tipas"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "_Visas pavadinimas:"
+msgstr "_Visas pavadinimas"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_Simbolis/trumpinys:"
+msgstr "_Simbolis/trumpinys"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN arba kitas kodas:"
+msgstr "ISIN arba kitas kodas"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "Prekiaujama _dalis:"
+msgstr "Prekiaujama _dalis"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14578,9 +14524,8 @@ msgid "_Get Online Quotes"
 msgstr "_Gauti pasiūlymus internete"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "Vie_nas:"
+msgstr "Vie_nas"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14592,9 +14537,8 @@ msgstr ""
 "internete. Jei ta svetainė neprieinama, negalėsite gauti pasiūlymų."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_Keli:"
+msgstr "_Keli"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14607,9 +14551,8 @@ msgstr ""
 "svetainės."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_Nežinomas:"
+msgstr "_Nežinomas"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14622,9 +14565,8 @@ msgstr ""
 "internete."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "_Laiko juosta:"
+msgstr "_Laiko juosta"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14696,9 +14638,8 @@ msgstr "Kredito limitas: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "Mokestis įskaičiuotas:"
+msgstr "Mokestis įskaičiuotas"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14990,9 +14931,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>Mokėjimų parinktys</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "Iš viso mokėjimų:"
+msgstr "Iš viso mokėjimų"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -15003,9 +14943,8 @@ msgid "Continuous"
 msgstr "Tolydus"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "Kada mokėta:"
+msgstr "Kada mokėta"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15150,9 +15089,8 @@ msgstr "Pasirinkite formatą"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "Formatas:"
+msgstr "Formatas"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15768,9 +15706,8 @@ msgid "<b>End Date</b>"
 msgstr "<b>Pabaigos data</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_Santykinė:"
+msgstr "_Santykinė"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
@@ -15778,9 +15715,8 @@ msgstr ""
 "Naudoti nurodytą santykinę pradžios datą pelno/nuostolio skaičiavimams."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_Аbsoliuti:"
+msgstr "_Аbsoliuti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
@@ -15788,9 +15724,8 @@ msgstr ""
 "Naudoti nurodytą absoliučią pradžios datą pelno/nuostolio skaičiavimams."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "San_tykinė:"
+msgstr "San_tykinė"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15801,9 +15736,8 @@ msgstr ""
 "pat naudoti šią datą turto skaičiavimams."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "Ab_soliuti:"
+msgstr "Ab_soliuti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15861,20 +15795,17 @@ msgstr "JAV doleriai (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "_Pasirinkti:"
+msgstr "_Pasirinkti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "Simbolis:"
+msgstr "Simbolis"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "Pavyzdys:"
+msgstr "Pavyzdys"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -15898,9 +15829,8 @@ msgstr "Rodyti sąskaitos spalvą kaip kortelės foną."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "_Lokalė:"
+msgstr "_Lokalė"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -16052,9 +15982,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>Paieškos dialogo langas</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "Naujos paieškos _limitas:"
+msgstr "Naujos paieškos _limitas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16070,9 +15999,8 @@ msgid "Show splash screen at startup."
 msgstr "Rodyti prisistatymo langą paleidžiant."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "Automatinio _išsaugojimo intervalas:"
+msgstr "Automatinio _išsaugojimo intervalas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -16103,9 +16031,8 @@ msgid "Forever"
 msgstr "Amžinai"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "Atsakymo laukimo laikas:"
+msgstr "Atsakymo laukimo laikas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -16155,9 +16082,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "Po tikrąja data spausdinti tos datos formatą 8 punktų šriftu."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "Numatytasis š_riftas:"
+msgstr "Numatytasis š_riftas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -16324,9 +16250,8 @@ msgid "_Auto-split ledger"
 msgstr "_Automatiškai skaidoma didžioji knyga"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "Operacijų _skaičius:"
+msgstr "Operacijų _skaičius"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16370,9 +16295,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "Simbolių skaičius automatiniam _užbaigimui:"
+msgstr "Simbolių skaičius automatiniam _užbaigimui"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16489,9 +16413,8 @@ msgstr ""
 "meniu punktas „Užverti“."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_Plotis:"
+msgstr "_Plotis"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16536,14 +16459,12 @@ msgid "Price Editor"
 msgstr "Kainų tvarkytuvė"
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "_Vardų sritis:"
+msgstr "_Vardų sritis"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "_Šaltinis:"
+msgstr "_Šaltinis"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16660,9 +16581,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_Data:"
+msgstr "_Data"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16751,19 +16671,16 @@ msgid "_Print"
 msgstr "Spausdinti"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "Čekio _formatas:"
+msgstr "Čekio _formatas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "Čekio _padėtis:"
+msgstr "Čekio _padėtis"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "_Datos formatas:"
+msgstr "_Datos formatas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16781,9 +16698,8 @@ msgid "_Address"
 msgstr "_Adresas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
-#, fuzzy
 msgid "Checks on first _page"
-msgstr "Čekių pirmame _puslapyje:"
+msgstr "Čekių pirmame _puslapyje"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:640
 msgid "x"
@@ -16794,19 +16710,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "_Gavėjas:"
+msgstr "_Gavėjas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "Suma (ž_odžiais):"
+msgstr "Suma (ž_odžiais)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Suma (_skaičiais):"
+msgstr "Suma (_skaičiais)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16814,14 +16727,12 @@ msgid "_Notes"
 msgstr "_Pastabos"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "_Vienetai:"
+msgstr "_Vienetai"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "Per_kėlimas:"
+msgstr "Per_kėlimas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16917,14 +16828,12 @@ msgid "Enter report row/column span"
 msgstr "Įveskite ataskaitos eilutės/stulpelio apimtį"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "_Eilutės apimtis:"
+msgstr "_Eilutės apimtis"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "_Stulpelio apimtis:"
+msgstr "_Stulpelio apimtis"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16939,9 +16848,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>Naujo stiliaus informacija</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "Š_ablonas:"
+msgstr "Š_ablonas"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17075,9 +16983,8 @@ msgid "Never End"
 msgstr "Niekada neužbaigti"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "Įvykių skaičius:"
+msgstr "Įvykių skaičius"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17120,14 +17027,12 @@ msgstr ""
 "operacijoms."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "Sukurti iš _anksto:"
+msgstr "Sukurti iš _anksto"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "_Priminti iš anksto:"
+msgstr "_Priminti iš anksto"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -17158,14 +17063,12 @@ msgid "<b>Options</b>"
 msgstr "<b>Parinktys</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "Sukurti iš anksto:"
+msgstr "Sukurti iš anksto"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "Priminti iš anksto:"
+msgstr "Priminti iš anksto"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17197,9 +17100,8 @@ msgid "Repeats:"
 msgstr "Kartojimas:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "Iki:"
+msgstr "Iki"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17406,9 +17308,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>Valiutos pervedimas</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "Konvertavimo kursas:"
+msgstr "Konvertavimo kursas"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17423,14 +17324,12 @@ msgid "Enter your username and password"
 msgstr "Įveskite savo naudotojo vardą ir slaptažodį"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "_Naudotojo vardas:"
+msgstr "_Naudotojo vardas"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_Slaptažodis:"
+msgstr "_Slaptažodis"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17478,9 +17377,8 @@ msgid "Abbreviation"
 msgstr "Santrumpa"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "Datos formatas:"
+msgstr "Datos formatas"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -17947,21 +17845,18 @@ msgid "months."
 msgstr "mėnesius."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "Iš pradžių:"
+msgstr "Iš pradžių"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "išskyrus savaitgaliais:"
+msgstr "išskyrus savaitgaliais"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "po to:"
+msgstr "po to"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -18023,9 +17918,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "Reikšminiai skaitmenys:"
+msgstr "Reikšminiai skaitmenys"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -18049,19 +17943,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Biudžeto pavadinimas:"
+msgstr "Biudžeto pavadinimas"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "Laikotarpių skaičius:"
+msgstr "Laikotarpių skaičius"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "Biudžeto laikotarpis:"
+msgstr "Biudžeto laikotarpis"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -18100,9 +17991,8 @@ msgstr "<b>Naujos operacijos informacija</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_Numeris:"
+msgstr "_Numeris"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -18122,9 +18012,8 @@ msgstr "Intervalo parinkimas:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "Pasirinkite _datą:"
+msgstr "Pasirinkite _datą"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -18160,9 +18049,8 @@ msgstr "Anuliuoti operaciją"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "Operacijos anuliavimo priežastis:"
+msgstr "Operacijos anuliavimo priežastis"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -18264,9 +18152,8 @@ msgid "Sort in descending order."
 msgstr "Rikiuoti mažėjančia tvarka"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1067
-#, fuzzy
 msgid "_Transaction Number"
-msgstr "_Operacijos numeris:"
+msgstr "_Operacijos numeris"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1101
 msgid "Keep Associated Entry"
@@ -18339,18 +18226,16 @@ msgstr "<b>Automatinio apmokėjimo informacija</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_Pabaigos likutis:"
+msgstr "_Pabaigos likutis"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>Suderinimo informacija</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Išrašo _data:"
+msgstr "Išrašo _data"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20767,19 +20652,16 @@ msgstr ""
 "ar atitinkamo investicijos tipo, galite įvesti naują."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_Pavadinimas arba aprašas:"
+msgstr "_Pavadinimas arba aprašas"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_Trumpinys ar kita santrumpa:"
+msgstr "_Trumpinys ar kita santrumpa"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "_Biržos ar santrumpos tipas:"
+msgstr "_Biržos ar santrumpos tipas"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

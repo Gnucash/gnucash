@@ -5785,9 +5785,8 @@ msgstr "Tarix növü"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Başlama tarixi :"
+msgstr "Başlama tarixi "
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -7310,15 +7309,13 @@ msgid "Transfer To"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "Miqdar:"
+msgstr "Miqdar"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "Miqdar:"
+msgstr "Miqdar"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -11743,9 +11740,8 @@ msgstr "Hamısını Seç"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Başlama tarixi :"
+msgstr "Başlama tarixi "
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12391,9 +12387,8 @@ msgstr ""
 #: gnucash/report/standard-reports/income-statement.scm:59
 #: gnucash/report/standard-reports/net-charts.scm:40
 #: gnucash/report/standard-reports/price-scatter.scm:35
-#, fuzzy
 msgid "Start Date"
-msgstr "Başlama tarixi :"
+msgstr "Başlama tarixi "
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
 msgid "Length"
@@ -12466,9 +12461,8 @@ msgid "Principal To"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Başlama tarixi :"
+msgstr "Başlama tarixi "
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12941,9 +12935,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "İzahat:"
+msgstr "İzahat"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13385,19 +13378,16 @@ msgid "<b>Identification</b>"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "Hesab adı:"
+msgstr "Hesab adı"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "Hesab Adı:"
+msgstr "Hesab Adı"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "İzahat:"
+msgstr "İzahat"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
 #, fuzzy
@@ -13405,9 +13395,8 @@ msgid "Smallest _fraction"
 msgstr "Transaksiya Raportu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "Hesab adı:"
+msgstr "Hesab adı"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
 #, fuzzy
@@ -13528,9 +13517,8 @@ msgid "Prefix"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "Ad:"
+msgstr "Ad"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -13772,9 +13760,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "İzahat:"
+msgstr "İzahat"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -13783,9 +13770,8 @@ msgstr "İzahat:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Növ:"
+msgstr "_Növ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -13818,14 +13804,12 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "Ad:"
+msgstr "Ad"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "Toplam :"
+msgstr "Toplam "
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
 #, fuzzy
@@ -15190,9 +15174,8 @@ msgstr "Paylaşmalar"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "Ad:"
+msgstr "Ad"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 #, fuzzy
@@ -15833,9 +15816,8 @@ msgid "_Namespace"
 msgstr "Ad"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "Kaynak:"
+msgstr "Kaynak"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -15943,9 +15925,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "Tarix:"
+msgstr "Tarix"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16074,14 +16055,12 @@ msgid "Pa_yee"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "Miqdar:"
+msgstr "Miqdar"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Hesab adı:"
+msgstr "Hesab adı"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16200,14 +16179,12 @@ msgid "Enter report row/column span"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "Sətir spanı:"
+msgstr "Sətir spanı"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "Sütun spanı:"
+msgstr "Sütun spanı"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16708,14 +16685,12 @@ msgid "Enter your username and password"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "İstifadəçi Adı:"
+msgstr "İstifadəçi Adı"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "Parol:"
+msgstr "Parol"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17339,9 +17314,8 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Hesab Adı:"
+msgstr "Hesab Adı"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
 #, fuzzy
@@ -17653,9 +17627,8 @@ msgid "<b>Reconcile Information</b>"
 msgstr "Hesab Haqqında"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Başlama tarixi :"
+msgstr "Başlama tarixi "
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -19888,9 +19861,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "İzahat:"
+msgstr "İzahat"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 msgid "_Ticker symbol or other abbreviation"

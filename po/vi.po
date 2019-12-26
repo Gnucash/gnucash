@@ -764,15 +764,13 @@ msgstr ""
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1285
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1290
 #: gnucash/report/standard-reports/budget-flow.scm:45
-#, fuzzy
 msgid "Period"
-msgstr "Kỳ:"
+msgstr "Kỳ"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "Ngày đóng:"
+msgstr "Ngày đóng"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5889,9 +5887,8 @@ msgstr "Ngà_y ghi"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Ngày ghi bảng kê:"
+msgstr "Ngày ghi bảng kê"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6314,21 +6311,18 @@ msgstr "Bạn có chắc muốn xoá giao dịch đã chọn không?"
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "Số dư đầu kỳ:"
+msgstr "Số dư đầu kỳ"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "Số dư cuối kỳ:"
+msgstr "Số dư cuối kỳ"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "Số dư đã chinh hợp:"
+msgstr "Số dư đã chinh hợp"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -7048,9 +7042,8 @@ msgstr "Chọn chứng khoán/tiền tệ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "Chứng kh_oán/tiền tệ:"
+msgstr "Chứng kh_oán/tiền tệ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -7058,9 +7051,8 @@ msgstr "Chọn chứng khoán"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_Chứng khoán:"
+msgstr "_Chứng khoán"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -7068,9 +7060,8 @@ msgstr "Chọn tiền tệ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "T_iền tệ:"
+msgstr "T_iền tệ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7132,9 +7123,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "_Số :"
+msgstr "_Số "
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 #, fuzzy
@@ -7205,9 +7195,8 @@ msgstr ""
 "khoản tài khoản khác."
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "Tiền tệ:"
+msgstr "Tiền tệ"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7485,15 +7474,13 @@ msgid "Transfer To"
 msgstr "Chuyển vào"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "Số tiền ghi nợ :"
+msgstr "Số tiền ghi nợ "
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "Số tiền ghi có :"
+msgstr "Số tiền ghi có "
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9229,9 +9216,8 @@ msgstr "Số khách: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "Số hiệu nhà sản xuất: "
+msgstr "Số hiệu nhà sản xuất"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -12357,17 +12343,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "Chọn phạm vi:"
+msgstr "Chọn phạm vi"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Đầu :"
+msgstr "Đầu "
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12376,9 +12360,8 @@ msgid "_Earliest"
 msgstr "_Cũ nhất"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "C_họn ngày:"
+msgstr "C_họn ngày"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12404,9 +12387,8 @@ msgstr "Kết thúc"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "C_họn ngày:"
+msgstr "C_họn ngày"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -13049,14 +13031,12 @@ msgid "Start Date"
 msgstr "Ngày bắt đầu"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Bề dài:"
+msgstr "Bề dài"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "Tài khoản vay:"
+msgstr "Tài khoản vay"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -13077,9 +13057,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "Tháng còn lại:"
+msgstr "Tháng còn lại"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -13100,9 +13079,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "...dùng tài khoản bên thứ ba để trả tiền không?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Tài khoản bên thứ ba:"
+msgstr "Tài khoản bên thứ ba"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 #, fuzzy
@@ -13116,14 +13094,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "Tiền gốc cho :"
+msgstr "Tiền gốc cho "
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Lãi đến:"
+msgstr "Lãi đến"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -13141,14 +13117,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "Trả cho (bên thứ ba):"
+msgstr "Trả cho (bên thứ ba)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "Trả từ (bên thứ ba):"
+msgstr "Trả từ (bên thứ ba)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13617,9 +13591,8 @@ msgid "Match existing transactions"
 msgstr "Chọn giao dịch đã tồn tại tương ứng"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "Sự phân thứ nhất của giao dịch đã nhập khẩu :"
+msgstr "Sự phân thứ nhất của giao dịch đã nhập khẩu "
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
 #, fuzzy
@@ -13706,9 +13679,8 @@ msgstr ""
 "dịch, hoặc giữ lại mô tả mặc định."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "_Mô tả:"
+msgstr "_Mô tả"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13723,14 +13695,12 @@ msgstr ""
 "nhiên, cũng có thể bỏ trống một cách an toàn."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "_Giá mới:"
+msgstr "_Giá mới"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "T_iền tệ:"
+msgstr "T_iền tệ"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13805,9 +13775,8 @@ msgid "_Edit list of encodings"
 msgstr "_Sửa danh sách bảng mã"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "Bảng mã mặc định:"
+msgstr "Bảng mã mặc định"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -14032,9 +14001,8 @@ msgid ""
 msgstr "Tài khoản này chứa tài khoản con. Bạn có muốn làm gì vậy?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_Di chuyển sang:"
+msgstr "_Di chuyển sang"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -14046,9 +14014,8 @@ msgstr "<b>Giao dịch</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "_Di chuyển sang:"
+msgstr "_Di chuyển sang"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -14178,24 +14145,20 @@ msgid "<b>Identification</b>"
 msgstr "<b>Nhận diện</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "Tê_n tài khoản:"
+msgstr "Tê_n tài khoản"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_Mã tài khoản:"
+msgstr "_Mã tài khoản"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_Mô tả:"
+msgstr "_Mô tả"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "_Phân số nhỏ nhất:"
+msgstr "_Phân số nhỏ nhất"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
 #, fuzzy
@@ -14203,9 +14166,8 @@ msgid "Account _Color"
 msgstr "Mã tài khoản"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "_Ghi chú :"
+msgstr "_Ghi chú "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -14321,14 +14283,12 @@ msgid "_Renumber"
 msgstr "Đánh số _lại"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "Tiền tố :"
+msgstr "Tiền tố "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "Thí dụ :"
+msgstr "Thí dụ "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14576,9 +14536,8 @@ msgstr "<b>Xác định kỳ</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "_Mô tả:"
+msgstr "_Mô tả"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14587,9 +14546,8 @@ msgstr "_Mô tả:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Kiểu :"
+msgstr "_Kiểu "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14622,9 +14580,8 @@ msgstr "<b>Kỳ hoà đơn mới</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "Tê_n:"
+msgstr "Tê_n"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
 #, fuzzy
@@ -14723,29 +14680,24 @@ msgid "<b>Security Information</b>"
 msgstr "Thông tin về chứng khoán"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "Kiểu nguồn chào giá:"
+msgstr "Kiểu nguồn chào giá"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "Tên đầ_y đủ :"
+msgstr "Tên đầ_y đủ "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_Ký hiệu/viết tắt:"
+msgstr "_Ký hiệu/viết tắt"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "CUSI_P hay mã khác:"
+msgstr "CUSI_P hay mã khác"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "_Phân số đã buôn:"
+msgstr "_Phân số đã buôn"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14756,9 +14708,8 @@ msgid "_Get Online Quotes"
 msgstr "Lấy chào _giá trực tuyến"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "Đơ_n:"
+msgstr "Đơ_n"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14770,9 +14721,8 @@ msgstr ""
 "Internet. Địa chỉ không sẵn sàng thì bạn không thể lấy chào giá."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_Nhiều :"
+msgstr "_Nhiều "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14785,9 +14735,8 @@ msgstr ""
 "chỉ khác."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_Không rõ :"
+msgstr "_Không rõ "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14800,9 +14749,8 @@ msgstr ""
 "Internet."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "Múi_giờ :"
+msgstr "Múi_giờ "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14839,9 +14787,8 @@ msgstr "Nhận diện"
 #: gnucash/gtkbuilder/dialog-customer.glade:920
 #: gnucash/gtkbuilder/dialog-employee.glade:280
 #: gnucash/gtkbuilder/dialog-vendor.glade:298
-#, fuzzy
 msgid "Address"
-msgstr "Địa chỉ: "
+msgstr "Địa chỉ"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:375
 #: gnucash/gtkbuilder/dialog-customer.glade:998
@@ -14849,9 +14796,8 @@ msgstr "Địa chỉ: "
 #: gnucash/gtkbuilder/dialog-vendor.glade:376
 #: gnucash/report/business-reports/aging.scm:718
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:212
-#, fuzzy
 msgid "Email"
-msgstr "Địa chỉ thư : "
+msgstr "Địa chỉ thư "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:514
 msgid "Billing Address"
@@ -14872,9 +14818,8 @@ msgstr "Hạn tín dụng: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "Gồm thuế:"
+msgstr "Gồm thuế"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -15176,9 +15121,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>Tùy chọn trả tiền</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "Tổng số tiền trả:"
+msgstr "Tổng số tiền trả"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -15189,9 +15133,8 @@ msgid "Continuous"
 msgstr "Liên tục"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "Khi trả:"
+msgstr "Khi trả"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15337,9 +15280,8 @@ msgstr "Chọn định dạng"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "Định dạng:"
+msgstr "Định dạng"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15440,9 +15382,8 @@ msgstr "Đã chỉnh hợp"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "Sự phân thứ nhất của giao dịch đã nhập khẩu :"
+msgstr "Sự phân thứ nhất của giao dịch đã nhập khẩu "
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15583,9 +15524,8 @@ msgid "Default Chargeback Project"
 msgstr "Dự án chịu ngược mặc định"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "Phụ vào Thẻ:"
+msgstr "Phụ vào Thẻ"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15967,27 +15907,24 @@ msgid "<b>End Date</b>"
 msgstr "<b>Ngày cuối</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_Tương đối:"
+msgstr "_Tương đối"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "Dùng ngày bắt đầu tương đối đã ghi rõ cho phép tính lợi/lỗ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "Tu_yệt đối:"
+msgstr "Tu_yệt đối"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "Dùng ngày bắt đầu tuyệt đối đã ghi rõ cho phép tính lợi/lỗ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "Tương đố_i:"
+msgstr "Tương đố_i"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15998,9 +15935,8 @@ msgstr ""
 "này để tính tài sản ròng."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "Tu_yệt đối:"
+msgstr "Tu_yệt đối"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -16059,20 +15995,17 @@ msgstr "Đô la Mỹ (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "C_họn:"
+msgstr "C_họn"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "Ký tự :"
+msgstr "Ký tự "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "Mẫu :"
+msgstr "Mẫu "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 #, fuzzy
@@ -16101,9 +16034,8 @@ msgstr "Hiển thị mã tài khoản cho tổng số phụ và tiêu đề ph�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "Miền đị_a phương:"
+msgstr "Miền đị_a phương"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -16260,9 +16192,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>Hộp thoại tìm kiếm</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "_Hạn tìm kiếm mới:"
+msgstr "_Hạn tìm kiếm mới"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16277,9 +16208,8 @@ msgid "Show splash screen at startup."
 msgstr "Hiển thị màn hình giật gân khi khởi chạy."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "Kh_oảng tự động lưu :"
+msgstr "Kh_oảng tự động lưu "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -16360,9 +16290,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "Bên dưới ngày tháng thật, in định dạng của ngày đó theo chữ in 8 điểm."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "_Phông mặc định:"
+msgstr "_Phông mặc định"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 #, fuzzy
@@ -16523,9 +16452,8 @@ msgid "_Auto-split ledger"
 msgstr "_Tự động phân tách sổ cái"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "Số _giao dịch:"
+msgstr "Số _giao dịch"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16566,9 +16494,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "Số _hàng:"
+msgstr "Số _hàng"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16688,9 +16615,8 @@ msgstr ""
 "năng với mục trình đơn « Đóng »."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_Rộng:"
+msgstr "_Rộng"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 #, fuzzy
@@ -16744,9 +16670,8 @@ msgid "_Namespace"
 msgstr "Miền tên"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "Ng_uồn:"
+msgstr "Ng_uồn"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16861,9 +16786,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "Ngà_y:"
+msgstr "Ngà_y"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16954,19 +16878,16 @@ msgid "_Print"
 msgstr "In"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "Định _dạng séc:"
+msgstr "Định _dạng séc"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "Vị trí _séc:"
+msgstr "Vị trí _séc"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "Định _dạng ngày:"
+msgstr "Định _dạng ngày"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16994,19 +16915,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "Người được t_rả tiền:"
+msgstr "Người được t_rả tiền"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "Số tiền (_từ):"
+msgstr "Số tiền (_từ)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Số tiền (_số):"
+msgstr "Số tiền (_số)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -17014,14 +16932,12 @@ msgid "_Notes"
 msgstr "_Ghi chú"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "Đơn _vị:"
+msgstr "Đơn _vị"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "_Dịch:"
+msgstr "_Dịch"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -17120,14 +17036,12 @@ msgid "Enter report row/column span"
 msgstr "Nhập báo cáo theo hàng/cột"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "Ô theo _hàng:"
+msgstr "Ô theo _hàng"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "Ô theo _cột:"
+msgstr "Ô theo _cột"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -17142,9 +17056,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>Thông tin bảng kiểu dáng mới</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "_Mẫu :"
+msgstr "_Mẫu "
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17281,9 +17194,8 @@ msgid "Never End"
 msgstr "Vô hạn"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "Số lần xảy ra:"
+msgstr "Số lần xảy ra"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17324,14 +17236,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "Đặt cờ « tự động tạo » trên các giao dịch đã định thời mới tạo."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "Tạo trước:"
+msgstr "Tạo trước"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "Nhắc nhở trước:"
+msgstr "Nhắc nhở trước"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -17362,14 +17272,12 @@ msgid "<b>Options</b>"
 msgstr "<b>Tùy chọn</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "Tạo trước:"
+msgstr "Tạo trước"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "Nhắc nhở trước:"
+msgstr "Nhắc nhở trước"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17401,9 +17309,8 @@ msgid "Repeats:"
 msgstr "Lặp lại:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "Đến khi:"
+msgstr "Đến khi"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17616,9 +17523,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>Chuyển tiền tệ</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "Tỷ lệ hội suất:"
+msgstr "Tỷ lệ hội suất"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 #, fuzzy
@@ -17634,14 +17540,12 @@ msgid "Enter your username and password"
 msgstr "Gõ tên người dùng và mật khẩu của bạn"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "Tên _người dùng:"
+msgstr "Tên _người dùng"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_Mật khẩu :"
+msgstr "_Mật khẩu "
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17687,9 +17591,8 @@ msgid "Abbreviation"
 msgstr "Viết tắt"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "Định dạng ngày:"
+msgstr "Định dạng ngày"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -18168,9 +18071,8 @@ msgid "months."
 msgstr "tháng."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "Đầu tiên vào :"
+msgstr "Đầu tiên vào "
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
@@ -18179,9 +18081,8 @@ msgid "except on weekends"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "rồi vào :"
+msgstr "rồi vào "
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -18243,9 +18144,8 @@ msgstr "Số chữ số cần giữ khi làm tròn số"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "Số lẻ:"
+msgstr "Số lẻ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -18269,19 +18169,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Tên ngân sách:"
+msgstr "Tên ngân sách"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "Số kỳ:"
+msgstr "Số kỳ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "Kỳ ngân sách:"
+msgstr "Kỳ ngân sách"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -18320,9 +18217,8 @@ msgstr "<b>Thông tin giao dịch mới</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_Số :"
+msgstr "_Số "
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -18381,9 +18277,8 @@ msgstr "Bãi bỏ giao dịch"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "Lý do bãi bỏ giao dịch:"
+msgstr "Lý do bãi bỏ giao dịch"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -18575,18 +18470,16 @@ msgstr "<b>Thông tin thuế</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_Số dư cuối kỳ:"
+msgstr "_Số dư cuối kỳ"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>Chỉnh hợp thông tin</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Ngày ghi bảng kê:"
+msgstr "Ngày ghi bảng kê"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -21033,19 +20926,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_Mô tả:"
+msgstr "_Mô tả"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_Ký hiệu/viết tắt:"
+msgstr "_Ký hiệu/viết tắt"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "Tỷ lệ hội _suất:"
+msgstr "Tỷ lệ hội _suất"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

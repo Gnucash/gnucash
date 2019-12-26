@@ -6079,9 +6079,8 @@ msgstr "_Sarrera-data"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Laburpenaren data:"
+msgstr "Laburpenaren data"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6507,21 +6506,18 @@ msgstr "Ziur zaude hautatutako transakzioa ezabatu nahi duzula?"
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "Hasierako saldoa:"
+msgstr "Hasierako saldoa"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "Amaierako saldoa:"
+msgstr "Amaierako saldoa"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "Saldo berdinkatua:"
+msgstr "Saldo berdinkatua"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -7254,9 +7250,8 @@ msgstr "Hautatu dibisa/titulua "
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "Dibisa:"
+msgstr "Dibisa"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7395,9 +7390,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "Dibisa:"
+msgstr "Dibisa"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7683,15 +7677,13 @@ msgid "Transfer To"
 msgstr "Transferitu hona:"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "Zorduntzeko zenbatekoa:"
+msgstr "Zorduntzeko zenbatekoa"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "Zenbatekora:"
+msgstr "Zenbatekora"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9556,9 +9548,8 @@ msgstr "Bezero-zenbakia: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "Hornitzaile-zenbakia: "
+msgstr "Hornitzaile-zenbakia"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -9614,9 +9605,8 @@ msgstr "Helbidea: "
 #: gnucash/gtkbuilder/dialog-vendor.glade:362
 #: gnucash/report/business-reports/aging.scm:716
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:206
-#, fuzzy
 msgid "Fax"
-msgstr "Faxa: "
+msgstr "Faxa"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:452
 #, fuzzy
@@ -12461,9 +12451,8 @@ msgstr "Ezarri _bitartea..."
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Hasi:"
+msgstr "Hasi"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -13151,19 +13140,16 @@ msgstr ""
 #: gnucash/report/standard-reports/income-statement.scm:59
 #: gnucash/report/standard-reports/net-charts.scm:40
 #: gnucash/report/standard-reports/price-scatter.scm:35
-#, fuzzy
 msgid "Start Date"
-msgstr "Hasiera-data:"
+msgstr "Hasiera-data"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Luzera:"
+msgstr "Luzera"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "Mailegu-kontua:"
+msgstr "Mailegu-kontua"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -13184,9 +13170,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "Falta diren hilak:"
+msgstr "Falta diren hilak"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -13207,9 +13192,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... kontu fiduziarioa erabili ordainketetarako?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Kontu fiduziarioa:"
+msgstr "Kontu fiduziarioa"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 #, fuzzy
@@ -13223,14 +13207,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "Printzipala:"
+msgstr "Printzipala"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Interesa:"
+msgstr "Interesa"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -13248,14 +13230,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "Nora ordaindua (fiduziarioa):"
+msgstr "Nora ordaindua (fiduziarioa)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "Nondik ordaindua (fiduziarioa):"
+msgstr "Nondik ordaindua (fiduziarioa)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13316,9 +13296,8 @@ msgstr "Bitartea: "
 #: gnucash/report/standard-reports/income-statement.scm:60
 #: gnucash/report/standard-reports/net-charts.scm:41
 #: gnucash/report/standard-reports/price-scatter.scm:36
-#, fuzzy
 msgid "End Date"
-msgstr "Amaiera-data:"
+msgstr "Amaiera-data"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1262
 #: gnucash/report/business-reports/job-report.scm:591
@@ -13745,9 +13724,8 @@ msgid "Match existing transactions"
 msgstr "Hautatu bat datorren lehengo transakzioa"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "Inportatutako transakzioaren lehen zatia:"
+msgstr "Inportatutako transakzioaren lehen zatia"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
 #, fuzzy
@@ -13833,9 +13811,8 @@ msgstr ""
 "Transakzioaren azalpena idatz dezakezu, edo azalpen lehenetsia onartu."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "Azalpena:"
+msgstr "Azalpena"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13851,14 +13828,12 @@ msgstr ""
 "Nahi baduzu, hutsik utz dezakezu."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "Prezio berria:"
+msgstr "Prezio berria"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "Dibisa:"
+msgstr "Dibisa"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -14337,14 +14312,12 @@ msgid "<b>Identification</b>"
 msgstr "Identifikazioa"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "Kontuaren izena:"
+msgstr "Kontuaren izena"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "Kontuaren kodea:"
+msgstr "Kontuaren kodea"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
 #, fuzzy
@@ -14352,9 +14325,8 @@ msgid "_Description"
 msgstr "_Azalpena"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "Frakzio txikiena:"
+msgstr "Frakzio txikiena"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
 #, fuzzy
@@ -14487,9 +14459,8 @@ msgid "_Renumber"
 msgstr "_Zenbakia"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "Prezioa:"
+msgstr "Prezioa"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
 #, fuzzy
@@ -14747,9 +14718,8 @@ msgstr "Baldintzen definizioa"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "Azalpena:"
+msgstr "Azalpena"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14758,9 +14728,8 @@ msgstr "Azalpena:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Mota:"
+msgstr "_Mota"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14794,9 +14763,8 @@ msgstr "Ordaintzeko modu berria"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "Izena:"
+msgstr "Izena"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
 #, fuzzy
@@ -14898,24 +14866,20 @@ msgid "Type of quote source"
 msgstr "Bilaketa-mota"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "Izen osoa:"
+msgstr "Izen osoa"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "Ikurra/laburtzapena:"
+msgstr "Ikurra/laburtzapena"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "CUSIP edo beste kode bat:"
+msgstr "CUSIP edo beste kode bat"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "Salerosketako frakzioa:"
+msgstr "Salerosketako frakzioa"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -15005,9 +14969,8 @@ msgstr "Identifikazioa"
 #: gnucash/gtkbuilder/dialog-customer.glade:920
 #: gnucash/gtkbuilder/dialog-employee.glade:280
 #: gnucash/gtkbuilder/dialog-vendor.glade:298
-#, fuzzy
 msgid "Address"
-msgstr "Helbidea: "
+msgstr "Helbidea"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:375
 #: gnucash/gtkbuilder/dialog-customer.glade:998
@@ -15015,9 +14978,8 @@ msgstr "Helbidea: "
 #: gnucash/gtkbuilder/dialog-vendor.glade:376
 #: gnucash/report/business-reports/aging.scm:718
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:212
-#, fuzzy
 msgid "Email"
-msgstr "Helb. el.: "
+msgstr "Helb. el."
 
 #: gnucash/gtkbuilder/dialog-customer.glade:514
 msgid "Billing Address"
@@ -15038,9 +15000,8 @@ msgstr "Kredituaren muga: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "Zerga barne:"
+msgstr "Zerga barne"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -15350,9 +15311,8 @@ msgid "<b>Payment Options</b>"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "Ordainketa guztira:"
+msgstr "Ordainketa guztira"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -15629,9 +15589,8 @@ msgstr "Berdinkatuta"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "Inportatutako transakzioaren lehen zatia:"
+msgstr "Inportatutako transakzioaren lehen zatia"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -16912,9 +16871,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_Zabalera:"
+msgstr "_Zabalera"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16965,9 +16923,8 @@ msgid "_Namespace"
 msgstr "Izena"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "Iturburua:"
+msgstr "Iturburua"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -17172,19 +17129,16 @@ msgid "_Print"
 msgstr "Inprimatu"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "Txeke-formatua:"
+msgstr "Txeke-formatua"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "Txeke-posizioa:"
+msgstr "Txeke-posizioa"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "Data-formatua:"
+msgstr "Data-formatua"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -17212,19 +17166,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "Onuraduna:"
+msgstr "Onuraduna"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "Zenbatekoa (hitzez):"
+msgstr "Zenbatekoa (hitzez)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Zenbatekoa (zenbakiz):"
+msgstr "Zenbatekoa (zenbakiz)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -17233,9 +17184,8 @@ msgid "_Notes"
 msgstr "Oharrak"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "Unitateak:"
+msgstr "Unitateak"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
 #, fuzzy
@@ -17347,14 +17297,12 @@ msgid "Enter report row/column span"
 msgstr "Sartu txostenaren errenkada/zutabe hedadura"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "Errenkada-hedadura:"
+msgstr "Errenkada-hedadura"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "Zutabe-hedadura:"
+msgstr "Zutabe-hedadura"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 #, fuzzy
@@ -17511,9 +17459,8 @@ msgid "Never End"
 msgstr "Amaiera gabea"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "Gertaldi-kopurua:"
+msgstr "Gertaldi-kopurua"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17640,9 +17587,8 @@ msgid "Repeats:"
 msgstr "_Txostenak"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "Unitateak:"
+msgstr "Unitateak"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 #, fuzzy
@@ -17874,9 +17820,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "Dibisa-transferentzia"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "Kanbio-tasa:"
+msgstr "Kanbio-tasa"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 #, fuzzy
@@ -17892,14 +17837,12 @@ msgid "Enter your username and password"
 msgstr "Idatzi erabiltzaile-izena eta pasahitza"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "Erabiltzaile-izena:"
+msgstr "Erabiltzaile-izena"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "Pasahitza:"
+msgstr "Pasahitza"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 #, fuzzy
@@ -17949,9 +17892,8 @@ msgid "Abbreviation"
 msgstr "Ikurra/laburtzapena:"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "Data-formatua:"
+msgstr "Data-formatua"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -18428,9 +18370,8 @@ msgid "months."
 msgstr "hilabete."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "Lehenengoa:"
+msgstr "Lehenengoa"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
@@ -18439,9 +18380,8 @@ msgid "except on weekends"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "hurrengoa:"
+msgstr "hurrengoa"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -18526,9 +18466,8 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Kontuaren izena:"
+msgstr "Kontuaren izena"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
 #, fuzzy
@@ -18842,9 +18781,8 @@ msgstr "Zerga-informazioa"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "Amaierako saldoa:"
+msgstr "Amaierako saldoa"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 #, fuzzy
@@ -18852,9 +18790,8 @@ msgid "<b>Reconcile Information</b>"
 msgstr "Berdinkatze-informazioa"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Laburpenaren data:"
+msgstr "Laburpenaren data"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 #, fuzzy
@@ -21288,14 +21225,12 @@ msgid "_Name or description"
 msgstr "_Azalpena"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "Ikurra/laburtzapena:"
+msgstr "Ikurra/laburtzapena"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "Kanbio-tasa:"
+msgstr "Kanbio-tasa"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

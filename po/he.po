@@ -778,9 +778,8 @@ msgstr "תקופה"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "תאריך סגירה:"
+msgstr "תאריך סגירה"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5852,14 +5851,12 @@ msgid "Associate Location with Transaction"
 msgstr "צרוף מיקום לתנועה"
 
 #: gnucash/gnome/gnc-split-reg.c:1356
-#, fuzzy
 msgid "Amend URL"
-msgstr "תיקון URL:"
+msgstr "תיקון URL"
 
 #: gnucash/gnome/gnc-split-reg.c:1360
-#, fuzzy
 msgid "Enter URL like https://www.gnucash.org"
-msgstr "נא להזין קישור כגון http://www.gnucash.org:"
+msgstr "נא להזין קישור כגון http://www.gnucash.org"
 
 #: gnucash/gnome/gnc-split-reg.c:1506
 msgid "This transaction is not associated with a URI."
@@ -5911,9 +5908,8 @@ msgstr ""
 "לצאת מאיזון."
 
 #: gnucash/gnome/gnc-split-reg.c:2485
-#, fuzzy
 msgid "Sort By:"
-msgstr "מיון לפי: "
+msgstr "מיון לפי:"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
@@ -6131,21 +6127,18 @@ msgstr "האם למחוק את התנועה שנבחרה?"
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "יתרה פתיחה:"
+msgstr "יתרה פתיחה"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "יתרת סגירה:"
+msgstr "יתרת סגירה"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "יתרה מותאמת:"
+msgstr "יתרה מותאמת"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6842,9 +6835,8 @@ msgstr "בחירת נייר ערך/מטבע"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_מטבע/ניר ערך:"
+msgstr "_מטבע/ניר ערך"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6852,9 +6844,8 @@ msgstr "בחירת נייר ערך"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_נייר ערך:"
+msgstr "_נייר ערך"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6862,9 +6853,8 @@ msgstr "בחירת מטבע"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "מט_בע:"
+msgstr "מט_בע"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -6924,9 +6914,8 @@ msgstr "נא להזין ערך לא ריק, \"שם מלא\", \"סמל/קיצור
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "פעולה/סימוכין:"
+msgstr "פעולה/סימוכין"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -6999,19 +6988,16 @@ msgstr ""
 "החשבון %s הוא מסוג מציין מיקום ואינו מאפשר רישום תנועות. נא לבחור חשבון אחר."
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "מטבע ספרים:"
+msgstr "מטבע ספרים"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
-#, fuzzy
 msgid "Default lot tracking policy"
-msgstr "מדיניות מעקב דבוקה ברירת מחדל:"
+msgstr "מדיניות מעקב דבוקה ברירת מחדל"
 
 #: gnucash/gnome-utils/dialog-options.c:1346
-#, fuzzy
 msgid "Default gain/loss account"
-msgstr "חשבון רוח/הפסד ברירת מחדל:"
+msgstr "חשבון רוח/הפסד ברירת מחדל"
 
 #: gnucash/gnome-utils/dialog-options.c:1518
 #: gnucash/gnome-utils/dialog-options.c:1661
@@ -7264,15 +7250,13 @@ msgid "Transfer To"
 msgstr "העברה ל"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "חשבון חובה:"
+msgstr "חשבון חובה"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "סכום ל:"
+msgstr "סכום ל"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -12003,17 +11987,15 @@ msgstr "הצ_גת הכל"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "בחירת _טווח:"
+msgstr "בחירת _טווח"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "התחלה:"
+msgstr "התחלה"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12022,9 +12004,8 @@ msgid "_Earliest"
 msgstr "_המוקדם ביותר"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "בחי_רת תאריך:"
+msgstr "בחי_רת תאריך"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12050,9 +12031,8 @@ msgstr "סוף"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "ב_חירת תאריך:"
+msgstr "ב_חירת תאריך"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12770,14 +12750,12 @@ msgid "Start Date"
 msgstr "תאריך התחלה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "אורך:"
+msgstr "אורך"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "חשבון הלוואה:"
+msgstr "חשבון הלוואה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12802,9 +12780,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "חודשים נותרים:"
+msgstr "חודשים נותרים"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12827,9 +12804,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... שימוש בחשבון נאמנות לתשלומים?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "חשבון נאמנות:"
+msgstr "חשבון נאמנות"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -12844,14 +12820,12 @@ msgstr ""
 "על מנת להמשיך, על כל החשבונות להכיל רשומות תקניות.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "קרן ל:"
+msgstr "קרן ל"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "ריבית ל:"
+msgstr "ריבית ל"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12870,14 +12844,12 @@ msgstr ""
 "על מנת להמשיך, על כל האפשרויות שאופשרו להכיל מידע תקין.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "תשלום ל(נאמנות):"
+msgstr "תשלום ל(נאמנות)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "תשלום מ(נאמנות):"
+msgstr "תשלום מ(נאמנות)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13141,16 +13113,14 @@ msgstr "חשבונות והחזקות ניירות ערך"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:553
 #: gnucash/gtkbuilder/assistant-qif-import.glade:685
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
-#, fuzzy
 msgid "_Select the matchings you want to change"
-msgstr "_בחירת ההתאמות הדורשות שינוי:"
+msgstr "_בחירת ההתאמות הדורשות שינוי"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:594
 #: gnucash/gtkbuilder/assistant-qif-import.glade:726
 #: gnucash/gtkbuilder/assistant-qif-import.glade:856
-#, fuzzy
 msgid "Matchings selected"
-msgstr "התאמות נבחרו:"
+msgstr "התאמות נבחרו"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:642
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13333,14 +13303,12 @@ msgid "Match existing transactions"
 msgstr "התאמת תנועות קיימות"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "_תנועות מיובאות המצריכות בדיקה:"
+msgstr "_תנועות מיובאות המצריכות בדיקה"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
-#, fuzzy
 msgid "_Possible matches for the selected transaction"
-msgstr "_התאמות אפשריות לתנועה שנבחרה:"
+msgstr "_התאמות אפשריות לתנועה שנבחרה"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Select possible duplicates"
@@ -13411,9 +13379,8 @@ msgstr ""
 "ניתן גם להזין תיאור תנועה או לקבל את את ברירת המחדל."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "תיא_ור:"
+msgstr "תיא_ור"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13428,14 +13395,12 @@ msgstr ""
 "השדה ריק."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "מחיר _חדש:"
+msgstr "מחיר _חדש"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "מטב_ע:"
+msgstr "מטב_ע"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13502,9 +13467,8 @@ msgid "_Edit list of encodings"
 msgstr "_עריכת רשימת קידודים"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "קידוד ברירת מחדל:"
+msgstr "קידוד ברירת מחדל"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13617,9 +13581,8 @@ msgid "Whether to display the list of Bills Due at startup."
 msgstr "הצגת רשימת החיובים לתשלום באתחול."
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "דוח להדפסה:"
+msgstr "דוח להדפסה"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -13663,9 +13626,8 @@ msgid "Pro_cess payments on posting"
 msgstr "עיב_וד תשלומים ברישום"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "מספר ימים מר_אש:"
+msgstr "מספר ימים מר_אש"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13676,9 +13638,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "כמה ימים בעתיד, לפני מועד פרעון חשבוניות, להתריע."
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "_ימים מראש:"
+msgstr "_ימים מראש"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 msgid "Cascade Account Color"
@@ -13720,9 +13681,8 @@ msgid ""
 msgstr "חשבון זה מכיל חשבונות משנה. מה לעשות עם חשבונות המשנה?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_מעבר ל:"
+msgstr "_מעבר ל"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13734,9 +13694,8 @@ msgstr "<b></b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "מ_עבר ל:"
+msgstr "מ_עבר ל"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13859,34 +13818,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>זיהוי</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "_שם חשבון:"
+msgstr "_שם חשבון"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_קוד חשבון:"
+msgstr "_קוד חשבון"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_תיאור:"
+msgstr "_תיאור"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "השבר _מזערי:"
+msgstr "השבר _מזערי"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "צבע _חשבון:"
+msgstr "צבע _חשבון"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "הע_רות:"
+msgstr "הע_רות"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -14003,14 +13956,12 @@ msgid "_Renumber"
 msgstr "_מספור מחדש"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "קידומת:"
+msgstr "קידומת"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "דוגמאות:"
+msgstr "דוגמאות"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14242,9 +14193,8 @@ msgstr "<b>הגדרת התנאי</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "_תיאור:"
+msgstr "_תיאור"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14253,9 +14203,8 @@ msgstr "_תיאור:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_סוג:"
+msgstr "_סוג"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14288,19 +14237,16 @@ msgstr "<b>תנאי תשלום חדש</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_שם:"
+msgstr "_שם"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "סך כל הכנסות:"
+msgstr "סך כל הכנסות"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "סך כל הוצאות:"
+msgstr "סך כל הוצאות"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14386,29 +14332,24 @@ msgid "<b>Security Information</b>"
 msgstr "<b>מידע בטוחה</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "סוג מקור שערי ניירות ערך:"
+msgstr "סוג מקור שערי ניירות ערך"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "_שם מלא:"
+msgstr "_שם מלא"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_סמל/קיצור:"
+msgstr "_סמל/קיצור"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P או קוד אחר:"
+msgstr "ISIN, CUSI_P או קוד אחר"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "ש_בר נסחר:"
+msgstr "ש_בר נסחר"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14419,9 +14360,8 @@ msgid "_Get Online Quotes"
 msgstr "_אחזור שערים מקוון"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "בו_דד:"
+msgstr "בו_דד"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14433,9 +14373,8 @@ msgstr ""
 "אחזור המחירים לא תתאפשר."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_מרובה:"
+msgstr "_מרובה"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14447,9 +14386,8 @@ msgstr ""
 "אינו זמין, F::Q ינסה לאחזר מידע מאתר אחר."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_לא ידוע:"
+msgstr "_לא ידוע"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14461,9 +14399,8 @@ msgstr ""
 "הוא מאתר אחד או ממספר אתרים במרשתת."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "אזור _זמן:"
+msgstr "אזור _זמן"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14533,9 +14470,8 @@ msgstr "מגבלת אשראי: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "כולל מס:"
+msgstr "כולל מס"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14826,9 +14762,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>אפשרויות תשלום</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "סך כל תשלום:"
+msgstr "סך כל תשלום"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -14839,9 +14774,8 @@ msgid "Continuous"
 msgstr "רָצִיף"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "בזמן תשולם:"
+msgstr "בזמן תשולם"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -14974,9 +14908,8 @@ msgstr "בחירת תבנית"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "תבנית:"
+msgstr "תבנית"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15075,9 +15008,8 @@ msgstr "הצגת מותאמים"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "פיצול ראשון של תנועות מיובאות:"
+msgstr "פיצול ראשון של תנועות מיובאות"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15217,9 +15149,8 @@ msgid "Default Chargeback Project"
 msgstr "פרויקט ברירת מחדל לחיוב חוזר"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "תוספות לכרטיס:"
+msgstr "תוספות לכרטיס"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15578,27 +15509,24 @@ msgid "<b>End Date</b>"
 msgstr "<b>תאריך סיום</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_יחסי:"
+msgstr "_יחסי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "שימוש בתאריך התחלה היחסי שנקבע לחישובי רווח/הפסד."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_מוחלט:"
+msgstr "_מוחלט"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "שימוש בתאריך ההתחלה המוחלט שנקבע לחישובי רווח והפסד."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "י_חסי:"
+msgstr "י_חסי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15609,9 +15537,8 @@ msgstr ""
 "רכוש נטו."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "מ_וחלט:"
+msgstr "מ_וחלט"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15669,20 +15596,17 @@ msgstr "דולרים אמריקאים (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "_בחירה:"
+msgstr "_בחירה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "תו:"
+msgstr "תו"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "דוגמה:"
+msgstr "דוגמה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -15706,9 +15630,8 @@ msgstr "הצגת צבע חשבון כרקע לשונית."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "_מקומי:"
+msgstr "_מקומי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -15855,9 +15778,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>מסך חיפוש</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "מגבלת חיפוש _חדש:"
+msgstr "מגבלת חיפוש _חדש"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -15872,9 +15794,8 @@ msgid "Show splash screen at startup."
 msgstr "הצגת מסך פתיחה באתחול."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "מרווח זמן שמירה _אוטומטית:"
+msgstr "מרווח זמן שמירה _אוטומטית"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -15904,9 +15825,8 @@ msgid "Forever"
 msgstr "לעד"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "זמן _המתנה לתשובה:"
+msgstr "זמן _המתנה לתשובה"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -15955,9 +15875,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "מתחת לתאריך בפועל, הדפסת תבנית תאריך ב 8 תווים."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "_גופן ברירת המחדל:"
+msgstr "_גופן ברירת המחדל"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -16120,9 +16039,8 @@ msgid "_Auto-split ledger"
 msgstr "_כרטסת מפוצל אוטומטית"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "_מספר תנועות:"
+msgstr "_מספר תנועות"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16164,9 +16082,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "מספר _תווים להשלמה אוטומטית:"
+msgstr "מספר _תווים להשלמה אוטומטית"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16281,9 +16198,8 @@ msgstr ""
 "הצג, לחצן סגירה בכל אחת מלשוניות המחברת. פונקציה זו זהה לפריט התפריט 'סגירה'."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_רוחב:"
+msgstr "_רוחב"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16327,14 +16243,12 @@ msgid "Price Editor"
 msgstr "עורך מחיר"
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "_מרחב שם:"
+msgstr "_מרחב שם"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "מ_קור:"
+msgstr "מ_קור"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 msgid "Remove Old Prices"
@@ -16406,14 +16320,12 @@ msgid "First Date"
 msgstr "תאריך ראשון"
 
 #: gnucash/gtkbuilder/dialog-price.glade:618
-#, fuzzy
 msgid "From these Commodities"
-msgstr "מסחורות אלו:"
+msgstr "מסחורות אלו"
 
 #: gnucash/gtkbuilder/dialog-price.glade:631
-#, fuzzy
 msgid "Keeping the last available price for option"
-msgstr "שמירת המחיר הזמין האחרון לאפשרויות:"
+msgstr "שמירת המחיר הזמין האחרון לאפשרויות"
 
 #: gnucash/gtkbuilder/dialog-price.glade:662
 msgid "Include _Fetched online prices"
@@ -16451,9 +16363,8 @@ msgstr ""
 "לפגום במהימנותם."
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "לפני _תאריך:"
+msgstr "לפני _תאריך"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16539,19 +16450,16 @@ msgid "_Print"
 msgstr "_הדפסה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "תבנית _המחאה:"
+msgstr "תבנית _המחאה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "מיקום המ_חאה:"
+msgstr "מיקום המ_חאה"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "תבנית _תאריך:"
+msgstr "תבנית _תאריך"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16569,9 +16477,8 @@ msgid "_Address"
 msgstr "_כתובת"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
-#, fuzzy
 msgid "Checks on first _page"
-msgstr "המחאות בעמוד _ראשון:"
+msgstr "המחאות בעמוד _ראשון"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:640
 msgid "x"
@@ -16582,19 +16489,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "מו_טב:"
+msgstr "מו_טב"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "סכום (_במילים):"
+msgstr "סכום (_במילים)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "סכום (_בספרות):"
+msgstr "סכום (_בספרות)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16602,14 +16506,12 @@ msgid "_Notes"
 msgstr "_הערות"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "_יחידות:"
+msgstr "_יחידות"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "_תרגום:"
+msgstr "_תרגום"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16704,14 +16606,12 @@ msgid "Enter report row/column span"
 msgstr "נא להזין רוחב שורות/עמודות דוח"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "_אורך שורה:"
+msgstr "_אורך שורה"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "_רוחב עמודות:"
+msgstr "_רוחב עמודות"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16726,9 +16626,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>מידע גיליון סגנון חדש</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "_תבנית:"
+msgstr "_תבנית"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -16857,9 +16756,8 @@ msgid "Never End"
 msgstr "לנצח"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "מספר מופעים:"
+msgstr "מספר מופעים"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 msgid "<b>Since Last Run</b>"
@@ -16896,14 +16794,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "הגדרת דגל 'יצירה אוטומטית' לתנועות מחזוריות חדשות."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "יציר_ה מראש:"
+msgstr "יציר_ה מראש"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "ת_זכורת מראש:"
+msgstr "ת_זכורת מראש"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -16934,14 +16830,12 @@ msgid "<b>Options</b>"
 msgstr "<b>אפשרויות</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "יצירה מראש:"
+msgstr "יצירה מראש"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "תזכורת מראש:"
+msgstr "תזכורת מראש"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -16973,9 +16867,8 @@ msgid "Repeats:"
 msgstr "חזרות:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "עד:"
+msgstr "עד"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17174,9 +17067,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>העברת מטבע</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "שער חליפין:"
+msgstr "שער חליפין"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17191,14 +17083,12 @@ msgid "Enter your username and password"
 msgstr "נא להזין שם משתמש וסיסמה"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "שם _משתמש:"
+msgstr "שם _משתמש"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_סיסמה:"
+msgstr "_סיסמה"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17243,9 +17133,8 @@ msgid "Abbreviation"
 msgstr "קיצור"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "תבנית תאריך:"
+msgstr "תבנית תאריך"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -17706,21 +17595,18 @@ msgid "months."
 msgstr "חודשים."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "ראשון ב:"
+msgstr "ראשון ב"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "למעט בסופי שבוע:"
+msgstr "למעט בסופי שבוע"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "אז ב:"
+msgstr "אז ב"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 msgctxt "Monthly"
@@ -17779,9 +17665,8 @@ msgstr "מספר ספרות מובילות לשמירה בעת עגול ספרו
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "ספרות משמעותיות:"
+msgstr "ספרות משמעותיות"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -17802,19 +17687,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr "שימוש בערך ממוצע מכל התקופות 'בפועל', עבור כל תקופות התחזית"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "שם התקציב:"
+msgstr "שם התקציב"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "מספר תקופות:"
+msgstr "מספר תקופות"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "תקופת התקציב:"
+msgstr "תקופת התקציב"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -17853,9 +17735,8 @@ msgstr "<b>מידע תנועה חדשה</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_סימוכין:"
+msgstr "_סימוכין"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -17875,9 +17756,8 @@ msgstr "בחירת טווח:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "בחיר_ת תאריך:"
+msgstr "בחיר_ת תאריך"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -17913,9 +17793,8 @@ msgstr "תנועה מבוטלת"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "סיבת ביטול תנועה:"
+msgstr "סיבת ביטול תנועה"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 msgid "Show _number of days"
@@ -18016,9 +17895,8 @@ msgid "Sort in descending order."
 msgstr "מיון בסדר יורד."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1067
-#, fuzzy
 msgid "_Transaction Number"
-msgstr "_מספר תנועה:"
+msgstr "_מספר תנועה"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1101
 msgid "Keep Associated Entry"
@@ -18089,18 +17967,16 @@ msgstr "<b>נתוני התאמה אוטומטית</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_יתרת סגירה:"
+msgstr "_יתרת סגירה"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>נתוני התאמה</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "תאריך _תדפיס:"
+msgstr "תאריך _תדפיס"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20496,19 +20372,16 @@ msgstr ""
 "במידה וזירת המסחר או סוג השקעה המתאים אינו מוצג, ניתן להזין אחת חדשה."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_שם או תיאור:"
+msgstr "_שם או תיאור"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_סמל טיקר או קיצור אחר:"
+msgstr "_סמל טיקר או קיצור אחר"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "_סוג קיצור או חליפין:"
+msgstr "_סוג קיצור או חליפין"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

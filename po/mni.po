@@ -792,9 +792,8 @@ msgstr "ꯃꯇꯝ (ꯄꯦꯔꯤꯑꯣꯗ)"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "ꯑꯔꯣꯏꯕ ꯇꯥꯡ:"
+msgstr "ꯑꯔꯣꯏꯕ ꯇꯥꯡ"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5806,9 +5805,8 @@ msgstr "_ꯑꯦꯟꯇ꯭ꯔꯤꯒꯤ ꯇꯥꯡ"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "ꯁ꯭ꯇꯦꯠꯃꯦꯟꯠꯒꯤ ꯇꯥꯡ:"
+msgstr "ꯁ꯭ꯇꯦꯠꯃꯦꯟꯠꯒꯤ ꯇꯥꯡ"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6233,21 +6231,18 @@ msgstr "ꯑꯗꯣꯝꯅ ꯈꯜꯂꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯃꯨꯠꯊ
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "ꯑꯍꯧꯕ ꯕꯦꯂꯦꯟꯁ:"
+msgstr "ꯑꯍꯧꯕ ꯕꯦꯂꯦꯟꯁ"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "ꯑꯔꯣꯏꯕ ꯕꯦꯂꯦꯟꯁ:"
+msgstr "ꯑꯔꯣꯏꯕ ꯕꯦꯂꯦꯟꯁ"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯔꯕ ꯕꯦꯂꯦꯟꯁ:"
+msgstr "ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯔꯕ ꯕꯦꯂꯦꯟꯁ"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6950,9 +6945,8 @@ msgstr "ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ/ꯀꯔꯦꯟꯁꯤ ꯈꯜꯂꯣ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ/ꯀꯔꯦꯟꯁꯤ:"
+msgstr "_ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ/ꯀꯔꯦꯟꯁꯤ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6960,9 +6954,8 @@ msgstr "ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ ꯈꯜꯂꯣ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ:"
+msgstr "_ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6970,9 +6963,8 @@ msgstr "ꯀꯔꯦꯟꯁꯤ ꯈꯜꯂꯣ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "ꯀ_ꯔꯦꯟꯁꯤ:"
+msgstr "ꯀ_ꯔꯦꯟꯁꯤ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7034,9 +7026,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "ꯑꯦꯛꯁꯟ/ꯅꯝꯕꯔ:"
+msgstr "ꯑꯦꯛꯁꯟ/ꯅꯝꯕꯔ"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -7105,9 +7096,8 @@ msgstr ""
 "ꯑꯦꯀꯥꯎꯟꯠ %s ꯑꯁꯤ ꯄ꯭ꯂꯦꯁꯍꯣꯜꯗꯔ ꯑꯦꯀꯥꯎꯟꯠꯅꯤ ꯑꯗꯨꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯌꯥꯗꯦ. ꯇꯣꯉꯥꯟꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃ ꯈꯟꯕꯤꯌꯨ."
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "ꯀꯔꯦꯟꯁꯤ:"
+msgstr "ꯀꯔꯦꯟꯁꯤ"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7374,15 +7364,13 @@ msgid "Transfer To"
 msgstr "...ꯗ ꯇ꯭ꯔꯥꯟꯁꯐꯔ ꯇꯧꯕ"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "ꯗꯦꯕꯤꯠ ꯑꯃꯥꯎꯟꯠ:"
+msgstr "ꯗꯦꯕꯤꯠ ꯑꯃꯥꯎꯟꯠ"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "...ꯗ ꯑꯃꯥꯎꯟꯠ:"
+msgstr "...ꯗ ꯑꯃꯥꯎꯟꯠ"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9110,9 +9098,8 @@ msgstr "ꯀꯁꯇꯃꯔ ꯅꯝꯕꯔ: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "ꯚꯦꯟꯗꯔ ꯅꯝꯕꯔ:"
+msgstr "ꯚꯦꯟꯗꯔ ꯅꯝꯕꯔ"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -12157,17 +12144,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "ꯔꯦꯟꯖ ꯈꯟꯕ:"
+msgstr "ꯔꯦꯟꯖ ꯈꯟꯕ"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "ꯍꯧꯕ:"
+msgstr "ꯍꯧꯕ"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12176,9 +12161,8 @@ msgid "_Earliest"
 msgstr "_ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯉꯟꯕ"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "ꯇꯥꯡ ꯈ_ꯜꯂꯣ:"
+msgstr "ꯇꯥꯡ ꯈ_ꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12204,9 +12188,8 @@ msgstr "ꯑꯔꯣꯏꯕ"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "ꯇꯥꯡ ꯈ_ꯜꯂꯣ:"
+msgstr "ꯇꯥꯡ ꯈ_ꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12866,14 +12849,12 @@ msgid "Start Date"
 msgstr "ꯑꯍꯧꯕ ꯇꯥꯡ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "ꯑꯁꯥꯡꯕ:"
+msgstr "ꯑꯁꯥꯡꯕ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "ꯂꯣꯟ ꯑꯦꯀꯥꯎꯟꯠ:"
+msgstr "ꯂꯣꯟ ꯑꯦꯀꯥꯎꯟꯠ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12894,9 +12875,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "ꯋꯥꯠꯂꯤꯕ ꯊꯥꯁꯤꯡ:"
+msgstr "ꯋꯥꯠꯂꯤꯕ ꯊꯥꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12919,9 +12899,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... ꯄꯦꯃꯦꯟꯠꯒꯤꯗꯃꯛ ꯑꯦꯁꯀ꯭ꯔꯣ ꯑꯦꯀꯥꯎꯟꯠ ꯁꯤꯖꯤꯟꯅꯒꯗ꯭ꯔꯥ?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "ꯑꯦꯁꯀ꯭ꯔꯣ ꯑꯦꯀꯥꯎꯟꯠ:"
+msgstr "ꯑꯦꯁꯀ꯭ꯔꯣ ꯑꯦꯀꯥꯎꯟꯠ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -12936,14 +12915,12 @@ msgstr ""
 "ꯑꯦꯀꯥꯎꯟꯠ ꯄꯨꯝꯅꯃꯛꯀꯤ ꯃꯈꯥ ꯆꯠꯊꯅꯕ ꯑꯆꯨꯝꯕ ꯑꯦꯟꯇ꯭ꯔꯤꯁꯤꯡ ꯂꯩꯒꯗꯕꯅꯤ꯫\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "ꯃꯁꯤꯗ ꯄ꯭ꯔꯤꯟꯁꯤꯄꯥꯜ:"
+msgstr "ꯃꯁꯤꯗ ꯄ꯭ꯔꯤꯟꯁꯤꯄꯥꯜ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "ꯃꯁꯤꯗ ꯁꯦꯟꯗꯣꯏ ꯀꯥꯕ:"
+msgstr "ꯃꯁꯤꯗ ꯁꯦꯟꯗꯣꯏ ꯀꯥꯕ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12962,14 +12939,12 @@ msgstr ""
 "ꯉꯑꯍꯜꯂꯕ ꯑꯣꯞꯁꯟ ꯂꯥꯃꯥꯏ ꯄꯨꯝꯅꯃꯛꯀꯤ ꯃꯈꯥ ꯆꯠꯊꯅꯕ ꯑꯆꯨꯝꯕ ꯑꯦꯟꯇ꯭ꯔꯤꯁꯤꯡ ꯌꯥꯎꯒꯗꯕꯅꯤ꯫\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "ꯄꯦꯃꯦꯟꯠ ꯄꯤꯐꯝ (ꯑꯦꯁꯀ꯭ꯔꯣ):"
+msgstr "ꯄꯦꯃꯦꯟꯠ ꯄꯤꯐꯝ (ꯑꯦꯁꯀ꯭ꯔꯣ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "ꯄꯦꯃꯦꯟꯠ ꯑꯄꯤꯕ (ꯑꯦꯁꯀ꯭ꯔꯣ):"
+msgstr "ꯄꯦꯃꯦꯟꯠ ꯑꯄꯤꯕ (ꯑꯦꯁꯀ꯭ꯔꯣ)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13240,16 +13215,14 @@ msgstr "ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃꯁꯨꯡ ꯁ꯭ꯇꯣꯛ ꯍꯣꯜꯗꯤꯡ
 #: gnucash/gtkbuilder/assistant-qif-import.glade:553
 #: gnucash/gtkbuilder/assistant-qif-import.glade:685
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
-#, fuzzy
 msgid "_Select the matchings you want to change"
-msgstr "ꯑꯗꯣꯝꯅ ꯍꯣꯡꯗꯣꯛꯄ ꯄꯥꯝꯕ ꯆꯥꯁꯤꯟꯅꯕ ꯑꯗꯨ _ꯈꯜꯂꯣ:"
+msgstr "ꯑꯗꯣꯝꯅ ꯍꯣꯡꯗꯣꯛꯄ ꯄꯥꯝꯕ ꯆꯥꯁꯤꯟꯅꯕ ꯑꯗꯨ _ꯈꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:594
 #: gnucash/gtkbuilder/assistant-qif-import.glade:726
 #: gnucash/gtkbuilder/assistant-qif-import.glade:856
-#, fuzzy
 msgid "Matchings selected"
-msgstr "ꯆꯥꯁꯤꯟꯅꯕꯁꯤꯡ ꯈꯜꯂꯦ:"
+msgstr "ꯆꯥꯁꯤꯟꯅꯕꯁꯤꯡ ꯈꯜꯂꯦ"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:642
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13444,14 +13417,12 @@ msgid "Match existing transactions"
 msgstr "ꯂꯩꯔꯤꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯆꯥꯁꯤꯟꯅꯍꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "_ꯄꯨꯁꯤꯜꯂꯛꯂꯕꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯔꯤꯚꯤꯎ ꯇꯧꯕ ꯇꯉꯥꯏꯐꯗꯦ:"
+msgstr "_ꯄꯨꯁꯤꯜꯂꯛꯂꯕꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡ ꯔꯤꯚꯤꯎ ꯇꯧꯕ ꯇꯉꯥꯏꯐꯗꯦ"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
-#, fuzzy
 msgid "_Possible matches for the selected transaction"
-msgstr "_ꯈꯜꯂꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯑꯣꯏꯕ ꯌꯥꯕ ꯆꯥꯟꯅꯕꯁꯤꯡ:"
+msgstr "_ꯈꯜꯂꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯑꯣꯏꯕ ꯌꯥꯕ ꯆꯥꯟꯅꯕꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Select possible duplicates"
@@ -13522,9 +13493,8 @@ msgstr ""
 "ꯁꯤꯖꯤꯟꯅꯧ. ꯑꯗꯣꯝꯅ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ ꯑꯃ ꯆꯪꯁꯤꯟꯕ ꯅꯇ꯭ꯔꯒ ꯗꯤꯐꯣꯜꯠ ꯑꯗꯨ ꯌꯥꯕꯁꯨ ꯌꯥꯒꯅꯤ."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "ꯗꯤ_ꯁꯀ꯭ꯔꯤꯞꯁꯟ:"
+msgstr "ꯗꯤ_ꯁꯀ꯭ꯔꯤꯞꯁꯟ"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13539,14 +13509,12 @@ msgstr ""
 "ꯑꯣꯏꯅ ꯑꯁꯣꯌ ꯑꯉꯥꯝ ꯌꯥꯎꯗꯅ ꯊꯝꯕ ꯌꯥꯒꯅꯤ."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "ꯑꯅꯧꯕ _ꯃꯃꯜ:"
+msgstr "ꯑꯅꯧꯕ _ꯃꯃꯜ"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "ꯀꯔꯦ_ꯟꯁꯤ:"
+msgstr "ꯀꯔꯦ_ꯟꯁꯤ"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13616,9 +13584,8 @@ msgid "_Edit list of encodings"
 msgstr "ꯑꯦꯟꯀꯣꯗꯤꯡꯒꯤ ꯄꯔꯤꯡ _ꯁꯦꯝꯗꯣꯛꯎ"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "ꯗꯤꯐꯣꯜꯠ ꯑꯦꯟꯀꯣꯗꯤꯡ:"
+msgstr "ꯗꯤꯐꯣꯜꯠ ꯑꯦꯟꯀꯣꯗꯤꯡ"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13732,9 +13699,8 @@ msgid "Whether to display the list of Bills Due at startup."
 msgstr "ꯁ꯭ꯇꯥꯔꯠꯑꯞꯇ ꯕꯤꯜ ꯗꯤꯎꯒꯤ ꯄꯔꯤꯡ ꯐꯣꯡꯗꯣꯛꯀꯗ꯭ꯔꯥ."
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "ꯅꯝꯊꯣꯛꯄꯒꯤ ꯔꯤꯄꯣꯔꯠ:"
+msgstr "ꯅꯝꯊꯣꯛꯄꯒꯤ ꯔꯤꯄꯣꯔꯠ"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -13781,9 +13747,8 @@ msgid "Pro_cess payments on posting"
 msgstr "ꯄꯣꯁꯇꯤꯡꯗ ꯃꯊꯟꯇ ꯄꯦ ꯇꯧꯔꯣ"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "_ꯅꯨꯃꯤꯠꯁꯤꯡ ꯃꯥꯡꯑꯣꯏꯅꯅ:"
+msgstr "_ꯅꯨꯃꯤꯠꯁꯤꯡ ꯃꯥꯡꯑꯣꯏꯅꯅ"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13795,9 +13760,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "ꯕꯤꯜ ꯂꯥꯛꯀꯗꯕ ꯗꯤꯎ ꯅꯨꯃꯤꯠ ꯀꯌꯥꯅꯤꯒꯤ ꯃꯇꯨꯡꯗ ꯈꯪꯍꯜꯂꯛꯀꯗꯒꯦ."
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "_ꯅꯨꯃꯤꯠꯁꯤꯡ ꯃꯥꯡꯑꯣꯏꯅꯅ:"
+msgstr "_ꯅꯨꯃꯤꯠꯁꯤꯡ ꯃꯥꯡꯑꯣꯏꯅꯅ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13839,9 +13803,8 @@ msgid ""
 msgstr "ꯑꯦꯀꯥꯎꯟꯠ ꯑꯁꯤꯗ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯌꯥꯎꯏ꯫ ꯑꯗꯣꯝꯅ ꯁꯕ-ꯑꯦꯀꯥꯎꯟꯠꯁꯤꯡ ꯑꯁꯤꯅ ꯀꯔꯤ ꯇꯧꯕ ꯄꯥꯝꯕꯒꯦ?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "...ꯗ _ꯆꯠꯂꯣ:"
+msgstr "...ꯗ _ꯆꯠꯂꯣ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13853,9 +13816,8 @@ msgstr "<b>ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁ</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "ꯃꯁꯤꯗ ꯆ_ꯠꯄ:"
+msgstr "ꯃꯁꯤꯗ ꯆ_ꯠꯄ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13986,34 +13948,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>ꯑꯥꯏꯗꯦꯟꯇꯤꯐꯤꯀꯦꯁꯟ</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "ꯑꯦꯀꯥꯎꯟꯠ _ꯃꯃꯤꯡ:"
+msgstr "ꯑꯦꯀꯥꯎꯟꯠ _ꯃꯃꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_ꯑꯦꯀꯥꯎꯟꯠ ꯀꯣꯗ:"
+msgstr "_ꯑꯦꯀꯥꯎꯟꯠ ꯀꯣꯗ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ:"
+msgstr "_ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯄꯤꯛꯄ _ꯐ꯭ꯔꯦꯛꯁꯟ:"
+msgstr "ꯈ꯭ꯋꯥꯏꯗꯒꯤ ꯄꯤꯛꯄ _ꯐ꯭ꯔꯦꯛꯁꯟ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "ꯑꯦꯀꯥꯎꯟꯠ _ꯃꯆꯨ:"
+msgstr "ꯑꯦꯀꯥꯎꯟꯠ _ꯃꯆꯨ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "ꯃꯔꯨꯑꯣꯏꯕ ꯋꯥ_ꯔꯣꯜ:"
+msgstr "ꯃꯔꯨꯑꯣꯏꯕ ꯋꯥ_ꯔꯣꯜ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -14130,14 +14086,12 @@ msgid "_Renumber"
 msgstr "_ꯔꯤꯅꯝꯕꯔ ꯇꯧꯕ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "ꯄ꯭ꯔꯤꯐꯤꯛꯁ:"
+msgstr "ꯄ꯭ꯔꯤꯐꯤꯛꯁ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "ꯈꯨꯗꯝꯁꯤꯡ:"
+msgstr "ꯈꯨꯗꯝꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14373,9 +14327,8 @@ msgstr "<b>ꯇꯥꯔꯝ ꯗꯤꯐꯤꯅꯤꯁꯟ</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "ꯗꯤ_ꯁꯀ꯭ꯔꯤꯞꯁꯟ:"
+msgstr "ꯗꯤ_ꯁꯀ꯭ꯔꯤꯞꯁꯟ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14384,9 +14337,8 @@ msgstr "ꯗꯤ_ꯁꯀ꯭ꯔꯤꯞꯁꯟ:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_ꯃꯈꯜ:"
+msgstr "_ꯃꯈꯜ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14419,19 +14371,16 @@ msgstr "<b>ꯑꯅꯧꯕ ꯕꯤꯜꯂꯤꯡ ꯇꯥꯔꯝ</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_ꯃꯤꯡ:"
+msgstr "_ꯃꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "ꯏꯟꯀꯝ ꯑꯄꯨꯟꯕ:"
+msgstr "ꯏꯟꯀꯝ ꯑꯄꯨꯟꯕ"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "ꯆꯥꯗꯤꯡꯒꯤ ꯑꯄꯨꯟꯕ:"
+msgstr "ꯆꯥꯗꯤꯡꯒꯤ ꯑꯄꯨꯟꯕ"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14520,29 +14469,24 @@ msgid "<b>Security Information</b>"
 msgstr "ꯁꯦꯀ꯭ꯌꯨꯎꯔꯤꯇꯤꯒꯤ ꯏꯄꯥꯎ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "ꯀꯣꯠ ꯁꯣꯔꯁꯀꯤ ꯃꯈꯜ:"
+msgstr "ꯀꯣꯠ ꯁꯣꯔꯁꯀꯤ ꯃꯈꯜ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "_ꯃꯄꯨꯡ ꯐꯥꯕ ꯃꯤꯡ:"
+msgstr "_ꯃꯄꯨꯡ ꯐꯥꯕ ꯃꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_ꯁꯤꯝꯕꯣꯜ/ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ:"
+msgstr "_ꯁꯤꯝꯕꯣꯜ/ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P ꯅꯇ꯭ꯔꯒ ꯑꯇꯣꯞꯄ ꯀꯣꯗ:"
+msgstr "ISIN, CUSI_P ꯅꯇ꯭ꯔꯒ ꯑꯇꯣꯞꯄ ꯀꯣꯗ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "ꯇ꯭ꯔꯦꯗ ꯇꯧꯔꯕ ꯐ꯭ꯔꯦ_ꯛꯁꯟ:"
+msgstr "ꯇ꯭ꯔꯦꯗ ꯇꯧꯔꯕ ꯐ꯭ꯔꯦ_ꯛꯁꯟ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14553,9 +14497,8 @@ msgid "_Get Online Quotes"
 msgstr "_ꯑꯣꯟꯂꯥꯏꯟ ꯀꯣꯠꯁꯤꯡ ꯂꯧꯕꯤꯌꯨ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "ꯑꯃꯇꯪ:"
+msgstr "ꯑꯃꯇꯪ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14567,9 +14510,8 @@ msgstr ""
 "ꯐꯪꯗ꯭ꯔꯕꯗꯤ ꯑꯗꯣꯝꯅ ꯀꯣꯠꯁꯤꯡ ꯂꯧꯔꯛꯄ ꯉꯝꯃꯣꯏ꯫"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_ꯃꯜꯇꯤꯄꯜ:"
+msgstr "_ꯃꯜꯇꯤꯄꯜ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14581,9 +14523,8 @@ msgstr ""
 "ꯐꯪꯗ꯭ꯔꯕꯗꯤ F::Q ꯅ ꯑꯇꯣꯞꯄ ꯁꯥꯏꯠꯇꯒꯤ ꯏ-ꯄꯥꯎꯁꯤꯡ ꯂꯧꯔꯛꯅꯕ ꯍꯣꯠꯅꯒꯅꯤ꯫"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_ꯁꯛꯈꯪꯗꯕ:"
+msgstr "_ꯁꯛꯈꯪꯗꯕ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14595,9 +14536,8 @@ msgstr ""
 "ꯑꯃꯗꯒꯤ ꯅꯇ꯭ꯔꯒ ꯁꯥꯏꯠ ꯀꯌꯥꯃꯔꯨꯝꯗꯒꯤ ꯏ-ꯄꯥꯎꯁꯤꯡ ꯂꯧꯔꯛꯄꯔꯥ ꯍꯥꯏꯕꯗꯨ GnuCash ꯅ ꯈꯪꯗꯦ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "ꯇꯥꯏꯝ_ꯖꯣꯟ:"
+msgstr "ꯇꯥꯏꯝ_ꯖꯣꯟ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14667,9 +14607,8 @@ msgstr "ꯀ꯭ꯔꯦꯗꯤꯠ ꯉꯝꯈꯩ:"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "ꯇꯦꯛꯁ ꯌꯥꯎꯔꯦ:"
+msgstr "ꯇꯦꯛꯁ ꯌꯥꯎꯔꯦ"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14962,9 +14901,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>ꯄꯦꯃꯦꯟꯠ ꯑꯣꯞꯁꯟꯁ</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "ꯄꯦꯃꯦꯟꯠꯒꯤ ꯑꯄꯨꯟꯕ:"
+msgstr "ꯄꯦꯃꯦꯟꯠꯒꯤ ꯑꯄꯨꯟꯕ"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -14975,9 +14913,8 @@ msgid "Continuous"
 msgstr "ꯃꯈꯥ ꯆꯠꯊꯕ"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "ꯀꯔꯝꯕ ꯃꯇꯝꯗ ꯄꯩꯁꯥ ꯄꯤ:"
+msgstr "ꯀꯔꯝꯕ ꯃꯇꯝꯗ ꯄꯩꯁꯥ ꯄꯤ"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15122,9 +15059,8 @@ msgstr "ꯐꯣꯔꯃꯦꯠ ꯑꯃ ꯈꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "ꯐꯣꯔꯃꯦꯠ:"
+msgstr "ꯐꯣꯔꯃꯦꯠ"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15224,9 +15160,8 @@ msgstr "ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯔꯕ"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "ꯄꯨꯁꯤꯜꯂꯛꯂꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯑꯍꯥꯟꯕ ꯁ꯭ꯄ꯭ꯂꯤꯠ:"
+msgstr "ꯄꯨꯁꯤꯜꯂꯛꯂꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯑꯍꯥꯟꯕ ꯁ꯭ꯄ꯭ꯂꯤꯠ"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15360,9 +15295,8 @@ msgid "Default Chargeback Project"
 msgstr "ꯗꯤꯐꯣꯜꯠ ꯆꯥꯔ꯭ꯖꯕꯦꯛ ꯄ꯭ꯔꯣꯖꯦꯛꯠ"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "ꯀꯥꯔ꯭ꯗꯇ ꯑꯍꯦꯟꯕ ꯍꯥꯄꯆꯤꯟꯕ:"
+msgstr "ꯀꯥꯔ꯭ꯗꯇ ꯑꯍꯦꯟꯕ ꯍꯥꯄꯆꯤꯟꯕ"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15727,27 +15661,24 @@ msgid "<b>End Date</b>"
 msgstr "<b>ꯑꯔꯣꯏꯕ ꯇꯥꯡ</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_ꯃꯔꯤ ꯂꯩꯅꯕ:"
+msgstr "_ꯃꯔꯤ ꯂꯩꯅꯕ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr "ꯁꯦꯟꯗꯣꯡ/ꯑꯃꯥꯡꯕ ꯍꯣꯠꯄꯒꯤ ꯄꯤꯔꯤꯕ ꯃꯔꯤ ꯂꯩꯅꯕ ꯑꯍꯧꯕ ꯇꯥꯡ ꯁꯤꯖꯤꯟꯅꯧ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_ꯃꯄꯨꯡ ꯐꯥꯕ:"
+msgstr "_ꯃꯄꯨꯡ ꯐꯥꯕ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "ꯁꯦꯟꯗꯣꯡ/ꯑꯃꯥꯡꯕ ꯍꯣꯠꯄꯒꯤ ꯄꯤꯔꯤꯕ ꯆꯞꯆꯥꯕ ꯑꯍꯧꯕ ꯇꯥꯡ ꯁꯤꯖꯤꯟꯅꯧ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "ꯃ_ꯔꯤ ꯂꯩꯅꯕ:"
+msgstr "ꯃ_ꯔꯤ ꯂꯩꯅꯕ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15758,9 +15689,8 @@ msgstr ""
 "ꯁꯤꯖꯤꯟꯅꯧ꯫"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "ꯃ_ꯄꯨꯡꯐꯥꯕ:"
+msgstr "ꯃ_ꯄꯨꯡꯐꯥꯕ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15818,20 +15748,17 @@ msgstr "US ꯗꯣꯂꯔꯁ (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "ꯑꯄꯥꯝꯕ ꯈ_ꯟꯕ:"
+msgstr "ꯑꯄꯥꯝꯕ ꯈ_ꯟꯕ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "ꯀꯦꯔꯦꯛꯇꯔ:"
+msgstr "ꯀꯦꯔꯦꯛꯇꯔ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "ꯁꯦꯝꯄꯜ:"
+msgstr "ꯁꯦꯝꯄꯜ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -15855,9 +15782,8 @@ msgstr "ꯑꯦꯀꯥꯎꯟꯠ ꯃꯆꯨ ꯇꯦꯕ ꯕꯦꯛꯒ꯭ꯔꯥꯎꯟꯗ
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "ꯂꯣꯀꯦ_ꯜ:"
+msgstr "ꯂꯣꯀꯦ_ꯜ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -16005,9 +15931,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>ꯊꯤꯕꯒꯤ ꯗꯥꯏꯂꯣꯒ</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "ꯑꯅꯧꯕ ꯊꯤꯕꯒꯤ _ꯉꯝꯈꯩ:"
+msgstr "ꯑꯅꯧꯕ ꯊꯤꯕꯒꯤ _ꯉꯝꯈꯩ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16022,9 +15947,8 @@ msgid "Show splash screen at startup."
 msgstr "ꯁ꯭ꯇꯥꯔꯠꯑꯞꯇ ꯁ꯭ꯄ꯭ꯂꯥꯁ ꯁ꯭ꯀ꯭ꯔꯤꯟ ꯎꯠꯂꯣ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "ꯑꯥꯎꯇꯣ-ꯁꯦꯚꯀꯤ _ꯑꯆꯪꯕ ꯃꯇꯝ:"
+msgstr "ꯑꯥꯎꯇꯣ-ꯁꯦꯚꯀꯤ _ꯑꯆꯪꯕ ꯃꯇꯝ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -16054,9 +15978,8 @@ msgid "Forever"
 msgstr "ꯃꯇꯝ ꯄꯨꯝꯅꯃꯛꯇ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "ꯄꯥꯎꯈꯨꯝꯒꯤ ꯉꯥꯏꯒꯗꯕ ꯃꯇꯝ:"
+msgstr "ꯄꯥꯎꯈꯨꯝꯒꯤ ꯉꯥꯏꯒꯗꯕ ꯃꯇꯝ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -16106,9 +16029,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "ꯑꯆꯨꯝꯕ ꯇꯥꯡꯒꯤ ꯃꯈꯥꯗ, ꯇꯥꯡ ꯑꯗꯨꯒꯤ ꯐꯣꯔꯃꯦꯠ 8 ꯄꯣꯏꯟꯠ ꯃꯈꯜꯗ ꯅꯝꯊꯣꯛꯎ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "ꯗꯤꯐꯣꯜꯠ _ꯐꯣꯟꯠ:"
+msgstr "ꯗꯤꯐꯣꯜꯠ _ꯐꯣꯟꯠ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -16272,9 +16194,8 @@ msgid "_Auto-split ledger"
 msgstr "_ꯃꯊꯟꯇꯅ-ꯈꯥꯌꯗꯣꯛꯆꯕ ꯂꯦꯖꯔ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "_ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯃꯁꯤꯡ:"
+msgstr "_ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯃꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16317,9 +16238,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "ꯃꯊꯟꯇꯅ ꯃꯄꯨꯡ ꯐꯥꯒꯗꯕ _ꯀꯦꯔꯦꯛꯇꯔꯁꯤꯡꯒꯤ ꯃꯁꯤꯡ:"
+msgstr "ꯃꯊꯟꯇꯅ ꯃꯄꯨꯡ ꯐꯥꯒꯗꯕ _ꯀꯦꯔꯦꯛꯇꯔꯁꯤꯡꯒꯤ ꯃꯁꯤꯡ"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16436,9 +16356,8 @@ msgstr ""
 "ꯇꯧꯏ꯫"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_ꯑꯄꯥꯛꯄ:"
+msgstr "_ꯑꯄꯥꯛꯄ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16483,14 +16402,12 @@ msgid "Price Editor"
 msgstr "ꯃꯃꯜꯒꯤ ꯏꯗꯤꯇꯔ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "_ꯅꯦꯝꯁ꯭ꯄꯦꯁ:"
+msgstr "_ꯅꯦꯝꯁ꯭ꯄꯦꯁ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "ꯁꯣ_ꯔꯁ:"
+msgstr "ꯁꯣ_ꯔꯁ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16608,9 +16525,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_ꯇꯥꯡ:"
+msgstr "_ꯇꯥꯡ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16698,19 +16614,16 @@ msgid "_Print"
 msgstr "ꯅꯝꯊꯣꯛꯄ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "ꯆꯦꯛ _ꯐꯣꯔꯃꯦꯠ:"
+msgstr "ꯆꯦꯛ _ꯐꯣꯔꯃꯦꯠ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "ꯆꯦꯛꯀꯤ ꯐꯤ_ꯕꯝ:"
+msgstr "ꯆꯦꯛꯀꯤ ꯐꯤ_ꯕꯝ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
-#, fuzzy
 msgid "_Date format"
-msgstr "_ꯇꯥꯡ ꯐꯣꯔꯃꯦꯠ:"
+msgstr "_ꯇꯥꯡ ꯐꯣꯔꯃꯦꯠ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:515
 msgid ""
@@ -16728,9 +16641,8 @@ msgid "_Address"
 msgstr "_ꯂꯩꯐꯝ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
-#, fuzzy
 msgid "Checks on first _page"
-msgstr "ꯑꯍꯥꯟꯕ _ꯂꯥꯃꯥꯏꯗ ꯌꯦꯡꯁꯤꯟꯕꯤꯌꯨ:"
+msgstr "ꯑꯍꯥꯟꯕ _ꯂꯥꯃꯥꯏꯗ ꯌꯦꯡꯁꯤꯟꯕꯤꯌꯨ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:640
 msgid "x"
@@ -16741,19 +16653,16 @@ msgid "y"
 msgstr "y"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:665
-#, fuzzy
 msgid "Pa_yee"
-msgstr "ꯄꯦ_ꯌꯤ:"
+msgstr "ꯄꯦ_ꯌꯤ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "ꯑꯃꯥꯎꯟꯠ (_ꯋꯥꯍꯩꯗ):"
+msgstr "ꯑꯃꯥꯎꯟꯠ (_ꯋꯥꯍꯩꯗ)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "ꯑꯃꯥꯎꯟꯠ (_ꯅꯝꯕꯔꯗ):"
+msgstr "ꯑꯃꯥꯎꯟꯠ (_ꯅꯝꯕꯔꯗ)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16761,14 +16670,12 @@ msgid "_Notes"
 msgstr "_ꯅꯣꯠꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:918
-#, fuzzy
 msgid "_Units"
-msgstr "_ꯌꯨꯅꯤꯠꯁ:"
+msgstr "_ꯌꯨꯅꯤꯠꯁ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "_ꯂꯣꯟ ꯍꯟꯗꯣꯛꯄ:"
+msgstr "_ꯂꯣꯟ ꯍꯟꯗꯣꯛꯄ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16864,14 +16771,12 @@ msgid "Enter report row/column span"
 msgstr "ꯔꯣ/ꯀꯂꯝ ꯁ꯭ꯄꯥꯟꯒꯤ ꯔꯤꯄꯣꯔꯠ ꯆꯪꯁꯤꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "_ꯔꯣꯒꯤ ꯁ꯭ꯄꯥꯟ:"
+msgstr "_ꯔꯣꯒꯤ ꯁ꯭ꯄꯥꯟ"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "_ꯀꯂꯝꯒꯤ ꯁ꯭ꯄꯥꯟ:"
+msgstr "_ꯀꯂꯝꯒꯤ ꯁ꯭ꯄꯥꯟ"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -16886,9 +16791,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>ꯑꯅꯧꯕ ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠꯀꯤ ꯏꯄꯥꯎ</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "_ꯇꯦꯝꯄ꯭ꯂꯦꯠ:"
+msgstr "_ꯇꯦꯝꯄ꯭ꯂꯦꯠ"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17018,9 +16922,8 @@ msgid "Never End"
 msgstr "ꯀꯩꯗꯧꯅꯨꯡꯗ ꯂꯣꯏꯗꯦ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "ꯊꯧꯗꯣꯛ ꯊꯣꯛꯈꯤꯕ ꯃꯁꯤꯡ:"
+msgstr "ꯊꯧꯗꯣꯛ ꯊꯣꯛꯈꯤꯕ ꯃꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17061,14 +16964,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "ꯅꯧꯅ ꯁꯦꯝꯒꯠꯂꯕ ꯁꯦꯗꯤꯎꯜ ꯇꯧꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡꯗ 'ꯃꯊꯟꯇꯅ ꯁꯦꯝꯒꯠꯄ' ꯐ꯭ꯂꯦꯒ ꯁꯦꯠ ꯇꯧꯔꯣ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "ꯃꯥꯡꯑꯣꯏꯅꯅ ꯁꯦꯝꯒ_ꯠꯄ:"
+msgstr "ꯃꯥꯡꯑꯣꯏꯅꯅ ꯁꯦꯝꯒ_ꯠꯄ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "ꯃꯃꯥꯡꯑꯣꯏꯅꯅ ꯅꯤꯡ_ꯁꯤꯡꯕ:"
+msgstr "ꯃꯃꯥꯡꯑꯣꯏꯅꯅ ꯅꯤꯡ_ꯁꯤꯡꯕ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -17099,14 +17000,12 @@ msgid "<b>Options</b>"
 msgstr "<b>ꯑꯣꯞꯁꯟꯁ</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "ꯃꯥꯡꯑꯣꯏꯅꯅ ꯁꯦꯝꯒꯠꯄ:"
+msgstr "ꯃꯥꯡꯑꯣꯏꯅꯅ ꯁꯦꯝꯒꯠꯄ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "ꯃꯃꯥꯡꯑꯣꯏꯅꯅ ꯅꯤꯡꯁꯤꯡꯕ:"
+msgstr "ꯃꯃꯥꯡꯑꯣꯏꯅꯅ ꯅꯤꯡꯁꯤꯡꯕ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17138,9 +17037,8 @@ msgid "Repeats:"
 msgstr "ꯑꯃꯨꯛ ꯍꯟꯕ:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "ꯇꯧꯗ꯭ꯔꯤꯐꯥꯎꯕ:"
+msgstr "ꯇꯧꯗ꯭ꯔꯤꯐꯥꯎꯕ"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17345,9 +17243,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>ꯀꯔꯦꯟꯁꯤ ꯇ꯭ꯔꯥꯟꯁꯐꯔ</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "ꯑꯦꯛꯆꯦꯟꯖ ꯇꯧꯕꯒꯤ ꯔꯦꯠ:"
+msgstr "ꯑꯦꯛꯆꯦꯟꯖ ꯇꯧꯕꯒꯤ ꯔꯦꯠ"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17362,14 +17259,12 @@ msgid "Enter your username and password"
 msgstr "ꯑꯗꯣꯝꯒꯤ ꯁꯤꯖꯤꯟꯅꯔꯤꯕꯒꯤꯃꯤꯡ ꯑꯃꯁꯨꯡ ꯄꯥꯁꯋꯥꯔ꯭ꯗ ꯆꯪꯁꯤꯜꯂꯣ"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "_ꯁꯤꯖꯤꯟꯅꯔꯤꯕꯒꯤꯃꯤꯡ:"
+msgstr "_ꯁꯤꯖꯤꯟꯅꯔꯤꯕꯒꯤꯃꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_ꯄꯥꯁꯋꯥꯔ꯭ꯗ:"
+msgstr "_ꯄꯥꯁꯋꯥꯔ꯭ꯗ"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17415,9 +17310,8 @@ msgid "Abbreviation"
 msgstr "ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "ꯇꯥꯡꯒꯤ ꯐꯣꯔꯃꯦꯠ:"
+msgstr "ꯇꯥꯡꯒꯤ ꯐꯣꯔꯃꯦꯠ"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -17884,21 +17778,18 @@ msgid "months."
 msgstr "ꯊꯥ."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "ꯑꯍꯥꯟꯕꯗ:"
+msgstr "ꯑꯍꯥꯟꯕꯗ"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "ꯆꯌꯣꯜꯒꯤ ꯑꯔꯣꯏꯕ ꯅꯨꯃꯤꯠꯁꯤꯡ ꯅꯠꯇꯅ:"
+msgstr "ꯆꯌꯣꯜꯒꯤ ꯑꯔꯣꯏꯕ ꯅꯨꯃꯤꯠꯁꯤꯡ ꯅꯠꯇꯅ"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "ꯑꯗꯨꯗꯒꯤ ꯃꯁꯤꯗ:"
+msgstr "ꯑꯗꯨꯗꯒꯤ ꯃꯁꯤꯗ"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -17960,9 +17851,8 @@ msgstr "ꯔꯥꯎꯟꯗꯤꯡ ꯇꯧꯕꯗ ꯊꯝꯒꯗꯕ ꯂꯤꯗꯤꯡ ꯗ�
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "ꯑꯈꯟꯅꯕ ꯗꯤꯖꯤꯠꯁꯤꯡ:"
+msgstr "ꯑꯈꯟꯅꯕ ꯗꯤꯖꯤꯠꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -17985,19 +17875,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "ꯕꯖꯦꯠꯀꯤ ꯃꯃꯤꯡ:"
+msgstr "ꯕꯖꯦꯠꯀꯤ ꯃꯃꯤꯡ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯃꯁꯤꯡ:"
+msgstr "ꯄꯦꯔꯤꯑꯣꯗꯀꯤ ꯃꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "ꯕꯖꯦꯠꯀꯤ ꯄꯦꯔꯤꯑꯣꯗ:"
+msgstr "ꯕꯖꯦꯠꯀꯤ ꯄꯦꯔꯤꯑꯣꯗ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -18036,9 +17923,8 @@ msgstr "<b>ꯑꯅꯧꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯏꯄꯥꯎ</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_ꯅꯝꯕꯔ:"
+msgstr "_ꯅꯝꯕꯔ"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -18058,9 +17944,8 @@ msgstr "ꯔꯦꯟꯖ ꯈꯟꯕ:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "ꯇꯥꯡ ꯈꯟ_ꯕ:"
+msgstr "ꯇꯥꯡ ꯈꯟ_ꯕ"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -18096,9 +17981,8 @@ msgstr "ꯌꯥꯗ꯭ꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯌꯥꯗꯕꯒꯤ ꯃꯔꯝ:"
+msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯌꯥꯗꯕꯒꯤ ꯃꯔꯝ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -18200,9 +18084,8 @@ msgid "Sort in descending order."
 msgstr "ꯑꯆꯧꯕꯗꯒꯤ ꯃꯆꯥꯗ ꯃꯊꯪ-ꯃꯅꯥꯎ ꯁꯦꯝꯗꯨꯅ ꯁꯣꯔꯠ ꯇꯧꯔꯣ꯫"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1067
-#, fuzzy
 msgid "_Transaction Number"
-msgstr "_ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯅꯝꯕꯔ:"
+msgstr "_ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯅꯝꯕꯔ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1101
 msgid "Keep Associated Entry"
@@ -18275,18 +18158,16 @@ msgstr "<b>ꯃꯊꯟꯇ ꯁꯦꯡꯗꯣꯛꯆꯕꯒꯤ ꯏꯄꯥꯎ</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_ꯑꯔꯣꯏꯕ ꯕꯦꯂꯦꯟꯁ:"
+msgstr "_ꯑꯔꯣꯏꯕ ꯕꯦꯂꯦꯟꯁ"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>ꯔꯤꯀꯟꯁꯥꯏꯜ ꯇꯧꯕꯒꯤ ꯏꯄꯥꯎ</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "ꯁ꯭ꯇꯦꯠꯃꯦꯟꯠꯒꯤ _ꯇꯥꯡ:"
+msgstr "ꯁ꯭ꯇꯦꯠꯃꯦꯟꯠꯒꯤ _ꯇꯥꯡ"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20727,19 +20608,16 @@ msgstr ""
 "ꯑꯃ ꯆꯪꯁꯤꯟꯕ ꯌꯥꯏ."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_ꯃꯃꯤꯡ ꯅꯇ꯭ꯔꯒ ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ:"
+msgstr "_ꯃꯃꯤꯡ ꯅꯇ꯭ꯔꯒ ꯗꯤꯁꯀ꯭ꯔꯤꯞꯁꯟ"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_ꯇꯤꯀꯔ ꯁꯤꯝꯕꯣꯜ ꯅꯇ꯭ꯔꯒ ꯑꯇꯣꯞꯄ ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ:"
+msgstr "_ꯇꯤꯀꯔ ꯁꯤꯝꯕꯣꯜ ꯅꯇ꯭ꯔꯒ ꯑꯇꯣꯞꯄ ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "_ꯑꯦꯛꯆꯦꯟꯖ ꯅꯇ꯭ꯔꯒ ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ ꯃꯈꯜ:"
+msgstr "_ꯑꯦꯛꯆꯦꯟꯖ ꯅꯇ꯭ꯔꯒ ꯑꯕ꯭ꯔꯦꯚꯤꯌꯦꯁꯟ ꯃꯈꯜ"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

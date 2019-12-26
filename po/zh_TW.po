@@ -733,9 +733,8 @@ msgstr "週期"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "關閉日期:"
+msgstr "關閉日期"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -6901,9 +6900,8 @@ msgstr "選擇證券/貨幣"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "證券/貨幣(_S):"
+msgstr "證券/貨幣(_S)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6911,9 +6909,8 @@ msgstr "選擇證券"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "證券(_S):"
+msgstr "證券(_S)"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6983,9 +6980,8 @@ msgstr "您必須為此商品輸入非空白的「全名」、「標記/縮寫�
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "號碼(_N):"
+msgstr "號碼(_N)"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -9016,9 +9012,8 @@ msgstr "客戶編號: "
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "廠商編號: "
+msgstr "廠商編號"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -11829,17 +11824,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "選擇範圍:"
+msgstr "選擇範圍"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "開始:"
+msgstr "開始"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -11848,9 +11841,8 @@ msgid "_Earliest"
 msgstr "顯示最早的時間(_E)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "選擇日期(_H):"
+msgstr "選擇日期(_H)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -11876,9 +11868,8 @@ msgstr "結束"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "選擇日期(_H):"
+msgstr "選擇日期(_H)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12520,14 +12511,12 @@ msgid "Start Date"
 msgstr "開始日期"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "長度:"
+msgstr "長度"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "貸款科目:"
+msgstr "貸款科目"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12548,9 +12537,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "剩餘月數:"
+msgstr "剩餘月數"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12571,9 +12559,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... 利用代管帳號？"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "代管帳號:"
+msgstr "代管帳號"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 #, fuzzy
@@ -12587,14 +12574,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "本金到:"
+msgstr "本金到"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "利息到:"
+msgstr "利息到"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12612,14 +12597,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "付款到 (代管):"
+msgstr "付款到 (代管)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "付款來自 (代管):"
+msgstr "付款來自 (代管)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13071,9 +13054,8 @@ msgid "Match existing transactions"
 msgstr "比對既存的交易"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "匯入交易的第一個分割:"
+msgstr "匯入交易的第一個分割"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
 #, fuzzy
@@ -13245,9 +13227,8 @@ msgid "_Edit list of encodings"
 msgstr "編輯編碼列表(_E)"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "預設編碼:"
+msgstr "預設編碼"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 #, fuzzy
@@ -13406,9 +13387,8 @@ msgid "Pro_cess payments on posting"
 msgstr "定期付款"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "幾日前(_D):"
+msgstr "幾日前(_D)"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13420,9 +13400,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "在多少天前警告帳單即將到期。"
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "幾日前(_D):"
+msgstr "幾日前(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13464,9 +13443,8 @@ msgid ""
 msgstr "這個科目包含子科目。您決定如何處理這些子科目?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "移到(_M):"
+msgstr "移到(_M)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13478,9 +13456,8 @@ msgstr "<b>交易</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "移到(_O):"
+msgstr "移到(_O)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13621,9 +13598,8 @@ msgid "_Account code"
 msgstr "科目代碼(_A)："
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "描述(_D):"
+msgstr "描述(_D)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
 #, fuzzy
@@ -13631,14 +13607,12 @@ msgid "Smallest _fraction"
 msgstr "最小單位(_F)："
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "科目顏色(_C):"
+msgstr "科目顏色(_C)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "筆記(_T):"
+msgstr "筆記(_T)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -13750,9 +13724,8 @@ msgid "_Renumber"
 msgstr "重編號(_R)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "字首:"
+msgstr "字首"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
 #, fuzzy
@@ -14043,14 +14016,12 @@ msgid "_Name"
 msgstr "名稱(_N)："
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "總收入:"
+msgstr "總收入"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "總支出:"
+msgstr "總支出"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14132,9 +14103,8 @@ msgid "<b>Security Information</b>"
 msgstr "證券資訊"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "報價來源類型:"
+msgstr "報價來源類型"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 #, fuzzy
@@ -14165,9 +14135,8 @@ msgid "_Get Online Quotes"
 msgstr "取得線上報價(_G)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "單一來源(_N):"
+msgstr "單一來源(_N)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14178,9 +14147,8 @@ msgstr ""
 "這是指 F::Q 報價只從一個網站截取。如果那個網站連不到，那就無法取得報價。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "多來源(_M):"
+msgstr "多來源(_M)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -14205,9 +14173,8 @@ msgstr ""
 "這是新加入 F::Q 的報價源，GnuCash 不知道它們是從單一還是多個網站截取報價。"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "時區(_Z):"
+msgstr "時區(_Z)"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14276,9 +14243,8 @@ msgstr "信用額度: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "含稅:"
+msgstr "含稅"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14588,9 +14554,8 @@ msgid "Continuous"
 msgstr "連續"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "何時支付:"
+msgstr "何時支付"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -14835,9 +14800,8 @@ msgstr "已對帳"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "匯入交易的第一個分割:"
+msgstr "匯入交易的第一個分割"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -14970,9 +14934,8 @@ msgid "Default Chargeback Project"
 msgstr "預設對內計費方案"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "外加到卡片的:"
+msgstr "外加到卡片的"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15339,27 +15302,24 @@ msgid "<b>End Date</b>"
 msgstr "<b>結束日期</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "相對(_R):"
+msgstr "相對(_R)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "絕對的(_A):"
+msgstr "絕對的(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "相對(_L):"
+msgstr "相對(_L)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15368,9 +15328,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "絕對(_S):"
+msgstr "絕對(_S)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15427,14 +15386,12 @@ msgstr "美元 (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "自選(_O):"
+msgstr "自選(_O)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "字元:"
+msgstr "字元"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
@@ -15469,9 +15426,8 @@ msgstr "顯示小計與小標題的科目代碼？"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "本地(_A):"
+msgstr "本地(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -15619,9 +15575,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>搜尋對話盒</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "重新搜尋限制(_L):"
+msgstr "重新搜尋限制(_L)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -15636,9 +15591,8 @@ msgid "Show splash screen at startup."
 msgstr "在程式啟動時顯示軟體啟動資訊畫面。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1483
-#, fuzzy
 msgid "Auto-save time _interval"
-msgstr "自動存檔時間間隔(_I):"
+msgstr "自動存檔時間間隔(_I)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1520
 msgid "minutes"
@@ -15718,9 +15672,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "在日期之下以 8 點字印出所用的日期格式。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "預設字型(_F):"
+msgstr "預設字型(_F)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -15879,9 +15832,8 @@ msgid "_Auto-split ledger"
 msgstr "自動分割分類帳(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "交易數量(_T):"
+msgstr "交易數量(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16037,9 +15989,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "寬度(_W):"
+msgstr "寬度(_W)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16360,9 +16311,8 @@ msgid "_Units"
 msgstr "單位(_U)："
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:949
-#, fuzzy
 msgid "_Translation"
-msgstr "交易(_T):"
+msgstr "交易(_T)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:964
 msgid "_Rotation"
@@ -16483,9 +16433,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>新增樣式表資訊</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "模板(_T):"
+msgstr "模板(_T)"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -16616,9 +16565,8 @@ msgid "Never End"
 msgstr "永不結束"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "發生次數:"
+msgstr "發生次數"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -16658,14 +16606,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "有新的、自動建立的排程交易時發出通知"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "多久前建立(_T):"
+msgstr "多久前建立(_T)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "幾天前提醒(_E):"
+msgstr "幾天前提醒(_E)"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -16697,14 +16643,12 @@ msgid "<b>Options</b>"
 msgstr "<b>選項</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "多久前建立:"
+msgstr "多久前建立"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "幾天前提醒:"
+msgstr "幾天前提醒"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17497,21 +17441,18 @@ msgid "months."
 msgstr "月。"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr "首先於:"
+msgstr "首先於"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "除了週末:"
+msgstr "除了週末"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "接著於:"
+msgstr "接著於"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -17598,19 +17539,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "預算名稱:"
+msgstr "預算名稱"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "期數:"
+msgstr "期數"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "預算週期:"
+msgstr "預算週期"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -17649,9 +17587,8 @@ msgstr "<b>新增交易資訊</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "號碼(_N):"
+msgstr "號碼(_N)"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -17671,9 +17608,8 @@ msgstr "選擇範圍:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "選擇日期(_S):"
+msgstr "選擇日期(_S)"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -17710,9 +17646,8 @@ msgstr "交易無效"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:753
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1218
-#, fuzzy
 msgid "Reason for voiding transaction"
-msgstr "交易無效的理由:"
+msgstr "交易無效的理由"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:103
 #, fuzzy
@@ -17909,9 +17844,8 @@ msgid "<b>Reconcile Information</b>"
 msgstr "<b>對帳資訊</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "結帳日期(_D):"
+msgstr "結帳日期(_D)"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20250,9 +20184,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "名稱或描述(_N):"
+msgstr "名稱或描述(_N)"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 #, fuzzy

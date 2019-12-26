@@ -797,9 +797,8 @@ msgstr "میعاد"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "آخری تاریخ :"
+msgstr "آخری تاریخ "
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5838,9 +5837,8 @@ msgstr "داخلہ كی تاریخ"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "اسٹیٹمینٹ تاریخ :"
+msgstr "اسٹیٹمینٹ تاریخ "
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6264,21 +6262,18 @@ msgstr "كیا آپ واقعی منتخب كیے گئے لین دین كو خا�
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "شروعاتی بقایا:"
+msgstr "شروعاتی بقایا"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "آخری بقایا:"
+msgstr "آخری بقایا"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "موافق كیا گیا بقایا:"
+msgstr "موافق كیا گیا بقایا"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6992,9 +6987,8 @@ msgstr "سیكیوریٹی/ كرنسی منتخب كرو"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_حفاظت/كرنسی :"
+msgstr "_حفاظت/كرنسی "
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -7002,9 +6996,8 @@ msgstr "سكیوریٹی منتخب كرو"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_تحفظ:"
+msgstr "_تحفظ"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -7012,9 +7005,8 @@ msgstr "كرنسی منتخب كرو"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "كرنسی :"
+msgstr "كرنسی "
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7076,9 +7068,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "ایكشن /نمبر:"
+msgstr "ایكشن /نمبر"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -7148,9 +7139,8 @@ msgstr ""
 "براہِ كرم ایك مختلف اكاؤنٹ منتخب كرو۔"
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "كرنسی:"
+msgstr "كرنسی"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7417,15 +7407,13 @@ msgid "Transfer To"
 msgstr "ٹرانسفر كو"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr "ڈیبیٹ رقم :"
+msgstr "ڈیبیٹ رقم "
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
-#, fuzzy
 msgid "To Amount"
-msgstr "رقم كو:"
+msgstr "رقم كو"
 
 #: gnucash/gnome-utils/dialog-utils.c:461
 msgid ""
@@ -9176,9 +9164,8 @@ msgstr "گاہك نمبر :"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "بیچنے والے كا نمبر:"
+msgstr "بیچنے والے كا نمبر"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -12305,9 +12292,8 @@ msgstr "حد كو منتخب كرو: "
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "شروع :"
+msgstr "شروع "
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12316,9 +12302,8 @@ msgid "_Earliest"
 msgstr "_سب سے پہلے "
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "تاریخ كا انتخاب كرو:"
+msgstr "تاریخ كا انتخاب كرو"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12344,9 +12329,8 @@ msgstr "ختم"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "تاریخ كا انتخاب كرو:"
+msgstr "تاریخ كا انتخاب كرو"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -13017,14 +13001,12 @@ msgid "Start Date"
 msgstr "شروع كی تاریخ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "لمبائی:"
+msgstr "لمبائی"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "قرض اكاؤنٹ:"
+msgstr "قرض اكاؤنٹ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -13045,9 +13027,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "باقی بچے مہینے:"
+msgstr "باقی بچے مہینے"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -13071,9 +13052,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "... ادائیگی  كے لیے ایك ایسكرو اكاؤنٹ كا استعمال كریں؟"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "اسكرو اكاؤنٹ:"
+msgstr "اسكرو اكاؤنٹ"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -13088,14 +13068,12 @@ msgstr ""
 "تمام اکاؤنٹس کو جاری رکھنے كے لیے جائز اندراجات ہونا ضروری.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "كو  اصل رقم :"
+msgstr "كو  اصل رقم "
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "بیاض كو:"
+msgstr "بیاض كو"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -13114,9 +13092,8 @@ msgstr ""
 "تمام فعال آپشنس صفحات کو جاری رکھنے جائز اندراجات پر مشتمل ہونا چاہئے.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "(ایسكرو) ادائیگی سے:"
+msgstr "(ایسكرو) ادائیگی سے"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
 #, fuzzy
@@ -13402,16 +13379,14 @@ msgstr "اكاؤنٹ اور اسٹاك ہولڈینگ"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:553
 #: gnucash/gtkbuilder/assistant-qif-import.glade:685
 #: gnucash/gtkbuilder/assistant-qif-import.glade:815
-#, fuzzy
 msgid "_Select the matchings you want to change"
-msgstr "_اُن میچینگ كو منتخب كرو جنھیں آپ تبدیل كرناچاہتے ہے:"
+msgstr "_اُن میچینگ كو منتخب كرو جنھیں آپ تبدیل كرناچاہتے ہے"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:594
 #: gnucash/gtkbuilder/assistant-qif-import.glade:726
 #: gnucash/gtkbuilder/assistant-qif-import.glade:856
-#, fuzzy
 msgid "Matchings selected"
-msgstr "منتخب كیا گیا مچینگز:"
+msgstr "منتخب كیا گیا مچینگز"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:642
 msgid "Match QIF accounts with GnuCash accounts"
@@ -13614,14 +13589,12 @@ msgid "Match existing transactions"
 msgstr "موجودہ لین دینوں كو میچ كرو"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1284
-#, fuzzy
 msgid "_Imported transactions needing review"
-msgstr "_ درآمد كیے گئے لین دینوں جن كے نظرِ ثانی كی ضرورت:"
+msgstr "_ درآمد كیے گئے لین دینوں جن كے نظرِ ثانی كی ضرورت"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1323
-#, fuzzy
 msgid "_Possible matches for the selected transaction"
-msgstr "_منتخب كیے گئے لین دین كے لیے مكمن میچیس:"
+msgstr "_منتخب كیے گئے لین دین كے لیے مكمن میچیس"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Select possible duplicates"
@@ -13712,9 +13685,8 @@ msgstr ""
 "آپ اسے تحفظّ كے ساتھ خالی چھوڑ سكتے ہے۔"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "نئی ـ قیمت:"
+msgstr "نئی ـ قیمت"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
 #, fuzzy
@@ -13790,9 +13762,8 @@ msgid "_Edit list of encodings"
 msgstr "_ ان كوڈینگس كی فہرست كو مرتب كرو"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "ڈیفالٹ انكوڈینگ:"
+msgstr "ڈیفالٹ انكوڈینگ"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13907,9 +13878,8 @@ msgid "Whether to display the list of Bills Due at startup."
 msgstr "خواہ اسٹارٹ اپ پر بقایا بلوں كی فہرست كو ظاہر كیا جائے۔"
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "پرنٹنگ کے لئے رپورٹ:"
+msgstr "پرنٹنگ کے لئے رپورٹ"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -14030,9 +14000,8 @@ msgstr "<b>لین دین</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "كو حركت دو:"
+msgstr "كو حركت دو"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -14166,19 +14135,16 @@ msgid "<b>Identification</b>"
 msgstr "<b>پہچان</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "اكاؤنٹ_ نام:"
+msgstr "اكاؤنٹ_ نام"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "_اكاؤنٹ كوڈ:"
+msgstr "_اكاؤنٹ كوڈ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_وضاحت:"
+msgstr "_وضاحت"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
 #, fuzzy
@@ -14186,9 +14152,8 @@ msgid "Smallest _fraction"
 msgstr "سب سے چھوٹا_جز: "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "اكاؤنٹ_ رنگ :"
+msgstr "اكاؤنٹ_ رنگ "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
 #, fuzzy
@@ -14318,9 +14283,8 @@ msgid "Prefix"
 msgstr "سابقہ : "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "مثالیں:"
+msgstr "مثالیں"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14562,9 +14526,8 @@ msgstr "<b>ٹرم كی تعریف </b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "وضاحت :"
+msgstr "وضاحت "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14573,9 +14536,8 @@ msgstr "وضاحت :"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_ ٹائپ :"
+msgstr "_ ٹائپ "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14608,19 +14570,16 @@ msgstr "<b>نیا بلینگ ٹرم </b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_نام :"
+msgstr "_نام "
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "كُل آمدنی:"
+msgstr "كُل آمدنی"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "كُل خرچ:"
+msgstr "كُل خرچ"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14713,24 +14672,20 @@ msgid "Type of quote source"
 msgstr "كوٹ ماخذ كی قسم: "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "_مكمل نام:"
+msgstr "_مكمل نام"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_علامت / خلاصہ:"
+msgstr "_علامت / خلاصہ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P یا دوسرے كوڈ:"
+msgstr "ISIN, CUSI_P یا دوسرے كوڈ"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "ٹریڈ كی گئی كسر:"
+msgstr "ٹریڈ كی گئی كسر"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -14741,9 +14696,8 @@ msgid "_Get Online Quotes"
 msgstr "_آن لائن كوٹ حاصل كرو "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "واحد:"
+msgstr "واحد"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -14770,9 +14724,8 @@ msgstr ""
 "كرنے كی كوشش كرے گا ۔"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_نامعلوم:"
+msgstr "_نامعلوم"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -14785,9 +14738,8 @@ msgstr ""
 "معلومات حاصل كی ۔ "
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:596
-#, fuzzy
 msgid "Time_zone"
-msgstr "ٹائم _ زون:"
+msgstr "ٹائم _ زون"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:633
 msgid ""
@@ -14859,9 +14811,8 @@ msgstr "كریڈیٹ كی حد:"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "ٹیكس شامل ہے :"
+msgstr "ٹیكس شامل ہے "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -15157,9 +15108,8 @@ msgid "<b>Payment Options</b>"
 msgstr "<b>معاوضہ كے آپشنس</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:604
-#, fuzzy
 msgid "Payment Total"
-msgstr "كُل معاوضہ:"
+msgstr "كُل معاوضہ"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:647
 msgid "Discrete"
@@ -15170,9 +15120,8 @@ msgid "Continuous"
 msgstr "جاری"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "كب معاوضہ دیا:"
+msgstr "كب معاوضہ دیا"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15423,9 +15372,8 @@ msgstr "ہم آہنگی"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "درآمد لین دینوں كا پہلا پھیلاؤ:"
+msgstr "درآمد لین دینوں كا پہلا پھیلاؤ"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15938,9 +15886,8 @@ msgid "<b>End Date</b>"
 msgstr "<b>آخری تاریخ</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_متعلقہ:"
+msgstr "_متعلقہ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
@@ -15948,9 +15895,8 @@ msgstr ""
 "فائدہ / نقصان كی شماروں كے لیے تشكیل متعلقہ شروعاتی تاریخ كا استعمال كرو۔ "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_ حقیقی :"
+msgstr "_ حقیقی "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
@@ -15958,9 +15904,8 @@ msgstr ""
 "فائدہ / نقصان كی شماروں كے لیے تشكیل حقیقی شروعاتی تاریخ كا استعمال كرو۔ ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "متعلقہ:"
+msgstr "متعلقہ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15971,9 +15916,8 @@ msgstr ""
 "علاوہ نیٹ اثاثوں کے حساب کے لئے اس کی تاریخ کا استعمال کریں."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "خالص:"
+msgstr "خالص"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -16031,20 +15975,17 @@ msgstr "US ڈالر (USD)  "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "انتخاب :"
+msgstr "انتخاب "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "حرف:"
+msgstr "حرف"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "نمونہ :"
+msgstr "نمونہ "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -16223,9 +16164,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>تلاش ڈائیلاگ</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "نئی تلاش كی حد:"
+msgstr "نئی تلاش كی حد"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16273,9 +16213,8 @@ msgid "Forever"
 msgstr "ہمیشہ كے لیے"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "وقت ہے جواب كے انتظار كرنے كا:"
+msgstr "وقت ہے جواب كے انتظار كرنے كا"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -16325,9 +16264,8 @@ msgid "Below the actual date, print the format of that date in 8 point type."
 msgstr "اصل تاریخ كے نیچے، ۸ پوائنٹ ٹائپ میں اُس تاریخ كے فارمیٹ كو پرنٹ كرو۔"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "ڈیفالٹ فانٹ :"
+msgstr "ڈیفالٹ فانٹ "
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -16538,9 +16476,8 @@ msgstr ""
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2540
-#, fuzzy
 msgid "Number of _characters for auto complete"
-msgstr "خود كار مکمل كے لئے  _حروف کی تعداد:"
+msgstr "خود كار مکمل كے لئے  _حروف کی تعداد"
 
 #. Register2 feature
 #: gnucash/gtkbuilder/dialog-preferences.glade:2572
@@ -16657,9 +16594,8 @@ msgstr ""
 "آئٹم پر كام كرے گا"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_چوڑائی:"
+msgstr "_چوڑائی"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -16709,9 +16645,8 @@ msgid "_Namespace"
 msgstr "_نیم اسپیس "
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "ماخذ :"
+msgstr "ماخذ "
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -16830,9 +16765,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_تاریخ:"
+msgstr "_تاریخ"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16920,14 +16854,12 @@ msgid "_Print"
 msgstr "پرنٹ كرو"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "چیك _فارمیٹ:"
+msgstr "چیك _فارمیٹ"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
-#, fuzzy
 msgid "Check po_sition"
-msgstr "حالت جانچو:"
+msgstr "حالت جانچو"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:401
 #, fuzzy
@@ -16950,9 +16882,8 @@ msgid "_Address"
 msgstr "_ایڈریس"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
-#, fuzzy
 msgid "Checks on first _page"
-msgstr "پہلےصفحہ پر جانچو:"
+msgstr "پہلےصفحہ پر جانچو"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:640
 msgid "x"
@@ -16968,14 +16899,12 @@ msgid "Pa_yee"
 msgstr "ادا كرنا"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "رقم (_لفظوں میں):"
+msgstr "رقم (_لفظوں میں)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "رقم (_ہندسوں میں):"
+msgstr "رقم (_ہندسوں میں)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -17086,9 +17015,8 @@ msgid "Enter report row/column span"
 msgstr "رپورٹ سطر/كالم اسپن داخل كرو "
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "_سطر اسپن:"
+msgstr "_سطر اسپن"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
 #, fuzzy
@@ -17108,9 +17036,8 @@ msgid "<b>New style sheet info</b>"
 msgstr "<b>نئی اسٹائل شیٹ معلومات</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:817
-#, fuzzy
 msgid "_Template"
-msgstr "_ٹیمپلیٹ:"
+msgstr "_ٹیمپلیٹ"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
@@ -17243,9 +17170,8 @@ msgid "Never End"
 msgstr "كھبی ختم نہیں "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "واقعات كی تعداد:"
+msgstr "واقعات كی تعداد"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17324,14 +17250,12 @@ msgid "<b>Options</b>"
 msgstr "<b>آپشنس</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "پیش رفت میں تخلیق:"
+msgstr "پیش رفت میں تخلیق"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "پیش رفت یاد دہانی كرائے :"
+msgstr "پیش رفت یاد دہانی كرائے "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -17570,9 +17494,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>كرنسی منتقل كرو</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "ایكسچینج شرح:"
+msgstr "ایكسچینج شرح"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17587,14 +17510,12 @@ msgid "Enter your username and password"
 msgstr "آپ كا صارف نام اور خفیہ لفظ داخل كرو"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "_ صارف نام :"
+msgstr "_ صارف نام "
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_خفیہ لفظ :"
+msgstr "_خفیہ لفظ "
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17642,9 +17563,8 @@ msgid "Abbreviation"
 msgstr "خلاصہ"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "تاریخ كا فارمیٹ:"
+msgstr "تاریخ كا فارمیٹ"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -18118,14 +18038,12 @@ msgstr "پہلے پر: "
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "ہفتہ كے آخری دن كو چھوڑ كر:"
+msgstr "ہفتہ كے آخری دن كو چھوڑ كر"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "اس پر:"
+msgstr "اس پر"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -18187,9 +18105,8 @@ msgstr "جب راؤنڈینگ كے وقت اہم ڈجیٹ كی تعدادركھ�
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "اہم ڈجیٹ:"
+msgstr "اہم ڈجیٹ"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -18213,19 +18130,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "بجٹ نام :"
+msgstr "بجٹ نام "
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "میعاد كی تعداد :"
+msgstr "میعاد كی تعداد "
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "بجٹ میعاد:"
+msgstr "بجٹ میعاد"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -18264,9 +18178,8 @@ msgstr "<b>نئے لین دین كی معلومات</b>"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_نمبر :"
+msgstr "_نمبر "
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -18286,9 +18199,8 @@ msgstr "حد كو منتخب كرو: "
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "تاریخ كا انتخاب كرو:"
+msgstr "تاریخ كا انتخاب كرو"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -18503,18 +18415,16 @@ msgstr "<b>خود كار۔ صاف معلومات</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_آخری بقایا:"
+msgstr "_آخری بقایا"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>صلح كی معلومات</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "اسٹیٹمینٹ كی تاریخ :"
+msgstr "اسٹیٹمینٹ كی تاریخ "
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -20998,9 +20908,8 @@ msgstr ""
 "سرمایہ كاری قسم كو نہیں دیكھ پاتے ہے، تو آپ ایك نئے كو درج كرسكتے ہے۔  "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
-#, fuzzy
 msgid "_Name or description"
-msgstr "_ نام یا وضاحت :"
+msgstr "_ نام یا وضاحت "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
 #, fuzzy
@@ -21008,9 +20917,8 @@ msgid "_Ticker symbol or other abbreviation"
 msgstr "_ ٹكر نشان یا دیگر خلاصہ: "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
-#, fuzzy
 msgid "_Exchange or abbreviation type"
-msgstr "_ ایكسچینج یا خلاصہ كی قسم :"
+msgstr "_ ایكسچینج یا خلاصہ كی قسم "
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3314

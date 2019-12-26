@@ -5715,9 +5715,8 @@ msgstr "_Syöttöpäivämäärä"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "Tiliotteen päväys:"
+msgstr "Tiliotteen päväys"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6129,15 +6128,13 @@ msgstr ""
 #. starting balance title/value
 #: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1899
 #: gnucash/gtkbuilder/window-reconcile.glade:122
-#, fuzzy
 msgid "Starting Balance"
-msgstr "Alkusaldo:"
+msgstr "Alkusaldo"
 
 #. ending balance title/value
 #: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1909
-#, fuzzy
 msgid "Ending Balance"
-msgstr "_Loppusaldo:"
+msgstr "_Loppusaldo"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
@@ -6816,9 +6813,8 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_Arvopaperi/valuutta:"
+msgstr "_Arvopaperi/valuutta"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -6826,9 +6822,8 @@ msgstr "Valitse arvopaperi"
 
 #: gnucash/gnome-utils/dialog-commodity.c:293
 #: gnucash/gtkbuilder/dialog-price.glade:149
-#, fuzzy
 msgid "_Security"
-msgstr "_Arvopaperi:"
+msgstr "_Arvopaperi"
 
 #: gnucash/gnome-utils/dialog-commodity.c:297
 msgid "Select currency"
@@ -6836,9 +6831,8 @@ msgstr "Valitse valuutta"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "_Valuutta:"
+msgstr "_Valuutta"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -6898,9 +6892,8 @@ msgstr ""
 
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
-#, fuzzy
 msgid "Action/Number"
-msgstr "Tapahtuma/Numero:"
+msgstr "Tapahtuma/Numero"
 
 #: gnucash/gnome-utils/dialog-file-access.c:302
 msgid "Open..."
@@ -6967,9 +6960,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "Valuutta:"
+msgstr "Valuutta"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -11651,17 +11643,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "Valitse aikaväli:"
+msgstr "Valitse aikaväli"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "Alku:"
+msgstr "Alku"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -11670,9 +11660,8 @@ msgid "_Earliest"
 msgstr "_Varhaisin"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "_Valitse päivämäärä:"
+msgstr "_Valitse päivämäärä"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -11698,9 +11687,8 @@ msgstr "Lopussa"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "_Valitse päivämäärä:"
+msgstr "_Valitse päivämäärä"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12336,14 +12324,12 @@ msgid "Start Date"
 msgstr "Alkupäivämäärä"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Pituus:"
+msgstr "Pituus"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "Lainan tili:"
+msgstr "Lainan tili"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -12368,9 +12354,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "Kuukausia jäljellä:"
+msgstr "Kuukausia jäljellä"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -12393,9 +12378,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "...käytä maksuille talletustiliä?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Talletustili:"
+msgstr "Talletustili"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -12410,14 +12394,12 @@ msgstr ""
 "Täytä kaikki kentät jatkaaksesi.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "Pääoma tilille:"
+msgstr "Pääoma tilille"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "Korko tilille:"
+msgstr "Korko tilille"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -12677,9 +12659,8 @@ msgstr "Valitse vertailtavat tilit"
 #: gnucash/gtkbuilder/assistant-qif-import.glade:594
 #: gnucash/gtkbuilder/assistant-qif-import.glade:726
 #: gnucash/gtkbuilder/assistant-qif-import.glade:856
-#, fuzzy
 msgid "Matchings selected"
-msgstr "Tilejä valittuna:"
+msgstr "Tilejä valittuna"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:642
 msgid "Match QIF accounts with GnuCash accounts"
@@ -12910,14 +12891,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:191
-#, fuzzy
 msgid "New _Price"
-msgstr "Uusi _Hinta:"
+msgstr "Uusi _Hinta"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "_Valuutta:"
+msgstr "_Valuutta"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -12982,9 +12961,8 @@ msgid "_Edit list of encodings"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "Oletus_fontti:"
+msgstr "Oletus_fontti"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13101,9 +13079,8 @@ msgstr ""
 "Näytetäänkö ohjelmaa käynnistettäessä muistutus erääntyvistä ostolaskuista."
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "Tulostukseen käytettävä raportti:"
+msgstr "Tulostukseen käytettävä raportti"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -13148,9 +13125,8 @@ msgid "Pro_cess payments on posting"
 msgstr "Käsi_ttele maksut laskun kirjauksen yhteydessä"
 
 #: gnucash/gtkbuilder/business-prefs.glade:299
-#, fuzzy
 msgid "Days in ad_vance"
-msgstr "_Päivää etukäteen:"
+msgstr "_Päivää etukäteen"
 
 #: gnucash/gtkbuilder/business-prefs.glade:314
 msgid "How many days in the future to warn about Bills coming due."
@@ -13162,9 +13138,8 @@ msgid "How many days in the future to warn about Invoices coming due."
 msgstr "Kuinka monta päivää etukäteen ostolaskujen erääntymisestä varoitetaan."
 
 #: gnucash/gtkbuilder/business-prefs.glade:364
-#, fuzzy
 msgid "_Days in advance"
-msgstr "_Päivää etukäteen:"
+msgstr "_Päivää etukäteen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13206,9 +13181,8 @@ msgid ""
 msgstr "Tällä tilillä on alatilejä. Mitä haluaisit tehdä niille?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:277
-#, fuzzy
 msgid "_Move to"
-msgstr "_Siirrä tilille:"
+msgstr "_Siirrä tilille"
 
 #: gnucash/gtkbuilder/dialog-account.glade:296
 msgid "Delete all _subaccounts"
@@ -13220,9 +13194,8 @@ msgstr "<b>Tapahtumat</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "Siirrä tilille:"
+msgstr "Siirrä tilille"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -13353,34 +13326,28 @@ msgid "<b>Identification</b>"
 msgstr "<b>Tiedot</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "Tilin _nimi:"
+msgstr "Tilin _nimi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "Tilin _koodi:"
+msgstr "Tilin _koodi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1046
-#, fuzzy
 msgid "_Description"
-msgstr "_Kuvaus:"
+msgstr "_Kuvaus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1088
-#, fuzzy
 msgid "Smallest _fraction"
-msgstr "Pienin osuus:"
+msgstr "Pienin osuus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "Tilin _väri:"
+msgstr "Tilin _väri"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
-#, fuzzy
 msgid "No_tes"
-msgstr "_Huomautuksia:"
+msgstr "_Huomautuksia"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1167
 msgid "Ta_x related"
@@ -13498,9 +13465,8 @@ msgid "Prefix"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "Esimerkki:"
+msgstr "Esimerkki"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -13744,9 +13710,8 @@ msgstr "<b>Maksuehdon tiedot</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "_Kuvaus:"
+msgstr "_Kuvaus"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -13755,9 +13720,8 @@ msgstr "_Kuvaus:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Tyyppi:"
+msgstr "_Tyyppi"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -13790,9 +13754,8 @@ msgstr "<b>Uusi laskun maksuehto</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_Nimi:"
+msgstr "_Nimi"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
 #, fuzzy
@@ -13883,9 +13846,8 @@ msgid "<b>Security Information</b>"
 msgstr "Arvopaperin tiedot"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "Kurssien lähteen tyyppi:"
+msgstr "Kurssien lähteen tyyppi"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
 #, fuzzy
@@ -13893,19 +13855,16 @@ msgid "_Full name"
 msgstr "_Koko nimi"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "_Symboli/lyhenne:"
+msgstr "_Symboli/lyhenne"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P tai muu koodi:"
+msgstr "ISIN, CUSI_P tai muu koodi"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
-#, fuzzy
 msgid "F_raction traded"
-msgstr "Pienin vaihdettava osuus:"
+msgstr "Pienin vaihdettava osuus"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:452
 msgid "Warning: Finance::Quote not installed properly."
@@ -13916,9 +13875,8 @@ msgid "_Get Online Quotes"
 msgstr "_Hae kurssi verkosta"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:512
-#, fuzzy
 msgid "Si_ngle"
-msgstr "Yksittäinen:"
+msgstr "Yksittäinen"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:518
 msgid ""
@@ -13931,9 +13889,8 @@ msgstr ""
 "kursseja ei voi noutaa."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:539
-#, fuzzy
 msgid "_Multiple"
-msgstr "_Usea:"
+msgstr "_Usea"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:545
 msgid ""
@@ -13946,9 +13903,8 @@ msgstr ""
 "saatavilla, F::Q yrittää hakea tiedot toiselta sivulta."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:566
-#, fuzzy
 msgid "_Unknown"
-msgstr "_Ei tiedossa:"
+msgstr "_Ei tiedossa"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:572
 msgid ""
@@ -13998,9 +13954,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-customer.glade:920
 #: gnucash/gtkbuilder/dialog-employee.glade:280
 #: gnucash/gtkbuilder/dialog-vendor.glade:298
-#, fuzzy
 msgid "Address"
-msgstr "Osoite: "
+msgstr "Osoite"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:375
 #: gnucash/gtkbuilder/dialog-customer.glade:998
@@ -14030,9 +13985,8 @@ msgstr "Luottoraja: "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
-#, fuzzy
 msgid "Tax Included"
-msgstr "Verot sisältyy:"
+msgstr "Verot sisältyy"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:681
 #: gnucash/gtkbuilder/dialog-vendor.glade:648
@@ -14336,9 +14290,8 @@ msgid "Continuous"
 msgstr "Jatkuva"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "Maksetaan:"
+msgstr "Maksetaan"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15069,9 +15022,8 @@ msgid "<b>End Date</b>"
 msgstr "<b>Päättymispäivä</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "_Suhteellinen:"
+msgstr "_Suhteellinen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
@@ -15079,18 +15031,16 @@ msgstr ""
 "Käytä määritettyä suhteellista aloituspäivää voitto-/tappiolaskelmille."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:270
-#, fuzzy
 msgid "_Absolute"
-msgstr "_Määritetty:"
+msgstr "_Määritetty"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:276
 msgid "Use the specified absolute starting date for profit/loss calculations."
 msgstr "Käytä määritettyä aloituspäivää voitto-/tappiolaskelmille."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:290
-#, fuzzy
 msgid "Re_lative"
-msgstr "S_uhteellinen:"
+msgstr "S_uhteellinen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:296
 msgid ""
@@ -15100,9 +15050,8 @@ msgstr ""
 "Käytä määritettyä suhteellista päättymispäivää voitto-/tappiolaskelmille."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:310
-#, fuzzy
 msgid "Ab_solute"
-msgstr "Mää_ritetty:"
+msgstr "Mää_ritetty"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:316
 msgid ""
@@ -15160,20 +15109,17 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "_Valitse:"
+msgstr "_Valitse"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "Merkki:"
+msgstr "Merkki"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
-#, fuzzy
 msgid "Sample"
-msgstr "Esimerkki:"
+msgstr "Esimerkki"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:694
 msgid "<b>Account Color</b>"
@@ -15197,9 +15143,8 @@ msgstr "Näytä tilin väri välilehden taustana."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "_Järjestelmä:"
+msgstr "_Järjestelmä"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -15351,9 +15296,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b>Hakuikkuna</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "Uuden _haun raja:"
+msgstr "Uuden _haun raja"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -15392,9 +15336,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1584
 #: gnucash/gtkbuilder/dialog-sx.glade:1248
-#, fuzzy
 msgid "For"
-msgstr "Tietyn ajan:"
+msgstr "Tietyn ajan"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1603
 #: gnucash/gtkbuilder/dialog-sx.glade:1216
@@ -15402,9 +15345,8 @@ msgid "Forever"
 msgstr "Ikuisesti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1644
-#, fuzzy
 msgid "Time to _wait for answer"
-msgstr "Aika joka odotetaan vastausta:"
+msgstr "Aika joka odotetaan vastausta"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
@@ -15454,9 +15396,8 @@ msgstr ""
 "Tulosta käytetty päiväyksen muoto itse päiväyksen alle 8 pisteen fontilla."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1929
-#, fuzzy
 msgid "Default _font"
-msgstr "Oletus_fontti:"
+msgstr "Oletus_fontti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1948
 msgid "The default check printing font."
@@ -15628,9 +15569,8 @@ msgid "_Auto-split ledger"
 msgstr "_Automaattisesti jaettu tilikirja"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "_Tapahtumien lukumäärä:"
+msgstr "_Tapahtumien lukumäärä"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -15793,9 +15733,8 @@ msgstr ""
 "valikon \"Sulje\"-painike."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3196
-#, fuzzy
 msgid "_Width"
-msgstr "_Leveys:"
+msgstr "_Leveys"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3217
 msgid ""
@@ -15840,9 +15779,8 @@ msgid "Price Editor"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "_Nimiavaruus:"
+msgstr "_Nimiavaruus"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
 #, fuzzy
@@ -15958,9 +15896,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "_Päiväys:"
+msgstr "_Päiväys"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16046,9 +15983,8 @@ msgid "_Print"
 msgstr "Tulosta"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "Valuutta:"
+msgstr "Valuutta"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
 msgid "Check po_sition"
@@ -16088,14 +16024,12 @@ msgid "Pa_yee"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:695
-#, fuzzy
 msgid "Amount (_words)"
-msgstr "Tilin _väri:"
+msgstr "Tilin _väri"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "Tilin _nimi:"
+msgstr "Tilin _nimi"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -16398,14 +16332,12 @@ msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "Aseta uudet ajastetut tapahtumat luotaviksi automaattisesti."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:606
-#, fuzzy
 msgid "Crea_te in advance"
-msgstr "Luo _etukäteen:"
+msgstr "Luo _etukäteen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:628
-#, fuzzy
 msgid "R_emind in advance"
-msgstr "_Ilmoita etukäteen:"
+msgstr "_Ilmoita etukäteen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:648
 msgid "Begin notifications this many days before the transaction is created."
@@ -16436,14 +16368,12 @@ msgid "<b>Options</b>"
 msgstr "<b>Asetukset</b>"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:934
-#, fuzzy
 msgid "Create in advance"
-msgstr "Luo etukäteen:"
+msgstr "Luo etukäteen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:949
-#, fuzzy
 msgid "Remind in advance"
-msgstr "Muistuta etukäteen:"
+msgstr "Muistuta etukäteen"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:990
 #: gnucash/gtkbuilder/dialog-sx.glade:1049
@@ -16475,9 +16405,8 @@ msgid "Repeats:"
 msgstr "Toistuu:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "Asti:"
+msgstr "Asti"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -16698,14 +16627,12 @@ msgid "Enter your username and password"
 msgstr "Syötä käyttäjätunnus ja salasana"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:86
-#, fuzzy
 msgid "_Username"
-msgstr "_Käyttäjätunnus:"
+msgstr "_Käyttäjätunnus"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "_Salasana:"
+msgstr "_Salasana"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 msgid ""
@@ -17226,9 +17153,8 @@ msgstr "Vientipäivä"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
 #: gnucash/gtkbuilder/gnc-frequency.glade:1387
-#, fuzzy
 msgid "except on weekends"
-msgstr "paitsi viikonloppuisin:"
+msgstr "paitsi viikonloppuisin"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
 msgid "then on the"
@@ -17293,9 +17219,8 @@ msgstr "Merkitsevien numeroiden määrä pyöristettäessä lukuja."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:226
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:355
-#, fuzzy
 msgid "Significant Digits"
-msgstr "Merkitseviä numeroita:"
+msgstr "Merkitseviä numeroita"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:250
 msgid "Estimate Budget Values"
@@ -17319,19 +17244,16 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Budjetin nimi:"
+msgstr "Budjetin nimi"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "Jaksojen määrä:"
+msgstr "Jaksojen määrä"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
-#, fuzzy
 msgid "Budget Period"
-msgstr "Budjetin aikaväli:"
+msgstr "Budjetin aikaväli"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:656
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -17370,9 +17292,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:114
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1024
-#, fuzzy
 msgid "_Number"
-msgstr "_Numero:"
+msgstr "_Numero"
 
 #. Filter register by... Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:171
@@ -17392,9 +17313,8 @@ msgstr "Valitse aikaväli:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "_Valitse päivämäärä:"
+msgstr "_Valitse päivämäärä"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -17615,18 +17535,16 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "_Loppusaldo:"
+msgstr "_Loppusaldo"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"
 msgstr "<b>Täsmäytyksen tiedot</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:110
-#, fuzzy
 msgid "Statement _Date"
-msgstr "Raportin _päiväys:"
+msgstr "Raportin _päiväys"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:143
 msgid "Include _subaccounts"
@@ -19886,9 +19804,8 @@ msgid "_Name or description"
 msgstr "(ei selitettä)"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:930
-#, fuzzy
 msgid "_Ticker symbol or other abbreviation"
-msgstr "_Symboli/lyhenne:"
+msgstr "_Symboli/lyhenne"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:964
 msgid "_Exchange or abbreviation type"

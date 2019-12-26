@@ -798,9 +798,8 @@ msgstr "kall"
 
 #: gnucash/gnome/assistant-acct-period.c:590
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
-#, fuzzy
 msgid "Closing Date"
-msgstr "Bond korpachi tarikh:"
+msgstr "Bond korpachi tarikh"
 
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
@@ -5832,9 +5831,8 @@ msgstr "Nondnnichi tarikh"
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
-#, fuzzy
 msgid "Statement Date"
-msgstr "nivedon tarik:"
+msgstr "nivedon tarik"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
@@ -6270,9 +6268,8 @@ msgstr "Xevttachi xirlok"
 
 #. reconciled balance title/value
 #: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1919
-#, fuzzy
 msgid "Reconciled Balance"
-msgstr "zulloileli  xirlok:"
+msgstr "zulloileli  xirlok"
 
 #. difference title/value
 #: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1929
@@ -6986,9 +6983,8 @@ msgstr "Zamin/cholon vench"
 
 #: gnucash/gnome-utils/dialog-commodity.c:288
 #: gnucash/gtkbuilder/dialog-account.glade:1061
-#, fuzzy
 msgid "_Security/currency"
-msgstr "_ Zamin/cholon:"
+msgstr "_ Zamin/cholon"
 
 #: gnucash/gnome-utils/dialog-commodity.c:292
 msgid "Select security"
@@ -7006,9 +7002,8 @@ msgstr "Cholon vench"
 
 #: gnucash/gnome-utils/dialog-commodity.c:298
 #: gnucash/gtkbuilder/dialog-price.glade:164
-#, fuzzy
 msgid "Cu_rrency"
-msgstr "Cholon:"
+msgstr "Cholon"
 
 #: gnucash/gnome-utils/dialog-commodity.c:772
 #: gnucash/gnome-utils/dialog-options.c:702
@@ -7142,9 +7137,8 @@ msgstr ""
 "vegllem khatem vench"
 
 #: gnucash/gnome-utils/dialog-options.c:1289
-#, fuzzy
 msgid "Book currency"
-msgstr "cholon:"
+msgstr "cholon"
 
 #: gnucash/gnome-utils/dialog-options.c:1318
 msgid "Default lot tracking policy"
@@ -7411,9 +7405,8 @@ msgid "Transfer To"
 msgstr "hanga bodli"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2042
-#, fuzzy
 msgid "Debit Amount"
-msgstr " dennem rok'kom:"
+msgstr " dennem rok'kom"
 
 #: gnucash/gnome-utils/dialog-transfer.c:2047
 #: gnucash/gtkbuilder/dialog-transfer.glade:555
@@ -9162,9 +9155,8 @@ msgstr "Giraikacho ankddo:"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:361
 #: gnucash/gtkbuilder/dialog-vendor.glade:142
-#, fuzzy
 msgid "Vendor Number"
-msgstr "vikpeacho ankddo:"
+msgstr "vikpeacho ankddo"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:365
 #: gnucash/gtkbuilder/dialog-employee.glade:117
@@ -12283,17 +12275,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:471
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:144
-#, fuzzy
 msgid "Select _Range"
-msgstr "ontor vench:"
+msgstr "ontor vench"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:496
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:294
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:169
-#, fuzzy
 msgid "Start"
-msgstr "suru kor:"
+msgstr "suru kor"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:505
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:303
@@ -12302,9 +12292,8 @@ msgid "_Earliest"
 msgstr "soglleavon adlem"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:522
-#, fuzzy
 msgid "Cho_ose Date"
-msgstr "tarikh vench:"
+msgstr "tarikh vench"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:539
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:335
@@ -12330,9 +12319,8 @@ msgstr "Xevott"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:594
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:391
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:265
-#, fuzzy
 msgid "C_hoose Date"
-msgstr "tarikh vench:"
+msgstr "tarikh vench"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:611
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:408
@@ -12993,14 +12981,12 @@ msgid "Start Date"
 msgstr "survatechi tarikh"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "lambai:"
+msgstr "lambai"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
-#, fuzzy
 msgid "Loan Account"
-msgstr "rinna khatem:"
+msgstr "rinna khatem"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:218
 msgid ""
@@ -13021,9 +13007,8 @@ msgid "%"
 msgstr "%"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:367
-#, fuzzy
 msgid "Months Remaining"
-msgstr "xirlok mhoine:"
+msgstr "xirlok mhoine"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:398
 msgid "Interest Rate Change Frequency"
@@ -13046,9 +13031,8 @@ msgid "... utilize an escrow account for payments?"
 msgstr "...poixe farik korunk ek escrow khatem vaprum?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:522
-#, fuzzy
 msgid "Escrow Account"
-msgstr "Escrow khatem:"
+msgstr "Escrow khatem"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:560
 msgid "Loan Repayment Options"
@@ -13063,14 +13047,12 @@ msgstr ""
 "Sogllea khateank void nondnneo asunk zai chalu dovorpak.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:610
-#, fuzzy
 msgid "Principal To"
-msgstr "haka mudol:"
+msgstr "haka mudol"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:649
-#, fuzzy
 msgid "Interest To"
-msgstr "haka jur:"
+msgstr "haka jur"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:722
 msgid "Repayment Frequency"
@@ -13090,14 +13072,12 @@ msgstr ""
 "dovorpak.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:843
-#, fuzzy
 msgid "Payment To (Escrow)"
-msgstr "haka farik korop (Escrow):"
+msgstr "haka farik korop (Escrow)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:898
-#, fuzzy
 msgid "Payment From (Escrow)"
-msgstr "savn poixe farik korop (escrow):"
+msgstr "savn poixe farik korop (escrow)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:921
 msgid "Specify Source Account"
@@ -13667,9 +13647,8 @@ msgstr ""
 "vevharachem vornnonui bhorum ieta vo ek default apnnavum ieta"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "vornnon:"
+msgstr "vornnon"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -13689,9 +13668,8 @@ msgid "New _Price"
 msgstr "novem mol: (_P)"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:205
-#, fuzzy
 msgid "Currenc_y"
-msgstr "cholon:"
+msgstr "cholon"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:235
 msgid "Stock Split Details"
@@ -13762,9 +13740,8 @@ msgid "_Edit list of encodings"
 msgstr "sonket volleri sudar"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:70
-#, fuzzy
 msgid "Default encoding"
-msgstr "default sonket:"
+msgstr "default sonket"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
 msgid "Convert the file"
@@ -13880,9 +13857,8 @@ msgstr ""
 "Survatek ken'na noganchi topxil dennem zata tachi volleri dakhol korpachi"
 
 #: gnucash/gtkbuilder/business-prefs.glade:170
-#, fuzzy
 msgid "Report for printing"
-msgstr "Chap'pa khatir vako:"
+msgstr "Chap'pa khatir vako"
 
 #: gnucash/gtkbuilder/business-prefs.glade:179
 msgid "_Tax included"
@@ -14003,9 +13979,8 @@ msgstr "<b>vevhar</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:369
 #: gnucash/gtkbuilder/dialog-account.glade:490
-#, fuzzy
 msgid "M_ove to"
-msgstr "hanga haloi:"
+msgstr "hanga haloi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:386
 #: gnucash/gtkbuilder/dialog-account.glade:507
@@ -14282,14 +14257,12 @@ msgid "_Renumber"
 msgstr "porot ankdde di"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
 msgid "Prefix"
-msgstr "Purvprotoi:"
+msgstr "Purvprotoi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1741
-#, fuzzy
 msgid "Examples"
-msgstr "dekhik:"
+msgstr "dekhik"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1764
 #: gnucash/report/standard-reports/balance-forecast.scm:42
@@ -14529,9 +14502,8 @@ msgstr "<b>Ottichim Vakhea/b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "Vornnon (_s):"
+msgstr "Vornnon (_s)"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -14540,9 +14512,8 @@ msgstr "Vornnon (_s):"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "_Prokar:"
+msgstr "_Prokar"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -14575,19 +14546,16 @@ msgstr "<b>Novi noganche topxilechi Ott</b>"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "_Nanv:"
+msgstr "_Nanv"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:98
-#, fuzzy
 msgid "Income Total"
-msgstr "Zoddichi beriz:"
+msgstr "Zoddichi beriz"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
-msgstr "ekunn khorch:"
+msgstr "ekunn khorch"
 
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:7
 msgid "Choose Owner Dialog"
@@ -14675,24 +14643,20 @@ msgid "<b>Security Information</b>"
 msgstr "Zaminichi mhaiti"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:309
-#, fuzzy
 msgid "Type of quote source"
-msgstr "sangnnechea mullacho prokar:"
+msgstr "sangnnechea mullacho prokar"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "purem nanv:"
+msgstr "purem nanv"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
-#, fuzzy
 msgid "_Symbol/abbreviation"
-msgstr "nixanni/sonkxep:"
+msgstr "nixanni/sonkxep"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:394
-#, fuzzy
 msgid "ISIN, CUSI_P or other code"
-msgstr "ISIN, CUSI_P vo her sonket:"
+msgstr "ISIN, CUSI_P vo her sonket"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
 #, fuzzy
@@ -15139,9 +15103,8 @@ msgid "Continuous"
 msgstr "eksarkem"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:747
-#, fuzzy
 msgid "When paid"
-msgstr "ken'na farik kel'lem:"
+msgstr "ken'na farik kel'lem"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:758
 msgid "Beginning"
@@ -15286,9 +15249,8 @@ msgstr "ek soruponn vench"
 
 #: gnucash/gtkbuilder/dialog-import.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:193
-#, fuzzy
 msgid "Format"
-msgstr "pod'dot:"
+msgstr "pod'dot"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-import.glade:339
@@ -15391,9 +15353,8 @@ msgstr "Zulloileat"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "Imported transaction's first split"
-msgstr "aiat vevharachi poili futall:"
+msgstr "aiat vevharachi poili futall"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
@@ -15527,9 +15488,8 @@ msgid "Default Chargeback Project"
 msgstr "default portun mol korpachem sonkolp"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:503
-#, fuzzy
 msgid "Additional to Card"
-msgstr "Cardak odik zoddnni:"
+msgstr "Cardak odik zoddnni"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:532
 msgid "Extra Payments"
@@ -15907,9 +15867,8 @@ msgid "<b>End Date</b>"
 msgstr "<b>xevottchi tarikh</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:250
-#, fuzzy
 msgid "_Relative"
-msgstr "Sombondit:"
+msgstr "Sombondit"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:256
 msgid "Use the specified relative starting date for profit/loss calculations."
@@ -15999,14 +15958,12 @@ msgstr "US Dollar (USD)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:619
 #: gnucash/gtkbuilder/dialog-preferences.glade:2718
-#, fuzzy
 msgid "Ch_oose"
-msgstr "vench:"
+msgstr "vench"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
-#, fuzzy
 msgid "Character"
-msgstr "okxor:"
+msgstr "okxor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 #: gnucash/gtkbuilder/gnc-date-format.glade:206
@@ -16036,9 +15993,8 @@ msgstr "Khateacho rong vollokh pott'ttechi fattbhuim mhonn dakhoi"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
 #: gnucash/gtkbuilder/dialog-preferences.glade:2744
-#, fuzzy
 msgid "Loc_ale"
-msgstr "sthol:"
+msgstr "sthol"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:799
 msgid ""
@@ -16189,9 +16145,8 @@ msgid "<b>Search Dialog</b>"
 msgstr "<b> sonvad sod</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1431
-#, fuzzy
 msgid "New search _limit"
-msgstr "novi sodpachi xim:"
+msgstr "novi sodpachi xim"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1446
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -16460,9 +16415,8 @@ msgid "_Auto-split ledger"
 msgstr "Apoap futall ledger"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2447
-#, fuzzy
 msgid "Number of _transactions"
-msgstr "vevharaankdde:"
+msgstr "vevharaankdde"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2479
 msgid "_Double line mode"
@@ -16673,9 +16627,8 @@ msgid "Price Editor"
 msgstr "mol sompadok"
 
 #: gnucash/gtkbuilder/dialog-price.glade:134
-#, fuzzy
 msgid "_Namespace"
-msgstr "nanvazago:"
+msgstr "nanvazago"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
 #, fuzzy
@@ -16797,9 +16750,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:750
-#, fuzzy
 msgid "Before _Date"
-msgstr "tarikh:"
+msgstr "tarikh"
 
 #: gnucash/gtkbuilder/dialog-price.glade:789
 #: gnucash/report/standard-reports/price-scatter.scm:96
@@ -16887,9 +16839,8 @@ msgid "_Print"
 msgstr "chhap"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:370
-#, fuzzy
 msgid "Check _format"
-msgstr "soruponnt topas:"
+msgstr "soruponnt topas"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:385
 #, fuzzy
@@ -16940,9 +16891,8 @@ msgid "Amount (_words)"
 msgstr "rok'kom(utramni): "
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:710
-#, fuzzy
 msgid "Amount (_numbers)"
-msgstr "rok'kom (ankddeamni):"
+msgstr "rok'kom (ankddeamni)"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:725
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:813
@@ -17210,9 +17160,8 @@ msgid "Never End"
 msgstr "Ken'nach sompchemna"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:366
-#, fuzzy
 msgid "Number of Occurrences"
-msgstr "ghoddleleanche ankdde:"
+msgstr "ghoddleleanche ankdde"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:510
 #, fuzzy
@@ -17330,9 +17279,8 @@ msgid "Repeats:"
 msgstr "porot kelelem:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1232
-#, fuzzy
 msgid "Until"
-msgstr "poriant:"
+msgstr "poriant"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1269
 msgid "occurrences"
@@ -17537,9 +17485,8 @@ msgid "<b>Currency Transfer</b>"
 msgstr "<b>cholon bodli</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:515
-#, fuzzy
 msgid "Exchange Rate"
-msgstr "Vattavachi dor:"
+msgstr "Vattavachi dor"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:596
 msgid "_Fetch Rate"
@@ -17609,9 +17556,8 @@ msgid "Abbreviation"
 msgstr "sonkxep"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:224
-#, fuzzy
 msgid "Date format"
-msgstr "Tarkhechem soruponn:"
+msgstr "Tarkhechem soruponn"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
@@ -18078,9 +18024,8 @@ msgid "months."
 msgstr "mhoine"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1101
-#, fuzzy
 msgid "First on the"
-msgstr " hache poilem:"
+msgstr " hache poilem"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1136
 #: gnucash/gtkbuilder/gnc-frequency.glade:1216
@@ -18090,9 +18035,8 @@ msgid "except on weekends"
 msgstr "satolleacho xevott soddun"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1181
-#, fuzzy
 msgid "then on the"
-msgstr "uprant voir:"
+msgstr "uprant voir"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1295
 #, fuzzy
@@ -18180,14 +18124,12 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "odmaspotrachem nanv:"
+msgstr "odmaspotrachem nanv"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
-#, fuzzy
 msgid "Number of Periods"
-msgstr "kallacho ankddo:"
+msgstr "kallacho ankddo"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:614
 #, fuzzy
@@ -18253,9 +18195,8 @@ msgstr "ontor vench:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:319
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:194
-#, fuzzy
 msgid "Choo_se Date"
-msgstr "tarikh vench:"
+msgstr "tarikh vench"
 
 #. Filter By Dialog, State Tab
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:511
@@ -18470,9 +18411,8 @@ msgstr "<b>Apoap nivllaipachi mhaiti</b>"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:100
 #: gnucash/gtkbuilder/window-reconcile.glade:133
-#, fuzzy
 msgid "_Ending Balance"
-msgstr "Xevttachem xirlok:"
+msgstr "Xevttachem xirlok"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:73
 msgid "<b>Reconcile Information</b>"

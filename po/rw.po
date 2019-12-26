@@ -13463,9 +13463,8 @@ msgid "Start Date"
 msgstr "Itariki y'itangira"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:177
-#, fuzzy
 msgid "Length"
-msgstr "Uburebure:"
+msgstr "Uburebure"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:203
 #, fuzzy
@@ -14110,9 +14109,8 @@ msgstr ""
 "Kwemera i Mburabuzi"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:138
-#, fuzzy
 msgid "Desc_ription"
-msgstr "Igaragaza Imiterere:"
+msgstr "Igaragaza Imiterere"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:153
 msgid "Stock Split"
@@ -14621,14 +14619,12 @@ msgid "<b>Identification</b>"
 msgstr "irangamimerere"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1015
-#, fuzzy
 msgid "Account _name"
-msgstr "Izina rya konti:"
+msgstr "Izina rya konti"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1031
-#, fuzzy
 msgid "_Account code"
-msgstr "Izina rya konti:"
+msgstr "Izina rya konti"
 
 # basctl/source\basicide\macrodlg.src:RID_MACROCHOOSER.RID_TXT_DESCRIPTION.text
 #: gnucash/gtkbuilder/dialog-account.glade:1046
@@ -14642,9 +14638,8 @@ msgid "Smallest _fraction"
 msgstr "Ibikorwa by'ubucuruzi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1103
-#, fuzzy
 msgid "Account _Color"
-msgstr "Izina rya konti:"
+msgstr "Izina rya konti"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1156
 #, fuzzy
@@ -15081,9 +15076,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-billterms.glade:655
 #: gnucash/gtkbuilder/dialog-billterms.glade:897
 #: gnucash/gtkbuilder/dialog-billterms.glade:1188
-#, fuzzy
 msgid "De_scription"
-msgstr "Igaragaza Imiterere:"
+msgstr "Igaragaza Imiterere"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:669
 #: gnucash/gtkbuilder/dialog-billterms.glade:938
@@ -15092,9 +15086,8 @@ msgstr "Igaragaza Imiterere:"
 #: gnucash/gtkbuilder/dialog-commodity.glade:813
 #: gnucash/gtkbuilder/dialog-price.glade:206
 #: gnucash/gtkbuilder/dialog-tax-table.glade:495
-#, fuzzy
 msgid "_Type"
-msgstr "Ubwoko:"
+msgstr "Ubwoko"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:684
 #: gnucash/gtkbuilder/dialog-billterms.glade:915
@@ -15133,9 +15126,8 @@ msgstr "a Gishya"
 #: gnucash/gtkbuilder/dialog-billterms.glade:1165
 #: gnucash/gtkbuilder/dialog-report.glade:802
 #: gnucash/gtkbuilder/dialog-tax-table.glade:546
-#, fuzzy
 msgid "_Name"
-msgstr "Izina:"
+msgstr "Izina"
 
 # #-#-#-#-#  sc.pot (PACKAGE VERSION)  #-#-#-#-#
 # sc/source\ui\src\autofmt.src:RID_SCDLG_AUTOFORMAT.STR_SUM.text
@@ -15246,9 +15238,8 @@ msgid "Type of quote source"
 msgstr "Bya Gushaka"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:329
-#, fuzzy
 msgid "_Full name"
-msgstr "Izina:"
+msgstr "Izina"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:351
 #, fuzzy
@@ -15353,9 +15344,8 @@ msgstr "irangamimerere"
 #: gnucash/gtkbuilder/dialog-customer.glade:920
 #: gnucash/gtkbuilder/dialog-employee.glade:280
 #: gnucash/gtkbuilder/dialog-vendor.glade:298
-#, fuzzy
 msgid "Address"
-msgstr "Aderesi:"
+msgstr "Aderesi"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:375
 #: gnucash/gtkbuilder/dialog-customer.glade:998
@@ -17336,9 +17326,8 @@ msgid "_Namespace"
 msgstr "Izina"
 
 #: gnucash/gtkbuilder/dialog-price.glade:191
-#, fuzzy
 msgid "S_ource"
-msgstr "Imvano:"
+msgstr "Imvano"
 
 #: gnucash/gtkbuilder/dialog-price.glade:369
 #, fuzzy
@@ -17600,9 +17589,8 @@ msgstr ""
 # svx/source\dialog\imapdlg.src:RID_SVXDLG_IMAP.FT_URL.text
 #: gnucash/gtkbuilder/dialog-print-check.glade:519
 #: gnucash/gtkbuilder/dialog-print-check.glade:1063
-#, fuzzy
 msgid "_Address"
-msgstr "Aderesi:"
+msgstr "Aderesi"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:544
 msgid "Checks on first _page"
@@ -17757,14 +17745,12 @@ msgid "Enter report row/column span"
 msgstr "Icyegeranyo Urubariro Inkingi"
 
 #: gnucash/gtkbuilder/dialog-report.glade:551
-#, fuzzy
 msgid "_Row span"
-msgstr "Igihe ky'Urubariro:"
+msgstr "Igihe ky'Urubariro"
 
 #: gnucash/gtkbuilder/dialog-report.glade:566
-#, fuzzy
 msgid "_Column span"
-msgstr "Igihe ky'inkingi:"
+msgstr "Igihe ky'inkingi"
 
 #: gnucash/gtkbuilder/dialog-report.glade:592
 msgid "Select HTML Style Sheet"
@@ -18359,9 +18345,8 @@ msgid "_Username"
 msgstr "Izina ry'ukoresha"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:100
-#, fuzzy
 msgid "_Password"
-msgstr "Ijambobanga:"
+msgstr "Ijambobanga"
 
 #: gnucash/gtkbuilder/dialog-vendor.glade:199
 #, fuzzy
@@ -18995,9 +18980,8 @@ msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
-#, fuzzy
 msgid "Budget Name"
-msgstr "Izina rya konti:"
+msgstr "Izina rya konti"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:585
 #, fuzzy
