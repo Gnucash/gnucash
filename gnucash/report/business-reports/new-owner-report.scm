@@ -115,11 +115,11 @@
   (vector-ref columns-used 0))
 (define (date-due-col columns-used)
   (vector-ref columns-used 1))
-(define (num-col columns-used)
+(define (ref-col columns-used)
   (vector-ref columns-used 2))
 (define (type-col columns-used)
   (vector-ref columns-used 3))
-(define (memo-col columns-used)
+(define (desc-col columns-used)
   (vector-ref columns-used 4))
 (define (sale-col columns-used)
   (vector-ref columns-used 5))
@@ -129,14 +129,14 @@
   (vector-ref columns-used 7))
 (define (debit-col columns-used)
   (vector-ref columns-used 8))
-(define (value-col columns-used)
+(define (bal-col columns-used)
   (vector-ref columns-used 9))
 (define (num-link-cols columns-used)
   (+ (if (date-col columns-used) 1 0)
-     (if (num-col columns-used) 1 0)
+     (if (ref-col columns-used) 1 0)
      (if (type-col columns-used) 1 0)
-     (if (memo-col columns-used) 1 0)
-     (if (value-col columns-used) 1 0)))
+     (if (desc-col columns-used) 1 0)
+     (if (bal-col columns-used) 1 0)))
 (define columns-used-size 10)
 
 (define (build-column-used options)
@@ -172,11 +172,11 @@
         (addto! heading-list (_ date-header)))
     (if (date-due-col column-vector)
         (addto! heading-list (_ due-date-header)))
-    (if (num-col column-vector)
+    (if (ref-col column-vector)
         (addto! heading-list (_ reference-header)))
     (if (type-col column-vector)
         (addto! heading-list (_ type-header)))
-    (if (memo-col column-vector)
+    (if (desc-col column-vector)
         (addto! heading-list (_ desc-header)))
     (if (sale-col column-vector)
         (addto! heading-list (_ sale-header)))
@@ -186,16 +186,16 @@
         (addto! heading-list (_ credit-header)))
     (if (debit-col column-vector)
         (addto! heading-list (_ debit-header)))
-    (if (value-col column-vector)
+    (if (bal-col column-vector)
         (addto! heading-list (_ amount-header)))
     (case link-option
       ((simple)
        (addto! heading-list (_ linked-txns-header)))
       ((detailed)
        (if (date-col column-vector) (addto! heading-list (_ "Date")))
-       (if (num-col column-vector) (addto! heading-list (_ "Reference")))
+       (if (ref-col column-vector) (addto! heading-list (_ "Reference")))
        (if (type-col column-vector) (addto! heading-list (_ "Type")))
-       (if (memo-col column-vector) (addto! heading-list (_ "Description")))
+       (if (desc-col column-vector) (addto! heading-list (_ "Description")))
        (if (or (debit-col column-vector) (credit-col column-vector))
            (addto! heading-list (_ "Amount")))))
     (reverse heading-list)))
@@ -290,23 +290,23 @@
 ;;
 ;; Make a row list based on the visible columns
 ;;
-(define (add-row table odd-row? column-vector date due-date num type-str
-                 memo currency amt credit debit sale tax anchor-split link-rows)
+(define (add-row table odd-row? column-vector date due-date ref type-str
+                 desc currency amt credit debit sale tax anchor-split link-rows)
   (define empty-cols
     (count identity
            (map (lambda (f) (f column-vector))
-                (list date-col date-due-col num-col type-col
-                      memo-col sale-col tax-col credit-col
-                      debit-col value-col))))
+                (list date-col date-due-col ref-col type-col
+                      desc-col sale-col tax-col credit-col
+                      debit-col bal-col))))
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
     (cond
      ((link-data? link-data)
       (append
        (addif (date-col column-vector) (link-data-date link-data))
-       (addif (num-col column-vector) (link-data-ref link-data))
+       (addif (ref-col column-vector) (link-data-ref link-data))
        (addif (type-col column-vector) (link-data-type link-data))
-       (addif (memo-col column-vector) (link-data-desc link-data))
+       (addif (desc-col column-vector) (link-data-desc link-data))
        (addif (or (debit-col column-vector) (credit-col column-vector))
               (gnc:make-html-table-cell/markup
                "number-cell" (link-data-amount link-data)))))
@@ -317,7 +317,7 @@
         (gnc:make-html-table-cell/size
          1 (count identity
                   (map (lambda (f) (f column-vector))
-                       (list date-col num-col type-col memo-col)))
+                       (list date-col ref-col type-col desc-col)))
          (link-desc-amount-desc link-data)))
        (addif (or (debit-col column-vector) (credit-col column-vector))
               (gnc:make-html-table-cell/markup
@@ -326,7 +326,7 @@
      ((link-blank? link-data)
       (make-list (count identity
                         (map (lambda (f) (f column-vector))
-                             (list date-col num-col type-col memo-col value-col)))
+                             (list date-col ref-col type-col desc-col bal-col)))
                  #f))
 
      (else link-data)))
@@ -352,19 +352,19 @@
               (addif (date-col column-vector) (qof-print-date date))
               (addif (date-due-col column-vector)
                      (and due-date (qof-print-date due-date)))
-              (addif (num-col column-vector)    num)
+              (addif (ref-col column-vector)    ref)
               (addif (type-col column-vector)   type-str)
-              (addif (memo-col column-vector)   memo)
+              (addif (desc-col column-vector)   desc)
               (addif (sale-col column-vector)   (cell sale))
               (addif (tax-col column-vector)    (cell tax))))
             (map
              (lambda (cell)
                (gnc:make-html-table-cell/size/markup nrows 1 "number-cell" cell))
              (append
-              (addif (credit-col column-vector) (cell-anchor credit))
-              (addif (debit-col column-vector)  (cell-anchor (and debit (- debit))))
-              (addif (value-col column-vector)  (cell amt))))
-             (link-data->cols (car link-rows))))
+              (addif (credit-col column-vector)  (cell-anchor credit))
+              (addif (debit-col column-vector)   (cell-anchor (and debit (- debit))))
+              (addif (bal-col column-vector)     (cell amt))))
+            (link-data->cols (car link-rows))))
           (gnc:html-table-append-row/markup!
            table (if odd-row? "normal-row" "alternate-row")
            (link-data->cols (car link-rows))))
@@ -386,7 +386,7 @@
       (total-cell (gnc:make-gnc-monetary currency amt)))
     (define span
       (count identity (map (lambda (f) (f used-columns))
-                           (list memo-col type-col num-col date-due-col date-col))))
+                           (list desc-col type-col ref-col date-due-col date-col))))
     ;; print period totals
     (if (or (sale-col used-columns) (tax-col used-columns)
             (credit-col used-columns) (debit-col used-columns))
@@ -400,11 +400,11 @@
           (addif (tax-col used-columns)    (make-cell tax))
           (addif (credit-col used-columns) (make-cell credit))
           (addif (debit-col used-columns)  (make-cell (- debit)))
-          (addif (value-col used-columns) (make-cell (+ credit debit)))
+          (addif (bal-col used-columns)    (make-cell (+ credit debit)))
           (addif (> link-cols 0) (gnc:make-html-table-cell/size 1 link-cols #f)))))
 
     ;; print grand total
-    (if (value-col used-columns)
+    (if (bal-col used-columns)
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (append
@@ -414,7 +414,7 @@
                      (_ "Total Credit")
                      (_ "Total Due")))
                 (gnc:make-html-table-cell/size/markup
-                 1 (value-col used-columns)
+                 1 (bal-col used-columns)
                  "total-number-cell"
                  (gnc:make-gnc-monetary currency total)))
           (addif (> link-cols 0)
@@ -446,9 +446,9 @@
          (split->type-str tfr-split)
          (split->desc tfr-split)
          (gnc:make-html-text
-           (gnc:html-markup-anchor
-            (gnc:split-anchor-text (txn->transfer-split pmt-txn))
-            (gnc:make-gnc-monetary tfr-curr tfr-amt))))))
+          (gnc:html-markup-anchor
+           (gnc:split-anchor-text (txn->transfer-split pmt-txn))
+           (gnc:make-gnc-monetary tfr-curr tfr-amt))))))
     (define (posting-split->row posting-split)
       (let* ((posting-txn (xaccSplitGetParent posting-split))
              (inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot posting-split))))
@@ -477,7 +477,7 @@
                (cons (make-link-desc-amount
                       (_ "UNPAID")
                       (gnc:make-gnc-monetary
-                        currency (AP-negate (gnc-lot-get-balance lot))))
+                       currency (AP-negate (gnc-lot-get-balance lot))))
                      result))))
 
          ;; This is the regular payment split. Find Transfer acct
@@ -563,9 +563,7 @@
         (lambda (inv)
           (gnc:html-markup-anchor
            (gnc:invoice-anchor-text inv)
-           (gnc-get-num-action
-            (gncInvoiceGetPostedTxn inv)
-            #f)))
+           (gncInvoiceGetID inv)))
         (cdr (payment-txn->overpayment-and-invoices txn)))))))
 
   (define (make-payment->invoices-table txn)
@@ -632,7 +630,7 @@
      ((null? splits)
       ;;Balance row may not have been added if all transactions were before
       ;;start-date (and no other rows would be added either) so add it now
-      (when (and (not printed?) (value-col used-columns) (not (zero? total)))
+      (when (and (not printed?) (bal-col used-columns) (not (zero? total)))
         (add-balance-row odd-row? total))
       (print-totals total debit credit tax sale)
       (gnc:html-table-set-style!
@@ -675,7 +673,7 @@
          ;; if balance row hasn't been rendered, consider
          ;; adding here.  skip if value=0.
          ((not printed?)
-          (let ((print? (and (value-col used-columns) (not (zero? total)))))
+          (let ((print? (and (bal-col used-columns) (not (zero? total)))))
             (if print? (add-balance-row odd-row? total))
             (lp #t (not print?) splits total debit credit tax sale)))
 
