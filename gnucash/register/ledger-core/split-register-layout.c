@@ -637,7 +637,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            /* Translators: The 'sample:' items are
                               strings which are not displayed, but only
                               used to estimate widths. */
-                           C_("sample", "12/12/2000"),
+                           C_("sample", "22/02/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -645,7 +645,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DDUE_CELL,
                            DATE_CELL_TYPE_NAME,
-                           C_("sample", "12/12/2000"),
+                           C_("sample", "22/02/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
