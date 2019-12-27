@@ -2294,7 +2294,11 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 VirtualLocation virt_loc;
                 const char *text;
 
-                virt_loc.vcell_loc = vcell_loc;
+                if (virt_row == 0)
+                    virt_loc.vcell_loc = sheet->table->current_cursor_loc.vcell_loc;
+                else
+                    virt_loc.vcell_loc = vcell_loc;
+
                 virt_loc.phys_row_offset = cell_row;
                 virt_loc.phys_col_offset = cell_col;
 
