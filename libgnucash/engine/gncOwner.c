@@ -838,8 +838,6 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
         xaccTransSetDescription (txn, name ? name : "");
         /* set per book option */
         xaccTransSetCurrency (txn, commodity);
-        xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-        xaccTransSetDatePostedSecs (txn, date);
 
 
         /* The split for the transfer account */
@@ -891,6 +889,10 @@ gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
     /* Mark the transaction as a payment */
     gnc_set_num_action (txn, NULL, num, _("Payment"));
     xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
+
+    /* Set date for transaction */
+    xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
+    xaccTransSetDatePostedSecs (txn, date);
 
     /* Commit this new transaction */
     xaccTransCommitEdit (txn);
