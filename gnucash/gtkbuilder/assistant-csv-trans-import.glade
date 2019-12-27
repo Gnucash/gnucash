@@ -128,7 +128,11 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Delete Settings</property>
+                            <property name="tooltip_text" translatable="yes">Delete Settings
+Deletes the settings saved under the name as entered in the adjacent text field.
+There are two reserved names which can never be deleted:
+- No settings
+- Gnucash default export format</property>
                             <signal name="clicked" handler="csv_tximp_preview_del_settings_cb" swapped="no"/>
                             <child>
                               <object class="GtkImage" id="image2">
@@ -150,7 +154,11 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Save Settings</property>
+                            <property name="tooltip_text" translatable="yes">Save Settings
+Saves current settings under the name as entered in the adjacent text field.
+There are two reserved names which can't be used to save custom settings:
+- No settings
+- Gnucash default export format</property>
                             <signal name="clicked" handler="csv_tximp_preview_save_settings_cb" swapped="no"/>
                             <child>
                               <object class="GtkImage" id="image1">
