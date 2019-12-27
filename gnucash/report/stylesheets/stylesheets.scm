@@ -27,6 +27,7 @@
 (define-module (gnucash report stylesheets))
 
 (use-modules (gnucash utilities))
+(use-modules (gnucash report stylesheet-css))
 (use-modules (gnucash report stylesheet-plain))
 (use-modules (gnucash report stylesheet-footer))
 (use-modules (gnucash report stylesheet-head-or-tail))

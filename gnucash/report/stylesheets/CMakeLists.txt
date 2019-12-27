@@ -36,6 +36,7 @@ install(TARGETS gncmod-stylesheets
 # Scheme
 
 set(stylesheets_SCHEME_1
+  stylesheet-css.scm
   stylesheet-plain.scm
   stylesheet-footer.scm
   stylesheet-head-or-tail.scm
