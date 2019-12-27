@@ -1596,10 +1596,14 @@ void CsvImpTransAssist::preview_refresh_table ()
     g_object_unref (combostore);
 
     /* Also reset the base account combo box as it's value may have changed due to column changes here */
-    g_signal_handlers_block_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
-    gnc_account_sel_set_account(GNC_ACCOUNT_SEL(acct_selector),
-            tx_imp->base_account() , false);
-    g_signal_handlers_unblock_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
+    auto base_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(acct_selector));
+    if (tx_imp->base_account() != base_acct)
+    {
+        g_signal_handlers_block_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
+        gnc_account_sel_set_account(GNC_ACCOUNT_SEL(acct_selector),
+                tx_imp->base_account() , false);
+        g_signal_handlers_unblock_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
+    }
 
     /* Make the things actually appear. */
     gtk_widget_show_all (GTK_WIDGET(treeview));

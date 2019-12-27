@@ -139,6 +139,11 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
 static void
 combo_changed_cb(GNCAccountSel *gas, gpointer combo)
 {
+    gint selected = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+    if (selected == gas->currentSelection)
+        return;
+
+    gas->currentSelection = selected;
     g_signal_emit_by_name(gas, "account_sel_changed");
 }
 
@@ -152,6 +157,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->initDone = FALSE;
     gas->acctTypeFilters = FALSE;
     gas->newAccountButton = NULL;
+    gas->currentSelection = -1;
 
     g_object_set(gas, "spacing", 2, (gchar*)NULL);
 
