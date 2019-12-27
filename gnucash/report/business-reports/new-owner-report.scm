@@ -446,7 +446,10 @@
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
              currency total #f #f #f #f (list (make-list link-cols #f))
-             link-option (list (make-link-blank))))
+             link-option (case link-option
+                           ((none) '(()))
+                           ((simple) '((#f)))
+                           ((detailed) (list (make-link-blank))))))
 
   (define (make-invoice->payments-table invoice)
     (define (tfr-split->row tfr-split)
