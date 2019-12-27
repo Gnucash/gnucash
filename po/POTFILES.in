@@ -496,6 +496,7 @@ gnucash/report/standard-reports/transaction.scm
 gnucash/report/standard-reports/trial-balance.scm
 gnucash/report/stylesheets/gncmod-stylesheets.c
 gnucash/report/stylesheets/gnc-plugin-stylesheets.c
+gnucash/report/stylesheets/stylesheet-css.scm
 gnucash/report/stylesheets/stylesheet-footer.scm
 gnucash/report/stylesheets/stylesheet-head-or-tail.scm
 gnucash/report/stylesheets/stylesheet-plain.scm

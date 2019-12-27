@@ -28,27 +28,68 @@
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define default-css "
-h3 { font-family: Noto Sans, Sans-Serif; font-size: 15pt; font-weight: bold; }
-a { font-family: Noto Sans, Sans-Serif; font-size: 10pt; font-style: italic; }
-body, p, table, tr, td { vertical-align: top; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-tr.alternate-row { background: #ffffff }
-tr { page-break-inside: avoid !important;}
-html, body { height: 100vh; margin: 0; }
-td, th { border-color: grey }
-th.column-heading-left { text-align: left; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-th.column-heading-center { text-align: center; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-th.column-heading-right { text-align: right; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-td.neg { color: red; }
-td.number-cell, td.total-number-cell { text-align: right; white-space: nowrap; }
-td.date-cell { white-space: nowrap; }
-td.anchor-cell { white-space: nowrap; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-td.number-cell { font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-td.number-header { text-align: right; font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-td.text-cell { font-family: Noto Sans, Sans-Serif; font-size: 10pt; }
-td.total-number-cell { font-family: Noto Sans, Sans-Serif; font-size: 12pt; font-weight: bold; }
-td.total-label-cell { font-family: Noto Sans, Sans-Serif; font-size: 12pt; font-weight: bold; }
-td.centered-label-cell { text-align: center; font-family: Noto Sans, Sans-Serif; font-size: 12pt; font-weight: bold; }
+(define default-css "/* default style */
+html, body {
+    height: 100vh;
+    margin: 0;
+    font-family: \"Noto Sans\", Sans-Serif;
+    font-size: 10pt;
+}
+
+body, p, table, tr, td, a, th {
+    vertical-align: top;
+}
+
+h3 {
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+a {
+    font-style: italic;
+}
+
+/* table elements as follows */
+td, th {
+    padding:4px;
+}
+
+tr.alternate-row {
+    background: #ffffff
+}
+
+tr {
+    page-break-inside: avoid !important;
+}
+
+td, th {
+    border-color: grey
+}
+
+td.total-number-cell, td.total-label-cell, td.centered-label-cell {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+th.column-heading-left {
+    text-align: left;
+}
+
+td.centered-label-cell, th.column-heading-center {
+    text-align: center;
+}
+
+td.number-header, th.column-heading-right, td.number-cell, td.total-number-cell {
+    text-align: right;
+}
+
+td.neg {
+    color: red;
+}
+
+td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
+    white-space: nowrap;
+}
 ")
 
 (define (css-options)
@@ -157,4 +198,4 @@ td.centered-label-cell { text-align: center; font-family: Noto Sans, Sans-Serif;
  'renderer css-renderer
  'options-generator css-options)
 
-(gnc:make-html-style-sheet "CSS" (N_ "CSS-based stylesheet"))
+(gnc:make-html-style-sheet "CSS" (N_ "CSS-based stylesheet (experimental)"))
