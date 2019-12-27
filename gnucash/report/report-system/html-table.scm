@@ -204,17 +204,33 @@
 (define gnc:html-table-set-caption!
   (record-modifier <html-table> 'caption))
 
-(define gnc:html-table-col-headers
+;; note the following function is now generally unused.
+(define (gnc:html-table-col-headers table)
+  (issue-deprecation-warning "gnc:html-table-col-headers is deprecated. \
+use gnc:html-table-multirow-col-headers instead.")
+  (let ((headers ((record-accessor <html-table> 'col-headers) table)))
+    (cond
+     ((not headers) #f)
+     ((null? (cdr headers)) (car headers))
+     (else (gnc:warn "gnc:html-table-col-headers used on a table object \
+with multiple rows. returning the first row only.") (car headers)))))
+
+(define (gnc:html-table-set-col-headers! table col-headers)
+  (gnc:html-table-set-multirow-col-headers! table (list col-headers)))
+
+(define gnc:html-table-multirow-col-headers
   (record-accessor <html-table> 'col-headers))
 
-(define gnc:html-table-set-col-headers!
+(define gnc:html-table-set-multirow-col-headers!
   (record-modifier <html-table> 'col-headers))
 
-(define gnc:html-table-row-headers
-  (record-accessor <html-table> 'row-headers))
+(define (gnc:html-table-row-headers table)
+  (issue-deprecation-warning "gnc:html-table-row-headers is unused.")
+  ((record-accessor <html-table> 'row-headers) table))
 
-(define gnc:html-table-set-row-headers!
-  (record-modifier <html-table> 'row-headers))
+(define (gnc:html-table-set-row-headers! table . rest)
+  (issue-deprecation-warning "gnc:html-table-set-row-headers! is unused.")
+  (apply (record-modifier <html-table> 'row-headers) table rest))
 
 (define gnc:html-table-style
   (record-accessor <html-table> 'style))
@@ -458,7 +474,7 @@
     ;; compile the col styles with the header style pushed; we'll
     ;; recompile them later, but this will have the benefit of
     ;; compiling in the col-header-style.
-    (let ((ch (gnc:html-table-col-headers table)))
+    (let ((ch (gnc:html-table-multirow-col-headers table)))
       (when ch
         (gnc:html-document-push-style doc (gnc:html-table-col-headers-style table))
 
@@ -473,25 +489,29 @@
 
         ;; render the headers
         (push (gnc:html-document-markup-start doc "thead" #t))
-        (push (gnc:html-document-markup-start doc "tr" #t))
-        (let lp ((ch ch)
-                 (colnum 0))
-          (unless (null? ch)
-            (let ((hdr (car ch)))
-              (gnc:html-document-push-style
-               doc (gnc:html-table-col-style table colnum))
-              (unless (gnc:html-table-cell? hdr)
-                (push (gnc:html-document-markup-start doc "th" #t)))
-              (push (gnc:html-object-render hdr doc))
-              (unless (gnc:html-table-cell? hdr)
-                (push (gnc:html-document-markup-end doc "th")))
-              (gnc:html-document-pop-style doc)
-              (lp (cdr ch)
-                  (+ colnum
-                     (if (gnc:html-table-cell? hdr)
-                         (gnc:html-table-cell-colspan hdr)
-                         1))))))
-        (push (gnc:html-document-markup-end doc "tr"))
+
+        (for-each
+         (lambda (ch-row)
+           (push (gnc:html-document-markup-start doc "tr" #t))
+           (let lp ((ch-row ch-row) (colnum 0))
+             (unless (null? ch-row)
+               (let* ((hdr (car ch-row))
+                      (table-cell? (gnc:html-table-cell? hdr))
+                      (col-style (gnc:html-table-col-style table colnum)))
+                 (gnc:html-document-push-style doc col-style)
+                 (cond
+                  (table-cell?
+                   (push (gnc:html-object-render hdr doc)))
+                  (else
+                   (push (gnc:html-document-markup-start doc "th" #t))
+                   (push (gnc:html-object-render hdr doc))
+                   (push (gnc:html-document-markup-end doc "th"))))
+                 (gnc:html-document-pop-style doc)
+                 (lp (cdr ch-row)
+                     (+ colnum
+                        (if table-cell? (gnc:html-table-cell-colspan hdr) 1))))))
+           (push (gnc:html-document-markup-end doc "tr")))
+         ch)
         (push (gnc:html-document-markup-end doc "thead"))
 
         ;; pop the col header style

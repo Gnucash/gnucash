@@ -586,6 +586,8 @@
 (export gnc:html-table-set-caption!)
 (export gnc:html-table-col-headers)
 (export gnc:html-table-set-col-headers!)
+(export gnc:html-table-multirow-col-headers)
+(export gnc:html-table-set-multirow-col-headers!)
 (export gnc:html-table-row-headers)
 (export gnc:html-table-set-row-headers!)
 (export gnc:html-table-style)
