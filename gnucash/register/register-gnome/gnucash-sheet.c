@@ -2288,6 +2288,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
             continue;
 
         if (cell_col < style->ncols)
+        {
             for (cell_row = 0; cell_row < style->nrows; cell_row++)
             {
                 VirtualLocation virt_loc;
@@ -2320,15 +2321,16 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 if ((g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
                     || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0))
                 {
-                    width += gnc_item_edit_get_button_width (item_edit);
+                    width += gnc_item_edit_get_button_width (item_edit) + 2; // add 2 for the button margin
                 }
                 max = MAX (max, width);
             }
+        }
     }
 
     g_object_unref (layout);
 
-    return max + 1; // add 1 for the border
+    return max;
 }
 
 void
