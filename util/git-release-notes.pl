@@ -64,8 +64,8 @@ while(<$revs>) {
     $item .= $rev;
     if ($rev =~ /<\{\}>$/) {
         $item =~ s/<\{\}>//;
-        if ($item =~ m/^Bug[\s:]?[0-9]+/) {
-            $item =~ s/^Bug[\s:]?([0-9]+)[ -]*/Bug $1 - /;
+        if ($item =~ m/^[\s\[]*[Bb]ug[\]\s:\-\#]*[0-9]+/) {
+            $item =~ s/^[\s\[]*[Bb]ug[\]\s:\-\#]*([0-9]+)[ -]*/Bug $1 - /;
             push @bugs, $item;
         } else {
             push @improves, $item;
