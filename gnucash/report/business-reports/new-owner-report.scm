@@ -131,16 +131,30 @@
   (vector-ref columns-used 8))
 (define (bal-col columns-used)
   (vector-ref columns-used 9))
-(define (num-link-cols columns-used)
-  (+ (if (or (date-col columns-used) (type-col columns-used)
-             (ref-col columns-used) (credit-col columns-used)
-             (desc-col columns-used) (debit-col columns-used))
-         1 0)
-     (if (date-col columns-used) 1 0)
-     (if (ref-col columns-used) 1 0)
-     (if (type-col columns-used) 1 0)
-     (if (desc-col columns-used) 1 0)
-     (if (or (credit-col columns-used) (debit-col columns-used)) 1 0)))
+
+(define (num-cols columns-used section)
+  (let* ((date? (date-col columns-used))
+         (due? (date-due-col columns-used))
+         (ref? (ref-col columns-used))
+         (type? (type-col columns-used))
+         (desc? (desc-col columns-used))
+         (sale? (sale-col columns-used))
+         (tax? (tax-col columns-used))
+         (credit? (credit-col columns-used))
+         (debit? (debit-col columns-used))
+         (bal? (bal-col columns-used))
+         (spacer? (or date? type? ref? desc? debit? credit?))
+         (amt? (or credit? debit?))
+         (cols-alist
+          (list
+           (list 'lhs-cols date? due? ref? type? desc? sale? tax? credit? debit? bal?)
+           (list 'ptt-span date? due? ref? type? desc?)
+           (list 'mid-spac spacer?)
+           (list 'rhs-cols date? ref? type? desc? amt?)
+           (list 'rhs-span date? ref? type? desc?)))
+         (cols-list (assq-ref cols-alist section)))
+    (count identity cols-list)))
+
 (define columns-used-size 10)
 
 (define (build-column-used options)
@@ -196,10 +210,7 @@
       ((simple)
        (addto! heading-list (_ linked-txns-header)))
       ((detailed)
-       (if (or (date-col column-vector) (type-col column-vector)
-               (ref-col column-vector) (credit-col column-vector)
-               (desc-col column-vector) (debit-col column-vector))
-           (addto! heading-list #f))
+       (if (< 0 (num-cols column-vector 'mid-spac)) (addto! heading-list #f))
        (if (date-col column-vector) (addto! heading-list (_ "Date")))
        (if (ref-col column-vector) (addto! heading-list (_ "Reference")))
        (if (type-col column-vector) (addto! heading-list (_ "Type")))
@@ -295,18 +306,24 @@
 (define-syntax-rule (addif pred? elt)
   (if pred? (list elt) '()))
 
+(define (make-section-heading-list column-vector owner-desc)
+  (define (make-heading cols str)
+    (gnc:make-html-table-cell/size/markup 1 cols "th" str))
+  (let ((lhs (num-cols column-vector 'lhs-cols))
+        (mid (num-cols column-vector 'mid-spac))
+        (rhs (num-cols column-vector 'rhs-cols)))
+    (append
+     ;; Translators: ~a History refers to main details table in owner
+     ;; report. ~a will be replaced with Customer, Vendor or Employee.
+     (addif (< 0 lhs) (make-heading lhs (format #f (_ "~a History") owner-desc)) )
+     (addif (< 0 mid) (make-heading mid #f))
+     (addif (< 0 rhs) (make-heading rhs (_ "Linked Details"))))))
 ;;
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
                  desc currency amt credit debit sale tax anchor-split
                  link-option link-rows)
-  (define empty-cols
-    (count identity
-           (map (lambda (f) (f column-vector))
-                (list date-col date-due-col ref-col type-col
-                      desc-col sale-col tax-col credit-col
-                      debit-col bal-col))))
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
     (cond
@@ -321,9 +338,7 @@
                "number-cell" (link-data-amount link-data)))))
 
      ((link-desc-amount? link-data)
-      (let ((cols (count identity
-                         (map (lambda (f) (f column-vector))
-                              (list date-col ref-col type-col desc-col)))))
+      (let ((cols (num-cols column-vector 'rhs-span)))
         (append
          (addif (< 0 cols) (gnc:make-html-table-cell/size
                             1 cols (link-desc-amount-desc link-data)))
@@ -332,10 +347,7 @@
                  "number-cell" (link-desc-amount-amount link-data))))))
 
      ((link-blank? link-data)
-      (make-list (count identity
-                        (map (lambda (f) (f column-vector))
-                             (list date-col ref-col type-col desc-col bal-col)))
-                 #f))
+      (make-list (num-cols column-vector 'rhs-cols) #f))
 
      (else link-data)))
   (define (cell amt)
@@ -351,6 +363,8 @@
       (gnc:html-table-cell-set-style!
        cell "td" 'attribute '("style" "border-bottom: none; border-top: none;"))
       cell))
+  (define mid-span
+    (if (eq? link-option 'detailed) (num-cols column-vector 'mid-spac) 0))
   (let lp ((link-rows link-rows)
            (first-row? #t))
     (unless (null? link-rows)
@@ -377,7 +391,7 @@
               (addif (credit-col column-vector)  (cell-anchor credit))
               (addif (debit-col column-vector)   (cell-anchor (and debit (- debit))))
               (addif (bal-col column-vector)     (cell amt))))
-            (addif (eq? link-option 'detailed) cell-nohoriz)
+            (addif (< 0 mid-span) cell-nohoriz)
             (link-data->cols (car link-rows))))
           (gnc:html-table-append-row/markup!
            table (if odd-row? "normal-row" "alternate-row")
@@ -389,63 +403,68 @@
   (define (AP-negate num)
     (if payable? (- num) num))
   (define currency (xaccAccountGetCommodity acc))
-  (define link-cols (assq-ref `((none . 0)
-                                (simple . 1)
-                                (detailed . ,(num-link-cols used-columns)))
-                              link-option))
+  (define rhs-cols (assq-ref `((none . 0)
+                               (simple . 1)
+                               (detailed . ,(num-cols used-columns 'rhs-cols)))
+                             link-option))
+  (define mid-span
+    (if (eq? link-option 'detailed) (num-cols used-columns 'mid-spac) 0))
   (define (print-totals total debit credit tax sale)
     (define (total-cell cell)
       (gnc:make-html-table-cell/markup "total-number-cell" cell))
     (define (make-cell amt)
       (total-cell (gnc:make-gnc-monetary currency amt)))
-    (define span
-      (count identity (map (lambda (f) (f used-columns))
-                           (list desc-col type-col ref-col date-due-col date-col))))
+    (define period-span (num-cols used-columns 'ptt-span))
+    (define grand-span (num-cols used-columns 'lhs-cols))
     ;; print period totals
     (if (or (sale-col used-columns) (tax-col used-columns)
             (credit-col used-columns) (debit-col used-columns))
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (append
-          (list (gnc:make-html-table-cell/markup
-                 "total-label-cell" (_ "Period Totals")))
-          (addif (>= span 2) (gnc:make-html-table-cell/size 1 (1- span) ""))
+          (addif (< 0 period-span) (gnc:make-html-table-cell/markup
+                                    "total-label-cell" (_ "Period Totals")))
+          (addif (< 1 period-span) (gnc:make-html-table-cell/size
+                                    1 (1- period-span) #f))
           (addif (sale-col used-columns)   (make-cell sale))
           (addif (tax-col used-columns)    (make-cell tax))
           (addif (credit-col used-columns) (make-cell credit))
           (addif (debit-col used-columns)  (make-cell (- debit)))
           (addif (bal-col used-columns)    (make-cell (+ credit debit)))
-          (addif (> link-cols 0) (gnc:make-html-table-cell/size 1 link-cols #f)))))
+          (addif (< 0 rhs-cols) (gnc:make-html-table-cell/size
+                                 1 (+ mid-span rhs-cols) #f)))))
 
     ;; print grand total
     (if (bal-col used-columns)
         (gnc:html-table-append-row/markup!
          table "grand-total"
          (append
-          (list (gnc:make-html-table-cell/markup
-                 "total-label-cell"
-                 (if (negative? total)
-                     (_ "Total Credit")
-                     (_ "Total Due")))
-                (gnc:make-html-table-cell/size/markup
-                 1 (bal-col used-columns)
-                 "total-number-cell"
-                 (gnc:make-gnc-monetary currency total)))
-          (addif (> link-cols 0)
-                 (gnc:make-html-table-cell/size 1 link-cols #f)))))
+          (addif (< 1 grand-span)
+                 (gnc:make-html-table-cell/markup
+                  "total-label-cell"
+                  (if (negative? total)
+                      (_ "Total Credit")
+                      (_ "Total Due"))))
+          (addif (< 1 grand-span)
+                 (gnc:make-html-table-cell/size/markup
+                  1 (1- grand-span)
+                  "total-number-cell"
+                  (gnc:make-gnc-monetary currency total)))
+          (addif (< 0 rhs-cols)
+                 (gnc:make-html-table-cell/size 1 (+ mid-span rhs-cols) #f)))))
 
     ;; print aging table
     (gnc:html-table-append-row/markup!
      table "grand-total"
      (list (gnc:make-html-table-cell/size
-            1 (+ columns-used-size link-cols)
+            1 (+ grand-span mid-span rhs-cols)
             (make-aging-table splits
                               end-date
                               payable? date-type currency)))))
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
-             currency total #f #f #f #f (list (make-list link-cols #f))
+             currency total #f #f #f #f (list (make-list rhs-cols #f))
              link-option (case link-option
                            ((none) '(()))
                            ((simple) '((#f)))
@@ -914,6 +933,7 @@ invoices and amounts.")))))
          (query (qof-query-create-for-splits))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
+         (section-headings (make-section-heading-list used-columns owner-descr))
          (headings (make-heading-list used-columns link-option))
          (report-title (string-append (_ owner-descr) " " (_ "Report"))))
 
@@ -1022,7 +1042,11 @@ invoices and amounts.")))))
 
           (make-break! document)
 
-          (gnc:html-table-set-col-headers! table headings)
+          (gnc:html-table-set-multirow-col-headers!
+           table
+           (if (eq? link-option 'detailed)
+               (list section-headings headings)
+               (list headings)))
 
           (gnc:html-document-add-object! document table))))))
 
