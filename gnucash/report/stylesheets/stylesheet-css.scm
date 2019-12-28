@@ -106,10 +106,12 @@ td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
 
 (define (css-renderer options doc)
 
-  (let ((ssdoc (gnc:make-html-document))
-        (css (gnc:option-value (gnc:lookup-option options "General" "CSS")))
-        (headline (or (gnc:html-document-headline doc)
-                      (gnc:html-document-title doc))))
+  (let* ((ssdoc (gnc:make-html-document))
+         (css (gnc:option-value (gnc:lookup-option options "General" "CSS")))
+         (report-css (or (gnc:html-document-style-text doc) ""))
+         (all-css (string-append css report-css))
+         (headline (or (gnc:html-document-headline doc)
+                       (gnc:html-document-title doc))))
 
     (gnc:html-document-set-style!
      ssdoc "column-heading-left"
@@ -182,7 +184,16 @@ td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
     (gnc:html-document-set-style! ssdoc "secondary-subheading" 'tag "tr")
     (gnc:html-document-set-style! ssdoc "grand-total" 'tag "tr")
 
-    (gnc:html-document-set-style-text! ssdoc css)
+    (cond
+     ((string-contains-ci all-css "</style>")
+      (gnc:html-document-set-style-text! ssdoc default-css)
+      (gnc:html-document-add-object!
+       ssdoc (gnc:make-html-text
+              (_ "CSS contains &lt;/style&gt; which is disallowed. \
+Using default CSS. Please amend"))))
+
+     (else
+      (gnc:html-document-set-style-text! ssdoc all-css)))
 
     (unless (equal? headline "")
       (gnc:html-document-add-object!
