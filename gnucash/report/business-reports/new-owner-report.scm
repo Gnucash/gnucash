@@ -367,13 +367,13 @@
                      (and due-date (qof-print-date due-date)))
               (addif (ref-col column-vector)    ref)
               (addif (type-col column-vector)   type-str)
-              (addif (desc-col column-vector)   desc)
-              (addif (sale-col column-vector)   (cell sale))
-              (addif (tax-col column-vector)    (cell tax))))
+              (addif (desc-col column-vector)   desc)))
             (map
              (lambda (cell)
                (gnc:make-html-table-cell/size/markup nrows 1 "number-cell" cell))
              (append
+              (addif (sale-col column-vector)    (cell sale))
+              (addif (tax-col column-vector)     (cell tax))
               (addif (credit-col column-vector)  (cell-anchor credit))
               (addif (debit-col column-vector)   (cell-anchor (and debit (- debit))))
               (addif (bal-col column-vector)     (cell amt))))
