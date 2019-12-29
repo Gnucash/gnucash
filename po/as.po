@@ -15300,9 +15300,8 @@ msgstr "আমদানি কৰা লেনদেনৰ প্ৰথম স�
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "নিৰ্বাচিত লেনদেনটো সম্ভাৱনাপূৰ্ণ স্প্লিটবোৰে মিল কৰে: "
+msgstr "নিৰ্বাচিত লেনদেনটো সম্ভাৱনাপূৰ্ণ স্প্লিটবোৰে মিল কৰে"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15399,9 +15398,8 @@ msgid "Green"
 msgstr "সেউজীয়া"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "ডউনলোড কৰা লেনদেনবোৰৰ তালিকা (উত্সৰ স্প্লিট দেখুৱায়):"
+msgstr "ডউনলোড কৰা লেনদেনবোৰৰ তালিকা (উত্সৰ স্প্লিট দেখুৱায়)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18275,9 +18273,8 @@ msgstr ""
 "তিনিমহীয়া = প্ৰত্যেক 3 মাহ"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "আৰম্ভ হোৱা:"
+msgstr "আৰম্ভ হোৱা"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

@@ -14320,19 +14320,16 @@ msgid "window1"
 msgstr "उइन्ड'_1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "होनोगोनां सान: "
+msgstr "होनोगोनां सान"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "रेहाय सान: "
+msgstr "रेहाय सान"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "रेहाय %: "
+msgstr "रेहाय %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14701,9 +14698,8 @@ msgid "Discount"
 msgstr "रेहाय"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "क्रेडिट सिमा: "
+msgstr "क्रेडिट सिमा"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14820,9 +14816,8 @@ msgid "Payment Address"
 msgstr "रांहोनाय थं"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "राव: "
+msgstr "राव"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
@@ -15272,9 +15267,8 @@ msgstr "लाबोनाय लेनदेननि गिबि बोखा
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "सायखखानाय लेनदेनखौ जाथाव बोखावनाय गोरोबहोनाय: "
+msgstr "सायखखानाय लेनदेनखौ जाथाव बोखावनाय गोरोबहोनाय"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15372,9 +15366,8 @@ msgid "Green"
 msgstr "सोमखोर"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डाउनल'ड खालामनाय लेनदेनफोरनि लिस्ट (फुंखा बोखावनाय दिन्थिनाय):"
+msgstr "डाउनल'ड खालामनाय लेनदेनफोरनि लिस्ट (फुंखा बोखावनाय दिन्थिनाय)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18243,9 +18236,8 @@ msgstr ""
 "दानथामारि = मोनफ्रोम 3 दान"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "..आव जागायदों: "
+msgstr "..आव जागायदों"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

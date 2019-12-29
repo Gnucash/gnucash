@@ -14179,19 +14179,16 @@ msgid "window1"
 msgstr "ウィンドウ _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "支払期限日数: "
+msgstr "支払期限日数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "値引き期限日数: "
+msgstr "値引き期限日数"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "値引き %: "
+msgstr "値引き %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14558,9 +14555,8 @@ msgid "Discount"
 msgstr "値引"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "与信限度額: "
+msgstr "与信限度額"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14672,23 +14668,20 @@ msgid "Payment Address"
 msgstr "支払先住所"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "言語: "
+msgstr "言語"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "インターフェース"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "デフォルトの1日あたりの時間: "
+msgstr "デフォルトの1日あたりの時間"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "デフォルトのレート: "
+msgstr "デフォルトのレート"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15117,9 +15110,8 @@ msgstr "インポートされた取引の最初のスプリット"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "選択した取引に一致する可能性のあるスプリット: "
+msgstr "選択した取引に一致する可能性のあるスプリット"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15218,9 +15210,8 @@ msgid "Green"
 msgstr "青"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "ダウンロードされた取引一覧 (ソースのスプリット表示):"
+msgstr "ダウンロードされた取引一覧 (ソースのスプリット表示)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18054,9 +18045,8 @@ msgid ""
 msgstr "反復する期間の長さです。例 : 2週間 = 毎2週間、四半期 = 毎3ヶ月"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "開始日: "
+msgstr "開始日"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

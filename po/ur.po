@@ -14426,9 +14426,8 @@ msgid "Due Days"
 msgstr "بقایا دن :"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "چھوٹ كے دن: "
+msgstr "چھوٹ كے دن"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
 #, fuzzy
@@ -15480,9 +15479,8 @@ msgid "Green"
 msgstr "ہرا"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "ڈاؤن لوڈ كیے گئے لین دینوں كی فہرست (ماخذ پھیلاؤ دكھایا گیا ):"
+msgstr "ڈاؤن لوڈ كیے گئے لین دینوں كی فہرست (ماخذ پھیلاؤ دكھایا گیا )"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18377,9 +18375,8 @@ msgstr ""
 "ہر 3 ماہ"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "شروع كی تاریخ :"
+msgstr "شروع كی تاریخ "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

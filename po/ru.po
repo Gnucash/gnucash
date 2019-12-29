@@ -14427,19 +14427,16 @@ msgid "window1"
 msgstr "Окно _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Количество дней для оплаты: "
+msgstr "Количество дней для оплаты"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Дисконтные дни: "
+msgstr "Дисконтные дни"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Скидка %: "
+msgstr "Скидка %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14938,14 +14935,12 @@ msgid "Interface"
 msgstr "Интерфейс"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "По умолчанию часов в дне: "
+msgstr "По умолчанию часов в дне"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Ставка по умолчанию: "
+msgstr "Ставка по умолчанию"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15379,9 +15374,8 @@ msgstr "Первая часть импортированной проводки"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Возможные части, подходящие выбранной транзакции: "
+msgstr "Возможные части, подходящие выбранной транзакции"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15479,9 +15473,8 @@ msgid "Green"
 msgstr "Зеленый"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Список загруженных проводок (источник частей показывается):"
+msgstr "Список загруженных проводок (источник частей показывается)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18363,9 +18356,8 @@ msgstr ""
 "Ежеквартально - каждые 3 мес."
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "начать с: "
+msgstr "начать с"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

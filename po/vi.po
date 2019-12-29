@@ -14434,19 +14434,16 @@ msgid "window1"
 msgstr "Cửa sổ _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Ngày tới hạn: "
+msgstr "Ngày tới hạn"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Ngày bớt giá: "
+msgstr "Ngày bớt giá"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Bớt giá %: "
+msgstr "Bớt giá %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14812,9 +14809,8 @@ msgid "Discount"
 msgstr "Bớt giá"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Hạn tín dụng: "
+msgstr "Hạn tín dụng"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14928,23 +14924,20 @@ msgid "Payment Address"
 msgstr "Địa chỉ trả tiền"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Ngôn ngữ : "
+msgstr "Ngôn ngữ "
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Giao diện"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Giờ mặc định mỗi ngày: "
+msgstr "Giờ mặc định mỗi ngày"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Suất mặc định: "
+msgstr "Suất mặc định"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15387,9 +15380,8 @@ msgstr "Sự phân thứ nhất của giao dịch đã nhập khẩu "
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Sự phân tách có thể khớp với giao dịch đã chọn: "
+msgstr "Sự phân tách có thể khớp với giao dịch đã chọn"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15492,9 +15484,8 @@ msgid "Green"
 msgstr "Lục"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Danh sách giao dịch đã tải về (hiển thị sự phân tách nguồn):"
+msgstr "Danh sách giao dịch đã tải về (hiển thị sự phân tách nguồn)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18430,9 +18421,8 @@ msgstr ""
 "Số đơn vị lịch trong lần xảy ra: v.d. mỗi hai tuần, hàng quý (mỗi ba tháng)"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "bắt đầu vào : "
+msgstr "bắt đầu vào "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22867,9 +22857,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "Sắp xếp cột tăng/giảm dần"
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "Số khách: "
+msgstr "Số khách"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

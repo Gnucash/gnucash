@@ -13863,19 +13863,16 @@ msgid "window1"
 msgstr "視窗 _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "到期日數: "
+msgstr "到期日數"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "折扣日數: "
+msgstr "折扣日數"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "折扣 %: "
+msgstr "折扣 %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14237,9 +14234,8 @@ msgid "Discount"
 msgstr "折扣"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "信用額度: "
+msgstr "信用額度"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14350,23 +14346,20 @@ msgid "Payment Address"
 msgstr "付款地址"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "語言: "
+msgstr "語言"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "介面"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "預設每日小時數: "
+msgstr "預設每日小時數"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "預設費率: "
+msgstr "預設費率"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -14805,9 +14798,8 @@ msgstr "匯入交易的第一個分割"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "符合選擇交易的潛在分割: "
+msgstr "符合選擇交易的潛在分割"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -14902,9 +14894,8 @@ msgid "Green"
 msgstr "綠色"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "已下載交易的清單（顯示來源分割）:"
+msgstr "已下載交易的清單（顯示來源分割）"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -17798,9 +17789,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "開始於: "
+msgstr "開始於"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22048,9 +22038,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "欄位遞增或遞減排序"
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "客戶編號: "
+msgstr "客戶編號"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

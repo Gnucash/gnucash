@@ -15161,9 +15161,8 @@ msgid "Green"
 msgstr "పచ్చ"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "స్వీకృతి లావాదేవీల జాబితా (మూలం చీలిక చూపబడింది):"
+msgstr "స్వీకృతి లావాదేవీల జాబితా (మూలం చీలిక చూపబడింది)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18012,9 +18011,8 @@ msgstr ""
 "పునరావృతంలో క్యాలండర్ యూనిట్ల సంఖ్య: ఉదా. ద్వివారం = ప్రతి 2 వారాలు; త్రైమాసికం = ప్రతి 3 నెలలు"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "ప్రారంభం:"
+msgstr "ప్రారంభం"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

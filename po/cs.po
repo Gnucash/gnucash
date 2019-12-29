@@ -14293,19 +14293,16 @@ msgid "window1"
 msgstr "Okno _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Dnů splatnosti: "
+msgstr "Dnů splatnosti"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Dnů slevy: "
+msgstr "Dnů slevy"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Sleva %: "
+msgstr "Sleva %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14682,9 +14679,8 @@ msgid "Discount"
 msgstr "Sleva"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Limit kreditu: "
+msgstr "Limit kreditu"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14801,23 +14797,20 @@ msgid "Payment Address"
 msgstr "Adresa pro platbu"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Jazyk: "
+msgstr "Jazyk"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Rozhraní"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Implicitní počet hodin denně: "
+msgstr "Implicitní počet hodin denně"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Implicitní mzda: "
+msgstr "Implicitní mzda"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15266,9 +15259,8 @@ msgstr "První část importované účetní položky"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Možné části odpovídající vybrané účetní položce: "
+msgstr "Možné části odpovídající vybrané účetní položce"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15368,9 +15360,8 @@ msgid "Green"
 msgstr "Zelená"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Seznam stažených účetních položek (zobrazeny zdrojové části):"
+msgstr "Seznam stažených účetních položek (zobrazeny zdrojové části)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18322,9 +18313,8 @@ msgstr ""
 "čvrtletně = každé 3 měsíce"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "začíná dne: "
+msgstr "začíná dne"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22714,9 +22704,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr ""
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "Číslo zákazníka: "
+msgstr "Číslo zákazníka"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

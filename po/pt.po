@@ -14461,9 +14461,8 @@ msgid "Discount Days"
 msgstr "Prazo de desconto (dias):"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Desconto em %: "
+msgstr "Desconto em %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14831,9 +14830,8 @@ msgid "Discount"
 msgstr "Desconto"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Limite de crédito: "
+msgstr "Limite de crédito"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14949,23 +14947,20 @@ msgid "Payment Address"
 msgstr "Morada de pagamento"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Idioma: "
+msgstr "Idioma"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Ambiente"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Horas predefinidas por dia: "
+msgstr "Horas predefinidas por dia"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Taxa predefinida: "
+msgstr "Taxa predefinida"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15499,9 +15494,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Lista de transacções transferidas (parcela origem mostrada):"
+msgstr "Lista de transacções transferidas (parcela origem mostrada)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 msgid "Show the Source Account column"
@@ -18385,9 +18379,8 @@ msgstr ""
 "duas semanas; Trimestral = a cada 3 meses"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "começando a: "
+msgstr "começando a"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

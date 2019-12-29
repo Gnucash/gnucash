@@ -14318,19 +14318,16 @@ msgid "window1"
 msgstr "_1. Pencere"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Kalan gün sayısı: "
+msgstr "Kalan gün sayısı"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "İndirim gün sayısı: "
+msgstr "İndirim gün sayısı"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "İndirim %: "
+msgstr "İndirim %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14696,9 +14693,8 @@ msgid "Discount"
 msgstr "İndirim"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredi Limiti: "
+msgstr "Kredi Limiti"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14815,23 +14811,20 @@ msgid "Payment Address"
 msgstr "Ödeme Adresi"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Dil: "
+msgstr "Dil"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "İletişim"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Günlük çalışma süresi (saat): "
+msgstr "Günlük çalışma süresi (saat)"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Saatlik ücreti: "
+msgstr "Saatlik ücreti"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15265,9 +15258,8 @@ msgstr "İçe aktarılan işlemin ilk bölümü"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Seçilen işlemi eşleşen potansiyel bölmeler: "
+msgstr "Seçilen işlemi eşleşen potansiyel bölmeler"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15364,9 +15356,8 @@ msgid "Green"
 msgstr "Yeşil"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "İndirilen işlemlerin listesi (kaynak bölünme gösteriliyor):"
+msgstr "İndirilen işlemlerin listesi (kaynak bölünme gösteriliyor)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18232,9 +18223,8 @@ msgstr ""
 "çeyrek = 3 ayda bir"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "başlama zamanı: "
+msgstr "başlama zamanı"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

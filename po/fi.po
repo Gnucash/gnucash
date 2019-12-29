@@ -13605,19 +13605,16 @@ msgid "window1"
 msgstr "Ikkuna"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Maksupäiviä: "
+msgstr "Maksupäiviä"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Alennuspäiviä: "
+msgstr "Alennuspäiviä"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Alennus %: "
+msgstr "Alennus %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -13979,9 +13976,8 @@ msgid "Discount"
 msgstr "Alennus"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Luottoraja: "
+msgstr "Luottoraja"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -17496,9 +17492,8 @@ msgid ""
 msgstr "Yhden budjetoitavan jakson kesto."
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "alkaen:"
+msgstr "alkaen"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

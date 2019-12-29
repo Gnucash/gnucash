@@ -13732,9 +13732,8 @@ msgid "window1"
 msgstr "작업창 1(_1)"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "만기일: "
+msgstr "만기일"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
 #, fuzzy
@@ -14100,9 +14099,8 @@ msgid "Discount"
 msgstr "할인"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "신용 한계: "
+msgstr "신용 한계"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14216,23 +14214,20 @@ msgid "Payment Address"
 msgstr "상환 주소"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "언어: "
+msgstr "언어"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "인터페이스"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "하루 당 기본 시간: "
+msgstr "하루 당 기본 시간"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "기본 비율: "
+msgstr "기본 비율"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -17654,9 +17649,8 @@ msgid ""
 msgstr "반복을 위한 달력 단위의 숫자: 즉 격주 = 매 2 주; 사분기 = 매 3 월"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "시작일: "
+msgstr "시작일"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

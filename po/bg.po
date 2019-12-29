@@ -14521,19 +14521,16 @@ msgid "window1"
 msgstr "Прозорец _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Дни на падеж: "
+msgstr "Дни на падеж"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Дни с отстъпка: "
+msgstr "Дни с отстъпка"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Отстъпка %: "
+msgstr "Отстъпка %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14907,9 +14904,8 @@ msgid "Discount"
 msgstr "Отстъпка"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Кредитен лимит: "
+msgstr "Кредитен лимит"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15023,23 +15019,20 @@ msgid "Payment Address"
 msgstr "Адрес за плащания"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Език: "
+msgstr "Език"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Интерфейс"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Стандартни часове за ден: "
+msgstr "Стандартни часове за ден"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Стандартен курс: "
+msgstr "Стандартен курс"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15486,9 +15479,8 @@ msgstr "Първа разбивка на внесена транзакция"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Възможни разбивки, които съвпадат с избраната транзакция: "
+msgstr "Възможни разбивки, които съвпадат с избраната транзакция"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15585,9 +15577,8 @@ msgid "Green"
 msgstr "Зелено"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Списък от свалени транзакции (показана е изходната разбивка):"
+msgstr "Списък от свалени транзакции (показана е изходната разбивка)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18544,9 +18535,8 @@ msgstr ""
 "седмици; тримесечие = всеки 3 месеца"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "започвайки от:"
+msgstr "започвайки от"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

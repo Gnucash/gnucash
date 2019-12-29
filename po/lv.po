@@ -14376,9 +14376,8 @@ msgid "Discount Days"
 msgstr "Atlaides dienas:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Atlaide %: "
+msgstr "Atlaide %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14746,9 +14745,8 @@ msgid "Discount"
 msgstr "Atlaide"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredītlimits: "
+msgstr "Kredītlimits"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14862,23 +14860,20 @@ msgid "Payment Address"
 msgstr "Apmaksas saņēmēja adrese"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Valoda: "
+msgstr "Valoda"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Saskarne"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Noklusētās stundas dienā: "
+msgstr "Noklusētās stundas dienā"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Noklusētā likme: "
+msgstr "Noklusētā likme"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18275,9 +18270,8 @@ msgstr ""
 "nedēļu; Reizi ceturksnī = katru trešo mēnesi"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "sākt no:"
+msgstr "sākt no"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

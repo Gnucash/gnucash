@@ -14460,19 +14460,16 @@ msgid "window1"
 msgstr "विंडो_1 "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "निश्चत दिन: "
+msgstr "निश्चत दिन"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "छूट दे दिन: "
+msgstr "छूट दे दिन"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "छूट %: "
+msgstr "छूट %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14859,9 +14856,8 @@ msgid "Discount"
 msgstr "छूट "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "क्रैडिट सीमा: "
+msgstr "क्रैडिट सीमा"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14979,23 +14975,20 @@ msgid "Payment Address"
 msgstr "भुगतान  दा   सिरनामां"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "भाशा: "
+msgstr "भाशा"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "इंटरफेस "
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "डिफाल्ट घैंटे प्रति दिन: "
+msgstr "डिफाल्ट घैंटे प्रति दिन"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "डिफाल्ट दर: "
+msgstr "डिफाल्ट दर"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15445,9 +15438,8 @@ msgstr "दरामद लैन-देनें दा पैह्‌ला �
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "चुनिंदा  लैन-देन   दा    मिलान करने आस्तै संभावत स्प्लिट: "
+msgstr "चुनिंदा  लैन-देन   दा    मिलान करने आस्तै संभावत स्प्लिट"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15546,9 +15538,8 @@ msgid "Green"
 msgstr "सैल्ला "
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डाउनलोड कीते गेदे लैन-देनें  दी     सूची (स्रोत स्प्लिट दस्सेआ गेदा): "
+msgstr "डाउनलोड कीते गेदे लैन-देनें  दी     सूची (स्रोत स्प्लिट दस्सेआ गेदा)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18537,9 +18528,8 @@ msgstr ""
 "हर 3 म्हीनें "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "शुरुआत दी तरीक: "
+msgstr "शुरुआत दी तरीक"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

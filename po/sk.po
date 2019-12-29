@@ -13853,19 +13853,16 @@ msgid "window1"
 msgstr "Okno _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Dni splatnosti: "
+msgstr "Dni splatnosti"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Dni zliav: "
+msgstr "Dni zliav"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Zľava %: "
+msgstr "Zľava %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14229,9 +14226,8 @@ msgid "Discount"
 msgstr "Zľava"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kreditný limit: "
+msgstr "Kreditný limit"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14350,23 +14346,20 @@ msgid "Payment Address"
 msgstr "Inkasná adresa"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Jazyk: "
+msgstr "Jazyk"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Rozhranie"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Štandardný počet hodín na deň: "
+msgstr "Štandardný počet hodín na deň"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Štandardná sadzba: "
+msgstr "Štandardná sadzba"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -14811,9 +14804,8 @@ msgstr "Importované prvé rozdelenie transakcie"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Možné časti zodpovedajúce vybranej transakcii: "
+msgstr "Možné časti zodpovedajúce vybranej transakcii"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -14905,9 +14897,8 @@ msgid "Green"
 msgstr "Zelená"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Zoznam stiahnutých transakcií (zobrazené zdrojové časti):"
+msgstr "Zoznam stiahnutých transakcií (zobrazené zdrojové časti)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -17826,9 +17817,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "začínajúci: "
+msgstr "začínajúci"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

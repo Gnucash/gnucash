@@ -14276,19 +14276,16 @@ msgid "window1"
 msgstr "_1. ablak"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Határidők: "
+msgstr "Határidők"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Engedménynapok: "
+msgstr "Engedménynapok"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Engedmény %: "
+msgstr "Engedmény %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14657,9 +14654,8 @@ msgid "Discount"
 msgstr "Engedmény"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Hitelkeret: "
+msgstr "Hitelkeret"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14774,18 +14770,16 @@ msgid "Payment Address"
 msgstr "Kifizetési cím"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Nyelv: "
+msgstr "Nyelv"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Felület"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Alapértelmezett órák száma naponta: "
+msgstr "Alapértelmezett órák száma naponta"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
 #, fuzzy
@@ -15232,9 +15226,8 @@ msgstr "Importált tranzakciók első kifejtése"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "A kijelölttel egyező lehetséges osztások: "
+msgstr "A kijelölttel egyező lehetséges osztások"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15328,9 +15321,8 @@ msgid "Green"
 msgstr "Zöld"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Letöltött tranzakciólista (forrásosztás megjelenítve):"
+msgstr "Letöltött tranzakciólista (forrásosztás megjelenítve)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18238,9 +18230,8 @@ msgstr ""
 "hét; negyedévi = minden 3. hónap"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "kezdődik: "
+msgstr "kezdődik"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

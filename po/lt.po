@@ -14252,19 +14252,16 @@ msgid "window1"
 msgstr "Langas _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Termino dienos: "
+msgstr "Termino dienos"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Nuolaidos dienos: "
+msgstr "Nuolaidos dienos"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Nuolaida %: "
+msgstr "Nuolaida %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14632,9 +14629,8 @@ msgid "Discount"
 msgstr "Nuolaida"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredito limitas: "
+msgstr "Kredito limitas"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14746,23 +14742,20 @@ msgid "Payment Address"
 msgstr "Mokėjimo adresas"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Kalba: "
+msgstr "Kalba"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Sąsaja"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Numatyta valandų per dieną: "
+msgstr "Numatyta valandų per dieną"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Numatytoji norma: "
+msgstr "Numatytoji norma"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18188,9 +18181,8 @@ msgstr ""
 "mėnesius; kas pusmetį = kas 6 mėnesius"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "pradedant: "
+msgstr "pradedant"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

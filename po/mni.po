@@ -14225,19 +14225,16 @@ msgid "window1"
 msgstr "ꯋꯤꯟꯗꯣ _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "ꯗꯤꯎ ꯅꯨꯃꯤꯠ: "
+msgstr "ꯗꯤꯎ ꯅꯨꯃꯤꯠ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "ꯗꯤꯁꯀꯥꯎꯟꯠ ꯅꯨꯃꯤꯠ: "
+msgstr "ꯗꯤꯁꯀꯥꯎꯟꯠ ꯅꯨꯃꯤꯠ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "ꯗꯤꯁꯀꯥꯎꯟꯠ %: "
+msgstr "ꯗꯤꯁꯀꯥꯎꯟꯠ %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14716,9 +14713,8 @@ msgid "Payment Address"
 msgstr "ꯄꯦꯃꯦꯟꯠ ꯑꯦꯗ꯭ꯔꯦꯁ"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "ꯂꯣꯟ: "
+msgstr "ꯂꯣꯟ"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
@@ -14730,9 +14726,8 @@ msgid "Default Hours per Day"
 msgstr "ꯅꯣꯡꯃꯗ ꯑꯣꯏꯕ ꯗꯤꯐꯣꯜꯠ ꯄꯨꯡꯁꯤꯡ"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "ꯗꯤꯐꯣꯜꯠꯀꯤ ꯆꯥꯡ: "
+msgstr "ꯗꯤꯐꯣꯜꯠꯀꯤ ꯆꯥꯡ"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15263,9 +15258,8 @@ msgid "Green"
 msgstr "ꯑꯁꯪꯕ"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "ꯗꯥꯎꯟꯂꯣꯗ ꯇꯧꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡꯒꯤ ꯄꯔꯤꯡ (ꯁꯣꯔꯁ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯎꯠꯂꯦ):"
+msgstr "ꯗꯥꯎꯟꯂꯣꯗ ꯇꯧꯔꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯁꯤꯡꯒꯤ ꯄꯔꯤꯡ (ꯁꯣꯔꯁ ꯁ꯭ꯄ꯭ꯂꯤꯠ ꯎꯠꯂꯦ)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18120,9 +18114,8 @@ msgstr ""
 "ꯀ꯭ꯋꯥꯔꯇꯔꯂꯤꯂꯤ = ꯊꯥ ꯑꯍꯨꯝ ꯈꯨꯗꯤꯡꯒꯤ"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "ꯃꯁꯤꯗꯒꯤ ꯍꯧꯕ: "
+msgstr "ꯃꯁꯤꯗꯒꯤ ꯍꯧꯕ"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
