@@ -63,6 +63,7 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 static AB_BANKING *gnc_AB_BANKING = NULL;
 static gint gnc_AB_BANKING_refcount = 0;
 
+static gchar* create_online_id(const gchar *bankcode, const gchar *accountnumber);
 static gpointer join_ab_strings_cb(const gchar *str, gpointer user_data);
 static Account *gnc_ab_accinfo_to_gnc_acc(GtkWidget *parent,
     AB_IMEXPORTER_ACCOUNTINFO *account_info);
@@ -314,6 +315,19 @@ gnc_AB_VALUE_to_readable_string(const AB_VALUE *value)
                                AB_Value_GetCurrency(value));
     else
         return g_strdup_printf("%.2f", 0.0);
+}
+
+
+static gchar*
+create_online_id(const gchar *bankcode, const gchar *accountnumber)
+{
+    gchar *online_id;
+
+    online_id = g_strconcat(bankcode ? bankcode : "",
+                            accountnumber ? accountnumber : "",
+                            (gchar*)NULL);
+
+    return online_id;
 }
 
 /**
@@ -646,9 +660,7 @@ gnc_ab_accinfo_to_gnc_acc(GtkWidget *parent, AB_IMEXPORTER_ACCOUNTINFO *acc_info
 
     bankcode = AB_ImExporterAccountInfo_GetBankCode(acc_info);
     accountnumber = AB_ImExporterAccountInfo_GetAccountNumber(acc_info);
-    online_id = g_strconcat(bankcode ? bankcode : "",
-                            accountnumber ? accountnumber : "",
-                            (gchar*)NULL);
+    online_id = create_online_id(bankcode, accountnumber);
     gnc_acc = gnc_import_select_account(
                   parent, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
                   NULL, ACCT_TYPE_NONE, NULL, NULL);
@@ -687,9 +699,7 @@ gnc_ab_txn_to_gnc_acc(GtkWidget *parent, const AB_TRANSACTION *transaction)
         return NULL;
     }
 
-    online_id = g_strconcat(bankcode ? bankcode : "",
-                            accountnumber ? accountnumber : "",
-                            (gchar*)NULL);
+    online_id = create_online_id(bankcode, accountnumber);
     gnc_acc = gnc_import_select_account(
                   parent, online_id, 1, AB_Transaction_GetLocalName(transaction),
                   NULL, ACCT_TYPE_NONE, NULL, NULL);
