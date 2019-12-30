@@ -323,6 +323,15 @@ create_online_id(const gchar *bankcode, const gchar *accountnumber)
 {
     gchar *online_id;
 
+    /* The accountnumber may have leading zeros, depending on where them
+     * accountnumver is came from, e.g. the accountnumber of accountinfo
+     * has no leading zeros while the (local)accountnumber of a transaction
+     * has leading zeros.
+     * So remove all leading '0', to get a consistant online_id.
+     */
+    while (accountnumber && *accountnumber == '0')
+        accountnumber++;
+
     online_id = g_strconcat(bankcode ? bankcode : "",
                             accountnumber ? accountnumber : "",
                             (gchar*)NULL);
