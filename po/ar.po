@@ -15302,9 +15302,8 @@ msgid "Green"
 msgstr "أخضر"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "قائمة العمليات المحملة:"
+msgstr "قائمة العمليات المحملة"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18148,9 +18147,8 @@ msgstr ""
 "أشهر = كل 3 أشهر"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "تبدأ في:"
+msgstr "تبدأ في"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

@@ -14310,14 +14310,12 @@ msgid "Due Days"
 msgstr "Дати завершення:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Дні знижок: "
+msgstr "Дні знижок"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Знижка %: "
+msgstr "Знижка %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14805,23 +14803,20 @@ msgid "Payment Address"
 msgstr "Адреса платежу"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Мова: "
+msgstr "Мова"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Інтерфейс"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Робочих годин на день: "
+msgstr "Робочих годин на день"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Типовий коефіцієнт: "
+msgstr "Типовий коефіцієнт"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15246,9 +15241,8 @@ msgstr "Перше розділення імпортованої транзак�
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Потенційні частини, що збігаються з вибраною транзакцією: "
+msgstr "Потенційні частини, що збігаються з вибраною транзакцією"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15349,9 +15343,8 @@ msgid "Green"
 msgstr "Зелений"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Список завантажених транзакції (джерело частин показано):"
+msgstr "Список завантажених транзакції (джерело частин показано)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 msgid "Show the Source Account column"
@@ -18228,9 +18221,8 @@ msgstr ""
 "2 тижні; Щоквартально = кожні 3 місяці"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "починається: "
+msgstr "починається"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

@@ -14398,19 +14398,16 @@ msgid "window1"
 msgstr "Window _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Due Days: "
+msgstr "Due Days"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Discount Days: "
+msgstr "Discount Days"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Discount %: "
+msgstr "Discount %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14781,9 +14778,8 @@ msgid "Discount"
 msgstr "Discount"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Credit Limit: "
+msgstr "Credit Limit"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14899,23 +14895,20 @@ msgid "Payment Address"
 msgstr "Payment Address"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Language: "
+msgstr "Language"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interface"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Default Hours per Day: "
+msgstr "Default Hours per Day"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Default Rate: "
+msgstr "Default Rate"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15361,9 +15354,8 @@ msgstr "Imported transaction's first split"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Potential splits matching the selected transaction: "
+msgstr "Potential splits matching the selected transaction"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15465,9 +15457,8 @@ msgid "Green"
 msgstr "Green"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "List of downloaded transactions (source split shown):"
+msgstr "List of downloaded transactions (source split shown)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18389,9 +18380,8 @@ msgstr ""
 "Quarterly = every 3 months"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "beginning on: "
+msgstr "beginning on"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22741,9 +22731,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "Sort column ascending or descending"
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "Customer Number: "
+msgstr "Customer Number"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

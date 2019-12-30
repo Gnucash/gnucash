@@ -14568,9 +14568,8 @@ msgid "Discount Days"
 msgstr "Zile de reducere:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Reducere %: "
+msgstr "Reducere %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14945,9 +14944,8 @@ msgid "Discount"
 msgstr "Reducere"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Limita creditului: "
+msgstr "Limita creditului"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15063,18 +15061,16 @@ msgid "Payment Address"
 msgstr "Adresa plății"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Limba: "
+msgstr "Limba"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interfață"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Ore pe zi implicite: "
+msgstr "Ore pe zi implicite"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
 #, fuzzy
@@ -15633,9 +15629,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Lista tranzacțiilor descărcate (partea sursei e afișată): "
+msgstr "Lista tranzacțiilor descărcate (partea sursei e afișată)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18587,9 +18582,8 @@ msgstr ""
 "săptămâni; trimestrial = la 3 luni"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "începând la:"
+msgstr "începând la"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

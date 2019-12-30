@@ -14232,19 +14232,16 @@ msgid "window1"
 msgstr "Vindue _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Forfaldsdage: "
+msgstr "Forfaldsdage"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Rabatdage: "
+msgstr "Rabatdage"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Rabat %: "
+msgstr "Rabat %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14601,9 +14598,8 @@ msgid "Discount"
 msgstr "Rabat"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kreditbegrænsning: "
+msgstr "Kreditbegrænsning"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14719,23 +14715,20 @@ msgid "Payment Address"
 msgstr "Betalingsadresse"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Sprog: "
+msgstr "Sprog"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Grænseflade"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Timer per dag som standard: "
+msgstr "Timer per dag som standard"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Standardrate: "
+msgstr "Standardrate"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18144,9 +18137,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "begyndende den: "
+msgstr "begyndende den"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

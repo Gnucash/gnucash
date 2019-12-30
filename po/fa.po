@@ -14360,19 +14360,16 @@ msgid "window1"
 msgstr "پنجره۱"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "روزهای سررسید: "
+msgstr "روزهای سررسید"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "روزهای تنزیل: "
+msgstr "روزهای تنزیل"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% تنزیل: "
+msgstr "% تنزیل"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14742,9 +14739,8 @@ msgid "Discount"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "سقف اعتبار: "
+msgstr "سقف اعتبار"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14857,23 +14853,20 @@ msgid "Payment Address"
 msgstr "نشانی پرداخت"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "زبان: "
+msgstr "زبان"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "رابط"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "ساعات پیش‌گزیده روزانه: "
+msgstr "ساعات پیش‌گزیده روزانه"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "نرخ پیش‌گزیده: "
+msgstr "نرخ پیش‌گزیده"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18215,9 +18208,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "آغاز در::"
+msgstr "آغاز در:"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

@@ -15314,9 +15314,8 @@ msgid "Green"
 msgstr "हिरवा"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डाउनलोड केलेल्या व्यवहारांची यादी (स्त्रोत विभाजन दाखविले आहे):"
+msgstr "डाउनलोड केलेल्या व्यवहारांची यादी (स्त्रोत विभाजन दाखविले आहे)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy

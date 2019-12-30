@@ -14162,19 +14162,16 @@ msgid "window1"
 msgstr "Παράθυρο _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Ημ/νια Οφειλής: "
+msgstr "Ημ/νια Οφειλής"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Ημέρες έκπτωσης: "
+msgstr "Ημέρες έκπτωσης"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Έκπτωση %: "
+msgstr "Έκπτωση %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14532,9 +14529,8 @@ msgid "Discount"
 msgstr "Έκπτωση"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Όριο πίστωσης: "
+msgstr "Όριο πίστωσης"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14650,18 +14646,16 @@ msgid "Payment Address"
 msgstr "Διεύθυνση πληρωμής"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Γλώσσα: "
+msgstr "Γλώσσα"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Διεπαφή"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Προεπιλεγμένες ώρες ανά ημέρα: "
+msgstr "Προεπιλεγμένες ώρες ανά ημέρα"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
 #, fuzzy
@@ -18074,9 +18068,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "Ξεκινάει στις:"
+msgstr "Ξεκινάει στις"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

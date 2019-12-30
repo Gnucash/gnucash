@@ -15780,19 +15780,16 @@ msgid "window1"
 msgstr "Fenêtre _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Dates d'échéance : "
+msgstr "Dates d'échéance "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Jours d'escompte : "
+msgstr "Jours d'escompte "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Pourcentage d'escompte : "
+msgstr "Pourcentage d'escompte "
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -16201,9 +16198,8 @@ msgstr "Escompte"
 
 # messages-i18n.c:173
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Limite de crédit : "
+msgstr "Limite de crédit "
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -16324,9 +16320,8 @@ msgid "Payment Address"
 msgstr "Adresse de paiement"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Langage : "
+msgstr "Langage "
 
 # messages-i18n.c:227
 #: gnucash/gtkbuilder/dialog-employee.glade:589
@@ -16335,15 +16330,13 @@ msgstr "Interface"
 
 # po/guile_strings.txt:152
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Horaires journaliers par défaut : "
+msgstr "Horaires journaliers par défaut "
 
 # po/guile_strings.txt:258
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Taux par défaut : "
+msgstr "Taux par défaut "
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -16938,9 +16931,8 @@ msgid "Green"
 msgstr "Vert"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Liste des transactions téléchargées (répartition de source affichée) :"
+msgstr "Liste des transactions téléchargées (répartition de source affichée) "
 
 # messages-i18n.c:164
 #: gnucash/gtkbuilder/dialog-import.glade:1194
@@ -20130,9 +20122,8 @@ msgstr ""
 "2 mois ; trimestriel = toutes les 3 mois."
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "À partir de :"
+msgstr "À partir de "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

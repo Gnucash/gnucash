@@ -14315,9 +14315,8 @@ msgid "Due Days"
 msgstr "नियत दिन:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "छूट क' दिन: "
+msgstr "छूट क' दिन"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
 #, fuzzy
@@ -14688,9 +14687,8 @@ msgid "Discount"
 msgstr "छूट"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "क्रेडिट सीमा: "
+msgstr "क्रेडिट सीमा"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15352,9 +15350,8 @@ msgid "Green"
 msgstr "हरिअर"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डाउनलोड कएल गेल लेनदेन केर सूची (स्रोत विभाजन देखाओल गेल):"
+msgstr "डाउनलोड कएल गेल लेनदेन केर सूची (स्रोत विभाजन देखाओल गेल)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18213,9 +18210,8 @@ msgstr ""
 "3 माह   "
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "प्रारंभ केर तिथि:"
+msgstr "प्रारंभ केर तिथि"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

@@ -14365,9 +14365,8 @@ msgid "Due Days"
 msgstr "નક્કી દિવસો:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "વળતરના દિવસો: "
+msgstr "વળતરના દિવસો"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
 #, fuzzy
@@ -14751,9 +14750,8 @@ msgid "Discount"
 msgstr "વળતર"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "ધિરાણ મર્યાદા: "
+msgstr "ધિરાણ મર્યાદા"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -18390,9 +18388,8 @@ msgstr ""
 "મહિને"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "પ્રારંભિક તારીખ:"
+msgstr "પ્રારંભિક તારીખ"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

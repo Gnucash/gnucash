@@ -15456,9 +15456,8 @@ msgid "Green"
 msgstr "pachvem"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Download kelelea vevharanchi volleri(mull futalll dakhovn):"
+msgstr "Download kelelea vevharanchi volleri(mull futalll dakhovn)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18373,9 +18372,8 @@ msgstr ""
 "ek pavtti; kaldem =dhor 3 mhoineank"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "hea dis survat zalem:"
+msgstr "hea dis survat zalem"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

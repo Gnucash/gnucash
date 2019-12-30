@@ -14596,19 +14596,16 @@ msgid "window1"
 msgstr "Finestra _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Període de pagament: "
+msgstr "Període de pagament"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Període de descompte: "
+msgstr "Període de descompte"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% de descompte: "
+msgstr "% de descompte"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14978,9 +14975,8 @@ msgid "Discount"
 msgstr "Descompte"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Límit de crèdit: "
+msgstr "Límit de crèdit"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15096,24 +15092,21 @@ msgid "Payment Address"
 msgstr "Adreça de pagament"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Idioma: "
+msgstr "Idioma"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interfície"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Hores diàries per defecte: "
+msgstr "Hores diàries per defecte"
 
 # Es refereix al salari per hora o tarifa (dpm)
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Sou per hora per defecte: "
+msgstr "Sou per hora per defecte"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18582,9 +18575,8 @@ msgstr ""
 "setmanes; Trimestral = cada 3 mesos"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "Data d'inici: "
+msgstr "Data d'inici"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

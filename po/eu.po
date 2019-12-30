@@ -14611,19 +14611,16 @@ msgid "window1"
 msgstr "Lei_hoak"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Mugaegunak: "
+msgstr "Mugaegunak"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Deskontu-egunak: "
+msgstr "Deskontu-egunak"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% deskontua: "
+msgstr "% deskontua"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14994,9 +14991,8 @@ msgid "Discount"
 msgstr "Deskontua"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredituaren muga: "
+msgstr "Kredituaren muga"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15112,23 +15108,20 @@ msgid "Payment Address"
 msgstr "Ordaintzeko helbidea"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Hizkuntza: "
+msgstr "Hizkuntza"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interfazea"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Eguneko ordu lehenetsiak: "
+msgstr "Eguneko ordu lehenetsiak"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Tasa lehenetsia: "
+msgstr "Tasa lehenetsia"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15594,9 +15587,8 @@ msgstr "Inportatutako transakzioaren lehen zatia"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Hautatutako transakzioarekin bat datozen zati potentzialak: "
+msgstr "Hautatutako transakzioarekin bat datozen zati potentzialak"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15693,9 +15685,8 @@ msgid "Green"
 msgstr "Berdea"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Deskargatutako transakzioen zerrenda (iturburuko zatia ikusten da):"
+msgstr "Deskargatutako transakzioen zerrenda (iturburuko zatia ikusten da)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -23153,9 +23144,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr ""
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "Bezero-zenbakia: "
+msgstr "Bezero-zenbakia"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

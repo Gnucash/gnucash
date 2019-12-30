@@ -14558,19 +14558,16 @@ msgid "window1"
 msgstr "venster1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Vervaldagen: "
+msgstr "Vervaldagen"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Kortingsdagen: "
+msgstr "Kortingsdagen"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Kortingspercentage: "
+msgstr "Kortingspercentage"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14946,9 +14943,8 @@ msgid "Discount"
 msgstr "Korting"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredietlimiet: "
+msgstr "Kredietlimiet"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15064,23 +15060,20 @@ msgid "Payment Address"
 msgstr "Betaaladres"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Taal: "
+msgstr "Taal"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interface"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Standaard aantal uren per dag: "
+msgstr "Standaard aantal uren per dag"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Standaardtarief: "
+msgstr "Standaardtarief"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15522,9 +15515,8 @@ msgstr "Eerste boekregel van geïmporteerde boeking"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Mogelijke boekingen die overeenkomen met de geselecteerde boeking: "
+msgstr "Mogelijke boekingen die overeenkomen met de geselecteerde boeking"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -18514,9 +18506,8 @@ msgstr ""
 "tweewekelijks = elke 2 weken, halfjaarlijks = elke 6 maanden"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "beginnend op: "
+msgstr "beginnend op"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

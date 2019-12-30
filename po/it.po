@@ -14869,19 +14869,16 @@ msgid "window1"
 msgstr "Finestra _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Giorni scadenza: "
+msgstr "Giorni scadenza"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Giorni sconto: "
+msgstr "Giorni sconto"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% sconto: "
+msgstr "% sconto"
 
 # Tooltip
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
@@ -15280,9 +15277,8 @@ msgid "Discount"
 msgstr "Sconto"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Limite di credito: "
+msgstr "Limite di credito"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15400,23 +15396,20 @@ msgid "Payment Address"
 msgstr "Indirizzo intestatario"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Lingua: "
+msgstr "Lingua"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interfaccia"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Orario giornaliero predefinito: "
+msgstr "Orario giornaliero predefinito"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Retribuzione predefinita: "
+msgstr "Retribuzione predefinita"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -18952,9 +18945,8 @@ msgstr ""
 "quindicinale = ogni 2 settimane; trimestrale = ogni 3 mesi"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "a partire da:"
+msgstr "a partire da"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

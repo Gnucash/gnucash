@@ -14091,19 +14091,16 @@ msgid "window1"
 msgstr "חלון1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "ימים לפרעון: "
+msgstr "ימים לפרעון"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "ימי הנחה: "
+msgstr "ימי הנחה"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% הנחה: "
+msgstr "% הנחה"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14464,9 +14461,8 @@ msgid "Discount"
 msgstr "הנחה"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "מגבלת אשראי: "
+msgstr "מגבלת אשראי"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14578,23 +14574,20 @@ msgid "Payment Address"
 msgstr "כתובת לתשלום"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "שפה: "
+msgstr "שפה"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "ממשק"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "שעות ביום: "
+msgstr "שעות ביום"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "שעור ברירת מחדל: "
+msgstr "שעור ברירת מחדל"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15013,9 +15006,8 @@ msgstr "פיצול ראשון של תנועות מיובאות"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "פיצולים שעשויים להתאים לתנועות שנבחרו: "
+msgstr "פיצולים שעשויים להתאים לתנועות שנבחרו"
 
 # פ=פעיל
 #: gnucash/gtkbuilder/dialog-import.glade:743
@@ -15118,9 +15110,8 @@ msgid "Green"
 msgstr "ירוק"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "רשימת תנועות שהורדו (פיצול מקור מוצג):"
+msgstr "רשימת תנועות שהורדו (פיצול מקור מוצג)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 msgid "Show the Source Account column"
@@ -17930,9 +17921,8 @@ msgstr ""
 "מספר יחידות קלנדריות בחזרות: כלומר דו שבועי=כל שבועיים, רבעוני=כל 3 חודשים"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "התחל ב: "
+msgstr "התחל ב"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

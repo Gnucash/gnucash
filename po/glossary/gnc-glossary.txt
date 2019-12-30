@@ -41,6 +41,7 @@
 "action: transfer"	"see: transfer 2. (=credit transfer)"
 "action: wire"	"-"
 "action: withdraw"	"-"
+"aging"	"As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 "amount"	"A sum of money"
 "average"	"The result of adding several amounts together and then dividing this total by the number of amounts"
 "balance (noun)"	"The amount of money that is in one's account"

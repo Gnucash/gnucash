@@ -14755,19 +14755,16 @@ msgid "window1"
 msgstr "ventana1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Días de vencimiento: "
+msgstr "Días de vencimiento"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Días de descuento: "
+msgstr "Días de descuento"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "% descuento: "
+msgstr "% descuento"
 
 # post -> límite
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
@@ -15145,9 +15142,8 @@ msgid "Discount"
 msgstr "Descuento"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Límite de crédito: "
+msgstr "Límite de crédito"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -15263,23 +15259,20 @@ msgid "Payment Address"
 msgstr "Dirección de liquidación"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Idioma: "
+msgstr "Idioma"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Interfaz"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Horas al día por omisión: "
+msgstr "Horas al día por omisión"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Tipo por omisión: "
+msgstr "Tipo por omisión"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15715,9 +15708,8 @@ msgstr "Primer desglose de la transacción importada"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Desgloses que podrían cotejar con la transacción seleccionada: "
+msgstr "Desgloses que podrían cotejar con la transacción seleccionada"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15818,9 +15810,8 @@ msgid "Green"
 msgstr "Verde"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Lista de transacciones descargados (se muestra desglose origen):"
+msgstr "Lista de transacciones descargados (se muestra desglose origen)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 msgid "Show the Source Account column"
@@ -18711,9 +18702,8 @@ msgstr ""
 "semanas, Trimestral = cada 3 meses"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "empezando el: "
+msgstr "empezando el"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

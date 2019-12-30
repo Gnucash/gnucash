@@ -14415,19 +14415,16 @@ msgid "window1"
 msgstr "Прозор _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Дани доспећа: "
+msgstr "Дани доспећа"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Дани попуста: "
+msgstr "Дани попуста"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Попуст %: "
+msgstr "Попуст %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14796,9 +14793,8 @@ msgid "Discount"
 msgstr "Попуст"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Ограничење кредита: "
+msgstr "Ограничење кредита"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14912,23 +14908,20 @@ msgid "Payment Address"
 msgstr "Адреса уплате"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Језик: "
+msgstr "Језик"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Сучеље"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Задатих часова по дану: "
+msgstr "Задатих часова по дану"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Основна стопа: "
+msgstr "Основна стопа"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15366,9 +15359,8 @@ msgstr "Прва подела увезене трансакције"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "Могуће поделе одговарају изабраној трансакцији: "
+msgstr "Могуће поделе одговарају изабраној трансакцији"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15465,9 +15457,8 @@ msgid "Green"
 msgstr "Зелена"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Списак преузетих трансакција (приказује поделу извора):"
+msgstr "Списак преузетих трансакција (приказује поделу извора)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18326,9 +18317,8 @@ msgstr ""
 "Тромесечно = свака 3 месеца"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "почиње: "
+msgstr "почиње"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

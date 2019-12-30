@@ -14143,19 +14143,16 @@ msgid "window1"
 msgstr "विंडो _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "सोपपाचे दिंस: "
+msgstr "सोपपाचे दिंस"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "सवलत दिंस: "
+msgstr "सवलत दिंस"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "सवलत%: "
+msgstr "सवलत%"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14515,9 +14512,8 @@ msgid "Discount"
 msgstr "सवलत"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "क्रेडिट मर्यादा: "
+msgstr "क्रेडिट मर्यादा"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14632,23 +14628,20 @@ msgid "Payment Address"
 msgstr "दिवपाच्या रकमेचो नामो"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "भास: "
+msgstr "भास"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "इंटरफेस"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "दरेक दिसाची मूळ वरां: "
+msgstr "दरेक दिसाची मूळ वरां"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "मूळ दर: "
+msgstr "मूळ दर"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15080,9 +15073,8 @@ msgstr "आयात केल्ली व्यवहाराची पयल
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "निवडील्ल्या व्यवहाराक जुळपी क्षमताय विभागणी: "
+msgstr "निवडील्ल्या व्यवहाराक जुळपी क्षमताय विभागणी"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15176,9 +15168,8 @@ msgid "Green"
 msgstr "हिरवो"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डावनलोड केल्ल्या व्यवहारांची वळेरी (स्त्रोत विभागणी दाखयल्या):"
+msgstr "डावनलोड केल्ल्या व्यवहारांची वळेरी (स्त्रोत विभागणी दाखयल्या)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18027,9 +18018,8 @@ msgstr ""
 "म्हयन्यांनी"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "चेर सुरू जाता: "
+msgstr "चेर सुरू जाता"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

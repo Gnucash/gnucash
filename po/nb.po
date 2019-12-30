@@ -14428,19 +14428,16 @@ msgid "window1"
 msgstr "Vindu _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "Betalingsfrist (dager): "
+msgstr "Betalingsfrist (dager)"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "Rabattdager: "
+msgstr "Rabattdager"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "Rabatt %: "
+msgstr "Rabatt %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14810,9 +14807,8 @@ msgid "Discount"
 msgstr "Rabatt"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Kredittgrense: "
+msgstr "Kredittgrense"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14928,23 +14924,20 @@ msgid "Payment Address"
 msgstr "Betalingsadresse"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "Språk: "
+msgstr "Språk"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "Grensesnitt"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "Standard antall timer per dag: "
+msgstr "Standard antall timer per dag"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "Standard lønn: "
+msgstr "Standard lønn"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15495,9 +15488,8 @@ msgid "Green"
 msgstr "Grønn"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "Liste over nedlastede transaksjoner (kildesplitt vises):"
+msgstr "Liste over nedlastede transaksjoner (kildesplitt vises)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18448,9 +18440,8 @@ msgstr ""
 "kvartalsvis = hver 3. måned"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "begynner den: "
+msgstr "begynner den"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22868,9 +22859,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "Sorter kolonnen stigende eller synkende"
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "Kundenummer: "
+msgstr "Kundenummer"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

@@ -14404,19 +14404,16 @@ msgid "window1"
 msgstr "ৱিন্দো _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "দিউ নুমিৎ: "
+msgstr "দিউ নুমিৎ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "দিস্কাউন্ত নুমিৎ: "
+msgstr "দিস্কাউন্ত নুমিৎ"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "দিস্কাউন্ত %: "
+msgstr "দিস্কাউন্ত %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14909,9 +14906,8 @@ msgid "Payment Address"
 msgstr "পেমেন্ত এদ্রেস"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "লোন: "
+msgstr "লোন"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
@@ -14923,9 +14919,8 @@ msgid "Default Hours per Day"
 msgstr "নোংমদা ওইবা দিফোল্ত পুংশিং"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "দিফোল্তকী চাং: "
+msgstr "দিফোল্তকী চাং"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15458,9 +15453,8 @@ msgid "Green"
 msgstr "অশংবা"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "দাউনলোদ তৌরবা ত্রান্সেকসনশিংগী পরিং (সোর্স স্প্লিত উৎলে):"
+msgstr "দাউনলোদ তৌরবা ত্রান্সেকসনশিংগী পরিং (সোর্স স্প্লিত উৎলে)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18344,9 +18338,8 @@ msgstr ""
 "ক্বার্তরলি = থা অহুম খুদিংগী"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "মসিদগী হৌবা: "
+msgstr "মসিদগী হৌবা"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

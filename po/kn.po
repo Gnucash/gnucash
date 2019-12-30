@@ -14466,9 +14466,8 @@ msgid "Discount Days"
 msgstr "ರಿಯಾಯಿತಿ ದಿನಗಳು:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "ರಿಯಾಯಿತಿ %: "
+msgstr "ರಿಯಾಯಿತಿ %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14839,9 +14838,8 @@ msgid "Discount"
 msgstr "ರಿಯಾಯಿತಿ"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "ಸಾಲದ ಮಿತಿ: "
+msgstr "ಸಾಲದ ಮಿತಿ"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14957,18 +14955,16 @@ msgid "Payment Address"
 msgstr "ಪಾವತಿಯ ವಿಳಾಸಗಳು"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "ಭಾಷೆ: "
+msgstr "ಭಾಷೆ"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "ಇಂಟರ್ಫೇಸ್"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "ಪ್ರತಿ ದಿನದ ಪೂರ್ವನಿಯೋಜಿತ ಗಂಟೆಗಳು: "
+msgstr "ಪ್ರತಿ ದಿನದ ಪೂರ್ವನಿಯೋಜಿತ ಗಂಟೆಗಳು"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
 #, fuzzy
@@ -15511,9 +15507,8 @@ msgid "Green"
 msgstr "ಹಸಿರು"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "ನಕಲಿಳಿಸಿಕೊಳ್ಳಲಾದ ವ್ಯವಹಾರಗಳ ಪಟ್ಟಿ (ಮೂಲ ವಿಭಜನೆಯನ್ನು ತೋರಿಸಲಾಗಿದೆ):"
+msgstr "ನಕಲಿಳಿಸಿಕೊಳ್ಳಲಾದ ವ್ಯವಹಾರಗಳ ಪಟ್ಟಿ (ಮೂಲ ವಿಭಜನೆಯನ್ನು ತೋರಿಸಲಾಗಿದೆ)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18388,9 +18383,8 @@ msgstr ""
 "ತ್ರೈಮಾಸಿಕ = ಪ್ರತಿ ೩ ತಿಂಗಳುಗಳು"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "ಆರಂಭಗೊಳ್ಳುವುದು: "
+msgstr "ಆರಂಭಗೊಳ್ಳುವುದು"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"

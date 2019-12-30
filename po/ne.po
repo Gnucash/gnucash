@@ -14351,14 +14351,12 @@ msgid "Due Days"
 msgstr "देय दिन:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "छुट दिन: "
+msgstr "छुट दिन"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "छुट %: "
+msgstr "छुट %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -14726,9 +14724,8 @@ msgid "Discount"
 msgstr "छुट"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:653
-#, fuzzy
 msgid "Credit Limit"
-msgstr "क्रेडिट सीमा: "
+msgstr "क्रेडिट सीमा"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:667
 #: gnucash/gtkbuilder/dialog-vendor.glade:634
@@ -14844,23 +14841,20 @@ msgid "Payment Address"
 msgstr "भुक्तानी ठेगाना"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:551
-#, fuzzy
 msgid "Language"
-msgstr "भाषा: "
+msgstr "भाषा"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:589
 msgid "Interface"
 msgstr "इन्टरफेस"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr "पूर्वनिर्धारित घण्टा प्रति दिन: "
+msgstr "पूर्वनिर्धारित घण्टा प्रति दिन"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
-#, fuzzy
 msgid "Default Rate"
-msgstr "पूर्वनिर्धारित दर: "
+msgstr "पूर्वनिर्धारित दर"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:868
 msgid "Access Control List"
@@ -15304,9 +15298,8 @@ msgstr "आयात गरिएको कारोबारहरू पहि
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid "Potential splits matching the selected transaction"
-msgstr "चयन गरिएको कारोबार मिल्दो सम्भावित कारोबारहरू: "
+msgstr "चयन गरिएको कारोबार मिल्दो सम्भावित कारोबारहरू"
 
 #: gnucash/gtkbuilder/dialog-import.glade:743
 msgid ""
@@ -15404,9 +15397,8 @@ msgid "Green"
 msgstr "हरियो"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "डाउनलोड गरिएको कारोबारहरूको सूची (बिभाजन स्रोतहरू देखाउनुहोस्):"
+msgstr "डाउनलोड गरिएको कारोबारहरूको सूची (बिभाजन स्रोतहरू देखाउनुहोस्)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18347,9 +18339,8 @@ msgstr ""
 "तीन महिना"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "सुरुआत: "
+msgstr "सुरुआत"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
@@ -22741,9 +22732,8 @@ msgid "Choose the ordering of the column sort: Either ascending or descending."
 msgstr "स्तम्भ बददोक्रम वा घट्दोक्रममा क्रमबद्ध गर्नुहोस्"
 
 #: gnucash/report/business-reports/customer-summary.scm:127
-#, fuzzy
 msgid "Customer Name"
-msgstr "ग्राहक सङ्ख्या: "
+msgstr "ग्राहक सङ्ख्या"
 
 #: gnucash/report/business-reports/customer-summary.scm:128
 #, fuzzy

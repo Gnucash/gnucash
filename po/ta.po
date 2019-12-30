@@ -14369,19 +14369,16 @@ msgid "window1"
 msgstr "சாளரம் _1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:79
-#, fuzzy
 msgid "Due Days"
-msgstr "செலுத்த வேண்டிய நாட்கள்: "
+msgstr "செலுத்த வேண்டிய நாட்கள்"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:93
-#, fuzzy
 msgid "Discount Days"
-msgstr "தள்ளுபடி நாட்கள்: "
+msgstr "தள்ளுபடி நாட்கள்"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:107
-#, fuzzy
 msgid "Discount %"
-msgstr "தள்ளுபடி %: "
+msgstr "தள்ளுபடி %"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:135
 msgid "The number of days to pay the bill after the post date."
@@ -15419,9 +15416,8 @@ msgid "Green"
 msgstr "பச்சை"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1156
-#, fuzzy
 msgid "List of downloaded transactions (source split shown)"
-msgstr "பதிவிறக்கப்பட்ட பரிமாற்றங்களின் பட்டியல் (மூல பிரிவை காட்டப்படும்):"
+msgstr "பதிவிறக்கப்பட்ட பரிமாற்றங்களின் பட்டியல் (மூல பிரிவை காட்டப்படும்)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1194
 #, fuzzy
@@ -18307,9 +18303,8 @@ msgstr ""
 "வாரங்கள்; காலாண்டு = ஒவ்வொரு 3 மாதங்கள்"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:111
-#, fuzzy
 msgid "beginning on"
-msgstr "இதில் துவங்குதல்:"
+msgstr "இதில் துவங்குதல்"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:146
 msgid "last of month"
