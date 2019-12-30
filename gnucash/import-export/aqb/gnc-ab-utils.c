@@ -323,6 +323,15 @@ create_online_id(const gchar *bankcode, const gchar *accountnumber)
 {
     gchar *online_id;
 
+    /* The accountnumber may have leading zeros, depending on where them
+     * accountnumber is came from, e.g. the accountnumber of accountinfo
+     * has no leading zeros while the (local)accountnumber of a transaction
+     * has leading zeros.
+     * So remove all leading '0', to get a consistent online_id.
+     */
+    while (accountnumber && *accountnumber == '0')
+        accountnumber++;
+
     online_id = g_strconcat(bankcode ? bankcode : "",
                             accountnumber ? accountnumber : "",
                             (gchar*)NULL);
@@ -342,7 +351,7 @@ join_ab_strings_cb(const gchar *str, gpointer user_data)
 
     if (!str || !*str)
         return NULL;
- 
+
     tmp = g_strdup(str);
     g_strstrip(tmp);
     gnc_utf8_strip_invalid_and_controls(tmp);
@@ -406,7 +415,7 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx)
 
     g_return_val_if_fail(ab_trans, g_strdup(""));
 
-    if (!is_ofx && gnc_prefs_get_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_USE_TRANSACTION_TXT)) 
+    if (!is_ofx && gnc_prefs_get_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_USE_TRANSACTION_TXT))
     {
         /* According to AqBanking, some of the non-swift lines have a special
          * meaning. Some banks place valuable text into the transaction text,
