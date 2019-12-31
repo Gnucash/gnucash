@@ -624,10 +624,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
             {
                 // As we now have the commodity, select the account with that commodity.
 
-                investment_account_text = g_strdup_printf( /* This string is a default account
-                                                              name. It MUST NOT contain the
-                                                              character ':' anywhere in it or
-                                                              in any translations.  */
+                /* Translators: This string is a default account name. It MUST
+                 * NOT contain the character ':' anywhere in it or in any
+                 * translations.  */
+                investment_account_text = g_strdup_printf(
                                          _("Stock account for security \"%s\""),
                              sanitize_string (data.security_data_ptr->secname));
 
@@ -793,10 +793,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                     if (income_account == NULL)
                     {
                         DEBUG("Couldn't find an associated income account");
-                        investment_account_text = g_strdup_printf( /* This string is a default account
-                                                                      name. It MUST NOT contain the
-                                                                      character ':' anywhere in it or
-                                                                      in any translations.  */
+                        /* Translators: This string is a default account
+                         * name. It MUST NOT contain the character ':' anywhere
+                         * in it or in any translations.  */
+                        investment_account_text = g_strdup_printf(
                                                       _("Income account for security \"%s\""),
                                                       sanitize_string (data.security_data_ptr->secname));
                         income_account = gnc_import_select_account(

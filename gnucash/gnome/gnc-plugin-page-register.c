@@ -3840,7 +3840,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     priv->sd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
-    /* Translations: The %s is the name of the plugin page */
+    /* Translators: The %s is the name of the plugin page */
     title = g_strdup_printf(_("Sort %s by..."),
                             gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
     gtk_window_set_title(GTK_WINDOW(dialog), title);
