@@ -3327,7 +3327,7 @@ Between 2.6.3 and 2.6.4, the following bugfixes were accomplished:
     733107 - Search for reconcile status doesn't work right.
     733283 - [PATCH] Loss of fractions when importing OFX investment
              transactions.
-    733506 - (ForwadDisableQIF) The forward button is not active even though
+    733506 - (ForwardDisableQIF) The forward button is not active even though
              a file is selected.
     734183 - Set all of the denominators correctly on the currency values.
     736703 - Scheduled transaction are registered without credit/debit.

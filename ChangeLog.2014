@@ -532,7 +532,7 @@
 
 2014-09-16 David Maline 
 
-	* Bug 733506 - (ForwadDisableQIF) The forward button is not active even though a file is selected
+	* Bug 733506 - (ForwardDisableQIF) The forward button is not active even though a file is selected
 
 2014-09-16 Jethro Beekman 
 
