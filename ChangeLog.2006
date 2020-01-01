@@ -17577,7 +17577,7 @@
 2006-01-23 19:29  chris
 
 	* [r12964] trunk/src/bin/Makefile.am, trunk/src/bin/gnucash-bin.c:
-	  Avoid GUI initialization durring --add-price-quotes, fixes
+	  Avoid GUI initialization during --add-price-quotes, fixes
 	  #327670 BTW, it turns out that we don't need to call gtk_init().
 	  It's called during the LIBGNOMEUI_MODULE initializtion from
 	  gnome_program_init().
