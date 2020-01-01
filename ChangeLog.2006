@@ -10214,7 +10214,7 @@
 	  "DEFAULT_VISIBLE", similar to "ALWAYS_VISIBLE", that controls
 	  the visibility of a column in the absence of, or prior to, gconf
 	  management. It is no longer necessary for the tree view to store
-	  a list of column names for default visible columns. To faciliate
+	  a list of column names for default visible columns. To facilitate
 	  the adaptation of pre-existing tree-views, the
 	  view_column_find_by_name() has been publicized as
 	  gnc_tree_view_find_column_by_name(). All callers of
