@@ -216,7 +216,7 @@
  *   used is the effective interest rate, EIR. In converting NAR to
  *   EIR, there are two concepts to discuss first, the Compounding
  *   Frequency and the Payment Frequency and * whether the interest is
- *   coumpounded in discrete intervals or continuously. The
+ *   compounded in discrete intervals or continuously. The
  *   compounding Frequency, CF, is simply the number of times per
  *   year, the monies in the financial transaction are compounded. In
  *   the U.S., monies are usually compounded daily on bank deposits,
