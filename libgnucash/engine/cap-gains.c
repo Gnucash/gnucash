@@ -231,7 +231,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     /* If this split already belongs to a lot, we are done. */
     if (split->lot) return NULL;
 
-    /* Anomolous situation; except for voided transactions,
+    /* Anomalous situation; except for voided transactions,
      * we don't expect to see splits with no amount ..
      * unless they're gains splits, and we shouldn't see those.
      */
