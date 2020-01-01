@@ -712,7 +712,7 @@
  *   The amortization schedule is computed for four different situations:
  *
  *   1) The original financial data is used. This ignores any possible
- *   agjustment to the Present value due to any delay in the initial
+ *   adjustment to the Present value due to any delay in the initial
  *   payment. This is quite common in mortgages where end of period
  *   payments are used and the first payment is scheduled for the end
  *   of the first whole period, i.e., any partial payment period from

@@ -249,7 +249,7 @@
     (H427 . "Form 6252 is used to report income from casual sales of real or personal property when you will receive any payments in a tax year after the year of sale (i.e., installment sale).")
     (N428 . "Enter the total of any money, face amount of the installment obligation, and the FMV of other property that you received or will receive in exchange for the property sold.")
     (N429 . "Enter only mortgages or other debts the buyer assumed from the seller or took the property subject to. Do not include new mortgages the buyer gets from a bank, the seller, or other sources.")
-    (N431 . "Enter all depreciation or amortization you deducted or should have deducted from the date of purchase until the date of sale. Add any section 179 expense deduction.  Several other adjustmants are allowed, See Form 6252 instructions.")
+    (N431 . "Enter all depreciation or amortization you deducted or should have deducted from the date of purchase until the date of sale. Add any section 179 expense deduction.  Several other adjustments are allowed, See Form 6252 instructions.")
     (N432 . "Enter sales commissions, advertising expenses, attorney and legal fees, etc., in selling the property.")
     (N434 . "Enter all money and the fair market value (FMV) of any property you received in this tax year. Include as payments any amount withheld to pay off a mortgage or other debt, such as broker and legal fees. Do not include interest whether stated or unstated.")
     (N435 . "Enter all money and the fair market value (FMV) of property you received before this tax year from the sale. Include allocable installment income and any other deemed payments from prior years. Do not include interest whether stated or unstated.")
