@@ -1135,7 +1135,7 @@ The Engine supports the concept of @dfn{Events} which notify
 external code when engine entities are created, modified, or
 destroyed.
 
-User code can register event handers which are invoked for each event,
+User code can register event handlers which are invoked for each event,
 giving information about the specific engine entity generating the event
 and the nature of the event (creation, modification, or deletion).
 
