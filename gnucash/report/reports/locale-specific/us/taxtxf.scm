@@ -73,7 +73,7 @@
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
 ;; to be current-date dependent!  Actually, time of day dependent!  Just
-;; after midnight gives diffenent dates than just before!  Referencing
+;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
 ;;
