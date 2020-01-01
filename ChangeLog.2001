@@ -2487,7 +2487,7 @@
 
 	* src/engine/SchedXaction.{ch}: Added member for recording if
 	SX has changed since last save.
-	(xaccSchedXactionSetDirtyness) provide API for modifying that field.
+	(xaccSchedXactionSetDirtiness) provide API for modifying that field.
 	All setter functions changed to set member appropriately.
 	(xaccSchedXactionSetSlot, XaccSchedXactionGetSlot): New functions
 
