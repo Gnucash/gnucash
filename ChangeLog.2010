@@ -10104,7 +10104,7 @@
 	  build. (gnc_build_data_path): New function, just a copy of
 	  gnc_build_book_path. Needed for rewrite of xaccResolveFilePath.
 	  (xaccResolveFilePath): Cleaned out the hard-coded paths and
-	  weird file path contruction functions and rewrote the function
+	  weird file path construction functions and rewrote the function
 	  to use gnc_path_get_foo and gnc_build_data_path without all of
 	  the silly indirection. Removed superfluous URI checks (which are
 	  correctly perfomed by xaccResolveURL()). (MakeHomeDir,
