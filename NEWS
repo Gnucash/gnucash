@@ -4115,7 +4115,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 Fixed Bugs:
 	 o #115066: "Search For" dialog shows all when criteria is left as
 	            default
-	 o #128774: "Edit exchange rate" context menu item disfunctional often
+	 o #128774: "Edit exchange rate" context menu item dysfunctional often
 	 o #137017: date of transaction change with time zone change
 	 o #339433: TiaaCref price quote dates off by one day
 	 o #340041: 0 as an amount should be allowed in Exchange Editor
