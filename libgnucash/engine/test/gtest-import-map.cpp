@@ -131,7 +131,7 @@ TEST_F(ImapPlainTest, FindAccount)
 
 TEST_F(ImapPlainTest, AddAccount)
 {
-// prevent the embedded beginedit/committedit from doing anything
+// prevent the embedded beginedit/commitedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     gnc_account_imap_add_account(t_imap, "foo", "bar", t_expense_account1);
@@ -168,7 +168,7 @@ TEST_F(ImapPlainTest, DeleteAccount)
     Path path2 {IMAP_FRAME, "foo"};
     Path path3 {IMAP_FRAME};
 
-// prevent the embedded beginedit/committedit from doing anything
+// prevent the embedded beginedit/commitedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     gnc_account_imap_add_account(t_imap, "foo", "bar", t_expense_account1);
@@ -275,7 +275,7 @@ TEST_F(ImapBayesTest, FindAccountBayes)
 
 TEST_F(ImapBayesTest, AddAccountBayes)
 {
-    // prevent the embedded beginedit/committedit from doing anything
+    // prevent the embedded beginedit/commitedit from doing anything
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     gnc_account_imap_add_account_bayes(t_imap, t_list1, t_expense_account1);
