@@ -1412,22 +1412,22 @@ int xaccAccountTreeForEachTransaction(Account *acc,
  */
 GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
 
-/* Look up an Account in the map non Baysian
+/* Look up an Account in the map non Bayesian
  */
 Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
                                         const char *key);
 
-/* Store an Account in the map non Baysian
+/* Store an Account in the map non Bayesian
  */
 void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
                                    const char *key, Account *acc);
 
-/* Remove a reference to an Account in the map non Baysian
+/* Remove a reference to an Account in the map non Bayesian
  */
 void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
                                       const char *key);
 
-/** Look up an Account in the map using Baysian
+/** Look up an Account in the map using Bayesian
  */
 Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
 

@@ -4301,7 +4301,7 @@
 	* src/import-export/import-backend.c:
 	* src/import-export/import-match-map.c:
 	* src/import-export/import-match-map.h:
-	  Chris Morgan's Baysian Matching code, to match transactions
+	  Chris Morgan's Bayesian Matching code, to match transactions
 	  based on Bayesian filtering of previously matched transactions.
 
 	* src/business/business-ledger/gncEntryLedger.c: allow the user

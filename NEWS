@@ -5588,7 +5588,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.
 	 o Turn off the report-total by default
 	 o The Euroland currency rates were inverted in the transfer dialog.
-	 o Chris Morgan's Baysian Matching code, to match transactions based
+	 o Chris Morgan's Bayesian Matching code, to match transactions based
 	   on Bayesian filtering of previously matched transactions.
 	 o Fix a bug in the account name list when you you filtered down to no
 	   accounts it would ignore the filter.
