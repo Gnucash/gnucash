@@ -67,7 +67,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Define an account record for cacheing information about all the accounts
+;; Define an account record for caching information about all the accounts
 (define (accrec-printer accrec port)
   ;; accrec printer.  This is for debugging reports, so it uses
   ;; HTML for pretty-printing
