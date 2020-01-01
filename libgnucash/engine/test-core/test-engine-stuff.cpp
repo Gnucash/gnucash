@@ -1,6 +1,6 @@
 /**
  * @file test-engine-stuff.c
- * @brief tools to set up random, but finanically consistent books.
+ * @brief tools to set up random, but financially consistent books.
  * Create transactions with random values, random accounts, random
  * account hierarchies, etc.
  *
