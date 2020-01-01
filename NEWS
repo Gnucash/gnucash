@@ -612,7 +612,7 @@ Other repairs or enhancements not marked as bugs:
       gnc-commodity-collector-contains-commodity?
       gnc:commodity-collectorlist-get-merged
       gnc:exchange-by-pricedb-helper
-      gnc:exhange-by-pricevalue-helper
+      gnc:exchange-by-pricevalue-helper
       gnc:get-commoditylist-inst-prices
       gnc:hook-run-danglers
       gnc:make-drcr-collector
