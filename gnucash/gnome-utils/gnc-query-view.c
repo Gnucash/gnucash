@@ -697,7 +697,7 @@ gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column)
     g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
 
     /* If we're asked to invert numerics, and if this is a numeric or
-     * debred column, then invert the sort order.
+     * debcred column, then invert the sort order.
      */
     if (qview->numeric_inv_sort)
     {
