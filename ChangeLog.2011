@@ -5498,7 +5498,7 @@
 
 	* [r20394] src/report/report-gnome/gnc-plugin-page-report.c: When
 	  setting a printer job name, remove slashes because they are not
-	  allowes in filenames.
+	  allowed in filenames.
 
 2011-03-10 22:23  cstim
 
