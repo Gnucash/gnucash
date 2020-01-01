@@ -257,7 +257,7 @@ qof_log_prettify (const char *name)
         return "";
     }
 /* Clang's __func__ displays the whole signature, like a good C++
- * compier should. Gcc displays only the name of the function. Strip
+ * compiler should. Gcc displays only the name of the function. Strip
  * the extras from Clang's output so that log messages are the same
  * regardless of compiler.
  */
