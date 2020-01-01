@@ -5619,7 +5619,7 @@
 	* src/app-utils/prefs.scm: Create a 'file compression' option and
 	pass the data into the backend.
 
-2003-01-04  Derek Atkkins  <derek@ihtfp.com>
+2003-01-04  Derek Atkins  <derek@ihtfp.com>
 
 	* add a set of business accounts to the setup druid
 	* fix the full and common accounts to remove the (wrong) "Accounts Payable"
