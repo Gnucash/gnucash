@@ -59,7 +59,7 @@
 #   in database and not only as logfile
 #
 #   Knut Gerwens, 2008-10-04:
-#   Improved memory-mangement. Writing to disc is enforced every 1000 rows
+#   Improved memory-management. Writing to disc is enforced every 1000 rows
 #
 
 import uno, unohelper

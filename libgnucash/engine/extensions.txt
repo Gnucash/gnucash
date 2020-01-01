@@ -65,6 +65,6 @@ AcctKey -- Cle (FR), blank in others
 
 Account type enumerants:
 bank account types:
-    checking, savings, moneymarket, creditline, cma (cash amangement account)
+    checking, savings, moneymarket, creditline, cma (cash management account)
 
 */
