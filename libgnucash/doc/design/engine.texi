@@ -1015,7 +1015,7 @@ A @code{kvp_value_t} enum must have one of the following values:
 @table @code
 
 @item KVP_TYPE_NONE
-Indicates the abscence of a value in a @code{kvp_frame}.
+Indicates the absence of a value in a @code{kvp_frame}.
 
 @item KVP_TYPE_INT64
 A @code{gint64} value.
