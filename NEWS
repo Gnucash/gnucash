@@ -5700,7 +5700,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   to do when entering invoices.
 
  1.7.8  - 20 January 2003
- 	 o Welcome to Release Canidate 3
+ 	 o Welcome to Release Candidate 3
 	 o Fixed build issues introduced in last release
 	 o Fix compile errors on SuSE 8.0 + 8.1
 	 o Update translations, po/ru.po by Vitaly Lipatov, po/el.po by
@@ -5751,7 +5751,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Lots more bugfixes, see changelog.
 
  1.7.7  - 05 January 2003
- 	 o Welcome to Release Canidate 2
+ 	 o Welcome to Release Candidate 2
 	 o Give the user better feedback on exactly what the exchange rate
 	   means.
 	 o Better handling of corrupt XML data files.  Print better error
