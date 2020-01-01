@@ -407,7 +407,7 @@
 	  Add the file and multifile providers to the druid test
 
 	* src/app-utils/gnc-druid-provider-desc-edge.c:
-	  don't need to cast to the cuperclass -- just use it directly.
+	  don't need to cast to the superclass -- just use it directly.
 
 	* src/app-utils/gnc-druid-provider-desc/file.[ch]:
 	  add a history_id as a separate member for where to store
