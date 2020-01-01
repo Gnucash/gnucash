@@ -476,7 +476,7 @@ simple_kvp_value_parser_new (sixtp_end_handler end_handler)
  */
 
 /* ------------------------------------------------------------ */
-/* generic type copnversion for kvp types */
+/* generic type conversion for kvp types */
 #define KVP_CVT_VALUE(TYPE)                 \
 {                               \
   gchar *txt = NULL;                        \
