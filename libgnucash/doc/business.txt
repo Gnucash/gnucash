@@ -33,7 +33,7 @@ API: \ref BillTerm
 \subsection entry Entry:
 
 \subsection invoice Invoice:
-Pulls together info needed to geenrate an invoice, including addresses,
+Pulls together info needed to generate an invoice, including addresses,
 job, the dates, the billing terms, the amounts, and the accounts
 to be credited.
 

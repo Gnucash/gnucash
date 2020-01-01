@@ -2475,7 +2475,7 @@
 
 2007-05-22 20:00  cstim
 
-	* [r16119] Makefile.am: Auto-genenerate ChangeLog only when
+	* [r16119] Makefile.am: Auto-generate ChangeLog only when
 	  building from svn.
 
 2007-05-22 19:17  cstim
