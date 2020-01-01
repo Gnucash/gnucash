@@ -22,7 +22,7 @@
 
 /*
  * FILE:
- * esacpe.c
+ * escape.c
  *
  * FUNCTION:
  * Escapes the ' and \ characters in a string
