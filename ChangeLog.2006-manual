@@ -2028,7 +2028,7 @@ r13883 | chris | 2006-04-29 20:43:45 -0400 (Sat, 29 Apr 2006) | 3 lines
    M /gnucash/trunk/src/register/ledger-core/split-register.c
 
    When deleting the current Transaction in the register, let the action take
-   effect immediately by commiting the transaction if it's open.
+   effect immediately by committing the transaction if it's open.
 
 r13880 | chris | 2006-04-29 11:08:12 -0400 (Sat, 29 Apr 2006) | 2 lines
 

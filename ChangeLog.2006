@@ -10860,7 +10860,7 @@
 
 	* [r13883] trunk/src/register/ledger-core/split-register.c: When
 	  deleting the current Transaction in the register, let the action
-	  take effect immediately by commiting the transaction if it's
+	  take effect immediately by committing the transaction if it's
 	  open.
 
 2006-04-29 22:42  andi5
