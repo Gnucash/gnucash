@@ -5633,7 +5633,7 @@
 	  The only difference between this commit and r20207 is that,
 	  contrary to the recommendation given in gnc-tree-view.h, "Use
 	  GNC_TREE_VIEW_COLUMN_DATA_NONE if you plan on using a non-model
-	  data source for this column", it cobtinues to use
+	  data source for this column", it continues to use
 	  "GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO". Using
 	  "GNC_TREE_VIEW_COLUMN_DATA_NONE" generates problems later in the
 	  "gnc_tree_view_add_text_column" routine when it tries to set up
