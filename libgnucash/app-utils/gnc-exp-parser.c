@@ -60,7 +60,7 @@ static gboolean      parser_inited     = FALSE;
 /** Implementations ************************************************/
 
 static gchar *
-gnc_exp_parser_filname (void)
+gnc_exp_parser_filename (void)
 {
     return gnc_build_userdata_path("expressions-2.0");
 }
@@ -90,7 +90,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
 
     if ( addPredefined )
     {
-        filename = gnc_exp_parser_filname();
+        filename = gnc_exp_parser_filename();
         key_file = gnc_key_file_load_from_file(filename, TRUE, FALSE, NULL);
         if (key_file)
         {
@@ -142,7 +142,7 @@ gnc_exp_parser_shutdown (void)
     if (!parser_inited)
         return;
 
-    filename = gnc_exp_parser_filname();
+    filename = gnc_exp_parser_filename();
     key_file = g_key_file_new();
     g_hash_table_foreach (variable_bindings, set_one_key, key_file);
     g_key_file_set_comment(key_file, GEP_GROUP_NAME, NULL,
