@@ -73,7 +73,7 @@
 
 struct transaction_s
 {
-    QofInstance inst;     /* glbally unique id */
+    QofInstance inst;     /* globally unique id */
 
     time64 date_entered;     /* date register entry was made              */
     time64 date_posted;      /* date transaction was posted at bank       */
