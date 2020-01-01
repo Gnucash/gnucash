@@ -2414,7 +2414,7 @@
 
 	* src/register/splitreg.h (struct _SplitRegisterColors): add color
  	for odd rows in single mode, and boolean argument determining
- 	whether to alterative virtual or physical rows in double mode.
+ 	whether to alternate virtual or physical rows in double mode.
 
 2000-02-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
