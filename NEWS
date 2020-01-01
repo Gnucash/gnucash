@@ -25,7 +25,7 @@ The following bugs have been fixed:
     Bug 793018 - Balance (with >>eguile<<) - Report Title can't be changed
     Bug 795251 - googletest detection cannot be overridden
     Bug 796819 - bad icon with Spanish localization
-                 Temporary fix for Farsi, which was afffected, too. As it
+                 Temporary fix for Farsi, which was affected, too. As it
                  is maintained by TP, the final fix has to come from them.
     Bug 796952 - Report formatting (justify) is broken
                  Previous patch reverted and replaced with a more correct one.
