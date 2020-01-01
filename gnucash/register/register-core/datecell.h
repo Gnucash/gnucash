@@ -49,7 +49,7 @@
  *     ']':    increment month
  *
  *     '{':
- *     '[':    decrment month
+ *     '[':    decrement month
  *
  *     'M':
  *     'm':    beginning of month
