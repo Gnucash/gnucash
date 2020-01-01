@@ -2770,7 +2770,7 @@
 	  cannot conflict with types of anchor accounts of open registers,
 	  as no register can have accessed it yet. On the contrary,
 	  killing the general ledger that is used to input a new account
-	  is contraproductive. BP
+	  is counterproductive. BP
 
 2008-05-11 21:41  andi5
 
