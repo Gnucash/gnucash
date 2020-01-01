@@ -4346,7 +4346,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	against being called after window destruction has started.
 
 	* src/gnome/glade/lots.glade:
-	* src/gnome/lot-viewer.c: Make the dialog more HIG compliate.
+	* src/gnome/lot-viewer.c: Make the dialog more HIG compliant.
 	Install the callbacks via glade instead of by hand.  Rework some
 	of the callback logic.  The buttons that require a lot be selected
 	now cannot be clicked unless a lot is selected.  Rememver window
