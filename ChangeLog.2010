@@ -5050,7 +5050,7 @@
 	  generate-restore-form does not rely on "hack" in setter that
 	  previously allowed either a budget object or a GUID string This
 	  is a different fix for 603215 -- see Known Issues * Provide
-	  translation support for "Trading Acccounts" (and "Budgeting") *
+	  translation support for "Trading Accounts" (and "Budgeting") *
 	  Refactor #define names for consistency and extensibility *
 	  KVP_OPTION_PATH for consistency with Guile usage *
 	  OPTION_SECTION_blahblah * OPTION_NAME_blahblah * Modify
@@ -11213,7 +11213,7 @@
 
 2010-01-12 19:40  gjanssens
 
-	* [r18564] src/gnome/glade/acctperiod.glade: Fix typo: accouting
+	* [r18564] src/gnome/glade/acctperiod.glade: Fix typo: accounting
 	  -> accounting
 
 2010-01-12 18:08  gjanssens

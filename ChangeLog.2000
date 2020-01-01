@@ -399,7 +399,7 @@
 	(xaccGroupMapAccounts): new function (probably going away later).
 	(xaccGroupForEachAccountDeeply): ditto.
 
-	* src/engine/Group.h: handler changes to Acccount*'s and to Group.c.
+	* src/engine/Group.h: handler changes to Account*'s and to Group.c.
 
 	* src/engine/GNCId.c:
 	(xaccGetAndResetEntityTable): new function - needed when you want
@@ -1807,7 +1807,7 @@
 	* src/SplitLedger.c: more cleanup. Fix a bug in refreshing a register
 	in auto-mode where the current transaction has been deleted.
 
-	* src/scm/report/balance-and-pnl.scm: put sub-accouts below their
+	* src/scm/report/balance-and-pnl.scm: put sub-accounts below their
 	parent accounts and indent their names. Align the columns better.
 	Print fully-qualified names.
 

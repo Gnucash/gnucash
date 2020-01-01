@@ -2216,7 +2216,7 @@ v	  fix the print_info
 	* add a 'modality' flag to the gnc-account-sel (which new-account API)
 	  so that the new-account-window can be called using the modal dialog
 	  interfaces.
-	* use the GNCAccoutSel in the date-close dialog (fixes bug #94973)
+	* use the GNCAccountSel in the date-close dialog (fixes bug #94973)
 
 	* create search-reconciled.[ch] to implement searches by reconcile flag
 	* gnome-search/search-core-type.c: hook in "reconciled" type,

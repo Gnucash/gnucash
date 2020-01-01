@@ -638,7 +638,7 @@ Other repairs or enhancements not marked as bugs:
         * USD -25 = GBP -20
         * USD +75 = EUR +66
        This will be useful in creating tests for stock-based reports, whereby stock sales need splits in STOCK/ASSET/INCOME accounts.
-    Scheme: Redesign gnc:account-get-balances-at-dates, replacing the ignore-closing? parameter with a split->amount function parameter having a default value of xaccSplitgetAmount. (split->amount split) should return the amount of the split or #f; in the latter case the split is skipped. This allows for a more general account balance list accumulator with novel balance strategies. For example a split->amount function could test void status and return xaccSplitVoidForerAmount on void splits; test description/memo for some content and vary the returned amount accordingly; or test the split and return 1 or 0 creating a counter. To recreate the ignore-closing use case pass (lambda (s) (and not (xaccTransGetIsClosingTxn (xaccSplitGetParent s))) (xaccSplitGetAcmount s)))
+    Scheme: Redesign gnc:account-get-balances-at-dates, replacing the ignore-closing? parameter with a split->amount function parameter having a default value of xaccSplitgetAmount. (split->amount split) should return the amount of the split or #f; in the latter case the split is skipped. This allows for a more general account balance list accumulator with novel balance strategies. For example a split->amount function could test void status and return xaccSplitVoidForerAmount on void splits; test description/memo for some content and vary the returned amount accordingly; or test the split and return 1 or 0 creating a counter. To recreate the ignore-closing use case pass (lambda (s) (and not (xaccTransGetIsClosingTxn (xaccSplitGetParent s))) (xaccSplitGetAccount s)))
     Scheme: Replace some option names. Automatically convert usage of the old names and issue a warning.
 
 
@@ -3797,7 +3797,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
 	 334939 - Account Report and Account Transaction Report are
 	 apparently the same, but different. Change menu entry for the single
-	 transaction Account Report from "Accout Transaction Report" to
+	 transaction Account Report from "Account Transaction Report" to
 	 "Account Report - Single Transaction" Author: Carsten Rinke
 
 	 603183 - Equity statement shows incorrect changes
@@ -3814,7 +3814,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 gnc_main_window_generate_title. Patch by Guilherme Salgado.
 
 	 696492 - Change report name in menu or in report output to be
-	 consistent Change the register name to "Accout Transaction Report"
+	 consistent Change the register name to "Account Transaction Report"
 	 when the register type is GENERAL_LEDGER, INCOME_LEDGER, or default
 	 in function gnc_reg_get_name().  Patch by Carsten Rinke.
 

@@ -129,7 +129,7 @@ void gnc_keyring_set_password (const gchar *access_method,
     status = SecKeychainAddInternetPassword ( NULL, /* keychain */
              strlen(server), server,                /* servername */
              strlen(access_method), access_method,  /* securitydomain */
-             strlen(user), user,                    /* acountname */
+             strlen(user), user,                    /* accountname */
              strlen(service), service,              /* path */
              port,                                  /* port */
              kSecProtocolTypeAny,                   /* protocol */

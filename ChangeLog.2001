@@ -4903,7 +4903,7 @@
 	rates.
 
 	* src/scm/report-utilities.scm
-	(gnc:acccounts-get-all-subaccounts): added.
+	(gnc:accounts-get-all-subaccounts): added.
 
 	* src/scm/commodity-utilities.scm
 	(gnc:make-exchange-nearest-function): Added this and many more

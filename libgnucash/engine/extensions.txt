@@ -6,7 +6,7 @@ of the changes that will come soon to the interfaces.
 
 \section accountperiods Accounting Periods
 
-Acconting periods are implemented by creating an object that
+Accounting periods are implemented by creating an object that
 describes the accounting period, and then assigning every 
 transaction to at least one period.
 
