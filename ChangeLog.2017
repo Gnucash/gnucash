@@ -2264,7 +2264,7 @@
 
 2017-09-06 Geert Janssens 
 
-	* Ajust the GUILE_COMPILE_PATH such that it also works on Windows
+	* Adjust the GUILE_COMPILE_PATH such that it also works on Windows
 
 2017-09-05 Geert Janssens 
 
