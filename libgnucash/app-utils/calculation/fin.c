@@ -1533,7 +1533,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
 void
 set_default (fi_ptr fi)
 {
-    /* flag whether accrueing interest at beginning or end of period
+    /* flag whether accruing interest at beginning or end of period
      * FALSE --> end
      * TRUE  --> beginning
      * default to end of period payment s
