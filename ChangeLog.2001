@@ -7770,7 +7770,7 @@
 	* summary: separate the HTML and HTTP processing functions into
 	different files to facilitate reuse.  Modularize much of the
 	gnucash-specific behavior of the HTML code (<object> and form
-	submission) to use run-time-expandable bahavior tables.  Add the
+	submission) to use run-time-expandable behavior tables.  Add the
 	gnc-action: mechanism for installing form submission handlers.
 
 	* src/gnome/gng-gpg.c: initialize gnc-html handler for crypted
