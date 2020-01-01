@@ -11989,7 +11989,7 @@
 	* [r13734]
 	  trunk/src/gnome-utils/glade/druid-provider-multifile.glade,
 	  trunk/src/import-export/qif-import/qif.glade: Fix translatable
-	  atttribute of non-visible label
+	  attribute of non-visible label
 
 2006-04-04 08:45  cstim
 
