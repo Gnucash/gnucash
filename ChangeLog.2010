@@ -4039,7 +4039,7 @@
 
 	* [r19293] src/optional/python-bindings/Makefile.am,
 	  src/optional/python-bindings/gnucash_core.i: Bug #622520 -
-	  gnucash business objects disapear on save, patch by Mark Jenkins
+	  gnucash business objects disappear on save, patch by Mark Jenkins
 
 2010-06-25 09:44  gjanssens
 

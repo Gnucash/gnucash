@@ -347,7 +347,7 @@ Known Issues:
     Bug 796899 - FTBFS on [mips]: segfault; test-backend-dbi; endianness
     Bug 796900 - Problems in Description Editing. Select all implemented with the Caps Key (plus no Ctrl Z Undo, grrr)
     Bug 796905 - GNUcash does not start after windows 10 update
-    Bug 796907 - After a series of actions to the window of GnuCash, some of or all of the contents will dispear and could not get them back
+    Bug 796907 - After a series of actions to the window of GnuCash, some of or all of the contents will disappear and could not get them back
     Bug 796909 - Can't enter different notes and memos for an AR payment transaction
     Bug 796911 - Minimum window width is too large, so it may not be possible to maximise the window
     Bug 796925 - Database connections not closed by session.end()/session.destroy() when is_new=True
@@ -969,7 +969,7 @@ Known Issues:
                   to maximise the window
      Bug 796892 - Startup warning: undefined symbol PyOS_getsig
      Bug 796907 - After a series of actions to the window of GnuCash, some of
-                  or all of the contents will dispear and could not get them
+                  or all of the contents will disappear and could not get them
                   back
      Bug 796896 - Button to complete an export not intuitively placed or
                   discoverable
