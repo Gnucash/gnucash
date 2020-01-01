@@ -77,7 +77,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans);
  * than this value is totally ignored.
  *
  * @param fuzzy_amount_difference For fuzzy amount matching, a certain
- * fuzzyness in the matching amount is allowed up to this value. May
+ * fuzziness in the matching amount is allowed up to this value. May
  * be e.g. 3.00 dollars for ATM fees, or 0.0 if you only want to allow
  * exact matches.
  *
