@@ -539,7 +539,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 	      (car choice)
 	      (cdr choice))
 	  (begin
-	    (gnc:warn "internal sorting option errorin aging.scm")
+	    (gnc:warn "internal sorting option error in aging.scm")
 	    (lambda (a b)
 	      (string<? (car a) (car b)))))))
 
