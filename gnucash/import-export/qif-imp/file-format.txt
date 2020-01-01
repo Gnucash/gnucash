@@ -248,7 +248,7 @@ slash separator, or using other separators in place of the slash,
 commonly '-' and '.'.  US Quicken seems to be using the ' to indicate
 post-2000 two-digit years (such as 01/01'00 for Jan 1 2000).  Some
 banks appear to be using a completely undifferentiated numeric string
-formateed YYYYMMDD in downloaded QIF files.
+formatted YYYYMMDD in downloaded QIF files.
 
 European QIF files may have dates in the DD/MM/YY format.
 
