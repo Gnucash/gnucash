@@ -3035,7 +3035,7 @@
 
 2001-07-06  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* doc/sgml/C/xacc-balancreport.sgml: minor updates
+	* doc/sgml/C/xacc-balancereport.sgml: minor updates
 
 	* doc/sgml/C/image/regwin*.png, appr-income.png, bal-graph.png,
 	  report-hierachical.png: no longer used, so removed.
