@@ -5119,7 +5119,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
           Converted the following functions to use GObject:
                 gnc_date_format_get_type,
                 gnc_date_format_class_init
-          Created gnc_date_format_dipose function
+          Created gnc_date_format_dispose function
 
 2005-01-02  Derek Atkins  <derek@ihtfp.com>
 
