@@ -113,7 +113,7 @@ concatenate_child_result_chars (GSList* data_from_children)
 
     g_return_val_if_fail (name, NULL);
 
-    /* child data lists are in reverse chron order */
+    /* child data lists are in reverse cron order */
     data_from_children = g_slist_reverse (g_slist_copy (data_from_children));
 
     for (lp = data_from_children; lp; lp = lp->next)

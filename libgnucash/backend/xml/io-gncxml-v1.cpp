@@ -657,7 +657,7 @@ glist_kvp_value_end_handler (gpointer data_for_children,
         sixtp_child_result* cr = (sixtp_child_result*) lp->data;
         KvpValue* kvp = (KvpValue*) cr->data;
 
-        /* children are in reverse chron order, so this fixes it. */
+        /* children are in reverse cron order, so this fixes it. */
         result_glist = g_list_prepend (result_glist, kvp);
         cr->should_cleanup = FALSE;
     }
