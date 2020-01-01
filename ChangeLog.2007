@@ -364,7 +364,7 @@
 2007-12-16 16:41  jsled
 
 	* [r16669] src/bin/gnucash-bin.c: Change some g_error's to
-	  g_warnings, which won't abend the app.
+	  g_warnings, which won't abort the app.
 
 2007-12-16 16:40  jsled
 
