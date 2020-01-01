@@ -798,7 +798,7 @@
 1999-11-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
         * src/register/gnome/ChangeLog: we're going to stop using this
-	changlog file and put all changes in the top-level ChangLog file.
+	changelog file and put all changes in the top-level ChangeLog file.
 
 	* src/gnome/reconcile-list.[ch]: Use a hash table to remember
 	reconcile flags after a refresh. Also remember scroll position.
