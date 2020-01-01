@@ -906,7 +906,7 @@ Other repairs or enhancements not marked as bugs:
           equally.
      Add short_labels for a few toolbar buttons with long names. That should
           fit a few more buttons on the toolbar.
-     Update iso-4217-currencies.xml, adddding VES - Bolivar Soberano, minor
+     Update iso-4217-currencies.xml, adding VES - Bolivar Soberano, minor
           updates of other VE currencies.
      Python 3 bindings fixes and improvements from Christoph Holterman and
           Sumit Bhardwaj.
