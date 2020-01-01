@@ -12,6 +12,6 @@ id,company,name,addr1,addr2,addr3,addr4,phone,fax,email,notes,shipname,shipaddr1
 ,No Address Company,Accounts,,,,,,,,,,,,,,,,
 
 #Just another example after a blank line
-,"Bad Company",Accounts,99 Destutute street,,,,,,,,,,,,,,, 
+,"Bad Company",Accounts,99 Destitute street,,,,,,,,,,,,,,, 
 
 
