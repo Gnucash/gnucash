@@ -4390,7 +4390,7 @@
 
 2010-06-07 21:45  jralls
 
-	* [r19238] src/bin/gnucash-bin.c: Disable enviroment_overide()
+	* [r19238] src/bin/gnucash-bin.c: Disable environment_overide()
 	  when MAC_INTEGRATION is defined: It doesn't play well with App
 	  Bundles.
 
