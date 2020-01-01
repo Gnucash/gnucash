@@ -6509,7 +6509,7 @@ r12975 | chris | 2006-01-24 20:36:28 -0500 (Tue, 24 Jan 2006) | 8 lines
    leaving only the highest level of gui initialization in /gnome/top-level.c
    Process --loglevel command-line option from C.
    Move the running of the startup hook from guile to C.
-   Distrubute bits of scheme from main.scm to the modules they're used in.
+   Distribute bits of scheme from main.scm to the modules they're used in.
    Remove more obsoleted scheme.
 
 
