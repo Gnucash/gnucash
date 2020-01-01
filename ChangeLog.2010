@@ -702,7 +702,7 @@
 	* [r19922] optional, optional/python-bindings,
 	  optional/python-bindings/example_scripts,
 	  optional/python-bindings/example_scripts/price_database_example.py:
-	  New example script for prices dababase. Thanks to Christoph
+	  New example script for prices database. Thanks to Christoph
 	  Holtermann for contributing to this.
 
 2010-12-10 10:25  cstim
