@@ -223,7 +223,7 @@ void qof_book_mark_closed (QofBook *book);
  *  type.
  *
  *  If the collection doesn't yet exist for the indicated type,
- *  it is created.  Thus, this routine is gaurenteed to return
+ *  it is created.  Thus, this routine is guaranteed to return
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */

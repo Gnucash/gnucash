@@ -256,7 +256,7 @@ gboolean gnc_uri_targets_local_fs (const gchar *uri);
  *                   is added verbatim, so if a dot should be added, this
  *                   should be part of the extension.
  *
- *  @return The uri, but garanteed to end with extension if the uri is file
+ *  @return The uri, but guaranteed to end with extension if the uri is file
  *          based. Otherwise the uri is returned unmodified. Note that the
  *          returned value should be freed with g_free when no longer needed.
  */
