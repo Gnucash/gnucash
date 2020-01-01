@@ -1188,7 +1188,7 @@
 
 2018-12-27 Geert Janssens
 
-	* Fix memory leaks in dialog-file-acces.c:geturl
+	* Fix memory leaks in dialog-file-access.c:geturl
 
 2018-12-27 Geert Janssens
 
