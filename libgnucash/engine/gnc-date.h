@@ -474,7 +474,7 @@ size_t qof_print_date_dmy_buff (gchar * buff, size_t buflen, int day, int month,
 size_t qof_print_date_buff (char * buff, size_t buflen, time64 secs);
 
 /** Convenience; calls through to qof_print_date_dmy_buff(). **/
-size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
+size_t qof_print_gdate(char *buf, size_t buflen, const GDate *gd);
 
 /** Convenience; calls through to qof_print_date_dmy_buff().
  *  Return: string, which should be freed when no longer needed.
