@@ -2098,7 +2098,7 @@ Other repairs not marked as bugs in git:
           intermediary.
      Pass KVP paths as a collection of elements instead of a delimited string.
            This allows keys to contain '/'. Thanks to Aaron Laws.
-     Added a frameowrk for migrating preferences.
+     Added a framework for migrating preferences.
      Made separate functions for finding a widget's parent window:
           gnc_ui_get_gtk_window tries to find the immediate parent and
           gnc_ui_get_main_window tries to find the widget's parent
@@ -2305,7 +2305,7 @@ Other repairs not marked as bugs in git:
           intermediary.
      Pass KVP paths as a collection of elements instead of a delimited string.
            This allows keys to contain '/'. Thanks to Aaron Laws.
-     Added a frameowrk for migrating preferences.
+     Added a framework for migrating preferences.
      Made separate functions for finding a widget's parent window:
           gnc_ui_get_gtk_window tries to find the immediate parent and
           gnc_ui_get_main_window tries to find the widget's parent
