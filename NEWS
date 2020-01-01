@@ -3882,7 +3882,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
 	 PostedDate is now recorded only as a date, with no time.
 
-	 Peter Broadberry contributed faster versions of several reports.
+	 Peter Broadbery contributed faster versions of several reports.
 
 	 Bug Fixes:
 	 703272: list of windows in OSX Windows menu
