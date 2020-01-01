@@ -58,7 +58,7 @@
     (N520 . "Spouse's part of tier I railroad retirement benefits, which are treated as a social security benefits. These will be reported on Form RRB-1099.")
     (N636 . "The amount of interest you paid this year on qualified student loans.")
     (H270 . "Schedule A is used to report your itemized deductions.")
-    (N271 . "Amounts paid for subscriptions to magazines or services that are directly related to the production or collection of taxable income.  (exapmle: subscriptions to investment publications, stock newsletters, etc.).")
+    (N271 . "Amounts paid for subscriptions to magazines or services that are directly related to the production or collection of taxable income.  (example: subscriptions to investment publications, stock newsletters, etc.).")
     (N272 . "Gambling losses, but only to the extent of gambling winnings reported on Form 1040. Note: not subject to the 2% AGI of limitation.")
     (N273 . "Prescription medicines, eyeglasses, contact lenses, hearing aids. Over-the-counter medicines are not deductible.")
     (N274 . "Lodging expenses while away from home to receive medical care in a hospital or a medical care facility related to a hospital. Do not include more than $50 a night for each eligible person. Ambulance service and other travel costs to get medical care.")
