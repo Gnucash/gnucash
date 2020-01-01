@@ -2854,7 +2854,7 @@
 	  src/engine/SchedXaction.c, src/engine/SchedXaction.h,
 	  src/engine/test-core/test-engine-stuff.c,
 	  src/engine/test-core/test-engine-stuff.h: And more
-	  const-correctnes in SchedXaction.h
+	  const-correctness in SchedXaction.h
 
 2010-08-21 23:52  jralls
 
