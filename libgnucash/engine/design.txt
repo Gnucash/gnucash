@@ -230,7 +230,7 @@ The 'reconcile' state of a transaction can have one of the following values:
 The process of reconciliation works as follows:
 -# User enters new transaction.  All splits are marked 'n' for 'new'
    or 'no, not yet reconciled'.
--# User beleives that the transaction has cleared the bank, 
+-# User believes that the transaction has cleared the bank, 
    e.g. that a cheque written out has been deposited/cashed.
    User clicks in the 'R' column in the register gui,
    marking the split 'c' for 'cleared'.   User can freely 
