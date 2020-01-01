@@ -339,7 +339,7 @@
 	(kvp_value_compare): new function.
 	(kvp_frame_compare): new function.
 
-	* src/engine/kvp_frame.h: accomodate changes to kvp_frame.c.
+	* src/engine/kvp_frame.h: accommodate changes to kvp_frame.c.
 	
 	* src/engine/guid.c:
 	(guid_compare): new function.
@@ -347,12 +347,12 @@
 	(guid_hash_table_new): new function.
 	(guid_g_hash_table_equal): new function.
 
-	* src/engine/guid.h: accomodate changes to guid.c.
+	* src/engine/guid.h: accommodate changes to guid.c.
 
 	* src/engine/date.c:
 	(timespec_equal): new function.
 
-	* src/engine/date.c: accomodate changes to date.c.
+	* src/engine/date.c: accommodate changes to date.c.
 	
 	* src/engine/Transaction.c: update all functions to mark the
 	account's dirty flags when needed.
@@ -367,9 +367,9 @@
 	(xaccTransSetDocref): deleted.
 	(xaccTransGetDocref): deleted.
 
-	* src/engine/Transaction.h: accomodate changes to Transaction.c.
+	* src/engine/Transaction.h: accommodate changes to Transaction.c.
 
-	* src/engine/TransactionP.h: accomodate changes to Transaction.c.
+	* src/engine/TransactionP.h: accommodate changes to Transaction.c.
 	
 	* src/engine/Session.c:
 	(xaccSessionGetFileError): new function - migrate away from using
@@ -409,7 +409,7 @@
 	to load two files representing the same data for
 	comparison.
 
-	* src/engine/GNCIdP.h: accomodate changes to GNCId.c
+	* src/engine/GNCIdP.h: accommodate changes to GNCId.c
 
 	* src/engine/Account.c: many changes, removed some unused fields,
 	changed Account's to have a GList of splits rather than a NULL
@@ -443,10 +443,10 @@
 	(xaccAccountVisitUnvisitedTransactions): new function.
 	(xaccAccountForEachTransaction): new function.
 	
-	* src/engine/Account.h: changes to accomodate above changes to
+	* src/engine/Account.h: changes to accommodate above changes to
 	Account.c.
 
-	* src/engine/Account.h: changes to accomodate above changes to
+	* src/engine/Account.h: changes to accommodate above changes to
 	Account.c.
 
 	* src/engine/io-gncxml-r.c: new xml format reader.  This has a
@@ -1101,7 +1101,7 @@
 
 2000-06-01  Rob Browning  <rlb@cs.utexas.edu>
 
-	* README: many mods to accomodate new changes, but still unfinished.
+	* README: many mods to accommodate new changes, but still unfinished.
 
 	* configure.in: --with-opt-style-install changed to
 	--enable-opt-style-install
@@ -1871,7 +1871,7 @@
  	* doc/build-system: new file - should eventually cover
  	build-system info and justifications.
 
- 	* configure.in: changes to accomodate the new GNC_EXPANDED_*
+ 	* configure.in: changes to accommodate the new GNC_EXPANDED_*
  	vars.  See doc/build-system for a summary.
 
  	* Makefile.init.in (ABSOLUTE_TOP_SRCDIR): set
@@ -2921,7 +2921,7 @@
 
 	* src/scm/report.scm: Change reports so that they have a function
  	which generates a new set of options. Change the report running
- 	functions to accomodate this.
+ 	functions to accommodate this.
 
 	* src/FileDialog.c: avoid showing multiple error dialogs.
 

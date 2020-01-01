@@ -228,7 +228,7 @@
 	  gnome/gnc-plugin-page-register.c - define
 	  gnc_find_register_by_account
 	  register/ledger-core/split-register.c - modify
-	  gnc_split_register_duplicate_current to accomodate book option
+	  gnc_split_register_duplicate_current to accommodate book option
 	  setting register/ledger-core/Makefile.am - add GNOME_CFLAGS
 	  register/ledger-core/test/Makefile.am - add libgnc-gnome.la 8.
 	  Adjust register sort and sort labels related to Num/Action radio

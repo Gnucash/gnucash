@@ -1572,7 +1572,7 @@ New Features for Developers:
         obsolete) texinfo documentation if the latter is. Document
         both in README.dependencies.
     Replaced Timespec with time64 in the Scheme and Python bindings,
-       introducing many new C time64 functions to accomodate the
+       introducing many new C time64 functions to accommodate the
        replacement. Timespec will eventually be removed from the C API
        as well.
     Some cruft removal in libgnucash/scm plus moving some code to its
@@ -2195,7 +2195,7 @@ For Developers and Distro packagers:
         obsolete) texinfo documentation if the latter is. Document
         both in README.dependencies.
     Replaced Timespec with time64 in the Scheme and Python bindings,
-       introducing many new C time64 functions to accomodate the
+       introducing many new C time64 functions to accommodate the
        replacement. Timespec will eventually be removed from the C API
        as well.
 

@@ -1470,7 +1470,7 @@
 	  balance for the parent account and all subaccounts. If set to
 	  FALSE, the function will only return the running balance of the
 	  parent account and will not include the subaccounts. The
-	  function has been modified also to accomodate this change. 2.
+	  function has been modified also to accommodate this change. 2.
 	  Update existing calls to the function to add the boolean value.
 	  This patch does not actually implement a runtime balance for
 	  single account register view or normal balance column because of

@@ -6153,7 +6153,7 @@
 	  src/gnome/gnc-sx-list-tree-model-adapter.h: Factor the sx-list
 	  tree view out and promote into an GncTreeViewSxList as a
 	  subclass of GncTreeView. Move the gnc-sx-list-tree-model-adapter
-	  into gnome-utils to accomodate.
+	  into gnome-utils to accommodate.
 
 2007-02-21 19:50  andi5
 
