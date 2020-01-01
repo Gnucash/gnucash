@@ -46,7 +46,7 @@ void gnc_extension_invoke_cb (SCM extension, SCM window);
 /** This function stores a menu item/callback for later insertion into
  *  the application menus,
  *
- *  @param extension A scheme object descrubing the menu to be
+ *  @param extension A scheme object describing the menu to be
  *  inserted.  Functions written in C should use the gnc-plugin code.
  */
 void gnc_add_scm_extension(SCM extension);
