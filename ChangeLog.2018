@@ -3920,7 +3920,7 @@
 
 2018-05-22 Bill Nottingham
 
-	* Modify date formatters to strip out certian specifiers.
+	* Modify date formatters to strip out certain specifiers.
 
 2018-05-19 Geert Janssens
 
