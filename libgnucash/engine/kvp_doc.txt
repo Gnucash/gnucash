@@ -264,7 +264,7 @@ Use:  date that the copy was created.
 \verbatim
 Name: /hbci/
 Type: frame
-Entitites: Account, Book
+Entities: Account, Book
 Use: subdirectory for information related to the German online banking
 protocol HBCI
 \endverbatim
@@ -280,14 +280,14 @@ in the real world
 \verbatim
 Name: /hbci/bank-code
 Type: string
-Entitites: Account
+Entities: Account
 Use: Bank code of HBCI account
 \endverbatim
 
 \verbatim
 Name: /hbci/country-code
 Type: gint64
-Entitites: Account
+Entities: Account
 Use: Country code of the bank of HBCI account
 \endverbatim
 
