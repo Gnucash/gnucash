@@ -1229,7 +1229,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 2005-11-13  Neil Williams <linux@codehelp.co.uk>
 
-	* make-gncuash-potfiles.in : Add a specific
+	* make-gnucash-potfiles.in : Add a specific
 	call to read one libqof file.
 	* po/POTFILES.in : the updated POTFILES list.
 
@@ -4783,7 +4783,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 	* src/gnome-utils/gnc-gnome-utils.c: Have gnucash read a private
 	RC file.  This makes it easy to apply styles to entire classes of
-	widgets in gnucsah without affecting any other application.
+	widgets in gnucash without affecting any other application.
 
 	* src/gnome-utils/gnc-tree-view-account.c:
 	* src/gnome-utils/gnc-tree-view-commodity.c:

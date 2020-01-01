@@ -6434,7 +6434,7 @@
 	  src/backend/sql/gnc-backend-sql.c, src/core-utils/gnc-main.c,
 	  src/core-utils/gnc-main.h: Add gnc_get_long_version, a guint
 	  concocted by adding the version values together allowing two
-	  digits for each. Add a new version value, GNUNCASH_NANO_VERSION,
+	  digits for each. Add a new version value, GNUCASH_NANO_VERSION,
 	  to be incremented when there's any change to data serialization.
 	  Use the new gnc_get_long_version to tag the Gnucash version in
 	  the versions table in the dbi backend.

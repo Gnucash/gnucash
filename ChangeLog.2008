@@ -357,7 +357,7 @@
 	  accounts/nl/Makefile.am, accounts/nl/acctchrt_full.gnucash-xea,
 	  configure.in: Bug #514455: Adding Dutch (Netherlands)
 	  translation of account template This translation has been
-	  reviewed by one of the gnuchash translators for Dutch nl_NL.
+	  reviewed by one of the gnucash translators for Dutch nl_NL.
 	  There is no need for an extra translation for Belgium, this
 	  version aims to be 'as Dutch as possible'. This file can now be
 	  used to translate the other templates English to Dutch.
