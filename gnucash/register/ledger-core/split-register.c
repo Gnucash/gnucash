@@ -961,7 +961,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
             {
                 gnc_warning_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                                     "%s", anchor_message);
-                LEAVE("anchore split");
+                LEAVE("anchor split");
                 return;
             }
             else if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
