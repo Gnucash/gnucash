@@ -143,7 +143,7 @@ xaccLotFill (GNCLot *lot)
         {
             PERR ("Accounting Policy gave us a split that "
                   "doesn't fit into this lot\n"
-                  "lot baln=%s, isclosed=%d, aplit amt=%s",
+                  "lot baln=%s, isclosed=%d, split amt=%s",
                   gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
                   gnc_lot_is_closed (lot),
                   gnc_num_dbg_to_string (split->amount));
