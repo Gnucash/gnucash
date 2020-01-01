@@ -391,7 +391,7 @@
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[-i]
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^n - 1]/i
  *
- *   The formaula for PV[n] can be proven using mathematical induction.
+ *   The formula for PV[n] can be proven using mathematical induction.
  *
  *   or:
  *
