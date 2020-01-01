@@ -1800,7 +1800,7 @@
 2010-10-14 21:00  gjanssens
 
 	* [r19657] src/app-utils/gnc-ui-util.c: Rework two nearly
-	  identical fuctions into a common function with parameters. Keep
+	  identical functions into a common function with parameters. Keep
 	  the old function names as convenience wrappers around the new
 	  function.
 

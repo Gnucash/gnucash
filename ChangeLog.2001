@@ -7916,7 +7916,7 @@
 	* src/scm/commodity-utilities.scm (gnc:sum-collector-stocks):
 	added such that stock prices are no longer shown but foreign
 	currencies are. Rounding precision increased. Added sanity checks
-	for arguments of various funtions.
+	for arguments of various functions.
 
 	* src/scm/report-utilities.scm (gnc:account-is-stock?): added
 	function

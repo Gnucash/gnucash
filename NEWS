@@ -4899,7 +4899,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 can polish GnuCash to be as stable as possible for the 2.0.0 release
 	 in a few weeks.
 	 o Major bugfixes include -
-	 o Hide not finished funtionality for the 2.0 release
+	 o Hide not finished functionality for the 2.0 release
 	 o Fixes to lots functionality
 	 o Fixes to XML import
 	 o Patches to work with guile 1.8

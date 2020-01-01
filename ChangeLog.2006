@@ -17612,7 +17612,7 @@
 	  trunk/src/scm/main-window.scm, trunk/src/scm/main.scm: Major
 	  step in extraction of application startup from guile. Details:
 	  Remove the last bits of libguile from top-level.[ch]. Change the
-	  gui initialization funtions so they can be called from C. Drop
+	  gui initialization functions so they can be called from C. Drop
 	  some gwrappers for gui initialization functions. Process the
 	  --nofile and filename command-line options from C. Drastic
 	  simpilification of main.scm. Initialize the gui and enter the
@@ -18036,7 +18036,7 @@
 2006-01-19 18:43  chris
 
 	* [r12902] trunk/src/bin/gnucash-bin.c,
-	  trunk/src/gnome/top-level.h: Remove "reverse_balance" fucntions
+	  trunk/src/gnome/top-level.h: Remove "reverse_balance" functions
 	  from top-level.h. Add another #include for gnucash-bin.c
 
 2006-01-19 18:02  chris

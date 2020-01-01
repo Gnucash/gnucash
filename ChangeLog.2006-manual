@@ -6586,7 +6586,7 @@ r12956 | chris | 2006-01-23 12:38:13 -0500 (Mon, 23 Jan 2006) | 28 lines
 
   Details:
     Remove the last bits of libguile from top-level.[ch].
-    Change the gui initialization funtions so they can be called from C.
+    Change the gui initialization functions so they can be called from C.
     Drop some gwrappers for gui initialization functions.
     Process the --nofile and filename command-line options from C.
     Drastic simpilification of main.scm.
@@ -6849,7 +6849,7 @@ r12902 | chris | 2006-01-19 13:43:59 -0500 (Thu, 19 Jan 2006) | 3 lines
    M /gnucash/trunk/src/bin/gnucash-bin.c
    M /gnucash/trunk/src/gnome/top-level.h
 
-  Remove "reverse_balance" fucntions from top-level.h.
+  Remove "reverse_balance" functions from top-level.h.
   Add another #include for gnucash-bin.c
 
 r12900 | chris | 2006-01-19 13:02:18 -0500 (Thu, 19 Jan 2006) | 4 lines
