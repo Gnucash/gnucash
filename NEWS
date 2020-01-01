@@ -386,7 +386,7 @@ Known Issues:
     Bug 797025 - Import Bills & Invoices: the type of the post to account is not validated - enabling A/P and A/R postings on regular accounts
     Bug 797026 - Reimport of account structure not working
     Bug 797033 - The CSV Importer should not obey with the "automatic digital point" setting
-    Bug 797035 - Date selection via calender
+    Bug 797035 - Date selection via calendar
     Bug 797036 - Runtime Error During 3.4 Upgrade
     Bug 797037 - Counter formats not saving
     Bug 797038 - GnuCash hangs loading under XWindows
@@ -711,7 +711,7 @@ Known Issues:
     Bug 797026 - Reimport of account structure not working
     Bug 797027 - After Upgrade to 3.4, File is Always Unsaved
     Bug 797033 - The CSV Importer should not obey with the "automatic digital point" setting
-    Bug 797035 - Date selection via calender
+    Bug 797035 - Date selection via calendar
     Bug 797036 - Runtime Error During 3.4 Upgrade
     Bug 797037 - Counter formats not saving
     Bug 797038 - GnuCash hangs loading under XWindows
