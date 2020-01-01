@@ -1996,7 +1996,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
 
-        /*  set advnaced payment */
+        /*  set advanced payment */
         adv_pmt = amortsched->fixed_pmt;
 
         for (per_cnt = 0, s = 1, j = n; j && (pv != fv); j--, per_cnt++)
