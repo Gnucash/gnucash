@@ -8434,87 +8434,87 @@
 	* src/test/test-xml-commodity.c: fixes for new sixtp_dom_parser_new.
 
 	* src/guile/option-util.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/guile/option-util.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/guile/guile-util.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/guile/guile-util.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/guile/global-options.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/guile/global-options.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/window-register.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/window-main.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/gnc-currency-edit.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/gnc-currency-edit.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/gnc-commodity-edit.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/gnc-commodity-edit.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/druid-commodity.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
-	* src/gnome/dialog-account.c: remove consts from gnc_commoditities
+	* src/gnome/dialog-account.c: remove consts from gnc_commodities
 	(after consultation with Bill).
 
-	* src/gnome/dialog-options.c: remove consts from gnc_commoditities
+	* src/gnome/dialog-options.c: remove consts from gnc_commodities
 	(after consultation with Bill).
 
 	* src/gnome/dialog-commodity.h: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
 	* src/gnome/dialog-commodity.c: remove consts from
-	gnc_commoditities (after consultation with Bill).
+	gnc_commodities (after consultation with Bill).
 
-	* src/gnc-ui-util.h: remove consts from gnc_commoditities (after
+	* src/gnc-ui-util.h: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/gnc-ui-util.c: remove consts from gnc_commoditities (after
+	* src/gnc-ui-util.c: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/engine/Transaction.h: remove consts from gnc_commoditities
+	* src/engine/Transaction.h: remove consts from gnc_commodities
 	(after consultation with Bill).
 
-	* src/engine/Transaction.c: remove consts from gnc_commoditities
+	* src/engine/Transaction.c: remove consts from gnc_commodities
 	(after consultation with Bill).
 
-	* src/engine/Scrub.c: remove consts from gnc_commoditities (after
+	* src/engine/Scrub.c: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/AccountP.h: remove consts from gnc_commoditities (after
+	* src/AccountP.h: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/Account.h: remove consts from gnc_commoditities (after
+	* src/Account.h: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/Account.c: remove consts from gnc_commoditities (after
+	* src/Account.c: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/SplitLedger.c: remove consts from gnc_commoditities (after
+	* src/SplitLedger.c: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/EuroUtils.h: remove consts from gnc_commoditities (after
+	* src/EuroUtils.h: remove consts from gnc_commodities (after
 	consultation with Bill).
 
-	* src/EuroUtils.c: remove consts from gnc_commoditities (after
+	* src/EuroUtils.c: remove consts from gnc_commodities (after
 	consultation with Bill).
 
 2001-02-23  Bill Gribble  <grib@billgribble.com>

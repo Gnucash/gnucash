@@ -67,7 +67,7 @@ GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
 static gboolean auto_create_commodity = FALSE;
 static Account *ofx_parent_account = NULL;
 
-GList *ofx_created_commodites = NULL;
+GList *ofx_created_commodities = NULL;
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -276,7 +276,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
             gnc_commodity_table_insert(gnc_get_current_commodities(), commodity);
 
             /* Remember this new commodity for us as well */
-            ofx_created_commodites = g_list_prepend(ofx_created_commodites, commodity);
+            ofx_created_commodities = g_list_prepend(ofx_created_commodities, commodity);
 	    g_free (commodity_namespace);
 
         }
@@ -1089,13 +1089,13 @@ void gnc_file_ofx_import (GtkWindow *parent)
         g_free(selected_filename);
     }
 
-    if (ofx_created_commodites)
+    if (ofx_created_commodities)
     {
         /* FIXME: Present some result window about the newly created
          * commodities */
-        g_warning("Created %d new commodities during import", g_list_length(ofx_created_commodites));
-        g_list_free(ofx_created_commodites);
-        ofx_created_commodites = NULL;
+        g_warning("Created %d new commodities during import", g_list_length(ofx_created_commodities));
+        g_list_free(ofx_created_commodities);
+        ofx_created_commodities = NULL;
     }
     else
     {

@@ -494,7 +494,7 @@ GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
                                       const gnc_commodity *currency,
                                       time64 t);
 
-/** @brief Return the price between the two commoditiesz nearest to the given
+/** @brief Return the price between the two commodities nearest to the given
  * time.
  *
  * The returned GNCPrice may be in either direction so check to ensure that its
