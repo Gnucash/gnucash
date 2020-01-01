@@ -1395,7 +1395,7 @@
 
 2009-10-03 20:11  cstim
 
-	* [r18367] packaging/win32/install.sh: Win32: Build gwenhyfar
+	* [r18367] packaging/win32/install.sh: Win32: Build gwenhywfar
 	  without openssl because it doesn't need it anyway.
 
 2009-10-03 14:06  cstim

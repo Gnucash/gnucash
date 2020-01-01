@@ -1132,7 +1132,7 @@
 
 2014-03-31 Christian Stimming 
 
-	* Win32: Update gwenhyhwfar/aqbanking again, but slightly more cautious (gwen-4.11.0 does not compile on win/mingw right now)
+	* Win32: Update gwenhywfar/aqbanking again, but slightly more cautious (gwen-4.11.0 does not compile on win/mingw right now)
 
 2014-03-30 John Ralls 
 

@@ -2935,7 +2935,7 @@
 
 	* [r19446] configure.ac, src/import-export/aqbanking/Makefile.am,
 	  src/import-export/aqbanking/gnc-gwen-gui.c: Add lookup of linker
-	  flags of libgwenhyfar-gui-gtk2. It is still disabled until more
+	  flags of libgwenhywfar-gui-gtk2. It is still disabled until more
 	  testing has been done, though.
 
 2010-08-17 21:05  cstim
