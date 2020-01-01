@@ -2776,7 +2776,7 @@ Other repairs not marked as bugs in git:
          non-swift-section 17 (aka transaction text). If available, this
 	 transaction text is put in front of the other purpose texts to provide
 	 full transaction information. Adds a preference to control import
-	 behaivour of transaction text.
+	 behaviour of transaction text.
 
 Updated Translations: Arabic, Turkish
 
