@@ -1456,7 +1456,7 @@ Known Problems:
         dialog creates transaction splits in the register's account. Bug 794854
     GnuCash asks if one wants to save changes when quitting or opening a file
         even if there's no book open. Bug 794870
-    Windows Defender falsly identifies the GnuCash installer as a Trojan.
+    Windows Defender falsely identifies the GnuCash installer as a Trojan.
         Bug 794967
     Some Windows users have trouble using Chinese input methods on the
         Register; other controls work. Bug 795253
