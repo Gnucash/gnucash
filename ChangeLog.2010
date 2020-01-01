@@ -1332,7 +1332,7 @@
 
 	* [r19781] src/gnome-utils/gnc-file.c: Bug #634252: Re-enable the
 	  splash screen if the user selects open anyway If during startup
-	  a file or database turns out to beeing locked the user is
+	  a file or database turns out to being locked the user is
 	  presented a dialog with the options to open anyway, create a new
 	  file or abort. This dialog, however, closes the splash screen.
 	  This may cause confusion, because file loading and report
