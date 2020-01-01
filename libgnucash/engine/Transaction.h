@@ -539,7 +539,7 @@ gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
  *      return >0 if ta sorts after tb
  *      return 0 if they are absolutely equal
  *
- *    The comparrison uses the following fields, in order:
+ *    The comparison uses the following fields, in order:
  *      date posted  (compare as a date)
  *      num field (compare as an integer)
  *      date entered (compare as a date)
@@ -560,7 +560,7 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
  *      return >0 if ta sorts after tb
  *      return 0 if they are absolutely equal
  *
- *    The comparrison uses the following fields, in order:
+ *    The comparison uses the following fields, in order:
  *      date posted  (compare as a date)
  *      if actna and actnb are NULL,
  *          num field (compare as an integer)

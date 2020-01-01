@@ -3211,7 +3211,7 @@
 
 	* src/engine/QueryCore.[ch]: create a new GUID_MATCH_LIST_ANY
 	  match-type, which can eventually be used to make an AccountGroup
-	  comparrison (once we figure out how to label an account group with
+	  comparison (once we figure out how to label an account group with
 	  a GUID)
 	* src/engine/QueryNew.c: print out GUID_MATCH_LIST_ANY query terms
 	* src/engine/gw-engine-spec.scm: wrap GUID_MATCH_LIST_ANY
