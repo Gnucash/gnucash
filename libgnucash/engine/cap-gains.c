@@ -836,7 +836,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             {
                 new_gain_split = FALSE;
             }
-            /* If the gain is already recorded corectly do nothing.  This is
+            /* If the gain is already recorded correctly do nothing.  This is
              * more than just an optimization since this may be called during
              * gnc_book_partition_txn and depending on the order in which things
              * happen some splits may be in the wrong book at that time. */
