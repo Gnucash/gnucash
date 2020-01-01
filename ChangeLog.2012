@@ -1270,7 +1270,7 @@
 	* [r22424] doc, doc/Makefile.am, doc/gnc-fq-dump.1,
 	  doc/gnc-fq-helper.1: Bug #684719 - Man pages for gnc-fq-* perl
 	  scripts first (static) publishing of the pod extracted man pages
-	  until we have some consense.
+	  until we have some consensus.
 
 2012-09-24 10:25  fell
 
