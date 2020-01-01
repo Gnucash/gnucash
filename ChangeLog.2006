@@ -8340,7 +8340,7 @@
 2006-06-22 13:30  cstim
 
 	* [r14409] trunk/src/import-export/log-replay/Makefile.am: Add
-	  GTK_LIBS because log_replay uses gtk functions direcly since
+	  GTK_LIBS because log_replay uses gtk functions directly since
 	  r14142
 
 2006-06-20 12:49  cstim
