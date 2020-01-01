@@ -7239,7 +7239,7 @@
 	  via 2.2.x).
 	* [r20095] src/libqof/qof/qofquery.h,
 	  src/libqof/qof/qofquerycore.h: Fix some spelling errors in
-	  doxigen documentation
+	  doxygen documentation
 
 2011-01-14 21:10  cmarchi
 
