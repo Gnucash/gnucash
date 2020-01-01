@@ -1016,7 +1016,7 @@
  * Example 6: Balloon Payment
  * On long term loans, small changes in the periodic payments can generate
  * large changes in the future value. If the monthly payment in example 5 is
- * rounded down to $1125, how much addtional (balloon) payment will be due
+ * rounded down to $1125, how much additional (balloon) payment will be due
  * with the final regular payment.
  * <>pmt=-1125
  * -1,125
