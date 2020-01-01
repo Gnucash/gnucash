@@ -4717,7 +4717,7 @@
 	* src/backend/postgres/PostgresBackend.c (pgendEnable):
 	Added ENTER/LEAVE statements
 
-	* src/backend/postgres/escape.c: Adde gnc-engine-util.h,
+	* src/backend/postgres/escape.c: Added gnc-engine-util.h,
 	  and "module = MOD_BACKEND"
 	- (sqlEscape_destroy): Added ENTER/LEAVE statemtents.
 
