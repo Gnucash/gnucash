@@ -278,8 +278,20 @@
    (compose (negate xaccAccountIsAPARType) xaccAccountGetType xaccSplitGetAccount)
    (xaccTransGetSplitList txn)))
 
-(define (split->desc split)
-  (gnc:html-string-sanitize (xaccSplitGetMemo split)))
+(define (txn->assetliab-splits txn)
+  (filter
+   (compose xaccAccountIsAssetLiabType xaccAccountGetType xaccSplitGetAccount)
+   (xaccTransGetSplitList txn)))
+
+(define (splits->desc splits)
+  (let lp ((splits splits) (result '()))
+    (if (null? splits)
+        (gnc:html-string-sanitize (string-join result ", "))
+        (lp (cdr splits)
+            (let ((memo (xaccSplitGetMemo (car splits))))
+              (if (or (string-null? memo) (member memo result))
+                  result
+                  (cons memo result)))))))
 
 (define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
@@ -480,7 +492,7 @@
          (qof-print-date (xaccTransGetDate pmt-txn))
          (split->reference tfr-split)
          (split->type-str tfr-split)
-         (split->desc tfr-split)
+         (splits->desc (list tfr-split))
          (gnc:make-html-text
           (gnc:html-markup-anchor
            (gnc:split-anchor-text (txn->transfer-split pmt-txn))
@@ -492,7 +504,7 @@
          (qof-print-date (xaccTransGetDate posting-txn))
          (split->reference posting-split)
          (split->type-str posting-split)
-         (split->desc posting-split)
+         (splits->desc (list posting-split))
          (gnc:make-html-text
           (gnc:html-markup-anchor
            (gnc:split-anchor-text (txn->transfer-split posting-txn))
@@ -617,7 +629,8 @@
                        (gnc:make-gnc-monetary currency overpayment))
                       result)))))
         ((inv . rest)
-         (let ((tfr-split (txn->transfer-split (gncInvoiceGetPostedTxn inv))))
+         (let* ((tfr-txn (gncInvoiceGetPostedTxn inv))
+                (tfr-split (txn->transfer-split tfr-txn)))
            (lp rest
                (cons (make-link-data
                       (qof-print-date (gncInvoiceGetDatePosted inv))
@@ -626,7 +639,7 @@
                         (gnc:invoice-anchor-text inv)
                         (gncInvoiceGetID inv)))
                       (gncInvoiceGetTypeString inv)
-                      (xaccSplitGetMemo tfr-split)
+                      (splits->desc (txn->assetliab-splits tfr-txn))
                       (gnc:make-html-text
                        (gnc:html-markup-anchor
                         (gnc:split-anchor-text tfr-split)
@@ -718,7 +731,11 @@
            table odd-row? used-columns date (invoice->due-date invoice)
            (split->reference split)
            (split->type-str split)
-           (split->desc split) currency (+ total value)
+           (splits->desc
+            (cond
+             ((txn-is-invoice? txn) (list split))
+             ((txn-is-payment? txn) (txn->assetliab-splits txn))))
+           currency (+ total value)
            (and (>= value 0) value) (and (< value 0) value)
            (invoice->sale invoice) (invoice->tax invoice)
            (txn->transfer-split txn)
