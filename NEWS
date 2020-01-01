@@ -3843,7 +3843,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 which loads only a subset of transactions to improve speed,
 	 and some date and cursor changes.
 
-	 Aurimas Fišeras contribued patches to make CSV Account import
+	 Aurimas Fišeras contributed patches to make CSV Account import
 	 table header translatable, to fix translation of table
 	 headers, fix dash marker usage, and some other translation
 	 issues.
