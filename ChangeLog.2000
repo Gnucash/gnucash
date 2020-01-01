@@ -720,7 +720,7 @@
 	* src/scm/main.scm (gnc:*batch-mode-forms-to-evaluate*): new
 	global to hold forms added by --evaluate for execution after
 	startup.
-	(gnc:main): support --evalutate properly.
+	(gnc:main): support --evaluate properly.
 
 	* src/scm/engine-utilities.scm (gnc:transaction-map-splits): moved
 	here.
