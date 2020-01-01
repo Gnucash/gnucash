@@ -258,7 +258,7 @@ GncOwner * gnc_tree_view_owner_get_selected_owner (GncTreeViewOwner *view);
 
 /** This function selects an owner in the owner tree view.  All
  *  other owners will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
+ *  collapses the entire tree and then expands only the path to the
  *  selected owner, making the item easy to find.  In general, this
  *  routine only need be called when initially putting up a window
  *  containing an owner tree view widget.

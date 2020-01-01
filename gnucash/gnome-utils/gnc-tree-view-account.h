@@ -410,7 +410,7 @@ Account * gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view);
 
 /** This function selects an account in the account tree view.  All
  *  other accounts will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
+ *  collapses the entire tree and then expands only the path to the
  *  selected account, making the item easy to find.  In general, this
  *  routine only need be called when initially putting up a window
  *  containing an account tree view widget.
@@ -443,7 +443,7 @@ GList * gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view);
 
 /** This function selects a set of accounts in the account tree view.
  *  All other accounts will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
+ *  collapses the entire tree and then expands only the path to the
  *  selected accounts, making them easy to find.  In general, this
  *  routine only need be called when initially putting up a window
  *  containing an account tree view widget.
