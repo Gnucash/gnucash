@@ -65,7 +65,7 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
 /********************************************************************\
- * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ * Sets the alignment of a Label Widget, GTK3 version specific.     *
  *                                                                  *
  * Args: widget - the label widget to set alignment on              *
  *       xalign - x alignment                                       *
