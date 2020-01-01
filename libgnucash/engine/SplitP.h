@@ -79,7 +79,7 @@ struct split_s
     Transaction *parent;       /* parent of split                           */
     Transaction *orig_parent;
 
-    /* The memo field is an arbitrary user-assiged value.
+    /* The memo field is an arbitrary user-assigned value.
      * It is intended to hold a short (zero to forty character) string
      * that is displayed by the GUI along with this split.
      */
