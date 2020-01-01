@@ -2108,7 +2108,7 @@ r13863 | chris | 2006-04-26 22:18:37 -0400 (Wed, 26 Apr 2006) | 14 lines
 2006-04-26  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c
-	(scheduledxaction_editor_dialog_destroy): re-order SX disolution
+	(scheduledxaction_editor_dialog_destroy): re-order SX dissolution
 	vs. ui teardown.  Add comment info-request response.
 
 2006-04-26  Christian Stimming <stimming@tuhh.de>
