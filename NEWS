@@ -2106,7 +2106,7 @@ Other repairs not marked as bugs in git:
      Make the splash/lock screen the transient parent for dialog boxes if the
           main window is not yet mapped.
      Rework directory determination in CMake builds.
-          Sets paths for finding componenents depending on the state
+          Sets paths for finding components depending on the state
           of ENABLE_BINRELOC, GNC_UNINSTALLED, GNC_BUILDDIR and
           whether any install paths have been set outside of
           CMAKE_INSTALL_PREFIX.  GNUInstallDirs changes the name of
@@ -2313,7 +2313,7 @@ Other repairs not marked as bugs in git:
      Make the splash/lock screen the transient parent for dialog boxes if the
           main window is not yet mapped.
      Rework directory determination in CMake builds.
-          Sets paths for finding componenents depending on the state
+          Sets paths for finding components depending on the state
           of ENABLE_BINRELOC, GNC_UNINSTALLED, GNC_BUILDDIR and
           whether any install paths have been set outside of
           CMAKE_INSTALL_PREFIX.  GNUInstallDirs changes the name of
