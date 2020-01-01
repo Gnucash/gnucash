@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 /*
- *  Functions to parse arthmetic expressions
+ *  Functions to parse arithmetic expressions
  *  6-21-2000
  */
 
