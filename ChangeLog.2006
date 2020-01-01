@@ -4063,7 +4063,7 @@
 	  branches/swig-redo/src/business/business-core/gncEntry.h,
 	  branches/swig-redo/src/business/business-core/gncInvoice.c,
 	  branches/swig-redo/src/business/business-core/gncInvoice.h: Use
-	  some typedefs to get more specific C typing that coresponds with
+	  some typedefs to get more specific C typing that corresponds with
 	  the level of detail that we want to type in guile.
 
 2006-10-09 23:48  chris
