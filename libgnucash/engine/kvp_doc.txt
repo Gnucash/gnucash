@@ -302,7 +302,7 @@ specific account
 \verbatim
 Name: /hbci/config-filename
 Type: string
-Entitied: Book
+Entitled: Book
 Use: OpenHBCI configuration file name, where the real HBCI
 configuration for the OpenHBCI library can be found
 \endverbatim
