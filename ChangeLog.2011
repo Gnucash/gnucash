@@ -1689,7 +1689,7 @@
 2011-11-08 19:04  gjanssens
 
 	* [r21536] src/business/business-gnome/dialog-invoice.c: Bug
-	  #663638 - Posting Invoices asks for curency conversion for blank
+	  #663638 - Posting Invoices asks for currency conversion for blank
 	  lines BP
 
 2011-11-08 18:25  gjanssens

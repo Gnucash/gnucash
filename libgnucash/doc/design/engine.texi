@@ -2203,7 +2203,7 @@ A textual description of the Account.
 The commodity that Splits in the account are valued in, i.e., the
 denomination of the 'value' member of Splits in the account.
 
-@item A curreny SCU
+@item A currency SCU
 The SCU is the smallest convertible unit that the currency is
 traded in. This value overrides the default SCU of the currency.
 
