@@ -5538,7 +5538,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Supply a start date (as well as an end date) and don't print
 	   invoices that occur prior to the start date or after the end date.
 	   The aging information ignores the start date, but not the end date.
-	   This means the aging information will always be acurate through the
+	   This means the aging information will always be accurate through the
 	   end date (even if all the invoices and payments are not displayed).
 	 o Limit the itemized invoices/payments to the start/end date range,
 	   but print out a "Balance" line if there is a non-zero balance as of
