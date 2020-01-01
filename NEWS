@@ -5277,7 +5277,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Modify Herbert's patch to centralize the date-selection option
 	   code.
 	 o Use the new centralized date-selection option-creation code.
-	 o Fix a typo in the help (was --diable-gui).
+	 o Fix a typo in the help (was --disable-gui).
 	 o Add db-4.2 to the list of databases we search.
 	 o Fix a problem with opt style installs.
 	 o Rename from_xxx and to_xxx account tree widgets to left_xxx and

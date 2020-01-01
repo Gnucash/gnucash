@@ -1399,7 +1399,7 @@
 
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
 
-	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
+	* configure.in: fix a typo in the help (was --disable-gui).  Fixes #131414
 
 	* configure.in: add db-4.2 to the list of databases we search.
 	  We probably need a better mechanism to search for a working db
