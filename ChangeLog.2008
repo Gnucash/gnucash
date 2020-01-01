@@ -56,7 +56,7 @@
 	  #564928: Fix segfault when closing a invoice tab (r17747
 	  regression) This reverts one hunk of r17747: It's not necessary
 	  because the hash table keys are freed up in
-	  gnucash_sheet_cleer_styles. Patch by Jonathan Kamens. BP
+	  gnucash_sheet_clear_styles. Patch by Jonathan Kamens. BP
 
 2008-12-20 03:06  plongstaff
 
