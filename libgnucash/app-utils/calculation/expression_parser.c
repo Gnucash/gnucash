@@ -224,7 +224,7 @@
  *
  * The logic recognizes "-" and "123" separately. The '-' unary
  * operator is then applied to negate the numeric. This also has the
- * advanatge that the same logic can be used for
+ * advantage that the same logic can be used for
  *
  *  -123
  *  +123.45
