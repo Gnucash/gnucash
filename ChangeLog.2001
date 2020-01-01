@@ -3038,7 +3038,7 @@
 	* doc/sgml/C/xacc-balancereport.sgml: minor updates
 
 	* doc/sgml/C/image/regwin*.png, appr-income.png, bal-graph.png,
-	  report-hierachical.png: no longer used, so removed.
+	  report-hierarchical.png: no longer used, so removed.
 
 	* doc/sgml/C/image/*tax*.png: resaved as compressed png.
 

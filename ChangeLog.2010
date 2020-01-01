@@ -1439,7 +1439,7 @@
 	  src/backend/xml/test/test-files/xml2/conrads-file.gml2,
 	  src/backend/xml/test/test-files/xml2/every.gml2,
 	  src/backend/xml/test/test-files/xml2/goonies-file.gml2,
-	  src/backend/xml/test/test-files/xml2/hierachical-data-file.gml2,
+	  src/backend/xml/test/test-files/xml2/hierarchical-data-file.gml2,
 	  src/backend/xml/test/test-files/xml2/ms-money.gml2,
 	  src/backend/xml/test/test-files/xml2/pricedb1.gml2: Updated test
 	  files complying with the xml schema as of 2011-11-02

@@ -2257,7 +2257,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* src/backend/file/test/test-files/xml2/conrads-file.gml2
 	* src/backend/file/test/test-files/xml2/every.gml2
 	* src/backend/file/test/test-files/xml2/goonies-file.gml2
-	* src/backend/file/test/test-files/xml2/hierachical-data-file.gml2
+	* src/backend/file/test/test-files/xml2/hierarchical-data-file.gml2
 	* src/backend/file/test/test-files/xml2/ms-money.gml2
 	* src/backend/file/test/test-files/xml2/pricedb1.gml2
 
