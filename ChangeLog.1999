@@ -690,7 +690,7 @@
 
 	* src/register/splitreg.c (configLayout): configure the single
  	cursor last so the header is the most reasonable. This is a
- 	hack. Eventually, we should probably switch headers dyamically.
+ 	hack. Eventually, we should probably switch headers dynamically.
 
 	* src/register/gnome/gnucash-sheet.c
  	(gnucash_register_goto_virt_row_col): replaces and generalizes
