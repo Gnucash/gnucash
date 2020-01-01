@@ -2485,7 +2485,7 @@ New Features For Users:
 A new Cashflow Barchart report from Jose Marino
 
     Transaction Report improvements, including regular expression filtering,
-    from Chrostopher Lam.
+    from Christopher Lam.
 
     The About dialog box layout is improved.
 
@@ -6098,7 +6098,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
  1.1.5 - 6 March 1998
          o perl scripts for parsing stock quotes from internet
-           from Chrostopher B. Browne
+           from Christopher B. Browne
 
  1.1.4 - 1 March 98
          o gui-independent engine code moved to src/engine
