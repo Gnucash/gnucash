@@ -58,7 +58,7 @@ def gnc_numeric_from_decimal(decimal_value):
     sign, digits, exponent = decimal_value.as_tuple()
 
     # convert decimal digits to a fractional numerator
-    # equivlent to
+    # equivalent to
     # numerator = int(''.join(digits))
     # but without the wated conversion to string and back,
     # this is probably the same algorithm int() uses
