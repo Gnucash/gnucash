@@ -161,7 +161,7 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 /** Invoke the callback 'cb' on every instance ov a particular
  *  object type.  It is presumed that the 'book' stores or somehow
- *  identifies a colllection of instances; thus the callback will
+ *  identifies a collection of instances; thus the callback will
  *  be invoked only for those instances stored in the book.
  */
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
