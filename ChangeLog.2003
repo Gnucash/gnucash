@@ -3765,7 +3765,7 @@
 	* src/gnome-utils/dialog-utils.c:
 	* src/gnome-utils/dialog-utils.h: Migrate fields and functions
 	related to price quotes from the account to the commodity.  Fixed
-	the original complatint in #104197 as part of these changes.
+	the original complaint in #104197 as part of these changes.
 
 	* src/backend/file/io-gncxml-v2.c:
 	* src/engine/Scrub.c:
