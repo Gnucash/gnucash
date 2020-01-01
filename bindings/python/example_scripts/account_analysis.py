@@ -100,7 +100,7 @@ def next_period_start(start_year, start_month, period_type):
     # use integer division to find out if the new end month is in a different
     # year, what year it is, and what the end month number should be changed
     # to.
-    # Because this depends on modular arithmetic, we have to curvert the month
+    # Because this depends on modular arithmetic, we have to convert the month
     # values from 1-12 to 0-11 by subtracting 1 and putting it back after
     #
     # the really cool part is that this whole thing is implemented without
