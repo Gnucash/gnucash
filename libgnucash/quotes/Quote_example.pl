@@ -71,8 +71,8 @@ print "\n\n";
 
 foreach $f (@funds) {
      $nav = $quotes {$f, "nav"};
-     $dayte = $quotes {$f, "date"};
-     print "T. Rowe Price $f NAV = $nav as of $dayte\n";
+     $date = $quotes {$f, "date"};
+     print "T. Rowe Price $f NAV = $nav as of $date\n";
 }
 print "\n\n";
 
