@@ -32,7 +32,7 @@
  * @Title: GncCellRendererTextFlag
  *
  * A #GncCellRendererTextFlag extends the GtkCellRendererText
- * adding the avility to show a color triangle on the top right corner
+ * adding the ability to show a color triangle on the top right corner
  * to flag the cell.
  */
 
