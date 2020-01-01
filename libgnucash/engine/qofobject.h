@@ -105,7 +105,7 @@ struct _QofObject
     /** Traverse over all of the items in the collection, calling
      *  the callback on each item.  The third argument can be any
      *  arbitrary caller-supplied data, and is passed to the callback.
-     *  Although (*foreach) may be NULL, allmost all objects should
+     *  Although (*foreach) may be NULL, almost all objects should
      *  provide this routine, as without it, little of interest can
       * be done.
      */
