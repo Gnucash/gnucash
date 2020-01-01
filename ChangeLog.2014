@@ -952,7 +952,7 @@
 
 2014-05-05 Mike Alexander 
 
-	* Don't nest AC_MSG_CHECKING calls, it produces confuing output.
+	* Don't nest AC_MSG_CHECKING calls, it produces confusing output.
 
 2014-05-05 Colin 
 
