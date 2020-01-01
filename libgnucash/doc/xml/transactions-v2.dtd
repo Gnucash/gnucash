@@ -13,7 +13,7 @@
 
 <!ELEMENT trn:date-posted %date-type;>
 
-<!ELEMENT trn:date-enterede %date-type;>
+<!ELEMENT trn:date-entered %date-type;>
 
 <!ELEMENT trn:description (#PCDATA)>
 
