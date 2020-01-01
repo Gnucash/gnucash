@@ -33,7 +33,7 @@
  * @author Copyright (c) 2006 Joshua Sled <jsled@asynchronous.org>
  *
  * XXX currently, this is crufty, it should be modified to use
- * entities a bit more whole-heartedly than it does.
+ * entities a bit more wholeheartedly than it does.
  **/
 
 #ifndef GNC_SX_BOOK_H
