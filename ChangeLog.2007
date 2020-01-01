@@ -348,7 +348,7 @@
 
 	* [r16678] src/pixmaps, src/pixmaps/Makefile.am: Bug#503889:
 	  Install icons according to spec. On Win32, however, don't run
-	  the non-existant (?) gtk-update-icon-cache. BP
+	  the nonexistent (?) gtk-update-icon-cache. BP
 
 2007-12-16 18:47  andi5
 

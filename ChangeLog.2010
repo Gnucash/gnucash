@@ -1264,7 +1264,7 @@
 	  sql backends, locking creates the database... which then would
 	  return may_clobber as true, even though it really wasn't. New
 	  parameter "force" added to session_begin() functions, and
-	  "create_if_nonexistant" is renamed to simply "create". The
+	  "create_if_nonexistent" is renamed to simply "create". The
 	  reason for the latter is that the file/database is created
 	  regardless of whether it already exists; that's what the clobber
 	  check is about. The new "force" parameter is set to true the

@@ -4616,7 +4616,7 @@
 	* [r14883] branches/2.0, branches/2.0/ChangeLog,
 	  branches/2.0/src/backend/file/gnc-backend-file.c: Fix error
 	  checking for non-existing filenames. #351351. Will now always
-	  give a "file not found" message on nonexisting paths or
+	  give a "file not found" message on nonexistent paths or
 	  filenames. Merge from r14789.
 
 2006-09-22 20:26  warlord
@@ -5281,7 +5281,7 @@
 	* [r14789] trunk/ChangeLog,
 	  trunk/src/backend/file/gnc-backend-file.c: Fix error checking
 	  for non-existing filenames. Will now always give a "file not
-	  found" message on nonexisting paths or filenames. #351351. BP
+	  found" message on nonexistent paths or filenames. #351351. BP
 
 2006-09-03 10:23  cstim
 
@@ -18302,7 +18302,7 @@
 2006-01-17 01:42  chris
 
 	* [r12815] trunk/src/bin/overrides/Makefile.am: Don't distribute
-	  non-existant 'gnucash'
+	  nonexistent 'gnucash'
 
 2006-01-16 20:30  jsled
 

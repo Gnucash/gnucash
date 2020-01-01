@@ -3321,7 +3321,7 @@ Between 2.6.3 and 2.6.4, the following bugfixes were accomplished:
     728841 - XML backend does not always store KVP slots.
     729157 - Bill Term discount days are allowed to be more than due days.
     729497 - Saved Report Configuration selection window resize.
-    730255 - Python bindings: Assigns bill entries to non-existant invoice.
+    730255 - Python bindings: Assigns bill entries to nonexistent invoice.
     731519 - The fix sets the upper limit before it sets the value of the end
              row spin button.
     733107 - Search for reconcile status doesn't work right.
@@ -6127,7 +6127,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
  1.0.17 - 14 Feb 98
          o Fix core dump when deleting account with open register windows.
-         o Fix core dump when transfering money to deleted (non-existant) account.
+         o Fix core dump when transfering money to deleted (nonexistent) account.
          o Fix tabbing between ledger entry and record/cancel/close buttons.
          o MS Money QIF import fixes.
          o obscure fix to Xbae table widget that may fix some mystery core dumps.

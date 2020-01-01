@@ -118,7 +118,7 @@
 
 	* src/backend/file/gnc-backend-file.c: Fix error checking for
 	non-existing filenames. Will now always give a "file not found"
-	message on nonexisting paths or filenames. #351351.
+	message on nonexistent paths or filenames. #351351.
 
 2006-08-20  David Hampton  <hampton@employees.org>
 
@@ -7067,7 +7067,7 @@ r12815 | chris | 2006-01-16 20:42:46 -0500 (Mon, 16 Jan 2006) | 2 lines
 
    M /gnucash/trunk/src/bin/overrides/Makefile.am
 
-  Don't distribute non-existant 'gnucash'
+  Don't distribute nonexistent 'gnucash'
 
 r12372 | chris | 2006-01-16 16:17:48 -0500 (Mon, 16 Jan 2006) | 2 lines
 

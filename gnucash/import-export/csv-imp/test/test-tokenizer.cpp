@@ -84,7 +84,7 @@ std::string GncTokenizerTest::get_filepath(const std::string& filename)
         return std::string(srcdir) + "/" + filename;
 }
 
-TEST_F (GncTokenizerTest, load_file_nonexisting)
+TEST_F (GncTokenizerTest, load_file_nonexistent)
 {
 
     auto file1 = get_filepath ("notexist.csv");

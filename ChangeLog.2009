@@ -377,7 +377,7 @@
 2009-12-17 06:30  mta
 
 	* [r18508] src/engine/Split.c: Teach xaccSplitConvertAmount that
-	  0*x = 0. Avoids looking up non-existant exchange rate.
+	  0*x = 0. Avoids looking up nonexistent exchange rate.
 
 2009-12-17 06:25  mta
 

@@ -856,7 +856,7 @@
 
 2014-06-01 Mike Evans 
 
-	* Bug 730255 - Python bindings: Assigns bill entries to non-existant invoice.
+	* Bug 730255 - Python bindings: Assigns bill entries to nonexistent invoice.
 
 2014-05-15 Mike Evans 
 
