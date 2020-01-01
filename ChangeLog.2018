@@ -656,7 +656,7 @@
 
 2019-01-27 Alex Aycinena
 
-	* scroll txf view to put line for selected account in center of view; doesn't work for first selected account but does for all subsequent delections. Will fix in later commit when I figure out why.
+	* scroll txf view to put line for selected account in center of view; doesn't work for first selected account but does for all subsequent selections. Will fix in later commit when I figure out why.
 
 2019-01-27 Alex Aycinena
 
