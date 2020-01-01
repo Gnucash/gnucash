@@ -55,7 +55,7 @@ This feature allows currency-trading accounts to be established.
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-enforced by the engine. The engine user cannnot accidentally destroy
+enforced by the engine. The engine user cannot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
