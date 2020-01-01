@@ -8032,7 +8032,7 @@
 	* src/register/splitreg.{ch}: mod for table-allgui changes
 
 	* src/register/table-allgui.{ch}: encapsulate 'view' callbacks
-	into a struct. add a callback for confiming data entry.
+	into a struct. add a callback for confirming data entry.
 
 2001-03-01  Robert Graham Merkel  <rgmerk@mira.net>
 
