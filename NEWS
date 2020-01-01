@@ -1841,7 +1841,7 @@ The following bugs are fixed only in unstable/master:
     Bug 793941 - 2.7.4: test failure on i686: 59 - test-gnc-timezone
                  Don't test before 1916, that's not a common GnuCash use-case.
     Bug 793947 - Impossible to render printable invoice
-    Bug 794031 - The checkbox "Placeholder" cann't be changed in dialog
+    Bug 794031 - The checkbox "Placeholder" can't be changed in dialog
                  "Setup selected accounts". Enable placeholder toggle and
                  provide callback. The text for this account tree view
                  specifies "If you would like an account to be a placeholder
