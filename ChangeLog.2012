@@ -3410,7 +3410,7 @@
 	  src/import-export/csv-export/schemas/apps_gnucash_dialog_export_csv.schemas.in:
 	  Bug #672157: New CSV account and transaction exporter Patch by
 	  Robert Fewell: I have put together a new feature to export the
-	  account tree and transactions to a deliminated file. Both
+	  account tree and transactions to a delimited file. Both
 	  options allow you to select the deliminator and the use of
 	  quotes. Every thing seems to work on the testing I have done but
 	  may be some of the text and the headings in the output might
