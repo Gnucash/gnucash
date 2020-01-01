@@ -8663,7 +8663,7 @@
 	  been renamed to gnc_resolve_file_path to be more consistent with
 	  the other functions. Lastly, this commit also adds a first
 	  implementation to work with a keyring to store and retrieve
-	  passwords, althoug
+	  passwords, although...
 
 2010-03-05 19:57  cstim
 
