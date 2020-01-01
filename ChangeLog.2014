@@ -672,7 +672,7 @@
 
 2014-08-31 Mike Alexander 
 
-	* Change gncOwnerGetBalanceInCurrency to only cosider lots that contain an invoice. This function is currently only used in the owner tree code and this change will cause payments not properly linked to invoices to be ignored when computing owner balances.
+	* Change gncOwnerGetBalanceInCurrency to only consider lots that contain an invoice. This function is currently only used in the owner tree code and this change will cause payments not properly linked to invoices to be ignored when computing owner balances.
 
 2014-08-31 Mike Alexander 
 
