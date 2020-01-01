@@ -1059,7 +1059,7 @@ The following bugs have been fixed:
     Bug 796137 - query.search_for outputs critical qof.object errors and
                  prevents queries being run.
     Bug 796248 - Editing Scheduled Transaction.
-                 In addition to not begining to edit already-loaded
+                 In addition to not beginning to edit already-loaded
                  transactions, don't try to load splits that are already
                  loaded. It shouldn't be possible to load a transaction
                  without also loading its splits.
