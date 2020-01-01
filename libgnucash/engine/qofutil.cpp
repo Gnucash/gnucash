@@ -224,7 +224,7 @@ qof_util_whitespace_filter (const gchar * val)
     return val + len;
 }
 
-#ifdef THESE_CAN_BE_USEFUL_FOR_DEGUGGING
+#ifdef THESE_CAN_BE_USEFUL_FOR_DEBUGGING
 static guint g_str_hash_KEY(gconstpointer v)
 {
     return g_str_hash(v);
