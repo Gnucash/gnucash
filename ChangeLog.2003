@@ -5069,7 +5069,7 @@
 	  both numbers to the lcd and then operate on them, instead of
 	  assuming that a "cross-multiply" is safe.
 	* src/app-utils/test/test-print-parse-amount.c -- add more tests for
-	  PrintAmountInternal by checking force_fit and round.  Excercises
+	  PrintAmountInternal by checking force_fit and round.  Exercises
 	  a bug (fixed in this patch) where cross-multiplies were NOT safe.
 
 	* src/gnome-search/dialog-search.c -- reset the search-type to
