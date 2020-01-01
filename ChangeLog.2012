@@ -321,7 +321,7 @@
 	  first import into a new book; also follow book option setting
 	  for num source in importing number whether new book or not:
 	  import-export/csv-import/assistant-csv-trans-import.glade -
-	  modify commments to alert user of raising book options dialog in
+	  modify comments to alert user of raising book options dialog in
 	  cases of csv import into a new book
 	  import-export/csv-import/gnc-csv-model.c & h. - use
 	  'gnc_set_num_action' function to import number based on book
