@@ -3003,7 +3003,7 @@
 
 	* src/gnome-utils/dialog-commodity.c:
 	* src/gnome-utils/dialog-utils.[ch]: Consolidate a couple of
-	functions into the only file where they areused.
+	functions into the only file where they are used.
 
 2003-06-25  Derek Atkins  <derek@ihtfp.com>
 
