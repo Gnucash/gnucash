@@ -499,7 +499,7 @@ gboolean xaccTransIsBalanced(const Transaction * trans);
 /** The xaccTransGetAccountValue() method returns the total value applied
  *  to a particular account.  In some cases there may be multiple Splits
  *  in a single Transaction applied to one account (in particular when
- *  trying to balance Lots) -- this function is just a convienience to
+ *  trying to balance Lots) -- this function is just a convenience to
  *  view everything at once.
  */
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
