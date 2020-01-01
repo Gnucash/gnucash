@@ -2202,7 +2202,7 @@
 	  src/optional/python-bindings/example_scripts/new_book_with_opening_balances.py,
 	  src/optional/python-bindings/example_scripts/simple_business_create.py,
 	  src/optional/python-bindings/example_scripts/test_imbalance_transaction.py:
-	  Bug #675201 - slight bugfix to prior enchancement post for
+	  Bug #675201 - slight bugfix to prior enhancement post for
 	  example scripts Patch by Jamie Campbell
 
 2012-06-22 14:36  gjanssens
