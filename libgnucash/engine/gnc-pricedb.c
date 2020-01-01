@@ -1149,7 +1149,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
     qof_event_gen (&p->inst, QOF_EVENT_ADD, NULL);
 
-    LEAVE ("db=%p, pr=%p dirty=%d dextroying=%d commodity=%s/%s currency_hash=%p",
+    LEAVE ("db=%p, pr=%p dirty=%d destroying=%d commodity=%s/%s currency_hash=%p",
            db, p, qof_instance_get_dirty_flag(p),
            qof_instance_get_destroying(p),
            gnc_commodity_get_namespace(p->commodity),
