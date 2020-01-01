@@ -1310,7 +1310,7 @@
 
 	* [r22396] po/glossary/gnc-glossary.txt: Add "compound interest"
 	  and "principal payment" to glossary. IMHO fundamental terms
-	  found in fin.scm / loan repayment calulator
+	  found in fin.scm / loan repayment calculator
 
 2012-09-16 13:17  fell
 
