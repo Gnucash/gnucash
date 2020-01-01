@@ -739,12 +739,12 @@
  *   1. The payment *, interest paid, principal paid and remaining PV
  *   for each payment period are computed and displayed. At the end of
  *   each year a summary is computed and displayed and the total
- *   interest paid is diplayed at the end.
+ *   interest paid is displayed at the end.
  *
  *   2. A summary is computed and displayed for each year. The
  *   interest paid during the year is computed and displayed as well
  *   as the remaining balance at years end.  The total interest paid
- *   is diplayed at the end.
+ *   is displayed at the end.
  *
  *   3. An amortization schedule is computed for a common method of
  *   advanced payment of principal is computed and displayed. In this

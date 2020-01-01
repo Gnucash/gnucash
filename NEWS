@@ -3351,7 +3351,7 @@ Some other fixes not associated with reported bugs were accomplished:
     CSV Import transform macro into function.
     Convert ISO-8859-1 account chart templates to UTF-8.
     Correct txf output to use a minus sign, rather than parenthesis.
-    Fix document type dispay for credit notes on owner report.
+    Fix document type display for credit notes on owner report.
     Fix test-backend-dbi segfault with libdbi-0.9.0.
     Handle the case of scrubbing a lot link between two non-document lots.
     Make scrub in lot viewer scrub business lots using the new scrub functions.
