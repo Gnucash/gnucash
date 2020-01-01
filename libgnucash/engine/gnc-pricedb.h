@@ -615,7 +615,7 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
 /** @brief Get the number of prices, in any currency, for a given commodity.
  * @param db The pricedb
  * @param c The commodity
- * @return The number of prices in the database for this commody, zero if none
+ * @return The number of prices in the database for this commodity, zero if none
  */
 int
 gnc_pricedb_num_prices(GNCPriceDB *db,

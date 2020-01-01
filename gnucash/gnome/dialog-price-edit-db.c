@@ -402,7 +402,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
 
     // Setup the commodity view
-    pdb_dialog->remove_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "commodty_treeview"));
+    pdb_dialog->remove_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "commodity_treeview"));
     selection = gtk_tree_view_get_selection (pdb_dialog->remove_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 

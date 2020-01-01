@@ -565,7 +565,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkTreeView" id="commodty_treeview">
+                      <object class="GtkTreeView" id="commodity_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">liststore4</property>
