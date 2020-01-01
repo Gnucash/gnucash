@@ -2897,7 +2897,7 @@ The following bugs are fixed:
     Bug 771379 - GnuCash doesn't support Russian Ruble Symbol.
 
 Other repairs that weren't marked as bugs in git:
-     Build improvements with CMake, accomodation for Guile-2.0.12 on Gentoo.
+     Build improvements with CMake, accommodation for Guile-2.0.12 on Gentoo.
      Change the date_posted timestamp from midnight local to 11:00 AM GMT,
           which will be the same date in nearly all timezones.
      SX - Recalculate all occurrences of all SX if the calendar is updated
