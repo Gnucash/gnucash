@@ -17718,7 +17718,7 @@
 
 	* [r12947] trunk/src/bin/gnucash-bin.c,
 	  trunk/src/scm/command-line.scm, trunk/src/scm/main.scm: Remove
-	  --devel option, which aparently doesn't do anything. Also remove
+	  --devel option, which apparently doesn't do anything. Also remove
 	  now unused guile portion of --add-price-quote option.
 
 2006-01-23 03:26  chris

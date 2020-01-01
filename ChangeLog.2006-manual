@@ -6622,7 +6622,7 @@ r12947 | chris | 2006-01-22 22:43:55 -0500 (Sun, 22 Jan 2006) | 3 lines
    M /gnucash/trunk/src/scm/command-line.scm
    M /gnucash/trunk/src/scm/main.scm
 
-  Remove --devel option, which aparently doesn't do anything.
+  Remove --devel option, which apparently doesn't do anything.
   Also remove now unused guile portion of --add-price-quote option.
 
 r12946 | chris | 2006-01-22 22:26:01 -0500 (Sun, 22 Jan 2006) | 18 lines
