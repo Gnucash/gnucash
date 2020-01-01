@@ -1315,7 +1315,7 @@
 	  that auto-completed transactions aren't correctly marked as
 	  pending. This bug is probably responsible for the crashes like
 	  those in bug #348469. In general, the register makes it very
-	  difficult to consistently distiguish between beginning to edit a
+	  difficult to consistently distinguish between beginning to edit a
 	  transaction that's being edited in another register and
 	  beginning to edit the blank transaction, which is already open
 	  for editing, but isn't marked pending so that we can pretend it
@@ -2897,7 +2897,7 @@
 	  transactions aren't correctly marked as pending. This bug is
 	  probably responsible for the crashes like those in bug #348469.
 	  In general, the register makes it very difficult to consistently
-	  distiguish between beginning to edit a transaction that's being
+	  distinguish between beginning to edit a transaction that's being
 	  edited in another register and beginning to edit the blank
 	  transaction, which is already open for editing, but isn't marked
 	  pending so that we can pretend it hasn't been opened if it never
