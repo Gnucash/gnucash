@@ -543,7 +543,7 @@ gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
  *      date posted  (compare as a date)
  *      num field (compare as an integer)
  *      date entered (compare as a date)
- *      description field (comcpare as a string using strcmp())
+ *      description field (compare as a string using strcmp())
  *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
@@ -566,7 +566,7 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
  *          num field (compare as an integer)
  *      else actna and actnb  (compare as an integer)
  *      date entered (compare as a date)
- *      description field (comcpare as a string using strcmp())
+ *      description field (compare as a string using strcmp())
  *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits (except action as
