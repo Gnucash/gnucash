@@ -6488,7 +6488,7 @@
 	* [r14633]
 	  branches/swigify/src/business/business-core/gncInvoice.c,
 	  branches/swigify/src/business/business-core/gncInvoice.h: SWIG
-	  doens't seem to generate a wrapper for the macro functions. I
+	  doesn't seem to generate a wrapper for the macro functions. I
 	  hope there's some better solution than making a real function
 	  out of the macro, but this works for now. Suggestions welcome.
 
@@ -7857,7 +7857,7 @@
 
 	* [r14500] trunk, trunk/ChangeLog, trunk/autogen.sh,
 	  trunk/configure.in: make sure that po/POTFILES.in exists so
-	  configure doens't complain.
+	  configure doesn't complain.
 
 2006-07-14 21:29  andi5
 

@@ -8761,7 +8761,7 @@
 2007-01-12 16:35  cstim
 
 	* [r15343] src/import-export/hbci/gnc-hbci-utils.c: Remove unused
-	  header (that doesnt exist on win32)
+	  header (that doesn't exist on win32)
 
 2007-01-12 01:41  jsled
 

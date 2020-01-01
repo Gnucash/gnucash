@@ -2800,7 +2800,7 @@
  	option for printing share quantities.
 
 	* src/engine/Session.c (MakeHomeDir): just because ~/.gnucash
- 	exists doens't mean ~/.gnucash/data exists.
+ 	exists doesn't mean ~/.gnucash/data exists.
 
 	* src/scm/report/hello-world.scm: renamed from dummy.scm. Added
 	documentation to the source code and additional help text in the

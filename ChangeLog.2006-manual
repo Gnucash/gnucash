@@ -424,7 +424,7 @@
 
 	* configure.in:
 	* autogen.sh:
-	  make sure that po/POTFILES.in exists so configure doens't complain.
+	  make sure that po/POTFILES.in exists so configure doesn't complain.
 
 	* configure.in:
 	  check for (g-wrap gw-glib-spec) instead of (g-wrap) #347404.
