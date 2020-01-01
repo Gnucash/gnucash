@@ -18495,7 +18495,7 @@
 	  trunk/src/gnome/glade/account.glade,
 	  trunk/src/gnome/gnc-plugin-page-account-tree.c: Add
 	  account-tree-view editing for name,code,desc,notes; refactor
-	  new-account-heirarchy druid for merging accounts into an
+	  new-account-hierarchy druid for merging accounts into an
 	  existing book.
 
 2006-01-15 22:19  jsled

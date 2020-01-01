@@ -6219,7 +6219,7 @@ r13040 | chris | 2006-01-29 19:59:25 -0500 (Sun, 29 Jan 2006) | 3 lines
 	* lib/libgsf-1.12.3/gsf/Makefile.am (pkglib_LTLIBRARIES)
 	* lib/goffice-0.0.4/goffice/Makefile.am (pkglib_LTLIBRARIES)
 	* configure.in: Use pkglib automake variables to install in a
-	gnucash-specific hierearchy; change configure.in paths for goffice
+	gnucash-specific hierarchy; change configure.in paths for goffice
 	for similar reasons.  Bug#328858.
 
 2006-01-25  Joshua Sled  <jsled@asynchronous.org>
@@ -7179,7 +7179,7 @@ r12364 | chris | 2006-01-16 00:22:01 -0500 (Mon, 16 Jan 2006) | 2 lines
 	account-hierarchy merge conflicts before allowing Next to final
 	page.
 	(balance_cell_data_func): Add new subtlety around opening-balance
-	editing in the face of hierarachy-merging.
+	editing in the face of hierarchy-merging.
 	(on_finish): Reorder dialog finishing to work around account-tree
 	model bug, starting-balance-transaction creation, data-merging,
 	when-completed callback creation.

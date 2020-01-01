@@ -7419,7 +7419,7 @@
 	* src/gnome/gnc-html.c: set busy cursor on html widget
 	while request is being processed
 
-	* src/gnome/window-main.c: hierarchy not heirarchy
+	* src/gnome/window-main.c: hierarchy not hierarchy
 
 	* src/gnome/window-help.c: specify the help window as the
 	request dialog parent
@@ -7552,7 +7552,7 @@
 2001-03-12  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/gnome/window-main.c (gnc_ui_xml_v2_cb): new func.
-	(gnc_ui_account_heirarchy_cb): new empty func.
+	(gnc_ui_account_hierarchy_cb): new empty func.
 	(gnc_main_create_menus): add devel menu.
 
 	* src/engine/io-gncxml-v2.h (struct _load_counter_struct): add
