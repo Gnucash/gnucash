@@ -155,7 +155,7 @@
 
     (define (default-testing-options)
       ;; To ease testing of transaction report, we will set default
-      ;; options for generating reports. We will elable extra columns
+      ;; options for generating reports. We will enable extra columns
       ;; for Exporting, disable generation of informational text, and
       ;; disable indenting. These options will be tested separately as
       ;; the first test group. By default, we'll select the modern dates.
