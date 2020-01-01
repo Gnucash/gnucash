@@ -4500,7 +4500,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 begin using the new Gnucash, and you have data files with scheduled
 	 transactions, then these files will not be readable by older
 	 versions. If you have to make a new data file readable by older
-	 versions of GnuCash, this can be achived by deleting all records of
+	 versions of GnuCash, this can be achieved by deleting all records of
 	 scheduled transactions in the scheduled transaction editor.
 	 o SWIG is now used instead of g-wrap for providing language bindings.
 	 o The Scheduled Transaction list view is now improved and summarized
@@ -4550,7 +4550,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 begin using the new Gnucash, and you have data files with scheduled
 	 transactions, then these files will not be readable by older
 	 versions. If you have to make a new data file readable by older
-	 versions of GnuCash, this can be achived by deleting all records of
+	 versions of GnuCash, this can be achieved by deleting all records of
 	 scheduled transactions in the scheduled transaction editor.
 	 o Bugfixes and improvements since the last version 2.1.4 include:
 	 o Updated translations.
