@@ -2854,7 +2854,7 @@
 	  values to default to unset, rather than zero. Main patch by
 	  Gregory Alexander <gregalexa@gmail.com>. On editing, interpret a
 	  blank as an unset budget value. On reporting, show "." for unset
-	  budget values. Add bugdet functions for testing whether a budget
+	  budget values. Add budget functions for testing whether a budget
 	  value is set or not, and for unsetting it.
 
 2006-10-11 20:49  chris

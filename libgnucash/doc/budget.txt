@@ -17,7 +17,7 @@ However, I believe that they provide a self-consistent view of how
 one might do this, and I hope that this document will serve to continue
 the discussion that began on the GnuCash/Xacc mailing list.
 
-\section bugettoc tableofcontents
+\section budgettoc tableofcontents
 
 \subsection budgetdefines Definitions
 
