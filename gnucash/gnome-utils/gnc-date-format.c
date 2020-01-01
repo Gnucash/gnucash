@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-date-format.c -- Date formator widget                        *
+ * gnc-date-format.c -- Date formatter widget                       *
  *                       (GnuCash)                                  *
  * Copyright (C) 2003 Derek Atkins  <derek@ihtfp.com>               *
  *                                                                  *
