@@ -9173,7 +9173,7 @@
 	* src/scm/report.scm: rename report objects; now the thing that
 	gets created by define-report is a <report-template> and the thing
 	that has a window and a set of parameters is a <report>.  Add a
-	"style sheet" option automatcally to EVERY report, and a "General"
+	"style sheet" option automatically to EVERY report, and a "General"
 	section to put it in; report with only 1 page of options should
 	use "General".  Add false-if-exception error catching to report
 	run.
