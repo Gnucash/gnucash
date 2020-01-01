@@ -3427,7 +3427,7 @@
 	* src/business/business-ledger/gncEntryLedger.c: fix a bug where
 	  if you unpost an invoice and don't bring the TaxTables up to
 	  date, the total value shown in the register is different
-	  dependending on whether the cursor is on the current line or
+	  depending on whether the cursor is on the current line or
 	  not.
 
 	* src/business/business-core/gncInvoice.[ch]: change the unpost
