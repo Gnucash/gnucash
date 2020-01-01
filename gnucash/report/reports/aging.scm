@@ -67,7 +67,7 @@
 ;; if any.  Any bills get taken out of the overpayment before
 ;; incurring debt.
 
-(define company-info (make-record-type "ComanyInfo" 
+(define company-info (make-record-type "CompanyInfo" 
 				       '(currency
 					 bucket-vector
 					 overpayment
