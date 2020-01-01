@@ -3235,7 +3235,7 @@ Other repairs that weren't reported in bugs:
       Correct the number field displayed in the reconcile window to correspond with the source specified in File->Options
       Fix some bugs found by SWIG version 3.0.5. Prior to version 3.0.3 SWIG silently ignored invalid preprocessor directives
       Scrubbing Improvements, including avoiding a potential infinite loop.
-      Remove build and run of no-longer-existant intl-scm/guile-strings.
+      Remove build and run of no-longer-existent intl-scm/guile-strings.
       Rewrite gnc-test-env in perl. This eliminates another guile dependency in the build chain.
       Switch from guile to xml to manage our iso-currencies source file
       Numeric values with more than commodity smallest fraction get silently dropped.
