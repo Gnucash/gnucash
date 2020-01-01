@@ -3509,7 +3509,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
          opening them in the default application for the document
          type.
 
-       * Cutsom Reports can now be saved without renaming the report,
+       * Custom Reports can now be saved without renaming the report,
          and modifications can overwrite an existing report.
 
        * The import assistant now finishes much more quickly after
