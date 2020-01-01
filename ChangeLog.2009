@@ -761,7 +761,7 @@
 2009-11-21 04:32  plongstaff
 
 	* [r18431] src/backend/sql/gnc-transaction-sql.c: Fix bug 591098 -
-	  when starting Gnucash, "Present" and all other collumns exept
+	  when starting Gnucash, "Present" and all other columns exept
 	  TOTAL are zero until you open the account Fix bug 598618 - does
 	  not calculate account balances correctly Both of these are
 	  happening because not all transactions are being loaded at
