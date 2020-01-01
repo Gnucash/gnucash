@@ -6309,7 +6309,7 @@
 	  src/doc/sx.rst,
 	  src/gnome/schemas/apps_gnucash_general.schemas.in: Save/restore
 	  recurrence list (schedule) for SXes. Add
-	  "allow_file_incompatability" gconf key; emit incompatible
+	  "allow_file_incompatibility" gconf key; emit incompatible
 	  elements (sx-enabled and recurrence/schedule) only if allowed.
 
 2007-02-18 23:14  jsled

@@ -218,7 +218,7 @@
 	  src/gnome-utils/gnc-frequency.c,
 	  src/gnome/glade/sched-xact.glade: Partly revert r17725, "Bug
 	  #106401: Add SX weekend occurence to be shifted to weekdays" The
-	  original patch doesn't seem to deal with backward compatiblity
+	  original patch doesn't seem to deal with backward compatibility
 	  in the XML parser well enough. This commit reverts the GUI- and
 	  XML-related parts of r17725.
 

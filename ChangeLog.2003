@@ -1890,8 +1890,8 @@
 	* src/register/register-gnome/gnucash-item-list
 	* src/register/register-gnome/gnucash-sheet.c
 
-	  In the following, use the 2.0 compatability function
-	  gdk_font_from_description instead of the 2.2 compatability function
+	  In the following, use the 2.0 compatibility function
+	  gdk_font_from_description instead of the 2.2 compatibility function
 	  gdk_font_from_description_for_display to correct error in 13th batch.
 	  Replace deprecated:
     	  gtk_editable_claim_selection( GTK_EDITABLE by
@@ -2886,7 +2886,7 @@
 
 	* src/backend/file/gnc-account-xml-v2.c:
 	* src/backend/file/gnc-commodity-xml-v2.c:
-	* src/engine/Scrub.c: Ensure backwards compatability of the XML file.
+	* src/engine/Scrub.c: Ensure backwards compatibility of the XML file.
 
 	* src/app-utils/gnc-helpers.c: Update for changes in accessing
 	quote source information.

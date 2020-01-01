@@ -322,7 +322,7 @@
 	  extensions menu.
 
 	* src/gnome-utils/gnc-html.[ch]: Revert gtkhtml2 changes; restoring
-	  gtkhtml1 version of the gnc-html.c code allows compatability
+	  gtkhtml1 version of the gnc-html.c code allows compatibility
 	  with gtkhtml3.
 
 	* src/gnome/ui/gnc-main-window-ui.xml: Add testing MiscAction,

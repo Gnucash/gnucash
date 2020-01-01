@@ -3922,7 +3922,7 @@ r13498 | chris | 2006-03-05 18:46:39 -0500 (Sun, 05 Mar 2006) | 4 lines
 	* src/gnome-utils/dialog-account.c:
 	* lib/glib26/gkeyfile.c:
 	* lib/glib26/gutils26.[ch]: Make g_strv_length available outside
-	of the gkeyfile compatability library.
+	of the gkeyfile compatibility library.
 
 2006-03-04  Joshua Sled  <jsled@asynchronous.org>
 

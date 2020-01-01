@@ -14005,7 +14005,7 @@
 	* [r13477] trunk/ChangeLog, trunk/lib/glib26/gkeyfile.c,
 	  trunk/lib/glib26/gutils26.c, trunk/lib/glib26/gutils26.h,
 	  trunk/src/gnome-utils/dialog-account.c: Make g_strv_length
-	  available outside of the gkeyfile compatability library.
+	  available outside of the gkeyfile compatibility library.
 
 2006-03-04 18:12  chris
 

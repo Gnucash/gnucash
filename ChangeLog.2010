@@ -8114,13 +8114,13 @@
 
 	* [r18907] src/app-utils/file-utils.c, src/app-utils/guile-util.c,
 	  src/calculation/fin.c, src/libqof/qof/qofid.h: MSVC
-	  compatiblity: Fix include files in MSVC. Replace QSTRCMP by
+	  compatibility: Fix include files in MSVC. Replace QSTRCMP by
 	  g_strcmp0 on MSVC.
 
 2010-03-14 21:01  cstim
 
 	* [r18906] src/app-utils/gnc-ui-common.h,
-	  src/app-utils/option-util.c: Improve non-gnome UI compatiblity:
+	  src/app-utils/option-util.c: Improve non-gnome UI compatibility:
 	  app-utils can compile without gtk as well.
 	* [r18905] CMakeLists.txt, packaging/win32/install.sh,
 	  src/CMakeLists.txt, src/app-utils/CMakeLists.txt,
@@ -8375,7 +8375,7 @@
 
 	* [r18876] src/CMakeLists.txt, src/engine/CMakeLists.txt,
 	  src/engine/gnc-euro.c, src/engine/gnc-ui-util.c: Win32/MSVC
-	  compatiblity - Replace trunc() by floor() - Provide a round()
+	  compatibility - Replace trunc() by floor() - Provide a round()
 	  workaround implementation for MSVC - Use g_strcasecmp instead of
 	  the libc one - Add include for libc replacements
 	* [r18875] src/gnc/gtk-icons.qrc, src/gnc/gtk-icons/gtk-redo.png,
@@ -8457,7 +8457,7 @@
 2010-03-07 13:06  cstim
 
 	* [r18864] packaging/win32/install.sh,
-	  src/business/business-core/business-core.i: MSVC compatiblity:
+	  src/business/business-core/business-core.i: MSVC compatibility:
 	  snprintf is required to have a prefixing underscore. Also, more
 	  symbols of libguile/gc.h need explicit declspec on MSVC.
 
@@ -8562,7 +8562,7 @@
 	  src/business/business-core/gncOrder.h,
 	  src/business/business-core/gncTaxTable.h,
 	  src/business/business-core/gncVendor.h,
-	  src/libqof/qof/qofbook.h: MSVC compatiblity: Replace
+	  src/libqof/qof/qofbook.h: MSVC compatibility: Replace
 	  QOF_BOOK_LOOKUP_ENTITY macro by a RETURN_ENTITY macro and add
 	  inline functions for lookup. MSVC doesn't accept the syntax with
 	  an inlined block, x = ({ foo; bar; value;}). Hence, this is
@@ -9628,17 +9628,17 @@
 	  the workaround to define a macro that will shadow the member
 	  names. However, the initialization itself works fine and
 	  non-MSVC code is unchanged, so I think we can live with that.
-	* [r18754] src/engine/Account.c: MSVC compatiblity: Struct
+	* [r18754] src/engine/Account.c: MSVC compatibility: Struct
 	  initialization doesn't work as expected. Somehow, the struct
 	  initialization containing a gnc_numeric doesn't work. As an
 	  exception, we hand-initialize that member afterwards.
 	* [r18753] src/backend/xml/gnc-backend-xml.c,
-	  src/engine/gnc-filepath-utils.c: MSVC compatiblity: open() flags
+	  src/engine/gnc-filepath-utils.c: MSVC compatibility: open() flags
 	  and S_ISDIR doesn't exist on MSVC.
 
 2010-02-27 18:40  cstim
 
-	* [r18752] src/backend/xml/io-gncxml-v1.c: MSVC compatiblity: Use
+	* [r18752] src/backend/xml/io-gncxml-v1.c: MSVC compatibility: Use
 	  a char* pointer for the memcpy() input argument. This is
 	  required by MSVC because we do some pointer arithmetic in the
 	  memcpy() argument, but in order to do this, MSVC wants to know
@@ -9649,11 +9649,11 @@
 	  bytes are counted.
 	* [r18751] src/backend/xml/sixtp.c,
 	  src/engine/gnc-filepath-utils.c, src/libqof/qof/gnc-numeric.c,
-	  src/libqof/qof/kvp_frame.c: MSVC compatiblity: Add defines for
+	  src/libqof/qof/kvp_frame.c: MSVC compatibility: Add defines for
 	  functions/types which are available under different names in
 	  MSVC.
 	* [r18750] src/backend/xml/gnc-backend-xml.c,
-	  src/engine/Recurrence.c: MSVC compatiblity: Array initialization
+	  src/engine/Recurrence.c: MSVC compatibility: Array initialization
 	  in MSVC requires a constant, not a variable. That is, gcc
 	  accepts a constant variable in many cases now, but MSVC doesn't
 	  accept it. So it must be turned into an old preprocessor define.
