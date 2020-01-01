@@ -857,7 +857,7 @@ GncDbiBackend<Type>::~GncDbiBackend()
 
 /* GNUCASH_RESAVE_VERSION indicates the earliest database version
  * compatible with this version of Gnucash; the stored value is the
- * earliest version of Gnucash conpatible with the database. If the
+ * earliest version of Gnucash compatible with the database. If the
  * GNUCASH_RESAVE_VERSION for this Gnucash is newer than the Gnucash
  * version which created the database, a resave is offered. If the
  * version of this Gnucash is older than the saved resave version,
