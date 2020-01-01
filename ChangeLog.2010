@@ -5089,7 +5089,7 @@
 	  https://bugs.gnucash.org/show_bug.cgi?id=492417#c3 But
 	  probably there is a better way to get this informations. 4.
 	  Review List: a. adding: CDF, GHS, ... b. outdated:
-	  AON->AOR->AOA, GWP->XOF, ... c. Typos like "fening". d. Alway
+	  AON->AOR->AOA, GWP->XOF, ... c. Typos like "fening". d. Always
 	  use singular instead of a mixture. 5. add comments: a. outdated
 	  currencies prepared as in the header shown. b. for
 	  abbreviations. Background is the thread starting with
