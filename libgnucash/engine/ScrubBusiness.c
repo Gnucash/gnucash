@@ -71,7 +71,7 @@ gncScrubInvoiceState (GNCLot *lot)
 
     if (invoice != lot_invoice)
     {
-        PINFO("Correcting lot invoice associaton. Old invoice: %p, new invoice %p", lot_invoice, invoice);
+        PINFO("Correcting lot invoice association. Old invoice: %p, new invoice %p", lot_invoice, invoice);
         gncInvoiceDetachFromLot(lot);
 
         if (invoice)
