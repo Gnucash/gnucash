@@ -897,7 +897,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     {
         /* Make sure that each side of the transaction is in
          * a different account; otherwise get weirdness in lot
-         * calculcations.  ... Hmm maybe should fix lots in
+         * calculations.  ... Hmm maybe should fix lots in
          * this case? */
         while (bcc == acc)
         {

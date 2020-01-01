@@ -88,7 +88,7 @@ Other repairs or enhancements not marked as bugs:
     Change the transfer account notation for single-split transactions in
       basic view from "--Split Transaction--" (they're obviously not) to "None".
     Correctly parse decimal values between 0 and -1 (e.g. -0.5) in register
-      caclulations: The negative sign was being stripped.
+      calculations: The negative sign was being stripped.
     Require CMake 3.5 or later for all platforms.
     Rework the building of libgtest.a from source when the builder sets
       GTEST_ROOT or the distro doesn't provide a pre-build one.
@@ -2217,7 +2217,7 @@ Other repairs not marked as bugs in git:
     Some bugs in the new Transaction Report.
     Correct setting of WebKit version during configuration when the version
        is cached.
-    The change to the Average Cost calulation introduced in 2.6.12 is reverted.
+    The change to the Average Cost calculation introduced in 2.6.12 is reverted.
        See the extensive discussion in Bug 775368 for mor information.
     Fix our appstream id as per the appstream recommendation
     Fix incorrect minimum dates in the net-linechart and net-barchart reports.
