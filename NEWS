@@ -5775,7 +5775,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o If the amount is monetary, map the keypad decimal key to the
 	   correct decimal character for the locale.
 	 o Fix malformed URLs for bringing up a report options window.
-	 o Add new option for specifying sort critera for piecharts and
+	 o Add new option for specifying sort criteria for piecharts and
 	   barcharts.
 	 o The report title should change when the report name field is
 	   changed in the options.

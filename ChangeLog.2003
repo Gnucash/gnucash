@@ -5697,7 +5697,7 @@
 
 	* src/report/report-system/options-utilities.scm:
 	* src/report/report-system/report-system.scm: Add new option for
-	specifying sort critera for piecharts and barcharts.
+	specifying sort criteria for piecharts and barcharts.
 
 	* src/report/standard-reports/account-piecharts.scm: Add various
 	sorting options.  Work around Guppi problem by replacing the
