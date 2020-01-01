@@ -1,6 +1,6 @@
 "Term (Dear translator: This file will never be visible to the user!)"	"English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 "account"	"A detailed record of money spent and received"
-"account code"	"An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
+"account code"	"An alphanumeric key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 "account hierarchy"	"the tree view of all accounts"
 "account name"	"-"
 "account type: Active"	"The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
