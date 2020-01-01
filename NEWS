@@ -5342,7 +5342,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Fix the ISO_DATELEN to be "long enough"
 	 o Fix handling of HBCI direct debits (fix wrong textkey). Fix and
 	   initially implement handling of multiple banks/users/customers.
-	 o Fixed extremly stupid, old bug that causes weird HBCI errors.
+	 o Fixed extremely stupid, old bug that causes weird HBCI errors.
 	   Improved user messages.
 	 o Refactor some GUI code. Improve user messages.
 	 o BillTermDecRef should have been BillTermIncRef when setting new

@@ -2387,7 +2387,7 @@
 	* src/import-export/hbci/hbci-interaction.c,
 	gnc-hbci-getbalance.c, dialog-hbcitrans.c: Improved user messages.
 
-	* src/import-export/hbci/gnc-hbci-utils.c: Fixed extremly stupid,
+	* src/import-export/hbci/gnc-hbci-utils.c: Fixed extremely stupid,
 	old bug that causes weird HBCI errors.
 
 2003-10-18  Christian Stimming  <stimming@tuhh.de>
