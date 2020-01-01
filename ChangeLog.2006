@@ -10038,7 +10038,7 @@
 	* [r14127] trunk/po/fr.po: Updated French translation by Jonathan
 	  Ernst. He said: I didn't translate anything new, but I fixed a
 	  lot of strings that where not following the Gnome-Fr translation
-	  guidelines (non-breaking spaces befor ":", web->Web, menu
+	  guidelines (non-breaking spaces before ":", web->Web, menu
 	  accelerators)."
 
 2006-05-18 11:32  cstim
