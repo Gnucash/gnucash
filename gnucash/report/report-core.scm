@@ -630,7 +630,7 @@ not found.")))
 ;; Convert a report into a report template and save this template in the savefile
 ;; Under specific conditions the we will attempt to replace the current report's
 ;; template instead of simply adding a new template to the file.
-;; These condititions are:
+;; These conditions are:
 ;; 1. the report is an instance of an existing custom report template
 ;;    (ie a template that is stored in the savefile already)
 ;; 2. an overwrite is requested by setting overwrite? to #t
