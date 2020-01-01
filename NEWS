@@ -2131,7 +2131,7 @@ Other repairs not marked as bugs in git:
           CMAKE_INSTALL_PREFIX in all paths that are subdirectories of
           CMAKE_INSTALL_PREFIX; paths that are not in
           CMAKE_INSTALL_PREFIX are appended whole to
-          GNC_BUILDDIR. This process is constent between CMake and
+          GNC_BUILDDIR. This process is consistent between CMake and
           gnc_path_get_foo. GnuCash is unlikely to run from a DESTDIR
           without Binreloc.
 
@@ -2338,7 +2338,7 @@ Other repairs not marked as bugs in git:
           CMAKE_INSTALL_PREFIX in all paths that are subdirectories of
           CMAKE_INSTALL_PREFIX; paths that are not in
           CMAKE_INSTALL_PREFIX are appended whole to
-          GNC_BUILDDIR. This process is constent between CMake and
+          GNC_BUILDDIR. This process is consistent between CMake and
           gnc_path_get_foo. GnuCash is unlikely to run from a DESTDIR
           without Binreloc.
 
