@@ -265,7 +265,7 @@ adapt them to your table structure.
  something other than digging through a bunch of historical data trying to figure out what 
 the exchange rate was at the time of particular transactions.
 
-<cstim> parameter: Bad. gnc-prices: Goood. I'd be happy if someone could implement that 
+<cstim> parameter: Bad. gnc-prices: Good. I'd be happy if someone could implement that 
 to augment the current code in commodity-utilities.scm Oh, the exchange rate at the time 
 of a particular *transaction* is easy -- that's just the fraction value/damount .
 
