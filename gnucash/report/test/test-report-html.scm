@@ -32,7 +32,7 @@
     (test-begin "Testing/Temporary/test-report-html")
       ;; if (test-runner-factory gnc:test-runner) is commented out, this
       ;; will create Testing/Temporary/test-report-html.log
-    (test-html-document-defintion)
+    (test-html-document-definition)
     (test-html-objects-definition-for-literals)
     (test-html-objects)
     (test-html-cells)
@@ -57,7 +57,7 @@
 
 ;; -----------------------------------------------------------------------
 
-(define (test-html-document-defintion)
+(define (test-html-document-definition)
 
   (test-begin "HTML Document - Basic Creation")
 

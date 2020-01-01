@@ -3875,7 +3875,7 @@
 	  branches/swig-redo/src/report/utility-reports/view-column.scm,
 	  branches/swig-redo/src/report/utility-reports/welcome-to-gnucash.scm:
 	  Convert the report-system module form gwrap to swig. All at
-	  once: Add the interface definiton. Convert the runtime code from
+	  once: Add the interface definition. Convert the runtime code from
 	  gwrap to swig. Rename wrapped function calls to their
 	  swig-names. Use '() instead of #f for the empty object. Use gint
 	  instead of int in gnc-report.[ch]
