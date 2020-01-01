@@ -249,8 +249,8 @@ void gnc_ui_qif_import_account_match_prepare (GtkAssistant *assistant, gpointer 
 void gnc_ui_qif_import_account_doc_prepare (GtkAssistant *assistant, gpointer user_data);
 void gnc_ui_qif_import_account_rematch_cb (GtkButton *button, gpointer user_data);
 
-void gnc_ui_qif_import_catagory_match_prepare (GtkAssistant *assistant, gpointer user_data);
-void gnc_ui_qif_import_catagory_doc_prepare (GtkAssistant *assistant, gpointer user_data);
+void gnc_ui_qif_import_category_match_prepare (GtkAssistant *assistant, gpointer user_data);
+void gnc_ui_qif_import_category_doc_prepare (GtkAssistant *assistant, gpointer user_data);
 void gnc_ui_qif_import_category_rematch_cb (GtkButton *button, gpointer user_data);
 
 void gnc_ui_qif_import_memo_match_prepare (GtkAssistant *assistant, gpointer user_data);
@@ -2453,10 +2453,10 @@ gnc_ui_qif_import_account_rematch_cb (GtkButton *button, gpointer user_data)
  *******************************************/
 
 /********************************************************************
- * gnc_ui_qif_import_catagory_doc_prepare
+ * gnc_ui_qif_import_category_doc_prepare
  ********************************************************************/
 void
-gnc_ui_qif_import_catagory_doc_prepare (GtkAssistant *assistant,
+gnc_ui_qif_import_category_doc_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
@@ -2489,13 +2489,13 @@ gnc_ui_qif_import_catagory_doc_prepare (GtkAssistant *assistant,
  ******************************************/
 
 /****************************************************************
- * gnc_ui_qif_import_catagory_match_prepare
+ * gnc_ui_qif_import_category_match_prepare
  *
  * Find the next page to show, depending on whether there are
  * category or payee/memo mappings to be dealt with.
  ****************************************************************/
 void
-gnc_ui_qif_import_catagory_match_prepare (GtkAssistant *assistant,
+gnc_ui_qif_import_category_match_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
@@ -3511,12 +3511,12 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     else if (!g_strcmp0 (pagename, "category_doc_page"))
     {
         /* Current page is Category Doc. page */
-        gnc_ui_qif_import_catagory_doc_prepare (assistant, user_data);
+        gnc_ui_qif_import_category_doc_prepare (assistant, user_data);
     }
     else if (!g_strcmp0 (pagename, "category_match_page"))
     {
         /* Current page is Category Match page */
-        gnc_ui_qif_import_catagory_match_prepare (assistant, user_data);
+        gnc_ui_qif_import_category_match_prepare (assistant, user_data);
     }
     else if (!g_strcmp0 (pagename, "memo_doc_page"))
     {
