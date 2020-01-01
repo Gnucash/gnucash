@@ -5484,7 +5484,7 @@
 	  as unknown, I tried to sort them in. Because normal users don't
 	  know all englisch abbreviations of far continents, I tried to
 	  use better understandable descriptions and added country codes.
-	  Caveeats: 1. The HU methods were not quite clear to me, so I
+	  Caveats: 1. The HU methods were not quite clear to me, so I
 	  added only one. 2. The Currencies methods seems to fetch lists
 	  of currencies, something what we don't need here; correct me, if
 	  I am wrong.
