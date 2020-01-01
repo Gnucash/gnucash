@@ -6353,7 +6353,7 @@
 	* [r14655]
 	  branches/swigify/src/business/dialog-tax-table/dialog-tax-table.i,
 	  branches/swigify/src/business/dialog-tax-table/gncmod-dialog-tax-table.c:
-	  Futher swigification of the dialog-tax-table module.
+	  Further swigification of the dialog-tax-table module.
 
 2006-08-13 02:30  chris
 

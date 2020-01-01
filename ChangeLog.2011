@@ -4065,7 +4065,7 @@
 	  </btd> tags instead of <b></td> *are missing a </center> tag
 	  preventing html validation. This patch removes the intended </b>
 	  and makes a clean </td> out of the necessary tags. The styles
-	  are set through css anyhow. Furthmore it adds the closing
+	  are set through css anyhow. Furthermore it adds the closing
 	  </center> tag. BP
 	* [r20674] src/report/stylesheets/stylesheet-easy.scm,
 	  src/report/stylesheets/stylesheet-fancy.scm,
