@@ -147,7 +147,7 @@ static const gchar* sane_descriptions[] =
     "Interect Earned",
     "Interest Earned",
     "Investment Interest",
-    "IRA Contrib, non Deductable",
+    "IRA Contrib, non Deductible",
     "IRA Contrib, Non work Spouse",
     "IRA Contrib, Spouse",
     "IRA Contribution",
