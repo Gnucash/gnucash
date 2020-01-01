@@ -2462,7 +2462,7 @@
 	  src/gnome/window-reconcile.c,
 	  src/register/ledger-core/dialog-dup-trans.c: Bug #659504 -
 	  Migrate Register and reconcile from GladeXML to Builder Patch by
-	  Robert Fewel Note: this patch is limited to the conversion of
+	  Robert Fewell Note: this patch is limited to the conversion of
 	  widgets found in the libglade files. Both the Register and the
 	  Reconcile features still depend on deprecated Gtk/Gnome widgets
 	  (like GtkCList), which are added programmatically. Eventually
