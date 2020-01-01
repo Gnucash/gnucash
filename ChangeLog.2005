@@ -3089,7 +3089,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	  not defined in any included header).
 
 2005-08-22  Josh Sled <jsled@asynchronous.org>
-	* lib/goffice/: Conditionallize #warnings used as TODO tracking
+	* lib/goffice/: Conditionalize #warnings used as TODO tracking
 	from "goffice" import.  Fix compiler warnings.  lib/goffice/
 	should now build with -Werror.  As such, remove -Werror removal
 	from .mk files.
