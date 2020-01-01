@@ -72,7 +72,7 @@ static void gnc_date_edit_finalize     (GObject          *object);
 static void gnc_date_edit_forall       (GtkContainer       *container,
                                         gboolean	    include_internals,
                                         GtkCallback	    callback,
-                                        gpointer	    callbabck_data);
+                                        gpointer	    callback_data);
 static struct tm gnc_date_edit_get_date_internal (GNCDateEdit *gde);
 static int date_accel_key_press(GtkWidget *widget,
                                 GdkEventKey *event,

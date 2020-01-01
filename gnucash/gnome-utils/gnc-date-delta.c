@@ -64,7 +64,7 @@ static void gnc_date_delta_class_init (GNCDateDeltaClass *klass);
 static void gnc_date_delta_forall     (GtkContainer      *container,
                                        gboolean	          include_internals,
                                        GtkCallback	  callback,
-                                       gpointer	          callbabck_data);
+                                       gpointer	          callback_data);
 
 static GtkBoxClass *parent_class;
 
