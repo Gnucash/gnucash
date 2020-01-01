@@ -155,7 +155,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
             if (wpos[1] < monitor_size.y)
                 wpos[1] = monitor_size.y;
 
-            DEBUG("geometry after screen adaption - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
+            DEBUG("geometry after screen adaptation - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
                   wpos[0],  wpos[1], wsize[0], wsize[1]);
 
             gtk_window_move(window, wpos[0], wpos[1]);

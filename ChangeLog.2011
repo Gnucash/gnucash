@@ -7604,4 +7604,4 @@
 	  patch adds an additional update action to the import matcher as
 	  described above. It can be activated with the online banking
 	  preferences dialog. (Patch changed because of one function name
-	  adaption after r19936)
+	  adaptation after r19936)
