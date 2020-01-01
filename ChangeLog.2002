@@ -927,7 +927,7 @@ v	  fix the print_info
 2002-11-30  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/report/standard-reports/cash-flow.scm: Added new option
-	for output formating, make the output "nicer"
+	for output formatting, make the output "nicer"
 
 2002-11-30  Christian Stimming  <stimming@tuhh.de>
 

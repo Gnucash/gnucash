@@ -1139,7 +1139,7 @@
 	Date widgets to make-from-transaction dialog.
 
 	* src/gnome/dialog-sx-from-trans.c (sxftd_add_template_trans): Use
-	the user-friendly amount formating instead of a stringified
+	the user-friendly amount formatting instead of a stringified
 	gnc_numeric.  Copies the account data over into the template
 	transaction.
 	(sxftd_init): Added; supports using the Description of the

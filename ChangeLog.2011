@@ -2614,7 +2614,7 @@
 
 2011-09-11 14:24  gjanssens
 
-	* [r21253] src/plugins/bi_import/bi_import.c: minor formating fix
+	* [r21253] src/plugins/bi_import/bi_import.c: minor formatting fix
 	* [r21252] src/plugins/bi_import/gui.c: Changed 3rd import regexp
 	  to actually accept quotes on all fields, and 4rd to accept
 	  commas and quotes, as advertised in the UI.
