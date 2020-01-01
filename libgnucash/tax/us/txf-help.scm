@@ -207,7 +207,7 @@
     (H503 . "Form 4137 is used to compute social security and Medicare tax owed on tips you did not report to your employer.")
     (N505 . "The amount of tips you did not report to your employer.")
     (H412 . "Form 4684 is used to report gains and losses from casualties and thefts.")
-    (N413 . "Cost or other basis usually means original cost plus improvements. Subtract any postponed gain from the sale of aprevious main home. Special rules applyto property received as a gift or inheritance. See Pub  551, Basis of Assets, for details.")
+    (N413 . "Cost or other basis usually means original cost plus improvements. Subtract any postponed gain from the sale of a previous main home. Special rules applyto property received as a gift or inheritance. See Pub  551, Basis of Assets, for details.")
     (N414 . "The amount of insurance or other reimbursement you received expect to receive.")
     (N415 . "The fair market value (FMV) is the price at which the property would change hands between a willing buyer and seller, each having knowledge of the relevant facts. FMV is generally determined by competent appraisal.")
     (N416 . "The fair market value (FMV) is the price at which the property would change hands between a willing buyer and seller, each having knowledge of the relevant facts. The FMV after a theft is zero if the property is not recovered. The FMV is generally determined by competent appraisal.")
