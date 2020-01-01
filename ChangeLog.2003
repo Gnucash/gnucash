@@ -5791,7 +5791,7 @@
 	* src/business/business-gnome/dialog-order.c: use new set_readonly() API
 	FIXES BUG #101452
 
-	* configure.in: add a blatent warning that the RPC code is broke!
+	* configure.in: add a blatant warning that the RPC code is broke!
 	* src/scm/command-line.scm: change the message to let people know that
 	  the rpc-server command-line option only works if gnucash was compiled
 	  with rpc enabled.
