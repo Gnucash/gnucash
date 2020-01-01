@@ -1604,7 +1604,7 @@ New Features for Developers:
     Pass GTEST_ROOT and GMOCK_ROOT through to distcheck.
         So that they don't have to be exported in the environment if they're
         needed.
-    The Python Bindings and Console are now for Python 3, and enahanced to
+    The Python Bindings and Console are now for Python 3, and enhanced to
         expose more GnuCash API.
         Compilation of GLib Schemas during build and installation can be
         disabled by setting -DCOMPILE_GSCHEMAS=OFF. This is intended
