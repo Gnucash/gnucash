@@ -4322,7 +4322,7 @@
 	  src/gnome/gtkbuilder/Makefile.am,
 	  src/gnome/gtkbuilder/owner.glade, src/gnome/gtkbuilder/owner.ui:
 	  Rename owner.ui to owner.glade I read that .ui should be the
-	  devault extension for gtkbuilder files, but it turns out that
+	  default extension for gtkbuilder files, but it turns out that
 	  would conflict with qt designer files. On Fedora (at least) only
 	  .glade is recognized as a file editable by glade-3.
 

@@ -4,7 +4,7 @@ from gnucash import GncNumeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED, \
     GNC_HOW_RND_NEVER, GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL
 
 class TestGncNumeric( TestCase ):
-    def test_defaut(self):
+    def test_default(self):
         num = GncNumeric()
         self.assertEqual(str(num), "0/1")
         self.assertEqual(num.num(), 0)
