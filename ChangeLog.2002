@@ -4225,9 +4225,9 @@ v	  fix the print_info
 	* src/gnc-ui.h:
 	* src/app-file/gnc-file.c:
 	* src/app-utils/option-util.c:
-	* src/busiuness/business-gnome/dialog-date-close.c:
-	* src/busiuness/business-gnome/dialog-order.c:
-	* src/busiuness/business-ledger/gncEntryLedgerControl.c:
+	* src/business/business-gnome/dialog-date-close.c:
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-ledger/gncEntryLedgerControl.c:
 	* src/gnome/dialog-commodities.c:
 	* src/gnome/dialog-price-editor.c:
 	* src/gnome/dialog-scheduledxaction.c:

@@ -3628,7 +3628,7 @@
 	  querylist dialog to display the due bills
 	* src/business/business-gnome/dialog-invoice.[ch]: create a new
 	  API to run a due-bills dialog.
-	* src/business/businss-gnome/gw-business-gnome-spec.scm: wrap the
+	* src/business/business-gnome/gw-business-gnome-spec.scm: wrap the
 	  new due-bills api
 	* src/engine/gnc-book.c: forcibly signal a book destroy event
 
