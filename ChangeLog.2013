@@ -1012,7 +1012,7 @@
 
 2013-10-20 Mike Alexander 
 
-	* Use ";" as seperator characer since that's what g_key_file_get_keys wants.
+	* Use ";" as seperator character since that's what g_key_file_get_keys wants.
 
 2013-10-20 Mike Alexander 
 
