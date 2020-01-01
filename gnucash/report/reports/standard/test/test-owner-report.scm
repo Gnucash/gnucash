@@ -316,7 +316,7 @@
       (test-equal "debit-amounts"
         '("$11.50" "$7.50" "$8.50" "$4.00" "$200.00" "$6.75")
         (sxml-get-row-col sxml #f 6))
-      (test-equal "crebit-amounts"
+      (test-equal "credit-amounts"
         '("-$1.50" "-$2.00" "-$200.00" "-$3.00")
         (sxml-get-row-col sxml #f 7))
       ;; from the report, find the 3rd table, last row, find embedded
