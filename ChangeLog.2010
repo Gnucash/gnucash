@@ -5072,7 +5072,7 @@
 2010-05-06 08:36  cstim
 
 	* [r19122] src/import-export/csv/gnc-csv-model.c: Bug #586805: Fix
-	  errorneous abs() in csv import Changes abs function to fabs in
+	  erroneous abs() in csv import Changes abs function to fabs in
 	  gnc-csv-model.c, to allow csv imports of values less than $1.00.
 	  Patch by James Raehl.
 

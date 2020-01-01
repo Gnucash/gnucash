@@ -7481,7 +7481,7 @@ r12306 | chris | 2006-01-08 22:33:46 -0500 (Sun, 08 Jan 2006) | 2 lines
 2006-01-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/gnc-main-window.c: Add gnc workaround function
-	for errorneous gtk_action_group_set_translation_domain. Fixes the
+	for erroneous gtk_action_group_set_translation_domain. Fixes the
 	statusbar-tooltip error mentioned on 2006-01-07. Filed in gtk as
 	bug#326200.
 
@@ -7508,7 +7508,7 @@ r12306 | chris | 2006-01-08 22:33:46 -0500 (Sun, 08 Jan 2006) | 2 lines
 	tooltip in the statusbar when the mouse is selection its menu
 	item. Code copied from gtk+'s test/testmerge.c. Works fine, except
 	that in non-C locales some "" tooltips are translated in a weird
-	way. Maybe because "" is errorneously passed through gettext(),
+	way. Maybe because "" is erroneously passed through gettext(),
 	which will accidentally catch a wrong string from the po
 	files. This needs to be fixed.
 

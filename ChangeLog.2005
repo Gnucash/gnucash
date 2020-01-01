@@ -2470,7 +2470,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 2005-10-08  Christian Stimming  <stimming@tuhh.de>
 
-	* src/import-export/ofx/gnc-ofx-import.c: Fix errornerous
+	* src/import-export/ofx/gnc-ofx-import.c: Fix erroneous
 	double-free at OFX import.
 
 2005-10-07  Joshua Sled  <jsled@asynchronous.org>
@@ -5144,7 +5144,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 	* src/engine/Transaction.c: Remove misleading (char*) casts by
 	Linas Vepstas from 2003-09-14, but nevertheless the code doesn't
-	have any errorneous double-free's at this point.
+	have any erroneous double-free's at this point.
 
 2005-10-07  Christian Stimming  <stimming@tuhh.de>
 
