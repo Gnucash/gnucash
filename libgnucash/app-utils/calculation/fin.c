@@ -101,7 +101,7 @@
  * during the term of the loan. The payments may be only large enough to repay
  * the interest,  with the  principal due  at the  end of  the loan period (an
  * interest only loan), or large enough  to fully repay both the interest  and
- * principal during the term of the loan (a fully amoritized loan). Many loans
+ * principal during the term of the loan (a fully amortized loan). Many loans
  * fall somewhere between, with payments that do not fully cover repayment  of
  * both the principal and interst. These loans require a larger final  payment
  * (balloon)  to  complete  their  amortization.  Payments  may  occur  at the
