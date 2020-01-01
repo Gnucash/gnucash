@@ -1246,7 +1246,7 @@ r14165 | chris | 2006-05-23 23:21:09 -0400 (Tue, 23 May 2006) | 18 lines
 
    Decrease coupling between backends and engine:
    - do not include the (supposedly) private qofbackend-p.h in qofutil.h,
-       instead, include it explictly in only the places that need it.
+       instead, include it explicitly in only the places that need it.
    - since backends are GModules, use the GModule module init hook, instead 
        of rolling our own and using a different function for each backend
    - loop over a list of backends for the engine to try to load 
@@ -4816,7 +4816,7 @@ r13329 | chris | 2006-02-20 15:22:24 -0500 (Mon, 20 Feb 2006) | 2 lines
    M /gnucash/trunk/src/gnome-utils/dialog-utils.h
    M /gnucash/trunk/src/gnome-utils/gnc-main-window.c
 
-   Explictly require gtk2.6 for conditionally compiled code that needs it.
+   Explicitly require gtk2.6 for conditionally compiled code that needs it.
 
 r13328 | chris | 2006-02-20 15:09:02 -0500 (Mon, 20 Feb 2006) | 3 lines
 

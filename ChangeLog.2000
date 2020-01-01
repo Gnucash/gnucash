@@ -3119,7 +3119,7 @@
 	(accWindow): remember window size and recreate it.
 
 	* src/engine/util.c (xaccParseQIFAmount): rename this from
-	xaccParseUSAmount to explictly reflect its only usage. Modify
+	xaccParseUSAmount to explicitly reflect its only usage. Modify
 	the parsing to guess what symbol is used as a decimal point.
 
 2000-01-15  Dave Peticolas  <peticola@cs.ucdavis.edu>

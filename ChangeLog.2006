@@ -126,7 +126,7 @@
 
 2006-12-28 02:21  hampton
 
-	* [r15268] trunk/src/scm/price-quotes.scm: Need to expliticly load
+	* [r15268] trunk/src/scm/price-quotes.scm: Need to explicitly load
 	  the gnome-utils scheme code.
 
 2006-12-27 20:47  andi5
@@ -9834,7 +9834,7 @@
 	  branches/misc-backend/src/engine/gw-engine-spec.scm: Decrease
 	  coupling between backends and engine: - do not include the
 	  (supposedly) private qofbackend-p.h in qofutil.h, instead,
-	  include it explictly in only the places that need it. - since
+	  include it explicitly in only the places that need it. - since
 	  backends are GModules, use the GModule module init hook, instead
 	  of rolling our own and using a different function for each
 	  backend - loop over a list of backends for the engine to try to
@@ -15063,7 +15063,7 @@
 	* [r13329] trunk/src/gnome-utils/dialog-options.c,
 	  trunk/src/gnome-utils/dialog-utils.c,
 	  trunk/src/gnome-utils/dialog-utils.h,
-	  trunk/src/gnome-utils/gnc-main-window.c: Explictly require
+	  trunk/src/gnome-utils/gnc-main-window.c: Explicitly require
 	  gtk2.6 for conditionally compiled code that needs it.
 
 2006-02-20 20:09  chris

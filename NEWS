@@ -5886,7 +5886,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Added a bunch of currencies.
 	 o MAJOR improvement to OFX investment support.  All transactions
 	   created from an investment account are now already balanced.
-	   Explicitely support Dividend Reinvestment transactions which
+	   Explicitly support Dividend Reinvestment transactions which
 	   will now directly create a income account -> stock account
 	   transaction, and Income transactions which will directly create
 	   a income account -> cash account transaction. Support memorising
