@@ -5704,7 +5704,7 @@
 	character "&" with the word "and".
 
 	* src/report/standard-reports/category-barchart.scm: Add various
-	sorting options. The default is now by ammount instead of by
+	sorting options. The default is now by amount instead of by
 	account-code, which is a much more interesting report.  #102342
 	Work around Guppi problem by replacing the character "&" with the
 	word "and".  Don't "reverse" the barchart legend.  Double-clicking
