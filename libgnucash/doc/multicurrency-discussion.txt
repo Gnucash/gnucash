@@ -104,7 +104,7 @@ collection of splits in different currencies to be displayed?
 <goonie> So, in the short term, your assumption is correct.
  In the long term, not the case.
 
-<cstim> What I would usually call the "currency" of an account is in Gnucash acctually called "security".
+<cstim> What I would usually call the "currency" of an account is in Gnucash actually called "security".
 \a gnc:account-get-commodity will return this security of the account.
 
 <goonie> Gotta love terminology.

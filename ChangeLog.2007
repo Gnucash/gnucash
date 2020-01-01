@@ -7738,7 +7738,7 @@
 2007-02-01 21:47  jsled
 
 	* [r15489] src/gnome-utils/gnc-dense-cal.c: Rename "pts" ->
-	  "units". It's not actaully points.
+	  "units". It's not actually points.
 
 2007-02-01 14:25  cstim
 
