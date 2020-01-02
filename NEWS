@@ -3418,7 +3418,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
        Fix guile 2 stack overflow errors for large reports
        Fix basis calculation for FIFO or LIFO when less than one lot is sold.
        Update Window and Menu item from "Preconfigured-" to "Saved-" Report
-       	      and add lables to the dialog with help texts
+       	      and add labels to the dialog with help texts
        Aqbanking: SEPA transfer improvements - fix origin labels and add
        	      possibility to edit sender's name.
        Prevent crash reported in Bug 711567.
