@@ -3054,7 +3054,7 @@
 	  particular attribute. Also added some specific python bindings
 	  support to allow this to be used as methods of Book:
 	  Book.CustomerLookupByID, Book.InvoiceLookupByID,
-	  Book.BillLoookupByID.
+	  Book.BillLookupByID.
 	* [r19430] src/report/report-system/eguile-gnc.scm: Bug #624721:
 	  Show backtrace for errors in eguile templates Patch by Matthijs
 	  Kooijman: The current eguile template implementation catches

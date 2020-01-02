@@ -171,7 +171,7 @@ try:
     invoice_customer.ApplyPayment(None, a6, GncNumeric(7,100),
                                   GncNumeric(1), datetime.date.today(), "", "")
 
-    vendor_bill_returns = book.BillLoookupByID("7")
+    vendor_bill_returns = book.BillLookupByID("7")
     assert( vendor_bill_returns.GetID() == "7" )
     vendor_extract = vendor_bill_returns.GetOwner()
     assert( vendor_extract.GetName() == new_vendor.GetName() )

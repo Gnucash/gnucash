@@ -5697,7 +5697,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     {
         /* Jump to next iteration if the pointer is not valid or if the
                  string is empty. In HBCI import we almost always get an empty
-                 string, which doesn't work in the kvp loopkup later. So we
+                 string, which doesn't work in the kvp lookup later. So we
                  skip this case here. */
         if (!current_token->data || (*((char*)current_token->data) == '\0'))
             continue;
