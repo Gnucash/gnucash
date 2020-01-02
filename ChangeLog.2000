@@ -1496,7 +1496,7 @@
 
 	* src/scm/prefs.scm: convert the gui options to internal options.
 
-	* src/scm/options.scm: add an interal option type with no frills.
+	* src/scm/options.scm: add an internal option type with no frills.
 
 	* src/engine/util.c (xaccSPrintAmount): add a space after the
 	currency code to make the currency symbol.
