@@ -3769,7 +3769,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
  * connected to NSApplicationWillTerminate, the last chance to do
  * anything before quitting. The problem is that it's launched from a
  * CFRunLoop, not a g_main_loop, and if we call anything that would
- * affect the main_loop we get an assert that we're in a subidiary
+ * affect the main_loop we get an assert that we're in a subsidiary
  * loop.
  */
 static void
