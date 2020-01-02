@@ -4204,7 +4204,7 @@
 
 	* [r20651]
 	  src/business/business-gnome/gnc-plugin-page-owner-tree.c: Fix an
-	  unintialized variable warning.
+	  uninitialized variable warning.
 
 2011-05-15 19:28  cstim
 

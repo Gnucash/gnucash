@@ -1613,7 +1613,7 @@
 
 	* [r16284] branches/csv-import/src/import-export/csv/Makefile.am,
 	  branches/csv-import/src/import-export/csv/gnc-csv-model.c: Got
-	  rid of some unintialized warnings
+	  rid of some uninitialized warnings
 
 2007-07-09 17:09  lasindi
 

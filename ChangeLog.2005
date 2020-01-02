@@ -5010,7 +5010,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 2005-02-15  Derek Atkins  <derek@ihtfp.com>
 
-	Chris Shoemaker's patch: Avoid use of unitialized values in guid.c.
+	Chris Shoemaker's patch: Avoid use of uninitialized values in guid.c.
 	* Avoid use of uninitialized values in guid.c
 	  - prevent md5 seeding from using uninitialized stack contents
 	  - give used/null GUID recognizable memory signature

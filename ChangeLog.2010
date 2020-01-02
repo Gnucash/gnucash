@@ -865,7 +865,7 @@
 	  crashes out when trying to save-as MySQL Disclaimer: This fix
 	  attempt is purely based on the information given in the bug
 	  report and code reading. I never could reproduce this bug but
-	  the code suggests an unitialized pointer may be the the cause.
+	  the code suggests an uninitialized pointer may be the the cause.
 
 2010-11-29 18:46  cmarchi
 

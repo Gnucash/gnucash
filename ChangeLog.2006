@@ -2179,7 +2179,7 @@
 
 2006-10-17 20:41  hampton
 
-	* [r15032] trunk/src/bin/gnucash-bin.c: Fix uninitialzed variable
+	* [r15032] trunk/src/bin/gnucash-bin.c: Fix uninitialized variable
 	  error message.
 
 2006-10-17 08:35  cstim

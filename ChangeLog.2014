@@ -1592,7 +1592,7 @@
 
 2014-01-22 Mike Alexander 
 
-	* Fix unitialized variable error in r23740. Thanks to Herbert Thoma for the patch.
+	* Fix uninitialized variable error in r23740. Thanks to Herbert Thoma for the patch.
 
 2014-01-22 Cristian Marchi 
 
