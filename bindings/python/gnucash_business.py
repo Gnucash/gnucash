@@ -112,7 +112,7 @@ class TaxTableEntry(GnuCashCoreClass):
     def __init__(self, account=None, percent=True, amount=None, instance=None):
         """TaxTableEntry constructor
 
-        You must provide an account, or be initizing this with an existing
+        You must provide an account, or be initializing this with an existing
         swig proxy object via the instance keyword argument.
 
         You may also optionally set the percent keyword argument to False to get
@@ -192,7 +192,7 @@ class Entry(GnuCashCoreClass):
     def __init__(self, book=None, invoice=None, date=None, instance=None):
         """Invoice Entry constructor
 
-        You must provide a book or be initizing this with an existing
+        You must provide a book or be initializing this with an existing
         swig proxy object via the instance keyword argument.
 
         The optional invoice argument can be set to a Bill or Invoice
