@@ -88,7 +88,7 @@ public:
  * information, the time will be set depending on the second parameter
  * to start of day, neutral or end of day.
  * @param date A GncDate representing a date.
- * @param part An optinoal DayPart indicating which time to use in the conversion.
+ * @param part An optional DayPart indicating which time to use in the conversion.
  * This can be "DayPart::start" for start of day (00:00 local time),
  *             "DayPart::neutral" for a neutral time (10:59 UTC, chosen to have the
  *              least chance of date changes when crossing timezone borders),
