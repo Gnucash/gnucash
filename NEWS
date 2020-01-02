@@ -6127,7 +6127,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
  1.0.17 - 14 Feb 98
          o Fix core dump when deleting account with open register windows.
-         o Fix core dump when transfering money to deleted (nonexistent) account.
+         o Fix core dump when transferring money to deleted (nonexistent) account.
          o Fix tabbing between ledger entry and record/cancel/close buttons.
          o MS Money QIF import fixes.
          o obscure fix to Xbae table widget that may fix some mystery core dumps.
