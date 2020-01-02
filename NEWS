@@ -2426,7 +2426,7 @@ The following bugs are fixed only in unstable/master:
          payment window that's presented to any of customer, vendor
          or employee to correct gnucash' suggestion.
     Bug 784623 - GNUCash does not work with sql backend.
-        Wherin the problem is that MySQL's TIMESTAMP has a date range of
+        Wherein the problem is that MySQL's TIMESTAMP has a date range of
         1970-01-01 00:00:01 to 2038-01-19 03:14:07 and is unable to handle
         time_t of 0. MySQL's TIMESTAMP also assumes that input is in the
         server's timezone and adjusts it to UTC. GnuCash has already done
