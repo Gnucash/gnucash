@@ -720,7 +720,7 @@
 
 2013-11-08 Mike Alexander 
 
-	* Handle multi-currency transactions in registers without a default currency. Editing a multi-currency transaction in a serach results register sometimes sets the exchange rate to 1 instead of the value you want.
+	* Handle multi-currency transactions in registers without a default currency. Editing a multi-currency transaction in a search results register sometimes sets the exchange rate to 1 instead of the value you want.
 
 2013-11-05 Christian Stimming 
 
