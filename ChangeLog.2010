@@ -5083,7 +5083,7 @@
 	  iso-4217-currencies Patch by Frank H. Ellenberger 1. improve the
 	  header of fieldnames with annotations 2. sort by ISO code,
 	  because a. easier for non english people b. most tables in the
-	  internet have this sort order. So maintainance becomes easier.
+	  internet have this sort order. So maintenance becomes easier.
 	  3. inserting a Column local_symbol, because some people like to
 	  use it, e.g.
 	  https://bugs.gnucash.org/show_bug.cgi?id=492417#c3 But

@@ -32,7 +32,7 @@
   fullname should be the same as in /usr/share/xml/iso-codes/iso_4217.xml from package iso-codes
   exchange-code is stored in ISIN/CUSIP;
   see iso-currencies-to-c for details and recent changes.
-  Sort order by ISO codes for simpler maintainance
+  Sort order by ISO codes for simpler maintenance
 -->
 
 
