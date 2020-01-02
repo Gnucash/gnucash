@@ -5160,7 +5160,7 @@
 
 2016-12-03 Geert Janssens 
 
-	* Fix error handling in the multi-split case (and probaly in the other case as well)
+	* Fix error handling in the multi-split case (and probably in the other case as well)
 
 2016-12-02 Geert Janssens 
 

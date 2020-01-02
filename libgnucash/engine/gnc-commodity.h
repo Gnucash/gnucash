@@ -971,7 +971,7 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
  @{
 */
 
-/** You proably shouldn't be using gnc_commodity_table_new() directly,
+/** You probably shouldn't be using gnc_commodity_table_new() directly,
  * its for internal use only. You should probably be using
  * gnc_commodity_table_get_table()
  */

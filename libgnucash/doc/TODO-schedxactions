@@ -238,7 +238,7 @@ X create a template register
   . to see upcoming xactions, modifying future balance?
     . to note which are "recurring"
       . the mozilla "reload" glyph is kinda neat...
-      . prolly should use existing PIM "recurring" glyphs
+      . probably should use existing PIM "recurring" glyphs
     . Differently-colored "not-yet-created" entries for a configurable
       time window?
     . Context menus/sensitive toolbar button/menu item for creation of
