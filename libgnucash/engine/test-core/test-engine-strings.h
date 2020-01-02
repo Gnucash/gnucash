@@ -144,7 +144,7 @@ static const gchar* sane_descriptions[] =
     "Fed Est Tax",
     "Fed Tax Witholding",
     "Insurance Rembersal",
-    "Interect Earned",
+    "Interest Earned",
     "Interest Earned",
     "Investment Interest",
     "IRA Contrib, non Deductible",
