@@ -984,7 +984,7 @@
 	  accounts/fi_FI/acctchrt_ry.gnucash-xea, configure.in: Add
 	  Finnish account templates. One template is the default one
 	  (common accounts), the other ("ry") is for a finnish non-profit
-	  organisation. Tuomo Kohvakka <tuomo.kohvakka@iki.fi> BP
+	  organization. Tuomo Kohvakka <tuomo.kohvakka@iki.fi> BP
 
 2008-09-27 17:31  plongstaff
 
