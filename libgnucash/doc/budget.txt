@@ -61,7 +61,7 @@ here.
 - Ledger The ledger is in effect documentation of the journal, in that
   it describes the meaning of the transactions with respect to the
   balances in the various accounts. In Xacc, this appears also to
-  be known as the register. It isn't clear to me that Xacc maintans
+  be known as the register. It isn't clear to me that Xacc maintains
   the journal and the ledger separately. The ledger could easily be
   expanded to include documentation of the calendar transactions,
   but it is less clear that one would want to include the template
