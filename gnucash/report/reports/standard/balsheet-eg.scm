@@ -118,7 +118,7 @@
                                         depth
                                         treedepth
                                         non-zero?  ; #t if this or any sub-a/cs are non zero
-                                        summary?   ; #t if subaccounts summarised here
+                                        summary?   ; #t if subaccounts summarized here
                                         subtotal-cc ; of sublist plus this a/c
                                         sublist)
                                      accrec-printer))
