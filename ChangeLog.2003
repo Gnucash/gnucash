@@ -4719,7 +4719,7 @@
 
 	* src/backend/postgres/escape.c: Added gnc-engine-util.h,
 	  and "module = MOD_BACKEND"
-	- (sqlEscape_destroy): Added ENTER/LEAVE statemtents.
+	- (sqlEscape_destroy): Added ENTER/LEAVE statements.
 
 	* src/backend/postgres/gncquery.c (sql_Query_destroy): Added
 	ENTER/LEAVE statements.
