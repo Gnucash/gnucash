@@ -4383,7 +4383,7 @@ r13423 | chris | 2006-02-28 14:34:42 -0500 (Tue, 28 Feb 2006) | 3 lines
 2006-02-26  Neil Williams <linux@codehelp.co.uk>
 
 	* qof/qof-be-utils.h : Replace macro to restore
-	programme flow.
+	program flow.
 	* qof/qofevent.c : 
 	* qof/qofevent.h : Outline method to make application 
 	events easier to use.

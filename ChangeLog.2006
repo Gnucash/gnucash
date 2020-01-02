@@ -14599,7 +14599,7 @@
 2006-02-26 18:06  codehelp
 
 	* [r13394] trunk/lib/libqof/qof/qof-be-utils.h: replacing the
-	  macro to restore programme flow
+	  macro to restore program flow
 
 2006-02-26 15:18  jsled
 
