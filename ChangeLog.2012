@@ -1304,7 +1304,7 @@
 
 	* [r22397] po/POTFILES.in, src/plugins/bi_import/glade: Fix of
 	  [21869]: src/plugins/bi_import/glade/* moved to gtkbuilder, but
-	  for some reason files were only trunkated.
+	  for some reason files were only truncated.
 
 2012-09-16 13:32  fell
 
