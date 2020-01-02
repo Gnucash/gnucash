@@ -475,7 +475,7 @@ not found.")))
 ;; Load and save functions
 
 
-;; Generate guile code required to recreate an instatiated report
+;; Generate guile code required to recreate an instantiated report
 (define (gnc:report-serialize report)
   ;; clean up the options if necessary.  this is only needed
   ;; in special cases.
@@ -617,7 +617,7 @@ not found.")))
 ;; reports, not other report templates this means that the template
 ;; recreation code must also contain the code to instantiate these
 ;; embedded report instances. This results in a mix of template and
-;; instatiated reports in the saved reports file...
+;; instantiated reports in the saved reports file...
 (define (gnc:report-template-serialize report-template)
   (let* ((name (gnc:report-template-name report-template))
          (type (gnc:report-template-parent-type report-template))
