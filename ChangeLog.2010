@@ -4223,7 +4223,7 @@
 	  src/bin/gnucash.in: Finish direct binary execution on Windows
 	  and linux and cleanup bin Makefile/targets - Windows * binary
 	  name becomes GnuCash.exe * gnucash.cmd is renamed to
-	  gnucash-launcer.cmd (consistent with OS X). This file is only
+	  gnucash-launcher.cmd (consistent with OS X). This file is only
 	  needed to run GnuCash straight from the source installation. It
 	  is not used (or distributed) with the Windows Installer version.
 	  * gnucash-valgrind, gnucash-gdb and the override extra's have
