@@ -306,12 +306,12 @@ sx_advRemind_handler (xmlNodePtr node, gpointer sx_pdata)
 static
 gboolean
 sx_set_date (xmlNodePtr node, SchedXaction* sx,
-             void (*settor) (SchedXaction* sx, const GDate* d))
+             void (*setter) (SchedXaction* sx, const GDate* d))
 {
     GDate* date;
     date = dom_tree_to_gdate (node);
     g_return_val_if_fail (date, FALSE);
-    (*settor) (sx, date);
+    (*setter) (sx, date);
     g_date_free (date);
 
     return TRUE;
