@@ -36,7 +36,7 @@
 
 2014-12-10 Mike Alexander 
 
-	* Tell Guile (and others) to look in install/lib/gnucash for ligraries. Without this Guile can't find libgncmod-engine and GnuCash won't start, at least sometimes.
+	* Tell Guile (and others) to look in install/lib/gnucash for libraries. Without this Guile can't find libgncmod-engine and GnuCash won't start, at least sometimes.
 
 2014-12-21 John Ralls 
 
