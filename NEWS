@@ -5299,7 +5299,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   appear.
 	 o Remove unused 'ledger_status' widget.
 	 o At least be consistent about the background coloring of the month
-	   labels, even if we're still not using GTK themeage correctly.
+	   labels, even if we're still not using GTK theming correctly.
 	 o Destroy the transient window when the widget is destroyed.
 	 o Make the advance and remind spin-buttons editable.
 	 o Change the upper bound on the advance and remind spins to 365
