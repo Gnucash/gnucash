@@ -906,7 +906,7 @@ gbv_selection_changed_cb (GtkTreeSelection *selection, GncBudgetView *budget_vie
 
 /** \brief Structure to assist in calculating of sub account totals.
 
-This structure is utilised by the functions \ref budget_accum_helper and \ref gbv_get_accumulated_budget_amount to find the totals of sub-accounts in an account tree.
+This structure is utilized by the functions \ref budget_accum_helper and \ref gbv_get_accumulated_budget_amount to find the totals of sub-accounts in an account tree.
 @param total The running total of the account in question
 @param budget The gnc budget under examination.
 @param period_num The specific period_num that we are finding the totals for.
