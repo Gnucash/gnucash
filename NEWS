@@ -908,7 +908,7 @@ Other repairs or enhancements not marked as bugs:
           fit a few more buttons on the toolbar.
      Update iso-4217-currencies.xml, adding VES - Bolivar Soberano, minor
           updates of other VE currencies.
-     Python 3 bindings fixes and improvements from Christoph Holterman and
+     Python 3 bindings fixes and improvements from Christoph Holtermann and
           Sumit Bhardwaj.
 
 Updated Translations:  Chinese (Simplified), Farsi, German, Japanese, Portuguese (Portugal), Ukrainian

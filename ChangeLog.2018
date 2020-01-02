@@ -1248,7 +1248,7 @@
 
 2018-12-24 John Ralls
 
-	* Merge Christoph Holterman's 'PR-Python-GetBalTaxValues' into maint.
+	* Merge Christoph Holtermann's 'PR-Python-GetBalTaxValues' into maint.
 
 2018-12-24 John Ralls
 
@@ -1920,7 +1920,7 @@
 
 2018-10-16 John Ralls
 
-	* Merge Christoph Holterman's 'PR-python2to3fixes' into maint.
+	* Merge Christoph Holtermann's 'PR-python2to3fixes' into maint.
 
 2018-10-16 John Ralls
 
@@ -2192,7 +2192,7 @@
 
 2018-09-20 John Ralls
 
-	* Merge branch Christoph Holterman's 'python-query-test' into maint
+	* Merge branch Christoph Holtermann's 'python-query-test' into maint
 
 2018-09-20 Christoph Holtermann
 
@@ -2480,7 +2480,7 @@
 
 2018-09-08 John Ralls
 
-	* Merge Christoph Holterman's Bug 796137 repair into maint.
+	* Merge Christoph Holtermann's Bug 796137 repair into maint.
 
 2018-09-07 Christoph Holtermann
 
