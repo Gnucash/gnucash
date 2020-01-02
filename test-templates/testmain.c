@@ -22,7 +22,7 @@
 
 
 /**
- * This is a template test program. Copy it to the test sudirectory and rename
+ * This is a template test program. Copy it to the test subdirectory and rename
  * it test_modulename.c. (Use the same modulename that you gave Makefile.am in
  * the same directory.
  */
