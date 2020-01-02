@@ -17615,7 +17615,7 @@
 	  gui initialization functions so they can be called from C. Drop
 	  some gwrappers for gui initialization functions. Process the
 	  --nofile and filename command-line options from C. Drastic
-	  simpilification of main.scm. Initialize the gui and enter the
+	  simplification of main.scm. Initialize the gui and enter the
 	  gtk event-loop from C. Even though there's some more clean-up to
 	  do, this patch does mark a certain milestone: A developer
 	  seeking to understand and/or modify GnuCash's startup process

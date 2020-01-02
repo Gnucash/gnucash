@@ -1503,7 +1503,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 
 2005-11-06  Christian Stimming  <stimming@tuhh.de>
 
-	* autogen.sh: Revert autogen.sh simplificatoin for now; to be
+	* autogen.sh: Revert autogen.sh simplification for now; to be
 	reconsidered after more testing.
 
 2005-11-06  Neil Williams <linux@codehelp.co.uk>

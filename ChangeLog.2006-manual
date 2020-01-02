@@ -6589,7 +6589,7 @@ r12956 | chris | 2006-01-23 12:38:13 -0500 (Mon, 23 Jan 2006) | 28 lines
     Change the gui initialization functions so they can be called from C.
     Drop some gwrappers for gui initialization functions.
     Process the --nofile and filename command-line options from C.
-    Drastic simpilification of main.scm.
+    Drastic simplification of main.scm.
     Initialize the gui and enter the gtk event-loop from C.
 
   Even though there's some more clean-up to do, this patch does mark
