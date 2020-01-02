@@ -1293,7 +1293,7 @@ Other repairs or enhancements not marked as bugs:
       give a consistent representation of invoice data across the application.
     Ensure gncEntry rounding is consistent. Internally calculated values in the
       entry are never rounded. Consumers of gncEntry's calculated values can
-      request them either rounded or not. Next use a pragmatical approach for
+      request them either rounded or not. Next use a pragmatic approach for
       calculating values on invoices based on the entry values: do the rounding
       such that we never create an unbalanced transaction while posting.
       That means:
