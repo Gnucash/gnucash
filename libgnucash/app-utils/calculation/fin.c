@@ -1992,7 +1992,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         amortsched->total_periods = per_cnt;
         break;
     case 'f':
-        /* fixed prepaymet schedule prepayment specified by user */
+        /* fixed prepayment schedule prepayment specified by user */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
 
