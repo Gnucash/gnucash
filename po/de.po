@@ -27468,11 +27468,11 @@ msgstr "Nettoertrag"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1340
 msgid "Balance Sheet (Multicolumn)"
-msgstr "Bilanz (mit »eguile«)"
+msgstr "Bilanz (mehrspaltig)"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1341
 msgid "Income Statement (Multicolumn)"
-msgstr "Ergebnisrechnung (mit »eguile«)"
+msgstr "Ergebnisrechnung (mehrspaltig)"
 
 #: gnucash/report/standard-reports/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
