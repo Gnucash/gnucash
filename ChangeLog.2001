@@ -7221,7 +7221,7 @@
 
 	* src/guile/gnc.gwp: added gnc_rpc_server() and new RPC Backend errors
 
-	* src/scm/command-line.scm: added --rpc-server optio
+	* src/scm/command-line.scm: added --rpc-server option
 
 	* src/engine/Makefile.am: Added RPC subdir
 

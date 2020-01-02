@@ -621,7 +621,7 @@
 	* src/guile/option-util.c: Support for new relative-date and
 	combination options , and use of scheme getters
 	rather than direct data structure manipulation.
-	(gnc_oiption_db_lookup_date_option): modified to
+	(gnc_option_db_lookup_date_option): modified to
 	support relative and combination date options.
 	(gnc_option_date_option_get_subtype: new function.
 
