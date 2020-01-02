@@ -1309,7 +1309,7 @@ Other repairs or enhancements not marked as bugs:
     New compilers (gcc-8.0 and Xcode 9) bring new warnings, so several fixups to
       mollify them.
     Lowercase all cmake commands for better readability.
-    Metadate migration (2.6.x->3.x) fixes for Windows.
+    Metadata migration (2.6.x->3.x) fixes for Windows.
     Ensure timezone is set correctly in FreeBSD.
 
 Updated Translations: Dutch
