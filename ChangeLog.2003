@@ -5094,7 +5094,7 @@
 	  new global preferences: "Notify Bills Due?" and "Bills Due Days"
 	* src/business/business-gnome/business-gnome.scm -- create a dialog
 	  are runtime (and via a new menu item) that displays all the bills
-	  that are due withing "Bills Due Days" days from now.  It's ugly,
+	  that are due within "Bills Due Days" days from now.  It's ugly,
 	  but it's functional.  Fixes #102439.
 
 	* configure.in -- scrub the CFLAGS for postgres, as per Roland Roberts'
