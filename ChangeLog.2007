@@ -4050,7 +4050,7 @@
 	* [r15819] branches/gobject-engine-dev-warlord,
 	  branches/gobject-engine-dev-warlord/src/business/business-core/gncEmployee.c,
 	  branches/gobject-engine-dev-warlord/src/business/business-core/gncEmployee.h:
-	  convert GncEmployee to GObject initialzation.
+	  convert GncEmployee to GObject initialization.
 	* [r15818] branches/gobject-engine-dev-warlord,
 	  branches/gobject-engine-dev-warlord/src/business/business-core/gncCustomer.c,
 	  branches/gobject-engine-dev-warlord/src/business/business-core/gncCustomer.h:
@@ -4124,7 +4124,7 @@
 	  branches/gobject-engine-dev-warlord/src/engine/Split.c,
 	  branches/gobject-engine-dev-warlord/src/engine/Split.h,
 	  branches/gobject-engine-dev-warlord/src/engine/SplitP.h: Convert
-	  Split objects to GObject intiialization
+	  Split objects to GObject initialization
 	* [r15806] branches/gobject-engine-dev-warlord,
 	  branches/gobject-engine-dev-warlord/src/engine/SX-book.c,
 	  branches/gobject-engine-dev-warlord/src/engine/SX-book.h:

@@ -6568,7 +6568,7 @@ r12964 | chris | 2006-01-23 14:29:57 -0500 (Mon, 23 Jan 2006) | 5 lines
   Avoid GUI initialization during --add-price-quotes, fixes #327670
 
   BTW, it turns out that we don't need to call gtk_init().  It's called 
-  during the LIBGNOMEUI_MODULE initializtion from gnome_program_init().
+  during the LIBGNOMEUI_MODULE initialization from gnome_program_init().
 
 r12956 | chris | 2006-01-23 12:38:13 -0500 (Mon, 23 Jan 2006) | 28 lines
 
