@@ -5392,7 +5392,7 @@
 	  const-correctness.
 	* [r20407] configure.ac: Configure simplification: Use pkg-config
 	  for libofx. Remove obsolete external qof detection. (Somehow the
-	  argument --with-qt3-wizard-package was writting right inside the
+	  argument --with-qt3-wizard-package was writing right inside the
 	  qof code stuff. This has been moved to the aqbanking section
 	  now.)
 	* [r20406] packaging/win32/crossbuild_webkit.sh,
