@@ -8389,7 +8389,10 @@ msgstr "Rachunkowość finansów osobistych i małych firm."
 msgid "translator-credits"
 msgstr ""
 "Michał Ciołek, 2020\n"
-"Radzisław 'Rajish' Galler, 2010"
+"Radzisław 'Rajish' Galler, 2010\n"
+"Jacek Baszkiewicz, 2009\n"
+"Tomasz Ł. Nowak, 2008\n"
+"The GNOME PL Team, 2001-2003"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4499
 msgid "Visit the GnuCash website."
