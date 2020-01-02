@@ -585,7 +585,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     info->period_menu = GNC_FREQUENCY(
                             gnc_frequency_new_from_recurrence(info->period, &info->closing_date));
 
-    /* Change the text so that its more mainingful for this assistant */
+    /* Change the text so that its more meaningful for this assistant */
     gnc_frequency_set_frequency_label_text(info->period_menu, _("Period"));
     gnc_frequency_set_date_label_text(info->period_menu, _("Closing Date"));
 

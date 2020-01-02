@@ -1218,7 +1218,7 @@ this is the 3-letter ISO4217 code (USD, AUD, etc.). For stocks
 this is generally the exchange symbol (RHAT, IBM, etc.).
 
 @item A namespace
-A string identifying the context in which the mnemonic is meaninful.
+A string identifying the context in which the mnemonic is meaningful.
 
 @item A full name
 The `long' name for the commodity, such as "US Dollar" or "IBM Common
