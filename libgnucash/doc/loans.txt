@@ -405,7 +405,7 @@ Do you...
 \verbatim
 Amount        : [ amount entry ]
 Assets from   : [ account sel |v] 
-Princiapl to  : [ account sel |v]
+Principal to  : [ account sel |v]
 Interest to   : [ account sel |v]
 Escrow to     : [ account sel |v]
 Remainder to  : [{escrow,principal,interest}|v]

@@ -1893,7 +1893,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
                 else
                 {
                     /* remaining pv less than advanced principal payment reduce
-                     * advanced pricipla payment to remaining pv */
+                     * advanced principal payment to remaining pv */
                     adv_pmt = -pv;
 
                     /* and set remaining pv to fv */
@@ -2034,7 +2034,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
                 else
                 {
                     /* remaining pv less than advanced principal payment reduce
-                     * advanced pricipal payment to remaining pv and set
+                     * advanced principal payment to remaining pv and set
                      * remaining pv to fv */
                     adv_pmt = -pv;
                     pv = fv;
@@ -2137,7 +2137,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
     case 'o':
         /* Constant payment to principal use constant payment equal to
          * original pv divided by number of periods.  constant payment to
-         * pricipal could be amount specified by user.  */
+         * principal could be amount specified by user.  */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
         amortsched->total_periods = n;
