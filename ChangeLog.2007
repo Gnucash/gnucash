@@ -3191,7 +3191,7 @@
 2007-04-22 21:20  hampton
 
 	* [r15991] src/gnome/glade/price.glade: Move the price
-	  manupilation buttons to the right side of the dialog. For
+	  manipulation buttons to the right side of the dialog. For
 	  languages where one of the button labels is very long, this
 	  prevents the dialog from becoming excessively wide.
 
