@@ -223,7 +223,7 @@ doxywizard doxygen.cfg &
 [codehelpgpg 2004-07-25] Doxygen now copes with addgroup and this page
 can be handled more easily by splitting the old single comment into repeated
 comments, split into pages. I've worked on doxygen files in Kate, KWrite and XCode (MacOSX) and
-the comment higlighting works fine. If you do have problems, particularly when
+the comment highlighting works fine. If you do have problems, particularly when
 you start a new line within an existing comment, enter a character at the end of
 the last highlighted line to refresh the highlighting. Some editors have a specific
 refresh option.

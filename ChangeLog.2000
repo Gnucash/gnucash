@@ -3065,14 +3065,14 @@
  	update. change entry widget appropriately.
 
 	* src/register/table-allgui.c (gnc_table_enter_update): added args
- 	to set cursor position and highlited selection.
+ 	to set cursor position and highlighted selection.
 
 	* src/scm/prefs.scm (gnc:save-options): truncate the options file
  	when opening.
 
 	* src/register/gnome/gnucash-item-edit.c (item_edit_draw_info):
- 	calc regions for the highlited portion of the text.
-	(item_edit_draw): draw the hightlited portion of the text.
+ 	calc regions for the highlighted portion of the text.
+	(item_edit_draw): draw the highlighted portion of the text.
 
 2000-01-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
 

@@ -802,7 +802,7 @@
 
 	* src/gnome/reconcile-list.[ch]: Use a hash table to remember
 	reconcile flags after a refresh. Also remember scroll position.
-	Change row styles so active row isn't highlited.
+	Change row styles so active row isn't highlighted.
 
 	* src/register/gnome/gnucash-sheet.c:
  	(gnucash_button_press_event): For now, we need to enter the cell,

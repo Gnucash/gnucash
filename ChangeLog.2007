@@ -3932,7 +3932,7 @@
 	  src/gnome-utils/gnc-sx-instance-dense-cal-adapter.c,
 	  src/gnome/dialog-sx-since-last-run.c: Rename
 	  GncSxInstances->list to instance_list, which at least emacs
-	  doesn't hilight as a (potential)keyword.
+	  doesn't highlight as a (potential)keyword.
 
 2007-04-06 01:15  hampton
 

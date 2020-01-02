@@ -12081,7 +12081,7 @@
 2006-03-31 21:08  jsled
 
 	* [r13721] trunk/src/test-core/test-stuff.h: match quotes (breaks
-	  editor syntax hilighting)
+	  editor syntax highlighting)
 
 2006-03-31 21:03  jsled
 
