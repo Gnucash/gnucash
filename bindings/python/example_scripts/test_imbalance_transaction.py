@@ -38,7 +38,7 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, \
 # mysql://user:password@host/dbname
 # postgres://user:password@host[:port]/dbname (the port is optional)
 #
-# You should try it out with a gnucash file with tranding accounts enabled
+# You should try it out with a gnucash file with trading accounts enabled
 # and trading accounts disabled
 
 if len(argv) < 2:
