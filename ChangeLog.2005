@@ -4764,7 +4764,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* src/business/business-gnome/gnc-plugin-business.c:
 	Adding show_session_error support to inform the user of
 	any write errors reported by QSF.
-	* src/engine/qof_book_merge.c: Re-instating fixes to
+	* src/engine/qof_book_merge.c: Reinstating fixes to
 	QOF_TYPE_CHAR handling in merge.
 	* src/engine/qofbackend.h: Definition of ERR_FILEIO_WRITE_ERROR
 	* src/gnome/Makefile.am: Building dialog-chart-export with
