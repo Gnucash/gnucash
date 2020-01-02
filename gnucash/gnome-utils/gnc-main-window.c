@@ -3184,7 +3184,7 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
 
 
 /*  Add a set of actions to the specified window.  This function
- *  should not need to be called directly by plugin implementors.
+ *  should not need to be called directly by plugin implementers.
  *  Correctly assigning values to the GncPluginClass fields during
  *  plugin initialization will cause this routine to be automatically
  *  called.
@@ -3250,7 +3250,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 
 
 /*  Remove a set of actions from the specified window.  This function
- *  should not need to be called directly by plugin implementors.  It
+ *  should not need to be called directly by plugin implementers.  It
  *  will automatically be called when a plugin is removed from a
  *  window.
  */
