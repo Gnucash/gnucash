@@ -4469,7 +4469,7 @@
 
 	* [r15747] packaging/win32/install.sh: Install.sh: Do not mix
 	  pexports and ".." as noted by Nathan Buchanan. pexports
-	  somestimes crashes in a new MSYS shell if a path, like the one
+	  sometimes crashes in a new MSYS shell if a path, like the one
 	  to a header file, contains "..".
 
 2007-03-21 22:50  andi5

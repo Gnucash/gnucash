@@ -220,7 +220,7 @@
  *   compounding Frequency, CF, is simply the number of times per
  *   year, the monies in the financial transaction are compounded. In
  *   the U.S., monies are usually compounded daily on bank deposits,
- *   and monthly on loans. Somtimes Long term deposits are compounded
+ *   and monthly on loans. Sometimes Long term deposits are compounded
  *   quarterly or weekly.
  *
  *   The Payment Frequency, PF, is simply how often during a year
