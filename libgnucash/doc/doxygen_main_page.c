@@ -232,7 +232,7 @@ refresh option.
 anything useful for GnuCash. Obviously doxygen only accepts "real" C
 struct definitions for inclusion on that page. However, all GnuCash
 data structures are defined somewhere in private headers, and only the
-typedefs are publically visible. Isn't there a way to have doxygen
+typedefs are publicly visible. Isn't there a way to have doxygen
 show the documentation for the <i>typedefs</i> on the "Data
 Structures" page? Unfortunately I don't know how.
 

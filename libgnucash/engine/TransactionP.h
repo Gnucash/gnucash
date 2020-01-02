@@ -137,7 +137,7 @@ struct _TransactionClass
 #define xaccTransSetGUID(t,g) qof_instance_set_guid(QOF_INSTANCE(t),g)
 
 /* This routine makes a 'duplicate' of the indicated transaction.
- * This routine cannot be exposed publically since the duplicate
+ * This routine cannot be exposed publicly since the duplicate
  * is wrong in many ways: it is not issued a unique guid, and thus
  * not a properly registered Entity.  The splits are copied, but
  * these are also funny: they aren't inserted into the accounts

@@ -8587,7 +8587,7 @@
 	  branches/sx-cleanup/src/app-utils/gnc-sx-instance-model.h,
 	  branches/sx-cleanup/src/doc/sx.rst,
 	  branches/sx-cleanup/src/gnome/dialog-sx-editor.c: rename
-	  publically-exposed utility functions.
+	  publicly-exposed utility functions.
 
 2007-01-14 01:49  jsled
 
