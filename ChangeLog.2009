@@ -849,7 +849,7 @@
 	  multiple currencies. Because of bugs in the register code this
 	  is rarely called. 6. Changed importers to use
 	  xaccTransGetImbalanceValue to check for imbalance, assuming that
-	  they won't create multiple currency trasactions. 7. Changed
+	  they won't create multiple currency transactions. 7. Changed
 	  xaccTransScrubImbalance to create a balancing split for each
 	  imbalanced commodity in the transaction. Also balances the
 	  transaction value. The commodity balancing splits go into

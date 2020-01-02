@@ -2109,7 +2109,7 @@ v	  fix the print_info
 	* app-utils/options.scm -- fix (find-first-account) to search subaccounts
 
 2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
-	* src/import-export/Trasaction-matcher.c: Fix compiler warnings.
+	* src/import-export/Transaction-matcher.c: Fix compiler warnings.
 	* src/import-export/ofx/gnc-ofx-import.c: Give the user more information
 	  for account creation.
 

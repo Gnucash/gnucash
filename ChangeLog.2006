@@ -6561,13 +6561,13 @@
 2006-08-09 09:42  cstim
 
 	* [r14623]
-	  branches/2.0/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in:
+	  branches/2.0/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in:
 	  Fix typo. Merges r14622 from trunk.
 
 2006-08-09 09:41  cstim
 
 	* [r14622]
-	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in:
+	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in:
 	  Fix typo
 
 2006-08-09 03:31  chris
@@ -6696,7 +6696,7 @@
 	  Fix string with yet another month-year-day vs. month-day-year
 	  confusion. Back-ported from trunk, r14602.
 	* [r14605]
-	  branches/2.0/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in:
+	  branches/2.0/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in:
 	  Fix wording of gconf key descriptions according to discussion in
 	  wiki. Back-ported from trunk, r14600.
 
@@ -6726,7 +6726,7 @@
 2006-08-07 13:05  cstim
 
 	* [r14600]
-	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in:
+	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in:
 	  Fix wording of gconf key descriptions according to discussion in
 	  wiki. BP
 
@@ -7807,7 +7807,7 @@
 
 	* [r14508] branches/2.0, branches/2.0/ChangeLog,
 	  branches/2.0/src/gnome/schemas/Makefile.am: Distribute
-	  apps_gnucash_scheduled_transctions.schemas.in (#340641). Merge
+	  apps_gnucash_scheduled_transactions.schemas.in (#340641). Merge
 	  from r14499
 
 2006-07-15 15:04  warlord
@@ -7862,7 +7862,7 @@
 2006-07-14 21:29  andi5
 
 	* [r14499] trunk/ChangeLog, trunk/src/gnome/schemas/Makefile.am:
-	  Add apps_gnucash_scheduled_transctions.schemas.in to
+	  Add apps_gnucash_scheduled_transactions.schemas.in to
 	  Makefile.am. Fixes #340641. BP
 
 2006-07-14 16:45  andi5
@@ -18201,8 +18201,8 @@
 	  trunk/src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in,
 	  trunk/src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas,
 	  trunk/src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in,
-	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas,
-	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in,
+	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas,
+	  trunk/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in,
 	  trunk/src/gnome/schemas/apps_gnucash_dialog_totd.schemas,
 	  trunk/src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in,
 	  trunk/src/gnome/schemas/apps_gnucash_general.schemas,
@@ -20388,7 +20388,7 @@
 	  branches/cashutil/src/gnome/reconcile-list.c,
 	  branches/cashutil/src/gnome/reconcile-list.h,
 	  branches/cashutil/src/gnome/schemas,
-	  branches/cashutil/src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas,
+	  branches/cashutil/src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas,
 	  branches/cashutil/src/gnome/top-level.c,
 	  branches/cashutil/src/gnome/top-level.h,
 	  branches/cashutil/src/gnome/ui,

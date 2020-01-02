@@ -2837,7 +2837,7 @@ The following translations have been updated: Catalan, Dutch, Finnish, German. P
 The following bugs are fixed:
 
       Bug 340991 - Default price source for reports not good.
-      Bug 516920 - Scheduled trasaction calendar popup off screen.
+      Bug 516920 - Scheduled transaction calendar popup off screen.
       Bug 685329 - Crashes on non-existent date.
       Bug 769124 - Australian (GMT-10) OFX transactions imported have
                    previous day's date.
@@ -3035,7 +3035,7 @@ Translation Updates: Azeri, Basque, Catalan, Chinese (Simplified), Czech,
 This is a snap release to correct a QIF import regression.
 
 The following bugs are fixed:
-     Bug 680104 - Scheduled Tranaction formula not calculated when variables
+     Bug 680104 - Scheduled Transaction formula not calculated when variables
                   are mixed with constants.
      Bug 756335 - When importing, date selection causes exit crash.
      Bug 759570 - Postponing a repeating SX skips over the instance.
@@ -5831,7 +5831,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   auto-complete like a quickfill cell [what we had been using].  This
 	   allows us to provide the gnome formula cell which can remap the
 	   keypad '.' character based on locale
-	 o Disallow the deletion of accounts with ReadOnly Transacation in
+	 o Disallow the deletion of accounts with ReadOnly Transaction in
 	   them. You must first "delete" the RO Txns before you delete the
 	   account.
 	 o NOTE: As of now you ABSOLUTELY REQUIRE G-WRAP >= 1.3.3

@@ -6921,7 +6921,7 @@
 	  src/gnome/schemas/apps_gnucash_dialog_common.schemas.in,
 	  src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in,
 	  src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in,
-	  src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas.in,
+	  src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas.in,
 	  src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in,
 	  src/gnome/schemas/apps_gnucash_general.schemas.in,
 	  src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in,

@@ -1040,7 +1040,7 @@ test_xaccTransGetImbalance_trading (Fixture *fixture,
     xaccAccountSetType (acc2, ACCT_TYPE_TRADING);
     /* The setup transaction is unbalanced in a trading-accounts environment. */
     g_assert (!xaccTransIsBalanced (fixture->txn));
-    /* Make it look like a proper trading accounts transactionm */
+    /* Make it look like a proper trading accounts transaction */
     split1->acc = acc1;
     split1->memo = static_cast<char*>(CACHE_INSERT ("foo"));
     split1->action = static_cast<char*>(CACHE_INSERT ("bar"));

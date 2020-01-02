@@ -231,7 +231,7 @@ The GUID does not, and never will, refer to a GnuCash entity.
 The GUID refers to an Account (@pxref{Accounts}).
 
 @item GNC_ID_TRANS
-The GUID refers to a Transation (@pxref{Transactions}).
+The GUID refers to a Transaction (@pxref{Transactions}).
 
 @item GNC_ID_SPLIT
 The GUID refers to a Split (@pxref{Splits}).

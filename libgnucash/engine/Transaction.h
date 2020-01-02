@@ -177,7 +177,7 @@ Transaction * xaccTransCloneNoKvp (const Transaction *t);
  *
  * @param check_splits If TRUE, after checking the transaction data
  * structures for equality, also check all splits attached to the
- * transation for equality.
+ * transaction for equality.
  *
  * @param check_balances If TRUE, when checking splits also compare
  * balances between the two splits.  Balances are recalculated
@@ -691,7 +691,7 @@ void xaccTransVoid(Transaction *transaction,
 void xaccTransUnvoid(Transaction *transaction);
 
 /** xaccTransReverse creates a Transaction that reverses the given
- *  tranaction by inverting all the numerical values in the given
+ *  transaction by inverting all the numerical values in the given
  *  transaction.  This function cancels out the effect of an earlier
  *  transaction.  This will be needed by write only accounts as a way
  *  to void a previous transaction (since you can't alter the existing

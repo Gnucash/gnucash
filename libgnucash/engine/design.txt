@@ -337,7 +337,7 @@ The SQL back-end should implement posting entirely in the
 		current = QueryTransaction();
 		// check ton make sure that what the sql db stores
 		// is identical to what we have on record as the
-		// 'original' tansaction.  If its not, then someone
+		// 'original' transaction.  If its not, then someone
 		// got in there and modified it while we weren't
 		// looking; so we better report this back toi user.
 		if (current != old_transaction) Error(); Unlock(); return err;

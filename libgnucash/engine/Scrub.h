@@ -62,7 +62,7 @@
     collects all functions that turn old (deprecated) data structures
     into the current new data model.
 
-    The ScrubOrphans() methods search for transacations that contain
+    The ScrubOrphans() methods search for transactions that contain
     splits that do not have a parent account. These "orphaned splits"
     are placed into an "orphan account" which the user will have to
     go into and clean up.  Kind of like the unix "Lost+Found" directory

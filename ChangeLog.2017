@@ -2108,7 +2108,7 @@
 
 2017-09-15 christopherlam 
 
-	* cp transction.scm income-gst-statement.scm
+	* cp transaction.scm income-gst-statement.scm
 
 2017-09-15 Geert Janssens 
 

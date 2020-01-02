@@ -459,7 +459,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* GNOME2_STATUS: remove GOG-porting notes, spelling fixes.
 	
 	* sched-xact.glade: 
-	* apps_gnucash_dialog_scheduled_transctions.schemas: 
+	* apps_gnucash_dialog_scheduled_transactions.schemas: 
 	* dialog-scheduledxaction.c (schedXact_editor_create_ledger):
 	Remove the not-really-respected-anyways option to change the
 	number of register lines in the SX editor dialog.
@@ -1678,7 +1678,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* GNOME2_STATUS: Updates
 	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_button_press):
 	Better transient-window positioning.
-	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas:
+	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas:
 	* src/gnome/dialog-scheduledxaction.[ch]: 
 	* src/gnome/dialog-sx-from-trans.c: 
 	Rename "notify-days" to "remind-days", as it should have been in
@@ -3469,7 +3469,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* src/gnome/gw-gnc-spec.scm:
 	* src/gnome/top-level.c:
 	* src/gnome/glade/sched-xact.glade:
-	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas:
+	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transactions.schemas:
 	* src/gnome/ui/gnc-plugin-page-sxregister-ui.xml:
 	* src/gnome/ui/gnc-sxed-window-ui.xml:
 	* src/scm/main.scm: Convert scheduled transactions over to the new
