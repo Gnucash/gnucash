@@ -2520,7 +2520,7 @@
 2003-08-13  Matt Vanecek   <mevanecek@yahoo.com>
 
     * src/backend/postgres/PostgresBackend.c pgend_session_begin():
-      Moved the pgendUpdgradeDB() call outside of the SQL transaction,
+      Moved the pgendUpgradeDB() call outside of the SQL transaction,
       because the upgrades performed each have their own separate
       transaction.
 
