@@ -12850,7 +12850,7 @@
 	* [r13618] trunk/ChangeLog,
 	  trunk/src/gnome-utils/gnc-plugin-page.c: Save a QofBook instead
 	  of its GUID in the list of books in plugin pages. This should
-	  renable the deletion of some plugin pages.
+	  re-enable the deletion of some plugin pages.
 
 2006-03-13 16:54  cstim
 

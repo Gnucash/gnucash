@@ -3287,7 +3287,7 @@ r13683 | chris | 2006-03-22 19:33:11 -0500 (Wed, 22 Mar 2006) | 3 lines
 
 	* src/gnome-utils/gnc-plugin-page.c (gnc_plugin_page_add_book):
 	  Save a QofBook instead of its GUID in the list of books. This
-	  should renable the deletion of some plugin pages.
+	  should re-enable the deletion of some plugin pages.
 
 2006-03-13  Christian Stimming <stimming@tuhh.de>
 
