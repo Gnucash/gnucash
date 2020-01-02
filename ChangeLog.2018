@@ -1248,7 +1248,7 @@
 
 2018-12-24 John Ralls
 
-	* Merge Christoff Holterman's 'PR-Python-GetBalTaxValues' into maint.
+	* Merge Christoph Holterman's 'PR-Python-GetBalTaxValues' into maint.
 
 2018-12-24 John Ralls
 
@@ -2480,7 +2480,7 @@
 
 2018-09-08 John Ralls
 
-	* Merge Christoff Holterman's Bug 796137 repair into maint.
+	* Merge Christoph Holterman's Bug 796137 repair into maint.
 
 2018-09-07 Christoph Holtermann
 
