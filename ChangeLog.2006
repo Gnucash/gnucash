@@ -16893,7 +16893,7 @@
 	  trunk/src/business/business-core/file/gnc-vendor-xml-v2.c,
 	  trunk/src/business/business-core/gncBillTerm.c,
 	  trunk/src/business/business-core/gncBillTerm.h: Clear up the
-	  billterm data lossage (due to a broken enum definition). *
+	  billterm dataloss (due to a broken enum definition). *
 	  src/business/business-core/file/gnc-bill-term-xml-v2.c: *
 	  src/business/business-core/file/gnc-bill-term-xml-v2.h: Add a
 	  new API to "find-or-create" a billterm so all the code is
