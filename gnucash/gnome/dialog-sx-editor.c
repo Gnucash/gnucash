@@ -749,7 +749,7 @@ check_transaction_splits (Transaction *txn, gpointer data)
                                                sd->tcds))
         {
             gchar *message = g_strdup_printf
-                (_("Split with memo %s has an unparseable Credit Formula."),
+                (_("Split with memo %s has an unparsable Credit Formula."),
                  xaccSplitGetMemo (s));
             split_error_warning_dialog (sd->sxed->dialog,
                                         _("Unparsable Formula in Split"),
@@ -765,7 +765,7 @@ check_transaction_splits (Transaction *txn, gpointer data)
 
         {
             gchar *message = g_strdup_printf
-                (_("Split with memo %s has an unparseable Debit Formula."),
+                (_("Split with memo %s has an unparsable Debit Formula."),
                  xaccSplitGetMemo (s));
             split_error_warning_dialog (sd->sxed->dialog,
                                         _("Unparsable Formula in Split"),

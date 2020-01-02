@@ -2134,11 +2134,11 @@ r13863 | chris | 2006-04-26 22:18:37 -0400 (Wed, 26 Apr 2006) | 14 lines
 	Bug#119078: promote register parse errors to the user.
 
 	* src/register/register-core/pricecell.c (gnc_price_cell_parse):
-	Return error if cell text isn't parseable via expression parser.
+	Return error if cell text isn't parsable via expression parser.
 
 	* src/register/register-core/pricecell.c (gnc_price_cell_leave):
 	* src/register/register-core/formulacell.c (gnc_formula_cell_leave): 
-	Promote error to UI if cell text isn't parseable.
+	Promote error to UI if cell text isn't parsable.
 
 	* src/register/register-core/table-allgui.c (gnc_table_save_cells): 
 	* src/register/ledger-core/split-register-load.c

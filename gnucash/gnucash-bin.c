@@ -730,7 +730,7 @@ gnc_log_init()
             parts = g_strsplit(log_opt, "=", 2);
             if (parts == NULL || parts[0] == NULL || parts[1] == NULL)
             {
-                g_warning("string [%s] not parseable", log_opt);
+                g_warning("string [%s] not parsable", log_opt);
                 continue;
             }
 

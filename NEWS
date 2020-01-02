@@ -1264,7 +1264,7 @@ Other repairs or enhancements not marked as bugs:
     Removed an incomplete and abandoned C implementation of QIF import.
     Restored libsecret support that had been left out of CMake.
     Replace old-style html style attributes with css.
-    Modify emitted html to be parseable by the Guile SXML module for testing.
+    Modify emitted html to be parsable by the Guile SXML module for testing.
     Remove support for long-gone gtkhtml renderer.
     Clean up code generating html tables.
     Ensure full precision of doubles is saved to SQL.
@@ -3551,7 +3551,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
                 recent transaction prices
        710823 - libofx can supply broken UTF-8 for account id
        710824 - GnuCash should sanitise UTF-8 before serialising files
-                to avoid writing broken unparseable XML.
+                to avoid writing broken unparsable XML.
        720555 - General Ledger - Can't Enter Transaction Amounts
        720556 - The Tip of the Day preference isn't getting saved
        720646 - New Book Tabs on Windows

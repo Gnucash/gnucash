@@ -1935,7 +1935,7 @@
 	  1) as the string to search. However, when looking at the main
 	  account file, strlen(name) == pathlen, so strptime is looking at
 	  the point just past the end of name. Sometimes this will be
-	  parseable by strptime, and this leads to the account file being
+	  parsable by strptime, and this leads to the account file being
 	  unlinked.
 
 2010-10-04 15:40  gjanssens
