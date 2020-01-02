@@ -122,7 +122,7 @@
  * 4: free_numeric - this function is responsible for freeing memory
  * used by the internal numeric representation.
  *
- * 5: func_op - this function is repsonsible for handling function calls.
+ * 5: func_op - this function is responsible for handling function calls.
  *
  * I have included the file "numeric_ops.c" containing the above
  * functions for the usual "double" and "int" representation of
