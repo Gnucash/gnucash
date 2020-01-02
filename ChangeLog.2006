@@ -936,7 +936,7 @@
 	  variables. merge from r15170.
 	* [r15176] branches/2.0, branches/2.0/ChangeLog,
 	  branches/2.0/src/gnome-utils/gnc-main-window.c: Factor out some
-	  quiting code from gnc_main_window_delete_event() and
+	  quitting code from gnc_main_window_delete_event() and
 	  gnc_main_window_cmd_file_quit(). The new implementation fixes
 	  two bugs - one in each of the previous implementations. The bug
 	  in the gnc_main_window_cmd_file_quit() code was a race condition
@@ -1015,7 +1015,7 @@
 2006-12-03 00:56  chris
 
 	* [r15169] trunk/src/gnome-utils/gnc-main-window.c: Factor out
-	  some quiting code from gnc_main_window_delete_event() and
+	  some quitting code from gnc_main_window_delete_event() and
 	  gnc_main_window_cmd_file_quit(). The new implementation fixes
 	  two bugs - one in each of the previous implementations. The bug
 	  in the gnc_main_window_cmd_file_quit() code was a race condition
