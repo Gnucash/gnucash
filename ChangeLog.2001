@@ -6735,7 +6735,7 @@
 
 2001-03-27  James LewisMoss  <jimdres@mindspring.com>
 
-	* doc-tools/Makefile.am (LDADD): remove all the unneccesary libs.
+	* doc-tools/Makefile.am (LDADD): remove all the unnecessary libs.
 
 2001-03-27  Christian Stimming  <stimming@tuhh.de>
 

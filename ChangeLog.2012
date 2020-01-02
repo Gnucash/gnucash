@@ -3526,7 +3526,7 @@
 	* [r22071] src/libqof/qof/gnc-numeric.c: Remove obsolete strspn()
 	  call that causes valgrind warnings about invalid read(). The
 	  strspn() call was added in r8500 but the usage of its return
-	  value was removed in r10315, so it isn't neccesary anyway. The
+	  value was removed in r10315, so it isn't necessary anyway. The
 	  macro GNC_DEPRECATED is defined nowhere and used nowhere else,
 	  so we can remove that block altogether.
 
