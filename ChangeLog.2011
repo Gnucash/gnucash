@@ -5648,7 +5648,7 @@
 	  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO model column if the row is
 	  expanded; otherwise it combines it with the data in the
 	  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT model column.
-	  Modily the view creation function to use the new
+	  Modify the view creation function to use the new
 	  tax_info_data_func for the text after having first set it to
 	  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO to prevent the problem
 	  mentioned above, thereby overriding it.
@@ -6395,7 +6395,7 @@
 	  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO model column if the row is
 	  expanded; otherwise it combines it with the data in the
 	  GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO_SUB_ACCT model column.
-	  Modily the view creation function to use the new
+	  Modify the view creation function to use the new
 	  tax_info_data_func.
 
 2011-01-30 18:33  gjanssens
