@@ -2541,7 +2541,7 @@ Set the US-specific tax code associated with @var{account}.
 
 @deftypefun {const char *} xaccAccountGetTaxUSPayerNameSource (Account * @var{account})
 Get the payer name source associated with @var{account}. See
-@file{src/scm/repot/taxtxf.scm} for details.
+@file{src/scm/report/taxtxf.scm} for details.
 @end deftypefun
 
 @deftypefun void xaccAccountSetTaxUSPayerNameSource (Account * @var{account}, const char * @var{source})
