@@ -5760,7 +5760,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   error. Also check for pkgconfig
 	 o Updated translations, po/de.po,
 	 o Fix HBCI reparent warnings. Make the PIN dialog a bit nicer.
-	 o Fixes to Postgresql backend.
+	 o Fixes to PostgreSQL backend.
 	 o Changed the "ALTER TABLE table ADD COLUMN..." statements to conform
 	   to the current Postgres implementation (and SQL 92) standard by
 	   putting the DEFAULT modifier in a separate ALTER statement.  This was

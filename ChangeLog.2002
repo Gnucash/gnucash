@@ -16,7 +16,7 @@
 	and LEAVE statements to more of the functions.
 
 	* src/backend/postgres/upgrade.c: Changed all the DATETIME
-	SQL data types to TIMESTAMP.  DATETIME will not be in Postgresql
+	SQL data types to TIMESTAMP.  DATETIME will not be in PostgreSQL
 	as of 7.3.
 
 	* src/backend/postgres/functions.sql: Changed all the DATETIME

@@ -2539,7 +2539,7 @@
       of regression testing:
     - add_multiple_book_support():  Removed the "NOT NULL" from the
       ADD COLUMN statements, and placed them in an ALTER TABLE...SET
-      NULL construct.  The original is not supported in Postgresql
+      NULL construct.  The original is not supported in PostgreSQL
       and fails to execute.
     - Changed the stpcpy() to use g_strdup_printf() instead, for dynamic
       query assembly.
