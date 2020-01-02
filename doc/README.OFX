@@ -230,7 +230,7 @@ version of GnuCash from.
 matcher, why doesn't other transaction with the same memo/description change?
 
 The matcher already "learns" where transactions are assigned.  The only problem
-is thatcurrently, it only uses what it has learned on the next import.
+is that currently, it only uses what it has learned on the next import.
 Re-processing the list during the import process is a feature you can hopefor
 early in the 1.8 series.
 
