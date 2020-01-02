@@ -1052,7 +1052,7 @@
 	  accounts/de_DE/acctchrt_full.gnucash-xea,
 	  accounts/de_DE/acctchrt_skr04.gnucash-xea: #472205: Replace &#;
 	  character references by latin0-encoded letters in german account
-	  hierachies.
+	  hierarchies.
 
 2007-09-03 20:22  rolf
 
