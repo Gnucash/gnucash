@@ -4021,7 +4021,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* qofid.h: qof_collection_count
 
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
-	* src/engine/qof_book_merge.c: Re-organising to
+	* src/engine/qof_book_merge.c: Re-organizing to
 	use static functions.
 	* src/engine/qof_book_merge.h: Setting public API.
 	* src/engine/qofclass.h: Typos.
@@ -4965,7 +4965,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	the schema namespace URL.
 	* src/backend/qsf/qsf-backend.c:
 	* src/backend/qsf/qsf-xml-map.c:
-	* src/backend/qsf/qsf-xml.c: Re-organising and adding
+	* src/backend/qsf/qsf-xml.c: Re-organizing and adding
 	references and almost complete KVP support to QSF backend.
 	* src/backend/qsf/qsf-map.xsd.xml:
 	* src/backend/qsf/qsf-object.xsd.xml: Correcting attribute
