@@ -3649,7 +3649,7 @@
 
 2012-02-15 23:14  alex.aycinena
 
-	* [r22038] src/backend/xml/sixtp.c: Properly handle Windos
+	* [r22038] src/backend/xml/sixtp.c: Properly handle Windows
 	  end-of-line markers in determining xml file versions.
 
 2012-02-15 15:23  gjanssens
