@@ -13725,7 +13725,7 @@
 
 2006-03-07 20:41  cstim
 
-	* [r13516] trunk/lib/libgsf-1.12.3/tests: Update svn:ifnore
+	* [r13516] trunk/lib/libgsf-1.12.3/tests: Update svn:ignore
 	  property
 
 2006-03-07 19:36  andi5
