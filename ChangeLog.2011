@@ -6332,7 +6332,7 @@
 
 	* [r20214] src/core-utils/gnc-locale-utils.c,
 	  src/core-utils/gnc-locale-utils.h: The new files for gnc_locale
-	  functions, ommitted from r20110.
+	  functions, omitted from r20110.
 
 2011-01-31 04:35  jralls
 
