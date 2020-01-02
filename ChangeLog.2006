@@ -7879,7 +7879,7 @@
 	  fix the (theoretical) problem of a null variable disappearing,
 	  leading to bash: test: =: unary operator expected And also,
 	  added AC_MSG_NOTICE([Ignore error message "./po/POTFILES.in: No
-	  such file or directory." if it occurrs.]) Patch by "Archimedes
+	  such file or directory." if it occurs.]) Patch by "Archimedes
 	  Submerged" <archimerged@gmail.com>
 
 2006-07-14 01:36  chris
