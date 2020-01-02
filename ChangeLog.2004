@@ -1298,7 +1298,7 @@
 	system. See Bug#130330.
 
 	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr): Fix nasty
-	memory-corruption issue; insufficent bounds checking on array
+	memory-corruption issue; insufficient bounds checking on array
 	index. Bug#125600.
 
 	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
