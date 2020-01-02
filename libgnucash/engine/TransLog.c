@@ -42,7 +42,7 @@
 static QofLogModule log_module = "gnc.translog";
 
 /*
- * Some design philosphy that I think would be good to keep in mind:
+ * Some design philosophy that I think would be good to keep in mind:
  * (0) Simplicity and foolproofness are the over-riding design points.
  *     This is supposed to be a fail-safe safety net.   We don't want
  *     our safety net to fail because of some whiz-bang shenanigans.
