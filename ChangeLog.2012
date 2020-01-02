@@ -2729,7 +2729,7 @@
 
 	* [r22173] src/engine/gncEmployee.c, src/engine/gncEmployee.h,
 	  src/engine/gncOwner.c: Add getter/setter for fake Employee name
-	  propery. This is done to get a more consistent owner interface
+	  property. This is done to get a more consistent owner interface
 	  and simplifies the python bindings
 	* [r22172] src/business/business-gnome/gnc-plugin-page-invoice.c:
 	  Remove some unused function declarations
