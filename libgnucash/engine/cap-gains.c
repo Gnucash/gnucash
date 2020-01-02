@@ -40,7 +40,7 @@
  * being a gains split, and that the source transaction should be
  * checked for dirtiness before returning the date, the amount, the
  * value, etc.  Finally, these flags make amount and value read-only
- * for the gains splits. (the memo is user-modifieable).
+ * for the gains splits. (the memo is user-modifiable).
  *
  * If the amount in a split is changed, then the lot has to be recomputed.
  * This has a potential trickle-through effect on all later lots.
