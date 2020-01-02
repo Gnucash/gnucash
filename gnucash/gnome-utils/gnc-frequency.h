@@ -97,7 +97,7 @@ void gnc_frequency_set_frequency_label_text (GncFrequency *gf, const gchar *txt)
 
 /**
  * Set the label text for the date entry widget. In the current
- * impelmentation, the default label text is "Start Date"
+ * implementation, the default label text is "Start Date"
  */
 void gnc_frequency_set_date_label_text (GncFrequency *gf, const gchar *txt);
 

@@ -274,7 +274,7 @@ of a particular *transaction* is easy -- that's just the fraction value/damount 
 
 <cstim> Yes, right. currently the commodity-utilities stuff uses a weighted average over the 
 history. But using the last known exchange rate instead may be useful at times. Maybe I'll 
-implmement something like that maybe if i have time :)
+implement something like that maybe if i have time :)
 
 <goonie>diff -up 'gnucash/src/engine/ Query.c' 'gnucash_transaction_report/src/engine/ Query.c'
 

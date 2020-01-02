@@ -557,7 +557,7 @@
 
 	* src/register/cellblock.c: re-implement using gtables.
 
-	* src/register/gtable.c: implentation of a dynamic 2-d array.
+	* src/register/gtable.c: implementation of a dynamic 2-d array.
 
 2000-09-13  Dave Peticolas  <dave@krondo.com>
 

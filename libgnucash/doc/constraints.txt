@@ -55,7 +55,7 @@ constraint, there is no (easy) way to reflect it directly in the
 object design; thus, it acts as a rule that must be periodically
 imposed.
 
-At this time, the financial constraints within gnucash are impelmented
+At this time, the financial constraints within gnucash are implemented
 in an ad-hoc manner, with no governing framework.  This may change,
 as there is pressure to support more complex constraints that vary
 by region/country, by account type, by industry, etc.
