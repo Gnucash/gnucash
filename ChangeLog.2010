@@ -2875,7 +2875,7 @@
 	  src/gnome-utils/gnc-frequency.h,
 	  src/gnome-utils/gnc-sx-list-tree-model-adapter.c,
 	  src/gnome/dialog-sx-editor.c,
-	  src/gnome/dialog-sx-since-last-run.c: Impove const-correctness
+	  src/gnome/dialog-sx-since-last-run.c: Improve const-correctness
 	  of SchedXaction.h functions; improve documentation. Also,
 	  replace "void *" by pointers to the actual type.
 
