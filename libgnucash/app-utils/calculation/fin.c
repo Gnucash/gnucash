@@ -286,7 +286,7 @@
  *
  *   NOTE: in the equations below for the financial transaction, all
  *   interest rates are the effective interest rate, ieff. The symbol
- *   will be shortned to just 'i'.
+ *   will be shortened to just 'i'.
  *
  * ****************************************************************************
  *
