@@ -1467,7 +1467,7 @@
 	amount using the account's currency.
 
 	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_create): remove the
-	currency symobl from the dialog and use the account currency, if
+	currency symbol from the dialog and use the account currency, if
 	available, in printing amounts.
 
 	* src/gnome/window-adjust.c: remove the currency symbol from the
