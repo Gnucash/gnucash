@@ -3864,7 +3864,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
          This is the fourth release in the UNSTABLE 2.5 series.
 
 	 New Features:
-	 Save and Save As for custom report templates (Geert Jansens)
+	 Save and Save As for custom report templates (Geert Janssens)
 	 Customized report settings can now be saved without renaming
 	 the report, and updates saved directly replacing the previously
 	 saved report or "saved as" to a new name.
