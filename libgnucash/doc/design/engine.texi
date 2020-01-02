@@ -1926,7 +1926,7 @@ Set the share price of @var{split} to @var{price}.
 @deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
 is more efficient than calling @code{xaccSplitSetShareAmount} and
-@code{xaccSplitSetSharePrice} in succesion.
+@code{xaccSplitSetSharePrice} in succession.
 @end deftypefun
 
 @deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
