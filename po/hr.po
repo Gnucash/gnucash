@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.7+\n"
+"Project-Id-Version: GnuCash 3.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2019-12-26 16:42+0100\n"
-"PO-Revision-Date: 2019-10-19 21:04+0200\n"
+"POT-Creation-Date: 2019-12-28 13:38-0800\n"
+"PO-Revision-Date: 2020-01-01 19:27+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -943,8 +943,8 @@ msgstr "Opcija za otplaćivanje kredita: „%s“"
 #: gnucash/gnome/assistant-loan.cpp:1867 gnucash/gnome/dialog-lot-viewer.c:908
 #: gnucash/gnome/gnc-split-reg.c:603 gnucash/gnome/reconcile-view.c:447
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
-#: gnucash/gtkbuilder/dialog-payment.glade:276
-#: gnucash/gtkbuilder/dialog-payment.glade:408
+#: gnucash/gtkbuilder/dialog-payment.glade:275
+#: gnucash/gtkbuilder/dialog-payment.glade:407
 #: gnucash/gtkbuilder/dialog-trans-assoc.glade:129
 #: gnucash/gtkbuilder/dialog-transfer.glade:142
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:492
@@ -967,7 +967,7 @@ msgstr "Opcija za otplaćivanje kredita: „%s“"
 #: gnucash/report/business-reports/invoice.scm:605
 #: gnucash/report/business-reports/job-report.scm:42
 #: gnucash/report/business-reports/new-owner-report.scm:50
-#: gnucash/report/business-reports/new-owner-report.scm:195
+#: gnucash/report/business-reports/new-owner-report.scm:203
 #: gnucash/report/business-reports/owner-report.scm:52
 #: gnucash/report/business-reports/receipt.eguile.scm:161
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:293
@@ -1001,18 +1001,18 @@ msgstr "Datum"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2919
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2993
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3079
-#: gnucash/gtkbuilder/dialog-payment.glade:470
+#: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2585
 #: gnucash/register/ledger-core/split-register.c:2626
 #: gnucash/register/ledger-core/split-register.c:2631
 #: gnucash/register/ledger-core/split-register.c:2642
-#: gnucash/report/business-reports/new-owner-report.scm:250
+#: gnucash/report/business-reports/new-owner-report.scm:258
 #: gnucash/report/business-reports/owner-report.scm:359
 #: libgnucash/app-utils/prefs.scm:66 libgnucash/app-utils/prefs.scm:74
 #: libgnucash/app-utils/prefs.scm:92 libgnucash/engine/gncOwner.c:814
-#: libgnucash/engine/gncOwner.c:849 libgnucash/engine/gncOwner.c:879
-#: libgnucash/engine/gncOwner.c:892
+#: libgnucash/engine/gncOwner.c:847 libgnucash/engine/gncOwner.c:877
+#: libgnucash/engine/gncOwner.c:890
 msgid "Payment"
 msgstr "Plaćanje"
 
@@ -1067,7 +1067,7 @@ msgstr "Greška prilikom dodavanja cijene."
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:335
 #: gnucash/report/business-reports/job-report.scm:38
-#: gnucash/report/business-reports/new-owner-report.scm:971
+#: gnucash/report/business-reports/new-owner-report.scm:987
 #: gnucash/report/business-reports/owner-report.scm:50
 #: gnucash/report/report-system/trep-engine.scm:1194
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1057
@@ -1256,7 +1256,7 @@ msgstr "Sljedeći mjesec"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:633
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/business-reports/job-report.scm:242
-#: gnucash/report/business-reports/new-owner-report.scm:251
+#: gnucash/report/business-reports/new-owner-report.scm:259
 #: gnucash/report/business-reports/owner-report.scm:355
 #: gnucash/report/business-reports/owner-report.scm:360
 msgid "Unknown"
@@ -1403,7 +1403,7 @@ msgstr "Izbrisati robu?"
 #: gnucash/import-export/aqb/dialog-ab.glade:931
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:420
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2013
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2017
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:384
 #: gnucash/register/ledger-core/gncEntryLedger.c:930
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
@@ -1728,7 +1728,7 @@ msgstr "Cijena dionice"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3770
 #: gnucash/report/business-reports/customer-summary.scm:75
 #: gnucash/report/business-reports/job-report.scm:47
-#: gnucash/report/business-reports/new-owner-report.scm:200
+#: gnucash/report/business-reports/new-owner-report.scm:208
 #: gnucash/report/business-reports/owner-report.scm:61
 #: gnucash/report/report-system/options-utilities.scm:237
 #: gnucash/report/report-system/trep-engine.scm:204
@@ -1833,7 +1833,7 @@ msgstr "Broj transakcije"
 #: gnucash/gnome/gnc-split-reg.c:612 gnucash/gnome-search/dialog-search.c:867
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2765
-#: gnucash/gtkbuilder/dialog-payment.glade:287
+#: gnucash/gtkbuilder/dialog-payment.glade:286
 #: gnucash/gtkbuilder/gnc-date-format.glade:98
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:612
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:621
@@ -1854,7 +1854,7 @@ msgstr "Opis, napomene ili zabilješka"
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2796
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2798
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2816
-#: gnucash/gtkbuilder/dialog-payment.glade:520
+#: gnucash/gtkbuilder/dialog-payment.glade:519
 #: gnucash/gtkbuilder/dialog-transfer.glade:222
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
@@ -1932,7 +1932,7 @@ msgstr "Napomene"
 #: gnucash/report/business-reports/invoice.scm:219
 #: gnucash/report/business-reports/job-report.scm:46
 #: gnucash/report/business-reports/new-owner-report.scm:54
-#: gnucash/report/business-reports/new-owner-report.scm:198
+#: gnucash/report/business-reports/new-owner-report.scm:206
 #: gnucash/report/business-reports/owner-report.scm:56
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:295
 #: gnucash/report/report-system/trep-engine.scm:212
@@ -2010,7 +2010,7 @@ msgstr "Ovaj je unos priložen narudžbi i bit će također izbrisan iz nje!"
 #: gnucash/report/business-reports/job-report.scm:43
 #: gnucash/report/business-reports/new-aging.scm:112
 #: gnucash/report/business-reports/new-owner-report.scm:51
-#: gnucash/report/business-reports/new-owner-report.scm:804
+#: gnucash/report/business-reports/new-owner-report.scm:820
 #: gnucash/report/business-reports/owner-report.scm:53
 #: gnucash/report/business-reports/owner-report.scm:614
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:258
@@ -2021,7 +2021,7 @@ msgstr "Datum dospijeća"
 #: gnucash/gnome/dialog-invoice.c:728
 #: gnucash/report/business-reports/aging.scm:414
 #: gnucash/report/business-reports/new-aging.scm:116
-#: gnucash/report/business-reports/new-owner-report.scm:808
+#: gnucash/report/business-reports/new-owner-report.scm:824
 #: gnucash/report/business-reports/owner-report.scm:615
 msgid "Post Date"
 msgstr "Datum knjiženja"
@@ -2088,7 +2088,7 @@ msgid "PAID"
 msgstr "PLAĆENO"
 
 #: gnucash/gnome/dialog-invoice.c:1943
-#: gnucash/report/business-reports/new-owner-report.scm:478
+#: gnucash/report/business-reports/new-owner-report.scm:495
 msgid "UNPAID"
 msgstr "NEPLAĆENO"
 
@@ -2290,13 +2290,13 @@ msgstr "Napomene za vaučer"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:688
 #: gnucash/gtkbuilder/dialog-invoice.glade:157
 #: gnucash/gtkbuilder/dialog-invoice.glade:676
-#: gnucash/gtkbuilder/dialog-payment.glade:303
+#: gnucash/gtkbuilder/dialog-payment.glade:302
 #: gnucash/gtkbuilder/dialog-tax-info.glade:142
 #: gnucash/register/ledger-core/split-register-model.c:356
 #: gnucash/report/business-reports/customer-summary.scm:73
 #: gnucash/report/business-reports/job-report.scm:45
 #: gnucash/report/business-reports/new-owner-report.scm:53
-#: gnucash/report/business-reports/new-owner-report.scm:197
+#: gnucash/report/business-reports/new-owner-report.scm:205
 #: gnucash/report/business-reports/owner-report.scm:55
 #: gnucash/report/standard-reports/account-summary.scm:406
 msgid "Type"
@@ -2304,7 +2304,7 @@ msgstr "Vrsta"
 
 #: gnucash/gnome/dialog-invoice.c:3235
 #: gnucash/register/ledger-core/split-register-model.c:303
-#: gnucash/report/business-reports/new-owner-report.scm:694
+#: gnucash/report/business-reports/new-owner-report.scm:710
 msgid "Paid"
 msgstr "Plaćeno"
 
@@ -2324,7 +2324,7 @@ msgstr "Otvoreno"
 #: gnucash/gnome/dialog-invoice.c:3247 gnucash/gnome/dialog-lot-viewer.c:918
 #: gnucash/gnome/dialog-order.c:893 gnucash/gnome/reconcile-view.c:439
 #: gnucash/gnome/reconcile-view.c:443
-#: gnucash/gtkbuilder/dialog-payment.glade:507
+#: gnucash/gtkbuilder/dialog-payment.glade:506
 #: gnucash/gtkbuilder/dialog-transfer.glade:170
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
 #: gnucash/register/ledger-core/split-register-model.c:249
@@ -2476,7 +2476,7 @@ msgstr "Naslov"
 #: gnucash/register/ledger-core/split-register-model.c:478
 #: gnucash/report/business-reports/job-report.scm:208
 #: gnucash/report/business-reports/new-owner-report.scm:59
-#: gnucash/report/business-reports/new-owner-report.scm:433
+#: gnucash/report/business-reports/new-owner-report.scm:447
 #: gnucash/report/business-reports/owner-report.scm:321
 #: gnucash/report/report-system/html-utilities.scm:717
 #: gnucash/report/standard-reports/account-summary.scm:420
@@ -2573,11 +2573,13 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Nije odabran nijedan dokument kojem bi se dodijelilo ovo plaćanje. Ovo može "
+"stvoriti neprivezano plaćanje."
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1270
-#: gnucash/report/business-reports/new-owner-report.scm:582
+#: gnucash/report/business-reports/new-owner-report.scm:597
 msgid "Pre-Payment"
-msgstr "Predplata"
+msgstr "Predujam"
 
 #: gnucash/gnome/dialog-payment.c:966
 msgid ""
@@ -2790,8 +2792,8 @@ msgstr "korisnik"
 #: gnucash/gnome/dialog-print-check.c:1592
 #: gnucash/gnome/dialog-print-check.c:2605
 #: gnucash/gtkbuilder/assistant-csv-export.glade:189
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:378
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:372
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:386
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:380
 #: gnucash/gtkbuilder/assistant-loan.glade:35
 #: gnucash/gtkbuilder/dialog-print-check.glade:257
 #: gnucash/gtkbuilder/dialog-print-check.glade:277
@@ -3262,7 +3264,7 @@ msgstr "Kapital"
 #: gnucash/report/business-reports/invoice.scm:254
 #: gnucash/report/business-reports/new-aging.scm:205
 #: gnucash/report/business-reports/new-aging.scm:323
-#: gnucash/report/business-reports/new-owner-report.scm:277
+#: gnucash/report/business-reports/new-owner-report.scm:285
 #: gnucash/report/locale-specific/us/taxtxf-de_DE.scm:295
 #: gnucash/report/report-system/html-acct-table.scm:799
 #: gnucash/report/report-system/html-utilities.scm:609
@@ -4424,9 +4426,8 @@ msgid "Sort by description"
 msgstr "Razvrstaj po opisu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:266
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "Ispiši izlazni račun"
+msgstr "Is_piši izlazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
 msgid "_Edit Invoice"
@@ -4453,109 +4454,88 @@ msgid "_Pay Invoice"
 msgstr "_Plati izlazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:278
-#, fuzzy
 msgid "_Print Bill"
-msgstr "_Ispiši"
+msgstr "Is_piši ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:279
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Uredi ulazni račun"
+msgstr "Ur_edi ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:280
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Dupliciraj"
+msgstr "_Dupliciraj ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:281
-#, fuzzy
 msgid "_Post Bill"
-msgstr "Plati ulazni račun"
+msgstr "_Uknjiži ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:282
-#, fuzzy
 msgid "_Unpost Bill"
-msgstr "_Isknjiži izlazni račun"
+msgstr "_Isknjiži ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
-#, fuzzy
 msgid "New _Bill"
-msgstr "Novi ulazni račun"
+msgstr "Novi _ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "Plati ulazni račun"
+msgstr "_Plati ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:290
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "_Ispiši čekove"
+msgstr "Is_piši vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:291
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "Prikaži/Uredi vaučer"
+msgstr "Ur_edi vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "_Dupliciraj izlazni račun"
+msgstr "_Dupliciraj vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:293
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "Vaučer"
+msgstr "_Uknjiži vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:294
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "_Isknjiži izlazni račun"
+msgstr "_Isknjiži vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:295
-#, fuzzy
 msgid "New _Voucher"
-msgstr "Novi vaučer"
+msgstr "Novi _vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:296
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "Vaučer"
+msgstr "_Plati vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "Is_piši knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:303
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "Ur_edi knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:304
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "_Dupliciraj knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:305
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "_Uknjiži knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:306
-#, fuzzy
 msgid "_Unpost Credit Note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "_Isknjiži knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:307
-#, fuzzy
 msgid "New _Credit Note"
-msgstr "Novo knjižno odobrenje"
+msgstr "Novo _knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:308
-#, fuzzy
 msgid "_Pay Credit Note"
-msgstr "Knjižno odobrenje"
+msgstr "_Plati knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:314
 msgid "Make a printable invoice"
@@ -4570,12 +4550,10 @@ msgid "Create a new invoice as a duplicate of the current one"
 msgstr "Stvori novi izlazni račun kao kopiju trenutačnog"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "Uknjiži ovaj izlazni račun u tvoj kontni plan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
-#, fuzzy
 msgid "Unpost this invoice and make it editable"
 msgstr "Isknjiži ovaj izlazni račun, kako bi se mogao udrediti"
 
@@ -4584,154 +4562,125 @@ msgid "Create a new invoice for the same owner as the current one"
 msgstr "Stvori novi izlazni račun za istog vlasnika kao za ovaj"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
 msgstr "Premjesti u prazno polje na dnu izlaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:321
-#, fuzzy
 msgid "Enter a payment for the owner of this invoice"
 msgstr "Upiši plaćanje za vlasnika ovog izlaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:322
-#, fuzzy
 msgid "Open a company report window for the owner of this invoice"
 msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:327
-#, fuzzy
 msgid "Make a printable bill"
-msgstr "Stvori ispisiv izlazni račun"
+msgstr "Stvori ispisiv ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:328
-#, fuzzy
 msgid "Edit this bill"
-msgstr "Uredi ovu fakturu"
+msgstr "Uredi ovaj ulazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:329
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Stvori novi izlazni račun kao kopiju trenutačnog"
+msgstr "Stvori novi ulazni račun kao kopiju trenutačnog"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:330
-#, fuzzy
 msgid "Post this bill to your Chart of Accounts"
-msgstr "Uknjiži ovaj izlazni račun u tvoj kontni plan"
+msgstr "Uknjiži ovaj ulazni račun u tvoj kontni plan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
-#, fuzzy
 msgid "Unpost this bill and make it editable"
-msgstr "Isknjiži ovaj izlazni račun, kako bi se mogao udrediti"
+msgstr "Isknjiži ovaj ulazni račun, kako bi se mogao udrediti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:332
-#, fuzzy
 msgid "Create a new bill for the same owner as the current one"
-msgstr "Stvori novi izlazni račun za istog vlasnika kao za ovaj"
+msgstr "Stvori novi ulazni račun kao kopiju trenutačnog"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:333
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the bill"
-msgstr "Premjesti u prazno polje na dnu izlaznog računa"
+msgstr "Premjesti u prazno polje na dnu ulaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:334
-#, fuzzy
 msgid "Enter a payment for the owner of this bill"
-msgstr "Upiši plaćanje za vlasnika ovog izlaznog računa"
+msgstr "Upiši plaćanje za vlasnika ovog ulaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:335
-#, fuzzy
 msgid "Open a company report window for the owner of this bill"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
+msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog ulaznog računa"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "Stvori ispisiv izlazni račun"
+msgstr "Stvori ispisiv vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "Uredi ovu fakturu"
+msgstr "Uredi ovaj vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:342
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Stvori novi izlazni račun kao kopiju trenutačnog"
+msgstr "Stvori novi vaučer kao kopiju trenutačnog"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:343
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Uknjiži ovaj izlazni račun u tvoj kontni plan"
+msgstr "Uknjiži ovaj vaučer u tvoj kontni plan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:344
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr "Isknjiži ovaj izlazni račun, kako bi se mogao udrediti"
+msgstr "Isknjiži ovaj vaučer, kako bi se mogao udrediti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:345
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Stvori novi izlazni račun za istog vlasnika kao za ovaj"
+msgstr "Stvori novi vaučer za istog vlasnika kao za ovaj"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Premjesti u prazno polje na dnu izlaznog računa"
+msgstr "Premjesti u prazno polje na dnu vaučera"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:347
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Upiši plaćanje za vlasnika ovog izlaznog računa"
+msgstr "Upiši plaćanje za vlasnika ovog vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:348
-#, fuzzy
 msgid "Open a company report window for the owner of this voucher"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
+msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog vaučera"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
-#, fuzzy
 msgid "Make a printable credit note"
-msgstr "Stvori ispisiv izlazni račun"
+msgstr "Stvori ispisivo knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:354
-#, fuzzy
 msgid "Edit this credit note"
-msgstr "Uredi knjižno odobrenje"
+msgstr "Uredi ovo knjižno odobrenje"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:355
-#, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "Stvori novi izlazni račun kao kopiju trenutačnog"
+msgstr "Stvori novo knjižno odobrenje kao kopiju trenutačnog"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:356
-#, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "Uknjiži ovaj izlazni račun u tvoj kontni plan"
+msgstr "Uknjiži ovo knjižno odobrenje u tvoj kontni plan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:357
-#, fuzzy
 msgid "Unpost this credit note and make it editable"
-msgstr "Isknjiži ovaj izlazni račun, kako bi se mogao udrediti"
+msgstr "Isknjiži ovo knjižno odobrenje, kako bi se moglo udrediti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:358
-#, fuzzy
 msgid "Create a new credit note for the same owner as the current one"
-msgstr "Stvori novi izlazni račun za istog vlasnika kao za ovaj"
+msgstr "Stvori novo knjižno odobrenje za istog vlasnika kao za ovaj"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:359
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr "Premjesti u prazno polje na dnu izlaznog računa"
+msgstr "Premjesti u prazno polje na dnu knjižnog odobrenja"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:360
-#, fuzzy
 msgid "Enter a payment for the owner of this credit note"
-msgstr "Upiši plaćanje za vlasnika ovog izlaznog računa"
+msgstr "Upiši plaćanje za vlasnika ovog knjižnog odobrenja"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:361
-#, fuzzy
 msgid "Open a company report window for the owner of this credit note"
-msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
+msgstr ""
+"Otvori prozor izvještaja o poduzeću za vlasnika ovog knjižnog odobrenja"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:367
 #: gnucash/gnome/gnc-plugin-page-register2.c:484
@@ -5410,7 +5359,7 @@ msgstr "i podkonti"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2910
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3018
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3023
-#: gnucash/gtkbuilder/dialog-payment.glade:335
+#: gnucash/gtkbuilder/dialog-payment.glade:334
 #: gnucash/register/ledger-core/split-register.c:2501
 #: gnucash/register/ledger-core/split-register.c:2596
 #: gnucash/register/ledger-core/split-register.c:2615
@@ -5428,7 +5377,7 @@ msgstr "Potražuje"
 #: gnucash/gnome/gnc-plugin-page-register.c:3346
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3099
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3104
-#: gnucash/gtkbuilder/dialog-payment.glade:319
+#: gnucash/gtkbuilder/dialog-payment.glade:318
 #: gnucash/register/ledger-core/split-register.c:2478
 #: gnucash/report/report-system/trep-engine.scm:1326
 #: gnucash/report/report-system/trep-engine.scm:1343
@@ -5493,9 +5442,8 @@ msgid "_Open Associated File/Location"
 msgstr "_Otvori povezanu datoteku/URL adresu"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:216
-#, fuzzy
 msgid "Open Associated Invoice"
-msgstr "_Otvori povezanu datoteku/URL adresu"
+msgstr "Otvori povezani izlazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:227
 msgid "Associate a file with the current transaction"
@@ -5510,9 +5458,8 @@ msgid "Open the associated file or location with the current transaction"
 msgstr "Otvori povezanu datoteku ili URL adresu s trenutačnom transakcijom"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:230
-#, fuzzy
 msgid "Open the associated invoice"
-msgstr "Otvori dijalog „Nađi izlazni račun”"
+msgstr "Otvori povezani izlazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:307
 msgid "Remo_ve Other Splits"
@@ -5536,9 +5483,8 @@ msgid "Open File/Location"
 msgstr "Otvori datoteku/stazu"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:527
-#, fuzzy
 msgid "Open Invoice"
-msgstr "Novi izlazni račun"
+msgstr "Otvori izlazni račun"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:703
 msgid ""
@@ -6069,9 +6015,8 @@ msgid "Perform financial calculations, such as a loan repayment"
 msgstr "Izradi financijske kalkulacije, kao što je otplaćivanje kredita"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
-#, fuzzy
 msgid "GnuCash Project"
-msgstr "GnuCash postavke"
+msgstr "GnuCash projekt"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
@@ -6289,7 +6234,7 @@ msgstr "_Konto"
 #: gnucash/gtkbuilder/dialog-search.glade:24
 #: gnucash/gtkbuilder/dialog-sx.glade:778
 #: gnucash/gtkbuilder/dialog-vendor.glade:50
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2049
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2053
 msgid "_Help"
 msgstr "Po_moć"
 
@@ -6883,12 +6828,12 @@ msgstr ""
 "promijeniti polje šifre svakog podređenog konta novostvorenom šifrom."
 
 #: gnucash/gnome-utils/dialog-account.c:2155
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
-"Postavi boju konta za konto „%s”, uključujući sva podkonta odabranom bojom:"
+"Postavi boju konta za konto „%s”, uključujući sva podkonta u odabranu boju"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -6899,13 +6844,12 @@ msgid "Please select an Equity account to hold the total Period Expense."
 msgstr "Odaberi konto kapitala, koji sadrži ukupni rashod razdoblja."
 
 #: gnucash/gnome-utils/dialog-commodity.c:174
-#, fuzzy
 msgid ""
 "\n"
 "Please select a commodity to match"
 msgstr ""
 "\n"
-"Odaberi dionicu/valutu za usporedbu:"
+"Odaberi dionicu/valutu za usporedbu"
 
 #: gnucash/gnome-utils/dialog-commodity.c:181
 msgid ""
@@ -7399,7 +7343,7 @@ msgid "Don't tell me again this _session."
 msgstr "Ne podsjećuj me više tijekom ove _sesije."
 
 #. create the button.
-#: gnucash/gnome-utils/gnc-account-sel.c:462
+#: gnucash/gnome-utils/gnc-account-sel.c:468
 msgid "New..."
 msgstr "Novi …"
 
@@ -7536,9 +7480,8 @@ msgid "1 month"
 msgstr "1 mjesec"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:291
-#, fuzzy
 msgid "View"
-msgstr "_Prikaz"
+msgstr "Prikaz"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:340
 #: gnucash/report/stylesheets/stylesheet-footer.scm:383
@@ -8946,7 +8889,7 @@ msgid "_Recalculate"
 msgstr "_Ponovo izračunaj"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:734
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:992
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1000
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:611
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
 #: gnucash/report/locale-specific/us/taxtxf-de_DE.scm:292
@@ -9261,7 +9204,7 @@ msgstr "Datum uknjiženja / upisa / usklađivanja"
 #: gnucash/report/business-reports/customer-summary.scm:72
 #: gnucash/report/business-reports/job-report.scm:44
 #: gnucash/report/business-reports/new-owner-report.scm:52
-#: gnucash/report/business-reports/new-owner-report.scm:196
+#: gnucash/report/business-reports/new-owner-report.scm:204
 #: gnucash/report/business-reports/owner-report.scm:54
 msgid "Reference"
 msgstr "Referenca"
@@ -12173,8 +12116,8 @@ msgid "Import Accounts Now"
 msgstr "Uvezi konta sad"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:342
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1080
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1144
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1088
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1152
 msgid "Import Summary"
 msgstr "Uvezi sažetak"
 
@@ -12199,26 +12142,26 @@ msgid "Simple Layout"
 msgstr "Jednostavni raspored"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:139
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:313
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:307
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:321
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:315
 msgid "Comma (,)"
 msgstr "Zarez (,)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:155
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:330
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:324
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:338
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:332
 msgid "Colon (:)"
 msgstr "Dvotočka (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:172
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:346
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:340
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:354
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:348
 msgid "Semicolon (;)"
 msgstr "Točka-zarez (;)"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:227
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:224
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:232
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:222
 msgid "Separators"
 msgstr "Razdvojni znakovi"
 
@@ -12430,63 +12373,87 @@ msgstr "Odaberi datoteku za uvoz"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:140
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:131
-msgid "Delete Settings"
-msgstr "Izbriši postavke"
+msgid ""
+"Delete Settings\n"
+"Deletes the settings saved under the name as entered in the adjacent text "
+"field.\n"
+"There are two reserved names which can never be deleted:\n"
+"- No settings\n"
+"- Gnucash default export format"
+msgstr ""
+"Izbriši postavke\n"
+"Briše postavke koje su spremljene s imenom, koji je upisan u susjednom "
+"tekstualnom polju.\n"
+"Postoje dva rezervirana imena koja se nikada ne mogu izbrisati:\n"
+"- Bez postavki\n"
+"- Gnucash-ov standardni format izvoza"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:162
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:153
-msgid "Save Settings"
-msgstr "Spremi postavke"
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:166
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:157
+msgid ""
+"Save Settings\n"
+"Saves current settings under the name as entered in the adjacent text "
+"field.\n"
+"There are two reserved names which can't be used to save custom settings:\n"
+"- No settings\n"
+"- Gnucash default export format"
+msgstr ""
+"Spremi postavke\n"
+"Sprema postavke koje su spremljene s imenom, koji je upisan u susjednom "
+"tekstualnom polju.\n"
+"Postoje dva rezervirana imena koja se nikada ne mogu izbrisati:\n"
+"- Bez postavki\n"
+"- Gnucash-ov standardni format izvoza"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:188
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:178
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:196
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:186
 msgid " <b>Load and Save Settings</b>"
 msgstr " <b>Učitaj i spremi postavke</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:241
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:249
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:239
 msgid "Fixed-Width"
 msgstr "Fiksna širina"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:281
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:275
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:289
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:283
 msgid "Space"
 msgstr "Razmak"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:297
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:291
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:305
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:299
 msgid "Tab"
 msgstr "Tabulator"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:362
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:356
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:370
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:364
 msgid "Hyphen (-)"
 msgstr "Spojnica (-)"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:444
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:472
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:441
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:469
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:452
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:480
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:449
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:477
 msgid "•"
 msgstr "•"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:458
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:455
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:466
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:463
 msgid "Double-click anywhere on the table below to insert a column break"
 msgstr "Dvoklik bilo gdje u donjoj tablici, za umetanje prijeloma stupca"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:486
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:483
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:494
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:491
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
 msgstr ""
 "Za promjenu (širenje, sužavanje, spajanje), pritisni desnim klikom bilo gdje "
 "u stupcu"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:526
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:534
 msgid "Allow existing prices to be over written."
 msgstr "Dozvoli prepisivanje postojećih cijena."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:531
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:539
 msgid ""
 "Normally prices are not over written, select this to change that. This "
 "setting is not saved."
@@ -12494,43 +12461,43 @@ msgstr ""
 "Uobičajeno se cijene ne prepisuju. Odaberi ovo, kako bi se to promijenilo. "
 "Ova postavka se ne sprema."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:557
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:561
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:565
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:569
 msgid "<b>File Format</b>"
 msgstr "<b>Format datoteka</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:608
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:612
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:616
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:620
 #: gnucash/gtkbuilder/gnc-date-format.glade:39
 msgid "Date Format"
 msgstr "Format datuma"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:631
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:635
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:639
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:643
 msgid "Currency Format"
 msgstr "Format valute"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:643
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:647
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:651
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:655
 msgid "Encoding"
 msgstr "Kodiranje"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:666
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:670
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:674
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:678
 msgid "Leading Lines to Skip"
 msgstr "Preskakanje prvih redaka"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:678
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:682
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:686
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:690
 msgid "Trailing Lines to Skip"
 msgstr "Preskakanje zadnjih redaka"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:759
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:763
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:767
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:771
 msgid "Skip alternate lines"
 msgstr "Preskoči retke naizmjenično"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:763
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:771
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -12549,35 +12516,35 @@ msgstr ""
 "* ako je „Preskakanje početnih redaka” postavljeno na 4, prvi redak koji će "
 "se uvesti je 5. redak. Redci 6, 8, 10, … se preskaču."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:786
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:789
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:794
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:797
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Razno</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:853
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:861
 msgid "<b>Commodity From</b>"
 msgstr "<b>Roba iz</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:907
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:915
 msgid "<b>Currency To</b>"
 msgstr "<b>Valuta u</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:972
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:891
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:980
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:899
 msgid "Select the type of each column to import."
 msgstr "Odaberi vrstu svakog stupca za uvoz."
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:994
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:913
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1002
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:921
 msgid "Skip Errors"
 msgstr "Preskoči greške"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1017
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:936
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1025
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:944
 msgid "Import Preview"
 msgstr "Uvezi pregled"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1036
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1044
 msgid ""
 "<b>Press Apply to add the Prices.\n"
 "Cancel to abort.</b>"
@@ -12585,7 +12552,7 @@ msgstr ""
 "<b>Klikni „Primijeni” za dodavanje cijena.\n"
 "„Odustani” za prekid.</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1053
+#: gnucash/gtkbuilder/assistant-csv-price-import.glade:1061
 msgid "Import Prices Now"
 msgstr "Uvezi cijene sad"
 
@@ -12660,11 +12627,11 @@ msgstr ""
 "\n"
 "Odaberi direktorij i naziv datoteke za uvoz, zatim klikni „U redu“ …\n"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:525
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:533
 msgid "Multi-split"
 msgstr "Višedjelna"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:529
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:537
 msgid ""
 "Normally the importer will assume each line in the input file will "
 "correspond to one transaction. Each line can have information for one "
@@ -12692,7 +12659,7 @@ msgstr ""
 "podatak jednak prethodnom retku transakcije, uvoznik će pretpostaviti, da je "
 "taj redak dio iste transakcije."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:767
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:775
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -12711,35 +12678,35 @@ msgstr ""
 "* ako je „Preskakanje početnih redaka” postavljeno na 4, prvi redak koji će "
 "se uvesti je 5. redak. Redci 6, 8, 10, … se preskaču."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:824
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:832
 msgid "<b>Account</b>"
 msgstr "<b>Konto</b>"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:951
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:959
 msgid "Select a row to change the mappings:"
 msgstr "Odaberi redak za promjenu mapiranja:"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:980
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:988
 #: gnucash/import-export/import-account-matcher.c:122
 msgid "Account ID"
 msgstr "ID konta"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1019
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1027
 msgid "Error text."
 msgstr "Tekst greške."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1029
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1037
 #: gnucash/gtkbuilder/assistant-qif-import.glade:619
 #: gnucash/gtkbuilder/assistant-qif-import.glade:751
 #: gnucash/gtkbuilder/assistant-qif-import.glade:881
 msgid "Change GnuCash _Account..."
 msgstr "Promijeni GnuCash _konto …"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1052
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1060
 msgid "Match Import and GnuCash accounts"
 msgstr "Usporedi uvoz i GnuCash konta"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1065
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1073
 msgid ""
 "If you click \"Next\" Gnucash will perform a number of checks.\n"
 "\n"
@@ -12782,11 +12749,11 @@ msgstr ""
 "\n"
 "Daljnje informacije možeš naći putem gumba za pomoć."
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1090
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1098
 msgid "Transaction Information"
 msgstr "Podaci transakcije"
 
-#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1117
+#: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1125
 msgid "Match Transactions"
 msgstr "Usporedi transakcije"
 
@@ -13184,9 +13151,8 @@ msgstr ""
 "terminirane transakcije."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1173
-#, fuzzy
 msgid "Range"
-msgstr "Raspon: "
+msgstr "Raspon"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1248
 #: gnucash/gtkbuilder/dialog-sx.glade:335
@@ -13210,7 +13176,7 @@ msgstr "Datum završetka"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1262
 #: gnucash/report/business-reports/job-report.scm:591
-#: gnucash/report/business-reports/new-owner-report.scm:1004
+#: gnucash/report/business-reports/new-owner-report.scm:1020
 #: gnucash/report/business-reports/owner-report.scm:794
 msgid "Date Range"
 msgstr "Raspon datuma"
@@ -14240,6 +14206,7 @@ msgstr "<b>_Matični konto</b>"
 #: gnucash/report/standard-reports/register.scm:375
 #: gnucash/report/standard-reports/trial-balance.scm:185
 #: gnucash/report/standard-reports/trial-balance.scm:189
+#: gnucash/report/stylesheets/stylesheet-css.scm:101
 #: gnucash/report/stylesheets/stylesheet-footer.scm:54
 #: gnucash/report/stylesheets/stylesheet-footer.scm:61
 #: gnucash/report/stylesheets/stylesheet-footer.scm:68
@@ -14784,9 +14751,8 @@ msgstr "Identifikacija"
 #: gnucash/gtkbuilder/dialog-customer.glade:920
 #: gnucash/gtkbuilder/dialog-employee.glade:280
 #: gnucash/gtkbuilder/dialog-vendor.glade:298
-#, fuzzy
 msgid "Address"
-msgstr "_Adresa"
+msgstr "Adresa"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:375
 #: gnucash/gtkbuilder/dialog-customer.glade:998
@@ -14934,11 +14900,8 @@ msgid "Interface"
 msgstr "Sučelje"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:644
-#, fuzzy
 msgid "Default Hours per Day"
-msgstr ""
-"Standardno radno vrijeme \n"
-"u satima na dan: "
+msgstr "Standardno radno vrijeme"
 
 #: gnucash/gtkbuilder/dialog-employee.glade:684
 msgid "Default Rate"
@@ -14953,9 +14916,8 @@ msgid "Access Control"
 msgstr "Kontrola pristupa"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:74
-#, fuzzy
 msgid "<b>Data Format</b>"
-msgstr "<b>Format podataka:</b>"
+msgstr "<b>Format podataka</b>"
 
 #: gnucash/gtkbuilder/dialog-file-access.glade:100
 msgid "Open _Read-Only"
@@ -15739,21 +15701,21 @@ msgstr "Poduzeće povezano s ovim plaćanjem."
 msgid "Partner"
 msgstr "Partner"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:222
+#: gnucash/gtkbuilder/dialog-payment.glade:221
 msgid "Post To"
 msgstr "Uknjiži u"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:356
+#: gnucash/gtkbuilder/dialog-payment.glade:355
 msgid "Documents"
 msgstr "Dokumenti"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:439
-#: gnucash/gtkbuilder/dialog-payment.glade:464
-#: gnucash/gtkbuilder/dialog-payment.glade:488
-#: gnucash/gtkbuilder/dialog-payment.glade:538
-#: gnucash/gtkbuilder/dialog-payment.glade:562
-#: gnucash/gtkbuilder/dialog-payment.glade:608
-#: gnucash/gtkbuilder/dialog-payment.glade:632
+#: gnucash/gtkbuilder/dialog-payment.glade:438
+#: gnucash/gtkbuilder/dialog-payment.glade:463
+#: gnucash/gtkbuilder/dialog-payment.glade:487
+#: gnucash/gtkbuilder/dialog-payment.glade:537
+#: gnucash/gtkbuilder/dialog-payment.glade:561
+#: gnucash/gtkbuilder/dialog-payment.glade:607
+#: gnucash/gtkbuilder/dialog-payment.glade:631
 msgid ""
 "The amount to pay for this invoice.\n"
 "\n"
@@ -15775,28 +15737,28 @@ msgstr ""
 "samostalno dodijelit preostali iznos prvom neplaćenom izlaznom računu za ovo "
 "poduzeće."
 
-#: gnucash/gtkbuilder/dialog-payment.glade:445
+#: gnucash/gtkbuilder/dialog-payment.glade:444
 msgid "<b>Amount</b>"
 msgstr "<b>Iznos</b>"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:494
+#: gnucash/gtkbuilder/dialog-payment.glade:493
 msgid "Refund"
 msgstr "Povrat novca"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:648
+#: gnucash/gtkbuilder/dialog-payment.glade:647
 #: gnucash/gtkbuilder/dialog-print-check.glade:283
 msgid "Print Check"
 msgstr "Ispiši ček"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:665
+#: gnucash/gtkbuilder/dialog-payment.glade:664
 msgid "(USD)"
 msgstr "(HRK)"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:696
+#: gnucash/gtkbuilder/dialog-payment.glade:695
 msgid "Transaction Details"
 msgstr "Detalji transakcije"
 
-#: gnucash/gtkbuilder/dialog-payment.glade:739
+#: gnucash/gtkbuilder/dialog-payment.glade:738
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 msgid "Transfer Account"
 msgstr "Konto prijenosa"
@@ -16197,9 +16159,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1584
 #: gnucash/gtkbuilder/dialog-sx.glade:1248
-#, fuzzy
 msgid "For"
-msgstr "Obrazac"
+msgstr "Za"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1603
 #: gnucash/gtkbuilder/dialog-sx.glade:1216
@@ -16212,7 +16173,7 @@ msgstr "Vrijeme čekanja na _odgovor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1679
 msgid "seconds"
-msgstr "sekunde"
+msgstr "sekundi"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1707
 msgid "Path head for Transaction Associated files "
@@ -16320,7 +16281,8 @@ msgstr "Provjeri potvrđene _transakcije"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2114
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
-msgstr "Pred-provjeri potvrđene transakcije, kad stvaraš prozor usklađivanja."
+msgstr ""
+"Unaprijed provjeri potvrđene transakcije, kad stvaraš prozor usklađivanja."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2127
 msgid "Automatic _interest transfer"
@@ -17404,9 +17366,8 @@ msgid "_Next"
 msgstr "_Sljedeći"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:98
-#, fuzzy
 msgid "<b>Tip of the Day</b>"
-msgstr "<b>Savjet dana:</b>"
+msgstr "<b>Savjet dana</b>"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:158
 msgid "_Show tips at startup"
@@ -20108,11 +20069,11 @@ msgstr ""
 "Poruka o grešci:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1735
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1739
 msgid "No Linked Account"
 msgstr "Nema povezanih konta"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1957
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1961
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
@@ -20120,7 +20081,7 @@ msgstr ""
 "Za promjenu mapiranja, upotrijebi dvoklik na redak ili odaberi redak i zatim "
 "klikni gumb …"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2001
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2005
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -20135,7 +20096,7 @@ msgstr ""
 "Poruka o grešci:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2035
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2039
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -20150,13 +20111,13 @@ msgstr ""
 "Poruka o grešci:\n"
 "%s"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2044
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2048
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 "Dvoklik na retke koje želiš promijeniti, zatim klikni „Primijeni“ za uvoz"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2084
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2088
 msgid "The transactions were imported from file '{1}'."
 msgstr "Transakcije su uvezene iz datoteke „{1}”."
 
@@ -20484,78 +20445,72 @@ msgid "Import Prices from a CSV file"
 msgstr "Uvezi cijene iz CSV datoteke"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:127
-#, fuzzy
 msgid "id"
-msgstr "Ponuđena kupovna cijena"
+msgstr "id"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:128
-#, fuzzy
 msgid "company"
-msgstr "Poduzeće"
+msgstr "poduzeće"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:130
 msgid "addr1"
-msgstr ""
+msgstr "adresa1"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:131
 msgid "addr2"
-msgstr ""
+msgstr "adresa2"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:132
 msgid "addr3"
-msgstr ""
+msgstr "adresa3"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 msgid "addr4"
-msgstr ""
+msgstr "adresa4"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
-#, fuzzy
 msgid "phone"
-msgstr "Telefon"
+msgstr "telefon"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:135
-#, fuzzy
 msgid "fax"
-msgstr "Faks"
+msgstr "faks"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:136
-#, fuzzy
 msgid "email"
-msgstr "E-pošta"
+msgstr "e-adresa"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:138
-#, fuzzy
 msgid "shipname"
-msgstr "naziv"
+msgstr "ime primatelja"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
 msgid "shipaddr1"
-msgstr ""
+msgstr "adresa primatelja 1"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:140
 msgid "shipaddr2"
-msgstr ""
+msgstr "adresa primatelja 2"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:141
 msgid "shipaddr3"
-msgstr ""
+msgstr "adresa primatelja 3"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:142
 msgid "shipaddr4"
-msgstr ""
+msgstr "adresa primatelja 4"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:143
 msgid "shipphone"
-msgstr ""
+msgstr "telefon primatelja"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:144
 msgid "shipfax"
-msgstr ""
+msgstr "faks primatelja"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:145
 msgid "shipemail"
-msgstr ""
+msgstr "e-adresa primatelja"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:175
 msgid "Import Customers from csv"
@@ -20636,7 +20591,7 @@ msgstr "Odredišni konto za automatski usklađenu stavku."
 
 #: gnucash/import-export/import-main-matcher.c:600
 msgid "Assign a transfer account to the selection."
-msgstr "Dodijeli konto prijenosa odabiru."
+msgstr "Odabiru dodijeli konto prijenosa."
 
 #. toggle column: add new transaction
 #: gnucash/import-export/import-main-matcher.c:759
@@ -21677,7 +21632,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-layout.c:640
 #: gnucash/register/ledger-core/split-register-layout.c:648
 msgctxt "sample"
-msgid "12/12/2000"
+msgid "22/02/2000"
 msgstr "12. 12. 2000."
 
 #. Translators: The 'sample' items are
@@ -22115,21 +22070,21 @@ msgstr "Prikaži sve dobavljače/kupce, čak i ako imaju saldo nula."
 
 #: gnucash/report/business-reports/aging.scm:410
 #: gnucash/report/business-reports/new-aging.scm:108
-#: gnucash/report/business-reports/new-owner-report.scm:800
+#: gnucash/report/business-reports/new-owner-report.scm:816
 #: gnucash/report/business-reports/owner-report.scm:611
 msgid "Leading date."
 msgstr "Odlučujući datum."
 
 #: gnucash/report/business-reports/aging.scm:413
 #: gnucash/report/business-reports/new-aging.scm:113
-#: gnucash/report/business-reports/new-owner-report.scm:805
+#: gnucash/report/business-reports/new-owner-report.scm:821
 #: gnucash/report/business-reports/owner-report.scm:614
 msgid "Due date is leading."
 msgstr "Datum dospijeća je odlučujući."
 
 #: gnucash/report/business-reports/aging.scm:414
 #: gnucash/report/business-reports/new-aging.scm:117
-#: gnucash/report/business-reports/new-owner-report.scm:809
+#: gnucash/report/business-reports/new-owner-report.scm:825
 #: gnucash/report/business-reports/owner-report.scm:615
 msgid "Post date is leading."
 msgstr "Datum knjiženja je odlučujući."
@@ -22185,7 +22140,7 @@ msgstr "Prikaži stanje aktivnosti."
 
 #: gnucash/report/business-reports/aging.scm:564
 #: gnucash/report/business-reports/new-aging.scm:200
-#: gnucash/report/business-reports/new-owner-report.scm:272
+#: gnucash/report/business-reports/new-owner-report.scm:280
 #: gnucash/report/business-reports/owner-report.scm:261
 #: gnucash/report/standard-reports/budget.scm:119
 msgid "Current"
@@ -22194,7 +22149,7 @@ msgstr "Trenutačno"
 #: gnucash/report/business-reports/aging.scm:565
 #: gnucash/report/business-reports/job-report.scm:161
 #: gnucash/report/business-reports/new-aging.scm:201
-#: gnucash/report/business-reports/new-owner-report.scm:273
+#: gnucash/report/business-reports/new-owner-report.scm:281
 #: gnucash/report/business-reports/owner-report.scm:262
 msgid "0-30 days"
 msgstr "0 – 30 dana"
@@ -22202,7 +22157,7 @@ msgstr "0 – 30 dana"
 #: gnucash/report/business-reports/aging.scm:566
 #: gnucash/report/business-reports/job-report.scm:162
 #: gnucash/report/business-reports/new-aging.scm:202
-#: gnucash/report/business-reports/new-owner-report.scm:274
+#: gnucash/report/business-reports/new-owner-report.scm:282
 #: gnucash/report/business-reports/owner-report.scm:263
 msgid "31-60 days"
 msgstr "31 – 60 dana"
@@ -22210,7 +22165,7 @@ msgstr "31 – 60 dana"
 #: gnucash/report/business-reports/aging.scm:567
 #: gnucash/report/business-reports/job-report.scm:163
 #: gnucash/report/business-reports/new-aging.scm:203
-#: gnucash/report/business-reports/new-owner-report.scm:275
+#: gnucash/report/business-reports/new-owner-report.scm:283
 #: gnucash/report/business-reports/owner-report.scm:264
 msgid "61-90 days"
 msgstr "61 – 90 dana"
@@ -22218,7 +22173,7 @@ msgstr "61 – 90 dana"
 #: gnucash/report/business-reports/aging.scm:568
 #: gnucash/report/business-reports/job-report.scm:164
 #: gnucash/report/business-reports/new-aging.scm:204
-#: gnucash/report/business-reports/new-owner-report.scm:276
+#: gnucash/report/business-reports/new-owner-report.scm:284
 #: gnucash/report/business-reports/owner-report.scm:265
 msgid "91+ days"
 msgstr "91+ dana"
@@ -22635,17 +22590,17 @@ msgstr "Prikaži adresu tvog poduzeća i datum ispisa."
 #: gnucash/report/business-reports/job-report.scm:386
 #: gnucash/report/business-reports/job-report.scm:391
 #: gnucash/report/business-reports/job-report.scm:396
-#: gnucash/report/business-reports/new-owner-report.scm:734
-#: gnucash/report/business-reports/new-owner-report.scm:739
-#: gnucash/report/business-reports/new-owner-report.scm:744
-#: gnucash/report/business-reports/new-owner-report.scm:749
-#: gnucash/report/business-reports/new-owner-report.scm:754
-#: gnucash/report/business-reports/new-owner-report.scm:759
-#: gnucash/report/business-reports/new-owner-report.scm:764
-#: gnucash/report/business-reports/new-owner-report.scm:769
-#: gnucash/report/business-reports/new-owner-report.scm:774
-#: gnucash/report/business-reports/new-owner-report.scm:779
-#: gnucash/report/business-reports/new-owner-report.scm:784
+#: gnucash/report/business-reports/new-owner-report.scm:750
+#: gnucash/report/business-reports/new-owner-report.scm:755
+#: gnucash/report/business-reports/new-owner-report.scm:760
+#: gnucash/report/business-reports/new-owner-report.scm:765
+#: gnucash/report/business-reports/new-owner-report.scm:770
+#: gnucash/report/business-reports/new-owner-report.scm:775
+#: gnucash/report/business-reports/new-owner-report.scm:780
+#: gnucash/report/business-reports/new-owner-report.scm:785
+#: gnucash/report/business-reports/new-owner-report.scm:790
+#: gnucash/report/business-reports/new-owner-report.scm:795
+#: gnucash/report/business-reports/new-owner-report.scm:800
 #: gnucash/report/business-reports/owner-report.scm:558
 #: gnucash/report/business-reports/owner-report.scm:563
 #: gnucash/report/business-reports/owner-report.scm:568
@@ -22743,7 +22698,7 @@ msgid "Z to A, largest to smallest."
 msgstr "Z do A, od većeg k manjem."
 
 #: gnucash/report/business-reports/customer-summary.scm:292
-#: gnucash/report/business-reports/new-owner-report.scm:902
+#: gnucash/report/business-reports/new-owner-report.scm:918
 #: gnucash/report/business-reports/owner-report.scm:742
 #: gnucash/report/report-gnome/dialog-report-column-view.c:412
 msgid "Report"
@@ -22842,6 +22797,8 @@ msgid "Layout"
 msgstr "Raspored stranice"
 
 #: gnucash/report/business-reports/invoice.scm:203
+#: gnucash/report/stylesheets/stylesheet-css.scm:101
+#: gnucash/report/stylesheets/stylesheet-css.scm:207
 msgid "CSS"
 msgstr "CSS"
 
@@ -22850,6 +22807,8 @@ msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
+"CSS kȏd. Ovo polje određuje CSS kȏd za oblikovanje izlaznih računa. Pogledaj "
+"izvezeni izvještaj za imena CSS klasa."
 
 #: gnucash/report/business-reports/invoice.scm:209
 msgid "Picture Location"
@@ -22857,7 +22816,7 @@ msgstr "Mjesto za sliku"
 
 #: gnucash/report/business-reports/invoice.scm:209
 msgid "Location for Picture"
-msgstr ""
+msgstr "Mjesto za sliku"
 
 #. customers-only)) ;-- see above
 #. Elements page options
@@ -23164,13 +23123,13 @@ msgid "~a #~a"
 msgstr "~a br. ~a"
 
 #: gnucash/report/business-reports/job-report.scm:320
-#: gnucash/report/business-reports/new-owner-report.scm:414
+#: gnucash/report/business-reports/new-owner-report.scm:428
 #: gnucash/report/business-reports/owner-report.scm:507
 msgid "Total Credit"
 msgstr "Ukupno kredit"
 
 #: gnucash/report/business-reports/job-report.scm:321
-#: gnucash/report/business-reports/new-owner-report.scm:415
+#: gnucash/report/business-reports/new-owner-report.scm:429
 #: gnucash/report/business-reports/owner-report.scm:508
 msgid "Total Due"
 msgstr "Ukupno dospijeće"
@@ -23186,33 +23145,33 @@ msgstr "Konto u kojem će se tražiti transakcije."
 
 #: gnucash/report/business-reports/job-report.scm:372
 #: gnucash/report/business-reports/job-report.scm:377
-#: gnucash/report/business-reports/new-owner-report.scm:735
-#: gnucash/report/business-reports/new-owner-report.scm:740
+#: gnucash/report/business-reports/new-owner-report.scm:751
+#: gnucash/report/business-reports/new-owner-report.scm:756
 #: gnucash/report/business-reports/owner-report.scm:559
 #: gnucash/report/business-reports/owner-report.scm:564
 msgid "Display the transaction date?"
 msgstr "Prikazati datum transakcije?"
 
 #: gnucash/report/business-reports/job-report.scm:382
-#: gnucash/report/business-reports/new-owner-report.scm:745
+#: gnucash/report/business-reports/new-owner-report.scm:761
 #: gnucash/report/business-reports/owner-report.scm:569
 msgid "Display the transaction reference?"
 msgstr "Prikazati reference transakcije?"
 
 #: gnucash/report/business-reports/job-report.scm:387
-#: gnucash/report/business-reports/new-owner-report.scm:750
+#: gnucash/report/business-reports/new-owner-report.scm:766
 #: gnucash/report/business-reports/owner-report.scm:574
 msgid "Display the transaction type?"
 msgstr "Prikazati vrstu transakcije?"
 
 #: gnucash/report/business-reports/job-report.scm:392
-#: gnucash/report/business-reports/new-owner-report.scm:755
+#: gnucash/report/business-reports/new-owner-report.scm:771
 #: gnucash/report/business-reports/owner-report.scm:579
 msgid "Display the transaction description?"
 msgstr "Prikazati opis transakcije?"
 
 #: gnucash/report/business-reports/job-report.scm:397
-#: gnucash/report/business-reports/new-owner-report.scm:780
+#: gnucash/report/business-reports/new-owner-report.scm:796
 #: gnucash/report/business-reports/owner-report.scm:604
 msgid "Display the transaction amount?"
 msgstr "Prikazati iznos transakcije?"
@@ -23257,36 +23216,35 @@ msgid ""
 "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR "
 "account exists."
 msgstr ""
+"Nisu nađena valjana konta dugovanja ili potraživanja. Osiguraj, da postoje "
+"valjana konta dugovanja ili potraživanja."
 
 #: gnucash/report/business-reports/new-aging.scm:67
 msgid ""
 "A/Payable or A/Receivable accounts exist but have no suitable transactions."
 msgstr ""
+"Konta dugovanja ili potraživanja postoje, ali nemaju odgovarajuće "
+"transakcije."
 
 #: gnucash/report/business-reports/new-aging.scm:97
-#, fuzzy
 msgid "Alphabetical order"
-msgstr "Abecednim redom"
+msgstr "Abecednim redoslijedom"
 
 #: gnucash/report/business-reports/new-aging.scm:98
-#, fuzzy
 msgid "Reverse alphabetical order"
-msgstr "_Preokreni redoslijed"
+msgstr "Preokreni abecedni redoslijed"
 
 #: gnucash/report/business-reports/new-aging.scm:199
-#, fuzzy
 msgid "Prepayments"
-msgstr "Plaćanja"
+msgstr "Predujmi"
 
 #: gnucash/report/business-reports/new-aging.scm:341
-#, fuzzy
 msgid "Please note some transactions were not processed"
-msgstr "Raspon datuma transakcija, koje se dohvaćaju:"
+msgstr "Napomena: neke transakcije nisu obrađene"
 
 #: gnucash/report/business-reports/new-aging.scm:366
-#, fuzzy
 msgid "Payment has no owner"
-msgstr "Zahvaljujemo Vam na plaćanju!"
+msgstr "Plaćanje nema vlasnika"
 
 #: gnucash/report/business-reports/new-aging.scm:421
 #: gnucash/report/business-reports/receivables.scm:68
@@ -23314,14 +23272,12 @@ msgid "Address fields from shipping address."
 msgstr "Polja adrese iz adrese isporuke."
 
 #: gnucash/report/business-reports/new-aging.scm:439
-#, fuzzy
 msgid "Payable Aging (beta)"
-msgstr "Razvoj dugovanja"
+msgstr "Razvoj dugovanja (beta)"
 
 #: gnucash/report/business-reports/new-aging.scm:448
-#, fuzzy
 msgid "Receivable Aging (beta)"
-msgstr "Razvoj potraživanja"
+msgstr "Razvoj potraživanja (beta)"
 
 #: gnucash/report/business-reports/new-owner-report.scm:55
 #: gnucash/report/business-reports/owner-report.scm:57
@@ -23329,9 +23285,8 @@ msgid "Sale"
 msgstr "Prodaja"
 
 #: gnucash/report/business-reports/new-owner-report.scm:60
-#, fuzzy
 msgid "Links"
-msgstr "Poveznica paketa"
+msgstr "Poveznice"
 
 #: gnucash/report/business-reports/new-owner-report.scm:69
 #: gnucash/report/business-reports/owner-report.scm:89
@@ -23344,125 +23299,113 @@ msgid "This report requires a employee to be selected."
 msgstr "Za ovaj izvještaj je potrebno odabrati radnika."
 
 #: gnucash/report/business-reports/new-owner-report.scm:79
-#, fuzzy
 msgid "This report requires a job to be selected."
-msgstr "Za ovaj izvještaj je potrebno odabrati poduzeće."
+msgstr "Za ovaj izvještaj je potrebno odabrati nalog."
 
 #: gnucash/report/business-reports/new-owner-report.scm:84
-#, fuzzy
 msgid "This report requires a vendor to be selected."
-msgstr "Za ovaj izvještaj je potrebno odabrati kupca."
+msgstr "Za ovaj izvještaj je potrebno odabrati dobavljača."
 
-#: gnucash/report/business-reports/new-owner-report.scm:271
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:279
 msgid "Pre-payment"
-msgstr "Predplata"
+msgstr "Predujam"
 
-#: gnucash/report/business-reports/new-owner-report.scm:397
+#: gnucash/report/business-reports/new-owner-report.scm:411
 #: gnucash/report/business-reports/owner-report.scm:465
 msgid "Period Totals"
 msgstr "Ukupno u razdoblju"
 
-#: gnucash/report/business-reports/new-owner-report.scm:720
+#: gnucash/report/business-reports/new-owner-report.scm:736
 #: gnucash/report/business-reports/owner-report.scm:537
 msgid "The company for this report."
 msgstr "Poduzeće za ovaj izvještaj."
 
-#: gnucash/report/business-reports/new-owner-report.scm:760
+#: gnucash/report/business-reports/new-owner-report.scm:776
 #: gnucash/report/business-reports/owner-report.scm:584
 msgid "Display the sale amount column?"
 msgstr "Prikazati stupac iznosa prodaje?"
 
-#: gnucash/report/business-reports/new-owner-report.scm:765
+#: gnucash/report/business-reports/new-owner-report.scm:781
 #: gnucash/report/business-reports/owner-report.scm:589
 msgid "Display the tax column?"
 msgstr "Prikazati stupac poreza?"
 
-#: gnucash/report/business-reports/new-owner-report.scm:770
+#: gnucash/report/business-reports/new-owner-report.scm:786
 #: gnucash/report/business-reports/owner-report.scm:594
 msgid "Display the period credits column?"
 msgstr "Prikazati stupac potraživanja za razdoblje?"
 
-#: gnucash/report/business-reports/new-owner-report.scm:775
+#: gnucash/report/business-reports/new-owner-report.scm:791
 #: gnucash/report/business-reports/owner-report.scm:599
 msgid "Display a period debits column?"
 msgstr "Prikazati stupac dugovanja za razdoblje?"
 
-#: gnucash/report/business-reports/new-owner-report.scm:785
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:801
 msgid "Show linked transactions"
-msgstr "Prikaži samo stornirane transakcije."
+msgstr "Prikaži povezane transakcije"
 
-#: gnucash/report/business-reports/new-owner-report.scm:787
+#: gnucash/report/business-reports/new-owner-report.scm:803
 #: gnucash/report/report-system/html-utilities.scm:788
 #: gnucash/report/standard-reports/balsheet-pnl.scm:143
 #: gnucash/report/standard-reports/balsheet-pnl.scm:144
 msgid "Disabled"
 msgstr "Isključeno"
 
-#: gnucash/report/business-reports/new-owner-report.scm:788
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:804
 msgid "Linked transactions are hidden."
-msgstr "Nađi transakcije pomoću pretrage"
+msgstr "Povezane transakcije su skrivene."
 
-#: gnucash/report/business-reports/new-owner-report.scm:790
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:806
 msgid "Simple"
-msgstr "Primjer:"
+msgstr "Jednostavno"
 
-#: gnucash/report/business-reports/new-owner-report.scm:791
+#: gnucash/report/business-reports/new-owner-report.scm:807
 msgid "Invoices show if paid, payments show invoice numbers."
-msgstr ""
+msgstr "Računi prikazuju je li plaćeno, plaćanja prikazuju brojeve računa."
 
-#: gnucash/report/business-reports/new-owner-report.scm:793
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:809
 msgid "Detailed"
-msgstr "Nije uspjelo"
+msgstr "Detaljno"
 
-#: gnucash/report/business-reports/new-owner-report.scm:794
+#: gnucash/report/business-reports/new-owner-report.scm:810
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
+"Računi prikazuju popis plaćanja, plaćanja prikazuju popis računa i iznose."
 
-#: gnucash/report/business-reports/new-owner-report.scm:917
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:933
 msgid "No valid account found"
-msgstr "Nije nađen nijedan valjani kupac."
+msgstr "Nije nađen valjani račun"
 
-#: gnucash/report/business-reports/new-owner-report.scm:918
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:934
 msgid "This report requires a valid AP/AR account to be available."
-msgstr "Za ovaj izvještaj je potrebno odabrati valjani konto."
+msgstr ""
+"Za ovaj izvještaj je potrebno imati valjani konto dugovanja ili potraživanja."
 
-#: gnucash/report/business-reports/new-owner-report.scm:941
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:957
 msgid "No transactions found."
-msgstr "Nisu nađene odgovarajuće transakcije"
+msgstr "Nisu nađene transakcije."
 
-#: gnucash/report/business-reports/new-owner-report.scm:943
-#, fuzzy, scheme-format
+#: gnucash/report/business-reports/new-owner-report.scm:959
+#, scheme-format
 msgid "No transactions were found associated with the ~a."
-msgstr "Ova transakcija nije povezana s URI adresom."
+msgstr "Nisu nađene transakcije povezane s ~a.."
 
-#: gnucash/report/business-reports/new-owner-report.scm:1029
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:1045
 msgid "Customer Report (beta)"
-msgstr "Izvještaj o kupcima"
+msgstr "Izvještaj o kupcima (beta)"
 
-#: gnucash/report/business-reports/new-owner-report.scm:1038
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:1054
 msgid "Vendor Report (beta)"
-msgstr "Izvještaj o dobavljačima"
+msgstr "Izvještaj o dobavljačima (beta)"
 
-#: gnucash/report/business-reports/new-owner-report.scm:1047
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:1063
 msgid "Employee Report (beta)"
-msgstr "Izvještaj o radnicima"
+msgstr "Izvještaj o radnicima (beta)"
 
-#: gnucash/report/business-reports/new-owner-report.scm:1056
-#, fuzzy
+#: gnucash/report/business-reports/new-owner-report.scm:1072
 msgid "Job Report (beta)"
-msgstr "Izvještaj o nalozima"
+msgstr "Izvještaj o nalozima (beta)"
 
 #: gnucash/report/business-reports/owner-report.scm:86
 msgid "No valid company selected."
@@ -25312,7 +25255,7 @@ msgstr "Koristi regularne izraze za filtar transkacija"
 
 #: gnucash/report/report-system/trep-engine.scm:93
 msgid "Transaction Filter excludes matched strings"
-msgstr ""
+msgstr "Filtar transakcije isključuje poklapajuće znakovne nizove"
 
 #: gnucash/report/report-system/trep-engine.scm:94
 msgid "Reconcile Status"
@@ -25328,7 +25271,7 @@ msgstr "Zaključne transakcije"
 
 #: gnucash/report/report-system/trep-engine.scm:105
 msgid "No matching transactions found"
-msgstr "Nisu nađene odgovarajuće transakcije"
+msgstr "Nisu nađene poklapajuće transakcije"
 
 #: gnucash/report/report-system/trep-engine.scm:106
 msgid ""
@@ -25660,6 +25603,8 @@ msgstr ""
 #: gnucash/report/report-system/trep-engine.scm:613
 msgid "If this option is selected, transactions matching filter are excluded."
 msgstr ""
+"Ako je ova opcija odabrana, isključuju se transakcije koje se poklapaju s "
+"filtrom."
 
 #: gnucash/report/report-system/trep-engine.scm:619
 msgid "Filter by reconcile status."
@@ -28397,7 +28342,7 @@ msgstr "Koristi točna salda u općem dnevniku"
 
 #: gnucash/report/standard-reports/trial-balance.scm:207
 msgid "Pre-adjustment Trial Balance"
-msgstr "Pred-podešena probna bilanca"
+msgstr "Probna bilanca prije podešavanja"
 
 #: gnucash/report/standard-reports/trial-balance.scm:208
 msgid "Ignores Adjusting/Closing entries"
@@ -28430,6 +28375,18 @@ msgstr "Stilski _predlošci"
 #: gnucash/report/stylesheets/gnc-plugin-stylesheets.c:52
 msgid "Edit report style sheets"
 msgstr "Uredi stilske predloške izvještaja"
+
+#: gnucash/report/stylesheets/stylesheet-css.scm:102
+msgid "CSS code. This field specifies the CSS code for styling reports."
+msgstr "CSS kȏd. Ovo polje određuje CSS kȏd za oblikovanje izlaznih računa."
+
+#: gnucash/report/stylesheets/stylesheet-css.scm:192
+msgid "&lt;/style is disallowed in CSS. Using default CSS."
+msgstr "&lt;/style nije dozvoljen u CSS-u. Koristi se standardni CSS."
+
+#: gnucash/report/stylesheets/stylesheet-css.scm:211
+msgid "CSS-based stylesheet (experimental)"
+msgstr "CSS-ov stilski predložak (eksperimentalno)"
 
 #: gnucash/report/stylesheets/stylesheet-footer.scm:55
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:54
@@ -30146,15 +30103,14 @@ msgid " (closed)"
 msgstr " (zaključano)"
 
 #: libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Korisnički određeno"
+msgstr "Neodređeno"
 
-#: libgnucash/engine/gncOwner.c:1013
+#: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "
 msgstr "Razmak između dokumenata: "
 
-#: libgnucash/engine/gncOwner.c:1123
+#: libgnucash/engine/gncOwner.c:1125
 msgid "Lot Link"
 msgstr "Poveznica paketa"
 
@@ -30354,6 +30310,12 @@ msgstr "Nađen je Finance::Quote verzije ~A."
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Pomoć nije dostupna."
+
+#~ msgid "Delete Settings"
+#~ msgstr "Izbriši postavke"
+
+#~ msgid "Save Settings"
+#~ msgstr "Spremi postavke"
 
 #~ msgid "Period:"
 #~ msgstr "Razdoblje:"
