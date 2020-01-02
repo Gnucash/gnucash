@@ -45,7 +45,7 @@ Derek Atkins <warlord@mit.edu>
 Version of October 2003
 
 The gncTaxTable and gncBillTerm business objects have parent, child,
-refcount, invisible field in thier structures that deserve some
+refcount, invisible field in their structures that deserve some
 explanation:
 
 - a child is a 'frozen' instance of a parent.  For example, the tax
