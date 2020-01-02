@@ -11783,7 +11783,7 @@
 	  trunk/src/engine/test/test-load-engine.c,
 	  trunk/src/gnome-utils/QuickFill.c,
 	  trunk/src/register/ledger-core/gnc-ledger-display.c: Revert
-	  r13749. Wedon't need to explicitly #include glib.h because qof.h
+	  r13749. We don't need to explicitly #include glib.h because qof.h
 	  includes it for us. Also, this changeset contains lots of other
 	  stuff that has nothing to do with glib.h. Note that this
 	  revision wont build, but I'll fix that shortly.

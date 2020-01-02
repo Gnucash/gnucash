@@ -2637,7 +2637,7 @@ r13766 | chris | 2006-04-10 22:55:57 -0400 (Mon, 10 Apr 2006) | 7 lines
 	  the whole problem.
 
 	* lots of files:
-	  Revert r13749.  Wedon't need to explicitly #include glib.h
+	  Revert r13749.  We don't need to explicitly #include glib.h
 	  because qof.h includes it for us.  Also, this changeset contains
 	  lots of other stuff that has nothing to do with glib.h.  Note
 	  that this revision wont build, but I'll fix that shortly.
