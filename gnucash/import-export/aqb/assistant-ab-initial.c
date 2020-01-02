@@ -186,7 +186,7 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
     if (info->deferred_info)
     {
         g_message("Online Banking assistant is being closed but the wizard is still "
-                  "running.  Inoring.");
+                  "running.  Ignoring.");
 
         /* Tell child_exit_cb() that there is no assistant anymore */
         info->deferred_info->initial_info = NULL;
