@@ -104,7 +104,7 @@
 	* src/scm/qif-import/qif-to-gnc.scm: kill pointer-token*
 
 	* src/scm/qif-import/qif-parse.scm:
-	delete unusd gif-parse:print-acct-type
+	delete unused gif-parse:print-acct-type
 
 	* src/scm/qif-import/qif-guess-map.scm: kill pointer-token*
 
