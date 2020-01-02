@@ -1068,7 +1068,7 @@
 	* src/gnome-utils/Makefile.am:
 	* src/import-export/qif-import/Makefile.am:
 
-	* src/gnome-utils/gnc-dense-cal.c: Fix some Gtk 2 incompatibilty problems.
+	* src/gnome-utils/gnc-dense-cal.c: Fix some Gtk 2 incompatibility problems.
         (gnc_dense_cal_class_init), (gnc_dense_cal_init):
 
 	Create a new tip of the day dialog.

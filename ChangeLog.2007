@@ -2834,7 +2834,7 @@
 
 	* [r16044] src/backend/file/gnc-book-xml-v2.c,
 	  src/backend/file/gnc-schedxaction-xml-v2.c,
-	  src/backend/file/io-utils.c: Invert "allow_file_incompatabiilty"
+	  src/backend/file/io-utils.c: Invert "allow_file_incompatibility"
 	  tests: we now generate files that 2.0 might not read exactly.
 
 2007-05-04 13:30  andi5
