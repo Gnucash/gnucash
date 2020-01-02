@@ -1348,7 +1348,7 @@
 
 2018-12-21 Frank H. Ellenberger
 
-	* de.po: fix 1 MsgStr to test boost::locale::tramslate
+	* de.po: fix 1 MsgStr to test boost::locale::translate
 
 2018-12-20 John Ralls
 

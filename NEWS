@@ -54,7 +54,7 @@ The following bugs have been fixed:
                  Note to translators: This is about msgids of the form
                  "Associate:A". The correct msgstr includes the part up to
                  the ':' verbatim with only the part to the right of it
-                 tranlated, e.g. "Associate:П" from uk.po. Each such msgstr
+                 translated, e.g. "Associate:П" from uk.po. Each such msgstr
                  has a comment explaining this.
     Bug 797353 - Add copyright and release info in appdata file
     Bug 797355 - General Journal report seems to be off balance
