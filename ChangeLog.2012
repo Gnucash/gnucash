@@ -1277,7 +1277,7 @@
 	* [r22423] src/quotes/README, src/quotes/gnc-fq-dump,
 	  src/quotes/gnc-fq-update.in: Fix [13303] files were renamed, but
 	  content not adjusted. This would produce misguiding man pages -
-	  if we would produce them. Additional were a few typos incomments
+	  if we would produce them. Additional were a few typos in comments
 	  fixed. BP ?
 
 2012-09-23 19:53  cstim
