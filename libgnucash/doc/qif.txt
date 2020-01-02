@@ -50,7 +50,7 @@ then no user input would be required and the "ask for date format
 disambiguation" input can be skipped.
 
 QUESTION: How does the importer relate the processing state back to
-the UI?  Simiarly, how does it pass back specific disambiguating
+the UI?  Similarly, how does it pass back specific disambiguating
 questions to ask the user (and how are those responses returned to the
 importer)?
 
