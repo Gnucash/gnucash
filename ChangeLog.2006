@@ -16502,7 +16502,7 @@
 	  trunk/src/report/report-system/report-system.scm,
 	  trunk/src/report/stylesheets/stylesheet-easy.scm,
 	  trunk/src/report/stylesheets/stylesheet-fancy.scm,
-	  trunk/src/report/stylesheets/stylesheet-plain.scm: Seperate
+	  trunk/src/report/stylesheets/stylesheet-plain.scm: Separate
 	  report titles from headlines; leave title as a string, use
 	  headline for richer markup. Related to Bug#329369.
 
