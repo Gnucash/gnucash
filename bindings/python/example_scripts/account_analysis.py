@@ -56,7 +56,7 @@ from gnucash import Session, GncNumeric, Split
 #
 # available period types are monthly quarterly and yearly
 #
-# At the moment this script only supports GnuCash files of the sqllite3 type
+# At the moment this script only supports GnuCash files of the sqlite3 type
 # its an easy edit to switch to xml: etc...
 
 

@@ -1904,7 +1904,7 @@ Updated Translations: German, Norwegian, Spanish
 
 KNOWN PROBLEMS:
 
-    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 789594 - Unable to overwrite sqlite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
     Bug 791825 - Accounting period dates off-by-1
 
@@ -2022,7 +2022,7 @@ Updated Translations: German, Greek, Slovak, Spanish
 
 KNOWN PROBLEMS:
 
-    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 789594 - Unable to overwrite sqlite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
     Bug 791825 - Accounting period dates off-by-1
 
@@ -2139,7 +2139,7 @@ KNOWN PROBLEMS:
 
     On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
 
-    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 789594 - Unable to overwrite sqlite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
     Bug 791825 - Accounting period dates off-by-1
 
@@ -2229,7 +2229,7 @@ Updated Translations: Dutch, German, Russian, Spanish, and Turkish.
 
 KNOWN PROBLEMS:
 
-    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 789594 - Unable to overwrite sqlite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
     Bug 791825 - Accounting period dates off-by-1I was
 
@@ -2349,7 +2349,7 @@ KNOWN PROBLEMS:
     test-import-bayes built with autotools intermittently fails at
     line 381, where the returned value is 1 instead of the expected 6.
 
-    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 789594 - Unable to overwrite sqlite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
     Bug 791825 - Accounting period dates off-by-1
 

@@ -675,7 +675,7 @@
 2009-11-28 15:51  plongstaff
 
 	* [r18444] src/backend/sql/gnc-transaction-sql.c: Fix bug 600486 -
-	  Unable to open sqllite file on Win7 64 bit Unposted invoice has
+	  Unable to open sqlite file on Win7 64 bit Unposted invoice has
 	  NULL tx guid, which wasn't being handled correctly. Doesn't
 	  crash on linux but does on windows.
 

@@ -1528,7 +1528,7 @@
 
 2013-09-12 John Ralls 
 
-	* Bug 684670 - Interest amount calculation is wrong in Sqllite3 format
+	* Bug 684670 - Interest amount calculation is wrong in Sqlite3 format
 
 2013-09-09 John Ralls 
 
