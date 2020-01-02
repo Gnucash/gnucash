@@ -4955,7 +4955,7 @@
 	  gconf druid will pop up once GnuCash is started. GnuCash will
 	  automagically add the correct lines to ~/.gconf.path, shut down
 	  gconfd and load the default values, if you choose the default
-	  selections. The others seem unadvisable to me for windows, so
+	  selections. The others seem inadvisable to me for windows, so
 	  another commit might hide the druid.
 
 2006-09-12 07:16  andi5
