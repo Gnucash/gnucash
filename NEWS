@@ -520,7 +520,7 @@ The following bugs have been fixed:
     Bug 787401 - Test for the report system - HTML Tests.
     Bug 795729 - Advanced Portfolio Report - Percentage rates not displaying leading zeros.
     Bug 796498 - Incorrect starting balance in TXF Report calculations.
-    Bug 796530 - TxnCsvImport - fix loading of saved preset with update of seperator selection. Previously this would cause all but the first column to lose its assigned types.
+    Bug 796530 - TxnCsvImport - fix loading of saved preset with update of separator selection. Previously this would cause all but the first column to lose its assigned types.
     Bug 796687 - Tax Entity name and type for an account won't work under "Tax Reporting Options" in Gnucash 3.2
     Bug 796826 - Report HTML - not possible to suppress the document header.
     Bug 796827 - Report HTML - it is not possible to suppress the document title.

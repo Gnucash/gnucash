@@ -1012,7 +1012,7 @@
 
 2013-10-20 Mike Alexander 
 
-	* Use ";" as seperator character since that's what g_key_file_get_keys wants.
+	* Use ";" as separator character since that's what g_key_file_get_keys wants.
 
 2013-10-20 Mike Alexander 
 
@@ -2404,7 +2404,7 @@
 
 2013-04-07 John Ralls 
 
-	* Register rewrite Update, fixes for duplicate and reversing transaction. This update fixes duplicate transaction and reversing transaction. Also included is a minor change to the model, added the test for unbalanced transaction along with some other dialogs. Tab key navigation has been revised but still further work. Account key seperator works along with new account creation. Author: Robert Fewell
+	* Register rewrite Update, fixes for duplicate and reversing transaction. This update fixes duplicate transaction and reversing transaction. Also included is a minor change to the model, added the test for unbalanced transaction along with some other dialogs. Tab key navigation has been revised but still further work. Account key separator works along with new account creation. Author: Robert Fewell
 
 2013-04-07 Christian Stimming 
 
