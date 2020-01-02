@@ -165,7 +165,7 @@
  * later, when the parser attempts to free the memory through a call
  * to "free_numeric". In addition, freeing the memory will probably
  * invalidate the numeric value contained therein and lead to
- * pernicuous results when the value is used.
+ * pernicious results when the value is used.
  *
  * If "variable_name != NULL", the user/caller should never attempt to
  * free this memory, that is the sole responsibility of the parser.
