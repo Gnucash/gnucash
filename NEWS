@@ -364,7 +364,7 @@ Known Issues:
     Bug 796959 - GnuCash complains about saving on close when read-only.
     Bug 796966 - Underscore showing in german translation strings in the gui - business - search invoice
     Bug 796970 - Disable editing of currency retrieval settings for currencies.
-    Bug 796974 - Feature Request - Headings for the Matcher column Deposit/Withdrawal do not change to Debit/Credit when formal accounting labels are preferenced
+    Bug 796974 - Feature Request - Headings for the Matcher column Deposit/Withdrawal do not change to Debit/Credit when formal accounting labels are preferred
     Bug 796977 - No amounts displaying after upgrade from 2.6.19 to 3.3
     Bug 796979 - GnuCash segfaults on first startup when run from remote X session
     Bug 796983 - fails when importing QIF exported by Quicken 2015 Deluxe
@@ -694,7 +694,7 @@ Known Issues:
     Bug 796955 - Import CSV - Single-line two-currency transactions can't be imported
     Bug 796970 - Disable editing of currency retrieval settings for currencies.
     Bug 796973 - Blocking problem when importing QIF - trading commodities enter Information
-    Bug 796974 - Feature Request - Headings for the Matcher column Deposit/Withdrawal do not change to Debit/Credit when formal accounting labels are preferenced
+    Bug 796974 - Feature Request - Headings for the Matcher column Deposit/Withdrawal do not change to Debit/Credit when formal accounting labels are preferred
     Bug 796979 - GnuCash segfaults on first startup when run from remote X session
     Bug 796983 - fails when importing QIF exported by Quicken 2015 Deluxe
     Bug 796995 - Income and GST Statement: wrong grouping of invoices with multiple tax rates
@@ -1020,7 +1020,7 @@ Known Issues:
                   scheduled transactions missing in tmp file?
      Bug 796974 - Feature Request - Headings for the Matcher column
                   Deposit/Withdrawal do not change to Debit/Credit when formal
-                  accounting labels are preferenced
+                  accounting labels are preferred
      Bug 796990 - Budget : Newly created account and account with zero
                   transaction cannot be shown in Budget
      Bug 796989 - some date/time does not honor user locale
