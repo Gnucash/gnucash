@@ -522,7 +522,7 @@ GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
  *
  *  @param name The name of the GtkAction to find.
  *
- *  @return A pointer to the retuested GtkAction object or NULL. */
+ *  @return A pointer to the requested GtkAction object or NULL. */
 GtkAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
 
 /* Signals */
