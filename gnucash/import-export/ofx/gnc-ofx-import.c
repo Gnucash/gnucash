@@ -197,7 +197,7 @@ static const gchar *gnc_ofx_invttype_to_str(InvTransactionType t)
     case OFX_SELLSTOCK:
         return "SELLSTOCK (Sell stock)";
     case OFX_SPLIT:
-        return "SPLIT (Stock or mutial fund split)";
+        return "SPLIT (Stock or mutual fund split)";
     case OFX_TRANSFER:
         return "TRANSFER (Transfer holdings in and out of the investment account)";
     default:
