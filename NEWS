@@ -3041,8 +3041,8 @@ The following bugs are fixed:
      Bug 759570 - Postponing a repeating SX skips over the instance.
      Bug 759674 - GNUCash crashes when importing invoices or bills with
                   delimited import.
-     Bug 759859 - Reconcilation does not convert transactions' currency to
-                  the main one making reconcilation impossible.
+     Bug 759859 - Reconciliation does not convert transactions' currency to
+                  the main one making reconciliation impossible.
      Bug 760052 - missing flag translatable in Custom Report.
      Bug 760079 - Translations comments: Remove translatable flag from
                   placeholder labels in dialog date-close.

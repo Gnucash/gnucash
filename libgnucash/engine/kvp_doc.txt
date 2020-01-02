@@ -471,7 +471,7 @@ Name: /reconcile-info/include-children
 Type: gint64
 Entities: Account
 Use: A boolean flag indicating whether transactions in sub-accounts should be
-     included during reconcilition.
+     included during reconciliation.
 \endverbatim
 
 \verbatim

@@ -80,7 +80,7 @@
 
 2015-12-26 Grzegorz Milka 
 
-	* Bug 759859 - Reconcilation does not convert transactions' currency to the main one making reconcilation impossible.
+	* Bug 759859 - Reconciliation does not convert transactions' currency to the main one making reconciliation impossible.
 
 2015-12-26 fell 
 
