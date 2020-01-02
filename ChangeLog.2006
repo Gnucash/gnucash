@@ -14506,7 +14506,7 @@
 2006-02-26 21:42  jsled
 
 	* [r13409] trunk/ChangeLog,
-	  trunk/src/gnome-utils/gnc-html-graph-gog.c: Andreas Kohler's
+	  trunk/src/gnome-utils/gnc-html-graph-gog.c: Andreas Koehler's
 	  patch for barchart improvements: segment color setting, axis
 	  rotation and formatting.
 
@@ -15469,7 +15469,7 @@
 2006-02-16 03:56  jsled
 
 	* [r13274] trunk/ChangeLog, trunk/src/gnome/druid-hierarchy.c,
-	  trunk/src/gnome/glade/account.glade: Andreas Kohler's patch to
+	  trunk/src/gnome/glade/account.glade: Andreas Koehler's patch to
 	  not scroll the tree view headers in the new-account hierarchy
 	  druid. Bug#330850.
 
@@ -19212,7 +19212,7 @@
 	  trunk/accounts/pt_PT/acctchrt_spouseinc.gnucash-xea,
 	  trunk/accounts/pt_PT/acctchrt_spouseretire.gnucash-xea,
 	  trunk/accounts/tr_TR/acctchrt_TEKDUZ.gnucash-xea: Andreas
-	  Kohler's cleanups, Bug#321405.
+	  Koehler's cleanups, Bug#321405.
 
 2006-01-05 15:50  jsled
 
