@@ -8757,7 +8757,7 @@
 	* src/engine/gnc-numeric.{c,h}, src/scm/gnc-numeric.scm: add
 	support for a new auto-denom type, GNC_DENOM_SIGFIGS(x), where x
 	is the number of "significant figures" you want in the output.
-	This means that the output denominator will always be a poewr of
+	This means that the output denominator will always be a power of
 	10, but which power is determined by the magnitude of the
 	argument.
 
