@@ -4778,7 +4778,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	* src/gnome-utils/transfer.glade: Make all input fields expand on
 	the X axis.
 
-	* configure.in: Remove reqirement for Berkeley DB.  The G2 branch
+	* configure.in: Remove requirement for Berkeley DB.  The G2 branch
 	compiles and runs fine without it.
 
 	* src/gnome-utils/gnc-gnome-utils.c: Have gnucash read a private
