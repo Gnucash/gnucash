@@ -2355,7 +2355,7 @@
 	  time in an existing file. In this case, the commodity would
 	  *not* be stored. This was an attempt to avoid testing each time
 	  to see whether the commodity needed to be stored or not. For
-	  now, the test every time is re-instated.
+	  now, the test every time is reinstated.
 
 2009-08-05 20:52  cedayiv
 
