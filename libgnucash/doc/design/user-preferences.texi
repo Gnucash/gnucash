@@ -257,7 +257,7 @@ use-alpha? is a boolean that, if false, disregards the alpha channel
 
 @deffn Function gnc:make-currency-option section name sort-tag documentation-string default-value
 
-Let the user specify a currency using a currency code.  The GUI provides a specialised widget
+Let the user specify a currency using a currency code.  The GUI provides a specialized widget
 for currency selection.
 
 @end deffn

@@ -240,7 +240,7 @@
 
 2015-11-12 Peter Broadbery 
 
-	* engine-utilities.scm: Add a specialised hashtable.
+	* engine-utilities.scm: Add a specialized hashtable.
 
 2015-11-09 Peter Broadbery 
 
