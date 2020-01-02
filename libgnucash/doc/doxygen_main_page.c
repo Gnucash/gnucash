@@ -4,7 +4,7 @@ This is the new developer and design manual for GnuCash.
 
 \section maindocs Documentation Sections.
 
-The documentation is organised in a rough sequence:
+The documentation is organized in a rough sequence:
 
 -# \ref manualguide Start with the main GnuCash manual.
 -# \ref texihtml Design overview.

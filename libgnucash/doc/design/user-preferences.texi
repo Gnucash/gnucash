@@ -39,7 +39,7 @@ return an options database.  The function
 
 returns a new, empty options database that you can then add options to.
 
-Options are organised into sections, which are each given a title string
+Options are organized into sections, which are each given a title string
 such as "Register" or "International".  The UI displays each section on
 a separate page.  Each section has a number of options.  Each option has
 a name that uniquely identifies it in that section, and an alphabetic
