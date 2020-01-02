@@ -71,7 +71,7 @@
 ;; Fix beginning balance off-by-one-day error for B/S accounts
 ;;
 ;; From prior version:
-;; NOTE: setting of specific dates is squirly! and seems
+;; NOTE: setting of specific dates is squirrely! and seems
 ;; to be current-date dependent!  Actually, time of day dependent!  Just
 ;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
