@@ -101,7 +101,7 @@
     (N296 . "Credits you allow customers for returned merchandise and any other allowances you make on sales.")
     (N297 . "The total amount of salaries and wages for the tax year. Do not include amounts paid to yourself.")
     (N298 . "Accountant's or legal fees for tax advice related to your business and for preparation of the tax forms related to your business.")
-    (N299 . "The amount paied to rent or lease vehicles, machinery, or equipment, for your business. If you leased a vehicle for a term of 30 days or more, you may have to reduce your deduction by an amount called the inclusion amount. See Pub. 463.")
+    (N299 . "The amount paid to rent or lease vehicles, machinery, or equipment, for your business. If you leased a vehicle for a term of 30 days or more, you may have to reduce your deduction by an amount called the inclusion amount. See Pub. 463.")
     (N300 . "The amounts paid to rent or lease real estate or  property, such as office space in a building.")
     (N301 . "The cost of supplies not reported under Cost Of Goods Sold.")
     (N302 . "Other costs not specified on other lines of Schedule C, such as: Clean-fuel vehicles and refueling property; Donations to business organizations; Educational expenses; Environmental cleanup costs; Impairment-related expenses; Interview expense allowances; Licenses and regulatory fees; Moving machinery; Outplacement services; Penalties and fines you pay for late performanc or nonperformance of a contract; Subscriptions to trade or professional publications.")
