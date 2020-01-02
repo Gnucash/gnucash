@@ -359,7 +359,7 @@ sort_func (const gconstpointer a, const gconstpointer b, const gpointer q)
 /* ==================================================================== */
 /* This is the main workhorse for performing the query.  For each
  * object, it walks over all of the query terms to see if the
- * object passes the seive.
+ * object passes the sieve.
  */
 
 static int
