@@ -39,7 +39,7 @@ struct _GNCSearchParam
     const char *		title;
     GtkJustification	justify;
     gboolean		passive;
-    gboolean		non_resizeable;
+    gboolean		non_resizable;
 };
 
 struct _GNCSearchParamClass
@@ -133,7 +133,7 @@ void			gnc_search_param_set_justify (GNCSearchParam *param,
         GtkJustification justify);
 void			gnc_search_param_set_passive (GNCSearchParam *param,
         gboolean value);
-void			gnc_search_param_set_non_resizeable (GNCSearchParam *param,
+void			gnc_search_param_set_non_resizable (GNCSearchParam *param,
         gboolean value);
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
         GNCSearchParam *b);

@@ -330,7 +330,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
         gtk_tree_view_column_set_alignment (col, algn);
 
         /* Set column resizable */
-        if (((GNCSearchParam *) param)->non_resizeable)
+        if (((GNCSearchParam *) param)->non_resizable)
         {
             gtk_tree_view_column_set_resizable (col, FALSE);
             gtk_tree_view_column_set_expand (col, FALSE);

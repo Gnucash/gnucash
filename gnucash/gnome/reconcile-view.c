@@ -425,7 +425,7 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     gnc_search_param_set_title ((GNCSearchParam *) param, C_("Column header for 'Reconciled'", "R"));
     gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
     gnc_search_param_set_passive ((GNCSearchParam *) param, FALSE);
-    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
+    gnc_search_param_set_non_resizable ((GNCSearchParam *) param, TRUE);
     columns = g_list_prepend (columns, param);
 
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),

@@ -374,11 +374,11 @@ gnc_search_param_set_passive (GNCSearchParam *param, gboolean value)
 }
 
 void
-gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
+gnc_search_param_set_non_resizable (GNCSearchParam *param, gboolean value)
 {
     g_assert (GNC_IS_SEARCH_PARAM (param));
 
-    param->non_resizeable = value;
+    param->non_resizable = value;
 }
 
 gboolean

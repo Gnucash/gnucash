@@ -3688,7 +3688,7 @@
 	  as an ABS and invert the sort (defaults to off).  Add methods to
 	  determine if an item is in the list, and one to refresh the display
 	  of an item.
-	* src/gnome-utils/search-param.[ch]: fix the spelling of resizeable
+	* src/gnome-utils/search-param.[ch]: fix the spelling of resizable
 
 	* src/gnome-utils/gnc-query-list.c: we can't use a reversed list
 	  and prepend() because then we're always adding row 0 so the
