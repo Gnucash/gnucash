@@ -4251,7 +4251,7 @@
 	  autosave and to activate FileSaveAction. BP
 	* [r21831] src/backend/dbi/gnc-backend-dbi.c: [Bug 666329] Empty
 	  database after a little while Use gnc_dbi_safe_sync_all (which
-	  doesn't lose data if the save partion errors out) for all
+	  doesn't lose data if the save partition errors out) for all
 	  be->sync. This is a bit of a half-way solution; we really
 	  shouldn't ever have to do this except when creating a new
 	  database, but fixing that will take major surgery. BP
