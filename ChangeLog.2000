@@ -2393,7 +2393,7 @@
 2000-02-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_create): use
- 	gnc_localconv to get the currency symbol.
+ 	gnc_localeconv to get the currency symbol.
 
 	* src/gnome/window-adjust.c (adjBWindow): put colons after label.
   	Use gnc_localeconv to get the currency symbol.
