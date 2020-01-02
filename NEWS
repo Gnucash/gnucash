@@ -918,7 +918,7 @@ Known Issues:
      Bug 795251 - googletest detection cannot be overridden
      Bug 795614 - Unicode handling in amount fields [resubmission]
      Bug 795729 - Advanced Portfolio Report - Percentage rates not displaying
-                  leadinga zeroes
+                  leading zeroes
      Bug 795071 - new account entry screen keeps on disappearing and coming back
      Bug 796122 - Poor Performance Scanning Old Files During Autosave
      Bug 796492 - Wrong calculation of the first occurrence
