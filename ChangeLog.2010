@@ -3046,7 +3046,7 @@
 	  tmp: invoice = gnucash.gnucash_business.Invoice(instance=tmp)
 	  Use the invoice object as in
 	  sample_scripts/simple_invoice_insert.py I support this patch,
-	  but I've made a few improvments of my own. I switched up the
+	  but I've made a few improvements of my own. I switched up the
 	  arguments in search_customer_on_id, search_invoice_on_id,
 	  search_bill_on_id to have Book first and ID second. The reason
 	  for this was to make these functions more consistent with the
