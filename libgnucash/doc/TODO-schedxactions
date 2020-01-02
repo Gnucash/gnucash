@@ -165,7 +165,7 @@ X create a template register
     X [initially starts as the next occurance after the created-from SX,
        which may not be the Right Thing]
 
-. need "since-last-run" UI for instanatiation.
+. need "since-last-run" UI for instantiation.
   . need nifty visual style for druid.
     . use color-setting code in src/gnome-utils/druid-utils.[ch]
   . support sorting in various clists
@@ -367,7 +367,7 @@ transaction to be created when the scheduled transaction comes due.
 Most fields will be copied directly, but certain fields will need to
 be modified upon instantiation, and the template version of these
 transactions will need to contain the information necessary to do that
-instiantion.  For some fields, this will be a derivable quantity, and
+instantiation.  For some fields, this will be a derivable quantity, and
 for others the user will need to be prompted.  This will show up
 mostly for the amount of variable-amount transactions; perhaps the
 amount is then derivable from some external source.  These amounts
