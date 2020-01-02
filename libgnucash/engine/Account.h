@@ -28,7 +28,7 @@
     list of Splits, the Account structure also gives the Account a name, a
     code number, description and notes fields, a key-value frame, a pointer
     to the commodity that is used for all splits in this account. The
-    commodity can be the name of anything traded and tradeable: a stock
+    commodity can be the name of anything traded and tradable: a stock
     (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
     anything added to the commodity table.
 

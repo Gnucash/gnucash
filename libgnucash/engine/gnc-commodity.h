@@ -23,7 +23,7 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Commodity Commodities
-    A commodity is something of value that is easily tradeable or
+    A commodity is something of value that is easily tradable or
     sellable; for example, currencies, stocks, bonds, grain,
     copper, and oil are all commodities.  This file provides
     an API for defining a commodities, and for working with
