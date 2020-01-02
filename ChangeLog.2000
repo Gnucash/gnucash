@@ -2522,7 +2522,7 @@
  	too. Ditto for the popup menu and the toolbar.
 
 	* Makefile.in: reversed order of gnucash linking so gnucash.gnome
-	gets linked last, so it overides the motif version. Also, install
+	gets linked last, so it overrides the motif version. Also, install
 	the gnucash.desktop entry so gnucash appears in the gnome panel.
 
 	* src/register/splitreg.c: right-align the xfer cells

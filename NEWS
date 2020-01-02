@@ -1497,7 +1497,7 @@ New Features for Users:
         - Windows: CSIDL_APPDATA/Gnucash
         - OS X: $HOME/Application Support/Gnucash
         - Linux: $XDG_CONFIG_HOME/gnucash (or the default $HOME/.config/gnucash)
-         It's still possible to overried with the environment variable
+         It's still possible to override with the environment variable
          GNC_DOC_PATH, which replaces GNC_DOT_DIR in earlier versions of
          GnuCash.
     Accounts in the Bayes import map are now linked by GUID instead
@@ -2555,7 +2555,7 @@ New Features For Users:
 
     Data file directories are now located appropriately to the
     operating system's conventions by default. It's still possible
-    to overried with the environment variable GNC_DOC_PATH, which
+    to override with the environment variable GNC_DOC_PATH, which
     replaces GNC_DOT_DIR in earlier versions of GnuCash. (Geert
     Janssens)
 
@@ -3709,7 +3709,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
 	 Geert Janssens has cleaned up most of the issues from the
 	 initial GSettings preference changes. There's a new
-	 configure option, --with-xdg-data-dirs to overide the
+	 configure option, --with-xdg-data-dirs to override the
 	 environment and defaults if necessary.
 
 	 Building Gnucash now requires Automake version 1.11 or later.
