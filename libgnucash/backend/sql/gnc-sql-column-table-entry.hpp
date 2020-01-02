@@ -444,7 +444,7 @@ void gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
 /**
  * Create a GncGUID from a guid stored in a row.
  *
- * @param sql_be: The active GncSqlBackend. Pass-throug to gnc_sql_load_object.
+ * @param sql_be: The active GncSqlBackend. Pass-through to gnc_sql_load_object.
  * @param row: The GncSqlResult row.
  */
 const GncGUID*
