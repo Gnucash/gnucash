@@ -134,7 +134,7 @@
 	  removed from the compilation, but still referenced from the ui
 	  xml file. This commit changes this so that the database
 	  connection action is still created, but the add_to_window()
-	  function is overriden to set that action insensitive if
+	  function is overridden to set that action insensitive if
 	  --enable-dbi is not given.
 
 2008-12-06 21:54  cstim
