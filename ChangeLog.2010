@@ -8408,7 +8408,7 @@
 2010-03-07 21:02  gjanssens
 
 	* [r18870] po/POTFILES.in: Update POTFILES.in for the moved
-	  dialog-userpass.c and the newely added gnc-jalali.c
+	  dialog-userpass.c and the newly added gnc-jalali.c
 
 2010-03-07 20:30  cstim
 
