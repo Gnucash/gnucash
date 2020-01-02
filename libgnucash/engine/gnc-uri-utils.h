@@ -37,7 +37,7 @@
  *  For GnuCash' purposes a full uri can be described as:
  *
  *  @li @c scheme://[[username[:password]@]hostname[:port]]/path (universal uri)
- *  @li @c file://[localhost]/path (uri refering to a file on the local file system)
+ *  @li @c file://[localhost]/path (uri referring to a file on the local file system)
  *
  *  Anything in square brackets is optional.
  *
