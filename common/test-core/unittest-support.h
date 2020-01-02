@@ -104,7 +104,7 @@ typedef struct
 
 /**
  * Convenience function to create an error struct. If you use this
- * with test_set_log_handler it will get cleaned up at tesrdown,
+ * with test_set_log_handler it will get cleaned up at teardown,
  * otherwise call test_error_free() at the end of your test function.
  *
  * NB: If you need to change the message, be sure to free the old one
