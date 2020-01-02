@@ -873,7 +873,7 @@ Other repairs or enhancements not marked as bugs:
             The following modules are deprecated:
                report-system/collectors
                report-system/report-collectors
-     Invoice: Remove H1 title and superflous option.
+     Invoice: Remove H1 title and superfluous option.
            Printing the title twice is silly, so remove the option and the
            H1 display of the title. Note that the remaining title is in a
            div named "invoice-title" so it can be styled with CSS as the user
