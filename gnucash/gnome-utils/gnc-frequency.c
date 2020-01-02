@@ -408,8 +408,8 @@ _setup_weekly_recurrence(GncFrequency *gf, Recurrence *r)
     const char *checkbox_widget_name;
     GtkWidget *weekday_checkbox;
 
-    GtkWidget *multipler_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "weekly_spin"));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
+    GtkWidget *multiplier_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "weekly_spin"));
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(multiplier_spin), multiplier);
 
     recurrence_date = recurrenceGetDate(r);
     day_of_week = g_date_get_weekday(&recurrence_date);
@@ -566,13 +566,13 @@ gnc_frequency_setup(GncFrequency *gf, GList *recurrences, const GDate *start_dat
         case PERIOD_NTH_WEEKDAY:
         {
             guint multiplier;
-            GtkWidget *multipler_spin, *day_of_month, *weekend_mode;
+            GtkWidget *multiplier_spin, *day_of_month, *weekend_mode;
 
-            multipler_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_spin"));
+            multiplier_spin = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_spin"));
             multiplier = recurrenceGetMultiplier(r);
             if (recurrenceGetPeriodType(r) == PERIOD_YEAR)
                 multiplier *= 12;
-            gtk_spin_button_set_value(GTK_SPIN_BUTTON(multipler_spin), multiplier);
+            gtk_spin_button_set_value(GTK_SPIN_BUTTON(multiplier_spin), multiplier);
 
             day_of_month = GTK_WIDGET(gtk_builder_get_object (gf->builder, "monthly_day"));
             gtk_combo_box_set_active(GTK_COMBO_BOX(day_of_month), _get_monthly_combobox_index(r));
