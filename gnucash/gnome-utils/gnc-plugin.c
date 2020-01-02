@@ -69,7 +69,7 @@ GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
 
 /** Initialize the class for the new gnucash plugin object.  This will
  *  set up any function pointers that override functions in the parent
- *  class, and also installs the proprieties that are unique to this
+ *  class, and also installs the properties that are unique to this
  *  class.
  *
  *  @param klass The new class structure created by the object system.
