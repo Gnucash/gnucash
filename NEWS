@@ -1153,7 +1153,7 @@ Other repairs or enhancements not marked as bugs:
     Speed up loading the preference dialog by blocking register updates until
         the dialog is fully loaded.
     Update change_tax_code.py, add basic test for python query.
-    Simplify GNCQueryView's data model: It was managing a number of redudant
+    Simplify GNCQueryView's data model: It was managing a number of redundant
         parameters which were leaking memory all over the place. The information
         that was tracked could easily be extracted from the underlying
         GtkTreeView, GtkTreeModel or GtkTreeSelection when needed.
