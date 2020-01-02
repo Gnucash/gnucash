@@ -5546,7 +5546,7 @@
 	The side effect it that any transaction outside a 25 day
 	range can't be matched at all.
 	-Disable skipping transactions which already have an online id
-	during matching, untill a fix for the "transfer between two
+	during matching, until a fix for the "transfer between two
 	accounts" bug is properly fixed.
 	* src/import-export/generic-import.scm:
 	* src/import-export/import-settings.c:

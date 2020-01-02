@@ -5796,7 +5796,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Give a much higher importance to the date heuristics in the OFX
 	   import.
 	 o Disable skipping transactions which already have an online id
-	   during matching, untill a fix for the "transfer between two accounts"
+	   during matching, until a fix for the "transfer between two accounts"
 	   bug is properly fixed.
 	 o Large set of fixes to the build system by John H. Pierce
 	   <john@killterm.org>
