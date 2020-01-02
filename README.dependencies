@@ -105,7 +105,7 @@ Libraries/Deps
                                                  just builds the
                                                  mostly obsolete
                                                  design documentation
-                                                 (superceded for the
+                                                 (superseded for the
                                                  most part in Doxygen
                                                  docs).
   doxygen                                        For building the Doxygen API
