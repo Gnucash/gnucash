@@ -1179,7 +1179,7 @@
 
 	* [r19808] src/optional/python-bindings/gnucash_core.py: Bug
 	  #634812: Improve backend error reporting for Session begin Patch
-	  by Mike E: The current error feedback to a python scrpt/user
+	  by Mike E: The current error feedback to a python script/user
 	  looks something like: call to begin resulted in the following
 	  errors, (7,) This change in gnucash_core.py makes the feedback
 	  similar to: call to begin resulted in the following errors,
