@@ -1615,7 +1615,7 @@
 	  src/register/ledger-core/split-register-model-save.c,
 	  src/register/ledger-core/split-register-model.c,
 	  src/register/ledger-core/split-register.c,
-	  src/register/register-core/pricecell.c: Bug #502853 - Incorrent
+	  src/register/register-core/pricecell.c: Bug #502853 - Incorrect
 	  tax rounding in invoice (rounding of .5) This patch changes the
 	  default rounding behaviour in GnuCash from "Round to nearest
 	  even" to "Round away to infinity". See the bugreport for more

@@ -85,7 +85,7 @@ class TestGncNumeric( TestCase ):
         self.assertEqual(fraction.numerator, 1000)
         self.assertEqual(fraction.denominator, 3)
 
-    def test_incorect_args(self):
+    def test_incorrect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
 
