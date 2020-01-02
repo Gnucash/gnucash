@@ -471,7 +471,7 @@ check_add_subtract (void)
                      z, d, "expected %s got %s = %s + %s for add fixed");
 
     /* ------------------------------------------------------------ */
-    /* Same as above, but with signs reviersed */
+    /* Same as above, but with signs reversed */
     a = c;
     b = d;
     /* Well, actually 14/24 would be acceptable/better in this case */
