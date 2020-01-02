@@ -798,7 +798,7 @@ The following bugs have been fixed:
                   matching window
      Bug 796887 - Remove account slot key color if there is no valid color
      Bug 796893 - invoice.GetDatePosted() and other date related functions
-                  returns strange values for uninitalised dates.
+                  returns strange values for uninitialised dates.
      Bug 796896 - Button to complete an export not intuitively placed or
                   discoverable
      Bug 796903 - Crash when searching invoice by Invoice Owner

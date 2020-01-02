@@ -559,7 +559,7 @@
 2008-10-31 10:28  cstim
 
 	* [r17677] src/register/ledger-core/split-register-control.c: Fix
-	  uninitalized variable that was introduced by an extra scope
+	  uninitialized variable that was introduced by an extra scope
 	  added in r17654.
 
 2008-10-29 21:18  cstim

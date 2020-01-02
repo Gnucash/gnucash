@@ -182,7 +182,7 @@ X create a template register
   . fix first/last page issues.
   . bugs 
     . tab-order on variable-entry window isn't always correct.
-    B inital "To-Create Transactions" varbinding table doesn't setup table correctly.
+    B initial "To-Create Transactions" varbinding table doesn't setup table correctly.
     B correct "Back" button behavior in Druid paradigm
     B created SXes are put in GL forever. :(
       B But this is true of manually-created transactions, too ... is this
