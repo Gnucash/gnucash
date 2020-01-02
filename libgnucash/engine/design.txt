@@ -23,7 +23,7 @@ What does Architecture Flaw really mean?  There is a Soviet joke from the 1960's
 
 A westerner in Moscow stops a man to ask him the time. The man puts
 down his breifcase, and flicks his wrist to look at his watch.  "The
-time is 7:03, the temperature is 12 degrees C, the air presssure is
+time is 7:03, the temperature is 12 degrees C, the air pressure is
 950 mmHg and falling."  The westerner remarks with considerable 
 interest, "Why, that's a mighty fine watch you have there! We don't
 have anything like that in the America!" The Soviet responds, "Why 
