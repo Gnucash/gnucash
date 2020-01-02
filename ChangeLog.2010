@@ -11095,7 +11095,7 @@
 	  on top and which has two stubs below. There are other voucher
 	  formats ( middle and bottom ) , but the check printing
 	  functionality would require separate templates for the different
-	  formats. Also changed the Quicken/Quickbooks US-Letter check
+	  formats. Also changed the Quicken/QuickBooks US-Letter check
 	  format to include the ADDRESS check item and blocking around the
 	  AMOUNT_NUMBER field. I made a change to the Quicken-wallet check
 	  to add blocking characters around the AMOUNT_NUMBER field, and I
