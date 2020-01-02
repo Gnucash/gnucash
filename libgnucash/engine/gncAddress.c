@@ -306,7 +306,7 @@ gnc_address_class_init (GncAddressClass *klass)
 /* Create/Destroy functions */
 
 GncAddress *
-gncAddressCreate (QofBook *book, QofInstance *prnt)
+gncAddressCreate (QofBook *book, QofInstance *parent)
 {
     GncAddress *addr;
 
@@ -316,7 +316,7 @@ gncAddressCreate (QofBook *book, QofInstance *prnt)
     qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
     addr->book = book;
     addr->dirty = FALSE;
-    addr->parent = prnt;
+    addr->parent = parent;
 
     addr->name = CACHE_INSERT ("");
     addr->addr1 = CACHE_INSERT ("");
