@@ -1236,7 +1236,7 @@ The following bugs have been fixed:
     Bug 796586 - QIF import incorrectly converts unicode characters from UTF8
         encoded file.
     Bug 796595 - QIF Import Select Account button to add a new account is
-        labled gnc-account-new but should be New.
+        labeled gnc-account-new but should be New.
     Bug 796600 - stock split cash-in-lieu income/asset labels backwards.
     Bug 796614 - Reconciliation report contains incorrect transactions.
     Bug 796638 - configuration not properly saved for CSV transactions import
