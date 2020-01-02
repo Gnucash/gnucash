@@ -12166,7 +12166,7 @@
 	  trunk/src/report/standard-reports/balance-sheet.scm,
 	  trunk/src/report/standard-reports/income-statement.scm: Move
 	  gnc:options-add-subtotal-view! options from income-statement,
-	  account-summary, and balance-sheet to option-utilisies.scm. Try
+	  account-summary, and balance-sheet to option-utilities.scm. Try
 	  to clarify the wording of the option -- any native english
 	  speaker please feel free to correct the wording even more.
 

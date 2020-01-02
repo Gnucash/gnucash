@@ -4975,7 +4975,7 @@
 	commodity-list, for instantaneous prices, for instantaneous prices
 	of a commodity-list, and for cooking your morning coffee :)
 
-	* src/scm/report-utilites.scm, html-utilities.scm: create new
+	* src/scm/report-utilities.scm, html-utilities.scm: create new
 	function (gnc:accounts-get-commodities), use it in
 	html-utilities.scm.
 
