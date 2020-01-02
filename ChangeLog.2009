@@ -2462,7 +2462,7 @@
 	  'gtk_editable_insert_text' and 'strlen' which require 'gchar *',
 	  so there is no alternative but to cast. 2 -
 	  src/backend/xml/gnc-budget-xml-v2.c The functions
-	  'xmlNewNode'and 'xmlSetProp' require arguments that are of type
+	  'xmlNewNode' and 'xmlSetProp' require arguments that are of type
 	  'const xmlChar *' but the arguments are string literals (char
 	  *). Can string literals be set up as type 'const xmlChar *'? The
 	  patchfile has them being cast. BAD_CAST is defined for this
@@ -2472,7 +2472,7 @@
 	  (char *). In the three other changes the type 'const xmlChar *'
 	  needs to be changed to 'char *' to be used by 'strcmp'. 4 -
 	  src/backend/xml/gnc-recurrence-xml-v2.c Like above for the
-	  functions 'xmlNewNode'and 'xmlSetProp'. 5 -
+	  functions 'xmlNewNode' and 'xmlSetProp'. 5 -
 	  src/html/gnc-html-graph-gog-webkit.c The function
 	  'g_base64_encode' requires type 'guchar *' for the argument and
 	  changing the variable to this caused other problems so used
