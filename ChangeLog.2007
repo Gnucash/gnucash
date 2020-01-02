@@ -2155,7 +2155,7 @@
 
 	* [r16186] src/backend/file/gnc-schedxaction-xml-v2.c,
 	  src/doc/sx.rst, src/engine/Recurrence.c,
-	  src/engine/SchedXaction.c: Fix freq=None recurrnence +
+	  src/engine/SchedXaction.c: Fix freq=None recurrence +
 	  file-restore.
 
 2007-06-19 01:49  jsled
