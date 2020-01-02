@@ -5306,7 +5306,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   [days], with a page-size of 30 [days].
 	 o Disallow the Scheduling of being-editing transactions in the
 	   Register, preventing a class of unbalacned SX template transactions
-	   from being entered and propogated through the system.
+	   from being entered and propagated through the system.
 	 o Fix nasty memory-corruption issue; insufficient bounds checking on
 	   array index.
 	 o Better handling of various error cases in transaction-creation.

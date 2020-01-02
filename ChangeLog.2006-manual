@@ -6967,7 +6967,7 @@ r12881 | chris | 2006-01-19 00:18:27 -0500 (Thu, 19 Jan 2006) | 2 lines
 
 2006-01-18  Joshua Sled  <jsled@asynchronous.org>
 
-	* src/gnome/dialog-sx-from-trans.c (sxftd_update_fs): Propgate
+	* src/gnome/dialog-sx-from-trans.c (sxftd_update_fs): Propagate
 	bi-weekly ui-frequency in transition from "schedule transaction"
 	dialog to "Advanced..." (Scheduled Transaction Editor).
 	Patch from Robert Zaleski <rzaleski81@yahoo.com>.
