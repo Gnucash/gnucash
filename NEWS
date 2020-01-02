@@ -1803,7 +1803,7 @@ Updated Translations: Spanish
     details.
 
 New Features For Users:
-    Modernise chart colors from the dated CSS defaults to
+    Modernize chart colors from the dated CSS defaults to
         modern colors as suggested by https://clrs.cc/.
     Add "Subtotal Summary Grid" to the Transaction Report.
         The subtotal summary-grid will tabulate subtotals - prime-sortkey
