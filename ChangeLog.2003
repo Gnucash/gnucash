@@ -58,7 +58,7 @@
 2003-11-28  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-commodity.c: Clarify variable names in data
-	strutures.  Promote the commodity namespace to a externally
+	structures.  Promote the commodity namespace to a externally
 	visible opaque object.  Make commodities and namespaces Qof
 	Instances.  Add more events related to commodities and namespaces.
 	Require the book when creating a new commodity.

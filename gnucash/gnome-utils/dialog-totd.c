@@ -271,7 +271,7 @@ show_handler (const char *class_name, gint component_id,
     ENTER(" ");
     if (!totd_dialog)
     {
-        LEAVE("no data strucure");
+        LEAVE("no data structure");
         return(FALSE);
     }
 
