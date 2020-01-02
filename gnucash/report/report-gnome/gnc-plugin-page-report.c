@@ -1165,10 +1165,10 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     gchar *saved_reports_path = gnc_build_userdata_path (SAVED_REPORTS_FILE);
     gchar *report_save_str = g_strdup_printf (
         _("Update the current report's saved configuration. "
-        "The report will be saved in the file %s. "), saved_reports_path);
+        "The report configuration will be saved in the file %s. "), saved_reports_path);
     gchar *report_saveas_str = g_strdup_printf (
-        _("Add the current report's configuration to the `Saved Report Configurations' menu. "
-        "The report will be saved in the file %s. "), saved_reports_path);
+        _("Add the current report's configuration to the `Reports > Saved Report Configurations' menu. "
+        "The report configuration will be saved in the file %s. "), saved_reports_path);
 
     GtkActionEntry report_actions[] =
     {
