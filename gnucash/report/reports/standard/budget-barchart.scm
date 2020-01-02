@@ -100,7 +100,7 @@
         optname-chart-type                    ;; displayed option name
         "b"                                   ;; localization in the tab
         (N_ "This is a multi choice option.") ;; option help text
-        'bars                                 ;; default selectioin
+        'bars                                 ;; default selection
         (list
           (vector 'bars
                   (N_ "Barchart")
