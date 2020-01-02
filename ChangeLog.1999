@@ -128,7 +128,7 @@
 	* src/MultiLedger.c (xaccRegisterRefreshAllGUI): new function.
 	call gui refresh on all registers.
 
-	* src/MultiLedger.h: remove unecessary externs.
+	* src/MultiLedger.h: remove unneccessary externs.
 
 1999-12-19  Heath Martin  <martinh@pegasus.cc.ucf.edu>
 
