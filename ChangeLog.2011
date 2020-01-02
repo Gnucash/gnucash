@@ -4368,7 +4368,7 @@
 	  employees, can be sorted and filtered so far. But attempts to
 	  edit any owner will cause a crash for now.
 	* [r20622] src/engine/gncOwner.c, src/engine/gncOwner.h: Add
-	  gncOnwer* convenience wrappers for BeginEdit, CommitEdit and
+	  gncOwner* convenience wrappers for BeginEdit, CommitEdit and
 	  Destroy. This allows to begin edit, commit edit or destroy an
 	  owner without knowing its type.
 	* [r20621] src/business/business-core/business-core.scm,
