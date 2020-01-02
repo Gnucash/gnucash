@@ -177,7 +177,7 @@
 1999-12-18  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-register.c (gnc_register_create_tool_bar):
- 	Don't cause a legister refresh.
+ 	Don't cause a register refresh.
 
 1999-12-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
@@ -600,7 +600,7 @@
 	the list signals.
 
 	* src/SplitLedger.c (LedgerMoveCursor): update cursor_phys_row and
- 	cursor_virt_row in the SplitRegiter.
+ 	cursor_virt_row in the SplitRegister.
 	(xaccSRDeleteCurrentSplit): new function. delete the current split
  	in the register.
 	(xaccSRCountRows): don't move the saved physical and virtual rows
