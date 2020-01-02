@@ -62,7 +62,7 @@
     (N272 . "Gambling losses, but only to the extent of gambling winnings reported on Form 1040. Note: not subject to the 2% AGI of limitation.")
     (N273 . "Prescription medicines, eyeglasses, contact lenses, hearing aids. Over-the-counter medicines are not deductible.")
     (N274 . "Lodging expenses while away from home to receive medical care in a hospital or a medical care facility related to a hospital. Do not include more than $50 a night for each eligible person. Ambulance service and other travel costs to get medical care.")
-    (N275 . "State income taxes paid this year for a prior year. Includ any part of a prior year refund that you chose to have credited to this years state income taxes.")
+    (N275 . "State income taxes paid this year for a prior year. Include any part of a prior year refund that you chose to have credited to this years state income taxes.")
     (N544 . "Local income taxes that were not withheld from your salary, such as local income taxes you paid this year for a prior year.")
     (N276 . "Include taxes (state, local, or foreign) you paid on real estate you own that was not used for business, but only if the taxes are based on the assessed value of the property. Do not include taxes charged for improvements that tend to increase the value of your property (for example, an assessment to build a new sidewalk).")
     (N535 . "Enter personal property tax you paid, but only if it is based on value alone. Example: You paid a fee for the registration of your car. Part of the fee was based on the car s value and part was based on its weight. You may deduct only the part of the fee that is based on the car s value.")
