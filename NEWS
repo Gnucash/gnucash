@@ -1407,7 +1407,7 @@ Other repairs or enhancements not marked as bugs:
         Windows; I vote to add a default "Sans-Serif" font-family which is
         valid CSS. This ensures exported reports are shown as intended.
     Several improvements to the Transaction and GST reports.
-    csv-impport - Allow empty amount fields
+    csv-import - Allow empty amount fields
         Treat empty amount fields as 0. This is necessary for example in
         the case the csv import file has both a deposit and a withdrawal
         column.

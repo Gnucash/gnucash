@@ -4472,7 +4472,7 @@
 
 2018-04-14 Geert Janssens
 
-	* csv-impport - Allow empty amount fields
+	* csv-import - Allow empty amount fields
 
 2018-04-14 Geert Janssens
 
