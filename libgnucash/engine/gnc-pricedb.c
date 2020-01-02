@@ -1063,7 +1063,7 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
 
 /* ==================================================================== */
 /* The add_price() function is a utility that only manages the
- * dual hash table instertion */
+ * dual hash table insertion */
 
 static gboolean
 add_price(GNCPriceDB *db, GNCPrice *p)
