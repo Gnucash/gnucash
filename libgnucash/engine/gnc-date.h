@@ -458,7 +458,7 @@ gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
  *    representation
  *
  * Args:   buff - pointer to previously allocated character array; its size
- *                must be at lease MAX_DATE_LENTH bytes.
+ *                must be at lease MAX_DATE_LENGTH bytes.
  *         len - length of the buffer, in bytes.
  *         day - day of the month as 1 ... 31
  *         month - month of the year as 1 ... 12
