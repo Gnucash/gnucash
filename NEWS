@@ -3831,7 +3831,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 Filter out all occurances of jquery.min.js and jquery.jqplot.js
 	 except for the first occurances.  Author: Carsten Rinke
 
-	 Translations updated: Lithuatnian
+	 Translations updated: Lithuanian
 
  2.5.4 - 4 August 2013
          This is the fifth release in the UNSTABLE 2.5 series.
