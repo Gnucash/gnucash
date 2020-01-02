@@ -265,7 +265,7 @@
 	  gnome-utils/gnc-gnome-utils.c & h. - define
 	  gnc_options_dialog_set_new_book_option_values to retrieve
 	  preference values gnome-utils/dialog-options.c & .h - define
-	  gnc_options_dialog_new_modal to surpress apply button
+	  gnc_options_dialog_new_modal to suppress apply button
 	  gnome-utils/gnc-main-window.c - define function
 	  gnc_book_options_dialog_cb with arguments so that the window can
 	  be called in modal mode and the title changed and return dialog

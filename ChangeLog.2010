@@ -9997,7 +9997,7 @@
 	  register window, (3) include scroll offset patch (id=153514),
 	  (4) include preedit string rollback patch (id=153518), (5) fix
 	  formula and account cells input problem which Christian pointed
-	  out, (6) surpress quick-fill when preedit string exists, (7) fix
+	  out, (6) suppress quick-fill when preedit string exists, (7) fix
 	  Windows IME problem. (8) Fix quick-fill problem.
 
 2010-02-23 20:28  cstim
