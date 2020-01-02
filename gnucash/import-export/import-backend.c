@@ -936,7 +936,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         /* If there is no selection, ignore this transaction. */
         if (!selected_match)
         {
-            PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+            PWARN("No matching translation to be cleared was chosen. Imported transaction will be ignored.");
             break;
         }
 
@@ -1026,7 +1026,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
         /* If there is no selection, ignore this transaction. */
         if (!selected_match)
         {
-            PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+            PWARN("No matching translation to be cleared was chosen. Imported transaction will be ignored.");
             break;
         }
 
