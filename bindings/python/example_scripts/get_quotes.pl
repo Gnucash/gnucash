@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# get_quotes.pl -- Addition to example Script quotes_historc.py. Reads online stock quotes to file INTC.
+# get_quotes.pl -- Addition to example Script quotes_historic.py. Reads online stock quotes to file INTC.
 #
  
 ##  @file
