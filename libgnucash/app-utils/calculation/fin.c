@@ -596,7 +596,7 @@
  *       T[n] = -i*n*(PV + C) - i*C*n(n+1)/2
  *       T[n] = -i*n*(PV + (C*(n - 1)/2))
  *
- * Note: substituing for C = -PV/N, in the equations for PV[n], I[n],
+ * Note: substituting for C = -PV/N, in the equations for PV[n], I[n],
  *   P[n], and T[n] would give the following equations:
  *
  *       PV[n] = PV*(1 - n/N)
