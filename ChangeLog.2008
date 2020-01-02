@@ -3362,7 +3362,7 @@
 	* [r17000] src/gnome/gnc-plugin-page-register.c: Bug#114591: Allow
 	  refinements of transaction searches. Overrides the default
 	  search function on register plugin pages and call
-	  gnc_ui_find_transactions_dialog_create() with the current legder
+	  gnc_ui_find_transactions_dialog_create() with the current ledger
 	  display as parameter. This also enables refinements of existing
 	  transaction search results.
 
