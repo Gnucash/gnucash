@@ -288,7 +288,7 @@
 	  improvement. BP
 	* [r16705] src/import-export/hbci/glade/hbci.glade,
 	  src/import-export/qif-import/qif.glade: Remove extra spaces in
-	  glade messages. Pointed out by Clytie Siddal. Those will break 2
+	  glade messages. Pointed out by Clytie Siddall. Those will break 2
 	  translated strings. BP
 	* [r16704] src/gnome/druid-merge.c,
 	  src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in,
