@@ -7581,7 +7581,7 @@
 2007-02-07 14:38  cstim
 
 	* [r15519] packaging/win32/functions, packaging/win32/install.sh:
-	  Add checking for whether an unpacked directory isnt confused
+	  Add checking for whether an unpacked directory isn't confused
 	  with an older one.
 
 2007-02-07 10:12  cstim
