@@ -729,7 +729,7 @@
 	  (gnc:html-table-add-account-balances
 	   right-table equity-table params)
 
-          ;; we omit retianed earnings from the balance report, if zero, since
+          ;; we omit retained earnings from the balance report, if zero, since
           ;; they are not present on normal balance sheets
           (if (not (gnc-commodity-collector-allzero? retained-earnings))
             (if new-existing?
