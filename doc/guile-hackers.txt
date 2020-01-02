@@ -60,7 +60,7 @@ off in a C data structure (say a callback pointer), and then return to
 the guile side and drop the guile-side reference to the item, guile
 may garbage collect it before it's used by the C side.
 
-For example, this psudeo-code is a problem:
+For example, this pseudo-code is a problem:
 
   void gnc_some_function(SCM scm_thunk) {
     gnc_set_push_button_callback(some_button, scm_thunk);
