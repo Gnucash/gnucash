@@ -11367,7 +11367,7 @@
 	  trunk/lib/libqof/qof/qofbookmerge.c,
 	  trunk/lib/libqof/qof/qofchoice.c,
 	  trunk/lib/libqof/qof/qofutil.c, trunk/lib/libqof/qof/qofutil.h:
-	  Revert r13797 so that it can be recommited as logical,
+	  Revert r13797 so that it can be recommitted as logical,
 	  documented changes.
 
 2006-04-20 00:05  hampton

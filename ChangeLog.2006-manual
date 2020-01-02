@@ -2365,7 +2365,7 @@ r13811 | chris | 2006-04-19 21:37:50 -0400 (Wed, 19 Apr 2006) | 2 lines
    M /gnucash/trunk/lib/libqof/qof/qofutil.c
    M /gnucash/trunk/lib/libqof/qof/qofutil.h
 
-   Revert r13797 so that it can be recommited as logical, documented changes.
+   Revert r13797 so that it can be recommitted as logical, documented changes.
 
 2006-04-19  David Hampton  <hampton@employees.org>
 
