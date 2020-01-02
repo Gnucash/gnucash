@@ -1959,7 +1959,7 @@ For Developers and Distro packagers:
     Added dependency information to all CMake targets, replacing a
     dependency on build order that was carried over from
     autotools. Highly parallel builds in ninja now complete without
-    interuption.
+    interruption.
 
     Ensure that all GtkBuilder and GtkUIManager files are correctly
     installed and that no configuration of build products in those
