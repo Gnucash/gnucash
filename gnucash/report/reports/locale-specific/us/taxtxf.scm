@@ -2026,7 +2026,7 @@
                                (set-tm:mon bdtm 5))
                               ((4th-est 4th-last) ; Sep 1
                                (set-tm:mon bdtm 8)))
-                            ;; Tax quaters equal Real quarters
+                            ;; Tax quarters equal Real quarters
                             (case alt-period
                               ((1st-est 1st-last last-year) ; Jan 1
                                (set-tm:mon bdtm 0))
@@ -2068,7 +2068,7 @@
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
                             (else (set! bdtm (gnc-localtime to-value))))
-                          ;; Tax quaters equal Real quarters
+                          ;; Tax quarters equal Real quarters
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31
                              (set-tm:mon bdtm 2))

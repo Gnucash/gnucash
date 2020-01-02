@@ -234,7 +234,7 @@
  *   1   == annual
  *   2   == semi-annual
  *   3   == tri-annual
- *   4   == quaterly
+ *   4   == quarterly
  *   6   == bi-monthly
  *   12  == monthly
  *   24  == semi-monthly
