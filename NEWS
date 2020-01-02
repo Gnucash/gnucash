@@ -4347,7 +4347,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Remove superfluous trailing colons of de_DE SKR04 account names
 	 o Add russian account templates
 	 o Add Swiss German translation
-	 o Update translations: Brazilian Portugese, German, Greek, Russian,
+	 o Update translations: Brazilian Portuguese, German, Greek, Russian,
 	                        Simplified Chinese, Slovak, Spanish
 
  2.2.3 - 06 January 2008
@@ -4439,7 +4439,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Add COU [Colombian Unidad de Valor Real]
 	 o Add MZN [Mozambique Metical]
 	 o Some occurrences of "Open Source" were changed to "Free"
-	 o Update translations: Brazilian Portugese, Czech, German,
+	 o Update translations: Brazilian Portuguese, Czech, German,
 	                        Japanese, Traditional Chinese
 
  2.2.1 - 19 August 2007
@@ -5158,7 +5158,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
  	 o Don't use C++/C99 declarations.  Declare variables at the top of
 	 the function.
 	 o Updated British English, Czech, Italian, Russian, German,
-	 Brazilian Portugese, Dutch, French, Spanish, translations.
+	 Brazilian Portuguese, Dutch, French, Spanish, translations.
 	 o Fabien COELHO's zero-balance patch to remove accounts of zero
 	 balance from the report.
 	 o Fix a broken recursion problem.  Don't call show-acct? from
@@ -5388,7 +5388,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   or not.
 	 o Don't constantly resize the invoice window every time we update
 	   ourselves.
-	 o Updated Italian, Brazilian Portugese, German, Czech, Dutch and
+	 o Updated Italian, Brazilian Portuguese, German, Czech, Dutch and
 	   British English translation.
 	 o Add Subtotal and Tax labels in the summary bar to print the
 	   Invoice's total amounts.
@@ -5507,7 +5507,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
  	 o Fix transfer dialog to nothang if OK button is clicked w/o filling
 	   in dialog properly.
 	 o Add HTML::Parser to the list of items checked/installed.
-	 o Updated translations:  Brazilian Portugese, Czech, Italian, German
+	 o Updated translations:  Brazilian Portuguese, Czech, Italian, German
 	 o Fix the "View xxxbar" menu items to track properly when a new data
 	   file is opened. Consolidate the code for manipulating the
 	   View/Statusbar and View/Summarybar menu items.  Work around a Gnome
@@ -5585,7 +5585,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
  1.8.3  - 03 May 2003
  	 o Updated translations: Italian, Swedish, Danish, British,
-	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.
+	   Traditional Chinese, French, German, Tamil, Brazilian Portuguese.
 	 o Turn off the report-total by default
 	 o The Euroland currency rates were inverted in the transfer dialog.
 	 o Chris Morgan's Bayesian Matching code, to match transactions based
@@ -5860,7 +5860,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o New progress bar when making reports
 	 o Payment schedule review page added to loan druid
 	 o Fixes to multi-currency support
-	 o Added Brazilian Portugese account templates by Lucimar Moresco
+	 o Added Brazilian Portuguese account templates by Lucimar Moresco
 	 o Added doxygen documentation support, and integrated it into the
 	   build system. There is a new target, make doc, that can be used to
 	   build the documentation if you have doxygen installed.

@@ -6855,7 +6855,7 @@
 
 	* [r20142] po/POTFILES.in, po/en.po, src/bin/gnucash-bin.c:
 	  Rejigger the set_macos_locale function to better handle
-	  qualified languages (e.g., Portugues (Portugal). Add po/en.po so
+	  qualified languages (e.g., Portuguese (Portugal). Add po/en.po so
 	  that english doesn't have to be special-cased to the C locale.
 
 2011-01-21 22:27  gjanssens
@@ -7382,7 +7382,7 @@
 	  testing, I'm using this on an average-sized gnucash file (5.7MB)
 	  without noticing any particular slowdown in saving, but a
 	  wonderful reduction in diffs when comparing changes.
-	* [r20066] po/pt_BR.po: Bug #638962: Update Brazil Portugese
+	* [r20066] po/pt_BR.po: Bug #638962: Update Brazil Portuguese
 	  translation by Dorneles Treméa
 
 2011-01-11 20:39  cstim

@@ -1012,7 +1012,7 @@ v	  fix the print_info
 
 2002-11-27  Christian Stimming  <stimming@tuhh.de>
 
-	* accounts/pt_BR/*: Added Brazilian Portugese account templates by
+	* accounts/pt_BR/*: Added Brazilian Portuguese account templates by
 	Lucimar Moresco <lucimarmoresco@hotmail.com>.
 
 2002-11-27  Derek Atkins  <derek@ihtfp.com>
