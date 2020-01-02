@@ -5027,7 +5027,7 @@
 	  --enable-{debug,ref-counts-dump}. Those commas will be
 	  interpreted as commands and warnings printed out. Also, put
 	  square brackets around the strings describing the corresponding
-	  autoconf definitions to save them from possible substitions.
+	  autoconf definitions to save them from possible substitutions.
 	  Noticed by Kevin HaleBoyes. BP
 
 2009-01-05 15:36  plongstaff

@@ -317,7 +317,7 @@
 
 	* [r17720] configure.in, macros/as-scrub-include.m4: Bug #548218:
 	  Unify command substitution shell pattern The command
-	  substiturion by $(expression) causes configure error on solaris.
+	  substitution by $(expression) causes configure error on solaris.
 	  Command substitution via $() is even part of
 	  http://www.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
 	  , which I regard as POSIX definition of a shell, i.e. the
