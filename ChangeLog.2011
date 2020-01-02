@@ -2235,7 +2235,7 @@
 2011-10-08 19:19  mikee
 
 	* [r21400] src/import-export/csv/gnc-csv-import.c: Bug #660875 -
-	  Make columns have minumum width in import dialog.
+	  Make columns have minimum width in import dialog.
 
 2011-10-08 19:14  jralls
 
