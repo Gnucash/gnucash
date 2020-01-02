@@ -2809,7 +2809,7 @@
 	  splits in the account, and reconciling queries for a subset of
 	  splits (those that haven't been reconciled), the reconcile query
 	  could do nothing and it would all still work. This will need to
-	  be revisted once the register and queries need to be smarter.
+	  be revisited once the register and queries need to be smarter.
 
 2009-07-03 16:16  plongstaff
 
