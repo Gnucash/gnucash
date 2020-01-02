@@ -6331,7 +6331,7 @@
 2007-02-18 20:52  jsled
 
 	* [r15608] src/doc/sx.rst, src/gnome/dialog-sx-from-trans.c:
-	  Better behavior when the number-of-occurences field is blank.
+	  Better behavior when the number-of-occurrences field is blank.
 
 2007-02-18 20:27  jsled
 

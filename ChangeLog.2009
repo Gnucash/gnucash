@@ -1282,7 +1282,7 @@
 	  from the noun. The Dutch translator wrote: Would it be possible
 	  to differentiate between the instance of the _verb_ "Deposit" in
 	  src/register/ledger-core/split-register.c:2184 (the verb) and
-	  the occurrances of the _noun_ "Deposit" in
+	  the occurrences of the _noun_ "Deposit" in
 	  src/app-utils/prefs.scm (via intl-scm/guile-strings.c:6732) and
 	  src/import-export/csv/gnc-csv-model.c:37? This would help me
 	  tremendously with my efforts.
@@ -2477,7 +2477,7 @@
 	  'g_base64_encode' requires type 'guchar *' for the argument and
 	  changing the variable to this caused other problems so used
 	  casting instead. 6 - src/libqof/backend/file/qsf-xml-map.c (6
-	  occurances) The first occurance was solved by changing the type
+	  occurrences) The first occurrence was solved by changing the type
 	  declaration, but the other 5 required casting.
 	* [r18225] src/backend/xml/io-example-account.c,
 	  src/backend/xml/sixtp-dom-parsers.c,

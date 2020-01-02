@@ -85,7 +85,7 @@ typedef struct
     GtkToggleButton *ne_but;
     GtkToggleButton *ed_but;
     GtkToggleButton *oc_but;
-    GtkEntry *n_occurences;
+    GtkEntry *n_occurrences;
 
     Transaction *trans;
     SchedXaction *sx;
@@ -180,7 +180,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
         gchar *text, *endptr;
         guint n_occs;
 
-        text = gtk_editable_get_chars(GTK_EDITABLE(sxfti->n_occurences), 0, -1);
+        text = gtk_editable_get_chars(GTK_EDITABLE(sxfti->n_occurrences), 0, -1);
         if (text == NULL || strlen(text) == 0)
         {
             n_occs = 0;
@@ -360,7 +360,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         sxfti->ne_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "never_end_button"));
         sxfti->ed_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "end_on_date_button"));
         sxfti->oc_but = GTK_TOGGLE_BUTTON(gtk_builder_get_object(sxfti->builder, "n_occurrences_button"));
-        sxfti->n_occurences = GTK_ENTRY(gtk_builder_get_object(sxfti->builder, "n_occurrences_entry"));
+        sxfti->n_occurrences = GTK_ENTRY(gtk_builder_get_object(sxfti->builder, "n_occurrences_entry"));
     }
 
     /* Get the name from the transaction, try that as the initial SX name. */
@@ -712,7 +712,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
 
     /* Set End date sensitivity */
     gtk_widget_set_sensitive( GTK_WIDGET(sxfti->endDateGDE), (get.type == END_ON_DATE) );
-    gtk_widget_set_sensitive( GTK_WIDGET(sxfti->n_occurences), (get.type == END_AFTER_N_OCCS) );
+    gtk_widget_set_sensitive( GTK_WIDGET(sxfti->n_occurrences), (get.type == END_AFTER_N_OCCS) );
 
     /* Use the day preceding the start date for the store to find the correct real start date */
     switch (get.type)

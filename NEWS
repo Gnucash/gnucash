@@ -3826,10 +3826,10 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 704525 - When you have a mix of chart types (bar charts and pie
 	 charts). Add new procedure gnc:substring-replace-from-to
 	 Similar to gnc:substring-replace, but offers the possibility to
-	 replace substrings in a range of occurances. Add calls to
+	 replace substrings in a range of occurrences. Add calls to
 	 gnc:substring-replace-from-to to procedure gnc:report-run.
-	 Filter out all occurances of jquery.min.js and jquery.jqplot.js
-	 except for the first occurances.  Author: Carsten Rinke
+	 Filter out all occurrences of jquery.min.js and jquery.jqplot.js
+	 except for the first occurrences.  Author: Carsten Rinke
 
 	 Translations updated: Lithuanian
 

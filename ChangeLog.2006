@@ -2936,7 +2936,7 @@
 
 	* [r15000] branches/swig-redo, branches/swig-redo/configure.in,
 	  branches/swig-redo/macros/g-wrap.m4: Remove last g-wrap
-	  occurences in configure.in and the file g-wrap.m4.
+	  occurrences in configure.in and the file g-wrap.m4.
 
 2006-10-11 00:00  chris
 

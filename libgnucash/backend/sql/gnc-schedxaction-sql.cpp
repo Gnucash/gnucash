@@ -66,10 +66,10 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_GDATE>("start_date", 0, 0, "start-date"),
     gnc_sql_make_table_entry<CT_GDATE>("end_date", 0, 0, "end-date"),
     gnc_sql_make_table_entry<CT_GDATE>(
-        "last_occur", 0, 0, "last-occurance-date"),
+        "last_occur", 0, 0, "last-occurrence-date"),
     gnc_sql_make_table_entry<CT_INT>(
-        "num_occur", 0, COL_NNUL, "num-occurance"),
-    gnc_sql_make_table_entry<CT_INT>("rem_occur", 0, COL_NNUL, "rem-occurance"),
+        "num_occur", 0, COL_NNUL, "num-occurrence"),
+    gnc_sql_make_table_entry<CT_INT>("rem_occur", 0, COL_NNUL, "rem-occurrence"),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "auto_create", 0, COL_NNUL, "auto-create"),
     gnc_sql_make_table_entry<CT_BOOLEAN>(

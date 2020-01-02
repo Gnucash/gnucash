@@ -143,7 +143,7 @@
 	  src/backend/file/gnc-recurrence-xml-v2.c,
 	  src/gnome-utils/gnc-frequency.c,
 	  src/gnome/glade/sched-xact.glade: Revert r17730 and re-apply
-	  r17725, "Bug #106401: Add SX weekend occurence to be shifted to
+	  r17725, "Bug #106401: Add SX weekend occurrence to be shifted to
 	  weekdays" This time, the XML element handler for the "weekend
 	  adjustment" is optional so that old files without that element
 	  are read without error. Patch (well, kind of) by Simon Arlott.
@@ -217,7 +217,7 @@
 	  src/backend/file/gnc-recurrence-xml-v2.c,
 	  src/gnome-utils/gnc-frequency.c,
 	  src/gnome/glade/sched-xact.glade: Partly revert r17725, "Bug
-	  #106401: Add SX weekend occurence to be shifted to weekdays" The
+	  #106401: Add SX weekend occurrence to be shifted to weekdays" The
 	  original patch doesn't seem to deal with backward compatibility
 	  in the XML parser well enough. This commit reverts the GUI- and
 	  XML-related parts of r17725.
@@ -261,7 +261,7 @@
 	  src/gnome/glade/sched-xact.glade,
 	  src/gnome/gnc-plugin-page-budget.c,
 	  src/gnome/gnc-plugin-page-sx-list.c: Bug #106401: Add SX weekend
-	  occurence to be shifted to weekdays The RFE wanted to specify
+	  occurrence to be shifted to weekdays The RFE wanted to specify
 	  the date of a scheduled transaction like this: At the 15th of
 	  each month but if that is a saturday or a sunday then at the
 	  next monday after that (or the friday before) This patch
@@ -684,8 +684,8 @@
 	* [r17659] src/gnome/dialog-sx-from-trans.c: Bug #532889: When
 	  showing sx from txn preview dense cal, choose correct starting
 	  month. When creating a scheduled transaction from a given
-	  transaction, the first occurence from the transaction date
-	  onwards is found by calculating the first occurence after the
+	  transaction, the first occurrence from the transaction date
+	  onwards is found by calculating the first occurrence after the
 	  day before that date. OTOH, that "yesterday" should not be used
 	  as start date of the dense calendar. Patch by Andreas Köhler
 	  <andi5.py@gmx.net>. BP

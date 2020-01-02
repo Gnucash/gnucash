@@ -2778,7 +2778,7 @@
 	  src/register/ledger-core/split-register-model.c,
 	  src/register/ledger-core/split-register.c,
 	  src/register/register-core/pricecell.c: Refactoring: replace all
-	  GNC_RND_* and GNC_DENOM_* occurences with their GNC_HOW_RND_*
+	  GNC_RND_* and GNC_DENOM_* occurrences with their GNC_HOW_RND_*
 	  and GNC_HOW_DENOM_* equivalents And then remove the deprecated
 	  definitions.
 
@@ -3657,7 +3657,7 @@
 
 	* [r19348] src/app-utils/date-utilities.scm: Bug #556713 -
 	  inconsistency in report options, partial fix This commit aligns
-	  all occurences of "Current/Previous Year Start/End" to
+	  all occurrences of "Current/Previous Year Start/End" to
 	  "Start/End of this year"
 
 2010-07-06 16:52  gjanssens
@@ -3671,7 +3671,7 @@
 	  src/report/standard-reports/transaction.scm,
 	  src/report/standard-reports/trial-balance.scm: Bug #556713 -
 	  inconsistency in report options, partial fix This commit aligns
-	  all occurences of "Report Accounts" and "Accounts to include" to
+	  all occurrences of "Report Accounts" and "Accounts to include" to
 	  "Accounts"
 
 2010-07-06 16:47  cmarchi
@@ -3808,7 +3808,7 @@
 	  src/report/standard-reports/portfolio.scm,
 	  src/report/standard-reports/transaction.scm: Bug #556713 -
 	  inconsistency in report options, partial fix This commit aligns
-	  all occurences of "Report Currency" and variants to "Report's
+	  all occurrences of "Report Currency" and variants to "Report's
 	  currency"
 
 2010-07-03 14:36  gjanssens

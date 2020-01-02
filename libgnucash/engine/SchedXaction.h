@@ -97,10 +97,10 @@ struct _SchedXaction
     /* if end_date is invalid, then no end. */
     GDate           end_date;
 
-    /* if num_occurances_total == 0, then no limit */
-    gint            num_occurances_total;
+    /* if num_occurrences_total == 0, then no limit */
+    gint            num_occurrences_total;
     /* remaining occurrences are as-of the 'last_date'. */
-    gint            num_occurances_remain;
+    gint            num_occurrences_remain;
 
     /* the current instance-count of the SX. */
     gint            instance_num;
@@ -247,7 +247,7 @@ void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 SXTmpStateData *gnc_sx_create_temporal_state(const SchedXaction *sx );
 
 /** Calculates the next occurrence of the given SX and stores that
- * occurence in the remporalStateDate. The SX is unchanged. */
+ * occurrence in the remporalStateDate. The SX is unchanged. */
 void gnc_sx_incr_temporal_state(const SchedXaction *sx, SXTmpStateData *stateData );
 
 /** Frees the given stateDate object. */

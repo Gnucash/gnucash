@@ -107,7 +107,7 @@ typedef struct _split_record
 
 static char *olds;
 /* This version of strtok will only match SINGLE occurrence of delim,
-   returning a 0 length valid string between two consecutive ocurence of delim.
+   returning a 0 length valid string between two consecutive occurrence of delim.
    It will also return a 0 length string instead of NULL when it reaches the end of s
 */
 static char * my_strtok (s, delim)

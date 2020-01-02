@@ -153,10 +153,10 @@ compare_single_sx (QofInstance* inst, gpointer user_data)
     TEST_GDATES_EQUAL (&sx_2->last_date, &sx_1->last_date);
     TEST_GDATES_EQUAL (&sx_2->start_date, &sx_1->start_date);
     TEST_GDATES_EQUAL (&sx_2->end_date, &sx_1->end_date);
-    g_assert_cmpint (sx_2->num_occurances_total, == ,
-                     sx_1->num_occurances_total);
-    g_assert_cmpint (sx_2->num_occurances_remain, == ,
-                     sx_1->num_occurances_remain);
+    g_assert_cmpint (sx_2->num_occurrences_total, == ,
+                     sx_1->num_occurrences_total);
+    g_assert_cmpint (sx_2->num_occurrences_remain, == ,
+                     sx_1->num_occurrences_remain);
     g_assert_cmpint (sx_2->instance_num, == , sx_1->instance_num);
     g_assert_cmpint (sx_2->enabled, == , sx_1->enabled);
     g_assert_cmpint (sx_2->autoCreateOption, == , sx_1->autoCreateOption);

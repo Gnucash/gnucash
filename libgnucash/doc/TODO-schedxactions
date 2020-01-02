@@ -162,7 +162,7 @@ X create a template register
   X pull accounts over.
   X pull initial SX name from the Transaction name?
   X need start-date on Make dialog
-    X [initially starts as the next occurance after the created-from SX,
+    X [initially starts as the next occurrence after the created-from SX,
        which may not be the Right Thing]
 
 . need "since-last-run" UI for instantiation.
@@ -348,7 +348,7 @@ X General
 . SX name should be default value for template transaction description
 . loan/repayment SX's
   . integrate "Financial Calculator"
-  . auto-determine number of occurances/end condition from liability
+  . auto-determine number of occurrences/end condition from liability
     account amount.
 . SX since-last-run should be able to sort by Date [conditional on the dialog
   staying around].

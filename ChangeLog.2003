@@ -4904,7 +4904,7 @@
 
 	* src/engine/SchedXaction.c (xaccSchedXactionGetNextInstance):
 	Remove the validity check on the temporal-state-data's notion of
-	the last-occurance date; as invalidity means something important,
+	the last-occurrence date; as invalidity means something important,
 	we must let it through; fixes Bug#103955.
 
 	* src/backend/file/gnc-schedxaction-xml-v2.c

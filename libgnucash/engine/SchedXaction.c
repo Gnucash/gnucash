@@ -49,9 +49,9 @@ enum
     PROP_ENABLED,			/* Table */
     PROP_START_DATE,			/* Table */
     PROP_END_DATE,			/* Table */
-    PROP_LAST_OCCURANCE_DATE,		/* Table */
-    PROP_NUM_OCCURANCE,			/* Table */
-    PROP_REM_OCCURANCE,			/* Table */
+    PROP_LAST_OCCURRENCE_DATE,		/* Table */
+    PROP_NUM_OCCURRENCE,			/* Table */
+    PROP_REM_OCCURRENCE,			/* Table */
     PROP_AUTO_CREATE,			/* Table */
     PROP_AUTO_CREATE_NOTIFY,		/* Table */
     PROP_ADVANCE_CREATION_DAYS,		/* Table */
@@ -73,7 +73,7 @@ gnc_schedxaction_init(SchedXaction* sx)
     g_date_clear( &sx->end_date, 1 );
 
     sx->enabled = 1;
-    sx->num_occurances_total = 0;
+    sx->num_occurrences_total = 0;
     sx->autoCreateOption = FALSE;
     sx->autoCreateNotify = FALSE;
     sx->advanceCreateDays = 0;
@@ -119,11 +119,11 @@ gnc_schedxaction_get_property (GObject         *object,
     case PROP_ENABLED:
         g_value_set_boolean(value, sx->enabled);
         break;
-    case PROP_NUM_OCCURANCE:
-        g_value_set_int(value, sx->num_occurances_total);
+    case PROP_NUM_OCCURRENCE:
+        g_value_set_int(value, sx->num_occurrences_total);
         break;
-    case PROP_REM_OCCURANCE:
-        g_value_set_int(value, sx->num_occurances_remain);
+    case PROP_REM_OCCURRENCE:
+        g_value_set_int(value, sx->num_occurrences_remain);
         break;
     case PROP_AUTO_CREATE:
         g_value_set_boolean(value, sx->autoCreateOption);
@@ -146,7 +146,7 @@ gnc_schedxaction_get_property (GObject         *object,
         if (g_date_valid (&sx->end_date))
             g_value_set_boxed(value, &sx->end_date);
         break;
-    case PROP_LAST_OCCURANCE_DATE:
+    case PROP_LAST_OCCURRENCE_DATE:
      /* g_value_set_boxed raises a critical error if sx->last_date
          * is invalid */
         if (g_date_valid (&sx->last_date))
@@ -185,10 +185,10 @@ gnc_schedxaction_set_property (GObject         *object,
     case PROP_ENABLED:
         xaccSchedXactionSetEnabled(sx, g_value_get_boolean(value));
         break;
-    case PROP_NUM_OCCURANCE:
+    case PROP_NUM_OCCURRENCE:
         xaccSchedXactionSetNumOccur(sx, g_value_get_int(value));
         break;
-    case PROP_REM_OCCURANCE:
+    case PROP_REM_OCCURRENCE:
         xaccSchedXactionSetRemOccur(sx, g_value_get_int(value));
         break;
     case PROP_AUTO_CREATE:
@@ -215,7 +215,7 @@ gnc_schedxaction_set_property (GObject         *object,
            called. */
         xaccSchedXactionSetEndDate(sx, g_value_get_boxed(value));
         break;
-    case PROP_LAST_OCCURANCE_DATE:
+    case PROP_LAST_OCCURRENCE_DATE:
         /* Note: when passed through a boxed gvalue, the julian value of the date is copied.
            The date may appear invalid until a function requiring for dmy calculation is
            called. */
@@ -266,10 +266,10 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_NUM_OCCURANCE,
-     g_param_spec_int ("num-occurance",
-                       "Number of occurances",
-                       "Total number of occurances for this scheduled transaction.",
+     PROP_NUM_OCCURRENCE,
+     g_param_spec_int ("num-occurrence",
+                       "Number of occurrences",
+                       "Total number of occurrences for this scheduled transaction.",
                        0,
                        G_MAXINT16,
                        1,
@@ -277,10 +277,10 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_REM_OCCURANCE,
-     g_param_spec_int ("rem-occurance",
-                       "Number of occurances remaining",
-                       "Remaining number of occurances for this scheduled transaction.",
+     PROP_REM_OCCURRENCE,
+     g_param_spec_int ("rem-occurrence",
+                       "Number of occurrences remaining",
+                       "Remaining number of occurrences for this scheduled transaction.",
                        0,
                        G_MAXINT16,
                        1,
@@ -333,7 +333,7 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
      PROP_START_DATE,
      g_param_spec_boxed("start-date",
                         "Start Date",
-                        "Date for the first occurence for the scheduled transaction.",
+                        "Date for the first occurrence for the scheduled transaction.",
                         G_TYPE_DATE,
                         G_PARAM_READWRITE));
 
@@ -348,10 +348,10 @@ gnc_schedxaction_class_init (SchedXactionClass *klass)
 
     g_object_class_install_property
     (gobject_class,
-     PROP_LAST_OCCURANCE_DATE,
-     g_param_spec_boxed("last-occurance-date",
-                        "Last Occurance Date",
-                        "Date for the last occurance of the scheduled transaction.",
+     PROP_LAST_OCCURRENCE_DATE,
+     g_param_spec_boxed("last-occurrence-date",
+                        "Last Occurrence Date",
+                        "Date for the last occurrence of the scheduled transaction.",
                         G_TYPE_DATE,
                         G_PARAM_READWRITE));
 
@@ -732,16 +732,16 @@ xaccSchedXactionHasOccurDef( const SchedXaction *sx )
 gint
 xaccSchedXactionGetNumOccur( const SchedXaction *sx )
 {
-    return sx->num_occurances_total;
+    return sx->num_occurrences_total;
 }
 
 void
 xaccSchedXactionSetNumOccur(SchedXaction *sx, gint new_num)
 {
-    if (sx->num_occurances_total == new_num)
+    if (sx->num_occurrences_total == new_num)
         return;
     gnc_sx_begin_edit(sx);
-    sx->num_occurances_remain = sx->num_occurances_total = new_num;
+    sx->num_occurrences_remain = sx->num_occurrences_total = new_num;
     qof_instance_set_dirty(&sx->inst);
     gnc_sx_commit_edit(sx);
 }
@@ -749,24 +749,24 @@ xaccSchedXactionSetNumOccur(SchedXaction *sx, gint new_num)
 gint
 xaccSchedXactionGetRemOccur( const SchedXaction *sx )
 {
-    return sx->num_occurances_remain;
+    return sx->num_occurrences_remain;
 }
 
 void
 xaccSchedXactionSetRemOccur(SchedXaction *sx, gint num_remain)
 {
     /* FIXME This condition can be tightened up */
-    if (num_remain > sx->num_occurances_total)
+    if (num_remain > sx->num_occurrences_total)
     {
         g_warning("number remaining [%d] > total occurrences [%d]",
-                  num_remain, sx->num_occurances_total);
+                  num_remain, sx->num_occurrences_total);
     }
     else
     {
-        if (num_remain == sx->num_occurances_remain)
+        if (num_remain == sx->num_occurrences_remain)
             return;
         gnc_sx_begin_edit(sx);
-        sx->num_occurances_remain = num_remain;
+        sx->num_occurrences_remain = num_remain;
         qof_instance_set_dirty(&sx->inst);
         gnc_sx_commit_edit(sx);
     }
@@ -953,7 +953,7 @@ xaccSchedXactionGetNextInstance (const SchedXaction *sx, SXTmpStateData *tsd)
     else if ( xaccSchedXactionHasOccurDef( sx ) )
     {
         if ((tsd && tsd->num_occur_rem == 0) ||
-            (!tsd && sx->num_occurances_remain == 0 ))
+            (!tsd && sx->num_occurrences_remain == 0 ))
         {
             g_date_clear( &next_occur, 1 );
         }
@@ -1092,7 +1092,7 @@ gnc_sx_create_temporal_state(const SchedXaction *sx )
 	 toRet->last_date       = sx->last_date;
     else
 	g_date_set_dmy (&(toRet->last_date), 1, 1, 1970);
-    toRet->num_occur_rem   = sx->num_occurances_remain;
+    toRet->num_occur_rem   = sx->num_occurrences_remain;
     toRet->num_inst   = sx->instance_num;
     return toRet;
 }
