@@ -787,7 +787,7 @@
     (cons 'N606 #(none "F1099-G" "Fed tax withheld, unemployment comp" 1 #t "" ((1990 "4"))))
 
     (cons 'N640 #(not-impl "F1099-INT" "1099 INT" 1 #f ""))
-    (cons 'N653 #(current "F1099-INT" "Intestment expense, int" 3 #t "" ((1999 "5"))))
+    (cons 'N653 #(current "F1099-INT" "Investment expense, int" 3 #t "" ((1999 "5"))))
     (cons 'N641 #(current "F1099-INT" "Foreign tax, int" 3 #t "" ((1999 "6") (1990 "5"))))
     (cons 'N642 #(not-impl "F1099-INT" "Foreign country, int" 2 #t "" ((1999 "7") (1990 "6"))))
 
