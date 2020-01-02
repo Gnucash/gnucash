@@ -147,7 +147,7 @@ Another point: with standardized options one option contract represents
 the ability to purchase (with a call option) or sell (with a put option) 
 100 shares of the underlying stock.  
 
-\seection engineerror Error Reporting
+\section engineerror Error Reporting
 
 The error reporting architecture (partially implemented), uses a globally
 visible subroutine to return an error.  In the naivest possible implementation,
