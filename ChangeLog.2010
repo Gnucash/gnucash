@@ -10107,7 +10107,7 @@
 	  weird file path construction functions and rewrote the function
 	  to use gnc_path_get_foo and gnc_build_data_path without all of
 	  the silly indirection. Removed superfluous URI checks (which are
-	  correctly perfomed by xaccResolveURL()). (MakeHomeDir,
+	  correctly performed by xaccResolveURL()). (MakeHomeDir,
 	  xaccPathGenerator, xaccDataPathGenerator)
 	  (xaccUserPathGenerator): Deleted; their functionality is
 	  replaced as noted above. (check_file_return_if_true): Renamed
