@@ -277,7 +277,7 @@ class GncNumeric(GnuCashCoreClass):
         """Constructor that supports the following formats:
         * No arguments defaulting to zero: eg. GncNumeric() == 0/1
         * A integer: e.g. GncNumeric(1) == 1/1
-        * Numerator and denominator intager pair: eg. GncNumeric(1, 2) == 1/2
+        * Numerator and denominator integer pair: eg. GncNumeric(1, 2) == 1/2
         * A floating point number: e.g. GncNumeric(0.5) == 1/2
         * A floating point number with defined conversion: e.g.
           GncNumeric(0.5, GNC_DENOM_AUTO,
