@@ -291,7 +291,7 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema,
 
     g_signal_handler_disconnect (settings_ptr, handlerid);
 
-    // remove the handlerid from the registerered_handlers_hash
+    // remove the handlerid from the registered_handlers_hash
     g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
 
     // destroy hash table if size is 0
