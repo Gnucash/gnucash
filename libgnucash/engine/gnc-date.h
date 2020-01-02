@@ -31,7 +31,7 @@
 
     Overall, this file is quite a mess.  Note, however, that other
     applications, besides just GnuCash, use this file.  In particular,
-    GnoTime (gttr.sourcefore.net) uses this file, and this file is
+    GnoTime (gttr.sourceforge.net) uses this file, and this file is
     formally a part of QOF (qof.sourceforge.net).
 
     An important note about time-keeping:  The general goal of any
