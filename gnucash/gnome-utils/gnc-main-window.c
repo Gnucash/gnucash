@@ -1561,7 +1561,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     gnc_plugin_update_actions(priv->action_group,
                               immutable_page_actions,
                               "sensitive", !immutable);
-    /* Trigger sensitivity updtates of other actions such as Save/Revert */
+    /* Trigger sensitivity updates of other actions such as Save/Revert */
     g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
     g_free(readonly);
