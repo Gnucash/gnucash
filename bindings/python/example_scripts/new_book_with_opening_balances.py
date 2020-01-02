@@ -47,7 +47,7 @@ from datetime import date
 #
 # This is done a per currency basis, one opening balance account for each
 #
-# For non-simple balance sheet accounts (like payable, recievable, stock,
+# For non-simple balance sheet accounts (like payable, receivable, stock,
 # mutual, and trading, you'll have to put the opening balance in yourself
 #
 # Invocation examples:
