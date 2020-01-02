@@ -441,7 +441,7 @@
 	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]:
 	  use basic-gobject framework to reduce the code size
 	  remove non-necessary overrides
-	  remove non-ncessary definitions
+	  remove unnecessary definitions
 	* src/gnome-utils/gnc-druid-provider-file-gnome.[ch]:
 	  Add a new provider that allows the user to select a file.
 

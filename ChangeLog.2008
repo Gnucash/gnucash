@@ -3170,7 +3170,7 @@
 2008-03-20 23:14  andi5
 
 	* [r17038] src/import-export/hbci/dialog-hbcitrans.c,
-	  src/import-export/hbci/gnc-plugin-hbci.c: Remove some unnessary
+	  src/import-export/hbci/gnc-plugin-hbci.c: Remove some unnecessary
 	  aqbanking version checks as we depend on >= 1.6.1. BP
 	* [r17037] src/gnome-utils/gnc-dialog.c,
 	  src/gnome-utils/gnc-dialog.h,
