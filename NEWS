@@ -1479,7 +1479,7 @@ New Features for Users:
         as the minimum version because it fully supports CSS
         theming.
     New editors to remove outdated or incorrect match data from the
-        import maps, a new user interfacs for managing files associated with
+        import maps, a new user interfaces for managing files associated with
         transactions, an improved facility for removing old prices from the
         price database, and a way to remove deleted files from the history
         list in the file menu.
@@ -2564,7 +2564,7 @@ New Features For Users:
     rename an account. THIS WILL MAKE YOUR FILE UNREADABLE BY
     PREVIOUS VERSIONS OF GNUCASH. There's a new editor to remove
     outdated or incorrect match data from the import maps, a new
-    user interfacs for managing files associated with transactions,
+    user interfaces for managing files associated with transactions,
     an improved facility for removing old prices from the price
     database, and a way to remove deleted files from the history
     list in the file menu. (All from Robert Fewell!)
