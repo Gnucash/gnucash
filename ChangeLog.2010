@@ -10820,7 +10820,7 @@
 	  The account name of the other account in multi-split transaction
 	  is extended to conform to the name in the register. Otherwise,
 	  the string Split from here has the ambiguity with the button
-	  labeles Split, which is the verb, whereas here we need the noun.
+	  labels Split, which is the verb, whereas here we need the noun.
 
 2010-02-05 20:29  cstim
 
