@@ -800,7 +800,7 @@ This "works" as follows:
 xaccAccountDestroy sets a "destroying" flag in qof_instance and calls xaccAccountCommitEdit.
 xaccAccountCommitEdit checks the flag and finding it true:
    calls xaccFreeACcountChildren
-   tests qof_book_shutting_down and either deletes the split list for the account (trusting the Transaction code to delete the splits if it is shutting down) or deletes the actual splits while it's clearing the list. (What happens to the references in the transactions then? It's calling xaccSplitDestroy, not g_oject_unref!)
+   tests qof_book_shutting_down and either deletes the split list for the account (trusting the Transaction code to delete the splits if it is shutting down) or deletes the actual splits while it's clearing the list. (What happens to the references in the transactions then? It's calling xaccSplitDestroy, not g_object_unref!)
    Again checking that the book isn't shutting down:
       run destroy_pending_splits_for_account
       destroy all of the lots in the lots list (again, destroy, not unref or even dispose)
