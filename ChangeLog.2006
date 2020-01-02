@@ -6243,7 +6243,7 @@
 	  report because it is untranslated completely. Merge from r14646.
 	* [r14664] branches/2.0, branches/2.0/ChangeLog,
 	  branches/2.0/src/business/business-reports/aging.scm: Fix string
-	  that wasnt marked for translation. Fortunately exactly this
+	  that wasn't marked for translation. Fortunately exactly this
 	  string exists already. Merge from r14645.
 
 2006-08-13 19:08  chris
@@ -6432,7 +6432,7 @@
 2006-08-11 20:30  cstim
 
 	* [r14645] trunk/src/business/business-reports/aging.scm: Fix
-	  string that wasnt marked for translation. Fortunately exactly
+	  string that wasn't marked for translation. Fortunately exactly
 	  this string exists already. BP
 
 2006-08-11 20:08  cstim
