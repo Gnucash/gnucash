@@ -25357,7 +25357,7 @@ msgstr ""
 "Zeige Zwischensummen für übergeordnete Konten gemäß Rechnungswesen-Stil "
 "eingerückt an. (experimentell)."
 
-# Hier ausnahmsweise "Aktiva & Passiva", die Seiten der Bilanz, 
+# Hier ausnahmsweise "Aktiva & Passiva", die Seiten der Bilanz,
 # da sich auch die Reinvermögen-Berichte darin befinden
 #: gnucash/report/report-system/report.scm:61
 msgid "_Assets & Liabilities"
@@ -27334,7 +27334,7 @@ msgstr ""
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:96
 msgid "Display amounts as hyperlinks"
-msgstr "Kontonamen anklickbar anzeigen"
+msgstr "Kontosalden anklickbar anzeigen"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:97
 msgid "Shows each amounts in the table as a hyperlink to a register or report."
@@ -27468,11 +27468,11 @@ msgstr "Nettoertrag"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1340
 msgid "Balance Sheet (Multicolumn)"
-msgstr "Bilanz (mit »eguile«)"
+msgstr "Bilanz (mehrspaltig)"
 
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1341
 msgid "Income Statement (Multicolumn)"
-msgstr "Ergebnisrechnung (mit »eguile«)"
+msgstr "Ergebnisrechnung (mehrspaltig)"
 
 #: gnucash/report/standard-reports/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
