@@ -74,7 +74,7 @@ simple, but it breaks down when there are too many/circular
 relationships.  It becomes all too easy to get trapped in inifite
 loops of corrections.   The goal of moving to a formal constraint
 system is to introduce specific, well-defined sync points where 
-constraint checking can be done, without incuring circular
+constraint checking can be done, without incurring circular
 dependencies.  At this time, the sync point is the xaccTransCommitEdit()
 subroutine.
 
