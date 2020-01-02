@@ -132,7 +132,7 @@
     (N329 . "The ordinary and necessary amounts of auto and travel expenses related to your rental activities, including 50% of meal expenses incurred while traveling away from home.")
     (N330 . "The amounts paid for cleaning services (carpet, drapes), cleaning supplies, locks and keys, pest control, pool service, and general cost of upkeep of the rental property.")
     (N331 . "The amounts paid as Commissions to realtors or management companies to collect rent.")
-    (N332 . "Insurasnce premiums paid for fire, theft, liability.")
+    (N332 . "Insurance premiums paid for fire, theft, liability.")
     (N333 . "The amounts of fees for tax advice and the preparation of tax forms related to your rental real estate or royalty properties.")
     (N334 . "Interest paid to banks or other financial institutions for a mortgage on your rental property, and you recieved a Form 1098.")
     (N335 . "Interest paid for a mortgage on your rental property, not paid to banks or other financial institutions or you did not recieve a Form 1098.")
