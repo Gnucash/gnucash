@@ -2320,7 +2320,7 @@
 
 2013-04-18 Christian Stimming 
 
-	* String improvements: For singular form of ngettest, the %d conversion specifier can be skipped.
+	* String improvements: For singular form of ngettext, the %d conversion specifier can be skipped.
 
 2013-04-17 Christian Stimming 
 
