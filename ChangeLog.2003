@@ -2072,7 +2072,7 @@
 	  Replace deprecated gnome_stock_new_with_icon, gnome_pixmap_button
 	  by gtk_button_new_from_stock
 	* src/gnome-utils/gnc-date-edit.c: select_clicked:
-	  Remove inactivated block referencing deprecated gnome_stock_cursor_new
+	  Remove inactivate block referencing deprecated gnome_stock_cursor_new
 
 
 2003-04-26 TomF changes for gnucash-gnome2-dev, 11th batch
@@ -2095,7 +2095,7 @@
 	  Replace deprecated gnome_stock_new_with_icon, gnome_pixmap_button
 	  by gtk_button_new_from_stock
 	* src/gnome-utils/gnc-date-edit.c: select_clicked:
-	  Remove inactivated block referencing deprecated gnome_stock_cursor_new
+	  Remove inactivate block referencing deprecated gnome_stock_cursor_new
 
 
 2003-04-02 TomF changes for gnucash-gnome2-dev, 10th batch
