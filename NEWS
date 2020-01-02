@@ -1534,7 +1534,7 @@ New Features for Developers:
         in C++, an effort that will continue in the next development
         cycle. KVP is now private to libgncmod-engine and accessible
         outside via qof_instance_set and qof_instance_get. KVP and GUID are
-        reimplemnted in C++ using boost::variant and boost::UUID respectively.
+        reimplemented in C++ using boost::variant and boost::UUID respectively.
     C++ unit tests require GoogleTest. While it's possible to use prebuilt
         libgtest and libgmock on some distros, building static libraries for
         GnuCash is preferred. It may be necessary to provide the paths to
@@ -2587,7 +2587,7 @@ New Features For Developers
     outside via qof_instance_set and qof_instance_get. (John Ralls
     and Aaron Laws)
 
-    KVP and GUID are reimplemnted in C++ using boost::variant and
+    KVP and GUID are reimplemented in C++ using boost::variant and
     boost::UUID respectively (Aaron Laws).
 
     The date implementation is migrated to boost::date-time,
