@@ -159,7 +159,7 @@ static const gchar* sane_descriptions[] =
     "Medicine",
     "Mortgage Interest",
     "Opening Balance",
-    "Pointe Paid",
+    "Points Paid",
     "Real Estate Tax",
     "Soc Sec",
     "State and Local",
