@@ -3248,7 +3248,7 @@
 
 2018-07-13 John Ralls
 
-	* Fix test-backend-dbi for Postgress and MySQL.
+	* Fix test-backend-dbi for Postgres and MySQL.
 
 2018-07-13 John Ralls
 
