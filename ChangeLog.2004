@@ -1180,7 +1180,7 @@
 	* src/engine/qof*:  Revert Linas' patch from last night which
 	  is broken is way too many ways to count.  First, the code didn't
 	  compile.  Second it was calling functions that took one argument
-	  with two due to broken casting.  Third, it had repurcusions in
+	  with two due to broken casting.  Third, it had repercussions in
 	  other sections of the code that Linas needs to take into account.
 
 2004-05-16  Derek Atkins  <derek@ihtfp.com>
