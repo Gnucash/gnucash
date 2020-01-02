@@ -12829,7 +12829,7 @@
 	  trunk/lib/libqof/backend/file/qsf-xml.h,
 	  trunk/lib/libqof/qof/deprecated.c,
 	  trunk/lib/libqof/qof/deprecated.h,
-	  trunk/lib/libqof/qof/gnc-date.c: Synchronise with QOF 0.6.3.
+	  trunk/lib/libqof/qof/gnc-date.c: Synchronize with QOF 0.6.3.
 	  Correct map handling to allow reverse operations and iteration
 	  over hierarchical objects. Improving debug messages and
 	  preventing a crash when loading a map directly. Standardise QSF

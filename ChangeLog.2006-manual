@@ -3262,7 +3262,7 @@ r13683 | chris | 2006-03-22 19:33:11 -0500 (Wed, 22 Mar 2006) | 3 lines
 
 2006-03-13  Neil Williams  <linux@codehelp.co.uk>
 
-	* : Synchronise with external QOF 0.6.3
+	* : Synchronize with external QOF 0.6.3
 
 	* qof/deprecated.c : Tweak.
 	* qof/deprecated.h : Tweak.
