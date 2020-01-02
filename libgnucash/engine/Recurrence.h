@@ -51,7 +51,7 @@ typedef enum
     PERIOD_WEEK,
     PERIOD_MONTH,
     PERIOD_END_OF_MONTH, /* This is actually a period plus a phase. */
-    PERIOD_NTH_WEEKDAY,  /* Also a phase, e.g. Second Tueday.       */
+    PERIOD_NTH_WEEKDAY,  /* Also a phase, e.g. Second Tuesday.       */
     PERIOD_LAST_WEEKDAY, /* Also a phase. */
     PERIOD_YEAR,
     NUM_PERIOD_TYPES,
