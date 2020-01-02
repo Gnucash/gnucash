@@ -4831,7 +4831,7 @@
 	  code are converted. This first commit for example contains a
 	  converted account hierarchy setup assistant, but not yet the
 	  code to use it, so the old druid is still in the libglade file.
-	  Once the code can succesfully use the new assistant from the
+	  Once the code can successfully use the new assistant from the
 	  gtkbuilder file, the old druid will be removed from the libglade
 	  file.
 	* [r20530] src/gnome/glade/account.glade: Add New Account
