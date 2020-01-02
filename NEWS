@@ -5461,7 +5461,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Added Italian account templates by Lorenzo Cappelletti
 	 o Change HBCI online transfer action so that first the gnucash
 	   Transaction is created and only after that the HBCI connection is
-	   started. Necessary for later implementation of offline queueing and
+	   started. Necessary for later implementation of offline queuing and
 	   multi-job execution.
 	 o Clarify the part of the HBCI setup about potentially adding HBCI
 	   accounts manually.
