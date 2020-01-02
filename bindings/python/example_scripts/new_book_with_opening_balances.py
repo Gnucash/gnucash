@@ -170,7 +170,7 @@ def record_opening_balance(original_account, new_account, new_book,
             opening_balance_per_currency[commodity_tuple] = \
                 (trans, new_total )
 
-def recursivly_build_account_tree(original_parent_account,
+def recursively_build_account_tree(original_parent_account,
                                   new_parent_account,
                                   new_book,
                                   new_commodity_table,
@@ -205,7 +205,7 @@ def recursivly_build_account_tree(original_parent_account,
                                 (namespace, mnemonic),
                                 )
 
-        recursivly_build_account_tree(original_account,
+        recursively_build_account_tree(original_account,
                                       new_account,
                                       new_book,
                                       new_commodity_table,
@@ -310,7 +310,7 @@ def main():
         new_book_session.save()
 
         opening_balance_per_currency = {}
-        recursivly_build_account_tree(
+        recursively_build_account_tree(
             original_book_session.get_book().get_root_account(),
             new_book_root,
             new_book,
