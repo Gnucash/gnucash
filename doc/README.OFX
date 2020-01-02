@@ -171,7 +171,7 @@ the exact same accounts.
 -----------------
 
 Tough much effort has been put in implementing relevant parts of the OFX
-standardas well as possible, and gracefully treating parts that are not
+standard as well as possible, and gracefully treating parts that are not
 supported, OFX is not implemented in a consistent manner across banks.  If you do
 encounter a problem, please report it to the developers (ideally with a sample
 file)
