@@ -6116,8 +6116,8 @@
 	* [r20265]
 	  src/optional/python-bindings/example_scripts/get_quotes.pl,
 	  src/optional/python-bindings/example_scripts/quotes_historic.py:
-	  Bug #640347: Adding Example Skripts for historic Stock Quotes
-	  This patch adds the example skripts from
+	  Bug #640347: Adding Example Scripts for historic Stock Quotes
+	  This patch adds the example scripts from
 	  http://wiki.gnucash.org/wiki/Stocks/get_prices to the directory
 	  python-bindings/example_scripts. Patch by Christoph Holtermann.
 	* [r20264]
