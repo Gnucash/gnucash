@@ -5914,7 +5914,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o HBCI improvements to transaction retrieval
 	 o Add Direct Debit HBCI action and add caching of the
 	   PIN to user preferences.
-	 o HBCI suport requires OpenHBCI 0.9.3 or current OpenHBCI CVS
+	 o HBCI support requires OpenHBCI 0.9.3 or current OpenHBCI CVS
 	 o loads of bugfixes, keep those bugs coming!
 	 o NOTE: Report bugs to https://bugs.gnucash.org
 

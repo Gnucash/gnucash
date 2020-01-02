@@ -11337,7 +11337,7 @@
 	  src/core-utils/Makefile.am, src/core-utils/core-utils.i,
 	  src/engine/engine.i, src/engine/gnc-hooks.c, src/gnc-ui.h,
 	  src/gnome/gnome.i, src/guile-mappings.h: Fix guile-1.6
-	  compatibility of r18541 (bug#582325). We still suppport
+	  compatibility of r18541 (bug#582325). We still support
 	  guile-1.6, hence we can use the functions introduced in
 	  guile-1.8 only by providing our own backward compatibility macro
 	  definitions in guile-mappings.h.
