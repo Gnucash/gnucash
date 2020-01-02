@@ -1,7 +1,7 @@
 
 /* Test file created by Linas Vepstas <linas@linas.org>
  * Review operation of the gnc-numeric tools by verifying results
- * of vairous operations.
+ * of various operations.
  *
  * June 2004
  */
