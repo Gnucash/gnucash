@@ -2764,7 +2764,7 @@
 2003-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c: change the description
-	  and action of Invoice and Payement Transactions/Splits, to make
+	  and action of Invoice and Payment Transactions/Splits, to make
 	  it easier to print a check off the posted transactions.
 
 	* src/report/standard-reports/cash-flow.scm: fix some labels and

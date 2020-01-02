@@ -227,7 +227,7 @@
     (cons 'N570 #(not-impl "F4835" "Spouse" 0 #t "" ((1990 ""))))
     (cons 'N571 #(none "F4835" "Sale of livestock/produce" 1 #t "" ((1990 "1"))))
     (cons 'N572 #(none "F4835" "Total co-op distributions" 1 #t "" ((1990 "2a"))))
-    (cons 'N573 #(none "F4835" "Agricultural program paymnts" 1 #t "" ((1990 "3a"))))
+    (cons 'N573 #(none "F4835" "Agricultural program payments" 1 #t "" ((1990 "3a"))))
     (cons 'N574 #(none "F4835" "CCC loans reported/election" 1 #t "" ((1990 "4a"))))
     (cons 'N575 #(none "F4835" "CCC loans forfeited/repaid" 1 #t "" ((1990 "4b"))))
     (cons 'N576 #(none "F4835" "Crop insurance proceeds received" 1 #t "" ((1990 "5a"))))

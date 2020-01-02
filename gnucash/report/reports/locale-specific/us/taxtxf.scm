@@ -2108,7 +2108,7 @@
                        (equal? (tm:mon bdto) 11)
                        (equal? (tm:mday bdto) 31))))
               ;; Adjust dates so we get the final Estimated Tax
-              ;; paymnent from the right year
+              ;; payment from the right year
                (from-est (if full-year?
                              (let ((bdtm (gnc-localtime
                                           (time64CanonicalDayTime

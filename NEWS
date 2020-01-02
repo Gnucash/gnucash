@@ -5478,7 +5478,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   consistent order (by date due).
 	 o Fix a bunch more rounding errors, and add more precision to the
 	   price.
-	 o Change the description and action of Invoice and Payement
+	 o Change the description and action of Invoice and Payment
 	   Transactions/Splits, to make it easier to print a check off the
 	   posted transactions.
 	 o Add Debit and Credit totals to Register report.
