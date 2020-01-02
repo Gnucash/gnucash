@@ -314,7 +314,7 @@ transaction to the general journal.
 
 Some important implementation details to understand:  the GUI currently
 uses begin/end as a convenience, and thus, may hold a transaction in
-the 'edit' state for a portentially long time (minutes or hours).
+the 'edit' state for a potentially long time (minutes or hours).
 Thus, begin/end should not map naively to a table-lock/unlock.
 Instead, an optimistic-locking scheme, as below, is preferred.
 
