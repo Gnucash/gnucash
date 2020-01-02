@@ -160,7 +160,7 @@ r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
 	  Single-pass audit/cleanup of Account.c
 
 	  - standardize on 'acc' as variable name for Account. 
-	  - removed 'acc->inst.dirty = TRUE' when preceeded by mark_account. 
+	  - removed 'acc->inst.dirty = TRUE' when preceded by mark_account. 
 	  - slightly more consistent whitespace. 
 	  - short-circuit no-op in many cases where we thought we were
 	  changing state but we really weren't. Don't dirty Accounts in
