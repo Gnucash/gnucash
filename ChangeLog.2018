@@ -1320,11 +1320,11 @@
 
 2018-12-11 Robert Fewell
 
-	* Change the way colours are imported by the CSV account tree importer
+	* Change the way colors are imported by the CSV account tree importer
 
 2018-12-11 Robert Fewell
 
-	* Change the sensitivity of the Cascade colour menu option
+	* Change the sensitivity of the Cascade color menu option
 
 2018-12-11 Robert Fewell
 
@@ -1644,7 +1644,7 @@
 
 2018-10-30 Robert Fewell
 
-	* Bug 796915 - Update Account colour background
+	* Bug 796915 - Update Account color background
 
 2018-10-18 Robert Fewell
 
@@ -3236,7 +3236,7 @@
 
 2018-07-15 Robert Fewell
 
-	* Add the ability to cascade account colours in account tree
+	* Add the ability to cascade account colors in account tree
 
 2018-07-14 John Ralls
 
@@ -5216,7 +5216,7 @@
 
 2018-03-05 Christopher Lam
 
-	* Modernise chart colours
+	* Modernise chart colors
 
 2018-03-04 Christopher Lam
 

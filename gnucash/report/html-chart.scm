@@ -270,7 +270,7 @@
 ;; chart - html-chart object
 ;; "label" - data series label eg. "Income"
 ;; data    - a list-of-numbers specifying series data
-;; color   - a string specifying series colour
+;; color   - a string specifying series color
 ;;
 ;; other keys may be specified, see ChartJS documentation
 ;; 'fill        - fill bar, or fill under line?

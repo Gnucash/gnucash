@@ -229,7 +229,7 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
  *
  * Creates a new #GtkCellRendererTextFlag. 
  * It is a standard GtkCellRendererText extended to optionally show a
- * coloured triangle as a flag in the top right corner
+ * colored triangle as a flag in the top right corner
  *
  * Returns: the new cell renderer
  **/

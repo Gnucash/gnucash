@@ -56,7 +56,7 @@
     (gnc:html-chart-add-data-series! chart
                                      "series-1"             ;series name
                                      '(25 45 30)            ;pie ratios
-                                     (gnc:assign-colors 3)) ;colours
+                                     (gnc:assign-colors 3)) ;colors
 
     ;; piechart doesn't need axes display:
     (gnc:html-chart-set-axes-display! chart #f)
@@ -64,7 +64,7 @@
 
 (define (simple-bar-chart stacked?)
   (let ((chart (gnc:make-html-chart))
-        (colours (gnc:assign-colors 3)))
+        (colors (gnc:assign-colors 3)))
     (gnc:html-chart-set-title!
      chart (list "Bar Chart Title"
                  (gnc:html-string-sanitize "Bar Chart SubTitle")))
@@ -75,15 +75,15 @@
     (gnc:html-chart-add-data-series! chart
                                      "dataset1"
                                      '(25 75)
-                                     (car colours))
+                                     (car colors))
     (gnc:html-chart-add-data-series! chart
                                      "dataset2"
                                      '(45 55)
-                                     (cadr colours))
+                                     (cadr colors))
     (gnc:html-chart-add-data-series! chart
                                      "dataset3"
                                      '(30 70)
-                                     (caddr colours))
+                                     (caddr colors))
 
     (gnc:html-chart-set-stacking?! chart stacked?)
     (gnc:html-chart-set-y-axis-label! chart "Y Axis")

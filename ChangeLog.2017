@@ -1164,11 +1164,11 @@
 
 2017-11-23 Robert Fewell 
 
-	* Replace the cell foreground and background colour handlers
+	* Replace the cell foreground and background color handlers
 
 2017-11-01 Robert Fewell 
 
-	* Test the widget state to get the correct background colour.
+	* Test the widget state to get the correct background color.
 
 2017-11-21 John Ralls 
 
@@ -1328,7 +1328,7 @@
 
 2017-11-01 Robert Fewell 
 
-	* Change the split and entry models to reflect the colour changes
+	* Change the split and entry models to reflect the color changes
 
 2017-11-01 Robert Fewell 
 
@@ -1336,11 +1336,11 @@
 
 2017-11-01 Robert Fewell 
 
-	* Replace the cell foreground and background colour handlers
+	* Replace the cell foreground and background color handlers
 
 2017-11-01 Robert Fewell 
 
-	* Test the widget state to get the correct background colour.
+	* Test the widget state to get the correct background color.
 
 2017-11-01 Robert Fewell 
 
@@ -1836,7 +1836,7 @@
 
 2017-09-09 Robert Fewell 
 
-	* Do not copy the colour and so prevent form having to free it
+	* Do not copy the color and so prevent form having to free it
 
 2017-09-09 Robert Fewell 
 
@@ -1888,7 +1888,7 @@
 
 2017-09-04 Robert Fewell 
 
-	* Remove the no longer widgets for setting register colours
+	* Remove the no longer widgets for setting register colors
 
 2017-09-04 Robert Fewell 
 
@@ -2396,11 +2396,11 @@
 
 2017-08-28 Robert Fewell 
 
-	* Change the background colours of the import-main-matcher
+	* Change the background colors of the import-main-matcher
 
 2017-08-28 Robert Fewell 
 
-	* Change colour function to is_color_light in gnc-dense-cal
+	* Change color function to is_color_light in gnc-dense-cal
 
 2017-08-26 Geert Janssens 
 
@@ -2476,7 +2476,7 @@
 
 2017-08-23 Robert Fewell 
 
-	* Rename the colour defines to closely match the text in import matcher
+	* Rename the color defines to closely match the text in import matcher
 
 2017-08-23 Robert Fewell 
 
@@ -2484,7 +2484,7 @@
 
 2017-08-23 Robert Fewell 
 
-	* Change the way dense calendar background colours are sourced
+	* Change the way dense calendar background colors are sourced
 
 2017-08-23 Robert Fewell 
 
@@ -2528,11 +2528,11 @@
 
 2017-08-13 Robert Fewell 
 
-	* Do not set the foreground colour in Import Matcher
+	* Do not set the foreground color in Import Matcher
 
 2017-08-13 Robert Fewell 
 
-	* Rework the Import Matcher colours to be from the fallback css file
+	* Rework the Import Matcher colors to be from the fallback css file
 
 2017-08-13 Robert Fewell 
 
@@ -2540,7 +2540,7 @@
 
 2017-08-12 Robert Fewell 
 
-	* The summary bar never respected the use of a negative colour
+	* The summary bar never respected the use of a negative color
 
 2017-08-12 Robert Fewell 
 
@@ -2548,7 +2548,7 @@
 
 2017-08-12 Robert Fewell 
 
-	* Rework the negative label colour
+	* Rework the negative label color
 
 2017-08-09 Robert Fewell 
 
@@ -3484,7 +3484,7 @@
 
 2017-07-02 Robert Fewell 
 
-	* Replace deprecated Gtk3.16 functions to change colour.
+	* Replace deprecated Gtk3.16 functions to change color.
 
 2017-07-02 Robert Fewell 
 

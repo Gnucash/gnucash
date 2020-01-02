@@ -7763,7 +7763,7 @@
 
 2001-03-08  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/scm/report/transaction-report.scm: More colourization.
+	* src/scm/report/transaction-report.scm: More colorization.
 	
 2001-03-07  Bill Gribble  <grib@billgribble.com>
 

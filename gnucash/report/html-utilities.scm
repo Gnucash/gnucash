@@ -159,7 +159,7 @@
                           value)))
 
 (define (gnc:assign-colors num-colors)
-  ;; default CSS colours
+  ;; default CSS colors
   ;; (define base-colors '("red" "orange" "yellow" "green"
   ;;                       "cyan" "blue" "purple" "magenta"
   ;;                       "orchid" "khaki" "gold" "orange"

@@ -1421,7 +1421,7 @@
 	  src/gnome-utils/gnc-tree-view.c,
 	  src/gnome-utils/gnc-tree-view.h,
 	  src/gnome-utils/gtkbuilder/dialog-preferences.glade: Bug #682660
-	  - Add Account background colour to Account page. Author: Robert
+	  - Add Account background color to Account page. Author: Robert
 	  Fewell <14ubobit@gmail.com>
 
 2012-09-05 10:45  gjanssens
@@ -3376,7 +3376,7 @@
 	  accounts based on the CSV file being imported. New accounts are
 	  created if the commodity required exists and existing accounts
 	  are updated for the four fields: code, description, notes and
-	  colour. This can be used for doing bulk updates of these fields
+	  color. This can be used for doing bulk updates of these fields
 	  and also for importing the account structure from another file.
 	  The second part is the change of the existing CSV importer to
 	  use an assistant to guide you through the import. Additional

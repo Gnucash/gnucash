@@ -2669,7 +2669,7 @@
 
 	* [r18198] src/report/stylesheets/stylesheet-css.scm: Update CSS
 	  style sheet to use font buttons rather than strings. The font
-	  weight and style can be set, but colour and background colour
+	  weight and style can be set, but color and background color
 	  cannot yet be set. Also, alignment is fixed by the stylesheet.
 
 2009-07-11 03:43  plongstaff

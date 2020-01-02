@@ -803,7 +803,7 @@ The following bugs have been fixed:
                   discoverable
      Bug 796903 - Crash when searching invoice by Invoice Owner
      Bug 796914 - Customer Summary is giving error
-     Bug 796915 - Update Account colour background
+     Bug 796915 - Update Account color background
      Bug 796940 - Invalid transaction date-posted KVP causes date-posted to
                   not be saved.
      Bug 796944 - Tab navigation From Company Address field in New Book Options
@@ -1070,10 +1070,10 @@ The following bugs have been fixed:
     Bug 796665 - Backspace Key Inoperable After Ctrl+V.
     Bug 796669 - Dark Theme Text Colors Hard to Read.
                  Only add the register-foreground class when using Gnucash built
-                 in colours. When this setting not used, the foreground colour
+                 in colors. When this setting not used, the foreground color
                  by default will be what ever the theme has set and will be
                  down to the user to over ride along with the other register
-                 colours.
+                 colors.
     Bug 796724 - Can't overwrite gnucash DB on MariaDB.
     Bug 796725 - 4 of 6 Date Posted options fail to return matching
                  transactions.
@@ -1146,10 +1146,10 @@ Other repairs or enhancements not marked as bugs:
         If a report was open, gnucash would invoke the print action on that
         report instead of opening an invoice report for the invoice.
     [job-report] Prevent Crash if there is no AR account
-    Add the ability to cascade account colours in account tree.
-        The colour on an account that has sub-accounts can be applied to its
+    Add the ability to cascade account colors in account tree.
+        The color on an account that has sub-accounts can be applied to its
         sub-accounts; by default only those sub-accounts that don't have a
-        colour set are affected, but there's a preference to override that.
+        color set are affected, but there's a preference to override that.
     Speed up loading the preference dialog by blocking register updates until
         the dialog is fully loaded.
     Update change_tax_code.py, add basic test for python query.
@@ -1511,7 +1511,7 @@ New Features for Users:
     Numerics are rewritten to allow for more significant digits. The old
         6-digit-maximum fraction is now 9-digits, and prices may have up
         to 18 digit precision.
-    Chart Reports appearance is improved, including more modern chart colours
+    Chart Reports appearance is improved, including more modern chart colors
         as suggested by https://clrs.cc/.
     Transaction Report improvements, including regular expression filtering
         and many more options and features including a "Subtotal Summary Grid"
@@ -1803,8 +1803,8 @@ Updated Translations: Spanish
     details.
 
 New Features For Users:
-    Modernise chart colours from the dated CSS defaults to
-        modern colours as suggested by https://clrs.cc/.
+    Modernise chart colors from the dated CSS defaults to
+        modern colors as suggested by https://clrs.cc/.
     Add "Subtotal Summary Grid" to the Transaction Report.
         The subtotal summary-grid will tabulate subtotals - prime-sortkey
         vertically, sec-sortkey horizontally. This will be useful, for
@@ -1893,7 +1893,7 @@ Other repairs not marked as bugs in git:
     With register obscured the sheet kept being redrawn
         When the register is obscured by another window, the sheet would get
         lot of draw events. This was tracked down to getting the foreground
-        colour for the item-edit widget for the state GTK_STATE_FLAG_NORMAL.
+        color for the item-edit widget for the state GTK_STATE_FLAG_NORMAL.
         Changed this to use the value obtained from gtk_widget_get_state_flags.
     Use the gnc_prefs_get_bool values to update cache values.
         This way is a safer way to update the cache values in case the settings
@@ -3298,7 +3298,7 @@ Between 2.6.3 and 2.6.4, the following bugfixes were accomplished:
     692249 - Add Help button in Custom Reports dialog box,
     695240 - mortgage wizard empty table.
     707243 - Hard-coded font colors in account tree?
-    711440 - Tab labels have different background colour than containing gui
+    711440 - Tab labels have different background color than containing gui
              element.
     711567 - Cannot save a custom report if a path contain diacritic chars
     719457 - Template for Home Mortgage Loan isn't properly nested.
