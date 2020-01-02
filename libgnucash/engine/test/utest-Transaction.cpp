@@ -1595,7 +1595,7 @@ test_xaccTransCommitEdit (void)
     split1->action = static_cast<char*>(CACHE_INSERT ("bar"));
     split1->amount = gnc_numeric_create (100000, 1000);
     split1->value = gnc_numeric_create (3200, 240);
-    /* Note, deliberately imblanced to force xaccTransScrubImbalance
+    /* Note, deliberately imbalanced to force xaccTransScrubImbalance
      * to create a balance split, thus showing that it got called.
      */
     split2->amount = gnc_numeric_create (-3000, 240);

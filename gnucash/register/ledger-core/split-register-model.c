@@ -1753,7 +1753,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
             if (!imbal_list)
             {
-                /* No commodity imbalance, there shouldn't be a value imablance. */
+                /* No commodity imbalance, there shouldn't be a value imbalance. */
                 return NULL;
             }
 
