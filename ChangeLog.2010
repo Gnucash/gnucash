@@ -3650,7 +3650,7 @@
 2010-07-08 19:16  gjanssens
 
 	* [r19349] src/gnome-utils/dialog-account.c,
-	  src/gnome-utils/gnc-main-window.c: Bug #623842 - Reseting of
+	  src/gnome-utils/gnc-main-window.c: Bug #623842 - Resetting of
 	  Color Tabs to default color wrong.
 
 2010-07-07 15:11  gjanssens
