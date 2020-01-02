@@ -1152,7 +1152,7 @@ def getBill(book, id):
 
     return gnucash_simple.billToDict(getGnuCashBill(book, id))
 
-def addVendor(book, id, currency_mnumonic, name, contact, address_line_1,
+def addVendor(book, id, currency_mnemonic, name, contact, address_line_1,
     address_line_2, address_line_3, address_line_4, phone, fax, email):
 
     if name == '':
@@ -1168,7 +1168,7 @@ def addVendor(book, id, currency_mnumonic, name, contact, address_line_1,
             {'field': 'address'})
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidVendorCurrency',
@@ -1192,7 +1192,7 @@ def addVendor(book, id, currency_mnumonic, name, contact, address_line_1,
 
     return gnucash_simple.vendorToDict(vendor)
 
-def addCustomer(book, id, currency_mnumonic, name, contact, address_line_1,
+def addCustomer(book, id, currency_mnemonic, name, contact, address_line_1,
     address_line_2, address_line_3, address_line_4, phone, fax, email):
 
     if name == '':
@@ -1208,7 +1208,7 @@ def addCustomer(book, id, currency_mnumonic, name, contact, address_line_1,
             {'field': 'address'})
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidCustomerCurrency',
@@ -1267,7 +1267,7 @@ def updateCustomer(book, id, name, contact, address_line_1, address_line_2,
 
     return gnucash_simple.customerToDict(customer)
 
-def addInvoice(book, id, customer_id, currency_mnumonic, date_opened, notes):
+def addInvoice(book, id, customer_id, currency_mnemonic, date_opened, notes):
 
     customer = book.CustomerLookupByID(customer_id)
 
@@ -1285,11 +1285,11 @@ def addInvoice(book, id, customer_id, currency_mnumonic, date_opened, notes):
             'The date opened must be provided in the form YYYY-MM-DD',
             {'field': 'date_opened'})
 
-    if currency_mnumonic is None:
-        currency_mnumonic = customer.GetCurrency().get_mnemonic()
+    if currency_mnemonic is None:
+        currency_mnemonic = customer.GetCurrency().get_mnemonic()
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidCustomerCurrency',
@@ -1302,7 +1302,7 @@ def addInvoice(book, id, customer_id, currency_mnumonic, date_opened, notes):
 
     return gnucash_simple.invoiceToDict(invoice)
 
-def updateInvoice(book, id, customer_id, currency_mnumonic, date_opened,
+def updateInvoice(book, id, customer_id, currency_mnemonic, date_opened,
     notes, posted, posted_account_guid, posted_date, due_date, posted_memo,
     posted_accumulatesplits, posted_autopay):
 
@@ -1380,7 +1380,7 @@ def updateInvoice(book, id, customer_id, currency_mnumonic, date_opened,
 
     return gnucash_simple.invoiceToDict(invoice)
 
-def updateBill(book, id, vendor_id, currency_mnumonic, date_opened, notes,
+def updateBill(book, id, vendor_id, currency_mnemonic, date_opened, notes,
     posted, posted_account_guid, posted_date, due_date, posted_memo,
     posted_accumulatesplits, posted_autopay):
 
@@ -1626,7 +1626,7 @@ def deleteTransaction(book, transaction_guid):
     if transaction != None :
         transaction.Destroy()
 
-def addBill(book, id, vendor_id, currency_mnumonic, date_opened, notes):
+def addBill(book, id, vendor_id, currency_mnemonic, date_opened, notes):
 
     vendor = book.VendorLookupByID(vendor_id)
 
@@ -1644,11 +1644,11 @@ def addBill(book, id, vendor_id, currency_mnumonic, date_opened, notes):
             'The date opened must be provided in the form YYYY-MM-DD',
             {'field': 'date_opened'})
 
-    if currency_mnumonic is None:
-        currency_mnumonic = vendor.GetCurrency().get_mnemonic()
+    if currency_mnemonic is None:
+        currency_mnemonic = vendor.GetCurrency().get_mnemonic()
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidVendorCurrency',
@@ -1661,7 +1661,7 @@ def addBill(book, id, vendor_id, currency_mnumonic, date_opened, notes):
 
     return gnucash_simple.billToDict(bill)
 
-def addAccount(book, name, currency_mnumonic, account_guid):
+def addAccount(book, name, currency_mnemonic, account_guid):
 
     from gnucash.gnucash_core_c import \
     ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE, ACCT_TYPE_INCOME, \
@@ -1670,7 +1670,7 @@ def addAccount(book, name, currency_mnumonic, account_guid):
     root_account = book.get_root_account()
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidCustomerCurrency',
@@ -1683,14 +1683,14 @@ def addAccount(book, name, currency_mnumonic, account_guid):
     account.SetType(ACCT_TYPE_ASSET)
     account.SetCommodity(currency)
 
-def addTransaction(book, num, description, date_posted, currency_mnumonic, splits):
+def addTransaction(book, num, description, date_posted, currency_mnemonic, splits):
 
     transaction = Transaction(book)
 
     transaction.BeginEdit()
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidTransactionCurrency',
@@ -1744,7 +1744,7 @@ def getTransaction(book, transaction_guid):
         return gnucash_simple.transactionToDict(transaction, ['splits'])
 
 def editTransaction(book, transaction_guid, num, description, date_posted,
-    currency_mnumonic, splits):
+    currency_mnemonic, splits):
 
     guid = gnucash.gnucash_core.GUID() 
     gnucash.gnucash_core.GUIDString(transaction_guid, guid)
@@ -1759,7 +1759,7 @@ def editTransaction(book, transaction_guid, num, description, date_posted,
     transaction.BeginEdit()
 
     commod_table = book.get_table()
-    currency = commod_table.lookup('CURRENCY', currency_mnumonic)
+    currency = commod_table.lookup('CURRENCY', currency_mnemonic)
 
     if currency is None:
         raise Error('InvalidTransactionCurrency',
