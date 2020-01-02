@@ -629,7 +629,7 @@ void gnc_file_log_replay (GtkWindow *parent)
                 {
                     if (strncmp(expected_header, read_buf, strlen(expected_header)) != 0)
                     {
-                        PERR("File header not recognised:\n%s", read_buf);
+                        PERR("File header not recognized:\n%s", read_buf);
                         PERR("Expected:\n%s", expected_header);
                         gnc_error_dialog(NULL, "%s",
                                          _("The log file you selected cannot be read. "

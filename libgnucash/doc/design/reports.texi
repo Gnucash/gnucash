@@ -63,7 +63,7 @@ has lots of date-manipulation functions you'll almost certainly need.
 
 To define a report, you call @code{(gnc:define-report)}. This function
 can accept a variable number of arguments, but at the moment four
-distinct arguments are recognised, as in the following from
+distinct arguments are recognized, as in the following from
 the transaction report:
 
 @example
