@@ -5480,7 +5480,7 @@
 	  patch reverses that decision.
 	* [r19059] src/engine/gnc-commodity.c: Bug #615912: Update
 	  gnc_quote_source from FQ 1.11 to 1.17 and enhance user_name
-	  Patch by Frank H. Ellenberger. Because many sources were listet
+	  Patch by Frank H. Ellenberger. Because many sources were listed
 	  as unknown, I tried to sort them in. Because normal users don't
 	  know all englisch abbreviations of far continents, I tried to
 	  use better understandable descriptions and added country codes.
