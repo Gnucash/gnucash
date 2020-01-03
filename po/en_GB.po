@@ -5870,20 +5870,18 @@ msgstr ""
 "instead of a set of accounts."
 
 #: gnucash/gnome/gnc-split-reg.c:600
-#, fuzzy
 msgid "Standard Order"
-msgstr "_Standard Order"
+msgstr "Standard Order"
 
 #: gnucash/gnome/gnc-split-reg.c:606
-#, fuzzy
 msgid "Date of Entry"
-msgstr "Date of _Entry"
+msgstr "Date of Entry"
 
 #. statement date title/value
 #: gnucash/gnome/gnc-split-reg.c:609 gnucash/gnome/window-reconcile2.c:1829
 #: gnucash/gnome/window-reconcile.c:1889
 msgid "Statement Date"
-msgstr "S_tatement Date"
+msgstr "Statement Date"
 
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/report/business-reports/customer-summary.scm:153
