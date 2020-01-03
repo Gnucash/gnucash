@@ -1167,7 +1167,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         _("Update the current report's saved configuration. "
         "The report configuration will be saved in the file %s. "), saved_reports_path);
     gchar *report_saveas_str = g_strdup_printf (
-        _("Add the current report's configuration to the `Reports > Saved Report Configurations' menu. "
+        _("Add the current report's configuration to the `Reports->Saved Report Configurations' menu. "
         "The report configuration will be saved in the file %s. "), saved_reports_path);
 
     GtkActionEntry report_actions[] =
