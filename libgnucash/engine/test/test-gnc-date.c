@@ -486,10 +486,10 @@ test_gnc_setlocale (int category, gchar *locale)
         if (localeval != NULL)
             return;
     }
-    g_fprintf (stderr, "There are some differences between distros in the way they name"
-              "locales, and this can cause trouble with the locale-based"
-              "formatting. If you get the assert in this function, run locale -a"
-              "and make sure that en_US, en_GB, and fr_FR are installed and that"
+    g_fprintf (stderr, "There are some differences between distros in the way they name "
+              "locales, and this can cause trouble with the locale-based "
+              "formatting. If you get the assert in this function, run locale -a "
+              "and make sure that en_US, en_GB, and fr_FR are installed and that "
               "if a suffix is needed it's in the suffixes array.");
     g_assert_not_reached ();
 }
