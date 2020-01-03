@@ -1,0 +1,2932 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-account-example
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Kontoplan BAS 2019 K1
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Kontoplan BAS 2019 K1
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      För enskilda näringsidkare som upprättar förenklat årsbokslut – K1
+
+      För mer information om BAS kontoplaner se https://www.bas.se/.
+    </gnc-act:long-description>
+    <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">5df07084fb48f599732df308a71d8246</act:id>
+  <act:type>ROOT</act:type>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1 TILLGÅNGAR</act:name>
+  <act:id type="new">03a869e21f475e8e7a0688e32035ee9a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>10 Immateriella anläggningstillgångar</act:name>
+  <act:id type="new">2624f7c2bf43bda02593c05adec45dc9</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1000 Immateriella anläggningstillgångar</act:name>
+  <act:id type="new">239a89c8081087a789d3e787d68e8d7f</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1000</act:code>
+  <act:parent type="new">2624f7c2bf43bda02593c05adec45dc9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1009 Årets avskrivningar på immateriella anläggningstillgångar</act:name>
+  <act:id type="new">cb36a1dddbc2b4b993c6a7cb0f60fc78</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1039</act:code>
+  <act:parent type="new">239a89c8081087a789d3e787d68e8d7f</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>11 Byggnader och mark</act:name>
+  <act:id type="new">8ce79ee3346df6cd06ccb1cebead42cb</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1110 Byggnader</act:name>
+  <act:id type="new">90a24db16dec9c0f67d0a10a61064e34</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1110</act:code>
+  <act:parent type="new">8ce79ee3346df6cd06ccb1cebead42cb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1119 Ackumulerade avskrivningar på byggnader</act:name>
+  <act:id type="new">b0e67f0df6cfb38beb1d2beba7a0542c</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1119</act:code>
+  <act:parent type="new">90a24db16dec9c0f67d0a10a61064e34</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1130 Mark</act:name>
+  <act:id type="new">9b1327f0309d862aa49cd35a7cc36feb</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1130</act:code>
+  <act:parent type="new">8ce79ee3346df6cd06ccb1cebead42cb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1150 Markanläggningar</act:name>
+  <act:id type="new">44cfafd593c9946f675800e496066917</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1150</act:code>
+  <act:parent type="new">8ce79ee3346df6cd06ccb1cebead42cb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1159 Ackumulerade avskrivningar på markanläggningar</act:name>
+  <act:id type="new">7555147c7129c5caba1e1876743cdf75</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1159</act:code>
+  <act:parent type="new">44cfafd593c9946f675800e496066917</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1180 Pågående nyanläggningar och förskott för byggnader och mark</act:name>
+  <act:id type="new">36b2409daa78427da527cd38a8b4d0c6</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1180</act:code>
+  <act:parent type="new">8ce79ee3346df6cd06ccb1cebead42cb</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>12 Maskiner och inventarier</act:name>
+  <act:id type="new">492385a54b954bf20b2e420647a75bcc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>1220 Maskiner och inventarier</act:name>
+  <act:id type="new">fc2b764be2cdc6e2d30b07a7f9ed8d6c</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1220</act:code>
+  <act:parent type="new">492385a54b954bf20b2e420647a75bcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1221 Årets nyanskaffning av maskiner och inventarier</act:name>
+  <act:id type="new">fcf6c6b1228e46dca37a58ed2e48280a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1221</act:code>
+  <act:parent type="new">fc2b764be2cdc6e2d30b07a7f9ed8d6c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1222 Årets ersättning för maskiner och inventarier</act:name>
+  <act:id type="new">dd81cb1e62ed40c8ad4933617ce0993a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1222</act:code>
+  <act:parent type="new">fc2b764be2cdc6e2d30b07a7f9ed8d6c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1229 Årets avskrivningar på maskiner och inventarier</act:name>
+  <act:id type="new">1baace30d40af65675f0d70414a5b9ae</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1229</act:code>
+  <act:parent type="new">fc2b764be2cdc6e2d30b07a7f9ed8d6c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1230 Byggnads- och markinventarier</act:name>
+  <act:id type="new">63859e6347004c5cabe073bf4b72bca8</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1230</act:code>
+  <act:parent type="new">492385a54b954bf20b2e420647a75bcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1231 Årets nyanskaffning av byggnads- och markinventarier</act:name>
+  <act:id type="new">652db6b3f4404d7ea980bff545e48860</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1231</act:code>
+  <act:parent type="new">63859e6347004c5cabe073bf4b72bca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1232 Årets ersättning för byggnads- och markinventarier</act:name>
+  <act:id type="new">9f4dced1dfa64d268f0e9d766e7da8e2</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1232</act:code>
+  <act:parent type="new">63859e6347004c5cabe073bf4b72bca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1239 Årets avskrivningar på byggnads- och markinventarier</act:name>
+  <act:id type="new">285527803a614551926df8115fc376e6</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1239</act:code>
+  <act:parent type="new">63859e6347004c5cabe073bf4b72bca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1240 Bilar och andra transportmedel</act:name>
+  <act:id type="new">1c3b92a0c2cac9e153224720f3e5b8b0</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1240</act:code>
+  <act:parent type="new">492385a54b954bf20b2e420647a75bcc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1241 Årets nyanskaffning av bilar och andra transportmedel</act:name>
+  <act:id type="new">80cb227723074363b11a6bf07b8b31f1</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1241</act:code>
+  <act:parent type="new">1c3b92a0c2cac9e153224720f3e5b8b0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1242 Årets ersättning för bilar och andra transportmedel</act:name>
+  <act:id type="new">37cc7a92889d476488a9edca25216ad9</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1242</act:code>
+  <act:parent type="new">1c3b92a0c2cac9e153224720f3e5b8b0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1249 Årets avskrivningar på bilar och andra transportmedel</act:name>
+  <act:id type="new">541c9a36435b436540b0adbb5e3661fb</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1249</act:code>
+  <act:parent type="new">1c3b92a0c2cac9e153224720f3e5b8b0</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>13 Övriga anläggningstillgångar</act:name>
+  <act:id type="new">b56290719d0a8fe11675ff31f6c22235</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1300 Andelar</act:name>
+  <act:id type="new">a1d0140d8d121321771e1bd5f50b2700</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1300</act:code>
+  <act:parent type="new">b56290719d0a8fe11675ff31f6c22235</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>14 Lager</act:name>
+  <act:id type="new">fffa8cc2b98304e1540b7dc12f14cc91</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1400 Lager</act:name>
+  <act:id type="new">aea558c9642f4614965537ffafd2e858</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1400</act:code>
+  <act:parent type="new">fffa8cc2b98304e1540b7dc12f14cc91</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>15 Kundfordringar</act:name>
+  <act:id type="new">ea4a0d0c8593641e278035a174cc3f1a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1500 Kundfordringar</act:name>
+  <act:id type="new">b9e033933cf1ff719f9847a4fe1f5a7a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1500</act:code>
+  <act:parent type="new">ea4a0d0c8593641e278035a174cc3f1a</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>16 Övriga fordringar</act:name>
+  <act:id type="new">4a545cb3bbba64a424b782cff8fc1090</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1600 Övriga fordringar</act:name>
+  <act:id type="new">7d87868f24bb0cd8e9653c29c05decfc</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1600</act:code>
+  <act:parent type="new">4a545cb3bbba64a424b782cff8fc1090</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1650 Momsfordran</act:name>
+  <act:id type="new">cfea3a3b8d526ff282182fc4c40e1d58</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1650</act:code>
+  <act:parent type="new">4a545cb3bbba64a424b782cff8fc1090</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>17 Förskott till leverantörer</act:name>
+  <act:id type="new">a6ddd0038008f72c3641d3f8a10a6e44</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1700 Förskott till leverantörer</act:name>
+  <act:id type="new">00a2f44b8fabc6172e62473fc6f04f98</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1700</act:code>
+  <act:parent type="new">a6ddd0038008f72c3641d3f8a10a6e44</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>19 Kassa och bank</act:name>
+  <act:id type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">03a869e21f475e8e7a0688e32035ee9a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1910 Kassa</act:name>
+  <act:id type="new">9dd99a757606bea0d9960f1f7fac5ac9</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1910</act:code>
+  <act:parent type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1920 PlusGiro</act:name>
+  <act:id type="new">1e03d5b8a1ef0570d6e8816525d2cb04</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1920</act:code>
+  <act:parent type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1930 Företagskonto/checkkonto/affärskonto</act:name>
+  <act:id type="new">9e3889245bc1fe8e60e4ebde71121e55</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1930</act:code>
+  <act:parent type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1940 Övriga bankkonton</act:name>
+  <act:id type="new">c05d3b4fb381ae36f77995fbf36c887a</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1940</act:code>
+  <act:parent type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>1970 Särskilda bankkonton</act:name>
+  <act:id type="new">58eda267ec774ea496bfb8b3bf9eb432</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1970</act:code>
+  <act:parent type="new">df5eca40bc7e9bb8fac067d26a15b2fa</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2 EGET KAPITAL OCH SKULDER</act:name>
+  <act:id type="new">3f9e37a71410baf409c19d761a821efa</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>20 Eget kapital</act:name>
+  <act:id type="new">9602fd8bd0ef942b260b68d649b1105d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2010 Eget kapital, delägare 1</act:name>
+  <act:id type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2010</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2011 Egna varuuttag</act:name>
+  <act:id type="new">c5e508332917d9ebbceb297262dbafe9</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2011</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2012 Avräkning för skatter och avgifter (skattekonto)</act:name>
+  <act:id type="new">aee12bb799a282ede2dd3f94c240afb0</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2012</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2013 Övriga egna uttag</act:name>
+  <act:id type="new">cfb05f3b914af4678e618e1738f738e2</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2013</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2014 Uttag förmåner</act:name>
+  <act:id type="new">4ce81ad6a20a4d449ba81dc9d4e32374</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2014</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2017 Egna insättningar</act:name>
+  <act:id type="new">9c999a847ac3b172840a57263c65ec80</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2017</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2019 Årets resultat, delägare 1</act:name>
+  <act:id type="new">56e05aa775350d8b7607b09c1ccde11f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2019</act:code>
+  <act:parent type="new">51f24b40f6b7ab6c9e0b68c8e59682db</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2020 Eget kapital, delägare 2</act:name>
+  <act:id type="new">9c2d120c4d6b45481eb5b8d4b62008a2</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2020</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2030 Eget kapital, delägare 3</act:name>
+  <act:id type="new">bbefcaa9f3f3103ddb062c5e63fe949b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2030</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2040 Eget kapital, delägare 4</act:name>
+  <act:id type="new">da65dce36c2e20960d8fd5134ee787ce</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2040</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2050 Avsättning till expansionsfond</act:name>
+  <act:id type="new">295cd0961c8d444a96d1a2ed3f54e445</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2050</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2060 Ersättningsfond</act:name>
+  <act:id type="new">d0b5a4945cb8de4bbb5b33b12b980b16</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2060</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2070 Insatsemissioner, avbetalningsplan på skog, skogskonto, upphovsmannakonto</act:name>
+  <act:id type="new">6e0ced09ad9c1dcd5499aef5cd40934e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2070</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2080 Periodiseringsfonder</act:name>
+  <act:id type="new">935bbd2db358dbc20876b7847c20cd80</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2080</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2083 Periodiseringsfond vid 2012 års taxering</act:name>
+  <act:id type="new">32724794d3eb49f9870eed08a4d9adfe</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2083</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2084 Periodiseringsfond vid 2013 års taxering</act:name>
+  <act:id type="new">06b7fce2805c4a2a9170755f4cfc5954</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2084</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2085 Periodiseringsfond 2013</act:name>
+  <act:id type="new">01801b0658694733b96c8807871c8cdf</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2085</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2086 Periodiseringsfond 2014</act:name>
+  <act:id type="new">78a599d77ad647328813d663bcb43e7f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2086</act:code>
+  <act:slots>
+  </act:slots>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2087 Periodiseringsfond 2015</act:name>
+  <act:id type="new">4384c7d3d39f43b8ada16206fd0c0100</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2087</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2088 Periodiseringsfond 2016</act:name>
+  <act:id type="new">d359e3b1bbec49a593c8f38ee01d068d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2088</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2089 Periodiseringsfond 2017</act:name>
+  <act:id type="new">e364946feeb64310ad422b65bff0de77</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2089</act:code>
+  <act:parent type="new">935bbd2db358dbc20876b7847c20cd80</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>2090 Utjämningskonto upplysningar 1-4</act:name>
+  <act:id type="new">abcb13e40f4d253ef842e99eb6039ebd</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2090</act:code>
+  <act:parent type="new">9602fd8bd0ef942b260b68d649b1105d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>23 Låneskulder</act:name>
+  <act:id type="new">b5151c31646cd499850ef318abd46590</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2330 Checkräkningskredit</act:name>
+  <act:id type="new">05b6a766fe9b991bf42994848c6fdfdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2330</act:code>
+  <act:parent type="new">b5151c31646cd499850ef318abd46590</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2350 Skulder till kreditinstitut</act:name>
+  <act:id type="new">cece56794a5a77829adddcfc9dbd43b1</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2350</act:code>
+  <act:parent type="new">b5151c31646cd499850ef318abd46590</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2390 Övriga låneskulder</act:name>
+  <act:id type="new">db6f4b353d24bfaeb239a067181105e8</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2390</act:code>
+  <act:parent type="new">b5151c31646cd499850ef318abd46590</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>24 Skulder till leverantörer</act:name>
+  <act:id type="new">d354f1f76b4aed575a3ed4cacd835203</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2440 Leverantörsskulder</act:name>
+  <act:id type="new">2aacb8080c22ff2e7fb81164b23fd3ba</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2440</act:code>
+  <act:parent type="new">d354f1f76b4aed575a3ed4cacd835203</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>26 Moms och särskilda punktskatter</act:name>
+  <act:id type="new">7df80aaf19a12c74a87eb5970f41098a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2610 Utgående moms, 25 %</act:name>
+  <act:id type="new">419e71cb06e38ff8b498a51ef0517d36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2610</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2611 Utgående moms på försäljning inom Sverige, 25 %</act:name>
+  <act:id type="new">43b38510275eb4c4911bcb85da20697f</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2611</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2612 Utgående moms på egna uttag, 25 %</act:name>
+  <act:id type="new">8f7e82b7c0f8b243a677ad29b23bbf07</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2612</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2613 Utgående moms för uthyrning, 25 %</act:name>
+  <act:id type="new">1a8b235b4852f4e22f0db78c04564c27</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2613</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2614 Utgående moms omvänd skattskyldighet, 25 %</act:name>
+  <act:id type="new">d84eb5acad93bcf5d21e471dbb2a2cdf</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2614</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2615 Utgående moms import av varor, 25 %</act:name>
+  <act:id type="new">1d020cc07964a0b257449401fafa1ae8</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2615</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2618 Vilande utgående moms, 25 %</act:name>
+  <act:id type="new">6570e6df2a35f9fb5f1442a9cf4800bc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2618</act:code>
+  <act:parent type="new">419e71cb06e38ff8b498a51ef0517d36</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2620 Utgående moms, 12 %</act:name>
+  <act:id type="new">9fa1e2ef799836868f1f3d874360b945</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2620</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2621 Utgående moms på försäljning inom Sverige, 12 %</act:name>
+  <act:id type="new">d483108e8771d7129364ac47f737deb2</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2621</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2622 Utgående moms på egna uttag, 12 %</act:name>
+  <act:id type="new">a6c29456caae05125a2d4e18836311d0</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2622</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2623 Utgående moms för uthyrning, 12 %</act:name>
+  <act:id type="new">7479e29f5e85ee0f1c412893f5d3fff1</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2623</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2624 Utgående moms omvänd skattskyldighet, 12 %</act:name>
+  <act:id type="new">8b7b2b45df16e77bb062650a7225afd3</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2624</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2625 Utgående moms import av varor, 12 %</act:name>
+  <act:id type="new">8305a58e6b9ba96c5616f3261b24ea87</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2625</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2628 Vilande utgående moms, 12 %</act:name>
+  <act:id type="new">4b127da3254b4982ac768c36cdd87479</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2628</act:code>
+  <act:parent type="new">9fa1e2ef799836868f1f3d874360b945</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2630 Utgående moms, 6 %</act:name>
+  <act:id type="new">ef916fa4249840372c89fe8e2cd03234</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2630</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2631 Utgående moms på försäljning inom Sverige, 6 %</act:name>
+  <act:id type="new">f8cb4f0a3a53844681d79811d71add1a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2631</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2632 Utgående moms på egna uttag, 6 %</act:name>
+  <act:id type="new">c2ca29aad57fda80ede6a0d280e65ada</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2632</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2633 Utgående moms för uthyrning, 6 %</act:name>
+  <act:id type="new">5312c41b7d02a323c8e247e454e96df3</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2633</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2634 Utgående moms omvänd skattskyldighet, 6 %</act:name>
+  <act:id type="new">d37c1bf20865a636dc2793baab04791a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2634</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2635 Utgående moms import av varor, 6 %</act:name>
+  <act:id type="new">f91bb4507443e417db3f0d356a09f0ae</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2635</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2638 Vilande utgående moms, 6 %</act:name>
+  <act:id type="new">daaaa545396c4c7c9ebfa3ad0078519e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2638</act:code>
+  <act:parent type="new">ef916fa4249840372c89fe8e2cd03234</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2640 Ingående moms</act:name>
+  <act:id type="new">27f018f9b9d1fa8a13349c140e669088</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2640</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2641 Debiterad ingående moms</act:name>
+  <act:id type="new">71a93c3019393adbbd3a121babbc6811</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2641</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2642 Debiterad ingående moms i anslutning till frivillig skattskyldighet</act:name>
+  <act:id type="new">9f7f0883959285e0e07dcc80eb9ad22c</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2642</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2645 Beräknad ingående moms på förvärv från utlandet</act:name>
+  <act:id type="new">2871b1aa3cea4f41686c05c22bf9bb72</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2645</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2646 Ingående moms på uthyrning</act:name>
+  <act:id type="new">fd9aeb8d0f875845149730ec4b1a254a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2646</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2648 Vilande ingående moms</act:name>
+  <act:id type="new">b959644b0916a8bd4d4421321f7ab7c7</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2648</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2649 Ingående moms, blandad verksamhet</act:name>
+  <act:id type="new">b95a2e37580e3cc18d3846c9e4b04ff5</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2649</act:code>
+  <act:parent type="new">27f018f9b9d1fa8a13349c140e669088</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2650 Redovisningskonto för moms</act:name>
+  <act:id type="new">f7a15f6636d66108c30faf45a621f0b9</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2650</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2660 Särskilda punktskatter</act:name>
+  <act:id type="new">41fc76ba75c348d8b40fbf27baafee34</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2660</act:code>
+  <act:parent type="new">7df80aaf19a12c74a87eb5970f41098a</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>27 Personalens skatter, avgifter och löneavdrag</act:name>
+  <act:id type="new">3b664b5bd2464be623414bc7006d1bff</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2710 Personalskatt</act:name>
+  <act:id type="new">271c1e0419852878eb21b17a8704367a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2710</act:code>
+  <act:parent type="new">3b664b5bd2464be623414bc7006d1bff</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2730 Lagstadgade/avtalade sociala avgifter och särskild löneskatt</act:name>
+  <act:id type="new">2c0b488697fd96d2d494e0c142e9ba4e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2730</act:code>
+  <act:parent type="new">3b664b5bd2464be623414bc7006d1bff</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>29 Övriga skulder</act:name>
+  <act:id type="new">de6fe9710408157e5f24d1ea87cd0999</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">3f9e37a71410baf409c19d761a821efa</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>2900 Övriga skulder</act:name>
+  <act:id type="new">c1bcd6be8cc9eeabd1bd36ba91483e05</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>2900</act:code>
+  <act:parent type="new">de6fe9710408157e5f24d1ea87cd0999</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>3 RÖRELSENS INKOMSTER/INTÄKTER</act:name>
+  <act:id type="new">304e26b5f79253ee3abd1a9ad7efa70f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>30–34 Huvudintäkter</act:name>
+  <act:id type="new">fef105cdfcaba2396588c82ecf5ebf45</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">304e26b5f79253ee3abd1a9ad7efa70f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3000 Försäljning och utfört arbete samt övriga momspliktiga intäkter</act:name>
+  <act:id type="new">48784eca275d7382341b27121e2a3fec</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3000</act:code>
+  <act:parent type="new">fef105cdfcaba2396588c82ecf5ebf45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3100 Momsfria intäkter</act:name>
+  <act:id type="new">a0fc05dadabb86ff3a7f3c8646e6c03c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3100</act:code>
+  <act:parent type="new">fef105cdfcaba2396588c82ecf5ebf45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3200 Bil- och bostadsförmån m.m.</act:name>
+  <act:id type="new">95a296b676893507f582699f063a52bd</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3200</act:code>
+  <act:parent type="new">fef105cdfcaba2396588c82ecf5ebf45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3300 Försäljning av tjänster utanför Sverige</act:name>
+  <act:id type="new">d0fd861e53684bbd8e891954dc178650</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3000</act:code>
+  <act:parent type="new">fef105cdfcaba2396588c82ecf5ebf45</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>35 Fakturerade kostnader</act:name>
+  <act:id type="new">f33b546190f5608863daf185241cd82d</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">304e26b5f79253ee3abd1a9ad7efa70f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3500 Fakturerade kostnader</act:name>
+  <act:id type="new">6db119b8cadd4379f2c86e6b69684c34</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3500</act:code>
+  <act:parent type="new">f33b546190f5608863daf185241cd82d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>37 Intäktskorrigeringar</act:name>
+  <act:id type="new">cfb26d1a7f1c6650e64b34b41181c8b9</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">304e26b5f79253ee3abd1a9ad7efa70f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3700 Lämnade rabatter, bonus, etc.</act:name>
+  <act:id type="new">21d37c96ea6e3b8cd6bb90a0aa9141ed</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3700</act:code>
+  <act:parent type="new">cfb26d1a7f1c6650e64b34b41181c8b9</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>39 Övriga rörelseintäkter</act:name>
+  <act:id type="new">7e9adb7a36e1248bd5c9eedd5596daa0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">304e26b5f79253ee3abd1a9ad7efa70f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3900 Övriga rörelseintäkter</act:name>
+  <act:id type="new">0e8f3d710aa7ab7e9fd38030b02edda0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3900</act:code>
+  <act:parent type="new">7e9adb7a36e1248bd5c9eedd5596daa0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3970 Vinst vid avyttring av immateriella och materiella anläggningstillgångar</act:name>
+  <act:id type="new">24efa4da075a6b41ea26aa87c0bd9cf0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3970</act:code>
+  <act:parent type="new">7e9adb7a36e1248bd5c9eedd5596daa0</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>3980 Erhållna bidrag</act:name>
+  <act:id type="new">c3ae8606f31a1c678eadc3fe2418a26c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>3980</act:code>
+  <act:parent type="new">7e9adb7a36e1248bd5c9eedd5596daa0</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>4 UTGIFTER/KOSTNADER FÖR VAROR, MATERIAL OCH VISSA KÖPTA TJÄNSTER</act:name>
+  <act:id type="new">e60ff13ba85f36e5ff013f2245c56a23</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>40–45 Inköp av varor och material</act:name>
+  <act:id type="new">2fd4dc2c72a0d51c7a3b54f61be5bd4e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">e60ff13ba85f36e5ff013f2245c56a23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4000 Varor</act:name>
+  <act:id type="new">d25ea315a5f4f4e19bf1053c764573af</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4000</act:code>
+  <act:parent type="new">2fd4dc2c72a0d51c7a3b54f61be5bd4e</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>46 Legoarbeten, underentreprenader</act:name>
+  <act:id type="new">19836cee2a9b0ba93035d1d51dfa63db</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">e60ff13ba85f36e5ff013f2245c56a23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4600 Legoarbeten och underentreprenader</act:name>
+  <act:id type="new">f78abdfd54fec20fcf2d314fead6a316</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4600</act:code>
+  <act:parent type="new">19836cee2a9b0ba93035d1d51dfa63db</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>47 Reduktion av inköpspriser</act:name>
+  <act:id type="new">f2e3421559c217e636e34553be7047e2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">e60ff13ba85f36e5ff013f2245c56a23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4700 Erhållna rabatter, bonus etc.</act:name>
+  <act:id type="new">c86b54b25424b09cf59246301f225de4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4700</act:code>
+  <act:parent type="new">f2e3421559c217e636e34553be7047e2</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>49 Förändring av lager</act:name>
+  <act:id type="new">fb93020f8515aa485282518945534233</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">e60ff13ba85f36e5ff013f2245c56a23</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>4900 Förändring av lager</act:name>
+  <act:id type="new">5556ffa0ceda660ebf72cc40f7b8d482</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>4900</act:code>
+  <act:parent type="new">fb93020f8515aa485282518945534233</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>5–6 ÖVRIGA EXTERNA RÖRELSEUTGIFTER/KOSTNADER</act:name>
+  <act:id type="new">d4050fa5794ead1a138cca64f22ff22f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>50 Lokalkostnader</act:name>
+  <act:id type="new">65b1c6ec7f07a8252235e191b69aee2e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5000 Lokalkostnader</act:name>
+  <act:id type="new">6c19c2b038ce141731d9d864eedc85c9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5000</act:code>
+  <act:parent type="new">65b1c6ec7f07a8252235e191b69aee2e</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>51 Fastighetskostnader</act:name>
+  <act:id type="new">d15302427553c8b89c07a5f77ccbc226</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5100 Fastighetskostnader</act:name>
+  <act:id type="new">e183aa14c75edce0c23dbd84f8d74e1c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5100</act:code>
+  <act:parent type="new">d15302427553c8b89c07a5f77ccbc226</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>52 Hyra av anläggningstillgångar</act:name>
+  <act:id type="new">15765a16995b11a12331fc8ba3df1d93</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5200 Hyra av anläggningstillgångar</act:name>
+  <act:id type="new">6f77b74b971ab873beb344a0b4f9767d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5200</act:code>
+  <act:parent type="new">15765a16995b11a12331fc8ba3df1d93</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>54 Förbrukningsinventarier och förbrukningsmaterial</act:name>
+  <act:id type="new">174ce570da1803d21dc4427a118752db</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5400 Förbrukningsinventarier och förbrukningsmaterial</act:name>
+  <act:id type="new">95ee87eab36f1346c9714e7153aeae27</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5400</act:code>
+  <act:parent type="new">174ce570da1803d21dc4427a118752db</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>55 Reparation och underhåll</act:name>
+  <act:id type="new">5977ffe944910809524c416d1b598d0d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5500 Reparation och underhåll</act:name>
+  <act:id type="new">ba50af751c0f6beb19095ce689c295ef</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5500</act:code>
+  <act:parent type="new">5977ffe944910809524c416d1b598d0d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>56 Kostnader för transportmedel</act:name>
+  <act:id type="new">c60ea041e268a87a402ec8f84e635d59</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5600 Kostnader för transportmedel</act:name>
+  <act:id type="new">1075a0a0541650a73c7ed15e5d427cf8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5600</act:code>
+  <act:parent type="new">c60ea041e268a87a402ec8f84e635d59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5610 Personbilskostnader</act:name>
+  <act:id type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5610</act:code>
+  <act:parent type="new">c60ea041e268a87a402ec8f84e635d59</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5611 Drivmedel för personbilar</act:name>
+  <act:id type="new">0f12bbdae4c15668d15a99272268c546</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5611</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5612 Försäkring och skatt för personbilar</act:name>
+  <act:id type="new">aee46aef7f0e20c78e16a140e34410f9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5612</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5613 Reparation och underhåll av personbilar</act:name>
+  <act:id type="new">d5e5c22c93f98cb792fbfd7782df6c05</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5613</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5615 Leasing av personbilar</act:name>
+  <act:id type="new">048357f5da43832cf451cfe3e05864f3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5615</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5618 Schablonmässig milkostnad privat personbil</act:name>
+  <act:id type="new">edd3d90d4d1741e7bd0f48b70bf67244</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5618</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5619 Övriga personbilskostnader</act:name>
+  <act:id type="new">6d6c7d1a9d2448eab0f89dcc786a8e7b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5619</act:code>
+  <act:parent type="new">57f8f326bec8882d8b939ab3c6ad6c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5620 Lastbilskostnader</act:name>
+  <act:id type="new">bb05957c-bf30-47c0-b06f-ddad995d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5620</act:code>
+  <act:parent type="new">c60ea041e268a87a402ec8f84e635d59</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>57 Frakter och transporter</act:name>
+  <act:id type="new">5152a3aa26e912bca990d9aaad75c789</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5700 Frakter och transporter</act:name>
+  <act:id type="new">ff2cb396f88e5bf557378981b2919097</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5700</act:code>
+  <act:parent type="new">5152a3aa26e912bca990d9aaad75c789</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>58 Resekostnader</act:name>
+  <act:id type="new">651599ea802bd71906ebefeedf7fc3fd</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5800 Resekostnader</act:name>
+  <act:id type="new">e63a708914ad8de60752a78aa8a150e3</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5800</act:code>
+  <act:parent type="new">651599ea802bd71906ebefeedf7fc3fd</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>59 Reklam och PR</act:name>
+  <act:id type="new">5fafc6c85ed1f9476772d954282ccaf5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>5900 Reklam och PR</act:name>
+  <act:id type="new">50f8e0e48ee499637e95fda6a04722b6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>5900</act:code>
+  <act:parent type="new">5fafc6c85ed1f9476772d954282ccaf5</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>60 Övriga försäljningskostnader</act:name>
+  <act:id type="new">fe681ef4b1cb94ee9a45459989606d97</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6000 Övriga försäljningskostnader</act:name>
+  <act:id type="new">344bf21648e1d1abd5438c288845633a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6000</act:code>
+  <act:parent type="new">fe681ef4b1cb94ee9a45459989606d97</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6070 Representation</act:name>
+  <act:id type="new">37484c37850fc5a8ea7a900ff3d5f3ee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6070</act:code>
+  <act:parent type="new">fe681ef4b1cb94ee9a45459989606d97</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6071 Representation, avdragsgill</act:name>
+  <act:id type="new">409eec0a10dbd73beab62757ccda1a01</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6071</act:code>
+  <act:parent type="new">37484c37850fc5a8ea7a900ff3d5f3ee</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6072 Representation, ej avdragsgill</act:name>
+  <act:id type="new">fe9ef5220b2c3a298cb996929212026a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6072</act:code>
+  <act:parent type="new">37484c37850fc5a8ea7a900ff3d5f3ee</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>61 Kontorsmateriel och trycksaker</act:name>
+  <act:id type="new">b1be8dc4a0fe37b6716f0bba64b82503</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6100 Kontorsmateriel och trycksaker</act:name>
+  <act:id type="new">7713ce8b99af44666d63a7fbd9b97cf7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6100</act:code>
+  <act:parent type="new">b1be8dc4a0fe37b6716f0bba64b82503</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>62 Tele och post</act:name>
+  <act:id type="new">0f7d8d465d24a66ff273a97c9c4d32d5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6200 Tele och post</act:name>
+  <act:id type="new">1f6933e211c801e289443386905040fb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6200</act:code>
+  <act:parent type="new">0f7d8d465d24a66ff273a97c9c4d32d5</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>63 Företagsförsäkringar och övriga riskkostnader</act:name>
+  <act:id type="new">ff3845e8e8f4b32c1b062d42c50ddcee</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6300 Företagsförsäkringar och övriga riskkostnader</act:name>
+  <act:id type="new">870b7ab4ed3e030596dad4fd19fbfd43</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6300</act:code>
+  <act:parent type="new">ff3845e8e8f4b32c1b062d42c50ddcee</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6310 Företagsförsäkringar</act:name>
+  <act:id type="new">949a896b0d2363e2f8d293abf4855c0f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6310</act:code>
+  <act:parent type="new">ff3845e8e8f4b32c1b062d42c50ddcee</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>65 Övriga externa tjänster</act:name>
+  <act:id type="new">d6814a1b83873474e28875f0a2027454</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6500 Övriga externa tjänster</act:name>
+  <act:id type="new">f07872e983524a3f21dedf31c9619818</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6500</act:code>
+  <act:parent type="new">d6814a1b83873474e28875f0a2027454</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>68 Inhyrd personal</act:name>
+  <act:id type="new">d2bf43f19eeaee925de5897bfae30bd1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6800 Inhyrd personal</act:name>
+  <act:id type="new">decec90c44700d30b14b6b6d13abb88c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6800</act:code>
+  <act:parent type="new">d2bf43f19eeaee925de5897bfae30bd1</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>69 Övriga kostnader</act:name>
+  <act:id type="new">a1ec7c5d4746cc880d983978648f5f18</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">d4050fa5794ead1a138cca64f22ff22f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6900 Övriga kostnader</act:name>
+  <act:id type="new">bf87a3cf9961e369d777e1966669d785</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6900</act:code>
+  <act:parent type="new">a1ec7c5d4746cc880d983978648f5f18</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>6980 Föreningsavgifter</act:name>
+  <act:id type="new">ef7ac168aa52644531e7c54e1add94f2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>6980</act:code>
+  <act:parent type="new">a1ec7c5d4746cc880d983978648f5f18</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>7 UTGIFTER/KOSTNADER FÖR PERSONAL, AVSKRIVNINGAR M.M.</act:name>
+  <act:id type="new">4337b5c87fc4c5b494a505c1268e3078</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>70 Löner till anställda</act:name>
+  <act:id type="new">13e61b9ddadcea4005a86fb9109c715d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7000 Löner till anställda</act:name>
+  <act:id type="new">74979e440d1a3106807910e178cd2891</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7000</act:code>
+  <act:parent type="new">13e61b9ddadcea4005a86fb9109c715d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>73 Kostnadsersättningar och förmåner</act:name>
+  <act:id type="new">62081d8b6a9f2a4bf744c5647739e8c5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7300 Kostnadsersättningar och förmåner</act:name>
+  <act:id type="new">9ca5f10bf4a9ac2fd5616f00e1e9f66e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7300</act:code>
+  <act:parent type="new">62081d8b6a9f2a4bf744c5647739e8c5</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>74 Pensionskostnader</act:name>
+  <act:id type="new">8e050fe19cfd9a779d2ca2b9bdd61067</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7400 Pensionskostnader</act:name>
+  <act:id type="new">222fbdbd33b1d36abd3180d6a5efef0d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7400</act:code>
+  <act:parent type="new">8e050fe19cfd9a779d2ca2b9bdd61067</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>75 Sociala och andra avgifter enligt lag och avtal</act:name>
+  <act:id type="new">ce35a8e8884f339372c6dcdfe9cc2281</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7500 Sociala och andra avgifter enligt lag och avtal</act:name>
+  <act:id type="new">e1c8883b4fe9f7ae2fc70a49b8002168</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7500</act:code>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">ce35a8e8884f339372c6dcdfe9cc2281</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>76 Övriga personalkostnader</act:name>
+  <act:id type="new">964d63e516a866305acd66870dd7753a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7600 Övriga personalkostnader</act:name>
+  <act:id type="new">f366b8ddeb2ba315b81b9324f4dd724f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7600</act:code>
+  <act:parent type="new">964d63e516a866305acd66870dd7753a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7631 Personalrepresentation, avdragsgill</act:name>
+  <act:id type="new">e2e6d7bd934add1021a29c7beff795f7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7631</act:code>
+  <act:parent type="new">f366b8ddeb2ba315b81b9324f4dd724f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7632 Personalrepresentation, ej avdragsgill</act:name>
+  <act:id type="new">848d8ce6bc730eaebd142a859a2d55c9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7632</act:code>
+  <act:parent type="new">f366b8ddeb2ba315b81b9324f4dd724f</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>77 Nedskrivningar och återföring av nedskrivningar</act:name>
+  <act:id type="new">b4749dee29139481b09b438dcc391e5d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7700 Nedskrivningar</act:name>
+  <act:id type="new">3ccafd5661e6a03fcb99c9cb14cf82e9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7700</act:code>
+  <act:parent type="new">b4749dee29139481b09b438dcc391e5d</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>78 Avskrivningar</act:name>
+  <act:id type="new">506613151e8e83915efd53d750ac5850</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7810 Avskrivningar på immateriella anläggningstillgångar</act:name>
+  <act:id type="new">0a80009d43df89860034b4378d436656</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7810</act:code>
+  <act:parent type="new">506613151e8e83915efd53d750ac5850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7820 Avskrivningar på byggnader och markanläggningar</act:name>
+  <act:id type="new">5c7225cdb859d76f557e39e0bf11ef6b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7820</act:code>
+  <act:parent type="new">506613151e8e83915efd53d750ac5850</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7830 Avskrivningar på maskiner och inventarier</act:name>
+  <act:id type="new">bebfc56c7d9419a6c521be999dc37019</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7830</act:code>
+  <act:parent type="new">506613151e8e83915efd53d750ac5850</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>79 Övriga rörelsekostnader</act:name>
+  <act:id type="new">913bbbbf9939836b2c7d1ff368b748ba</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">4337b5c87fc4c5b494a505c1268e3078</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7970 Förlust vid avyttring av immateriella och materiella anläggningstillgångar</act:name>
+  <act:id type="new">06a23e13fae83210fc1fea8a51f4c37e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7970</act:code>
+  <act:parent type="new">913bbbbf9939836b2c7d1ff368b748ba</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>7980 Ersättningsfonder</act:name>
+  <act:id type="new">a3d4b1c646f4d84bb8ece45f93fe704b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>7980</act:code>
+  <act:parent type="new">913bbbbf9939836b2c7d1ff368b748ba</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>8 FINANSIELLA OCH ANDRA INKOMSTER/INTÄKTER OCH UTGIFTER/KOSTNADER</act:name>
+  <act:id type="new">5eb03e1a55b0797531168a162149cc8f</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5df07084fb48f599732df308a71d8246</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>83 Övriga ränteintäkter och liknande resultatposter</act:name>
+  <act:id type="new">b5df992121ac4871d2cf519895f7461e</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5eb03e1a55b0797531168a162149cc8f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8310 Ränteintäkter och utdelningar</act:name>
+  <act:id type="new">a9fef6b809da21c30af803a8469e3024</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8310</act:code>
+  <act:parent type="new">b5df992121ac4871d2cf519895f7461e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8314 Skattefria ränteintäkter</act:name>
+  <act:id type="new">516d6bcea2a670d04fc7744ba11b0794</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8314</act:code>
+  <act:parent type="new">a9fef6b809da21c30af803a8469e3024</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8330 Valutakursdifferenser på fordringar och placeringar</act:name>
+  <act:id type="new">78f52ab1b17fb3fd746bc46716c72c07</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8330</act:code>
+  <act:parent type="new">b5df992121ac4871d2cf519895f7461e</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>84 Räntekostnader och liknande resultatposter</act:name>
+  <act:id type="new">19adda4bc889ecc05678e1173360fdb8</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5eb03e1a55b0797531168a162149cc8f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8410 Räntekostnader för skulder</act:name>
+  <act:id type="new">dafe3e5396a502d12398d6bbcc5832e0</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8410</act:code>
+  <act:parent type="new">19adda4bc889ecc05678e1173360fdb8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8430 Valutakursdifferenser på skulder</act:name>
+  <act:id type="new">a3b3ced560c9c83af255d12985a77cfb</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8430</act:code>
+  <act:parent type="new">19adda4bc889ecc05678e1173360fdb8</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>88 Bokslutsdispositioner</act:name>
+  <act:id type="new">b6070711ca82c6add708fb16519e2c7b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5eb03e1a55b0797531168a162149cc8f</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>89 Årets resultat</act:name>
+  <act:id type="new">d728f7338cffbc52156aa786c7904000</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5eb03e1a55b0797531168a162149cc8f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8990 Resultat</act:name>
+  <act:id type="new">80e4b8de8f8c363665fcc52248c3b5fa</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8990</act:code>
+  <act:parent type="new">d728f7338cffbc52156aa786c7904000</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>8999 Årets resultat</act:name>
+  <act:id type="new">c923df9ab817e8c857541ff3ffad604c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>SEK</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>8999</act:code>
+  <act:parent type="new">80e4b8de8f8c363665fcc52248c3b5fa</act:parent>
+</gnc:account>
+
+</gnc-account-example>
