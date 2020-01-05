@@ -574,10 +574,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "ಒಂದು ರಿಜಿಸ್ಟರ್‌ನಲ್ಲಿ ಎಲ್ಲಾ ಉಪಖಾತೆಗಳ ವಹಿವಾಟುಗಳನ್ನು ನೋಡಲು ಬಯಸುವಿರಾ? ಮುಖ್ಯ "
-"ಪರಿವಿಡಿಯಲ್ಲಿ, ಮೂಲ ಖಾತೆಯನ್ನು ಸುಪ್ರಕಾಶಗೊಳಿಸಿ ಹಾಗು ಖಾತೆಗಳು -> ಉಪಖಾತೆಗಳನ್ನು ತೆರೆಯಿರಿ "
+"ಪರಿವಿಡಿಯಲ್ಲಿ, ಮೂಲ ಖಾತೆಯನ್ನು ಸುಪ್ರಕಾಶಗೊಳಿಸಿ ಹಾಗು ಖಾತೆಗಳು->ಉಪಖಾತೆಗಳನ್ನು ತೆರೆಯಿರಿ "
 "ಅನ್ನು ಆರಿಸಿ."
 
 #: doc/tip_of_the_day.list.c:58
@@ -631,21 +631,21 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "ನೀವು ನೋಡಬೇಕಿರುವ ಎಲ್ಲಾ ಹಣಕಾಸು ಮಾಹಿತಿಯನ್ನು ಒದಗಿಸುವಂತೆ ನೀವು ಅನೇಕ ವರದಿಗಳನ್ನು ಒಂದು "
-"ಕಿಟಕಿಯಲ್ಲಿ ಒಂದುಗೂಡಿಸಲು ಸಾಧ್ಯವಿರುತ್ತದೆ. ಹಾಗೆ ಮಾಡಲು ನಮೂನೆ ಹಾಗು ಕಸ್ಟಮ್ -> \"ಕಸ್ಟಮ್ "
+"ಕಿಟಕಿಯಲ್ಲಿ ಒಂದುಗೂಡಿಸಲು ಸಾಧ್ಯವಿರುತ್ತದೆ. ಹಾಗೆ ಮಾಡಲು ನಮೂನೆ ಹಾಗು ಕಸ್ಟಮ್->\"ಕಸ್ಟಮ್ "
 "ಬಹುಸಾಲು ವರದಿ\" ವರದಿಯನ್ನು ಬಳಸಿ."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "ಶೈಲಿ ಹಾಳೆಗಳ ಪರಿಣಾಮವು ಹೇಗೆ ವರದಿಗಳನ್ನು ತೋರಿಸಲಾಗುತ್ತದೆ ಎಂಬುದರ ಮೇಲೆ ಪರಿಣಾಮ "
 "ಬೀರುತ್ತದೆ. ನಿಮ್ಮ ವರದಿಗಾಗಿ ಒಂದು ವರದಿ ಆಯ್ಕೆಯಾಗಿ ಒಂದು ಶೈಲಿ ಹಾಳೆಯನ್ನು ಆರಿಸಿ, ನಂತರ "
-"ಶೈಲಿ ಹಾಳೆಗಳನ್ನು ನಿಮ್ಮ ಇಚ್ಛೆ ಅನುಸಾರವಾಗಿ ಬದಲಾಯಿಸಲು ಸಂಪಾದನೆ -> ಶೈಲಿ ಹಾಳೆಗಳು "
+"ಶೈಲಿ ಹಾಳೆಗಳನ್ನು ನಿಮ್ಮ ಇಚ್ಛೆ ಅನುಸಾರವಾಗಿ ಬದಲಾಯಿಸಲು ಸಂಪಾದನೆ->ಶೈಲಿ ಹಾಳೆಗಳು "
 "ಪರಿವಿಡಿಯನ್ನು ಬಳಸಿ."
 
 #: doc/tip_of_the_day.list.c:88
@@ -694,18 +694,18 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
 "ನಿಮ್ಮ ಎಲ್ಲಾ ವ್ಯವಹಾರಗಳ ಮುಖಾಂತರ ಹುಡುಕಲು, ಮುಖ್ಯ ಖಾತೆಗಳ ಶ್ರೇಣಿ ವ್ಯವಸ್ಥೆಯ ಪುಟದಿಂದ ಒಂದು "
-"ಹುಡುಕಾಟವನ್ನು ಆರಂಭಿಸಿ (ಸಂಪಾದನೆ -> ಹುಡುಕು...). ನಿಮ್ಮ ಹುಡುಕಾಟವನ್ನು ಒಂದೇ ಖಾತೆಗೆ "
+"ಹುಡುಕಾಟವನ್ನು ಆರಂಭಿಸಿ (ಸಂಪಾದನೆ->ಹುಡುಕು...). ನಿಮ್ಮ ಹುಡುಕಾಟವನ್ನು ಒಂದೇ ಖಾತೆಗೆ "
 "ಮಿತಿಗೊಳಿಸಲು, ಖಾತೆಯ ರಿಜಿಸ್ಟರಿನಿಂದ ಹುಡುಕಾಟವನ್ನು ಆರಂಭಿಸಿ."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5953,10 +5953,10 @@ msgstr "ಈ ವ್ಯವಹಾರವನ್ನು ಮಾರ್ಪಡಿಸಲು 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "ಈ ವ್ಯವಹಾರದ ದಿನಾಂಕವು ಈ ಪುಸ್ತಕಕ್ಕಾಗಿ ಹೊಂದಿಸಲಾದ \"ಓದಲು-ಮಾತ್ರದ ಮಿತಿ\"ಗಿಂತ "
-"ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ -> ಗುಣಗಳು -> ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
+"ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ->ಗುಣಗಳು->ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7489,8 +7489,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7498,8 +7498,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7507,7 +7507,7 @@ msgstr[0] ""
 "ಉಳಿಸಬೇಕಿರುತ್ತದೆ. ನೀವು ಬಾರಿಯೂ ಸಹ \"ಉಳಿಸು\" ಗುಂಡಿಯನ್ನು ಒತ್ತಿದ್ದೀರೊ ಎಂಬಂತೆ, \"ಪ್ರತಿ "
 "%d ನಿಮಿಷಕ್ಕೊಮ್ಮೆ ಕಡತವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಳಿಸುವ ಸೌಲಭ್ಯವನ್ನು ಗ್ನುಕ್ಯಾಶ್ ಹೊಂದಿದೆ. \n"
 "\n"
-"ಸಂಪಾದನೆ -> ಆದ್ಯತೆಗಳು -> ಸಾಮಾನ್ಯ -> ಸ್ವಯಂ-ಉಳಿಕೆ ಸಮಯದ ಅಂತರವನ್ನು ಬಳಸಿಕೊಂಡು ನೀವು "
+"ಸಂಪಾದನೆ->ಆದ್ಯತೆಗಳು->ಸಾಮಾನ್ಯ->ಸ್ವಯಂ-ಉಳಿಕೆ ಸಮಯದ ಅಂತರವನ್ನು ಬಳಸಿಕೊಂಡು ನೀವು "
 "ಸಮಯದ ಅವಧಿಯನ್ನು ಬದಲಾಯಿಸಬಹುದು. \n"
 "\n"
 "ನಿಮ್ಮ ಕಡತವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಳಿಸಬೇಕೆ?"
@@ -7516,7 +7516,7 @@ msgstr[1] ""
 "ಉಳಿಸಬೇಕಿರುತ್ತದೆ. ನೀವು ಬಾರಿಯೂ ಸಹ \"ಉಳಿಸು\" ಗುಂಡಿಯನ್ನು ಒತ್ತಿದ್ದೀರೊ ಎಂಬಂತೆ, \"ಪ್ರತಿ "
 "%d ನಿಮಿಷಗಳಿಗೊಮ್ಮೆ ಕಡತವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಳಿಸುವ ಸೌಲಭ್ಯವನ್ನು ಗ್ನುಕ್ಯಾಶ್ ಹೊಂದಿದೆ. \n"
 "\n"
-"ಸಂಪಾದನೆ -> ಆದ್ಯತೆಗಳು -> ಸಾಮಾನ್ಯ -> ಸ್ವಯಂ-ಉಳಿಕೆ ಸಮಯದ ಅಂತರವನ್ನು ಬಳಸಿಕೊಂಡು ನೀವು "
+"ಸಂಪಾದನೆ->ಆದ್ಯತೆಗಳು->ಸಾಮಾನ್ಯ->ಸ್ವಯಂ-ಉಳಿಕೆ ಸಮಯದ ಅಂತರವನ್ನು ಬಳಸಿಕೊಂಡು ನೀವು "
 "ಸಮಯದ ಅವಧಿಯನ್ನು ಬದಲಾಯಿಸಬಹುದು. \n"
 "\n"
 "ನಿಮ್ಮ ಕಡತವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಳಿಸಬೇಕೆ?"
@@ -7863,10 +7863,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "ಈ ದತ್ತಸಂಚಯವು ಗ್ನುಕ್ಯಾಶ್‌ನ ಒಂದು ಹೊಸ ಆವೃತ್ತಿಯದ್ದಾಗಿದೆ. ಈ ಆವೃತ್ತಿಯು ಅದನ್ನು ಓದಬಲ್ಲದು, ಆದರೆ "
-"ಉಳಿಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ಇದನ್ನು ನೀವು ಕಡತ > ಹೀಗೆ ಉಳಿಸು ಅನ್ನು ಚಲಾಯಿಸುವವರೆಗೆ ಓದಲು "
+"ಉಳಿಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ಇದನ್ನು ನೀವು ಕಡತ->ಹೀಗೆ ಉಳಿಸು ಅನ್ನು ಚಲಾಯಿಸುವವರೆಗೆ ಓದಲು "
 "ಮಾತ್ರ ಎಂದು ಗುರುತು ಹಾಕಿರಲಾಗಿರುತ್ತದೆ, ಆದರೆ ಹಳೆಯ ಆವೃತ್ತಿಗೆ ಬರೆಯುವಾಗ ದತ್ತಾಂಶವು "
 "ಇಲ್ಲವಾಗಬಹುದು."
 
@@ -8595,11 +8595,11 @@ msgstr "ಈ ದಿನಾಂಕದಂದು ಒಂದು ವ್ಯವಹಾರವ
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "ನಕಲು ಮಾಡಿದ ವ್ಯವಹಾರದ ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಈ ಪುಸ್ತಕಕ್ಕಾಗಿ ಹೊಂದಿಸಲಾದ \"ಓದಲು-ಮಾತ್ರದ "
-"ಮಿತಿ\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ -> ಗುಣಗಳು -> ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
+"ಮಿತಿ\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ->ಗುಣಗಳು->ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8957,11 +8957,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "ಹೊಸ ವ್ಯವಹಾರದ ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಈ ಪುಸ್ತಕಕ್ಕಾಗಿ ಹೊಂದಿಸಲಾದ \"ಓದಲು-ಮಾತ್ರದ ಮಿತಿ"
-"\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ -> ಗುಣಗಳು -> ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
+"\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ->ಗುಣಗಳು->ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -16104,8 +16104,8 @@ msgid "Perform account list _setup on new file"
 msgstr "ಹೊಸ ಕಡತದಲ್ಲಿ ಖಾತೆ ಅಣಿಗೊಳಿಕೆಯನ್ನು ನಿರ್ವಹಿಸಿ (_s)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "ಕಡತ -> ಹೊಸ ಕಡತವನ್ನು ನೀವು ಆರಿಸಿದಾಗ ಹೊಸ ಖಾತೆಯ ಪಟ್ಟಿಯ ಡೈಲಾಗ್ ಅನ್ನು ನೀಡು."
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "ಕಡತ->ಹೊಸ ಕಡತವನ್ನು ನೀವು ಆರಿಸಿದಾಗ ಹೊಸ ಖಾತೆಯ ಪಟ್ಟಿಯ ಡೈಲಾಗ್ ಅನ್ನು ನೀಡು."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -22010,11 +22010,11 @@ msgstr "ವ್ಯವಹಾರವನ್ನು ರದ್ದುಗೊಳಿಸಿ (
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "ಹೊಸ ವ್ಯವಹಾರದ ನಮೂದಿಸಲಾದ ದಿನಾಂಕವು ಈ ಪುಸ್ತಕಕ್ಕಾಗಿ ಹೊಂದಿಸಲಾದ \"ಓದಲು-ಮಾತ್ರದ ಮಿತಿ"
-"\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ -> ಗುಣಗಳು -> ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
+"\"ಗಿಂತ ಹಳೆಯದಾಗಿದೆ. ಈ ಸಿದ್ಧತೆಯನ್ನು ಕಡತ->ಗುಣಗಳು->ಖಾತೆಗಳಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -22183,8 +22183,8 @@ msgid "Increasing"
 msgstr "ಹೆಚ್ಚಿಸುವಿಕೆ"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22192,8 +22192,8 @@ msgid "Decreasing"
 msgstr "ಇಳಿಕೆ"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

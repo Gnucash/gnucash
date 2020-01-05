@@ -565,10 +565,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "Vill du se alla transaktioner för underkonton i ett register? Från "
-"huvudmenyn, välj gruppkontot och välj \"Arkiv -> Öppna underkonton\" från "
+"huvudmenyn, välj gruppkontot och välj \"Arkiv->Öppna underkonton\" från "
 "menyn."
 
 #: doc/tip_of_the_day.list.c:58
@@ -621,20 +621,20 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Du kan lägga flera rapporter i samma fönster, för att få all information du "
 "vill ha i ett enda ögonkast. För att göra det, använd rapporten \"Exempel & "
-"anpassade\" -> \"Anpassad flerkolumnsrapport\"."
+"anpassade\"->\"Anpassad flerkolumnsrapport\"."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "Stilmallar påverkar hur rapporter visas. Välj en stilmall för din rapport "
-"som ett alternativ och använd menyn \"Redigera\" -> \"Stilmallar\" för att "
+"som ett alternativ och använd menyn \"Redigera\"->\"Stilmallar\" för att "
 "konfigurera stilmallarna."
 
 #: doc/tip_of_the_day.list.c:88
@@ -666,7 +666,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
@@ -674,7 +674,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5816,7 +5816,7 @@ msgstr "Kan inte modifiera eller ta bort denna transaktion."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7287,8 +7287,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7296,8 +7296,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7639,7 +7639,7 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8344,8 +8344,8 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -8697,8 +8697,8 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -15237,8 +15237,8 @@ msgid "Perform account list _setup on new file"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "Visa dialogrutan för ny kontohierarki när du väljer Arkiv -> Ny fil."
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "Visa dialogrutan för ny kontohierarki när du väljer Arkiv->Ny fil."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -20837,7 +20837,7 @@ msgstr "_Avbryt transaktion"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -21006,8 +21006,8 @@ msgid "Increasing"
 msgstr "Stigande"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> 999 999,99, A->Ö."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999 999,99, A .. Ö."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21015,8 +21015,8 @@ msgid "Decreasing"
 msgstr "Fallande"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "999 999,99 -> 0, Ö->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999 999,99 .. 0, Ö .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

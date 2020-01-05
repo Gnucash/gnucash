@@ -571,10 +571,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "كیا آپ اپنے سب اكاؤنٹ كے سبھی لین دینوں كو ایك رجسٹر میں دیكھنا چاہتے ہیں؟ "
-"مین مینو سے، پیرینٹ اكاؤنٹ كو واضح كرو اور اكاؤنٹس منتخب كرو-> مینو سے سب "
+"مین مینو سے، پیرینٹ اكاؤنٹ كو واضح كرو اور اكاؤنٹس منتخب كرو->مینو سے سب "
 "اكاؤنٹس كو كھولو۔"
 
 #: doc/tip_of_the_day.list.c:58
@@ -627,21 +627,21 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "آپ مختلف رپوٹس كو ایك واحد ونڈو میں پیك كرسكتے ہیں، جوایك ہی نظر میں آپ كی "
-"سبھی مالیاتی معلومات مہیا كرتا ہے ۔ ایسا كرنے كے لیے، سیمپل اور كسٹم -> \\ "
+"سبھی مالیاتی معلومات مہیا كرتا ہے ۔ ایسا كرنے كے لیے، سیمپل اور كسٹم->\\ "
 "\" كسٹم ملٹی كولم رپورٹ\" رپورٹ كا استعمال كریں۔ "
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "اسٹائل شیٹس كیسے رپورٹس ڈسپلے  ہوتی ہےمتاثر كرتی ہے  ایک رپورٹ کے آپشن کے "
 "طور پر آپ کی رپورٹ کے لئے ایک اسٹائل شیٹ کو منتخب کریں، اور ترمیم کریں کا "
-"استعمال کرتے ہیں -> اسٹائل شیٹس كسٹمائز اسٹائل شیٹس مینو."
+"استعمال کرتے ہیں->اسٹائل شیٹس كسٹمائز اسٹائل شیٹس مینو."
 
 #: doc/tip_of_the_day.list.c:88
 msgid ""
@@ -688,18 +688,18 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
 " اپنے تمام لین دین کے ذریعے تلاش کرنے کے لئے، اہم اكاؤنٹ كے ہیراچی صفحہ سے  "
-"تلاش شروع كریں (مرتب -> تلاش ...). ایک اکاؤنٹ کے لئے آپ کی تلاش کو محدود "
+"تلاش شروع كریں (مرتب->تلاش ...). ایک اکاؤنٹ کے لئے آپ کی تلاش کو محدود "
 "كرنے   اکاؤنٹ کے رجسٹر سے تلاش شروع كریں۔"
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5932,10 +5932,10 @@ msgstr "یہ لین دین كو خارج یا ترمیم نہیں كیا جاس�
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "اس كتاب كے لیے  لین دین کی تاریخ  سے  \"ریڈ اونلی تھریشولڈ \" سیٹ سے پرانی "
-"ہے . یہ ترتیب فائل-> پراپرٹیز -> اکاؤنٹس. میں تبدیل کی جا سکتی ہے "
+"ہے . یہ ترتیب فائل->پراپرٹیز->اکاؤنٹس. میں تبدیل کی جا سکتی ہے "
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7458,8 +7458,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7467,8 +7467,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7477,7 +7477,7 @@ msgstr[0] ""
 "\"محفوظ \"  كرنے كی خصوصیت موجود ہے ، جیسے آپ نے  ہر بار  \"محفوظ \"بٹن پریس "
 "كیا ہو۔  \n"
 " \n"
-"آپ وقت کے وقفہ کو تبدیل یا اس خصوصیت كو ٹرن آف  ->  ترجیحات -> جنرل -> خود "
+"آپ وقت کے وقفہ کو تبدیل یا اس خصوصیت كو ٹرن آف -> ترجیحات->جنرل->خود "
 "كار محفوظ ۔ وقت کا وقفہ. كے تحت کر سکتے ہیں \n"
 "  \n"
 "كیا آپ کی فائل خود بخود محفوظ کیا جانا چاہئے؟"
@@ -7487,7 +7487,7 @@ msgstr[1] ""
 "\"محفوظ \"  كرنے كی خصوصیت موجود ہے ، جیسے آپ نے  ہر بار  \"محفوظ \"بٹن پریس "
 "كیا ہو۔  \n"
 " \n"
-"آپ وقت کے وقفہ کو تبدیل یا اس خصوصیت كو ٹرن آف  ->  ترجیحات -> جنرل -> خود "
+"آپ وقت کے وقفہ کو تبدیل یا اس خصوصیت كو ٹرن آف -> ترجیحات->جنرل->خود "
 "كار محفوظ ۔ وقت کا وقفہ. كے تحت کر سکتے ہیں \n"
 "  \n"
 "كیا آپ کی فائل خود بخود محفوظ کیا جانا چاہئے؟"
@@ -7831,10 +7831,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "یہ ڈاٹا بیس GnuCash کے  نئے ورژن سے ہے. یہ ورژن اسے پڑھ سکتا ہیں، لیکن محفوظ "
-"طریقے سے اس کو محفوظ نہیں كرسکتے. آپ فائل > محفوظ جیسے  كرنے تك یہ  صرف "
+"طریقے سے اس کو محفوظ نہیں كرسکتے. آپ فائل->محفوظ جیسے  كرنے تك یہ  صرف "
 "پڑھنے سے نشان لگا دیا جائے گا، لیکن ڈاٹا پرانے ورژن میں رائٹ كرنے سے ختم "
 "ہوسکتا."
 
@@ -8565,11 +8565,11 @@ msgstr "اس  تاریخ میں ایک ٹرانزیکشن محفوظ نہیں ک
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "اس کتاب کے لئے نقل لین دین کی داخل شدہ  تاریخ \"صرف پڑھنے تھریشولڈ \" سیٹ سے "
-"پرانا ہے. یہ ترتیب فائل -> پراپرٹیز -> اکاؤنٹس.میں تبدیل کی جا سکتی ہے "
+"پرانا ہے. یہ ترتیب فائل->پراپرٹیز->اکاؤنٹس.میں تبدیل کی جا سکتی ہے "
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8925,11 +8925,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "نئے ٹرانسیكشن كی  داخل تاریخ اس کتاب کے  لیے \"صرف پڑھنے تھریشولڈ \" سیٹ سے "
-"پرانی ہے. یہ ترتیب فائل -> پراپرٹیز -> اکاؤنٹس میں تبدیل کی جا سکتی ہے ."
+"پرانی ہے. یہ ترتیب فائل->پراپرٹیز->اکاؤنٹس میں تبدیل کی جا سکتی ہے ."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -14170,7 +14170,7 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"ٹیكس رپورٹ -> مرتب كرو آپشنس كا استعمال ٹیكس ۔ متعلقہ فیلگ كو سیٹ كرنے اور "
+"ٹیكس رپورٹ->مرتب كرو آپشنس كا استعمال ٹیكس ۔ متعلقہ فیلگ كو سیٹ كرنے اور "
 "یہ اكاؤنٹ میں ایك ٹیكس كوڈ كو منسوب كرو۔ "
 
 #: gnucash/gtkbuilder/dialog-account.glade:1185
@@ -16081,9 +16081,9 @@ msgid "Perform account list _setup on new file"
 msgstr "نئی فائل پر اكاؤنٹ فہرست سیٹ اپ عمل درآمد كرو ۔"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"جب آپ فائل -> نئی فائل كا انتخاب کرتے ہیں تب نئے اکاؤنٹ فہرست ڈائیلاگ پیش "
+"جب آپ فائل->نئی فائل كا انتخاب کرتے ہیں تب نئے اکاؤنٹ فہرست ڈائیلاگ پیش "
 "کریں ."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
@@ -21996,11 +21996,11 @@ msgstr "لین دین كو منسوخ كرو"
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "نئے ٹرانسیكشن كی  داخل تاریخ اس کتاب کے  لیے \"صرف پڑھنے تھریشولڈ \" سیٹ سے "
-"پرانی ہے. یہ ترتیب فائل -> پراپرٹیز -> اکاؤنٹس میں تبدیل کی جا سکتی ہے ."
+"پرانی ہے. یہ ترتیب فائل->پراپرٹیز->اکاؤنٹس میں تبدیل کی جا سکتی ہے ."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -22169,8 +22169,8 @@ msgid "Increasing"
 msgstr "بڑھتا ہوا"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22178,8 +22178,8 @@ msgid "Decreasing"
 msgstr "گھٹتا ہوا"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""
@@ -23824,7 +23824,7 @@ msgstr ""
 
 #: gnucash/report/business-reports/receipt.scm:159
 msgid "The format for the date->string conversion for today's date."
-msgstr "تاریخ كے لیے فارمیٹ -> آج كی تاریخ كے لیے اسٹرینگ متبادل"
+msgstr "تاریخ كے لیے فارمیٹ .. آج كی تاریخ كے لیے اسٹرینگ متبادل"
 
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"

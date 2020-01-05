@@ -81,7 +81,7 @@ gtc_sr_is_trans_readonly_and_warn (GncTreeViewSplitReg *view, Transaction *trans
                                         "%s", title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                 "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
-                        "This setting can be changed in File -> Properties -> Accounts."));
+                        "This setting can be changed in File->Properties->Accounts."));
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
         return TRUE;
@@ -1357,7 +1357,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                                     "%s", _("Cannot store a transaction at this date"));
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                         "%s", _("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. "
-                                "This setting can be changed in File -> Properties -> Accounts."));
+                                "This setting can be changed in File->Properties->Accounts."));
                 gtk_dialog_run (GTK_DIALOG (dialog));
                 gtk_widget_destroy (dialog);
 

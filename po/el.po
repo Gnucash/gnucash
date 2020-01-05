@@ -573,7 +573,7 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 
 #: doc/tip_of_the_day.list.c:58
@@ -622,7 +622,7 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Μπορείτε να βλέπετε πολλές αναφορές σε ένα παράθυρο, έτσι έχετε με μια ματιά "
 "όλες τις οικονομικές πληροφορίες που χρειάζεστε. Για να το κάνετε, επιλέξτε "
@@ -631,7 +631,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 
@@ -664,7 +664,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
@@ -672,7 +672,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5941,7 +5941,7 @@ msgstr "Δεν μπορεί να τροποποιηθεί ή διαγραφεί 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7444,8 +7444,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7453,8 +7453,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7464,7 +7464,7 @@ msgstr[0] ""
 "\"Αποθήκευση\" κάθε φορά. \n"
 "\n"
 "Μπορείτε να αλλάξετε το μεσοδιάστημα ή να απενεργοποιήσετε αυτή την "
-"δυνατότητα στο Επεξεργασία -> Προτιμήσεις -> Γενικά -> Χρονικό διάστημα "
+"δυνατότητα στο Επεξεργασία->Προτιμήσεις->Γενικά->Χρονικό διάστημα "
 "αυτόματης αποθήκευσης.\n"
 "\n"
 "Να αποθηκεύεται αυτόματα το αρχείο σας;"
@@ -7475,7 +7475,7 @@ msgstr[1] ""
 "\"Αποθήκευση\" κάθε φορά. \n"
 "\n"
 "Μπορείτε να αλλάξετε το μεσοδιάστημα ή να απενεργοποιήσετε αυτή την "
-"δυνατότητα στο Επεξεργασία -> Προτιμήσεις -> Γενικά -> Χρονικό διάστημα "
+"δυνατότητα στο Επεξεργασία->Προτιμήσεις->Γενικά->Χρονικό διάστημα "
 "αυτόματης αποθήκευσης.\n"
 "\n"
 "Να αποθηκεύεται αυτόματα το αρχείο σας;"
@@ -7821,7 +7821,7 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8554,8 +8554,8 @@ msgstr "Λόγος ακύρωσης συναλλαγής"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -8913,8 +8913,8 @@ msgstr "%B %#d, %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -15787,7 +15787,7 @@ msgstr "Εκκίνηση _ρύθμισης νέας λίστας λογαρια�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
 #, fuzzy
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Εμφάνιση του διαλόγου νέας λίστας λογαριασμών όταν επιλέγεται  \"New File\" "
 "από το μενού \"File\""
@@ -21568,7 +21568,7 @@ msgstr "Α_λλαγή συναλλαγής"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -21742,8 +21742,8 @@ msgstr "Αύξουσα"
 
 #: gnucash/report/business-reports/aging.scm:385
 #, fuzzy
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z"
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21752,8 +21752,8 @@ msgstr "Φθίνουσα"
 
 #: gnucash/report/business-reports/aging.scm:386
 #, fuzzy
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 #, fuzzy

@@ -7774,10 +7774,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "हा माहितीसाठी GnuCash च्या नव्या आवृत्तीमधील आहे. ही नवी आवृत्ती तो वाचू शकते, मात्र "
-"सुरक्षितपणे त्यामध्ये सेव्ह करु शकत नाही. तुम्ही धारिका> या नावाने सेव्ह करा करेपर्यंत त्यावर "
+"सुरक्षितपणे त्यामध्ये सेव्ह करु शकत नाही. तुम्ही धारिका->या नावाने सेव्ह करा करेपर्यंत त्यावर "
 "केवळ-वाचण्यायोग्य म्हणून खूण केली जाईल, मात्र जुन्या आवृत्तीवर लिहीताना डाटा हरवू शकतो."
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8499,11 +8499,11 @@ msgstr "या तारखेस व्यवहार संग्रहित
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "नक्कल व्यवहाराची घातलेली तारीख या पुस्तकासाठी निश्चित केलेल्या \"केवळ-वाचा सीमारेषेपेक्षा"
-"\" जुनी आहे. ही मांडणी धारिका -> वैशिष्ट्ये -> खाती यामध्ये बदलली जाऊ शकते."
+"\" जुनी आहे. ही मांडणी धारिका->वैशिष्ट्ये->खाती यामध्ये बदलली जाऊ शकते."
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8859,11 +8859,11 @@ msgstr "%ए %डी %बी %वाय"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "नव्या व्यवहारासाठी घातलेली तारीख या पुस्तकासाठी निश्चित केलेल्या \"केवळ-वाचण्यायोग्य "
-"सीमारेषेपेक्षा\" जुनी आहे. ही मांडणी धारिका -> वैशिष्ट्ये -> खाती यामध्ये बदलता येऊ शकते."
+"सीमारेषेपेक्षा\" जुनी आहे. ही मांडणी धारिका->वैशिष्ट्ये->खाती यामध्ये बदलता येऊ शकते."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -15909,8 +15909,8 @@ msgid "Perform account list _setup on new file"
 msgstr "नवीन फाइल वर खाते _यादी सेटअप करा"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "तुम्ही धारिका -> नवीन धारिका निवडतो तेव्हा नवीन खाते यादी संवाद सादर करा."
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "तुम्ही धारिका->नवीन धारिका निवडतो तेव्हा नवीन खाते यादी संवाद सादर करा."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -21753,11 +21753,11 @@ msgstr "व्यवहार रद्द_करा"
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "नव्या व्यवहारासाठी घातलेली तारीख या पुस्तकासाठी निश्चित केलेल्या \"केवळ-वाचण्यायोग्य "
-"सीमारेषेपेक्षा\" जुनी आहे. ही मांडणी धारिका -> वैशिष्ट्ये -> खाती यामध्ये बदलता येऊ शकते."
+"सीमारेषेपेक्षा\" जुनी आहे. ही मांडणी धारिका->वैशिष्ट्ये->खाती यामध्ये बदलता येऊ शकते."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -21924,8 +21924,8 @@ msgid "Increasing"
 msgstr "वाढता"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21933,8 +21933,8 @@ msgid "Decreasing"
 msgstr "उतरता"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

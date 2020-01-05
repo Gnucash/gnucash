@@ -444,7 +444,7 @@ show_session_error (GtkWindow *parent,
     case ERR_SQL_DB_TOO_NEW:
         fmt = _("This database is from a newer version of GnuCash. "
                 "This version can read it, but cannot safely save to it. "
-                "It will be marked read-only until you do File>Save As, "
+                "It will be marked read-only until you do File->Save As, "
                 "but data may be lost in writing to the old version.");
         gnc_warning_dialog (parent, "%s", fmt);
         uh_oh = TRUE;

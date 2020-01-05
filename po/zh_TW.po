@@ -506,7 +506,7 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "要輸入像具有多重扣除額的薪水這類多重分割交易，可點選工具列中的分割按鈕。或"
-"者，您可以在檢視 -> 樣式選單中選擇登記簿樣式自動分割分類帳或交易日記帳。"
+"者，您可以在檢視->樣式選單中選擇登記簿樣式自動分割分類帳或交易日記帳。"
 
 #: doc/tip_of_the_day.list.c:38
 #, fuzzy
@@ -547,10 +547,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
-"想在登記簿中看到您子科目的所有交易？在主選單中反白母科目並且從選單中選擇科目 "
-"-> 開啟子科目。"
+"想在登記簿中看到您子科目的所有交易？在主選單中反白母科目並且從選單中選擇科目"
+"->開啟子科目。"
 
 #: doc/tip_of_the_day.list.c:58
 msgid ""
@@ -598,18 +598,18 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "您可以把多個報表集合到單一視窗中，讓您一眼看到所有您要的財務資訊。要這麼做，"
-"使用 樣本 & 自訂 -> 「自訂多欄報表」報表。"
+"使用 樣本 & 自訂->「自訂多欄報表」報表。"
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
-"樣式表影響報表顯示的方式。為您的報表選擇樣式表做為報表選項，並使用編輯 -> 樣"
+"樣式表影響報表顯示的方式。為您的報表選擇樣式表做為報表選項，並使用編輯->樣"
 "式表選單自訂樣式表。"
 
 #: doc/tip_of_the_day.list.c:88
@@ -641,7 +641,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
@@ -649,7 +649,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5878,7 +5878,7 @@ msgstr "無法修改或刪除這個交易。"
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7370,8 +7370,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7379,8 +7379,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7710,10 +7710,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "這個資料庫來自較新版本的 GnuCash。現在這個版本能夠讀取，但無法安全的寫入。資"
-"料庫將被標記為唯讀，直到您執行 檔案>另存新檔。"
+"料庫將被標記為唯讀，直到您執行 檔案->另存新檔。"
 
 #: gnucash/gnome-utils/gnc-file.c:454
 msgid ""
@@ -8412,8 +8412,8 @@ msgstr "是否顯示交易日期？"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -8773,8 +8773,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -15487,7 +15487,7 @@ msgstr "新增檔案時不使用科目列表設定"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
 #, fuzzy
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr "當您自「檔案」選單選擇「新增檔案」時不跳出新科目列表對話盒"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
@@ -21248,7 +21248,7 @@ msgstr "取消交易(_N)"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -21424,9 +21424,8 @@ msgid "Increasing"
 msgstr "遞增"
 
 #: gnucash/report/business-reports/aging.scm:385
-#, fuzzy
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z"
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21434,9 +21433,8 @@ msgid "Decreasing"
 msgstr "遞減"
 
 #: gnucash/report/business-reports/aging.scm:386
-#, fuzzy
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 #, fuzzy

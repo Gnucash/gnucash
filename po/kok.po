@@ -566,10 +566,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "तुमचे सगळे उपखाते व्यवहार एका नोंदवहीन पळोवपाक जाय?मुखेल मेनूतल्यान,पालक खाते ठळक करात "
-"आणि मेनूतल्यान खातीं -> उपखातीं उगडात निवडात."
+"आणि मेनूतल्यान खातीं->उपखातीं उगडात निवडात."
 
 #: doc/tip_of_the_day.list.c:58
 msgid ""
@@ -618,20 +618,20 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "एका नजरेन पळोवपाक जाय ती सगळी आर्थीक माहिती दिंवन तुमी एका विंडोन भौ अहवाल पॅक "
-"करपाक शकतात. अशे करपाक, नमुनो & थारायात -> \"भौस्तंभ अहवाल थारायात\" अहवाल "
+"करपाक शकतात. अशे करपाक, नमुनो & थारायात->\"भौस्तंभ अहवाल थारायात\" अहवाल "
 "वापरात."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "अहवाल कशे दाखयले वतात हाजेर शैली शीट्सांचो परिणाम जाता. तुमच्या अहवालाखातीर अहवाल "
-"विकल्प म्हण शैली शीट निवडात, आणि शैली शीट्स थारावपाक संपादन करात ->शैली शीट्स मेनू "
+"विकल्प म्हण शैली शीट निवडात, आणि शैली शीट्स थारावपाक संपादन करात->शैली शीट्स मेनू "
 "वापरात."
 
 #: doc/tip_of_the_day.list.c:88
@@ -677,18 +677,18 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
 "तुमच्या सगळ्या व्यवहारांतल्यान सोदपाखातीर, मुखेल खाते उतरण पानातल्यान सोद सुरू करात "
-"(संपादन -> सोदात...) तुमचो सोद एका खात्यापुरतो मर्यादित करपाखातीर, त्या खात्याच्या "
+"(संपादन->सोदात...) तुमचो सोद एका खात्यापुरतो मर्यादित करपाखातीर, त्या खात्याच्या "
 "नोंदवहीतल्यान सोद सुरू करात."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5876,10 +5876,10 @@ msgstr "हो व्यवहार बदलुपाक वो काडू�
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "ह्या व्यवहाराची तारीक ह्या पुस्तकाखातीर थारायल्ल्या \"फकत-वाचपाखातीर थ्रेशोल्ड\" परस "
-"पोन्नी आसा. हे स्थापित फायल -> वैशिष्ट्या -> खाती न बदलुपाक येता."
+"पोन्नी आसा. हे स्थापित फायल->वैशिष्ट्या->खाती न बदलुपाक येता."
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7384,8 +7384,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7393,8 +7393,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7402,7 +7402,7 @@ msgstr[0] ""
 "GnuCash न दरेक %d मिनटान फायलीची आपसूंक जतनाय जावपाचे वैशिष्ट्य आसा, दरेक फावटीं "
 "\"जतनाय करात\" बटण दामिल्ल्या भशेन.\n"
 " \n"
-"तुमी  संपादन करात -> प्राधान्यां -> सर्वसादारण -> वेळ मध्यांतराची आपसूंक जतनाय करात "
+"तुमी  संपादन करात->प्राधान्यां->सर्वसादारण->वेळ मध्यांतराची आपसूंक जतनाय करात "
 "सकयल वेळ मध्यांतर बदलुपाक शकता वो हे वैशिष्ट्य बंद करपाक शकता.\n"
 "\n"
 "तुमच्या फायलीची आपसूंक जतनाय करपाक जाय?"
@@ -7411,7 +7411,7 @@ msgstr[1] ""
 "GnuCash न दरेक %d मिनटांनी फायलीची आपसूंक जतनाय जावपाचे वैशिष्ट्य आसा, दरेक फावटीं "
 "\"जतनाय करात\" बटण दामिल्ल्या भशेन.\n"
 " \n"
-"तुमी  संपादन करात -> प्राधान्यां -> सर्वसादारण -> वेळ मध्यांतराची आपसूंक जतनाय करात "
+"तुमी  संपादन करात->प्राधान्यां->सर्वसादारण->वेळ मध्यांतराची आपसूंक जतनाय करात "
 "सकयल वेळ मध्यांतर बदलुपाक शकता वो हे वैशिष्ट्य बंद करपाक शकता.\n"
 "\n"
 "तुमच्या फायलीची आपसूंक जतनाय करपाक जाय?"
@@ -7747,10 +7747,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "ही डेटाबेस GnuCash च्या नव्या आवृत्तेतली आसा. ही आवृत्ती ती वाचपाक शकता, पुण सुरक्षित "
-"पणान तातून जतनाय करपाक शकना. तुमी फायल>म्हण जतनाय करात करतामेरेन ती फकत-"
+"पणान तातून जतनाय करपाक शकना. तुमी फायल->म्हण जतनाय करात करतामेरेन ती फकत-"
 "वाचपाखातीर म्हण खूण केली वतली,पुण पोन्न्या आवृत्तेन बरयतना डेटा शेणपाची शक्यता आसा."
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8460,11 +8460,11 @@ msgstr "व्यवहार ह्या तारकेर साठोवप
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "नकल केल्ल्या व्यवहाराची दिल्ली तारीक ह्या पुस्तकाखातीर थारायल्ल्या \"फकत-वाचपाखातीर "
-"थ्रेशोल्ड\" परस पोन्नी आसा. हे स्थापित फायल -> वैशिष्ट्या -> खाती न बदलुपाक येता."
+"थ्रेशोल्ड\" परस पोन्नी आसा. हे स्थापित फायल->वैशिष्ट्या->खाती न बदलुपाक येता."
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8820,11 +8820,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "नव्या व्यवहाराची दिल्ली तारीक ह्या पुस्तकाखातीर थारायल्ल्या \"फकत-वाचपाखातीर थ्रेशोल्ड"
-"\" परस पोन्नी आसा. हे स्थापित फायल -> वैशिष्ट्या -> खाती न बदलुपाक येता."
+"\" परस पोन्नी आसा. हे स्थापित फायल->वैशिष्ट्या->खाती न बदलुपाक येता."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -13901,7 +13901,7 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"कर संबंधित बावटो थारावंपाक संपादन -> कर अहवाल पर्याय वापरात आणि ह्या ख्यात्याक कर "
+"कर संबंधित बावटो थारावंपाक संपादन->कर अहवाल पर्याय वापरात आणि ह्या ख्यात्याक कर "
 "कोड दियात."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1185
@@ -15757,8 +15757,8 @@ msgid "Perform account list _setup on new file"
 msgstr "नव्या फायलीर खाते वळेरी सेटअप करात"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "तुमी फायल -> नवी फायल निवडटा तेन्ना नवे खाते वळेरी संवाद सादर करात."
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "तुमी फायल->नवी फायल निवडटा तेन्ना नवे खाते वळेरी संवाद सादर करात."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -21566,11 +21566,11 @@ msgstr "व्यवहार रद्द करात"
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "नव्या व्यवहाराची दिल्ली तारीक ह्या पुस्तकाखातीर थारायल्ल्या \"फकत-वाचपाखातीर थ्रेशोल्ड"
-"\" परस पोन्नी आसा. हे स्थापित फायल -> वैशिष्ट्या -> खाती न बदलुपाक येता."
+"\" परस पोन्नी आसा. हे स्थापित फायल->वैशिष्ट्या->खाती न बदलुपाक येता."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -21737,8 +21737,8 @@ msgid "Increasing"
 msgstr "वाडयता"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21746,8 +21746,8 @@ msgid "Decreasing"
 msgstr "कमी जाता"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

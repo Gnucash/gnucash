@@ -615,18 +615,18 @@ msgid ""
 "Custom -> \"Custom Multicolumn Report\" report."
 msgstr ""
 "ניתן לארוז מספר דוחות לתוך חלון בודד ולספק את כל המידע הפיננסי המבוקש במבט "
-"חטוף. לשם כך, יש לבחור מהתפריט: דוחות ->דוגמה ומותאם אישית-> 'מנגנון שרשור "
+"חטוף. לשם כך, יש לבחור מהתפריט: דוחות->דוגמה ומותאם אישית->'מנגנון שרשור "
 "דוחות'."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "גיליונות הסגנון משפיעים על אופן הצגת הדוחות. ניתן לבחור גיליון סגנון עבור "
-"הדוח באפשרויות דוח. להתאמה אישית של גיליונות הסגנון נא לבחור מהתפריט: עריכה-"
-"> גיליונות סגנון."
+"הדוח באפשרויות דוח. להתאמה אישית של גיליונות הסגנון נא לבחור מהתפריט: עריכה"
+"->גיליונות סגנון."
 
 #: doc/tip_of_the_day.list.c:88
 msgid ""
@@ -670,22 +670,22 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
-"על מנת לחפש בכל התנועות, יש לבצע התחלת חיפוש (עריכה-> חיפוש...) מעמוד תרשים "
+"על מנת לחפש בכל התנועות, יש לבצע התחלת חיפוש (עריכה->חיפוש...) מעמוד תרשים "
 "החשבונות הראשי. על מנת להגביל את החיפוש לחשבון יחיד, יש להפעיל את החיפוש "
 "מהיומן של אותו חשבון."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 "על מנת להשוות חזותית על המסך את התוכן של שתי לשוניות, באחת הלשוניות, יש "
-"לבחור מהתפריט חלון-> חלון חדש עם עמוד ולשכפל לשונית זו לחלון החדש."
+"לבחור מהתפריט חלון->חלון חדש עם עמוד ולשכפל לשונית זו לחלון החדש."
 
 #: doc/tip_of_the_day.list.c:112
 msgid ""
@@ -5805,10 +5805,10 @@ msgstr "לא ניתן להסגיל או למחוק את התנועה."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "תאריך התנועה קודם יותר מערך \"סף לקריאה בלבד\" עבור ספר חשבונות זה. ניתן "
-"לשנות הגדרה זו מתפריט קובץ-> מאפיינים-> חשבונות."
+"לשנות הגדרה זו מתפריט קובץ->מאפיינים->חשבונות."
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7301,8 +7301,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7310,8 +7310,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7319,7 +7319,7 @@ msgstr[0] ""
 "יש תכונה לשמור את הקובץ באופן אוטומטי כל %d דקה, בדיוק כאילו הוקש על לחצן "
 "\"שמירה\" בכל פעם. \n"
 "\n"
-"ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט עריכה-> העדפות-> כללי-> "
+"ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט עריכה->העדפות->כללי->"
 "תזמון שמירה אוטומטית. \n"
 "\n"
 "האם לשמור את הקובץ באופן אוטומטי?"
@@ -7328,7 +7328,7 @@ msgstr[1] ""
 "יש תכונה לשמור את הקובצים באופן אוטומטי כל %d דקות, בדיוק כאילו הוקש על לחצן "
 "\"שמירה\" בכל פעם. \n"
 "\n"
-"ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט עריכה-> העדפות-> כללי-> "
+"ניתן לשנות את מרווח הזמן או לבטל תכונה זו מתפריט עריכה->העדפות->כללי->"
 "תזמון שמירה אוטומטית. \n"
 "\n"
 "האם לשמור את הקובצים באופן אוטומטי?"
@@ -7671,10 +7671,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "מסד נתונים זה הוא מגרסה חדשה יותר של גנוקאש. גרסה זו יכולה לקרוא אותו, אך לא "
-"יכולה לבצע שמירה בבטחה. הקובץ יסומן לקריאה בלבד עד לביצוע קובץ-> שמירה בשם, "
+"יכולה לבצע שמירה בבטחה. הקובץ יסומן לקריאה בלבד עד לביצוע קובץ->שמירה בשם, "
 "אך ייתכן שנתונים יאבדו בכתיבה לגרסה הישנה."
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8379,11 +8379,11 @@ msgstr "לא ניתן לרשום תנועה לתאריך זה"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "התאריך התנועה המשוכפלת קודם לערך \"סף קריאה בלבד\" עבור ספר חשבונות זה. ניתן "
-"לשנות הגדרה זו בקובץ> מאפיינים-> חשבונות."
+"לשנות הגדרה זו בקובץ->מאפיינים->חשבונות."
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8737,11 +8737,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "התאריך התנועה החדשה קודם לערך \"סף קריאה בלבד\" עבור ספר חשבונות זה. ניתן "
-"לשנות הגדרה זו בקובץ> מאפיינים-> תיקי לקוחות."
+"לשנות הגדרה זו בקובץ->מאפיינים->תיקי לקוחות."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -15693,8 +15693,8 @@ msgid "Perform account list _setup on new file"
 msgstr "דוח-שיח הגדרת תרשים _חשבונות בפתיחת קובץ חדש"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "הצגת תיבת דו-השיח תרשים חשבונות חדש בבחירת: קובץ -> קובץ חדש."
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "הצגת תיבת דו-השיח תרשים חשבונות חדש בבחירת: קובץ->קובץ חדש."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -19495,7 +19495,7 @@ msgstr ""
 "אם זהו הייבוא הראשוני לקובץ חדש, תוצג תחילה חלון דו-שיח להגדרת אפשרויות "
 "ספרים, מאחר והגדרות אלו עשויות להשפיע על האופן שבו הנתונים המיובאים מומרים "
 "לתנועות גנוקאש.\n"
-"הערה: לאחר היבוא, ייתכן וידרש לבחור מתפריט 'הצגה -> סינון לפי -> אחר' להציג "
+"הערה: לאחר היבוא, ייתכן וידרש לבחור מתפריט 'הצגה->סינון לפי->אחר' להציג "
 "חשבונות שלא בשימוש.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:528
@@ -21406,7 +21406,7 @@ msgstr "שינו_י תנועה"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "תאריך התנועה שהוזנה קודם לערך \"סף קריאה בלבד\" עבור ספרים אלו. ניתן לשנות "
@@ -21573,8 +21573,8 @@ msgid "Increasing"
 msgstr "גָדֵל"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, א->ת."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, א .. ת."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21582,8 +21582,8 @@ msgid "Decreasing"
 msgstr "עולה"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, ת->א."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, ת .. א."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

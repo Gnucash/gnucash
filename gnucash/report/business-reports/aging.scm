@@ -382,8 +382,8 @@ more than one currency. This report is not designed to cope with this possibilit
        (N_ "Sort order.")
        'increasing
        (list
-	(vector 'increasing (N_ "Increasing") (N_ "0 -> $999,999.99, A->Z."))
-	(vector 'decreasing (N_ "Decreasing") (N_ "$999,999.99 -> $0, Z->A.")))))
+	(vector 'increasing (N_ "Increasing") (N_ "0 .. 999,999.99, A .. Z."))
+	(vector 'decreasing (N_ "Decreasing") (N_ "999,999.99 .. 0, Z .. A.")))))
 
     (add-option
      (gnc:make-simple-boolean-option

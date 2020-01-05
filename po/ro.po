@@ -591,10 +591,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "Vrei să-ți vezi toate tranzacțiile subcontului într-un registru? Din meniul "
-"principal, evidențiază contul părinte și selectează din meniu Conturi -> "
+"principal, evidențiază contul părinte și selectează din meniu Conturi->"
 "Deschide subconturi."
 
 #: doc/tip_of_the_day.list.c:58
@@ -650,21 +650,21 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Poți împacheta mai multe rapoarte într-o singură fereastră, oferind dintr-o "
 "privire toate informațiile financiare dorite. Pentru a face asta, folosește "
-"raportul Exemplu & personalizare -> \"Raport personalizat pe mai multe "
+"raportul Exemplu & personalizare->\"Raport personalizat pe mai multe "
 "coloane\"."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "Foile de stil afectează felul în care sunt afișate rapoartele. Alegeți o "
-"foaie de stil din opțiunile raportului și folosiți meniul Editare -> Foi de "
+"foaie de stil din opțiunile raportului și folosiți meniul Editare->Foi de "
 "stil pentru a o personaliza."
 
 #: doc/tip_of_the_day.list.c:88
@@ -698,7 +698,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
@@ -706,7 +706,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -6009,7 +6009,7 @@ msgstr "Nu pot modifica sau șterge această tranzacție."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7560,8 +7560,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7569,8 +7569,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7580,7 +7580,7 @@ msgstr[0] ""
 "dată. \n"
 "\n"
 "Poți schimba intervalul de timp sau anula această funcționalitate din meniul "
-"Editare -> Preferințe -> General -> Intervalul de timp pentru salvarea "
+"Editare->Preferințe->General->Intervalul de timp pentru salvarea "
 "automată. \n"
 "\n"
 "Ar trebui fișierul tău salvat în mod automat?"
@@ -7591,7 +7591,7 @@ msgstr[1] ""
 "dată. \n"
 "\n"
 "Poți schimba intervalul de timp sau anula această funcționalitate din meniul "
-"Editare -> Preferințe -> General -> Intervalul de timp pentru salvarea "
+"Editare->Preferințe->General->Intervalul de timp pentru salvarea "
 "automată. \n"
 "\n"
 "Ar trebui fișierul tău salvat în mod automat?"
@@ -7602,7 +7602,7 @@ msgstr[2] ""
 "dată. \n"
 "\n"
 "Poți schimba intervalul de timp sau anula această funcționalitate din meniul "
-"Editare -> Preferințe -> General -> Intervalul de timp pentru salvarea "
+"Editare->Preferințe->General->Intervalul de timp pentru salvarea "
 "automată. \n"
 "\n"
 "Ar trebui fișierul tău salvat în mod automat?"
@@ -7945,7 +7945,7 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8675,8 +8675,8 @@ msgstr "Se afișează data tranzacției?"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -9044,8 +9044,8 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -16252,7 +16252,7 @@ msgstr "Execută _instalarea listei de conturi în cazul unui fișier nou"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
 #, fuzzy
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Afișează dialogul cu lista de conturi noi, când alegi \"Fișier nou\" din "
 "meniul \"Fișier\""
@@ -22208,7 +22208,7 @@ msgstr "Re_nunță la tranzacție"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -22387,9 +22387,8 @@ msgid "Increasing"
 msgstr "Creștere"
 
 #: gnucash/report/business-reports/aging.scm:385
-#, fuzzy
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z"
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22397,9 +22396,8 @@ msgid "Decreasing"
 msgstr "Scădere"
 
 #: gnucash/report/business-reports/aging.scm:386
-#, fuzzy
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 #, fuzzy
@@ -24094,7 +24092,7 @@ msgstr ""
 
 #: gnucash/report/business-reports/receipt.scm:159
 msgid "The format for the date->string conversion for today's date."
-msgstr "Formatul pentru conversia dată -> șir pentru data de azi."
+msgstr "Formatul pentru conversia dată .. șir pentru data de azi."
 
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"

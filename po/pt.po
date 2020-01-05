@@ -562,10 +562,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "Quer ver todas as transacções das suas sub-contas num diário? No separador "
-"de contas da página principal, realce a conta-mãe e seleccione Editar -> "
+"de contas da página principal, realce a conta-mãe e seleccione Editar->"
 "Abrir sub-contas."
 
 #: doc/tip_of_the_day.list.c:58
@@ -623,20 +623,20 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Pode empacotar múltiplos relatórios numa só janela, fornecendo toda a "
-"informação financeira numa vista de olhos. Para tal, use Exemplo & Pessoal -"
-"> Relatório multi-coluna personalizado, no menu Relatórios."
+"informação financeira numa vista de olhos. Para tal, use Exemplo & Pessoal->"
+"Relatório multi-coluna personalizado, no menu Relatórios."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "As folhas de estilo afectam como os relatórios são mostrados. Escolha uma "
-"folha de estilo para o seu relatório como opção do relatório e use Editar -> "
+"folha de estilo para o seu relatório como opção do relatório e use Editar->"
 "Folhas de estilo para as personalizar."
 
 #: doc/tip_of_the_day.list.c:88
@@ -683,22 +683,22 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
-"Para procurar em todas as suas transacções, comece uma procura (Editar -> "
+"Para procurar em todas as suas transacções, comece uma procura (Editar->"
 "Localizar...) na página principal do plano de contas. Para limitar a procura "
 "a uma conta especifica, comece a procura no diário dessa conta."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 "Para comparar visualmente no ecrã o conteúdo de dois separadores, seleccione "
-"Janela -> Nova janela com a página para duplicar o separador actual numa "
+"Janela->Nova janela com a página para duplicar o separador actual numa "
 "nova janela."
 
 #: doc/tip_of_the_day.list.c:112
@@ -5895,10 +5895,10 @@ msgstr "Impossível modificar ou eliminar esta transacção."
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "A data desta transacção é anterior ao limite de edição definido para este "
-"livro. Pode alterar esta definição em Ficheiro -> Propriedades -> Contas."
+"livro. Pode alterar esta definição em Ficheiro->Propriedades->Contas."
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7433,8 +7433,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7442,8 +7442,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7452,8 +7452,8 @@ msgstr[0] ""
 "automaticamente o ficheiro a cada %d minuto, tal como se clicasse em \"Gravar"
 "\".\n"
 "\n"
-"Pode alterar o intervalo de tempo ou desligar a funcionalidade em Editar -> "
-"Preferências -> Geral -> Intervalo de gravação automática.\n"
+"Pode alterar o intervalo de tempo ou desligar a funcionalidade em Editar->"
+"Preferências->Geral->Intervalo de gravação automática.\n"
 "\n"
 "Quer fazer a gravação automática do seu ficheiro?"
 msgstr[1] ""
@@ -7462,8 +7462,8 @@ msgstr[1] ""
 "automaticamente o ficheiro a cada %d minutos, tal como se clicasse em "
 "\"Gravar\".\n"
 "\n"
-"Pode alterar o intervalo de tempo ou desligar a funcionalidade em Editar -> "
-"Preferências -> Geral -> Intervalo de gravação automática.\n"
+"Pode alterar o intervalo de tempo ou desligar a funcionalidade em Editar->"
+"Preferências->Geral->Intervalo de gravação automática.\n"
 "\n"
 "Quer fazer a gravação automática do seu ficheiro?"
 
@@ -7809,11 +7809,11 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "Esta base de dados é de uma versão mais recente do GnuCash. Esta versão "
 "consegue lê-la mas não a consegue gravar com segurança. Será marcada como só "
-"de leitura até que escolha Ficheiro -> Gravar como, mas poderá perder dados "
+"de leitura até que escolha Ficheiro->Gravar como, mas poderá perder dados "
 "ao gravar numa versão anterior."
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8534,12 +8534,12 @@ msgstr "Impossível armazenar uma transacção nesta data"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "A data inserida da transacção duplicada é mais antiga que o limite de edição "
-"definido para este livro. Pode alterar esta definição em Ficheiro -> "
-"Propriedades -> Contas."
+"definido para este livro. Pode alterar esta definição em Ficheiro->"
+"Propriedades->Contas."
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8894,11 +8894,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "A data de entrada da nova transacção é anterior ao limite de edição definido "
-"para este livro. Pode alterar este limite em Ficheiro -> Propriedades -> "
+"para este livro. Pode alterar este limite em Ficheiro->Propriedades->"
 "Contas."
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -14204,7 +14204,7 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Use Editar -> Opções de relatório Impostos para definir a bandeira tax-"
+"Use Editar->Opções de relatório Impostos para definir a bandeira tax-"
 "related e atribuir um código de imposto a esta conta."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1185
@@ -16088,9 +16088,9 @@ msgid "Perform account list _setup on new file"
 msgstr "Configurar árvore de conta_s em ficheiro novo"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"Mostrar o diálogo de nova lista de contas quando escolhe Ficheiro -> Novo "
+"Mostrar o diálogo de nova lista de contas quando escolhe Ficheiro->Novo "
 "ficheiro."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
@@ -22023,11 +22023,11 @@ msgstr "_Alterar transacção"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "A data de entrada da nova transacção é anterior ao limite de edição definido "
-"para este livro. Pode alterar este limite em Ficheiro -> Propriedades -> "
+"para este livro. Pode alterar este limite em Ficheiro->Propriedades->"
 "Contas, repondo o limite."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
@@ -22193,8 +22193,8 @@ msgid "Increasing"
 msgstr "Ascendente"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> €999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22202,8 +22202,8 @@ msgid "Decreasing"
 msgstr "Descendente"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "€999,999.99 -> €0, Z->A"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A"
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""
@@ -23796,7 +23796,7 @@ msgstr ""
 
 #: gnucash/report/business-reports/receipt.scm:159
 msgid "The format for the date->string conversion for today's date."
-msgstr "O formato para conversão data -> cadeia da data de hoje."
+msgstr "O formato para conversão data->cadeia da data de hoje."
 
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"

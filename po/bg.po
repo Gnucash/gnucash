@@ -582,10 +582,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "Искате да виждате всички транзанкции на по подсметките в един регистър? В "
-"главното меню отбележете основната сметка и изберете 'Сметки' -> 'Отваряне "
+"главното меню отбележете основната сметка и изберете 'Сметки'->'Отваряне "
 "на подсметки'."
 
 #: doc/tip_of_the_day.list.c:58
@@ -640,21 +640,21 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Можете да съберете повече отчети в един прозорец  за да имате цялата "
 "финансова информация наведнъж. За да го направите, изберете 'Мостра', "
-"'Потребителски' -> \"Потребителски многоколонен отчет\"."
+"'Потребителски'->\"Потребителски многоколонен отчет\"."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "Таблиците със стилове влияят върху начина на показване на отчетите. Изберете "
 "таблица със стил за отчета като опция за отчет и използвайте менюто "
-"'Редактиране' -> 'Таблици със стилове', за да настроите таблиците със "
+"'Редактиране'->'Таблици със стилове', за да настроите таблиците със "
 "стилове."
 
 #: doc/tip_of_the_day.list.c:88
@@ -692,7 +692,7 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
@@ -700,7 +700,7 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -6005,7 +6005,7 @@ msgstr "Транзакцията не може да се промени или �
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7542,8 +7542,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7551,8 +7551,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7560,8 +7560,8 @@ msgstr[0] ""
 "промените. GnuCash притежава свойството да съхранява файла автоматично на "
 "всеки %d минути, равносилно на натискането на бутона \"Запазване\". \n"
 "\n"
-"Можете да промените интервала или да изключите свойството от Редактиране -> "
-"Предпочитания -> Основни -> Интервал за автоматичен запис. \n"
+"Можете да промените интервала или да изключите свойството от Редактиране->"
+"Предпочитания->Основни->Интервал за автоматичен запис. \n"
 "\n"
 "Да се запазва ли автоматично файлът?"
 msgstr[1] ""
@@ -7569,8 +7569,8 @@ msgstr[1] ""
 "промените. GnuCash притежава свойството да съхранява файла автоматично на "
 "всеки %d минути, равносилно на натискането на бутона \"Запазване\". \n"
 "\n"
-"Можете да промените интервала или да изключите свойството от Редактиране -> "
-"Предпочитания -> Основни -> Интервал за автоматичен запис. \n"
+"Можете да промените интервала или да изключите свойството от Редактиране->"
+"Предпочитания->Основни->Интервал за автоматичен запис. \n"
 "\n"
 "Да се запазва ли автоматично файлът?"
 
@@ -7919,11 +7919,11 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "Базата от данни е от по-нова версия на GnuCash. Настоящата версия може да я "
 "чете, но не може да запазва безопасно в нея. Ще бъде отбелязана само за "
-"четене, докато не изберете Файл>Запазване като."
+"четене, докато не изберете Файл->Запазване като."
 
 #: gnucash/gnome-utils/gnc-file.c:454
 msgid ""
@@ -8646,8 +8646,8 @@ msgstr "Причина за анулиране на транзакцията"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -9015,8 +9015,8 @@ msgstr "%B %#d, %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -16204,7 +16204,7 @@ msgstr "_Инсталиране на счетоводен списък в нов
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
 #, fuzzy
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Прозорец със списък от нови сметки при избор на \"Нов файл\" от менюто \"Файл"
 "\""
@@ -22157,7 +22157,7 @@ msgstr "О_тмяна на транзакция"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -22333,9 +22333,8 @@ msgid "Increasing"
 msgstr "Увеличение"
 
 #: gnucash/report/business-reports/aging.scm:385
-#, fuzzy
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999 999,99, А->Я"
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999 999,99, А .. Я."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22343,9 +22342,8 @@ msgid "Decreasing"
 msgstr "Намаление"
 
 #: gnucash/report/business-reports/aging.scm:386
-#, fuzzy
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999 999,99 -> $0, Я->А"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999 999,99 .. 0, Я .. А."
 
 #: gnucash/report/business-reports/aging.scm:393
 #, fuzzy

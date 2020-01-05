@@ -7951,7 +7951,7 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8673,8 +8673,8 @@ msgstr "Důvod, proč byla účetní položka zneplatněna"
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #. Translators: This message will be presented when a user *
@@ -9043,8 +9043,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -15986,7 +15986,7 @@ msgstr "Provést _nastavení seznamů účtů při novém souboru"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
 #, fuzzy
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
 "Zobrazovat dialog seznamu nových účtů, když zvolíte \"Nový soubor\" z menu "
 "\"Soubor\""
@@ -21901,7 +21901,7 @@ msgstr "_Zrušit účetní položku"
 #: gnucash/register/register-gnome/datecell-gnome.c:103
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 
@@ -22079,9 +22079,8 @@ msgid "Increasing"
 msgstr "Vzestupně"
 
 #: gnucash/report/business-reports/aging.scm:385
-#, fuzzy
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> 999 999,,99 Kč, A->Z"
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999 999,99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22089,9 +22088,8 @@ msgid "Decreasing"
 msgstr "Sestupné"
 
 #: gnucash/report/business-reports/aging.scm:386
-#, fuzzy
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "999 999,99 Kč -> 0 Kč, Z->A"
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999 999,99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 #, fuzzy

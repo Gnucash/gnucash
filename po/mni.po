@@ -573,10 +573,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "ꯔꯦꯖꯤꯁꯇꯔ ꯑꯃꯗ ꯑꯗꯣꯝꯒꯤ ꯁꯕꯑꯦꯀꯥꯎꯟꯠ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯅꯃꯛ ꯌꯦꯡꯕ ꯄꯥꯝꯕꯤꯕ꯭ꯔꯥ? ꯃꯄꯨꯡ ꯑꯣꯏꯕ ꯃꯦꯅꯤꯎꯗꯒꯤ, "
-"ꯄꯦꯔꯦꯟꯠ ꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯏꯂꯥꯏꯠ ꯇꯧꯕꯤꯔꯣ ꯑꯃꯁꯨꯡ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯜꯂꯣ -> ꯃꯦꯅꯤꯎꯗꯒꯤ ꯁꯕꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯡꯗꯣꯛꯎ"
+"ꯄꯦꯔꯦꯟꯠ ꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯏꯂꯥꯏꯠ ꯇꯧꯕꯤꯔꯣ ꯑꯃꯁꯨꯡ ꯑꯦꯀꯥꯎꯟꯠ ꯈꯜꯂꯣ->ꯃꯦꯅꯤꯎꯗꯒꯤ ꯁꯕꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯡꯗꯣꯛꯎ"
 
 #: doc/tip_of_the_day.list.c:58
 msgid ""
@@ -626,20 +626,20 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "ꯑꯗꯣꯝꯅ ꯋꯤꯟꯗꯣ ꯑꯃꯈꯛꯇꯪꯗ ꯑꯃꯨꯛꯇꯪꯗ ꯎꯕ ꯄꯥꯝꯕ ꯑꯗꯨꯒꯤ ꯐꯥꯏꯅꯥꯟꯁꯤꯌꯦꯜꯒꯤ ꯑꯣꯏꯕ ꯏꯄꯥꯎ ꯄꯨꯝꯅꯃꯛ ꯆꯪꯁꯤꯟꯗꯨꯅ "
-"ꯔꯤꯄꯣꯔꯠ ꯀꯌꯥꯃꯔꯨꯝ ꯄꯦꯛ ꯇꯧꯕ ꯌꯥꯒꯅꯤ. ꯑꯁꯨꯝꯅ ꯇꯧꯅꯕ ꯁꯦꯝꯄꯜ ꯑꯃꯁꯨꯡ ꯀꯁꯇꯝ -> \"ꯀꯁꯇꯝ ꯃꯜꯇꯤꯀꯂꯝ ꯔꯤꯄꯣꯔꯠ"
+"ꯔꯤꯄꯣꯔꯠ ꯀꯌꯥꯃꯔꯨꯝ ꯄꯦꯛ ꯇꯧꯕ ꯌꯥꯒꯅꯤ. ꯑꯁꯨꯝꯅ ꯇꯧꯅꯕ ꯁꯦꯝꯄꯜ ꯑꯃꯁꯨꯡ ꯀꯁꯇꯝ->\"ꯀꯁꯇꯝ ꯃꯜꯇꯤꯀꯂꯝ ꯔꯤꯄꯣꯔꯠ"
 "\" ꯔꯤꯄꯣꯔꯠ ꯁꯤꯖꯤꯟꯅꯧ."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠꯅ ꯔꯤꯄꯣꯔꯠꯁꯤꯡꯅ ꯎꯠꯂꯤꯕꯗꯨꯗ ꯁꯣꯛꯍꯜꯂꯤ꯫ ꯔꯤꯄꯣꯔꯠ ꯑꯣꯞꯁꯟ ꯑꯃ ꯑꯣꯏꯅ ꯑꯗꯣꯝꯒꯤ ꯔꯤꯄꯣꯔꯠꯀꯤ "
-"ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠ ꯑꯃ ꯈꯜꯂꯣ, ꯑꯗꯨꯒ ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠꯁꯤꯡ ꯀꯁꯇꯃꯥꯏꯖ ꯇꯧꯅꯕ Edit -> Style Sheets ꯃꯦꯅꯨ "
+"ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠ ꯑꯃ ꯈꯜꯂꯣ, ꯑꯗꯨꯒ ꯁ꯭ꯇꯥꯏꯜ ꯁꯤꯠꯁꯤꯡ ꯀꯁꯇꯃꯥꯏꯖ ꯇꯧꯅꯕ Edit->Style Sheets ꯃꯦꯅꯨ "
 "ꯁꯤꯖꯤꯟꯅꯧ꯫"
 
 #: doc/tip_of_the_day.list.c:88
@@ -686,17 +686,17 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
-"ꯑꯗꯣꯝꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯅꯃꯛꯇ ꯊꯤꯅꯕ, ꯃꯄꯨꯡ ꯑꯣꯏꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯏꯔꯥꯔꯀꯤ ꯂꯥꯃꯥꯏꯗꯒꯤ (Edit -> Find...) "
+"ꯑꯗꯣꯝꯒꯤ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯄꯨꯝꯅꯃꯛꯇ ꯊꯤꯅꯕ, ꯃꯄꯨꯡ ꯑꯣꯏꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯍꯥꯏꯔꯥꯔꯀꯤ ꯂꯥꯃꯥꯏꯗꯒꯤ (Edit->Find...) "
 "ꯊꯤꯕ ꯍꯧꯔꯣ꯫ ꯑꯦꯀꯥꯎꯟꯠ ꯑꯃꯗ ꯑꯗꯣꯝꯒꯤ ꯊꯤꯕ ꯄꯪꯈꯩ ꯑꯣꯏꯅꯕ, ꯑꯦꯀꯥꯎꯟꯠ ꯑꯗꯨꯒ ꯔꯦꯖꯤꯁꯇꯔꯗꯒꯤ ꯊꯤꯕ ꯍꯧꯔꯣ꯫"
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5900,10 +5900,10 @@ msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤ ꯁꯦꯝꯗꯣꯛꯄ ꯅꯇ꯭
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯇꯥꯡ ꯑꯁꯤ ꯕꯨꯛ ꯑꯁꯤꯒꯤ \"Read-Only Threshold\" ꯁꯦꯠ ꯑꯁꯤꯗꯒꯤ ꯂꯤꯕ "
-"ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ -> ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ -> ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
+"ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ->ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ->ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
 
 #: gnucash/gnome/gnc-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:840
@@ -7415,8 +7415,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7424,8 +7424,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7433,7 +7433,7 @@ msgstr[0] ""
 "\" ꯕꯇꯟ ꯅꯝꯕ ꯃꯇꯝ ꯈꯨꯗꯤꯡꯗ %d ꯃꯤꯅꯤꯠ ꯈꯨꯗꯤꯡꯒꯤ ꯃꯊꯟꯇꯅ ꯐꯥꯏꯜ ꯁꯦꯚ ꯇꯧꯅꯕ GnuCash ꯒꯤ ꯐꯤꯆꯔ ꯑꯃ "
 "ꯂꯩ꯫\n"
 "\n"
-"ꯁꯦꯝꯗꯣꯛꯄ -> ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯤꯡ -> ꯖꯦꯅꯔꯦꯜ -> ꯇꯥꯏꯝ ꯏꯟꯇꯔꯚꯦꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯕ ꯑꯁꯤ ꯇꯧꯗꯨꯅ ꯑꯗꯣꯝꯅ "
+"ꯁꯦꯝꯗꯣꯛꯄ->ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯤꯡ->ꯖꯦꯅꯔꯦꯜ->ꯇꯥꯏꯝ ꯏꯟꯇꯔꯚꯦꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯕ ꯑꯁꯤ ꯇꯧꯗꯨꯅ ꯑꯗꯣꯝꯅ "
 "ꯃꯇꯝ ꯀꯥꯟꯅꯕꯗꯨ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ ꯅꯇ꯭ꯔꯒ ꯐꯤꯆꯔ ꯑꯁꯤ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ꯫\n"
 "\n"
 "ꯑꯗꯣꯝꯒꯤ ꯐꯥꯏꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯒꯗ꯭ꯔꯥ?"
@@ -7442,7 +7442,7 @@ msgstr[1] ""
 "\" ꯕꯇꯟ ꯅꯝꯕ ꯃꯇꯝ ꯈꯨꯗꯤꯡꯗ %d ꯃꯤꯅꯤꯠꯁꯤꯡ ꯈꯨꯗꯤꯡꯒꯤ ꯃꯊꯟꯇꯅ ꯐꯥꯏꯜ ꯁꯦꯚ ꯇꯧꯅꯕ GnuCash ꯒꯤ ꯐꯤꯆꯔ "
 "ꯑꯃ ꯂꯩ꯫\n"
 "\n"
-"ꯁꯦꯝꯗꯣꯛꯄ -> ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯤꯡ -> ꯖꯦꯅꯔꯦꯜ -> ꯇꯥꯏꯝ ꯏꯟꯇꯔꯚꯦꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯕ ꯑꯁꯤ ꯇꯧꯗꯨꯅ ꯑꯗꯣꯝꯅ "
+"ꯁꯦꯝꯗꯣꯛꯄ->ꯄ꯭ꯔꯤꯐꯔꯦꯟꯁꯤꯡ->ꯖꯦꯅꯔꯦꯜ->ꯇꯥꯏꯝ ꯏꯟꯇꯔꯚꯦꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯕ ꯑꯁꯤ ꯇꯧꯗꯨꯅ ꯑꯗꯣꯝꯅ "
 "ꯃꯇꯝ ꯀꯥꯟꯅꯕꯗꯨ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ ꯅꯇ꯭ꯔꯒ ꯐꯤꯆꯔ ꯑꯁꯤ ꯃꯨꯠꯊꯠꯄ ꯌꯥꯏ꯫\n"
 "\n"
 "ꯑꯗꯣꯝꯒꯤ ꯐꯥꯏꯜ ꯃꯊꯟꯇꯅ ꯁꯦꯚ ꯇꯧꯒꯗ꯭ꯔꯥ?"
@@ -7778,10 +7778,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "ꯗꯥꯇꯥꯕꯦꯖ ꯑꯁꯤ GnuCash ꯒꯤ ꯍꯦꯟꯅ ꯅꯧꯕ ꯚꯔꯁꯟ ꯑꯃꯗꯒꯤꯅꯤ꯫ ꯚꯔꯁꯟ ꯑꯁꯤꯅ ꯃꯁꯤ ꯄꯥꯕ ꯌꯥꯏ, ꯑꯗꯨꯕꯨ ꯃꯁꯤꯗ "
-"ꯑꯁꯣꯏ-ꯑꯉꯥꯝ ꯌꯥꯎꯗꯅ ꯁꯦꯚ ꯇꯧꯕ ꯉꯝꯗꯦ꯫ ꯑꯗꯣꯝꯅ File>Save As ꯇꯧꯗ꯭ꯔꯤꯐꯥꯎꯕ ꯃꯁꯤ ꯄꯥꯕꯈꯛꯇꯒꯤꯅꯤ ꯍꯥꯏꯅ "
+"ꯑꯁꯣꯏ-ꯑꯉꯥꯝ ꯌꯥꯎꯗꯅ ꯁꯦꯚ ꯇꯧꯕ ꯉꯝꯗꯦ꯫ ꯑꯗꯣꯝꯅ File->Save As ꯇꯧꯗ꯭ꯔꯤꯐꯥꯎꯕ ꯃꯁꯤ ꯄꯥꯕꯈꯛꯇꯒꯤꯅꯤ ꯍꯥꯏꯅ "
 "ꯃꯥꯔꯛ ꯇꯧꯒꯅꯤ, ꯑꯗꯨꯕꯨ ꯑꯔꯤꯕ ꯚꯔꯁꯟꯗ ꯏꯕ ꯃꯇꯝꯗ ꯗꯥꯇꯥ ꯃꯥꯡꯈꯤꯕ ꯌꯥꯏ꯫"
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8499,11 +8499,11 @@ msgstr "ꯇꯥꯡ ꯑꯁꯤꯗ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯅ ꯑꯃ ꯁ꯭ꯇ�
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "ꯗꯨꯄ꯭ꯂꯤꯀꯦꯠ ꯑꯣꯏꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯑꯁꯤꯒꯤ ꯆꯪꯁꯤꯜꯂꯤꯕ ꯇꯥꯡ ꯑꯁꯤ ꯕꯨꯛ ꯑꯁꯤꯒꯤ \"Read-Only Threshold\" "
-"ꯁꯦꯠ ꯑꯁꯤꯗꯒꯤ ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ -> ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ -> ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
+"ꯁꯦꯠ ꯑꯁꯤꯗꯒꯤ ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ->ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ->ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
 
 #. Translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
@@ -8859,11 +8859,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "ꯑꯅꯧꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯆꯪꯁꯤꯜꯂꯤꯕ ꯇꯥꯡ ꯑꯁꯤ ꯕꯨꯛ ꯑꯁꯤꯒꯤ \"Read-Only Threshold\" ꯁꯦꯠ ꯑꯁꯤꯗꯒꯤ "
-"ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ -> ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ -> ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
+"ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ->ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ->ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
 msgid ""
@@ -15848,8 +15848,8 @@ msgid "Perform account list _setup on new file"
 msgstr "ꯑꯅꯧꯕ ꯐꯥꯏꯜꯗ ꯑꯦꯀꯥꯎꯟꯠ ꯄꯔꯤꯡꯒꯤ _ꯁꯦꯠꯑꯞ ꯄꯥꯡꯊꯣꯛꯎ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
-msgstr "ꯑꯗꯣꯝꯅ ꯐꯥꯏꯜ -> ꯑꯅꯧꯕ ꯐꯥꯏꯜ ꯈꯟꯕ ꯃꯇꯝꯗ ꯑꯅꯧꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯄꯔꯤꯡꯒꯤ ꯗꯥꯏꯂꯣꯒ ꯄꯤꯔꯤ꯫"
+msgid "Present the new account list dialog when you choose File->New File."
+msgstr "ꯑꯗꯣꯝꯅ ꯐꯥꯏꯜ->ꯑꯅꯧꯕ ꯐꯥꯏꯜ ꯈꯟꯕ ꯃꯇꯝꯗ ꯑꯅꯧꯕ ꯑꯦꯀꯥꯎꯟꯠ ꯄꯔꯤꯡꯒꯤ ꯗꯥꯏꯂꯣꯒ ꯄꯤꯔꯤ꯫"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
 msgid "Display \"_tip of the day\" dialog"
@@ -21683,11 +21683,11 @@ msgstr "ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟ ꯀ_ꯛꯊꯠꯂꯣ"
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "ꯑꯅꯧꯕ ꯇ꯭ꯔꯥꯟꯁꯦꯛꯁꯟꯒꯤ ꯆꯪꯁꯤꯜꯂꯤꯕ ꯇꯥꯡ ꯑꯁꯤ ꯕꯨꯛ ꯑꯁꯤꯒꯤ \"Read-Only Threshold\" ꯁꯦꯠ ꯑꯁꯤꯗꯒꯤ "
-"ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ -> ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ -> ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
+"ꯂꯤꯕ ꯑꯣꯏꯔꯦ꯫  ꯁꯦꯠꯇꯤꯡ ꯑꯁꯤ ꯐꯥꯏꯜ->ꯄ꯭ꯔꯣꯄꯔꯇꯤꯁ->ꯑꯦꯀꯥꯎꯟꯠꯁꯗ ꯍꯣꯡꯗꯣꯛꯄ ꯌꯥꯏ꯫"
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -21854,8 +21854,8 @@ msgid "Increasing"
 msgstr "ꯍꯦꯟꯒꯠꯂꯛꯄ"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -21863,8 +21863,8 @@ msgid "Decreasing"
 msgstr "ꯍꯟꯊꯔꯛꯄ"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""

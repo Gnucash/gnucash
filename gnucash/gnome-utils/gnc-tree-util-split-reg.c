@@ -477,7 +477,7 @@ gnc_tree_util_split_reg_parse_date (GDate *parsed, const char *datestr)
                                                        "%s", _("Cannot store a transaction at this date"));
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                      "%s", _("The entered date of the new transaction is older than the \"Read-Only Threshold\" set for this book. "
-                                                             "This setting can be changed in File -> Properties -> Accounts."));
+                                                             "This setting can be changed in File->Properties->Accounts."));
             gtk_dialog_run (GTK_DIALOG (dialog));
             gtk_widget_destroy (dialog);
 #endif

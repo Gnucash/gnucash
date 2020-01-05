@@ -575,10 +575,10 @@ msgstr ""
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
-"Edit -> Open Subaccounts from the menu."
+"Edit->Open Subaccounts from the menu."
 msgstr ""
 "রেজিস্তর অমদা অদোমগী সবএকাউন্ত ত্রান্সেকসন পুম্নমক য়েংবা পাম্বিব্রা? মপুং ওইবা "
-"মেন্যুদগী, পেরেন্ত একাউন্ত হাইলাইত তৌবিরো অমসুং একাউন্ত খল্লো -> মেন্যুদগী সবএকাউন্ত "
+"মেন্যুদগী, পেরেন্ত একাউন্ত হাইলাইত তৌবিরো অমসুং একাউন্ত খল্লো->মেন্যুদগী সবএকাউন্ত "
 "হাংদোকউ"
 
 #: doc/tip_of_the_day.list.c:58
@@ -630,21 +630,21 @@ msgstr ""
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
-"Custom -> \"Custom Multicolumn Report\" report."
+"Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "অদোম্না ৱিন্দো অমখক্তংদা অমুক্তংদা উবা পাম্বা অদুগী ফাইনান্সিয়েলগী ওইবা ঈপাউ পুম্নমক "
-"চঙশিন্দুনা রিপোর্ত কয়ামরুম পেক তৌবা য়াগনি. অশুম্না তৌনবা সেম্পল অমসুং কস্তম -> \"কস্তম "
+"চঙশিন্দুনা রিপোর্ত কয়ামরুম পেক তৌবা য়াগনি. অশুম্না তৌনবা সেম্পল অমসুং কস্তম->\"কস্তম "
 "মলতিকলম রিপোর্ত\" রিপোর্ত শিজিন্নৌ."
 
 #: doc/tip_of_the_day.list.c:84
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
-"report as a report option, and use the Edit -> Style Sheets menu to "
+"report as a report option, and use the Edit->Style Sheets menu to "
 "customize style sheets."
 msgstr ""
 "মতৌ করম্না রিপোর্তসিং উৎপগে হায়বদুদা স্তাইল সিতসিংনা সাফু পী। নহাক্কী রিপোর্ত "
 "অদুগীদমক স্তাইল সিত অমা রিপোর্ত ওপসন অমগুম্না খল্লো, অমসুং স্তাইল সিতসিং কস্তমাইজ "
-"তৌনবগীদমক এদিত -> স্তাইল সিতস মেন্যু অদু সিজিন্নৌ।"
+"তৌনবগীদমক এদিত->স্তাইল সিতস মেন্যু অদু সিজিন্নৌ।"
 
 #: doc/tip_of_the_day.list.c:88
 msgid ""
@@ -691,18 +691,18 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:104
 msgid ""
-"To search through all your transactions, start a search (Edit -> Find...) "
+"To search through all your transactions, start a search (Edit->Find...) "
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
 "নহাক্কী ত্রাঞ্জেক্সন লোয়নমক্তা থীনবগীদমক্তা, মপুং ওইবা একাউন্তগী হৈরার্কি পেজ অদুদগী "
-"থীবা অমা (Edit -> Find...) হৌরো। নহাক্না থীবদুগী লিমিত লৈহন্নবগীদমক্তা, থীবদু "
+"থীবা অমা (Edit->Find...) হৌরো। নহাক্না থীবদুগী লিমিত লৈহন্নবগীদমক্তা, থীবদু "
 "একাউন্ত অদুগী রেজিস্তরদগী হৌ।"
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
-"select Window -> New Window with Page from the menu to duplicate that tab in "
+"select Window->New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
 
@@ -5962,10 +5962,10 @@ msgstr "ত্রান্সেকসন অসি শেমদোকপা ন
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:83
 msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
-"for this book. This setting can be changed in File -> Properties -> Accounts."
+"for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
 "ত্রাঞ্জেক্সন অসিগী তারিখ অসি লাইরিক অসিগীদমক সেত তৌবা \"পাবা-খক্কী অহৌবা\" অদুদগী "
-"হেন্না লিরে। সেত্তিং অসি ফাইল -> প্রোপর্তিজ -> একাউন্তসতা হোংদোক-হোংজিন তৌবা "
+"হেন্না লিরে। সেত্তিং অসি ফাইল->প্রোপর্তিজ->একাউন্তসতা হোংদোক-হোংজিন তৌবা "
 "য়াগনি।"
 
 #: gnucash/gnome/gnc-split-reg.c:1137
@@ -7493,8 +7493,8 @@ msgid ""
 "GnuCash has a feature to save the file automatically every %d minute, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgid_plural ""
@@ -7502,8 +7502,8 @@ msgid_plural ""
 "GnuCash has a feature to save the file automatically every %d minutes, just "
 "as if you had pressed the \"Save\" button each time. \n"
 "\n"
-"You can change the time interval or turn off this feature under Edit -> "
-"Preferences -> General -> Auto-save time interval. \n"
+"You can change the time interval or turn off this feature under Edit->"
+"Preferences->General->Auto-save time interval. \n"
 "\n"
 "Should your file be saved automatically?"
 msgstr[0] ""
@@ -7511,7 +7511,7 @@ msgstr[0] ""
 "তৌনবগীদমক্তা সেভ তৌবা মথৌ তাই। GnuCashতা, নহাক্না \"সেভ\" বতন নম্বা খুদিংগী "
 "তৌবগুম্না ফাইল মসা মথন্তা মিনিত %d খুদিংগী সেভ তৌজবা ফিচর অমা লৈ। \n"
 "\n"
-"নহাক্না এদিত -> প্রিফরেন্সসিং -> জেনেরেল -> ওতো-সেভ তাইম ইন্তর্ভেলগী মখাদা তাইম "
+"নহাক্না এদিত->প্রিফরেন্সসিং->জেনেরেল->ওতো-সেভ তাইম ইন্তর্ভেলগী মখাদা তাইম "
 "ইন্তর্ভেল হোংদোকপা নৎত্রগা ফিচর অসি মুত্থৎপা ঙম্মী। \n"
 "\n"
 "নহাক্কী ফাইল অদু মসা মথন্তা সেভ তৌহনগদ্রা?"
@@ -7520,7 +7520,7 @@ msgstr[1] ""
 "তৌনবগীদমক্তা সেভ তৌবা মথৌ তাই। GnuCashতা, নহাক্না \"সেভ\" বতন নম্বা খুদিংগী "
 "তৌবগুম্না ফাইল মসা মথন্তা মিনিত %d খুদিংগী সেভ তৌজবা ফিচর অমা লৈ। \n"
 "\n"
-"নহাক্না এদিত -> প্রিফরেন্সসিং -> জেনেরেল -> ওতো-সেভ তাইম ইন্তর্ভেলগী মখাদা তাইম "
+"নহাক্না এদিত->প্রিফরেন্সসিং->জেনেরেল->ওতো-সেভ তাইম ইন্তর্ভেলগী মখাদা তাইম "
 "ইন্তর্ভেল হোংদোকপা নৎত্রগা ফিচর অসি মুত্থৎপা ঙম্মী। \n"
 "\n"
 "নহাক্কী ফাইল অদু মসা মথন্তা সেভ তৌহনগদ্রা?"
@@ -7859,10 +7859,10 @@ msgstr ""
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
-"File>Save As, but data may be lost in writing to the old version."
+"File->Save As, but data may be lost in writing to the old version."
 msgstr ""
 "দেতাবেজ অসি হেন্না নৌবা GnuCashকী ভর্সন অমদগীনি। ভর্সন অসিনা মদু পাবা ঙম্মী, অদুবু "
-"মদুদা সোয়-ঙামদনা সেভ তৌবদি ঙমদে। নহাক্না ফাইল>সেভ এজ তৌদ্রিফাউবা মদু পাবা-খক্তা "
+"মদুদা সোয়-ঙামদনা সেভ তৌবদি ঙমদে। নহাক্না ফাইল->সেভ এজ তৌদ্রিফাউবা মদু পাবা-খক্তা "
 "হায়না মার্ক তৌগনি, অদুবু অরিবা ভর্সন্দা ইবা মতমদা দেতা মাংখিবা য়াই।"
 
 #: gnucash/gnome-utils/gnc-file.c:454
@@ -8586,11 +8586,11 @@ msgstr "তারিখ অসিদা ত্রাঞ্জেক্সন অ
 #: gnucash/register/ledger-core/split-register.c:615
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "দুপ্লিকেত সেম্লবা ত্রাঞ্জেক্সন অদুগী এন্তর তৌরবা তারিখ অদুনা লাইরিক অসিগী সেত তৌরবা "
-"\"পাবা-খক্কী অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল -> প্রোপর্তিজ -> "
+"\"পাবা-খক্কী অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল->প্রোপর্তিজ->"
 "একাউন্তসতা হোংদোক-হোংজিন তৌবা য়াই।"
 
 # the word "Blank" can be translated as "অহাংবা" in Manipuri. But, if the same is banking terminology, it may be kept as "ব্লেঙ্ক" also considering the context.
@@ -8953,11 +8953,11 @@ msgstr "%A %d %B %Y"
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
 "The entered date of the new transaction is older than the \"Read-Only "
-"Threshold\" set for this book. This setting can be changed in File -> "
-"Properties -> Accounts."
+"Threshold\" set for this book. This setting can be changed in File->"
+"Properties->Accounts."
 msgstr ""
 "ত্রাঞ্জেক্সন অসিগী এন্তর তৌরবা তারিখ অসি লাইরিক অসিগীদমক সেত তৌবা \"পাবা-খক্কী "
-"অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল -> প্রোপর্তিজ -> একাউন্তসতা হোংদোক-"
+"অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল->প্রোপর্তিজ->একাউন্তসতা হোংদোক-"
 "হোংজিন তৌবা য়াগনি।"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:861
@@ -14157,7 +14157,7 @@ msgid ""
 "code to this account."
 msgstr ""
 "একাউন্ত অসিদা তেক্সকা মরি লৈনবা ফ্লেগ সেত তৌনবা অমসুং তেক্স কোদ এসাইন তৌনবা "
-"শেমদোকপা-> তেক্স রিপোর্ত ওপসন শিজিন্নৌ"
+"শেমদোকপা->তেক্স রিপোর্ত ওপসন শিজিন্নৌ"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1185
 msgid "Placeholde_r"
@@ -16050,7 +16050,7 @@ msgid "Perform account list _setup on new file"
 msgstr "অনৌবা ফাইলদা একাউন্ত পরিংগী _সেতঅপ পাংথোকউ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1150
-msgid "Present the new account list dialog when you choose File -> New File."
+msgid "Present the new account list dialog when you choose File->New File."
 msgstr "নহাক্না ফাইল-> অনৌবা ফাইল খনবা মতমদা অনৌবা একাউন্ত লিস্ত দাইএলোগ অদু উৎলু।"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1183
@@ -21943,11 +21943,11 @@ msgstr "ত্রান্সেকসন ক_কথৎলো"
 #, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File -> Properties -> "
+"\" set for this book. This setting can be changed in File->Properties->"
 "Accounts, resetting to the threshold."
 msgstr ""
 "ত্রাঞ্জেক্সন অসিগী এন্তর তৌরবা তারিখ অসি লাইরিক অসিগীদমক সেত তৌবা \"পাবা-খক্কী "
-"অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল -> প্রোপর্তিজ -> একাউন্তসতা হোংদোক-"
+"অহৌবা\" অদুদগী হেন্না লিরে। সেত্তিং অসি ফাইল->প্রোপর্তিজ->একাউন্তসতা হোংদোক-"
 "হোংজিন তৌবা য়াগনি।"
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
@@ -22117,8 +22117,8 @@ msgid "Increasing"
 msgstr "হেনগৎলকপা"
 
 #: gnucash/report/business-reports/aging.scm:385
-msgid "0 -> $999,999.99, A->Z."
-msgstr "0 -> $999,999.99, A->Z."
+msgid "0 .. 999,999.99, A .. Z."
+msgstr "0 .. 999,999.99, A .. Z."
 
 #: gnucash/report/business-reports/aging.scm:386
 #: gnucash/report/business-reports/new-aging.scm:98
@@ -22126,8 +22126,8 @@ msgid "Decreasing"
 msgstr "হন্থরকপা"
 
 #: gnucash/report/business-reports/aging.scm:386
-msgid "$999,999.99 -> $0, Z->A."
-msgstr "$999,999.99 -> $0, Z->A."
+msgid "999,999.99 .. 0, Z .. A."
+msgstr "999,999.99 .. 0, Z .. A."
 
 #: gnucash/report/business-reports/aging.scm:393
 msgid ""
