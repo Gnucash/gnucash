@@ -84,10 +84,9 @@ static AccountPickerDialog* gnc_import_new_account_picker(void)
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
     const gchar * current_online_id = gnc_import_get_acc_online_id(acct);
-    if ( (current_online_id != NULL
-            && param_online_id != NULL )
-	 && strncmp( current_online_id, param_online_id,
-		     strlen( current_online_id ) ) == 0 )
+    if ((current_online_id != NULL && param_online_id != NULL)
+	 && strncmp (current_online_id, param_online_id,
+		     strlen (current_online_id)) == 0)
     {
         return (gpointer *) acct;
     }
