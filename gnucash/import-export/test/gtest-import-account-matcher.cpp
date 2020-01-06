@@ -76,7 +76,7 @@ protected:
         create_account(stocks, ACCT_TYPE_STOCK, "HPE", "BrokerStocksHPE");
         create_account(broker, ACCT_TYPE_BANK, "Cash Management",
                        "BrokerCash Management");
-        create_account(expenses, ACCT_TYPE_EXPENSE, "Food", nullptr);
+       create_account(expenses, ACCT_TYPE_EXPENSE, "Food", nullptr);
         create_account(expenses, ACCT_TYPE_EXPENSE, "Gas", nullptr);
         create_account(expenses, ACCT_TYPE_EXPENSE, "Rent", nullptr);
    }
@@ -115,8 +115,7 @@ TEST_F(ImportMatcherTest, test_match_with_subaccounts)
                                            nullptr, nullptr, ACCT_TYPE_NONE,
                                            nullptr, nullptr);
     ASSERT_NE(nullptr, found);
-    // Should be equal
-    EXPECT_STRNE("Stocks", xaccAccountGetName(found));
+    EXPECT_STREQ("Stocks", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match)
@@ -125,8 +124,7 @@ TEST_F(ImportMatcherTest, test_subaccount_match)
                                            nullptr, nullptr, ACCT_TYPE_NONE,
                                            nullptr, nullptr);
     ASSERT_NE(nullptr, found);
-    //should be equal
-    EXPECT_STRNE("HPE", xaccAccountGetName(found));
+    EXPECT_STREQ("HPE", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trailing_noise)
@@ -134,21 +132,16 @@ TEST_F(ImportMatcherTest, test_subaccount_match_trailing_noise)
     auto found = gnc_import_select_account(nullptr, "BrokerStocksHPEUSD", FALSE,
                                            nullptr, nullptr, ACCT_TYPE_NONE,
                                            nullptr, nullptr);
-    // Should be equal
-    EXPECT_STRNE("HPE", xaccAccountGetName(found));
+    ASSERT_NE(nullptr, found);
+    EXPECT_STREQ("HPE", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_no_match)
 {
     auto found = gnc_import_select_account(nullptr, "BrokerStocksINTC", FALSE,
-                                           nullptr, nullptr, ACCT_TYPE_NONE,
+                                           nullptr, nullptr, ACCT_TYPE_STOCK,
                                            nullptr, nullptr);
-/* We really want nullptr in this case, but the algorithm can't tell the
- * difference between trailing noise and a new security that needs a new
- * account.
- */
-    ASSERT_NE(nullptr, found);
-    EXPECT_STREQ("Stocks", xaccAccountGetName(found));
+    ASSERT_EQ(nullptr, found);
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trailing_space)
@@ -157,8 +150,7 @@ TEST_F(ImportMatcherTest, test_subaccount_match_trailing_space)
                                            nullptr, nullptr, ACCT_TYPE_NONE,
                                            nullptr, nullptr);
     ASSERT_NE(nullptr, found);
-    //Should be equal
-    EXPECT_STRNE("MSFT", xaccAccountGetName(found));
+    EXPECT_STREQ("MSFT", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_trim_trailing_space)
@@ -167,8 +159,7 @@ TEST_F(ImportMatcherTest, test_subaccount_match_trim_trailing_space)
                                            nullptr, nullptr, ACCT_TYPE_NONE,
                                            nullptr, nullptr);
     ASSERT_NE(nullptr, found);
-    //Should be equal
-    EXPECT_STRNE("MSFT", xaccAccountGetName(found));
+    EXPECT_STREQ("MSFT", xaccAccountGetName(found));
 }
 
 TEST_F(ImportMatcherTest, test_subaccount_match_internal_space)
@@ -177,6 +168,5 @@ TEST_F(ImportMatcherTest, test_subaccount_match_internal_space)
                                            FALSE, nullptr, nullptr,
                                            ACCT_TYPE_NONE, nullptr, nullptr);
     ASSERT_NE(nullptr, found);
-    // Should be equal, of course
-    EXPECT_STRNE("Cash Management", xaccAccountGetName(found));
+    EXPECT_STREQ("Cash Management", xaccAccountGetName(found));
 }
