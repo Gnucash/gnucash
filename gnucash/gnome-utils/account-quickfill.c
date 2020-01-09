@@ -291,6 +291,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
          * store.  Otherwise its a simple update of the name string. */
         for (tmp = data.refs; tmp; tmp = g_list_next(tmp))
         {
+            gchar *old_name, *new_name;
             path = gtk_tree_row_reference_get_path(tmp->data);
             gtk_tree_row_reference_free(tmp->data);
             if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
@@ -302,20 +303,31 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
             gtk_tree_path_free(path);
             gtk_tree_model_get(GTK_TREE_MODEL(qfb->list_store), &iter,
                                ACCOUNT_POINTER, &account,
+                               ACCOUNT_NAME, &old_name,
                                -1);
+
+            new_name = gnc_get_account_name_for_register(account);
+
+            /* check if the name has changed */
+            match = gnc_quickfill_get_string_match (qf, old_name);
+            if (match && (g_strcmp0 (old_name, new_name) != 0))
+                gnc_quickfill_remove (qf, old_name, QUICKFILL_ALPHA);
+
             if (qfb->dont_add_cb &&
                     qfb->dont_add_cb(account, qfb->dont_add_data))
             {
+                gnc_quickfill_remove (qf, new_name, QUICKFILL_ALPHA);
                 gtk_list_store_remove(qfb->list_store, &iter);
             }
             else
             {
-                gchar *aname = gnc_get_account_name_for_register(account);
+                gnc_quickfill_insert (qf, new_name, QUICKFILL_ALPHA);
                 gtk_list_store_set(qfb->list_store, &iter,
-                                   ACCOUNT_NAME, aname,
+                                   ACCOUNT_NAME, new_name,
                                    -1);
-                g_free(aname);
             }
+            g_free (old_name);
+            g_free (new_name);
         }
 
         /* Any accounts that weren't found in the tree are accounts that
@@ -331,6 +343,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
                     continue;
                 }
             }
+            gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
             gtk_list_store_append (qfb->list_store, &iter);
             gtk_list_store_set (qfb->list_store, &iter,
                                 ACCOUNT_NAME, name,
@@ -366,6 +379,7 @@ listen_for_account_events  (QofInstance *entity,  QofEventId event_type,
 
     case QOF_EVENT_ADD:
         DEBUG("add %s", name);
+
         if (qfb->dont_add_cb &&
                 qfb->dont_add_cb(account, qfb->dont_add_data))
             break;
