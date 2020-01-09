@@ -71,6 +71,9 @@ typedef struct _ofx_info
     GSList* statement;
     GtkWindow* parent;
     GNCImportMainMatcher *gnc_ofx_importer_gui;
+    Account *last_import_account;
+    Account *last_investment_account;
+    Account *last_income_account;
     GList *created_commodites   ;
 } ofx_info ;
 
@@ -434,12 +437,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     account = gnc_import_select_account(gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
                                         data.account_id,
 					0, NULL, NULL, ACCT_TYPE_NONE,
-					NULL, NULL);
+					info->last_import_account, NULL);
     if (account == NULL)
     {
         PERR("Unable to find account for id %s", data.account_id);
         return 0;
     }
+    info->last_import_account = account;
     /***** Validate the input strings to ensure utf8 *****/
     if (data.name_valid)
         gnc_utf8_strip_invalid(data.name);
@@ -652,8 +656,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                                      investment_account_text,
                                      investment_commodity,
                                      ACCT_TYPE_STOCK,
-                                     NULL,
+                                     info->last_investment_account,
                                      NULL);
+                if (investment_account)
+                    info->last_investment_account = investment_account;
 
                 // but use it only if that's really the right commodity
                 if (investment_account
@@ -681,8 +687,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                                                  investment_account_text,
                                                  investment_commodity,
                                                  ACCT_TYPE_STOCK,
-                                                 NULL,
+                                                 info->last_investment_account,
                                                  &choosing_account);
+                        if (investment_account)
+                            info->last_investment_account = investment_account;
                     }
                     // Does the chosen account have the right commodity?
                     if (investment_account && xaccAccountGetCommodity(investment_account) != investment_commodity)
@@ -817,10 +825,11 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                                              investment_account_text,
                                              currency,
                                              ACCT_TYPE_INCOME,
-                                             NULL,
+                                             info->last_income_account,
                                              NULL);
                         if (income_account != NULL)
                         {
+                            info->last_income_account = income_account;
                             set_associated_income_account(investment_account,
                                                           income_account);
                             DEBUG("KVP written");
@@ -1005,7 +1014,11 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
         account = gnc_import_select_account (GTK_WIDGET(info->parent),
                                              data.account_id, 1,
                                              account_description, default_commodity,
-                                             default_type, NULL, NULL);
+                                             default_type, info->last_import_account, NULL);
+        if (account)
+        {
+            info->last_import_account = account;
+        }
         g_free(account_description);
     }
     else
@@ -1053,7 +1066,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
     GtkFileFilter* filter = gtk_file_filter_new ();
     GSList *iter = NULL;
     // Create the structure we're using to gather reconciliation information.
-    ofx_info info = {0, NULL, parent, NULL, NULL};
+    ofx_info info = {0, NULL, parent, NULL, NULL, NULL, NULL, NULL};
 
     ofx_PARSER_msg = false;
     ofx_DEBUG_msg = false;
