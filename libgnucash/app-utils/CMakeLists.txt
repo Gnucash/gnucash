@@ -90,6 +90,29 @@ endif()
 
 
 add_library (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+
+include(CheckFunctionExists)
+
+if(HAVE_LIBM AND NOT POW_FUNCTION_EXISTS AND NOT NEED_LINKING_AGAINST_LIBM)
+  SET(LIBM_CFLAGS_STORAGE ${CMAKE_C_FLAGS})
+  SET(CMAKE_C_FLAGS "")
+  CHECK_FUNCTION_EXISTS(pow POW_FUNCTION_EXISTS)
+  if(NOT POW_FUNCTION_EXISTS)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES m)
+    CHECK_FUNCTION_EXISTS(pow POW_FUNCTION_EXISTS_IN_M)
+    if(POW_FUNCTION_EXISTS_IN_M)
+      set(NEED_LINKING_AGAINST_LIBM True CACHE BOOL "" FORCE)
+    else()
+      message(FATAL_ERROR "Failed making the pow() function available")
+    endif()
+  endif()
+  SET(CMAKE_C_FLAGS ${LIBM_CFLAGS_STORAGE})
+endif()
+
+if (NEED_LINKING_AGAINST_LIBM)
+	list(APPEND app_utils_ALL_LIBRARIES -lm)
+endif()
+
 target_link_libraries(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
 
 target_include_directories (gncmod-app-utils
