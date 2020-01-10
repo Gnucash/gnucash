@@ -25,6 +25,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 (define-module (gnucash report standard-reports category-barchart))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -86,15 +87,11 @@ developing over time"))
 (define optname-averaging (N_ "Show Average"))
 (define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
-(define (options-generator account-types reverse-balance? do-intervals?)
+(define (options-generator account-types do-intervals?)
   (let* ((options (gnc:new-options))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    ;; save off the reverse-balance option
-    (add-option
-     (gnc:make-internal-option "__report" "reverse-balance?" reverse-balance?))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -214,7 +211,7 @@ developing over time"))
 ;; *really* complicated.
 
 (define (category-barchart-renderer report-obj reportname reportguid
-                                    account-types do-intervals?)
+                                    account-types do-intervals? reverse-bal?)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
     (gnc:option-value
@@ -253,7 +250,6 @@ developing over time"))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
          (sort-method (get-option gnc:pagename-display optname-sort-method))
-         (reverse-balance? (get-option "__report" "reverse-balance?"))
 
          (work-done 0)
          (work-to-do 0)
@@ -356,7 +352,7 @@ developing over time"))
             (map
              (lambda (acc)
                (let* ((comm (xaccAccountGetCommodity acc))
-                      (split->elt (if (reverse-balance? acc)
+                      (split->elt (if reverse-bal?
                                       (lambda (s)
                                         (gnc:make-gnc-monetary
                                          comm (- (xaccSplitGetNoclosingBalance s))))
@@ -788,38 +784,33 @@ developing over time"))
 (define category-barchart-liability-uuid "faf410e8f8da481fbc09e4763da40bcc")
 
 (for-each
- (lambda (l)
-   (let ((tip-and-rev (cddddr l)))
-     (gnc:define-report
-      'version 1
-      'name (car l)
-      'report-guid (car (reverse l))
-      'menu-path (if (caddr l)
-                     (list gnc:menuname-income-expense)
-                     (list gnc:menuname-asset-liability))
-      'menu-name (cadddr l)
-      'menu-tip (car tip-and-rev)
-      'options-generator (lambda () (options-generator (cadr l)
-                                                       (cadr tip-and-rev)
-                                                       (caddr l)))
-      'renderer (lambda (report-obj)
-                  (category-barchart-renderer report-obj
-                                              (car l)
-                                              (car (reverse l))
-                                              (cadr l)
-                                              (caddr l))))))
+ (match-lambda
+   ((reportname account-types inc-exp? menuname menutip reverse-bal? uuid)
+    (gnc:define-report
+     'version 1
+     'name reportname
+     'report-guid uuid
+     'menu-path (if inc-exp?
+                    (list gnc:menuname-income-expense)
+                    (list gnc:menuname-asset-liability))
+     'menu-name menuname
+     'menu-tip menutip
+     'options-generator (lambda () (options-generator account-types inc-exp?))
+     'renderer (lambda (report-obj)
+                 (category-barchart-renderer
+                  report-obj reportname uuid account-types inc-exp? reverse-bal?)))))
  (list
-  ;; reportname, account-types, do-intervals?,
-  ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) category-barchart-income-uuid)
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) category-barchart-expense-uuid)
+  ;; reportname, account-types, inc-exp?,
+  ;; menu-reportname, menu-tip, reverse-bal?, uuid
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income #t category-barchart-income-uuid)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense #f category-barchart-expense-uuid)
   (list reportname-assets
         (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
               ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
               ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
               ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f) category-barchart-asset-uuid)
+        #f menuname-assets menutip-assets #f category-barchart-asset-uuid)
   (list reportname-liabilities
         (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
               ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t) category-barchart-liability-uuid)))
+        #f menuname-liabilities menutip-liabilities #t category-barchart-liability-uuid)))
