@@ -248,6 +248,7 @@ void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
  * Set the focus of the register to the sheet
  **/
 void gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr);
+void gnc_split_reg_set_sheet_focus (GNCSplitReg *gsr, gboolean has_focus);
 
 /*
  * Create a transaction entry with given amount and date. One account is

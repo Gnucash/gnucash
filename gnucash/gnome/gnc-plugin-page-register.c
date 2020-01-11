@@ -566,6 +566,7 @@ typedef struct GncPluginPageRegisterPrivate
 
     gint lines_default;
     gboolean read_only;
+    gboolean page_focus;
     gboolean enable_refresh; // used to reduce ledger display refreshes
     Query *search_query;     // saved search query for comparison
     Query *filter_query;     // saved filter query for comparison
@@ -1150,6 +1151,7 @@ gnc_plugin_register_main_window_page_changed (GncMainWindow *window,
                                               GncPluginPage *register_plugin_page)
 {
     GncPluginPageRegisterPrivate *priv;
+    GNCSplitReg *gsr;
 
     // We continue only if the plugin_page is a valid
     if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_REGISTER(current_plugin_page) ||
@@ -1157,15 +1159,23 @@ gnc_plugin_register_main_window_page_changed (GncMainWindow *window,
         return;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(register_plugin_page);
+    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
 
     if (current_plugin_page == register_plugin_page)
     {
+        priv->page_focus = TRUE;
+
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the register
         g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
         g_idle_add ((GSourceFunc)gnc_plugin_page_register_focus,
                       GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
     }
+    else
+        priv->page_focus = FALSE;
+
+    // set the sheet focus setting
+    gnc_split_reg_set_sheet_focus (gsr, priv->page_focus);
 }
 
 static GtkWidget *
@@ -1194,6 +1204,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         LEAVE("existing widget %p", priv->widget);
         return priv->widget;
     }
+    // on create, the page will be the current page so set the focus flag
+    priv->page_focus = TRUE;
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);

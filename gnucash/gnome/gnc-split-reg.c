@@ -1931,6 +1931,14 @@ gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr)
 }
 
 void
+gnc_split_reg_set_sheet_focus (GNCSplitReg *gsr, gboolean has_focus)
+{
+    GnucashRegister *reg = gsr->reg;
+    GnucashSheet *sheet = gnucash_register_get_sheet (reg);
+    gnucash_sheet_set_has_focus (sheet, has_focus);
+}
+
+void
 gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
                               time64 statement_date, gnc_numeric balancing_amount)
 {

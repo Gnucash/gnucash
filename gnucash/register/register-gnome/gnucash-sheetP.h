@@ -80,6 +80,8 @@ struct _GnucashSheet
 
     gint editing;
 
+    gboolean sheet_has_focus;
+
     guint button; /* mouse button being held down */
     gboolean grabbed; /* has the grab */
     gdouble button_x, button_y;

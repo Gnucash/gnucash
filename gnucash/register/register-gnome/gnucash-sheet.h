@@ -112,5 +112,7 @@ gint gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation v
 
 gboolean gnucash_sheet_is_read_only (GnucashSheet *sheet);
 
+void gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus);
+
 /** @} */
 #endif
