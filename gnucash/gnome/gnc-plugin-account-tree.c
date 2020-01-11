@@ -44,8 +44,6 @@
 static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass);
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
 static void gnc_plugin_account_tree_finalize (GObject *object);
-static void gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
-                                                   GncMainWindow *window, GQuark type);
 
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
@@ -97,26 +95,6 @@ gnc_plugin_account_tree_new (void)
     return GNC_PLUGIN (plugin);
 }
 
-static void
-gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
-        GncPluginPage *plugin_page, gpointer user_data)
-{
-    // We continue only if the plugin_page is a valid
-    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
-        return;
-
-    if (gnc_main_window_get_current_page (window) == plugin_page)
-    {
-        if (!GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page))
-            return;
-
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_account_tree_focus,
-                      GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
-    }
-}
 
 /** Initialize the class for a new account tree plugin.  This will set
  *  up any function pointers that override functions in the parent
@@ -137,9 +115,6 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 
     /* plugin info */
     plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
-
-    /* function overrides */
-    plugin_class->add_to_window = gnc_plugin_account_tree_add_to_window;
 
     /* widget addition/removal */
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
@@ -176,20 +151,6 @@ gnc_plugin_account_tree_finalize (GObject *object)
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-
-/**
- * Called when this plugin is added to a main window.  Connect a few callbacks
- * here to track page changes.
- *
- */
-static void gnc_plugin_account_tree_add_to_window (GncPlugin *plugin,
-        GncMainWindow *mainwindow,
-        GQuark type)
-{
-    g_signal_connect(mainwindow, "page_changed",
-                     G_CALLBACK(gnc_plugin_account_tree_main_window_page_changed),
-                     plugin);
-}
 /************************************************************
  *                    Command Callbacks                     *
  ************************************************************/

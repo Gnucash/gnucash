@@ -121,27 +121,6 @@ gnc_plugin_register_new (void)
 }
 
 static void
-gnc_plugin_register_main_window_page_changed(GncMainWindow *window,
-        GncPluginPage *plugin_page, gpointer user_data)
-{
-    // We continue only if the plugin_page is a valid
-    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
-        return;
-
-    if (gnc_main_window_get_current_page (window) == plugin_page)
-    {
-        if (!GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page))
-            return;
-
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the register
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_register_focus,
-                      GNC_PLUGIN_PAGE_REGISTER (plugin_page));
-    }
-}
-
-static void
 gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -204,10 +183,6 @@ gnc_plugin_register_add_to_window (GncPlugin *plugin,
 {
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER, NULL,
                            gnc_plugin_register_pref_changed, window);
-
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_register_main_window_page_changed),
-                     plugin);
 }
 
 

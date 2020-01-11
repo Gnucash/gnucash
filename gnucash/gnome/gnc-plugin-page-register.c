@@ -1144,11 +1144,36 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
         return "0";
 }
 
+static void
+gnc_plugin_register_main_window_page_changed (GncMainWindow *window,
+                                              GncPluginPage *current_plugin_page,
+                                              GncPluginPage *register_plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    // We continue only if the plugin_page is a valid
+    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_REGISTER(current_plugin_page) ||
+        !register_plugin_page || !GNC_IS_PLUGIN_PAGE_REGISTER(register_plugin_page))
+        return;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(register_plugin_page);
+
+    if (current_plugin_page == register_plugin_page)
+    {
+        // The page changed signal is emitted multiple times so we need
+        // to use an idle_add to change the focus to the register
+        g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
+        g_idle_add ((GSourceFunc)gnc_plugin_page_register_focus,
+                      GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
+    }
+}
+
 static GtkWidget *
 gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
+    GncMainWindow *window;
     GNCLedgerDisplayType ledger_type;
     GncWindow *gnc_window;
     guint numRows;
@@ -1360,6 +1385,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
     gnc_split_reg_set_moved_cb
     (priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
+
+    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+    g_signal_connect (window, "page_changed",
+                      G_CALLBACK(gnc_plugin_register_main_window_page_changed),
+                      plugin_page);
 
     /* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
     LEAVE(" ");
