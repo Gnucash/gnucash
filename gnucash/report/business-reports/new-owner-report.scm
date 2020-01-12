@@ -286,7 +286,11 @@
 (define (splits->desc splits)
   (let lp ((splits splits) (result '()))
     (if (null? splits)
-        (gnc:html-string-sanitize (string-join result ", "))
+        (apply gnc:make-html-text
+               (fold
+                (lambda (a b)
+                  (cons* (gnc:html-string-sanitize a) (gnc:html-markup-br) b))
+                '() result))
         (lp (cdr splits)
             (let ((memo (xaccSplitGetMemo (car splits))))
               (if (or (string-null? memo) (member memo result))
