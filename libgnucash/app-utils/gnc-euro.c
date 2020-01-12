@@ -49,7 +49,7 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
     { "DEM",  1.95583 },  /* german mark */
     { "DM",   1.95583 },  /* german mark */
     { "EEK",  15.6466 },  /* Estonian Kroon */
-    { "ESC",  200.482 },  /* portugese escudo */
+    { "ESC",  200.482 },  /* portuguese escudo */
     { "ESP",  166.386 },  /* spanish peseta */
     { "EUR",  1.00000 },  /* euro */
     { "EURO", 1.00000 },  /* euro */
@@ -69,7 +69,7 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
     { "MTL",  .429300 },  /* maltese lira */
     { "NLG",  2.20371 },  /* netherland gulden */
     { "PTA",  166.386 },  /* spanish peseta */
-    { "PTE",  200.482 },  /* portugese escudo */
+    { "PTE",  200.482 },  /* portuguese escudo */
     { "S",    13.7603 },  /* austrian schilling */
     { "SCH",  13.7603 },  /* austrian schilling */
     { "SIT",  239.640 },  /* slovenian tolar */

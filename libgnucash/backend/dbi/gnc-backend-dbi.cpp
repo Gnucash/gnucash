@@ -633,7 +633,7 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
             uri.m_portnum = PGSQL_DEFAULT_PORT;
         /* Postgres's SQL interface coerces identifiers to lower case, but the
          * C interface is case-sensitive. This results in a mixed-case dbname
-         * being created (with a lower case name) but then dbi can't conect to
+         * being created (with a lower case name) but then dbi can't connect to
          * it. To work around this, coerce the name to lowercase first. */
         auto lcname = g_utf8_strdown (uri.dbname(), -1);
         uri.m_dbname = std::string{lcname};
@@ -857,7 +857,7 @@ GncDbiBackend<Type>::~GncDbiBackend()
 
 /* GNUCASH_RESAVE_VERSION indicates the earliest database version
  * compatible with this version of Gnucash; the stored value is the
- * earliest version of Gnucash conpatible with the database. If the
+ * earliest version of Gnucash compatible with the database. If the
  * GNUCASH_RESAVE_VERSION for this Gnucash is newer than the Gnucash
  * version which created the database, a resave is offered. If the
  * version of this Gnucash is older than the saved resave version,

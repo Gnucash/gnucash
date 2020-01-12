@@ -101,9 +101,9 @@
  * during the term of the loan. The payments may be only large enough to repay
  * the interest,  with the  principal due  at the  end of  the loan period (an
  * interest only loan), or large enough  to fully repay both the interest  and
- * principal during the term of the loan (a fully amoritized loan). Many loans
+ * principal during the term of the loan (a fully amortized loan). Many loans
  * fall somewhere between, with payments that do not fully cover repayment  of
- * both the principal and interst. These loans require a larger final  payment
+ * both the principal and interest. These loans require a larger final  payment
  * (balloon)  to  complete  their  amortization.  Payments  may  occur  at the
  * beginning or end of a payment period. If you and your friend had agreed  on
  * monthly repayment of  the $800 loan  at 12% NAR  compounded monthly, twelve
@@ -216,11 +216,11 @@
  *   used is the effective interest rate, EIR. In converting NAR to
  *   EIR, there are two concepts to discuss first, the Compounding
  *   Frequency and the Payment Frequency and * whether the interest is
- *   coumpounded in discrete intervals or continuously. The
+ *   compounded in discrete intervals or continuously. The
  *   compounding Frequency, CF, is simply the number of times per
  *   year, the monies in the financial transaction are compounded. In
  *   the U.S., monies are usually compounded daily on bank deposits,
- *   and monthly on loans. Somtimes Long term deposits are compounded
+ *   and monthly on loans. Sometimes Long term deposits are compounded
  *   quarterly or weekly.
  *
  *   The Payment Frequency, PF, is simply how often during a year
@@ -234,7 +234,7 @@
  *   1   == annual
  *   2   == semi-annual
  *   3   == tri-annual
- *   4   == quaterly
+ *   4   == quarterly
  *   6   == bi-monthly
  *   12  == monthly
  *   24  == semi-monthly
@@ -286,7 +286,7 @@
  *
  *   NOTE: in the equations below for the financial transaction, all
  *   interest rates are the effective interest rate, ieff. The symbol
- *   will be shortned to just 'i'.
+ *   will be shortened to just 'i'.
  *
  * ****************************************************************************
  *
@@ -391,7 +391,7 @@
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[-i]
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^n - 1]/i
  *
- *   The formaula for PV[n] can be proven using mathematical induction.
+ *   The formula for PV[n] can be proven using mathematical induction.
  *
  *   or:
  *
@@ -596,7 +596,7 @@
  *       T[n] = -i*n*(PV + C) - i*C*n(n+1)/2
  *       T[n] = -i*n*(PV + (C*(n - 1)/2))
  *
- * Note: substituing for C = -PV/N, in the equations for PV[n], I[n],
+ * Note: substituting for C = -PV/N, in the equations for PV[n], I[n],
  *   P[n], and T[n] would give the following equations:
  *
  *       PV[n] = PV*(1 - n/N)
@@ -712,7 +712,7 @@
  *   The amortization schedule is computed for four different situations:
  *
  *   1) The original financial data is used. This ignores any possible
- *   agjustment to the Present value due to any delay in the initial
+ *   adjustment to the Present value due to any delay in the initial
  *   payment. This is quite common in mortgages where end of period
  *   payments are used and the first payment is scheduled for the end
  *   of the first whole period, i.e., any partial payment period from
@@ -739,12 +739,12 @@
  *   1. The payment *, interest paid, principal paid and remaining PV
  *   for each payment period are computed and displayed. At the end of
  *   each year a summary is computed and displayed and the total
- *   interest paid is diplayed at the end.
+ *   interest paid is displayed at the end.
  *
  *   2. A summary is computed and displayed for each year. The
  *   interest paid during the year is computed and displayed as well
  *   as the remaining balance at years end.  The total interest paid
- *   is diplayed at the end.
+ *   is displayed at the end.
  *
  *   3. An amortization schedule is computed for a common method of
  *   advanced payment of principal is computed and displayed. In this
@@ -1016,7 +1016,7 @@
  * Example 6: Balloon Payment
  * On long term loans, small changes in the periodic payments can generate
  * large changes in the future value. If the monthly payment in example 5 is
- * rounded down to $1125, how much addtional (balloon) payment will be due
+ * rounded down to $1125, how much additional (balloon) payment will be due
  * with the final regular payment.
  * <>pmt=-1125
  * -1,125
@@ -1533,7 +1533,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
 void
 set_default (fi_ptr fi)
 {
-    /* flag whether accrueing interest at beginning or end of period
+    /* flag whether accruing interest at beginning or end of period
      * FALSE --> end
      * TRUE  --> beginning
      * default to end of period payment s
@@ -1893,7 +1893,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
                 else
                 {
                     /* remaining pv less than advanced principal payment reduce
-                     * advanced pricipla payment to remaining pv */
+                     * advanced principal payment to remaining pv */
                     adv_pmt = -pv;
 
                     /* and set remaining pv to fv */
@@ -1992,11 +1992,11 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         amortsched->total_periods = per_cnt;
         break;
     case 'f':
-        /* fixed prepaymet schedule prepayment specified by user */
+        /* fixed prepayment schedule prepayment specified by user */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
 
-        /*  set advnaced payment */
+        /*  set advanced payment */
         adv_pmt = amortsched->fixed_pmt;
 
         for (per_cnt = 0, s = 1, j = n; j && (pv != fv); j--, per_cnt++)
@@ -2034,7 +2034,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
                 else
                 {
                     /* remaining pv less than advanced principal payment reduce
-                     * advanced pricipal payment to remaining pv and set
+                     * advanced principal payment to remaining pv and set
                      * remaining pv to fv */
                     adv_pmt = -pv;
                     pv = fv;
@@ -2137,7 +2137,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
     case 'o':
         /* Constant payment to principal use constant payment equal to
          * original pv divided by number of periods.  constant payment to
-         * pricipal could be amount specified by user.  */
+         * principal could be amount specified by user.  */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
         amortsched->total_periods = n;

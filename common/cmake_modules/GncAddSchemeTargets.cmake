@@ -269,7 +269,7 @@ endfunction(gnc_add_scheme_test_targets)
 
 # The function expects module names in the form "gnucash mod parts"
 # If _DEPMSG is left blank, the module will emit a generic message,
-# otherswise _DEPMSG will be emitted.
+# otherwise _DEPMSG will be emitted.
 function(gnc_add_scheme_deprecated_module _OLDMOD _NEWMOD _DEPENDS _DEPMSG)
     string(STRIP _OLDMOD "${_OLDMOD}")
     string(REPLACE " " "-" _TARGET ${_OLDMOD})

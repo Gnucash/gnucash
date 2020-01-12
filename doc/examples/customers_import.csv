@@ -2,7 +2,7 @@
 id,company,name,addr1,addr2,addr3,addr4,phone,fax,email,notes,shipname,shipaddr1,shipaddr2,shipaddr3,shipaddr4,shipphone,shipfax,shipemail
 # Only company and name are compulsory
 # This is a comment line
-# Good company has no ID and will be allocated one automajically
+# Good company has no ID and will be allocated one automagically
 ,Good Company,Accounts Dept.,1 Rich drive,,,,,,,,,,,,,,,
 # Average company has an ID and will be used literally.  An already existing
 #company with the same ID will be UPDATED.  This may not be what you want!

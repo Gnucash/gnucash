@@ -25,7 +25,7 @@
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
  *  This file implements the FIFO Accounting Policy (and, in the
- *  future, others as well).  The Accounting Polciy determines
+ *  future, others as well).  The Accounting Policy determines
  *  how splits are assigned to lots.
  */
 

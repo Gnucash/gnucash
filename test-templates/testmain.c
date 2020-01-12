@@ -22,7 +22,7 @@
 
 
 /**
- * This is a template test program. Copy it to the test sudirectory and rename
+ * This is a template test program. Copy it to the test subdirectory and rename
  * it test_modulename.c. (Use the same modulename that you gave Makefile.am in
  * the same directory.
  */
@@ -89,7 +89,7 @@ main (int argc, char *argv[])
     /* Add test functions. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
      * details. Unfortunately, GLib-Testing doesn't provide the automatic
-     * registration features of more sophisitcated frameworks. */
+     * registration features of more sophisticated frameworks. */
     g_test_add_func ("/TESTPROG/Test Case Name 1", example_without_fixture);
     g_test_add_data_func ("/TESTPROG/Test Case Name 2", NULL);
     g_test_add ("/TESTPROG/Test Case Name", Fixture, NULL, setup,

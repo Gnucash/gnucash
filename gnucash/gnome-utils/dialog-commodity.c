@@ -321,7 +321,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
 /**
  *  This function is called whenever the user clicks on the "New"
  *  button in the commodity picker.  Its function is pop up a new
- *  dialog alling the user to create a new commodity.
+ *  dialog allowing the user to create a new commodity.
  *
  *  @note This function is an internal helper function for the
  *  Commodity Selection dialog.  It should not be used outside of the

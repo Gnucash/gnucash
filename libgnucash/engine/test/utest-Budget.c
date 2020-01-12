@@ -800,11 +800,11 @@ This "works" as follows:
 xaccAccountDestroy sets a "destroying" flag in qof_instance and calls xaccAccountCommitEdit.
 xaccAccountCommitEdit checks the flag and finding it true:
    calls xaccFreeACcountChildren
-   tests qof_book_shutting_down and either deletes the split list for the account (trusting the Transaction code to delete the splits if it is shutting down) or deletes the actual splits while it's clearing the list. (What happens to the references in the transactions then? It's calling xaccSplitDestroy, not g_oject_unref!)
+   tests qof_book_shutting_down and either deletes the split list for the account (trusting the Transaction code to delete the splits if it is shutting down) or deletes the actual splits while it's clearing the list. (What happens to the references in the transactions then? It's calling xaccSplitDestroy, not g_object_unref!)
    Again checking that the book isn't shutting down:
       run destroy_pending_splits_for_account
       destroy all of the lots in the lots list (again, destroy, not unref or even dispose)
-  free the lot list (regardless of whether the book is shuttin down) and NULL the pointer
+  free the lot list (regardless of whether the book is shutting down) and NULL the pointer
   set the instance dirty
 unconditionally calls qof_commit_edit_part2 with acc_free
 qof_commit_edit_part2:
@@ -911,7 +911,7 @@ No test, just a pass-through.
 /* acc_free
 static void acc_free (QofInstance *inst)// 2
 ***Callback for qof_commit_edit_part2
-No test, just a passthrough -- plus see comment at test_xaccFreeAccount, which is what this is a passtrough of.
+No test, just a passthrough -- plus see comment at test_xaccFreeAccount, which is what this is a passthrough of.
 */
 /* static void
 test_acc_free (Fixture *fixture, gconstpointer pData)

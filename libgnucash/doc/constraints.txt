@@ -51,11 +51,11 @@ certain ways.   The 'double-entry' constraint belongs to this class:
 it computes the total value of all the splits in a transaction, and 
 adds one, if needed, to bring the total to zero.  This constraint
 runs when the transaction is committed.   Although this is an important
-cosntraint, there is no (easy) way to reflect it directly in the
+constraint, there is no (easy) way to reflect it directly in the
 object design; thus, it acts as a rule that must be periodically
 imposed.
 
-At this time, the financial constraints within gnucash are impelmented
+At this time, the financial constraints within gnucash are implemented
 in an ad-hoc manner, with no governing framework.  This may change,
 as there is pressure to support more complex constraints that vary
 by region/country, by account type, by industry, etc.
@@ -71,11 +71,11 @@ returned.
 
 Simple/ad-hoc lazy evaluation works well when data dependencies are 
 simple, but it breaks down when there are too many/circular
-relationships.  It becomes all too easy to get trapped in inifite
+relationships.  It becomes all too easy to get trapped in infinite
 loops of corrections.   The goal of moving to a formal constraint
 system is to introduce specific, well-defined sync points where 
-constraint checking can be done, without incuring circular
-deopendencies.  At this time, the sync point is the xaccTransCommitEdit()
+constraint checking can be done, without incurring circular
+dependencies.  At this time, the sync point is the xaccTransCommitEdit()
 subroutine.
 
 \section financelist List of Constraints

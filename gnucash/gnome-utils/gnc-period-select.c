@@ -500,7 +500,7 @@ gnc_period_select_set_property (GObject      *object,
 
 /** Initialize the class for the a Period Selection widget.  This
  *  will set up any function pointers that override functions in the
- *  parent class, and also installs the proprieties that are unique to
+ *  parent class, and also installs the properties that are unique to
  *  this class.
  *
  *  @param klass The new class structure created by the object system.

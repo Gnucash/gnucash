@@ -277,7 +277,7 @@ gnc_tree_control_split_reg_balance_trans (GncTreeViewSplitReg *view, Transaction
         other_account = xaccSplitGetAccount (split);
 
     /*  If the two pointers are still the same, we have two splits, but
-     *  they both refer to the same account. While non-sensical, we don't
+     *  they both refer to the same account. While nonsensical, we don't
      *  object.   */
 
     if (default_account == other_account)

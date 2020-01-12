@@ -282,7 +282,7 @@ gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
  * 2. larger abs value is preferred over smaller abs value
  * 3. if previous and new candidate are in the same value category,
  *    prefer real payment splits over lot link splits
- * 4. if previous and new candiate are of same split type
+ * 4. if previous and new candidate are of same split type
  *    prefer biggest abs value.
  */
 Split *gncOwnerFindOffsettingSplit (GNCLot *pay_lot, gnc_numeric target_value);

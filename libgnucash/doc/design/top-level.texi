@@ -59,7 +59,7 @@ writing the engine information to an XML format.
 The @dfn{Backend} module (@file{src/engine/Backend*.*}) provides
 hooks to allow different modules to be used for storing and retrieving
 Engine data. There are two backends currently under development, a
-Postgresql backend (@file{src/engine/sql/*}) and an RPC backend
+PostgreSQL backend (@file{src/engine/sql/*}) and an RPC backend
 (@file{src/engine/rpc/*}).
 
 

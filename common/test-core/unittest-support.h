@@ -104,7 +104,7 @@ typedef struct
 
 /**
  * Convenience function to create an error struct. If you use this
- * with test_set_log_handler it will get cleaned up at tesrdown,
+ * with test_set_log_handler it will get cleaned up at teardown,
  * otherwise call test_error_free() at the end of your test function.
  *
  * NB: If you need to change the message, be sure to free the old one
@@ -339,7 +339,7 @@ gboolean test_object_checked_destroy (GObject *obj);
 /**
  * Ensures that a GObject is still alive at the time
  * it's called and that it is finalized. The first assertion will
- * trigger if you pass it a ponter which isn't a GObject -- which
+ * trigger if you pass it a pointer which isn't a GObject -- which
  * could be the case if the object has already been finalized. Then it
  * calls test_object_checked_destroy() on it, asserting if the
  * finalize method wasn't called (which indicates a leak).

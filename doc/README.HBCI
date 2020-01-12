@@ -86,7 +86,7 @@ HBCI support is accessible through a few new menu items:
 Einrichtung"). This menu item opens the HBCI Setup druid which
 will guide you through the setup. (Note: With the new
 aqbanking/aqhbci, the Setup druid is an external program provided
-by the aqhbci authors, but this will be explaning during the HBCI
+by the aqhbci authors, but this will be explaining during the HBCI
 Setup druid.)
 
    - Chip card users and PIN/TAN users will need to run this only
@@ -180,7 +180,7 @@ this new functionality.
   GnuCash.
 
 * Currently each HBCI action can only be executed while you are
-  online; support for off-line preparation and queueing is not yet
+  online; support for off-line preparation and queuing is not yet
   implemented.
 
 If you think you can do better on any of these issues -- why not give it 

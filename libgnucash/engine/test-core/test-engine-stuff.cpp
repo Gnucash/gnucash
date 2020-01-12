@@ -1,6 +1,6 @@
 /**
  * @file test-engine-stuff.c
- * @brief tools to set up random, but finanically consistent books.
+ * @brief tools to set up random, but financially consistent books.
  * Create transactions with random values, random accounts, random
  * account hierarchies, etc.
  *
@@ -897,7 +897,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     {
         /* Make sure that each side of the transaction is in
          * a different account; otherwise get weirdness in lot
-         * calculcations.  ... Hmm maybe should fix lots in
+         * calculations.  ... Hmm maybe should fix lots in
          * this case? */
         while (bcc == acc)
         {

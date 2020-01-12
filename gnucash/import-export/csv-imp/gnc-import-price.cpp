@@ -178,7 +178,7 @@ void GncPriceImport::to_currency (gnc_commodity* to_currency)
                             GncPricePropType::NONE);
 
         // force a refresh of the from_commodity if the to_currency is changed
-        // either namespace or symbol will be sufice
+        // either namespace or symbol will be suffice
         std::vector<GncPricePropType> commodities = { GncPricePropType::FROM_SYMBOL };
         reset_formatted_column (commodities);
     }

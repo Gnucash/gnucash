@@ -44,7 +44,7 @@ void GncFwTokenizer::col_delete (uint32_t col_num)
 
 bool GncFwTokenizer::col_can_narrow (uint32_t col_num)
 {
-    // Can't narrow the last column, it always sticks to the end of the parseable data
+    // Can't narrow the last column, it always sticks to the end of the parsable data
     auto last_col = m_col_vec.size() - 1;
     if (col_num >= last_col)
         return false;
@@ -67,7 +67,7 @@ void GncFwTokenizer::col_narrow (uint32_t col_num)
 
 bool GncFwTokenizer::col_can_widen (uint32_t col_num)
 {
-    // Can't widen the last column, it always sticks to the end of the parseable data
+    // Can't widen the last column, it always sticks to the end of the parsable data
     auto last_col = m_col_vec.size() - 1;
     if (col_num >= last_col)
         return false;

@@ -1811,7 +1811,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
 {
     auto go_back = false;
 
-    /* Load the file into parse_data, reset it if altrady loaded. */
+    /* Load the file into parse_data, reset it if already loaded. */
     if (price_imp)
         price_imp.reset();
 

@@ -71,9 +71,9 @@
 ;; Fix beginning balance off-by-one-day error for B/S accounts
 ;;
 ;; From prior version:
-;; NOTE: setting of specific dates is squirly! and seems
+;; NOTE: setting of specific dates is squirrely! and seems
 ;; to be current-date dependent!  Actually, time of day dependent!  Just
-;; after midnight gives diffenent dates than just before!  Referencing
+;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
 ;;
@@ -618,7 +618,7 @@
 ;; if neither trans-currency nor account-commodity = USD-currency,
 ;;    use split amount & pricedb lookup using lookup date
 ;; returns the converted amount, the conversion text, and, if the conversion
-;;   price was looked up, the pricedb-lookup-price and addtitional text in
+;;   price was looked up, the pricedb-lookup-price and additional text in
 ;;   a list
 
   (let*
@@ -2026,7 +2026,7 @@
                                (set-tm:mon bdtm 5))
                               ((4th-est 4th-last) ; Sep 1
                                (set-tm:mon bdtm 8)))
-                            ;; Tax quaters equal Real quarters
+                            ;; Tax quarters equal Real quarters
                             (case alt-period
                               ((1st-est 1st-last last-year) ; Jan 1
                                (set-tm:mon bdtm 0))
@@ -2068,7 +2068,7 @@
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
                             (else (set! bdtm (gnc-localtime to-value))))
-                          ;; Tax quaters equal Real quarters
+                          ;; Tax quarters equal Real quarters
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31
                              (set-tm:mon bdtm 2))
@@ -2108,7 +2108,7 @@
                        (equal? (tm:mon bdto) 11)
                        (equal? (tm:mday bdto) 31))))
               ;; Adjust dates so we get the final Estimated Tax
-              ;; paymnent from the right year
+              ;; payment from the right year
                (from-est (if full-year?
                              (let ((bdtm (gnc-localtime
                                           (time64CanonicalDayTime

@@ -1479,7 +1479,7 @@ gnc_gdate_set_month_end (GDate *date)
     g_date_subtract_days(date, 1);
 }
 
-/** Convert a GDate to the first day of the prebvious month.  This
+/** Convert a GDate to the first day of the previous month.  This
  *  routine has no knowledge of how many days are in a month, whether
  *  its a leap year, etc.  All that information is contained in the
  *  glib date functions.
@@ -1493,7 +1493,7 @@ gnc_gdate_set_prev_month_start (GDate *date)
     g_date_subtract_months(date, 1);
 }
 
-/** Convert a GDate to the last day of the prebvious month.  This
+/** Convert a GDate to the last day of the previous month.  This
  *  routine has no knowledge of how many days are in a month, whether
  *  its a leap year, etc.  All that information is contained in the
  *  glib date functions.

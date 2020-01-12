@@ -1346,9 +1346,9 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     GtkWidget *trans_mas = NULL; /* transaction move to account selector */
     GtkWidget *sa_mas = NULL;    /* subaccount move to account selector */
     GtkWidget *sa_trans_mas = NULL; /* subaccount's transaction move to account selector */
-    Account *ta = NULL; /* transaction adopter */
-    Account *saa = NULL; /* subaccount adopter */
-    Account *sta = NULL; /* subaccount transaction adopter */
+    Account *ta = NULL; /* transaction adapter */
+    Account *saa = NULL; /* subaccount adapter */
+    Account *sta = NULL; /* subaccount transaction adapter */
     GList *splits;
     GList* list;
     gint response;

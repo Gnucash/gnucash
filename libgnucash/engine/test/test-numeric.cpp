@@ -1,7 +1,7 @@
 
 /* Test file created by Linas Vepstas <linas@linas.org>
  * Review operation of the gnc-numeric tools by verifying results
- * of vairous operations.
+ * of various operations.
  *
  * June 2004
  */
@@ -243,7 +243,7 @@ check_equality_operator (void)
         check_unary_op (gnc_numeric_equal,
                         val, mval, mval, "expected %s = %s");
 
-        /* Certain modulo's should be very cleary un-equal; this
+        /* Certain modulo's should be very clearly un-equal; this
          * helps stop funky modulo-64 aliasing in compares that
          * might creep in. */
         mval.denom >>= 1;
@@ -471,7 +471,7 @@ check_add_subtract (void)
                      z, d, "expected %s got %s = %s + %s for add fixed");
 
     /* ------------------------------------------------------------ */
-    /* Same as above, but with signs reviersed */
+    /* Same as above, but with signs reversed */
     a = c;
     b = d;
     /* Well, actually 14/24 would be acceptable/better in this case */

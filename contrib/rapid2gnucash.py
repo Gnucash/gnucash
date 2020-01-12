@@ -23,7 +23,7 @@ Convert a CSV file exported from Rapid Electronics (UK) to a form importable by 
 Line format is:
 line number,product code,quantity,availability,product description,unit price,discounts,line total,delivery,sub total,vat,grand total
 
-Useage: rapid2gnucash.py  DOWNLOADED_BASKET.csv "ORDER_NUMBER" <"Expense account">  >  output.csv
+Usage: rapid2gnucash.py  DOWNLOADED_BASKET.csv "ORDER_NUMBER" <"Expense account">  >  output.csv
 
 We need to remove first line and totals
 

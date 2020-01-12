@@ -40,7 +40,7 @@
  * being a gains split, and that the source transaction should be
  * checked for dirtiness before returning the date, the amount, the
  * value, etc.  Finally, these flags make amount and value read-only
- * for the gains splits. (the memo is user-modifieable).
+ * for the gains splits. (the memo is user-modifiable).
  *
  * If the amount in a split is changed, then the lot has to be recomputed.
  * This has a potential trickle-through effect on all later lots.
@@ -231,7 +231,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     /* If this split already belongs to a lot, we are done. */
     if (split->lot) return NULL;
 
-    /* Anomolous situation; except for voided transactions,
+    /* Anomalous situation; except for voided transactions,
      * we don't expect to see splits with no amount ..
      * unless they're gains splits, and we shouldn't see those.
      */
@@ -275,7 +275,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
      * implemented accounting policies should be giving us splits
      * that make lots larger.  One a lot is open, the FIFO/LIFO
      * policies should be working only to make the lot smaller.
-     * We can remove the warning emssage come the day we have
+     * We can remove the warning message come the day we have
      * fancier policies.
      */
     baln_is_positive = gnc_numeric_positive_p (baln);
@@ -836,7 +836,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             {
                 new_gain_split = FALSE;
             }
-            /* If the gain is already recorded corectly do nothing.  This is
+            /* If the gain is already recorded correctly do nothing.  This is
              * more than just an optimization since this may be called during
              * gnc_book_partition_txn and depending on the order in which things
              * happen some splits may be in the wrong book at that time. */

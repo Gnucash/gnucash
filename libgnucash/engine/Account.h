@@ -28,7 +28,7 @@
     list of Splits, the Account structure also gives the Account a name, a
     code number, description and notes fields, a key-value frame, a pointer
     to the commodity that is used for all splits in this account. The
-    commodity can be the name of anything traded and tradeable: a stock
+    commodity can be the name of anything traded and tradable: a stock
     (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
     anything added to the commodity table.
 
@@ -1412,22 +1412,22 @@ int xaccAccountTreeForEachTransaction(Account *acc,
  */
 GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
 
-/* Look up an Account in the map non Baysian
+/* Look up an Account in the map non Bayesian
  */
 Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
                                         const char *key);
 
-/* Store an Account in the map non Baysian
+/* Store an Account in the map non Bayesian
  */
 void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
                                    const char *key, Account *acc);
 
-/* Remove a reference to an Account in the map non Baysian
+/* Remove a reference to an Account in the map non Bayesian
  */
 void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
                                       const char *key);
 
-/** Look up an Account in the map using Baysian
+/** Look up an Account in the map using Bayesian
  */
 Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
 

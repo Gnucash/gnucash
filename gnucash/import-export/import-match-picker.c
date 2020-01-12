@@ -77,7 +77,7 @@ enum matcher_cols
 /*static short module = MOD_IMPORT;*/
 
 /********************************************************************\
- *   Constants, should idealy be defined a user preference dialog    *
+ *   Constants, should ideally be defined a user preference dialog   *
 \********************************************************************/
 
 static const int SHOW_NUMERIC_SCORE = FALSE;

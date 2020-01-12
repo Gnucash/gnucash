@@ -859,7 +859,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     GtkWidget            *fcb_new;
     gchar                *boxname;
 
-    /* We need to distroy the GtkFileChooserButton and recreate as there
+    /* We need to destroy the GtkFileChooserButton and recreate as there
        does not seem to be away of resetting the folder path to NONE */
     box = gtk_widget_get_parent (GTK_WIDGET(fcb));
     gtk_widget_destroy (GTK_WIDGET(fcb));

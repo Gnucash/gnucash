@@ -665,7 +665,7 @@
 ;; Return the splits that match an account list, date range, and (optionally) type
 ;; where type is defined as an alist like:
 ;; '((str "match me") (cased #f) (regexp #f) (closing #f))
-;; where str, cased, and regexp define a pattern match on transaction deseriptions 
+;; where str, cased, and regexp define a pattern match on transaction descriptions 
 ;; and "closing" matches transactions created by the book close command.  If "closing"
 ;; is given as #t then only closing transactions will be returned, if it is #f then
 ;; only non-closing transactions will be returned, and if it is omitted then both

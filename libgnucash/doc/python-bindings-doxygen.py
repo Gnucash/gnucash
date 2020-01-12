@@ -43,7 +43,7 @@
 #   Not everything GnuCash can is possible to access though. The bindings focus on basic accounting functions.
 #   Have a look at the examples to get an impression.
 #
-#   Some functions are broken because they have not been wrapped properly. They may crash the program or return unaccessible values. 
+#   Some functions are broken because they have not been wrapped properly. They may crash the program or return inaccessible values. 
 #   Please file a bug report if you find one to help support the development process.
 #
 #   @section python_bindings_section Principles

@@ -835,7 +835,7 @@
 ;;
 ;; returned is a tree-structured list of all the old and new accounts
 ;; like so : (name new? children).  trees are sorted alphabetically.
-;; This should probably change but it's beeter than no sort at all.
+;; This should probably change but it's better than no sort at all.
 
 (define (qif-import:get-all-accts extra-maps)
   (define (cvt-to-tree path new?)

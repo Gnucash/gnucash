@@ -3447,7 +3447,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
             else
             {
                 /* This split is not for the account shown in this register.  Get the
-                   split that anchors the transaction to the registor */
+                   split that anchors the transaction to the register */
                 split = gnc_split_register_get_current_trans_split(reg, NULL);
                 if (split)
                 {

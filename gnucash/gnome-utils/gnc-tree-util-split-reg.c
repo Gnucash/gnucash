@@ -674,7 +674,7 @@ gnc_tree_util_split_reg_get_debcred_entry (GncTreeViewSplitReg *view,
 
             if (!imbal_list)
             {
-                /* No commodity imbalance, there shouldn't be a value imablance. */
+                /* No commodity imbalance, there shouldn't be a value imbalance. */
                 return FALSE;
             }
 

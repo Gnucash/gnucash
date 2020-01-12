@@ -139,7 +139,7 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  *    connected to, opened and read, and a lock can be obtained then a
  *    lock will be obtained.  Note that while multi-user datastores
  *    (e.g. the SQL backend) typically will have record-level locking
- *    and therefor should not need to get a global lock, qof works by
+ *    and therefore should not need to get a global lock, qof works by
  *    having a local copy of the whole database and can't be trusted
  *    to handle multiple users writing data, so we lock the database
  *    anyway.

@@ -58,7 +58,7 @@ def gnc_numeric_from_decimal(decimal_value):
     sign, digits, exponent = decimal_value.as_tuple()
 
     # convert decimal digits to a fractional numerator
-    # equivlent to
+    # equivalent to
     # numerator = int(''.join(digits))
     # but without the wated conversion to string and back,
     # this is probably the same algorithm int() uses
@@ -66,7 +66,7 @@ def gnc_numeric_from_decimal(decimal_value):
     TEN = int(Decimal(0).radix()) # this is always 10
     numerator_place_value = 1
     # add each digit to the final value multiplied by the place value
-    # from least significant to most sigificant
+    # from least significant to most significant
     for i in range(len(digits)-1,-1,-1):
         numerator += digits[i] * numerator_place_value
         numerator_place_value *= TEN

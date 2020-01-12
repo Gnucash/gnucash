@@ -104,7 +104,7 @@ collection of splits in different currencies to be displayed?
 <goonie> So, in the short term, your assumption is correct.
  In the long term, not the case.
 
-<cstim> What I would usually call the "currency" of an account is in Gnucash acctually called "security".
+<cstim> What I would usually call the "currency" of an account is in Gnucash actually called "security".
 \a gnc:account-get-commodity will return this security of the account.
 
 <goonie> Gotta love terminology.
@@ -265,7 +265,7 @@ adapt them to your table structure.
  something other than digging through a bunch of historical data trying to figure out what 
 the exchange rate was at the time of particular transactions.
 
-<cstim> parameter: Bad. gnc-prices: Goood. I'd be happy if someone could implement that 
+<cstim> parameter: Bad. gnc-prices: Good. I'd be happy if someone could implement that 
 to augment the current code in commodity-utilities.scm Oh, the exchange rate at the time 
 of a particular *transaction* is easy -- that's just the fraction value/damount .
 
@@ -274,7 +274,7 @@ of a particular *transaction* is easy -- that's just the fraction value/damount 
 
 <cstim> Yes, right. currently the commodity-utilities stuff uses a weighted average over the 
 history. But using the last known exchange rate instead may be useful at times. Maybe I'll 
-implmement something like that maybe if i have time :)
+implement something like that maybe if i have time :)
 
 <goonie>diff -up 'gnucash/src/engine/ Query.c' 'gnucash_transaction_report/src/engine/ Query.c'
 

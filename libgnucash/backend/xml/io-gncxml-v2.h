@@ -72,7 +72,7 @@ class GncXmlBackend;
 #define GNC_FILE_BACKEND_VERS   2
 
 /**
- * Struct used to pass the account group/accounts and trasnactions in
+ * Struct used to pass the account group/accounts and transactions in
  * the <gnc:template-transactions> section between the parser in
  * gnc-schedxactions-xml-v2.c and the add-to-book callback in
  * io-gncxml-v2.c.

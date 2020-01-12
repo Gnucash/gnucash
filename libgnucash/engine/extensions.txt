@@ -6,7 +6,7 @@ of the changes that will come soon to the interfaces.
 
 \section accountperiods Accounting Periods
 
-Acconting periods are implemented by creating an object that
+Accounting periods are implemented by creating an object that
 describes the accounting period, and then assigning every 
 transaction to at least one period.
 
@@ -65,6 +65,6 @@ AcctKey -- Cle (FR), blank in others
 
 Account type enumerants:
 bank account types:
-    checking, savings, moneymarket, creditline, cma (cash amangement account)
+    checking, savings, moneymarket, creditline, cma (cash management account)
 
 */

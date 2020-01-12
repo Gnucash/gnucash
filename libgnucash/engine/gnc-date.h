@@ -31,7 +31,7 @@
 
     Overall, this file is quite a mess.  Note, however, that other
     applications, besides just GnuCash, use this file.  In particular,
-    GnoTime (gttr.sourcefore.net) uses this file, and this file is
+    GnoTime (gttr.sourceforge.net) uses this file, and this file is
     formally a part of QOF (qof.sourceforge.net).
 
     An important note about time-keeping:  The general goal of any
@@ -458,7 +458,7 @@ gsize qof_strftime(gchar *buf, gsize max, const gchar *format,
  *    representation
  *
  * Args:   buff - pointer to previously allocated character array; its size
- *                must be at lease MAX_DATE_LENTH bytes.
+ *                must be at lease MAX_DATE_LENGTH bytes.
  *         len - length of the buffer, in bytes.
  *         day - day of the month as 1 ... 31
  *         month - month of the year as 1 ... 12

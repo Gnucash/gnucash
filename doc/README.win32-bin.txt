@@ -42,8 +42,8 @@ About the Program:
 
 GnuCash is a free, open source accounting program released under the
 GNU General Public License (GPL). More than 200 programmers and 40
-documentors have contributed to its development over 20+ years, please
-see the AUTHORS and DOCUMENTORS files.
+documenters have contributed to its development over 20+ years, please
+see the AUTHORS and DOCUMENTERS files.
 
 Programming on GnuCash began in 1997, and its first release was in
 1998. 

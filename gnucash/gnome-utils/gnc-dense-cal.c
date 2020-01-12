@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-dense-cal.c : a custom densely-dispalyed calendar widget     *
+ * gnc-dense-cal.c : a custom densely-displayed calendar widget     *
  * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

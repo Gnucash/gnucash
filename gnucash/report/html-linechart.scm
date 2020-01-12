@@ -263,7 +263,7 @@
              (set! colnum l))))
      rows)
 
-    ;; append the elements of 'newrow' to the rowumns
+    ;; append the elements of 'newrow' to the rownums
     (for-each
      (lambda (newelt)
        ;; find the row, or append one
@@ -278,7 +278,7 @@
              (set! new-row #t)
              (set! this-row '())))
 
-       ;; make sure the rowumn is long enough, then append the data
+       ;; make sure the rownum is long enough, then append the data
        (let loop ((l (length this-row))
                   (r (reverse this-row)))
          (if (< l colnum)

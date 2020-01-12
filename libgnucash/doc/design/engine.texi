@@ -63,7 +63,7 @@ the splits are zero.  If there are only two splits,
 then the value of one must be positive, the other negative: this denotes
 that one account is debited, and another is credited by an equal
 amount.   By forcing the value of the splits to always 'add up' to
-zero, we can gaurentee that the balances of the accounts are always
+zero, we can guarantee that the balances of the accounts are always
 correctly balanced.
 
 The engine does not enforce double-entry accounting, but provides an API
@@ -78,7 +78,7 @@ This feature allows currency-trading accounts to be established.
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-enforced by the engine. The engine user cannnot accidentally destroy
+enforced by the engine. The engine user cannot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
@@ -231,7 +231,7 @@ The GUID does not, and never will, refer to a GnuCash entity.
 The GUID refers to an Account (@pxref{Accounts}).
 
 @item GNC_ID_TRANS
-The GUID refers to a Transation (@pxref{Transactions}).
+The GUID refers to a Transaction (@pxref{Transactions}).
 
 @item GNC_ID_SPLIT
 The GUID refers to a Split (@pxref{Splits}).
@@ -1015,7 +1015,7 @@ A @code{kvp_value_t} enum must have one of the following values:
 @table @code
 
 @item KVP_TYPE_NONE
-Indicates the abscence of a value in a @code{kvp_frame}.
+Indicates the absence of a value in a @code{kvp_frame}.
 
 @item KVP_TYPE_INT64
 A @code{gint64} value.
@@ -1135,7 +1135,7 @@ The Engine supports the concept of @dfn{Events} which notify
 external code when engine entities are created, modified, or
 destroyed.
 
-User code can register event handers which are invoked for each event,
+User code can register event handlers which are invoked for each event,
 giving information about the specific engine entity generating the event
 and the nature of the event (creation, modification, or deletion).
 
@@ -1218,7 +1218,7 @@ this is the 3-letter ISO4217 code (USD, AUD, etc.). For stocks
 this is generally the exchange symbol (RHAT, IBM, etc.).
 
 @item A namespace
-A string identifying the context in which the mnemonic is meaninful.
+A string identifying the context in which the mnemonic is meaningful.
 
 @item A full name
 The `long' name for the commodity, such as "US Dollar" or "IBM Common
@@ -1926,7 +1926,7 @@ Set the share price of @var{split} to @var{price}.
 @deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
 is more efficient than calling @code{xaccSplitSetShareAmount} and
-@code{xaccSplitSetSharePrice} in succesion.
+@code{xaccSplitSetSharePrice} in succession.
 @end deftypefun
 
 @deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
@@ -2203,7 +2203,7 @@ A textual description of the Account.
 The commodity that Splits in the account are valued in, i.e., the
 denomination of the 'value' member of Splits in the account.
 
-@item A curreny SCU
+@item A currency SCU
 The SCU is the smallest convertible unit that the currency is
 traded in. This value overrides the default SCU of the currency.
 
@@ -2541,7 +2541,7 @@ Set the US-specific tax code associated with @var{account}.
 
 @deftypefun {const char *} xaccAccountGetTaxUSPayerNameSource (Account * @var{account})
 Get the payer name source associated with @var{account}. See
-@file{src/scm/repot/taxtxf.scm} for details.
+@file{src/scm/report/taxtxf.scm} for details.
 @end deftypefun
 
 @deftypefun void xaccAccountSetTaxUSPayerNameSource (Account * @var{account}, const char * @var{source})

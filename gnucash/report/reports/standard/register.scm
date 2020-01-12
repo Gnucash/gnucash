@@ -300,7 +300,7 @@
                     " ")))
     ;; For single account registers, use the split's cached balance to remain
     ;; consistent with the balances shown in the register itself
-    ;; For others, use the cumulated balance from the totals-collector
+    ;; For others, use the cumulative balance from the totals-collector
     (if (balance-col column-vector)
         (addto! row-contents
                 (if transaction-info?

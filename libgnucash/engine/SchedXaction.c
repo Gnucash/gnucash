@@ -661,7 +661,7 @@ xaccSchedXactionGetEndDate(const SchedXaction *sx )
 void
 xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
 {
-/* Note that an invalid GDate IS a permissable value: It means that
+/* Note that an invalid GDate IS a permissible value: It means that
  * the SX is to run "forever". See gnc_sxed_save_sx() and
  * schedXact_editor_populate() in dialog-sx-editor.c.
  */
@@ -1177,7 +1177,7 @@ gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
 /**
  * Returns the defer list from the SX; this is a (date-)sorted
  * temporal-state-data instance list.  The list should not be modified by the
- * caller; use the gnc_sx_{add,remove}_defer_instance() functions to modifiy
+ * caller; use the gnc_sx_{add,remove}_defer_instance() functions to modify
  * the list.
  *
  * @param sx Scheduled transaction

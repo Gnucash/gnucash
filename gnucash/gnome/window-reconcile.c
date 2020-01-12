@@ -1958,7 +1958,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
 
 /********************************************************************\
- * gnc_ui_reconile_window_raise                                     *
+ * gnc_ui_reconcile_window_raise                                    *
  *   shows and raises an account editing window                     *
  *                                                                  *
  * Args:   editAccData - the edit window structure                  *

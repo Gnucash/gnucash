@@ -9,7 +9,7 @@
 # - SRC (full path to gnc-vcs-info.h.in)
 # - DST (full path to destination for gnc-vcs-info.h)
 # - VCS_INFO_FILE (full path to gnc-vcs-info.h - can be in source tree (release builds) or build tree (git builds))
-# - DATADIR_BUILD (path to applicication data directory, typically {CMAKE_BINARY_DIR}/share)
+# - DATADIR_BUILD (path to application data directory, typically {CMAKE_BINARY_DIR}/share)
 
 include (${SRC_DIR}/cmake/version-info2env.cmake)
 versioninfo2env (${VCS_INFO_FILE})

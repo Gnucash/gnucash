@@ -183,7 +183,7 @@ gnc_plugin_register_finalize (GObject *object)
  *              Plugin Function Implementation              *
  ************************************************************/
 
-/** Initialize the registeru for a window.  This function is
+/** Initialize the register for a window.  This function is
  *  called as part of the initialization of a window, after all the
  *  plugin menu items have been added to the menu structure.  Its job
  *  is to correctly initialize the register.  It does this by

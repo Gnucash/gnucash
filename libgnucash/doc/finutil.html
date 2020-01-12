@@ -57,7 +57,7 @@
   <dd><A HREF="#Rounding">Rounding</A></dd>
 <dt><A HREF="#Examples">Examples</A></dt>
   <dd><A HREF="#SimpleInt">Simple Interest </A></dd>
-  <dd><A HREF="#CompundInt">Compound Interest</A></dd>
+  <dd><A HREF="#CompoundInt">Compound Interest</A></dd>
   <dd><A HREF="#PeriodicPmt">Periodic Payment</A></dd>
   <dd><A HREF="#ConvMortg">Conventional Mortgage</A></dd>
   <dd><A HREF="#FinalPmt">Final Payment</A></dd>
@@ -75,7 +75,7 @@
   <dd><A HREF="#EquivPmt">Equivalent Payments</A></dd>
   <dd><A HREF="#Perpetuity">Perpetuity - Continuous Compounding</A></dd>
   <dd><A HREF="#DevCo">Investment Return</A></dd>
-  <dd><A HREF="#Retiement">Retirement Investment</A></dd>
+  <dd><A HREF="#Retirement">Retirement Investment</A></dd>
   <dd><A HREF="#PropVal">Property Values</A></dd>
   <dd><A HREF="#CollegeExpenses">College Expenses</A></dd>
   <dd><A HREF="#EffAPY">Certificate of Deposit, Annual Percentage Yield</A></dd>
@@ -172,9 +172,9 @@ agreement to require the borrower  to make periodic payments to  the lender
 during the term of the loan. The payments may be only large enough to repay
 the interest,  with the  principal due  at the  end of  the loan period (an
 interest only loan), or large enough  to fully repay both the interest  and
-principal during the term of the loan (a fully amoritized loan). Many loans
+principal during the term of the loan (a fully amortized loan). Many loans
 fall somewhere between, with payments that do not fully cover repayment  of
-both the principal and interst. These loans require a larger final  payment
+both the principal and interest. These loans require a larger final  payment
 (balloon)  to  complete  their  amortization.  Payments  may  occur  at the
 beginning or end of a payment period. If you and your friend had agreed  on
 monthly repayment of  the $800 loan  at 12% NAR  compounded monthly, twelve
@@ -317,7 +317,7 @@ whether the interest is compounded in discrete intervals or continuously.
 <h2>Compounding Frequency</h2></A>
 <p>The compounding Frequency, CF, is simply the number of times per year, the
 monies in the financial transaction are compounded. In the U.S., monies
-are usually compounded daily on bank deposits, and monthly on loans. Somtimes
+are usually compounded daily on bank deposits, and monthly on loans. Sometimes
 long term deposits are compounded quarterly or weekly.
 
 <A NAME="PayFreq">
@@ -336,7 +336,7 @@ as well as any previous money paid or money still owed.
 <li>1   == annual
 <li>2   == semi-annual
 <li>3   == tri-annual
-<li>4   == quaterly
+<li>4   == quarterly
 <li>6   == bi-monthly
 <li>12  == monthly
 <li>24  == semi-monthly
@@ -397,7 +397,7 @@ rate NOT the effective interest rate. ieff is converted to i using the following
 <A NAME="FinEquation">
 <H1>Financial Equation</h1></A>
 <p>NOTE: in the equations below for the financial transaction, all interest rates
-are the effective interest rate, <tt>ieff</tt>. The symbol will be shortned to just <tt>i</tt>.
+are the effective interest rate, <tt>ieff</tt>. The symbol will be shortened to just <tt>i</tt>.
 
 <p>The financial equation used to inter-relate n,i,PV,PMT and FV is:
 
@@ -595,7 +595,7 @@ to principal.
 
 <A name="OrigData">
 <h3>Original Data Schedule</h3></A>
-<li>The original financial data is used. This ignores any possible agjustment to
+<li>The original financial data is used. This ignores any possible adjustment to
 the Present value due to any delay in the initial payment. This is quite
 common in mortgages where end of period payments are used and the first
 payment is scheduled for the end of the first whole period, i.e., any
@@ -630,11 +630,11 @@ based upon the adjusted Present Value and the agreed upon Future Value.
 <li>The payment#, interest paid, principal paid and remaining PV for each payment period
 are computed and displayed.
 <p>At the end of each year a summary is computed and displayed
-and the total interest paid is diplayed at the end.
+and the total interest paid is displayed at the end.
 
 <li>A summary is computed and displayed for each year. The interest paid during the
 year is computed and displayed as well as the remaining balance at years end.
-<p>The total interest paid is diplayed at the end.
+<p>The total interest paid is displayed at the end.
 
 <li>An amortization schedule is computed and displayed for a common method of
 advanced payment of principal.
@@ -659,7 +659,7 @@ period are used. The actual values are computed using the built-in 'jdn' functio
 <h1>Financial Calculator Usage</h1></a>
 <p>the Financial Calculator is run as a QTAwk utility. If input is to be interactive and
 from the keyboard, do not specify any input files on the command line. The financial
-calcutlator reads all input from the standard input file. The calculator is started
+calculator reads all input from the standard input file. The calculator is started
 as:
 
 <pre>
@@ -700,7 +700,7 @@ set by the user to use the financial calculator functions.
 
 Variables to set:
 n    == number of periodic payments
-i    == interest per compouding interval
+i    == interest per compounding interval
 pv   == present value
 pmt  == periodic payment
 fv   == future value
@@ -872,7 +872,7 @@ _PMT(n,i,pv,fv,CF,PF,disc,bep), _FV(n,i,pv,pmt,CF,PF,disc,bep)</tt>.
 <li>The first set of functions take no arguments and
 use the calculator variables, n, i, pv, pmt, fv, CF, PF, disc
 and bep to compute the desired value. The second set of functions use the values passed in
-the function arguments. The first set of functions call the second set with the necssary
+the function arguments. The first set of functions call the second set with the necessary
 arguments.
 <li>The first set of functions round the computed value returned by the call to the second set
 of functions to the nearest cent. The second set of functions perform no rounding.
@@ -882,7 +882,7 @@ to the value computed. The second set of functions set no global variable values
 
 <a name="UserVar">
 <h2>User Defined Variables</h2></a>
-<p>User defined variables may be defined and their values set to a desired qunatity. For example,
+<p>User defined variables may be defined and their values set to a desired quantity. For example,
 to save computation results before re-initializing the calculator to obtain other results. If
 the user desired to compare the periodic payments necessary to fully pay the conventional
 mortgage cited above, the payment computed above could be saved in the variable
@@ -928,7 +928,7 @@ desired by the user beyond those performed by the functions of the utility.
 <h2>Rounding</h2></a>
 <p>Note that the output of the calculator is rounded to the nearest cent for floating
 point values. Sometimes the full accuracy of the value is desired. This can be obtained
-by redefing the calculator variable <tt>ofmt</tt> to the string "%.15g". You might want to
+by redefining the calculator variable <tt>ofmt</tt> to the string "%.15g". You might want to
 save the current value in a user variable for resetting. For example in the above
 conventional mortgage, the exact value of the periodic payment can be displayed as:
 
@@ -977,7 +977,7 @@ saved in the variable, <tt>sofmt</tt>, and later restored.
          12.00
 </pre>
 
-<a name="CompundInt">
+<a name="CompoundInt">
 <h2>Compound Interest</h2></a>
 <p>Compound Interest
 <p>Find the future value of $800 after one year at a nominal rate of 12%
@@ -1842,7 +1842,7 @@ amortize the loan in 15 years.
   Total Interest: -130,711.19
 </pre>
 
-<p>The toral interest is reduced to $130,711.19. This compares to:
+<p>The total interest is reduced to $130,711.19. This compares to:
 
 <ol>
 <li>$130,711.19 - Fixed prepayment $155.99/period, 15 year term
@@ -1855,7 +1855,7 @@ amortize the loan in 15 years.
 <p>Balloon Payment
 <p>On long term loans, small changes in the periodic payments can generate
 large changes in the future value. If the monthly payment in the previous example is
-rounded down to $1125, how much addtional (balloon) payment will be due
+rounded down to $1125, how much additional (balloon) payment will be due
 with the final regular payment.
 <pre>
   <>s
@@ -1886,7 +1886,7 @@ with the final regular payment.
 <a name="CanadianMortg">
 <h2>Canadian Mortgage</h2></a>
 <p>Canadian Mortgage
-<p>A "Canadian Mortgage" is defined with semi-annual compunding, <tt>CF == 2</tt>,
+<p>A "Canadian Mortgage" is defined with semi-annual compounding, <tt>CF == 2</tt>,
 and monthly payments, <tt>PF == 12</tt>.
 
 <p>Find the monthly end-of-period payment necessary to fully amortize a 25 year
@@ -2128,7 +2128,7 @@ investment, what is the maximum price they can pay for the property today?
 
 <p>So the maximum purchase price today would be $335,576.22 to achieve the desired yield.
 
-<a name="Retiement">
+<a name="Retirement">
 <h2>Retirement Investment</h2></a>
 <p>Retirement Investment
 <p>You wish to retire in 20 years and wish to deposit a lump sum amount in an account

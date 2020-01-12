@@ -105,7 +105,7 @@ struct _QofObject
     /** Traverse over all of the items in the collection, calling
      *  the callback on each item.  The third argument can be any
      *  arbitrary caller-supplied data, and is passed to the callback.
-     *  Although (*foreach) may be NULL, allmost all objects should
+     *  Although (*foreach) may be NULL, almost all objects should
      *  provide this routine, as without it, little of interest can
       * be done.
      */
@@ -120,7 +120,7 @@ struct _QofObject
      *  backends to determine if the local or the remote copy of a
      *  particular item is the latest, 'uptodate' version.  Tis routine
      *  should return an integer less than, equal to, or greater than zero
-     *  if 'instance_left' is found to be, respecitvely, earlier than, equal
+     *  if 'instance_left' is found to be, respectively, earlier than, equal
      *  to or later than than 'instance_right'.
      */
     int                 (*version_cmp)(gpointer instance_left, gpointer instance_right);
@@ -161,7 +161,7 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 /** Invoke the callback 'cb' on every instance ov a particular
  *  object type.  It is presumed that the 'book' stores or somehow
- *  identifies a colllection of instances; thus the callback will
+ *  identifies a collection of instances; thus the callback will
  *  be invoked only for those instances stored in the book.
  */
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book,

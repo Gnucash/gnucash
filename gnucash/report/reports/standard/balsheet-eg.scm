@@ -67,7 +67,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Define an account record for cacheing information about all the accounts
+;; Define an account record for caching information about all the accounts
 (define (accrec-printer accrec port)
   ;; accrec printer.  This is for debugging reports, so it uses
   ;; HTML for pretty-printing
@@ -118,7 +118,7 @@
                                         depth
                                         treedepth
                                         non-zero?  ; #t if this or any sub-a/cs are non zero
-                                        summary?   ; #t if subaccounts summarised here
+                                        summary?   ; #t if subaccounts summarized here
                                         subtotal-cc ; of sublist plus this a/c
                                         sublist)
                                      accrec-printer))

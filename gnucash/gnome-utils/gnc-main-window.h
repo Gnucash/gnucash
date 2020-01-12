@@ -211,7 +211,7 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
 
 
 /** Add a set of actions to the specified window.  This function
- *  should not need to be called directly by plugin implementors.
+ *  should not need to be called directly by plugin implementers.
  *  Correctly assigning values to the GncPluginClass fields during
  *  plugin initialization will cause this routine to be automatically
  *  called.
@@ -250,7 +250,7 @@ void gnc_main_window_merge_actions (GncMainWindow *window,
 
 
 /** Remove a set of actions from the specified window.  This function
- *  should not need to be called directly by plugin implementors.  It
+ *  should not need to be called directly by plugin implementers.  It
  *  will automatically be called when a plugin is removed from a
  *  window.
  *
@@ -385,7 +385,7 @@ gboolean gnc_main_window_all_finish_pending (void);
  *  used to serialize access to a command so that in cannot be
  *  reinvoked until the current invocation is finished.
  *
- *  @param action_name The name of the command to modity.
+ *  @param action_name The name of the command to modify.
  *
  *  @param sensitive Whether or not the user should be able to invoke
  *  this action. */
@@ -426,7 +426,7 @@ GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title,
 
 /**
  * Processes selected options in the Book Options dialog: checks book_currency
- * and use_split_action_for_num to see if features kvp shuold be set. To be used
+ * and use_split_action_for_num to see if features kvp should be set. To be used
  * where ever a new book situation requires book option selection (e.g., not
  * just in Book Options dialog opened from main window but also in new-file
  * assistant).

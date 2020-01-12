@@ -278,7 +278,7 @@ fs_subelement_handler (xmlNodePtr node, gpointer data)
             GDate recurrence_date;
             if (fspd->uift == UIFREQ_SEMI_MONTHLY)
             {
-                // complementry hack around 'once' freqspects not being valid. :/
+                // complementary hack around 'once' freqspects not being valid. :/
                 recurrence_date = recurrenceGetDate (r);
                 recurrenceSet (r, recurrenceGetMultiplier (r), PERIOD_MONTH, &recurrence_date,
                                recurrenceGetWeekendAdjust (r));

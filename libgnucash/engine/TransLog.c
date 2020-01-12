@@ -42,7 +42,7 @@
 static QofLogModule log_module = "gnc.translog";
 
 /*
- * Some design philosphy that I think would be good to keep in mind:
+ * Some design philosophy that I think would be good to keep in mind:
  * (0) Simplicity and foolproofness are the over-riding design points.
  *     This is supposed to be a fail-safe safety net.   We don't want
  *     our safety net to fail because of some whiz-bang shenanigans.
@@ -54,7 +54,7 @@ static QofLogModule log_module = "gnc.translog";
  * (2.a) Keep the format, simple, flat, more or less unstructured,
  *       record oriented.  This will help parsing by perl scripts.
  *       No, using a perl script to analyze a file that's supposed to
- *       be human readable is not a contradication in terms -- that's
+ *       be human readable is not a contradiction in terms -- that's
  *       exactly the point.
  * (2.b) Use tabs as a human friendly field separator; its also a
  *       character that does not (should not) appear naturally anywhere

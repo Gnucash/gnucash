@@ -23,12 +23,12 @@ What does Architecture Flaw really mean?  There is a Soviet joke from the 1960's
 
 A westerner in Moscow stops a man to ask him the time. The man puts
 down his breifcase, and flicks his wrist to look at his watch.  "The
-time is 7:03, the temperature is 12 degrees C, the air presssure is
+time is 7:03, the temperature is 12 degrees C, the air pressure is
 950 mmHg and falling."  The westerner remarks with considerable 
 interest, "Why, that's a mighty fine watch you have there! We don't
 have anything like that in the America!" The Soviet responds, "Why 
 yes, this demonstrates the superiority of Soviet engineering over
-decadent captalist design."  Stooping to pick up his briefcase, 
+decadent capitalist design."  Stooping to pick up his briefcase, 
 he mumbles half to himself, "If only these batteries weren't so heavy."
 
 There is only one place where the engine requires the use of guile.
@@ -147,7 +147,7 @@ Another point: with standardized options one option contract represents
 the ability to purchase (with a call option) or sell (with a put option) 
 100 shares of the underlying stock.  
 
-\seection engineerror Error Reporting
+\section engineerror Error Reporting
 
 The error reporting architecture (partially implemented), uses a globally
 visible subroutine to return an error.  In the naivest possible implementation,
@@ -230,7 +230,7 @@ The 'reconcile' state of a transaction can have one of the following values:
 The process of reconciliation works as follows:
 -# User enters new transaction.  All splits are marked 'n' for 'new'
    or 'no, not yet reconciled'.
--# User beleives that the transaction has cleared the bank, 
+-# User believes that the transaction has cleared the bank, 
    e.g. that a cheque written out has been deposited/cashed.
    User clicks in the 'R' column in the register gui,
    marking the split 'c' for 'cleared'.   User can freely 
@@ -314,7 +314,7 @@ transaction to the general journal.
 
 Some important implementation details to understand:  the GUI currently
 uses begin/end as a convenience, and thus, may hold a transaction in
-the 'edit' state for a portentially long time (minutes or hours).
+the 'edit' state for a potentially long time (minutes or hours).
 Thus, begin/end should not map naively to a table-lock/unlock.
 Instead, an optimistic-locking scheme, as below, is preferred.
 
@@ -337,7 +337,7 @@ The SQL back-end should implement posting entirely in the
 		current = QueryTransaction();
 		// check ton make sure that what the sql db stores
 		// is identical to what we have on record as the
-		// 'original' tansaction.  If its not, then someone
+		// 'original' transaction.  If its not, then someone
 		// got in there and modified it while we weren't
 		// looking; so we better report this back toi user.
 		if (current != old_transaction) Error(); Unlock(); return err;

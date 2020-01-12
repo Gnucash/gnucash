@@ -86,7 +86,7 @@ struct _QofBook
     /* Boolean indicates that the session is dirty -- that is, it has
      * not yet been written out to disk after the last time the
      * backend ran commit_edit(). This is distinct from the inherited
-     * QofInstance::dirty, which indicates that some persisitent
+     * QofInstance::dirty, which indicates that some persistent
      * property of the book object itself has been edited and not
      * committed. Some backends write data out as part of
      * commit_edit() and so don't use this flag.
@@ -155,7 +155,7 @@ struct _QofBook
     /* Whether the above cached value is valid. */
     gboolean cached_num_field_source_isvalid;
 
-    /* A cahed value of the "autoreadonly-days" option value because
+    /* A cached value of the "autoreadonly-days" option value because
      * it is queried quite a lot, so we want to avoid a KVP lookup on
      * each query */
     gint cached_num_days_autoreadonly;
@@ -210,7 +210,7 @@ void qof_book_destroy (QofBook *book);
 /** Close a book to editing.
 
 It is up to the application to check this flag,
-and once marked closed, books cannnot be marked as open.
+and once marked closed, books cannot be marked as open.
 */
 void qof_book_mark_closed (QofBook *book);
 
@@ -223,7 +223,7 @@ void qof_book_mark_closed (QofBook *book);
  *  type.
  *
  *  If the collection doesn't yet exist for the indicated type,
- *  it is created.  Thus, this routine is gaurenteed to return
+ *  it is created.  Thus, this routine is guaranteed to return
  *  a non-NULL value.  (Unless the system malloc failed (out of
  *  memory) in which case what happens??).
  */

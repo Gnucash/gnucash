@@ -1,5 +1,5 @@
 /***********************************************************************
- * dialog-reset-warnings.h -- "Resert Warnings" dialog                 *
+ * dialog-reset-warnings.h -- "Reset Warnings" dialog                  *
  * Copyright (C) 2005 David Hampton                                    *
  * Copyright (C) 2011 Robert Fewell                                    *
  *                                                                     *

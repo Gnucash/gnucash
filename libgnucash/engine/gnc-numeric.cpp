@@ -136,7 +136,7 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
     static const regex num_over_hex(numer_frag + slash + hex_frag);
     static const regex decimal(numer_frag + "[.,]" + denom_frag);
     smatch m;
-/* The order of testing the regexes is from the more restrictve to the less
+/* The order of testing the regexes is from the more restrictive to the less
  * restrictive, as less-restrictive ones will match patterns that would also
  * match the more-restrictive and so invoke the wrong construction.
  */

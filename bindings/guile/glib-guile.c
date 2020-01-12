@@ -120,9 +120,9 @@ gnc_scm_list_to_glist(SCM rest)
 
 /********************************************************************
  * gnc_glist_string_to_scm
- * i.e. (glist-of (<gw:mchars> calee-owned) callee-owned)
+ * i.e. (glist-of (<gw:mchars> callee-owned) callee-owned)
  * or equivalently
- * i.e. (glist-of (<gw:gchars> calee-owned) callee-owned)
+ * i.e. (glist-of (<gw:gchars> callee-owned) callee-owned)
  ********************************************************************/
 SCM
 gnc_glist_string_to_scm(GList *glist)

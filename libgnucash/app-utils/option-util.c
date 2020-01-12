@@ -1484,7 +1484,7 @@ gnc_option_db_num_sections(GNCOptionDB *odb)
  *                                                                  *
  * Args: odb - the option database                                  *
  *       i   - index of section                                     *
- * Returns: ith option sectioin                                     *
+ * Returns: ith option section                                      *
 \********************************************************************/
 GNCOptionSection *
 gnc_option_db_get_section(GNCOptionDB *odb, gint i)

@@ -176,7 +176,7 @@ qof_log_init_filename(const gchar* log_filename)
             g_assert(g_strcmp0(log_filename, "/dev/null") != 0);
 
             /* Windows prevents renaming of open files, so the next command silently fails there
-             * No problem, the filename on Winows will simply have the random characters */
+             * No problem, the filename on Windows will simply have the random characters */
             g_rename(fname, log_filename);
             fout = fdopen(fd, "w");
 #endif
@@ -257,7 +257,7 @@ qof_log_prettify (const char *name)
         return "";
     }
 /* Clang's __func__ displays the whole signature, like a good C++
- * compier should. Gcc displays only the name of the function. Strip
+ * compiler should. Gcc displays only the name of the function. Strip
  * the extras from Clang's output so that log messages are the same
  * regardless of compiler.
  */

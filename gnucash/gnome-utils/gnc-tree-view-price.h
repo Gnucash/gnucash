@@ -177,7 +177,7 @@ GNCPrice * gnc_tree_view_price_get_selected_price (GncTreeViewPrice *view);
 
 /** This function selects an price in the price tree view.  All
  *  other prices will be unselected.  In addition, this function
- *  collapses the entitre tree and then expands only the path to the
+ *  collapses the entire tree and then expands only the path to the
  *  selected price, making the item easy to find.  In general, this
  *  routine only need be called when initially putting up a window
  *  containing an price tree view widget.

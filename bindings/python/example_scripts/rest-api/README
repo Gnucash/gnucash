@@ -94,7 +94,7 @@ POST request to /bills/<id>/entries - adds a new entry to a bill
 
 date - required -  a date formatted as YYYY-MM-DD
 description  - required -   the description for this entry
-account_guid  - required -  the GUID for the required accoumt
+account_guid  - required -  the GUID for the required account
 quantity - required - the quantity
 price - required -  the price
 

@@ -1561,7 +1561,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     gnc_plugin_update_actions(priv->action_group,
                               immutable_page_actions,
                               "sensitive", !immutable);
-    /* Trigger sensitivity updtates of other actions such as Save/Revert */
+    /* Trigger sensitivity updates of other actions such as Save/Revert */
     g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
     g_free(readonly);
@@ -3184,7 +3184,7 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
 
 
 /*  Add a set of actions to the specified window.  This function
- *  should not need to be called directly by plugin implementors.
+ *  should not need to be called directly by plugin implementers.
  *  Correctly assigning values to the GncPluginClass fields during
  *  plugin initialization will cause this routine to be automatically
  *  called.
@@ -3250,7 +3250,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 
 
 /*  Remove a set of actions from the specified window.  This function
- *  should not need to be called directly by plugin implementors.  It
+ *  should not need to be called directly by plugin implementers.  It
  *  will automatically be called when a plugin is removed from a
  *  window.
  */
@@ -3771,7 +3771,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
  * connected to NSApplicationWillTerminate, the last chance to do
  * anything before quitting. The problem is that it's launched from a
  * CFRunLoop, not a g_main_loop, and if we call anything that would
- * affect the main_loop we get an assert that we're in a subidiary
+ * affect the main_loop we get an assert that we're in a subsidiary
  * loop.
  */
 static void

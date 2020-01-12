@@ -1143,7 +1143,7 @@ xaccTransScrubCurrency (Transaction *trans)
             {
                 /* This Split needs fixing: The transaction-currency equals
                  * the account-currency/commodity, but the amount/values are
-                 * inequal i.e. they still correspond to the security
+                 * unequal i.e. they still correspond to the security
                  * (amount) and the currency (value). In the new model, the
                  * value is the amount in the account-commodity -- so it
                  * needs to be set to equal the amount (since the

@@ -64,7 +64,7 @@ public:
      * Conditionally create or update a database table from m_col_table. The
      * condition is the version returned by querying the database's version
      * table: If it's 0 then the table wasn't found and will be created; All
-     * tables areat least version 1. If the database's version is less than the
+     * tables are at least version 1. If the database's version is less than the
      * compiled version then the table schema is upgraded but the data isn't,
      * that's the engine's responsibility when the object is loaded. If the
      * version is greater than the compiled version then nothing is touched.

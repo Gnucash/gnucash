@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; dashboard.scm : dasboard style report based on Bill's welcome
+;; dashboard.scm : dashboard style report based on Bill's welcome
 ;;                 to gnucash demo report
 ;; Copyright 2001 Bill Gribble <grib@gnumatic.com>
 ;; Copyright 2019 Geert Janssens <geert@kobaltwit.be>

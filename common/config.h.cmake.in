@@ -27,7 +27,7 @@
 /* Name of our gettext-domain */
 #define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
 
-/* Cocoa/Nexstep/GnuStep framework */
+/* Cocoa/NextSTEP/GnuStep framework */
 #cmakedefine GNC_PLATFORM_COCOA 1
 
 /* Darwin-based OS */

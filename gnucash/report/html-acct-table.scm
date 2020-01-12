@@ -366,7 +366,7 @@
 ;;         display-tree-depth is #f, this is the value of label-cols
 ;;         plus any indent.  if display-tree-depth is set, this is the
 ;;         value of display-tree-depth, plus indent plus zero, if
-;;         parent-account-subotal-mode is not 'canonically-tabbed, or,
+;;         parent-account-subtotal-mode is not 'canonically-tabbed, or,
 ;;         if parent-account-subtotal-mode is 'canonically-tabbed,
 ;;         plus one.  don't you just love english?
 ;; 

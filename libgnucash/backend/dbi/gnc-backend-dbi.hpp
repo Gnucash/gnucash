@@ -77,7 +77,7 @@ enum class DbType
 {
     DBI_SQLITE, /**< Sqlite3 */
     DBI_MYSQL,  /**< MySQL and probably MariaDB */
-    DBI_PGSQL   /**< Postgresql */
+    DBI_PGSQL   /**< PostgreSQL */
 };
 
 /**

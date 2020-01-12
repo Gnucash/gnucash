@@ -86,7 +86,7 @@
  *    by the user, FALSE otherwise.
  *
  *    The callback is also passed pointers to the cursor position
- *    and the start and end of the highlited region. If the callback
+ *    and the start and end of the highlighted region. If the callback
  *    returns NULL, it may also change these values and the GUI will
  *    update appropriately.
  *
@@ -112,7 +112,7 @@
  *                       will reflect the change. Set to -1
  *                       to make the cursor go to the end of
  *                       the text.
- *    "start_selection", the starting character of the highlited
+ *    "start_selection", the starting character of the highlighted
  *                       selection.
  *    "end_selection",   the index immediately after the last
  *                       character in the selection. Set both

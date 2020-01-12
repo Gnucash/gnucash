@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# test_imbalance_transaction.py -- Test the transaction imbalace viewing
+# test_imbalance_transaction.py -- Test the transaction imbalance viewing
 # mechanisms
 #
 # Copyright (C) 2010 ParIT Worker Co-operative <transparency@parit.ca>
@@ -23,7 +23,7 @@
 # @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 
 ##  @file
-#   @brief Test the transaction imbalace viewing mechanisms
+#   @brief Test the transaction imbalance viewing mechanisms
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @ingroup python_bindings_examples
 
@@ -38,7 +38,7 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, \
 # mysql://user:password@host/dbname
 # postgres://user:password@host[:port]/dbname (the port is optional)
 #
-# You should try it out with a gnucash file with tranding accounts enabled
+# You should try it out with a gnucash file with trading accounts enabled
 # and trading accounts disabled
 
 if len(argv) < 2:

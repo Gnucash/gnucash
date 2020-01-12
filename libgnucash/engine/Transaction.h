@@ -55,7 +55,7 @@ This feature allows currency-trading accounts to be established.
 Every Split must point to its parent Transaction, and that Transaction
 must in turn include that Split in the Transaction's list of Splits. A
 Split can belong to at most one Transaction. These relationships are
-enforced by the engine. The engine user cannnot accidentally destroy
+enforced by the engine. The engine user cannot accidentally destroy
 this relationship as long as they stick to using the API and never
 access internal structures directly.
 
@@ -177,7 +177,7 @@ Transaction * xaccTransCloneNoKvp (const Transaction *t);
  *
  * @param check_splits If TRUE, after checking the transaction data
  * structures for equality, also check all splits attached to the
- * transation for equality.
+ * transaction for equality.
  *
  * @param check_balances If TRUE, when checking splits also compare
  * balances between the two splits.  Balances are recalculated
@@ -499,7 +499,7 @@ gboolean xaccTransIsBalanced(const Transaction * trans);
 /** The xaccTransGetAccountValue() method returns the total value applied
  *  to a particular account.  In some cases there may be multiple Splits
  *  in a single Transaction applied to one account (in particular when
- *  trying to balance Lots) -- this function is just a convienience to
+ *  trying to balance Lots) -- this function is just a convenience to
  *  view everything at once.
  */
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
@@ -539,11 +539,11 @@ gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
  *      return >0 if ta sorts after tb
  *      return 0 if they are absolutely equal
  *
- *    The comparrison uses the following fields, in order:
+ *    The comparison uses the following fields, in order:
  *      date posted  (compare as a date)
  *      num field (compare as an integer)
  *      date entered (compare as a date)
- *      description field (comcpare as a string using strcmp())
+ *      description field (compare as a string using strcmp())
  *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
@@ -560,13 +560,13 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
  *      return >0 if ta sorts after tb
  *      return 0 if they are absolutely equal
  *
- *    The comparrison uses the following fields, in order:
+ *    The comparison uses the following fields, in order:
  *      date posted  (compare as a date)
  *      if actna and actnb are NULL,
  *          num field (compare as an integer)
  *      else actna and actnb  (compare as an integer)
  *      date entered (compare as a date)
- *      description field (comcpare as a string using strcmp())
+ *      description field (compare as a string using strcmp())
  *      GncGUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits (except action as
@@ -691,7 +691,7 @@ void xaccTransVoid(Transaction *transaction,
 void xaccTransUnvoid(Transaction *transaction);
 
 /** xaccTransReverse creates a Transaction that reverses the given
- *  tranaction by inverting all the numerical values in the given
+ *  transaction by inverting all the numerical values in the given
  *  transaction.  This function cancels out the effect of an earlier
  *  transaction.  This will be needed by write only accounts as a way
  *  to void a previous transaction (since you can't alter the existing

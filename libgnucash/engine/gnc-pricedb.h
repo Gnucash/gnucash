@@ -494,7 +494,7 @@ GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
                                       const gnc_commodity *currency,
                                       time64 t);
 
-/** @brief Return the price between the two commoditiesz nearest to the given
+/** @brief Return the price between the two commodities nearest to the given
  * time.
  *
  * The returned GNCPrice may be in either direction so check to ensure that its
@@ -615,7 +615,7 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
 /** @brief Get the number of prices, in any currency, for a given commodity.
  * @param db The pricedb
  * @param c The commodity
- * @return The number of prices in the database for this commody, zero if none
+ * @return The number of prices in the database for this commodity, zero if none
  */
 int
 gnc_pricedb_num_prices(GNCPriceDB *db,

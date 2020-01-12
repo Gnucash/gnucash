@@ -56,7 +56,7 @@
     (gnc:html-chart-add-data-series! chart
                                      "series-1"             ;series name
                                      '(25 45 30)            ;pie ratios
-                                     (gnc:assign-colors 3)) ;colours
+                                     (gnc:assign-colors 3)) ;colors
 
     ;; piechart doesn't need axes display:
     (gnc:html-chart-set-axes-display! chart #f)
