@@ -29,6 +29,7 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-11))            ;let-values
+(use-modules (ice-9 match))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -39,6 +40,7 @@
 (use-modules (gnucash report business-reports))
 
 (define optname-to-date (N_ "To"))
+(define optname-sort-by (N_ "Sort By"))
 (define optname-sort-order (N_ "Sort Order"))
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
@@ -89,6 +91,20 @@ exist but have no suitable transactions."))
     (gnc:option-set-default-value
      (gnc:lookup-option options gnc:pagename-general optname-to-date)
      (cons 'relative 'today))
+
+    (add-option
+     (gnc:make-multichoice-option
+      gnc:pagename-general optname-sort-by "i" (N_ "Sort companies by.") 'name
+      (list
+       (vector 'name
+               (N_ "Name")
+               (N_ "Name of the company."))
+       (vector 'total
+               (N_ "Total Owed")
+               (N_ "Total amount owed to/from Company."))
+       (vector 'oldest-bracket
+               (N_ "Bracket Total Owed")
+               (N_ "Amount owed in oldest bracket - if same go to next oldest.")))))
 
     (add-option
      (gnc:make-multichoice-option
@@ -213,6 +229,7 @@ exist but have no suitable transactions."))
                        (gnc:date-option-absolute-time
                         (op-value gnc:pagename-general optname-to-date))))
          (sort-order (op-value gnc:pagename-general optname-sort-order))
+         (sort-by (op-value gnc:pagename-general optname-sort-by))
          (show-zeros (op-value gnc:pagename-general optname-show-zeros))
          (date-type (op-value gnc:pagename-general optname-date-driver))
          (query (qof-query-create-for-splits))
@@ -223,10 +240,21 @@ exist but have no suitable transactions."))
     (define (ownerGUID<? a b)
       (string<? (gncOwnerGetGUID a) (gncOwnerGetGUID b)))
 
-    ;; for presentation. compare names.
-    (define (owner<? a b)
-      ((if (eq? sort-order 'increasing) string<? string>?)
-       (gncOwnerGetName a) (gncOwnerGetName b)))
+    (define (sort-aging<? a b)
+      (match-let* (((own1 aging1 aging-total1) a)
+                   ((own2 aging2 aging-total2) b)
+                   (increasing? (eq? sort-order 'increasing))
+                   (op-str (if increasing? string<? string>?))
+                   (op-num (if increasing? < >)))
+        (case sort-by
+          ((name)  (op-str (gncOwnerGetName own1) (gncOwnerGetName own2)))
+          ((total) (op-num aging-total1 aging-total2))
+          (else
+           (let lp ((aging1 aging1) (aging2 aging2))
+             (cond
+              ((null? aging1) (op-str (gncOwnerGetName own1) (gncOwnerGetName own2)))
+              ((= (car aging1) (car aging2)) (lp (cdr aging1) (cdr aging2)))
+              (else (op-num (car aging1) (car aging2)))))))))
 
     ;; set default title
     (gnc:html-document-set-title! document report-title)
@@ -313,7 +341,7 @@ exist but have no suitable transactions."))
                                 (gnc:owner-report-text owner account)
                                 (gnc:make-gnc-monetary comm aging-total)))))
                             (options->address options receivable owner)))))
-                      (reverse owners-and-aging))
+                      (sort owners-and-aging sort-aging<?))
 
                      (gnc:html-table-append-row!
                       table
@@ -368,9 +396,8 @@ exist but have no suitable transactions."))
                            (gncOwnerFree owner)
                            b))))
                      '() acc-splits))
-                   (acc-owners (sort (sort-and-delete-duplicates
-                                      split-owners ownerGUID<? gnc-owner-equal?)
-                                     owner<?)))
+                   (acc-owners (sort-and-delete-duplicates
+                                split-owners ownerGUID<? gnc-owner-equal?)))
 
               ;; loop into each APAR account split
               (let lp ((acc-owners acc-owners)
