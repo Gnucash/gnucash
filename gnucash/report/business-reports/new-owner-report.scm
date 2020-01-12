@@ -303,7 +303,7 @@
                      splits num-buckets to-date date-type (not payable?))))
 
     (gnc:html-table-set-col-headers!
-     table (list (_ "Pre-payment")
+     table (list (_ "Pre-Payment")
                  (_ "Current")
                  (_ "0-30 days")
                  (_ "31-60 days")
