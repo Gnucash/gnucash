@@ -212,7 +212,7 @@ exist but have no suitable transactions."))
 
   (define make-heading-list
     (list (_ "Company")
-          (_ "Prepayments")
+          (_ "Pre-Payment")
           (_ "Current")
           (_ "0-30 days")
           (_ "31-60 days")
