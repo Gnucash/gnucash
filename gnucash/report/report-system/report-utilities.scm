@@ -155,8 +155,7 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 (define (gnc:accounts-and-all-descendants accountslist)
   (sort-and-delete-duplicates
    (apply append accountslist (map gnc-account-get-descendants accountslist))
-   (lambda (a b) (< (xaccAccountOrder a b) 0))
-   equal?))
+   gnc:account-path-less-p equal?))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.

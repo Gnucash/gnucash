@@ -240,8 +240,6 @@
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 (define (txn-is-link? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-LINK))
-(define (split<? a b)
-  (< (xaccSplitOrder a b) 0))
 (define (split-is-payment? split)
   (txn-is-payment? (xaccSplitGetParent split)))
 
