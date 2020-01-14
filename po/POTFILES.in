@@ -511,6 +511,7 @@ gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
 gnucash/report/report.scm
 gnucash/report/report-utilities.scm
+gnucash/report/stylesheets/css.scm
 gnucash/report/stylesheets/footer.scm
 gnucash/report/stylesheets/head-or-tail.scm
 gnucash/report/stylesheets/plain.scm
@@ -629,6 +630,7 @@ libgnucash/engine/gncBillTerm.c
 libgnucash/engine/gnc-budget.c
 libgnucash/engine/gncBusiness.c
 libgnucash/engine/gnc-commodity.c
+libgnucash/engine/gnc-commodity.h
 libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp

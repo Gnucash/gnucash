@@ -42,6 +42,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 
 ;; Define the strings here to avoid typos and make changes easier.
 
@@ -1033,7 +1034,8 @@ be excluded from periodic reporting.")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
-(define (make-split-table splits options custom-calculated-cells)
+(define (make-split-table splits options custom-calculated-cells
+                          begindate)
 
   (define (opt-val section name)
     (let ((option (gnc:lookup-option options section name)))
@@ -1119,6 +1121,11 @@ be excluded from periodic reporting.")
          (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level)
                              'multi-line))
          (export? (opt-val gnc:pagename-general optname-table-export)))
+
+    (define (acc-reverse? acc)
+      (if account-types-to-reverse
+          (memv (xaccAccountGetType acc) account-types-to-reverse)
+          (gnc-reverse-balance acc)))
 
     (define (column-uses? param)
       (cdr (assq param used-columns)))
@@ -1315,6 +1322,7 @@ be excluded from periodic reporting.")
          ;;                             column must be the credit side
          ;;         friendly-heading-fn (friendly-heading-fn account) to retrieve
          ;;                             friendly name for account debit/credit
+         ;;                             or 'bal-bf for balance-brought-forward
 
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
@@ -1351,7 +1359,7 @@ be excluded from periodic reporting.")
          (if (column-uses? 'running-balance)
              (list (vector (_ "Running Balance")
                            running-balance #t #f #f
-                           (lambda (a) "")))
+                           'bal-bf))
              '()))))
 
     (define calculated-cells
@@ -1406,29 +1414,35 @@ be excluded from periodic reporting.")
            table subheading-style
            (append
             (gnc:html-make-empty-cells left-indent)
-            (if (and (opt-val pagename-sorting optname-show-informal-headers)
-                     (column-uses? 'amount-double)
-                     (memq sortkey SORTKEY-INFORMAL-HEADERS))
-                (append
-                 (if export?
-                     (cons
-                      (gnc:make-html-table-cell data)
-                      (gnc:html-make-empty-cells
-                       (+ right-indent width-left-columns -1)))
-                     (list
-                      (gnc:make-html-table-cell/size
-                       1 (+ right-indent width-left-columns) data)))
-                 (map (lambda (cell)
-                        (let ((friendly-fn (vector-ref cell 5)))
-                          (and friendly-fn
-                               (gnc:make-html-text
-                                (gnc:html-markup-b
-                                 (friendly-fn (renderer-fn split)))))))
-                      calculated-cells))
+            (if export?
+                (cons
+                 (gnc:make-html-table-cell data)
+                 (gnc:html-make-empty-cells
+                  (+ right-indent width-left-columns -1)))
                 (list
                  (gnc:make-html-table-cell/size
-                  1 (+ right-indent width-left-columns width-right-columns)
-                  data))))))))
+                  1 (+ right-indent width-left-columns) data)))
+            (map
+             (lambda (cell)
+               (match (vector-ref cell 5)
+                 (#f #f)
+                 ('bal-bf
+                  (let* ((acc (xaccSplitGetAccount split))
+                         (bal (xaccAccountGetBalanceAsOfDate acc begindate)))
+                    (and (memq sortkey ACCOUNT-SORTING-TYPES)
+                         (gnc:make-html-table-cell/markup
+                          "number-cell"
+                          (gnc:make-gnc-monetary
+                           (xaccAccountGetCommodity acc)
+                           (if (acc-reverse? acc) (- bal) bal))))))
+                 (fn
+                  (and (opt-val pagename-sorting optname-show-informal-headers)
+                       (column-uses? 'amount-double)
+                       (memq sortkey SORTKEY-INFORMAL-HEADERS)
+                       (gnc:make-html-text
+                        (gnc:html-markup-b
+                         (fn (xaccSplitGetAccount split))))))))
+             calculated-cells))))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors
                               subtotal-style level row col)
@@ -1605,10 +1619,7 @@ be excluded from periodic reporting.")
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((account (xaccSplitGetAccount split))
-             (reversible-account? (if account-types-to-reverse
-                                      (memv (xaccAccountGetType account)
-                                            account-types-to-reverse)
-                                      (gnc-reverse-balance account)))
+             (reversible-account? (acc-reverse? account))
              (cells (map (lambda (cell)
                            (let ((split->monetary (vector-ref cell 1)))
                              (vector (split->monetary split)
@@ -2173,7 +2184,8 @@ be excluded from periodic reporting.")
 
        (else
         (let-values (((table grid csvlist)
-                      (make-split-table splits options custom-calculated-cells)))
+                      (make-split-table splits options custom-calculated-cells
+                                        begindate)))
 
           (gnc:html-document-set-title! document report-title)
 

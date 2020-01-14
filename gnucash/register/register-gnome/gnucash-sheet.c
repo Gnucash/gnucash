@@ -2268,6 +2268,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
     SheetBlockStyle *style;
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), "");
     GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    const gchar *type_name;
 
     g_return_val_if_fail (virt_col >= 0, 0);
     g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
@@ -2287,12 +2288,17 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
             continue;
 
         if (cell_col < style->ncols)
+        {
             for (cell_row = 0; cell_row < style->nrows; cell_row++)
             {
                 VirtualLocation virt_loc;
                 const char *text;
 
-                virt_loc.vcell_loc = vcell_loc;
+                if (virt_row == 0)
+                    virt_loc.vcell_loc = sheet->table->current_cursor_loc.vcell_loc;
+                else
+                    virt_loc.vcell_loc = vcell_loc;
+
                 virt_loc.phys_row_offset = cell_row;
                 virt_loc.phys_col_offset = cell_col;
 
@@ -2313,13 +2319,22 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 width += (gnc_item_edit_get_margin (item_edit, left_right) +
                           gnc_item_edit_get_padding_border (item_edit, left_right));
 
+                // get the cell type so we can add the button width to the
+                // text width if required.
+                type_name = gnc_table_get_cell_type_name (sheet->table, virt_loc);
+                if ((g_strcmp0 (type_name, DATE_CELL_TYPE_NAME) == 0)
+                    || (g_strcmp0 (type_name, COMBO_CELL_TYPE_NAME) == 0))
+                {
+                    width += gnc_item_edit_get_button_width (item_edit) + 2; // add 2 for the button margin
+                }
                 max = MAX (max, width);
             }
+        }
     }
 
     g_object_unref (layout);
 
-    return max + 1; // add 1 for the border
+    return max;
 }
 
 void

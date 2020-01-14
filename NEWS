@@ -1,5 +1,169 @@
 Version history:
 ------- -------
+3.8 - 29 December 2019
+The ninth release of the 3.x stable series.
+
+Note for German FinTS users: This release includes the latest fixes
+in support of the PSD2 changes. The Mac and Windows bundles include
+the current beta releases of AQBanking and its support library needed
+to work with most German banks' implementations of FinTS.
+
+Translators, Note Well: The obsolete "disambiguation prefix" translator
+comments are removed in favor of three-parameter gettext(). See
+https://lists.gnucash.org/pipermail/gnucash-devel/2019-September/044199.html
+
+The following bugs have been fixed:
+    Bug 412151 - Not handling exception when guile is compiled w/o regexp
+		 support
+		 Disable qif-import and make-regexp if guile is compiled
+		 without regex.
+    Bug 724219 - Customer Summary includes Closing Entries when reporting
+		 across the end of year
+    Bug 743943 - "Edit->Post Invoice" is ambiguous.
+    Bug 759005 - Print negatives in red.
+    Bug 787295 - Allow UI jump from Business accounts to their relevant
+		 invoice/bill/voucher
+    Bug 796530 - [txn csv importer] usability suggestions
+    Bug 796736 - Register cell pop up columns width to narrow
+    Bug 796945 - Find Transaction Split Search Search Criteria window does
+                 not scroll when added criteria exceed a certain amount
+    Bug 797078 - "Automatic decimal point" Should Not Cause 2 Different
+		 Behaviors
+    Bug 797086 - Import customer dialog – headers not translated
+    Bug 797279 - Reports RTL do not support RTL
+    Bug 797326 - Enhancement: budget's Estimate tool should ignore Closing
+		 Entries
+    Bug 797356 - ninja check fails with GCC-9
+    Bug 797390 - xaccAccountRecomputeBalance also tallies no-closing
+		 balances
+    Bug 797397 - Import Map Editor - Deletion not limited by current filter.
+    Bug 797401 - Invoice Reports need an overall page width set
+    Bug 797405 - HBCI Import PIN entry window is hidden behind log window,
+                 program stuck
+    Bug 797408 - Find Transaction Window -> Search Criteria Section -> Add
+		 Search Criteria -> Section does not expand to new size to
+		 include a newly added Search Criteria
+    Bug 797416 - Enter key does not move to blank tx or next line
+    Bug 797418 - In budget report, column with Actual Totals for
+		 Liabilities and Income are reversed
+    Bug 797430 - SEPA transfers are not executed
+                 Avoid double init of gui Patch by Mike Pieper. Thanks!
+    Bug 797453 - Chart of Accounts is slow to update / redraw
+    Bug 797459 - Installation (for 3.7) Readme Version number shows 2.2.x
+    Bug 797462 - gnc:strify reports the amount and value incorrectly
+    Bug 797473 - UTF8 characters not processed correctly with aqbanking6
+    Bug 797481 - crash on close of unsaved tabs by pressing [X]
+    Bug 797482 - Can't edit date when using Edit Payment function
+    Bug 797492 - Lock up on 'Find Account'
+    Bug 797500 - valgrind errors - new/delete vs malloc/free
+    Bug 797506 - New Aging errors out with guile backtrace in case of a few
+		 uncommon transactions
+    Bug 797519 - Budget Viewer Totals do not redraw upon to Sign-Reversal
+		 changes
+    Bug 797520 - Balance Sheet (Multicolumn) the retained earnings amount
+		 in the equity section has its sign reversed
+    Bug 797521 - Receivable Aging (beta): include earliest split
+    Bug 797521 - Receivable Aging (beta): prepayments logic doesn't work,
+		 appears to use incorrect absolute value logic
+    Bug 797532 - Crash/Coredump Lots
+
+Other repairs or enhancements not marked as bugs:
+
+    The Customer/Employee/Vendor reports have been rewritten. The new
+      versions may be found in Reports>Experimental.
+    [stylesheet-css] a user-customisable CSS based stylesheet
+      New stylesheet. Exposes a single text box for full CSS
+      customisability.
+    Allow account selection by typing into the post-to field of the payment
+      window
+    When sizing some register columns take account of 'Tot' being added.
+    Take account for the pop up button border in the register.
+    Change the date sample so it has the maximum text width possible
+    [new-owner-report] bugfix: balance row needs variable linked cols
+    Improve translations by scriptedly removing the removed colon suffix.
+    [report-utilities] bugfix: aging-list was incorrect. off-by-1 error.
+    [report-utilities] bugfix: overpayment works for AP accounts.
+    Swap the buttons around on the Budget Open dialogue
+      Swap the OK and Cancel buttons so they conform to the normal layout. 
+    [report-utilities] bugfix: fix overpayment detection
+      For 1 payment to >1 invoices, previously would miscalculate
+      overpayment.
+    [budgets.scm] Budget reports handle both natural & reversed budgets.
+      This change is protected by a Feature: Using it will prevent the file
+      from being opened by earlier versions of GnuCash.
+    [gnc-budget-view.c] totals - 5 fundamental types
+      previous showed income/expense/transfers/totals budget totals, of
+      uncertain meaning. now shows income/expense/asset/liability/equity
+      budget totals. The 5 lines also become sensitive to the global
+      sign-reverse property.
+    bindings-python - drop references to gnucash-env
+      We no longer ship a gnucash-env script, directly use python(3)
+      instead
+    [balsheet-pnl] fix: single-date balsheet missed printing date
+    [balsheet-pnl] fix: hide Equity sections when not needed
+      * If currencies are not converted, Unrealized Gains are meaningless.
+      Hide them. * If there are no income/expense accounts, retained
+      earnings will be nil. Remove row.
+    Ignore trailing noise on imported transaction account numbers.
+      AQBanking6 uses a separate method for retrieving account numbers for
+      account info and transactions, where the transactions method can have
+      additional characters, most often the ISO4217 currency code. That
+      results in match failures when importing. As a work-around, compare
+      only the length of the account-info-generated online id when
+      comparing it to the transaction-generated one. Note that this is only
+      a partial solution: At least one German bank also appends characters
+      to the transaction-generated bank id and that will still cause the
+      match to fail.
+    [dialog-payment] Add warning label if payment is unattached
+      Completing a payment for a customer without associating with an open
+      invoice is allowable and is used for prepayments. Enable a warning to
+      inform that the payment does not have an invoice/bill document attached.
+    [aging] update error reporting
+      This error handling was for transactions in APAR accounts whereby
+      Transaction Currency != Owner Currency. An example is a manually
+      entered transaction, then assigned as payment to a customer with a
+      different currency. Update to modern API calls. Show the culprit
+      split details. Fixed example output: IGNORING TRANSACTION! Invoice
+      Owner: [None:] Transaction:Txn<d:28/10/19> Splits are:
+      Split<d:28/10/19,acc:Current,amt:$150.00,val:£150.00>
+      Split<d:28/10/19,acc:AR,amt:$0.00,val:-£150.00> Transaction
+      Currency:GBP Client Currency:AUD 
+    Fixed German IBAN error message
+    Allow edit of some fields for posted invoice
+      Allow editing of some fields for posted invoice. For reasons, see bug
+      report: https://bugs.gnucash.org/show_bug.cgi?id=797400
+    [average-balance] show monetaries instead of numbers in data table
+    UK VAT template: replace obsolete EEC and EC by EU
+    Implements the presentation of static optical TAN challenges (photoTAN
+      and QR) inside the enter TAN dialogue.
+    [budget] fixcrash: fix crasher for some periods
+      eg. the following combo would previously crash: - periods from next
+      to current - use accumulated amounts 
+    [budget] fixcrash: prevent crash if periods start > end
+      It's silly to input start-period > end-period. Nevertheless handle it
+      by swapping them instead of crashing. i.e. report budget periods from
+      end to start. 
+    [budget-flow] fixcrash: exchange-fn needs to specify exchange date
+      because some exchange-fn *do* require date eg. pricedb-nearest. use
+      the period end-date for the exchange date. 
+    [portfolio report] There's no report-currency. Use currency.
+    [window-report] show backtrace when report crashes
+      * exposes a SCM string last-captured-error containing last backtrace
+      * when rendering report-crash window, include it
+
+New Scheme Functions:
+    gnc:html-markup-ol: creates an HTML ordered list.
+    gnc:multiline-to-html-textt: creates html-text with <br/> elements.
+    gnc:make-html-table-cell/min-width: Create a table-cell with min-width
+      style attribute
+    gnc:collector+ and gnc:collector-
+
+New Deprecations:
+    gnc:html-table-append-ruler/at!
+    gnc:html-table-remove-last-row!
+
+Translations Updated: Chinese(Simplified), Croatian, German, Hebrew, Ukrainian
+
 3.7 -  8 September 2019
 The eighth release of the 3.x stable series.
 
@@ -7,7 +171,7 @@ Note for German FinTS users: This release in concert with AQBanking
 5.8.0 is the first release to support the new product registration
 requirement that goes into effect 15 September 2019.
 
-The following bugs have been fixed:
+
 The following bugs have been fixed:
     Bug 605602 - precision of Financial Calculator seems to depend on
                  locale

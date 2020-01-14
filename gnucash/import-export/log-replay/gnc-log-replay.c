@@ -608,11 +608,10 @@ void gnc_file_log_replay (GtkWindow *parent)
             {
                 int err = errno;
                 perror("File open failed");
+                /* Translators: First argument is the filename,
+                 * second argument is the error.
+                 */
                 gnc_error_dialog(NULL,
-                                 /* Translation note:
-                                  * First argument is the filename,
-                                  * second argument is the error.
-                                  */
                                  _("Failed to open log file: %s: %s"),
                                  selected_filename,
                                  strerror(err));

@@ -163,7 +163,7 @@ struct _invoice_window
     GtkWidget  * posted_date;
     GtkWidget  * active_check;
     GtkWidget  * paid_label;
-    
+
     GtkWidget  * owner_box;
     GtkWidget  * owner_label;
     GtkWidget  * owner_choice;
@@ -1942,11 +1942,37 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("PAID"));
     else
         gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("UNPAID"));
-    
+
     if (widget)
         gtk_widget_show (widget);
     else
         gtk_widget_show (iw_get_window(iw));
+}
+
+GncInvoiceType
+gnc_invoice_get_type_from_window (InvoiceWindow *iw)
+{
+    /* uses the same approach as gnc_invoice_get_title
+       not called gnc_invoice_get_type because of name collisions
+    */
+    switch (gncOwnerGetType(&iw->owner))
+    {
+    case GNC_OWNER_CUSTOMER:
+        return iw->is_credit_note ? GNC_INVOICE_CUST_CREDIT_NOTE
+                                  : GNC_INVOICE_CUST_INVOICE;
+        break;
+    case GNC_OWNER_VENDOR:
+        return iw->is_credit_note ? GNC_INVOICE_VEND_CREDIT_NOTE
+                                  : GNC_INVOICE_VEND_INVOICE;
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        return iw->is_credit_note ? GNC_INVOICE_EMPL_CREDIT_NOTE
+                                  : GNC_INVOICE_EMPL_INVOICE;
+        break;
+    default:
+        return GNC_INVOICE_UNDEFINED;
+        break;
+    }
 }
 
 gchar *

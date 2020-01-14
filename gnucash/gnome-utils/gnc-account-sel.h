@@ -51,6 +51,7 @@ typedef struct
     /* The state of this pointer also serves as a flag about what state
      * the widget is in WRT the new-account-button ability. */
     GtkWidget *newAccountButton;
+    gint currentSelection;
 
 #if 0 /* completion not implemented. */
     GCompletion *completion;

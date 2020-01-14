@@ -195,8 +195,7 @@
                     <signal name="changed" handler="gnc_payment_dialog_post_to_changed_cb" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
-                        <property name="can_focus">False</property>
-                        <property name="overwrite_mode">True</property>
+                        <property name="can_focus">True</property>
                       </object>
                     </child>
                   </object>

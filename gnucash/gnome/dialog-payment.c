@@ -432,7 +432,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
 
     /* Get a list of open lots for this owner and post account */
-    if (pw->owner.owner.undefined)
+    if (pw->owner.owner.undefined && pw->post_acct)
         list = xaccAccountFindOpenLots (pw->post_acct, gncOwnerLotMatchOwnerFunc,
                                         &pw->owner, NULL);
 

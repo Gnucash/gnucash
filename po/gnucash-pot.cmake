@@ -1,5 +1,5 @@
 execute_process(
-    COMMAND ${XGETTEXT} --add-comments
+    COMMAND ${XGETTEXT} --add-comments=Translators
                         --directory=${TOP_SRC_DIR}
                         --default-domain=${PACKAGE}
                         --output=${PACKAGE}.pot

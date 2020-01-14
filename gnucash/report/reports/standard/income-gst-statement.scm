@@ -196,7 +196,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     ;; each column will be a vector
     ;; (vector heading              - string
     ;;         calculator-function  - (calculator-function split) to obtain amount
-    ;;         reverse-column?      - #t for sales, #f for purchases
+    ;;         reverse-column?      - #f - already handled via myneg in fns above
     ;;         subtotal?            - #t - all columns need subtotals
     ;;         start-dual-column?   - unused in GST report
     ;;         friendly-heading-fn  - unused in GST report
@@ -204,74 +204,61 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
      ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
      (list (vector (_ "Gross Sales")
                    gross-sales
-                   #t #t #f
-                   (lambda (a) "")))
+                   #f #t #f #f))
      (if (opt-val gnc:pagename-display (N_ "Individual sales columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder-neg acc)
-                                    #t #t #f
-                                    (lambda (a) "")))
+                                    #f #t #f #f))
               accounts-sales)
          (list (vector (_ "Net Sales")
                        sales-without-tax
-                       #t #t #f
-                       (lambda (a) ""))))
+                       #f #t #f #f)))
      (if (opt-val gnc:pagename-display (N_ "Individual tax columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder-neg acc)
-                                    #t #t #f
-                                    (lambda (a) "")))
+                                    #f #t #f #f))
               accounts-tax-collected)
          (list (vector (_ "Tax on Sales")
                        tax-on-sales
-                       #t #t #f
-                       (lambda (a) ""))))
+                       #f #t #f #f)))
      ;; Translators: "Gross Purchases" refer to Net Purchase + GST/VAT on Purchase
      (list (vector (_ "Gross Purchases")
                    gross-purchases
-                   #f #t #f
-                   (lambda (a) "")))
+                   #f #t #f #f))
      (if (opt-val gnc:pagename-display (N_ "Individual purchases columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder acc)
-                                    #f #t #f
-                                    (lambda (a) "")))
+                                    #f #t #f #f))
               accounts-purchases)
          (list (vector (_ "Net Purchases")
                        purchases-without-tax
-                       #f #t #f
-                       (lambda (a) ""))))
+                       #f #t #f #f)))
      (if (opt-val gnc:pagename-display (N_ "Individual tax columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder acc)
-                                    #f #t #f
-                                    (lambda (a) "")))
+                                    #f #t #f #f))
               accounts-tax-paid)
          (list (vector (_ "Tax on Purchases")
                        tax-on-purchases
-                       #f #t #f
-                       (lambda (a) ""))))
+                       #f #t #f #f)))
      (if (opt-val gnc:pagename-display (N_ "Gross Balance"))
          ;; Translators: "Gross Balance" refer to "Gross Sales - Gross Purchases" in GST Report
          (list (vector (_ "Gross Balance")
                        gross-balance
-                       #f #t #f
-                       (lambda (a) "")))
+                       #f #t #f #f))
          '())
          ;; Note: Net income = net balance - other costs
      (if (opt-val gnc:pagename-display (N_ "Net Balance"))
          ;; Translators: "Net Balance" refer to Net Sales - Net Purchases in GST Report
          (list (vector (_ "Net Balance")
                        net-balance
-                       #f #t #f
-                       (lambda (a) "")))
+                       #f #t #f #f))
          '())
      (if (opt-val gnc:pagename-display (N_ "Tax payable"))
          ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
          (list (vector (_ "Tax payable")
                        tax-payable
-                       #f #t #f
-                       (lambda (a) "")))
+                       #f #t #f #f))
          '()))))
 
 ;; Define the report.

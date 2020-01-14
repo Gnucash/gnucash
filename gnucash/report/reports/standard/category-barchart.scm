@@ -26,6 +26,7 @@
 (define-module (gnucash reports standard category-barchart))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
+(use-modules (ice-9 match))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
@@ -87,15 +88,11 @@ developing over time"))
 (define optname-averaging (N_ "Show Average"))
 (define opthelp-averaging (N_ "Select whether the amounts should be shown over the full time period or rather as the average e.g. per month."))
 
-(define (options-generator account-types reverse-balance? do-intervals?)
+(define (options-generator account-types do-intervals?)
   (let* ((options (gnc:new-options))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    ;; save off the reverse-balance option
-    (add-option
-     (gnc:make-internal-option "__report" "reverse-balance?" reverse-balance?))
 
     ;; General tab
     (gnc:options-add-date-interval!
@@ -215,7 +212,7 @@ developing over time"))
 ;; *really* complicated.
 
 (define (category-barchart-renderer report-obj reportname reportguid
-                                    account-types do-intervals?)
+                                    account-types do-intervals? reverse-bal?)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
     (gnc:option-value
@@ -254,7 +251,6 @@ developing over time"))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
          (sort-method (get-option gnc:pagename-display optname-sort-method))
-         (reverse-balance? (get-option "__report" "reverse-balance?"))
 
          (work-done 0)
          (work-to-do 0)
@@ -351,7 +347,7 @@ developing over time"))
             (map
              (lambda (acc)
                (let* ((comm (xaccAccountGetCommodity acc))
-                      (split->elt (if reverse-balance?
+                      (split->elt (if reverse-bal?
                                       (lambda (s)
                                         (gnc:make-gnc-monetary
                                          comm (- (xaccSplitGetNoclosingBalance s))))
@@ -712,12 +708,12 @@ developing over time"))
     'menu-tip (get-menutip variant)
     'options-generator (lambda ()
                          (options-generator (get-acct-types variant)
-                                            (get-reverse? variant)
                                             (get-intervals? variant)))
     'renderer (lambda (report-obj)
                 (category-barchart-renderer report-obj
                                             (get-reportname variant)
                                             (get-uuid variant)
                                             (get-acct-types variant)
-                                            (get-intervals? variant)))))
+                                            (get-intervals? variant)
+                                            (get-reverse? variant)))))
  variants)

@@ -68,13 +68,11 @@ typedef gboolean (*AccountBoolCB) (Account *, gpointer);
  *  it).  This code does not currently listen to account-destroy
  *  events.
  */
-QuickFill * gnc_get_shared_account_name_quickfill (Account *root,
-        const char * key,
-        AccountBoolCB skip_cb,
-        gpointer cb_data);
+QuickFill *
+gnc_get_shared_account_name_quickfill (Account *root, const char * key,
+                                       AccountBoolCB skip_cb, gpointer cb_data);
 GtkListStore *
-gnc_get_shared_account_name_list_store (Account *root,
-                                        const char * key,
+gnc_get_shared_account_name_list_store (Account *root, const char * key,
                                         AccountBoolCB cb, gpointer cb_data);
 
 #endif

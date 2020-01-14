@@ -760,8 +760,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     /* prevent the rows being dragged to a different order */
     gtk_tree_view_set_reorderable (view, FALSE);
 
-    /* Add the columns *
-     * (keep the line break below to avoid a translator comment) */
+    /* Add the columns */
     add_text_column (view, _("Date"), DOWNLOADED_COL_DATE_TXT, FALSE);
     info->account_column = add_text_column (view, _("Account"), DOWNLOADED_COL_ACCOUNT, FALSE);
     gtk_tree_view_column_set_visible (info->account_column, show_account);

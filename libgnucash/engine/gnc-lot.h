@@ -147,9 +147,10 @@ void gnc_lot_get_balance_before (const GNCLot *, const Split *,
 gboolean gnc_lot_is_closed (GNCLot *);
 
 /** The gnc_lot_get_earliest_split() routine is a convenience routine
- *    that helps identify the date this lot was opened.   It simply
+ *    that helps identify the earliest date in the lot.   It simply
  *    loops over all of the splits in the lot, and returns the split
- *    with the earliest split->transaction->date_posted.
+ *    with the earliest split->transaction->date_posted.  It may not
+ *    necessarily identify the lot opening split.
  */
 Split * gnc_lot_get_earliest_split (GNCLot *lot);
 

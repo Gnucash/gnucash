@@ -500,7 +500,7 @@ recurrenceListToString(const GList *r)
         {
             if (iter != r)
             {
-                /* translators: " + " is an separator in a list of string-representations of recurrence frequencies */
+                /* Translators: " + " is an separator in a list of string-representations of recurrence frequencies */
                 g_string_append(str, _(" + "));
             }
             s = recurrenceToString((Recurrence *)iter->data);
@@ -615,7 +615,7 @@ _weekly_list_to_compact_string(GList *rs, GString *buf)
     g_string_printf(buf, "%s", _("Weekly"));
     if (multiplier > 1)
     {
-        /* translators: %u is the recurrence multiplier, i.e. this
+        /* Translators: %u is the recurrence multiplier, i.e. this
         	   event should occur every %u'th week. */
         g_string_append_printf(buf, _(" (x%u)"), multiplier);
     }
@@ -649,7 +649,7 @@ _monthly_append_when(Recurrence *r, GString *buf)
 
         gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
 
-        /* translators: %s is an already-localized form of the day of the week. */
+        /* Translators: %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("last %s"), day_name_buf);
     }
     else if (recurrenceGetPeriodType(r) == PERIOD_NTH_WEEKDAY)
@@ -662,13 +662,13 @@ _monthly_append_when(Recurrence *r, GString *buf)
         gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
         day_of_month_index = g_date_get_day(&date) - 1;
         week = day_of_month_index / 7 > 3 ? 3 : day_of_month_index / 7;
-        /* translators: %s is the string 1st, 2nd, 3rd and so on, and
+        /* Translators: %s is the string 1st, 2nd, 3rd and so on, and
          * %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("%s %s"), _(numerals[week]), day_name_buf);
     }
     else
     {
-        /* translators: %u is the day of month */
+        /* Translators: %u is the day of month */
         g_string_append_printf(buf, "%u", g_date_get_day(&date));
     }
 }
@@ -705,7 +705,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_append_printf(buf, " ");
             if (recurrenceGetMultiplier(first) > 1)
             {
-                /* translators: %u is the recurrence multiplier number */
+                /* Translators: %u is the recurrence multiplier number */
                 g_string_append_printf(buf, _(" (x%u)"), recurrenceGetMultiplier(first));
             }
             g_string_append_printf(buf, ": ");
@@ -715,7 +715,7 @@ recurrenceListToCompactString(GList *rs)
         }
         else
         {
-            /* translators: %d is the number of Recurrences in the list. */
+            /* Translators: %d is the number of Recurrences in the list. */
             g_string_printf(buf, _("Unknown, %d-size list."), g_list_length(rs));
         }
     }
@@ -736,7 +736,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, "%s", _("Daily"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multiplier. */
+                /* Translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
         }
@@ -753,7 +753,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, "%s", _("Monthly"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multiplier. */
+                /* Translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
             g_string_append_printf(buf, ": ");
@@ -764,12 +764,10 @@ recurrenceListToCompactString(GList *rs)
         {
             //g_warning("nth weekday not handled");
             //g_string_printf(buf, "@fixme: nth weekday not handled");
-        	/* (keep the line break below to avoid a translator comment) */
-            g_string_printf(buf,
-            		"%s", _("Monthly"));
+            g_string_printf(buf, "%s", _("Monthly"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multiplier. */
+                /* Translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
             g_string_append_printf(buf, ": ");
@@ -781,7 +779,7 @@ recurrenceListToCompactString(GList *rs)
             g_string_printf(buf, "%s", _("Yearly"));
             if (multiplier > 1)
             {
-                /* translators: %u is the recurrence multiplier. */
+                /* Translators: %u is the recurrence multiplier. */
                 g_string_append_printf(buf, _(" (x%u)"), multiplier);
             }
         }

@@ -1,5 +1,6 @@
 
 set(stylesheets_SCHEME
+  css.scm
   plain.scm
   footer.scm
   head-or-tail.scm

@@ -252,7 +252,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
      */
     locale = g_getenv("LANG");
     if (g_strcmp0(locale, "Swedish_Sweden") == 0)
-        locale = g_strdup("sv_SV");
+        locale = g_strdup("sv_SE");
     else if (g_strcmp0(locale, "Swedish_Finland") == 0)
         locale =g_strdup("sv_FI");
     else

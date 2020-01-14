@@ -292,6 +292,7 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     SET_ENUM("TXN-TYPE-NONE");
     SET_ENUM("TXN-TYPE-INVOICE");
     SET_ENUM("TXN-TYPE-PAYMENT");
+    SET_ENUM("TXN-TYPE-LINK");
 
     SET_ENUM("ACCT-TYPE-INVALID");
     SET_ENUM("ACCT-TYPE-NONE");

@@ -574,7 +574,7 @@
               <object class="GtkLabel" id="label29">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Invoice Entries</property>
+                <property name="label" translatable="yes">Entries</property>
               </object>
             </child>
           </object>

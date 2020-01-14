@@ -56,6 +56,8 @@ enum
     TARGET_COMPOUND_TEXT
 };
 
+#define MIN_BUTT_WIDTH 20 // minimum size for a button excluding border
+
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
@@ -111,12 +113,19 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
 {
     GncItemEditTb *tb = GNC_ITEM_EDIT_TB (widget);
     GncItemEdit *item_edit = GNC_ITEM_EDIT(tb->sheet->item_editor);
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(tb));
+    GtkBorder border;
     gint x, y, w, h = 2, width = 0;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
-    if (width < 22) // minimum size for a button
-        width = 22;
+
+    gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+
+    if (width < MIN_BUTT_WIDTH + border.left + border.right)
+        width = MIN_BUTT_WIDTH + border.left + border.right;
+
     *minimal_width = *natural_width = width;
+    item_edit->button_width = width;
 }
 
 static void
@@ -220,6 +229,9 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
     SheetBlock *block;
     int xd, yd;
 
+    if (sheet == NULL)
+        return;
+
     block = gnucash_sheet_get_block (sheet, item_edit->virt_loc.vcell_loc);
     if (block == NULL)
         return;
@@ -248,6 +260,8 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 {
     gint x = 0, y = 0, w, h;
 
+    if (item_edit == NULL || item_edit->sheet == NULL)
+        return FALSE;
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
                      GTK_WIDGET(item_edit), x, y);
@@ -319,6 +333,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->popup_user_data = NULL;
 
     item_edit->style = NULL;
+    item_edit->button_width = MIN_BUTT_WIDTH;
 
     gnc_virtual_location_init(&item_edit->virt_loc);
 }
@@ -561,7 +576,8 @@ draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
     gint height = gtk_widget_get_allocated_height (widget);
     gint size;
 
-    gtk_render_background (context, cr, 0, 0, width, height);
+    // allow room for a border
+    gtk_render_background (context, cr, 2, 2, width - 4, height - 4);
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 
@@ -646,6 +662,28 @@ gnc_item_edit_get_property (GObject *object,
     }
 }
 
+/* FIXME: Idle events calling gnc_item_edit_update can fire after the
+ * GncItemEdit is finalized, but because the GncItemEdit class is
+ * defined by hand instead of with the GType macros there's no way to
+ * run gnc_item_edit_dispose or gnc_item_edit_finalize to null out the
+ * pointers. We resort instead to a weak reference to null out the
+ * sheet when it gets finalized to prevent gnc_item_edit_upate from
+ * accessing the freed sheet.
+ *
+ * https://bugs.gnucash.org/show_bug.cgi?id=797481
+ *
+ * Note that this is still not bulletproof, after all we're still
+ * using the GncItemEdit after it has been freed but without a dispose
+ * function to do this correctly we're a bit stuck.
+ */
+static void
+sheet_destroyed (gpointer data, GObject *table)
+{
+     GncItemEdit *item_edit = (GncItemEdit*)data;
+     if (item_edit)
+          item_edit->sheet = NULL;
+}
+
 static void
 gnc_item_edit_set_property (GObject *object,
                             guint param_id,
@@ -653,11 +691,18 @@ gnc_item_edit_set_property (GObject *object,
                             GParamSpec *pspec)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT (object);
-
     switch (param_id)
     {
     case PROP_SHEET:
+         if (item_edit->sheet)
+             g_object_weak_unref(G_OBJECT(item_edit->sheet),
+                                 (GWeakNotify)sheet_destroyed,
+                                 (gpointer)item_edit);
         item_edit->sheet = GNUCASH_SHEET (g_value_get_object (value));
+        if (item_edit->sheet)
+            g_object_weak_ref(G_OBJECT(item_edit->sheet),
+                              (GWeakNotify)sheet_destroyed,
+                              (gpointer)item_edit);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -720,7 +765,9 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
     widget_class->get_preferred_height = gnc_item_edit_get_preferred_height;
 }
 
-
+/* FIXME: This way of initializing GObjects is obsolete. We should be
+ * using G_DECLARE_FINAL_TYPE instead of rolling _get_type by hand.
+ */
 GType
 gnc_item_edit_get_type (void)
 {
@@ -795,6 +842,25 @@ gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side)
     default:
         return 2;
     }
+}
+
+gint
+gnc_item_edit_get_button_width (GncItemEdit *item_edit)
+{
+    if (item_edit)
+    {
+        if (gtk_widget_is_visible (GTK_WIDGET(item_edit->popup_toggle.tbutton)))
+            return item_edit->button_width;
+        else
+        {
+            GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(item_edit->popup_toggle.tbutton));
+            GtkBorder border;
+
+            gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+            return MIN_BUTT_WIDTH + border.left + border.right;
+        }
+    }
+    return MIN_BUTT_WIDTH + 2; // add the default border
 }
 
 static gboolean

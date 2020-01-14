@@ -84,11 +84,6 @@ gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fulln
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
-
-    key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
-    g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
-    g_free (key);
-
     sheet = GNUCASH_SHEET (table->ui_data);
 
     widths = gnc_header_widths_new ();
@@ -113,6 +108,10 @@ gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fulln
             g_key_file_remove_key (state_file, state_section, key, NULL);
         g_free (key);
     }
+    key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
+    g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
+    g_free (key);
+
     gnc_header_widths_destroy (widths);
 }
 

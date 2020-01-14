@@ -3353,6 +3353,8 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     GtkPositionType position = GTK_POS_TOP;
     GncMainWindowPrivate *priv;
 
+    g_return_if_fail (GNC_IS_MAIN_WINDOW(user_data));
+
     window = GNC_MAIN_WINDOW(user_data);
 
     ENTER ("window %p", window);

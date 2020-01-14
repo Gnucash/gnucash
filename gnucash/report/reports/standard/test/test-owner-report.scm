@@ -333,7 +333,7 @@
                       owner-1 (get-acct "AR-USD")))
            (sxml (options->sxml 'customer-new options "new-customer-report basic")))
       (test-equal "inv-descriptions"
-        '("inv >90 $11.50" "inv 60-90 $7.50" "inv 30-60 $8.50"
+        '("inv >90 $11.50" "$2.00" "inv 60-90 $7.50" "inv 30-60 $8.50"
           "inv >90 payment" "inv >90 payment" "inv <30days $4.00"
           "inv $200" "inv $200" "inv current $6.75" "inv $3 CN"
           "$31.75" "$7.50")

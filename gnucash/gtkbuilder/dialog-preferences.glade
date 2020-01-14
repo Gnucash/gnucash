@@ -1141,8 +1141,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Present the new account list dialog when you choose File -&gt; New File.</property>
-                    <property name="tooltip_text" translatable="yes">Present the new account list dialog when you choose File -&gt; New File.</property>
+                    <property name="tooltip_markup">Present the new account list dialog when you choose File-&gt;New File.</property>
+                    <property name="tooltip_text" translatable="yes">Present the new account list dialog when you choose File-&gt;New File.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
