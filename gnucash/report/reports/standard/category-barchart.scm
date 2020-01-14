@@ -658,62 +658,35 @@ developing over time"))
     (gnc:report-finished)
     document))
 
-(define-record-type :variant
-  (make-variant reportname acct-types intervals? menuname menutip reverse? uuid)
-  variant?
-  (reportname get-reportname)
-  (acct-types get-acct-types)
-  (intervals? get-intervals?)
-  (menuname   get-menuname)
-  (menutip    get-menutip)
-  (reverse?   get-reverse?)
-  (uuid       get-uuid))
-
-(define variants
-  (list
-   (make-variant reportname-income
-                 (list ACCT-TYPE-INCOME)
-                 #t menuname-income menutip-income
-                 #t category-barchart-income-uuid)
-
-   (make-variant reportname-expense
-                 (list ACCT-TYPE-EXPENSE)
-                 #t menuname-expense menutip-expense
-                 #f category-barchart-expense-uuid)
-
-   (make-variant reportname-assets
-                 (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
-                       ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
-                       ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
-                       ACCT-TYPE-CURRENCY)
-                 #f menuname-assets menutip-assets
-                 #f category-barchart-asset-uuid)
-
-   (make-variant reportname-liabilities
-                 (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
-                       ACCT-TYPE-CREDITLINE)
-                 #f menuname-liabilities menutip-liabilities
-                 #t category-barchart-liability-uuid)))
-
 (for-each
- (lambda (variant)
-   (gnc:define-report
-    'version 1
-    'name (get-reportname variant)
-    'report-guid (get-uuid variant)
-    'menu-path (if (get-intervals? variant)
-                   (list gnc:menuname-income-expense)
-                   (list gnc:menuname-asset-liability))
-    'menu-name (get-menuname variant)
-    'menu-tip (get-menutip variant)
-    'options-generator (lambda ()
-                         (options-generator (get-acct-types variant)
-                                            (get-intervals? variant)))
-    'renderer (lambda (report-obj)
-                (category-barchart-renderer report-obj
-                                            (get-reportname variant)
-                                            (get-uuid variant)
-                                            (get-acct-types variant)
-                                            (get-intervals? variant)
-                                            (get-reverse? variant)))))
- variants)
+ (match-lambda
+   ((reportname account-types inc-exp? menuname menutip reverse-bal? uuid)
+    (gnc:define-report
+     'version 1
+     'name reportname
+     'report-guid uuid
+     'menu-path (if inc-exp?
+                    (list gnc:menuname-income-expense)
+                    (list gnc:menuname-asset-liability))
+     'menu-name menuname
+     'menu-tip menutip
+     'options-generator (lambda () (options-generator account-types inc-exp?))
+     'renderer (lambda (report-obj)
+                 (category-barchart-renderer
+                  report-obj reportname uuid account-types inc-exp? reverse-bal?)))))
+ (list
+  ;; reportname, account-types, inc-exp?,
+  ;; menu-reportname, menu-tip, reverse-bal?, uuid
+  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income #t category-barchart-income-uuid)
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense #f category-barchart-expense-uuid)
+  (list reportname-assets
+        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+              ACCT-TYPE-CURRENCY)
+        #f menuname-assets menutip-assets #f category-barchart-asset-uuid)
+  (list reportname-liabilities
+        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+              ACCT-TYPE-CREDITLINE)
+        #f menuname-liabilities menutip-liabilities #t category-barchart-liability-uuid)))
+
