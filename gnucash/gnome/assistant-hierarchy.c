@@ -247,7 +247,9 @@ gnc_get_ea_locale_dir(const char *top_dir)
         locale = g_strdup("sv_SE");
     else if (g_strcmp0(locale, "Swedish_Finland") == 0)
         locale =g_strdup("sv_FI");
-    else
+    else if (g_strcmp0(locale, "Swedish_Åland Islands") == 0)
+        locale =g_strdup("sv_AX");
+     else
     {
         locale = g_win32_getlocale();
         if (!locale)
