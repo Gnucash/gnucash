@@ -717,9 +717,7 @@
          ;; txn-date < start-date. skip display, accumulate amounts
          ((< date start-date)
           (lp printed? odd-row? (cdr splits) (+ total value)
-              (if (negative? value) (+ debit value) debit)
-              (if (negative? value) credit (+ credit value))
-              tax sale))
+              debit credit tax sale))
 
          ;; if balance row hasn't been rendered, consider
          ;; adding here.  skip if value=0.
