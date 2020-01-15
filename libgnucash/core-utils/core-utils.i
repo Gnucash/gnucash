@@ -85,6 +85,20 @@ gchar * gnc_locale_to_utf8(const gchar *);
 const char * gnc_locale_default_iso_currency_code (void);
 
 #if defined(SWIGGUILE)
+%init {
+    {
+        char tmp[100];
+
+#define SET_ENUM(e) snprintf(tmp, 100, "(set! %s (%s))", (e), (e));  \
+        scm_c_eval_string(tmp);
+
+        /* Enum conversions go here */
+
+#undef SET_ENUM
+    }
+
+}
+
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
 %inline %{
   /* This helper function wraps gnc_utf8_validate() into a predicate. */
