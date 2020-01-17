@@ -36,12 +36,10 @@ extern "C"
 #include <time.h>
 #include <errno.h>
 
-#ifdef PROJECT_VERSION_MAJOR
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
 #include <gnc-date.h>
-#endif
 }
 
 #include "sixtp.h"

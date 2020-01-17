@@ -55,9 +55,7 @@ up to you to pass a suitable entity.
 #define GNC_ADDRESS_H_
 
 #include "qof.h"
-#ifdef PROJECT_VERSION_MAJOR
 #include "gncBusiness.h"
-#endif
 
 #define GNC_ADDRESS_MODULE_NAME        "gncAddress"
 #define GNC_ID_ADDRESS GNC_ADDRESS_MODULE_NAME

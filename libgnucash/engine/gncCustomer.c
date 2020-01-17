@@ -37,9 +37,7 @@
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
-#ifdef PROJECT_VERSION_MAJOR
 #include "gncBusiness.h"
-#endif
 
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
