@@ -2,30 +2,24 @@
 
 cmake_minimum_required (VERSION 3.5)
 
-project (gnucash)
+project (gnucash
+    VERSION 3.8
+)
 
 enable_testing()
 
 # Version number of gnucash
-set (GNUCASH_MAJOR_VERSION 3)
-set (GNUCASH_MINOR_VERSION 8)
-set (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}")
 set (GNUCASH_LATEST_STABLE_SERIES 3.x)
 
-set (PACKAGE gnucash)
 set (PACKAGE_NAME GnuCash)
-set (PACKAGE_VERSION 3.8)
 set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
-set (PACKAGE_TARNAME ${PACKAGE})
-set (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
+set (PACKAGE_STRING "${PACKAGE_NAME} ${PROJECT_VERSION}")
 set (PACKAGE_URL "https://www.gnucash.org/")
 
 # Change this in development versions when changing anything that
 # affects stored data structures. Reset to zero when bumping version.
 
 set (GNUCASH_RESAVE_VERSION "19920")
-
-set(GETTEXT_PACKAGE "gnucash")
 
 # Clear cache variables that will be filled later during the cmake run
 unset(dist_generated CACHE)
@@ -672,8 +666,6 @@ install(FILES ${gnucash_DOCS} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 # Create config.h
 
-set (GETTEXT_PACKAGE "gnucash")
-
 if (WIN32)
 if (MINGW)
 set (HAVE_SCANF_LLD 1)
@@ -828,7 +820,7 @@ dist_add_generated (${BUILDING_FROM_VCS} ChangeLog)
 
 ############################ BEGIN MAKE DIST #################
 
-set(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
+set(PACKAGE_PREFIX "${PROJECT_NAME}-${PROJECT_VERSION}")
 set(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
 set(toplvl_DIST_local ${gnucash_DOCS}
@@ -961,10 +953,6 @@ if (WIN32)
 endif()
 # ############################################################
 # Package creation rules
-
-set(CPACK_PACKAGE_VERSION_MAJOR "${GNUCASH_MAJOR_VERSION}")
-set(CPACK_PACKAGE_VERSION_MINOR "${GNUCASH_MINOR_VERSION}")
-set(CPACK_PACKAGE_VERSION "${VERSION}")
 
 if(UNIX)
   set(CPACK_GENERATOR "TGZ")

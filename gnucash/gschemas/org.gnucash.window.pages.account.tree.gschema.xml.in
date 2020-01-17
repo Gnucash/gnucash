@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.window.pages.account-tree.summary" path="/org/gnucash/window/pages/account-tree/summary/">
     <key name="grand-total" type="b">
       <default>true</default>

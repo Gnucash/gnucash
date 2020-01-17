@@ -576,7 +576,7 @@ gboolean gncJobRegister (void)
         { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
         { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
         { JOB_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncJobGetRate, (QofSetterFunc)gncJobSetRate },
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
         { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
 #else
         { JOB_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },
@@ -597,7 +597,7 @@ gboolean gncJobRegister (void)
     }
 
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
     qofJobGetOwner(NULL);
     qofJobSetOwner(NULL, NULL);
 #endif

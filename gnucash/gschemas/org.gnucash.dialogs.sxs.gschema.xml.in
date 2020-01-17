@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.sxs" path="/org/gnucash/dialogs/scheduled-trans/">
     <child name="since-last-run" schema="org.gnucash.dialogs.sxs.since-last-run"/>
     <child name="transaction-editor" schema="org.gnucash.dialogs.sxs.transaction-editor"/>

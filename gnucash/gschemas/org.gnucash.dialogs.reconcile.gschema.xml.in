@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.reconcile" path="/org/gnucash/dialogs/reconcile/">
     <key name="check-cleared" type="b">
       <default>true</default>

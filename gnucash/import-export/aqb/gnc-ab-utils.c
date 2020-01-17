@@ -169,7 +169,7 @@ gnc_AB_BANKING_new(void)
         registration was requested and is managed by cstim). The function call was
         introduced in aqbanking-5.99.25 and aqbanking-5.7.9. */
         AB_Banking_RuntimeConfig_SetCharValue(api, "fintsRegistrationKey", "412748A1836CDD07181CE1910");
-        AB_Banking_RuntimeConfig_SetCharValue(api, "fintsApplicationVersionString", PACKAGE_VERSION);
+        AB_Banking_RuntimeConfig_SetCharValue(api, "fintsApplicationVersionString", PROJECT_VERSION);
 #endif
 
 #ifndef AQBANKING6

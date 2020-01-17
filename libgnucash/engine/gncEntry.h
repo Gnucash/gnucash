@@ -49,7 +49,7 @@ typedef enum
 
 typedef GList AccountValueList;
 
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
 #include "gncBusiness.h"
 #endif
 #include "gncInvoice.h"

@@ -55,7 +55,7 @@ up to you to pass a suitable entity.
 #define GNC_ADDRESS_H_
 
 #include "qof.h"
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
 #include "gncBusiness.h"
 #endif
 

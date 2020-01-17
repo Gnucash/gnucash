@@ -2079,7 +2079,7 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     // FIXME Rather than passing a locale generator below we probably should set std::locale::global appropriately somewhere.
     bl::generator gen;
     gen.add_messages_path(gnc_path_get_localedir());
-    gen.add_messages_domain(GETTEXT_PACKAGE);
+    gen.add_messages_domain(PROJECT_NAME);
 
     auto text = std::string("<span size=\"medium\"><b>");
     try

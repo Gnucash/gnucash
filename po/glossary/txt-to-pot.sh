@@ -23,17 +23,17 @@ then
 	exit 1;
 fi
 
-# Note: Line 3: PACKAGE and probably a few other variables are hardcoded
+# Note: Line 3: PROJECT and probably a few other variables are hardcoded
 cat <<!
 # SOME DESCRIPTIVE TITLE. (Glossary)
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) YEAR THE PROJECT'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the GnuCash package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: `date +'%Y-%m-%d %H:%M%z'`\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"

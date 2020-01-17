@@ -438,7 +438,7 @@ gnc_parse_command_line(int *argc, char ***argv)
     GError *error = NULL;
     GOptionContext *context = g_option_context_new (_("- GnuCash, accounting for personal and small business finance"));
 
-    g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+    g_option_context_add_main_entries (context, options, PROJECT_NAME);
     g_option_context_add_group (context, gtk_get_option_group(FALSE));
     if (!g_option_context_parse (context, argc, argv, &error))
     {
@@ -882,11 +882,11 @@ main(int argc, char ** argv)
         setlocale (LC_ALL, "C");
       }
 #endif
-    bindtextdomain(GETTEXT_PACKAGE, localedir);
+    bindtextdomain(PROJECT_NAME, localedir);
     bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
     bind_textdomain_codeset("iso_4217", "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    textdomain(PROJECT_NAME);
+    bind_textdomain_codeset(PROJECT_NAME, "UTF-8");
     g_free(localedir);
 
     gnc_parse_command_line(&argc, &argv);

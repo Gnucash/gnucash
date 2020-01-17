@@ -62,7 +62,7 @@ usr_confpath_strings strs2[] =
 #if defined G_OS_WIN32 ||defined MAC_INTEGRATION
 const char *path_package = PACKAGE_NAME;
 #else
-const char *path_package = PACKAGE;
+const char *path_package = PROJECT_NAME;
 #endif
 
 

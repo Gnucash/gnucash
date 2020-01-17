@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.checkprinting" path="/org/gnucash/dialogs/print-checks/">
     <key name="check-format-guid" type="s">
       <default>''</default>

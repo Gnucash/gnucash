@@ -34,7 +34,7 @@
 
 const char *gnc_version(void)
 {
-    return VERSION;
+    return PROJECT_VERSION;
 }
 
 const char *gnc_build_id(void)
@@ -64,5 +64,5 @@ const char *gnc_vcs_rev_date(void)
 
 const int gnc_gnucash_major_version(void)
 {
-    return GNUCASH_MAJOR_VERSION;
+    return PROJECT_VERSION_MAJOR;
 }

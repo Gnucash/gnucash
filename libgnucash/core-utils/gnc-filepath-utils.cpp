@@ -591,7 +591,7 @@ static std::string migrate_gnc_datahome()
 
     bl::generator gen;
     gen.add_messages_path(gnc_path_get_datadir());
-    gen.add_messages_domain(PACKAGE);
+    gen.add_messages_domain(PROJECT_NAME);
 
     std::stringstream migration_msg;
     migration_msg.imbue(gnc_get_locale());
@@ -737,7 +737,7 @@ static std::string migrate_gnc_datahome()
 #if defined G_OS_WIN32 ||defined MAC_INTEGRATION
 constexpr auto path_package = PACKAGE_NAME;
 #else
-constexpr auto path_package = PACKAGE;
+constexpr auto path_package = PROJECT_NAME;
 #endif
 
 // Initialize the user's config directory for gnucash

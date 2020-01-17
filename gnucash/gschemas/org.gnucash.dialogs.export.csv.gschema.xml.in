@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.export.csv" path="/org/gnucash/dialogs/export/csv/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>

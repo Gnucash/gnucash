@@ -37,7 +37,7 @@
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
 #include "gncBusiness.h"
 #endif
 

@@ -1765,7 +1765,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         action_group = gtk_action_group_new ("ReconcileWindowActions");
         recnData->action_group = action_group;
-        gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+        gtk_action_group_set_translation_domain(action_group, PROJECT_NAME);
         gtk_action_group_add_actions (action_group, recnWindow_actions,
                                       recnWindow_n_actions, recnData);
         action =

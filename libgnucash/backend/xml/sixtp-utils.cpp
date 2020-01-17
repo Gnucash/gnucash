@@ -36,7 +36,7 @@ extern "C"
 #include <time.h>
 #include <errno.h>
 
-#ifdef GNUCASH_MAJOR_VERSION
+#ifdef PROJECT_VERSION_MAJOR
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif

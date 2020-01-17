@@ -1,5 +1,5 @@
 # translation of gnucash2.ne.po to Nepali
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the GnuCash package.
 # Copyright (C) YEAR Gnumatic, Inc.
 # Pawan Chitrakar <pchitrakar@gmail.com>, 2006.
 # Jyotshna Shrestha <jyotshna@mpp.org.np>, 2006.

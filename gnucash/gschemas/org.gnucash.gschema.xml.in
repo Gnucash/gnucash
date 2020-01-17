@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash" path="/org/gnucash/">
     <child name="general" schema="org.gnucash.general"/>
     <child name="dev" schema="org.gnucash.dev"/>
