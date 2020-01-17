@@ -2284,18 +2284,6 @@ xaccAccountOrder (const Account *aa, const Account *ab)
     da = priv_aa->accountCode;
     db = priv_ab->accountCode;
 
-    /* If accountCodes are both base 36 integers do an integer sort */
-    la = strtoul (da, &endptr, 36);
-    if ((*da != '\0') && (*endptr == '\0'))
-    {
-        lb = strtoul (db, &endptr, 36);
-        if ((*db != '\0') && (*endptr == '\0'))
-        {
-            if (la < lb) return -1;
-            if (la > lb) return +1;
-        }
-    }
-
     /* Otherwise do a string sort */
     result = g_strcmp0 (da, db);
     if (result)

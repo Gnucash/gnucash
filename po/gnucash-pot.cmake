@@ -1,8 +1,8 @@
 execute_process(
     COMMAND ${XGETTEXT} --add-comments=Translators
                         --directory=${TOP_SRC_DIR}
-                        --default-domain=${PACKAGE}
-                        --output=${PACKAGE}.pot
+                        --default-domain=${PROJECT_NAME}
+                        --output=${PROJECT_NAME}.pot
                         --files-from=${PO_SRC_DIR}/POTFILES.in
                         --from-code=UTF-8
                         --flag=g_strdup_printf:1:c-format
@@ -30,7 +30,7 @@ execute_process(
                         --keyword=translate:1,2,3t
                         --keyword=translate:1c,2,3,4t
                         --package-name=${PACKAGE_NAME}
-                        --package-version=${PACKAGE_VERSION}
+                        --package-version=${PROJECT_VERSION}
                         --msgid-bugs-address=https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations
   WORKING_DIRECTORY ${PO_BIN_DIR}
   RESULT_VARIABLE GNUCASH_POT_RESULT

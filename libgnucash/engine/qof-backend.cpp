@@ -109,7 +109,7 @@ QofBackend::register_backend(const char* directory, const char* module_name)
     g_free (fullpath);
     if (!backend)
     {
-        PINFO ("%s: %s\n", PACKAGE, g_module_error ());
+        PINFO ("%s: %s\n", PROJECT_NAME, g_module_error ());
         return false;
     }
     void (*module_init_func)(void);

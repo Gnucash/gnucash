@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.history" path="/org/gnucash/history/">
     <key name="maxfiles" type="i">
       <default>4</default>

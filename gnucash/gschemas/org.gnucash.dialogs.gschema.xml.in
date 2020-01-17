@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs" path="/org/gnucash/dialogs/">
     <child name="account" schema="org.gnucash.dialogs.account"/>
     <child name="imap-editor" schema="org.gnucash.dialogs.imap-editor"/>

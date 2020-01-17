@@ -3,8 +3,8 @@
 APPLICATION_ICON ICON DISCARDABLE "../data/pixmaps/gnucash-icon.ico"
 
 1 VERSIONINFO
- FILEVERSION     @GNUCASH_MAJOR_VERSION@,@GNUCASH_MINOR_VERSION@,0,0
- PRODUCTVERSION  @GNUCASH_MAJOR_VERSION@,@GNUCASH_MINOR_VERSION@,0,0
+ FILEVERSION     @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,0,0
+ PRODUCTVERSION  @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,0,0
  FILEFLAGSMASK   0x3fL
  FILEFLAGS       0x0L
  FILEOS          VOS__WINDOWS32
@@ -17,12 +17,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "GnuCash Development Team"
       VALUE "FileDescription", "GnuCash Program File"
-      VALUE "FileVersion", "@VERSION@"
+      VALUE "FileVersion", "@PROJECT_VERSION@"
       VALUE "InternalName", "gnucash"
       VALUE "LegalCopyright", "©2018 GnuCash Development Team, Licence: GPL v2.0 or later"
       VALUE "OriginalFilename", "gnucash.exe"
       VALUE "ProductName", "GnuCash Free Finance Manager"
-      VALUE "ProductVersion", "@VERSION@"
+      VALUE "ProductVersion", "@PROJECT_VERSION@"
     END
   END
 

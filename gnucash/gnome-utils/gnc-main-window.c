@@ -3222,7 +3222,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     entry = g_new0 (MergedActionEntry, 1);
     entry->action_group = gtk_action_group_new (group_name);
-    gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
+    gtk_action_group_set_translation_domain (entry->action_group, PROJECT_NAME);
     gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
     if (toggle_actions != NULL && n_toggle_actions > 0)
     {
@@ -3672,7 +3672,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     /* Create menu and toolbar information */
     priv->action_group = gtk_action_group_new ("MainWindowActions");
-    gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
+    gtk_action_group_set_translation_domain (priv->action_group, PROJECT_NAME);
     gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
                                   gnc_menu_n_actions, window);
     gtk_action_group_add_toggle_actions (priv->action_group,

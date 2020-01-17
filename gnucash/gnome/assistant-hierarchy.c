@@ -243,19 +243,22 @@ gnc_get_ea_locale_dir(const char *top_dir)
     GStatBuf buf;
     int i;
 
-#ifdef PLATFORM_WIN32
+#if PLATFORM(WINDOWS)
     /* On win32, setlocale() doesn't say anything useful, so we check
      * g_win32_getlocale(). Unfortunately it checks the value of $LANG first,
      * and the user might have worked around the absence of sv in gettext's
      * Microsoft Conversion Array by setting it to "Swedish_Sweden", so first
      * check that.
      */
-    locale = g_getenv("LANG");
-    if (g_strcmp0(locale, "Swedish_Sweden") == 0)
+    const gchar *env_locale;
+    env_locale = g_getenv("LANG");
+    if (g_strcmp0(env_locale, "Swedish_Sweden") == 0)
         locale = g_strdup("sv_SE");
-    else if (g_strcmp0(locale, "Swedish_Finland") == 0)
+    else if (g_strcmp0(env_locale, "Swedish_Finland") == 0)
         locale =g_strdup("sv_FI");
-    else
+    else if (g_strcmp0(env_locale, "Swedish_Åland Islands") == 0)
+        locale =g_strdup("sv_AX");
+     else
     {
         locale = g_win32_getlocale();
         if (!locale)

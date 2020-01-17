@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.totd" path="/org/gnucash/dialogs/tip-of-the-day/">
     <key name="current-tip" type="i">
       <default>0</default>

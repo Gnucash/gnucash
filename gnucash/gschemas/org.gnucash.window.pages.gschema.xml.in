@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.window.pages" path="/org/gnucash/window/pages/account-tree/">
     <key name="account-code-visible" type="b">
       <default>false</default>

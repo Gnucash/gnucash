@@ -666,7 +666,7 @@ void gnc_gsettings_version_upgrade (void)
     /* Use versioning to ensure this routine will only sync once for each
      * superseded setting */
     int old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
-    int cur_maj_min = GNUCASH_MAJOR_VERSION * 100 + GNUCASH_MINOR_VERSION;
+    int cur_maj_min = PROJECT_VERSION_MAJOR * 100 + PROJECT_VERSION_MINOR;
 
     /* Convert settings to 3.0 compatibility level */
     if (old_maj_min < 207)

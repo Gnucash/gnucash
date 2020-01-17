@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.import.ofx" path="/org/gnucash/dialogs/import/ofx/">
     <key name="last-path" type="s">
       <default>''</default>

@@ -1,4 +1,4 @@
-<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+<schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.dialogs.commodities" path="/org/gnucash/dialogs/commodities/">
     <key name="include-iso" type="b">
       <default>false</default>

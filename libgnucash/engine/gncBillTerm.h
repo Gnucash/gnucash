@@ -35,9 +35,8 @@ typedef struct _gncBillTerm GncBillTerm;
 typedef struct _gncBillTermClass GncBillTermClass;
 
 #include "qof.h"
-#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
-#endif
+
 #define GNC_ID_BILLTERM       "gncBillTerm"
 
 /* --- type macros --- */

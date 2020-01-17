@@ -273,10 +273,10 @@
     (set-option! balance-sheet-options "Display" "Parent account subtotals" 'f)
     (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-recursive")))
       (test-equal "recursive. root = $760+15000+104600"
-        '("#200.00" "$340.00" "$106,709.00" "$106,709.00" "30 FUNDS" "$15,000.00")
+        '("#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
         (sxml->table-row-col sxml 1 3 6))
       (test-equal "recursive. assets = $760+15000+104600"
-        '("#200.00" "$340.00" "$106,709.00" "$106,709.00" "30 FUNDS" "$15,000.00")
+        '("#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
         (sxml->table-row-col sxml 1 4 5))
       (test-equal "recursive. bank1 = $4,709.00"
         (list "$4,709.00")
@@ -294,7 +294,7 @@
         (list "$100.00")
         (sxml->table-row-col sxml 1 9 3))
       (test-equal "recursive. broker = $15000+2000.00"
-        '("$2,000.00" "$2,000.00" "30 FUNDS" "$15,000.00")
+        '("30 FUNDS" "$15,000.00" "$2,000.00" "$2,000.00")
         (sxml->table-row-col sxml 1 10 4))
       (test-equal "recursive. funds = $15,000.00"
         (list "30 FUNDS" "$15,000.00" "$15,000.00")
@@ -326,7 +326,7 @@
     (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
     (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-enable show-fcur show-rates")))
       (test-equal "show-fcur enabled"
-        '("#200.00" "$340.00" "$106,709.00" "$106,709.00" "30 FUNDS" "$15,000.00")
+        '("#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
         (sxml->table-row-col sxml 1 3 6))
       (test-equal "show-rates enabled"
         '("#1.00" "$1.70" "1 FUNDS" "$500.00")

@@ -54,7 +54,7 @@
 (define tax-header (N_ "Tax"))
 (define credit-header (N_ "Credits"))
 (define debit-header (N_ "Debits"))
-(define amount-header (N_ "Balance"))
+(define balance-header (N_ "Balance"))
 (define linked-txns-header (N_ "Links"))
 
 ;; Depending on the report type we want to set up some lists/cases
@@ -123,9 +123,9 @@
   (vector-ref columns-used 5))
 (define (tax-col columns-used)
   (vector-ref columns-used 6))
-(define (credit-col columns-used)
-  (vector-ref columns-used 7))
 (define (debit-col columns-used)
+  (vector-ref columns-used 7))
+(define (credit-col columns-used)
   (vector-ref columns-used 8))
 (define (bal-col columns-used)
   (vector-ref columns-used 9))
@@ -177,13 +177,15 @@
     (set-col (opt-val "Display Columns" desc-header) 4)
     (set-col (opt-val "Display Columns" sale-header) 5)
     (set-col (opt-val "Display Columns" tax-header) 6)
-    (set-col (opt-val "Display Columns" credit-header) 7)
-    (set-col (opt-val "Display Columns" debit-header) 8)
-    (set-col (opt-val "Display Columns" amount-header) 9)
+    (set-col (opt-val "Display Columns" debit-header) 7)
+    (set-col (opt-val "Display Columns" credit-header) 8)
+    (set-col (opt-val "Display Columns" balance-header) 9)
     col-vector))
 
-(define (make-heading-list column-vector link-option)
-  (let ((heading-list '()))
+(define (make-heading-list column-vector link-option acct-type)
+  (let ((heading-list '())
+        (formal? (gnc-prefs-get-bool GNC-PREFS-GROUP-GENERAL
+                                     GNC-PREF-ACCOUNTING-LABELS)))
     (if (date-col column-vector)
         (addto! heading-list (_ date-header)))
     (if (date-due-col column-vector)
@@ -198,12 +200,14 @@
         (addto! heading-list (_ sale-header)))
     (if (tax-col column-vector)
         (addto! heading-list (_ tax-header)))
-    (if (credit-col column-vector)
-        (addto! heading-list (_ credit-header)))
     (if (debit-col column-vector)
-        (addto! heading-list (_ debit-header)))
+        (addto! heading-list
+                (if formal? debit-header (gnc:get-debit-string acct-type))))
+    (if (credit-col column-vector)
+        (addto! heading-list
+                (if formal? credit-header (gnc:get-credit-string acct-type))))
     (if (bal-col column-vector)
-        (addto! heading-list (_ amount-header)))
+        (addto! heading-list (_ balance-header)))
     (case link-option
       ((simple)
        (addto! heading-list (_ linked-txns-header)))
@@ -238,8 +242,6 @@
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
 (define (txn-is-link? txn)
   (eqv? (xaccTransGetTxnType txn) TXN-TYPE-LINK))
-(define (split<? a b)
-  (< (xaccSplitOrder a b) 0))
 (define (split-is-payment? split)
   (txn-is-payment? (xaccSplitGetParent split)))
 
@@ -402,8 +404,8 @@
              (append
               (addif (sale-col column-vector)    (cell sale))
               (addif (tax-col column-vector)     (cell tax))
-              (addif (credit-col column-vector)  (cell-anchor credit))
-              (addif (debit-col column-vector)   (cell-anchor (and debit (- debit))))
+              (addif (debit-col column-vector)   (cell-anchor debit))
+              (addif (credit-col column-vector)  (cell-anchor (and credit (- credit))))
               (addif (bal-col column-vector)     (cell amt))))
             (addif (< 0 mid-span) cell-nohoriz)
             (link-data->cols (car link-rows))))
@@ -442,9 +444,9 @@
                                     1 (1- period-span) #f))
           (addif (sale-col used-columns)   (make-cell sale))
           (addif (tax-col used-columns)    (make-cell tax))
+          (addif (debit-col used-columns)  (make-cell debit))
           (addif (credit-col used-columns) (make-cell credit))
-          (addif (debit-col used-columns)  (make-cell (- debit)))
-          (addif (bal-col used-columns)    (make-cell (+ credit debit)))
+          (addif (bal-col used-columns)    (make-cell total))
           (addif (< 0 rhs-cols) (gnc:make-html-table-cell/size
                                  1 (+ mid-span rhs-cols) #f)))))
 
@@ -710,16 +712,15 @@
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
-             (value (AP-negate (xaccTransGetAccountAmount txn acc)))
+             (orig-value (xaccTransGetAccountAmount txn acc))
+             (value (AP-negate orig-value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn)))
 
         (cond
          ;; txn-date < start-date. skip display, accumulate amounts
          ((< date start-date)
           (lp printed? odd-row? (cdr splits) (+ total value)
-              (if (negative? value) (+ debit value) debit)
-              (if (negative? value) credit (+ credit value))
-              tax sale))
+              debit credit tax sale))
 
          ;; if balance row hasn't been rendered, consider
          ;; adding here.  skip if value=0.
@@ -738,7 +739,8 @@
              ((txn-is-invoice? txn) (list split))
              ((txn-is-payment? txn) (txn->assetliab-splits txn))))
            currency (+ total value)
-           (and (>= value 0) value) (and (< value 0) value)
+           (and (< orig-value 0) orig-value)
+           (and (>= orig-value 0) orig-value)
            (invoice->sale invoice) (invoice->tax invoice)
            (txn->transfer-split txn)
            link-option
@@ -756,8 +758,8 @@
             (else '(()))))
 
           (lp printed? (not odd-row?) (cdr splits) (+ total value)
-              (if (negative? value) (+ debit value) debit)
-              (if (negative? value) credit (+ credit value))
+              (if (< 0 orig-value) (+ debit orig-value) debit)
+              (if (< 0 orig-value) credit (- credit orig-value))
               (+ tax (or (invoice->tax invoice) 0))
               (+ sale (or (invoice->sale invoice) 0))))))))))
 
@@ -820,18 +822,18 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") credit-header
-    "hac" (N_ "Display the period credits column?") #t))
-
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
     (N_ "Display Columns") debit-header
-    "had" (N_ "Display a period debits column?") #t))
+    "hac" (N_ "Display the period debits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t))
+    (N_ "Display Columns") credit-header
+    "had" (N_ "Display a period credits column?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") balance-header
+    "hb" (N_ "Display a running balance?") #t))
 
   (gnc:register-inv-option
    (gnc:make-multichoice-option
@@ -953,7 +955,12 @@ invoices and amounts.")))))
          (document (gnc:make-html-document))
          (table (gnc:make-html-table))
          (section-headings (make-section-heading-list used-columns owner-descr))
-         (headings (make-heading-list used-columns link-option))
+         (headings (make-heading-list
+                    used-columns link-option
+                    (if (eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
+                              GNC-OWNER-CUSTOMER)
+                        ACCT-TYPE-RECEIVABLE
+                        ACCT-TYPE-PAYABLE)))
          (report-title (string-append (_ owner-descr) " " (_ "Report"))))
 
     (cond
