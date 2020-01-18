@@ -193,7 +193,7 @@ exist but have no suitable transactions."))
 ;; simpler version of gnc:owner-from-split. must be gncOwnerFree after
 ;; use! see split-has-owner? above...
 (define (split->owner split)
-  (let* ((lot (xaccSplitGetLot (gnc-lot-get-earliest-split (xaccSplitGetLot split))))
+  (let* ((lot (xaccSplitGetLot split))
          (owner (gncOwnerNew))
          (use-lot-owner? (gncOwnerGetOwnerFromLot lot owner)))
     (unless use-lot-owner?
