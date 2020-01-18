@@ -183,6 +183,12 @@ exist but have no suitable transactions."))
     (gncOwnerFree split-owner)
     retval))
 
+(define (split-owner-is-invalid? split)
+  (let* ((owner (split->owner split))
+         (retval (not (gncOwnerIsValid owner))))
+    (gncOwnerFree owner)
+    retval))
+
 (define (split-from-acct? split acct)
   (equal? acct (xaccSplitGetAccount split)))
 
@@ -230,12 +236,7 @@ exist but have no suitable transactions."))
          (show-zeros (op-value gnc:pagename-general optname-show-zeros))
          (date-type (op-value gnc:pagename-general optname-date-driver))
          (query (qof-query-create-for-splits))
-         (invalid-splits '())
          (document (gnc:make-html-document)))
-
-    ;; for sorting and delete-duplicates. compare GUIDs
-    (define (ownerGUID<? a b)
-      (string<? (gncOwnerGetGUID a) (gncOwnerGetGUID b)))
 
     (define (sort-aging<? a b)
       (match-let* (((own1 aging1 aging-total1) a)
@@ -274,6 +275,7 @@ exist but have no suitable transactions."))
                                   (txn-is-payment? (xaccSplitGetParent split))))
                             splits))
                    (accounts-and-owners '())
+                   (invalid-splits '())
                    (tofree '()))
           (cond
            ((null? accounts)
@@ -372,61 +374,50 @@ exist but have no suitable transactions."))
 
            (else
             (let* ((account (car accounts))
-                   (splits-acc-others (list-split splits split-from-acct? account))
-                   (acc-splits (car splits-acc-others))
-                   (other-acc-splits (cdr splits-acc-others))
-                   (split-owners
-                    (fold
-                     (lambda (a b)
-                       (let ((owner (split->owner a)))
-                         (cond
-                          ((gncOwnerIsValid owner) (cons owner b))
-                          ;; some payment splits may have no owner in
-                          ;; this account. skip. see bug 797506.
-                          (else
-                           (gnc:warn "split " (gnc:strify a) " has no owner")
-                           (set! invalid-splits
-                             (cons (list (_ "Payment has no owner") a)
-                                   invalid-splits))
-                           (gncOwnerFree owner)
-                           b))))
-                     '() acc-splits))
-                   (acc-owners (sort-and-delete-duplicates
-                                split-owners ownerGUID<? gnc-owner-equal?)))
+                   (splits-acc-others (list-split splits split-from-acct? account)))
 
-              ;; loop into each APAR account split
-              (let lp ((acc-owners acc-owners)
-                       (acc-splits acc-splits)
+              (let lp ((acc-splits (car splits-acc-others))
                        (acc-totals (make-list (1+ num-buckets) 0))
+                       (invalid-splits invalid-splits)
+                       (tofree tofree)
                        (owners-and-aging '()))
-                (cond
-                 ((null? acc-owners)
-                  (loop (cdr accounts)
-                        other-acc-splits
-                        (if (null? owners-and-aging)
-                            accounts-and-owners
-                            (cons (list account owners-and-aging acc-totals)
-                                  accounts-and-owners))
-                        (append-reverse tofree split-owners)))
 
-                 (else
-                  (let* ((owner (car acc-owners))
-                         (splits-own-others (list-split acc-splits split-has-owner?
-                                                        owner))
-                         (owner-splits (car splits-own-others))
-                         (other-owner-splits (cdr splits-own-others))
-                         (aging (gnc:owner-splits->aging-list
-                                 owner-splits num-buckets report-date
-                                 date-type receivable))
-                         (aging-total (apply + aging)))
-                    (lp (cdr acc-owners)
-                        other-owner-splits
-                        (map + acc-totals
-                             (reverse (cons aging-total aging)))
-                        (if (or show-zeros (not (every zero? aging)))
-                            (cons (list owner aging aging-total)
-                                  owners-and-aging)
-                            owners-and-aging)))))))))))))
+                (match acc-splits
+                  (()
+                   (loop (cdr accounts)
+                         (cdr splits-acc-others)
+                         (if (null? owners-and-aging)
+                             accounts-and-owners
+                             (cons (list account owners-and-aging acc-totals)
+                                   accounts-and-owners))
+                         invalid-splits
+                         tofree))
+
+                  ;; some payment splits may have no owner in this
+                  ;; account. skip. see bug 797506.
+                  (((? split-owner-is-invalid? this) . rest)
+                   (gnc:warn "split " this " has no owner")
+                   (lp rest
+                       acc-totals
+                       (cons (list (_ "Payment has no owner") this) invalid-splits)
+                       tofree
+                       owners-and-aging))
+
+                  ((this . _)
+                   (match-let* ((owner (split->owner this))
+                                ((owner-splits . other-owner-splits)
+                                 (list-split acc-splits split-has-owner? owner))
+                                (aging (gnc:owner-splits->aging-list
+                                        owner-splits num-buckets report-date
+                                        date-type receivable))
+                                (aging-total (apply + aging)))
+                     (lp other-owner-splits
+                         (map + acc-totals (reverse (cons aging-total aging)))
+                         invalid-splits
+                         (cons owner tofree)
+                         (if (or show-zeros (any (negate zero?) aging))
+                             (cons (list owner aging aging-total) owners-and-aging)
+                             owners-and-aging)))))))))))))
     (gnc:report-finished)
     document))
 
