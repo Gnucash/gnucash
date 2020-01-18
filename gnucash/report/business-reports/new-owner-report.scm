@@ -745,7 +745,7 @@
            (and (< orig-value 0) orig-value)
            (and (>= orig-value 0) orig-value)
            (invoice->sale invoice) (invoice->tax invoice)
-           (txn->transfer-split txn)
+           split
            link-option
            (cond
             ((and (txn-is-invoice? txn) (eq? link-option 'simple))
