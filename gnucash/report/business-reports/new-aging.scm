@@ -168,11 +168,10 @@ exist but have no suitable transactions."))
     (fold-right (lambda (opt elt prev) (if opt (cons elt prev) prev))
                 '() address-list-options result-list)))
 
-(define (txn-is-invoice? txn)
-  (eqv? (xaccTransGetTxnType txn) TXN-TYPE-INVOICE))
-
-(define (txn-is-payment? txn)
-  (eqv? (xaccTransGetTxnType txn) TXN-TYPE-PAYMENT))
+(define (split-is-not-business? split)
+  (let ((type (xaccTransGetTxnType (xaccSplitGetParent split))))
+    (not (or (eqv? type TXN-TYPE-INVOICE)
+             (eqv? type TXN-TYPE-PAYMENT)))))
 
 (define (gnc-owner-equal? a b)
   (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
@@ -269,11 +268,7 @@ exist but have no suitable transactions."))
 
         ;; loop into each APAR account
         (let loop ((accounts accounts)
-                   (splits (filter
-                            (lambda (split)
-                              (or (txn-is-invoice? (xaccSplitGetParent split))
-                                  (txn-is-payment? (xaccSplitGetParent split))))
-                            splits))
+                   (splits splits)
                    (accounts-and-owners '())
                    (invalid-splits '())
                    (tofree '()))
@@ -392,6 +387,16 @@ exist but have no suitable transactions."))
                                    accounts-and-owners))
                          invalid-splits
                          tofree))
+
+                  ;; txn type != TXN_TYPE_INVOICE or TXN_TYPE_PAYMENT.
+                  (((? split-is-not-business? this) . rest)
+                   (let ((type (xaccTransGetTxnType (xaccSplitGetParent this))))
+                     (lp rest
+                         acc-totals
+                         (cons (list (format #f (_ "Invalid Txn Type ~a") type) this)
+                               invalid-splits)
+                         tofree
+                         owners-and-aging)))
 
                   ;; some payment splits may have no owner in this
                   ;; account. skip. see bug 797506.
