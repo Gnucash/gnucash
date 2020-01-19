@@ -74,6 +74,9 @@ void gnc_keyring_set_password (const gchar *access_method,
     GError* error = NULL;
     gchar* label = NULL;
 
+    g_return_if_fail(access_method != NULL && server != NULL &&
+                     service != NULL && user != NULL && password != NULL);
+
     label = g_strdup_printf("GnuCash password for %s://%s@%s", access_method, user, server);
 
     if (port == 0)
@@ -104,6 +107,9 @@ void gnc_keyring_set_password (const gchar *access_method,
     GnomeKeyringResult  gkr_result;
     guint32 item_id = 0;
 
+    g_return_if_fail(access_method != NULL && server != NULL &&
+                     service != NULL && user != NULL && password != NULL);
+
     gkr_result = gnome_keyring_set_network_password_sync
         (NULL, user, NULL, server, service,
          access_method, NULL, port, password, &item_id);
@@ -119,6 +125,8 @@ void gnc_keyring_set_password (const gchar *access_method,
     OSStatus status;
     SecKeychainItemRef *itemRef = NULL;
 
+    g_return_if_fail(access_method != NULL && server != NULL &&
+                     service != NULL && user != NULL && password != NULL);
     /* mysql and postgres aren't valid protocols on Mac OS X.
      * So we use the security domain parameter to allow us to
      * distinguish between these two.
