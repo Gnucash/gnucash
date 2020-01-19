@@ -91,7 +91,6 @@
   <act:description>Osobno vozilo</act:description>
   <act:parent type="new">8d1440efb8cd42d9a23e606fac6f2870</act:parent>
 </gnc:account>
-
 <gnc:account version="2.0.0">
   <act:name>Obveze</act:name>
   <act:id type="new">cca4bedbdfde4421a586be15765eb072</act:id>
@@ -107,7 +106,7 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="new">5f1a637ad17146839faf0ae35ec06ec4</act:parent>
+  <act:parent type="new">8315c26e871c497c9d192aaa0fc7398d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Krediti</act:name>
@@ -137,7 +136,6 @@
   <act:description>Kredit za auto</act:description>
   <act:parent type="new">1ec09bc1aeb940d6803026f155862ef6</act:parent>
 </gnc:account>
-
 <gnc:account version="2.0.0">
   <act:name>Rashod</act:name>
   <act:id type="new">62cf4cfb2aa047e7a584dd0c3f8a860a</act:id>

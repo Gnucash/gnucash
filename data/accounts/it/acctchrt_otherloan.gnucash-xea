@@ -68,7 +68,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id></cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Mutui</act:description>
   <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
