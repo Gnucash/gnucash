@@ -222,16 +222,14 @@ GncOptionDateValue::in_stream(std::istream& iss)
 }
 
 QofInstance*
-qof_instance_from_string(const std::string& str, GncOptionUIType type)
+qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
 {
     QofIdType qof_type;
-    bool commodity_type{false};
     switch(type)
     {
         case GncOptionUIType::CURRENCY:
         case GncOptionUIType::COMMODITY:
             qof_type = "Commodity";
-            commodity_type = true;
             break;
         case GncOptionUIType::BUDGET:
             qof_type = "Budget";
@@ -264,8 +262,17 @@ qof_instance_from_string(const std::string& str, GncOptionUIType type)
             break;
     }
     auto book{gnc_get_current_book()};
-    if (commodity_type)
+    auto col{qof_book_get_collection(book, qof_type)};
+    return QOF_INSTANCE(qof_collection_lookup_entity(col, guid));
+}
+
+QofInstance*
+qof_instance_from_string(const std::string& str, GncOptionUIType type)
+{
+    if (type == GncOptionUIType::CURRENCY ||
+        type == GncOptionUIType::COMMODITY)
     {
+        auto book{gnc_get_current_book()};
         auto sep{str.find(":")};
         auto name_space{str.substr(0, sep)};
         auto mnemonic{str.substr(sep + 1, -1)};
@@ -275,8 +282,7 @@ qof_instance_from_string(const std::string& str, GncOptionUIType type)
                                                        mnemonic.c_str()));
     }
     auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
-    auto col{qof_book_get_collection(book, qof_type)};
-    return QOF_INSTANCE(qof_collection_lookup_entity(col, &guid));
+    return qof_instance_from_guid(&guid, type);
 }
 
 std::string

@@ -264,6 +264,7 @@ private:
 
 QofInstance* qof_instance_from_string(const std::string& str,
                                       GncOptionUIType type);
+QofInstance* qof_instance_from_guid(GncGUID*, GncOptionUIType type);
 std::string qof_instance_to_string(const QofInstance* inst);
 
 /* These will work when m_value is a built-in class; GnuCash class and container

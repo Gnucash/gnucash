@@ -24,6 +24,7 @@
 #include "gnc-optiondb.hpp"
 #include <limits>
 #include <sstream>
+#include <kvp-value.hpp>
 
 auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
 GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}
@@ -445,7 +446,10 @@ GncOptionDB::load_option_scheme(std::istream& iss)
     }
 
     if (!lookup_id)
-        throw std::runtime_error("No gnc:lookup-option found");
+    {
+        iss.setstate(std::ios_base::eofbit);
+        return iss; // No options
+    }
     const auto& classifier = lookup_id->get().m_ids;
     if (classifier.size() != 3)
         throw std::runtime_error("Malformed option classifier.");
@@ -474,15 +478,54 @@ GncOptionDB::load_option_scheme(std::istream& iss)
 }
 
 std::ostream&
+GncOptionDB::save_to_scheme(std::ostream& oss, const char* options_prolog) const noexcept
+{
+    for (auto section : m_sections)
+    {
+        const auto& [s_name, s_vec] = section;
+        oss << "\n; Section: " << s_name << "\n\n";
+        for (auto option : s_vec)
+        {
+            if (!option.is_changed())
+                continue;
+            oss << scheme_tags[0] << options_prolog << "\n";
+            oss << scheme_tags[1] << '"' << section.first.substr(0, classifier_size_max) << "\"\n";
+            oss << scheme_tags[1] << '"' << option.get_name().substr(0, classifier_size_max) << '"';
+            oss  <<  scheme_tags[2] << "\n" << scheme_tags[3];
+            option.to_scheme(oss);
+            oss << scheme_tags[4] << "\n\n";
+        }
+    }
+    return oss;
+}
+
+std::istream&
+GncOptionDB::load_from_scheme(std::istream& iss) noexcept
+{
+    try {
+        while (iss.good())
+            load_option_scheme(iss);
+        iss.clear(); //unset eofbit and maybe failbit
+    }
+    catch (const std::runtime_error& err)
+    {
+        std::cerr << "Load of options from Scheme failed: " <<
+            err.what() << std::endl;
+    }
+    return iss;
+}
+
+std::ostream&
 GncOptionDB::save_option_key_value(std::ostream& oss,
-                                        const char* section,
-                                        const char* name) const noexcept
+                                   const std::string& section,
+                                   const std::string& name) const noexcept
 {
 
     auto db_opt = find_option(section, name);
     if (!db_opt || !db_opt->get().is_changed())
         return oss;
-    oss << section << ":" << name << "=" << db_opt->get() << ";";
+    oss << section.substr(0, classifier_size_max) << ":" <<
+        name.substr(0, classifier_size_max) << "=" << db_opt->get() << ";";
     return oss;
 }
 
@@ -506,6 +549,128 @@ GncOptionDB::load_option_key_value(std::istream& iss)
         item_iss >> option->get();
     }
     return iss;
+}
+
+std::ostream&
+GncOptionDB::save_to_key_value(std::ostream& oss) const noexcept
+{
+
+    for (auto section : m_sections)
+    {
+        const auto& [s_name, s_vec] = section;
+        oss << "[Options]\n";
+        for (auto option : s_vec)
+        {
+            if (option.is_changed())
+                oss << section.first.substr(0, classifier_size_max) <<
+                    ':' << option.get_name().substr(0, classifier_size_max) <<
+                    '=' << option << '\n';
+       }
+    }
+    return oss;
+}
+
+std::istream&
+GncOptionDB::load_from_key_value(std::istream& iss)
+{
+    if (iss.peek() == '[')
+    {
+        char buf[classifier_size_max];
+        iss.getline(buf, classifier_size_max);
+        if (strcmp(buf, "[Options]") != 0) // safe
+            throw std::runtime_error("Wrong secion header for options.");
+    }
+    // Otherwise assume we were sent here correctly:
+    while (iss.peek() != '[') //Indicates the start of the next file section
+    {
+        load_option_key_value(iss);
+    }
+    return iss;
+}
+
+void
+GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
+{
+    if (clear_options)
+        qof_book_options_delete(book, nullptr);
+    for (auto section : m_sections)
+    {
+        const auto& [s_name, s_vec] = section;
+        for (auto option : s_vec)
+            if (option.is_changed())
+            {
+                // qof_book_set_option wants a GSList path. Let's avoid allocating and make one here.
+                GSList list_tail{(void*)option.get_name().c_str(), nullptr};
+                GSList list_head{(void*)s_name.c_str(), &list_tail};
+                auto type{option.get_ui_type()};
+                if (type == GncOptionUIType::BOOLEAN)
+                {
+                    auto val{option.get_value<bool>()};
+                    auto kvp{new KvpValue(val ? "t" : "f")};
+                    qof_book_set_option(book, kvp, &list_head);
+                }
+                else if (type > GncOptionUIType::DATE_FORMAT)
+                {
+                    QofInstance* inst{QOF_INSTANCE(option.get_value<QofInstance*>())};
+                    auto guid = guid_copy(qof_instance_get_guid(inst));
+                    auto kvp{new KvpValue(guid)};
+                    qof_book_set_option(book, kvp, &list_head);
+                }
+                else if (type == GncOptionUIType::NUMBER_RANGE)
+                {
+                    auto kvp{new KvpValue(option.get_value<int64_t>())};
+                    qof_book_set_option(book, kvp, &list_head);
+                }
+                else
+                {
+                    auto kvp{new KvpValue{g_strdup(option.get_value<std::string>().c_str())}};
+                    qof_book_set_option(book, kvp, &list_head);
+                }
+            }
+    }
+}
+
+void
+GncOptionDB::load_from_kvp(QofBook* book) noexcept
+{
+    for (auto section : m_sections)
+    {
+        const auto& [s_name, s_vec] = section;
+        for (auto option : s_vec)
+        {
+            /* qof_book_set_option wants a GSList path. Let's avoid allocating
+             * and make one here. */
+            GSList list_tail{(void*)option.get_name().c_str(), nullptr};
+            GSList list_head{(void*)s_name.c_str(), &list_tail};
+            auto kvp = qof_book_get_option(book, &list_head);
+            if (!kvp)
+                continue;
+            switch (kvp->get_type())
+            {
+                case KvpValue::Type::INT64:
+                    option.set_value(kvp->get<int64_t>());
+                    break;
+                case KvpValue::Type::STRING:
+                {
+                    auto str{kvp->get<const char*>()};
+                    if (option.get_ui_type() == GncOptionUIType::BOOLEAN)
+                        option.set_value(*str == 't' ? true : false);
+                    else
+                        option.set_value(str);
+                    break;
+                }
+                case KvpValue::Type::GUID:
+                {
+                    auto guid{kvp->get<GncGUID*>()};
+                    option.set_value(qof_instance_from_guid(guid, option.get_ui_type()));
+                    break;
+                }
+                default:
+                    continue;
+                    break;
+            }
+        }
+    }
 }
 
 GncOptionDBPtr

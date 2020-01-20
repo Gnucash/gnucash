@@ -82,7 +82,7 @@ public:
     }
 //    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
-    void commit();
+    void commit() {};
     std::optional<std::reference_wrapper<GncOptionSection>> find_section(const std::string& section);
     std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) {
         return static_cast<const GncOptionDB&>(*this).find_option(section, name);
@@ -92,17 +92,17 @@ public:
                                  const char* options_prolog) const noexcept;
     std::istream& load_from_scheme(std::istream& iss) noexcept;
     std::ostream& save_to_key_value(std::ostream& oss) const noexcept;
-    std::istream& load_from_key_value(std::istream& iss) noexcept;
-    void save_to_kvp() const noexcept;
-    void load_from_kvp() noexcept;
+    std::istream& load_from_key_value(std::istream& iss);
+    void save_to_kvp(QofBook* book, bool clear_book) const noexcept;
+    void load_from_kvp(QofBook* book) noexcept;
     std::ostream& save_option_scheme(std::ostream& oss,
                                      const char* option_prolog,
                                      const std::string& section,
                                      const std::string& name) const noexcept;
     std::istream& load_option_scheme(std::istream& iss);
     std::ostream& save_option_key_value(std::ostream& oss,
-                                             const char* section,
-                                             const char* name) const noexcept;
+                                        const std::string& section,
+                                        const std::string& name) const noexcept;
     std::istream& load_option_key_value(std::istream& iss);
 private:
     std::optional<std::reference_wrapper<GncOptionSection>> m_default_section;

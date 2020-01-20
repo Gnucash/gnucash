@@ -23,6 +23,13 @@
 
 #include <gtest/gtest.h>
 #include <gnc-optiondb.hpp>
+#include <kvp-value.hpp>
+extern "C"
+{
+#include <glib-2.0/glib.h>
+#include <gnc-ui-util.h>
+#include <gnc-session.h>
+}
 
 class GncOptionDBTest : public ::testing::Test
 {
@@ -280,8 +287,34 @@ TEST_F(GncOptionDBUITest, test_option_value_from_ui)
 class GncOptionDBIOTest : public ::testing::Test
 {
 protected:
-    GncOptionDBIOTest() : m_db{gnc_option_db_new()}
+    GncOptionDBIOTest() : m_book{gnc_get_current_book()}, m_root{gnc_account_create_root(m_book)}, m_db{gnc_option_db_new()}
     {
+        auto create_account = [this](Account* parent, GNCAccountType type,
+                                       const char* name)->Account* {
+            auto account = xaccMallocAccount(this->m_book);
+            xaccAccountBeginEdit(account);
+            xaccAccountSetType(account, type);
+            xaccAccountSetName(account, name);
+            xaccAccountBeginEdit(parent);
+            gnc_account_append_child(parent, account);
+            xaccAccountCommitEdit(parent);
+            xaccAccountCommitEdit(account);
+            return account;
+        };
+        auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
+        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
+        auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
+        create_account(assets, ACCT_TYPE_BANK, "Bank");
+        auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
+        auto stocks = create_account(broker, ACCT_TYPE_STOCK, "Stocks");
+        auto aapl = create_account(stocks, ACCT_TYPE_STOCK, "AAPL");
+        create_account(stocks, ACCT_TYPE_STOCK, "MSFT");
+        auto hpe = create_account(stocks, ACCT_TYPE_STOCK, "HPE");
+        create_account(broker, ACCT_TYPE_BANK, "Cash Management");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Food");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Gas");
+        create_account(expenses, ACCT_TYPE_EXPENSE, "Rent");
+
         gnc_register_string_option(m_db, "foo", "bar", "baz", "Phony Option",
                                    std::string{"waldo"});
         gnc_register_text_option(m_db, "foo", "sausage", "links",
@@ -290,8 +323,23 @@ protected:
                                    std::string{""});
         gnc_register_text_option(m_db, "qux", "garply", "fred",
                                    "Phony Option", std::string{"waldo"});
+        gnc_register_date_interval_option(m_db, "pork", "garply", "first",
+                                          "Phony Date Option",
+                                          RelativeDatePeriod::START_CURRENT_QUARTER);
+        gnc_register_account_list_option(m_db, "quux", "xyzzy", "second",
+                                         "Phony AccountList Option",
+                                         {aapl, hpe});
     }
 
+    ~GncOptionDBIOTest()
+    {
+        xaccAccountBeginEdit(m_root);
+        xaccAccountDestroy(m_root); //It does the commit
+        gnc_clear_current_session();
+    }
+
+    QofBook* m_book;
+    Account* m_root;
     GncOptionDBPtr m_db;
 };
 
@@ -313,7 +361,7 @@ TEST_F(GncOptionDBIOTest, test_option_scheme_output)
                  "))) option))\n\n", oss.str().c_str());
 }
 
-TEST_F(GncOptionDBIOTest, test_option_scheme_input)
+TEST_F(GncOptionDBIOTest, test_string_option_scheme_input)
 {
     const char* input{"(let ((option (gnc:lookup-option option\n"
                  "                                 \"foo\"\n"
@@ -324,6 +372,84 @@ TEST_F(GncOptionDBIOTest, test_option_scheme_input)
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "sausage").c_str());
     m_db->load_option_scheme(iss);
     EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+}
+
+TEST_F(GncOptionDBIOTest, test_date_interval_option_scheme_input)
+{
+    const char* input{"(let ((option (gnc:lookup-option option\n"
+                 "                                 \"pork\"\n"
+                 "                                 \"garply\")))\n"
+                 "   ((lambda (o) (if o (gnc:option-set-value o "
+            "'(relative . end-prev-month)"
+            "))) option))\n\n"};
+    std::istringstream iss{input};
+    GDate month_end;
+    g_date_set_time_t(&month_end, time(nullptr));
+    g_date_subtract_months(&month_end, 1);
+    gnc_gdate_set_month_end(&month_end);
+    auto time1 = time64_from_gdate(&month_end, DayPart::end);
+    m_db->load_option_scheme(iss);
+    EXPECT_EQ(time1, m_db->find_option("pork", "garply")->get().get_value<time64>());
+
+}
+
+TEST_F(GncOptionDBIOTest, test_account_list_option_scheme_input)
+{
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
+    auto hpe_guid{qof_instance_to_string(QOF_INSTANCE(acclist[3]))};
+    auto msft_guid{qof_instance_to_string(QOF_INSTANCE(acclist[2]))};
+    std::string input{"(let ((option (gnc:lookup-option option\n"
+                            "                                 \"quux\"\n"
+                            "                                 \"xyzzy\")))\n"
+                            "   ((lambda (o) (if o (gnc:option-set-value o '(\""};
+    input += hpe_guid + "\" \"";
+    input += msft_guid + "\")))) option))\n\n";
+    std::istringstream iss{input};
+    EXPECT_EQ(acclist[1], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[0]);
+    m_db->load_option_scheme(iss);
+    EXPECT_EQ(acclist[2], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[1]);
+    EXPECT_EQ(2, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
+
+}
+
+TEST_F(GncOptionDBIOTest, test_multiple_options_scheme_input)
+{
+    auto acclist{gnc_account_list_from_types(m_book, {ACCT_TYPE_STOCK})};
+    auto hpe_guid{qof_instance_to_string(QOF_INSTANCE(acclist[3]))};
+    auto msft_guid{qof_instance_to_string(QOF_INSTANCE(acclist[2]))};
+    std::string input{";; Foo\n\n"
+                      "(let ((option (gnc:lookup-option option\n"
+                      "                                 \"foo\"\n"
+                      "                                 \"sausage\")))\n"
+                      "   ((lambda (o) (if o (gnc:option-set-value o \"pepper\""
+                      "))) option))\n\n"
+                      ";; Pork\n\n"
+                      "(let ((option (gnc:lookup-option option\n"
+                      "                                 \"pork\"\n"
+                      "                                 \"garply\")))\n"
+                      "   ((lambda (o) (if o (gnc:option-set-value o "
+                      "'(relative . end-prev-month)"
+                      "))) option))\n\n"
+                      ";; Quux\n\n"
+                      "(let ((option (gnc:lookup-option option\n"
+                      "                                 \"quux\"\n"
+                      "                                 \"xyzzy\")))\n"
+                      "   ((lambda (o) (if o (gnc:option-set-value o '(\""};
+    input += hpe_guid + "\" \"";
+    input += msft_guid + "\")))) option))\n\n";
+    std::istringstream iss{input};
+    GDate month_end;
+    g_date_set_time_t(&month_end, time(nullptr));
+    g_date_subtract_months(&month_end, 1);
+    gnc_gdate_set_month_end(&month_end);
+    auto time1 = time64_from_gdate(&month_end, DayPart::end);
+    EXPECT_EQ(acclist[1], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[0]);
+    m_db->load_from_scheme(iss);
+    EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+    EXPECT_EQ(time1, m_db->find_option("pork", "garply")->get().get_value<time64>());
+    EXPECT_EQ(acclist[2], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[1]);
+    EXPECT_EQ(2, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
+
 }
 
 TEST_F(GncOptionDBIOTest, test_option_key_value_output)
@@ -344,4 +470,32 @@ TEST_F(GncOptionDBIOTest, test_option_key_value_input)
     EXPECT_STREQ("waldo", m_db->lookup_string_option("foo", "sausage").c_str());
     m_db->load_option_key_value(iss);
     EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
+}
+
+TEST_F(GncOptionDBIOTest, test_option_kvp_save)
+{
+    m_db->save_to_kvp(m_book, false);
+    auto foo = "foo";
+    auto bar = "bar";
+    auto sausage = "sausage";
+    auto grault = "grault";
+    auto garply = "garply";
+    GSList foo_bar_tail{(void*)bar, nullptr};
+    GSList foo_bar_head{(void*)foo, &foo_bar_tail};
+    GSList foo_sausage_tail{(void*)sausage, nullptr};
+    GSList foo_sausage_head{(void*)foo, &foo_sausage_tail};
+    GSList qux_grault_tail{(void*)grault, nullptr};
+    GSList qux_grault_head{(void*)foo, &qux_grault_tail};
+    GSList qux_garply_tail{(void*)garply, nullptr};
+    GSList qux_garply_head{(void*)foo, &qux_grault_tail};
+    m_db->set_option("foo", "sausage", std::string{"pepper"});
+    m_db->save_to_kvp(m_book, true);
+    auto foo_bar = qof_book_get_option(m_book, &foo_bar_head);
+    auto foo_sausage = qof_book_get_option(m_book, &foo_sausage_head);
+    auto qux_garply = qof_book_get_option(m_book, &qux_garply_head);
+    auto qux_grault = qof_book_get_option(m_book, &qux_grault_head);
+    EXPECT_EQ(nullptr, foo_bar);
+    EXPECT_EQ(nullptr, qux_garply);
+    EXPECT_EQ(nullptr, qux_grault);
+    EXPECT_STREQ("pepper", foo_sausage->get<const char*>());
 }
