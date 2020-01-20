@@ -527,7 +527,6 @@ libgnucash/app-utils/gnc-exp-parser.c
 libgnucash/app-utils/gnc-gsettings.c
 libgnucash/app-utils/gnc-helpers.c
 libgnucash/app-utils/gnc-help-utils.c
-libgnucash/app-utils/gncmod-app-utils.c
 libgnucash/app-utils/gnc-option.cpp
 libgnucash/app-utils/gnc-optiondb.cpp
 libgnucash/app-utils/gnc-prefs-utils.c

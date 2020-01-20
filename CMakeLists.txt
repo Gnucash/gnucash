@@ -569,7 +569,7 @@ endif()
 
 add_definitions(-D_GNU_SOURCE)
 
-# Also, set the C++ version to c++11
+# Set up the language standards:
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

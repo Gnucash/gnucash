@@ -43,8 +43,8 @@ set(gtest_gnc_option_INCLUDES
   ${GUILE_INCLUDE_DIRS})
 
 set(gtest_gnc_option_LIBS
-  gncmod-app-utils
-  gncmod-engine
+  gnc-app-utils
+  gnc-engine
   ${GLIB2_LDFLAGS}
   ${GUILE_LDFLAGS}
   gtest)
@@ -94,6 +94,7 @@ if (HAVE_SRFI64)
   gnc_add_swig_guile_command(swig-gnc-optiondb-guile
     SWIG_GNC_OPTIONDB_GUILE_CPP swig-gnc-optiondb-guile.cpp
     ${MODULEPATH}/gnc-optiondb.i
+    ""
     )
   add_library(swig-gnc-optiondb MODULE
     ${MODULEPATH}/gnc-option.cpp
@@ -102,6 +103,7 @@ if (HAVE_SRFI64)
     )
   set(swig_gnc_optiondb_INCLUDES
     ${MODULEPATH}
+    ${CMAKE_SOURCE_DIR}/bindings/guile
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_BINARY_DIR}/common # for config.h
     ${GLIB2_INCLUDE_DIRS}
@@ -109,8 +111,9 @@ if (HAVE_SRFI64)
     )
 
   set(swig_gnc_optiondb_LIBS
-    gncmod-engine
-    gncmod-app-utils
+    gnc-engine
+    gnc-app-utils
+    gnucash-guile
     ${GLIB2_LDFLAGS}
     ${GUILE_LDFLAGS}
     )

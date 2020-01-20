@@ -39,7 +39,12 @@ namespace std {
 
 %module sw_gnc_optiondb
 %{
+extern "C"
+{
+#include <config.h>
 #include <libguile.h>
+#include <gnc-engine-guile.h>
+}
 #include "gnc-optiondb.hpp"
 extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %}
