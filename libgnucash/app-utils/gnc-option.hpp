@@ -118,9 +118,10 @@ enum GncOptionUIType
 };
 
 static const char* commodity_scm_intro{"'(commodity-scm "};
-
+#ifndef SWIG
 size_t constexpr classifier_size_max{50};
 size_t constexpr sort_tag_size_max{10};
+#endif
 
 struct OptionClassifier
 {
@@ -181,7 +182,9 @@ private:
     GncOptionUIType m_ui_type;
 };
 
+#ifndef SWIG
 auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
+#endif
 
 template <typename ValueType>
 class GncOptionValue : public OptionClassifier, public OptionUIItem
