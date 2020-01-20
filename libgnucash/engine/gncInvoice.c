@@ -1228,6 +1228,7 @@ gncInvoiceDetachFromLot (GNCLot *lot)
     gnc_lot_begin_edit (lot);
     qof_instance_set (QOF_INSTANCE (lot), "invoice", NULL, NULL);
     gnc_lot_commit_edit (lot);
+    gnc_lot_set_cached_invoice (lot, NULL);
 }
 
 void
@@ -1242,6 +1243,7 @@ gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
     gnc_lot_begin_edit (lot);
     qof_instance_set (QOF_INSTANCE (lot), "invoice", guid, NULL);
     gnc_lot_commit_edit (lot);
+    gnc_lot_set_cached_invoice (lot, invoice);
     gncInvoiceSetPostedLot (invoice, lot);
 }
 
@@ -1253,10 +1255,16 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 
     if (!lot) return NULL;
 
-    book = gnc_lot_get_book (lot);
-    qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
-    invoice = gncInvoiceLookup(book, guid);
-    guid_free (guid);
+    invoice = gnc_lot_get_cached_invoice (lot);
+    if (!invoice)
+    {
+        book = gnc_lot_get_book (lot);
+        qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
+        invoice = gncInvoiceLookup(book, guid);
+        guid_free (guid);
+        gnc_lot_set_cached_invoice (lot, invoice);
+    }
+
     return invoice;
 }
 

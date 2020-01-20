@@ -52,6 +52,7 @@
 #include "cap-gains.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "gncInvoice.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_LOT;
@@ -85,6 +86,7 @@ typedef struct GNCLotPrivate
     /* List of splits that belong to this lot. */
     SplitList *splits;
 
+    GncInvoice *cached_invoice;
     /* Handy cached value to indicate if lot is closed. */
     /* If value is negative, then the cache is invalid. */
     signed char is_closed;
@@ -112,6 +114,7 @@ gnc_lot_init(GNCLot* lot)
     priv = GET_PRIVATE(lot);
     priv->account = NULL;
     priv->splits = NULL;
+    priv->cached_invoice = NULL;
     priv->is_closed = LOT_CLOSED_UNKNOWN;
     priv->marker = 0;
 }
@@ -376,6 +379,19 @@ gnc_lot_get_account (const GNCLot *lot)
     if (!lot) return NULL;
     priv = GET_PRIVATE(lot);
     return priv->account;
+}
+
+GncInvoice * gnc_lot_get_cached_invoice (const GNCLot *lot)
+{
+    if (!lot) return NULL;
+    return GET_PRIVATE(lot)->cached_invoice;
+}
+
+void
+gnc_lot_set_cached_invoice(GNCLot* lot, GncInvoice *invoice)
+{
+    if (!lot) return;
+    GET_PRIVATE(lot)->cached_invoice = invoice;
 }
 
 void

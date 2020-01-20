@@ -64,6 +64,7 @@
 #include "qof.h"
 #include "gnc-engine.h"
 /*#include "gnc-lot-p.h"*/
+#include "gncInvoice.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -126,6 +127,12 @@ gint gnc_lot_count_splits (const GNCLot *);
 /*@ dependent @*/
 Account * gnc_lot_get_account (const GNCLot *);
 void gnc_lot_set_account(GNCLot*, Account*);
+
+/** The gnc_lot_get_cached_invoice() routine returns the invoice with
+ *    which this lot is associated. */
+/*@ dependent @*/
+GncInvoice * gnc_lot_get_cached_invoice (const GNCLot *lot);
+void gnc_lot_set_cached_invoice(GNCLot* lot, GncInvoice *invoice);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot.
  *    The commodity in which this balance is expressed is the commodity
