@@ -183,34 +183,15 @@
          (cols-list (assq-ref cols-alist section)))
     (count identity cols-list)))
 
-(define columns-used-size 10)
-
 (define (build-column-used options)
-  (define (opt-val section name)
+  (define (opt-val name)
     (gnc:option-value
-     (gnc:lookup-option options section name)))
-  (define (make-set-col col-vector)
-    (let ((col 0))
-      (lambda (used? index)
-        (if used?
-            (begin
-              (vector-set! col-vector index col)
-              (set! col (+ col 1)))
-            (vector-set! col-vector index #f)))))
-
-  (let* ((col-vector (make-vector columns-used-size #f))
-         (set-col (make-set-col col-vector)))
-    (set-col (opt-val "Display Columns" date-header) 0)
-    (set-col (opt-val "Display Columns" due-date-header) 1)
-    (set-col (opt-val "Display Columns" reference-header) 2)
-    (set-col (opt-val "Display Columns" type-header) 3)
-    (set-col (opt-val "Display Columns" desc-header) 4)
-    (set-col (opt-val "Display Columns" sale-header) 5)
-    (set-col (opt-val "Display Columns" tax-header) 6)
-    (set-col (opt-val "Display Columns" debit-header) 7)
-    (set-col (opt-val "Display Columns" credit-header) 8)
-    (set-col (opt-val "Display Columns" balance-header) 9)
-    col-vector))
+     (gnc:lookup-option options "Display Columns" name)))
+  (list->vector
+   (map opt-val
+        (list date-header due-date-header reference-header type-header
+              desc-header sale-header tax-header debit-header credit-header
+              balance-header))))
 
 (define (make-heading-list column-vector link-option acct-type)
   (let ((heading-list '())
@@ -254,8 +235,6 @@
     (reverse heading-list)))
 
 (define num-buckets 6)
-(define (new-bucket-vector)
-  (make-vector num-buckets 0))
 
 (define (sign-equal? a b)
   (or (= 0 a b) (< 0 (* a b))))
