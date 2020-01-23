@@ -28,7 +28,7 @@
  (compile load eval expand)
  (load-extension "libswig-gnc-optiondb" "scm_init_sw_gnc_optiondb_module"))
 
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash engine))
 (use-modules (sw_gnc_optiondb))
 
 (define (run-test)
