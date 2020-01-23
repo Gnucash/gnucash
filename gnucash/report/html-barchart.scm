@@ -43,6 +43,17 @@
                       button-2-legend-urls 
 		      button-3-legend-urls)))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
+
 (define gnc:html-barchart? 
   (record-predicate <html-barchart>))
 
@@ -55,6 +66,8 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
+  (issue-deprecation-warning
+   "(gnc:make-html-barchart) is deprecated. use gnc:make-html-chart instead.")
   (gnc:make-html-barchart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() '() '() 
 				   #f #f #f '() #f #f #f #f #f #f))
 
@@ -272,308 +285,70 @@
      newcol)))
 
 (define (gnc:html-barchart-render barchart doc)
-  (define (ensure-numeric elt)
-    (cond ((number? elt)
-           (exact->inexact elt))
-          ((string? elt)
-           (with-input-from-string elt
-             (lambda ()
-               (let ((n (read)))
-                 (if (number? n) n 0.0)))))
-          (#t 
-           0.0)))
-  
-  (define (catenate-escaped-strings nlist)
-    (if (not (list? nlist))
-        ""
-        (with-output-to-string
-          (lambda ()
-            (for-each 
-             (lambda (s)
-               (let ((escaped 
-                      (regexp-substitute/global 
-                       #f " " 
-                       (regexp-substitute/global 
-                        #f "\\\\" s
-                        'pre "\\\\" 'post)
-                       'pre "\\ " 'post)))
-                 (display escaped)
-                 (display " ")))
-             nlist)))))
+  (let* ((chart (gnc:make-html-chart))
+         (data (gnc:html-barchart-data barchart)))
+    (cond
+     ((and (pair? data) (gnc:not-all-zeros data))
+      (gnc:html-chart-set-type! chart 'bar)
+      (gnc:html-chart-set-width! chart (gnc:html-barchart-width barchart))
+      (gnc:html-chart-set-height! chart (gnc:html-barchart-height barchart))
+      (gnc:html-chart-set-data-labels! chart (gnc:html-barchart-row-labels barchart))
+      (for-each
+       (lambda (label series color)
+         (gnc:html-chart-add-data-series! chart label series color))
+       (gnc:html-barchart-col-labels barchart)
+       data
+       (gnc:html-barchart-col-colors barchart))
+      (gnc:html-chart-set-title! chart (list
+                                        (gnc:html-barchart-title barchart)
+                                        (gnc:html-barchart-subtitle barchart)))
+      (gnc:html-chart-set-stacking?! chart (gnc:html-barchart-stacked? barchart))
+      (gnc:html-chart-render chart doc))
 
-  (let* ((retval '())
-         (push (lambda (l) (set! retval (cons l retval))))
-         (title (gnc:html-barchart-title barchart))
-         (subtitle (gnc:html-barchart-subtitle barchart))
-         (url-1
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-1-bar-urls barchart)))
-         (url-2
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-2-bar-urls barchart)))
-         (url-3
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-3-bar-urls barchart)))
-         (legend-1
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-1-legend-urls barchart)))
-         (legend-2
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-2-legend-urls barchart)))
-         (legend-3
-          (catenate-escaped-strings 
-           (gnc:html-barchart-button-3-legend-urls barchart)))
-         (x-label (gnc:html-barchart-x-axis-label barchart))
-         (y-label (gnc:html-barchart-y-axis-label barchart))
-         (data (gnc:html-barchart-data barchart))
-	 (dummy1 (gnc:debug "data " data))
-         (row-labels (catenate-escaped-strings 
-                      (gnc:html-barchart-row-labels barchart)))
-         (col-labels (catenate-escaped-strings 
-                      (gnc:html-barchart-col-labels barchart)))
-         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
-         (colors-str (string-join (map (lambda (color)
-					 (string-append "\"" color "\""))
-				       (gnc:html-barchart-col-colors barchart)) ", "))
-         (series-data-start (lambda (series-index)
-                         (push "var d")
-                         (push series-index)
-                         (push " = [];\n")))
-         (series-data-add (lambda (series-index x y)
-                         (push (string-append
-                               "  d"
-                               (number->string series-index)
-                               ".push(["
-                               (number->string x)
-                               ", "
-                               (number->string y)
-                               "]);\n"))))
-         (series-data-end (lambda (series-index label)
-                         (push "data.push(d")
-                         (push series-index)
-                         (push ");\n")
-                         (push (format #f "series.push({ label: ~s });\n\n"
-                                       (gnc:html-string-sanitize label)))
-                         ))
-         ; Use a unique chart-id for each chart. This prevents chart
-         ; clashed on multi-column reports
-         (chart-id (string-append "chart-" (number->string (random 999999)))))
-    (if (and (list? data)
-             (not (null? data))
-             (gnc:not-all-zeros data))
-        (begin
-            (push (gnc:html-js-include "jqplot/jquery.min.js"))
-            (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
+     (else
+      (gnc:warn "null-data, not rendering barchart")
+      ""))))
 
-            (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
-            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (cdr (gnc:html-barchart-width barchart)))
-            (if (eq? 'pixels (car (gnc:html-barchart-width barchart)))
-                 (push "px;height:")
-                 (push "%;height:"))
-
-            (push (cdr (gnc:html-barchart-height barchart)))
-            (if (eq? 'pixels (car (gnc:html-barchart-height barchart)))
-                 (push "px;\"></div>\n")
-                 (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
-
-            (push "var data = [];")
-            (push "var series = [];\n")
-
-            (if (and data (list? data))
-              (let ((rows (length data))
-                    (cols 0))
-                (let loop ((col 0) (rowcnt 1))
-                  (series-data-start col)
-                  (if (list? (car data))
-                      (begin 
-                        (set! cols (length (car data)))))    
-                  (for-each
-                    (lambda (row)
-                      (if (<= rowcnt rows)
-                        (series-data-add col rowcnt
-                                       (ensure-numeric (list-ref-safe row col)))
-                      )
-                      (set! rowcnt (+ rowcnt 1)))
-                    data)
-                  (series-data-end col (list-ref-safe (gnc:html-barchart-col-labels barchart) col))
-                  (if (< col (- cols 1))
-                      (loop (+ 1 col) 1)))))
-
-
-            (push "var all_ticks = [")
-            (for-each
-                (lambda (val)
-                    (push "\"")
-                    (push val)
-                    (push "\","))
-                (gnc:html-barchart-row-labels barchart))
-            (push "];\n")
-            (push "var options = {
-                   shadowAlpha: 0.07,
-                   stackSeries: false,
-                   legend: {
-                        show: true,
-                        placement: \"outsideGrid\", },
-                   seriesDefaults: {
-                        renderer: $.jqplot.BarRenderer,
-                        rendererOptions: {
-                            shadowAlpha: 0.04,
-                            shadowDepth: 3,
-                        },
-                        fillToZero: true,
-                   },
-                   series: series,
-                   axesDefaults: {
-                   },
-                   grid: {
-                   },
-                   axes: {
-                       xaxis: {
-                           renderer:$.jqplot.CategoryAxisRenderer,
-                           tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                           tickOptions: {
-                               angle: -30,
-                               fontSize: '10pt',
-                           },
-                       },
-                       yaxis: {
-                           autoscale: true,
-                       },
-                   },
-                   highlighter: {
-                       tooltipContentEditor: formatTooltip,
-                   },
-                   cursor:{
-                       show: true,
-                       showTooltip: false,
-                       zoom: true,
-                   },
-                   seriesColors: false,
-                };\n")
-
-            (push "  options.stackSeries = ")
-            (push (if (gnc:html-barchart-stacked? barchart)
-                "true;\n"
-                "false;\n"))
-
-            (if title
-                (push (format #f "  options.title = ~s;\n"
-                              (gnc:html-string-sanitize title))))
-
-            (if subtitle
-                (push (format #f "  options.title += ' <br />' + ~s;\n"
-                               (gnc:html-string-sanitize subtitle))))
-
-
-            (if (and (string? x-label) (> (string-length x-label) 0))
-              (begin 
-                (push "  options.axes.xaxis.label = \"")
-                (push x-label)
-                (push "\";\n")))
-            (if (and (string? y-label) (> (string-length y-label) 0))
-              (begin 
-                (push "  options.axes.yaxis.label = \"")
-                (push y-label)
-                (push "\";\n")))
-            (push "  options.axes.xaxis.ticks = all_ticks;\n")
-            (if (not (equal? colors-str ""))
-                (begin            ; example: options.seriesColors= ["blue", "red"];
-                  (push "options.seriesColors = [")
-                  (push colors-str)
-                  (push "];\n")
-                  (push "options.negativeSeriesColors = [")
-                  (push colors-str)
-                  (push "];\n")
-                  )
-                )
-
-
-            (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "$(document).ready(function() {
-var plot = $.jqplot('")(push chart-id)(push"', data, options);
-plot.axes.xaxis.ticks = getVisualTicks();
-plot.replot();
-var timer;
-var load_timer;
-
-// var win_width = $(window).width();
-// var win_height = $(window).height();
-// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
-
-// var doc_width = document.body.clientWidth;
-// var doc_height = document.body.clientHeight;
-// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
-
-$(window).resize(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        plot.replot({resetAxes: true });
-        $.each(plot.series, function(index, series) {
-            series.barWidth = undefined;
-        });
-        plot.axes.xaxis.ticks = getVisualTicks();
-//        console.log( 'Resize Timer!' );
-        plot.replot();
-    }, 100);
-    });
-
-$(window).on('load', function () {
-    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
-    clearTimeout(load_timer);
-    load_timer = setTimeout(function () {
-//        console.log( 'Load Timer!' );
-        if(hasVScroll)
-        {
-//            console.log( 'Load Timer Replot!' );
-            plot.replot();
-        }
-    },100);
-    });
-});
-
-function formatTooltip(str, seriesIndex, pointIndex) {
-    if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-        x = options.axes.xaxis.ticks[pointIndex];
-    else
-        x = pointIndex;
-    y = data[seriesIndex][pointIndex][1].toFixed(2);
-    return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
-}
-
-function getVisualTicks() {
-    var chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
-    var num_ticks = all_ticks.length;
-    var label_width = 25;
-    var num_labels = chart_width / label_width;
-    var show_every_nth_label = Math.ceil (num_ticks / num_labels);
-    var visual_ticks = [];
-
-    if (show_every_nth_label == 0)
-        show_every_nth_label = 1;
-    for (counter = 0; counter < all_ticks.length; counter++) {
-        if ((counter % show_every_nth_label) == 0)
-            visual_ticks.push (all_ticks[counter]);
-        else
-            visual_ticks.push (' ');
-    }
-//    console.log( 'getVis chart_width ' + chart_width );
-    return visual_ticks;
-}\n")
-
-            (push "});\n</script>")
-
-            (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
- 
-        )
-        (begin 
-          (gnc:warn "barchart has no non-zero data.")
-            " "))
-    retval))
+(gnc:guard-html-chart gnc:html-barchart-data)
+(gnc:guard-html-chart gnc:html-barchart-set-data!)
+(gnc:guard-html-chart gnc:html-barchart-width)
+(gnc:guard-html-chart gnc:html-barchart-set-width!)
+(gnc:guard-html-chart gnc:html-barchart-height)
+(gnc:guard-html-chart gnc:html-barchart-set-height!)
+(gnc:guard-html-chart gnc:html-barchart-x-axis-label)
+(gnc:guard-html-chart gnc:html-barchart-set-x-axis-label!)
+(gnc:guard-html-chart gnc:html-barchart-y-axis-label)
+(gnc:guard-html-chart gnc:html-barchart-set-y-axis-label!)
+(gnc:guard-html-chart gnc:html-barchart-row-labels)
+(gnc:guard-html-chart gnc:html-barchart-set-row-labels!)
+(gnc:guard-html-chart gnc:html-barchart-row-labels-rotated?)
+(gnc:guard-html-chart gnc:html-barchart-set-row-labels-rotated?!)
+(gnc:guard-html-chart gnc:html-barchart-stacked?)
+(gnc:guard-html-chart gnc:html-barchart-set-stacked?!)
+(gnc:guard-html-chart gnc:html-barchart-col-labels)
+(gnc:guard-html-chart gnc:html-barchart-set-col-labels!)
+(gnc:guard-html-chart gnc:html-barchart-col-colors)
+(gnc:guard-html-chart gnc:html-barchart-set-col-colors!)
+(gnc:guard-html-chart gnc:html-barchart-legend-reversed?)
+(gnc:guard-html-chart gnc:html-barchart-set-legend-reversed?!)
+(gnc:guard-html-chart gnc:html-barchart-title)
+(gnc:guard-html-chart gnc:html-barchart-set-title!)
+(gnc:guard-html-chart gnc:html-barchart-subtitle)
+(gnc:guard-html-chart gnc:html-barchart-set-subtitle!)
+(gnc:guard-html-chart gnc:html-barchart-button-1-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-1-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-2-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-2-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-3-bar-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-3-bar-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-1-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-1-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-2-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-2-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-button-3-legend-urls)
+(gnc:guard-html-chart gnc:html-barchart-set-button-3-legend-urls!)
+(gnc:guard-html-chart gnc:html-barchart-append-row!)
+(gnc:guard-html-chart gnc:html-barchart-prepend-row!)
+(gnc:guard-html-chart gnc:html-barchart-append-column!)
+(gnc:guard-html-chart gnc:html-barchart-prepend-column!)
+(gnc:guard-html-chart gnc:html-barchart-render)

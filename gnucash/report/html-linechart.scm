@@ -50,6 +50,17 @@
                       button-3-legend-urls
                       line-width)))
 
+(define-syntax-rule (gnc:guard-html-chart api)
+  ;; this macro applied to old html-bar/line/scatter/pie apis will
+  ;; guard a report writer from passing html-chart objects. this
+  ;; should be removed in 5.x series.
+  (let ((old-api api))
+    (set! api
+      (lambda args
+        (if (and (pair? args) (gnc:html-chart? (car args)))
+            (gnc:warn "using old-api " (procedure-name api) " on html-chart object. set options via gnc:html-chart-set! or its shortcuts gnc:html-chart-set-title! etc, and set data via gnc:html-chart-add-data-series! see sample-graphs.scm for examples.")
+            (apply old-api args))))))
+
 (define gnc:html-linechart?
   (record-predicate <html-linechart>))
 
@@ -62,6 +73,8 @@
   (record-constructor <html-linechart>))
 
 (define (gnc:make-html-linechart)
+  (issue-deprecation-warning
+   "(gnc:make-html-linechart) is deprecated. use gnc:make-html-chart instead.")
   (gnc:make-html-linechart-internal
     '(pixels . -1)  ;;width
     '(pixels . -1)  ;;height
@@ -327,284 +340,84 @@
      newcol)))
 
 (define (gnc:html-linechart-render linechart doc)
-  (define (ensure-numeric elt)
-    (cond ((number? elt)
-           (exact->inexact elt))
-          ((string? elt)
-           (with-input-from-string elt
-             (lambda ()
-               (let ((n (read)))
-                 (if (number? n) n 0.0)))))
-          (#t
-           0.0)))
-
-  (define (catenate-escaped-strings nlist)
-    (if (not (list? nlist))
-        ""
-        (with-output-to-string
-          (lambda ()
-            (for-each
-             (lambda (s)
-               (let ((escaped
-                      (regexp-substitute/global
-                       #f " "
-                       (regexp-substitute/global
-                        #f "\\\\" s
-                        'pre "\\\\" 'post)
-                       'pre "\\ " 'post)))
-                 (display escaped)
-                 (display " ")))
-             nlist)))))
-
-  (let* ((retval '())
-         (push (lambda (l) (set! retval (cons l retval))))
-         (title (gnc:html-linechart-title linechart))
-         (subtitle (gnc:html-linechart-subtitle linechart))
-         (url-1
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-1-line-urls linechart)))
-         (url-2
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-2-line-urls linechart)))
-         (url-3
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-3-line-urls linechart)))
-         (legend-1
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-1-legend-urls linechart)))
-         (legend-2
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-2-legend-urls linechart)))
-         (legend-3
-          (catenate-escaped-strings
-           (gnc:html-linechart-button-3-legend-urls linechart)))
-         (x-label (gnc:html-linechart-x-axis-label linechart))
-         (y-label (gnc:html-linechart-y-axis-label linechart))
+  (let* ((chart (gnc:make-html-chart))
          (data (gnc:html-linechart-data linechart))
-	 (dummy1 (gnc:debug "data " data))
-         (row-labels (catenate-escaped-strings
-                      (gnc:html-linechart-row-labels linechart)))
-         (col-labels (catenate-escaped-strings
-                      (gnc:html-linechart-col-labels linechart)))
-         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
-         (colors-str (string-join (map (lambda (color)
-                                         (string-append "\"" color "\""))
-                                       (gnc:html-linechart-col-colors linechart)) ", "))
          (line-width (gnc:html-linechart-line-width linechart))
-         (series-data-start (lambda (series-index)
-                         (push "var d")
-                         (push series-index)
-                         (push " = [];\n")))
-         (series-data-add (lambda (series-index date y)
-                         (push (string-append
-                               "  d"
-                               (number->string series-index)
-                               ".push(["
-                               "\"" date "\""
-                               ", "
-                               (number->string y)
-                               "]);\n"))))
-         (series-data-end (lambda (series-index label)
-                         (push "data.push(d")
-                         (push series-index)
-                         (push ");\n")
-                         (push (format #f "series.push({ label: ~s });\n\n"
-                                       (gnc:html-string-sanitize label)))))
-         ; Use a unique chart-id for each chart. This prevents chart
-         ; clashed on multi-column reports
-         (chart-id (string-append "chart-" (number->string (random 999999)))))
-    (if (and (list? data)
-             (not (null? data))
-             (gnc:not-all-zeros data))
-        (begin
-            (push (gnc:html-js-include "jqplot/jquery.min.js"))
-            (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
-            (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
+         (radius (if (gnc:html-linechart-markers? linechart) 3 0)))
+    (cond
+     ((and (pair? data) (gnc:not-all-zeros data))
+      (gnc:html-chart-set-type! chart 'line)
+      (gnc:html-chart-set-width! chart (gnc:html-linechart-width linechart))
+      (gnc:html-chart-set-height! chart (gnc:html-linechart-height linechart))
+      (gnc:html-chart-set-data-labels! chart (gnc:html-linechart-row-labels linechart))
+      (for-each
+       (lambda (label series color)
+         (gnc:html-chart-add-data-series! chart label series color
+                                          'borderWidth line-width
+                                          'pointRadius radius
+                                          'fill #f))
+       (gnc:html-linechart-col-labels linechart)
+       (apply zip data)
+       (gnc:html-linechart-col-colors linechart))
+      (gnc:html-chart-set-title! chart (list
+                                        (gnc:html-linechart-title linechart)
+                                        (gnc:html-linechart-subtitle linechart)))
+      (gnc:html-chart-set-stacking?! chart (gnc:html-linechart-stacked? linechart))
+      (gnc:html-chart-render chart doc))
 
-            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (cdr (gnc:html-linechart-width linechart)))
-            (if (eq? 'pixels (car (gnc:html-linechart-width linechart)))
-                 (push "px;height:")
-                 (push "%;height:"))
-
-            (push (cdr (gnc:html-linechart-height linechart)))
-            (if (eq? 'pixels (car (gnc:html-linechart-height linechart)))
-                 (push "px;\"></div>\n")
-                 (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
-
-            (push "var data = [];")
-            (push "var series = [];\n")
-
-            (if (and data (list? data))
-              (let ((rows (length data))
-                    (cols 0))
-                (let loop ((col 0) (rowcnt 0))
-                  (series-data-start col)
-                  (if (list? (car data))
-                      (begin 
-                        (set! cols (length (car data)))))    
-                  (for-each
-                    (lambda (row)
-                      (if (< rowcnt rows)
-                        (series-data-add col
-                          (list-ref (gnc:html-linechart-row-labels linechart) rowcnt)
-                          (ensure-numeric (list-ref-safe row col))
-                        )
-                      )
-                      (set! rowcnt (+ rowcnt 1)))
-                    data)
-                  (series-data-end col (list-ref-safe (gnc:html-linechart-col-labels linechart) col))
-                  (if (< col (- cols 1))
-                      (loop (+ 1 col) 0)))))
+     (else
+      (gnc:warn "null-data, not rendering linechart")
+      ""))))
 
 
-            (push "var options = {
-                   shadowAlpha: 0.07,
-                   legend: {
-                        show: true,
-                        placement: \"outsideGrid\", },
-                   seriesDefaults: {
-                        lineWidth: ")
-            (push (ensure-numeric line-width))
-            (push ",
-                        showMarker: true,
-                   },
-                   series: series,
-                   axesDefaults: {
-                   },        
-                   grid: {
-                   },
-                   axes: {
-                       xaxis: {
-                           renderer:$.jqplot.DateAxisRenderer,
-                           tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                           tickOptions: {
-                               angle: -30,
-                               fontSize: '10pt',
-                           },
-                       },
-                       yaxis: {
-                           autoscale: true,
-                       },
-                   },
-                   highlighter: {
-                       tooltipContentEditor: formatTooltip,
-                       tooltipLocation: 'ne',
-                   },
-                   cursor: {
-                       show: true,
-                       zoom: true
-                   },
-                   seriesColors: false,
-                };\n")
-
-            (push "  options.stackSeries = ")
-            (push (if (gnc:html-linechart-stacked? linechart)
-                "true;\n"
-                "false;\n"))
-
-            (push "  options.seriesDefaults.showMarker = ")
-            (push (if (gnc:html-linechart-markers? linechart)
-                "true;\n"
-                "false;\n"))
-
-            (push "  options.axesDefaults.drawMajorGridlines = ")
-            (push (if (gnc:html-linechart-major-grid? linechart)
-                "true;\n"
-                "false;\n"))
-
-            (push "  options.axesDefaults.drawMinorGridlines = ")
-            (push (if (gnc:html-linechart-minor-grid? linechart)
-                "true;\n"
-                "false;\n"))
-
-            (if title
-                (push (format #f "  options.title = ~s;\n"
-                              (gnc:html-string-sanitize title))))
-
-            (if subtitle
-                (push (format #f "  options.title += ' <br />' + ~s;\n"
-                              (gnc:html-string-sanitize subtitle))))
-
-            (if (and (string? x-label) (> (string-length x-label) 0))
-              (begin 
-                (push "  options.axes.xaxis.label = \"")
-                (push x-label)
-                (push "\";\n")))
-            (if (and (string? y-label) (> (string-length y-label) 0))
-              (begin 
-                (push "  options.axes.yaxis.label = \"")
-                (push y-label)
-                (push "\";\n")))
-	    (if (not (equal? colors-str ""))
-                (begin            ; example: options.seriesColors= ["blue", "red"];
-                  (push "options.seriesColors = [")
-                  (push colors-str)
-                  (push "];\n")
-                  )
-                )
-
-            ;; adjust the date string format to the one given by the preferences
-            (push "  options.axes.xaxis.tickOptions.formatString = '")
-            (push (qof-date-format-get-string (qof-date-format-get)))
-            (push "';\n")
-
-            (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "$(document).ready(function() {
-var plot = $.jqplot('")(push chart-id)(push"', data, options);
-plot.replot();
-var timer;
-var load_timer;
-
-// var win_width = $(window).width();
-// var win_height = $(window).height();
-// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
-
-// var doc_width = document.body.clientWidth;
-// var doc_height = document.body.clientHeight;
-// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
-
-$(window).resize(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-//        console.log( 'Resize Timer!' );
-        plot.replot();
-    }, 100);
-    });
-
-$(window).on('load', function () {
-    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
-    clearTimeout(load_timer);
-    load_timer = setTimeout(function () {
-//        console.log( 'Load Timer!' );
-        if(hasVScroll)
-        {
-//            console.log( 'Load Timer Replot!' );
-            plot.replot();
-        }
-    },100);
-    });
-});
-
-function formatTooltip(str, seriesIndex, pointIndex) {
-    x = $.jqplot.DateTickFormatter (options.axes.xaxis.tickOptions.formatString,
-                                    data[seriesIndex][pointIndex][0]);
-    y = data[seriesIndex][pointIndex][1].toFixed(2);
-    return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
-}\n")
-
-            (push "});\n</script>")
-
-            (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
-            
-        )
-        (begin
-          (gnc:warn "linechart has no non-zero data.")
-            " "))
-    retval))
+(gnc:guard-html-chart gnc:html-linechart-data)
+(gnc:guard-html-chart gnc:html-linechart-set-data!)
+(gnc:guard-html-chart gnc:html-linechart-width)
+(gnc:guard-html-chart gnc:html-linechart-set-width!)
+(gnc:guard-html-chart gnc:html-linechart-height)
+(gnc:guard-html-chart gnc:html-linechart-set-height!)
+(gnc:guard-html-chart gnc:html-linechart-x-axis-label)
+(gnc:guard-html-chart gnc:html-linechart-set-x-axis-label!)
+(gnc:guard-html-chart gnc:html-linechart-y-axis-label)
+(gnc:guard-html-chart gnc:html-linechart-set-y-axis-label!)
+(gnc:guard-html-chart gnc:html-linechart-row-labels)
+(gnc:guard-html-chart gnc:html-linechart-set-row-labels!)
+(gnc:guard-html-chart gnc:html-linechart-row-labels-rotated?)
+(gnc:guard-html-chart gnc:html-linechart-set-row-labels-rotated?!)
+(gnc:guard-html-chart gnc:html-linechart-stacked?)
+(gnc:guard-html-chart gnc:html-linechart-set-stacked?!)
+(gnc:guard-html-chart gnc:html-linechart-markers?)
+(gnc:guard-html-chart gnc:html-linechart-set-markers?!)
+(gnc:guard-html-chart gnc:html-linechart-major-grid?)
+(gnc:guard-html-chart gnc:html-linechart-set-major-grid?!)
+(gnc:guard-html-chart gnc:html-linechart-minor-grid?)
+(gnc:guard-html-chart gnc:html-linechart-set-minor-grid?!)
+(gnc:guard-html-chart gnc:html-linechart-col-labels)
+(gnc:guard-html-chart gnc:html-linechart-set-col-labels!)
+(gnc:guard-html-chart gnc:html-linechart-col-colors)
+(gnc:guard-html-chart gnc:html-linechart-set-col-colors!)
+(gnc:guard-html-chart gnc:html-linechart-legend-reversed?)
+(gnc:guard-html-chart gnc:html-linechart-set-legend-reversed?!)
+(gnc:guard-html-chart gnc:html-linechart-title)
+(gnc:guard-html-chart gnc:html-linechart-set-title!)
+(gnc:guard-html-chart gnc:html-linechart-subtitle)
+(gnc:guard-html-chart gnc:html-linechart-set-subtitle!)
+(gnc:guard-html-chart gnc:html-linechart-button-1-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-1-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-2-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-2-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-3-line-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-3-line-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-1-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-1-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-2-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-2-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-button-3-legend-urls)
+(gnc:guard-html-chart gnc:html-linechart-set-button-3-legend-urls!)
+(gnc:guard-html-chart gnc:html-linechart-append-row!)
+(gnc:guard-html-chart gnc:html-linechart-prepend-row!)
+(gnc:guard-html-chart gnc:html-linechart-append-column!)
+(gnc:guard-html-chart gnc:html-linechart-prepend-column!)
+(gnc:guard-html-chart gnc:html-linechart-render)
+(gnc:guard-html-chart gnc:html-linechart-set-line-width!)
+(gnc:guard-html-chart gnc:html-linechart-line-width)
