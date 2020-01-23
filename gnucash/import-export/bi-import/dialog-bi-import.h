@@ -26,6 +26,7 @@
  * @brief core import functions for invoice import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  * @author Mike Evans <mikee@saxicola.co.uk>
+ * @author Rob Laan <rob.laan@chello.nl>
  */
 
 #ifndef GNC_PLUGIN_BI_IMPORT_H
@@ -69,7 +70,7 @@ gnc_bi_import_fix_bis (GtkListStore *store, guint *fixed, guint *deleted, GStrin
 
 void
 gnc_bi_import_create_bis (GtkListStore *store, QofBook *book, guint *n_invoices_created,
-                          guint *n_invoices_updated,	gchar *type, gchar *open_mode, GString * info,
+                          guint *n_invoices_updated, guint *n_rows_ignored,	gchar *type, gchar *open_mode, GString * info,
                           GtkWindow *parent);
 
 
