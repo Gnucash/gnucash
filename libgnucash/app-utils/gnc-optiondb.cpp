@@ -256,7 +256,11 @@ scan_scheme_symbol_from_streambuf(std::streambuf* sbuf)
     return retval;
 }
 
+#ifdef _LIBCPP_VERSION
 static inline void constexpr
+#else
+static inline void
+#endif
 consume_scheme_comment(std::streambuf* sbuf)
 {
     while (sbuf->in_avail() && !is_eol(sbuf->sgetc()))
@@ -273,7 +277,11 @@ scan_scheme_string_from_streambuf(std::streambuf* sbuf)
     return retval;
 }
 
+#ifdef _LIBCPP_VERSION
 static inline void constexpr
+#else
+static inline void
+#endif
 consume_scheme_whitespace(std::streambuf* sbuf)
 {
     while (sbuf->in_avail() && is_whitespace(sbuf->sgetc()))

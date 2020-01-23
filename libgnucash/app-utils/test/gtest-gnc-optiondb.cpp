@@ -129,7 +129,7 @@ TEST_F(GncOptionDBTest, test_register_account_list_option)
     auto acclist{gnc_account_list_from_types(book.m_book, {ACCT_TYPE_STOCK})};
     gnc_register_account_list_option(m_db, "foo", "bar", "baz", "Phony Option",
                                     acclist);
-    EXPECT_EQ(4, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(4U, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
     EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(3));
 }
 
@@ -140,7 +140,7 @@ TEST_F(GncOptionDBTest, test_register_account_list_limited_option)
     gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", acclist,
                                              {ACCT_TYPE_STOCK});
-    EXPECT_EQ(4, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(4U, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
     EXPECT_EQ(acclist[3], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(3));
 }
 
@@ -152,7 +152,7 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option)
     gnc_register_account_list_limited_option(m_db, "foo", "bar", "baz",
                                              "Phony Option", accsel,
                                              {ACCT_TYPE_STOCK});
-    EXPECT_EQ(1, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(1U, m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().size());
     EXPECT_EQ(accsel[0], m_db->find_option("foo", "bar")->get().get_value<GncOptionAccountList>().at(0));
 }
 
@@ -408,7 +408,7 @@ TEST_F(GncOptionDBIOTest, test_account_list_option_scheme_input)
     EXPECT_EQ(acclist[1], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[0]);
     m_db->load_option_scheme(iss);
     EXPECT_EQ(acclist[2], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[1]);
-    EXPECT_EQ(2, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(2U, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
 
 }
 
@@ -448,7 +448,7 @@ TEST_F(GncOptionDBIOTest, test_multiple_options_scheme_input)
     EXPECT_STREQ("pepper", m_db->lookup_string_option("foo", "sausage").c_str());
     EXPECT_EQ(time1, m_db->find_option("pork", "garply")->get().get_value<time64>());
     EXPECT_EQ(acclist[2], m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>()[1]);
-    EXPECT_EQ(2, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
+    EXPECT_EQ(2U, m_db->find_option("quux", "xyzzy")->get().get_value<GncOptionAccountList>().size());
 
 }
 

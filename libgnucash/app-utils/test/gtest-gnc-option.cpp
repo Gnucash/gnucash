@@ -667,9 +667,9 @@ TEST_F(GncOptionAccountTest, test_test_constructor_and_destructor)
     EXPECT_TRUE(m_root != NULL);
     EXPECT_TRUE(GNC_IS_ACCOUNT(m_root));
     GncOptionAccountList list{list_of_types({ACCT_TYPE_BANK})};
-    EXPECT_EQ(2, list.size());
+    EXPECT_EQ(2U, list.size());
     list = list_of_types({ACCT_TYPE_ASSET, ACCT_TYPE_STOCK});
-    EXPECT_EQ(6, list.size());
+    EXPECT_EQ(6U, list.size());
 }
 
 TEST_F(GncOptionAccountTest, test_option_no_value_constructor)
@@ -685,8 +685,8 @@ TEST_F(GncOptionAccountTest, test_option_value_constructor)
     GncOptionAccountList acclist{list_of_types({ACCT_TYPE_BANK})};
     GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
             GncOptionUIType::ACCOUNT_LIST, acclist};
-    EXPECT_EQ(2, option.get_value().size());
-    EXPECT_EQ(2, option.get_default_value().size());
+    EXPECT_EQ(2U, option.get_value().size());
+    EXPECT_EQ(2U, option.get_default_value().size());
     EXPECT_EQ(acclist[0], option.get_value()[0]);
 }
 
@@ -695,7 +695,8 @@ TEST_F(GncOptionAccountTest, test_option_no_value_limited_constructor)
     GncOptionAccountList acclistgood{list_of_types({ACCT_TYPE_BANK})};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
     GncOptionAccountValue option{"foo", "bar", "baz", "Bogus Option",
-            GncOptionUIType::ACCOUNT_LIST, {ACCT_TYPE_BANK}};
+            GncOptionUIType::ACCOUNT_LIST,
+            GncOptionAccountTypeList{ACCT_TYPE_BANK}};
     EXPECT_TRUE(option.get_value().empty());
     EXPECT_TRUE(option.get_default_value().empty());
     EXPECT_EQ(true, option.validate(acclistgood));
@@ -919,13 +920,13 @@ TEST_F(GncMultichoiceOption, test_set_value)
 
 TEST_F(GncMultichoiceOption, test_num_permissible)
 {
-    EXPECT_EQ(4, m_option.num_permissible_values());
+    EXPECT_EQ(4U, m_option.num_permissible_values());
 }
 
 TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
 {
     EXPECT_NO_THROW({
-            EXPECT_EQ(3, m_option.permissible_value_index("corge"));
+            EXPECT_EQ(3U, m_option.permissible_value_index("corge"));
             EXPECT_STREQ("waldo", m_option.permissible_value(1).c_str());
             EXPECT_STREQ("sausage", m_option.permissible_value_name(2).c_str());
             EXPECT_STREQ("thud",

@@ -409,7 +409,10 @@ gnc_option_from_scheme (std::istream& iss, OptType& opt)
         {
             iss.ignore(strlen(commodity_scm_intro) + 1, '"');
             std::getline(iss, name_space, '"');
+ // libc++ doesn't consume the end character, libstdc++ does
+#ifdef _LIBCPP_VERSION
             iss.ignore(1, '"');
+#endif
         }
         else
             name_space = GNC_COMMODITY_NS_CURRENCY;
