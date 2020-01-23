@@ -327,6 +327,7 @@ methods_return_instance_lists(
     Invoice, { 'GetEntries': Entry })
 
 Invoice.add_method('gncInvoiceRemoveEntry', 'RemoveEntry')
+Invoice.add_method('gncInvoiceUnpost', 'Unpost')
 
 # Bill
 Bill.add_methods_with_prefix('gncBill')
