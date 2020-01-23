@@ -710,8 +710,22 @@
       (gnc:warn "sanity check fail" txn)
       (lp printed? odd-row? (cdr splits) total debit credit tax sale))
 
+     ;; txn-date < start-date. skip display, accumulate amounts
+     ((< (xaccTransGetDate (xaccSplitGetParent (car splits))) start-date)
+      (let* ((txn (xaccSplitGetParent (car splits)))
+             (value (AP-negate (xaccTransGetAccountAmount txn acc))))
+        (lp printed? odd-row? (cdr splits) (+ total value)
+            debit credit tax sale)))
+
+     ;; if balance row hasn't been rendered, consider
+     ;; adding here.  skip if value=0.
+     ((not printed?)
+      (let ((print? (and (bal-col used-columns) (not (zero? total)))))
+        (if print? (add-balance-row odd-row? total))
+        (lp #t (not print?) splits total debit credit tax sale)))
+
      ;; start printing txns.
-     (else
+     ((txn-is-invoice? (xaccSplitGetParent (car splits)))
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
@@ -719,52 +733,57 @@
              (value (AP-negate orig-value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn)))
 
-        (cond
-         ;; txn-date < start-date. skip display, accumulate amounts
-         ((< date start-date)
-          (lp printed? odd-row? (cdr splits) (+ total value)
-              debit credit tax sale))
+        (add-row
+         table odd-row? used-columns date (invoice->due-date invoice)
+         (split->reference split)
+         (split->type-str split)
+         (splits->desc (list split))
+         currency (+ total value)
+         (and (< orig-value 0) orig-value)
+         (and (>= orig-value 0) orig-value)
+         (invoice->sale invoice) (invoice->tax invoice)
+         split
+         link-option
+         (case link-option
+           ((simple) (list (list (and (gncInvoiceIsPaid invoice) (_ "Paid")))))
+           ((detailed) (make-invoice->payments-table invoice))
+           (else '(()))))
 
-         ;; if balance row hasn't been rendered, consider
-         ;; adding here.  skip if value=0.
-         ((not printed?)
-          (let ((print? (and (bal-col used-columns) (not (zero? total)))))
-            (if print? (add-balance-row odd-row? total))
-            (lp #t (not print?) splits total debit credit tax sale)))
+        (lp printed? (not odd-row?) (cdr splits) (+ total value)
+            (if (< 0 orig-value) (+ debit orig-value) debit)
+            (if (< 0 orig-value) credit (- credit orig-value))
+            (+ tax (or (invoice->tax invoice) 0))
+            (+ sale (or (invoice->sale invoice) 0)))))
 
-         (else
-          (add-row
-           table odd-row? used-columns date (invoice->due-date invoice)
-           (split->reference split)
-           (split->type-str split)
-           (splits->desc
-            (cond
-             ((txn-is-invoice? txn) (list split))
-             ((txn-is-payment? txn) (txn->assetliab-splits txn))))
-           currency (+ total value)
-           (and (< orig-value 0) orig-value)
-           (and (>= orig-value 0) orig-value)
-           (invoice->sale invoice) (invoice->tax invoice)
-           split
-           link-option
-           (cond
-            ((and (txn-is-invoice? txn) (eq? link-option 'simple))
-             (if (gncInvoiceIsPaid invoice)
-                 (list (list (_ "Paid")))
-                 (list (list #f))))
-            ((and (txn-is-invoice? txn) (eq? link-option 'detailed))
-             (make-invoice->payments-table invoice))
-            ((and (txn-is-payment? txn) (eq? link-option 'simple))
-             (make-payment->invoices-list txn))
-            ((and (txn-is-payment? txn) (eq? link-option 'detailed))
-             (make-payment->invoices-table txn))
-            (else '(()))))
+     ((txn-is-payment? (xaccSplitGetParent (car splits)))
+      (let* ((split (car splits))
+             (txn (xaccSplitGetParent split))
+             (date (xaccTransGetDate txn))
+             (orig-value (xaccTransGetAccountAmount txn acc))
+             (value (AP-negate orig-value))
+             (invoice (gncInvoiceGetInvoiceFromTxn txn)))
 
-          (lp printed? (not odd-row?) (cdr splits) (+ total value)
-              (if (< 0 orig-value) (+ debit orig-value) debit)
-              (if (< 0 orig-value) credit (- credit orig-value))
-              (+ tax (or (invoice->tax invoice) 0))
-              (+ sale (or (invoice->sale invoice) 0))))))))))
+        (add-row
+         table odd-row? used-columns date (invoice->due-date invoice)
+         (split->reference split)
+         (split->type-str split)
+         (splits->desc (txn->assetliab-splits txn))
+         currency (+ total value)
+         (and (< orig-value 0) orig-value)
+         (and (>= orig-value 0) orig-value)
+         (invoice->sale invoice) (invoice->tax invoice)
+         split
+         link-option
+         (case link-option
+           ((simple) (make-payment->invoices-list txn))
+           ((detailed) (make-payment->invoices-table txn))
+           (else '(()))))
+
+        (lp printed? (not odd-row?) (cdr splits) (+ total value)
+            (if (< 0 orig-value) (+ debit orig-value) debit)
+            (if (< 0 orig-value) credit (- credit orig-value))
+            (+ tax (or (invoice->tax invoice) 0))
+            (+ sale (or (invoice->sale invoice) 0))))))))
 
 (define (options-generator owner-type)
 
