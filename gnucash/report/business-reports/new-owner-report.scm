@@ -490,20 +490,6 @@
                            ((detailed) (list (make-link-blank))))))
 
   (define (make-invoice->payments-table invoice)
-    (define (tfr-split->row tfr-split)
-      (let* ((pmt-txn (xaccSplitGetParent tfr-split))
-             (tfr-acct (xaccSplitGetAccount tfr-split))
-             (tfr-curr (xaccAccountGetCommodity tfr-acct))
-             (tfr-amt (AP-negate (xaccSplitGetAmount tfr-split))))
-        (make-link-data
-         (qof-print-date (xaccTransGetDate pmt-txn))
-         (split->reference tfr-split)
-         (split->type-str tfr-split)
-         (splits->desc (list tfr-split))
-         (gnc:make-html-text
-          (gnc:html-markup-anchor
-           (gnc:split-anchor-text (txn->transfer-split pmt-txn))
-           (gnc:make-gnc-monetary tfr-curr tfr-amt))))))
     (define (posting-split->row posting-split)
       (let* ((posting-txn (xaccSplitGetParent posting-split))
              (inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot posting-split))))
@@ -519,7 +505,6 @@
             currency (AP-negate (xaccSplitGetAmount posting-split))))))))
     (let ((lot (gncInvoiceGetPostedLot invoice)))
       (let lp ((lot-splits (gnc-lot-get-split-list lot))
-               (transfer-splits-seen '())
                (link-splits-seen '())
                (result '()))
         (cond
@@ -538,24 +523,28 @@
          ;; This is the regular payment split. Find Transfer acct
          ;; splits, and if haven't encountered before, add to result rows.
          ((txn-is-payment? (xaccSplitGetParent (car lot-splits)))
-          (let lp1 ((pmt-splits (xaccTransGetPaymentAcctSplitList
-                                 (xaccSplitGetParent (car lot-splits))))
-                    (transfer-splits-seen transfer-splits-seen)
-                    (result result))
-            ;; this is a secondary 'inner loop', looping
-            ;; lot-split->tfr-account-splits.
-            (cond
-             ;; finished tfr-splits. loop main lot-splits.
-             ((null? pmt-splits)
-              (lp (cdr lot-splits) transfer-splits-seen link-splits-seen result))
-             ;; we've encountered this tfr-split before. skip.
-             ((member (car pmt-splits) transfer-splits-seen)
-              (lp1 (cdr pmt-splits) transfer-splits-seen result))
-             ;; new tfr-split. render in original currency.
-             (else
-              (lp1 (cdr pmt-splits)
-                   (cons (car pmt-splits) transfer-splits-seen)
-                   (cons (tfr-split->row (car pmt-splits)) result))))))
+          (lp (cdr lot-splits)
+              link-splits-seen
+              (cons (let* ((lot-split (car lot-splits))
+                           (lot-txn (xaccSplitGetParent lot-split))
+                           (lot-amt (AP-negate (- (xaccSplitGetAmount lot-split))))
+                           (tfr-split (txn->transfer-split lot-txn)))
+                      (make-link-data
+                       (qof-print-date (xaccTransGetDate lot-txn))
+                       (split->reference lot-split)
+                       (split->type-str lot-split)
+                       (splits->desc (list lot-split))
+                       (gnc:make-html-text
+                        (gnc:html-markup-anchor
+                         (gnc:split-anchor-text lot-split)
+                         (gnc:make-gnc-monetary currency lot-amt))
+                        " of "
+                        (gnc:html-markup-anchor
+                         (gnc:split-anchor-text tfr-split)
+                         (gnc:make-gnc-monetary
+                          (xaccAccountGetCommodity (xaccSplitGetAccount tfr-split))
+                          (AP-negate (xaccSplitGetAmount tfr-split)))))))
+                    result)))
 
          ;; This is a lot link split. Find corresponding documents,
          ;; and add to result rows.
@@ -569,7 +558,7 @@
             (cond
              ;; finished peer-splits. loop main lot-splits.
              ((null? link-splits)
-              (lp (cdr lot-splits) transfer-splits-seen link-splits-seen result))
+              (lp (cdr lot-splits) link-splits-seen result))
              ;; peer split is of same sign as lot split. skip.
              ((sign-equal? (xaccSplitGetAmount (car lot-splits))
                            (xaccSplitGetAmount (car link-splits)))
@@ -589,7 +578,7 @@
          ;; This is either the invoice posting transaction, or a
          ;; TXN-TYPE-NONE txn which shouldn't happen. Skip both.
          (else
-          (lp (cdr lot-splits) transfer-splits-seen link-splits-seen result))))))
+          (lp (cdr lot-splits) link-splits-seen result))))))
 
   (define (payment-txn->overpayment-and-invoices txn)
     (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
