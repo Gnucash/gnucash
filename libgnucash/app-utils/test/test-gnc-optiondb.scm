@@ -83,8 +83,7 @@
       (create-account book expenses ACCT-TYPE-EXPENSE "Rent")))
 
   (define (cleanup book root)
-    (xaccAccountBeginEdit root)
-    (xaccAccountDestroy root)
+;; Destroying the book destroys the account tree too
     (qof-book-destroy book))
 
   (define (test-make-account-list-option book)
