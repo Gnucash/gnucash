@@ -534,23 +534,27 @@
               link-splits-seen
               (cons (let* ((lot-split (car lot-splits))
                            (lot-txn (xaccSplitGetParent lot-split))
-                           (lot-amt (AP-negate (- (xaccSplitGetAmount lot-split))))
-                           (tfr-split (txn->transfer-split lot-txn)))
+                           (pmt-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
+                      (define (split->anchor split negate?)
+                        (gnc:html-markup-anchor
+                         (gnc:split-anchor-text split)
+                         (gnc:make-gnc-monetary
+                          (xaccAccountGetCommodity (xaccSplitGetAccount split))
+                          ((if negate? - +)
+                           (AP-negate (xaccSplitGetAmount split))))))
                       (make-link-data
                        (qof-print-date (xaccTransGetDate lot-txn))
                        (split->reference lot-split)
                        (split->type-str lot-split)
                        (splits->desc (list lot-split))
-                       (gnc:make-html-text
-                        (gnc:html-markup-anchor
-                         (gnc:split-anchor-text lot-split)
-                         (gnc:make-gnc-monetary currency lot-amt)))
-                       (gnc:make-html-text
-                        (gnc:html-markup-anchor
-                         (gnc:split-anchor-text tfr-split)
-                         (gnc:make-gnc-monetary
-                          (xaccAccountGetCommodity (xaccSplitGetAccount tfr-split))
-                          (AP-negate (xaccSplitGetAmount tfr-split)))))))
+                       (gnc:make-html-text (split->anchor lot-split #t))
+                       (let lp1 ((pmt-splits pmt-splits) (acc '()))
+                         (match pmt-splits
+                           (() (apply gnc:make-html-text acc))
+                           ((pmt-split . rest)
+                            (lp1 rest (cons* (split->anchor pmt-split #f)
+                                             (gnc:html-markup-br)
+                                             acc)))))))
                     result)))
 
          ;; This is a lot link split. Find corresponding documents,
