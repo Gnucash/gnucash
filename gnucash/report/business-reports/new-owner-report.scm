@@ -251,6 +251,11 @@
 (define (split-is-payment? split)
   (txn-is-payment? (xaccSplitGetParent split)))
 
+(define (invoice->anchor inv)
+  (gnc:html-markup-anchor
+   (gnc:invoice-anchor-text inv)
+   (gncInvoiceGetID inv)))
+
 (define (split->reference split)
   (let* ((txn (xaccSplitGetParent split))
          (type (xaccTransGetTxnType txn)))
@@ -262,10 +267,7 @@
           (gnc:split-anchor-text split) ref))))
      ((eqv? type TXN-TYPE-INVOICE)
       (let ((inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
-        (gnc:make-html-text
-         (gnc:html-markup-anchor
-          (gnc:invoice-anchor-text inv)
-          (gncInvoiceGetID inv))))))))
+        (gnc:make-html-text (invoice->anchor inv)))))))
 
 (define (split->type-str split)
   (let* ((txn (xaccSplitGetParent split))
@@ -434,6 +436,15 @@
                              link-option))
   (define mid-span
     (if (eq? link-option 'detailed) (num-cols used-columns 'mid-spac) 0))
+
+  (define (split->anchor split negate?)
+    (gnc:html-markup-anchor
+     (gnc:split-anchor-text split)
+     (gnc:make-gnc-monetary
+      (xaccAccountGetCommodity (xaccSplitGetAccount split))
+      ((if negate? - +)
+       (AP-negate (xaccSplitGetAmount split))))))
+
   (define (print-totals total debit credit tax sale)
     (define (total-cell cell)
       (gnc:make-html-table-cell/markup "total-number-cell" cell))
@@ -535,13 +546,6 @@
               (cons (let* ((lot-split (car lot-splits))
                            (lot-txn (xaccSplitGetParent lot-split))
                            (pmt-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
-                      (define (split->anchor split negate?)
-                        (gnc:html-markup-anchor
-                         (gnc:split-anchor-text split)
-                         (gnc:make-gnc-monetary
-                          (xaccAccountGetCommodity (xaccSplitGetAccount split))
-                          ((if negate? - +)
-                           (AP-negate (xaccSplitGetAmount split))))))
                       (make-link-data
                        (qof-print-date (xaccTransGetDate lot-txn))
                        (split->reference lot-split)
@@ -598,16 +602,9 @@
       (match splits
         (() (cons (AP-negate overpayment) invoices))
         ((split . rest)
-         (let ((invoice (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
-           (if (null? invoice)
-               (lp rest
-                   (- overpayment (xaccSplitGetAmount split))
-                   invoices)
-               (lp rest
-                   overpayment
-                   (if (member invoice invoices)
-                       invoices
-                       (cons (cons invoice split) invoices)))))))))
+         (match (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))
+           (() (lp rest (- overpayment (xaccSplitGetAmount split)) invoices))
+           (invoice (lp rest overpayment (cons (cons invoice split) invoices))))))))
 
   (define (make-payment->invoices-list txn)
     (list
@@ -616,10 +613,7 @@
        gnc:make-html-text
        (map
         (lambda (inv-split-pair)
-          (let ((inv (car inv-split-pair)))
-            (gnc:html-markup-anchor
-             (gnc:invoice-anchor-text inv)
-             (gncInvoiceGetID inv))))
+          (invoice->anchor (car inv-split-pair)))
         (cdr (payment-txn->overpayment-and-invoices txn)))))))
 
   (define (make-payment->invoices-table txn)
@@ -637,26 +631,15 @@
                        (gnc:make-gnc-monetary currency overpayment))
                       result)))))
         (((inv . APAR-split) . rest)
-         (let* ((tfr-txn (gncInvoiceGetPostedTxn inv)))
+         (let* ((posting-split (lot-split->posting-split APAR-split)))
            (lp rest
                (cons (make-link-data
                       (qof-print-date (gncInvoiceGetDatePosted inv))
-                      (gnc:make-html-text
-                       (gnc:html-markup-anchor
-                        (gnc:invoice-anchor-text inv)
-                        (gncInvoiceGetID inv)))
+                      (gnc:make-html-text (invoice->anchor inv))
                       (gncInvoiceGetTypeString inv)
                       (splits->desc (list APAR-split))
-                      (gnc:make-html-text
-                       (gnc:html-markup-anchor
-                        (gnc:split-anchor-text APAR-split)
-                        (gnc:make-gnc-monetary
-                         currency (AP-negate (- (xaccSplitGetAmount APAR-split))))))
-                      (gnc:make-html-text
-                       (gnc:html-markup-anchor
-                        (gnc:split-anchor-text (lot-split->posting-split APAR-split))
-                        (gnc:make-gnc-monetary
-                         currency (invoice->total inv)))))
+                      (gnc:make-html-text (split->anchor APAR-split #t))
+                      (gnc:make-html-text (split->anchor posting-split #f)))
                      result)))))))
 
   (define (invoice->sale invoice)
