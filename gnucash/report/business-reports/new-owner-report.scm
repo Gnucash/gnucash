@@ -637,8 +637,7 @@
                        (gnc:make-gnc-monetary currency overpayment))
                       result)))))
         (((inv . APAR-split) . rest)
-         (let* ((tfr-txn (gncInvoiceGetPostedTxn inv))
-                (tfr-split (txn->transfer-split tfr-txn)))
+         (let* ((tfr-txn (gncInvoiceGetPostedTxn inv)))
            (lp rest
                (cons (make-link-data
                       (qof-print-date (gncInvoiceGetDatePosted inv))
@@ -655,7 +654,7 @@
                          currency (AP-negate (- (xaccSplitGetAmount APAR-split))))))
                       (gnc:make-html-text
                        (gnc:html-markup-anchor
-                        (gnc:split-anchor-text tfr-split)
+                        (gnc:split-anchor-text APAR-split)
                         (gnc:make-gnc-monetary
                          currency (invoice->total inv)))))
                      result)))))))
