@@ -654,7 +654,7 @@
                          currency (AP-negate (- (xaccSplitGetAmount APAR-split))))))
                       (gnc:make-html-text
                        (gnc:html-markup-anchor
-                        (gnc:split-anchor-text APAR-split)
+                        (gnc:split-anchor-text (lot-split->posting-split APAR-split))
                         (gnc:make-gnc-monetary
                          currency (invoice->total inv)))))
                      result)))))))
