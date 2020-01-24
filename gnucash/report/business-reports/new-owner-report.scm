@@ -88,12 +88,13 @@
   (assv-ref owner-string-alist key))
 
 (define-record-type :link-data
-  (make-link-data date ref type desc amount)
+  (make-link-data date ref type desc partial-amount amount)
   link-data?
   (date link-data-date)
   (ref link-data-ref)
   (type link-data-type)
   (desc link-data-desc)
+  (partial-amount link-data-partial-amount)
   (amount link-data-amount))
 
 (define-record-type :link-desc-amount
@@ -151,7 +152,7 @@
            (list 'lhs-cols date? due? ref? type? desc? sale? tax? credit? debit? bal?)
            (list 'ptt-span date? due? ref? type? desc?)
            (list 'mid-spac spacer?)
-           (list 'rhs-cols date? ref? type? desc? amt?)
+           (list 'rhs-cols date? ref? type? desc? amt? amt?)
            (list 'rhs-span date? ref? type? desc?)))
          (cols-list (assq-ref cols-alist section)))
     (count identity cols-list)))
@@ -220,6 +221,8 @@
        (if (ref-col column-vector) (addto! heading-list (_ "Reference")))
        (if (type-col column-vector) (addto! heading-list (_ "Type")))
        (if (desc-col column-vector) (addto! heading-list (_ "Description")))
+       (if (or (debit-col column-vector) (credit-col column-vector))
+           (addto! heading-list (_ "Partial Amount")))
        (if (or (debit-col column-vector) (credit-col column-vector))
            (addto! heading-list (_ "Amount")))))
     (reverse heading-list)))
@@ -354,6 +357,9 @@
        (addif (desc-col column-vector) (link-data-desc link-data))
        (addif (or (debit-col column-vector) (credit-col column-vector))
               (gnc:make-html-table-cell/markup
+               "number-cell" (link-data-partial-amount link-data)))
+       (addif (or (debit-col column-vector) (credit-col column-vector))
+              (gnc:make-html-table-cell/markup
                "number-cell" (link-data-amount link-data)))))
 
      ((link-desc-amount? link-data)
@@ -362,8 +368,8 @@
          (addif (< 0 cols) (gnc:make-html-table-cell/size
                             1 cols (link-desc-amount-desc link-data)))
          (addif (or (debit-col column-vector) (credit-col column-vector))
-                (gnc:make-html-table-cell/markup
-                 "number-cell" (link-desc-amount-amount link-data))))))
+                (gnc:make-html-table-cell/size/markup
+                 1 2 "number-cell" (link-desc-amount-amount link-data))))))
 
      ((link-blank? link-data)
       (make-list (num-cols column-vector 'rhs-cols) #f))
@@ -498,6 +504,7 @@
          (split->reference posting-split)
          (split->type-str posting-split)
          (splits->desc (list posting-split))
+         #f
          (gnc:make-html-text
           (gnc:html-markup-anchor
            (gnc:split-anchor-text (txn->transfer-split posting-txn))
@@ -537,8 +544,8 @@
                        (gnc:make-html-text
                         (gnc:html-markup-anchor
                          (gnc:split-anchor-text lot-split)
-                         (gnc:make-gnc-monetary currency lot-amt))
-                        " of "
+                         (gnc:make-gnc-monetary currency lot-amt)))
+                       (gnc:make-html-text
                         (gnc:html-markup-anchor
                          (gnc:split-anchor-text tfr-split)
                          (gnc:make-gnc-monetary
@@ -641,8 +648,8 @@
                        (gnc:html-markup-anchor
                         (gnc:split-anchor-text APAR-split)
                         (gnc:make-gnc-monetary
-                         currency (AP-negate (- (xaccSplitGetAmount APAR-split)))))
-                       " of "
+                         currency (AP-negate (- (xaccSplitGetAmount APAR-split))))))
+                      (gnc:make-html-text
                        (gnc:html-markup-anchor
                         (gnc:split-anchor-text tfr-split)
                         (gnc:make-gnc-monetary
