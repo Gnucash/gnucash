@@ -740,26 +740,25 @@
         (lp printed? (not odd-row?) (cdr splits) (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
-            (+ tax (or (invoice->tax invoice) 0))
-            (+ sale (or (invoice->sale invoice) 0)))))
+            (+ tax (invoice->tax invoice))
+            (+ sale (invoice->sale invoice)))))
 
      ((txn-is-payment? (xaccSplitGetParent (car splits)))
       (let* ((split (car splits))
              (txn (xaccSplitGetParent split))
              (date (xaccTransGetDate txn))
              (orig-value (xaccTransGetAccountAmount txn acc))
-             (value (AP-negate orig-value))
-             (invoice (gncInvoiceGetInvoiceFromTxn txn)))
+             (value (AP-negate orig-value)))
 
         (add-row
-         table odd-row? used-columns date (invoice->due-date invoice)
+         table odd-row? used-columns date #f
          (split->reference split)
          (split->type-str split)
          (splits->desc (txn->assetliab-splits txn))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
-         (invoice->sale invoice) (invoice->tax invoice)
+         #f #f
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
@@ -769,8 +768,8 @@
         (lp printed? (not odd-row?) (cdr splits) (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
-            (+ tax (or (invoice->tax invoice) 0))
-            (+ sale (or (invoice->sale invoice) 0))))))))
+            tax
+            sale))))))
 
 (define (options-generator owner-type)
 
