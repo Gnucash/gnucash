@@ -88,14 +88,15 @@
   (assv-ref owner-string-alist key))
 
 (define-record-type :link-data
-  (make-link-data date ref type desc partial-amount amount)
+  (make-link-data date ref type desc partial-amount amount rhs-class)
   link-data?
   (date link-data-date)
   (ref link-data-ref)
   (type link-data-type)
   (desc link-data-desc)
   (partial-amount link-data-partial-amount)
-  (amount link-data-amount))
+  (amount link-data-amount)
+  (rhs-class link-data-rhs-class))
 
 (define-record-type :link-desc-amount
   (make-link-desc-amount desc amount)
@@ -346,23 +347,39 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
-                 desc currency amt debit credit sale tax
+                 desc currency amt debit credit sale tax lhs-class
                  link-option link-rows)
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
     (cond
      ((link-data? link-data)
       (append
-       (addif (date-col column-vector) (link-data-date link-data))
-       (addif (ref-col column-vector) (link-data-ref link-data))
-       (addif (type-col column-vector) (link-data-type link-data))
-       (addif (desc-col column-vector) (link-data-desc link-data))
-       (addif (or (debit-col column-vector) (credit-col column-vector))
-              (gnc:make-html-table-cell/markup
-               "number-cell" (link-data-partial-amount link-data)))
-       (addif (or (debit-col column-vector) (credit-col column-vector))
-              (gnc:make-html-table-cell/markup
-               "number-cell" (link-data-amount link-data)))))
+       (map
+        (lambda (str)
+          (let ((cell (gnc:make-html-table-cell str))
+                (rhs-class (link-data-rhs-class link-data)))
+            (when rhs-class
+              (gnc:html-table-cell-set-style!
+               cell "td" 'attribute (list "link-id" rhs-class)))
+            cell))
+        (append
+         (addif (date-col column-vector) (link-data-date link-data))
+         (addif (ref-col column-vector) (link-data-ref link-data))
+         (addif (type-col column-vector) (link-data-type link-data))
+         (addif (desc-col column-vector) (link-data-desc link-data))))
+       (map
+        (lambda (str)
+          (let ((cell (gnc:make-html-table-cell/markup "number-cell" str))
+                (rhs-class (link-data-rhs-class link-data)))
+            (when rhs-class
+              (gnc:html-table-cell-set-style!
+               cell "number-cell" 'attribute (list "link-id" rhs-class)))
+            cell))
+        (append
+         (addif (or (debit-col column-vector) (credit-col column-vector))
+                (link-data-partial-amount link-data))
+         (addif (or (debit-col column-vector) (credit-col column-vector))
+                (link-data-amount link-data))))))
 
      ((link-desc-amount? link-data)
       (let ((cols (num-cols column-vector 'rhs-span)))
@@ -386,6 +403,7 @@
       cell))
   (define mid-span
     (if (eq? link-option 'detailed) (num-cols column-vector 'mid-spac) 0))
+
   (let lp ((link-rows link-rows)
            (first-row? #t))
     (unless (null? link-rows)
@@ -394,8 +412,12 @@
            table (if odd-row? "normal-row" "alternate-row")
            (append
             (map
-             (lambda (cell)
-               (gnc:make-html-table-cell/size nrows 1 cell))
+             (lambda (str)
+               (let ((cell (gnc:make-html-table-cell/size nrows 1 str)))
+                 (when lhs-class
+                   (gnc:html-table-cell-set-style!
+                    cell "td" 'attribute (list "link-id" lhs-class)))
+                 cell))
              (append
               (addif (date-col column-vector) (qof-print-date date))
               (addif (date-due-col column-vector)
@@ -404,14 +426,21 @@
               (addif (type-col column-vector)   type-str)
               (addif (desc-col column-vector)   desc)))
             (map
-             (lambda (cell)
-               (gnc:make-html-table-cell/size/markup nrows 1 "number-cell" cell))
+             (lambda (str)
+               (let ((cell (gnc:make-html-table-cell/size/markup
+                            nrows 1 "number-cell" str)))
+                 (when lhs-class
+                   (gnc:html-table-cell-set-style!
+                    cell "number-cell" 'attribute (list "link-id" lhs-class)))
+                 cell))
              (append
               (addif (sale-col column-vector)    (cell sale))
               (addif (tax-col column-vector)     (cell tax))
               (addif (debit-col column-vector)   debit)
-              (addif (credit-col column-vector)  credit)
-              (addif (bal-col column-vector)     (cell amt))))
+              (addif (credit-col column-vector)  credit)))
+            (addif (bal-col column-vector)
+                   (gnc:make-html-table-cell/size/markup
+                    nrows 1 "number-cell" (cell amt)))
             (addif (< 0 mid-span) cell-nohoriz)
             (link-data->cols (car link-rows))))
           (gnc:html-table-append-row/markup!
@@ -494,7 +523,7 @@
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
-             currency total #f #f #f (list (make-list rhs-cols #f))
+             currency total #f #f #f (list (make-list rhs-cols #f)) #f
              link-option (case link-option
                            ((none) '(()))
                            ((simple) '((#f)))
@@ -514,7 +543,8 @@
           (gnc:html-markup-anchor
            (gnc:split-anchor-text (txn->transfer-split posting-txn))
            (gnc:make-gnc-monetary
-            currency (AP-negate (xaccSplitGetAmount posting-split))))))))
+            currency (AP-negate (xaccSplitGetAmount posting-split)))))
+         (gncInvoiceReturnGUID inv))))
     (let ((lot (gncInvoiceGetPostedLot invoice)))
       (let lp ((lot-splits (gnc-lot-get-split-list lot))
                (link-splits-seen '())
@@ -552,7 +582,8 @@
                            ((pmt-split . rest)
                             (lp1 rest (cons* (split->anchor pmt-split #f)
                                              (gnc:html-markup-br)
-                                             acc)))))))
+                                             acc)))))
+                       (gncTransGetGUID lot-txn)))
                     result)))
 
          ;; This is a lot link split. Find corresponding documents,
@@ -633,7 +664,8 @@
                       (gncInvoiceGetTypeString inv)
                       (splits->desc (list APAR-split))
                       (gnc:make-html-text (split->anchor APAR-split #t))
-                      (gnc:make-html-text (split->anchor posting-split #f)))
+                      (gnc:make-html-text (split->anchor posting-split #f))
+                      (gncInvoiceReturnGUID inv))
                      result)))))))
 
   (define (invoice->sale invoice)
@@ -731,6 +763,7 @@
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
          (invoice->sale invoice) (invoice->tax invoice)
+         (gncInvoiceReturnGUID invoice)
          link-option
          (case link-option
            ((simple) (list (list (and (gncInvoiceIsPaid invoice) (_ "Paid")))))
@@ -759,6 +792,7 @@
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
          #f #f
+         (gncTransGetGUID txn)
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
