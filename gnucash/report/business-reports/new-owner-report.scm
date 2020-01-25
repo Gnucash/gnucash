@@ -346,7 +346,7 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
-                 desc currency amt credit debit sale tax anchor-split
+                 desc currency amt debit credit sale tax
                  link-option link-rows)
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
@@ -379,12 +379,6 @@
      (else link-data)))
   (define (cell amt)
     (and amt (gnc:make-gnc-monetary currency amt)))
-  (define (cell-anchor amt)
-    (and amt anchor-split
-         (gnc:make-html-text
-          (gnc:html-markup-anchor
-           (gnc:split-anchor-text anchor-split)
-           (gnc:make-gnc-monetary currency amt)))))
   (define cell-nohoriz
     (let ((cell (gnc:make-html-table-cell/size nrows 1 #f)))
       (gnc:html-table-cell-set-style!
@@ -415,8 +409,8 @@
              (append
               (addif (sale-col column-vector)    (cell sale))
               (addif (tax-col column-vector)     (cell tax))
-              (addif (debit-col column-vector)   (cell-anchor debit))
-              (addif (credit-col column-vector)  (cell-anchor (and credit (- credit))))
+              (addif (debit-col column-vector)   debit)
+              (addif (credit-col column-vector)  credit)
               (addif (bal-col column-vector)     (cell amt))))
             (addif (< 0 mid-span) cell-nohoriz)
             (link-data->cols (car link-rows))))
@@ -500,7 +494,7 @@
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
-             currency total #f #f #f #f (list (make-list rhs-cols #f))
+             currency total #f #f #f (list (make-list rhs-cols #f))
              link-option (case link-option
                            ((none) '(()))
                            ((simple) '((#f)))
@@ -662,6 +656,12 @@
          (gncInvoiceIsPosted invoice)
          (gncInvoiceGetDateDue invoice)))
 
+  (define (amount->anchor split amount)
+    (gnc:make-html-text
+     (gnc:html-markup-anchor
+      (gnc:split-anchor-text split)
+      (gnc:make-gnc-monetary currency amount))))
+
   (let lp ((printed? #f)
            (odd-row? #t)
            (splits splits)
@@ -728,10 +728,9 @@
          (split->type-str split)
          (splits->desc (list split))
          currency (+ total value)
-         (and (< orig-value 0) orig-value)
-         (and (>= orig-value 0) orig-value)
+         (and (>= orig-value 0) (amount->anchor split orig-value))
+         (and (< orig-value 0) (amount->anchor split (- orig-value)))
          (invoice->sale invoice) (invoice->tax invoice)
-         split
          link-option
          (case link-option
            ((simple) (list (list (and (gncInvoiceIsPaid invoice) (_ "Paid")))))
@@ -758,10 +757,9 @@
          (split->type-str split)
          (splits->desc (txn->assetliab-splits txn))
          currency (+ total value)
-         (and (< orig-value 0) orig-value)
-         (and (>= orig-value 0) orig-value)
+         (and (>= orig-value 0) (amount->anchor split orig-value))
+         (and (< orig-value 0) (amount->anchor split (- orig-value)))
          (invoice->sale invoice) (invoice->tax invoice)
-         split
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
