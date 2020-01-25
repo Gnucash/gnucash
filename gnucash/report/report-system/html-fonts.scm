@@ -142,6 +142,7 @@
       "th.column-heading-left { text-align: left; " number-header-info " }\n"
       "th.column-heading-center { text-align: center; " number-header-info " }\n"
       "th.column-heading-right { text-align: right; " number-header-info " }\n"
+      "td.highlight {background-color:#e1e1e1}"
       "td.neg { " (if negative-red? "color: red; " "") " }\n"
       "td.number-cell, td.total-number-cell { text-align: right; white-space: nowrap; }\n"
       "td.date-cell { white-space: nowrap; }\n"

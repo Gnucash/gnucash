@@ -60,6 +60,23 @@
 (define balance-header (N_ "Balance"))
 (define linked-txns-header (N_ "Links"))
 
+(define javascript "
+<script>
+  function getID(cell) { return cell.getAttribute('link-id'); }
+  function clicky() {
+      var id = getID(this);
+      var ishighlighted = this.classList.contains('highlight');
+      TDs.forEach(TD => TD.classList.remove('highlight'));
+      if (ishighlighted) return;
+      TDs
+          .filter (TD => getID(TD) == id)
+          .forEach (TD => TD.classList.add('highlight'));}
+  var TDs = document.getElementsByTagName('td');
+  TDs = [...TDs].filter(getID);
+  TDs.forEach(TD => TD.onclick = clicky);
+</script>
+")
+
 ;; Depending on the report type we want to set up some lists/cases
 ;; with strings to ease overview and translation
 (define owner-string-alist
@@ -1116,7 +1133,9 @@ invoices and amounts.")))))
                (list section-headings headings)
                (list headings)))
 
-          (gnc:html-document-add-object! document table))))))
+          (gnc:html-document-add-object! document table)
+
+          (gnc:html-document-add-object! document javascript))))))
 
     document))
 
