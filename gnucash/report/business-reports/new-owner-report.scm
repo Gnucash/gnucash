@@ -311,17 +311,12 @@
 
 (define (splits->desc splits)
   (let lp ((splits splits) (result '()))
-    (if (null? splits)
-        (apply gnc:make-html-text
-               (fold
-                (lambda (a b)
-                  (cons* (gnc:html-string-sanitize a) (gnc:html-markup-br) b))
-                '() result))
-        (lp (cdr splits)
-            (let ((memo (xaccSplitGetMemo (car splits))))
-              (if (or (string-null? memo) (member memo result))
-                  result
-                  (cons memo result)))))))
+    (match splits
+      (() (apply gnc:make-html-text result))
+      ((split . rest)
+       (lp rest (cons* (gnc:html-string-sanitize (xaccSplitGetMemo split))
+                       (gnc:html-markup-br)
+                       result))))))
 
 (define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
@@ -591,7 +586,7 @@
                        (qof-print-date (xaccTransGetDate lot-txn))
                        (split->reference lot-split)
                        (split->type-str lot-split)
-                       (splits->desc (list lot-split))
+                       (splits->desc pmt-splits)
                        (gnc:make-html-text (split->anchor lot-split #t))
                        (let lp1 ((pmt-splits pmt-splits) (acc '()))
                          (match pmt-splits
@@ -804,7 +799,7 @@
          table odd-row? used-columns date #f
          (split->reference split)
          (split->type-str split)
-         (splits->desc (txn->assetliab-splits txn))
+         (splits->desc (xaccTransGetAPARAcctSplitList txn #t))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
