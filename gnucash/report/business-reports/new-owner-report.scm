@@ -116,10 +116,11 @@
   (rhs-class link-data-rhs-class))
 
 (define-record-type :link-desc-amount
-  (make-link-desc-amount desc amount)
+  (make-link-desc-amount desc amount rhs-class)
   link-desc-amount?
   (desc link-desc-amount-desc)
-  (amount link-desc-amount-amount))
+  (amount link-desc-amount-amount)
+  (rhs-class link-desc-amount-rhs-class))
 
 (define-record-type :link-blank
   (make-link-blank)
@@ -403,11 +404,25 @@
      ((link-desc-amount? link-data)
       (let ((cols (num-cols column-vector 'rhs-span)))
         (append
-         (addif (< 0 cols) (gnc:make-html-table-cell/size
-                            1 cols (link-desc-amount-desc link-data)))
-         (addif (or (debit-col column-vector) (credit-col column-vector))
-                (gnc:make-html-table-cell/size/markup
-                 1 2 "number-cell" (link-desc-amount-amount link-data))))))
+         (map
+          (lambda (str)
+            (let ((cell (gnc:make-html-table-cell/size 1 cols str))
+                  (rhs-class (link-desc-amount-rhs-class link-data)))
+              (when rhs-class
+                (gnc:html-table-cell-set-style!
+                 cell "td" 'attribute (list "link-id" rhs-class)))
+              cell))
+          (addif (< 0 cols) (link-desc-amount-desc link-data)))
+         (map
+          (lambda (str)
+            (let ((cell (gnc:make-html-table-cell/size/markup 1 2 "number-cell" str))
+                  (rhs-class (link-desc-amount-rhs-class link-data)))
+              (when rhs-class
+                (gnc:html-table-cell-set-style!
+                 cell "number-cell" 'attribute (list "link-id" rhs-class)))
+              cell))
+          (addif (or (debit-col column-vector) (credit-col column-vector))
+                 (link-desc-amount-amount link-data))))))
 
      ((link-blank? link-data)
       (make-list (num-cols column-vector 'rhs-cols) #f))
@@ -578,7 +593,8 @@
                (cons (make-link-desc-amount
                       (_ "UNPAID")
                       (gnc:make-gnc-monetary
-                       currency (AP-negate (gnc-lot-get-balance lot))))
+                       currency (AP-negate (gnc-lot-get-balance lot)))
+                      (gncInvoiceReturnGUID invoice))
                      result))))
 
          ;; This is the regular payment split. Find Transfer acct
@@ -703,7 +719,8 @@
             '()
             (list (make-link-desc-amount
                    (_ "Pre-Payment")
-                   (gnc:make-gnc-monetary currency overpayment))))))
+                   (gnc:make-gnc-monetary currency overpayment)
+                   (gncTransGetGUID txn))))))
 
     (define payments-list
       (map
