@@ -5281,13 +5281,15 @@ struct AccountInfo
 static void
 build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
-    tokenInfo.total_count += value->get<int64_t>();
-    AccountTokenCount this_account;
-    std::string account_guid {suffix};
-    /*By convention, the key ends with the account GUID.*/
-    this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
-    this_account.token_count = value->get<int64_t>();
-    tokenInfo.accounts.push_back(this_account);
+    if (strlen(suffix) == GUID_ENCODING_LENGTH)
+    {
+        tokenInfo.total_count += value->get<int64_t>();
+        AccountTokenCount this_account;
+        /*By convention, the key ends with the account GUID.*/
+        this_account.account_guid = std::string{suffix};
+        this_account.token_count = value->get<int64_t>();
+        tokenInfo.accounts.push_back(this_account);
+    }
 }
 
 /** We scale the probability values by probability_factor.
@@ -5332,7 +5334,7 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
         TokenAccountsInfo tokenInfo{};
-        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data);
+        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data) + "/";
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
         for (auto const & current_account_token : tokenInfo.accounts)
         {
