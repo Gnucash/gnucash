@@ -5279,11 +5279,11 @@ struct AccountInfo
 };
 
 static void
-build_token_info(char const * key, KvpValue * value, TokenAccountsInfo & tokenInfo)
+build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
     tokenInfo.total_count += value->get<int64_t>();
     AccountTokenCount this_account;
-    std::string account_guid {key};
+    std::string account_guid {suffix};
     /*By convention, the key ends with the account GUID.*/
     this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
     this_account.token_count = value->get<int64_t>();
@@ -5665,38 +5665,36 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     g_free (guid_string);
 }
 
-static std::tuple<std::string, std::string, std::string>
+static std::tuple<std::string, std::string>
 parse_bayes_imap_info (std::string const & imap_bayes_entry)
 {
-    auto header_length = strlen (IMAP_FRAME_BAYES);
-    std::string header {imap_bayes_entry.substr (0, header_length)};
     auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
-    std::string keyword {imap_bayes_entry.substr (header_length + 1, guid_start - header_length - 2)};
+    std::string keyword {imap_bayes_entry.substr (1, guid_start - 2)};
     std::string account_guid {imap_bayes_entry.substr (guid_start)};
-    return std::tuple <std::string, std::string, std::string> {header, keyword, account_guid};
+    return std::tuple <std::string, std::string> {keyword, account_guid};
 }
 
 static void
-build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
+build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
 {
-    auto parsed_key = parse_bayes_imap_info (key);
+    auto parsed_key = parse_bayes_imap_info (suffix);
     GncGUID guid;
     try
     {
-        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
+        auto temp_guid = gnc::GUID::from_string (std::get <1> (parsed_key));
         guid = temp_guid;
     }
     catch (const gnc::guid_syntax_exception& err)
     {
-        PWARN("Invalid GUID string from %s", key);
+        PWARN("Invalid GUID string from %s%s", IMAP_FRAME_BAYES, suffix);
     }
     auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
     auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
     auto count = value->get <int64_t> ();
     imap_node->source_account = imapInfo.source_account;
     imap_node->map_account = map_account;
-    imap_node->head = g_strdup (key);
-    imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
+    imap_node->head = g_strdup_printf ("%s%s", IMAP_FRAME_BAYES, suffix);
+    imap_node->match_string = g_strdup (std::get <0> (parsed_key).c_str ());
     imap_node->category = g_strdup(" ");
     imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
     imapInfo.list = g_list_prepend (imapInfo.list, imap_node);

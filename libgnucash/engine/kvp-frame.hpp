@@ -247,7 +247,7 @@ void KvpFrame::for_each_slot_prefix(std::string const & prefix,
                 return;
             /* Testing for prefix matching */
             if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
-                func (a.first, a.second);
+                func (&a.first[prefix.size()], a.second);
         }
     );
 }
@@ -264,7 +264,7 @@ void KvpFrame::for_each_slot_prefix(std::string const & prefix,
                 return;
             /* Testing for prefix matching */
             if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
-                func (a.first, a.second, data);
+                func (&a.first[prefix.size()], a.second, data);
         }
     );
 }
