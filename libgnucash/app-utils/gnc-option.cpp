@@ -1,6 +1,6 @@
 /********************************************************************\
  * gnc-option.cpp -- Application options system                     *
- * Copyright (C) 2019 John Ralls <jralls@ceridwen.us>               *
+ * Copyright (C) 2020 John Ralls <jralls@ceridwen.us>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,273 +21,353 @@
  *                                                                  *
 \********************************************************************/
 
-//#include "options.h"
 #include "gnc-option.hpp"
-#include <gnc-datetime.hpp>
-#include <guid.hpp>
-extern "C"
+#include "gnc-option-impl.hpp"
+#include "gnc-option-uitype.hpp"
+
+template <typename ValueType>
+GncOption::GncOption(const char* section, const char* name,
+                     const char* key, const char* doc_string,
+                     ValueType value, GncOptionUIType ui_type) :
+    m_option{std::make_unique<GncOptionVariant>(GncOptionValue<ValueType> {
+            section, name, key, doc_string, value, ui_type})}
 {
-#include "gnc-accounting-period.h"
-#include "gnc-ui-util.h"
+}
+
+template <typename ValueType> ValueType
+GncOption::get_value() const
+{
+    return std::visit([](const auto option)->ValueType {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
+                                           return option.get_value();
+                          return ValueType {};
+                      }, *m_option);
+}
+
+template <typename ValueType> ValueType
+GncOption::get_default_value() const
+{
+    return std::visit([](const auto option)->ValueType {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
+                                           return option.get_default_value();
+                          return ValueType {};
+                      }, *m_option);
+
+}
+
+template <typename ValueType> void
+GncOption::set_value(ValueType value)
+{
+    std::visit([value](auto& option) {
+                   if constexpr
+                       (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                        std::decay_t<ValueType>> ||
+                        (std::is_same_v<std::decay_t<decltype(option)>,
+                         GncOptionDateValue> &&
+                         std::is_same_v<std::decay_t<ValueType>,
+                         RelativeDatePeriod>))
+                           option.set_value(value);
+               }, *m_option);
+}
+
+const std::string&
+GncOption::get_section() const
+{
+    return std::visit([](const auto& option)->const std::string& {
+                          return option.m_section;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::get_name() const
+{
+    return std::visit([](const auto& option)->const std::string& {
+                          return option.m_name;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::get_key() const
+{
+    return std::visit([](const auto& option)->const std::string& {
+                          return option.m_sort_tag;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::get_docstring() const
+{
+    return std::visit([](const auto& option)->const std::string& {
+                          return option.m_doc_string;
+                      }, *m_option);
+}
+
+void
+GncOption::set_ui_item(GncOptionUIItem* ui_elem)
+{
+    std::visit([ui_elem](auto& option) {
+                   option.set_ui_item(ui_elem);
+               }, *m_option);
+}
+
+const GncOptionUIType
+GncOption::get_ui_type() const
+{
+    return std::visit([](const auto& option)->GncOptionUIType {
+                          return option.get_ui_type();
+                      }, *m_option);
+}
+
+GncOptionUIItem* const
+GncOption::get_ui_item() const
+{
+    return std::visit([](const auto& option)->GncOptionUIItem* {
+                          return option.get_ui_item();
+                      }, *m_option);
+}
+
+void
+GncOption::make_internal()
+{
+    std::visit([](auto& option) {
+                   option.make_internal();
+               }, *m_option);
 }
 
 bool
-GncOptionAccountValue::validate(const GncOptionAccountList& values) const
+GncOption::is_changed() const noexcept
 {
-    if (values.empty())
-        return false;
-    if (get_ui_type() == GncOptionUIType::ACCOUNT_SEL && values.size() != 1)
-        return false;
-    if (m_allowed.empty())
-        return true;
-    for(auto account : values) {
-        if (std::find(m_allowed.begin(), m_allowed.end(),
-                      xaccAccountGetType(account)) == m_allowed.end())
-            return false;
-    }
-    return true;
+    return std::visit([](const auto& option)->bool {
+                          return option.is_changed();
+                      }, *m_option);
 }
 
-static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-static void
-normalize_month(struct tm& now)
+template<typename ValueType> bool
+GncOption::validate(ValueType value) const
 {
-    if (now.tm_mon < 0)
-    {
-        now.tm_mon += 12;
-        --now.tm_year;
-    }
-    else if (now.tm_mon > 11)
-    {
-        now.tm_mon -= 12;
-        ++now.tm_year;
-    }
+    return std::visit([value] (const auto& option) -> bool {
+                          if constexpr ((std::is_same_v<std::decay_t<decltype(option)>,
+                                         GncOptionMultichoiceValue> &&
+                                         std::is_same_v<std::decay_t<ValueType>,
+                                         std::string>) ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionValidatedValue<ValueType>>)
+                                           return option.validate(value);
+                          else
+                              return false;
+                      }, *m_option);
 }
 
-static void
-set_day_and_time(struct tm& now, bool starting)
+std::size_t
+GncOption::num_permissible_values() const
 {
-    if (starting)
-    {
-        now.tm_hour = now.tm_min = now.tm_sec = 0;
-        now.tm_mday = 1;
-    }
-    else
-    {
-        now.tm_min = now.tm_sec = 59;
-        now.tm_hour = 23;
-        now.tm_mday = days_in_month[now.tm_mon];
-        // Check for Februrary in a leap year
-        if (int year = now.tm_year + 1900; now.tm_mon == 1 &&
-            year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-            ++now.tm_mday;
-    }
-};
-
-time64
-GncOptionDateValue::get_value() const
-{
-    if (m_period == RelativeDatePeriod::ABSOLUTE)
-        return m_date;
-    if (m_period == RelativeDatePeriod::TODAY)
-        return static_cast<time64>(GncDateTime());
-    if (m_period == RelativeDatePeriod::START_ACCOUNTING_PERIOD)
-        return gnc_accounting_period_fiscal_start();
-    if (m_period == RelativeDatePeriod::END_ACCOUNTING_PERIOD)
-        return gnc_accounting_period_fiscal_end();
-
-    GncDateTime now_t;
-    if (m_period == RelativeDatePeriod::TODAY)
-        return static_cast<time64>(now_t);
-    struct tm now{static_cast<tm>(now_t)};
-    struct tm period{static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()))};
-    bool starting =  m_period == RelativeDatePeriod::START_PREV_MONTH ||
-        m_period == RelativeDatePeriod::START_THIS_MONTH ||
-        m_period == RelativeDatePeriod::START_CAL_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
-        m_period == RelativeDatePeriod::START_PREV_QUARTER;
-
-    bool prev = m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::END_PREV_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_QUARTER ||
-        m_period == RelativeDatePeriod::END_PREV_QUARTER;
-
-    if (period.tm_mon == now.tm_mon && period.tm_mday == now.tm_mday)
-    {
-        //No set accounting period, use the calendar year
-        period.tm_mon = 0;
-        period.tm_mday = 0;
-    }
-
-    if (m_period == RelativeDatePeriod::START_CAL_YEAR ||
-        m_period == RelativeDatePeriod::END_CAL_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::END_PREV_YEAR)
-    {
-
-        if (prev)
-            --now.tm_year;
-        now.tm_mon = starting ? 0 : 11;
-    }
-    else if (m_period == RelativeDatePeriod::START_PREV_QUARTER ||
-             m_period == RelativeDatePeriod::END_PREV_QUARTER ||
-             m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
-             m_period == RelativeDatePeriod::END_CURRENT_QUARTER)
-    {
-        auto offset = (now.tm_mon > period.tm_mon ? now.tm_mon - period.tm_mon :
-                       period.tm_mon - now.tm_mon) % 3;
-        now.tm_mon = now.tm_mon - offset;
-        if (prev)
-            now.tm_mon -= 3;
-        if (!starting)
-            now.tm_mon += 2;
-    }
-    else if (m_period == RelativeDatePeriod::START_PREV_MONTH ||
-             m_period == RelativeDatePeriod::END_PREV_MONTH)
-        --now.tm_mon;
-    normalize_month(now);
-    set_day_and_time(now, starting);
-    return static_cast<time64>(GncDateTime(now));
+    return std::visit([] (const auto& option) -> size_t {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionMultichoiceValue>)
+                                           return option.num_permissible_values();
+                          else
+                              return size_t_max;
+                      }, *m_option);
 }
-static const char* date_type_str[] {"absolute", "relative"};
-static const std::array<const char*, 15> date_period_str
-{
-    "today",
-    "start-this-month", "end-this-month",
-    "start-prev-month", "end-prev-month",
-    "start-current-quarter", "end-current-quarter",
-    "start-prev-quarter", "end-prev-quarter",
-    "start-cal-year", "end-cal-year",
-    "start-prev-year", "end-prev-year",
-    "start-prev-fin-year", "end-prev-fin-year"
-};
 
+std::size_t
+GncOption::permissible_value_index(const std::string& value) const
+{
+    return std::visit([&value] (const auto& option) -> size_t {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionMultichoiceValue>)
+                                           return option.permissible_value_index(value);
+                          else
+                              return size_t_max;;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::permissible_value(std::size_t index) const
+{
+    return std::visit([index] (const auto& option) -> const std::string& {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionMultichoiceValue>)
+                                           return option.permissible_value(index);
+                          else
+                              return c_empty_string;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::permissible_value_name(std::size_t index) const
+{
+    return std::visit([index] (const auto& option) -> const std::string& {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionMultichoiceValue>)
+                                           return option.permissible_value_name(index);
+                          else
+                              return c_empty_string;
+                      }, *m_option);
+}
+
+const std::string&
+GncOption::permissible_value_description(std::size_t index) const
+{
+    return std::visit([index] (const auto& option) -> const std::string& {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionMultichoiceValue>)
+                                           return option.permissible_value_description(index);
+                          else
+                              return c_empty_string;
+                      }, *m_option);
+}
 
 std::ostream&
-GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
+GncOption::out_stream(std::ostream& oss) const
 {
-    if (m_period == RelativeDatePeriod::ABSOLUTE)
-        oss << date_type_str[0] << " . " << m_date;
-    else
-        oss << date_type_str[1] << " . " <<
-            date_period_str[static_cast<int>(m_period)];
-    return oss;
+    return std::visit([&oss](auto& option) -> std::ostream& {
+                          oss << option;
+                          return oss;
+                      }, *m_option);
 }
 
 std::istream&
-GncOptionDateValue::in_stream(std::istream& iss)
+GncOption::in_stream(std::istream& iss)
 {
-    char type_str[10]; //The length of both "absolute" and "relative" plus 1.
-    iss.getline(type_str, sizeof(type_str), '.');
-    if(!iss)
-        throw std::invalid_argument("Date Type separator missing");
-    /* strcmp is safe, istream::getline null terminates the buffer. */
-    if (strcmp(type_str, "absolute ") == 0)
-    {
-        time64 time;
-        iss >> time;
-        set_value(time);
-        if (iss.get() != ')')
-            iss.unget();
-    }
-    else if (strcmp(type_str, "relative ") == 0)
-    {
-        std::string period_str;
-        iss >> period_str;
-        if (period_str.back() == ')')
-            period_str.pop_back();
-        auto period = std::find(date_period_str.begin(), date_period_str.end(),
-                                period_str);
-        if (period == date_period_str.end())
-        {
-            std::string err{"Unknown period string in date option: '"};
-            err += period_str;
-            err += "'";
-            throw std::invalid_argument(err);
-        }
-
-        int64_t index = period - date_period_str.begin();
-        set_value(static_cast<RelativeDatePeriod>(index));
-    }
-    else
-    {
-        std::string err{"Unknown date type string in date option: '"};
-        err += type_str;
-        err += "'";
-        throw std::invalid_argument{err};
-    }
-    return iss;
+    return std::visit([&iss](auto& option) -> std::istream& {
+                          iss >> option;
+                          return iss;
+                      }, *m_option);
 }
 
-QofInstance*
-qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
+std::ostream&
+GncOption::to_scheme(std::ostream& oss) const
 {
-    QofIdType qof_type;
-    switch(type)
-    {
-        case GncOptionUIType::CURRENCY:
-        case GncOptionUIType::COMMODITY:
-            qof_type = "Commodity";
-            break;
-        case GncOptionUIType::BUDGET:
-            qof_type = "Budget";
-            break;
-        case GncOptionUIType::OWNER:
-            qof_type = "gncOwner";
-            break;
-        case GncOptionUIType::CUSTOMER:
-            qof_type = "gncCustomer";
-            break;
-        case GncOptionUIType::VENDOR:
-            qof_type = "gncVendor";
-            break;
-        case GncOptionUIType::EMPLOYEE:
-            qof_type = "gncEmployee";
-            break;
-        case GncOptionUIType::INVOICE:
-            qof_type = "gncInvoice";
-            break;
-        case GncOptionUIType::TAX_TABLE:
-            qof_type = "gncTaxtable";
-            break;
-        case GncOptionUIType::QUERY:
-            qof_type = "gncQuery";
-            break;
-        case GncOptionUIType::ACCOUNT_LIST:
-        case GncOptionUIType::ACCOUNT_SEL:
-        default:
-            qof_type = "Account";
-            break;
-    }
-    auto book{gnc_get_current_book()};
-    auto col{qof_book_get_collection(book, qof_type)};
-    return QOF_INSTANCE(qof_collection_lookup_entity(col, guid));
+    return std::visit([&oss](auto& option) ->std::ostream& {
+                          if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionAccountValue>)
+                                  gnc_option_to_scheme(oss, option);
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionMultichoiceValue>)
+                                  oss << "'" << option;
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValue<const QofInstance*>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValidatedValue<const QofInstance*>>)
+                                  gnc_option_to_scheme(oss, option);
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionDateValue>)
+                                  oss << "'(" << option << ")";
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                               std::string>)
+                                  oss << '"' << option << '"';
+                          else
+                              oss << option;
+                          return oss;
+                      }, *m_option);
 }
 
-QofInstance*
-qof_instance_from_string(const std::string& str, GncOptionUIType type)
+std::istream&
+GncOption::from_scheme(std::istream& iss)
 {
-    if (type == GncOptionUIType::CURRENCY ||
-        type == GncOptionUIType::COMMODITY)
-    {
-        auto book{gnc_get_current_book()};
-        auto sep{str.find(":")};
-        auto name_space{str.substr(0, sep)};
-        auto mnemonic{str.substr(sep + 1, -1)};
-        auto table = gnc_commodity_table_get_table(book);
-        return QOF_INSTANCE(gnc_commodity_table_lookup(table,
-                                                       name_space.c_str(),
-                                                       mnemonic.c_str()));
-    }
-    auto guid{static_cast<GncGUID>(gnc::GUID::from_string(str))};
-    return qof_instance_from_guid(&guid, type);
+    return std::visit([&iss](auto& option) -> std::istream& {
+                          if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionAccountValue>)
+                              gnc_option_from_scheme(iss, option);
+                          else if constexpr
+                              ((std::is_same_v<std::decay_t<decltype(option)>,
+                                GncOptionMultichoiceValue>))
+                          {
+                              iss.ignore(1, '\'');
+                              iss >> option;
+                          }
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValue<const QofInstance*>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionValidatedValue<const QofInstance*>>)
+                              gnc_option_from_scheme(iss, option);
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionDateValue>)
+                          {
+                              iss.ignore(2, '(');
+                              iss >> option;
+                              //operator >> clears the trailing ')'
+                          }
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option.get_value())>,
+                               std::string>)
+                          {
+                              iss.ignore(1, '"');
+                              std::string input;
+                              std::getline(iss, input, '"');
+                              option.set_value(input);
+                          }
+                          else
+                              iss >> option;
+                          return iss;
+                      }, *m_option);
 }
 
-std::string
-qof_instance_to_string(const QofInstance* inst)
-{
-    gnc::GUID guid{*qof_instance_get_guid(inst)};
-    return guid.to_string();
-}
+/* We must instantiate all of the templates we need here because we don't expose
+ * the template implementation in the public header.
+ */
+
+using GncOptionAccountList = std::vector<const Account*>;
+
+template class GncOptionValidatedValue<const QofInstance*>;
+
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, bool, GncOptionUIType);
+//template GncOption::GncOption(const char*, const char*, const char*,
+//                              const char*, int, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, int64_t, GncOptionUIType);
+//template GncOption::GncOption(const char*, const char*, const char*,
+//                              const char*, const char*, GncOptionUIType);
+//template GncOption::GncOption(const char*, const char*, const char*,
+//                              const char*, double, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, std::string, GncOptionUIType);
+template GncOption::GncOption(const char*, const char*, const char*,
+                              const char*, const QofInstance*, GncOptionUIType);
+
+template bool GncOption::get_value<bool>() const;
+template int GncOption::get_value<int>() const;
+template int64_t GncOption::get_value<int64_t>() const;
+template double GncOption::get_value<double>() const;
+template const char* GncOption::get_value<const char*>() const;
+template std::string GncOption::get_value<std::string>() const;
+template const QofInstance* GncOption::get_value<const QofInstance*>() const;
+template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
+template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
+
+template bool GncOption::get_default_value<bool>() const;
+template int GncOption::get_default_value<int>() const;
+template int64_t GncOption::get_default_value<int64_t>() const;
+template double GncOption::get_default_value<double>() const;
+template const char* GncOption::get_default_value<const char*>() const;
+template std::string GncOption::get_default_value<std::string>() const;
+template const QofInstance* GncOption::get_default_value<const QofInstance*>() const;
+template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() const;
+
+template void GncOption::set_value(bool);
+template void GncOption::set_value(int);
+template void GncOption::set_value(int64_t);
+template void GncOption::set_value(double);
+template void GncOption::set_value(const char*);
+template void GncOption::set_value(std::string);
+template void GncOption::set_value(const QofInstance*);
+template void GncOption::set_value(RelativeDatePeriod);
+
+template bool GncOption::validate(bool) const;
+template bool GncOption::validate(int) const;
+template bool GncOption::validate(int64_t) const;
+template bool GncOption::validate(double) const;
+template bool GncOption::validate(const char*) const;
+template bool GncOption::validate(std::string) const;
+template bool GncOption::validate(const QofInstance*) const;
+template bool GncOption::validate(RelativeDatePeriod) const;

@@ -21,10 +21,12 @@
  *                                                                  *
 \********************************************************************/
 
-#include "gnc-optiondb.hpp"
+#include <string>
 #include <limits>
 #include <sstream>
 #include <kvp-value.hpp>
+#include "gnc-optiondb.hpp"
+#include "gnc-optiondb-impl.hpp"
 
 auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
 GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}
@@ -43,7 +45,8 @@ GncOptionDB::register_option(const char* section, GncOption&& option)
 
     if (db_section)
     {
-        db_section->get().second.emplace_back(std::move(option));
+        auto& sec_vec = db_section->get().second;
+        sec_vec.emplace_back(std::move(option));
         return;
     }
 
@@ -59,10 +62,11 @@ GncOptionDB::unregister_option(const char* section, const char* name)
     auto db_section = find_section(section);
     if (db_section)
     {
-        db_section->get().second.erase(
+        auto& sec_vec = db_section->get().second;
+        sec_vec.erase(
             std::remove_if(
-                db_section->get().second.begin(), db_section->get().second.end(),
-                [name](const GncOption& option) -> bool
+                sec_vec.begin(), sec_vec.end(),
+                [name](const auto& option) -> bool
                 {
                     return option.get_name() == std::string{name};
                 }));
@@ -132,7 +136,7 @@ GncOptionDB::find_section(const std::string& section)
 {
     auto db_section = std::find_if(
         m_sections.begin(), m_sections.end(),
-        [&section](GncOptionSection sect) -> bool
+        [&section](auto& sect) -> bool
         {
             return section.compare(0, classifier_size_max, sect.first) == 0;
         });
@@ -147,14 +151,15 @@ GncOptionDB::find_option(const std::string& section, const std::string& name) co
     auto db_section = const_cast<GncOptionDB*>(this)->find_section(section);
     if (!db_section)
         return std::nullopt;
+    auto& sec_vec =  db_section->get().second;
     auto db_opt = std::find_if(
-        db_section->get().second.begin(), db_section->get().second.end(),
+       sec_vec.begin(), sec_vec.end(),
         [&name](GncOption& option) -> bool
         {
             return name.compare(0, classifier_size_max - 1,
                                   option.get_name()) == 0;
         });
-    if (db_opt == db_section->get().second.end())
+    if (db_opt == sec_vec.end())
         return std::nullopt;
     return *db_opt;
 }
@@ -173,6 +178,7 @@ GncOptionDB::lookup_string_option(const char* section, const char* name)
 void
 GncOptionDB::make_internal(const char* section, const char* name)
 {
+
     auto db_opt = find_option(section, name);
     if (db_opt)
         db_opt->get().make_internal();
@@ -306,8 +312,7 @@ struct SchemeId
 
 /**
  * Scheme Parse Tree
- * An identifier is a string and a type (name, const, string, or form). A Form 
- * 
+ * An identifier is a string and a type (name, const, string, or form).
  */
 
 static void scan_scheme_id_from_streambuf(std::streambuf* sbuf, SchemeId& id);
@@ -488,11 +493,11 @@ GncOptionDB::load_option_scheme(std::istream& iss)
 std::ostream&
 GncOptionDB::save_to_scheme(std::ostream& oss, const char* options_prolog) const noexcept
 {
-    for (auto section : m_sections)
+    for (auto& section : m_sections)
     {
         const auto& [s_name, s_vec] = section;
         oss << "\n; Section: " << s_name << "\n\n";
-        for (auto option : s_vec)
+        for (auto& option : s_vec)
         {
             if (!option.is_changed())
                 continue;
@@ -563,11 +568,11 @@ std::ostream&
 GncOptionDB::save_to_key_value(std::ostream& oss) const noexcept
 {
 
-    for (auto section : m_sections)
+    for (auto& section : m_sections)
     {
         const auto& [s_name, s_vec] = section;
         oss << "[Options]\n";
-        for (auto option : s_vec)
+        for (auto& option : s_vec)
         {
             if (option.is_changed())
                 oss << section.first.substr(0, classifier_size_max) <<
@@ -601,10 +606,10 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
 {
     if (clear_options)
         qof_book_options_delete(book, nullptr);
-    for (auto section : m_sections)
+    for (auto& section : m_sections)
     {
         const auto& [s_name, s_vec] = section;
-        for (auto option : s_vec)
+        for (auto& option : s_vec)
             if (option.is_changed())
             {
                 // qof_book_set_option wants a GSList path. Let's avoid allocating and make one here.
@@ -619,7 +624,7 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                 }
                 else if (type > GncOptionUIType::DATE_FORMAT)
                 {
-                    QofInstance* inst{QOF_INSTANCE(option.get_value<QofInstance*>())};
+                    const QofInstance* inst{QOF_INSTANCE(option.get_value<const QofInstance*>())};
                     auto guid = guid_copy(qof_instance_get_guid(inst));
                     auto kvp{new KvpValue(guid)};
                     qof_book_set_option(book, kvp, &list_head);
@@ -641,13 +646,14 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
 void
 GncOptionDB::load_from_kvp(QofBook* book) noexcept
 {
-    for (auto section : m_sections)
+    for (auto& section : m_sections)
     {
-        const auto& [s_name, s_vec] = section;
-        for (auto option : s_vec)
+        auto& [s_name, s_vec] = section;
+        for (auto& option : s_vec)
         {
             /* qof_book_set_option wants a GSList path. Let's avoid allocating
-             * and make one here. */
+             * and make one here.
+             */
             GSList list_tail{(void*)option.get_name().c_str(), nullptr};
             GSList list_head{(void*)s_name.c_str(), &list_tail};
             auto kvp = qof_book_get_option(book, &list_head);
@@ -670,7 +676,7 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                 case KvpValue::Type::GUID:
                 {
                     auto guid{kvp->get<GncGUID*>()};
-                    option.set_value(qof_instance_from_guid(guid, option.get_ui_type()));
+                    option.set_value((const QofInstance*)qof_instance_from_guid(guid, option.get_ui_type()));
                     break;
                 }
                 default:
@@ -723,7 +729,7 @@ gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::BUDGET};
     db->register_option(section, std::move(option));
 }
@@ -743,7 +749,7 @@ gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::COMMODITY};
     db->register_option(section, std::move(option));
 }
@@ -880,7 +886,8 @@ gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
 }
 
 /* Only balance-forecast.scm, hello-world.scm, and net-charts.scm
- * use decimals and fractional steps and they can be worked around. */
+ * use decimals and fractional steps and they can be worked around.
+ */
 void
 gnc_register_number_range_option(const GncOptionDBPtr& db, const char* section,
                                  const char* name, const char* key,
@@ -908,7 +915,7 @@ gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
                           const char* name, const char* key,
                           const char* doc_string, QofQuery* value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::INTERNAL};
     db->register_option(section, std::move(option));
 }
@@ -928,7 +935,7 @@ gnc_register_invoice_option(const GncOptionDBPtr& db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, GncInvoice* value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::INVOICE};
     db->register_option(section, std::move(option));
 }
@@ -938,7 +945,7 @@ gnc_register_owner_option(const GncOptionDBPtr& db, const char* section,
                           const char* name, const char* key,
                           const char* doc_string, GncOwner* value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::OWNER};
     db->register_option(section, std::move(option));
 }
@@ -948,7 +955,7 @@ gnc_register_taxtable_option(const GncOptionDBPtr& db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, GncTaxTable* value)
 {
-    GncOption option{section, name, key, doc_string, QOF_INSTANCE(value),
+    GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::TAX_TABLE};
     db->register_option(section, std::move(option));
 }
@@ -989,9 +996,9 @@ gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, gnc_commodity *value)
 {
-    GncOption option{GncOptionValidatedValue<QofInstance*>{
-        section, name, key, doc_string, QOF_INSTANCE(value),
-        [](QofInstance* new_value) -> bool
+    GncOption option{GncOptionValidatedValue<const QofInstance*>{
+        section, name, key, doc_string, (const QofInstance*)value,
+        [](const QofInstance* new_value) -> bool
             {
                 return GNC_IS_COMMODITY (new_value) &&
                     gnc_commodity_is_currency(GNC_COMMODITY(new_value));

@@ -46,6 +46,7 @@ extern "C"
 #include <gnc-engine-guile.h>
 }
 #include "gnc-optiondb.hpp"
+#include "gnc-optiondb-impl.hpp"
 extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
@@ -299,28 +300,30 @@ using Account = struct account_s;
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
 %include "gnc-option.hpp"
+%include "gnc-option-impl.hpp"
 %include "gnc-optiondb.hpp"
+%include "gnc-optiondb-impl.hpp"
 
 %extend GncOption {
-    SCM get_scm_value() const
+    SCM get_scm_value()
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_value()};
                 return scm_from_value(static_cast<decltype(value)>(value));
-            }, $self->_get_option());
+            }, *($self->_get_option()));
     }
-    SCM get_scm_default_value() const
+    SCM get_scm_default_value()
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_default_value()};
                 return scm_from_value(static_cast<decltype(value)>(value));
-            }, $self->_get_option());
+            }, *($self->_get_option()));
     }
     void set_value_from_scm(SCM new_value)
     {
         std::visit([new_value](auto& option) {
                 option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
-            }, $self->_get_option());
+            }, *($self->_get_option()));
     }
 };
 
@@ -331,6 +334,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
  };
 
 %inline %{
+    using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
+
     static SCM
     gnc_option_value(const GncOptionDBPtr& optiondb, const char* section,
                      const char* name)

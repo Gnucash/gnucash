@@ -31,6 +31,7 @@ add_app_utils_test(test-sx test-sx.cpp)
 
 set(gtest_gnc_option_SOURCES
   ${MODULEPATH}/gnc-option.cpp
+  ${MODULEPATH}/gnc-option-impl.cpp
   ${MODULEPATH}/gnc-optiondb.cpp
   gtest-gnc-option.cpp
   gtest-gnc-optiondb.cpp)
@@ -98,6 +99,7 @@ if (HAVE_SRFI64)
     )
   add_library(swig-gnc-optiondb MODULE
     ${MODULEPATH}/gnc-option.cpp
+    ${MODULEPATH}/gnc-option-impl.cpp
     ${MODULEPATH}/gnc-optiondb.cpp
     ${SWIG_GNC_OPTIONDB_GUILE_CPP}
     )

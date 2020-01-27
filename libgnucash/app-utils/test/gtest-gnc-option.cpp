@@ -23,9 +23,15 @@
 
 #include <gtest/gtest.h>
 #include <gnc-option.hpp>
+#include <gnc-option-impl.hpp>
 #include <guid.hpp>
 extern "C"
 {
+#include <config.h>
+#include <qof.h>
+#include <Account.h>
+#include <gnc-budget.h>
+#include <gnc-commodity.h>
 #include <gnc-date.h>
 #include <time.h>
 #include <gnc-ui-util.h>
@@ -207,7 +213,7 @@ TEST_F(GncOptionTest, test_budget_ctor)
     auto budget = gnc_budget_new(m_book);
     EXPECT_NO_THROW({
             GncOption option("foo", "bar", "baz", "Phony Option",
-                             QOF_INSTANCE(budget));
+                             (const QofInstance*)budget);
         });
     gnc_budget_destroy(budget);
 }
@@ -215,7 +221,7 @@ TEST_F(GncOptionTest, test_budget_ctor)
 TEST_F(GncOptionTest, test_budget_out)
 {
     auto budget = gnc_budget_new(m_book);
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(budget)};
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)budget};
 
     auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
     std::ostringstream oss;
@@ -229,16 +235,16 @@ TEST_F(GncOptionTest, test_budget_in)
     auto budget = gnc_budget_new(m_book);
     auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
     std::istringstream iss{budget_guid};
-    GncOption option{GncOptionValue<QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
+    GncOption option{GncOptionValue<const QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
     iss >> option;
-    EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<QofInstance*>());
+    EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<const QofInstance*>());
     gnc_budget_destroy(budget);
 }
 
 TEST_F(GncOptionTest, test_budget_to_scheme)
 {
     auto budget = gnc_budget_new(m_book);
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(budget)};
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)budget};
 
     auto budget_guid{gnc::GUID{*qof_instance_get_guid(QOF_INSTANCE(budget))}.to_string()};
     std::ostringstream oss;
@@ -256,9 +262,9 @@ TEST_F(GncOptionTest, test_budget_from_scheme)
     budget_guid.insert(0, "\"");
     budget_guid += "\"";
     std::istringstream iss{budget_guid};
-    GncOption option{GncOptionValue<QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
+    GncOption option{GncOptionValue<const QofInstance*>{"foo", "bar", "baz", "Phony Option", nullptr, GncOptionUIType::BUDGET}};
     option.from_scheme(iss);
-    EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<QofInstance*>());
+    EXPECT_EQ(QOF_INSTANCE(budget), option.get_value<const QofInstance*>());
     gnc_budget_destroy(budget);
 }
 
@@ -268,7 +274,7 @@ TEST_F(GncOptionTest, test_commodity_ctor)
                                     "NYSE", "HPE", NULL, 1);
     EXPECT_NO_THROW({
             GncOption option("foo", "bar", "baz", "Phony Option",
-                             QOF_INSTANCE(hpe));
+                             (const QofInstance*)hpe);
         });
     gnc_commodity_destroy(hpe);
 }
@@ -320,9 +326,9 @@ make_currency_option (const char* section, const char* name,
                       const char* key, const char* doc_string,
                       gnc_commodity *value, bool is_currency=false)
 {
-    GncOption option{GncOptionValidatedValue<QofInstance*>{
-        section, name, key, doc_string, QOF_INSTANCE(value),
-        [](QofInstance* new_value) -> bool
+    GncOption option{GncOptionValidatedValue<const QofInstance*>{
+        section, name, key, doc_string, (const QofInstance*)value,
+        [](const QofInstance* new_value) -> bool
             {
                 return GNC_IS_COMMODITY (new_value) &&
                     gnc_commodity_is_currency(GNC_COMMODITY(new_value));
@@ -349,25 +355,26 @@ TEST_F(GncOptionCommodityTest, test_currency_ctor)
 
 TEST_F(GncOptionCommodityTest, test_currency_setter)
 {
-    auto option = make_currency_option("foo", "bar", "baz", "Phony Option", m_eur, true);
+    auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
+                                      m_eur, true);
     EXPECT_NO_THROW({
-            option.set_value(QOF_INSTANCE(m_usd));
+            option.set_value((const QofInstance*)m_usd);
         });
     EXPECT_PRED2(gnc_commodity_equal, m_usd,
-                 GNC_COMMODITY(option.get_value<QofInstance*>()));
+                 GNC_COMMODITY(option.get_value<const QofInstance*>()));
     EXPECT_THROW({
-            option.set_value(QOF_INSTANCE(m_hpe));
+            option.set_value((const QofInstance*)m_hpe);
         }, std::invalid_argument);
     EXPECT_PRED2(gnc_commodity_equal, m_usd,
-                 GNC_COMMODITY(option.get_value<QofInstance*>()));
+                 GNC_COMMODITY(option.get_value<const QofInstance*>()));
 }
 
 TEST_F(GncOptionCommodityTest, test_currency_validator)
 {
     auto option = make_currency_option("foo", "bar", "baz", "Phony Option",
-                                       m_eur, true);
-    EXPECT_TRUE(option.validate(QOF_INSTANCE(m_usd)));
-    EXPECT_FALSE(option.validate(QOF_INSTANCE(m_aapl)));
+                                      m_eur, true);
+    EXPECT_TRUE(option.validate((const QofInstance*)m_usd));
+    EXPECT_FALSE(option.validate((const QofInstance*)m_aapl));
 }
 
 static inline std::string make_currency_str(gnc_commodity* cur)
@@ -416,7 +423,7 @@ TEST_F(GncOptionCommodityTest, test_currency_out)
 
 TEST_F(GncOptionCommodityTest, test_commodity_out)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_hpe),
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_hpe,
                      GncOptionUIType::COMMODITY};
     std::string hpe_str{make_commodity_str(m_hpe)};
     std::ostringstream oss;
@@ -439,19 +446,19 @@ TEST_F(GncOptionCommodityTest, test_currency_in)
             std::string usd_str{make_currency_str(m_usd)};
             std::istringstream iss{usd_str};
             iss >> option;
-            EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<QofInstance*>());
+            EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<const QofInstance*>());
         });
 }
 
 TEST_F(GncOptionCommodityTest, test_commodity_in)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_aapl),
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_aapl,
                      GncOptionUIType::COMMODITY};
 
     std::string hpe_str{make_commodity_str(m_hpe)};
     std::istringstream iss{hpe_str};
     iss >> option;
-    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<QofInstance*>());
+    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<const QofInstance*>());
 }
 
 TEST_F(GncOptionCommodityTest, test_currency_to_scheme)
@@ -467,7 +474,7 @@ TEST_F(GncOptionCommodityTest, test_currency_to_scheme)
 
 TEST_F(GncOptionCommodityTest, test_commodity_to_scheme)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_hpe),
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_hpe,
                      GncOptionUIType::COMMODITY};
 
     std::string hpe_str{make_commodity_SCM_str(m_hpe)};
@@ -484,18 +491,18 @@ TEST_F(GncOptionCommodityTest, test_currency_from_scheme)
     std::string usd_str{make_currency_SCM_str(m_usd)};
     std::istringstream iss{usd_str};
     option.from_scheme(iss);
-    EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<QofInstance*>());
+    EXPECT_EQ(QOF_INSTANCE(m_usd), option.get_value<const QofInstance*>());
 }
 
 TEST_F(GncOptionCommodityTest, test_commodity_from_scheme)
 {
-    GncOption option{"foo", "bar", "baz", "Phony Option", QOF_INSTANCE(m_aapl),
+    GncOption option{"foo", "bar", "baz", "Phony Option", (const QofInstance*)m_aapl,
                      GncOptionUIType::COMMODITY};
 
     std::string hpe_str{make_commodity_SCM_str(m_hpe)};
     std::istringstream iss{hpe_str};
     option.from_scheme(iss);
-    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<QofInstance*>());
+    EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<const QofInstance*>());
 }
 
 class GncUIItem
