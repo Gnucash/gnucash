@@ -52,6 +52,9 @@ static GncGUID gncCustomerReturnGUID(GncCustomer *x)
 static GncGUID gncEmployeeReturnGUID(GncEmployee *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
+static GncGUID gncLotReturnGUID(GNCLot *x)
+{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 static GncTaxTable * gncTaxTableLookupFlip(GncGUID g, QofBook *b)
 { return gncTaxTableLookup(b, &g); }
 
