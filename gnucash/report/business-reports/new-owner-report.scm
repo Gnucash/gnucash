@@ -301,6 +301,7 @@
     (cond
      ((txn-is-invoice? txn) (gncInvoiceGetTypeString invoice))
      ((txn-is-payment? txn) (_ "Payment"))
+     ((txn-is-link? txn) (_ "Link"))
      (else (_ "Unknown")))))
 
 ;; for splits, find the first peer that is not in an APAR
@@ -317,14 +318,16 @@
    (compose xaccAccountIsAssetLiabType xaccAccountGetType xaccSplitGetAccount)
    (xaccTransGetSplitList txn)))
 
-(define (splits->desc splits)
-  (let lp ((splits splits) (result '()))
-    (match splits
+;; input: list of html-text elements
+;; output: a cell with html-text interleaved with <br> tags
+(define (list->cell lst)
+  (let lp ((lst lst) (result '()))
+    (match lst
       (() (apply gnc:make-html-text result))
-      ((split . rest)
-       (lp rest (cons* (gnc:html-string-sanitize (xaccSplitGetMemo split))
-                       (gnc:html-markup-br)
-                       result))))))
+      ((elt . rest) (lp rest (cons* elt (gnc:html-markup-br) result))))))
+
+(define (splits->desc splits)
+  (list->cell (map (compose gnc:html-string-sanitize xaccSplitGetMemo) splits)))
 
 (define (make-aging-table splits to-date payable? date-type currency)
   (let ((table (gnc:make-html-table))
@@ -564,24 +567,8 @@
                            ((detailed) (list (make-link-blank))))))
 
   (define (make-invoice->payments-table invoice)
-    (define (posting-split->row posting-split)
-      (let* ((posting-txn (xaccSplitGetParent posting-split))
-             (inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot posting-split))))
-        (make-link-data
-         (qof-print-date (xaccTransGetDate posting-txn))
-         (split->reference posting-split)
-         (split->type-str posting-split)
-         (splits->desc (list posting-split))
-         #f
-         (gnc:make-html-text
-          (gnc:html-markup-anchor
-           (gnc:split-anchor-text (txn->transfer-split posting-txn))
-           (gnc:make-gnc-monetary
-            currency (AP-negate (xaccSplitGetAmount posting-split)))))
-         (gncInvoiceReturnGUID inv))))
     (let ((lot (gncInvoiceGetPostedLot invoice)))
       (let lp ((lot-splits (gnc-lot-get-split-list lot))
-               (link-splits-seen '())
                (result '()))
         (cond
          ;; Finished result rows. Display them, and add Outstanding if
@@ -597,63 +584,93 @@
                       (gncInvoiceReturnGUID invoice))
                      result))))
 
-         ;; This is the regular payment split. Find Transfer acct
-         ;; splits, and if haven't encountered before, add to result rows.
-         ((txn-is-payment? (xaccSplitGetParent (car lot-splits)))
-          (lp (cdr lot-splits)
-              link-splits-seen
-              (cons (let* ((lot-split (car lot-splits))
-                           (lot-txn (xaccSplitGetParent lot-split))
-                           (pmt-splits (xaccTransGetPaymentAcctSplitList lot-txn)))
-                      (make-link-data
-                       (qof-print-date (xaccTransGetDate lot-txn))
-                       (split->reference lot-split)
-                       (split->type-str lot-split)
-                       (splits->desc pmt-splits)
-                       (gnc:make-html-text (split->anchor lot-split #t))
-                       (let lp1 ((pmt-splits pmt-splits) (acc '()))
-                         (match pmt-splits
-                           (() (apply gnc:make-html-text acc))
-                           ((pmt-split . rest)
-                            (lp1 rest (cons* (split->anchor pmt-split #f)
-                                             (gnc:html-markup-br)
-                                             acc)))))
-                       (gncTransGetGUID lot-txn)))
-                    result)))
+         ;; this is invoice posting split. skip. has no payment data.
+         ((equal? (xaccSplitGetParent (car lot-splits))
+                  (gncInvoiceGetPostedTxn invoice))
+          (lp (cdr lot-splits) result))
 
-         ;; This is a lot link split. Find corresponding documents,
-         ;; and add to result rows.
-         ((txn-is-link? (xaccSplitGetParent (car lot-splits)))
-          (let lp1 ((link-splits (xaccTransGetSplitList
-                                  (xaccSplitGetParent (car lot-splits))))
-                    (link-splits-seen link-splits-seen)
-                    (result result))
-            ;; this is a secondary 'inner loop', looping
-            ;; lot-split->peer-splits.
-            (cond
-             ;; finished peer-splits. loop main lot-splits.
-             ((null? link-splits)
-              (lp (cdr lot-splits) link-splits-seen result))
-             ;; peer split is of same sign as lot split. skip.
-             ((sign-equal? (xaccSplitGetAmount (car lot-splits))
-                           (xaccSplitGetAmount (car link-splits)))
-              (lp1 (cdr link-splits) link-splits-seen result))
-             ;; we've encountered this peer-split before. skip.
-             ((member (car link-splits) link-splits-seen)
-              (lp1 (cdr link-splits) link-splits-seen result))
-             ;; new peer-split. render the posting split details.
-             ((lot-split->posting-split (car link-splits))
-              => (lambda (posting-split)
-                   (lp1 (cdr link-splits)
-                        (cons (car link-splits) link-splits-seen)
-                        (cons (posting-split->row posting-split) result))))
-             ;; can't find posting split. probably invalid txn. skip.
-             (else (lp1 (cdr link-splits) link-splits-seen result)))))
-
-         ;; This is either the invoice posting transaction, or a
-         ;; TXN-TYPE-NONE txn which shouldn't happen. Skip both.
+         ;; this is an invoice payment split (reduces the lot).
          (else
-          (lp (cdr lot-splits) link-splits-seen result))))))
+          (let* ((lot-split (car lot-splits))
+                 (lot-txn (xaccSplitGetParent lot-split)))
+
+            ;; each invoice payment split's peer splits are analysed.
+            (let lp1 ((lot-txn-splits (xaccTransGetSplitList lot-txn))
+                      (non-APAR '())
+                      (result result))
+              (cond
+
+               ;; finished. loop up, adding single row with non-APAR
+               ((null? lot-txn-splits)
+                (lp (cdr lot-splits)
+                    (if (null? non-APAR)
+                        result
+                        (cons (make-link-data
+                               (qof-print-date (xaccTransGetDate lot-txn))
+                               (split->reference lot-split)
+                               (split->type-str lot-split)
+                               (splits->desc non-APAR)
+                               (gnc:make-html-text (split->anchor lot-split #t))
+                               (list->cell
+                                (map (lambda (s) (split->anchor s #f)) non-APAR))
+                               (gncTransGetGUID lot-txn))
+                              result))))
+
+               ;; this payment peer is non-APAR, accumulate it.
+               ((not (memv (xaccAccountGetType
+                            (xaccSplitGetAccount (car lot-txn-splits)))
+                           (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
+                (lp1 (cdr lot-txn-splits)
+                     (cons (car lot-txn-splits) non-APAR)
+                     result))
+
+               ;; this payment's peer split has same sign as the
+               ;; payment split. ignore.
+               ((sign-equal? (xaccSplitGetAmount (car lot-txn-splits))
+                             (xaccSplitGetAmount lot-split))
+                (lp1 (cdr lot-txn-splits) non-APAR result))
+
+               ;; this payment's peer APAR split is a document lot
+               ;; reducing split.
+               ((lot-split->posting-split (car lot-txn-splits)) =>
+                (lambda (posting-split)
+                  (let ((lot-txn-split (car lot-txn-splits))
+                        (invoice (gncInvoiceGetInvoiceFromTxn
+                                  (xaccSplitGetParent posting-split)))
+                        (posting-txn (xaccSplitGetParent posting-split)))
+                    (lp1 (cdr lot-txn-splits)
+                         non-APAR
+                         (cons (make-link-data
+                                (qof-print-date (xaccTransGetDate posting-txn))
+                                (split->reference posting-split)
+                                (split->type-str posting-split)
+                                (splits->desc (list posting-split))
+                                (gnc:make-html-text (split->anchor lot-txn-split #t))
+                                (gnc:make-html-text (split->anchor posting-split #f))
+                                (gncInvoiceReturnGUID invoice))
+                               result)))))
+
+               ;; this payment's peer APAR split can't find
+               ;; document. this likely is an old style link txn. RHS
+               ;; show transaction only.
+               (else
+                (gnc:warn (car lot-txn-splits) " in APAR but can't find "
+                          "owner; is likely an old-style link transaction.")
+                (let* ((lot-txn-split (car lot-txn-splits))
+                       (posting-txn (xaccSplitGetParent lot-txn-split)))
+                  (lp1 (cdr lot-txn-splits)
+                       non-APAR
+                       (cons (make-link-data
+                              (qof-print-date (xaccTransGetDate posting-txn))
+                              (split->reference lot-txn-split)
+                              (split->type-str lot-txn-split)
+                              (splits->desc (list lot-txn-split))
+                              (gnc:make-html-text (split->anchor lot-txn-split #t))
+                              (gnc:make-html-text (split->anchor lot-txn-split #t))
+                              (gncTransGetGUID posting-txn))
+                             result))))))))))))
+
+
 
   (define (payment-txn->payment-info txn)
     (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
@@ -730,7 +747,7 @@
           (split->reference s)
           (split->type-str s)
           (splits->desc (list s))
-          (gnc:make-html-text (split->anchor s #t))
+          (gnc:make-html-text (split->anchor s #f))
           (gnc:make-html-text (split->anchor s #f))
           (gncTransGetGUID (xaccSplitGetParent s))))
        (payment-info-opposing-splits payment-info)))
