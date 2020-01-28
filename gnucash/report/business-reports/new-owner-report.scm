@@ -125,6 +125,13 @@
   (make-link-blank)
   link-blank?)
 
+(define-record-type :payment-info
+  (make-payment-info overpayment invoices opposing-splits)
+  payment-info?
+  (overpayment payment-info-overpayment)
+  (invoices payment-info-invoices)
+  (opposing-splits payment-info-opposing-splits))
+
 ;; Names in Option panel (Untranslated! Because it is used for option
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
@@ -632,16 +639,31 @@
          (else
           (lp (cdr lot-splits) link-splits-seen result))))))
 
-  (define (payment-txn->overpayment-and-invoices txn)
+  (define (payment-txn->payment-info txn)
     (let lp ((splits (xaccTransGetAPARAcctSplitList txn #f))
              (overpayment 0)
-             (invoices '()))
+             (invoices '())
+             (opposing-splits '()))
       (match splits
-        (() (cons (AP-negate overpayment) invoices))
+        (() (make-payment-info (AP-negate overpayment) invoices opposing-splits))
         ((split . rest)
-         (match (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))
-           (() (lp rest (- overpayment (xaccSplitGetAmount split)) invoices))
-           (invoice (lp rest overpayment (cons (cons invoice split) invoices))))))))
+         (let ((lot (xaccSplitGetLot split)))
+           (define (equal-to-split? s) (equal? s split))
+           (match (gncInvoiceGetInvoiceFromLot lot)
+             (() (lp rest
+                     (- overpayment (gnc-lot-get-balance lot))
+                     invoices
+                     (let lp ((lot-splits (gnc-lot-get-split-list lot))
+                              (acc opposing-splits))
+                       (match lot-splits
+                         (() acc)
+                         (((? equal-to-split?) . rest) (lp rest acc))
+                         ((lot-split . rest) (lp rest (cons lot-split acc)))))))
+             (inv
+              (lp rest
+                  overpayment
+                  (cons (cons inv split) invoices)
+                  opposing-splits))))))))
 
   (define (make-payment->invoices-list txn)
     (list
@@ -651,34 +673,52 @@
        (map
         (lambda (inv-split-pair)
           (invoice->anchor (car inv-split-pair)))
-        (cdr (payment-txn->overpayment-and-invoices txn)))))))
+        (payment-info-invoices (payment-txn->payment-info txn)))))))
 
-  (define (make-payment->invoices-table txn)
-    (define overpayment-and-invoices (payment-txn->overpayment-and-invoices txn))
-    (let lp ((invoice-split-pairs (cdr overpayment-and-invoices))
-             (result '()))
-      (match invoice-split-pairs
-        (()
-         (let ((overpayment (car overpayment-and-invoices)))
-           (reverse
-            (if (zero? overpayment)
-                result
-                (cons (make-link-desc-amount
-                       (_ "Pre-Payment")
-                       (gnc:make-gnc-monetary currency overpayment))
-                      result)))))
-        (((inv . APAR-split) . rest)
-         (let* ((posting-split (lot-split->posting-split APAR-split)))
-           (lp rest
-               (cons (make-link-data
-                      (qof-print-date (gncInvoiceGetDatePosted inv))
-                      (gnc:make-html-text (invoice->anchor inv))
-                      (gncInvoiceGetTypeString inv)
-                      (splits->desc (list APAR-split))
-                      (gnc:make-html-text (split->anchor APAR-split #t))
-                      (gnc:make-html-text (split->anchor posting-split #f))
-                      (gncInvoiceReturnGUID inv))
-                     result)))))))
+  (define (make-payment->payee-table txn)
+
+    (define payment-info (payment-txn->payment-info txn))
+
+    (define invoices-list
+      (let lp ((invoice-split-pairs (payment-info-invoices payment-info))
+               (result '()))
+        (match invoice-split-pairs
+          (() result)
+          (((inv . APAR-split) . rest)
+           (let* ((posting-split (lot-split->posting-split APAR-split)))
+             (lp rest
+                 (cons (make-link-data
+                        (qof-print-date (gncInvoiceGetDatePosted inv))
+                        (gnc:make-html-text (invoice->anchor inv))
+                        (gncInvoiceGetTypeString inv)
+                        (splits->desc (list APAR-split))
+                        (gnc:make-html-text (split->anchor APAR-split #t))
+                        (gnc:make-html-text (split->anchor posting-split #f))
+                        (gncInvoiceReturnGUID inv))
+                       result)))))))
+
+    (define overpayment-list
+      (let ((overpayment (payment-info-overpayment payment-info)))
+        (if (zero? overpayment)
+            '()
+            (list (make-link-desc-amount
+                   (_ "Pre-Payment")
+                   (gnc:make-gnc-monetary currency overpayment))))))
+
+    (define payments-list
+      (map
+       (lambda (s)
+         (make-link-data
+          (qof-print-date (xaccTransGetDate (xaccSplitGetParent s)))
+          (split->reference s)
+          (split->type-str s)
+          (splits->desc (list s))
+          (gnc:make-html-text (split->anchor s #t))
+          (gnc:make-html-text (split->anchor s #f))
+          (gncTransGetGUID (xaccSplitGetParent s))))
+       (payment-info-opposing-splits payment-info)))
+
+    (append invoices-list payments-list overpayment-list))
 
   (define (invoice->sale invoice)
     (and (not (null? invoice))
@@ -714,6 +754,7 @@
            (credit 0)
            (tax 0)
            (sale 0))
+
     (cond
 
      ((null? splits)
@@ -808,7 +849,7 @@
          link-option
          (case link-option
            ((simple) (make-payment->invoices-list txn))
-           ((detailed) (make-payment->invoices-table txn))
+           ((detailed) (make-payment->payee-table txn))
            (else '(()))))
 
         (lp printed? (not odd-row?) (cdr splits) (+ total value)
