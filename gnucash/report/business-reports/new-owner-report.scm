@@ -304,20 +304,6 @@
      ((txn-is-link? txn) (_ "Link"))
      (else (_ "Unknown")))))
 
-;; for splits, find the first peer that is not in an APAR
-;; account. this is adequate to find the transfer split (ie
-;; asset/liability/income/expense account split). lot-link txns are
-;; not expected to have any non-APAR split therefore returns #f.
-(define (txn->transfer-split txn)
-  (find
-   (compose (negate xaccAccountIsAPARType) xaccAccountGetType xaccSplitGetAccount)
-   (xaccTransGetSplitList txn)))
-
-(define (txn->assetliab-splits txn)
-  (filter
-   (compose xaccAccountIsAssetLiabType xaccAccountGetType xaccSplitGetAccount)
-   (xaccTransGetSplitList txn)))
-
 ;; input: list of html-text elements
 ;; output: a cell with html-text interleaved with <br> tags
 (define (list->cell lst)
