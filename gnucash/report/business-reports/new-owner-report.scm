@@ -754,26 +754,6 @@
 
     (append invoices-list payments-list overpayment-list))
 
-  (define (invoice->sale invoice)
-    (and (not (null? invoice))
-         ((if (gncInvoiceGetIsCreditNote invoice) - identity)
-          (gncInvoiceGetTotalSubtotal invoice))))
-
-  (define (invoice->tax invoice)
-    (and (not (null? invoice))
-         ((if (gncInvoiceGetIsCreditNote invoice) - identity)
-          (gncInvoiceGetTotalTax invoice))))
-
-  (define (invoice->total invoice)
-    (and (not (null? invoice))
-         ((if (gncInvoiceGetIsCreditNote invoice) - identity)
-          (gncInvoiceGetTotal invoice))))
-
-  (define (invoice->due-date invoice)
-    (and (not (null? invoice))
-         (gncInvoiceIsPosted invoice)
-         (gncInvoiceGetDateDue invoice)))
-
   (define (amount->anchor split amount)
     (gnc:make-html-text
      (gnc:html-markup-anchor
@@ -841,15 +821,18 @@
              (value (AP-negate orig-value))
              (invoice (gncInvoiceGetInvoiceFromTxn txn)))
 
+        (define (CN-negate fn)
+          (if (gncInvoiceGetIsCreditNote invoice) (- (fn invoice)) (fn invoice)))
+
         (add-row
-         table odd-row? used-columns date (invoice->due-date invoice)
+         table odd-row? used-columns date (gncInvoiceGetDateDue invoice)
          (split->reference split)
          (split->type-str split)
          (splits->desc (list split))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
-         (invoice->sale invoice) (invoice->tax invoice)
+         (CN-negate gncInvoiceGetTotalSubtotal) (CN-negate gncInvoiceGetTotalTax)
          (gncInvoiceReturnGUID invoice)
          link-option
          (case link-option
@@ -860,8 +843,8 @@
         (lp printed? (not odd-row?) (cdr splits) (+ total value)
             (if (< 0 orig-value) (+ debit orig-value) debit)
             (if (< 0 orig-value) credit (- credit orig-value))
-            (+ tax (invoice->tax invoice))
-            (+ sale (invoice->sale invoice)))))
+            (+ tax (CN-negate gncInvoiceGetTotalTax))
+            (+ sale (CN-negate gncInvoiceGetTotalSubtotal)))))
 
      ((txn-is-payment? (xaccSplitGetParent (car splits)))
       (let* ((split (car splits))
