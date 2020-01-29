@@ -63,7 +63,7 @@ Libraries/Deps
   guile			2.2.0 or 2.0.0		Must be built with regex
                                                 support enabled
   libxml2		2.5.10
-  gettext               0.19.6                  Can use older if you pass
+  gettext               0.20                    Can use older if you pass
                                                 -DALLOW_OLD_GETTEXT to cmake;
                                                 doesn't include all file types
                                                 when building gnucash.pot.
