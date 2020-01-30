@@ -81,4 +81,4 @@ if(WITH_SQL)
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
   # No headers to install
-endif(WITH_SQL)
+endif()

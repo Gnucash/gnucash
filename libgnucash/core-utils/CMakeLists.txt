@@ -72,9 +72,9 @@ add_custom_target(gnc-vcs-info ALL
                              -D SHELL="${SHELL}"
                              -P ${CMAKE_SOURCE_DIR}/cmake/git2version-info.cmake
 )
-else(BUILDING_FROM_VCS)
+else()
   add_custom_target(gnc-vcs-info DEPENDS ${VCS_INFO_FILE})
-endif(BUILDING_FROM_VCS)
+endif()
 dist_add_generated (${BUILDING_FROM_VCS} gnc-vcs-info.h)
 ### Compile library
 
@@ -124,10 +124,10 @@ target_include_directories(gnc-core-utils PUBLIC ${core_utils_ALL_INCLUDES})
 
 if (MAC_INTEGRATION)
   target_compile_options(gnc-core-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-endif(MAC_INTEGRATION)
+endif()
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gnc-core-utils PRIVATE -DGNC_VCS=\"git\")
-endif (BUILDING_FROM_VCS)
+endif()
 
 install(TARGETS gnc-core-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

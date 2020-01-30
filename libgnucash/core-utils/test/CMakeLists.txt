@@ -25,7 +25,7 @@ endif()
 if (MAC_INTEGRATION)
   target_compile_options(test-userdata-dir PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_compile_definitions(test-userdata-dir PRIVATE ${GTK_MAC_CFLAGS_OTHER})
-endif(MAC_INTEGRATION)
+endif()
 
 set(gtest_core_utils_INCLUDES
   ${MODULEPATH}

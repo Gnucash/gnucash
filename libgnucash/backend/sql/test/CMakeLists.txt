@@ -24,4 +24,4 @@ if(WITH_SQL)
     BACKEND_SQL_TEST_INCLUDE_DIRS BACKEND_SQL_TEST_LIBS
   )
   target_compile_definitions(test-sqlbe PRIVATE TESTPROG=test_sqlbe)
-endif(WITH_SQL)
+endif()

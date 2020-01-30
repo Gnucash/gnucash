@@ -119,7 +119,7 @@ if (WIN32)
     ${MODULEPATH}/qof-win32.cpp
     ../../../borrowed/libc/strptime.c
   )
-endif (WIN32)
+endif()
 
 set(test_gnc_guid_SOURCES
   ${MODULEPATH}/guid.cpp
@@ -244,7 +244,7 @@ if (HAVE_SRFI64)
 
   gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
   add_dependencies(check scm-srfi64-extras)
-endif (HAVE_SRFI64)
+endif()
 
 gnc_add_scheme_targets(scm-test-engine
   "${engine_test_SCHEME}"
