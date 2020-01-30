@@ -101,28 +101,6 @@ GncPlugin * gnc_plugin_budget_new (void)
     return GNC_PLUGIN(plugin);
 }
 
-static void
-gnc_plugin_budget_main_window_page_changed (GncMainWindow *window,
-                                            GncPluginPage *plugin_page,
-                                            gpointer user_data)
-{
-    // We continue only if the plugin_page is a valid
-    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
-        return;
-
-    if (gnc_main_window_get_current_page (window) == plugin_page)
-    {
-        if (!GNC_IS_PLUGIN_PAGE_BUDGET(plugin_page))
-            return;
-
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_BUDGET(plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_budget_focus,
-                      GNC_PLUGIN_PAGE_BUDGET(plugin_page));
-    }
-}
-
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBudget, gnc_plugin_budget, GNC_TYPE_PLUGIN)
 
 static void
@@ -134,9 +112,6 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     ENTER (" ");
     parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_plugin_budget_finalize;
-
-    /* function overrides */
-    plugin_class->add_to_window = gnc_plugin_budget_add_to_window;
 
     plugin_class->plugin_name  = GNC_PLUGIN_BUDGET_NAME;
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
@@ -161,20 +136,6 @@ gnc_plugin_budget_finalize (GObject *object)
     (parent_class->finalize)(object);
     LEAVE(" ");
 
-}
-
-/**
- * Called when this plugin is added to a main window.  Connect a few callbacks
- * here to track page changes.
- *
- */
-static void gnc_plugin_budget_add_to_window (GncPlugin *plugin,
-                                             GncMainWindow *mainwindow,
-                                             GQuark type)
-{
-    g_signal_connect (mainwindow, "page_changed",
-                      G_CALLBACK(gnc_plugin_budget_main_window_page_changed),
-                      plugin);
 }
 
 /************************************************************

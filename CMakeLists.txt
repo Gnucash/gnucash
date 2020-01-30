@@ -72,7 +72,7 @@ foreach(install_dir ${CMAKE_INSTALL_FULL_BINDIR}
     ${CMAKE_INSTALL_FULL_SYSCONFDIR} ${CMAKE_INSTALL_FULL_DATAROOTDIR}
     ${CMAKE_INSTALL_FULL_DATADIR} ${CMAKE_INSTALL_FULL_LIBDIR})
   string(FIND ${install_dir} ${CMAKE_INSTALL_PREFIX} in_prefix)
-  if(in_prefix EQUAL -1)
+  if(NOT (in_prefix EQUAL 0))
     set(ENABLE_BINRELOC OFF)
     message(WARNING "${install_dir} is set outside of the intallation prefix ${CMAKE_INSTALL_PREFIX}. That will break relocation so ENABLE_BINRELOC is set to off. With relocation disabled GnuCash will run only in its configured install location. You must set GNC_UNINSTALLED=1 and GNC_BUILDDIR=/path/to/builddir to run from the build directory. GnuCash will not run from a DESTDIR.")
     break()

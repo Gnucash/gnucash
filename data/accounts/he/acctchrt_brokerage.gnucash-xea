@@ -70,7 +70,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>השקעות</act:description>
-  <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -300,7 +300,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>הכנסות מדיבדנד</act:description>
-  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>מתנות שנתקבלו</act:name>
@@ -311,7 +311,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>מתנות שנתקבלו</act:description>
-  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>הכנסות ריבית</act:name>
@@ -322,7 +322,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>הכנסות ריבית</act:description>
-  <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>ריבית מאג"ח</act:name>
@@ -427,6 +427,6 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>דמי ניהול</act:description>
-  <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
+  <act:parent type="new">77fdffddc79c662c93c482cefa5a4744</act:parent>
 </gnc:account>
 </gnc-account-example>

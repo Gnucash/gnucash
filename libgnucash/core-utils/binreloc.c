@@ -459,7 +459,10 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
  *
  * If compiled_dir exists and is an absolute path then we check the dynamic
  * prefix and if it's NULL fall back first on the passed-in default and then on
- * compiled_dir; otherwise we pass the compiled PREFIX value as a default to
+ * compiled_dir;
+ * otherwise if the dynamic prefix turns out to be the compile time defined PREFIX
+ * just use that
+ * otherwise we pass the compiled PREFIX value as a default to
  * gnc_gbr_find_prefix, remove the PREFIX part (if any) from the compiled_dir
  * and append that to the retrieved prefix.
  */
@@ -471,6 +474,9 @@ find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
     prefix = gnc_gbr_find_prefix (NULL);
     if (prefix == NULL)
         return g_strdup (default_dir ? default_dir : compiled_dir);
+    else if (!g_strcmp0 (prefix, PREFIX))
+        return g_strdup (compiled_dir);
+
     subdir = gnc_file_path_relative_part(PREFIX, compiled_dir);
     if (g_strcmp0 (compiled_dir, subdir) == 0)
     {
@@ -544,7 +550,6 @@ gchar *
 gnc_gbr_find_lib_dir (const gchar *default_lib_dir)
 {
     return find_component_directory (default_lib_dir, LIBDIR);
-
 }
 
 /** Locate the application's configuration files folder.
@@ -563,62 +568,7 @@ gnc_gbr_find_lib_dir (const gchar *default_lib_dir)
 gchar *
 gnc_gbr_find_etc_dir (const gchar *default_etc_dir)
 {
-    gchar *prefix, *dir, *sysconfdir;
-
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_etc_dir != NULL)
-            return g_strdup (default_etc_dir);
-        else
-            return NULL;
-    }
-
-    if (g_path_is_absolute (SYSCONFDIR))
-    {
-        sysconfdir = gnc_file_path_relative_part (PREFIX, SYSCONFDIR);
-        if (g_strcmp0 (sysconfdir, SYSCONFDIR) == 0)
-        {
-            g_free (sysconfdir);
-            sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
-        }
-        dir = g_build_filename (prefix, sysconfdir, NULL);
-        g_free (sysconfdir);
-    }
-    else if ((g_strcmp0 (PREFIX, "/opt") == 0) ||
-             (g_str_has_prefix (PREFIX, "/opt/")))
-    {
-        /* If the prefix is "/opt/..." the etc stuff will be installed in
-         * "SYSCONFDIR/opt/...", while the rest will be in "/opt/..."
-         * If this gets relocated after (make install), there will be another
-         * prefix prepended to all of that:
-         * "prefix2/opt/..."
-         * "prefix2/SYSCONFDIR/opt/..."
-         * Note: this most likely won't work on Windows. Don't try a /opt
-         * prefix on that platform...
-         */
-        gchar *std_etc_dir = g_build_filename ("/", SYSCONFDIR, PREFIX, NULL);
-
-        gchar *base_prefix_pos = g_strstr_len (prefix, -1, PREFIX);
-        if (!base_prefix_pos || base_prefix_pos == prefix)
-            dir = g_build_filename ("/", std_etc_dir, NULL);
-        else
-        {
-            gchar *prefix2 = g_strndup (prefix, base_prefix_pos - prefix);
-            dir = g_build_filename (prefix2, std_etc_dir, NULL);
-        }
-        g_free (std_etc_dir);
-
-    }
-    else
-    {
-        sysconfdir = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
-        dir = g_build_filename (prefix, sysconfdir, NULL);
-        g_free (sysconfdir);
-    }
-    g_free (prefix);
-    return dir;
+    return find_component_directory (default_etc_dir, SYSCONFDIR);
 }
 
 

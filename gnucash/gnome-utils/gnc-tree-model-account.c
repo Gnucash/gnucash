@@ -1434,10 +1434,6 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
 
     account = GNC_ACCOUNT(entity);
 
-    /* clear the cached model values for account */
-    if (event_type != QOF_EVENT_ADD)
-        gnc_tree_model_account_clear_cached_values (model, account);
-
     if (gnc_account_get_book (account) != priv->book)
     {
         LEAVE("not in this book");
@@ -1448,6 +1444,11 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
         LEAVE("not in this model");
         return;
     }
+
+    /* clear the cached model values for account */
+    if (event_type != QOF_EVENT_ADD)
+        gnc_tree_model_account_clear_cached_values (model, account);
+
     /* What to do, that to do. */
     switch (event_type)
     {

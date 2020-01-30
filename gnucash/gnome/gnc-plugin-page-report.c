@@ -250,24 +250,18 @@ gnc_plugin_page_report_focus (GtkWidget *widget)
  */
 static void
 gnc_plugin_page_report_main_window_page_changed (GncMainWindow *window,
-        GncPluginPage *plugin_page, gpointer user_data)
+                                                 GncPluginPage *current_plugin_page,
+                                                 GncPluginPage *report_plugin_page)
 {
     // We continue only if the plugin_page is a valid
-    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_REPORT(current_plugin_page) ||
+        !report_plugin_page || !GNC_IS_PLUGIN_PAGE_REPORT(report_plugin_page))
         return;
 
-    if (gnc_main_window_get_current_page (window) == plugin_page)
+    if (current_plugin_page == report_plugin_page)
     {
-        GncPluginPageReport *report;
-        GncPluginPageReportPrivate *priv;
-        GtkWidget *widget;
-
-        if (!GNC_IS_PLUGIN_PAGE_REPORT(plugin_page))
-            return;
-
-        report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
-        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-        widget = gnc_html_get_widget(priv->html);
+        GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report_plugin_page);
+        GtkWidget *widget = gnc_html_get_widget (priv->html);
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the webkit widget

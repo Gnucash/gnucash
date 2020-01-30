@@ -407,8 +407,10 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         sheet->direct_update_cell =
             gnucash_sheet_check_direct_update_cell (sheet, virt_loc);
     }
-
-    gtk_widget_grab_focus (GTK_WIDGET(sheet));
+    // when a gui refresh is called, we end up here so only grab the focus
+    // if the sheet is showing on the current plugin_page
+    if (sheet->sheet_has_focus)
+        gtk_widget_grab_focus (GTK_WIDGET(sheet));
 }
 
 
@@ -755,6 +757,12 @@ gnucash_sheet_is_read_only (GnucashSheet *sheet)
     g_return_val_if_fail (sheet != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), TRUE);
     return gnc_table_model_read_only (sheet->table->model);
+}
+
+void
+gnucash_sheet_set_has_focus (GnucashSheet *sheet, gboolean has_focus)
+{
+    sheet->sheet_has_focus = has_focus;
 }
 
 static void
@@ -2763,6 +2771,9 @@ gnucash_sheet_new (Table *table)
     g_return_val_if_fail (table != NULL, NULL);
 
     sheet = gnucash_sheet_create (table);
+
+    /* on create, the sheet can grab the focus */
+    sheet->sheet_has_focus = TRUE;
 
     /* The cursor */
     sheet->cursor = gnucash_cursor_new (sheet);

@@ -384,22 +384,17 @@ gnc_plugin_page_owner_focus (GtkTreeView *tree_view)
  */
 static void
 gnc_plugin_page_owner_main_window_page_changed (GncMainWindow *window,
-        GncPluginPage *plugin_page, gpointer user_data)
+                                                GncPluginPage *current_plugin_page,
+                                                GncPluginPage *owner_plugin_page)
 {
     // We continue only if the plugin_page is a valid
-    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_OWNER_TREE(current_plugin_page) ||
+        !owner_plugin_page || !GNC_IS_PLUGIN_PAGE_OWNER_TREE(owner_plugin_page))
         return;
 
-    if (gnc_main_window_get_current_page (window) == plugin_page)
+    if (current_plugin_page == owner_plugin_page)
     {
-        GncPluginPageOwnerTree *page;
-        GncPluginPageOwnerTreePrivate *priv;
-
-        if (!GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page))
-            return;
-
-        page = GNC_PLUGIN_PAGE_OWNER_TREE(plugin_page);
-        priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
+        GncPluginPageOwnerTreePrivate *priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(owner_plugin_page);
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the tree view

@@ -340,7 +340,7 @@
         ((sxpath `(// (table 3) // tr (td 5) // *text*))
          sxml))
       (test-equal "credit-amounts"
-        '("$11.50" "$7.50" "$8.50" "$4.00" "$200.00" "$6.75" "$8.00")
+        '("$11.50" "$2.00" "$7.50" "$8.50" "$4.00" "$200.00" "$6.75" "$8.00")
         ((sxpath `(// (table 3) // tr (td 6) // *text*))
          sxml))
       (test-equal "debit-amounts"

@@ -127,7 +127,6 @@ static gboolean gnc_gen_trans_onButtonPressed_cb (
                     GNCImportMainMatcher *info);
 static gboolean gnc_gen_trans_onPopupMenu_cb (
                     GtkTreeView *treeview,
-                    GdkEvent *event,
                     GNCImportMainMatcher *info);
 static void refresh_model_row (
                     GNCImportMainMatcher *gui,
@@ -659,7 +658,6 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
 
 static gboolean
 gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
-                              GdkEvent *event,
                               GNCImportMainMatcher *info)
 {
     GtkTreeSelection *selection;

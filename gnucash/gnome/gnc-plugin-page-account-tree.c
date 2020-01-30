@@ -636,11 +636,32 @@ gnc_plugin_page_account_editing_finished_cb (gpointer various, GncPluginPageRegi
         gtk_action_set_sensitive (action, TRUE);
 }
 
+static void
+gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
+                                                  GncPluginPage *current_plugin_page,
+                                                  GncPluginPage *account_plugin_page)
+{
+    // We continue only if the plugin_page is a valid
+    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(current_plugin_page)||
+        !account_plugin_page || !GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(account_plugin_page))
+        return;
+
+    if (current_plugin_page == account_plugin_page)
+    {
+        // The page changed signal is emitted multiple times so we need
+        // to use an idle_add to change the focus to the tree view
+        g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (account_plugin_page));
+        g_idle_add ((GSourceFunc)gnc_plugin_page_account_tree_focus,
+                      GNC_PLUGIN_PAGE_ACCOUNT_TREE (account_plugin_page));
+    }
+}
+
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageAccountTree *page;
     GncPluginPageAccountTreePrivate *priv;
+    GncMainWindow *window;
     GtkTreeSelection *selection;
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
@@ -737,6 +758,11 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                            GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                            gnc_plugin_page_account_tree_summarybar_position_changed,
                            page);
+
+    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window);
+    g_signal_connect (window, "page_changed",
+                      G_CALLBACK(gnc_plugin_account_tree_main_window_page_changed),
+                      plugin_page);
 
     // Read account filter state information from account section
     gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,

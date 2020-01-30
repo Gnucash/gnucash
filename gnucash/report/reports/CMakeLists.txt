@@ -27,6 +27,7 @@ set (reports_standard_SCHEME
     standard/general-ledger.scm
     standard/income-gst-statement.scm
     standard/income-statement.scm
+    standard/lot-viewer.scm
     standard/net-charts.scm
     standard/new-owner-report.scm
     standard/portfolio.scm

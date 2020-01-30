@@ -724,6 +724,7 @@
 (export gnc:pk)
 (export gnc:dump-book)
 (export gnc:dump-invoices)
+(export gnc:dump-lot)
 
 ;; trep-engine.scm
 (export gnc:trep-options-generator)
