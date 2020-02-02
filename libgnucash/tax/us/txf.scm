@@ -153,7 +153,7 @@
     (cons 'N497 #(not-impl "Sched C-EZ" "Schedule C-EZ" 1 #t ""))
     (cons 'N498 #(not-impl "Sched C-EZ" "Spouse" 0 #t "" ((1992 ""))))
     (cons 'N501 #(not-impl "Sched C-EZ" "Principal business/prof" 2 #t "" ((1992 "A"))))
-    (cons 'N499 #(none "Sched C-EZ" "Gross receipts" 1 #t "" ((2012 "1") (2011 "1b") (1992 "1"))))
+    (cons 'N499 #(none "Sched C-EZ" "Gross receipts" 1 #t "" ((2012 "1") (2011 "1b") (1992 "1")) 2018))
 
     (cons 'N320 #(not-impl "Sched D" "Schedule D" 1 #f ""))
     (cons 'N321 #(not-impl "Form 8949 Copy A" "Short Term gain/loss - security" 5 #f "" ((2013 "Part I, 1") (2011 "1") (1993 "Sched D, line 1") (1991 "Sched D, line 1a") (1986 "Sched D, line 2a") (1985 "Sched D, line 1b") (1980 "Sched D, line 1"))))
