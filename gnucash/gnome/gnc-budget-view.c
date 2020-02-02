@@ -93,11 +93,10 @@ struct _GncBudgetViewClass
 
 enum
 {
-    TOTALS_TYPE_INCOME,    /**< This total is Income type*/
-    TOTALS_TYPE_EXPENSES,  /**< This total is Expenses type*/
-    TOTALS_TYPE_ASSET,     /**< This total is Assets type*/
-    TOTALS_TYPE_LIABILITY, /**< This total is Liabilities type*/
-    TOTALS_TYPE_EQUITY     /**< This total is for Equity type*/
+    TOTALS_TYPE_INCOME,        /**< This total is Income type*/
+    TOTALS_TYPE_EXPENSES,      /**< This total is Expenses type*/
+    TOTALS_TYPE_ASSET_LIAB_EQ, /**< This total is Asset/Liab/Equity type*/
+    TOTALS_TYPE_REMAINDER      /**< This total is Remaining to Budget*/
 };
 /**< \brief ENUM for different budget totals types.
 
@@ -446,17 +445,15 @@ gbv_create_widget (GncBudgetView *budget_view)
                       G_CALLBACK(gbv_totals_scrollbar_value_changed_cb), budget_view);
 
     // Create totals tree view
-    totals_tree_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-    gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Income"), 1, TOTALS_TYPE_INCOME, -1);
-    gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
-    gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Assets"), 1, TOTALS_TYPE_ASSET, -1);
-    gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Liabilities"), 1, TOTALS_TYPE_LIABILITY, -1);
-    gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Equity"), 1, TOTALS_TYPE_EQUITY, -1);
+    totals_tree_model = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
+    gtk_list_store_append(totals_tree_model, &iter);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Inflow from Income"), 1, TOTALS_TYPE_INCOME, -1);
+    gtk_list_store_append(totals_tree_model, &iter);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Outflow to Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
+    gtk_list_store_append(totals_tree_model, &iter);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Outflow to Asset/Equity/Liability"), 1, TOTALS_TYPE_ASSET_LIAB_EQ, -1);
+    gtk_list_store_append(totals_tree_model, &iter);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Remaining to Budget"), 1, TOTALS_TYPE_REMAINDER, -1);
 
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
@@ -1168,7 +1165,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     gint i;
     gint num_top_accounts;
-    gboolean red;
+    gboolean red, neg;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
 
@@ -1193,28 +1190,30 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     {
         account  = gnc_account_nth_child (priv->rootAcct, i);
         currency = gnc_account_get_currency_or_parent (account);
+        neg = FALSE;
 
         switch (xaccAccountGetType (account))
         {
-        case ACCT_TYPE_INCOME:
-            if (row_type != TOTALS_TYPE_INCOME)
+        case ACCT_TYPE_ASSET:
+        case ACCT_TYPE_LIABILITY:
+        case ACCT_TYPE_EQUITY:
+            if (row_type != TOTALS_TYPE_ASSET_LIAB_EQ &&
+                row_type != TOTALS_TYPE_REMAINDER)
                 continue;
+            neg = (row_type != TOTALS_TYPE_ASSET_LIAB_EQ);
+            break;
+        case ACCT_TYPE_INCOME:
+            if (row_type != TOTALS_TYPE_INCOME &&
+                row_type != TOTALS_TYPE_REMAINDER)
+                continue;
+            neg = (row_type == TOTALS_TYPE_ASSET_LIAB_EQ);
             break;
         case ACCT_TYPE_EXPENSE:
-            if (row_type != TOTALS_TYPE_EXPENSES)
+            if ((row_type != TOTALS_TYPE_EXPENSES) &&
+                (row_type != TOTALS_TYPE_REMAINDER))
                 continue;
-            break;
-        case ACCT_TYPE_ASSET:
-            if (row_type != TOTALS_TYPE_ASSET)
-                continue;
-            break;
-        case ACCT_TYPE_LIABILITY:
-            if (row_type != TOTALS_TYPE_LIABILITY)
-                continue;
-            break;
-        case ACCT_TYPE_EQUITY:
-            if (row_type != TOTALS_TYPE_EQUITY)
-                continue;
+            neg = (row_type == TOTALS_TYPE_REMAINDER ||
+                   row_type == TOTALS_TYPE_ASSET_LIAB_EQ);
             break;
         default:
             continue;
@@ -1233,6 +1232,9 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         pdb, value, currency, total_currency,
                         gnc_budget_get_period_start_date (budget, period_num));
         }
+
+        if (neg)
+            value = gnc_numeric_neg (value);
 
         total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
