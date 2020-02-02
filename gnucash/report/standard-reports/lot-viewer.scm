@@ -22,6 +22,7 @@
 (define-module (gnucash report standard-reports lot-viewer))
 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-11))            ;for let-values
 (use-modules (ice-9 match))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
@@ -35,7 +36,7 @@
 (define optname-from-date (N_ "Start Date"))
 (define optname-to-date (N_ "End Date"))
 (define optname-account (N_ "Account"))
-(define optname-desc-filter (N_ "Desc Filter"))
+(define optname-desc-filter "Description Filter")
 
 (define txn-type-alist
   (list (cons TXN-TYPE-NONE "None")
@@ -133,6 +134,9 @@
       (let ((title (gnc-lot-get-title lot)))
         (if (string-null? title) "None" title)))
 
+    (define (lot->guid lot)
+      (string-take (gncLotReturnGUID lot) 8))
+
     (define (to-cell elt)
       (gnc:make-html-table-cell/markup "number-cell" elt))
 
@@ -158,8 +162,9 @@
 
      (else
       (let ((table (gnc:make-html-table)))
-        (gnc:html-table-set-col-headers!
-         table `("Date" "Desc" "Type" ,@(map lot->title lots) "Non-APAR"))
+        (gnc:html-table-set-multirow-col-headers!
+         table `(("Date" "Desc" "Type" ,@(map lot->title lots) "Other Account")
+                 (#f #f #f ,@(map lot->guid lots) #f)))
 
         (gnc:html-table-append-row!
          table `(#f "Document" #f ,@(map lot->document lots)))
@@ -180,11 +185,8 @@
                  (() (map (compose to-cell list->text) (reverse (cons splits accum))))
                  ((this-lot . rest-lots)
                   (define (in-lot? s) (member s (car lots-splits)))
-                  (let lp1 ((splits splits) (next '()) (this '()))
-                    (match splits
-                      (() (lp rest-lots (cdr lots-splits) next (cons this accum)))
-                      (((? in-lot? head) . tail) (lp1 tail next (cons head this)))
-                      ((head . tail) (lp1 tail (cons head next) this))))))))))
+                  (let-values (((this next) (partition in-lot? splits)))
+                    (lp rest-lots (cdr lots-splits) next (cons this accum)))))))))
          (sort transactions (lambda (a b) (< (xaccTransOrder a b) 0))))
 
         (gnc:html-table-append-row!
