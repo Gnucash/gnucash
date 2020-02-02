@@ -1651,17 +1651,12 @@
   ) ;;end of let*
 )
 
-;; Recursively validate children if parent is not a tax account.
-;; Don't check children if parent is valid.
-;; Returns the Parent if a child or grandchild is valid.
+;; Returns #t if account is tax related.
 (define (validate accounts)
   (filter (lambda (a)
             (if (xaccAccountGetTaxRelated a)
                 #t
-                ;; check children
-                (if (null? (validate (gnc-account-get-descendants a)))
-                    #f
-                    #t)))
+                #f))
           accounts))
 
 (define (generate-tax-schedule report-name
@@ -1829,10 +1824,6 @@
                   )
                   selected-accounts-sorted-by-form-line-acct)
                );; end of if
-               (if (not (null? children))
-                        (make-form-line-acct-list children tax-year)
-                        selected-accounts-sorted-by-form-line-acct
-               )
             );; end let*
           );; end lambda
       accounts)
@@ -2005,7 +1996,7 @@
          (selected-accounts (if (not (null? user-sel-accnts))
                                 valid-user-sel-accnts
                                 (validate (reverse
-                                           (gnc-account-get-children-sorted
+                                           (gnc-account-get-descendants-sorted
                                             (gnc-get-current-root-account))))))
 
          (work-to-do 0)
