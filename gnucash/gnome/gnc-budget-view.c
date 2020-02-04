@@ -1190,33 +1190,73 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     {
         account  = gnc_account_nth_child (priv->rootAcct, i);
         currency = gnc_account_get_currency_or_parent (account);
-        neg = FALSE;
 
-        switch (xaccAccountGetType (account))
-        {
-        case ACCT_TYPE_ASSET:
-        case ACCT_TYPE_LIABILITY:
-        case ACCT_TYPE_EQUITY:
-            if (row_type != TOTALS_TYPE_ASSET_LIAB_EQ &&
-                row_type != TOTALS_TYPE_REMAINDER)
-                continue;
-            neg = (row_type != TOTALS_TYPE_ASSET_LIAB_EQ);
-            break;
-        case ACCT_TYPE_INCOME:
-            if (row_type != TOTALS_TYPE_INCOME &&
-                row_type != TOTALS_TYPE_REMAINDER)
-                continue;
-            neg = (row_type == TOTALS_TYPE_ASSET_LIAB_EQ);
-            break;
-        case ACCT_TYPE_EXPENSE:
-            if ((row_type != TOTALS_TYPE_EXPENSES) &&
-                (row_type != TOTALS_TYPE_REMAINDER))
-                continue;
-            neg = (row_type == TOTALS_TYPE_REMAINDER ||
-                   row_type == TOTALS_TYPE_ASSET_LIAB_EQ);
-            break;
-        default:
-            continue;
+        if (gnc_using_unreversed_budgets(gnc_account_get_book(account)))
+        {  /* using book with unreversed-budgets feature. This will be
+              the default in 4.x after budget scrubbing*/
+            neg = gnc_reverse_balance (account);
+            switch (xaccAccountGetType (account))
+            {
+            case ACCT_TYPE_ASSET:
+                if (row_type != TOTALS_TYPE_ASSET_LIAB_EQ &&
+                    row_type != TOTALS_TYPE_REMAINDER)
+                    continue;
+                if (row_type == TOTALS_TYPE_REMAINDER)
+                    neg = !neg;
+                break;
+            case ACCT_TYPE_LIABILITY:
+            case ACCT_TYPE_EQUITY:
+                if (row_type != TOTALS_TYPE_ASSET_LIAB_EQ &&
+                    row_type != TOTALS_TYPE_REMAINDER)
+                    continue;
+                if (row_type == TOTALS_TYPE_ASSET_LIAB_EQ)
+                    neg = !neg;
+                break;
+            case ACCT_TYPE_INCOME:
+                if (row_type != TOTALS_TYPE_INCOME &&
+                    row_type != TOTALS_TYPE_REMAINDER)
+                    continue;
+                neg = !neg;
+                break;
+            case ACCT_TYPE_EXPENSE:
+                if ((row_type != TOTALS_TYPE_EXPENSES) &&
+                    (row_type != TOTALS_TYPE_REMAINDER))
+                    continue;
+                if (row_type == TOTALS_TYPE_REMAINDER)
+                    neg = !neg;
+                break;
+            default:
+                continue;       /* skip other types... */
+            }
+        }
+        else
+        {   /* this section is for backward compatibility, to be
+               removed when unreversed-budgets are mandatory */
+            switch (xaccAccountGetType (account))
+            {
+            case ACCT_TYPE_ASSET:
+            case ACCT_TYPE_LIABILITY:
+            case ACCT_TYPE_EQUITY:
+                if (row_type != TOTALS_TYPE_ASSET_LIAB_EQ &&
+                    row_type != TOTALS_TYPE_REMAINDER)
+                    continue;
+                neg = (row_type != TOTALS_TYPE_ASSET_LIAB_EQ);
+                break;
+            case ACCT_TYPE_INCOME:
+                if (row_type != TOTALS_TYPE_INCOME &&
+                    row_type != TOTALS_TYPE_REMAINDER)
+                    continue;
+                neg = FALSE;
+                break;
+            case ACCT_TYPE_EXPENSE:
+                if ((row_type != TOTALS_TYPE_EXPENSES) &&
+                    (row_type != TOTALS_TYPE_REMAINDER))
+                    continue;
+                neg = (row_type == TOTALS_TYPE_REMAINDER);
+                break;
+            default:
+                continue;       /* skip other types... */
+            }
         }
         // find the total for this account
 
