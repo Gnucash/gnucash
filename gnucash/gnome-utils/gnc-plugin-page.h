@@ -156,6 +156,21 @@ typedef struct
      *  @param window The window where the page was added. */
     void (* window_changed) (GncPluginPage *plugin_page, GtkWidget *window);
 
+    /** Perform plugin specific actions to set the focus.
+     *
+     *  @param page The page that was added to a window.
+     *
+     *  @param on_current_pgae Whether this page is the currentone. */
+    void (* focus_page) (GncPluginPage *plugin_page, gboolean on_current_page);
+
+    /** This function performs specific actions to set the focus on a specific
+     *  widget.
+     *
+     *  @param page The page that was added to a window.
+     *
+     *  @param on_current_pgae Whether this page is the currentone. */
+    gboolean (* focus_page_function) (GncPluginPage *plugin_page);
+
     /** This function vector allows page specific actions to occur
      *  when the page name is changed.
      *
@@ -393,10 +408,28 @@ const gchar *gnc_plugin_page_get_page_color (GncPluginPage *page);
  *
  *  @param page The page whose name should be retrieved.
  *
- *  @return The color for this page.  This string is owned by the page and
+ *  @param The color for this page.  This string is owned by the page and
  *  should not be freed by the caller.
  */
 void gnc_plugin_page_set_page_color (GncPluginPage *page, const char *color);
+
+
+/** Set up the page_changed callback for when the current page is changed.
+ *  This will store a pointer to the page focus funtion passed as a parameter
+ *  so that it can be used in setting up the g_idle_add
+ *
+ *  @param page The page the callback is setup for.
+ *
+ *  @param user_data The page focus function
+ */
+void gnc_plugin_page_inserted_cb (GncPluginPage *page, gpointer user_data);
+
+
+/** Disconnect the page_changed_id signal callback.
+ *
+ *  @param page The page whose name should be retrieved.
+ */
+void gnc_plugin_page_disconnect_page_changed (GncPluginPage *page);
 
 
 /** Retrieve the Uniform Resource Identifier for this page.

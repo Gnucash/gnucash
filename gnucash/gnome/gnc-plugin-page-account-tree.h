@@ -95,15 +95,6 @@ GncPluginPage *gnc_plugin_page_account_tree_new  (void);
 Account * gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page);
 
 
-/** Given a pointer to an account tree plugin page, set the focus to
- *  the GtkTreeView. This is used in a g_idle_add so return FALSE.
- *
- *  @param page The "account tree" page.
- * 
- *  @return FALSE;
- */
-gboolean gnc_plugin_page_account_tree_focus (GncPluginPageAccountTree *page);
-
 /** Given a pointer to an account, the account tree will open
  *  and the account will be selected (if any).
  *

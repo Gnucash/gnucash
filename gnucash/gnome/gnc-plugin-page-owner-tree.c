@@ -58,6 +58,7 @@
 #include "gnc-tree-view-owner.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "guile-mappings.h"
 #include "dialog-lot-viewer.h"
 #include "dialog-object-references.h"
@@ -365,43 +366,25 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
     return GNC_PLUGIN_PAGE(plugin_page);
 }
 
-
-static gboolean
-gnc_plugin_page_owner_focus (GtkTreeView *tree_view)
-{
-    if (GTK_IS_TREE_VIEW(tree_view))
-    {
-        if (!gtk_widget_is_focus (GTK_WIDGET(tree_view)))
-            gtk_widget_grab_focus (GTK_WIDGET(tree_view));
-    }
-    return FALSE;
-}
-
-
 /**
  * Whenever the current page is changed, if an owner page is
- * the current page, set focus on the treeview.
+ * the current page, set focus on the tree view.
  */
-static void
-gnc_plugin_page_owner_main_window_page_changed (GncMainWindow *window,
-                                                GncPluginPage *current_plugin_page,
-                                                GncPluginPage *owner_plugin_page)
+static gboolean
+gnc_plugin_page_owner_focus_widget (GncPluginPage *owner_plugin_page)
 {
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_OWNER_TREE(current_plugin_page) ||
-        !owner_plugin_page || !GNC_IS_PLUGIN_PAGE_OWNER_TREE(owner_plugin_page))
-        return;
-
-    if (current_plugin_page == owner_plugin_page)
+    if (GNC_IS_PLUGIN_PAGE_OWNER_TREE(owner_plugin_page))
     {
         GncPluginPageOwnerTreePrivate *priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(owner_plugin_page);
+        GtkTreeView *tree_view = priv->tree_view;
 
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_owner_focus,
-                      GTK_TREE_VIEW (priv->tree_view));
+        if (GTK_IS_TREE_VIEW(tree_view))
+        {
+            if (!gtk_widget_is_focus (GTK_WIDGET(tree_view)))
+                gtk_widget_grab_focus (GTK_WIDGET(tree_view));
+        }
     }
+    return FALSE;
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, GNC_TYPE_PLUGIN_PAGE)
@@ -422,6 +405,7 @@ gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_owner_tree_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_owner_tree_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_owner_tree_recreate_page;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_owner_focus_widget;
 
     plugin_page_signals[OWNER_SELECTED] =
         g_signal_new ("owner_selected",
@@ -571,7 +555,6 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageOwnerTree *page;
     GncPluginPageOwnerTreePrivate *priv;
-    GncMainWindow  *window;
     GtkTreeSelection *selection;
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
@@ -686,10 +669,9 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     gnc_gui_component_set_session (priv->component_id,
                                    gnc_get_current_session());
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_page_owner_main_window_page_changed),
-                     plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     LEAVE("widget = %p", priv->widget);
     return priv->widget;
@@ -705,8 +687,11 @@ gnc_plugin_page_owner_tree_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->widget)
     {

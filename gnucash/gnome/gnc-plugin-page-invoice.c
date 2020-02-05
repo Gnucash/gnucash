@@ -52,6 +52,7 @@ static void gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
+static gboolean gnc_plugin_page_invoice_focus_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_invoice_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
@@ -448,6 +449,7 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
     gnc_plugin_class->save_page       = gnc_plugin_page_invoice_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_invoice_recreate_page;
     gnc_plugin_class->window_changed  = gnc_plugin_page_invoice_window_changed;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_invoice_focus_widget;
 }
 
 static void
@@ -572,56 +574,39 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
 }
 
 
-static gboolean
-gnc_plugin_page_invoice_focus (InvoiceWindow *iw)
-{
-    GtkWidget *regWidget = gnc_invoice_get_register(iw);
-    GtkWidget *notes = gnc_invoice_get_notes(iw);
-    GnucashSheet *sheet;
-
-    if (!GNUCASH_IS_REGISTER(regWidget))
-        return FALSE;
-
-    sheet = gnucash_register_get_sheet (GNUCASH_REGISTER(regWidget));
-
-    // Test for the sheet being read only
-    if (!gnucash_sheet_is_read_only (sheet))
-    {
-        if (!gtk_widget_is_focus (GTK_WIDGET(sheet)))
-            gtk_widget_grab_focus (GTK_WIDGET(sheet));
-    }
-    else // set focus to the notes field
-    {
-        if (!gtk_widget_is_focus (GTK_WIDGET(notes)))
-            gtk_widget_grab_focus (GTK_WIDGET(notes));
-    }
-    return FALSE;
-}
-
-
 /**
  * Whenever the current page is changed, if an invoice page is
  * the current page, set focus on the sheet or notes field.
  */
-static void
-gnc_plugin_page_invoice_main_window_page_changed (GncMainWindow *window,
-                                                  GncPluginPage *current_plugin_page,
-                                                  GncPluginPage *invoice_plugin_page)
+static gboolean
+gnc_plugin_page_invoice_focus_widget (GncPluginPage *invoice_plugin_page)
 {
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_INVOICE(current_plugin_page) ||
-        !invoice_plugin_page || !GNC_IS_PLUGIN_PAGE_INVOICE(invoice_plugin_page))
-        return;
-
-    if (current_plugin_page == invoice_plugin_page)
+    if (GNC_IS_PLUGIN_PAGE_INVOICE(invoice_plugin_page))
     {
         GncPluginPageInvoicePrivate *priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_plugin_page);
 
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the sheet
-        g_idle_remove_by_data (priv->iw);
-        g_idle_add ((GSourceFunc)gnc_plugin_page_invoice_focus, priv->iw);
+        GtkWidget *regWidget = gnc_invoice_get_register(priv->iw);
+        GtkWidget *notes = gnc_invoice_get_notes(priv->iw);
+        GnucashSheet *sheet;
+
+        if (!GNUCASH_IS_REGISTER(regWidget))
+            return FALSE;
+
+        sheet = gnucash_register_get_sheet (GNUCASH_REGISTER(regWidget));
+
+        // Test for the sheet being read only
+        if (!gnucash_sheet_is_read_only (sheet))
+        {
+            if (!gtk_widget_is_focus (GTK_WIDGET(sheet)))
+                gtk_widget_grab_focus (GTK_WIDGET(sheet));
+        }
+        else // set focus to the notes field
+        {
+            if (!gtk_widget_is_focus (GTK_WIDGET(notes)))
+                gtk_widget_grab_focus (GTK_WIDGET(notes));
+        }
     }
+    return FALSE;
 }
 
 
@@ -633,7 +618,6 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     GncPluginPageInvoice *page;
     GncPluginPageInvoicePrivate *priv;
     GtkWidget *regWidget, *widget;
-    GncMainWindow  *window;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
@@ -680,10 +664,9 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
                                    gnc_plugin_page_invoice_refresh_cb,
                                    NULL, page);
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_page_invoice_main_window_page_changed),
-                     plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     LEAVE("");
     return priv->widget;
@@ -708,8 +691,11 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
                                  gnc_plugin_page_invoice_summarybar_position_changed,
                                  page);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (priv->iw);
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->widget == NULL)
     {

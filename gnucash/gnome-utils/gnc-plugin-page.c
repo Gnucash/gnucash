@@ -58,6 +58,9 @@ static void gnc_plugin_page_get_property (GObject         *object,
         GValue          *value,
         GParamSpec      *pspec);
 
+static void gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
+                                           gboolean on_current_page);
+
 enum
 {
     INSERTED,
@@ -102,6 +105,9 @@ typedef struct _GncPluginPagePrivate
     gchar *page_color;
     gchar *uri;
     gchar *statusbar_text;
+
+    gulong page_changed_id;
+
 } GncPluginPagePrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
@@ -371,6 +377,7 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 
     klass->tab_icon    = NULL;
     klass->plugin_name = NULL;
+    klass->focus_page = gnc_plugin_page_default_focus;
 
     g_object_class_install_property
     (gobject_class,
@@ -506,18 +513,19 @@ static void
 gnc_plugin_page_init (GncPluginPage *page, void *data)
 {
     GncPluginPagePrivate *priv;
-    
+
     GncPluginPageClass *klass = (GncPluginPageClass*)data;
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->page_name   = NULL;
     priv->page_color  = NULL;
     priv->uri         = NULL;
+    priv->page_changed_id = 0;
 
     page->window      = NULL;
     page->summarybar  = NULL;
 
-    gnc_gobject_tracking_remember(G_OBJECT(page), 
+    gnc_gobject_tracking_remember(G_OBJECT(page),
 		                  G_OBJECT_CLASS(klass));
 }
 
@@ -845,6 +853,96 @@ gnc_plugin_page_set_page_color (GncPluginPage *page, const gchar *color)
         g_free(priv->page_color);
     if (color)
         priv->page_color = g_strdup(color);
+}
+
+
+static void
+gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
+                               gboolean on_current_page)
+{
+    GncPluginPagePrivate *priv;
+
+    if (!on_current_page)
+        return;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(plugin_page);
+
+    if (G_LIKELY(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function))
+    {
+        // The page changed signal is emitted multiple times so we need
+        // to use an idle_add to change the focus
+        g_idle_remove_by_data (GNC_PLUGIN_PAGE(plugin_page));
+        g_idle_add ((GSourceFunc)(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function),
+                     GNC_PLUGIN_PAGE(plugin_page));
+    }
+}
+
+
+/* this is the callback for the plugin "page_changed" signal */
+static void
+gnc_plugin_page_main_window_changed (GtkWindow *window,
+                                     GObject *object,
+                                     gpointer user_data)
+{
+    GncPluginPage *current_plugin_page = GNC_PLUGIN_PAGE(object);
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(user_data);
+    GncPluginPagePrivate *priv;
+    gboolean on_current_page = FALSE;
+
+    // Continue if current_plugin_page is valid
+    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE(current_plugin_page))
+        return;
+
+    // Continue only if the plugin_page is valid
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(plugin_page);
+
+    if (current_plugin_page == plugin_page)
+        on_current_page = TRUE;
+
+    (GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page)(plugin_page, on_current_page);
+}
+
+/* this is the callback for the plugin "inserted" signal which will setup
+ * the callback for the "page_changed" signal and save a pointer to the
+ * page focus function. */
+void
+gnc_plugin_page_inserted_cb (GncPluginPage *page, gpointer user_data)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    priv->page_changed_id = g_signal_connect (G_OBJECT(page->window), "page_changed",
+                                              G_CALLBACK(gnc_plugin_page_main_window_changed),
+                                              page);
+
+    // on initial load try and set the page focus
+    (GNC_PLUGIN_PAGE_GET_CLASS(page)->focus_page)(page, TRUE);
+}
+
+
+/* disconnect the page_changed callback */
+void
+gnc_plugin_page_disconnect_page_changed (GncPluginPage *page)
+{
+    GncPluginPagePrivate *priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
+
+    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+
+    if (priv->page_changed_id > 0)
+    {
+        g_signal_handler_disconnect (G_OBJECT(page->window), priv->page_changed_id);
+        priv->page_changed_id = 0;
+    }
 }
 
 

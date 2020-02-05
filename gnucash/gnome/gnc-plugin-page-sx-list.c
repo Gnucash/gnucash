@@ -73,6 +73,7 @@
 #include "gnc-tree-view-sx-list.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "gnc-window.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.plugin-page.sx-list"
@@ -187,42 +188,25 @@ gnc_plugin_page_sx_list_new (void)
 }
 
 
-static gboolean
-gnc_plugin_page_sx_list_focus (GtkTreeView *tree_view)
-{
-    if (GTK_IS_TREE_VIEW(tree_view))
-    {
-        if (!gtk_widget_is_focus (GTK_WIDGET(tree_view)))
-            gtk_widget_grab_focus (GTK_WIDGET(tree_view));
-    }
-    return FALSE;
-}
-
-
 /**
- * Whenever the current page is changed, if a schedule editor page is
- * the current page, set focus on the treeview.
+ * Whenever the current page is changed, if a sx page is
+ * the current page, set focus on the tree view.
  */
-static void
-gnc_plugin_page_sx_list_main_window_page_changed (GncMainWindow *window,
-                                                  GncPluginPage *current_plugin_page,
-                                                  GncPluginPage *sx_plugin_page)
+static gboolean
+gnc_plugin_page_sx_list_focus_widget (GncPluginPage *sx_plugin_page)
 {
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_SX_LIST(current_plugin_page) ||
-        !sx_plugin_page || !GNC_IS_PLUGIN_PAGE_SX_LIST(sx_plugin_page))
-        return;
-
-    if (current_plugin_page == sx_plugin_page)
+    if (GNC_IS_PLUGIN_PAGE_SX_LIST(sx_plugin_page))
     {
         GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(sx_plugin_page);
+        GtkTreeView *tree_view = priv->tree_view;
 
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_sx_list_focus,
-                      GTK_TREE_VIEW (priv->tree_view));
+        if (GTK_IS_TREE_VIEW(tree_view))
+        {
+            if (!gtk_widget_is_focus (GTK_WIDGET(tree_view)))
+                gtk_widget_grab_focus (GTK_WIDGET(tree_view));
+        }
     }
+    return FALSE;
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageSxList, gnc_plugin_page_sx_list, GNC_TYPE_PLUGIN_PAGE)
@@ -244,6 +228,7 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_sx_list_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_sx_list_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_sx_list_recreate_page;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_sx_list_focus_widget;
 }
 
 
@@ -371,7 +356,6 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageSxList *page;
     GncPluginPageSxListPrivate *priv;
-    GncMainWindow  *window;
     GtkWidget *widget;
     GtkWidget *vbox;
     GtkWidget *label;
@@ -498,10 +482,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_gui_component_set_session (priv->gnc_component_id,
                                    gnc_get_current_session());
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_page_sx_list_main_window_page_changed),
-                     plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     return priv->widget;
 }
@@ -516,8 +499,11 @@ gnc_plugin_page_sx_list_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_SX_LIST (plugin_page);
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->widget)
     {

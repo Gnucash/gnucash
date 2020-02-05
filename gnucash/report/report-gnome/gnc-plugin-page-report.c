@@ -233,41 +233,25 @@ gnc_plugin_page_report_set_property( GObject *obj,
 
 }
 
-static gboolean
-gnc_plugin_page_report_focus (GtkWidget *widget)
-{
-    if (GTK_IS_WIDGET(widget))
-    {
-        if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
-            gtk_widget_grab_focus (GTK_WIDGET(widget));
-    }
-    return FALSE;
-}
-
 /**
  * Whenever the current page is changed, if a report page is
  * the current page, set focus on the report.
  */
-static void
-gnc_plugin_page_report_main_window_page_changed (GncMainWindow *window,
-                                                 GncPluginPage *current_plugin_page,
-                                                 GncPluginPage *report_plugin_page)
+static gboolean
+gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
 {
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_REPORT(current_plugin_page) ||
-        !report_plugin_page || !GNC_IS_PLUGIN_PAGE_REPORT(report_plugin_page))
-        return;
-
-    if (current_plugin_page == report_plugin_page)
+    if (GNC_IS_PLUGIN_PAGE_REPORT(report_plugin_page))
     {
         GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report_plugin_page);
         GtkWidget *widget = gnc_html_get_widget (priv->html);
 
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the webkit widget
-        g_idle_remove_by_data (widget);
-        g_idle_add ((GSourceFunc)gnc_plugin_page_report_focus, widget);
+        if (GTK_IS_WIDGET(widget))
+        {
+            if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
+                gtk_widget_grab_focus (GTK_WIDGET(widget));
+        }
     }
+    return FALSE;
 }
 
 static void
@@ -294,6 +278,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
     gnc_plugin_page_class->update_edit_menu_actions = gnc_plugin_page_report_update_edit_menu;
     gnc_plugin_page_class->finish_pending   = gnc_plugin_page_report_finish_pending;
+    gnc_plugin_page_class->focus_page_function = gnc_plugin_page_report_focus_widget;
 
     // create the "reportId" property
     g_object_class_install_property( object_class,
@@ -412,7 +397,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
-    GncMainWindow  *window;
     GtkWindow *topLvl;
     GtkAction *action;
     URLType type;
@@ -477,10 +461,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
                       G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window);
-    g_signal_connect(window, "page_changed",
-                     G_CALLBACK(gnc_plugin_page_report_main_window_page_changed),
-                     page);
+    g_signal_connect (G_OBJECT(page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
     LEAVE("container %p", priv->container);
@@ -783,8 +766,11 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 
     widget = gnc_html_get_widget(priv->html);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (widget);
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->component_manager_id)
     {
