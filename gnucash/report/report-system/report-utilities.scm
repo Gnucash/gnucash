@@ -423,11 +423,10 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
 ;; output: a monetary object
 (define (gnc:monetary+ . monetaries)
-  (let* ((coll (apply gnc:monetaries-add monetaries))
-         (list-of-monetaries (coll 'format gnc:make-gnc-monetary #f)))
-    (if (null? (cdr list-of-monetaries))
-        (car list-of-monetaries)
-        (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
+  (let ((coll (apply gnc:monetaries-add monetaries)))
+    (match (coll 'format gnc:make-gnc-monetary #f)
+      ((mon) mon)
+      (_ (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries))))))
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
