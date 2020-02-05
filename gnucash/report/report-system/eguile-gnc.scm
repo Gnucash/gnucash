@@ -87,6 +87,7 @@
 (use-modules (ice-9 rdelim))      ; for read-line
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash app-utils)) ; for _
+(use-modules (gnucash utilities)) ; for gnc:html-string-sanitize
 
 (define-public (string-substitute-alist str sub-alist)
   (with-output-to-string
@@ -97,15 +98,6 @@
           (or (assv-ref sub-alist c)
               c)))
        str))))
-
-;; This is needed for displaying error messages -- note that it assumes that
-;; the output is HTML, which is a pity, because otherwise this module is
-;; non-specific -- it is designed to output a mixture of Guile and any other
-;; sort of text.  Oh well.
-(define-public (escape-html s1)
-  (string-substitute-alist s1 '((#\< . "&lt;")
-                                (#\> . "&gt;")
-                                (#\& . "&amp;"))))
 
 ;; regexps used to find start and end of code segments
 (define startre (and (defined? 'make-regexp) (make-regexp "<\\?scm(:d)?[[:space:]]")))
@@ -203,11 +195,12 @@
     (display (_ "An error occurred when processing the template:"))
     (display "<br/><pre>")
     (display
-     (escape-html
+     (gnc:html-string-sanitize
       (with-output-to-string
         (lambda ()
-          (display-error #f (current-output-port) subr message args rest)
-          (display-backtrace error-stack (current-output-port))))))
+          (display-backtrace error-stack (current-output-port))
+          (newline)
+          (display-error #f (current-output-port) subr message args rest)))))
     (display "</pre><br/>"))
 
   (define (pre-unwind-handler key . rest)
