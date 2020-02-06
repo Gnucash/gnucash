@@ -22,6 +22,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
+(use-modules (ice-9 match))
 ; using all of these seems like overkill -- 
 ; not sure which are really required
 (use-modules (gnucash engine))
@@ -32,13 +33,10 @@
 
 (define-public (fmtnumber n)
   ;; Format a number (integer or real) into something printable
-  (number->string (if (integer? n) 
-                    (inexact->exact n) 
-                    n)))
+  (number->string (if (integer? n) (inexact->exact n) n)))
 
-(define-public (fmtnumeric n)
-  ;; Format gnc-numeric n with as many decimal places as required
-  (fmtnumber (gnc-numeric-to-double n)))
+;; Format gnc-numeric n with as many decimal places as required
+(define-public fmtnumeric fmtnumber)
 
 (define-public (gnc-monetary-neg? monetary)
   ; return true if the monetary value is negative
@@ -46,14 +44,15 @@
 
 ;; 'Safe' versions of cdr and cadr that don't crash
 ;; if the list is empty  (is there a better way?)
-(define-public (safe-cdr l)
-  (if (null? l) '()
-      (cdr l)))
-(define-public (safe-cadr l)
-  (cond
-   ((null? l) '())
-   ((null? (cdr l)) '())
-   (else (cadr l))))
+(define-public safe-cdr
+  (match-lambda
+    ((_ . x) x)
+    (_ '())))
+
+(define-public safe-cadr
+  (match-lambda
+    ((_ x . _) x)
+    (_ '())))
 
 ; deprecated - use find-stylesheet or find-template instead
 (define-public (find-file fname)

@@ -265,7 +265,7 @@ set(engine_EXTRA_DIST
 
 if (NOT WIN32)
   list(APPEND engine_EXTRA_DIST qof-win32.cpp)
-endif (NOT WIN32)
+endif()
 set_local_dist(engine_DIST_local CMakeLists.txt ${engine_SOURCES} ${engine_HEADERS}
                      ${engine_noinst_HEADERS} ${engine_EXTRA_DIST})
 set(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)

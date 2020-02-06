@@ -167,7 +167,7 @@ add_dependencies (gnc-gnome swig-runtime-h)
 if (MAC_INTEGRATION)
   target_compile_options(gnc-gnome PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gnc-gnome ${OSX_EXTRA_LIBRARIES})
-endif(MAC_INTEGRATION)
+endif()
 
 
 install(TARGETS gnc-gnome

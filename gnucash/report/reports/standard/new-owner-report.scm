@@ -180,34 +180,15 @@
          (cols-list (assq-ref cols-alist section)))
     (count identity cols-list)))
 
-(define columns-used-size 10)
-
 (define (build-column-used options)
-  (define (opt-val section name)
+  (define (opt-val name)
     (gnc:option-value
-     (gnc:lookup-option options section name)))
-  (define (make-set-col col-vector)
-    (let ((col 0))
-      (lambda (used? index)
-        (if used?
-            (begin
-              (vector-set! col-vector index col)
-              (set! col (+ col 1)))
-            (vector-set! col-vector index #f)))))
-
-  (let* ((col-vector (make-vector columns-used-size #f))
-         (set-col (make-set-col col-vector)))
-    (set-col (opt-val "Display Columns" date-header) 0)
-    (set-col (opt-val "Display Columns" due-date-header) 1)
-    (set-col (opt-val "Display Columns" reference-header) 2)
-    (set-col (opt-val "Display Columns" type-header) 3)
-    (set-col (opt-val "Display Columns" desc-header) 4)
-    (set-col (opt-val "Display Columns" sale-header) 5)
-    (set-col (opt-val "Display Columns" tax-header) 6)
-    (set-col (opt-val "Display Columns" debit-header) 7)
-    (set-col (opt-val "Display Columns" credit-header) 8)
-    (set-col (opt-val "Display Columns" balance-header) 9)
-    col-vector))
+     (gnc:lookup-option options "Display Columns" name)))
+  (list->vector
+   (map opt-val
+        (list date-header due-date-header reference-header type-header
+              desc-header sale-header tax-header debit-header credit-header
+              balance-header))))
 
 (define (make-heading-list column-vector link-option acct-type)
   (let ((heading-list '())
@@ -251,8 +232,6 @@
     (reverse heading-list)))
 
 (define num-buckets 6)
-(define (new-bucket-vector)
-  (make-vector num-buckets 0))
 
 (define (sign-equal? a b)
   (or (= 0 a b) (< 0 (* a b))))
@@ -579,39 +558,39 @@
 
             ;; each invoice payment split's peer splits are analysed.
             (let lp1 ((lot-txn-splits (xaccTransGetSplitList lot-txn))
-                      (non-APAR '())
+                      (non-document '())
                       (result result))
               (cond
 
-               ;; finished. loop up, adding single row with non-APAR
+               ;; finished. loop up, adding single row with non-document
                ((null? lot-txn-splits)
                 (lp (cdr lot-splits)
-                    (if (null? non-APAR)
+                    (if (null? non-document)
                         result
                         (cons (make-link-data
                                (qof-print-date (xaccTransGetDate lot-txn))
                                (split->reference lot-split)
                                (split->type-str lot-split)
-                               (splits->desc non-APAR)
+                               (splits->desc non-document)
                                (gnc:make-html-text (split->anchor lot-split #t))
                                (list->cell
-                                (map (lambda (s) (split->anchor s #f)) non-APAR))
+                                (map (lambda (s) (split->anchor s #f)) non-document))
                                (gncTransGetGUID lot-txn))
                               result))))
 
-               ;; this payment peer is non-APAR, accumulate it.
+               ;; this payment peer is non-document, accumulate it.
                ((not (memv (xaccAccountGetType
                             (xaccSplitGetAccount (car lot-txn-splits)))
                            (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
                 (lp1 (cdr lot-txn-splits)
-                     (cons (car lot-txn-splits) non-APAR)
+                     (cons (car lot-txn-splits) non-document)
                      result))
 
                ;; this payment's peer split has same sign as the
                ;; payment split. ignore.
                ((sign-equal? (xaccSplitGetAmount (car lot-txn-splits))
                              (xaccSplitGetAmount lot-split))
-                (lp1 (cdr lot-txn-splits) non-APAR result))
+                (lp1 (cdr lot-txn-splits) non-document result))
 
                ;; this payment's peer APAR split is a document lot
                ;; reducing split.
@@ -622,7 +601,7 @@
                                   (xaccSplitGetParent posting-split)))
                         (posting-txn (xaccSplitGetParent posting-split)))
                     (lp1 (cdr lot-txn-splits)
-                         non-APAR
+                         non-document
                          (cons (make-link-data
                                 (qof-print-date (xaccTransGetDate posting-txn))
                                 (split->reference posting-split)
@@ -639,19 +618,9 @@
                (else
                 (gnc:warn (car lot-txn-splits) " in APAR but can't find "
                           "owner; is likely an old-style link transaction.")
-                (let* ((lot-txn-split (car lot-txn-splits))
-                       (posting-txn (xaccSplitGetParent lot-txn-split)))
-                  (lp1 (cdr lot-txn-splits)
-                       non-APAR
-                       (cons (make-link-data
-                              (qof-print-date (xaccTransGetDate posting-txn))
-                              (split->reference lot-txn-split)
-                              (split->type-str lot-txn-split)
-                              (splits->desc (list lot-txn-split))
-                              (gnc:make-html-text (split->anchor lot-txn-split #t))
-                              (gnc:make-html-text (split->anchor lot-txn-split #t))
-                              (gncTransGetGUID posting-txn))
-                             result))))))))))))
+                (lp1 (cdr lot-txn-splits)
+                     (cons (car lot-txn-splits) non-document)
+                     result))))))))))
 
 
 

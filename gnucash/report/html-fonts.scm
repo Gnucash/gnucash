@@ -132,6 +132,7 @@
     (gnc:html-document-set-style-text!
      ssdoc
      (string-append
+      "@media (prefers-color-scheme: dark) {body {color: #000; background-color: #fff;}}\n"
       "h3 { " title-info " }\n"
       "a { " account-link-info " }\n"
       "body, p, table, tr, td { vertical-align: top; " text-cell-info " }\n"

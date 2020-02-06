@@ -54,8 +54,8 @@ if (HAVE_SRFI64)
       FALSE
     )
     gnc_add_scheme_tests("${scm_test_with_textual_ports_SOURCES}")
-  endif (HAVE_TEXT_PORTS)
-endif (HAVE_SRFI64)
+  endif()
+endif()
 
 gnc_add_scheme_tests("${scm_test_reports_standard_SOURCES}")
 

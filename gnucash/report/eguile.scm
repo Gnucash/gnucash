@@ -87,6 +87,7 @@
 (use-modules (ice-9 rdelim))      ; for read-line
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash app-utils)) ; for _
+(use-modules (gnucash utilities)) ; for gnc:html-string-sanitize
 
 (define-public (string-substitute-alist str sub-alist)
   (with-output-to-string
@@ -97,15 +98,6 @@
           (or (assv-ref sub-alist c)
               c)))
        str))))
-
-;; This is needed for displaying error messages -- note that it assumes that
-;; the output is HTML, which is a pity, because otherwise this module is
-;; non-specific -- it is designed to output a mixture of Guile and any other
-;; sort of text.  Oh well.
-(define-public (escape-html s1)
-  (string-substitute-alist s1 '((#\< . "&lt;")
-                                (#\> . "&gt;")
-                                (#\& . "&amp;"))))
 
 ;; regexps used to find start and end of code segments
 (define startre (and (defined? 'make-regexp) (make-regexp "<\\?scm(:d)?[[:space:]]")))
@@ -183,65 +175,39 @@
 ;;   env  - environment in which to do the evaluation;
 ;;          if #f, (the-environment) will be used
 (define (script->output env)
-  ; Placeholder for the normal stack and error stack in case of an error
-  (define good-stack #f)
-  (define error-stack #f)
-  ; Actual evaluation function. This is where the work happens.
-  (define (eval-input)
-    (let ((s-expression (read)))
-      (while (not (eof-object? s-expression))
-	     ; Capture the current stack, so we can detect from where we
-	     ; need to display the stack trace
-	     (set! good-stack (make-stack #t))
-             (local-eval s-expression (or env (the-environment)))
-             (set! s-expression (read)))))
 
-  ; Error handler to display any errors while evaluating the template
+  ;; Placeholder for the error stack in case of an error
+  (define error-stack #f)
+  (define local-env (or env (the-environment)))
+
+  ;; Actual evaluation function. This is where the work happens.
+  (define (eval-input)
+    (let lp ((next (read)))
+      (cond
+       ((eof-object? next) #f)
+       (else
+        (local-eval next local-env)
+        (lp (read))))))
+
+  ;; Error handler to display any errors while evaluating the template
   (define (error-handler key subr message args . rest)
     (display "<p>")
     (display (_ "An error occurred when processing the template:"))
-    (display "<br><pre>")
+    (display "<br/><pre>")
     (display
-      (escape-html
-        (with-output-to-string
-          (lambda ()
-            (display-error #f (current-output-port) subr message args rest)))))
-	    ; Find out how many frames are interesting. From the
-	    ; good-stack, all but the bottom two frames are in
-	    ; error-stack as well, so we can remove the top #good - 2
-	    ; right away. Below that, there is still one frame in error
-	    ; stack, the call to local-eval, which we'll remove as well.
-	    ; So (#good - 2) + 1 == #good - 1 to remove from the top.
-	    ; We remove the bottom three frames as well: the pre-unwind
-	    ; handler, make-trace and one frame inside make-trace.
-	    (let* ((remove-top (- (stack-length good-stack) 1))
-		   (remove-bottom 3)
-		   (error-length (stack-length error-stack)))
-	      ; Show the backtrace. Remove one extra from the "first"
-	      ; argument, since that is an index, not a count.
-	      (display-backtrace error-stack
-                                 (current-output-port)
-                                 (- (- error-length remove-top) 1)
-                                 (- (- error-length remove-top) remove-bottom)))
-    (display "</pre><br>"))
+     (gnc:html-string-sanitize
+      (with-output-to-string
+        (lambda ()
+          (display-backtrace error-stack (current-output-port))
+          (newline)
+          (display-error #f (current-output-port) subr message args rest)))))
+    (display "</pre><br/>"))
 
-  ; This handler will be called by catch before unwinding the
-  ; stack, so we can capture it. The above handler will then be called
-  ; to actually handle the exception. This technique is based on the
-  ; example in the guile manual. See:
-  ; https://www.gnu.org/software/guile/manual/html_node/Debug-on-Error.html
   (define (pre-unwind-handler key . rest)
-    ; Save the current stack. Note that this will include a couple of
-    ; extra entries (this error handler, the call to make-stack and
-    ; another one to gsubr-apply) which we'll cutt off at the display
-    ; above.
-    (set! error-stack (make-stack #t))
-    ; And throw the error again
-    (apply throw key rest))
+    ;; Capture the stack here, cut the last 3 frames which are
+    ;; make-stack, this one, and the throw handler.
+    (set! error-stack (make-stack #t 3)))
 
-  ; Use two nested catches. The inner one is lazy and does not unwind,
-  ; so it can catch th stack. The outer one does the real error
-  ; handling.
   (catch #t eval-input error-handler pre-unwind-handler))
 
 ; end of (script->output)

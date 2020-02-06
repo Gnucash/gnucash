@@ -586,10 +586,9 @@
   ;; total balances from get-exchange-totals are divided by each
   ;; other.
   (map
-   (lambda (e)
-     (list (car e)
-           (abs (/ ((cdadr e) 'total #f)
-                   ((caadr e) 'total #f)))))
+   (match-lambda
+     ((comm (domestic . foreign))
+      (list comm (abs (/ (foreign 'total #f) (domestic 'total #f))))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
 (define (gnc:make-exchange-cost-alist report-commodity end-date)
@@ -597,12 +596,10 @@
   ;; total balances from get-exchange-totals are divided by each
   ;; other.
   (map
-   (lambda (e)
-     (list (car e)
-           (if (zero? ((caadr e) 'total #f))
-               0
-               (abs (/ ((cdadr e) 'total #f)
-                       ((caadr e) 'total #f))))))
+   (match-lambda
+     ((comm (domestic . foreign))
+      (let ((denom (domestic 'total #f)))
+        (list comm (if (zero? denom) 0 (abs (/ (foreign 'total #f) denom)))))))
    (gnc:get-exchange-cost-totals report-commodity end-date)))
 
 
@@ -850,7 +847,7 @@
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities
-  (let ((list-of-commodities (amt 'format (lambda (comm amt) comm) #f)))
-    (or (null? list-of-commodities)
-        (and (null? (cdr list-of-commodities))
-             (gnc-commodity-equiv report-commodity (car list-of-commodities))))))
+  (match (amt 'format (lambda (comm amt) comm) #f)
+    (() #t)
+    ((comm) (gnc-commodity-equiv report-commodity comm))
+    (_ #f)))

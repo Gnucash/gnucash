@@ -112,7 +112,7 @@ target_compile_definitions (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.back
 set(LIB_DIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
 if (WIN32)
   set(LIB_DIR ${CMAKE_INSTALL_BINDIR})
-endif(WIN32)
+endif()
 
 
 if (APPLE)

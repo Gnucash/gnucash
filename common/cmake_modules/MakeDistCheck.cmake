@@ -20,7 +20,7 @@ function(run_dist_check PACKAGE_PREFIX EXT)
     FIND_PROGRAM(NINJA_COMMAND NAMES ninja ninja-build)
     if (${NINJA_COMMAND} STREQUAL "NINJA_COMMAND-NOTFOUND")
         message(FATAL_ERROR "Can't find the 'ninja' or 'ninja-build' program.")
-    endif ()
+    endif()
 
     execute_process_and_check_result(
             COMMAND ${CMAKE_COMMAND} -E tar ${TAR_OPTION} ${tarball}

@@ -118,7 +118,7 @@ if (WIN32)
     ${MODULEPATH}/qof-win32.cpp
     ../../../borrowed/libc/strptime.c
   )
-endif (WIN32)
+endif()
 
 set(test_gnc_guid_SOURCES
   ${MODULEPATH}/guid.cpp

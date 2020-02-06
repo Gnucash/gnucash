@@ -336,11 +336,10 @@
 ;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
 ;; output: a monetary object
 (define (gnc:monetary+ . monetaries)
-  (let* ((coll (apply gnc:monetaries-add monetaries))
-         (list-of-monetaries (coll 'format gnc:make-gnc-monetary #f)))
-    (if (null? (cdr list-of-monetaries))
-        (car list-of-monetaries)
-        (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
+  (let ((coll (apply gnc:monetaries-add monetaries)))
+    (match (coll 'format gnc:make-gnc-monetary #f)
+      ((mon) mon)
+      (_ (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries))))))
 
 ;; this function will scan through the account splitlist, building
 ;; a list of balances along the way at dates specified in dates-list.
@@ -396,28 +395,26 @@
       (() (reverse result))
 
       ((date . rest)
+       (define (before-date? s) (< (split->date s) date))
+       (define (after-date? s) (< date (split->date s)))
        (match splits
 
          ;; end of splits, but still has dates. pad with last-result
          ;; until end of dates.
          (() (lp '() rest (cons last-result result) last-result))
 
+         ;; the next split is still before date.
+         ((and (_ (? before-date?) . _) (head . tail))
+          (lp tail dates result (split->elt head)))
+
+         ;; head split after date, accumulate previous result
+         (((? after-date?) . tail)
+          (lp splits rest (cons last-result result) last-result))
+
+         ;; head split before date, next split after date, or end.
          ((head . tail)
-          (let ((next (and (pair? tail) (car tail))))
-            (cond
-
-             ;; the next split is still before date.
-             ((and next (< (split->date next) date))
-              (lp tail dates result (split->elt head)))
-
-             ;; head split after date, accumulate previous result
-             ((< date (split->date head))
-              (lp splits rest (cons last-result result) last-result))
-
-             ;; head split before date, next split after date, or end.
-             (else
-              (let ((head-result (split->elt head)))
-                (lp tail rest (cons head-result result) head-result)))))))))))
+          (let ((head-result (split->elt head)))
+            (lp tail rest (cons head-result result) head-result))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.

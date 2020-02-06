@@ -33,7 +33,7 @@ endif()
 
   file(COPY ${pycons_DATA} DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
   file(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
-endif(WITH_PYTHON)
+endif()
 
 set_local_dist(pycons_DIST ${pycons_DATA})
 set_local_dist(python_DIST_local CMakeLists.txt gncmod-python.c init.py)

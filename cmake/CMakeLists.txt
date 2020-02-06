@@ -5,7 +5,7 @@ if (APPLE)
                 COMMAND /usr/bin/install_name_tool -add_rpath ${CMAKE_INSTALL_LIBDIR}
                                                    -add_rpath ${PKGLIBDIR}
                                                    ${CMAKE_INSTALL_BINDIR}/gnucash)")
-endif(APPLE)
+endif()
 
 
 set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in

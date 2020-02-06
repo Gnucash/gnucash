@@ -65,7 +65,7 @@ Libraries/Deps
   guile                 2.2.0 or 2.0.0          Must be built with regex
                                                 support enabled
   libxml2               2.5.10
-  gettext               0.19.6
+  gettext               0.20
   libxslt, including xsltproc
   ICU                                           International Components for
                                                 Unicode

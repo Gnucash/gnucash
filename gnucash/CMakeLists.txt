@@ -25,11 +25,11 @@ if (WIN32)
     set (GNUCASH_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnucash.rc)
     configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
 
-else (WIN32)
+else()
   # All other platforms use these settings:
   set (PLATFORM_FILES gnucash-valgrind)
 
-endif (WIN32)
+endif()
 
 set (gnucash_SOURCES
   gnucash-bin.c
@@ -48,7 +48,7 @@ target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
   target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
-endif (BUILDING_FROM_VCS)
+endif()
 
 target_link_libraries (gnucash
    gncmod-ledger-core gnc-gnome gncmod-gnome-utils gnc-app-utils
@@ -97,7 +97,7 @@ add_custom_command(
 if (MAC_INTEGRATION)
   target_compile_options(gnucash PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gnucash ${OSX_EXTRA_LIBRARIES})
-endif(MAC_INTEGRATION)
+endif()
 
 install(TARGETS gnucash DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
@@ -224,7 +224,7 @@ if (WIN32)
       file(TO_NATIVE_PATH ${CMAKE_PREFIX_PATH}/${dir}/bin PATH_ITEM)
       list(APPEND CMD_LINES "set PATH=${PATH_ITEM}\;%PATH%\n")
     endforeach(dir)
-  endif (NOT ${MINGW64})
+  endif()
   set(CMD_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnucash-launcher.cmd)
   file(WRITE ${CMD_FILE} "@echo off\nsetlocal\n\n")
   foreach(line ${CMD_LINES})
@@ -240,7 +240,7 @@ if (WIN32)
   file(APPEND ${BUILD_CMD_FILE} "\nstart gnucash %*\n")
 
   install(PROGRAMS ${CMD_FILE} DESTINATION  ${CMAKE_INSTALL_BINDIR})
-endif(WIN32)
+endif()
 
 # The GResource Files are absolute paths but set_local_dist requires
 # relative paths.

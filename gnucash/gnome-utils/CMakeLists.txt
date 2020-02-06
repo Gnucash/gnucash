@@ -222,12 +222,12 @@ target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
 
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
-endif (BUILDING_FROM_VCS)
+endif()
 
 if (MAC_INTEGRATION)
   target_compile_options(gncmod-gnome-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gncmod-gnome-utils ${OSX_EXTRA_LIBRARIES})
-endif(MAC_INTEGRATION)
+endif()
 
 target_include_directories(gncmod-gnome-utils
     PUBLIC

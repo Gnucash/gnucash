@@ -30,7 +30,7 @@ else ()
   list(APPEND html_HEADERS gnc-html-webkit2.h)
   list(APPEND html_SOURCES gnc-html-webkit2.c)
   set(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
-endif ()
+endif()
 
 
 

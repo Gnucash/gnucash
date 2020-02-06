@@ -38,7 +38,7 @@ if (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
     COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
     DEPENDS ${gnucash_design_TEXINFOS}
   )
-endif (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
+endif()
 dist_add_generated (${BUILDING_FROM_VCS} gnucash-design.info)
 
 set_dist_list(doc_design_DIST CMakeLists.txt gnucash-design.texi ${gnucash_design_TEXINFOS})

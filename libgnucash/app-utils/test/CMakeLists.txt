@@ -72,7 +72,7 @@ if (HAVE_SRFI64)
     )
 
   gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
-endif ()
+endif()
 
 # Doesn't work yet:
 gnc_add_test_with_guile(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
