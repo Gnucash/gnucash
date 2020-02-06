@@ -239,7 +239,7 @@ find_path (REGEX_INCLUDE_PATH NAMES regex.h
 find_library (REGEX_LIBRARY NAMES regex)
 
 # I18N
-find_package (Gettext 0.20 REQUIRED)
+find_package (Gettext 0.19.6 REQUIRED)
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
 find_library (LIBINTL_LIBRARY NAMES intl)
