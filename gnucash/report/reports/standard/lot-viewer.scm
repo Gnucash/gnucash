@@ -27,6 +27,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash report))
 (use-modules (gnucash core-utils))           ;for gnc-prefs-is-extra-enabled
+(use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 
 
