@@ -25,12 +25,10 @@
 (use-modules (srfi srfi-11))            ;for let-values
 (use-modules (ice-9 match))
 (use-modules (gnucash utilities))
-(use-modules (gnucash gnc-module))
-(use-modules (gnucash report business-reports))
-(use-modules (gnucash gettext))
-(use-modules (sw_core_utils))           ;for gnc-prefs-is-extra-enabled
+(use-modules (gnucash report))
+(use-modules (gnucash core-utils))           ;for gnc-prefs-is-extra-enabled
+(use-modules (gnucash engine))
 
-(gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Lot Viewer"))
 (define optname-from-date (N_ "Start Date"))
