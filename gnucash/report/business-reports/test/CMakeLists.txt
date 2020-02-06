@@ -17,7 +17,7 @@ set(GUILE_DEPENDS
 
 if (HAVE_SRFI64)
   gnc_add_scheme_tests("${scm_test_business_reports_with_srfi64_SOURCES}")
-endif (HAVE_SRFI64)
+endif()
 
 gnc_add_scheme_targets(scm-test-business-reports
   "${scm_test_business_reports_SOURCES}"

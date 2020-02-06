@@ -89,7 +89,7 @@ endif()
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)
   file(COPY ${aqbanking_GLADE}
     DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-endif(WITH_AQBANKING)
+endif()
 
 set_local_dist(aqbanking_DIST_local CMakeLists.txt migratable-prefs-aqbanking.xml
         ${aqbanking_SOURCES} ${aqbanking_noinst_HEADERS} ${aqbanking_EXTRA_DIST}

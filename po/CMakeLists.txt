@@ -91,7 +91,7 @@ function(make_gnucash_potfiles)
         AND
         NOT ${path} MATCHES "/[.][^/]*$")
         list (APPEND GOOD_FILES ${path})
-    endif ()
+    endif()
   endforeach (path)
 
   # Remove the paths that we have marked as explicitly skipped
@@ -142,7 +142,7 @@ if(BUILDING_FROM_VCS)
 
   if (${XGETTEXT} STREQUAL "XGETTEXT-NOTFOUND")
     message(FATAL_ERROR "Can't find the 'xgettext' program.")
-  endif ()
+  endif()
 
   add_custom_command(OUTPUT gnucash.pot
         COMMAND ${CMAKE_COMMAND}

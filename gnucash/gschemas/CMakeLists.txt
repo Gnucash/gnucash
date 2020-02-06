@@ -46,7 +46,7 @@ if (COMPILE_GSCHEMAS)
     execute_process(
         COMMAND ${SHELL} -c \"echo Compiling gschema files in \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
                               ${GLIB_COMPILE_SCHEMAS} \$ENV\{DESTDIR\}${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
-endif ()
+endif()
 
 set(gschemas_DIST_local "")
 foreach(file ${gschema_SOURCES})

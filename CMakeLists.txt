@@ -109,7 +109,7 @@ if (MINGW)
   if(${IS_MSYS2} GREATER_EQUAL 0)
     set(MINGW64 ON)
   endif()
-endif(MINGW)
+endif()
 
 # Find a proper bash executable
 
@@ -183,13 +183,13 @@ if (WIN32)
   #set(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
 #Prevent creating a console window on startup.
   set(CMAKE_EXE_LINKER_FLAGS -mwindows)
-endif(WIN32)
+endif()
 
 find_package(PkgConfig REQUIRED)
 
 if (NOT PKG_CONFIG_FOUND)
    message (SEND_ERROR "pkg-config not found, but is required")
- endif (NOT PKG_CONFIG_FOUND)
+ endif()
 
 if (CMAKE_VERSION VERSION_LESS 3.6)
   include(GncPkgConfig)
@@ -213,7 +213,7 @@ if (WITH_GNUCASH)
       _pkg_create_imp_target(WEBKIT)
     endif()
     set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
-  else (WIN32 OR APPLE)
+  else()
     If (NOT CMAKE_VERSION VERSION_LESS 3.6)
       pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0)
     else()
@@ -226,15 +226,15 @@ if (WITH_GNUCASH)
         pkg_check_modules (WEBKIT REQUIRED webkit2gtk-3.0)
       endif()
       set(WEBKIT2_3 1 CACHE INTERNAL "WebKit2Gtk3")
-    else (NOT WEBKIT_FOUND)
+    else()
       if (NOT WEBKIT2_3)
         set(WEBKIT2_4 1 CACHE INTERNAL "WebKit2Gtk4")
-      endif(NOT WEBKIT2_3)
-    endif (NOT WEBKIT_FOUND)
+      endif()
+    endif()
     if (CMAKE_VERSION VERSION_LESS 3.6)
       _pkg_create_imp_target(WEBKIT)
     endif()
-  endif (WIN32 OR APPLE)
+  endif()
 
   if (NOT CMAKE_VERSION VERSION_LESS 3.6)
     pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=3.10.0)
@@ -242,7 +242,7 @@ if (WITH_GNUCASH)
     pkg_check_modules (GTK3 REQUIRED gtk+-3.0>=3.10.0)
     _pkg_create_imp_target(GTK3)
   endif()
-endif (WITH_GNUCASH)
+endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
 
@@ -252,7 +252,7 @@ if (MSVC)
   # Disable the obnoxious min/max macros in MSVC - we want to use the
   # function versions of them.
   add_definitions ( -DNOMINMAX )
-endif (MSVC)
+endif()
 
 find_path (LTDL_INCLUDE_PATH NAMES ltdl.h PATHS /usr/include)
 if(NOT LTDL_INCLUDE_PATH-NOTFOUND)
@@ -262,7 +262,7 @@ endif()
 find_program(GLIB_COMPILE_SCHEMAS glib-compile-schemas HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 if (NOT GLIB_COMPILE_SCHEMAS)
   message(SEND_ERROR "Can't find glib-compile-schemas program. Please set GLIB_COMPILE_SCHEMAS.")
-endif(NOT GLIB_COMPILE_SCHEMAS)
+endif()
 
 find_path (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
@@ -271,25 +271,25 @@ find_library (REGEX_LIBRARY NAMES regex)
 # I18N
 if (ALLOW_OLD_GETTEXT)
     find_package (Gettext REQUIRED)
-else (ALLOW_OLD_GETTEXT)
+else()
     find_package (Gettext 0.20)
     if (NOT GETTEXT_FOUND)
         message (FATAL_ERROR "Note the build can be configured with an older version of gettext by setting ALLOW_OLD_GETTEXT=ON but then some files will not be translated:
         - gnucash.desktop (requires at least gettext 0.19)
         - gnucash.appdata.xml (requires at least gettext 0.19.6)
         - tag developer_name from gnucash.appdata.xml (requires at least gettext 0.20)")
-    endif (NOT GETTEXT_FOUND)
-endif (ALLOW_OLD_GETTEXT)
+    endif()
+endif()
 
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
     message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19 in order to handle translation of the gnucash.desktop file. The build will be configured with an untranslated gnucash.desktop file.")
-endif ()
+endif()
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
     message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19.6 in order to handle translation of the gnucash.appdata file. The build will be configured with an untranslated gnucash.appdata file.")
-endif ()
+endif()
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
     message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.20 in order to handle the translation of 'GnuCash Project' from the gnucash.appdata file. That message will be missing in gnucash.pot.")
-endif ()
+endif()
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
@@ -300,7 +300,7 @@ if (WIN32)
   message(STATUS "Looking for htmlhelp.h and htmlhelp.a")
   find_path (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h)
   find_library (HTMLHELP_LIBRARY htmlhelp)
-endif (WIN32)
+endif()
 
 # ############################################################
 
@@ -326,10 +326,10 @@ if (GUILE22_FOUND) # found guile-2.2
   find_program (GUILD_EXECUTABLE NAMES guild2.2 guild)
   if (NOT GUILD_EXECUTABLE)
     message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
-  endif (NOT GUILD_EXECUTABLE)
+  endif()
   message(STATUS "Using guile-2.2.x")
   find_program (GUILE_EXECUTABLE NAMES guile2.2 guile)
-else(GUILE22_FOUND)
+else()
   pkg_check_modules (GUILE2 guile-2.0>=2.0.9 QUIET)
   if (GUILE2_FOUND) # found guile-2.0
     add_definitions (-DHAVE_GUILE20)
@@ -341,17 +341,17 @@ else(GUILE22_FOUND)
     find_program (GUILD_EXECUTABLE NAMES guild2.0 guild)
     if (NOT GUILD_EXECUTABLE)
       message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
-    endif (NOT GUILD_EXECUTABLE)
+    endif()
     message(STATUS "Using guile-2.0.x")
     find_program (GUILE_EXECUTABLE NAMES guile2.0 guile)
-  else(GUILE2_FOUND)
+  else()
     message (FATAL_ERROR "Neither guile 2.2 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pkg-config.")
-  endif(GUILE2_FOUND)
-endif(GUILE22_FOUND)
+  endif()
+endif()
 
 if (NOT GUILE_EXECUTABLE)
   message (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
-endif (NOT GUILE_EXECUTABLE)
+endif()
 
 # Test that guile has SRFI-64. This is required for some unit tests.
 execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (srfi srfi-64))"
@@ -362,7 +362,7 @@ execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (srfi srfi-64))"
 if (GNC_SRFI64_RESULT EQUAL 0)
   message (STATUS "Using guile SRFI-64")
   set (HAVE_SRFI64 TRUE)
-endif ()
+endif()
 
 # Test that guile has textual-ports. This is required for the stress test.
 execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (ice-9 textual-ports))"
@@ -373,7 +373,7 @@ execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (ice-9 textual-por
 if (GNC_TEXT_PORTS_RESULT EQUAL 0)
   message (STATUS "Using guile textual-ports")
   set (HAVE_TEXT_PORTS TRUE)
-endif ()
+endif()
 
 # ############################################################
 if (WITH_AQBANKING)
@@ -384,17 +384,17 @@ if (WITH_AQBANKING)
     if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")
       set(HAVE_GWEN_GTK3 1 CACHE BOOL "True if gwen-gtk3.pc exists")
     endif()
-  endif(WITH_GNUCASH)
-endif (WITH_AQBANKING)
+  endif()
+endif()
 
 if (WITH_OFX)
   pkg_check_modules (LIBOFX REQUIRED libofx)
   include(CheckCXXSourceRuns)
   if (WIN32)
       set(CMAKE_REQUIRED_LIBRARIES "-L ${CMAKE_PREFIX_PATH}/libofx/lib -lofx")
-  else (WIN32)
+  else()
       set(CMAKE_REQUIRED_LIBRARIES "-lofx")
-  endif (WIN32)
+  endif()
       CHECK_CXX_SOURCE_RUNS("
 #include <time.h>
 #include <stdlib.h>
@@ -421,7 +421,7 @@ int main(int argc, char** argv)
 " HAVE_OFX_BUG_39)
   set(HAVE_OFX_BUG_39 ${HAVE_OFX_BUG_39})
   set(CMAKE_REQUIRED_LIBRARIES)
-endif(WITH_OFX)
+endif()
 # ############################################################
 
 if(APPLE)
@@ -441,9 +441,9 @@ if(APPLE)
       find_library(CARBON_LIBRARY Carbon)
       set(OSX_EXTRA_COMPILE_FLAGS $<$<COMPILE_LANGUAGE:C>:-xobjective-c> $<$<COMPILE_LANGUAGE:CXX>:-xobjective-c++>)
       set(OSX_EXTRA_LIBRARIES objc ${COCOA_LIBRARY} ${SECURITY_LIBRARY} ${CARBON_LIBRARY})
-    endif(GTK_MAC_FOUND)
+    endif()
   endif()
-endif(APPLE)
+endif()
 
 # find_package(LibXslt) eats PKG_CONFIG_EXECUTABLE, so preserve it.
 set(GNC_PKG_CONFIG_EXE ${PKG_CONFIG_EXECUTABLE})
@@ -454,10 +454,10 @@ find_package(LibXslt)
 
 if (NOT LIBXSLT_FOUND)
    message(FATAL_ERROR "libxslt library not found.")
-endif(NOT LIBXSLT_FOUND)
+endif()
 if (${LIBXSLT_XSLTPROC_EXECUTABLE} STREQUAL "LIBXSLT_XSLTPROC_EXECUTABLE-NOTFOUND")
   message(FATAL_ERROR "xsltproc executable not found")
-endif ()
+endif()
 # ############################################################
 set(PKG_CONFIG_EXECUTABLE ${GNC_PKG_CONFIG_EXE})
 
@@ -473,10 +473,10 @@ find_library (LIBDBI_DRIVERS_DIR
 if (WITH_SQL)
   if (NOT LIBDBI_INCLUDE_PATH)
     message (SEND_ERROR "Include file <dbi/dbi.h> was not found - did you install libdbi0-dev or libdbi-dev?")
-  endif (NOT LIBDBI_INCLUDE_PATH)
+  endif()
   if (NOT LIBDBI_LIBRARY)
     message (SEND_ERROR "Library libdbi was not found")
-  endif (NOT LIBDBI_LIBRARY)
+  endif()
   set(HAVE_DBI_DBI_H 1)
   if (NOT LIBDBI_DRIVERS_DIR)
     message (SEND_ERROR "No libdbi drivers found, SQL tests will fail.")
@@ -484,7 +484,7 @@ if (WITH_SQL)
     get_filename_component(drivers_dir ${LIBDBI_DRIVERS_DIR} DIRECTORY)
     set(LIBDBI_DRIVERS_DIR ${drivers_dir} CACHE FILEPATH "Directory containing the libdbi driver modules." FORCE)
   endif()
-endif (WITH_SQL)
+endif()
 
 # ############################################################
 
@@ -524,7 +524,7 @@ find_package(Perl)
 
 if (NOT PERL_FOUND)
   message(SEND_ERROR "Perl executable not found. Please set PERL_EXECUTABLE.")
-endif(NOT PERL_FOUND)
+endif()
 
 get_filename_component(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 
@@ -551,9 +551,9 @@ find_package (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem
 if (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   set(HAVE_BOOST 1)
-else (Boost_FOUND)
+else()
   message (SEND_ERROR "Boost 1.54.0 or later is not installed, and is required. Please install it and ensure that the following libraries are built: chrono, date_time, filesystem, log, program_options, regex, signals, system, and test.")
-endif (Boost_FOUND)
+endif()
 
 
 # Compiler flags
@@ -588,16 +588,16 @@ if (UNIX)
   set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
   set( CMAKE_CXX_FLAGS "-Wno-error=deprecated-declarations ${REGISTER_CXXFLAG} ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
-endif (UNIX)
+endif()
 if (MINGW)
   set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11 ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
-endif (MINGW)
+endif()
 
 if (APPLE AND WITH_GNUCASH)
   set(CMAKE_MACOSX_RPATH ON)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
-endif (APPLE AND WITH_GNUCASH)
+endif()
 
 if (UNIX)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}:${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
@@ -675,9 +675,9 @@ if (MINGW)
 set (HAVE_SCANF_LLD 1)
 else ()
 set (HAVE_SCANF_I64D 1)
-endif ()
+endif()
 set (HAVE_HTMLHELPW 1)
-endif (WIN32)
+endif()
 
 check_include_files (dirent.h HAVE_DIRENT_H)
 check_include_files (dlfcn.h HAVE_DLFCN_H)
@@ -702,17 +702,17 @@ check_include_files (wctype.h HAVE_WCTYPE_H)
 test_big_endian(IS_BIGENDIAN)
 if (IS_BIGENDIAN)
   set(WORDS_BIGENDIAN)
-endif (IS_BIGENDIAN)
+endif()
 
 if (NOT DISABLE_NLS)
 set(ENABLE_NLS 1)
-endif(NOT DISABLE_NLS)
+endif()
 
 if (ENABLE_BINRELOC)
 if (UNIX OR MINGW)
 set(BR_PTHREAD 1)
-endif(UNIX OR MINGW)
-endif(ENABLE_BINRELOC)
+endif()
+endif()
 
 if (UNIX OR MINGW)
 set (HAVE_GETTIMEOFDAY 1)
@@ -725,7 +725,7 @@ set (_GNU_SOURCE 1)
 set (_POSIX_PTHREAD_SEMANTICS 1)
 set (_TANDEM_SOURCE 1)
 set (__EXTENSIONS__ 1)
-endif (UNIX OR MINGW)
+endif()
 
 if (UNIX)
 set (HAVE_CHOWN 1)
@@ -751,11 +751,11 @@ set (HAVE_STRUCT_TM_GMTOFF 1)
 set (HAVE_TIMEGM 1)
 set (HAVE_TOWUPPER 1)
 set (GNC_PLATFORM_POSIX 1)
-endif (UNIX)
+endif()
 
 if (WIN32)
 set (GNC_PLATFORM_WINDOWS 1)
-endif (WIN32)
+endif()
 
 if (APPLE)
 # FIXME: HANDLE gtk-mac-integration-gtk2
@@ -763,7 +763,7 @@ set(GNC_PLATFORM_DARWIN 1)
 set(GNC_PLATFORM_OSX 1)
 set(PLATFORM_OSX 1)
 set(HAVE_OSX_KEYCHAIN 1)
-endif(APPLE)
+endif()
 
 if(GLIB2_VERSION VERSION_GREATER 2.46.0 OR GLIB2_VERSION VERSION_EQUAL 2.46.0)
 set(HAVE_GLIB_2_46 1)
@@ -771,17 +771,17 @@ endif()
 
 if(DISABLE_DEPRECATED_GNOME)
 set(GNOME_DISABLE_DEPRECATED 1)
-endif(DISABLE_DEPRECATED_GNOME)
+endif()
 
 if(DISABLE_DEPRECATED_GTK)
 set(GTK_DISABLE_DEPRECATED 1)
 set(GDK_DISABLE_DEPRECATED 1)
 set(GDK_PIXMAP_DISABLE_DEPRECATED 1)
-endif(DISABLE_DEPRECATED_GTK)
+endif()
 
 if(DISABLE_DEPRECATED_GLIB)
 set(G_DISABLE_DEPRECATED 1)
-endif(DISABLE_DEPRECATED_GLIB)
+endif()
 
 add_definitions (-DHAVE_CONFIG_H)
 
@@ -800,7 +800,7 @@ add_subdirectory (common)
 add_subdirectory (libgnucash)
 if (WITH_GNUCASH)
   add_subdirectory (gnucash)
-endif (WITH_GNUCASH)
+endif()
 add_subdirectory (bindings)
 add_subdirectory (test-templates)
 add_subdirectory (util)
@@ -902,11 +902,11 @@ set(_MODULES gnc-core-utils gnc-module gnc-backend-xml-utils)
 
 if (WITH_SQL)
   list(APPEND _MODULES gnc-backend-sql)
-endif(WITH_SQL)
+endif()
 
 if (WITH_GNUCASH)
   list(APPEND _MODULES gnc-gnome)
-endif(WITH_GNUCASH)
+endif()
 
 set_target_properties(${_MODULES} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY         ${LIBDIR_BUILD}
@@ -960,6 +960,6 @@ endif()
 
 if(UNIX)
   set(CPACK_GENERATOR "TGZ")
-endif(UNIX)
+endif()
 
 include (CPack)

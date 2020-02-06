@@ -37,7 +37,7 @@ gnc_add_scheme_tests("${scm_test_report_system_SOURCES}")
 
 if (HAVE_SRFI64)
   gnc_add_scheme_tests ("${scm_test_report_system_with_srfi64_SOURCES}")
-endif (HAVE_SRFI64)
+endif()
 
 gnc_add_scheme_targets(scm-test-report-system
   "test-extras.scm"

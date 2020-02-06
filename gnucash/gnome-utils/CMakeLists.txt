@@ -29,10 +29,10 @@ add_custom_command(
 if (NOT have_mod_mask)
 if (MAC_INTEGRATION)
   add_definitions(-DGDK_MODIFIER_INTENT_DEFAULT_MOD_MASK=GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK|GDK_MOD2_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK)
-else (MAC_INTEGRATION)
+else()
   add_definitions(-DGDK_MODIFIER_INTENT_DEFAULT_MOD_MASK=GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK)
-endif (MAC_INTEGRATION)
-endif (NOT have_mod_mask)
+endif()
+endif()
 
 set (gnome_utils_SOURCES
   account-quickfill.c
@@ -220,12 +220,12 @@ target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
 
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
-endif (BUILDING_FROM_VCS)
+endif()
 
 if (MAC_INTEGRATION)
   target_compile_options(gncmod-gnome-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gncmod-gnome-utils ${OSX_EXTRA_LIBRARIES})
-endif(MAC_INTEGRATION)
+endif()
 
 target_include_directories(gncmod-gnome-utils
     PUBLIC
