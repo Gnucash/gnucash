@@ -96,7 +96,7 @@ set (engine_SCHEME_2
 set(BACKEND_DEPENDS gncmod-backend-xml)
 if (WITH_SQL)
     list(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
-endif(WITH_SQL)
+endif()
 
 set(GUILE_DEPENDS
   ${BACKEND_DEPENDS}

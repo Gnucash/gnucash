@@ -113,9 +113,9 @@ add_custom_target(gnc-vcs-info ALL
                              -D SHELL="${SHELL}"
                              -P ${CMAKE_SOURCE_DIR}/cmake/git2version-info.cmake
 )
-else(BUILDING_FROM_VCS)
+else()
   add_custom_target(gnc-vcs-info DEPENDS ${VCS_INFO_FILE})
-endif(BUILDING_FROM_VCS)
+endif()
 dist_add_generated (${BUILDING_FROM_VCS} gnc-vcs-info.h)
 
 # Dist files

@@ -82,7 +82,7 @@ if (HAVE_SRFI64)
 
     gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
     add_dependencies(check scm-srfi64-extras)
-endif (HAVE_SRFI64)
+endif()
 
 
 set(test_scm_SCHEME
@@ -109,7 +109,7 @@ if (HAVE_SRFI64)
 
   gnc_add_scheme_tests("${test_scm_SCHEME}")
 
-endif (HAVE_SRFI64)
+endif()
 
 set(test_engine_SCHEME_DIST
     srfi64-extras.scm

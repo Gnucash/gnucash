@@ -526,7 +526,7 @@ else()
 endif()
 if (NOT HAVE_BOOST)
 message (SEND_ERROR "A suitable Boost is not installed, and is required. GnuCash requires that Boost be compatible and compiled with C++17. Boost 1.67 is the first compatible release but some distributions have patched earlier ones to work with C++17. Please install it and ensure that the following libraries are built: date_time, filesystem, locale, and regex.")
-endif ()
+endif()
 
 
 # Compiler flags
