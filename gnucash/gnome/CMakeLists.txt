@@ -161,18 +161,7 @@ DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in ${VCS_INFO_FILE}
                              -D SRC_DIR=${CMAKE_SOURCE_DIR}
                              -P ${CMAKE_SOURCE_DIR}/cmake/configure-appdata.cmake)
 
-if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
-    # Gettext is too old to be able to merge an appdata file.
-    # Fall back to providing an unmerged (and hence untranslated) appdata file.
-    add_custom_command (
-        OUTPUT gnucash.appdata.xml
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
-
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
-        )
-else()
+if (TRANSLATE_GNUCASH_APPDATA)
     # FIXME: where does LC_ALL=C come from?
     add_custom_command (
         OUTPUT gnucash.appdata.xml
@@ -182,8 +171,17 @@ else()
                 --xml --template ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o gnucash.appdata.xml
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
-    )
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE})
+else()
+    # Gettext is too old to be able to merge an appdata file.
+    # Fall back to providing an unmerged (and hence untranslated) appdata file.
+    add_custom_command (
+        OUTPUT gnucash.appdata.xml
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
+           ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
+
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE})
 endif()
 
 add_custom_target(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
@@ -194,12 +192,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 
 configure_file(gnucash.desktop.in.in gnucash.desktop.in)
 
-if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
-    # Gettext is too old to be able to merge a desktop file.
-    # Fall back to providing an unmerged (and hence untranslated) desktop file.
-    configure_file (${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
-                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop COPYONLY)
-else()
+if (TRANSLATE_GNUCASH_DESKTOP)
     add_custom_command (
         OUTPUT gnucash.desktop
         COMMAND ${CMAKE_COMMAND} -E env
@@ -208,8 +201,12 @@ else()
                 --desktop --template gnucash.desktop.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o gnucash.desktop
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
-    )
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in)
+else()
+    # Gettext is too old to be able to merge a desktop file.
+    # Fall back to providing an unmerged (and hence untranslated) desktop file.
+    configure_file (${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop COPYONLY)
 endif()
 
 add_custom_target(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)

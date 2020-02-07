@@ -55,7 +55,6 @@ option (DISABLE_NLS "do not use Native Language Support" OFF)
 option (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
 option (DISABLE_DEPRECATED_GTK "don't use deprecated gtk, gdk or gdk-pixbuf functions" OFF)
 option (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
-option (ALLOW_OLD_GETTEXT "allow to configure build with a gettext version older than 0.19.6. Some files will not be translated!" OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -269,26 +268,27 @@ find_path (REGEX_INCLUDE_PATH NAMES regex.h
 find_library (REGEX_LIBRARY NAMES regex)
 
 # I18N
-if (ALLOW_OLD_GETTEXT)
-    find_package (Gettext REQUIRED)
-else()
-    find_package (Gettext 0.20)
-    if (NOT GETTEXT_FOUND)
-        message (FATAL_ERROR "Note the build can be configured with an older version of gettext by setting ALLOW_OLD_GETTEXT=ON but then some files will not be translated:
-        - gnucash.desktop (requires at least gettext 0.19)
-        - gnucash.appdata.xml (requires at least gettext 0.19.6)
-        - tag developer_name from gnucash.appdata.xml (requires at least gettext 0.20)")
-    endif()
-endif()
+# Potfile generation will only be enabled if building from a git worktree
+set (BUILD_GNUCASH_POT ${BUILDING_FROM_VCS})
+set (TRANSLATE_GNUCASH_APPDATA ON)
+set (TRANSLATE_GNUCASH_DESKTOP ON)
 
-if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
-    message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19 in order to handle translation of the gnucash.desktop file. The build will be configured with an untranslated gnucash.desktop file.")
+find_package (Gettext 0.18.1 REQUIRED)
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
+    message (WARNING "Gettext version 0.20 or more recent is required to translate the 'developer_name' tag in gnucash.appdata.xml. All but that tag will be translated in the generated file.")
+    if(BUILD_GNUCASH_POT)
+        # Only emit warning if potfile generation was enabled otherwise
+        message (WARNING "Gettext version 0.20 or more recent is required to extract all translatable strings. Potfile generation will be disabled.")
+    endif()
+    set (BUILD_GNUCASH_POT OFF)
 endif()
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
-    message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19.6 in order to handle translation of the gnucash.appdata file. The build will be configured with an untranslated gnucash.appdata file.")
+    set (TRANSLATE_GNUCASH_APPDATA OFF)
+    message (WARNING "Gettext version 0.19.6 or more recent is required to translate gnucash.appdata.xml. The build will be configured to generate an untranslated gnucash.appdata.xml.")
 endif()
-if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
-    message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.20 in order to handle the translation of 'GnuCash Project' from the gnucash.appdata file. That message will be missing in gnucash.pot.")
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
+    set (TRANSLATE_GNUCASH_DESKTOP OFF)
+    message (WARNING "Gettext version 0.19 or more recent is required to translate gnucash.desktop. The build will be configured to generate an untranslated gnucash.desktop.")
 endif()
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
