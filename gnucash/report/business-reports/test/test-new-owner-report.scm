@@ -160,7 +160,7 @@
         (set-option! options "General" "From"
                      (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! options "General" "To"
-                     (cons 'absolute (gnc-dmy2time64 1 7 1980)))
+                     (cons 'absolute (gnc-dmy2time64 1 7 1981)))
         (set-option! options "Display Columns" "Links" 'detailed)
         options))
 
@@ -181,7 +181,7 @@
     (let ((new-cn (add-invoice (gnc-dmy2time64 22 06 1980) -3 "CN")))
       (gncInvoiceSetIsCreditNote new-cn #t))
 
-    ;; inv $11.50, 2 payments
+    ;; inv $28, CN $27, Bank $1
     (let* ((inv (add-invoice (gnc-dmy2time64 24 06 1980) 28 "$28.00"))
            (CN (add-invoice (gnc-dmy2time64 25 06 1980) -27 "$27.00"))
            (inv-lot (gncInvoiceGetPostedLot inv))
@@ -198,6 +198,29 @@
        (list (create-split-for-lot AR -27 inv-lot)
              (create-split-for-lot AR 27 CN-lot))))
 
+    ;; refund $120 to partially repay
+    (let ((lot1 (gnc-lot-new (gnc-get-current-book)))
+          (lot2 (gnc-lot-new (gnc-get-current-book))))
+
+      (gncOwnerAttachToLot owner-1 lot1)
+      (gncOwnerAttachToLot owner-1 lot2)
+
+      (create-multisplit
+       28 06 1980 "payment" TXN-TYPE-PAYMENT
+       (list (create-split-for-lot AR  -120 lot1)
+             (create-split-for-lot AR   -40 lot2)
+             (create-split-for-lot Bank 160 #f)))
+
+      (create-multisplit
+       29 06 1980 "payment" TXN-TYPE-PAYMENT
+       (list (create-split-for-lot AR    120 lot1)
+             (create-split-for-lot Bank -120 #f)))
+
+      (create-multisplit
+       30 06 1980 "payment" TXN-TYPE-PAYMENT
+       (list (create-split-for-lot AR    50 lot2)
+             (create-split-for-lot Bank -50 #f))))
+
     (display "new-owner-report tests:\n")
     (test-begin "new-customer-report")
     (let* ((options (default-testing-options owner-1 (get-acct "AR-USD")))
@@ -206,8 +229,8 @@
         '("Customer History" "Linked Details" "1980-01-13" "1980-01-13"
           "Invoice" "$11.50" "$11.50" "1980-03-18" "Payment" "inv >90 payment"
           "$11.50" "pay only $1.50" "$1.50" "$1.50" "Pre-Payment" "Current"
-          "0-30 days" "31-60 days" "61-90 days" "91+ days" "Total" "$0.00"
-          "$0.00" "-$3.00" "$6.75" "$0.00" "$8.00" "$11.75")
+          "0-30 days" "31-60 days" "61-90 days" "91+ days" "Total" "$20.00"
+          "$0.00" "$0.00" "$0.00" "$0.00" "$11.75" "$31.75")
         ((sxpath `(// (table 3) // (tr 1) // *text*)) sxml))
       (test-equal "line 2"
         '("Date" "Due Date" "Reference" "Type" "Description" "Invoice"
@@ -248,5 +271,30 @@
       (test-equal "line 11"
         '("1980-06-26" "Payment" "$11.75" "1980-06-24" "Invoice" "$1.00"
           "$1.00" "$28.00")
-        ((sxpath `(// (table 3) // (tr 11) // *text*)) sxml)))
+        ((sxpath `(// (table 3) // (tr 11) // *text*)) sxml))
+
+      ;; tests for refund $120 to partially repay
+      (test-equal "line 12"
+        '("1980-06-28" "Payment" "-$148.25" "1980-06-30" "Payment"
+          "$160.00" "$50.00" "$50.00")
+        ((sxpath `(// (table 3) // (tr 12) // *text*)) sxml))
+      (test-equal "line 13"
+        '("1980-06-29" "Payment" "$120.00" "$120.00")
+        ((sxpath `(// (table 3) // (tr 13) // *text*)) sxml))
+      (test-equal "line 14"
+        '("Pre-Payment" "-$10.00")
+        ((sxpath `(// (table 3) // (tr 14) // *text*)) sxml))
+      (test-equal "line 15"
+        '("1980-06-29" "Payment" "-$28.25" "1980-06-28" "Payment"
+          "$120.00" "-$120.00" "-$120.00")
+        ((sxpath `(// (table 3) // (tr 15) // *text*)) sxml))
+      (test-equal "line 16"
+        '("1980-06-30" "Payment" "$21.75" "1980-06-28" "Payment"
+          "$50.00" "-$40.00" "-$40.00")
+        ((sxpath `(// (table 3) // (tr 16) // *text*)) sxml))
+      (test-equal "line 17"
+        '("Pre-Payment" "-$10.00")
+        ((sxpath `(// (table 3) // (tr 17) // *text*)) sxml))
+
+      )
     (test-end "new-customer-report")))
