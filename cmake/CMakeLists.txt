@@ -9,6 +9,6 @@ endif()
 
 
 set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in
-    configure-appdata.cmake configure-manpage.cmake git2version-info.cmake
+    insert-vcs-data.cmake configure-manpage.cmake git2version-info.cmake
     version-info2env.cmake
 )
