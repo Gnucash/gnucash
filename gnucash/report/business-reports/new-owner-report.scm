@@ -581,14 +581,6 @@
                                (gncTransGetGUID lot-txn))
                               result))))
 
-               ;; this payment peer is non-document, accumulate it.
-               ((not (memv (xaccAccountGetType
-                            (xaccSplitGetAccount (car lot-txn-splits)))
-                           (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
-                (lp1 (cdr lot-txn-splits)
-                     (cons (car lot-txn-splits) non-document)
-                     result))
-
                ;; this payment's peer split has same sign as the
                ;; payment split. ignore.
                ((sign-equal? (xaccSplitGetAmount (car lot-txn-splits))
@@ -599,11 +591,10 @@
                ;; reducing split.
                ((lot-split->posting-split (car lot-txn-splits)) =>
                 (lambda (posting-split)
-                  (let ((lot-txn-split (car lot-txn-splits))
-                        (invoice (gncInvoiceGetInvoiceFromTxn
-                                  (xaccSplitGetParent posting-split)))
-                        (neg (not (gncInvoiceGetIsCreditNote invoice)))
-                        (posting-txn (xaccSplitGetParent posting-split)))
+                  (let* ((lot-txn-split (car lot-txn-splits))
+                         (posting-txn (xaccSplitGetParent posting-split))
+                         (document (gncInvoiceGetInvoiceFromTxn posting-txn))
+                         (neg (gncInvoiceGetIsCreditNote document)))
                     (lp1 (cdr lot-txn-splits)
                          non-document
                          (cons (make-link-data
@@ -613,15 +604,13 @@
                                 (splits->desc (list posting-split))
                                 (gnc:make-html-text (split->anchor lot-split neg))
                                 (gnc:make-html-text (split->anchor posting-split neg))
-                                (gncInvoiceReturnGUID invoice))
+                                (gncInvoiceReturnGUID document))
                                result)))))
 
                ;; this payment's peer APAR split can't find
                ;; document. this likely is an old style link txn. RHS
                ;; show transaction only.
                (else
-                (gnc:warn (car lot-txn-splits) " in APAR but can't find "
-                          "owner; is likely an old-style link transaction.")
                 (lp1 (cdr lot-txn-splits)
                      (cons (car lot-txn-splits) non-document)
                      result))))))))))
