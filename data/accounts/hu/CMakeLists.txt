@@ -17,7 +17,7 @@ set(account_DATA
   acctchrt_spouseretire.gnucash-xea)
 
 
-set_dist_list(HU_HU_DIST ${account_DATA} CMakeLists.txt)
+set_dist_list(HU_DIST ${account_DATA} CMakeLists.txt)
 
 install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/hu)
 file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/hu)
