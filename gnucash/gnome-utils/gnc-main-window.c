@@ -4169,12 +4169,9 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     QofBook *book = gnc_get_current_book ();
     gboolean use_split_action_for_num_before =
         qof_book_use_split_action_for_num_field (book);
-    gboolean use_book_currency_before =
-        gnc_book_use_book_currency (book);
     gint use_read_only_threshold_before =
         qof_book_get_num_days_autoreadonly (book);
     gboolean use_split_action_for_num_after;
-    gboolean use_book_currency_after;
     gint use_read_only_threshold_after;
     gboolean return_val = FALSE;
     GList *results = NULL, *iter;
@@ -4199,7 +4196,6 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
-    use_book_currency_after = gnc_book_use_book_currency (book);
 
     // mark cached value as invalid so we get new value
     book->cached_num_days_autoreadonly_isvalid = FALSE;
@@ -4209,11 +4205,6 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     {
         gnc_book_option_num_field_source_change_cb (
                                                 use_split_action_for_num_after);
-        return_val = TRUE;
-    }
-    if (use_book_currency_before != use_book_currency_after)
-    {
-        gnc_book_option_book_currency_selected_cb (use_book_currency_after);
         return_val = TRUE;
     }
     if (use_read_only_threshold_before != use_read_only_threshold_after)
@@ -4261,25 +4252,6 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
                                GNC_FEATURE_NUM_FIELD_SOURCE);
     }
     gnc_book_option_num_field_source_change (num_action);
-    gnc_resume_gui_refresh ();
-}
-
-/** Calls gnc_book_option_book_currency_selected to initiate registered
- * callbacks when currency accounting book option changes to book-currency so
- * that registers/reports can update themselves; sets feature flag */
-void
-gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
-{
-    gnc_suspend_gui_refresh ();
-    if (use_book_currency)
-    {
-        /* Set a feature flag in the book for use of book currency. This will
-         * prevent older GnuCash versions that don't support this feature from
-         * opening this file. */
-        gnc_features_set_used (gnc_get_current_book(),
-                               GNC_FEATURE_BOOK_CURRENCY);
-    }
-    gnc_book_option_book_currency_selected (use_book_currency);
     gnc_resume_gui_refresh ();
 }
 

@@ -1473,24 +1473,11 @@ on_select_currency_prepare (hierarchy_data  *data)
     {
         gnc_book_options_dialog_apply_helper(data->options);
 
-        if (gnc_book_use_book_currency (gnc_get_current_book ()))
-        {
-            gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
-                gnc_book_get_book_currency (gnc_get_current_book ()));
-            gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
-                ( _("You selected a book currency and it will be used for\n" \
-                    "new accounts. Accounts in other currencies must be\n" \
-                    "added manually.") ));
-            gtk_widget_set_sensitive(data->currency_selector, FALSE);
-        }
-        else
-        {
-            gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
-                gnc_default_currency());
-            gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
-                ( _("Please choose the currency to use for new accounts.") ));
-            gtk_widget_set_sensitive(data->currency_selector, TRUE);
-        }
+        gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
+                                        gnc_default_currency());
+        gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
+                            ( _("Please choose the currency to use for new accounts.") ));
+        gtk_widget_set_sensitive(data->currency_selector, TRUE);
     }
 }
 

@@ -188,22 +188,6 @@ gnc_book_option_num_field_source_change (gboolean num_action)
     g_hook_list_invoke(bo_final_hook_list, TRUE);
 }
 
-/** Calls registered callbacks when book_currency book option changes so that
-  * registers/reports can update themselves */
-void
-gnc_book_option_book_currency_selected (gboolean use_book_currency)
-{
-    GHookList *hook_list;
-    const gchar *key = OPTION_NAME_BOOK_CURRENCY;
-
-    g_once(&bo_init_once, bo_init, NULL);
-
-    hook_list = g_hash_table_lookup(bo_callback_hash, key);
-    if (hook_list != NULL)
-        g_hook_list_marshal(hook_list, TRUE, bo_call_hook, &use_book_currency);
-    g_hook_list_invoke(bo_final_hook_list, TRUE);
-}
-
 void
 gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data)
 {

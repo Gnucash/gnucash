@@ -63,9 +63,6 @@
 
 struct gncpolicy_s
 {
-    char *name;
-    char *description;
-    char *hint;
     GNCLot * (*PolicyGetLot) (GNCPolicy *, Split *split);
     Split  * (*PolicyGetSplit) (GNCPolicy *, GNCLot *lot);
     void     (*PolicyGetLotOpening) (GNCPolicy *, GNCLot *lot,

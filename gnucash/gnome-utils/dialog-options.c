@@ -66,7 +66,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DIALOG_OPTIONS_CM_CLASS      "dialog-options"
-#define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
 #define GNC_PREFS_GROUP              "dialogs.options"
 
@@ -81,8 +80,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /* A Hash-table of GNCOptionDef_t keyed with option names. */
 static GHashTable *optionTable = NULL;
-
-static int gain_loss_accounts_in_filter = 0;
 
 struct gnc_option_win
 {
@@ -127,43 +124,12 @@ enum page_tree
     NUM_COLUMNS
 };
 
-typedef struct
-{
-    GtkWidget *gnc_currency_radiobutton_0;
-    GtkWidget *gnc_currency_radiobutton_1;
-    GtkWidget *gnc_currency_radiobutton_2;
-    GtkWidget *book_currency_widget;
-    GtkWidget *default_cost_policy_widget;
-    GtkWidget *default_gain_loss_account_widget;
-    GtkWidget *book_currency_table;
-    GtkWidget *book_currency_vbox;
-    GtkWidget *gain_loss_account_del_button;
-    GtkWidget *gain_loss_account_table;
-    GtkWidget *default_gain_loss_account_text;
-    GNCOption *option;
-    Account   *prior_gain_loss_account;
-    gnc_commodity *retrieved_book_currency;
-
-    SCM retrieved_policy_scm;
-    SCM retrieved_gain_loss_acct_guid_scm;
-
-} currency_accounting_data;
-
-static currency_accounting_data *book_currency_data = NULL;
-
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
 
 static void gnc_options_dialog_reset_cb (GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
                                         gpointer data);
-void gnc_set_default_cost_policy_widget (SCM list_symbol);
-void gnc_set_default_gain_loss_account_widget (gnc_commodity *commodity);
-void gnc_option_changed_book_currency_widget_cb (GtkWidget *widget);
-void gnc_option_changed_gain_loss_account_widget_cb (GtkTreeSelection *selection,
-                                                     gpointer data);
-void gnc_option_changed_gain_loss_account_del_button_widget_cb (GtkButton *button,
-                                                                gpointer data);
 static void component_close_handler (gpointer data);
 
 GtkWidget *
@@ -520,6 +486,7 @@ gnc_option_radiobutton_cb (GtkWidget *w, gpointer data)
     gnc_option_changed_widget_cb (widget, option);
 }
 
+<<<<<<< HEAD
 static gboolean
 gnc_gain_loss_account_view_filter (Account  *account, gpointer  data)
 {
@@ -975,6 +942,8 @@ gnc_option_currency_accounting_book_cb (GtkWidget *widget, gpointer data)
     gtk_widget_set_sensitive (book_currency_data->book_currency_vbox, TRUE);
     gnc_option_radiobutton_cb (widget, (gpointer) book_currency_data->option);
 }
+=======
+>>>>>>> f87d57145 (Remove the incomplete book-currency code.)
 
 static GtkWidget *
 gnc_option_create_date_widget (GNCOption *option)
@@ -1186,6 +1155,7 @@ gnc_option_create_radiobutton_widget (char *name, GNCOption *option)
     return frame;
 }
 
+<<<<<<< HEAD
 static GtkWidget *
 gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
 {
@@ -1358,6 +1328,8 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     return frame;
 }
 
+=======
+>>>>>>> f87d57145 (Remove the incomplete book-currency code.)
 static void
 gnc_option_account_cb (GtkTreeSelection *selection, gpointer data)
 {
@@ -2161,27 +2133,6 @@ component_close_handler (gpointer data)
     gnc_options_dialog_cancel_button_cb (NULL, win);
 }
 
-static void
-refresh_handler (GHashTable *changes, gpointer user_data)
-{
-    gnc_commodity *commodity = NULL;
-    GtkTreeIter iter;
-
-    /* The default_gain_loss_account_widget needs to be refreshed if any
-       changes have been made via account maintenance, if it exists and
-       if the book currency widget has a selection */
-/*    if (book_currency_data->default_gain_loss_account_widget &&
-        gtk_combo_box_get_active_iter(
-            GTK_COMBO_BOX(book_currency_data->book_currency_widget), &iter))
-    {
-        commodity = gnc_currency_edit_get_currency(
-                                GNC_CURRENCY_EDIT(
-                                    book_currency_data->book_currency_widget));
-        gnc_set_default_gain_loss_account_widget(commodity);
-        gtk_widget_show_all(book_currency_data->book_currency_vbox);
-    } */
-}
-
 /* gnc_options_dialog_new:
  *
  *   - Opens the dialog-options glade file
@@ -2294,20 +2245,10 @@ gnc_options_dialog_new_modal (gboolean modal, gchar *title,
     gtk_widget_show (retval->notebook);
     gtk_box_pack_start (GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
 
-    retval->component_class =
-                (component_class ? component_class : DIALOG_OPTIONS_CM_CLASS);
     component_id = gnc_register_gui_component (retval->component_class,
-                    refresh_handler, component_close_handler,
-                    retval);
+                                               NULL, component_close_handler,
+                                               retval);
     gnc_gui_component_set_session (component_id, gnc_get_current_session());
-
-    /* Watch account maintenance events only if book option dialog */
-    if (g_strcmp0 (retval->component_class, DIALOG_BOOK_OPTIONS_CM_CLASS) == 0)
-    {
-        gnc_gui_component_watch_entity_type (component_id,
-                                             GNC_ID_ACCOUNT,
-                                             QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
-    }
 
     g_signal_connect (retval->window, "destroy",
                       G_CALLBACK(gnc_options_dialog_destroy_cb), retval);
@@ -3106,28 +3047,6 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkGrid *page_box,
     return value;
 }
 
-static GtkWidget *
-gnc_option_set_ui_widget_currency_accounting (GNCOption *option,
-                                              GtkGrid *page_box,
-                                              GtkLabel *name_label, char *documentation,
-                                              /* Return values */
-                                              GtkWidget **enclosing,
-                                              gboolean *packed)
-{
-    GtkWidget *value;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX(*enclosing), FALSE);
-
-    value = gnc_option_create_currency_accounting_widget (NULL, option);
-    gnc_option_set_widget (option, value);
-
-    gnc_option_set_ui_value (option, FALSE);
-    gtk_box_pack_start (GTK_BOX(*enclosing), value, TRUE, TRUE, 0);
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
 /*************************
  *       SET VALUE       *
  *************************
@@ -3617,113 +3536,6 @@ gnc_option_set_ui_value_plot_size (GNCOption *option, gboolean use_default,
     return TRUE;
 }
 
-static gboolean
-gnc_option_set_ui_value_currency_accounting (GNCOption *option,
-                                             gboolean use_default,
-                                             GtkWidget *widget, SCM value)
-{
-    if (scm_is_pair (value))
-    {
-        SCM rb_symbol;
-
-        rb_symbol = gnc_currency_accounting_option_value_get_method (value);
-
-        if (rb_symbol)
-        {
-            int index;
-
-            index = gnc_option_permissible_value_index (option, rb_symbol);
-            if (index < 0)
-                return TRUE;
-            else
-            {
-                GtkWidget *button = NULL;
-                gpointer val;
-
-                switch (index)
-                {
-                    case 0:
-                        button = book_currency_data->gnc_currency_radiobutton_0;
-                        break;
-                    case 1:
-                        button = book_currency_data->gnc_currency_radiobutton_1;
-                        break;
-                    case 2:
-                        button = book_currency_data->gnc_currency_radiobutton_2;
-                        break;
-                    default:
-                        return TRUE;
-                }
-
-                val = g_object_get_data (G_OBJECT(button),
-                                            "gnc_radiobutton_index");
-                g_return_val_if_fail (GPOINTER_TO_INT(val) == index, TRUE);
-
-                if (g_strcmp0 (gnc_option_permissible_value_name (option,
-                                                                  index),
-                                "Use a Book Currency") == 0)
-                {
-                    gnc_commodity *commodity = NULL;
-                    SCM curr_scm =
-                        gnc_currency_accounting_option_value_get_book_currency
-                            (value);
-                    SCM list_symbol =
-                        gnc_currency_accounting_option_value_get_default_policy
-                            (value);
-                    SCM acct_guid_scm =
-                        gnc_currency_accounting_option_value_get_default_account
-                            (value);
-
-                    commodity = gnc_scm_to_commodity (curr_scm);
-                    if (commodity)
-                    {
-                        book_currency_data->retrieved_book_currency = commodity;
-                    }
-                    else
-                    {
-                        book_currency_data->retrieved_book_currency = NULL;
-                    }
-                    if (list_symbol)
-                    {
-                        book_currency_data->retrieved_policy_scm = list_symbol;
-                    }
-                    else
-                    {
-                        book_currency_data->retrieved_policy_scm = NULL;
-                    }
-                    if (acct_guid_scm)
-                    {
-                        book_currency_data->retrieved_gain_loss_acct_guid_scm =
-                                                                acct_guid_scm;
-                    }
-                    else
-                    {
-                        book_currency_data->retrieved_gain_loss_acct_guid_scm =
-                                                                        NULL;
-                    }
-                }
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), TRUE);
-                /* when an unselected button in a group is clicked the clicked
-                   button receives the “toggled” signal, as does the
-                   previously selected button; however, if the first button
-                   is active when the currency-accounting dialog is created,
-                   that is, it's read from the option, the "toggled" handler
-                   is not called while it is if any other button is active.
-                   To get desired result, that is, to set sensitivity to
-                   FALSE, explicitly call the handler here if first button */
-                if (index == 0)
-                {
-                    gnc_option_currency_accounting_non_book_cb (button,
-                        (gpointer) book_currency_data);
-                }
-                return FALSE;
-            }
-        }
-        return TRUE;
-    }
-    return TRUE;
-}
-
 /*************************
  *       GET VALUE       *
  *************************
@@ -4045,6 +3857,7 @@ gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
     return scm_cons (type, val);
 }
 
+<<<<<<< HEAD
 static SCM
 gnc_option_get_ui_value_currency_accounting (GNCOption *option,
                                              GtkWidget *widget)
@@ -4148,6 +3961,8 @@ gnc_option_get_ui_value_currency_accounting (GNCOption *option,
     return (scm_cons (gnc_option_permissible_value (option, index), value));
 }
 
+=======
+>>>>>>> f87d57145 (Remove the incomplete book-currency code.)
 /************************************/
 /*          INITIALIZATION          */
 /************************************/
@@ -4227,12 +4042,6 @@ static void gnc_options_initialize_options (void)
         {
             "budget", gnc_option_set_ui_widget_budget,
             gnc_option_set_ui_value_budget, gnc_option_get_ui_value_budget
-        },
-        {
-            "currency-accounting",
-            gnc_option_set_ui_widget_currency_accounting,
-            gnc_option_set_ui_value_currency_accounting,
-            gnc_option_get_ui_value_currency_accounting
         },
         { NULL, NULL, NULL, NULL }
     };

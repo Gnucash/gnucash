@@ -201,89 +201,6 @@ guint32 gnc_option_db_lookup_color_option_argb (GNCOptionDB *odb,
                                                 const char *name,
                                                 guint32 default_value);
 
-void gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb,
-        SCM callback_id);
-
-char * gnc_option_section(GNCOption *option);
-char * gnc_option_name(GNCOption *option);
-char * gnc_option_type(GNCOption *option);
-char * gnc_option_sort_tag(GNCOption *option);
-char * gnc_option_documentation(GNCOption *option);
-SCM    gnc_option_getter(GNCOption *option);
-SCM    gnc_option_setter(GNCOption *option);
-SCM    gnc_option_default_getter(GNCOption *option);
-SCM    gnc_option_get_option_data(GNCOption *option);
-
-int    gnc_option_num_permissible_values(GNCOption *option);
-int    gnc_option_permissible_value_index(GNCOption *option, SCM value);
-SCM    gnc_option_permissible_value(GNCOption *option, int index);
-char * gnc_option_permissible_value_name(GNCOption *option, int index);
-char * gnc_option_permissible_value_description(GNCOption *option, int index);
-
-gboolean gnc_option_show_time(GNCOption *option);
-
-gboolean gnc_option_multiple_selection(GNCOption *option);
-GList * gnc_option_get_account_type_list(GNCOption *option);
-
-gboolean gnc_option_get_range_info(GNCOption *option,
-                                   double *lower_bound,
-                                   double *upper_bound,
-                                   int    *num_decimals,
-                                   double *step_size);
-
-gdouble  gnc_option_color_range(GNCOption *option);
-gdouble  gnc_option_use_alpha(GNCOption *option);
-gboolean gnc_option_get_color_info(GNCOption *option,
-                                   gboolean use_default,
-                                   gdouble *red,
-                                   gdouble *green,
-                                   gdouble *blue,
-                                   gdouble *alpha);
-
-void gnc_option_call_option_widget_changed_proc (GNCOption *option);
-
-void gnc_option_set_default(GNCOption *option);
-
-guint gnc_option_db_num_sections(GNCOptionDB *odb);
-
-const char * gnc_option_section_name(GNCOptionSection *section);
-guint  gnc_option_section_num_options(GNCOptionSection *section);
-
-GNCOptionSection * gnc_option_db_get_section(GNCOptionDB *odb, gint i);
-
-GNCOption * gnc_get_option_section_option(GNCOptionSection *section, int i);
-
-GNCOption * gnc_option_db_get_option_by_name(GNCOptionDB *odb,
-        const char *section_name,
-        const char *name);
-
-void     gnc_option_db_clean(GNCOptionDB *odb);
-
-gboolean gnc_option_db_get_changed(GNCOptionDB *odb);
-GList* gnc_option_db_commit(GNCOptionDB *odb);
-
-char * gnc_option_db_get_default_section(GNCOptionDB *odb);
-
-SCM gnc_option_db_lookup_option(GNCOptionDB *odb,
-                                const char *section,
-                                const char *name,
-                                SCM default_value);
-
-gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
-        const char *section,
-        const char *name,
-        gboolean default_value);
-
-char * gnc_option_db_lookup_string_option(GNCOptionDB *odb,
-        const char *section,
-        const char *name,
-        const char *default_value);
-
-gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
-        const char *section,
-        const char *name,
-        gdouble default_value);
-
 gboolean gnc_option_db_set_option(GNCOptionDB *odb,
                                   const char *section,
                                   const char *name,
@@ -312,16 +229,6 @@ SCM gnc_date_option_value_get_relative (SCM option_value);
 
 char * gnc_plot_size_option_value_get_type (SCM option_value);
 gdouble gnc_plot_size_option_value_get_value (SCM option_value);
-
-char * gnc_currency_accounting_option_currency_documentation (GNCOption *option);
-SCM gnc_currency_accounting_option_get_default_currency (GNCOption *option);
-char * gnc_currency_accounting_option_policy_documentation (GNCOption *option);
-SCM gnc_currency_accounting_option_get_default_policy (GNCOption *option);
-char * gnc_currency_accounting_option_gain_loss_account_documentation (GNCOption *option);
-SCM gnc_currency_accounting_option_value_get_method (SCM option_value);
-SCM gnc_currency_accounting_option_value_get_book_currency (SCM option_value);
-SCM gnc_currency_accounting_option_value_get_default_policy (SCM option_value);
-SCM gnc_currency_accounting_option_value_get_default_account (SCM option_value);
 
 void gnc_option_db_set_option_selectable_by_name (SCM guile_options,
                                                   const char *section,

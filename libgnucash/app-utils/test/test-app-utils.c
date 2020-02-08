@@ -35,7 +35,6 @@ guile_main (void *closure, int argc, char **argv)
     scm_c_use_module("gnucash app-utils");
 
     test_suite_option_util ();
-    test_suite_gnc_ui_util ();
     retval = g_test_run ();
 
     exit (retval);
