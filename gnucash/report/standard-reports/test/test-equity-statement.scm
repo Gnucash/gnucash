@@ -108,13 +108,13 @@
         (sxml->table-row-col sxml 1 5 #f))
 
       (test-equal "unrealized"
-        '("Unrealized Losses" "$0.25")
+        '("Unrealized Losses" "$1.00")
         (sxml->table-row-col sxml 1 6 #f))
 
       (test-equal "inc/dec in capital"
-        '("Increase in capital" "$3,086.75")
+        '("Increase in capital" "$3,086.00")
         (sxml->table-row-col sxml 1 7 #f))
 
       (test-equal "capital end"
-        '("Capital, 01/01/05" "$3,115.75")
+        '("Capital, 01/01/05" "$3,115.00")
         (sxml->table-row-col sxml 1 8 #f)))))

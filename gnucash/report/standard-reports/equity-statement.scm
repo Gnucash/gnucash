@@ -283,12 +283,12 @@
 	 )
 
     (define (unrealized-gains-at-date book-balance exchange-fn date)
-      (define weighted-fn
-	(gnc:case-exchange-fn 'weighted-average report-commodity date))
+      (define cost-fn
+	(gnc:case-exchange-fn 'average-cost report-commodity date))
       (gnc:monetaries-add
        (gnc:sum-collector-commodity book-balance report-commodity exchange-fn)
        (gnc:monetary-neg
-        (gnc:sum-collector-commodity book-balance report-commodity weighted-fn))))
+        (gnc:sum-collector-commodity book-balance report-commodity cost-fn))))
 
     (define (get-start-balance-fn account)
       (gnc:account-get-comm-balance-at-date account start-date #f))
