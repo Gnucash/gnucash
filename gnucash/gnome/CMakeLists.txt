@@ -177,25 +177,32 @@ install(TARGETS gnc-gnome
 
 # No headers to install
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in ${VCS_INFO_FILE}
-    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in
-                             -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-                             -D VCS_INFO_FILE=${VCS_INFO_FILE}
-                             -D SRC_DIR=${CMAKE_SOURCE_DIR}
-                             -P ${CMAKE_SOURCE_DIR}/cmake/configure-appdata.cmake)
+set (GNC_APPDATA_IN ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in)
+if (NOT BUILDING_FROM_VCS)
+    # We're building from a dist tarball.
+    # As a convenience to packagers we have included a pretranslated
+    # intermediate appdata file in the dist tarball.
+    set (GNC_APPDATA_IN ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in)
+else()
+    add_custom_command (
+        OUTPUT ${GNC_APPDATA_IN}
+        COMMAND ${CMAKE_COMMAND} -E env
+            ${GETTEXT_MSGFMT_EXECUTABLE}
+                --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in
+                -d ${CMAKE_SOURCE_DIR}/po
+                -o ${GNC_APPDATA_IN}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in)
+endif()
 
-# FIXME: where does LC_ALL=C come from?
-add_custom_command (
-    OUTPUT gnucash.appdata.xml
-    COMMAND ${CMAKE_COMMAND} -E env
-        LC_ALL=C
-        ${GETTEXT_MSGFMT_EXECUTABLE}
-            --xml --template ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in
-            -d ${CMAKE_SOURCE_DIR}/po
-            -o gnucash.appdata.xml
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in ${VCS_INFO_FILE}
-)
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
+    DEPENDS ${GNC_APPDATA_IN} ${VCS_INFO_FILE}
+    COMMAND ${CMAKE_COMMAND} -D SRC=${GNC_APPDATA_IN}
+                             -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
+                             -D VCS_INFO_FILE=${VCS_INFO_FILE}
+                             -D PROJECT_VERSION=${PROJECT_VERSION}
+                             -D SRC_DIR=${CMAKE_SOURCE_DIR}
+                             -P ${CMAKE_SOURCE_DIR}/cmake/insert-vcs-data.cmake)
 
 add_custom_target(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
 
@@ -203,18 +210,25 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 
 #=======
 
-configure_file(gnucash.desktop.in.in gnucash.desktop.in)
+set (GNC_DESKTOP_IN ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in)
+add_custom_command (
+    OUTPUT ${GNC_DESKTOP_IN}
+    COMMAND ${CMAKE_COMMAND} -E env
+        ${GETTEXT_MSGFMT_EXECUTABLE}
+            --desktop --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.desktop.in.in
+            -d ${CMAKE_SOURCE_DIR}/po
+            -o ${GNC_DESKTOP_IN}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.desktop.in.in)
 
 add_custom_command (
-    OUTPUT gnucash.desktop
-    COMMAND ${CMAKE_COMMAND} -E env
-        LC_ALL=C
-        ${GETTEXT_MSGFMT_EXECUTABLE}
-            --desktop --template gnucash.desktop.in
-            -d ${CMAKE_SOURCE_DIR}/po
-            -o gnucash.desktop
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
-)
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop
+    DEPENDS ${GNC_DESKTOP_IN} ${VCS_INFO_FILE}
+    COMMAND ${CMAKE_COMMAND} -D SRC=${GNC_DESKTOP_IN}
+                             -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop
+                             -D VCS_INFO_FILE=${VCS_INFO_FILE}
+                             -D PROJECT_VERSION=${PROJECT_VERSION}
+                             -D SRC_DIR=${CMAKE_SOURCE_DIR}
+                             -P ${CMAKE_SOURCE_DIR}/cmake/insert-vcs-data.cmake)
 
 add_custom_target(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 
@@ -250,3 +264,4 @@ gnc_add_scheme_deprecated_module ("gnucash report report-gnome" "gnucash report-
 set_dist_list(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})
+dist_add_generated(${BUILDING_FROM_VCS} gnucash.appdata.xml.in)

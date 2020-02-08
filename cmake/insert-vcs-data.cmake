@@ -13,4 +13,4 @@
 
 include (${SRC_DIR}/cmake/version-info2env.cmake)
 versioninfo2env (${VCS_INFO_FILE})
-configure_file(${SRC} ${DST} )
+configure_file(${SRC} ${DST})

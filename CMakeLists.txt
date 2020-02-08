@@ -239,7 +239,19 @@ find_path (REGEX_INCLUDE_PATH NAMES regex.h
 find_library (REGEX_LIBRARY NAMES regex)
 
 # I18N
+# Potfile generation will only be enabled if building from a git worktree
+set (BUILD_GNUCASH_POT ${BUILDING_FROM_VCS})
+
 find_package (Gettext 0.19.6 REQUIRED)
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
+    message (WARNING "Gettext version 0.20 or more recent is required to translate the 'developer_name' tag in gnucash.appdata.xml. All but that tag will be translated in the generated file.")
+    if(BUILD_GNUCASH_POT)
+        # Only emit warning if potfile generation was enabled otherwise
+        message (WARNING "Gettext version 0.20 or more recent is required to extract all translatable strings. Potfile generation will be disabled.")
+    endif()
+    set (BUILD_GNUCASH_POT OFF)
+endif()
+
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
 find_library (LIBINTL_LIBRARY NAMES intl)

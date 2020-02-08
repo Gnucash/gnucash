@@ -132,7 +132,7 @@ function(make_gnucash_potfiles)
   set(gnucash_pot_depends ${POTFILE_DEPS}  CACHE INTERNAL "List of files with translatable strings. If any of these change, gnucash.pot should be regenerated")
 endfunction()
 
-if(BUILDING_FROM_VCS)
+if(BUILD_GNUCASH_POT)
 
   make_gnucash_potfiles()
 
