@@ -5,6 +5,7 @@
 (use-modules (gnucash reports standard invoice))
 (use-modules (gnucash report stylesheets plain)) ; For the default stylesheet, required for rendering
 (use-modules (gnucash report))
+(use-modules (gnucash reports))
 (use-modules (tests test-report-extras))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-64))
