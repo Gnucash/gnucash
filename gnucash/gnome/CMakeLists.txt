@@ -160,11 +160,9 @@ if (NOT BUILDING_FROM_VCS)
     # intermediate appdata file in the dist tarball.
     set (GNC_APPDATA_IN ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in)
 elseif (TRANSLATE_GNUCASH_APPDATA)
-    # FIXME: where does LC_ALL=C come from?
     add_custom_command (
         OUTPUT ${GNC_APPDATA_IN}
         COMMAND ${CMAKE_COMMAND} -E env
-            LC_ALL=C
             ${GETTEXT_MSGFMT_EXECUTABLE}
                 --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in.in
                 -d ${CMAKE_SOURCE_DIR}/po
@@ -209,7 +207,6 @@ elseif (TRANSLATE_GNUCASH_DESKTOP)
     add_custom_command (
         OUTPUT ${GNC_DESKTOP_IN}
         COMMAND ${CMAKE_COMMAND} -E env
-            LC_ALL=C
             ${GETTEXT_MSGFMT_EXECUTABLE}
                 --desktop --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.desktop.in.in
                 -d ${CMAKE_SOURCE_DIR}/po
