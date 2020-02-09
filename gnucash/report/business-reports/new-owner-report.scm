@@ -629,15 +629,15 @@
          (let ((lot (xaccSplitGetLot split)))
            (define (equal-to-split? s) (equal? s split))
            (match (gncInvoiceGetInvoiceFromLot lot)
-             (() (lp rest
-                     (- overpayment (gnc-lot-get-balance lot))
-                     invoices
-                     (let lp ((lot-splits (gnc-lot-get-split-list lot))
-                              (acc opposing-splits))
-                       (match lot-splits
-                         (() acc)
-                         (((? equal-to-split?) . rest) (lp rest acc))
-                         ((lot-split . rest) (lp rest (cons lot-split acc)))))))
+             (() (let lp1 ((lot-splits (gnc-lot-get-split-list lot))
+                           (opposing-splits opposing-splits))
+                   (match lot-splits
+                     (() (lp rest
+                             (- overpayment (gnc-lot-get-balance lot))
+                             invoices
+                             opposing-splits))
+                     (((? equal-to-split?) . tail) (lp1 tail opposing-splits))
+                     ((head . tail) (lp1 tail (cons head opposing-splits))))))
              (inv
               (lp rest
                   overpayment
