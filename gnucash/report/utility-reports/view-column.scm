@@ -27,6 +27,7 @@
 ;; don't have to worry about that here.
 
 (define-module (gnucash report view-column))
+(use-modules (ice-9 match))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash app-utils))
 (use-modules (gnucash gnc-module))
@@ -86,20 +87,14 @@
 
     ;; make sure each subreport has an option change callback that 
     ;; pings the parent
-    (let loop ((new-reports '())
-               (reports reports))
-      (if (null? reports)
-          (gnc:option-set-value report-opt (reverse new-reports))
-          (let* ((report-info (car reports))
-                 (child (car report-info))
-                 (rowspan (cadr report-info))
-                 (colspan (caddr report-info))
-                 (callback (or (cadddr report-info)
-                               (make-child-options-callback
-                                report (gnc-report-find child)))))
-            (loop (cons (list child rowspan colspan callback)
-                        new-reports)
-                  (cdr reports)))))
+    (let loop ((reports reports) (new-reports '()))
+      (match reports
+        (() (gnc:option-set-value report-opt (reverse new-reports)))
+        (((child rowspan colspan callback) . rest)
+         (let ((callback (or callback
+                             (make-child-options-callback
+                              report (gnc-report-find child)))))
+           (loop rest (cons (list child rowspan colspan callback) new-reports))))))
     
     ;; we really would rather do something smart here with the
     ;; report's cached text if possible.  For the moment, we'll have
@@ -217,17 +212,11 @@
 (define (cleanup-options report)
   (let* ((options (gnc:report-options report))
 	 (report-opt (gnc:lookup-option options "__general" "report-list")))
-    (let loop ((new-reports '())
-               (reports (gnc:option-value report-opt)))
-      (if (null? reports)
-          (gnc:option-set-value report-opt (reverse new-reports))
-          (let* ((report-info (car reports))
-                 (child (car report-info))
-                 (rowspan (cadr report-info))
-                 (colspan (caddr report-info)))
-            (loop (cons (list child rowspan colspan #f)
-                        new-reports)
-                  (cdr reports)))))))
+    (let loop ((reports (gnc:option-value report-opt)) (new-reports '()))
+      (match reports
+        (() (gnc:option-set-value report-opt (reverse new-reports)))
+        (((child rowspan colspan _) . rest)
+         (loop rest (cons (list child rowspan colspan #f) new-reports)))))))
 
 ;; define the view now.
 (gnc:define-report 

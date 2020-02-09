@@ -22,6 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (gnc:module-load "gnucash/html" 0)
+(use-modules (ice-9 match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-document> class
@@ -220,95 +221,74 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:html-document-markup-start doc markup end-tag? . rest)
-  (let ((childinfo (gnc:html-document-fetch-markup-style doc markup))
-        (extra-attrib (and (pair? rest) rest)))
-    ;; now generate the start tag
-    (let ((tag   (gnc:html-markup-style-info-tag childinfo))
-          (attr  (gnc:html-markup-style-info-attributes childinfo))
-          (face  (gnc:html-markup-style-info-font-face childinfo))
-          (size  (gnc:html-markup-style-info-font-size childinfo))
-          (color (gnc:html-markup-style-info-font-color childinfo)))
+  (let* ((childinfo (gnc:html-document-fetch-markup-style doc markup))
+         (extra-attrib (and (pair? rest) rest))
+         (retval '())
+         (tag   (or (gnc:html-markup-style-info-tag childinfo) markup))
+         (attr  (gnc:html-markup-style-info-attributes childinfo))
+         (face  (gnc:html-markup-style-info-font-face childinfo))
+         (size  (gnc:html-markup-style-info-font-size childinfo))
+         (color (gnc:html-markup-style-info-font-color childinfo)))
 
-      ;; "" tags mean "show no tag"; #f tags means use default.
-      (cond ((not tag)
-             (set! tag markup))
-            ((and (string? tag) (string=? tag ""))
-             (set! tag #f)))
-      (let* ((retval '())
-             (push (lambda (l) (set! retval (cons l retval))))
-             (add-internal-tag (lambda (tag) (push "<") (push tag) (push ">")))
-             (add-attribute
-              (lambda (key value prior)
-                      (push " ") (push key)
-                      (if value (begin (push "=\"")
-                                       (push value)
-                                       (push "\"")))
-                      #t))
-             (addextraatt
-              (lambda (attr)
-                (cond ((string? attr) (push " ") (push attr))
-                      (attr (gnc:warn "non-string attribute" attr)))))
-             (build-first-tag
-              (lambda (tag)
-                (push "<") (push tag)
-                (if attr (hash-fold add-attribute #f attr))
-                (if extra-attrib (for-each addextraatt extra-attrib))
-                (if (not end-tag?)
-                    (push " /")) ;;add closing "/" for no-end elements...
-                (push ">"))))
-        (if tag
-            (if (list? tag)
-                (begin
-                  (build-first-tag (car tag))
-                  (for-each add-internal-tag (cdr tag)))
-                (build-first-tag tag)))
-        ;; XXX Font styling should be done through CSS, NOT html code
-        ;; XXX Also, why is this even here?  'Font' is an html tag just like anything else,
-        ;;       so why does it have it's own custom pseudo code here?  It should be built
-        ;;       as a call to this function just like any other tag, passing face/size/color as attributes.
-        (if (or face size color)
-            (begin
-              (issue-deprecation-warning
-               "this section is unreachable in code")
-              (push "<font ")
-              (if face
-                  (begin
-                    (push "face=\"") (push face) (push "\" ")))
-              (if size
-                  (begin
-                    (push "size=\"") (push size) (push "\" ")))
-              (if color
-                  (begin
-                    (push "color=\"") (push color) (push "\" ")))
-              (push ">")))
-        retval))))
+    (define (push l) (set! retval (cons l retval)))
+    (define (add-internal-tag tag) (push "<") (push tag) (push ">"))
+    (define (add-attribute key value)
+      (push " ") (push key)
+      (when value (push "=\"") (push value) (push "\"")))
+    (define (addextraatt attr)
+      (cond ((string? attr) (push " ") (push attr))
+            (attr (gnc:warn "non-string attribute" attr))))
+    (define (build-first-tag tag)
+      (push "<") (push tag)
+      (if attr (hash-for-each add-attribute attr))
+      (if extra-attrib (for-each addextraatt extra-attrib))
+      (unless end-tag? (push " /")) ;;add closing "/" for no-end elements...
+      (push ">"))
+
+    (match tag
+      ("" #f)
+      ((head . tail) (build-first-tag head) (for-each add-internal-tag tail))
+      (_ (build-first-tag tag)))
+
+    ;; XXX Font styling should be done through CSS, NOT html code
+    ;; XXX Also, why is this even here?  'Font' is an html tag just like anything else,
+    ;;       so why does it have it's own custom pseudo code here?  It should be built
+    ;;       as a call to this function just like any other tag, passing face/size/color as attributes.
+    (if (or face size color)
+        (begin
+          (issue-deprecation-warning
+           "this section is unreachable in code")
+          (push "<font ")
+          (if face
+              (begin
+                (push "face=\"") (push face) (push "\" ")))
+          (if size
+              (begin
+                (push "size=\"") (push size) (push "\" ")))
+          (if color
+              (begin
+                (push "color=\"") (push color) (push "\" ")))
+          (push ">")))
+    retval))
 
 (define (gnc:html-document-markup-end doc markup)
-  (let ((childinfo (gnc:html-document-fetch-markup-style doc markup)))
+  (let* ((childinfo (gnc:html-document-fetch-markup-style doc markup))
+         (tag (or (gnc:html-markup-style-info-tag childinfo) markup))
+         (retval '()))
+    (define (push l) (set! retval (cons l retval)))
+    (define (addtag t)
+      (push "</")
+      (push t)
+      (push ">\n"))
+    (when (gnc:html-markup-style-info-closing-font-tag childinfo)
+      (push "</font>\n"))
     ;; now generate the end tag
-    (let ((tag (gnc:html-markup-style-info-tag childinfo))
-          (closing-font-tag
-           (gnc:html-markup-style-info-closing-font-tag childinfo)))
-      ;; "" tags mean "show no tag"; #f tags means use default.
-      (cond ((not tag)
-             (set! tag markup))
-            ((and (string? tag) (string=? tag ""))
-             (set! tag #f)))
-      (let* ((retval '())
-             (push (lambda (l) (set! retval (cons l retval)))))
-        (if closing-font-tag
-            (push "</font>\n"))
-        (if tag
-            (let ((addtag (lambda (t)
-                            (push "</")
-                            (push tag)
-                            (push ">\n"))))
-              (cond
-               ((string? tag)
-                (addtag tag))
-               ((list? tag)
-                (for-each addtag (reverse tag))))))
-        retval))))
+    ;; "" tags mean "show no tag"; #f tags means use default.)
+    (match tag
+      ("" #f)
+      ((? string?) (addtag tag))
+      ((? list?) (for-each addtag (reverse tag))))
+    retval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  html-document-render-data
