@@ -117,6 +117,15 @@ class Session(GnuCashCoreClass):
                 self.destroy()
                 raise
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        # Roll back changes on exception by not calling save. Only works for XMl backend.
+        if not exc_type:
+            self.save()
+        self.end()
+
     def raise_backend_errors(self, called_function="qof_session function"):
         """Raises a GnuCashBackendException if there are outstanding
         QOF_BACKEND errors.
