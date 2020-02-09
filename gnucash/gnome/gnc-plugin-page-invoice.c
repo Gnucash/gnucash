@@ -609,8 +609,7 @@ gnc_plugin_page_invoice_main_window_page_changed (GncMainWindow *window,
                                                   GncPluginPage *invoice_plugin_page)
 {
     // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_INVOICE(current_plugin_page) ||
-        !invoice_plugin_page || !GNC_IS_PLUGIN_PAGE_INVOICE(invoice_plugin_page))
+    if (!current_plugin_page || !invoice_plugin_page)
         return;
 
     if (current_plugin_page == invoice_plugin_page)
