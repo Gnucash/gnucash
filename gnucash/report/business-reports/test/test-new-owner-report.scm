@@ -226,18 +226,12 @@
     (let* ((options (default-testing-options owner-1 (get-acct "AR-USD")))
            (sxml (options->sxml options "new-customer-report basic")))
       (test-equal "line 1"
-        '("Customer History" "Linked Details" "1980-01-13" "1980-01-13"
-          "Invoice" "$11.50" "$11.50" "1980-03-18" "Payment" "inv >90 payment"
-          "$11.50" "pay only $1.50" "$1.50" "$1.50" "Pre-Payment" "Current"
-          "0-30 days" "31-60 days" "61-90 days" "91+ days" "Total" "$20.00"
-          "$0.00" "$0.00" "$0.00" "$0.00" "$11.75" "$31.75")
-        ((sxpath `(// (table 3) // (tr 1) // *text*)) sxml))
+        '("1980-01-13" "1980-01-13" "Invoice" "$11.50" "$11.50" "1980-03-18"
+          "Payment" "inv >90 payment" "$11.50" "pay only $1.50" "$1.50" "$1.50")
+        ((sxpath `(html body (table 3) tbody (tr 1) // *text*)) sxml))
       (test-equal "line 2"
-        '("Date" "Due Date" "Reference" "Type" "Description" "Invoice"
-          "Payment" "Balance" "Date" "Reference" "Type" "Description"
-          "Partial Amount" "Amount" "1980-03-20" "Payment" "inv >90 payment"
-          "pay only $2.00" "$2.00" "$2.00")
-        ((sxpath `(// (table 3) // (tr 2) // *text*)) sxml))
+        '("1980-03-20" "Payment" "inv >90 payment" "pay only $2.00" "$2.00" "$2.00")
+        ((sxpath `(// (table 3) // tbody // (tr 2) // *text*)) sxml))
       (test-equal "line 3"
         '("UNPAID" "$8.00")
         ((sxpath `(// (table 3) // (tr 3) // *text*)) sxml))
