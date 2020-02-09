@@ -60,9 +60,10 @@
 (define javascript "
 <script>
   function getID(cell) { return cell.getAttribute('link-id'); }
-  function clicky() {
-      var id = getID(this);
-      var ishighlighted = this.classList.contains('highlight');
+  function mousedown(e) {
+      var id = getID(e.target);
+      var ishighlighted = e.target.classList.contains('highlight');
+      e.preventDefault ();
       TDs.forEach(TD => TD.classList.remove('highlight'));
       if (ishighlighted) return;
       TDs
@@ -70,7 +71,7 @@
           .forEach (TD => TD.classList.add('highlight'));}
   var TDs = document.getElementsByTagName('td');
   TDs = [...TDs].filter(getID);
-  TDs.forEach(TD => TD.onclick = clicky);
+  TDs.forEach(TD => TD.onmousedown = mousedown);
 </script>
 ")
 
@@ -271,12 +272,14 @@
       (let ((inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
         (gnc:make-html-text (invoice->anchor inv)))))))
 
-(define (split->type-str split)
+(define (split->type-str split payable?)
   (let* ((txn (xaccSplitGetParent split))
+         (amt (xaccSplitGetAmount split))
+         (refund? (if payable? (< amt 0) (> amt 0)))
          (invoice (gncInvoiceGetInvoiceFromTxn txn)))
     (cond
      ((txn-is-invoice? txn) (gncInvoiceGetTypeString invoice))
-     ((txn-is-payment? txn) (_ "Payment"))
+     ((txn-is-payment? txn) (if refund? (_ "Refund") (_ "Payment")))
      ((txn-is-link? txn) (_ "Link"))
      (else (_ "Unknown")))))
 
@@ -570,21 +573,13 @@
                         (cons (make-link-data
                                (qof-print-date (xaccTransGetDate lot-txn))
                                (split->reference lot-split)
-                               (split->type-str lot-split)
+                               (split->type-str lot-split payable?)
                                (splits->desc non-document)
                                (gnc:make-html-text (split->anchor lot-split #t))
                                (list->cell
                                 (map (lambda (s) (split->anchor s #f)) non-document))
                                (gncTransGetGUID lot-txn))
                               result))))
-
-               ;; this payment peer is non-document, accumulate it.
-               ((not (memv (xaccAccountGetType
-                            (xaccSplitGetAccount (car lot-txn-splits)))
-                           (list ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
-                (lp1 (cdr lot-txn-splits)
-                     (cons (car lot-txn-splits) non-document)
-                     result))
 
                ;; this payment's peer split has same sign as the
                ;; payment split. ignore.
@@ -596,29 +591,25 @@
                ;; reducing split.
                ((lot-split->posting-split (car lot-txn-splits)) =>
                 (lambda (posting-split)
-                  (let ((lot-txn-split (car lot-txn-splits))
-                        (invoice (gncInvoiceGetInvoiceFromTxn
-                                  (xaccSplitGetParent posting-split)))
-                        (neg (not (gncInvoiceGetIsCreditNote invoice)))
-                        (posting-txn (xaccSplitGetParent posting-split)))
+                  (let* ((lot-txn-split (car lot-txn-splits))
+                         (posting-txn (xaccSplitGetParent posting-split))
+                         (document (gncInvoiceGetInvoiceFromTxn posting-txn))
+                         (neg (gncInvoiceGetIsCreditNote document)))
                     (lp1 (cdr lot-txn-splits)
                          non-document
                          (cons (make-link-data
                                 (qof-print-date (xaccTransGetDate posting-txn))
                                 (split->reference posting-split)
-                                (split->type-str posting-split)
+                                (split->type-str posting-split payable?)
                                 (splits->desc (list posting-split))
                                 (gnc:make-html-text (split->anchor lot-split neg))
                                 (gnc:make-html-text (split->anchor posting-split neg))
-                                (gncInvoiceReturnGUID invoice))
+                                (gncInvoiceReturnGUID document))
                                result)))))
 
-               ;; this payment's peer APAR split can't find
-               ;; document. this likely is an old style link txn. RHS
-               ;; show transaction only.
+               ;; this payment's peer split can't find document. this
+               ;; is a regular payment or an old link txn. accumulate.
                (else
-                (gnc:warn (car lot-txn-splits) " in APAR but can't find "
-                          "owner; is likely an old-style link transaction.")
                 (lp1 (cdr lot-txn-splits)
                      (cons (car lot-txn-splits) non-document)
                      result))))))))))
@@ -636,15 +627,15 @@
          (let ((lot (xaccSplitGetLot split)))
            (define (equal-to-split? s) (equal? s split))
            (match (gncInvoiceGetInvoiceFromLot lot)
-             (() (lp rest
-                     (- overpayment (gnc-lot-get-balance lot))
-                     invoices
-                     (let lp ((lot-splits (gnc-lot-get-split-list lot))
-                              (acc opposing-splits))
-                       (match lot-splits
-                         (() acc)
-                         (((? equal-to-split?) . rest) (lp rest acc))
-                         ((lot-split . rest) (lp rest (cons lot-split acc)))))))
+             (() (let lp1 ((lot-splits (gnc-lot-get-split-list lot))
+                           (opposing-splits opposing-splits))
+                   (match lot-splits
+                     (() (lp rest
+                             (- overpayment (gnc-lot-get-balance lot))
+                             invoices
+                             opposing-splits))
+                     (((? equal-to-split?) . tail) (lp1 tail opposing-splits))
+                     ((head . tail) (lp1 tail (cons head opposing-splits))))))
              (inv
               (lp rest
                   overpayment
@@ -698,7 +689,7 @@
          (make-link-data
           (qof-print-date (xaccTransGetDate (xaccSplitGetParent s)))
           (split->reference s)
-          (split->type-str s)
+          (split->type-str s payable?)
           (splits->desc (list s))
           (gnc:make-html-text (split->anchor s #f))
           (gnc:make-html-text (split->anchor s #f))
@@ -780,7 +771,7 @@
         (add-row
          table odd-row? used-columns date (gncInvoiceGetDateDue invoice)
          (split->reference split)
-         (split->type-str split)
+         (split->type-str split payable?)
          (splits->desc (list split))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
@@ -809,7 +800,7 @@
         (add-row
          table odd-row? used-columns date #f
          (split->reference split)
-         (split->type-str split)
+         (split->type-str split payable?)
          (splits->desc (xaccTransGetAPARAcctSplitList txn #t))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
