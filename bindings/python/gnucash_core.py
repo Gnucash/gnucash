@@ -434,6 +434,9 @@ class Transaction(GnuCashCoreClass):
         return self.do_lookup_create_oo_instance(
             gncInvoiceGetInvoiceFromTxn, Transaction )
 
+    def __eq__(self, other):
+        return self.Equal(other, True, False, False, False)
+
 def decorate_monetary_list_returning_function(orig_function):
     def new_function(self, *args):
         """decorate function that returns list of gnc_monetary to return tuples of GncCommodity and GncNumeric
@@ -460,6 +463,9 @@ class Split(GnuCashCoreClass):
     another.
     """
     _new_instance = 'xaccMallocSplit'
+
+    def __eq__(self, other):
+        return self.Equal(other, True, False, False)
 
 class Account(GnuCashCoreClass):
     """A GnuCash Account.
