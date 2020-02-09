@@ -63,9 +63,10 @@
 (define javascript "
 <script>
   function getID(cell) { return cell.getAttribute('link-id'); }
-  function clicky() {
-      var id = getID(this);
-      var ishighlighted = this.classList.contains('highlight');
+  function mousedown(e) {
+      var id = getID(e.target);
+      var ishighlighted = e.target.classList.contains('highlight');
+      e.preventDefault ();
       TDs.forEach(TD => TD.classList.remove('highlight'));
       if (ishighlighted) return;
       TDs
@@ -73,7 +74,7 @@
           .forEach (TD => TD.classList.add('highlight'));}
   var TDs = document.getElementsByTagName('td');
   TDs = [...TDs].filter(getID);
-  TDs.forEach(TD => TD.onclick = clicky);
+  TDs.forEach(TD => TD.onmousedown = mousedown);
 </script>
 ")
 
