@@ -607,9 +607,8 @@
                                 (gncInvoiceReturnGUID document))
                                result)))))
 
-               ;; this payment's peer APAR split can't find
-               ;; document. this likely is an old style link txn. RHS
-               ;; show transaction only.
+               ;; this payment's peer split can't find document. this
+               ;; is a regular payment or an old link txn. accumulate.
                (else
                 (lp1 (cdr lot-txn-splits)
                      (cons (car lot-txn-splits) non-document)
