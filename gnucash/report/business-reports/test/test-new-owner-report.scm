@@ -274,25 +274,25 @@
         ((sxpath `(// (table 3) // (tr 11) // *text*)) sxml))
 
       ;; tests for refund $120 to partially repay
-      (test-equal "line 12"
-        '("1980-06-28" "Payment" "-$148.25" "1980-06-30" "Payment"
+      (test-equal "line 12 refund $120 to partially repay"
+        '("1980-06-28" "Payment" "-$148.25" "1980-06-30" "Refund"
           "$160.00" "$50.00" "$50.00")
         ((sxpath `(// (table 3) // (tr 12) // *text*)) sxml))
-      (test-equal "line 13"
-        '("1980-06-29" "Payment" "$120.00" "$120.00")
+      (test-equal "line 13 refund $120 to partially repay"
+        '("1980-06-29" "Refund" "$120.00" "$120.00")
         ((sxpath `(// (table 3) // (tr 13) // *text*)) sxml))
-      (test-equal "line 14"
+      (test-equal "line 14 refund $120 to partially repay"
         '("Pre-Payment" "-$10.00")
         ((sxpath `(// (table 3) // (tr 14) // *text*)) sxml))
-      (test-equal "line 15"
-        '("1980-06-29" "Payment" "-$28.25" "1980-06-28" "Payment"
+      (test-equal "line 15 refund $120 to partially repay"
+        '("1980-06-29" "Refund" "-$28.25" "1980-06-28" "Payment"
           "$120.00" "-$120.00" "-$120.00")
         ((sxpath `(// (table 3) // (tr 15) // *text*)) sxml))
-      (test-equal "line 16"
-        '("1980-06-30" "Payment" "$21.75" "1980-06-28" "Payment"
+      (test-equal "line 16 refund $120 to partially repay"
+        '("1980-06-30" "Refund" "$21.75" "1980-06-28" "Payment"
           "$50.00" "-$40.00" "-$40.00")
         ((sxpath `(// (table 3) // (tr 16) // *text*)) sxml))
-      (test-equal "line 17"
+      (test-equal "line 17 refund $120 to partially repay"
         '("Pre-Payment" "-$10.00")
         ((sxpath `(// (table 3) // (tr 17) // *text*)) sxml))
 

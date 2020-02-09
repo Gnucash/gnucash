@@ -274,12 +274,14 @@
       (let ((inv (gncInvoiceGetInvoiceFromLot (xaccSplitGetLot split))))
         (gnc:make-html-text (invoice->anchor inv)))))))
 
-(define (split->type-str split)
+(define (split->type-str split payable?)
   (let* ((txn (xaccSplitGetParent split))
+         (amt (xaccSplitGetAmount split))
+         (refund? (if payable? (< amt 0) (> amt 0)))
          (invoice (gncInvoiceGetInvoiceFromTxn txn)))
     (cond
      ((txn-is-invoice? txn) (gncInvoiceGetTypeString invoice))
-     ((txn-is-payment? txn) (_ "Payment"))
+     ((txn-is-payment? txn) (if refund? (_ "Refund") (_ "Payment")))
      ((txn-is-link? txn) (_ "Link"))
      (else (_ "Unknown")))))
 
@@ -573,7 +575,7 @@
                         (cons (make-link-data
                                (qof-print-date (xaccTransGetDate lot-txn))
                                (split->reference lot-split)
-                               (split->type-str lot-split)
+                               (split->type-str lot-split payable?)
                                (splits->desc non-document)
                                (gnc:make-html-text (split->anchor lot-split #t))
                                (list->cell
@@ -600,7 +602,7 @@
                          (cons (make-link-data
                                 (qof-print-date (xaccTransGetDate posting-txn))
                                 (split->reference posting-split)
-                                (split->type-str posting-split)
+                                (split->type-str posting-split payable?)
                                 (splits->desc (list posting-split))
                                 (gnc:make-html-text (split->anchor lot-split neg))
                                 (gnc:make-html-text (split->anchor posting-split neg))
@@ -689,7 +691,7 @@
          (make-link-data
           (qof-print-date (xaccTransGetDate (xaccSplitGetParent s)))
           (split->reference s)
-          (split->type-str s)
+          (split->type-str s payable?)
           (splits->desc (list s))
           (gnc:make-html-text (split->anchor s #f))
           (gnc:make-html-text (split->anchor s #f))
@@ -771,7 +773,7 @@
         (add-row
          table odd-row? used-columns date (gncInvoiceGetDateDue invoice)
          (split->reference split)
-         (split->type-str split)
+         (split->type-str split payable?)
          (splits->desc (list split))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
@@ -800,7 +802,7 @@
         (add-row
          table odd-row? used-columns date #f
          (split->reference split)
-         (split->type-str split)
+         (split->type-str split payable?)
          (splits->desc (xaccTransGetAPARAcctSplitList txn #t))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
