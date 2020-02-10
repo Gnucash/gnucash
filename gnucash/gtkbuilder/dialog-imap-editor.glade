@@ -51,6 +51,20 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
+              <object class="GtkButton" id="scrub_button">
+                <property name="label" translatable="yes">_Scrub</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="delete_button">
                 <property name="label" translatable="yes">_Delete</property>
                 <property name="visible">True</property>
@@ -61,7 +75,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -77,7 +91,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -374,6 +388,7 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="4">scrub_button</action-widget>
       <action-widget response="-10">delete_button</action-widget>
       <action-widget response="-6">close_button</action-widget>
     </action-widgets>

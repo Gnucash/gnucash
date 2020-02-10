@@ -182,6 +182,40 @@ delete_selected_row (GtkTreeModel *model, GtkTreeIter *iter, ImapDialog *imap_di
 }
 
 static void
+gnc_delete_nomapping (GtkTreeModel *model, GtkTreePath *path,
+                      GtkTreeIter *iter, gpointer data)
+{
+    Account     *source_account = NULL;
+    Account     *map_account = NULL;
+    gchar       *head;
+    GtkTreePath *tree_path;
+    gint         depth;
+
+    gtk_tree_model_get (model, iter, SOURCE_ACCOUNT, &source_account,
+                        MAP_ACCOUNT, &map_account, HEAD, &head, -1);
+    tree_path = gtk_tree_model_get_path (model, iter);
+    depth = gtk_tree_path_get_depth (tree_path);
+    gtk_tree_path_free (tree_path);
+
+    if ((source_account == NULL) || (map_account != NULL) || (depth == 1))
+        return;
+
+    PWARN ("Delete map: Acc=%s, head=%s", xaccAccountGetName(source_account), head);
+    gnc_account_delete_map_entry (source_account, head, NULL, NULL, FALSE);
+}
+
+static void
+gnc_imap_scrub (ImapDialog *imap_dialog)
+{
+    GtkTreeModel     *model;
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
+
+    gnc_suspend_gui_refresh();
+    gtk_tree_model_foreach (model, (GtkTreeModelForeachFunc)gnc_delete_nomapping, NULL);
+    gnc_resume_gui_refresh();
+}
+
+static void
 gnc_imap_dialog_delete (ImapDialog *imap_dialog)
 {
     GList            *list, *row;
@@ -228,6 +262,10 @@ gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_
     {
     case GTK_RESPONSE_APPLY:
         gnc_imap_dialog_delete (imap_dialog);
+        return;
+
+    case 4:
+        gnc_imap_scrub (imap_dialog);
         return;
 
     case GTK_RESPONSE_CLOSE:
