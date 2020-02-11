@@ -27,6 +27,7 @@
 #include <kvp-value.hpp>
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
+#include "gnc-option-ui.hpp"
 
 auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
 GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}

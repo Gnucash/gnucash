@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 #include <gnc-optiondb.hpp>
 #include <gnc-optiondb-impl.hpp>
+#include <gnc-option-ui.hpp>
 #include <kvp-value.hpp>
 extern "C"
 {
@@ -205,6 +206,7 @@ TEST_F(GncOptionDBTest, test_register_date_interval_option)
     ASSERT_TRUE(m_db->set_option("foo", "bar", time));
     EXPECT_EQ(time, m_db->find_option("foo", "bar")->get().get_value<time64>());
 }
+
 class GncOptionDBIOTest : public ::testing::Test
 {
 protected:

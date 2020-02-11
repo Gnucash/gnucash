@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 #include <gnc-option.hpp>
 #include <gnc-option-impl.hpp>
+#include <gnc-option-ui.hpp>
 #include <guid.hpp>
 extern "C"
 {
@@ -505,7 +506,7 @@ TEST_F(GncOptionCommodityTest, test_commodity_from_scheme)
     EXPECT_EQ(QOF_INSTANCE(m_hpe), option.get_value<const QofInstance*>());
 }
 
-class GncUIItem
+class GncUIType
 {
 public:
     void set_value(const std::string& value) { m_value = value; }
@@ -514,20 +515,29 @@ private:
     std::string m_value;
 };
 
-class GncOptionUIItem
-{
-public:
-    GncOptionUIItem(GncUIItem* widget) : m_widget{widget} {}
-    GncUIItem* m_widget;
-};
+using OptionUIItem = GncUIItem<GncUIType>;
 
 class GncOptionUITest : public ::testing::Test
 {
 protected:
     GncOptionUITest() :
+        m_widget{},
         m_option{"foo", "bar", "baz", "Phony Option", std::string{"waldo"},
-            GncOptionUIType::STRING} {}
-
+                 GncOptionUIType::STRING}
+    {
+        auto to_ui = [](OptionUIItem& ui, GncOption& opt) {
+                         ui.m_widget->set_value(opt.get_value<std::string>());
+                     };
+        auto from_ui = [](OptionUIItem& ui, GncOption& opt) {
+                           opt.set_value<std::string>(ui.m_widget->get_value());
+                       };
+        auto ui_item{std::make_unique<GncOptionUIItem>(
+                OptionUIItem{&m_widget},
+                GncOptionUIType::STRING,
+                to_ui, from_ui)};
+        m_option.set_ui_item(std::move(ui_item));
+    }
+    GncUIType m_widget;
     GncOption m_option;
 };
 
@@ -540,10 +550,24 @@ TEST_F(GncOptionUI, test_option_ui_type)
 
 TEST_F(GncOptionUI, test_set_option_ui_item)
 {
-    GncUIItem ui_item;
-    GncOptionUIItem option_ui_item{&ui_item};
-    m_option.set_ui_item(&option_ui_item);
-    EXPECT_EQ(&ui_item, m_option.get_ui_item()->m_widget);
+    EXPECT_EQ(&m_widget, m_option.get_ui_item()->get_ui_item().m_widget);
+}
+
+TEST_F(GncOptionUI, test_ui_value_from_option)
+{
+    const char* value{"waldo"};
+
+    m_option.set_value(value);
+    m_option.set_ui_item_from_option();
+    EXPECT_STREQ(value, m_widget.get_value().c_str());
+}
+
+TEST_F(GncOptionUI, test_option_value_from_ui)
+{
+    const char* value{"pepper"};
+    m_widget.set_value(value);
+    m_option.set_option_from_ui_item();
+    EXPECT_STREQ(value, m_option.get_value<std::string>().c_str());
 }
 
 class GncOptionRangeTest : public ::testing::Test

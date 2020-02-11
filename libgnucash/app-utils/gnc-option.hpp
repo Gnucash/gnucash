@@ -31,6 +31,7 @@
 #include "gnc-option-uitype.hpp"
 
 class GncOptionUIItem;
+using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
 struct QofInstance_s;
 using QofInstance = QofInstance_s;
 template <typename ValueType> class GncOptionValue;
@@ -72,9 +73,11 @@ public:
     const std::string& get_name() const;
     const std::string& get_key() const;
     const std::string& get_docstring() const;
-    void set_ui_item(GncOptionUIItem* ui_elem);
+    void set_ui_item(GncOptionUIItemPtr&& ui_elem);
     const GncOptionUIType get_ui_type() const;
-    GncOptionUIItem* const get_ui_item() const;
+    const GncOptionUIItem* get_ui_item() const;
+    void set_ui_item_from_option();
+    void set_option_from_ui_item();
     void make_internal();
     bool is_changed() const noexcept;
     template <typename ValueType> bool validate(ValueType value) const;
@@ -87,10 +90,11 @@ public:
     std::istream& in_stream(std::istream& iss);
     std::ostream& to_scheme(std::ostream& oss) const;
     std::istream& from_scheme(std::istream& iss);
-    GncOptionVariantPtr& _get_option() { return m_option; }
+    GncOptionVariant* const _get_option() { return m_option.get(); }
 private:
     inline static const std::string c_empty_string{""};
     GncOptionVariantPtr m_option;
+    GncOptionUIItemPtr m_ui_item{nullptr};
 };
 
 inline std::ostream&

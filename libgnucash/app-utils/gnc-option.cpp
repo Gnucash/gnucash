@@ -24,6 +24,14 @@
 #include "gnc-option.hpp"
 #include "gnc-option-impl.hpp"
 #include "gnc-option-uitype.hpp"
+#include "gnc-option-ui.hpp"
+
+static const char* log_module{"gnc.app-utils.gnc-option"};
+
+extern "C"
+{
+#include <qoflog.h>
+}
 
 template <typename ValueType>
 GncOption::GncOption(const char* section, const char* name,
@@ -103,11 +111,21 @@ GncOption::get_docstring() const
 }
 
 void
-GncOption::set_ui_item(GncOptionUIItem* ui_elem)
+GncOption::set_ui_item(GncOptionUIItemPtr&& ui_item)
 {
-    std::visit([ui_elem](auto& option) {
-                   option.set_ui_item(ui_elem);
-               }, *m_option);
+
+    auto opt_ui_type = std::visit([](const auto& option)->GncOptionUIType {
+                                      return option.get_ui_type();
+                                  }, *m_option);
+
+    if (ui_item->get_ui_type() != opt_ui_type)
+    {
+        PERR("Setting option %s:%s UI element failed, mismatched UI types.",
+              get_section().c_str(), get_name().c_str());
+        return;
+    }
+
+    m_ui_item = std::move(ui_item);
 }
 
 const GncOptionUIType
@@ -118,17 +136,37 @@ GncOption::get_ui_type() const
                       }, *m_option);
 }
 
-GncOptionUIItem* const
+const GncOptionUIItem*
 GncOption::get_ui_item() const
 {
-    return std::visit([](const auto& option)->GncOptionUIItem* {
-                          return option.get_ui_item();
-                      }, *m_option);
+    return m_ui_item.get();
+}
+
+void
+GncOption::set_ui_item_from_option()
+{
+    if (!m_ui_item)
+        return;
+    m_ui_item->set_ui_item_from_option(*this);
+}
+
+void
+GncOption::set_option_from_ui_item()
+{
+    if (!m_ui_item)
+        return;
+    m_ui_item->set_option_from_ui_item(*this);
 }
 
 void
 GncOption::make_internal()
 {
+    if (!m_ui_item)
+    {
+        PERR("Option %s:%s has a UI Element, can't be INTERNAL.",
+             get_section().c_str(), get_name().c_str());
+        return;
+    }
     std::visit([](auto& option) {
                    option.make_internal();
                }, *m_option);

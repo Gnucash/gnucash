@@ -181,6 +181,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
 %ignore operator<<(std::ostream&, const GncOption&);
 %ignore operator>>(std::istream&, GncOption&);
+%ignore GncOption::_get_option();
 
 %rename(absolute) RelativeDatePeriod::ABSOLUTE;
 %rename(today) RelativeDatePeriod::TODAY;
@@ -305,6 +306,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 %include "gnc-option-impl.hpp"
 %include "gnc-optiondb.hpp"
 %include "gnc-optiondb-impl.hpp"
+%inline %{
+#include "gnc-option-ui.hpp"
+%}
 
 %extend GncOption {
     SCM get_scm_value()

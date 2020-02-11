@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-option-impl.hpp -- Application options system                     *
+ * gnc-option-impl.hpp -- Application options system                *
  * Copyright (C) 2019 John Ralls <jralls@ceridwen.us>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -107,62 +107,12 @@ struct OptionClassifier
     std::string m_doc_string;
 };
 
-class GncOptionUIItem;
-
-/**
- * Holds a pointer to the UI item which will control the option and an enum
- * representing the type of the option for dispatch purposes; all of that
- * happens in gnucash/gnome-utils/dialog-options and
- * gnucash/gnome/business-option-gnome.
- *
- * This class takes no ownership responsibility, so calling code is responsible
- * for ensuring that the UI_Item is alive. For convenience the public
- * clear_ui_item function can be used as a weak_ptr's destruction callback to
- * ensure that the ptr will be nulled if the ui_item is destroyed elsewhere.
- */
-class OptionUIItem
-{
-public:
-    GncOptionUIType get_ui_type() const { return m_ui_type; }
-    GncOptionUIItem* const get_ui_item() const {return m_ui_item; }
-    void clear_ui_item() { m_ui_item = nullptr; }
-    void set_ui_item(GncOptionUIItem* ui_item)
-    {
-        if (m_ui_type == GncOptionUIType::INTERNAL)
-        {
-            std::string error{"INTERNAL option, setting the UI item forbidden."};
-            throw std::logic_error(std::move(error));
-        }
-        m_ui_item = ui_item;
-    }
-    void make_internal()
-    {
-        if (m_ui_item != nullptr)
-        {
-            std::string error("Option has a UI Element, can't be INTERNAL.");
-            throw std::logic_error(std::move(error));
-        }
-        m_ui_type = GncOptionUIType::INTERNAL;
-    }
-protected:
-    OptionUIItem(GncOptionUIType ui_type) :
-        m_ui_item{nullptr}, m_ui_type{ui_type} {}
-    OptionUIItem(const OptionUIItem&) = default;
-    OptionUIItem(OptionUIItem&&) = default;
-    ~OptionUIItem() = default;
-    OptionUIItem& operator=(const OptionUIItem&) = default;
-    OptionUIItem& operator=(OptionUIItem&&) = default;
-private:
-    GncOptionUIItem* m_ui_item;
-    GncOptionUIType m_ui_type;
-};
-
 #ifndef SWIG
 auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
 #endif
 
 template <typename ValueType>
-class GncOptionValue : public OptionClassifier, public OptionUIItem
+class GncOptionValue : public OptionClassifier
 {
 public:
     GncOptionValue<ValueType>(const char* section, const char* name,
@@ -170,8 +120,7 @@ public:
                               ValueType value,
                               GncOptionUIType ui_type = GncOptionUIType::INTERNAL) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type),
-        m_value{value}, m_default_value{value} {}
+        m_ui_type(ui_type), m_value{value}, m_default_value{value} {}
     GncOptionValue<ValueType>(const GncOptionValue<ValueType>&) = default;
     GncOptionValue<ValueType>(GncOptionValue<ValueType>&&) = default;
     GncOptionValue<ValueType>& operator=(const GncOptionValue<ValueType>&) = default;
@@ -180,13 +129,16 @@ public:
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
+    GncOptionUIType m_ui_type;
     ValueType m_value;
     ValueType m_default_value;
 };
 
 template <typename ValueType>
-class GncOptionValidatedValue : public OptionClassifier, public OptionUIItem
+class GncOptionValidatedValue : public OptionClassifier
 {
 public:
     GncOptionValidatedValue<ValueType>() = delete;
@@ -197,8 +149,8 @@ public:
                                        GncOptionUIType ui_type = GncOptionUIType::INTERNAL
         ) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem{ui_type},
-        m_value{value}, m_default_value{value}, m_validator{validator}
+        m_ui_type{ui_type}, m_value{value}, m_default_value{value},
+        m_validator{validator}
         {
             if (!this->validate(value))
             throw std::invalid_argument("Attempt to create GncValidatedOption with bad value.");
@@ -209,7 +161,7 @@ public:
                                        std::function<bool(ValueType)>validator,
                                        ValueType val_data) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem{GncOptionUIType::INTERNAL}, m_value{value},
+        m_ui_type{GncOptionUIType::INTERNAL}, m_value{value},
         m_default_value{value}, m_validator{validator}, m_validation_data{val_data}
     {
             if (!this->validate(value))
@@ -232,7 +184,10 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     std::ostream& to_scheme(std::ostream&) const;
     std::istream& from_scheme(std::istream&);
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
+    GncOptionUIType m_ui_type;
     ValueType m_value;
     ValueType m_default_value;
     std::function<bool(ValueType)> m_validator;                         //11
@@ -419,8 +374,7 @@ gnc_option_from_scheme (std::istream& iss, OptType& opt)
  */
 
 template <typename ValueType>
-class GncOptionRangeValue :
-    public OptionClassifier, public OptionUIItem
+class GncOptionRangeValue : public OptionClassifier
 {
 public:
     GncOptionRangeValue<ValueType>(const char* section, const char* name,
@@ -428,7 +382,6 @@ public:
                                    ValueType value, ValueType min,
                                    ValueType max, ValueType step) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(GncOptionUIType::NUMBER_RANGE),
         m_value{value >= min && value <= max ? value : min},
         m_default_value{value >= min && value <= max ? value : min},
         m_min{min}, m_max{max}, m_step{step} {}
@@ -448,7 +401,10 @@ public:
             throw std::invalid_argument("Validation failed, value not set.");
     }
     bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
+    GncOptionUIType m_ui_type = GncOptionUIType::NUMBER_RANGE;
     ValueType m_value;
     ValueType m_default_value;
     ValueType m_min;
@@ -471,8 +427,7 @@ using GncMultiChoiceOptionChoices = std::vector<GncMultiChoiceOptionEntry>;
  *
  */
 
-class GncOptionMultichoiceValue :
-    public OptionClassifier, public OptionUIItem
+class GncOptionMultichoiceValue : public OptionClassifier
 {
 public:
     GncOptionMultichoiceValue(const char* section, const char* name,
@@ -481,7 +436,7 @@ public:
                               GncMultiChoiceOptionChoices&& choices,
                               GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type),
+        m_ui_type{ui_type},
         m_value{}, m_default_value{}, m_choices{std::move(choices)} {
             if (value)
             {
@@ -543,6 +498,8 @@ public:
         return std::get<2>(m_choices.at(index));
     }
     bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
     std::size_t find_key (const std::string& key) const noexcept
     {
@@ -555,6 +512,7 @@ private:
             return size_t_max;
 
     }
+    GncOptionUIType m_ui_type;
     std::size_t m_value;
     std::size_t m_default_value;
     GncMultiChoiceOptionChoices m_choices;
@@ -581,31 +539,28 @@ using GncOptionAccountTypeList = std::vector<GNCAccountType>;
 
  */
 
-class GncOptionAccountValue :
-    public OptionClassifier, public OptionUIItem
+class GncOptionAccountValue : public OptionClassifier
 {
 public:
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type), m_value{}, m_default_value{}, m_allowed{} {}
+        m_ui_type{ui_type}, m_value{}, m_default_value{}, m_allowed{} {}
 
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const GncOptionAccountList& value) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type),
-        m_value{value},
+        m_ui_type{ui_type}, m_value{value},
         m_default_value{std::move(value)}, m_allowed{} {}
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           GncOptionAccountTypeList&& allowed) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type),
-        m_value{},
+        m_ui_type{ui_type}, m_value{},
         m_default_value{}, m_allowed{std::move(allowed)} {}
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
@@ -613,8 +568,7 @@ public:
                           const GncOptionAccountList& value,
                           GncOptionAccountTypeList&& allowed) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(ui_type),
-        m_value{},
+        m_ui_type{ui_type}, m_value{},
         m_default_value{}, m_allowed{std::move(allowed)} {
             if (!validate(value))
                 throw std::invalid_argument("Supplied Value not in allowed set.");
@@ -631,7 +585,10 @@ public:
             m_value = values;
     }
     bool is_changed() const noexcept { return m_value != m_default_value; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
+    GncOptionUIType m_ui_type;
     GncOptionAccountList m_value;
     GncOptionAccountList m_default_value;
     GncOptionAccountTypeList m_allowed;
@@ -727,13 +684,12 @@ gnc-date-option-absolute-time m_type == DateTyupe::Absolute
 gnc-date-option-relative-time m_type != DateTyupe::Absolute
  */
 
-class GncOptionDateValue : public OptionClassifier, public OptionUIItem
+class GncOptionDateValue : public OptionClassifier
 {
 public:
     GncOptionDateValue(const char* section, const char* name,
                               const char* key, const char* doc_string) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(GncOptionUIType::DATE),
         m_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
         m_date{INT64_MAX},
         m_default_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
@@ -742,14 +698,12 @@ public:
                        const char* key, const char* doc_string,
                        time64 time) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(GncOptionUIType::DATE),
         m_period{RelativeDatePeriod::ABSOLUTE}, m_date{time},
         m_default_period{RelativeDatePeriod::ABSOLUTE}, m_default_date{time} {}
     GncOptionDateValue(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        const RelativeDatePeriod period) :
         OptionClassifier{section, name, key, doc_string},
-        OptionUIItem(GncOptionUIType::DATE),
         m_period{period}, m_date{INT64_MAX},
         m_default_period{period}, m_default_date{INT64_MAX} {}
         GncOptionDateValue(const GncOptionDateValue&) = default;
@@ -770,7 +724,10 @@ public:
     }
     bool is_changed() const noexcept { return m_period != m_default_period &&
             m_date != m_default_date; }
+    GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
+    void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
 private:
+    GncOptionUIType m_ui_type = GncOptionUIType::DATE;
     RelativeDatePeriod m_period;
     time64 m_date;
     RelativeDatePeriod m_default_period;

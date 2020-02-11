@@ -206,4 +206,5 @@ void gnc_register_date_interval_option(const GncOptionDBPtr& db,
                                        const char* section, const char* name,
                                        const char* key, const char* doc_string,
                                        RelativeDatePeriod period);
+
 #endif //GNC_OPTIONDB_HPP_
