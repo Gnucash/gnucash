@@ -181,27 +181,27 @@ delete_selected_row (GtkTreeModel *model, GtkTreeIter *iter, ImapDialog *imap_di
         g_free (full_source_account);
 }
 
-static void
+static gboolean
 gnc_delete_nomapping (GtkTreeModel *model, GtkTreePath *path,
                       GtkTreeIter *iter, gpointer data)
 {
     Account     *source_account = NULL;
     Account     *map_account = NULL;
     gchar       *head;
-    GtkTreePath *tree_path;
     gint         depth;
 
     gtk_tree_model_get (model, iter, SOURCE_ACCOUNT, &source_account,
                         MAP_ACCOUNT, &map_account, HEAD, &head, -1);
-    tree_path = gtk_tree_model_get_path (model, iter);
-    depth = gtk_tree_path_get_depth (tree_path);
+    depth = gtk_tree_path_get_depth (path);
     gtk_tree_path_free (tree_path);
 
-    if ((source_account == NULL) || (map_account != NULL) || (depth == 1))
-        return;
-
-    PWARN ("Delete map: Acc=%s, head=%s", xaccAccountGetName(source_account), head);
-    gnc_account_delete_map_entry (source_account, head, NULL, NULL, FALSE);
+    if (!((source_account == NULL) || (map_account != NULL) || (depth == 1)))
+    {
+        PWARN ("Delete map: Acc=%s, head=%s", xaccAccountGetName(source_account), head);
+        gnc_account_delete_map_entry (source_account, head, NULL, NULL, FALSE);
+    }
+    g_free(head);
+    return FALSE;
 }
 
 static void
