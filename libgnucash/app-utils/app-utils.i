@@ -21,6 +21,10 @@
 %module sw_app_utils
 %{
 /* Includes the header in the wrapper code */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <config.h>
 #include <option-util.h>
 #include <gnc-euro.h>
@@ -33,14 +37,22 @@
 #include <gnc-sx-instance-model.h>
 
 #include "gnc-engine-guile.h"
+#ifdef __cplusplus
+}
+#endif
 %}
 
-#if defined(SWIGGUILE)
+#if defined(SWIGGUILE) //Always C++
 %{
+extern "C"
+{
 #include "guile-mappings.h"
 
 SCM scm_init_sw_app_utils_module (void);
+}
 %}
+
+%include "gnc-optiondb.i"
 #endif
 
 #if defined(SWIGPYTHON)
@@ -76,7 +88,7 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_option,
   GList *node;
 
   for (node = $1; node; node = node->next)
-    list = scm_cons(gnc_quoteinfo2scm(node->data), list);
+      list = scm_cons(gnc_quoteinfo2scm(static_cast<gnc_commodity*>(node->data)), list);
 
   $result = scm_reverse(list);
 }

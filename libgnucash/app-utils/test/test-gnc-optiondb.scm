@@ -26,10 +26,10 @@
 (use-modules (gnucash gnc-module))
 (eval-when
  (compile load eval expand)
- (load-extension "libswig-gnc-optiondb" "scm_init_sw_gnc_optiondb_module"))
+ (load-extension "_sw_app_utils" "scm_init_sw_app_utils_module"))
 
 (use-modules (gnucash engine))
-(use-modules (sw_gnc_optiondb))
+(use-modules (sw_app_utils))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
@@ -84,7 +84,7 @@
 
   (define (cleanup book root)
 ;; Destroying the book destroys the account tree too
-    (qof-book-destroy book))
+    (gnc-option-test-book-destroy book))
 
   (define (test-make-account-list-option book)
     (test-group "test-make-account-list-option"
@@ -122,7 +122,7 @@
       (let ((acct (gnc-option-value optiondb "salt" "pork")))
         (test-equal (list (cadr acctlist)) acct)))))
 
-  (let* ((book (qof-book-new))
+  (let* ((book (gnc-option-test-book-new))
          (root-account (gnc-account-create-root book)))
     (test-group-with-cleanup "test-gnc-make-account-list-options"
                              (make-account-tree book root-account)

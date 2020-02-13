@@ -30,9 +30,6 @@ gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
 add_app_utils_test(test-sx test-sx.cpp)
 
 set(gtest_gnc_option_SOURCES
-  ${MODULEPATH}/gnc-option.cpp
-  ${MODULEPATH}/gnc-option-impl.cpp
-  ${MODULEPATH}/gnc-optiondb.cpp
   gtest-gnc-option.cpp
   gtest-gnc-optiondb.cpp)
 
@@ -91,49 +88,10 @@ if (HAVE_SRFI64)
     FALSE
     )
 
-  set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
-  gnc_add_swig_guile_command(swig-gnc-optiondb-guile
-    SWIG_GNC_OPTIONDB_GUILE_CPP swig-gnc-optiondb-guile.cpp
-    ${MODULEPATH}/gnc-optiondb.i
-    ""
-    )
-  add_library(swig-gnc-optiondb MODULE
-    ${MODULEPATH}/gnc-option.cpp
-    ${MODULEPATH}/gnc-option-impl.cpp
-    ${MODULEPATH}/gnc-optiondb.cpp
-    ${SWIG_GNC_OPTIONDB_GUILE_CPP}
-    )
-  set(swig_gnc_optiondb_INCLUDES
-    ${MODULEPATH}
-    ${CMAKE_SOURCE_DIR}/bindings/guile
-    ${CMAKE_SOURCE_DIR}/libgnucash/engine
-    ${CMAKE_BINARY_DIR}/common # for config.h
-    ${GLIB2_INCLUDE_DIRS}
-    ${GUILE_INCLUDE_DIRS}
-    )
-
-  set(swig_gnc_optiondb_LIBS
-    gnc-engine
-    gnc-app-utils
-    gnucash-guile
-    ${GLIB2_LDFLAGS}
-    ${GUILE_LDFLAGS}
-    )
-
-  target_link_libraries(swig-gnc-optiondb ${swig_gnc_optiondb_LIBS})
-  target_include_directories(swig-gnc-optiondb
-    PRIVATE ${swig_gnc_optiondb_INCLUDES})
-
-  install(TARGETS swig-gnc-optiondb
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
-
   gnc_add_scheme_test_targets(scm-test-gnc-optiondb
     "test-gnc-optiondb.scm"
     "tests"
-    "swig-gnc-optiondb;scm-srfi64-extras"
+    "swig-apputils-guile-cpp;scm-srfi64-extras"
     FALSE
     )
   gnc_add_scheme_tests("test-gnc-optiondb.scm")
@@ -173,4 +131,5 @@ set_dist_list(test_app_utils_DIST
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
   ${test_autoclear_SOURCES}
+  ${gtest_gnc_option_SOURCES}
 )

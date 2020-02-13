@@ -11,6 +11,8 @@ set (app_utils_noinst_HEADERS
   calculation/finproto.h
   calculation/fin_spl_protos.h
   calculation/fin_static_proto.h
+  gnc-option-impl.hpp
+  gnc-optiondb-impl.hpp
 )
 
 set (app_utils_HEADERS
@@ -27,8 +29,10 @@ set (app_utils_HEADERS
   gnc-gsettings.h
   gnc-help-utils.h
   gnc-helpers.h
+  gnc-option.hpp
+  gnc-optiondb.hpp
   gnc-prefs-utils.h
-  gnc-state.h  
+  gnc-state.h
   gnc-sx-instance-model.h
   gnc-ui-util.h
   gnc-ui-balances.h
@@ -36,10 +40,13 @@ set (app_utils_HEADERS
 )
 
 # Command to generate the swig-app-utils-guile.c wrapper file
-gnc_add_swig_guile_command (swig-apputils-guile-c
-    SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i ""
+set(SWIG_ARGS "-c++" "-procdoc" "sw-gnc-option-doc" "-procdocformat" "plain")
+gnc_add_swig_guile_command (swig-apputils-guile-cpp
+    SWIG_APP_UTILS_GUILE_CPP swig-app-utils-guile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-optiondb.i ""
 )
+unset(SWIG_ARGS)
 
 # Command to generate the swig-app-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-app-utils-python
@@ -62,6 +69,9 @@ set (app_utils_SOURCES
   gnc-exp-parser.c
   gnc-gsettings.c
   gnc-helpers.c
+  gnc-option.cpp
+  gnc-option-impl.cpp
+  gnc-optiondb.cpp
   gnc-prefs-utils.c
   gnc-sx-instance-model.c
   gnc-state.c
@@ -103,7 +113,7 @@ if (WIN32)
 endif()
 
 
-add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_CPP})
 target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 
 target_include_directories (gnc-app-utils

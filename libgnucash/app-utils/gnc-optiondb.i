@@ -3,6 +3,7 @@
  *
  * unique_ptr SWIG wrapper from https://stackoverflow.com/questions/27693812/how-to-handle-unique-ptrs-with-swig
  */
+#if defined(SWIGGUILE)
 
 namespace std {
   %feature("novaluewrapper") unique_ptr;
@@ -37,17 +38,11 @@ namespace std {
 
 %enddef
 
-%module sw_gnc_optiondb
+ //%module sw_gnc_optiondb
 %{
-extern "C"
-{
-#include <config.h>
-#include <libguile.h>
-#include <gnc-engine-guile.h>
-}
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
-extern "C" SCM scm_init_sw_gnc_optiondb_module(void);
+SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
 %include <std_string.i>
@@ -118,27 +113,6 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
     return scm_guid;
 }
 
-/* Account is actually a typedef for struct account_s and SWIG insists on using
- * the struct name (i.e. account_s) in C++ and the alias (i.e. Account) in
- * C. Oddly the compiler's type resolution also fails to consider them the same
- * so we have to use the struct name here to get the template to resolve
- * correctly.
- */
-using GncOptionAccount_sList = std::vector<const account_s*>;
-
-template <>inline SCM
-scm_from_value<GncOptionAccount_sList>(GncOptionAccount_sList value)
-{
-    SCM s_list = SCM_EOL;
-    for (auto acct : value)
-    {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
-        s_list = scm_append(scm_list_2(s_list, elem));
-    }
-
-    return s_list;
-}
-
 template <typename ValueType> inline ValueType
 scm_to_value(SCM new_value)
 {
@@ -166,19 +140,34 @@ scm_to_value<int64_t>(SCM new_value)
     return scm_to_int64(new_value);
 }
 
+template <>inline SCM
+scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
+{
+    SCM s_list = SCM_EOL;
+    for (auto acct : value)
+    {
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
+        s_list = scm_append(scm_list_2(s_list, elem));
+    }
+
+    return s_list;
+}
+
+QofBook* gnc_option_test_book_new();
+void gnc_option_test_book_destroy(QofBook*);
+
 QofBook*
-qof_book_new()
+gnc_option_test_book_new()
 {
     return static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
 }
 
 void
-qof_book_destroy(QofBook* book)
+gnc_option_test_book_destroy(QofBook* book)
 {
     g_object_unref(book);
 }
 
-using Account = struct account_s;
 %}
 
 %ignore OptionClassifier;
@@ -228,6 +217,19 @@ using Account = struct account_s;
     $1 = &choices;
  }
 
+
+%typemap(in) GncOptionAccountList
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_account = scm_list_ref($input, scm_from_size_t(i));
+        Account* acct = (Account*)SWIG_MustGetPtr(s_account,
+                                                  SWIGTYPE_p_Account, 1, 0);
+        $1.push_back(acct);
+    }
+}
+
 %typemap(in) GncOptionAccountTypeList& (GncOptionAccountTypeList types)
 {
     auto len = scm_to_size_t(scm_length($input));
@@ -259,7 +261,7 @@ using Account = struct account_s;
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
-                                                  SWIGTYPE_p_account_s, 1, 0);
+                                                  SWIGTYPE_p_Account, 1, 0);
         $1.push_back(acct);
     }
 }
@@ -271,7 +273,7 @@ using Account = struct account_s;
     {
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
-                                                  SWIGTYPE_p_account_s, 1, 0);
+                                                  SWIGTYPE_p_Account, 1, 0);
         acclist.push_back(acct);
     }
     $1 = &acclist;
@@ -282,7 +284,7 @@ using Account = struct account_s;
     $result = SCM_EOL;
     for (auto acct : $1)
     {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
         $result = scm_append(scm_list_2($result, elem));
     }
 }
@@ -292,7 +294,7 @@ using Account = struct account_s;
     $result = SCM_EOL;
     for (auto acct : *$1)
     {
-        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_account_s, 0));
+        SCM elem = scm_list_1(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0));
         $result = scm_append(scm_list_2($result, elem));
     }
 }
@@ -326,7 +328,6 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
             }, *($self->_get_option()));
     }
 };
-
 %extend GncOptionDB {
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
@@ -369,3 +370,5 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         GncOption_set_value_from_scm(&(db_opt->get()), new_value);
     }
 %}
+
+#endif //SWIGGUILE
