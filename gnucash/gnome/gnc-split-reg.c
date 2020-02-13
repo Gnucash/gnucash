@@ -511,9 +511,16 @@ gsr_update_summary_label( GtkWidget *label,
 {
     gnc_numeric amount;
     char string[256];
+    const gchar *label_str = NULL;
+    GtkWidget *text_label, *hbox;
+    gchar *tooltip;
 
     if ( label == NULL )
         return;
+
+    hbox = g_object_get_data (G_OBJECT(label), "text_box");
+    text_label = g_object_get_data (G_OBJECT(label), "text_label");
+    label_str = gtk_label_get_text (GTK_LABEL(text_label));
 
     amount = (*getter)( leader );
 
@@ -534,6 +541,13 @@ gsr_update_summary_label( GtkWidget *label,
 
     gnc_set_label_color( label, amount );
     gtk_label_set_text( GTK_LABEL(label), string );
+
+    if (label_str)
+    {
+        tooltip = g_strdup_printf ("%s %s", label_str, string);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(hbox), tooltip);
+        g_free (tooltip);
+    }
 }
 
 static
@@ -2418,7 +2432,7 @@ GtkWidget*
 add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label_str, GtkWidget *extra)
 {
     GtkWidget *hbox;
-    GtkWidget *label;
+    GtkWidget *text_label, *secondary_label;
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
@@ -2427,18 +2441,21 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     else
         gtk_box_pack_end( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
 
-    label = gtk_label_new( label_str );
-    gnc_label_set_alignment(label, 1.0, 0.5 );
-    gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
+    text_label = gtk_label_new (label_str);
+    gnc_label_set_alignment (text_label, 1.0, 0.5 );
+    gtk_label_set_ellipsize (GTK_LABEL(text_label), PANGO_ELLIPSIZE_END);
+    gtk_box_pack_start (GTK_BOX(hbox), text_label, FALSE, FALSE, 0);
 
-    label = gtk_label_new( "" );
-    gnc_label_set_alignment(label, 1.0, 0.5 );
-    gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
+    secondary_label = gtk_label_new ( "" );
+    g_object_set_data (G_OBJECT(secondary_label), "text_label", text_label);
+    g_object_set_data (G_OBJECT(secondary_label), "text_box", hbox);
+    gnc_label_set_alignment (secondary_label, 1.0, 0.5 );
+    gtk_box_pack_start (GTK_BOX(hbox), secondary_label, FALSE, FALSE, 0);
 
     if (extra != NULL)
         gtk_box_pack_start( GTK_BOX(hbox), extra, FALSE, FALSE, 0 );
 
-    return label;
+    return secondary_label;
 }
 
 static void
