@@ -1939,18 +1939,14 @@ be excluded from periodic reporting.")
   (define BOOK-SPLIT-ACTION
     (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (is-filter-member split account-list)
-    (let* ((txn (xaccSplitGetParent split))
-           (splitcount (xaccTransCountSplits txn))
-           (is-in-account-list? (lambda (acc) (member acc account-list))))
-      (cond
-       ((= splitcount 2)
-        (is-in-account-list?
-         (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
-       ((> splitcount 2)
-        (or-map is-in-account-list?
-                (map xaccSplitGetAccount
-                     (delete split (xaccTransGetSplitList txn)))))
-       (else #f))))
+    (define (same-split? s) (equal? s split))
+    (define (from-account? s) (member (xaccSplitGetAccount s) account-list))
+    (let lp ((splits (xaccTransGetSplitList (xaccSplitGetParent split))))
+      (match splits
+        (() #f)
+        (((? same-split?) . rest) (lp rest))
+        (((? from-account?) . _) #t)
+        ((_ . rest) (lp rest)))))
 
   (gnc:report-starting (opt-val gnc:pagename-general gnc:optname-reportname))
 

@@ -149,11 +149,19 @@ gnc_plugin_budget_cmd_new_budget (GtkAction *action,
 {
     GncBudget *budget;
     GncPluginPage *page;
+    gchar *description, *date;
 
     g_return_if_fail (user_data != NULL);
 
     budget = gnc_budget_new (gnc_get_current_book());
     page = gnc_plugin_page_budget_new (budget);
+
+    date = qof_print_date (gnc_time (NULL));
+    description = g_strdup_printf ("%s: %s",  _("Created"), date);
+    gnc_budget_set_description (budget, description);
+    g_free (description);
+    g_free (date);
+
     gnc_main_window_open_page (user_data->window, page);
 }
 

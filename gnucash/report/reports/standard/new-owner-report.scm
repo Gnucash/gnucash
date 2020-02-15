@@ -60,18 +60,22 @@
 (define javascript "
 <script>
   function getID(cell) { return cell.getAttribute('link-id'); }
-  function mousedown(e) {
-      var id = getID(e.target);
-      var ishighlighted = e.target.classList.contains('highlight');
-      e.preventDefault ();
-      TDs.forEach(TD => TD.classList.remove('highlight'));
+
+  function clicky() {
+      var id = getID(this);
+      var ishighlighted = this.classList.contains('highlight');
+      TDs.forEach (function (item, idx) {
+          item.classList.remove('highlight')});
       if (ishighlighted) return;
-      TDs
-          .filter (TD => getID(TD) == id)
-          .forEach (TD => TD.classList.add('highlight'));}
+      TDs.forEach (function (item, idx) {
+          if (getID(item) == id)
+              item.classList.add('highlight')})}
+
   var TDs = document.getElementsByTagName('td');
-  TDs = [...TDs].filter(getID);
-  TDs.forEach(TD => TD.onmousedown = mousedown);
+  TDs = Array.prototype.slice.call (TDs);
+  TDs = TDs.filter (getID);
+  TDs.forEach(function (item, idx) {
+      item.addEventListener('click', clicky)});
 </script>
 ")
 

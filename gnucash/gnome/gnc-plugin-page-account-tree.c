@@ -114,6 +114,7 @@ static void gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_
 static void gnc_plugin_page_account_tree_finalize (GObject *object);
 static void gnc_plugin_page_account_tree_selected (GObject *object, gpointer user_data);
 
+static gboolean gnc_plugin_page_account_tree_focus_widget (GncPluginPage *plugin_page);
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
@@ -405,6 +406,7 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_account_tree_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_account_tree_recreate_page;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_account_tree_focus_widget;
 
     plugin_page_signals[ACCOUNT_SELECTED] =
         g_signal_new ("account_selected",
@@ -573,12 +575,16 @@ gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page
     return account;
 }
 
-gboolean
-gnc_plugin_page_account_tree_focus (GncPluginPageAccountTree *page)
+/**
+ * Whenever the current page is changed, if an account page is
+ * the current page, set focus on the tree view.
+ */
+static gboolean
+gnc_plugin_page_account_tree_focus_widget (GncPluginPage *account_plugin_page)
 {
-    if (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page))
+    if (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(account_plugin_page))
     {
-        GncPluginPageAccountTreePrivate *priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+        GncPluginPageAccountTreePrivate *priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_plugin_page);
         GtkTreeView *view = GTK_TREE_VIEW(priv->tree_view);
 
         if (!gtk_widget_is_focus (GTK_WIDGET(view)))
@@ -636,32 +642,11 @@ gnc_plugin_page_account_editing_finished_cb (gpointer various, GncPluginPageRegi
         gtk_action_set_sensitive (action, TRUE);
 }
 
-static void
-gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
-                                                  GncPluginPage *current_plugin_page,
-                                                  GncPluginPage *account_plugin_page)
-{
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(current_plugin_page)||
-        !account_plugin_page || !GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(account_plugin_page))
-        return;
-
-    if (current_plugin_page == account_plugin_page)
-    {
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (account_plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_account_tree_focus,
-                      GNC_PLUGIN_PAGE_ACCOUNT_TREE (account_plugin_page));
-    }
-}
-
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageAccountTree *page;
     GncPluginPageAccountTreePrivate *priv;
-    GncMainWindow *window;
     GtkTreeSelection *selection;
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
@@ -759,10 +744,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                            gnc_plugin_page_account_tree_summarybar_position_changed,
                            page);
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window);
-    g_signal_connect (window, "page_changed",
-                      G_CALLBACK(gnc_plugin_account_tree_main_window_page_changed),
-                      plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     // Read account filter state information from account section
     gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,
@@ -798,8 +782,11 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
     // Destroy the filter override hash table
     g_hash_table_destroy(priv->fd.filter_override);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->widget)
     {

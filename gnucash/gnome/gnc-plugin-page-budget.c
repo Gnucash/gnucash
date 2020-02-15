@@ -59,6 +59,7 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "option-util.h"
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
@@ -86,6 +87,7 @@ static void gnc_plugin_page_budget_finalize (GObject *object);
 
 static GtkWidget *
 gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page);
+static gboolean gnc_plugin_page_budget_focus_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
                                               GKeyFile *file,
@@ -310,6 +312,7 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_budget_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_budget_recreate_page;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_budget_focus_widget;
 }
 
 
@@ -383,12 +386,16 @@ gnc_plugin_page_budget_close_cb (gpointer user_data)
 }
 
 
-gboolean
-gnc_plugin_page_budget_focus (GncPluginPageBudget *page)
+/**
+ * Whenever the current page is changed, if a budget page is
+ * the current page, set focus on the budget tree view.
+ */
+static gboolean
+gnc_plugin_page_budget_focus_widget (GncPluginPage *budget_plugin_page)
 {
-    if (GNC_IS_PLUGIN_PAGE_BUDGET(page))
+    if (GNC_IS_PLUGIN_PAGE_BUDGET(budget_plugin_page))
     {
-        GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+        GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(budget_plugin_page);
         GncBudgetView *budget_view = priv->budget_view;
         GtkWidget *account_view = gnc_budget_view_get_account_tree_view (budget_view);
 
@@ -434,27 +441,6 @@ gnc_plugin_page_budget_refresh_cb (GHashTable *changes, gpointer user_data)
 }
 
 
-static void
-gnc_plugin_budget_main_window_page_changed (GncMainWindow *window,
-                                            GncPluginPage *current_plugin_page,
-                                            GncPluginPage *budget_plugin_page)
-{
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_BUDGET(current_plugin_page) ||
-        !budget_plugin_page || !GNC_IS_PLUGIN_PAGE_BUDGET(budget_plugin_page))
-        return;
-
-    if (current_plugin_page == budget_plugin_page)
-    {
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the tree view
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_BUDGET(budget_plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_budget_focus,
-                      GNC_PLUGIN_PAGE_BUDGET(budget_plugin_page));
-    }
-}
-
-
 /****************************
  * GncPluginPage Functions  *
  ***************************/
@@ -463,7 +449,6 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageBudget *page;
     GncPluginPageBudgetPrivate *priv;
-    GncMainWindow *window;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_BUDGET(plugin_page);
@@ -498,10 +483,9 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
                                     gnc_budget_get_guid (priv->budget),
                                     QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window);
-    g_signal_connect (window, "page_changed",
-                      G_CALLBACK(gnc_plugin_budget_main_window_page_changed),
-                      plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     LEAVE("widget = %p", priv->budget_view);
     return GTK_WIDGET(priv->budget_view);
@@ -516,8 +500,11 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
 
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
+
     // Remove the page focus idle function if present
-    g_idle_remove_by_data (GNC_PLUGIN_PAGE_BUDGET(plugin_page));
+    g_idle_remove_by_data (plugin_page);
 
     if (priv->budget_view)
     {

@@ -102,6 +102,8 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
+static gboolean gnc_plugin_page_register_focus_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_register_focus (GncPluginPage *plugin_page, gboolean current_page);
 static void gnc_plugin_page_register_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_register_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide);
@@ -750,10 +752,12 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
     gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
     gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
+    gnc_plugin_class->focus_page      = gnc_plugin_page_register_focus;
     gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
     gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
     gnc_plugin_class->finish_pending  = gnc_plugin_page_register_finish_pending;
+    gnc_plugin_class->focus_page_function = gnc_plugin_page_register_focus_widget;
 
     gnc_ui_register_account_destroy_callback (gppr_account_destroy_cb);
 }
@@ -843,12 +847,16 @@ gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page)
     return gnc_split_register_get_current_trans(reg);
 }
 
-gboolean
-gnc_plugin_page_register_focus (GncPluginPageRegister *page)
+/**
+ * Whenever the current page is changed, if a register page is
+ * the current page, set focus on the sheet.
+ */
+static gboolean
+gnc_plugin_page_register_focus_widget (GncPluginPage *register_plugin_page)
 {
-    if (GNC_IS_PLUGIN_PAGE_REGISTER(page))
+    if (GNC_IS_PLUGIN_PAGE_REGISTER(register_plugin_page))
     {
-        GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));
+        GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(register_plugin_page));
         gnc_split_reg_focus_on_sheet (gsr);
     }
     return FALSE;
@@ -1145,31 +1153,33 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
         return "0";
 }
 
+/* For setting the focus on a register page, the default gnc_plugin
+ * function for 'focus_page' is overridden so that the page focus
+ * can be condionally set. This is to allow for enabling the setting
+ * of the sheet focus only when the page is the current one.
+ */
 static void
-gnc_plugin_register_main_window_page_changed (GncMainWindow *window,
-                                              GncPluginPage *current_plugin_page,
-                                              GncPluginPage *register_plugin_page)
+gnc_plugin_page_register_focus (GncPluginPage *plugin_page,
+                                gboolean on_current_page)
 {
+    GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
     GNCSplitReg *gsr;
 
-    // We continue only if the plugin_page is a valid
-    if (!current_plugin_page || !GNC_IS_PLUGIN_PAGE_REGISTER(current_plugin_page) ||
-        !register_plugin_page || !GNC_IS_PLUGIN_PAGE_REGISTER(register_plugin_page))
-        return;
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
-    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(register_plugin_page);
-    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(register_plugin_page));
+    page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
-    if (current_plugin_page == register_plugin_page)
+    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(plugin_page));
+
+    if (on_current_page)
     {
         priv->page_focus = TRUE;
 
-        // The page changed signal is emitted multiple times so we need
-        // to use an idle_add to change the focus to the register
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
-        g_idle_add ((GSourceFunc)gnc_plugin_page_register_focus,
-                      GNC_PLUGIN_PAGE_REGISTER (register_plugin_page));
+       // Chain up to use parent version of 'focus_page' which will
+       // use an idle_add as the page changed signal is emitted multiple times.
+       GNC_PLUGIN_PAGE_CLASS(parent_class)->focus_page (plugin_page, TRUE);
     }
     else
         priv->page_focus = FALSE;
@@ -1183,7 +1193,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
-    GncMainWindow *window;
     GNCLedgerDisplayType ledger_type;
     GncWindow *gnc_window;
     guint numRows;
@@ -1398,10 +1407,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     gnc_split_reg_set_moved_cb
     (priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
 
-    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    g_signal_connect (window, "page_changed",
-                      G_CALLBACK(gnc_plugin_register_main_window_page_changed),
-                      plugin_page);
+    g_signal_connect (G_OBJECT(plugin_page), "inserted",
+                      G_CALLBACK(gnc_plugin_page_inserted_cb),
+                      NULL);
 
     /* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
     LEAVE(" ");
@@ -1426,6 +1434,9 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_register_summarybar_position_changed,
                                  page);
+
+    // Remove the page_changed signal callback
+    gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
 
     // Remove the page focus idle function if present
     g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (plugin_page));
@@ -1468,7 +1479,7 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 
 static void
 gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
-        GtkWidget *window)
+                                         GtkWidget *window)
 {
     GncPluginPageRegister *page;
     GncPluginPageRegisterPrivate *priv;
