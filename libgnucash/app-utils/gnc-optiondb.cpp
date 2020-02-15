@@ -87,50 +87,6 @@ GncOptionDB::get_default_section() const noexcept
     return nullptr;
 }
 
-void
-GncOptionDB::set_ui_item(const char* section, const char* name,
-                         GncOptionUIItem* ui_item)
-{
-    auto option = find_option(section, name);
-    if (!option) return;
-    option->get().set_ui_item(ui_item);
-}
-
-GncOptionUIItem* const
-GncOptionDB::get_ui_item(const char* section, const char* name)
-{
-    auto option = find_option(section, name);
-    if (!option) return nullptr;
-    return option->get().get_ui_item();
-}
-
-GncOptionUIType
-GncOptionDB::get_ui_type(const char* section, const char* name)
-{
-    auto option = find_option(section, name);
-    if (!option) return GncOptionUIType::INTERNAL;
-    return option->get().get_ui_type();
-}
-
-void
-GncOptionDB::set_ui_from_option(const char* section, const char* name,
-                        std::function<void(GncOption&)> func)
-{
-    auto option = find_option(section, name);
-    if (!option) return;
-    func(option->get());
-}
-
-void
-GncOptionDB::set_option_from_ui(const char* section, const char* name,
-                        std::function<void(GncOption&)> func)
-{
-    auto option = find_option(section, name);
-    if (!option) return;
-    func(option->get());
-}
-
-
 std::optional<std::reference_wrapper<GncOptionSection>>
 GncOptionDB::find_section(const std::string& section)
 {

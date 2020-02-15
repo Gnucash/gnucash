@@ -56,13 +56,6 @@ public:
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;
-    void set_ui_item(const char* section, const char* name, GncOptionUIItem* ui_item);
-    GncOptionUIItem* const get_ui_item(const char* section, const char* name);
-    GncOptionUIType get_ui_type(const char* section, const char* name);
-    void set_ui_from_option(const char* section, const char* name,
-                            std::function<void(GncOption&)> func);
-    void set_option_from_ui(const char* section, const char* name,
-                            std::function<void(GncOption&)> func);
     std::string lookup_string_option(const char* section,
                                             const char* name);
     template <typename ValueType>
