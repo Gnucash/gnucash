@@ -167,8 +167,8 @@ typedef struct
      *  widget.
      *
      *  @param page The page that was added to a window.
-     *
-     *  @param on_current_pgae Whether this page is the currentone. */
+     * 
+     *  @return FALSE to remove idle */
     gboolean (* focus_page_function) (GncPluginPage *plugin_page);
 
     /** This function vector allows page specific actions to occur

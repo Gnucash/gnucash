@@ -107,6 +107,7 @@ typedef struct _GncPluginPagePrivate
     gchar *statusbar_text;
 
     gulong page_changed_id;
+    guint  focus_source_id;
 
 } GncPluginPagePrivate;
 
@@ -521,6 +522,7 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv->page_color  = NULL;
     priv->uri         = NULL;
     priv->page_changed_id = 0;
+    priv->focus_source_id = 0;
 
     page->window      = NULL;
     page->summarybar  = NULL;
@@ -857,6 +859,14 @@ gnc_plugin_page_set_page_color (GncPluginPage *page, const gchar *color)
 
 
 static void
+gnc_plugin_page_focus_idle_destroy (GncPluginPage *plugin_page)
+{
+    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(plugin_page);
+    priv->focus_source_id = 0;
+}
+
+
+static void
 gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
                                gboolean on_current_page)
 {
@@ -873,9 +883,14 @@ gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
     {
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE(plugin_page));
-        g_idle_add ((GSourceFunc)(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function),
-                     GNC_PLUGIN_PAGE(plugin_page));
+
+        if (priv->focus_source_id > 0)
+            g_source_remove (priv->focus_source_id);
+
+        priv->focus_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                                    (GSourceFunc)(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function),
+                                    GNC_PLUGIN_PAGE(plugin_page),
+                                    (GDestroyNotify)gnc_plugin_page_focus_idle_destroy);
     }
 }
 
@@ -906,6 +921,7 @@ gnc_plugin_page_main_window_changed (GtkWindow *window,
 
     (GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page)(plugin_page, on_current_page);
 }
+
 
 /* this is the callback for the plugin "inserted" signal which will setup
  * the callback for the "page_changed" signal and save a pointer to the
