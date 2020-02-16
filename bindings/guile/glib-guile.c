@@ -77,7 +77,7 @@ glist_to_scm_list_helper(GList *glist, swig_type_info *wct)
 }
 
 SCM
-gnc_glist_to_scm_list(GList *glist, gchar *wct)
+gnc_glist_to_scm_list(GList *glist, const gchar *wct)
 {
     swig_type_info *stype = SWIG_TypeQuery(wct);
     g_return_val_if_fail(stype, SCM_UNDEFINED);
