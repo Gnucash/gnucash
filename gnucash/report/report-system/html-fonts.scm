@@ -132,6 +132,8 @@
     (gnc:html-document-set-style-text!
      ssdoc
      (string-append
+      ;; Note: any changes in the default CSS *should* be duplicated in
+      ;; stylesheet-css.scm
       "@media (prefers-color-scheme: dark) {body {color: #000; background-color: #fff;}}\n"
       "h3 { " title-info " }\n"
       "a { " account-link-info " }\n"
