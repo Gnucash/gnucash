@@ -28,6 +28,8 @@
   (load-extension "libgncmod-report" "scm_init_sw_report_module"))
 (use-modules (sw_report))
 
+(use-modules (ice-9 match))
+
 ; Export the swig-wrapped symbols in the public interface of this module
 (let ((i (module-public-interface (current-module))))
      (module-use! i (resolve-interface '(sw_report))))
@@ -120,14 +122,12 @@ not found.")))
   ;; set of options, and generates the report. the renderer must
   ;; return as its final value an <html-document> object.
 
-  (let* ((report-rec
-          (let loop ((report-rec (make-report-template)) (args args))
-            (cond
-             ((null? args) report-rec)
-             (else
-              ((record-modifier <report-template> (car args))
-               report-rec (cadr args))
-              (loop report-rec (cddr args))))))
+  (let* ((report-rec (let loop ((report-rec (make-report-template)) (args args))
+                       (match args
+                         (() report-rec)
+                         ((field val . rest)
+                          ((record-modifier <report-template> field) report-rec val)
+                          (loop report-rec rest)))))
          (report-guid (gnc:report-template-report-guid report-rec))
          (report-name (gnc:report-template-name report-rec)))
     (cond
