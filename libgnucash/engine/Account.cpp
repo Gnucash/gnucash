@@ -5284,11 +5284,8 @@ build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & toke
     if (strlen(suffix) == GUID_ENCODING_LENGTH)
     {
         tokenInfo.total_count += value->get<int64_t>();
-        AccountTokenCount this_account;
         /*By convention, the key ends with the account GUID.*/
-        this_account.account_guid = std::string{suffix};
-        this_account.token_count = value->get<int64_t>();
-        tokenInfo.accounts.push_back(this_account);
+        tokenInfo.accounts.emplace_back(AccountTokenCount{std::string{suffix}, value->get<int64_t>()});
     }
 }
 
