@@ -44,6 +44,7 @@
 
 #include "gnc-plugin-page-register.h"
 #include "gnc-budget.h"
+#include "gnc-features.h"
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
@@ -804,6 +805,8 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
 
     GtkTextBuffer *buffer;
     GtkTextIter start, end;
+    GtkWidget *show_account_code, *show_account_desc;
+    gboolean show_ac, show_ad;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -835,6 +838,15 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
         gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods (priv->budget));
 
+        show_account_code = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountCode"));
+        show_account_desc = GTK_WIDGET(gtk_builder_get_object (builder, "ShowAccountDescription"));
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_code),
+                                      gnc_budget_view_get_show_account_code (priv->budget_view));
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_desc),
+                                      gnc_budget_view_get_show_account_description (priv->budget_view));
+
         gtk_widget_show_all (priv->dialog);
         result = gtk_dialog_run (GTK_DIALOG(priv->dialog));
 
@@ -857,6 +869,19 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
 
             gnc_budget_set_description (priv->budget, desc);
             g_free (desc);
+
+            show_ac = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_code));
+            gnc_budget_view_set_show_account_code (priv->budget_view, show_ac);
+
+            show_ad = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(show_account_desc));
+            gnc_budget_view_set_show_account_description (priv->budget_view, show_ad);
+
+            // if show account code or description is set then set feature
+            if ((show_ac || show_ad) && (!gnc_features_check_used (gnc_get_current_book (),
+                                           GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS)))
+            {
+                gnc_features_set_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS);
+            }
 
             num_periods = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(gbnumperiods));
             gnc_budget_set_num_periods (priv->budget, num_periods);

@@ -70,6 +70,10 @@ GtkTreeSelection* gnc_budget_view_get_selection (GncBudgetView *budget_view);
 Account* gnc_budget_view_get_account_from_path (GncBudgetView *budget_view, GtkTreePath *path);
 GList* gnc_budget_view_get_selected_accounts (GncBudgetView *budget_view);
 GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView *budget_view);
+void gnc_budget_view_set_show_account_code (GncBudgetView *budget_view, gboolean show_account_code);
+gboolean gnc_budget_view_get_show_account_code (GncBudgetView *budget_view);
+void gnc_budget_view_set_show_account_description (GncBudgetView *budget_view, gboolean show_account_desc);
+gboolean gnc_budget_view_get_show_account_description (GncBudgetView *budget_view);
 
 G_END_DECLS
 

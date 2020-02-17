@@ -168,6 +168,8 @@ struct GncBudgetViewPrivate
     GtkTreeViewColumn   *total_col;
     AccountFilterDialog *fd;
     Account             *rootAcct;
+    gboolean             show_account_code;
+    gboolean             show_account_desc;
 
     GtkCellRenderer *temp_cr;
     GtkCellEditable *temp_ce;
@@ -198,6 +200,8 @@ gnc_budget_view_new (GncBudget *budget, AccountFilterDialog *fd)
     priv->key = *gnc_budget_get_guid (budget);
     priv->fd = fd;
     priv->total_col = NULL;
+    priv->show_account_code = FALSE;
+    priv->show_account_desc = FALSE;
     gbv_create_widget (budget_view);
 
     LEAVE("new budget view %p", budget_view);
@@ -239,6 +243,36 @@ gbv_treeview_update_grid_lines (gpointer prefs, gchar *pref, gpointer user_data)
 {
     GtkTreeView *view = user_data;
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+}
+
+void
+gnc_budget_view_set_show_account_code (GncBudgetView *budget_view, gboolean show_account_code)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    priv->show_account_code = show_account_code;
+    gnc_budget_view_refresh (budget_view);
+}
+
+gboolean
+gnc_budget_view_get_show_account_code (GncBudgetView *budget_view)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    return priv->show_account_code;
+}
+
+void
+gnc_budget_view_set_show_account_description (GncBudgetView *budget_view, gboolean show_account_desc)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    priv->show_account_desc = show_account_desc;
+    gnc_budget_view_refresh (budget_view);
+}
+
+gboolean
+gnc_budget_view_get_show_account_description (GncBudgetView *budget_view)
+{
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    return priv->show_account_desc;
 }
 
 static void
@@ -376,10 +410,9 @@ gbv_create_widget (GncBudgetView *budget_view)
     GtkBox               *vbox;
     GtkListStore         *totals_tree_model;
     GtkTreeView          *totals_tree_view;
-    GtkTreeViewColumn    *totals_title_col;
+    GtkTreeViewColumn    *totals_title_col, *name_col, *code_col, *desc_col;
     GtkTreeIter           iter;
     GtkWidget            *h_separator;
-    GKeyFile             *state_file = gnc_state_get_current ();
     gchar                *state_section;
     gchar                 guidstr[GUID_ENCODING_LENGTH+1];
 
@@ -401,17 +434,6 @@ gbv_create_widget (GncBudgetView *budget_view)
     guid_to_string_buff (&priv->key, guidstr);
     state_section = g_strjoin (" ", STATE_SECTION_PREFIX, guidstr, NULL);
     g_object_set (G_OBJECT(tree_view), "state-section", state_section, NULL);
-
-    // make sure any extra account columns are hidden, there will be an option to
-    // show code and description in 4.0 which will disrupt the display of the table
-    if (gnc_features_check_used (gnc_get_current_book (), GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS))
-    {
-        if (g_key_file_has_group (state_file, state_section))
-        {
-            g_key_file_set_boolean (state_file, state_section, "account-code_visible", FALSE);
-            g_key_file_set_boolean (state_file, state_section, "description_visible", FALSE);
-        }
-    }
     g_free (state_section);
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view));
@@ -421,12 +443,24 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     // make sure the account column is the expand column
     gnc_tree_view_expand_columns (GNC_TREE_VIEW(tree_view), "name", NULL);
+    name_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "name");
+    gtk_tree_view_column_set_reorderable (name_col, FALSE);
 
     // Accounts filter
     priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view),
                                       gnc_plugin_page_account_tree_filter_accounts,
                                       priv->fd, NULL);
+
+    // get the visibility of the account code column
+    code_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "account-code");
+    priv->show_account_code = gtk_tree_view_column_get_visible (code_col);
+    gtk_tree_view_column_set_reorderable (code_col, FALSE);
+
+    // get the visibility of the account description column
+    desc_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "description");
+    priv->show_account_desc = gtk_tree_view_column_get_visible (desc_col);
+    gtk_tree_view_column_set_reorderable (desc_col, FALSE);
 
     // Add accounts tree view to scroll window
     gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(tree_view));
@@ -460,15 +494,19 @@ gbv_create_widget (GncBudgetView *budget_view)
                       G_CALLBACK(gbv_totals_scrollbar_value_changed_cb), budget_view);
 
     // Create totals tree view
-    totals_tree_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+    totals_tree_model = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
     gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Inflow from Income"), 1, TOTALS_TYPE_INCOME, -1);
+    gtk_list_store_set (totals_tree_model, &iter, 0, _("Inflow from Income"),
+                                                  1, TOTALS_TYPE_INCOME, 2, " ", 3, " ", -1);
     gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Outflow to Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
+    gtk_list_store_set (totals_tree_model, &iter, 0, _("Outflow to Expenses"),
+                                                  1, TOTALS_TYPE_EXPENSES, 2, " ", 3, " ", -1);
     gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Outflow to Asset/Equity/Liability"), 1, TOTALS_TYPE_ASSET_LIAB_EQ, -1);
+    gtk_list_store_set (totals_tree_model, &iter, 0, _("Outflow to Asset/Equity/Liability"),
+                                                  1, TOTALS_TYPE_ASSET_LIAB_EQ, 2, " ", 3, " ", -1);
     gtk_list_store_append (totals_tree_model, &iter);
-    gtk_list_store_set (totals_tree_model, &iter, 0, _("Remaining to Budget"), 1, TOTALS_TYPE_REMAINDER, -1);
+    gtk_list_store_set (totals_tree_model, &iter, 0, _("Remaining to Budget"),
+                                                  1, TOTALS_TYPE_REMAINDER, 2, " ", 3, " ", -1);
 
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new ());
     priv->totals_tree_view = totals_tree_view;
@@ -476,10 +514,23 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_view_set_headers_visible (totals_tree_view, FALSE);
     gtk_tree_view_set_model (totals_tree_view, GTK_TREE_MODEL(totals_tree_model));
 
+    // add the totals title column
     totals_title_col = gtk_tree_view_column_new_with_attributes ("", gtk_cell_renderer_text_new (), "text", 0, NULL);
     gtk_tree_view_column_set_expand (totals_title_col, TRUE);
     gtk_tree_view_column_set_sizing (totals_title_col, GTK_TREE_VIEW_COLUMN_FIXED);
     gtk_tree_view_append_column (totals_tree_view, totals_title_col);
+
+    // add the totals account code column
+    code_col = gtk_tree_view_column_new_with_attributes ("", gtk_cell_renderer_text_new(), "text", 2, NULL);
+    gtk_tree_view_column_set_sizing (code_col, GTK_TREE_VIEW_COLUMN_FIXED);
+    gtk_tree_view_append_column (totals_tree_view, code_col);
+    gtk_tree_view_column_set_visible (code_col, priv->show_account_code);
+
+    // add the totals account description column
+    desc_col = gtk_tree_view_column_new_with_attributes ("", gtk_cell_renderer_text_new(), "text", 3, NULL);
+    gtk_tree_view_column_set_sizing (desc_col, GTK_TREE_VIEW_COLUMN_FIXED);
+    gtk_tree_view_append_column (totals_tree_view, desc_col);
+    gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
 
     // Add totals tree view to scroll window
     gtk_container_add (GTK_CONTAINER(priv->totals_scroll_window), GTK_WIDGET(totals_tree_view));
@@ -822,10 +873,21 @@ gbv_treeview_resized_cb (GtkWidget *widget, GtkAllocation *allocation,
     for (i = 0, j = 0; i < ncols; ++i)
     {
         gint col_width;
+        const gchar *name;
         GtkTreeViewColumn *tree_view_col;
         GtkTreeViewColumn *totals_view_col;
 
         tree_view_col = gtk_tree_view_get_column (priv->tree_view, i);
+
+        name = g_object_get_data (G_OBJECT(tree_view_col), PREF_NAME);
+
+        // if we do not show account code, step over the equivalent totals column
+        if ((g_strcmp0 (name, "account-code") == 0) && (!priv->show_account_code))
+           j++;
+
+        // if we do not show account description, step over the equivalent totals column
+        if ((g_strcmp0 (name, "description") == 0) && (!priv->show_account_desc))
+           j++;
 
         if (gtk_tree_view_column_get_visible (tree_view_col))
         {
@@ -1481,7 +1543,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     GncBudgetViewPrivate *priv;
     gint num_periods;
     gint num_periods_visible;
-    GtkTreeViewColumn *col;
+    GtkTreeViewColumn *col, *code_col, *desc_col;
     GList *col_list;
     GList *totals_col_list;
     GdkRGBA *note_color, *note_color_selected;
@@ -1516,6 +1578,18 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     }
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(priv->tree_view));
+
+    // set visibility of the account code columns
+    code_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "account-code");
+    gtk_tree_view_column_set_visible (code_col, priv->show_account_code);
+    code_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), 1);
+    gtk_tree_view_column_set_visible (code_col, priv->show_account_code);
+
+    // set visibility of the account description columns
+    desc_col = gnc_tree_view_find_column_by_name (GNC_TREE_VIEW(priv->tree_view), "description");
+    gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
+    desc_col = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->totals_tree_view), 2);
+    gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
 
     /* If we're creating new columns to be appended to already existing
      * columns, first delete the total column. (Then regenerate after
