@@ -5664,24 +5664,15 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     g_free (guid_string);
 }
 
-static std::tuple<std::string, std::string>
-parse_bayes_imap_info (std::string const & imap_bayes_entry)
-{
-    auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
-    std::string keyword {imap_bayes_entry.substr (1, guid_start - 2)};
-    std::string account_guid {imap_bayes_entry.substr (guid_start)};
-    return std::tuple <std::string, std::string> {keyword, account_guid};
-}
-
 static void
 build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
 {
-    auto parsed_key = parse_bayes_imap_info (suffix);
+    size_t guid_start = strlen(suffix) - GUID_ENCODING_LENGTH;
+    std::string account_guid {&suffix[guid_start]};
     GncGUID guid;
     try
     {
-        auto temp_guid = gnc::GUID::from_string (std::get <1> (parsed_key));
-        guid = temp_guid;
+        guid = gnc::GUID::from_string (account_guid);
     }
     catch (const gnc::guid_syntax_exception& err)
     {
@@ -5693,7 +5684,7 @@ build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
     imap_node->source_account = imapInfo.source_account;
     imap_node->map_account = map_account;
     imap_node->head = g_strdup_printf ("%s%s", IMAP_FRAME_BAYES, suffix);
-    imap_node->match_string = g_strdup (std::get <0> (parsed_key).c_str ());
+    imap_node->match_string = g_strndup (&suffix[1], guid_start - 2);
     imap_node->category = g_strdup(" ");
     imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
     imapInfo.list = g_list_prepend (imapInfo.list, imap_node);
