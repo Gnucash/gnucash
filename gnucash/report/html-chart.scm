@@ -32,6 +32,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 match))
+
 ;; nested-alist-set! parameters are
 ;; lst - a nested alist e.g. (list (cons 'key1 'val1)
 ;;                                 (cons 'key2 (list (cons 'key2-sub1 'val2a))))
@@ -44,70 +46,45 @@
 ;; see test-html-chart.scm for usage examples
 (define (nested-alist-set! lst path newval)
   (define (path->nested-alist path newval)
-    (let innerloop ((path (reverse path))
-                    (result newval))
-      (cond
-       ((null? path)
-        result)
-       ((and (pair? (car path)) (number? (caar path)))
-        (innerloop (cdr path)
-                   (let ((v (make-vector (1+ (caar path)))))
-                     (vector-set! v (caar path) result)
-                     v)))
-       (else
-        (innerloop (cdr path)
-                   (list (cons (car path) result)))))))
+    (let loop ((path (reverse path)) (result newval))
+      (match path
+        (() result)
+        ((((? number? idx)) . tail)
+         (let ((v (make-vector (1+ idx))))
+           (vector-set! v idx result)
+           (loop tail v)))
+        ((head . tail) (loop tail (list (cons head result)))))))
 
   (let loop ((nested-lst lst) (path path))
-    (cond
-     ((or (null? nested-lst) (null? path))
-      (throw "invalid state"))
-     ((and (pair? (car path)) (number? (caar path)))
-      (cond
-       ((>= (caar path) (vector-length nested-lst))
-        (throw (format #f "high vector index ~s must be set earlier"
-                       (caar path))))
-       ((list? (vector-ref nested-lst (caar path)))
-        (loop (vector-ref nested-lst (caar path))
-              (cdr path)))
-       (else
-        (vector-set! nested-lst
-                     (caar path)
-                     (path->nested-alist (cdr path) newval)))))
-     (else
-      (let ((kvp (assq (car path) nested-lst)))
-        (cond
-         ((not kvp) ; new branch. append to end of parent branch
-          (list-cdr-set! nested-lst
-                         (1- (length nested-lst))
-                         (path->nested-alist path newval)))
-         ((null? (cdr path)) ; existing branch, last path. replace pair's cdr
-          (set-cdr! kvp newval))
-         (else ; existing branch. traverse into next layer.
-          (loop (cdr kvp) (cdr path)))))))))
+    (define (out-of-bound? n) (and (number? n) (>= n (vector-length nested-lst))))
+    (define (existing? n) (and (number? n) (pair? (vector-ref nested-lst n))))
+    (if (null? nested-lst) (throw 'invalid-state))
+    (match path
+      (() (throw 'invalid-state))
+      ((((? out-of-bound? idx)) . _) (throw 'index-too-high idx))
+      ((((? existing? idx)) . tail) (loop (vector-ref nested-lst idx) tail))
+      ((((? number? idx)) . tail) (vector-set! nested-lst idx
+                                               (path->nested-alist tail newval)))
+      ((head . tail)
+       (let ((pair (assq head nested-lst)))
+         (cond
+          ((not pair) (list-cdr-set! nested-lst (1- (length nested-lst))
+                                     (path->nested-alist path newval)))
+          ((null? tail) (set-cdr! pair newval))
+          (else (loop (cdr pair) tail))))))))
 
 (define (nested-alist-get lst path)
   (let loop ((nested-lst lst) (path path))
-    (cond
-     ((null? path)
-      nested-lst)
-     ((null? nested-lst)
-      (throw "invalid state. most likely the initial list is empty."))
-     ((and (pair? (car path)) (number? (caar path)))
-      (cond
-       ((>= (caar path) (vector-length nested-lst))
-        (throw (format #f "invalid path vector index ~s too high"
-                       (caar path))))
-       (else
-        (loop (vector-ref nested-lst (caar path))
-              (cdr path)))))
-     (else
-      (let ((kvp (assq (car path) nested-lst)))
-        (cond
-         ((not kvp)
-          (throw (format #f "invalid path: ~s" path)))
-         (else
-          (loop (cdr kvp) (cdr path)))))))))
+    (define (out-of-bound? n) (and (number? n) (>= n (vector-length nested-lst))))
+    (match path
+      (() nested-lst)
+      ((((? out-of-bound? idx)) . _) (throw 'index-too-high idx))
+      ((((? number? idx)) . tail) (loop (vector-ref nested-lst idx) tail))
+      ((head . tail)
+       (let ((pair (assq head nested-lst)))
+         (if pair
+             (loop (cdr pair) tail)
+             (throw 'invalid-path path)))))))
 
 ;; helper for setting data - guile-json expects vectors to be
 ;; transformed into JSON arrays; convert list to vector. if not list,
@@ -285,18 +262,14 @@
                          (cons 'label label)
                          (cons 'backgroundColor (list-to-vec color))
                          (cons 'borderColor (list-to-vec color)))))
-    (if (null? rest)
-        (gnc:html-chart-set!
-         chart '(data datasets)
-         (list->vector
-          (append (vector->list
-                   (or (gnc:html-chart-get chart '(data datasets))
-                       #()))
-                  (list newseries))))
-        (loop (cddr rest)
-              (assq-set! newseries
-                         (car rest)
-                         (list-to-vec (cadr rest)))))))
+    (match rest
+      (() (gnc:html-chart-set!
+           chart '(data datasets)
+           (list->vector
+            (append (vector->list
+                     (or (gnc:html-chart-get chart '(data datasets)) #()))
+                    (list newseries)))))
+      ((key val . rest) (loop rest (assq-set! newseries key (list-to-vec val)))))))
 
 (define-public (gnc:html-chart-clear-data-series! chart)
   (gnc:html-chart-set! chart '(data datasets) #()))
