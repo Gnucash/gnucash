@@ -4,11 +4,11 @@
 
 
 /* Negative value label colors */
-.default-color {
+.gnc-class-default-color {
   color: @default-color;
 }
 
-.negative-numbers {
+.gnc-class-negative-numbers {
   color: @negative-numbers;
 }
 

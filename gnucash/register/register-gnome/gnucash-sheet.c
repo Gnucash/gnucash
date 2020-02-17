@@ -2525,7 +2525,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
 
     if (field_type >= COLOR_NEGATIVE) // Require a Negative fg color
     {
-        gtk_style_context_add_class (stylectxt, "negative-numbers");
+        gtk_style_context_add_class (stylectxt, "gnc-class-negative-numbers");
         field_type -= COLOR_NEGATIVE;
     }
     else
