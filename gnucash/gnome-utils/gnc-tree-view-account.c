@@ -208,6 +208,31 @@ gnc_tree_view_account_finalize (GObject *object)
  *                        Callbacks                         *
  ************************************************************/
 static void
+gnc_tree_view_account_hidden_toggled (GtkCellRendererToggle *cell,
+                                      const gchar *s_path_str,
+                                      gpointer user_data)
+{
+    GncTreeViewAccount *tree_view;
+    GtkTreePath *s_path;
+    Account *account;
+    gboolean hidden;
+
+    /* Change the requested account */
+    tree_view = user_data;
+    s_path = gtk_tree_path_new_from_string (s_path_str);
+    account = gnc_tree_view_account_get_account_from_path (tree_view, s_path);
+    if (account)
+    {
+        hidden = !gtk_cell_renderer_toggle_get_active (cell); // hasn't changed yet.
+        xaccAccountSetHidden (account, hidden);
+    }
+
+    /* Clean up */
+    gtk_tree_path_free (s_path);
+}
+
+
+static void
 gnc_tree_view_account_placeholder_toggled (GtkCellRendererToggle *cell,
         const gchar *s_path_str,
         gpointer user_data)
@@ -421,6 +446,29 @@ sort_by_total_value (GtkTreeModel *f_model,
 {
     return sort_by_xxx_value (xaccAccountGetBalanceInCurrency, TRUE,
                               f_model, f_iter_a, f_iter_b, user_data);
+}
+
+static gint
+sort_by_hidden (GtkTreeModel *f_model,
+                GtkTreeIter *f_iter_a,
+                GtkTreeIter *f_iter_b,
+                gpointer user_data)
+{
+    const Account *account_a, *account_b;
+    gboolean flag_a, flag_b;
+
+    /* Find the accounts */
+    sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
+
+    /* Get the placeholder flags. */
+    flag_a = xaccAccountGetHidden (account_a);
+    flag_b = xaccAccountGetHidden (account_b);
+
+    if (flag_a > flag_b)
+        return -1;
+    else if (flag_a < flag_b)
+        return 1;
+    return xaccAccountOrder (account_a, account_b);
 }
 
 static gint
@@ -901,6 +949,14 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                             tax_info_data_func,
                                             GTK_TREE_VIEW(view),
                                             NULL);
+
+    gnc_tree_view_add_toggle_column (view, _("Hidden"),
+                                     C_("Column header for 'Hidden'", "H"),
+                                     "hidden",
+                                     GNC_TREE_MODEL_ACCOUNT_COL_HIDDEN,
+                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                     sort_by_hidden,
+                                     gnc_tree_view_account_hidden_toggled);
 
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
 				    C_("Column header for 'Placeholder'", "P"),
