@@ -62,8 +62,14 @@ option (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 # Use gsettings-desktop-schemas for a better integration with GNOME
 set(COMPILE_GSCHEMAS ON CACHE BOOL "Compile the GSettings schema")
 
-set(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
 # GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
+
+# Support for downstream packagers
+set(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
+# In addition to the GNUCASH_BUILD_ID environment variable, packagers can overwrite
+# gnucash/gnome/gnucash.releases.xml with (package) release details to be included
+# in the appdata file. It should follow appdata <release> node conventions.
+
 
 # Check that all of the absolute install paths are inside
 # ${CMAKE_INSTALL_PREFIX}. If they're not, disable binreloc as it
