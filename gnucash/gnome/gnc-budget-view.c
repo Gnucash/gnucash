@@ -1066,7 +1066,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
 
             if (priv->use_red_color && gnc_numeric_negative_p (numeric))
             {
-                gchar *color = get_negative_color ();
+                gchar *color = gnc_get_negative_color ();
                 g_object_set (cell, "foreground", color, NULL);
                 g_free (color);
             }
@@ -1162,7 +1162,7 @@ budget_total_col_source (Account *account, GtkTreeViewColumn *col,
 
     if (priv->use_red_color && gnc_numeric_negative_p (total))
     {
-        gchar *color = get_negative_color ();
+        gchar *color = gnc_get_negative_color ();
         g_object_set (cell, "foreground", color, NULL);
         g_free (color);
     }
@@ -1346,7 +1346,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                                                 period_num < 0 ? TRUE : FALSE));
     if (priv->use_red_color && gnc_numeric_negative_p (total))
     {
-        gchar *color = get_negative_color ();
+        gchar *color = gnc_get_negative_color ();
         g_object_set (cell, "foreground", color, NULL);
         g_free (color);
     }

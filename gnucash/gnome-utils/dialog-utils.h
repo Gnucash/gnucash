@@ -161,6 +161,9 @@ gboolean gnc_new_book_option_display (GtkWidget *parent);
 GtkWidget *
 gnc_cost_policy_select_new (void);
 
-gchar* get_negative_color (void);
+/** This function returns the color string for the CSS 'negative-numbers' class,
+ *  the returned value must be freed.
+ */
+gchar* gnc_get_negative_color (void);
 
 #endif /* DIALOG_UTILS_H */

@@ -889,8 +889,11 @@ gnc_cost_policy_select_new (void)
     return cost_policy_widget;
 }
 
+/* This function returns a string for the CSS 'negative-numbers' class,
+ * the returned string must be freed
+ */
 gchar*
-get_negative_color (void)
+gnc_get_negative_color (void)
 {
     GdkRGBA color;
     GtkWidget *label = gtk_label_new ("Color");
