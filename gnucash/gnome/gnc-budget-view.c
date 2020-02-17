@@ -161,6 +161,7 @@ struct GncBudgetViewPrivate
 
     GncBudget *budget;
     GncGUID    key;
+    gboolean   use_red_color;
 
     GList               *period_col_list;
     GList               *totals_col_list;
@@ -241,6 +242,16 @@ gbv_treeview_update_grid_lines (gpointer prefs, gchar *pref, gpointer user_data)
 }
 
 static void
+gbv_update_use_red (gpointer prefs, gchar *pref, gpointer user_data)
+{
+    GncBudgetView *budget_view = user_data;
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+
+    priv->use_red_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                              GNC_PREF_NEGATIVE_IN_RED);
+}
+
+static void
 gnc_budget_view_finalize (GObject *object)
 {
     GncBudgetView *budget_view;
@@ -256,6 +267,8 @@ gnc_budget_view_finalize (GObject *object)
                                  gbv_treeview_update_grid_lines, priv->totals_tree_view);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
                                  gbv_treeview_update_grid_lines, priv->totals_tree_view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                                 gbv_update_use_red, budget_view);
 
     G_OBJECT_CLASS(gnc_budget_view_parent_class)->finalize (object);
     LEAVE(" ");
@@ -477,6 +490,11 @@ gbv_create_widget (GncBudgetView *budget_view)
                            gbv_treeview_update_grid_lines, totals_tree_view);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
                            gbv_treeview_update_grid_lines, totals_tree_view);
+
+    // get initial value and register prefs call back for use red color
+    priv->use_red_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                           gbv_update_use_red, budget_view);
 
     PINFO("Number of Created totals columns is %d", gtk_tree_view_get_n_columns (totals_tree_view));
 
@@ -994,40 +1012,39 @@ static gchar *
 budget_col_source (Account *account, GtkTreeViewColumn *col,
                    GtkCellRenderer *cell)
 {
-    GtkTreeView *bview;
-    GncBudget *budget;
+    GncBudgetView *budget_view;
+    GncBudgetViewPrivate *priv;
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     const gchar *note;
-    gboolean red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
-    budget = GNC_BUDGET(g_object_get_data (G_OBJECT(col), "budget"));
-    bview = GTK_TREE_VIEW(g_object_get_data (G_OBJECT(col), "budget_tree_view"));
+    budget_view = GNC_BUDGET_VIEW(g_object_get_data (G_OBJECT(col), "budget_view"));
     period_num = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT(col), "period_num"));
 
-    if (!gnc_budget_is_account_period_value_set (budget, account, period_num))
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+
+    if (!gnc_budget_is_account_period_value_set (priv->budget, account, period_num))
     {
         if (gnc_account_n_children (account) == 0)
             amtbuff[0] = '\0';
         else
         {
             GdkRGBA color;
-            GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(bview));
+            GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
             gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
 
-            numeric = gbv_get_accumulated_budget_amount (budget, account, period_num);
-            xaccSPrintAmount (amtbuff, numeric,
-                             gnc_account_print_info (account, FALSE));
+            numeric = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
+            xaccSPrintAmount (amtbuff, numeric, gnc_account_print_info (account, FALSE));
             if (gnc_is_dark_theme (&color))
                 g_object_set (cell, "foreground",
-                              red && gnc_numeric_negative_p (numeric)
+                              priv->use_red_color && gnc_numeric_negative_p (numeric)
                                   ? "darkred"
                                   : "darkgray",
                               NULL);
             else
                 g_object_set (cell, "foreground",
-                              red && gnc_numeric_negative_p (numeric)
+                              priv->use_red_color && gnc_numeric_negative_p (numeric)
                                   ? "PaleVioletRed"
                                   : "dimgray",
                               NULL);
@@ -1035,7 +1052,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
     }
     else
     {
-        numeric = gnc_budget_get_account_period_value (budget, account,
+        numeric = gnc_budget_get_account_period_value (priv->budget, account,
                                                        period_num);
         if (gnc_numeric_check (numeric))
             strcpy (amtbuff, "error");
@@ -1047,7 +1064,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
             xaccSPrintAmount (amtbuff, numeric,
                               gnc_account_print_info (account, FALSE));
 
-            if (red && gnc_numeric_negative_p (numeric))
+            if (priv->use_red_color && gnc_numeric_negative_p (numeric))
             {
                 gchar *color = get_negative_color ();
                 g_object_set (cell, "foreground", color, NULL);
@@ -1058,7 +1075,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
         }
     }
 
-    note = gnc_budget_get_account_period_note (budget, account, period_num);
+    note = gnc_budget_get_account_period_note (priv->budget, account, period_num);
     g_object_set (cell, "flagged", note != NULL, NULL);
 
     return g_strdup (amtbuff);
@@ -1132,16 +1149,18 @@ static gchar *
 budget_total_col_source (Account *account, GtkTreeViewColumn *col,
                          GtkCellRenderer *cell)
 {
-    GncBudget *budget;
+    GncBudgetView *budget_view;
+    GncBudgetViewPrivate *priv;
     gnc_numeric total;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    gboolean red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
-    budget = GNC_BUDGET(g_object_get_data (G_OBJECT(col), "budget"));
-    total = bgv_get_total_for_account (account, budget, NULL);
+    budget_view = GNC_BUDGET_VIEW(g_object_get_data (G_OBJECT(col), "budget_view"));
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+
+    total = bgv_get_total_for_account (account, priv->budget, NULL);
     xaccSPrintAmount (amtbuff, total, gnc_account_print_info (account, TRUE));
 
-    if (red && gnc_numeric_negative_p (total))
+    if (priv->use_red_color && gnc_numeric_negative_p (total))
     {
         gchar *color = get_negative_color ();
         g_object_set (cell, "foreground", color, NULL);
@@ -1164,7 +1183,8 @@ static void
 budget_col_edited (Account *account, GtkTreeViewColumn *col,
                    const gchar *new_text)
 {
-    GncBudget *budget;
+    GncBudgetView *budget_view;
+    GncBudgetViewPrivate *priv;
     guint period_num;
     gnc_numeric numeric = gnc_numeric_error (GNC_ERROR_ARG);
 
@@ -1174,15 +1194,16 @@ budget_col_edited (Account *account, GtkTreeViewColumn *col,
 
     period_num = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT(col), "period_num"));
 
-    budget = GNC_BUDGET(g_object_get_data (G_OBJECT(col), "budget"));
+    budget_view = GNC_BUDGET_VIEW(g_object_get_data (G_OBJECT(col), "budget_view"));
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
     if (new_text && *new_text == '\0')
-        gnc_budget_unset_account_period_value (budget, account, period_num);
+        gnc_budget_unset_account_period_value (priv->budget, account, period_num);
     else
     {
         if (gnc_reverse_budget_balance (account, TRUE))
             numeric = gnc_numeric_neg (numeric);
-        gnc_budget_set_account_period_value (budget, account, period_num,
+        gnc_budget_set_account_period_value (priv->budget, account, period_num,
                                              numeric);
     }
 }
@@ -1207,24 +1228,21 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     GncBudgetView *budget_view;
     GncBudgetViewPrivate *priv;
     gint row_type;
-    GncBudget *budget;
-    Account* account; // used to make things easier in the adding up processes
+    Account *account; // used to make things easier in the adding up processes
     gint period_num;
     gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
     gint i;
     gint num_top_accounts;
-    gboolean red, neg;
+    gboolean neg;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
     gnc_numeric total = gnc_numeric_zero ();
 
     budget_view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
-    red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     gtk_tree_model_get (s_model, s_iter, 1, &row_type, -1);
-    budget = GNC_BUDGET(g_object_get_data (G_OBJECT(col), "budget"));
     period_num = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(col), "period_num"));
 
     pdb = gnc_pricedb_get_db (gnc_get_current_book ());
@@ -1306,15 +1324,15 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
 
         if (period_num < 0)
         {
-            value = bgv_get_total_for_account (account, budget, total_currency);
+            value = bgv_get_total_for_account (account, priv->budget, total_currency);
         }
         else
         {
-            value = gbv_get_accumulated_budget_amount (budget, account, period_num);
+            value = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
 
             value = gnc_pricedb_convert_balance_nearest_price_t64 (
                         pdb, value, currency, total_currency,
-                        gnc_budget_get_period_start_date (budget, period_num));
+                        gnc_budget_get_period_start_date (priv->budget, period_num));
         }
 
         if (neg)
@@ -1326,7 +1344,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     xaccSPrintAmount (amtbuff, total,
                       gnc_commodity_print_info (total_currency,
                                                 period_num < 0 ? TRUE : FALSE));
-    if (red && gnc_numeric_negative_p (total))
+    if (priv->use_red_color && gnc_numeric_negative_p (total))
     {
         gchar *color = get_negative_color ();
         g_object_set (cell, "foreground", color, NULL);
@@ -1407,7 +1425,7 @@ gbv_create_totals_column (GncBudgetView *budget_view, gint period_num)
     gbv_renderer_add_padding (renderer);
 
     gtk_tree_view_column_set_cell_data_func (col, renderer, totals_col_source, budget_view, NULL);
-    g_object_set_data (G_OBJECT(col), "budget", priv->budget);
+    g_object_set_data (G_OBJECT(col), "budget_view", budget_view);
     g_object_set_data (G_OBJECT(col), "period_num", GUINT_TO_POINTER(period_num));
     gtk_tree_view_column_set_sizing (col, GTK_TREE_VIEW_COLUMN_FIXED);
 
@@ -1522,8 +1540,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         col = gnc_tree_view_account_add_custom_column_renderer (
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
                   budget_col_source, budget_col_edited, renderer);
-        g_object_set_data (G_OBJECT(col), "budget", priv->budget);
-        g_object_set_data (G_OBJECT(col), "budget_tree_view", priv->tree_view);
+        g_object_set_data (G_OBJECT(col), "budget_view", budget_view);
         g_object_set_data (G_OBJECT(col), "period_num", GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append (col_list, col);
 
@@ -1579,7 +1596,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
             gtk_tree_view_column_set_min_width (priv->total_col, logical_rect.width);
         }
         g_date_free (date);
-        g_object_set_data (G_OBJECT(priv->total_col), "budget", priv->budget);
+        g_object_set_data (G_OBJECT(priv->total_col), "budget_view", budget_view);
 
         // as we only have one renderer/column, use this function to get it
         renderer = gnc_tree_view_column_get_renderer (priv->total_col);
