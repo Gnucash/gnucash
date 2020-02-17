@@ -155,7 +155,7 @@ static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginP
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_cascade_color_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page);
 
 /* Command callback for new Register Test */
 static void gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action, GncPluginPageAccountTree *page);
@@ -230,9 +230,9 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
     },
     {
-        "EditColorCascadeAccountAction", NULL, N_("_Cascade Account Color..."), NULL,
-        N_("Cascade selected account color"),
-        G_CALLBACK (gnc_plugin_page_account_tree_cmd_cascade_color_account)
+        "EditCascadeAccountAction", NULL, N_("_Cascade Account Properties..."), NULL,
+        N_("Cascade selected properties for account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_cascade_account_properties)
     },
     {
         "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
@@ -1072,7 +1072,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
     g_object_set (G_OBJECT(action), "sensitive",
                   is_readwrite && sensitive && subaccounts, NULL);
 
-    action = gtk_action_group_get_action (action_group, "EditColorCascadeAccountAction");
+    action = gtk_action_group_get_action (action_group, "EditCascadeAccountAction");
     g_object_set (G_OBJECT(action), "sensitive", subaccounts, NULL);
 
     gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
@@ -1190,7 +1190,7 @@ gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPlugi
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_cascade_color_account (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *account = NULL;
     GtkWidget *window;
@@ -1199,10 +1199,10 @@ gnc_plugin_page_account_tree_cmd_cascade_color_account (GtkAction *action, GncPl
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
 
-    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
 
     if (account != NULL)
-        gnc_account_cascade_color_dialog (window, account);
+        gnc_account_cascade_properties_dialog (window, account);
 
     LEAVE(" ");
 }

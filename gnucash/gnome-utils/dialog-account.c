@@ -2122,12 +2122,28 @@ update_account_color (Account *acc, const gchar *old_color, const gchar *new_col
     }
 }
 
+static void
+enable_box_cb (GtkToggleButton *toggle_button, gpointer user_data)
+{
+    gboolean sensitive = FALSE;
+
+    if (gtk_toggle_button_get_active (toggle_button))
+        sensitive = TRUE;
+
+    gtk_widget_set_sensitive (GTK_WIDGET(user_data), sensitive);
+}
+
 void
-gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
+gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
 {
     GtkWidget *dialog;
     GtkBuilder *builder;
-    GtkWidget *color_label, *color_button, *over_write, *color_button_default;
+    GtkWidget *label;
+    GtkWidget *color_button, *over_write, *color_button_default;
+    GtkWidget *enable_color, *enable_placeholder, *enable_hidden;
+    GtkWidget *color_box, *placeholder_box, *hidden_box;
+    GtkWidget *placeholder_button, *hidden_button;
+
     gchar *string;
     const char *color_string;
     gchar *old_color_string = NULL;
@@ -2138,24 +2154,31 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
     g_return_if_fail (gnc_account_n_children (account) > 0);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_cascade_color_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_cascade_color_dialog"));
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_cascade_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_cascade_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(window));
 
-    color_label = GTK_WIDGET(gtk_builder_get_object (builder, "color_label"));
+    // Color section
+    enable_color = GTK_WIDGET(gtk_builder_get_object (builder, "enable_cascade_color"));
+    color_box = GTK_WIDGET(gtk_builder_get_object (builder, "color_box"));
+
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "color_label"));
     over_write = GTK_WIDGET(gtk_builder_get_object (builder, "replace_check"));
     color_button = GTK_WIDGET(gtk_builder_get_object (builder, "color_button"));
     color_button_default = GTK_WIDGET(gtk_builder_get_object (builder, "color_button_default"));
 
     gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER(color_button), FALSE);
 
+    g_signal_connect (G_OBJECT(enable_color), "toggled",
+                      G_CALLBACK(enable_box_cb), (gpointer)color_box);
+
     g_signal_connect (G_OBJECT(color_button_default), "clicked",
                       G_CALLBACK(default_color_button_cb), (gpointer)color_button);
 
-    string = g_strdup_printf(_( "Set the account color for account '%s' "
-                                "including all sub-accounts to the selected color"),
-                             gnc_account_get_full_name(account));
-    gtk_label_set_text (GTK_LABEL(color_label), string);
+    string = g_strdup_printf (_( "Set the account color for account '%s' "
+                                 "including all sub-accounts to the selected color"),
+                              gnc_account_get_full_name (account));
+    gtk_label_set_text (GTK_LABEL(label), string);
     g_free (string);
 
     color_string = xaccAccountGetColor (account); // get existing account color
@@ -2171,6 +2194,34 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
     // set the color chooser to account color
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(color_button), &color);
 
+    // Placeholder section
+    enable_placeholder = GTK_WIDGET(gtk_builder_get_object (builder, "enable_cascade_placeholder"));
+    placeholder_box = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_box"));
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_label"));
+    placeholder_button = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_check_button"));
+    g_signal_connect (G_OBJECT(enable_placeholder), "toggled",
+                      G_CALLBACK(enable_box_cb), (gpointer)placeholder_box);
+
+    string = g_strdup_printf (_( "Set the account placeholder value for account '%s' "
+                                 "including all sub-accounts"),
+                              gnc_account_get_full_name (account));
+    gtk_label_set_text (GTK_LABEL(label), string);
+    g_free (string);
+
+    // Hidden section
+    enable_hidden = GTK_WIDGET(gtk_builder_get_object (builder, "enable_cascade_hidden"));
+    hidden_box = GTK_WIDGET(gtk_builder_get_object (builder, "hidden_box"));
+    label = GTK_WIDGET(gtk_builder_get_object (builder, "hidden_label"));
+    hidden_button = GTK_WIDGET(gtk_builder_get_object (builder, "hidden_check_button"));
+    g_signal_connect (G_OBJECT(enable_hidden), "toggled",
+                      G_CALLBACK(enable_box_cb), (gpointer)hidden_box);
+
+    string = g_strdup_printf (_( "Set the account hidden value for account '%s' "
+                                 "including all sub-accounts"),
+                              gnc_account_get_full_name (account));
+    gtk_label_set_text (GTK_LABEL(label), string);
+    g_free (string);
+
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
@@ -2184,31 +2235,56 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
     if (response == GTK_RESPONSE_OK)
     {
         GList *accounts = gnc_account_get_descendants (account);
-        gboolean replace = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(over_write));
-        GList *acct;
         GdkRGBA new_color;
-        const gchar *new_color_string;
+        const gchar *new_color_string = NULL;
+        gboolean color_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_color));
+        gboolean placeholder_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_placeholder));
+        gboolean hidden_active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(enable_hidden));
+        gboolean replace = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(over_write));
+        gboolean placeholder = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(placeholder_button));
+        gboolean hidden = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(hidden_button));
 
-        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(color_button), &new_color);
-        new_color_string = gdk_rgba_to_string (&new_color);
+        // Update Account Colors
+        if (color_active)
+        {
+            gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(color_button), &new_color);
+            new_color_string = gdk_rgba_to_string (&new_color);
 
-        if (g_strcmp0 (new_color_string, DEFAULT_COLOR) == 0)
-            new_color_string = NULL;
+            if (g_strcmp0 (new_color_string, DEFAULT_COLOR) == 0)
+                new_color_string = NULL;
 
-        // check/update selected account
-        update_account_color (account, old_color_string, new_color_string, replace);
+            // check/update selected account
+            update_account_color (account, old_color_string, new_color_string, replace);
+        }
 
+        // Update Account Placeholder value
+        if (placeholder_active)
+            xaccAccountSetPlaceholder (account, placeholder);
+
+        // Update Account Hidden value
+        if (hidden_active)
+            xaccAccountSetHidden (account, hidden);
+
+        // Update SubAccounts
         if (accounts)
         {
-            for (acct = accounts; acct; acct = g_list_next(acct))
+            for (GList *acct = accounts; acct; acct = g_list_next(acct))
             {
-                const char *string = xaccAccountGetColor (acct->data);
-
-                // check/update sub-accounts
-                update_account_color (acct->data, string, new_color_string, replace);
+                // Update SubAccount Colors
+                if (color_active)
+                {
+                    const char *string = xaccAccountGetColor (acct->data);
+                    update_account_color (acct->data, string, new_color_string, replace);
+                }
+                // Update SubAccount PlaceHolder
+                if (placeholder_active)
+                    xaccAccountSetPlaceholder (acct->data, placeholder);
+                // Update SubAccount Hidden
+                if (hidden_active)
+                    xaccAccountSetHidden (acct->data, hidden);
             }
-            g_list_free (accounts);
         }
+        g_list_free (accounts);
     }
     if (old_color_string)
         g_free (old_color_string);
