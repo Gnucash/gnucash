@@ -30,6 +30,12 @@
 (use-modules (gnucash html))
 
 (define default-css "/* default style */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #000; background-color: #fff;
+    }
+}
+
 html, body {
     height: 100vh;
     margin: 0;
@@ -90,6 +96,10 @@ td.neg {
 
 td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
     white-space: nowrap;
+}
+
+td.highlight {
+    background-color: #e1e1e1
 }
 ")
 

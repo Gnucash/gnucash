@@ -47,16 +47,16 @@ static gpointer parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
 static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
-		                        void *data);
+                                        void *data);
 static void gnc_plugin_page_finalize   (GObject *object);
-static void gnc_plugin_page_set_property (GObject         *object,
-        guint            prop_id,
-        const GValue    *value,
-        GParamSpec      *pspec);
-static void gnc_plugin_page_get_property (GObject         *object,
-        guint            prop_id,
-        GValue          *value,
-        GParamSpec      *pspec);
+static void gnc_plugin_page_set_property (GObject      *object,
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec);
+static void gnc_plugin_page_get_property (GObject      *object,
+                                          guint         prop_id,
+                                          GValue       *value,
+                                          GParamSpec   *pspec);
 
 static void gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
                                            gboolean on_current_page);
@@ -107,14 +107,15 @@ typedef struct _GncPluginPagePrivate
     gchar *statusbar_text;
 
     gulong page_changed_id;
+    guint  focus_source_id;
 
 } GncPluginPagePrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
-		        G_ADD_PRIVATE(GncPluginPage))
+                G_ADD_PRIVATE(GncPluginPage))
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
-   ((GncPluginPagePrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE))
+   ((GncPluginPagePrivate*)g_type_instance_get_private ((GTypeInstance*)o, GNC_TYPE_PLUGIN_PAGE))
 
 /*  Create the display widget that corresponds to this plugin.  This
  *  function will be called by the main/embedded window manipulation
@@ -127,9 +128,9 @@ gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
     GncPluginPageClass *klass;
     GtkWidget *widget;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page), NULL);
 
-    klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+    klass = GNC_PLUGIN_PAGE_GET_CLASS(plugin_page);
     g_return_val_if_fail (klass != NULL, NULL);
     g_return_val_if_fail (klass->create_widget != NULL, NULL);
 
@@ -142,7 +143,7 @@ gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
      * main notebook for the window.
      */
     if (klass->destroy_widget)
-        g_object_ref(widget);
+        g_object_ref (widget);
 
     return widget;
 }
@@ -156,9 +157,9 @@ gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageClass *klass;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
 
-    klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+    klass = GNC_PLUGIN_PAGE_GET_CLASS(plugin_page);
     g_return_if_fail (klass != NULL);
     g_return_if_fail (klass->destroy_widget != NULL);
 
@@ -171,19 +172,15 @@ void
 gnc_plugin_page_show_summarybar (GncPluginPage *page,
                                  gboolean visible)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     if (!page->summarybar)
         return;
 
     if (visible)
-    {
-        gtk_widget_show(page->summarybar);
-    }
+        gtk_widget_show (page->summarybar);
     else
-    {
-        gtk_widget_hide(page->summarybar);
-    }
+        gtk_widget_hide (page->summarybar);
 }
 
 
@@ -198,16 +195,16 @@ gnc_plugin_page_save_page (GncPluginPage *page,
 {
     GncPluginPageClass *klass;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
     g_return_if_fail (key_file != NULL);
     g_return_if_fail (group_name != NULL);
 
     ENTER(" ");
-    klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
+    klass = GNC_PLUGIN_PAGE_GET_CLASS(page);
     g_return_if_fail (klass != NULL);
     g_return_if_fail (klass->save_page != NULL);
 
-    klass->save_page(page, key_file, group_name);
+    klass->save_page (page, key_file, group_name);
     LEAVE(" ");
 }
 
@@ -226,17 +223,17 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
     GType type;
 
     ENTER("type %s, keyfile %p, group %s", page_type, key_file, page_group);
-    type = g_type_from_name(page_type);
+    type = g_type_from_name (page_type);
     if (type == 0)
     {
         LEAVE("Cannot find type named %s", page_type);
         return NULL;
     }
 
-    klass = g_type_class_ref(type);
+    klass = g_type_class_ref (type);
     if (klass == NULL)
     {
-        const gchar *type_name = g_type_name(type);
+        const gchar *type_name = g_type_name (type);
         LEAVE("Cannot create class %s(%s)", page_type, type_name ? type_name : "invalid type");
         return NULL;
     }
@@ -244,12 +241,12 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
     if (!klass->recreate_page)
     {
         LEAVE("Class %shas no recreate function.", page_type);
-        g_type_class_unref(klass);
+        g_type_class_unref (klass);
         return NULL;
     }
 
     page = (klass->recreate_page)(window, key_file, page_group);
-    g_type_class_unref(klass);
+    g_type_class_unref (klass);
     LEAVE(" ");
     return page;
 }
@@ -267,9 +264,9 @@ gnc_plugin_page_merge_actions (GncPluginPage *page,
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->ui_merge = ui_merge;
     gtk_action_group_set_sensitive (priv->action_group, TRUE);
-    priv->merge_id = gnc_plugin_add_actions(priv->ui_merge,
-                                            priv->action_group,
-                                            priv->ui_description);
+    priv->merge_id = gnc_plugin_add_actions (priv->ui_merge,
+                                             priv->action_group,
+                                             priv->ui_description);
 }
 
 
@@ -282,13 +279,13 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
     g_return_if_fail (priv->merge_id != 0);
     g_return_if_fail (priv->action_group != NULL);
 
-    gtk_ui_manager_remove_ui(ui_merge, priv->merge_id);
+    gtk_ui_manager_remove_ui (ui_merge, priv->merge_id);
     gtk_action_group_set_sensitive (priv->action_group, FALSE);
-    gtk_ui_manager_remove_action_group(ui_merge, priv->action_group);
+    gtk_ui_manager_remove_action_group (ui_merge, priv->action_group);
 
     priv->ui_merge = NULL;
     priv->merge_id = 0;
@@ -300,8 +297,8 @@ gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), NULL);
-    g_return_val_if_fail(name != NULL, NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+    g_return_val_if_fail (name != NULL, NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (!priv->action_group)
@@ -316,9 +313,9 @@ gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
 {
     GncPluginPageClass *klass;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page), NULL);
 
-    klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+    klass = GNC_PLUGIN_PAGE_GET_CLASS(plugin_page);
     g_return_val_if_fail (klass != NULL, NULL);
 
     return (klass->plugin_name);
@@ -329,33 +326,33 @@ gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
 void
 gnc_plugin_page_inserted (GncPluginPage *plugin_page)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
 
-    g_signal_emit (G_OBJECT (plugin_page), signals[INSERTED], 0);
+    g_signal_emit (G_OBJECT(plugin_page), signals[INSERTED], 0);
 }
 
 void
 gnc_plugin_page_removed (GncPluginPage *plugin_page)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
 
-    g_signal_emit (G_OBJECT (plugin_page), signals[REMOVED], 0);
+    g_signal_emit (G_OBJECT(plugin_page), signals[REMOVED], 0);
 }
 
 void
 gnc_plugin_page_selected (GncPluginPage *plugin_page)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
 
-    g_signal_emit (G_OBJECT (plugin_page), signals[SELECTED], 0);
+    g_signal_emit (G_OBJECT(plugin_page), signals[SELECTED], 0);
 }
 
 void
 gnc_plugin_page_unselected (GncPluginPage *plugin_page)
 {
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(plugin_page));
 
-    g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
+    g_signal_emit (G_OBJECT(plugin_page), signals[UNSELECTED], 0);
 }
 
 /** Initialize the class for a new generic plugin page.  This will set
@@ -368,7 +365,7 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
 static void
 gnc_plugin_page_class_init (GncPluginPageClass *klass)
 {
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     parent_class = g_type_class_peek_parent (klass);
     gobject_class->finalize = gnc_plugin_page_finalize;
@@ -521,12 +518,13 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
     priv->page_color  = NULL;
     priv->uri         = NULL;
     priv->page_changed_id = 0;
+    priv->focus_source_id = 0;
 
     page->window      = NULL;
     page->summarybar  = NULL;
 
-    gnc_gobject_tracking_remember(G_OBJECT(page),
-		                  G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember (G_OBJECT(page),
+                                   G_OBJECT_CLASS(klass));
 }
 
 
@@ -543,28 +541,31 @@ gnc_plugin_page_finalize (GObject *object)
     GncPluginPagePrivate *priv;
     GncPluginPage *page;
 
-    page = GNC_PLUGIN_PAGE (object);
+    page = GNC_PLUGIN_PAGE(object);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->page_name)
-        g_free(priv->page_name);
+        g_free (priv->page_name);
+
     if (priv->page_color)
-        g_free(priv->page_color);
+        g_free (priv->page_color);
+
     if (priv->uri)
-        g_free(priv->uri);
+        g_free (priv->uri);
+
     if (priv->statusbar_text)
-        g_free(priv->statusbar_text);
+        g_free (priv->statusbar_text);
 
     if (priv->books)
     {
-        g_list_free(priv->books);
+        g_list_free (priv->books);
         priv->books = NULL;
     }
 
     page->window = NULL; // Don't need to free it.
 
-    gnc_gobject_tracking_forget(object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    gnc_gobject_tracking_forget (object);
+    G_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
 /************************************************************/
@@ -671,22 +672,22 @@ gnc_plugin_page_set_property (GObject      *object,
     switch (prop_id)
     {
     case PROP_PAGE_NAME:
-        gnc_plugin_page_set_page_name(page, g_value_get_string(value));
+        gnc_plugin_page_set_page_name (page, g_value_get_string (value));
         break;
     case PROP_PAGE_COLOR:
-        gnc_plugin_page_set_page_color(page, g_value_get_string(value));
+        gnc_plugin_page_set_page_color (page, g_value_get_string (value));
         break;
     case PROP_PAGE_URI:
-        gnc_plugin_page_set_uri(page, g_value_get_string(value));
+        gnc_plugin_page_set_uri (page, g_value_get_string (value));
         break;
     case PROP_STATUSBAR_TEXT:
-        gnc_plugin_page_set_statusbar_text(page, g_value_get_string(value));
+        gnc_plugin_page_set_statusbar_text (page, g_value_get_string (value));
         break;
     case PROP_USE_NEW_WINDOW:
-        gnc_plugin_page_set_use_new_window(page, g_value_get_boolean(value));
+        gnc_plugin_page_set_use_new_window (page, g_value_get_boolean (value));
         break;
     case PROP_UI_DESCRIPTION:
-        gnc_plugin_page_set_ui_description(page, g_value_get_string(value));
+        gnc_plugin_page_set_ui_description (page, g_value_get_string (value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -704,11 +705,11 @@ gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
     g_return_if_fail (book != NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    priv->books = g_list_append(priv->books, book);
+    priv->books = g_list_append (priv->books, book);
 }
 
 
@@ -719,11 +720,11 @@ gnc_plugin_page_has_book (GncPluginPage *page, QofBook *book)
     GncPluginPagePrivate *priv;
     GList *item;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
     g_return_val_if_fail (book != NULL, FALSE);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    for (item = priv->books; item; item = g_list_next(item))
+    for (item = priv->books; item; item = g_list_next (item))
     {
         if (item->data == book)
         {
@@ -740,7 +741,7 @@ gnc_plugin_page_has_books (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return (priv->books != NULL);
@@ -752,7 +753,7 @@ gnc_plugin_page_has_books (GncPluginPage *page)
 GtkWidget *
 gnc_plugin_page_get_window (GncPluginPage *page)
 {
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     return page->window;
 }
@@ -765,7 +766,7 @@ gnc_plugin_page_get_page_name (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->page_name;
@@ -780,12 +781,13 @@ gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
     GncPluginPagePrivate *priv;
     GncPluginPageClass *klass;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->page_name)
-        g_free(priv->page_name);
-    priv->page_name = g_strdup(name);
+        g_free (priv->page_name);
+
+    priv->page_name = g_strdup (name);
 
     /* Perform page specific actions */
     klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
@@ -804,7 +806,7 @@ gnc_plugin_page_get_page_long_name (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->page_long_name;
@@ -818,12 +820,13 @@ gnc_plugin_page_set_page_long_name (GncPluginPage *page, const gchar *name)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->page_long_name)
-        g_free(priv->page_long_name);
-    priv->page_long_name = g_strdup(name);
+        g_free (priv->page_long_name);
+
+    priv->page_long_name = g_strdup (name);
 }
 
 
@@ -833,7 +836,7 @@ gnc_plugin_page_get_page_color (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->page_color;
@@ -846,13 +849,22 @@ gnc_plugin_page_set_page_color (GncPluginPage *page, const gchar *color)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->page_color)
-        g_free(priv->page_color);
+        g_free (priv->page_color);
+
     if (color)
-        priv->page_color = g_strdup(color);
+        priv->page_color = g_strdup (color);
+}
+
+
+static void
+gnc_plugin_page_focus_idle_destroy (GncPluginPage *plugin_page)
+{
+    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(plugin_page);
+    priv->focus_source_id = 0;
 }
 
 
@@ -873,9 +885,14 @@ gnc_plugin_page_default_focus (GncPluginPage *plugin_page,
     {
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus
-        g_idle_remove_by_data (GNC_PLUGIN_PAGE(plugin_page));
-        g_idle_add ((GSourceFunc)(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function),
-                     GNC_PLUGIN_PAGE(plugin_page));
+
+        if (priv->focus_source_id > 0)
+            g_source_remove (priv->focus_source_id);
+
+        priv->focus_source_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                                    (GSourceFunc)(GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page_function),
+                                    GNC_PLUGIN_PAGE(plugin_page),
+                                    (GDestroyNotify)gnc_plugin_page_focus_idle_destroy);
     }
 }
 
@@ -906,6 +923,7 @@ gnc_plugin_page_main_window_changed (GtkWindow *window,
 
     (GNC_PLUGIN_PAGE_GET_CLASS(plugin_page)->focus_page)(plugin_page, on_current_page);
 }
+
 
 /* this is the callback for the plugin "inserted" signal which will setup
  * the callback for the "page_changed" signal and save a pointer to the
@@ -952,7 +970,7 @@ gnc_plugin_page_get_uri (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->uri;
@@ -965,12 +983,13 @@ gnc_plugin_page_set_uri (GncPluginPage *page, const gchar *name)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->uri)
-        g_free(priv->uri);
-    priv->uri = g_strdup(name);
+        g_free (priv->uri);
+
+    priv->uri = g_strdup (name);
 }
 
 
@@ -980,7 +999,7 @@ gnc_plugin_page_get_statusbar_text (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->statusbar_text;
@@ -993,12 +1012,13 @@ gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const gchar *message)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->statusbar_text)
-        g_free(priv->statusbar_text);
-    priv->statusbar_text = g_strdup(message);
+        g_free (priv->statusbar_text);
+
+    priv->statusbar_text = g_strdup (message);
 }
 
 
@@ -1008,7 +1028,7 @@ gnc_plugin_page_get_use_new_window (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->use_new_window;
@@ -1024,7 +1044,7 @@ gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->use_new_window = use_new;
@@ -1037,7 +1057,7 @@ gnc_plugin_page_get_ui_description (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->ui_description;
@@ -1052,12 +1072,13 @@ gnc_plugin_page_set_ui_description (GncPluginPage *page,
 {
     GncPluginPagePrivate *priv;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE(page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     if (priv->ui_description)
-        g_free(priv->ui_description);
-    priv->ui_description = g_strdup(ui_filename);
+        g_free (priv->ui_description);
+
+    priv->ui_description = g_strdup (ui_filename);
 }
 
 
@@ -1067,7 +1088,7 @@ gnc_plugin_page_get_ui_merge (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->ui_merge;
@@ -1080,7 +1101,8 @@ gnc_plugin_page_get_action_group(GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
-    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), NULL);
+
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     return priv->action_group;
 }
@@ -1094,8 +1116,8 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
     GtkActionGroup *group;
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-    group = gtk_action_group_new(group_name);
-    gtk_action_group_set_translation_domain(group, PROJECT_NAME);
+    group = gtk_action_group_new (group_name);
+    gtk_action_group_set_translation_domain (group, PROJECT_NAME);
     priv->action_group = group;
     return group;
 }
@@ -1105,11 +1127,13 @@ gnc_plugin_page_finish_pending (GncPluginPage *page)
 {
     if (!page)
         return TRUE;
+
     if (!GNC_IS_PLUGIN_PAGE(page))
         return TRUE;
 
     if (!GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)
         return TRUE;
+
     return (GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)(page);
 }
 

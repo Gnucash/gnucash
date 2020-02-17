@@ -68,6 +68,10 @@ typedef struct
 {
     /** The parent class for an embedded window. */
     GtkBoxClass vbox;
+
+    /* callbacks */
+    void (*page_changed) (GncEmbeddedWindow *window,
+                          GncPluginPage *page);
 } GncEmbeddedWindowClass;
 
 

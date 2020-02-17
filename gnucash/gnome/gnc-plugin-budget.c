@@ -156,7 +156,7 @@ gnc_plugin_budget_cmd_new_budget (GtkAction *action,
     budget = gnc_budget_new (gnc_get_current_book());
     page = gnc_plugin_page_budget_new (budget);
 
-    date = qof_print_date (gnc_time (NULL));
+    date = gnc_print_time64 (gnc_time (NULL), qof_date_format_get_string (QOF_DATE_FORMAT_LOCALE));
     description = g_strdup_printf ("%s: %s",  _("Created"), date);
     gnc_budget_set_description (budget, description);
     g_free (description);

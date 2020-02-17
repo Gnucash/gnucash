@@ -1,6 +1,6 @@
 /*
  * gnc-plugin-page.h -- A page, which can be added to the
- *	GnuCash main window.
+ *  GnuCash main window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
@@ -57,22 +57,22 @@ G_BEGIN_DECLS
 /** The instance data structure for a content plugin. */
 typedef struct GncPluginPage
 {
-    GObject gobject;		/**< The parent object data. */
+    GObject gobject;            /**< The parent object data. */
 
-    GtkWidget *window;		/**< The window that contains the
-					 *   display widget for this plugin.
-					 *   This field is private to the
-					 *   gnucash window management
-					 *   code.  */
-    GtkWidget *notebook_page;	/**< The display widget for this
-					 *   plugin.  This field is private to
-					 *   the gnucash window management
-					 *   code.  */
-    GtkWidget *summarybar;		/**< The summary bar widget (if any)
-					 *   that is associated with this
-					 *   plugin.  This field is private to
-					 *   the gnucash window management
-					 *   code.  */
+    GtkWidget *window;          /**< The window that contains the
+                                *   display widget for this plugin.
+                                *   This field is private to the
+                                *   gnucash window management
+                                *   code.  */
+    GtkWidget *notebook_page;   /**< The display widget for this
+                                *   plugin.  This field is private to
+                                *   the gnucash window management
+                                *   code.  */
+    GtkWidget *summarybar;      /**< The summary bar widget (if any)
+                                *   that is associated with this
+                                *   plugin.  This field is private to
+                                *   the gnucash window management
+                                *   code.  */
 } GncPluginPage;
 
 
@@ -105,6 +105,7 @@ typedef struct
      *
      *  @return A displayable gtk widget. */
     GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
+
     /** Function called to destroy the display widget for a
      *  particular type of plugin.
      *
@@ -168,7 +169,7 @@ typedef struct
      *
      *  @param page The page that was added to a window.
      *
-     *  @param on_current_pgae Whether this page is the currentone. */
+     *  @return FALSE to remove idle */
     gboolean (* focus_page_function) (GncPluginPage *plugin_page);
 
     /** This function vector allows page specific actions to occur
@@ -219,7 +220,8 @@ GType gnc_plugin_page_get_type (void);
  *  @param plugin_page A pointer to the plugin for which a display
  *  widget should be created.
  *
- *  @return A displayable gtk widget. */
+ *  @return A displayable gtk widget.
+ */
 GtkWidget *gnc_plugin_page_create_widget (GncPluginPage *plugin_page);
 
 
@@ -228,7 +230,8 @@ GtkWidget *gnc_plugin_page_create_widget (GncPluginPage *plugin_page);
  *  code when a page is closed.
  *
  *  @param plugin_page A pointer to the plugin whose display widget
- *  should be destroyed. */
+ *  should be destroyed.
+ */
 void gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page);
 
 
@@ -251,7 +254,8 @@ void gnc_plugin_page_show_summarybar (GncPluginPage *page, gboolean visible);
  *  @param key_file A pointer to the GKeyFile data structure where the
  *  page information should be written.
  *
- *  @param group_name The group name to use when saving data. */
+ *  @param group_name The group name to use when saving data.
+ */
 void gnc_plugin_page_save_page (GncPluginPage *page,
                                 GKeyFile *key_file,
                                 const gchar *group_name);
@@ -268,11 +272,12 @@ void gnc_plugin_page_save_page (GncPluginPage *page,
  *  @param key_file A pointer to the GKeyFile data structure where the
  *  page information should be read.
  *
- *  @param group_name The group name to use when restoring data. */
+ *  @param group_name The group name to use when restoring data.
+ */
 GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
-        const gchar *page_type,
-        GKeyFile *key_file,
-        const gchar *group_name);
+                                              const gchar *page_type,
+                                              GKeyFile *key_file,
+                                              const gchar *group_name);
 
 
 /** Add the actions for a content page to the specified window.
@@ -281,7 +286,8 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  *  added to the user interface.
  *
  *  @param merge A pointer to the UI manager data structure for a
- *  window. */
+ *  window.
+ */
 void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
                                     GtkUIManager *merge);
 
@@ -292,7 +298,8 @@ void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
  *  removed from the user interface.
  *
  *  @param merge A pointer to the UI manager data structure for a
- *  window. */
+ *  window.
+ */
 void gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
                                       GtkUIManager *merge);
 
@@ -303,7 +310,8 @@ void gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
  *  should be retrieved.
  *
  *  @return The name of this plugin.  This string is owned by the
- *  plugin. */
+ *  plugin.
+ */
 const gchar *gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
 
 
@@ -530,7 +538,8 @@ GtkUIManager *gnc_plugin_page_get_ui_merge (GncPluginPage *page);
  *  @param page The page whose menu/toolbar action group should be
  *  retrieved.
  *
- *  @return A pointer to the GtkActionGroup object for this page. */
+ *  @return A pointer to the GtkActionGroup object for this page.
+ */
 GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
 
 
@@ -544,9 +553,10 @@ GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
  *  be consistent across all pages of the same type.
  *
  *  @return A pointer to the newly created GtkActionGroup object for
- *  this page. */
+ *  this page.
+ */
 GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
-        const gchar *group_name);
+                                                      const gchar *group_name);
 
 /** Retrieve a GtkAction object associated with this page.
  *
@@ -555,7 +565,8 @@ GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page,
  *
  *  @param name The name of the GtkAction to find.
  *
- *  @return A pointer to the retuested GtkAction object or NULL. */
+ *  @return A pointer to the retuested GtkAction object or NULL.
+ */
 GtkAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
 
 /* Signals */
@@ -569,7 +580,8 @@ void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
  *  @param plugin_page A page.
  *
  *  @return FALSE if the page could not or would not comply, which
- *  should cancel the pending operation.  TRUE otherwise */
+ *  should cancel the pending operation.  TRUE otherwise
+ */
 gboolean gnc_plugin_page_finish_pending (GncPluginPage *plugin_page);
 
 G_END_DECLS

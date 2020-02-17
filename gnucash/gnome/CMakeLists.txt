@@ -200,6 +200,7 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -D SRC=${GNC_APPDATA_IN}
                              -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml
                              -D VCS_INFO_FILE=${VCS_INFO_FILE}
+                             -D GNUCASH_BUILD_ID=${GNUCASH_BUILD_ID}
                              -D PROJECT_VERSION=${PROJECT_VERSION}
                              -D SRC_DIR=${CMAKE_SOURCE_DIR}
                              -P ${CMAKE_SOURCE_DIR}/cmake/insert-vcs-data.cmake)

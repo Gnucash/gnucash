@@ -13,4 +13,9 @@
 
 include (${SRC_DIR}/cmake/version-info2env.cmake)
 versioninfo2env (${VCS_INFO_FILE})
+
+
+if (GNUCASH_BUILD_ID AND NOT "${GNUCASH_BUILD_ID}" STREQUAL "${GNC_VCS_REV}")
+    set (GNC_VCS_REV "${GNC_VCS_REV} (${GNUCASH_BUILD_ID})")
+endif()
 configure_file(${SRC} ${DST})
