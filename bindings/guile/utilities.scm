@@ -163,6 +163,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public (gnc:substring-replace-from-to s1 s2 s3 start end-after)
+  (issue-deprecation-warning "gnc:substring-replace-from-to is deprecated.")
   (string-replace-substring
    s1 s2 s3 0 (string-length s1) (max 0 (1- start))
    (and (positive? end-after) (+ (max 0 (1- start)) (1- end-after)))))
