@@ -1012,7 +1012,8 @@ class GncOptionDateOptionTest : public ::testing::Test
 {
 protected:
     GncOptionDateOptionTest() :
-        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option"}} {}
+        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option",
+                                    GncOptionUIType::DATE_BOTH_END}} {}
 
     GncOption m_option;
 };

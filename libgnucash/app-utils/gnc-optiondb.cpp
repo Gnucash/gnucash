@@ -971,6 +971,9 @@ gnc_register_date_interval_option(const GncOptionDBPtr& db, const char* section,
                                   const char* doc_string,
                                   RelativeDatePeriod period)
 {
-    GncOption option{GncOptionDateValue(section, name, key, doc_string, period)};
+    auto ui_type = static_cast<int>(period) % 2 ?
+        GncOptionUIType::DATE_BOTH_END : GncOptionUIType::DATE_BOTH_BEGIN;
+    GncOption option{GncOptionDateValue(section, name, key, doc_string,
+                                        ui_type, period)};
     db->register_option(section, std::move(option));
 }
