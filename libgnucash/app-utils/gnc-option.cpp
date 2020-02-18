@@ -256,6 +256,18 @@ GncOption::permissible_value_description(std::size_t index) const
                       }, *m_option);
 }
 
+GList*
+GncOption::account_type_list() const noexcept
+{
+    return std::visit([] (const auto& option) -> GList* {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionAccountValue>)
+                              return option.account_type_list();
+                          else
+                              return nullptr;
+                      }, *m_option);
+}
+
 std::ostream&
 GncOption::out_stream(std::ostream& oss) const
 {

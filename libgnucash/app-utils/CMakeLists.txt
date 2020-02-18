@@ -92,6 +92,7 @@ set(app_utils_ALL_LIBRARIES
     gnc-engine
     gnc-locale-tax
     gnucash-guile
+    ${GLIB_LDFLAGS}
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
     ${LIBXSLT_LDFLAGS}

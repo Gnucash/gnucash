@@ -584,6 +584,7 @@ public:
             //throw!
             m_value = values;
     }
+    GList* account_type_list() const noexcept;
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }

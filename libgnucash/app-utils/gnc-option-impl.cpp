@@ -48,6 +48,24 @@ GncOptionAccountValue::validate(const GncOptionAccountList& values) const
     return true;
 }
 
+/**
+ * Create a GList of account types to pass to gnc_account_sel_set_acct_filters.
+ * gnc_account_sel_set_acct_filters copies the list so the intermediary caller
+ * is responsible for freeing the list.
+ *
+ * @return an allocated GList* or nullptr if the list is empty.
+ */
+GList*
+GncOptionAccountValue::account_type_list() const noexcept
+{
+    if (m_allowed.empty())
+        return nullptr;
+    GList* retval;
+    for (auto type : m_allowed)
+        retval = g_list_prepend(retval, GINT_TO_POINTER(type));
+    return g_list_reverse(retval);
+}
+
 static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 static void
