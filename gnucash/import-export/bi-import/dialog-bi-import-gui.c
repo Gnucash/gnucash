@@ -425,14 +425,14 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
 
     // add a label
     label = gtk_label_new (msg);
-    gtk_container_add (GTK_CONTAINER (content_area), label);
+    gtk_box_pack_start(GTK_BOX(content_area), label, FALSE, FALSE, 0);
 
     // add a textview
     view = gtk_text_view_new ();
     gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD_CHAR);
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
     gtk_text_buffer_set_text (buffer, default_input, -1);
-    gtk_container_add (GTK_CONTAINER (content_area), view);
+    gtk_box_pack_start(GTK_BOX(content_area), view, TRUE, TRUE, 0);
 
     // run the dialog
     gtk_widget_show_all (dialog);
@@ -482,11 +482,10 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
 
     // add a scroll area
     scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
-    gtk_container_add (GTK_CONTAINER (content_area), scrolledwindow);
+    gtk_box_pack_start(GTK_BOX(content_area), scrolledwindow, TRUE, TRUE, 0);
 
     // add a textview
     view = gtk_text_view_new ();
-//    gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD_CHAR);
     gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
     gtk_text_buffer_set_text (buffer, msg, -1);
