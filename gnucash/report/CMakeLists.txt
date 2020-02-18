@@ -1,5 +1,4 @@
 
-add_subdirectory(jqplot)
 add_subdirectory(reports)
 add_subdirectory(stylesheets)
 add_subdirectory(test)
@@ -146,5 +145,5 @@ set_local_dist(report_DIST_local CMakeLists.txt
   ${report_SCHEME} ${report_SCHEME_1} ${report_SCHEME_2}
   ${report_eguile_parts_SCHEME} ${report_eguile_SCHEME})
 
-set(report_DIST ${report_DIST_local} ${jqplot_DIST}
+set(report_DIST ${report_DIST_local}
                 ${reports_DIST} ${stylesheets_DIST} ${test_report_DIST} PARENT_SCOPE)
