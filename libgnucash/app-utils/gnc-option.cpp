@@ -48,6 +48,11 @@ GncOption::get_value() const
     return std::visit([](const auto option)->ValueType {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
                                            return option.get_value();
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                         GncOptionDateValue> &&
+                                         std::is_same_v<std::decay_t<ValueType>,
+                                        RelativeDatePeriod>)
+                              return option.get_period();
                           return ValueType {};
                       }, *m_option);
 }
