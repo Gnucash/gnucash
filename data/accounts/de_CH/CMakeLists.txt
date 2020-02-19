@@ -4,7 +4,7 @@ set(account_DATA
   acctchrt_kids.gnucash-xea
   acctchrt_otherasset.gnucash-xea
   acctchrt_otherloan.gnucash-xea
-  acctchrt_chkmu.gnucash-xea)
+  acctchrt_kmu.gnucash-xea)
 
 set_dist_list(DE_CH_DIST ${account_DATA} CMakeLists.txt)
 
