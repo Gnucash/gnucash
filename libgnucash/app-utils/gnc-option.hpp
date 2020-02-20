@@ -96,7 +96,10 @@ public:
     std::istream& in_stream(std::istream& iss);
     std::ostream& to_scheme(std::ostream& oss) const;
     std::istream& from_scheme(std::istream& iss);
-    GncOptionVariant* const _get_option() { return m_option.get(); }
+
+
+    friend GncOptionVariant& swig_get_option(GncOption*);
+
 private:
     inline static const std::string c_empty_string{""};
     GncOptionVariantPtr m_option;

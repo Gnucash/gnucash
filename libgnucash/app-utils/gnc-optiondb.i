@@ -302,34 +302,43 @@ gnc_option_test_book_destroy(QofBook* book)
 
 wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 
+%ignore swig_get_option(GncOption&);
+%inline %{
+#include "gnc-option.hpp"
+#include "gnc-option-ui.hpp"
+
+    GncOptionVariant& swig_get_option(GncOption* option)
+    {
+        return *option->m_option;
+    }
+%}
+
 %include "gnc-option.hpp"
 %include "gnc-option-impl.hpp"
 %include "gnc-optiondb.hpp"
 %include "gnc-optiondb-impl.hpp"
-%inline %{
-#include "gnc-option-ui.hpp"
-%}
 
 %extend GncOption {
+
     SCM get_scm_value()
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_value()};
                 return scm_from_value(static_cast<decltype(value)>(value));
-            }, *($self->_get_option()));
+            }, swig_get_option($self));
     }
     SCM get_scm_default_value()
     {
         return std::visit([](const auto& option)->SCM {
                 auto value{option.get_default_value()};
                 return scm_from_value(static_cast<decltype(value)>(value));
-            }, *($self->_get_option()));
+            }, swig_get_option($self));
     }
     void set_value_from_scm(SCM new_value)
     {
         std::visit([new_value](auto& option) {
                 option.set_value(scm_to_value<std::decay_t<decltype(option.get_value())>>(new_value));
-            }, *($self->_get_option()));
+            }, swig_get_option($self));
     }
 };
 %extend GncOptionDB {
