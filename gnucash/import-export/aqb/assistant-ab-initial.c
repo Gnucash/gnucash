@@ -106,7 +106,9 @@ static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                                      GtkTreeViewColumn  *col, gpointer user_data);
-static void clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
+static void insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
+static void remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
+static void clear_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static void aai_close_handler(gpointer user_data);
 
@@ -127,6 +129,8 @@ struct _ABInitialInfo
     AB_BANKING *api;
     /* AB_ACCOUNT* -> Account* -- DO NOT DELETE THE KEYS! */
     GHashTable *gnc_hash;
+    /* Reverse hash table for lookup of matched GnuCash accounts */
+    GHashTable *gnc_revhash;
 };
 
 struct _DeferredInfo
@@ -204,6 +208,12 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
 #endif
         g_hash_table_destroy(info->gnc_hash);
         info->gnc_hash = NULL;
+    }
+
+    if (info->gnc_revhash)
+    {
+        g_hash_table_destroy(info->gnc_revhash);
+        info->gnc_revhash = NULL;
     }
 
     if (info->api)
@@ -321,6 +331,20 @@ aai_ab_account_equal (gconstpointer v1, gconstpointer v2)
 }
 #endif
 
+static void
+insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
+{
+    g_return_if_fail(revhash && gnc_acc && ab_acc);
+    g_hash_table_insert((GHashTable *) revhash, gnc_acc, ab_acc);
+}
+
+static void
+remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash)
+{
+    g_return_if_fail(revhash && gnc_acc);
+    g_hash_table_remove((GHashTable *) revhash, gnc_acc);
+}
+
 void
 aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
 {
@@ -349,8 +373,10 @@ aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
 #endif
         data.api = info->api;
         data.hash = info->gnc_hash;
-        gnc_account_foreach_descendant(
-            root, (AccountCb) hash_from_kvp_acc_cb, &data);
+        gnc_account_foreach_descendant(root, (AccountCb) hash_from_kvp_acc_cb, &data);
+        /* Memorize initial matches in reverse hash table */
+        info->gnc_revhash = g_hash_table_new(NULL, NULL);
+        g_hash_table_foreach(data.hash, (GHFunc) insert_acc_into_revhash_cb, (gpointer) info->gnc_revhash);
 
         info->match_page_prepared = TRUE;
     }
@@ -365,13 +391,17 @@ void
 aai_on_finish (GtkAssistant *assistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
-    Account *root;
 
-    g_return_if_fail(info && info->gnc_hash);
+    g_return_if_fail(info && info->gnc_hash && info->gnc_revhash);
 
+    /* Remove GnuCash accounts from reverse hash table which are still
+     * matched to an AqBanking account. For the remaining GnuCash accounts
+     * the KVPs must be cleared (i.e. deleted).
+     * Please note that the value (i.e. the GnuCash account) stored in info->gnc_hash
+     * is used as key for info->gnc_revhash */
+    g_hash_table_foreach(info->gnc_hash, (GHFunc) remove_acc_from_revhash_cb, info->gnc_revhash);
     /* Commit the changes */
-    root = gnc_book_get_root_account(gnc_get_current_book());
-    gnc_account_foreach_descendant(root, (AccountCb) clear_kvp_acc_cb, NULL);
+    g_hash_table_foreach(info->gnc_revhash, (GHFunc) clear_kvp_acc_cb, NULL);
     g_hash_table_foreach(info->gnc_hash, (GHFunc) save_kvp_acc_cb, NULL);
 
     gtk_widget_destroy(info->window);
@@ -649,14 +679,11 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
 }
 
 static void
-clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
+clear_kvp_acc_cb(gpointer gnc_acc, gpointer ab_acc, gpointer user_data)
 {
-    if (gnc_ab_get_account_uid(gnc_acc))
-        gnc_ab_set_account_uid(gnc_acc, 0);
-    if (gnc_ab_get_account_accountid(gnc_acc))
-        gnc_ab_set_account_accountid(gnc_acc, "");
-    if (gnc_ab_get_account_bankcode(gnc_acc))
-        gnc_ab_set_account_bankcode(gnc_acc, "");
+    g_return_if_fail(gnc_acc);
+    /* Delete complete "hbci..." KVPs for GnuCash account */
+    gnc_account_delete_map_entry((Account *) gnc_acc, "hbci", NULL, NULL, FALSE);
 }
 
 static void
