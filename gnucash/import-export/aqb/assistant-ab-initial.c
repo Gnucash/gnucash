@@ -545,7 +545,11 @@ clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,
 
     gtk_tree_model_get(model, iter, ACCOUNT_LIST_COL_AB_ACCT, &ab_acc, -1);
 
+#ifdef AQBANKING6
+    if (aai_ab_account_equal(ab_acc, data->ab_acc))
+#else
     if (ab_acc == data->ab_acc)
+#endif
     {
         gtk_list_store_set(store, iter, ACCOUNT_LIST_COL_GNC_NAME, "",
                            ACCOUNT_LIST_COL_CHECKED, TRUE, -1);
