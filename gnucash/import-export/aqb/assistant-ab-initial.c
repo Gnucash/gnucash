@@ -27,6 +27,7 @@
  * @author Copyright (C) 2006 David Hampton <hampton@employees.org>
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  * @author Copyright (C) 2011 Robert Fewell
+ * @author Copyright (C) 2020 Peter Zimmerer <pkzw@web.de>
  */
 
 #include <config.h>
@@ -89,6 +90,10 @@ gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 void aai_wizard_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data);
 
+#ifdef AQBANKING6
+static guint aai_ab_account_hash(gconstpointer v);
+static gboolean aai_ab_account_equal(gconstpointer v1, gconstpointer v2);
+#endif
 void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 static gboolean banking_has_accounts(AB_BANKING *banking);
@@ -290,6 +295,32 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     LEAVE(" ");
 }
 
+#ifdef AQBANKING6
+static guint
+aai_ab_account_hash (gconstpointer v)
+{
+	if (v == NULL)
+		return 0;
+	else
+		/* Use the account unique id as hash value */
+		return AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v);
+}
+
+static gboolean
+aai_ab_account_equal (gconstpointer v1, gconstpointer v2)
+{
+	if (v1 == NULL || v2 == NULL)
+		return v1 == v2;
+	else
+	{
+		/* Use the account unique id to check for equality */
+		uint32_t uid1 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v1);
+		uint32_t uid2 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v2);
+		return uid1 == uid2;
+	}
+}
+#endif
+
 void
 aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
 {
@@ -311,7 +342,11 @@ aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
 #endif
         /* Determine current mapping */
         root = gnc_book_get_root_account(gnc_get_current_book());
+#ifdef AQBANKING6
+        info->gnc_hash = g_hash_table_new(&aai_ab_account_hash, &aai_ab_account_equal);
+#else
         info->gnc_hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
+#endif
         data.api = info->api;
         data.hash = info->gnc_hash;
         gnc_account_foreach_descendant(
