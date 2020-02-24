@@ -339,8 +339,8 @@ find_guile_dirs()
 
 # ############################################################
 if (WITH_AQBANKING)
-  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.9.99)
-  pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.3.4)
+  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.20)
+  pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.7.8)
   set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
     "${GWENHYWFAR_INCLUDE_DIRS}")
   set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")
@@ -350,10 +350,7 @@ if (WITH_AQBANKING)
   set(CMAKE_REQUIRED_INCLUDES)
   set(CMAKE_REQUIRED_LIBRARIES)
   if(WITH_GNUCASH)
-    pkg_check_modules (GWEN_GTK3 gwengui-gtk3)
-    if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")
-      set(HAVE_GWEN_GTK3 1 CACHE BOOL "True if gwen-gtk3.pc exists")
-    endif()
+    pkg_check_modules (GWEN_GTK3 REQUIRED gwengui-gtk3)
   endif()
 endif()
 

@@ -46,7 +46,6 @@
 #include "gnc-plugin-aqbanking.h"
 #include "qof.h"
 
-# define USING_GWENHYWFAR_GTK3_GUI
 # define GNC_GWENHYWFAR_CB GWENHYWFAR_CB
 
 #define GWEN_GUI_CM_CLASS "dialog-hbcilog"
@@ -54,9 +53,7 @@
 #define GNC_PREF_CLOSE_ON_FINISH   "close-on-finish"
 #define GNC_PREF_REMEMBER_PIN      "remember-pin"
 
-#ifdef USING_GWENHYWFAR_GTK3_GUI
-# include <gtk3_gui.h>
-#endif
+# include <gwen-gui-gtk3/gtk3_gui.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
