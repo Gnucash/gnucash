@@ -61,12 +61,12 @@
     <act:description>Kto 9000-9999</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -81,6 +81,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>Aktiva = Kapitalverwendung</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -94,8 +100,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5431c68bfabcf5fdbef88abedd861198</act:parent>
@@ -112,8 +122,8 @@
     <act:description>SKR04 2005: 0001-0089</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">25554b48b5e81d8452521bacda7cc226</act:parent>
@@ -129,8 +139,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">60a53513911abc31ce93dfddbc9c96c5</act:parent>
@@ -171,8 +181,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">60a53513911abc31ce93dfddbc9c96c5</act:parent>
@@ -237,8 +247,8 @@
     <act:description>SKR04 2005: 0095-0099</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">25554b48b5e81d8452521bacda7cc226</act:parent>
@@ -279,8 +289,8 @@
     <act:description>0100-0160</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">25554b48b5e81d8452521bacda7cc226</act:parent>
@@ -296,8 +306,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3dbb5945983bc0de9d33b40bb21c53cb</act:parent>
@@ -314,8 +324,8 @@
     <act:code>0100</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">accd83b772d8921a4fa697291ad04e2c</act:parent>
@@ -368,8 +378,8 @@
     <act:code>0135</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">05140533502d0be13e2a07b5b78f826d</act:parent>
@@ -396,6 +406,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:parent type="new">3dbb5945983bc0de9d33b40bb21c53cb</act:parent>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
     <act:name>Geschäfts- oder Firmenwert</act:name>
@@ -430,6 +446,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">3dbb5945983bc0de9d33b40bb21c53cb</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -468,12 +490,12 @@
     <act:description>0200-0795</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">25554b48b5e81d8452521bacda7cc226</act:parent>
@@ -490,8 +512,8 @@
     <act:code>0200</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4240cda2d91992e2202a40b0bf36a8b2</act:parent>
@@ -689,8 +711,8 @@
     <act:code>0310</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f48445e107dc1620cd4fda6f6b144ad4</act:parent>
@@ -839,12 +861,12 @@
     <act:code>0400</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4240cda2d91992e2202a40b0bf36a8b2</act:parent>
@@ -909,8 +931,8 @@
     <act:code>0500</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4240cda2d91992e2202a40b0bf36a8b2</act:parent>
@@ -939,8 +961,8 @@
     <act:code>0520</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -957,8 +979,8 @@
     <act:code>0540</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -999,8 +1021,8 @@
     <act:code>0620</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -1029,8 +1051,8 @@
     <act:code>0650</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -1059,8 +1081,8 @@
     <act:code>0670</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -1089,8 +1111,8 @@
     <act:code>0690</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9c897b2b8563220f6ba863b5d7bcb0aa</act:parent>
@@ -1275,12 +1297,12 @@
     <act:description>Ausweis nach Restlaufzeit</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">0800-0999</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">0800-0999</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">25554b48b5e81d8452521bacda7cc226</act:parent>
@@ -1333,8 +1355,8 @@
     <act:code>0820</act:code>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0c02303d139190b2cfded19f03caa096</act:parent>
@@ -1423,8 +1445,8 @@
     <act:code>0900</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0c02303d139190b2cfded19f03caa096</act:parent>
@@ -1465,8 +1487,8 @@
     <act:code>0930</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0c02303d139190b2cfded19f03caa096</act:parent>
@@ -1541,6 +1563,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>SKR04 2005:1000-1999</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">5431c68bfabcf5fdbef88abedd861198</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1553,6 +1581,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>SKR04 2005: 1000-1199</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1567,8 +1601,8 @@
     <act:code>1000</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">693674f6bcdd8dfbc525267340f4771b</act:parent>
@@ -1585,8 +1619,8 @@
     <act:code>1040</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">693674f6bcdd8dfbc525267340f4771b</act:parent>
@@ -1651,8 +1685,8 @@
     <act:code>1100</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">693674f6bcdd8dfbc525267340f4771b</act:parent>
@@ -1693,8 +1727,8 @@
     <act:code>1180</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">693674f6bcdd8dfbc525267340f4771b</act:parent>
@@ -1711,8 +1745,8 @@
     <act:code>1181</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4b94caba6927babf0af628999af0e00d</act:parent>
@@ -1729,8 +1763,8 @@
     <act:code>1184</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4b94caba6927babf0af628999af0e00d</act:parent>
@@ -1748,8 +1782,8 @@
     <act:description>(von Vorräten offen abgesetzt)</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">693674f6bcdd8dfbc525267340f4771b</act:parent>
@@ -1766,8 +1800,8 @@
     <act:code>1191</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c4ecd4b8292df74335546eda34e7e375</act:parent>
@@ -1794,6 +1828,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>SKR04 2005: 1200-1299</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -1809,8 +1849,8 @@
     <act:description>Debitorensammenkonto</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">045196223f1e151347db1f23d28b3dc5</act:parent>
@@ -1828,8 +1868,8 @@
     <act:description>ohne Kontokorrent</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3db9920658f7630cee64902f9698ebb3</act:parent>
@@ -1859,8 +1899,8 @@
     <act:code>1216</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">76c54d31f188167d8a031d96045283fd</act:parent>
@@ -1914,8 +1954,8 @@
     <act:code>1220</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3db9920658f7630cee64902f9698ebb3</act:parent>
@@ -2148,8 +2188,8 @@
     <act:code>1260</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">045196223f1e151347db1f23d28b3dc5</act:parent>
@@ -2190,8 +2230,8 @@
     <act:code>1266</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2206ddc60ecf97df41c9a90d71fdd94d</act:parent>
@@ -2244,8 +2284,8 @@
     <act:code>1270</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2206ddc60ecf97df41c9a90d71fdd94d</act:parent>
@@ -2310,8 +2350,8 @@
     <act:code>1280</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">045196223f1e151347db1f23d28b3dc5</act:parent>
@@ -2352,8 +2392,8 @@
     <act:code>1286</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8025095dc946bd68be8762fc42e31fc6</act:parent>
@@ -2406,8 +2446,8 @@
     <act:code>1290</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8025095dc946bd68be8762fc42e31fc6</act:parent>
@@ -2499,8 +2539,8 @@
     <act:description>SKR04 2005: 1300-1499</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">045196223f1e151347db1f23d28b3dc5</act:parent>
@@ -2514,6 +2554,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -2552,8 +2598,8 @@
     <act:code>1310</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2594,8 +2640,8 @@
     <act:code>1320</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2636,8 +2682,8 @@
     <act:code>1330</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2678,8 +2724,8 @@
     <act:code>1340</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2721,8 +2767,8 @@
     <act:description>gezahlte Kautionen</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2764,8 +2810,8 @@
     <act:description>Ausgereichte Darlehen</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2806,8 +2852,8 @@
     <act:code>1370</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2931,8 +2977,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -2950,21 +2996,21 @@
     <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K66</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -2982,17 +3028,17 @@
     <act:description>UstVa Zl. 55, Kz. 66</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K66</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K66</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4ac4ec9e7c83bcbb6ac389be1821f0c</act:parent>
@@ -3066,17 +3112,17 @@
     <act:description>UstVa Zl. 56, Kz. 61</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K61</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K61</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3150,17 +3196,17 @@
     <act:description>UstVa Zl. 59, Kz. 63</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K63</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K63</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3178,17 +3224,17 @@
     <act:description>UstVa Zl. 58, Kz. 67</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K67</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K67</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3218,8 +3264,8 @@
     <act:description>teilw. privat genutze Anschaffungen (?)</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3321,17 +3367,17 @@
     <act:description>UstVa Zl. 61, Kz. 59</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K59</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K59</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3349,17 +3395,17 @@
     <act:description>UstVa Zl. 57, Kz. 62</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K62</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K62</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">24224918f644a964fef3d4afdc48933f</act:parent>
@@ -3377,8 +3423,8 @@
     <act:description>gegen das Finanzamt</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c36cd806a8bad4266ed2395be7f90d0c</act:parent>
@@ -3621,6 +3667,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>1500-1549</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -3731,12 +3783,12 @@
     <act:description>1550-1899</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>last-num</slot:key>
-	<slot:value type="string">1</slot:value>
+        <slot:key>last-num</slot:key>
+        <slot:value type="string">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3be1aa86d6868b006741b9af6777cf5f</act:parent>
@@ -3753,12 +3805,12 @@
     <act:code>1600</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>last-num</slot:key>
-	<slot:value type="string">1</slot:value>
+        <slot:key>last-num</slot:key>
+        <slot:value type="string">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
@@ -3775,8 +3827,8 @@
     <act:code>1700</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9743059255b8318a7eb5ba07b2dd3e0e</act:parent>
@@ -3842,16 +3894,16 @@
     <act:description>Rechnungsabgrenzungsposten</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">1900-1999</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">1900-1999</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5431c68bfabcf5fdbef88abedd861198</act:parent>
@@ -3868,8 +3920,8 @@
     <act:code>1900</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">12ee644791faadaee9c46305b8932295</act:parent>
@@ -3923,12 +3975,12 @@
     <act:description>§274 HGB</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">WertaufholungsGEBOT in Handelsbilanz - WertaufholungsVERBOT in Steuerbilanz</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">WertaufholungsGEBOT in Handelsbilanz - WertaufholungsVERBOT in Steuerbilanz</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">12ee644791faadaee9c46305b8932295</act:parent>
@@ -3943,6 +3995,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>Passiva = Kapitalherkunft</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -3954,6 +4012,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -3967,8 +4031,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e5cb03707f1435c681379f2924800bd3</act:parent>
@@ -3985,8 +4049,8 @@
     <act:description>Personengesellschaften</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">411ea1d84113310d5129ff98c4bb2397</act:parent>
@@ -4039,8 +4103,8 @@
     <act:description>Kommanditisten</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">411ea1d84113310d5129ff98c4bb2397</act:parent>
@@ -4092,8 +4156,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">411ea1d84113310d5129ff98c4bb2397</act:parent>
@@ -4253,8 +4317,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">411ea1d84113310d5129ff98c4bb2397</act:parent>
@@ -4390,8 +4454,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e5cb03707f1435c681379f2924800bd3</act:parent>
@@ -4407,8 +4471,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">74e3a2129a8919b314a0d3ca7ecd5028</act:parent>
@@ -4438,8 +4502,8 @@
     <act:description>Passivausweis, von gezeichnetem Kapital offen abgesetzt; eingeforderte ausstehende Einlagen s. Konto 1298</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aktivausweis: 0001</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aktivausweis: 0001</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5eeae8dd31cc6836e2af04d1e3bf00fd</act:parent>
@@ -4455,8 +4519,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">74e3a2129a8919b314a0d3ca7ecd5028</act:parent>
@@ -4473,8 +4537,8 @@
     <act:code>2920</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">a5e82f2d37d71d8778bbf7debb5ef5e3</act:parent>
@@ -4551,8 +4615,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e5cb03707f1435c681379f2924800bd3</act:parent>
@@ -4568,8 +4632,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">03f020a835b1fb5ba5b79c0622007f0c</act:parent>
@@ -4586,8 +4650,8 @@
     <act:code>2930</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef9e2cde3ed8ea553ecd7266fab83db4</act:parent>
@@ -4652,8 +4716,8 @@
     <act:code>2950</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef9e2cde3ed8ea553ecd7266fab83db4</act:parent>
@@ -4706,8 +4770,8 @@
     <act:code>2960</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef9e2cde3ed8ea553ecd7266fab83db4</act:parent>
@@ -4771,8 +4835,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">03f020a835b1fb5ba5b79c0622007f0c</act:parent>
@@ -4789,8 +4853,8 @@
     <act:code>2970</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">AutoGewinn</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">AutoGewinn</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8de79e4312296a8f5aa1d8e81d90fff8</act:parent>
@@ -4843,8 +4907,8 @@
     <act:code>2978</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">AutoVerlust</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">AutoVerlust</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8de79e4312296a8f5aa1d8e81d90fff8</act:parent>
@@ -4872,8 +4936,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">03f020a835b1fb5ba5b79c0622007f0c</act:parent>
@@ -4890,8 +4954,8 @@
     <act:code>2980</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef029fd872a653c6ae662719cb3d2e2d</act:parent>
@@ -5147,12 +5211,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
@@ -5169,8 +5233,8 @@
     <act:code>3000</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2b4ee42a89a642847e32a71e03b95976</act:parent>
@@ -5211,8 +5275,8 @@
     <act:code>3020</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2b4ee42a89a642847e32a71e03b95976</act:parent>
@@ -5277,8 +5341,8 @@
     <act:code>3070</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2b4ee42a89a642847e32a71e03b95976</act:parent>
@@ -5391,8 +5455,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
@@ -5406,6 +5470,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -5420,8 +5490,8 @@
     <act:code>3100</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">de51c7e09ef85fd4768482c9873d71b7</act:parent>
@@ -5474,8 +5544,8 @@
     <act:code>3120</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">de51c7e09ef85fd4768482c9873d71b7</act:parent>
@@ -5527,8 +5597,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -5545,8 +5615,8 @@
     <act:code>3150</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">815036103fbfcdc67d0fcee3c4bd7279</act:parent>
@@ -5599,8 +5669,8 @@
     <act:code>3180</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">815036103fbfcdc67d0fcee3c4bd7279</act:parent>
@@ -5664,8 +5734,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -5682,8 +5752,8 @@
     <act:code>3250</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">83d0177a3bf8ecab71f864adb04c678e</act:parent>
@@ -5759,8 +5829,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -5778,8 +5848,8 @@
     <act:description>Sammelkonto Kreditoren</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e98ae511eab7e00712870af910a33ce0</act:parent>
@@ -5848,8 +5918,8 @@
     <act:code>3310</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e98ae511eab7e00712870af910a33ce0</act:parent>
@@ -5914,8 +5984,8 @@
     <act:code>3340</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e98ae511eab7e00712870af910a33ce0</act:parent>
@@ -5979,8 +6049,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -5997,8 +6067,8 @@
     <act:code>3350</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">77a50a6f4eebd8d7fe6dfe49064be612</act:parent>
@@ -6050,8 +6120,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -6068,8 +6138,8 @@
     <act:code>3400</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c0e507fe6c93db3fb2e93205c33d49db</act:parent>
@@ -6122,8 +6192,8 @@
     <act:code>3420</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c0e507fe6c93db3fb2e93205c33d49db</act:parent>
@@ -6173,10 +6243,16 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Verbindl. gg.UN mit Beteiligungsverh.</act:name>
+    <act:name>Verbindl. gg. UN mit Beteiligungsverh.</act:name>
     <act:id type="new">2d40feca23be62c13faf71b69ce216a7</act:id>
     <act:type>PAYABLE</act:type>
     <act:commodity>
@@ -6187,8 +6263,8 @@
     <act:code>3450</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">72f6fb081f9e61aa689f51a110c3458f</act:parent>
@@ -6241,8 +6317,8 @@
     <act:code>3470</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">72f6fb081f9e61aa689f51a110c3458f</act:parent>
@@ -6292,6 +6368,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -6306,8 +6388,8 @@
     <act:code>3500</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6372,8 +6454,8 @@
     <act:code>3510</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6438,8 +6520,8 @@
     <act:code>3520</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6492,8 +6574,8 @@
     <act:code>3530</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6546,8 +6628,8 @@
     <act:code>3540</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6600,8 +6682,8 @@
     <act:code>3550</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6654,8 +6736,8 @@
     <act:code>3560</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6793,8 +6875,8 @@
     <act:code>3700</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6847,8 +6929,8 @@
     <act:code>3720</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6902,8 +6984,8 @@
     <act:description>Sozialversicherungsbeiträge</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -6982,8 +7064,8 @@
     <act:description>Direktversicherungen u.ä.</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3f6c684bfaa3d0fc8b94368847566df3</act:parent>
@@ -7036,8 +7118,8 @@
     <act:code>3790</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -7067,8 +7149,8 @@
     <act:code>3800</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">8755bf4081c942798c5ac5f34c5b1aac</act:parent>
@@ -7172,8 +7254,8 @@
     <act:code>3810</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:parent>
@@ -7275,8 +7357,8 @@
     <act:description>Umsatzsteuervoranmeldungen</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:parent>
@@ -7306,17 +7388,17 @@
     <act:description>UstVa Zl. 52, Kz. 65</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K65</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K65</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:parent>
@@ -7444,17 +7526,17 @@
     <act:description>UstVa Zl. 63f, Kz. 69</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K69</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K69</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:parent>
@@ -7482,12 +7564,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
@@ -7527,8 +7609,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+      <slot>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -7542,6 +7628,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">ef9980b6277cc8f46bc1b1411ea65c87</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -7555,8 +7647,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -7574,21 +7666,21 @@
     <act:description>UstVa Zl. 25, Kz. 48</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Kredite, Immobilien ...</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Kredite, Immobilien ...</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K48</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K48</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7618,21 +7710,21 @@
     <act:description>UstVa Zl. 24, Kz. 43</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Ausfuhrlieferungen, Lohnveredelung...</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Ausfuhrlieferungen, Lohnveredelung...</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K43</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K43</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7650,17 +7742,17 @@
     <act:description>UstVa Zl. 21, Kz. 41</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K41</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K41</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7678,17 +7770,17 @@
     <act:description>UstVa Zl. 40, Kz. 42</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K42</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K42</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7706,17 +7798,17 @@
     <act:description>UstVa Zl. 22, Kz. 44</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K44</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K44</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7734,17 +7826,17 @@
     <act:description>UstVa Zl. 42, Kz. 45</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K45</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K45</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7762,21 +7854,21 @@
     <act:description>UstVa Zl. 24, Kz. 43</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">grenzüberschr. Beförderung, ZB-Gold, ...</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">grenzüberschr. Beförderung, ZB-Gold, ...</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K43</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K43</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3d14d5d5d3001e01974df06bf3752d3a</act:parent>
@@ -7807,21 +7899,21 @@
     <act:description>UstVa Zl. 32, Kz. 76</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">land- und forstwirtschaftliche Betriebe</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">land- und forstwirtschaftliche Betriebe</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K76</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K76</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -7876,17 +7968,17 @@
     <act:description>UstVa Zl. 28, Kz. 86</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K86</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K86</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -7904,17 +7996,17 @@
     <act:description>UstVa Zl. 36, Kz. 93</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K93</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K93</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -7932,17 +8024,17 @@
     <act:description>UstVa Zl. 35, Kz. 97</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K97</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K97</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -7960,17 +8052,17 @@
     <act:description>UstVa Zl. 35, Kz. 89</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K89</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K89</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8000,21 +8092,21 @@
     <act:description>UstVa Zl. 41, Kz. 60</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Werklieferungen aus Ausland ...</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Werklieferungen aus Ausland ...</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K60</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K60</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8032,17 +8124,17 @@
     <act:description>UstVa Zl. 42, Kz. 45</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K45</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K45</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8060,17 +8152,17 @@
     <act:description>UstVa Zl. 42, Kz. 45</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K45</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K45</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8088,17 +8180,17 @@
     <act:description>UstVa Zl. 27, Kz. 51</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K51</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K51</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8116,17 +8208,17 @@
     <act:description>UstVa Zl. 27, Kz. 81</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
       <slot>
-	<slot:key>tax-US</slot:key>
-	<slot:value type="frame">
-	  <slot>
-	    <slot:key>code</slot:key>
-	    <slot:value type="string">K81</slot:value>
-	  </slot>
-	</slot:value>
+        <slot:key>tax-US</slot:key>
+        <slot:value type="frame">
+          <slot>
+            <slot:key>code</slot:key>
+            <slot:value type="string">K81</slot:value>
+          </slot>
+        </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8144,8 +8236,8 @@
     <act:description>ohne Umsatzsteuer</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">0be35cece133442ae9f967be1626bc57</act:parent>
@@ -8186,8 +8278,8 @@
     <act:code>4506</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4cc96976e01bee25735c73178ffdea87</act:parent>
@@ -8204,8 +8296,8 @@
     <act:code>4508</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4cc96976e01bee25735c73178ffdea87</act:parent>
@@ -8245,8 +8337,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef9980b6277cc8f46bc1b1411ea65c87</act:parent>
@@ -8553,8 +8645,8 @@
     <act:code>4700</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">ef9980b6277cc8f46bc1b1411ea65c87</act:parent>
@@ -8667,8 +8759,8 @@
     <act:code>4730</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2210f6850f7a649cf982df696a48e4b7</act:parent>
@@ -8709,8 +8801,8 @@
     <act:code>4740</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2210f6850f7a649cf982df696a48e4b7</act:parent>
@@ -8751,8 +8843,8 @@
     <act:code>4770</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">2210f6850f7a649cf982df696a48e4b7</act:parent>
@@ -8792,8 +8884,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -8869,12 +8961,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -8902,8 +8994,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -8920,8 +9012,8 @@
     <act:code>4830</act:code>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9011,8 +9103,8 @@
     <act:description>(bei Buchgewinn)</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Ausfuhrlieferungen</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Ausfuhrlieferungen</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9030,8 +9122,8 @@
     <act:description>(bei Buchgewinn)</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9049,8 +9141,8 @@
     <act:description>(bei Buchgewinn)</act:description>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">innergemeischaftlich</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">innergemeischaftlich</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9280,7 +9372,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>4914</act:code>
-    <act:description>(inlndische Kap.Ges.)</act:description>
+    <act:description>(inländische Kap.Ges.)</act:description>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -9305,7 +9397,7 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>4916</act:code>
-    <act:description>(inlndische Kap.Ges.)</act:description>
+    <act:description>(inländische Kap.Ges.)</act:description>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -9477,8 +9569,8 @@
     <act:description>(Waren)</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9496,8 +9588,8 @@
     <act:description>(Waren)</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9552,8 +9644,8 @@
     <act:description>(soweit nicht außerordentlich)</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">4c0c1557fe54e71d7ed717587a0c0b4d</act:parent>
@@ -9631,8 +9723,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -9733,8 +9825,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -9823,8 +9915,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -9912,8 +10004,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f9c832cff024c6324b0712d6abfb61dc</act:parent>
@@ -10062,8 +10154,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -10080,8 +10172,8 @@
     <act:code>7400</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">7c2d0fdbe09af95d2a055c399fafea81</act:parent>
@@ -10122,8 +10214,8 @@
     <act:description>Achtung Summenzeile 15-16</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -10139,8 +10231,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -10156,8 +10248,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">57c64d9217db4ee87cece20a3c08a148</act:parent>
@@ -10173,8 +10265,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3cc4cb3a122624f62657777491c1ac38</act:parent>
@@ -10227,8 +10319,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">3cc4cb3a122624f62657777491c1ac38</act:parent>
@@ -10257,8 +10349,8 @@
     <act:code>5300</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
@@ -10275,8 +10367,8 @@
     <act:code>5400</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">59bf2e65d45938c741124bcadeaec5d7</act:parent>
@@ -10424,6 +10516,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">3cc4cb3a122624f62657777491c1ac38</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -10760,6 +10858,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">57c64d9217db4ee87cece20a3c08a148</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -10771,6 +10875,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">7862bce521129521ac86d0326f7f8e3c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -10785,8 +10895,8 @@
     <act:code>5900</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">62133a447283b07ff0502169b12fbd1c</act:parent>
@@ -10800,6 +10910,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">7862bce521129521ac86d0326f7f8e3c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -10920,6 +11036,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -10932,6 +11054,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:code>6000</act:code>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">6dd2362a27e92ab13554c41721b91795</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -11151,8 +11279,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">a943872d0d0623064a3c76ccff77965e</act:parent>
@@ -11287,6 +11415,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -11299,6 +11433,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>sowie auf aktivierte Aufwendungen für die Ingangsetzung und Erweiterung des Geschftsbetriebs</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1b709a262ee2432eed07961dc6a92463</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -11530,8 +11670,8 @@
     <act:code>6269</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Abschreibungen auf Vermögensgegenstnde des Umlaufvermögens, soweit diese die in der Kapitalgesellschaft üblichen Abschreibungen überschreiten </slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Abschreibungen auf Vermögensgegenstnde des Umlaufvermögens, soweit diese die in der Kapitalgesellschaft üblichen Abschreibungen überschreiten </slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">190d32a7a4ab84dd1b8b1ab0ef80434c</act:parent>
@@ -11547,8 +11687,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1b709a262ee2432eed07961dc6a92463</act:parent>
@@ -11605,8 +11745,8 @@
     <act:description>(soweit unüblich hoch)</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">d4c9d630bdd7fffa3a7ab0aa5e69796e</act:parent>
@@ -11624,8 +11764,8 @@
     <act:description>soweit unüblich hoch</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9dda452d32d7855339d67cf02698c269</act:parent>
@@ -11643,8 +11783,8 @@
     <act:description>soweit unüblich hoch</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">9dda452d32d7855339d67cf02698c269</act:parent>
@@ -11658,6 +11798,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -11669,6 +11815,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -11682,8 +11834,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -11700,8 +11852,8 @@
     <act:code>6305</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11718,8 +11870,8 @@
     <act:code>6310</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11796,8 +11948,8 @@
     <act:code>6320</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11826,8 +11978,8 @@
     <act:code>6325</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11856,8 +12008,8 @@
     <act:code>6330</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11886,8 +12038,8 @@
     <act:code>6335</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11916,8 +12068,8 @@
     <act:code>6340</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -11946,8 +12098,8 @@
     <act:code>6345</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -12000,8 +12152,8 @@
     <act:code>6350</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">70f081631b2bf13005c3453c6d235c6a</act:parent>
@@ -12029,8 +12181,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -12154,8 +12306,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -12172,8 +12324,8 @@
     <act:code>6450</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
@@ -12214,8 +12366,8 @@
     <act:code>6470</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
@@ -12256,8 +12408,8 @@
     <act:code>6495</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
@@ -12274,8 +12426,8 @@
     <act:code>6498</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">5925fef34d2d43bd1a1fbe06d7cf5515</act:parent>
@@ -12303,8 +12455,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -12321,8 +12473,8 @@
     <act:code>6600</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c4f157aa055b2df995b3ecb00a255372</act:parent>
@@ -12340,8 +12492,8 @@
     <act:description>steuerlich abziehbar</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12359,8 +12511,8 @@
     <act:description>steuerlich nicht abziehbar</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12389,8 +12541,8 @@
     <act:code>6630</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12407,8 +12559,8 @@
     <act:code>6640</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12449,8 +12601,8 @@
     <act:code>6643</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12468,8 +12620,8 @@
     <act:description>20% der Bewirtungskosten</act:description>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12486,8 +12638,8 @@
     <act:code>6645</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b79422d817942119d25d7a427466b48a</act:parent>
@@ -12504,8 +12656,8 @@
     <act:code>6650</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c4f157aa055b2df995b3ecb00a255372</act:parent>
@@ -12570,8 +12722,8 @@
     <act:code>6670</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">c4f157aa055b2df995b3ecb00a255372</act:parent>
@@ -12660,8 +12812,8 @@
     <act:description>allg. Verwaltungskosten</act:description>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -12690,8 +12842,8 @@
     <act:code>6805</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12708,8 +12860,8 @@
     <act:code>6810</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12726,8 +12878,8 @@
     <act:code>6815</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12744,8 +12896,8 @@
     <act:code>6820</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12810,8 +12962,8 @@
     <act:code>6825</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12828,8 +12980,8 @@
     <act:code>6827</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12846,8 +12998,8 @@
     <act:code>6830</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12864,8 +13016,8 @@
     <act:code>6835</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12919,8 +13071,8 @@
     <act:code>6845</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -12937,8 +13089,8 @@
     <act:code>6850</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
@@ -13064,8 +13216,8 @@
     <act:code>6300</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -13106,8 +13258,8 @@
     <act:code>6500</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">02bf19f7916e6dc15c403335dd274ccb</act:parent>
@@ -13136,8 +13288,8 @@
     <act:code>6530</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">56d46dd3b373b38c30ecf7fe5321a12c</act:parent>
@@ -13154,8 +13306,8 @@
     <act:code>6540</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">56d46dd3b373b38c30ecf7fe5321a12c</act:parent>
@@ -13172,8 +13324,8 @@
     <act:code>6550</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">56d46dd3b373b38c30ecf7fe5321a12c</act:parent>
@@ -13190,8 +13342,8 @@
     <act:code>6560</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">56d46dd3b373b38c30ecf7fe5321a12c</act:parent>
@@ -13208,8 +13360,8 @@
     <act:code>6570</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">56d46dd3b373b38c30ecf7fe5321a12c</act:parent>
@@ -13311,8 +13463,8 @@
     <act:code>6770</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f426b343a06164be037f65c82153a874</act:parent>
@@ -13329,8 +13481,8 @@
     <act:code>6780</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f426b343a06164be037f65c82153a874</act:parent>
@@ -13347,8 +13499,8 @@
     <act:code>6790</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f426b343a06164be037f65c82153a874</act:parent>
@@ -13398,6 +13550,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -13577,6 +13735,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -13689,8 +13853,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
@@ -13814,12 +13978,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
@@ -13979,8 +14143,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
@@ -14121,8 +14285,8 @@
     <act:description>übliche Höhe</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
@@ -14231,8 +14395,8 @@
     <act:description>soweit nicht außerordentlich</act:description>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
@@ -14272,8 +14436,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -14386,6 +14550,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -14397,6 +14567,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1848323dfe915f8ed2a24bc00fef1e16</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -14483,12 +14659,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1848323dfe915f8ed2a24bc00fef1e16</act:parent>
@@ -14761,8 +14937,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -14779,8 +14955,8 @@
     <act:code>7500</act:code>
     <act:slots>
       <slot>
-	<slot:key>tax-related</slot:key>
-	<slot:value type="integer">1</slot:value>
+        <slot:key>tax-related</slot:key>
+        <slot:value type="integer">1</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">17d4b5a4b578ad6b4b9c1ba56a4822bd</act:parent>
@@ -14818,6 +14994,12 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -14832,8 +15014,8 @@
     <act:code>7600</act:code>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">b1f254106f1e487b31aad762ad1cca11</act:parent>
@@ -14850,8 +15032,8 @@
     <act:code>7603</act:code>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f00e5e2126e3acdb3789807e0596a497</act:parent>
@@ -14868,8 +15050,8 @@
     <act:code>7604</act:code>
     <act:slots>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">f00e5e2126e3acdb3789807e0596a497</act:parent>
@@ -15041,6 +15223,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>ertragsunabhängig</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -15174,12 +15362,12 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-	<slot:key>hidden</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>hidden</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
@@ -15278,8 +15466,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e940821294093238c9ed9e89a1d00a37</act:parent>
@@ -15296,8 +15484,8 @@
     <act:code>7735</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15314,8 +15502,8 @@
     <act:code>7740</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15332,8 +15520,8 @@
     <act:code>7745</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15350,8 +15538,8 @@
     <act:code>7750</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15368,8 +15556,8 @@
     <act:code>7755</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15386,8 +15574,8 @@
     <act:code>7760</act:code>
     <act:slots>
       <slot>
-	<slot:key>notes</slot:key>
-	<slot:value type="string">Aufwandskonten?</slot:value>
+        <slot:key>notes</slot:key>
+        <slot:value type="string">Aufwandskonten?</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e250efca9681cba74a7eb7f31361d9af</act:parent>
@@ -15403,8 +15591,8 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-	<slot:key>placeholder</slot:key>
-	<slot:value type="string">true</slot:value>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
     <act:parent type="new">e940821294093238c9ed9e89a1d00a37</act:parent>
@@ -15503,6 +15691,12 @@
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
     <act:description>Anfangsbestand</act:description>
+    <act:slots>
+      <slot>
+        <slot:key>placeholder</slot:key>
+        <slot:value type="string">true</slot:value>
+      </slot>
+    </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
