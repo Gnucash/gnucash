@@ -5447,7 +5447,7 @@
   <gnc:account version="2.0.0">
     <act:name>C. Verbindlichkeiten</act:name>
     <act:id type="new">8755bf4081c942798c5ac5f34c5b1aac</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5464,7 +5464,7 @@
   <gnc:account version="2.0.0">
     <act:name>01. Anleihen</act:name>
     <act:id type="new">de51c7e09ef85fd4768482c9873d71b7</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5481,7 +5481,7 @@
   <gnc:account version="2.0.0">
     <act:name>a) Anleihen, nicht konvertibel</act:name>
     <act:id type="new">5915a4522e747674c7831a0d5edc376d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5499,7 +5499,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen, nicht konvertibel (b. 1 Jahr)</act:name>
     <act:id type="new">a9dc8adc5d95d9d7d7c3dff016e6adec</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5511,7 +5511,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen, nicht konvertibel (1-5 Jahre)</act:name>
     <act:id type="new">c0fa201dc751c2dd353dcaeb5619af65</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5523,7 +5523,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen, nicht konvertibel (g.5 Jahre)</act:name>
     <act:id type="new">77801e429d3cf2f736943f84bbfd2b74</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5535,7 +5535,7 @@
   <gnc:account version="2.0.0">
     <act:name>b) Anleihen konvertibel</act:name>
     <act:id type="new">aeacb8efbecfd61776b68ceaabbd1a8e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5553,7 +5553,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen konvertibel(bis 1 Jahr)</act:name>
     <act:id type="new">c143c56e844900decfb250502e61bd79</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5565,7 +5565,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen konvertibel(1-5 Jahre)</act:name>
     <act:id type="new">aca606dbc4c5ade581f71a4cd16b3ece</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5577,7 +5577,7 @@
   <gnc:account version="2.0.0">
     <act:name>Anleihen konvertibel(größer 5 Jahre)</act:name>
     <act:id type="new">3067cb5b2dbe8e93df51cb22d68f9c36</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5589,7 +5589,7 @@
   <gnc:account version="2.0.0">
     <act:name>02. Verbindlichkeiten gegenüber Kreditinstituten</act:name>
     <act:id type="new">815036103fbfcdc67d0fcee3c4bd7279</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5606,7 +5606,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten gegenüber Kreditinstituten</act:name>
     <act:id type="new">3c1393a502f036b6961963e7c48a5bfe</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5624,7 +5624,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten Kreditinstitut (b.1J)</act:name>
     <act:id type="new">2c8cef398d52b653e5b10efe684c6eb3</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5636,7 +5636,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten Kreditinstitut (1-5J)</act:name>
     <act:id type="new">8b18c26c125bc1e1a959594af5dd9abc</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5648,7 +5648,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten Kreditinstitut (g.5J)</act:name>
     <act:id type="new">b11d185dc016dc4eae87d81d748a79ec</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5660,7 +5660,7 @@
   <gnc:account version="2.0.0">
     <act:name>TZ-Verbindlichkeit. gg. Kreditinstituten</act:name>
     <act:id type="new">347c9d781d57484ed9db61bd43358a91</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5678,7 +5678,7 @@
   <gnc:account version="2.0.0">
     <act:name>TZ-Verbindlichkeit. Kreditinstitut(b.1J)</act:name>
     <act:id type="new">fee36472b54a600058b36d82223e7bfa</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5690,7 +5690,7 @@
   <gnc:account version="2.0.0">
     <act:name>TZ-Verbindlichkeit. Kreditinstitut(1-5J)</act:name>
     <act:id type="new">e01fea25919cbdfc85d0feff5d55f1bc</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5702,7 +5702,7 @@
   <gnc:account version="2.0.0">
     <act:name>TZ-Verbindlichkeit. Kreditinstitut(g.5J)</act:name>
     <act:id type="new">94712c7762f2caf4fd8c51f7d255cb8f</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5726,7 +5726,7 @@
   <gnc:account version="2.0.0">
     <act:name>03. erhaltene Anzahlungen auf Bestellungen</act:name>
     <act:id type="new">83d0177a3bf8ecab71f864adb04c678e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5743,7 +5743,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen</act:name>
     <act:id type="new">8849ae77228dd660bcdfd0becbfd9e7f</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5761,7 +5761,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen 7% USt</act:name>
     <act:id type="new">856a96c65a9b07bedf3ab8639f64887d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5773,7 +5773,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen 16% USt</act:name>
     <act:id type="new">63ce0da19dbe9d32234963c756cff0f1</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5785,7 +5785,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen (bis 1 Jahr)</act:name>
     <act:id type="new">ab3a06aa8006429907e1ca0d5ef59025</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5797,7 +5797,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen (1-5 Jahre)</act:name>
     <act:id type="new">19127ffca08544384a00bc092298fe0c</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5809,7 +5809,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Anzahlungen (g. 5 Jahre)</act:name>
     <act:id type="new">9fd0b8be384320ae79465cff54d26431</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -5821,7 +5821,7 @@
   <gnc:account version="2.0.0">
     <act:name>04. Verbindlichkeiten aus Lieferungen und Leistungen</act:name>
     <act:id type="new">e98ae511eab7e00712870af910a33ce0</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6058,7 +6058,7 @@
   <gnc:account version="2.0.0">
     <act:name>Wechselverbindlichkeiten</act:name>
     <act:id type="new">519d50149266a6b5e6ffbb05d85f7dc3</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6076,7 +6076,7 @@
   <gnc:account version="2.0.0">
     <act:name>Wechselverbindlichkeiten (bis 1 Jahr)</act:name>
     <act:id type="new">a7d1e5cbd85fd3bc9e9a98c60dfd1254</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6088,7 +6088,7 @@
   <gnc:account version="2.0.0">
     <act:name>Wechselverbindlichkeiten (1-5 Jahre)</act:name>
     <act:id type="new">c17a62ed7ccd7708afc6ee29f7783e79</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6100,7 +6100,7 @@
   <gnc:account version="2.0.0">
     <act:name>Wechselverbindlichkeiten (g. 5 Jahre)</act:name>
     <act:id type="new">8dfa05094cc1864f6e70c5b10c1bde43</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6112,7 +6112,7 @@
   <gnc:account version="2.0.0">
     <act:name>06. Verbindlichkeiten gegenüber verbundenen Untenehmen</act:name>
     <act:id type="new">c0e507fe6c93db3fb2e93205c33d49db</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6129,7 +6129,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk.gegenüber verbundenen Unternehmen</act:name>
     <act:id type="new">b326baaf2f2f4605872301349800b078</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6147,7 +6147,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit. gg. verbundene UN (b.1 J)</act:name>
     <act:id type="new">a6b2750c0433b56eff8e7c64977e72ac</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6159,7 +6159,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit. gg. verbundene UN (1-5 J)</act:name>
     <act:id type="new">185ab34bfe93153e311deb52053c4899</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6171,7 +6171,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit. gg. verbundene UN (g.5 J)</act:name>
     <act:id type="new">02cc27e90047b66749dba9013c3b4252</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6237,7 +6237,7 @@
   <gnc:account version="2.0.0">
     <act:name>07. Verbindlichkeiten gegenüber Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:name>
     <act:id type="new">72f6fb081f9e61aa689f51a110c3458f</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6254,7 +6254,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. gg. UN mit Beteiligungsverh.</act:name>
     <act:id type="new">2d40feca23be62c13faf71b69ce216a7</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6272,7 +6272,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. gg. UN mit Beteiligg.verh. b. 1 J</act:name>
     <act:id type="new">049ff8f520a2e830caed2344ecd12ef3</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6284,7 +6284,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. gg. UN mit Beteiligg.verh. 1-5 J</act:name>
     <act:id type="new">dbe32dba00dc90ecd4eab677d4242a0a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6296,7 +6296,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. gg. UN mit Beteiligg.verh. g. 5 J</act:name>
     <act:id type="new">8ea637b2f274efb9d04dd9db6059f454</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6362,7 +6362,7 @@
   <gnc:account version="2.0.0">
     <act:name>08. sonstige Verbindlichkeiten</act:name>
     <act:id type="new">3f6c684bfaa3d0fc8b94368847566df3</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6379,7 +6379,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verbindlichkeiten</act:name>
     <act:id type="new">ecd88b09ea57fbcb6c1371597d818f2c</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6397,7 +6397,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verbindlichkeiten (bis 1 J)</act:name>
     <act:id type="new">74e160fe423d026a1e40f49c1267b03a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6409,7 +6409,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verbindlichkeiten (1-5 J)</act:name>
     <act:id type="new">78f3f5c58155aef4dee7b7b3c20e564b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6421,7 +6421,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verbindlichkeiten (g. 5 J)</act:name>
     <act:id type="new">7486947e958ca0aaad2165caf3a63409</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6433,7 +6433,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verbindlichkeiten z.B. nach §11 Abs. 2 Satz 2 EStG für §4/3 EStG</act:name>
     <act:id type="new">d8096c61e103f7399bc4b89b9e296d74</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6445,7 +6445,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten gegenüber Gesellschaftern</act:name>
     <act:id type="new">3c6fad03081857dacd8a1b210903521b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6463,7 +6463,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit.gg. Gesellschaftern b. 1 J</act:name>
     <act:id type="new">52fcf38ee09a51320fd7510739329381</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6475,7 +6475,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit.gg. Gesellschaftern 1-5 J</act:name>
     <act:id type="new">381d85d8f08da48b51da89a9f8fe374c</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6487,7 +6487,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeit.gg. Gesellschaftern g. 5 J</act:name>
     <act:id type="new">be0a3a594fb9945cc4ffdca22fcd2e58</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6499,7 +6499,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten gegenüber Gesellschaftern für offene Ausschüttungen</act:name>
     <act:id type="new">156c86a0302635048cc5fe68ac686eac</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6511,7 +6511,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen typisch stiller Gesellschafter</act:name>
     <act:id type="new">421272e226ee21875f24c597c6857abf</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6529,7 +6529,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen typ. stiller Gesellsch. (b. 1 J)</act:name>
     <act:id type="new">3d2868a89184a1ce85be852f78e19882</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6541,7 +6541,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen typ. stiller Gesellsch. (1-5 J )</act:name>
     <act:id type="new">f4969a49be7f0208ea3861dbcb8cc4fa</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6553,7 +6553,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen typ. stiller Gesellsch. (g. 5 J)</act:name>
     <act:id type="new">44a957e1f40949df9f6c2c3fdf7be2c2</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6565,7 +6565,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen atypisch stiller Gesellschafter</act:name>
     <act:id type="new">3b9d74efc7a3e88f81321be0efbe5863</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6583,7 +6583,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen atyp. stiller Gesellsch. (b. 1 J)</act:name>
     <act:id type="new">e52a22c8007b7f4785de0060514a8720</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6595,7 +6595,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen atyp. stiller Gesellsch. (1-5 J)</act:name>
     <act:id type="new">6342940330bca762ebc6f8e83d6cb936</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6607,7 +6607,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen atyp. stiller Gesellsch. (g. 5 J)</act:name>
     <act:id type="new">ebf182d076a4b447f0c5f1bb2b566934</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6619,7 +6619,7 @@
   <gnc:account version="2.0.0">
     <act:name>Partiarische Darlehen</act:name>
     <act:id type="new">040967754f9301f1256ae5b221fc765c</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6637,7 +6637,7 @@
   <gnc:account version="2.0.0">
     <act:name>Partiarische Darlehen (bis 1 Jahr)</act:name>
     <act:id type="new">e8bc089dc96dfa3d43f7532cbb9cf209</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6649,7 +6649,7 @@
   <gnc:account version="2.0.0">
     <act:name>Partiarische Darlehen (1-5 Jahre)</act:name>
     <act:id type="new">05fb4d30864ba5f778c22165b5cc65e2</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6661,7 +6661,7 @@
   <gnc:account version="2.0.0">
     <act:name>Partiarische Darlehen (g. 5 Jahre)</act:name>
     <act:id type="new">d3c439cf5a19d1e6b4684a69531ba36d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6673,7 +6673,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Kautionen</act:name>
     <act:id type="new">57a400aeb55463d303ce9dd7b76a9433</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6691,7 +6691,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Kautionen (bis 1 Jahr)</act:name>
     <act:id type="new">57f576bc1446660251c2fddca14b7634</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6703,7 +6703,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Kautionen (1-5 Jahre)</act:name>
     <act:id type="new">5157c18456daaee9ea1896c9ce451791</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6715,7 +6715,7 @@
   <gnc:account version="2.0.0">
     <act:name>Erhaltene Kautionen (größer 5 Jahre)</act:name>
     <act:id type="new">b1f141619fe38fcfb1807704fd70815e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6727,7 +6727,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen</act:name>
     <act:id type="new">934e168b36770e076b9d2eeaad400912</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6745,7 +6745,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen bis 1 Jahr</act:name>
     <act:id type="new">c8b15d58899a26fb0f5adcb9a638f463</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6757,7 +6757,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen 1-5 Jahre</act:name>
     <act:id type="new">e6c9925fba68f48555d1096d6112f412</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6769,7 +6769,7 @@
   <gnc:account version="2.0.0">
     <act:name>Darlehen g. 5 Jahre</act:name>
     <act:id type="new">ac4f4cbd1fd12506bc90a140716e584a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6781,7 +6781,7 @@
   <gnc:account version="2.0.0">
     <act:name>(frei, in Bilanz kein Restlaufzeitvermerk)</act:name>
     <act:id type="new">948b824b332b6b86f53a3b5dd6f56e3a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6793,7 +6793,7 @@
   <gnc:account version="2.0.0">
     <act:name>Gegenkonto 3500-3569 bei Aufteilung der Konten 3570-3598</act:name>
     <act:id type="new">bdeae88868dc39b0d847e5d065e92e60</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6805,7 +6805,7 @@
   <gnc:account version="2.0.0">
     <act:name>Agenturwarenabrechnung</act:name>
     <act:id type="new">0cc79fd0ba31bd2fa0c9581e54592824</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6817,7 +6817,7 @@
   <gnc:account version="2.0.0">
     <act:name>Kreditkartenabrechnung</act:name>
     <act:id type="new">c8c1adfa13189c2897549a2148559e76</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6829,7 +6829,7 @@
   <gnc:account version="2.0.0">
     <act:name>Gewinnverfügungskonto stille Gesellschafter</act:name>
     <act:id type="new">8c94b8b8878b348bc67e526b6d87375d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6841,7 +6841,7 @@
   <gnc:account version="2.0.0">
     <act:name>Sonstige Verrechnungskonten</act:name>
     <act:id type="new">ba655bf306e798662d1d3a9444a82dd0</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6854,7 +6854,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verrechnung geleistete Anzahlungen</act:name>
     <act:id type="new">8e9b4667238895174a65c97cccda007e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6866,7 +6866,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus Betriebssteuern und -abgaben</act:name>
     <act:id type="new">6bd083365b1e5c1cd1bd43b8f955cdf0</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6884,7 +6884,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. Betriebsst. und -abgaben (b. 1 J)</act:name>
     <act:id type="new">f786a9f1a268ae3897c2956459a168eb</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6896,7 +6896,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. Betriebsst. und -abgaben (1-5 J)</act:name>
     <act:id type="new">fb29c1cd46816d95433224a0e32da1e4</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6908,7 +6908,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindl. Betriebsst. und -abgaben (g. 5 J)</act:name>
     <act:id type="new">bdb9d5c4b48848675cbfcafa7d02da2b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6920,7 +6920,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus Lohn und Gehalt</act:name>
     <act:id type="new">dfe419d26acef7e1ab26d3a8a8b7233e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6938,7 +6938,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten für Einbehaltungen von Arbeitnehmern</act:name>
     <act:id type="new">4b9346293f696a395e3bece98dcabac9</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6950,7 +6950,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus an das Finanzamt abzuführendem Bauabzugsbetrag</act:name>
     <act:id type="new">511112f3ac55f88ab568dfecd03d90fb</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6962,7 +6962,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus Lohn- und Kirchensteuer</act:name>
     <act:id type="new">15b65af9d925bbb74245b9c78a5147be</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6974,7 +6974,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten im Rahmen der sozialen Sicherheit</act:name>
     <act:id type="new">c105052eb7f8cb231479a5e34e363e5a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -6993,7 +6993,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. soziale Sicherheit (b. 1 J)</act:name>
     <act:id type="new">c587254565269152a2fd99d936f1b1c5</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7005,7 +7005,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. soziale Sicherheit (1-5 J)</act:name>
     <act:id type="new">e635b905bf0e5ef164ffce6b54277bfb</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7017,7 +7017,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. soziale Sicherheit (g. 5 J)</act:name>
     <act:id type="new">d09d10bcaa4d9c83d9a9d9104f9feecf</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7029,7 +7029,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus Einbehaltungen</act:name>
     <act:id type="new">53d93c2641b874bfeba7f284479fc486</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7042,7 +7042,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten für Verbrauchsteuern</act:name>
     <act:id type="new">3f77e9140f7ff39061e3b050e41eb2ec</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7054,7 +7054,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten aus Vermögensbildung</act:name>
     <act:id type="new">34fc3612b13809ba551d2e11b0f5dad2</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7073,7 +7073,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. Vermögensbildung (b. 1 J)</act:name>
     <act:id type="new">6af86240ddd6307f14cb704d52cb4afd</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7085,7 +7085,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. Vermögensbildung (1-5 J)</act:name>
     <act:id type="new">e3d893eba2e242ef3aa418d8226f2805</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7097,7 +7097,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichk. Vermögensbildung (g. 5 J)</act:name>
     <act:id type="new">433b7acee76ed8c3a71d2d65f6b5d768</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7109,7 +7109,7 @@
   <gnc:account version="2.0.0">
     <act:name>09. Lohn- und Gehaltsverrechnungskonto</act:name>
     <act:id type="new">dcc9df0c20ead56ac1dc766fd4aaf6b1</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7127,7 +7127,7 @@
   <gnc:account version="2.0.0">
     <act:name>Verbindlichkeiten im Rahmen der sozialen Sicherheit</act:name>
     <act:id type="new">db0fce38f062541db4f23a2c7bfeac22</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7140,7 +7140,7 @@
   <gnc:account version="2.0.0">
     <act:name>10. Umsatzsteuer</act:name>
     <act:id type="new">a4ca09669a36f58cc3081d5ecff9cdb6</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7158,7 +7158,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer 7%</act:name>
     <act:id type="new">c76f946f844d0afc674013ca97731f3a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7171,7 +7171,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus innergemeinschaftlichem Erwerb</act:name>
     <act:id type="new">e726cf1027d9589c65f0681a73fbc8c8</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7184,7 +7184,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus innergemeinschaftlichem Erwerb 15%/16%</act:name>
     <act:id type="new">a17ba6e2ea6c5860cec8ab134fc1b7e4</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7196,7 +7196,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer 16%</act:name>
     <act:id type="new">ea57995749ee6b3af394f62ff181e502</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7209,7 +7209,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus im Inland steuerpflichtigen EG-Lieferungen</act:name>
     <act:id type="new">1ac3610bf6825ca16c1dd555cb44940d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7221,7 +7221,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer EG-Lieferungen 15%/16%</act:name>
     <act:id type="new">4a390f95f31f6c2799b0868ea61b0571</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7233,7 +7233,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus innergemeinschaftlichem Erwerb ohne Vorsteuerabzug</act:name>
     <act:id type="new">edc1d6c73ae5b82d21fa87ec5ffd96a7</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7245,7 +7245,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig</act:name>
     <act:id type="new">cb006e38c871c34faeb5164e7662ede0</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7263,7 +7263,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig 7%</act:name>
     <act:id type="new">cbbc566c6cbe89d0c0e00681db1e3da4</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7275,7 +7275,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig aus im Inland steuerpflichtigen EG-Lieferungen</act:name>
     <act:id type="new">98828285aa78b084da26b62acc4880d4</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7287,7 +7287,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig aus im Inland steuerpflichtigen EG-Lieferungen 16%</act:name>
     <act:id type="new">6f91728564f5efceef7ed4a7188c698f</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7299,7 +7299,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig 16%</act:name>
     <act:id type="new">8198644d9fb9d0f780cee1f2f5de7b26</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7311,7 +7311,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nicht fällig 15%</act:name>
     <act:id type="new">39ff80036df801b30b3364fcb6cc7e18</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7323,7 +7323,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus im anderen EG-Land steuerpflichtigen Lieferungen</act:name>
     <act:id type="new">16bc4b8c90d252be6193c6ec706d277a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7335,7 +7335,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer aus im anderen EG-Land steuerpflichtigen sonstigen Leistungen/Werklieferungen</act:name>
     <act:id type="new">2e4a7740b8819739a88a6c02ecbe319e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7347,7 +7347,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuervorauszahlungen</act:name>
     <act:id type="new">b0b8449ed3962e5c8932ad6ca1e29792</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7366,7 +7366,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuervorauszahlungen 1/11</act:name>
     <act:id type="new">514276e874955b4f32008c078d0085d9</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7378,7 +7378,7 @@
   <gnc:account version="2.0.0">
     <act:name>Nachsteuer</act:name>
     <act:id type="new">f63ecbc200758bbe0927caf1813b409e</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7406,7 +7406,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">6dc1d68bf6a196c6b51e5f5e3d50de3d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7419,7 +7419,7 @@
   <gnc:account version="2.0.0">
     <act:name>USt EG-Erwerb Neufahrzeuge ohne UStID</act:name>
     <act:id type="new">a4071b167e1efe11d256feaeadaf424b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7431,7 +7431,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nach §13b UStG</act:name>
     <act:id type="new">6cf2599b1f60ced718c520f313ee100b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7443,7 +7443,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nach §13b UStG 16%</act:name>
     <act:id type="new">a2046307bda04804b5e6277e01baef5a</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7455,7 +7455,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer nach §13a UStG</act:name>
     <act:id type="new">32b9678b389940f682903a025aaa11e9</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7468,7 +7468,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer laufendes Jahr</act:name>
     <act:id type="new">cc58dab474a61b30c313cd1cd8ec90c2</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7480,7 +7480,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer Vorjahr</act:name>
     <act:id type="new">3cb0b6a8d40653514a59fa65b0abec5b</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7492,7 +7492,7 @@
   <gnc:account version="2.0.0">
     <act:name>Umsatzsteuer frühere Jahre</act:name>
     <act:id type="new">5a7146d370eb3f3132e876da3b8f000f</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7504,7 +7504,7 @@
   <gnc:account version="2.0.0">
     <act:name>Aufgeschobene Einfuhr-Umsatzsteuer</act:name>
     <act:id type="new">67f4a46ec27ab741ee919bf6abf6c2f2</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7516,7 +7516,7 @@
   <gnc:account version="2.0.0">
     <act:name>In Rechnung unberechtigt ausgewiesene und geschuldete Steuerbeträge</act:name>
     <act:id type="new">b05509ddda11646cabd5c0aca95a183d</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -7544,7 +7544,7 @@
   <gnc:account version="2.0.0">
     <act:name>Steuerzahlungen an andere EG-Länder</act:name>
     <act:id type="new">8a9ad6b49648d5e0627601f031c094b9</act:id>
-    <act:type>PAYABLE</act:type>
+    <act:type>LIABILITY</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
