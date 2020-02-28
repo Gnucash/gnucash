@@ -6,6 +6,19 @@ set (reports_common_SCHEME
   aging.scm
 )
 
+# The 'with exposed generator' reports are standard reports that can
+# be created with a special generator function
+# This function is exposed via reports.scm.
+# As such these reports should be built before reports.scm
+# However all other reports need to be built after reports.scm
+# as they in turn may consume these generators.
+set (reports_standard_with_exposed_generator_SCHEME
+    standard/register.scm
+    standard/owner-report.scm
+    standard/payables.scm
+    standard/receivables.scm
+)
+
 set (reports_standard_SCHEME
     standard/account-piecharts.scm
     standard/account-summary.scm
@@ -33,7 +46,6 @@ set (reports_standard_SCHEME
     standard/portfolio.scm
     standard/price-scatter.scm
     standard/reconcile-report.scm
-    standard/register.scm
     standard/transaction.scm
     standard/trial-balance.scm
     standard/view-column.scm
@@ -41,9 +53,6 @@ set (reports_standard_SCHEME
     standard/receipt.scm
     standard/invoice.scm
     standard/job-report.scm
-    standard/owner-report.scm
-    standard/payables.scm
-    standard/receivables.scm
     standard/balsheet-eg.scm
 )
 
@@ -77,38 +86,31 @@ set(scm_rpts_GUILE_DEPENDS
   scm-core-utils
   scm-engine
   scm-gnome-utils
+  scm-app-utils
+  scm-gnc-module
   scm-report
   )
 
 set(scm_rpt_example_GUILE_DEPENDS
-  scm-gnc-html
-  scm-app-utils
-  scm-core-utils
-  scm-gnc-module
-  scm-engine
+  ${scm_rpts_GUILE_DEPENDS}
   scm-reports-example-links
-  scm-gnome-utils
-  scm-report
   )
 
 set(scm_rpt_locale_specific_GUILE_DEPENDS
-  scm-gnc-html
-  scm-core-utils
-  scm-gnc-module
-  scm-engine
+  ${scm_rpts_GUILE_DEPENDS}
   scm-test-core
   scm-locale-tax
-  scm-report
-  scm-gnome-utils
+  )
+
+set(scm_rpt_std_w_exposed_generator_GUILE_DEPENDS
+  ${scm_rpts_GUILE_DEPENDS}
+  scm-reports-common-links
+  scm-reports-standard-links
   )
 
 set(scm_rpt_std_GUILE_DEPENDS
-  ${scm_rpts_GUILE_DEPENDS}
-  scm-app-utils
-  scm-gnc-module
+  ${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}
   scm-rpt-reports
-  scm-reports-common-links
-  scm-reports-standard-links
   )
 
 gnc_add_scheme_targets(scm-reports-common
@@ -118,10 +120,17 @@ gnc_add_scheme_targets(scm-reports-common
   TRUE
 )
 
+gnc_add_scheme_targets(scm-reports-standard-with-exposed-generator
+  "${reports_standard_with_exposed_generator_SCHEME}"
+  "gnucash/reports/standard"
+  "${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}"
+  TRUE
+)
+
 gnc_add_scheme_targets(scm-rpt-reports
   "${reports_SCHEME}"
   "gnucash"
-  "${scm_rpts_GUILE_DEPENDS}"
+  "scm-reports-standard-with-exposed-generator;${scm_rpts_GUILE_DEPENDS}"
   TRUE
 )
 
