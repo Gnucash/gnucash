@@ -19,7 +19,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report standard-reports lot-viewer))
+(define-module (gnucash report lot-viewer))
 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-11))            ;for let-values

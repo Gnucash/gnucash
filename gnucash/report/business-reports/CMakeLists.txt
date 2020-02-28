@@ -7,6 +7,7 @@ set (business_reports_SCHEME
   receipt.scm
   invoice.scm
   job-report.scm
+  lot-viewer.scm
   new-aging.scm
   new-owner-report.scm
   owner-report.scm

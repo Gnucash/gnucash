@@ -418,6 +418,7 @@ gnucash/report/business-reports/business-reports.scm
 gnucash/report/business-reports/customer-summary.scm
 gnucash/report/business-reports/invoice.scm
 gnucash/report/business-reports/job-report.scm
+gnucash/report/business-reports/lot-viewer.scm
 gnucash/report/business-reports/new-aging.scm
 gnucash/report/business-reports/new-owner-report.scm
 gnucash/report/business-reports/owner-report.scm
@@ -486,7 +487,6 @@ gnucash/report/standard-reports/general-journal.scm
 gnucash/report/standard-reports/general-ledger.scm
 gnucash/report/standard-reports/income-gst-statement.scm
 gnucash/report/standard-reports/income-statement.scm
-gnucash/report/standard-reports/lot-viewer.scm
 gnucash/report/standard-reports/net-charts.scm
 gnucash/report/standard-reports/portfolio.scm
 gnucash/report/standard-reports/price-scatter.scm

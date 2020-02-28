@@ -104,6 +104,7 @@
 (use-modules (gnucash report receipt))
 (use-modules (gnucash report owner-report))
 (use-modules (gnucash report job-report))
+(use-modules (gnucash report lot-viewer))
 (use-modules (gnucash report new-aging))
 (use-modules (gnucash report new-owner-report))
 (use-modules (gnucash report payables))

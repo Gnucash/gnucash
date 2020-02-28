@@ -25,7 +25,6 @@ set (standard_reports_SCHEME_2
     general-ledger.scm
     income-gst-statement.scm
     income-statement.scm
-    lot-viewer.scm
     net-charts.scm
     portfolio.scm
     price-scatter.scm
