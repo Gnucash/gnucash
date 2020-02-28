@@ -41,7 +41,7 @@ TRUE
 gnc_add_scheme_targets(scm-tax-us-2
 "${gncmod_tax_us_SCHEME_2}"
 "gnucash/locale/us"
-"${GUILE_DEPENDS}"
+"scm-tax-us-1;${GUILE_DEPENDS}"
 FALSE
 )
 
@@ -54,7 +54,7 @@ TRUE
 gnc_add_scheme_targets(scm-tax-de_DE-2
 "${gncmod_tax_de_DE_SCHEME_2}"
 "gnucash/locale/de_DE"
-"${GUILE_DEPENDS}"
+"scm-tax-de_DE-1;${GUILE_DEPENDS}"
 FALSE
 )
 
