@@ -2743,8 +2743,8 @@
   partname="xu"
   namespace="ISO4217"
   exchange-code="704"
-  parts-per-unit="100"
-  smallest-fraction="100"
+  parts-per-unit="1"
+  smallest-fraction="1"
   local-symbol="₫"
 />
 <!-- "VUV" - "Vatu"
