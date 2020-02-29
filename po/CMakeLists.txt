@@ -75,7 +75,7 @@ function(make_gnucash_potfiles)
     ${CMAKE_SOURCE_DIR}/*.glade ${CMAKE_SOURCE_DIR}/*.desktop.in.in
     ${CMAKE_SOURCE_DIR}/*.gschema.xml.in ${CMAKE_SOURCE_DIR}/*.appdata.xml.in.in
     ${CMAKE_SOURCE_DIR}/*.keys.in ${CMAKE_SOURCE_DIR}/*.scm
-    ${CMAKE_SOURCE_DIR}/*/qofbookslots.h
+    ${CMAKE_SOURCE_DIR}/*.py ${CMAKE_SOURCE_DIR}/*/qofbookslots.h
     ${CMAKE_SOURCE_DIR}/*/gnc-commodity.h
   )
 

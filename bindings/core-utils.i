@@ -57,6 +57,12 @@ gchar * gnc_path_get_scmdir(void);
 %newobject gnc_path_get_reportsdir;
 gchar * gnc_path_get_reportsdir(void);
 
+%newobject gnc_path_get_localedir;
+gchar * gnc_path_get_localedir(void);
+
+/* Name of our gettext-domain (defined in config.h) */
+%constant char* GETTEXT_PACKAGE = GETTEXT_PACKAGE;
+
 %newobject gnc_path_get_stdreportsdir;
 gchar * gnc_path_get_stdreportsdir(void);
 

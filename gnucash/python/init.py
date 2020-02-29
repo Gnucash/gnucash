@@ -1,11 +1,15 @@
 import sys
 import gnucash._sw_app_utils as _sw_app_utils
-from gnucash import *
+import gnucash._sw_core_utils as _sw_core_utils
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled
+from gnucash import *
 from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+
+_=gnucash_core._
+
 sys.path.append(os.path.dirname(__file__))
 # output extra debug information if gnucash has been started with
 # gnucash --debug --extra
