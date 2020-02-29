@@ -26,6 +26,7 @@
 
 
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 match))
 (use-modules (gnucash import-export string))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -513,12 +514,10 @@
     ;; Look for the transaction status (QIF "C" line). When it exists, apply
     ;; the cleared (c) or reconciled (y) status to the split. Otherwise, apply
     ;; user preference.
-    (if (eq? qif-cleared 'cleared)
-        (xaccSplitSetReconcile gnc-near-split #\c)
-        (if (eq? qif-cleared 'reconciled)
-            (xaccSplitSetReconcile gnc-near-split #\y)
-            ;; Apply user preference by default.
-            (xaccSplitSetReconcile gnc-near-split transaction-status-pref)))
+    (case qif-cleared
+      ((cleared) (xaccSplitSetReconcile gnc-near-split #\c))
+      ((reconciled) (xaccSplitSetReconcile gnc-near-split #\y))
+      (else (xaccSplitSetReconcile gnc-near-split transaction-status-pref)))
 
     (if (not qif-security)
         (begin
@@ -595,11 +594,9 @@
                    (set! far-acct (hash-ref gnc-acct-hash far-acct-name))
 
                    ;; set the reconcile status.
-                   (let ((cleared (qif-split:matching-cleared qif-split)))
-                     (if (eq? 'cleared cleared)
-                         (xaccSplitSetReconcile gnc-far-split #\c))
-                     (if (eq? 'reconciled cleared)
-                         (xaccSplitSetReconcile gnc-far-split #\y)))
+                   (case (qif-split:matching-cleared qif-split)
+                     ((cleared) (xaccSplitSetReconcile gnc-far-split #\c))
+                     ((reconciled) (xaccSplitSetReconcile gnc-far-split #\y)))
 
                    ;; finally, plug the split into the account
                    (xaccSplitSetAccount gnc-far-split far-acct)
@@ -762,12 +759,9 @@
                (xaccSplitSetValue gnc-near-split (n- split-amt))
                (xaccSplitSetValue gnc-far-split split-amt))))
 
-          (let ((cleared (qif-split:matching-cleared
-                          (car (qif-xtn:splits qif-xtn)))))
-            (if (eq? 'cleared cleared)
-                (xaccSplitSetReconcile gnc-far-split #\c))
-            (if (eq? 'reconciled cleared)
-                (xaccSplitSetReconcile gnc-far-split #\y)))
+          (case (qif-split:matching-cleared (car (qif-xtn:splits qif-xtn)))
+            ((cleared) (xaccSplitSetReconcile gnc-far-split #\c))
+            ((reconciled) (xaccSplitSetReconcile gnc-far-split #\y)))
 
           (if qif-commission-acct
               (let* ((commission-acct-info
@@ -957,14 +951,9 @@
         (this-group-amt (gnc-numeric-zero))
         (how #f)
         (date-matches
-         (let ((self-date (qif-xtn:date xtn)))
-           (and (pair? self-date)
-                (pair? date)
-                (eq? (length self-date) 3)
-                (eq? (length date) 3)
-                (= (car self-date) (car date))
-                (= (cadr self-date) (cadr date))
-                (= (caddr self-date) (caddr date)))))
+         (match (cons date (qif-xtn:date xtn))
+           (((a b c) . (a b c)) #t)
+           (_ #f)))
         (n- (lambda (n) (gnc-numeric-neg n)))
         (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
         (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
