@@ -15,8 +15,8 @@ sys.path.append(os.path.dirname(__file__))
 # gnucash --debug --extra
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
-    print("Hello from python!")
-    print("Python file: %s" % (__file__))
+    print(_("Hello from python!"))
+    print(_("Python file: %s") % (__file__))
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
 # so ignore it for the duration
@@ -95,7 +95,7 @@ class Console (cons.Console):
     def quit (self):
         """ quit """
 
-        self.write("\nHave a nice day !\n")
+        self.write("\n"+_("Have a nice day!")+"\n")
         return super(Console, self).quit()
 
 
@@ -104,9 +104,13 @@ class Console (cons.Console):
 # shelltype can either be "python" or "ipython" (the latter is not yet fully functional)
 if False:
     shelltype = "python"
-    title = "gnucash "+shelltype+" shell"
+    if shelltype=="python":
+        shelltypeName = "Python"
+    else:
+        shelltypeName = "IPython"
     banner_style = 'title'
-    banner = "Welcome to "+title+"!\n"
+    # TRANSLATORS: %s is either Python or IPython
+    banner = _("Welcome to GnuCash %s Shell") % shelltypeName
     console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
