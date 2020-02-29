@@ -1,16 +1,22 @@
 import sys
 from gnucash import *
+from gnucash import _sw_app_utils
+from gnucash import _sw_core_utils
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled, gnc_prefs_is_debugging_enabled
+from gnucash.gnucash_core import _
 from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+
 sys.path.append(os.path.dirname(__file__))
 
 # output file location if gnucash has been started with
 # gnucash --extra
 if gnc_prefs_is_extra_enabled():
     print("Python shell init file: %s" % (__file__))
+    print("\n" + "The following string should appear translated in your preferred language:" + "\n")
+    print("\n" + _("Welcome to GnuCash") +"\n")
 
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
