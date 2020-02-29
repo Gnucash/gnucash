@@ -3387,7 +3387,7 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
         param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,
                                                INVOICE_POST_LOT, LOT_BALANCE, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Company"), NULL, type,
-                                               INVOICE_OWNER, OWNER_NAME, NULL);
+                                               INVOICE_OWNER, OWNER_PARENT, OWNER_NAME, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Due"), NULL, type,
                                                INVOICE_DUE, NULL);
     }
