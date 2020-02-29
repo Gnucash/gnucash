@@ -5279,15 +5279,14 @@ struct AccountInfo
 };
 
 static void
-build_token_info(char const * key, KvpValue * value, TokenAccountsInfo & tokenInfo)
+build_token_info(char const * suffix, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
-    tokenInfo.total_count += value->get<int64_t>();
-    AccountTokenCount this_account;
-    std::string account_guid {key};
-    /*By convention, the key ends with the account GUID.*/
-    this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
-    this_account.token_count = value->get<int64_t>();
-    tokenInfo.accounts.push_back(this_account);
+    if (strlen(suffix) == GUID_ENCODING_LENGTH)
+    {
+        tokenInfo.total_count += value->get<int64_t>();
+        /*By convention, the key ends with the account GUID.*/
+        tokenInfo.accounts.emplace_back(AccountTokenCount{std::string{suffix}, value->get<int64_t>()});
+    }
 }
 
 /** We scale the probability values by probability_factor.
@@ -5332,7 +5331,7 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
         TokenAccountsInfo tokenInfo{};
-        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data);
+        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data) + "/";
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
         for (auto const & current_account_token : tokenInfo.accounts)
         {
@@ -5665,38 +5664,27 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     g_free (guid_string);
 }
 
-static std::tuple<std::string, std::string, std::string>
-parse_bayes_imap_info (std::string const & imap_bayes_entry)
-{
-    auto header_length = strlen (IMAP_FRAME_BAYES);
-    std::string header {imap_bayes_entry.substr (0, header_length)};
-    auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
-    std::string keyword {imap_bayes_entry.substr (header_length + 1, guid_start - header_length - 2)};
-    std::string account_guid {imap_bayes_entry.substr (guid_start)};
-    return std::tuple <std::string, std::string, std::string> {header, keyword, account_guid};
-}
-
 static void
-build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
+build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
 {
-    auto parsed_key = parse_bayes_imap_info (key);
+    size_t guid_start = strlen(suffix) - GUID_ENCODING_LENGTH;
+    std::string account_guid {&suffix[guid_start]};
     GncGUID guid;
     try
     {
-        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
-        guid = temp_guid;
+        guid = gnc::GUID::from_string (account_guid);
     }
     catch (const gnc::guid_syntax_exception& err)
     {
-        PWARN("Invalid GUID string from %s", key);
+        PWARN("Invalid GUID string from %s%s", IMAP_FRAME_BAYES, suffix);
     }
     auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
     auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
     auto count = value->get <int64_t> ();
     imap_node->source_account = imapInfo.source_account;
     imap_node->map_account = map_account;
-    imap_node->head = g_strdup (key);
-    imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
+    imap_node->head = g_strdup_printf ("%s%s", IMAP_FRAME_BAYES, suffix);
+    imap_node->match_string = g_strndup (&suffix[1], guid_start - 2);
     imap_node->category = g_strdup(" ");
     imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
     imapInfo.list = g_list_prepend (imapInfo.list, imap_node);
