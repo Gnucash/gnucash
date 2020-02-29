@@ -25,6 +25,7 @@
 
 
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 match))
 
 (define GNC-BANK-TYPE 0)
 (define GNC-CASH-TYPE 1)
@@ -227,24 +228,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:read-securities security-list)
-  (let ((table (make-hash-table 20)))
+  (let ((table (make-hash-table))
+        (comm-table (gnc-commodity-table-get-table (gnc-get-current-book))))
     (for-each
-     (lambda (entry)
-       (if (and (list? entry)
-                (= 3 (length entry)))
-           ;; The saved information about each security mapping is a
-           ;; list of three items: the QIF name, and the GnuCash
-           ;; namespace and mnemonic (symbol) to which it maps.
-           ;; Example: ("McDonald's" "NYSE" "MCD")
-           (let ((commodity (gnc-commodity-table-lookup
-                              (gnc-commodity-table-get-table
-                                (gnc-get-current-book))
-                              (cadr entry)
-                              (caddr entry))))
-             (if (and commodity (not (null? commodity)))
-                 ;; There is an existing GnuCash commodity for this
-                 ;; combination of namespace and symbol.
-                 (hash-set! table (car entry) commodity)))))
+     (match-lambda
+       ((name ns mnemonic)
+        ;; The saved information about each security mapping is a
+        ;; list of three items: the QIF name, and the GnuCash
+        ;; namespace and mnemonic (symbol) to which it maps.
+        ;; Example: ("McDonald's" "NYSE" "MCD")
+        (let ((commodity (gnc-commodity-table-lookup comm-table ns mnemonic)))
+          (if (and commodity (not (null? commodity)))
+              ;; There is an existing GnuCash commodity for this
+              ;; combination of namespace and symbol.
+              (hash-set! table name commodity))))
+       (_ #f))
      security-list)
     table))
 
@@ -462,18 +460,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:find-new-acct qif-acct allowed-types gnc-acct-info)
-  (cond ((and (string? qif-acct)
-              (string=? qif-acct (default-equity-account)))
-         (let ((existing-equity
-                (qif-import:find-similar-acct (default-equity-account)
-                                              (list GNC-EQUITY-TYPE)
-                                              gnc-acct-info)))
-           (if existing-equity
-               existing-equity
-               (list (default-equity-account) (list GNC-EQUITY-TYPE)))))
-        ((and (string? qif-acct)
-              (not (string=? qif-acct "")))
-         (list qif-acct allowed-types))
-        (#t
-         (list (default-unspec-acct) allowed-types))))
+  (cond
+   ((equal? qif-acct (default-equity-account))
+    (or (qif-import:find-similar-acct
+         (default-equity-account) (list GNC-EQUITY-TYPE) gnc-acct-info)
+        (list (default-equity-account) (list GNC-EQUITY-TYPE))))
+   ((equal? qif-acct "") (list (default-unspec-acct) allowed-types))
+   (else (list qif-acct allowed-types))))
 
