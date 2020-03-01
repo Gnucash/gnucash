@@ -31,6 +31,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-session.h"
 
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
 
@@ -72,9 +73,13 @@ typedef struct
     GtkWidget    *filter_label;
     gboolean      apply_selection_filter;
 
+    GtkWidget    *total_entries_label;
+    gint          tot_entries;
+    gint          tot_invalid_maps;
 
     GtkWidget    *expand_button;
     GtkWidget    *collapse_button;
+    GtkWidget    *remove_button;
 }ImapDialog;
 
 
@@ -146,6 +151,12 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
     gchar       *head;
     gchar       *category;
     gchar       *match_string;
+    gint         num = 0;
+    GtkTreeIter  parent;
+
+    // get the parent iter and see how many children it has, if 1 we will remove
+    if (gtk_tree_model_iter_parent (imap_dialog->model, &parent, iter))
+        num = gtk_tree_model_iter_n_children (imap_dialog->model, &parent);
 
     gtk_tree_model_get (imap_dialog->model, iter, SOURCE_ACCOUNT, &source_account,
                                                   SOURCE_FULL_ACC, &full_source_account,
@@ -174,7 +185,15 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
 
         if (imap_dialog->type == NBAYES)
             delete_info_nbayes (source_account, head, category, match_string, depth);
+
+        gtk_tree_store_remove (GTK_TREE_STORE(imap_dialog->model), iter);
+
+        if (num == 1 && (imap_dialog->type != ONLINE))
+            gtk_tree_store_remove (GTK_TREE_STORE(imap_dialog->model), &parent);
     }
+    // Clear the total
+    gtk_label_set_text (GTK_LABEL(imap_dialog->total_entries_label), " ");
+
     if (head)
         g_free (head);
     if (category)
@@ -183,6 +202,30 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
         g_free (match_string);
     if (full_source_account)
         g_free (full_source_account);
+}
+
+static gboolean
+find_invalid_mappings_total (GtkTreeModel *model, GtkTreePath *path,
+                             GtkTreeIter *iter, ImapDialog *imap_dialog)
+{
+    Account *source_account = NULL;
+    Account *map_account = NULL;
+    gchar   *head;
+    gint     depth;
+
+    gtk_tree_model_get (model, iter, SOURCE_ACCOUNT, &source_account,
+                                     MAP_ACCOUNT, &map_account,
+                                     HEAD, &head, -1);
+
+    depth = gtk_tree_path_get_depth (path);
+
+    if ((source_account != NULL) && (map_account == NULL))
+    {
+        if (((g_strcmp0 (head, "online_id") == 0) && (depth == 1)) || (depth == 2))
+            imap_dialog->tot_invalid_maps ++;
+    }
+    g_free (head);
+    return FALSE;
 }
 
 static void
@@ -203,6 +246,9 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     if (g_list_length (list) == 0)
         return;
 
+    // reset the invalid map total
+    imap_dialog->tot_invalid_maps = 0;
+
     // reverse list
     list = g_list_reverse (list);
 
@@ -221,10 +267,115 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
     g_list_free (list);
 
-    get_account_info (imap_dialog);
+    // Enable GUI refresh again
+    gnc_resume_gui_refresh();
+
+    // recount the number of invalid maps
+    gtk_tree_model_foreach (imap_dialog->model,
+                            (GtkTreeModelForeachFunc)find_invalid_mappings_total,
+                            imap_dialog);
+
+    if (imap_dialog->tot_invalid_maps == 0)
+        gtk_widget_hide (imap_dialog->remove_button);
+
+}
+
+static gboolean
+find_invalid_mappings (GtkTreeModel *model, GtkTreePath *path,
+                         GtkTreeIter *iter, GList **rowref_list)
+{
+    Account *source_account = NULL;
+    Account *map_account = NULL;
+    gchar   *head;
+    gint     depth;
+
+    gtk_tree_model_get (model, iter, SOURCE_ACCOUNT, &source_account,
+                                     MAP_ACCOUNT, &map_account,
+                                     HEAD, &head, -1);
+
+    depth = gtk_tree_path_get_depth (path);
+
+    if ((source_account != NULL) && (map_account == NULL))
+    {
+        if (((g_strcmp0 (head, "online_id") == 0) && (depth == 1)) || (depth == 2))
+        {
+             GtkTreeRowReference *rowref = gtk_tree_row_reference_new (model, path);
+             *rowref_list = g_list_append (*rowref_list, rowref);
+        }
+    }
+    g_free (head);
+    return FALSE;
+}
+
+static void
+gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
+{
+    GList *rr_list = NULL;
+    GList *node;
+
+    gtk_tree_model_foreach (imap_dialog->model,
+                            (GtkTreeModelForeachFunc)find_invalid_mappings,
+                            &rr_list);
+
+    // reverse the reference list
+    rr_list = g_list_reverse (rr_list);
+
+    // Suspend GUI refreshing
+    gnc_suspend_gui_refresh();
+
+    // Walk the list
+    for (node = rr_list; node != NULL; node = node->next)
+    {
+        GtkTreePath *path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)node->data);
+
+        if (path)
+        {
+            GtkTreeIter iter;
+
+            if (gtk_tree_model_get_iter (GTK_TREE_MODEL(imap_dialog->model), &iter, path))
+                delete_selected_row (imap_dialog, &iter);
+
+            gtk_tree_path_free (path);
+        }
+    }
 
     // Enable GUI refresh again
     gnc_resume_gui_refresh();
+
+    g_list_foreach (rr_list, (GFunc)gtk_tree_row_reference_free, NULL);
+    g_list_free (rr_list);
+}
+
+static void
+gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
+{
+    gtk_widget_hide (imap_dialog->remove_button);
+
+    if (imap_dialog->tot_invalid_maps > 0)
+    {
+        /* Translators: This is a ngettext(3) message, %d is the number of maps missing */
+        gchar *message = g_strdup_printf (ngettext ("There is %d invalid mapping,\n\nWould you like to remove it now?",
+                                                    "There are %d invalid mappings,\n\nWould you like to remove them now?",
+                                                    imap_dialog->tot_invalid_maps),
+                                                    imap_dialog->tot_invalid_maps);
+
+        gchar *message2 = g_strdup_printf (gettext ("To see the invalid mappings, use a filter of '%s'"), _("Map Account NOT found"));
+
+        gchar *text = g_strdup_printf ("%s\n\n%s\n\n%s", message, message2, _("(Note, if there is a large number, it may take a while)"));
+
+        if (gnc_verify_dialog (GTK_WINDOW (imap_dialog->dialog), FALSE, "%s", text))
+        {
+            gnc_imap_remove_invalid_maps (imap_dialog);
+            gtk_widget_hide (imap_dialog->remove_button);
+        }
+        else
+        {
+            gtk_widget_show (imap_dialog->remove_button);
+        }
+        g_free (message);
+        g_free (message2);
+        g_free (text);
+    }
 }
 
 void
@@ -236,6 +387,10 @@ gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_
     {
     case GTK_RESPONSE_APPLY:
         gnc_imap_dialog_delete (imap_dialog);
+        return;
+
+    case GTK_RESPONSE_REJECT:
+        gnc_imap_invalid_maps_dialog (imap_dialog);
         return;
 
     case GTK_RESPONSE_CLOSE:
@@ -366,6 +521,7 @@ list_type_selected_cb (GtkToggleButton* button, ImapDialog *imap_dialog)
     {
         imap_dialog->type = type;
         get_account_info (imap_dialog);
+        gnc_imap_invalid_maps_dialog (imap_dialog);
     }
 }
 
@@ -395,9 +551,17 @@ add_to_store (ImapDialog *imap_dialog, GtkTreeIter *iter, const gchar *text, Gnc
 
     // Do we have a valid map account
     if (imapInfo->map_account == NULL)
+    {
+        // count the total invalid maps
+        imap_dialog->tot_invalid_maps ++;
+
         map_fullname = g_strdup (_("Map Account NOT found"));
+    }
     else
         map_fullname = gnc_account_get_full_name (imapInfo->map_account);
+
+    // count the total entries
+    imap_dialog->tot_entries ++;
 
     PINFO("Add to Store: Source Acc '%s', Head is '%s', Category is '%s', Match '%s', Map Acc '%s', Count is %s",
           fullname, imapInfo->head, imapInfo->category, imapInfo->match_string, map_fullname, imapInfo->count);
@@ -581,10 +745,14 @@ get_account_info (ImapDialog *imap_dialog)
     Account      *root;
     GList        *accts;
     GtkTreeModel *fmodel;
+    gchar        *total;
 
     /* Get list of Accounts */
     root = gnc_book_get_root_account (gnc_get_current_book());
     accts = gnc_account_get_descendants_sorted (root);
+
+    imap_dialog->tot_entries = 0;
+    imap_dialog->tot_invalid_maps = 0;
 
     fmodel = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
 
@@ -632,6 +800,17 @@ get_account_info (ImapDialog *imap_dialog)
 
     // if there are any entries, show first row
     show_first_row (imap_dialog);
+
+    // add the totals
+    total = g_strdup_printf ("%s %d", _("Total Entries"), imap_dialog->tot_entries);
+    gtk_label_set_text (GTK_LABEL(imap_dialog->total_entries_label), total);
+    gtk_widget_show (imap_dialog->total_entries_label);
+    g_free (total);
+
+    if (imap_dialog->tot_invalid_maps > 0)
+        gtk_widget_show (imap_dialog->remove_button);
+    else
+        gtk_widget_hide (imap_dialog->remove_button);
 
     g_list_free (accts);
 }
@@ -681,8 +860,8 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_dialog"));
     imap_dialog->dialog = dialog;
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncImapDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-import-map");
 
     imap_dialog->session = gnc_get_current_session();
     imap_dialog->type = BAYES;
@@ -700,6 +879,7 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     g_signal_connect (imap_dialog->radio_nbayes, "toggled",
                       G_CALLBACK(list_type_selected_cb), (gpointer)imap_dialog);
 
+    imap_dialog->total_entries_label = GTK_WIDGET(gtk_builder_get_object (builder, "total_entries_label"));
     imap_dialog->filter_text_entry = GTK_WIDGET(gtk_builder_get_object (builder, "filter-text-entry"));
     imap_dialog->filter_label = GTK_WIDGET(gtk_builder_get_object (builder, "filter-label"));
     imap_dialog->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
@@ -715,6 +895,8 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
                       G_CALLBACK(collapse_button_cb), (gpointer)imap_dialog);
 
     imap_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
+
+    imap_dialog->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
 
     // Set filter column
     filter = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
@@ -810,5 +992,7 @@ gnc_imap_dialog (GtkWidget *parent)
     gnc_gui_component_set_session (component_id, imap_dialog->session);
 
     gtk_widget_show (imap_dialog->dialog);
+    gtk_widget_hide (imap_dialog->remove_button);
+    gnc_imap_invalid_maps_dialog (imap_dialog);
     LEAVE(" ");
 }
