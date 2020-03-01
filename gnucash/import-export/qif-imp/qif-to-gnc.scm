@@ -29,6 +29,12 @@
 (use-modules (ice-9 match))
 (use-modules (gnucash import-export string))
 
+(define (n- n) (gnc-numeric-neg n))
+(define (nsub a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD))
+(define (n+ a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD))
+(define (n* a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE))
+(define (n/ a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-or-make-acct
 ;;
@@ -465,12 +471,7 @@
         (qif-memo #f)
         (qif-date (qif-xtn:date qif-xtn))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
-        (qif-cleared (qif-xtn:cleared qif-xtn))
-        (n- (lambda (n) (gnc-numeric-neg n)))
-        (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
-        (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
-        (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
-        (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
+        (qif-cleared (qif-xtn:cleared qif-xtn)))
 
     ;; Set properties of the whole transaction.
 
@@ -834,12 +835,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:mark-some-splits splits xtn candidate-xtns errorproc)
-  (let* ((n- (lambda (n) (gnc-numeric-neg n)))
-         (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
-         (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
-         (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
-         (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE)))
-         (split (car splits))
+  (let* ((split (car splits))
          (near-acct-name #f)
          (far-acct-name #f)
          (date (qif-xtn:date xtn))
@@ -951,12 +947,7 @@
         (date-matches
          (match (cons date (qif-xtn:date xtn))
            (((a b c) . (a b c)) #t)
-           (_ #f)))
-        (n- (lambda (n) (gnc-numeric-neg n)))
-        (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
-        (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
-        (n* (lambda (a b) (gnc-numeric-mul a b 0 GNC-DENOM-REDUCE)))
-        (n/ (lambda (a b) (gnc-numeric-div a b 0 GNC-DENOM-REDUCE))))
+           (_ #f))))
 
     (if date-matches
         (begin
