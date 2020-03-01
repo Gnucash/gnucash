@@ -271,6 +271,14 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     EXPECT_EQ(t_expense_account2, account);
     account = gnc_account_imap_find_account_bayes(t_imap, t_list5);
     EXPECT_EQ(nullptr, account);
+
+    // only imap entries with exact token matching should be considered
+    root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + waldo + "/" + acct2_guid}, new KvpValue{*value});
+    account = gnc_account_imap_find_account_bayes(t_imap, t_list3);
+    EXPECT_EQ(t_expense_account1, account);
+    root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + waldo + "/" + acct2_guid}, new KvpValue{*value});
+    account = gnc_account_imap_find_account_bayes(t_imap, t_list3);
+    EXPECT_EQ(t_expense_account1, account);
 }
 
 TEST_F(ImapBayesTest, AddAccountBayes)

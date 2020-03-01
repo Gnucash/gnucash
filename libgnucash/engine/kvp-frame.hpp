@@ -235,23 +235,6 @@ struct KvpFrameImpl
     KvpValue * set_impl (std::string const &, KvpValue *) noexcept;
 };
 
-template<typename func_type>
-void KvpFrame::for_each_slot_prefix(std::string const & prefix,
-        func_type const & func) const noexcept
-{
-    std::for_each (m_valuemap.begin(), m_valuemap.end(),
-        [&prefix,&func](const KvpFrameImpl::map_type::value_type & a)
-        {
-            std::string temp_key {a.first};
-            if (temp_key.size() < prefix.size())
-                return;
-            /* Testing for prefix matching */
-            if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
-                func (a.first, a.second);
-        }
-    );
-}
-
 template<typename func_type, typename data_type>
 void KvpFrame::for_each_slot_prefix(std::string const & prefix,
         func_type const & func, data_type & data) const noexcept
@@ -259,12 +242,9 @@ void KvpFrame::for_each_slot_prefix(std::string const & prefix,
     std::for_each (m_valuemap.begin(), m_valuemap.end(),
         [&prefix,&func,&data](const KvpFrameImpl::map_type::value_type & a)
         {
-            std::string temp_key {a.first};
-            if (temp_key.size() < prefix.size())
-                return;
             /* Testing for prefix matching */
-            if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
-                func (a.first, a.second, data);
+            if (strncmp(a.first, prefix.c_str(), prefix.size()) == 0)
+                func (&a.first[prefix.size()], a.second, data);
         }
     );
 }

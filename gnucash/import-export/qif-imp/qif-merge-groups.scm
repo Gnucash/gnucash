@@ -25,21 +25,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  gnc:account-tree-get-transactions
-;;
-;;  Given an account tree, this procedure returns a list of all
-;;  transactions whose splits only use accounts in the tree.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (gnc:account-tree-get-transactions root)
-  (let ((accounts (gnc-account-get-descendants-sorted root)))
-    (let ((q (qof-query-create-for-splits)))
-      (qof-query-set-book q (gnc-account-get-book root))
-      (xaccQueryAddAccountMatch q accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-      (let ((xtns (xaccQueryGetTransactions q QUERY-TXN-MATCH-ALL)))
-        (qof-query-destroy q)
-        xtns))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:account-tree-find-duplicates
 ;;
 ;;  Given two account trees, old-root and new-root, a search is
