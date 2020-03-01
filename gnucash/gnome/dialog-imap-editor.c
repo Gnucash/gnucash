@@ -58,6 +58,13 @@ typedef enum
 
 typedef struct
 {
+    guint inv_dialog_shown_bayes : 1;
+    guint inv_dialog_shown_nbayes : 1;
+    guint inv_dialog_shown_online : 1;
+}GncInvFlags;
+
+typedef struct
+{
     GtkWidget    *dialog;
     QofSession   *session;
     GtkWidget    *view;
@@ -80,6 +87,7 @@ typedef struct
     GtkWidget    *expand_button;
     GtkWidget    *collapse_button;
     GtkWidget    *remove_button;
+    GncInvFlags   inv_dialog_shown;
 }ImapDialog;
 
 
@@ -371,11 +379,36 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
         else
         {
             gtk_widget_show (imap_dialog->remove_button);
+
+            if (imap_dialog->type == BAYES)
+                imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
+            if (imap_dialog->type == NBAYES)
+                imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes = TRUE;
+            if (imap_dialog->type == ONLINE)
+                imap_dialog->inv_dialog_shown.inv_dialog_shown_online = TRUE;
         }
         g_free (message);
         g_free (message2);
         g_free (text);
     }
+}
+
+static void
+gnc_imap_invalid_maps (ImapDialog *imap_dialog)
+{
+    gboolean inv_dialog_shown = FALSE;
+
+    if ((imap_dialog->type == BAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes))
+        inv_dialog_shown = TRUE;
+
+    if ((imap_dialog->type == NBAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes))
+        inv_dialog_shown = TRUE;
+
+    if ((imap_dialog->type == ONLINE) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_online))
+        inv_dialog_shown = TRUE;
+
+    if (!inv_dialog_shown)
+        gnc_imap_invalid_maps_dialog (imap_dialog);
 }
 
 void
@@ -519,9 +552,22 @@ list_type_selected_cb (GtkToggleButton* button, ImapDialog *imap_dialog)
     // Lets do this only on change of list type
     if (type != imap_dialog->type)
     {
+        gboolean inv_dialog_shown = FALSE;
+
         imap_dialog->type = type;
         get_account_info (imap_dialog);
-        gnc_imap_invalid_maps_dialog (imap_dialog);
+
+        if ((imap_dialog->type == BAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes))
+            inv_dialog_shown = TRUE;
+
+        if ((imap_dialog->type == NBAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes))
+            inv_dialog_shown = TRUE;
+
+        if ((imap_dialog->type == ONLINE) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_online))
+            inv_dialog_shown = TRUE;
+
+        if (!inv_dialog_shown)
+            gnc_imap_invalid_maps_dialog (imap_dialog);
     }
 }
 
