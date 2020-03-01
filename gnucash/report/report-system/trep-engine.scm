@@ -1401,6 +1401,11 @@ be excluded from periodic reporting.")
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
+             (data (if (and (any (lambda (c) (eq? 'bal-bf (vector-ref c 5)))
+                                 calculated-cells)
+                            (memq sortkey ACCOUNT-SORTING-TYPES))
+                       (string-append data ": " (_ "Balance b/f"))
+                       data))
              (renderer-fn (keylist-get-info
                            (sortkey-list BOOK-SPLIT-ACTION)
                            sortkey 'renderer-fn))
