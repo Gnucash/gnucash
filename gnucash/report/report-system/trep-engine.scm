@@ -1738,7 +1738,7 @@ be excluded from periodic reporting.")
 
             (for-each
              (lambda (prime-collector sec-collector tot-collector value)
-               (when value
+               (when (gnc:gnc-monetary? value)
                  (let ((comm (gnc:gnc-monetary-commodity value))
                        (val (gnc:gnc-monetary-amount value)))
                  (prime-collector 'add comm val)
