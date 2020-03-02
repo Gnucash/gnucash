@@ -108,10 +108,12 @@ gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fulln
             g_key_file_remove_key (state_file, state_section, key, NULL);
         g_free (key);
     }
-    key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
-    g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
-    g_free (key);
-
+    if (account_fullname)
+    {
+        key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
+        g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
+        g_free (key);
+    }
     gnc_header_widths_destroy (widths);
 }
 
