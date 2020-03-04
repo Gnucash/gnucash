@@ -64,10 +64,6 @@
         <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
     </act:slots>
     <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   </gnc:account>
@@ -1355,7 +1351,7 @@
     <act:code>0820</act:code>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -3898,10 +3894,6 @@
         <slot:value type="string">true</slot:value>
       </slot>
       <slot>
-        <slot:key>hidden</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
         <slot:key>notes</slot:key>
         <slot:value type="string">1900-1999</slot:value>
       </slot>
@@ -3975,7 +3967,7 @@
     <act:description>§274 HGB</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
       <slot>
@@ -5212,10 +5204,6 @@
     <act:slots>
       <slot>
         <slot:key>placeholder</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -7567,10 +7555,6 @@
         <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
     </act:slots>
     <act:parent type="new">67e3afb8f6e39be571749da7aa113b2e</act:parent>
   </gnc:account>
@@ -8884,7 +8868,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -8962,10 +8946,6 @@
     <act:slots>
       <slot>
         <slot:key>placeholder</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -9644,7 +9624,7 @@
     <act:description>(soweit nicht außerordentlich)</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -9723,7 +9703,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -9825,7 +9805,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -9915,7 +9895,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -10004,7 +9984,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -10154,7 +10134,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -10214,7 +10194,7 @@
     <act:description>Achtung Summenzeile 15-16</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -11687,7 +11667,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -11745,7 +11725,7 @@
     <act:description>(soweit unüblich hoch)</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -13981,10 +13961,6 @@
         <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
     </act:slots>
     <act:parent type="new">cf7f94dcdeb53cd3d602ea87d83aba4e</act:parent>
   </gnc:account>
@@ -14285,7 +14261,7 @@
     <act:description>übliche Höhe</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -14395,7 +14371,7 @@
     <act:description>soweit nicht außerordentlich</act:description>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -14436,7 +14412,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -14660,10 +14636,6 @@
     <act:slots>
       <slot>
         <slot:key>placeholder</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -14937,7 +14909,7 @@
     <act:commodity-scu>100</act:commodity-scu>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -15014,7 +14986,7 @@
     <act:code>7600</act:code>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -15032,7 +15004,7 @@
     <act:code>7603</act:code>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -15050,7 +15022,7 @@
     <act:code>7604</act:code>
     <act:slots>
       <slot>
-        <slot:key>hidden</slot:key>
+        <slot:key>placeholder</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
@@ -15363,10 +15335,6 @@
     <act:slots>
       <slot>
         <slot:key>placeholder</slot:key>
-        <slot:value type="string">true</slot:value>
-      </slot>
-      <slot>
-        <slot:key>hidden</slot:key>
         <slot:value type="string">true</slot:value>
       </slot>
     </act:slots>
