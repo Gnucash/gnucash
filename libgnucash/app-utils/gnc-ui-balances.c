@@ -179,11 +179,11 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
     return g_strdup(xaccPrintAmount(balance, print_info));
 }
 
-
-gnc_numeric
-gnc_ui_account_get_balance_as_of_date (Account *account,
-                                       time64 date,
-                                       gboolean include_children)
+static gnc_numeric
+account_get_balance_as_of_date (Account *account,
+                                time64 date,
+                                gboolean include_children,
+                                xaccGetBalanceAsOfDateFn fn)
 {
     QofBook *book = gnc_account_get_book (account);
     GNCPriceDB *pdb = gnc_pricedb_get_db (book);
@@ -194,7 +194,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
         return gnc_numeric_zero ();
 
     currency = xaccAccountGetCommodity (account);
-    balance = xaccAccountGetBalanceAsOfDate (account, date);
+    balance = fn (account, date);
 
     if (include_children)
     {
@@ -210,7 +210,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
 
             child = node->data;
             child_currency = xaccAccountGetCommodity (child);
-            child_balance = xaccAccountGetBalanceAsOfDate (child, date);
+            child_balance = fn (child, date);
             child_balance =
                 gnc_pricedb_convert_balance_latest_price (pdb, child_balance,
                                                           child_currency,
@@ -226,6 +226,24 @@ gnc_ui_account_get_balance_as_of_date (Account *account,
         balance = gnc_numeric_neg (balance);
 
     return balance;
+}
+
+gnc_numeric
+gnc_ui_account_get_balance_as_of_date (Account *account,
+                                       time64 date,
+                                       gboolean include_children)
+{
+    return account_get_balance_as_of_date (account, date, include_children,
+                                           xaccAccountGetBalanceAsOfDate);
+}
+
+gnc_numeric
+gnc_ui_account_get_reconciled_balance_as_of_date (Account *account,
+                                                  time64 date,
+                                                  gboolean include_children)
+{
+    return account_get_balance_as_of_date (account, date, include_children,
+                                           xaccAccountGetReconciledBalanceAsOfDate);
 }
 
 
