@@ -558,6 +558,9 @@ gnc_numeric xaccAccountGetProjectedMinimumBalance (const Account *account);
 gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account,
         time64 date);
 
+/** Get the reconciled balance of the account as of the date specified */
+gnc_numeric xaccAccountGetReconciledBalanceAsOfDate (Account *account, time64 date);
+
 /* These two functions convert a given balance from one commodity to
    another.  The account argument is only used to get the Book, and
    may have nothing to do with the supplied balance.  Likewise, the

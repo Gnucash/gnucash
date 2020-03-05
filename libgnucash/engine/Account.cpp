@@ -3428,6 +3428,24 @@ xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
     return GetBalanceAsOfDate (acc, date, TRUE);
 }
 
+gnc_numeric
+xaccAccountGetReconciledBalanceAsOfDate (Account *acc, time64 date)
+{
+    gnc_numeric balance = gnc_numeric_zero();
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
+
+    for (GList *node = GET_PRIVATE(acc)->splits; node; node = node->next)
+    {
+        Split *split = (Split*) node->data;
+        if ((xaccSplitGetReconcile (split) == YREC) &&
+            (xaccSplitGetDateReconciled (split) <= date))
+            balance = gnc_numeric_add_fixed (balance, xaccSplitGetAmount (split));
+    };
+
+    return balance;
+}
+
 /*
  * Originally gsr_account_present_balance in gnc-split-reg.c
  *
