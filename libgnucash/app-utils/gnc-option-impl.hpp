@@ -481,21 +481,21 @@ public:
     {
         return m_choices.size();
     }
-    std::size_t permissible_value_index(const std::string& key) const noexcept
+    std::size_t permissible_value_index(const char* key) const noexcept
     {
             return find_key(key);
     }
-    const std::string& permissible_value(std::size_t index) const
+    const char* permissible_value(std::size_t index) const
     {
-        return std::get<0>(m_choices.at(index));
+        return std::get<0>(m_choices.at(index)).c_str();
     }
-    const std::string& permissible_value_name(std::size_t index) const
+    const char* permissible_value_name(std::size_t index) const
     {
-        return std::get<1>(m_choices.at(index));
+        return std::get<1>(m_choices.at(index)).c_str();
     }
-    const std::string& permissible_value_description(std::size_t index) const
+    const char* permissible_value_description(std::size_t index) const
     {
-        return std::get<2>(m_choices.at(index));
+        return std::get<2>(m_choices.at(index)).c_str();
     }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }

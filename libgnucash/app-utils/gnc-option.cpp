@@ -214,7 +214,7 @@ GncOption::num_permissible_values() const
 }
 
 std::size_t
-GncOption::permissible_value_index(const std::string& value) const
+GncOption::permissible_value_index(const char* value) const
 {
     return std::visit([&value] (const auto& option) -> size_t {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
@@ -225,39 +225,39 @@ GncOption::permissible_value_index(const std::string& value) const
                       }, *m_option);
 }
 
-const std::string&
+const char*
 GncOption::permissible_value(std::size_t index) const
 {
-    return std::visit([index] (const auto& option) -> const std::string& {
+    return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                         GncOptionMultichoiceValue>)
                                            return option.permissible_value(index);
                           else
-                              return c_empty_string;
+                              return "";
                       }, *m_option);
 }
 
-const std::string&
+const char*
 GncOption::permissible_value_name(std::size_t index) const
 {
-    return std::visit([index] (const auto& option) -> const std::string& {
+    return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                         GncOptionMultichoiceValue>)
                                            return option.permissible_value_name(index);
                           else
-                              return c_empty_string;
+                              return "";
                       }, *m_option);
 }
 
-const std::string&
+const char*
 GncOption::permissible_value_description(std::size_t index) const
 {
-    return std::visit([index] (const auto& option) -> const std::string& {
+    return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
                                         GncOptionMultichoiceValue>)
                                            return option.permissible_value_description(index);
                           else
-                              return c_empty_string;
+                              return "";
                       }, *m_option);
 }
 

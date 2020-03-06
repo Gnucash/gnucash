@@ -87,10 +87,10 @@ public:
     bool is_changed() const noexcept;
     template <typename ValueType> bool validate(ValueType value) const;
     std::size_t num_permissible_values() const;
-    std::size_t permissible_value_index(const std::string& value) const;
-    const std::string& permissible_value(std::size_t index) const;
-    const std::string& permissible_value_name(std::size_t index) const;
-    const std::string& permissible_value_description(std::size_t index) const;
+    std::size_t permissible_value_index(const char* value) const;
+    const char* permissible_value(std::size_t index) const;
+    const char* permissible_value_name(std::size_t index) const;
+    const char* permissible_value_description(std::size_t index) const;
     GList* account_type_list() const noexcept;
     std::ostream& out_stream(std::ostream& oss) const;
     std::istream& in_stream(std::istream& iss);

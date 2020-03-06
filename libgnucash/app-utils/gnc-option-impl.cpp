@@ -25,6 +25,7 @@
 #include "gnc-option-impl.hpp"
 #include <gnc-datetime.hpp>
 #include <guid.hpp>
+
 extern "C"
 {
 #include "gnc-accounting-period.h"
@@ -66,122 +67,77 @@ GncOptionAccountValue::account_type_list() const noexcept
     return g_list_reverse(retval);
 }
 
-static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-static void
-normalize_month(struct tm& now)
-{
-    if (now.tm_mon < 0)
-    {
-        now.tm_mon += 12;
-        --now.tm_year;
-    }
-    else if (now.tm_mon > 11)
-    {
-        now.tm_mon -= 12;
-        ++now.tm_year;
-    }
+bool
+GncOptionDateValue::validate(RelativeDatePeriod value) {
+    if (m_period_set.empty())
+        return true; // No restrictions
+    if (std::find(m_period_set.begin(), m_period_set.end(),
+                  value) != m_period_set.end())
+        return true;
+    return false;
 }
 
-static void
-set_day_and_time(struct tm& now, bool starting)
-{
-    if (starting)
-    {
-        now.tm_hour = now.tm_min = now.tm_sec = 0;
-        now.tm_mday = 1;
-    }
-    else
-    {
-        now.tm_min = now.tm_sec = 59;
-        now.tm_hour = 23;
-        now.tm_mday = days_in_month[now.tm_mon];
-        // Check for Februrary in a leap year
-        if (int year = now.tm_year + 1900; now.tm_mon == 1 &&
-            year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-            ++now.tm_mday;
-    }
-};
-
 time64
-GncOptionDateValue::get_value() const
+GncOptionDateValue::get_value() const noexcept
 {
     if (m_period == RelativeDatePeriod::ABSOLUTE)
         return m_date;
-    if (m_period == RelativeDatePeriod::TODAY)
-        return static_cast<time64>(GncDateTime());
-    if (m_period == RelativeDatePeriod::START_ACCOUNTING_PERIOD)
-        return gnc_accounting_period_fiscal_start();
-    if (m_period == RelativeDatePeriod::END_ACCOUNTING_PERIOD)
-        return gnc_accounting_period_fiscal_end();
-
-    GncDateTime now_t;
-    if (m_period == RelativeDatePeriod::TODAY)
-        return static_cast<time64>(now_t);
-    struct tm now{static_cast<tm>(now_t)};
-    struct tm period{static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()))};
-    bool starting =  m_period == RelativeDatePeriod::START_PREV_MONTH ||
-        m_period == RelativeDatePeriod::START_THIS_MONTH ||
-        m_period == RelativeDatePeriod::START_CAL_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
-        m_period == RelativeDatePeriod::START_PREV_QUARTER;
-
-    bool prev = m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::END_PREV_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_QUARTER ||
-        m_period == RelativeDatePeriod::END_PREV_QUARTER;
-
-    if (period.tm_mon == now.tm_mon && period.tm_mday == now.tm_mday)
-    {
-        //No set accounting period, use the calendar year
-        period.tm_mon = 0;
-        period.tm_mday = 0;
-    }
-
-    if (m_period == RelativeDatePeriod::START_CAL_YEAR ||
-        m_period == RelativeDatePeriod::END_CAL_YEAR ||
-        m_period == RelativeDatePeriod::START_PREV_YEAR ||
-        m_period == RelativeDatePeriod::END_PREV_YEAR)
-    {
-
-        if (prev)
-            --now.tm_year;
-        now.tm_mon = starting ? 0 : 11;
-    }
-    else if (m_period == RelativeDatePeriod::START_PREV_QUARTER ||
-             m_period == RelativeDatePeriod::END_PREV_QUARTER ||
-             m_period == RelativeDatePeriod::START_CURRENT_QUARTER ||
-             m_period == RelativeDatePeriod::END_CURRENT_QUARTER)
-    {
-        auto offset = (now.tm_mon > period.tm_mon ? now.tm_mon - period.tm_mon :
-                       period.tm_mon - now.tm_mon) % 3;
-        now.tm_mon = now.tm_mon - offset;
-        if (prev)
-            now.tm_mon -= 3;
-        if (!starting)
-            now.tm_mon += 2;
-    }
-    else if (m_period == RelativeDatePeriod::START_PREV_MONTH ||
-             m_period == RelativeDatePeriod::END_PREV_MONTH)
-        --now.tm_mon;
-    normalize_month(now);
-    set_day_and_time(now, starting);
-    return static_cast<time64>(GncDateTime(now));
+    return gnc_relative_date_to_time64(m_period);
 }
-static const char* date_type_str[] {"absolute", "relative"};
-static const std::array<const char*, 15> date_period_str
-{
-    "today",
-    "start-this-month", "end-this-month",
-    "start-prev-month", "end-prev-month",
-    "start-current-quarter", "end-current-quarter",
-    "start-prev-quarter", "end-prev-quarter",
-    "start-cal-year", "end-cal-year",
-    "start-prev-year", "end-prev-year",
-    "start-prev-fin-year", "end-prev-fin-year"
-};
 
+time64
+GncOptionDateValue::get_default_value() const noexcept
+{
+    if (m_default_period == RelativeDatePeriod::ABSOLUTE)
+        return m_default_date;
+    return gnc_relative_date_to_time64(m_default_period);
+}
+
+/* Use asserts for pre- and post-conditions to deliberately crash if they're not
+ * met as the program design should prevent that from happening.
+ */
+int8_t
+GncOptionDateValue::get_period_index() const noexcept
+{
+    assert (m_period != RelativeDatePeriod::ABSOLUTE);
+    assert(!m_period_set.empty());
+    auto item{std::find(m_period_set.begin(), m_period_set.end(), m_period)};
+    assert(item != m_period_set.end());
+    return item - m_period_set.begin();
+}
+
+int8_t
+GncOptionDateValue::get_default_period_index() const noexcept
+{
+    assert(m_period != RelativeDatePeriod::ABSOLUTE);
+    assert(!m_period_set.empty());
+    auto item{std::find(m_period_set.begin(), m_period_set.end(),
+                        m_default_period)};
+    assert (item != m_period_set.end());
+    return item - m_period_set.begin();
+}
+
+void
+GncOptionDateValue::set_value(size_t index) noexcept
+{
+    assert(!m_period_set.empty());
+    assert(index < m_period_set.size());
+    m_date = INT64_MAX;
+    m_period = m_period_set[index];
+}
+
+size_t
+GncOptionDateValue::permissible_value_index(const char* key) const noexcept
+{
+    auto index = std::find_if(m_period_set.begin(), m_period_set.end(),
+                              [key](auto period) -> bool {
+                                  return strcmp(gnc_relative_date_display_string(period),
+                                                key) == 0;
+                              });
+    return index != m_period_set.end() ? index - m_period_set.begin() : 0;
+}
+
+static const char* date_type_str[] {"absolute", "relative"};
 
 std::ostream&
 GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
@@ -190,7 +146,7 @@ GncOptionDateValue::out_stream(std::ostream& oss) const noexcept
         oss << date_type_str[0] << " . " << m_date;
     else
         oss << date_type_str[1] << " . " <<
-            date_period_str[static_cast<int>(m_period)];
+            gnc_relative_date_storage_string(m_period);
     return oss;
 }
 
@@ -216,9 +172,8 @@ GncOptionDateValue::in_stream(std::istream& iss)
         iss >> period_str;
         if (period_str.back() == ')')
             period_str.pop_back();
-        auto period = std::find(date_period_str.begin(), date_period_str.end(),
-                                period_str);
-        if (period == date_period_str.end())
+        auto period = gnc_relative_date_from_storage_string(period_str.c_str());
+        if (period == RelativeDatePeriod::ABSOLUTE)
         {
             std::string err{"Unknown period string in date option: '"};
             err += period_str;
@@ -226,8 +181,7 @@ GncOptionDateValue::in_stream(std::istream& iss)
             throw std::invalid_argument(err);
         }
 
-        int64_t index = period - date_period_str.begin();
-        set_value(static_cast<RelativeDatePeriod>(index));
+        set_value(period);
     }
     else
     {
