@@ -25,17 +25,10 @@
 #define GNC_OPTION_UI_HPP_
 
 #include "gnc-option-uitype.hpp"
-template <typename UIType>
-class GncUIItem
-{
-public:
-    GncUIItem(UIType* widget) : m_widget{widget} {}
-    UIType* m_widget;
-};
 
-class GncUIType;
-using OptionUIItem = GncUIItem<GncUIType>;
-using OptionSyncFunc = std::function<void(OptionUIItem&, GncOption&)>;
+class GncOptionUIItem;
+using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
+
 /**
  * Holds a pointer to the UI item which will control the option and an enum
  * representing the type of the option for dispatch purposes; all of that
@@ -47,47 +40,18 @@ using OptionSyncFunc = std::function<void(OptionUIItem&, GncOption&)>;
  * clear_ui_item function can be used as a weak_ptr's destruction callback to
  * ensure that the ptr will be nulled if the ui_item is destroyed elsewhere.
  */
+
 class GncOptionUIItem
 {
 public:
-    GncOptionUIItem(OptionUIItem&& ui_item, GncOptionUIType type,
-                    OptionSyncFunc to_ui, OptionSyncFunc from_ui) :
-        m_ui_item{std::move(ui_item)}, m_ui_type{type},
-        m_set_ui_item_from_option{to_ui}, m_set_option_from_ui_item{from_ui} {}
-    GncOptionUIItem(GncOptionUIType ui_type) :
-        m_ui_item{nullptr}, m_ui_type{ui_type} {}
-    GncOptionUIItem(const GncOptionUIItem&) = default;
-    GncOptionUIItem(GncOptionUIItem&&) = default;
-    ~GncOptionUIItem() = default;
-    GncOptionUIItem& operator=(const GncOptionUIItem&) = default;
-    GncOptionUIItem& operator=(GncOptionUIItem&&) = default;
-    GncOptionUIType get_ui_type() const { return m_ui_type; }
-    const OptionUIItem& get_ui_item() const {return m_ui_item; }
-    void clear_ui_item() { m_ui_item = nullptr; }
-    void set_ui_item(OptionUIItem&& ui_item)
-    {
-        if (m_ui_type == GncOptionUIType::INTERNAL)
-        {
-            std::string error{"INTERNAL option, setting the UI item forbidden."};
-            throw std::logic_error(std::move(error));
-        }
-        m_ui_item = std::move(ui_item);
-    }
-    void set_ui_item_from_option(GncOption& option)
-    {
-        m_set_ui_item_from_option(m_ui_item, option);
-    }
-    void set_option_from_ui_item(GncOption& option)
-    {
-        m_set_option_from_ui_item(m_ui_item, option);
-    }
-private:
-    OptionUIItem m_ui_item;
-    GncOptionUIType m_ui_type;
-    OptionSyncFunc m_set_ui_item_from_option;
-    OptionSyncFunc m_set_option_from_ui_item;
+    GncOptionUIItem() = default;
+    virtual ~GncOptionUIItem() = default;
+    virtual GncOptionUIType get_ui_type() const noexcept = 0;
+    virtual void set_dirty(bool status) noexcept = 0;
+    virtual bool get_dirty() const noexcept = 0;
+    virtual void clear_ui_item() = 0;
+    virtual void set_ui_item_from_option(GncOption& option) noexcept = 0;
+    virtual void set_option_from_ui_item(GncOption& option) noexcept = 0;
 };
-
-using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
 
 #endif //GNC_OPTION_UI_HPP__
