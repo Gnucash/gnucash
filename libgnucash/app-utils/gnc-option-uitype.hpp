@@ -41,6 +41,7 @@ enum GncOptionUIType
     NUMBER_RANGE,
     COLOR,
     FONT,
+    PLOT_SIZE,
     BUDGET,
     PIXMAP,
     RADIOBUTTON,
