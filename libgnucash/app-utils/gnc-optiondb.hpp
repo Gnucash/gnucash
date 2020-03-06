@@ -202,9 +202,39 @@ void gnc_register_dateformat_option(const GncOptionDBPtr& db,
                                     const char* key, const char* doc_string,
                                     std::string value);
 
-void gnc_register_date_interval_option(const GncOptionDBPtr& db,
-                                       const char* section, const char* name,
-                                       const char* key, const char* doc_string,
-                                       RelativeDatePeriod period);
+enum RelativeDateUI : uint8_t
+{
+    ABSOLUTE,
+    RELATIVE,
+    BOTH
+};
+
+void gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string,
+                              RelativeDatePeriod period =
+                              RelativeDatePeriod::TODAY,
+                              RelativeDateUI ui = RelativeDateUI::BOTH);
+
+void gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string, time64 time,
+                              RelativeDateUI ui = RelativeDateUI::BOTH);
+
+void gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+                              const char* name, const char* key,
+                              const char* doc_string,
+                              RelativeDatePeriodVec& period_set,
+                              bool both = true);
+
+void gnc_register_start_date_option(const GncOptionDBPtr& db,
+                                    const char* section,
+                                    const char* name, const char* key,
+                                    const char* doc_string, bool both = true);
+
+void gnc_register_end_date_option(const GncOptionDBPtr& db, const char* section,
+                                  const char* name, const char* key,
+                                  const char* doc_string, bool both = true);
+
 
 #endif //GNC_OPTIONDB_HPP_

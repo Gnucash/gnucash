@@ -190,21 +190,82 @@ time64_from_gdate(const GDate* g_date, DayPart when)
 {
     GncDate date{g_date_get_year(g_date), g_date_get_month(g_date),
             g_date_get_day(g_date)};
-    GncDateTime time{date, when};
-    return static_cast<time64>(time);
+    GncDateTime time1{date, when};
+    return static_cast<time64>(time1);
 }
 
 
-TEST_F(GncOptionDBTest, test_register_date_interval_option)
+TEST_F(GncOptionDBTest, test_register_relative_date_option)
 {
-    gnc_register_date_interval_option(m_db, "foo", "bar", "baz", "Phony Option",
-                                      RelativeDatePeriod::START_ACCOUNTING_PERIOD);
+    gnc_register_date_option(m_db, "foo", "bar", "baz", "Phony Option",
+                             RelativeDatePeriod::START_ACCOUNTING_PERIOD);
     GDate prev_year_start;
     g_date_set_time_t(&prev_year_start, time(nullptr));
     gnc_gdate_set_prev_year_start(&prev_year_start);
-    time64 time{time64_from_gdate(&prev_year_start, DayPart::start)};
-    ASSERT_TRUE(m_db->set_option("foo", "bar", time));
-    EXPECT_EQ(time, m_db->find_option("foo", "bar")->get().get_value<time64>());
+    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
+    ASSERT_TRUE(m_db->set_option("foo", "bar", time1));
+    EXPECT_EQ(time1, m_db->find_option("foo", "bar")->get().get_value<time64>());
+}
+
+TEST_F(GncOptionDBTest, test_register_absolute_date_option)
+{
+    time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
+
+    gnc_register_date_option(m_db, "foo", "bar", "baz", "Phony Option", time1);
+    GDate prev_year_start;
+    g_date_set_time_t(&prev_year_start, time(nullptr));
+    gnc_gdate_set_prev_year_start(&prev_year_start);
+    ASSERT_TRUE(m_db->set_option("foo", "bar", time1));
+    EXPECT_EQ(time1,
+              m_db->find_option("foo", "bar")->get().get_value<time64>());
+}
+
+/* Copied from gnc-optiondb.cpp for the purpose of finding the index of the
+ * option in the following test.
+ */
+static const RelativeDatePeriodVec begin_dates
+{
+    RelativeDatePeriod::TODAY,
+    RelativeDatePeriod::START_THIS_MONTH,
+    RelativeDatePeriod::START_PREV_MONTH,
+    RelativeDatePeriod::START_CURRENT_QUARTER,
+    RelativeDatePeriod::START_PREV_QUARTER,
+    RelativeDatePeriod::START_CAL_YEAR,
+    RelativeDatePeriod::START_PREV_YEAR,
+    RelativeDatePeriod::START_ACCOUNTING_PERIOD
+};
+
+TEST_F(GncOptionDBTest, test_register_start_date_option)
+{
+    gnc_register_start_date_option(m_db, "foo", "bar", "baz", "Phony Option");
+    GDate prev_year_start;
+    g_date_set_time_t(&prev_year_start, time(nullptr));
+    gnc_gdate_set_prev_year_start(&prev_year_start);
+    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
+    EXPECT_EQ(RelativeDatePeriod::START_ACCOUNTING_PERIOD,
+              m_db->find_option("foo", "bar")->get().get_value<RelativeDatePeriod>());
+    ASSERT_TRUE(m_db->set_option("foo", "bar", time1));
+    EXPECT_EQ(time1,
+              m_db->find_option("foo", "bar")->get().get_value<time64>());
+    EXPECT_EQ(RelativeDatePeriod::ABSOLUTE,
+              m_db->find_option("foo", "bar")->get().get_value<RelativeDatePeriod>());
+    m_db->set_option("foo", "bar", RelativeDatePeriod::START_THIS_MONTH);
+    EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH,
+              m_db->find_option("foo", "bar")->get().get_value<RelativeDatePeriod>());
+
+    auto index(std::find(begin_dates.begin(), begin_dates.end(),
+                         RelativeDatePeriod::START_THIS_MONTH) - begin_dates.begin());
+    /* If this fails check that the begin_dates vector above matches the one in
+     * gnc-optiondb.cpp.
+     */
+    EXPECT_EQ(index,
+              m_db->find_option("foo", "bar")->get().get_value<size_t>());
+    m_db->set_option("foo", "bar", RelativeDatePeriod::END_THIS_MONTH);
+    EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH,
+              m_db->find_option("foo", "bar")->get().get_value<RelativeDatePeriod>());
+    m_db->set_option("foo", "bar", static_cast<size_t>(5));
+    EXPECT_EQ(5, m_db->find_option("foo", "bar")->get().get_value<size_t>());
+
 }
 
 class GncOptionDBIOTest : public ::testing::Test
@@ -246,9 +307,9 @@ protected:
                                    std::string{""});
         gnc_register_text_option(m_db, "qux", "garply", "fred",
                                    "Phony Option", std::string{"waldo"});
-        gnc_register_date_interval_option(m_db, "pork", "garply", "first",
-                                          "Phony Date Option",
-                                          RelativeDatePeriod::START_CURRENT_QUARTER);
+        gnc_register_date_option(m_db, "pork", "garply", "first",
+                                 "Phony Date Option",
+                                 RelativeDatePeriod::START_CURRENT_QUARTER);
         gnc_register_account_list_option(m_db, "quux", "xyzzy", "second",
                                          "Phony AccountList Option",
                                          {aapl, hpe});

@@ -692,52 +692,97 @@ public:
                        const char* key, const char* doc_string,
                        GncOptionUIType ui_type) :
         OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
-        m_date{INT64_MAX},
-        m_default_period{RelativeDatePeriod::END_ACCOUNTING_PERIOD},
-        m_default_date{INT64_MAX} {}
+        m_ui_type{ui_type}, m_date{INT64_MAX}, m_default_date{INT64_MAX},
+        m_period{RelativeDatePeriod::TODAY},
+        m_default_period{RelativeDatePeriod::TODAY},
+        m_period_set{} {}
     GncOptionDateValue(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        GncOptionUIType ui_type, time64 time) :
         OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_period{RelativeDatePeriod::ABSOLUTE},
-        m_date{time}, m_default_period{RelativeDatePeriod::ABSOLUTE},
-        m_default_date{time} {}
+        m_ui_type{ui_type}, m_date{time}, m_default_date{time},
+        m_period{RelativeDatePeriod::ABSOLUTE},
+        m_default_period{RelativeDatePeriod::ABSOLUTE},
+        m_period_set{} {}
     GncOptionDateValue(const char* section, const char* name,
                        const char* key, const char* doc_string,
                        GncOptionUIType ui_type,
-                       const RelativeDatePeriod period) :
+                       RelativeDatePeriod period) :
         OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_period{period}, m_date{INT64_MAX},
-        m_default_period{period}, m_default_date{INT64_MAX} {}
-        GncOptionDateValue(const GncOptionDateValue&) = default;
-        GncOptionDateValue(GncOptionDateValue&&) = default;
-        GncOptionDateValue& operator=(const GncOptionDateValue&) = default;
-        GncOptionDateValue& operator=(GncOptionDateValue&&) = default;
-    time64 get_value() const;
-    time64 get_default_value() const { return static_cast<time64>(GncDateTime()); }
+        m_ui_type{ui_type}, m_date{INT64_MAX}, m_default_date{INT64_MAX},
+        m_period{period}, m_default_period{period},
+        m_period_set{} {}
+    GncOptionDateValue(const char* section, const char* name,
+                       const char* key, const char* doc_string,
+                       GncOptionUIType ui_type,
+                       const RelativeDatePeriodVec& period_set) :
+        OptionClassifier{section, name, key, doc_string},
+        m_ui_type{ui_type}, m_date{INT64_MAX}, m_default_date{INT64_MAX},
+        m_period{period_set.back()},
+        m_default_period{period_set.back()},
+        m_period_set{period_set} {}
+    GncOptionDateValue(const GncOptionDateValue&) = default;
+    GncOptionDateValue(GncOptionDateValue&&) = default;
+    GncOptionDateValue& operator=(const GncOptionDateValue&) = default;
+    GncOptionDateValue& operator=(GncOptionDateValue&&) = default;
+    time64 get_value() const noexcept;
+    time64 get_default_value() const noexcept;
     RelativeDatePeriod get_period() const noexcept { return m_period; }
     RelativeDatePeriod get_default_period() const noexcept { return m_default_period; }
+    int8_t get_period_index() const noexcept;
+    int8_t get_default_period_index() const noexcept;
     std::ostream& out_stream(std::ostream& oss) const noexcept;
     std::istream& in_stream(std::istream& iss);
+    bool validate(RelativeDatePeriod value);
+    bool validate(time64 time) {
+        if (time > MINTIME && time < MAXTIME)
+            return true;
+        return false;
+    }
     void set_value(RelativeDatePeriod value) {
-        m_period = value;
-        m_date = INT64_MAX;
+        if (validate(value))
+        {
+            m_period = value;
+            m_date = INT64_MAX;
+        }
     }
     void set_value(time64 time) {
-        m_period = RelativeDatePeriod::ABSOLUTE;
-        m_date = time;
+        if (validate(time))
+        {
+            m_period = RelativeDatePeriod::ABSOLUTE;
+            m_date = time;
+        }
+    }
+    void set_value(size_t index) noexcept;
+    std::size_t num_permissible_values() const noexcept
+    {
+        return m_period_set.size();
+    }
+    std::size_t permissible_value_index(const char* key) const noexcept;
+    const char* permissible_value(std::size_t index) const
+    {
+        return gnc_relative_date_storage_string(m_period_set.at(index));
+    }
+    const char* permissible_value_name(std::size_t index) const
+    {
+        return gnc_relative_date_display_string(m_period_set.at(index));
+    }
+    const char* permissible_value_description(std::size_t index) const
+    {
+        return gnc_relative_date_description(m_period_set.at(index));
     }
     bool is_changed() const noexcept { return m_period != m_default_period &&
             m_date != m_default_date; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    const RelativeDatePeriodVec& get_period_set() const { return m_period_set; }
 private:
     GncOptionUIType m_ui_type;
-    RelativeDatePeriod m_period;
     time64 m_date;
-    RelativeDatePeriod m_default_period;
     time64 m_default_date;
+    RelativeDatePeriod m_period;
+    RelativeDatePeriod m_default_period;
+    RelativeDatePeriodVec m_period_set;
 };
 
 template<> inline std::ostream&

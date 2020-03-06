@@ -966,14 +966,92 @@ gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_date_interval_option(const GncOptionDBPtr& db, const char* section,
-                                  const char* name, const char* key,
-                                  const char* doc_string,
-                                  RelativeDatePeriod period)
+gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+                         const char* name, const char* key,
+                         const char* doc_string, time64 time,
+                         RelativeDateUI ui)
 {
-    auto ui_type = static_cast<int>(period) % 2 ?
-        GncOptionUIType::DATE_BOTH_END : GncOptionUIType::DATE_BOTH_BEGIN;
+    auto ui_type = ui == RelativeDateUI::BOTH ? GncOptionUIType::DATE_BOTH :
+        ui == RelativeDateUI::RELATIVE ? GncOptionUIType::DATE_RELATIVE :
+        GncOptionUIType::DATE_ABSOLUTE;
+    GncOption option{GncOptionDateValue(section, name, key, doc_string,
+                                        ui_type, time)};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+                         const char* name, const char* key,
+                         const char* doc_string, RelativeDatePeriod period,
+                         RelativeDateUI ui)
+{
+    auto ui_type = ui == RelativeDateUI::BOTH ? GncOptionUIType::DATE_BOTH :
+        ui == RelativeDateUI::RELATIVE ? GncOptionUIType::DATE_RELATIVE :
+        GncOptionUIType::DATE_ABSOLUTE;
     GncOption option{GncOptionDateValue(section, name, key, doc_string,
                                         ui_type, period)};
+    db->register_option(section, std::move(option));
+}
+
+void
+gnc_register_date_option(const GncOptionDBPtr& db,
+                                  const char* section, const char* name,
+                                  const char* key, const char* doc_string,
+                                  RelativeDatePeriodVec& period_set,
+                                  bool both)
+{
+    auto ui_type = both ? GncOptionUIType::DATE_BOTH :
+        GncOptionUIType::DATE_RELATIVE;
+    GncOption option{GncOptionDateValue(section, name, key, doc_string,
+                                        ui_type, period_set)};
+    db->register_option(section, std::move(option));
+}
+
+
+static const RelativeDatePeriodVec begin_dates
+{
+    RelativeDatePeriod::TODAY,
+    RelativeDatePeriod::START_THIS_MONTH,
+    RelativeDatePeriod::START_PREV_MONTH,
+    RelativeDatePeriod::START_CURRENT_QUARTER,
+    RelativeDatePeriod::START_PREV_QUARTER,
+    RelativeDatePeriod::START_CAL_YEAR,
+    RelativeDatePeriod::START_PREV_YEAR,
+    RelativeDatePeriod::START_ACCOUNTING_PERIOD
+};
+
+void
+gnc_register_start_date_option(const GncOptionDBPtr& db, const char* section,
+                               const char* name, const char* key,
+                               const char* doc_string, bool both)
+{
+    auto ui_type = both ? GncOptionUIType::DATE_BOTH :
+        GncOptionUIType::DATE_RELATIVE;
+    GncOption option{GncOptionDateValue(section, name, key, doc_string,
+                                        ui_type, begin_dates)};
+    db->register_option(section, std::move(option));
+}
+
+static const RelativeDatePeriodVec end_dates
+{
+    RelativeDatePeriod::TODAY,
+    RelativeDatePeriod::END_THIS_MONTH,
+    RelativeDatePeriod::END_PREV_MONTH,
+    RelativeDatePeriod::END_CURRENT_QUARTER,
+    RelativeDatePeriod::END_PREV_QUARTER,
+    RelativeDatePeriod::END_CAL_YEAR,
+    RelativeDatePeriod::END_PREV_YEAR,
+    RelativeDatePeriod::END_ACCOUNTING_PERIOD
+};
+
+void
+gnc_register_end_date_option(const GncOptionDBPtr& db, const char* section,
+                             const char* name, const char* key,
+                             const char* doc_string, bool both)
+{
+    auto ui_type = both ? GncOptionUIType::DATE_BOTH :
+        GncOptionUIType::DATE_RELATIVE;
+    GncOption option{GncOptionDateValue(section, name, key, doc_string,
+                                        ui_type, end_dates)};
     db->register_option(section, std::move(option));
 }

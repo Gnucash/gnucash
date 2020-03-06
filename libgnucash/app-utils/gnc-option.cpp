@@ -49,10 +49,15 @@ GncOption::get_value() const
                           if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
                                            return option.get_value();
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                         GncOptionDateValue> &&
-                                         std::is_same_v<std::decay_t<ValueType>,
+                                        GncOptionDateValue> &&
+                                        std::is_same_v<std::decay_t<ValueType>,
                                         RelativeDatePeriod>)
                               return option.get_period();
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue> &&
+                                        std::is_same_v<std::decay_t<ValueType>,
+                                        size_t>)
+                              return option.get_period_index();
                           return ValueType {};
                       }, *m_option);
 }
@@ -63,6 +68,16 @@ GncOption::get_default_value() const
     return std::visit([](const auto option)->ValueType {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option.get_value())>, std::decay_t<ValueType>>)
                                            return option.get_default_value();
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue> &&
+                                        std::is_same_v<std::decay_t<ValueType>,
+                                        RelativeDatePeriod>)
+                              return option.get_default_period();
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue> &&
+                                        std::is_same_v<std::decay_t<ValueType>,
+                                        size_t>)
+                              return option.get_default_period_index();
                           return ValueType {};
                       }, *m_option);
 
@@ -77,8 +92,9 @@ GncOption::set_value(ValueType value)
                         std::decay_t<ValueType>> ||
                         (std::is_same_v<std::decay_t<decltype(option)>,
                          GncOptionDateValue> &&
-                         std::is_same_v<std::decay_t<ValueType>,
-                         RelativeDatePeriod>))
+                         (std::is_same_v<std::decay_t<ValueType>,
+                         RelativeDatePeriod> ||
+                          std::is_same_v<std::decay_t<ValueType>, size_t>)))
                            option.set_value(value);
                }, *m_option);
 }
@@ -206,7 +222,9 @@ GncOption::num_permissible_values() const
 {
     return std::visit([] (const auto& option) -> size_t {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>)
+                                        GncOptionMultichoiceValue>  ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue>)
                                            return option.num_permissible_values();
                           else
                               return size_t_max;
@@ -218,7 +236,9 @@ GncOption::permissible_value_index(const char* value) const
 {
     return std::visit([&value] (const auto& option) -> size_t {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>)
+                                        GncOptionMultichoiceValue>  ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue>)
                                            return option.permissible_value_index(value);
                           else
                               return size_t_max;;
@@ -230,7 +250,9 @@ GncOption::permissible_value(std::size_t index) const
 {
     return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>)
+                                        GncOptionMultichoiceValue>  ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue>)
                                            return option.permissible_value(index);
                           else
                               return "";
@@ -242,7 +264,9 @@ GncOption::permissible_value_name(std::size_t index) const
 {
     return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>)
+                                        GncOptionMultichoiceValue>  ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue>)
                                            return option.permissible_value_name(index);
                           else
                               return "";
@@ -254,7 +278,9 @@ GncOption::permissible_value_description(std::size_t index) const
 {
     return std::visit([index] (const auto& option) -> const char* {
                           if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
-                                        GncOptionMultichoiceValue>)
+                                        GncOptionMultichoiceValue>  ||
+                                        std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionDateValue>)
                                            return option.permissible_value_description(index);
                           else
                               return "";
@@ -394,6 +420,7 @@ template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;
 template int64_t GncOption::get_value<int64_t>() const;
 template double GncOption::get_value<double>() const;
+template size_t GncOption::get_value<size_t>() const;
 template const char* GncOption::get_value<const char*>() const;
 template std::string GncOption::get_value<std::string>() const;
 template const QofInstance* GncOption::get_value<const QofInstance*>() const;
@@ -417,6 +444,7 @@ template void GncOption::set_value(const char*);
 template void GncOption::set_value(std::string);
 template void GncOption::set_value(const QofInstance*);
 template void GncOption::set_value(RelativeDatePeriod);
+template void GncOption::set_value(size_t);
 
 template bool GncOption::validate(bool) const;
 template bool GncOption::validate(int) const;

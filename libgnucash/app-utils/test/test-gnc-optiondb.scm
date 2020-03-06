@@ -39,6 +39,7 @@
   (test-gnc-make-multichoice-option)
   (test-gnc-make-list-option)
   (test-gnc-make-date-option)
+  (test-gnc-make-date-set-option)
   (test-gnc-make-number-range-option)
   (test-end "test-gnc-optiondb-scheme"))
 
@@ -181,14 +182,31 @@
 (define (test-gnc-make-date-option)
   (test-begin "test-gnc-test-date-option")
   (let* ((option-db (gnc-option-db-new))
-         (date-opt (gnc-register-date-interval-option option-db "foo" "bar"
-                                                      "baz" "Phony Option"
-                                                      (RelativeDatePeriod-today)))
+         (date-opt (gnc-register-date-option option-db "foo" "bar"
+                                             "baz" "Phony Option"
+                                             (RelativeDatePeriod-today)))
          (a-time (gnc-dmy2time64 11 07 2019)))
     (test-equal (current-time) (gnc-option-value option-db "foo" "bar"))
     (gnc-set-option option-db "foo" "bar" a-time)
     (test-equal a-time (gnc-option-value option-db "foo" "bar")))
   (test-end "test-gnc-test-date-option"))
+
+(define (test-gnc-make-date-set-option)
+  (test-begin "test-gnc-test-date-set-option")
+  (let* ((option-db (gnc-option-db-new))
+         (date-opt (gnc-register-date-option-set
+                    option-db "foo" "bar" "baz" "Phony Option"
+                    (list (RelativeDatePeriod-today)
+                          (RelativeDatePeriod-start-this-month)
+                          (RelativeDatePeriod-start-prev-month)
+                          (RelativeDatePeriod-start-current-quarter)
+                          (RelativeDatePeriod-start-prev-quarter)
+                          (RelativeDatePeriod-start-cal-year)
+                          (RelativeDatePeriod-start-prev-year)
+                          (RelativeDatePeriod-start-accounting-period)) #t)))
+    (test-equal (gnc-accounting-period-fiscal-start)
+                (gnc-option-value option-db "foo" "bar")))
+  (test-end "test-gnc-test-date-set-option"))
 
 (define (test-gnc-make-number-range-option)
   (test-begin "test-gnc-number-range-option")

@@ -42,6 +42,8 @@ namespace std {
 %{
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
+#include "gnc-option-date.hpp"
+
 SCM scm_init_sw_gnc_optiondb_module(void);
 %}
 
@@ -179,12 +181,23 @@ gnc_option_test_book_destroy(QofBook* book)
 %ignore GncOptionDateValue(GncOptionDateValue&&);
 %ignore GncOptionDateValue::operator=(const GncOptionDateValue&);
 %ignore GncOptionDateValue::operator=(GncOptionDateValue&&);
+%ignore GncOptionDateValue::set_value(size_t); // Used only by dialog-options
 %ignore operator<<(std::ostream&, const GncOption&);
 %ignore operator>>(std::istream&, GncOption&);
 %ignore GncOption::_get_option();
 
 %rename(absolute) RelativeDatePeriod::ABSOLUTE;
 %rename(today) RelativeDatePeriod::TODAY;
+%rename(one_week_ago) RelativeDatePeriod::ONE_WEEK_AGO;
+%rename(one_week_ahead) RelativeDatePeriod::ONE_WEEK_AHEAD;
+%rename(one_month_ago) RelativeDatePeriod::ONE_MONTH_AGO;
+%rename(one_month_ahead) RelativeDatePeriod::ONE_MONTH_AHEAD;
+%rename(three_months_ago) RelativeDatePeriod::THREE_MONTHS_AGO;
+%rename(three_months_ahead) RelativeDatePeriod::THREE_MONTHS_AHEAD;
+%rename(six_months_ago) RelativeDatePeriod::SIX_MONTHS_AGO;
+%rename(six_months_ahead) RelativeDatePeriod::SIX_MONTHS_AHEAD;
+%rename(one_year_ago) RelativeDatePeriod::ONE_YEAR_AGO;
+%rename(one_year_ahead) RelativeDatePeriod::ONE_YEAR_AHEAD;
 %rename(start_this_month) RelativeDatePeriod::START_THIS_MONTH;
 %rename(end_this_month) RelativeDatePeriod::END_THIS_MONTH;
 %rename(start_prev_month) RelativeDatePeriod::START_PREV_MONTH;
@@ -200,8 +213,24 @@ gnc_option_test_book_destroy(QofBook* book)
 %rename(start_accounting_period) RelativeDatePeriod::START_ACCOUNTING_PERIOD;
 %rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
+%rename(gnc_register_date_option_set)
+    gnc_register_date_option(const GncOptionDBPtr&, const char*, const char*,
+                             const char*, const char*, RelativeDatePeriodVec&,
+                             bool);
+
 %typemap(typecheck, precedence=SWIG_TYPECHECK_INT64) time64 {
     $1 = scm_is_signed_integer($input, INT64_MAX, INT64_MIN);
+}
+
+%typemap(in) RelativeDatePeriodVec& (RelativeDatePeriodVec period_set)
+{
+    auto len = scm_to_size_t(scm_length($input));
+    for (std::size_t i = 0; i < len; ++i)
+    {
+        SCM s_reldateperiod = scm_list_ref($input, scm_from_size_t(i));
+        period_set.push_back((RelativeDatePeriod)scm_to_int(s_reldateperiod));
+    }
+    $1 = &period_set;
 }
 
 %typemap(in) GncMultiChoiceOptionChoices&& (GncMultiChoiceOptionChoices choices)
@@ -313,6 +342,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 %}
 
+%include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
 %include "gnc-option-impl.hpp"
 %include "gnc-optiondb.hpp"

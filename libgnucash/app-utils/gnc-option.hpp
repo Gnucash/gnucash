@@ -34,6 +34,7 @@ extern "C"
 #include <variant>
 #include <memory>
 #include "gnc-option-uitype.hpp"
+#include "gnc-option-date.hpp"
 
 class GncOptionUIItem;
 using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
@@ -117,31 +118,6 @@ operator>>(std::istream& iss, GncOption& opt)
 {
     return opt.in_stream(iss);
 }
-/**
- * Reporting periods relative to the current date.
- *
- * The original design allowed custom RelativeDatePeriods, but that facility is
- * unused so we'll go with compiled-in enums.
- */
-enum class RelativeDatePeriod : int
-{
-    ABSOLUTE = -1,
-    TODAY,
-    START_THIS_MONTH,
-    END_THIS_MONTH,
-    START_PREV_MONTH,
-    END_PREV_MONTH,
-    START_CURRENT_QUARTER,
-    END_CURRENT_QUARTER,
-    START_PREV_QUARTER,
-    END_PREV_QUARTER,
-    START_CAL_YEAR,
-    END_CAL_YEAR,
-    START_PREV_YEAR,
-    END_PREV_YEAR,
-    START_ACCOUNTING_PERIOD,
-    END_ACCOUNTING_PERIOD
-};
 
 
 #endif //GNC_OPTION_HPP_

@@ -509,35 +509,52 @@ TEST_F(GncOptionCommodityTest, test_commodity_from_scheme)
 class GncUIType
 {
 public:
-    void set_value(const std::string& value) { m_value = value; }
-    const std::string& get_value() { return m_value; }
+    void set_value(const std::string& value) const noexcept { m_value = value; }
+    const std::string& get_value() const noexcept { return m_value; }
+    void clear() noexcept { m_value.clear(); }
 private:
-    std::string m_value;
+    mutable std::string m_value;
 };
 
-using OptionUIItem = GncUIItem<GncUIType>;
+
+class OptionUIItem : public GncOptionUIItem
+{
+    GncUIType m_widget;
+    bool m_dirty = false;
+public:
+    ~OptionUIItem() = default;
+    GncOptionUIType get_ui_type() const noexcept override { return GncOptionUIType::STRING; }
+    void set_dirty(bool status) noexcept override { m_dirty = status; }
+    bool get_dirty() const noexcept override { return m_dirty; }
+    void clear_ui_item() override { m_widget.clear(); }
+    void set_ui_item_from_option(GncOption& option) noexcept override
+    {
+        m_widget.set_value(option.get_value<std::string>());
+    }
+    void set_option_from_ui_item(GncOption& option) noexcept override
+    {
+        option.set_value(m_widget.get_value());
+    }
+    void set_widget_value(const std::string& value) const noexcept
+    {
+        m_widget.set_value(value);
+    }
+    const std::string& get_widget_value() const noexcept
+    {
+        return m_widget.get_value();
+    }
+};
 
 class GncOptionUITest : public ::testing::Test
 {
 protected:
     GncOptionUITest() :
-        m_widget{},
         m_option{"foo", "bar", "baz", "Phony Option", std::string{"waldo"},
                  GncOptionUIType::STRING}
     {
-        auto to_ui = [](OptionUIItem& ui, GncOption& opt) {
-                         ui.m_widget->set_value(opt.get_value<std::string>());
-                     };
-        auto from_ui = [](OptionUIItem& ui, GncOption& opt) {
-                           opt.set_value<std::string>(ui.m_widget->get_value());
-                       };
-        auto ui_item{std::make_unique<GncOptionUIItem>(
-                OptionUIItem{&m_widget},
-                GncOptionUIType::STRING,
-                to_ui, from_ui)};
+        auto ui_item{std::make_unique<OptionUIItem>()};
         m_option.set_ui_item(std::move(ui_item));
     }
-    GncUIType m_widget;
     GncOption m_option;
 };
 
@@ -548,24 +565,23 @@ TEST_F(GncOptionUI, test_option_ui_type)
     EXPECT_EQ(GncOptionUIType::STRING, m_option.get_ui_type());
 }
 
-TEST_F(GncOptionUI, test_set_option_ui_item)
-{
-    EXPECT_EQ(&m_widget, m_option.get_ui_item()->get_ui_item().m_widget);
-}
-
 TEST_F(GncOptionUI, test_ui_value_from_option)
 {
     const char* value{"waldo"};
 
     m_option.set_value(value);
     m_option.set_ui_item_from_option();
-    EXPECT_STREQ(value, m_widget.get_value().c_str());
+    auto ui_item{dynamic_cast<const OptionUIItem*>(m_option.get_ui_item())};
+    ASSERT_TRUE(ui_item != nullptr);
+    EXPECT_STREQ(value, ui_item->get_widget_value().c_str());
 }
 
 TEST_F(GncOptionUI, test_option_value_from_ui)
 {
     const char* value{"pepper"};
-    m_widget.set_value(value);
+    auto ui_item{dynamic_cast<const OptionUIItem*>(m_option.get_ui_item())};
+    ASSERT_TRUE(ui_item != nullptr);
+    ui_item->set_widget_value(value);
     m_option.set_option_from_ui_item();
     EXPECT_STREQ(value, m_option.get_value<std::string>().c_str());
 }
@@ -958,10 +974,10 @@ TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
 {
     EXPECT_NO_THROW({
             EXPECT_EQ(3U, m_option.permissible_value_index("corge"));
-            EXPECT_STREQ("waldo", m_option.permissible_value(1).c_str());
-            EXPECT_STREQ("sausage", m_option.permissible_value_name(2).c_str());
+            EXPECT_STREQ("waldo", m_option.permissible_value(1));
+            EXPECT_STREQ("sausage", m_option.permissible_value_name(2));
             EXPECT_STREQ("thud",
-                         m_option.permissible_value_description(0).c_str());
+                         m_option.permissible_value_description(0));
         });
     EXPECT_THROW({ auto result = m_option.permissible_value(7); },
                  std::out_of_range);
@@ -1008,18 +1024,6 @@ TEST_F(GncMultichoiceOption, test_multichoice_scheme_in)
     EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
 }
 
-class GncOptionDateOptionTest : public ::testing::Test
-{
-protected:
-    GncOptionDateOptionTest() :
-        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option",
-                                    GncOptionUIType::DATE_BOTH_END}} {}
-
-    GncOption m_option;
-};
-
-using GncDateOption = GncOptionDateOptionTest;
-
 static time64
 time64_from_gdate(const GDate* g_date, DayPart when)
 {
@@ -1029,6 +1033,171 @@ time64_from_gdate(const GDate* g_date, DayPart when)
     return static_cast<time64>(time);
 }
 
+TEST(GncOptionDate, test_gnc_relative_date_is_single)
+{
+    EXPECT_FALSE(gnc_relative_date_is_single(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_TRUE(gnc_relative_date_is_single(RelativeDatePeriod::TODAY));
+    EXPECT_TRUE(gnc_relative_date_is_single(RelativeDatePeriod::ONE_YEAR_AHEAD));
+    EXPECT_FALSE(gnc_relative_date_is_single(RelativeDatePeriod::START_THIS_MONTH));
+    EXPECT_FALSE(gnc_relative_date_is_single(RelativeDatePeriod::END_CURRENT_QUARTER));
+    EXPECT_FALSE(gnc_relative_date_is_single(RelativeDatePeriod::START_ACCOUNTING_PERIOD));
+    EXPECT_FALSE(gnc_relative_date_is_single(RelativeDatePeriod::END_ACCOUNTING_PERIOD));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_is_starting)
+{
+    EXPECT_FALSE(gnc_relative_date_is_starting(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_FALSE(gnc_relative_date_is_starting(RelativeDatePeriod::TODAY));
+    EXPECT_FALSE(gnc_relative_date_is_starting(RelativeDatePeriod::ONE_YEAR_AHEAD));
+    EXPECT_TRUE(gnc_relative_date_is_starting(RelativeDatePeriod::START_THIS_MONTH));
+    EXPECT_FALSE(gnc_relative_date_is_starting(RelativeDatePeriod::END_CURRENT_QUARTER));
+    EXPECT_TRUE(gnc_relative_date_is_starting(RelativeDatePeriod::START_ACCOUNTING_PERIOD));
+    EXPECT_FALSE(gnc_relative_date_is_starting(RelativeDatePeriod::END_ACCOUNTING_PERIOD));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_is_ending)
+{
+    EXPECT_FALSE(gnc_relative_date_is_ending(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_FALSE(gnc_relative_date_is_ending(RelativeDatePeriod::TODAY));
+    EXPECT_FALSE(gnc_relative_date_is_ending(RelativeDatePeriod::ONE_YEAR_AHEAD));
+    EXPECT_FALSE(gnc_relative_date_is_ending(RelativeDatePeriod::START_CURRENT_QUARTER));
+    EXPECT_TRUE(gnc_relative_date_is_ending(RelativeDatePeriod::END_CURRENT_QUARTER));
+    EXPECT_FALSE(gnc_relative_date_is_ending(RelativeDatePeriod::START_ACCOUNTING_PERIOD));
+    EXPECT_TRUE(gnc_relative_date_is_ending(RelativeDatePeriod::END_ACCOUNTING_PERIOD));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_storage_string)
+{
+    EXPECT_EQ(nullptr, gnc_relative_date_storage_string(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_STREQ("one-month-ago", gnc_relative_date_storage_string(RelativeDatePeriod::ONE_MONTH_AGO));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_display_string)
+{
+    EXPECT_EQ(nullptr, gnc_relative_date_display_string(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_STREQ("Start of next month", gnc_relative_date_display_string(RelativeDatePeriod::START_NEXT_MONTH));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_description)
+{
+    EXPECT_EQ(nullptr, gnc_relative_date_description(RelativeDatePeriod::ABSOLUTE));
+    EXPECT_STREQ("First day of the next month.", gnc_relative_date_description(RelativeDatePeriod::START_NEXT_MONTH));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_from_storage_string)
+{
+    EXPECT_EQ(RelativeDatePeriod::ABSOLUTE, gnc_relative_date_from_storage_string("foo"));
+    EXPECT_EQ(RelativeDatePeriod::ONE_MONTH_AHEAD,  gnc_relative_date_from_storage_string("one-month-ahead"));
+    EXPECT_EQ(RelativeDatePeriod::START_CURRENT_QUARTER,  gnc_relative_date_from_storage_string("start-current-quarter"));
+    EXPECT_EQ(RelativeDatePeriod::END_ACCOUNTING_PERIOD,  gnc_relative_date_from_storage_string("end-prev-fin-year"));
+}
+
+TEST(GncOptionDate, test_gnc_relative_date_to_time64)
+{
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_month_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_THIS_MONTH));
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_month_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_THIS_MONTH));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_month_start(&date);
+    time1 = time64_from_gdate(&date, DayPart::start);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_MONTH));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_month_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_MONTH));
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_quarter_start(&date);
+    time1 = time64_from_gdate(&date, DayPart::start);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CURRENT_QUARTER));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_quarter_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CURRENT_QUARTER));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_quarter_start(&date);
+    time1 = time64_from_gdate(&date, DayPart::start);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_QUARTER));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_quarter_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_QUARTER));
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_year_start(&date);
+    time1 = time64_from_gdate(&date, DayPart::start);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CAL_YEAR));
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_year_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CAL_YEAR));
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_year_start(&date);
+    time1 = time64_from_gdate(&date, DayPart::start);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_YEAR));
+
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_year_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
+    EXPECT_EQ(time1,
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_YEAR));
+}
+
+class GncOptionDateOptionTest : public ::testing::Test
+{
+protected:
+    GncOptionDateOptionTest() :
+        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option",
+                                    GncOptionUIType::DATE_BOTH}} {}
+    GncOption m_option;
+};
+
+class GncOptionDateOptionListTest : public ::testing::Test
+{
+protected:
+    GncOptionDateOptionListTest() :
+        m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option",
+                                    GncOptionUIType::DATE_BOTH, c_begin_dates}} {}
+    GncOption m_option;
+
+    static const RelativeDatePeriodVec c_begin_dates;
+};
+
+const RelativeDatePeriodVec GncOptionDateOptionListTest::c_begin_dates
+{
+    RelativeDatePeriod::TODAY,
+    RelativeDatePeriod::START_THIS_MONTH,
+    RelativeDatePeriod::START_PREV_MONTH,
+    RelativeDatePeriod::START_CURRENT_QUARTER,
+    RelativeDatePeriod::START_PREV_QUARTER,
+    RelativeDatePeriod::START_CAL_YEAR,
+    RelativeDatePeriod::START_PREV_YEAR,
+    RelativeDatePeriod::START_ACCOUNTING_PERIOD
+};
+
+using GncDateOption = GncOptionDateOptionTest;
+using GncDateOptionList = GncOptionDateOptionListTest;
+
 TEST_F(GncDateOption, test_set_and_get_absolute)
 {
     time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
@@ -1036,124 +1205,25 @@ TEST_F(GncDateOption, test_set_and_get_absolute)
     EXPECT_EQ(time1, m_option.get_value<time64>());
 }
 
-TEST_F(GncDateOption, test_set_and_get_month_start)
+TEST_F(GncDateOptionList, test_set_and_get_relative)
 {
-    GDate month_start;
-    g_date_set_time_t(&month_start, time(nullptr));
-    gnc_gdate_set_month_start(&month_start);
-    time64 time1{time64_from_gdate(&month_start, DayPart::start)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_month_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
+    EXPECT_EQ(RelativeDatePeriod::START_ACCOUNTING_PERIOD, m_option.get_value<RelativeDatePeriod>());
     m_option.set_value(RelativeDatePeriod::START_THIS_MONTH);
     EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_month_end)
-{
-    GDate month_end;
-    g_date_set_time_t(&month_end, time(nullptr));
-    gnc_gdate_set_month_end(&month_end);
-    time64 time1{time64_from_gdate(&month_end, DayPart::end)};
+    EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH, m_option.get_value<RelativeDatePeriod>());
+    auto index(std::find(c_begin_dates.begin(), c_begin_dates.end(),
+                         RelativeDatePeriod::START_THIS_MONTH) - c_begin_dates.begin());
+    EXPECT_EQ(index, m_option.get_value<size_t>());
+    // And check that nothing happens when we try to set m_option to an end date
     m_option.set_value(RelativeDatePeriod::END_THIS_MONTH);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_month_start)
-{
-    GDate prev_month_start;
-    g_date_set_time_t(&prev_month_start, time(nullptr));
-    gnc_gdate_set_prev_month_start(&prev_month_start);
-    time64 time1{time64_from_gdate(&prev_month_start, DayPart::start)};
-    m_option.set_value(RelativeDatePeriod::START_PREV_MONTH);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_month_end)
-{
-    GDate prev_month_end;
-    g_date_set_time_t(&prev_month_end, time(nullptr));
-    gnc_gdate_set_prev_month_end(&prev_month_end);
-    time64 time1{time64_from_gdate(&prev_month_end, DayPart::end)};
-    m_option.set_value(RelativeDatePeriod::END_PREV_MONTH);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_quarter_start)
-{
-    GDate quarter_start;
-    g_date_set_time_t(&quarter_start, time(nullptr));
-    gnc_gdate_set_quarter_start(&quarter_start);
-    time64 time1{time64_from_gdate(&quarter_start, DayPart::start)};
-    m_option.set_value(RelativeDatePeriod::START_CURRENT_QUARTER);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_quarter_end)
-{
-    GDate quarter_end;
-    g_date_set_time_t(&quarter_end, time(nullptr));
-    gnc_gdate_set_quarter_end(&quarter_end);
-    time64 time1{time64_from_gdate(&quarter_end, DayPart::end)};
-    m_option.set_value(RelativeDatePeriod::END_CURRENT_QUARTER);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_quarter_start)
-{
-    GDate prev_quarter_start;
-    g_date_set_time_t(&prev_quarter_start, time(nullptr));
-    gnc_gdate_set_prev_quarter_start(&prev_quarter_start);
-    time64 time1{time64_from_gdate(&prev_quarter_start, DayPart::start)};
-    m_option.set_value(RelativeDatePeriod::START_PREV_QUARTER);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_quarter_end)
-{
-    GDate prev_quarter_end;
-    g_date_set_time_t(&prev_quarter_end, time(nullptr));
-    gnc_gdate_set_prev_quarter_end(&prev_quarter_end);
-    time64 time1{time64_from_gdate(&prev_quarter_end, DayPart::end)};
-    m_option.set_value(RelativeDatePeriod::END_PREV_QUARTER);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_year_start)
-{
-    GDate year_start;
-    g_date_set_time_t(&year_start, time(nullptr));
-    gnc_gdate_set_year_start(&year_start);
-    time64 time1{time64_from_gdate(&year_start, DayPart::start)};
-    m_option.set_value(RelativeDatePeriod::START_CAL_YEAR);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_year_end)
-{
-    GDate year_end;
-    g_date_set_time_t(&year_end, time(nullptr));
-    gnc_gdate_set_year_end(&year_end);
-    time64 time1{time64_from_gdate(&year_end, DayPart::end)};
-    m_option.set_value(RelativeDatePeriod::END_CAL_YEAR);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_year_start)
-{
-    GDate prev_year_start;
-    g_date_set_time_t(&prev_year_start, time(nullptr));
-    gnc_gdate_set_prev_year_start(&prev_year_start);
-    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
-    m_option.set_value(RelativeDatePeriod::START_PREV_YEAR);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
-}
-
-TEST_F(GncDateOption, test_set_and_get_prev_year_end)
-{
-    GDate prev_year_end;
-    g_date_set_time_t(&prev_year_end, time(nullptr));
-    gnc_gdate_set_prev_year_end(&prev_year_end);
-    time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
-    m_option.set_value(RelativeDatePeriod::END_PREV_YEAR);
-    EXPECT_EQ(time1, m_option.get_value<time64>());
+    EXPECT_EQ(RelativeDatePeriod::START_THIS_MONTH, m_option.get_value<RelativeDatePeriod>());
+    m_option.set_value(static_cast<size_t>(5));
+    EXPECT_EQ(RelativeDatePeriod::START_CAL_YEAR, m_option.get_value<RelativeDatePeriod>());
+    EXPECT_EQ(5, m_option.get_value<size_t>());
 }
 
 TEST_F(GncDateOption, test_stream_out)
@@ -1271,10 +1341,10 @@ TEST_F(GncDateOption, test_stream_in_month_start)
 
 TEST_F(GncDateOption, test_stream_in_month_end)
 {
-    GDate month_end;
-    g_date_set_time_t(&month_end, time(nullptr));
-    gnc_gdate_set_month_end(&month_end);
-    time64 time1{time64_from_gdate(&month_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_month_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-this-month"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1293,10 +1363,10 @@ TEST_F(GncDateOption, test_stream_in_prev_month_start)
 
 TEST_F(GncDateOption, test_stream_in_prev_month_end)
 {
-    GDate prev_month_end;
-    g_date_set_time_t(&prev_month_end, time(nullptr));
-    gnc_gdate_set_prev_month_end(&prev_month_end);
-    time64 time1{time64_from_gdate(&prev_month_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_month_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-prev-month"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1304,10 +1374,10 @@ TEST_F(GncDateOption, test_stream_in_prev_month_end)
 
 TEST_F(GncDateOption, test_stream_in_quarter_start)
 {
-    GDate quarter_start;
-    g_date_set_time_t(&quarter_start, time(nullptr));
-    gnc_gdate_set_quarter_start(&quarter_start);
-    time64 time1{time64_from_gdate(&quarter_start, DayPart::start)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_quarter_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
     std::istringstream iss{"relative . start-current-quarter"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1315,10 +1385,10 @@ TEST_F(GncDateOption, test_stream_in_quarter_start)
 
 TEST_F(GncDateOption, test_stream_in_quarter_end)
 {
-    GDate quarter_end;
-    g_date_set_time_t(&quarter_end, time(nullptr));
-    gnc_gdate_set_quarter_end(&quarter_end);
-    time64 time1{time64_from_gdate(&quarter_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_quarter_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-current-quarter"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1326,10 +1396,10 @@ TEST_F(GncDateOption, test_stream_in_quarter_end)
 
 TEST_F(GncDateOption, test_stream_in_prev_quarter_start)
 {
-    GDate prev_quarter_start;
-    g_date_set_time_t(&prev_quarter_start, time(nullptr));
-    gnc_gdate_set_prev_quarter_start(&prev_quarter_start);
-    time64 time1{time64_from_gdate(&prev_quarter_start, DayPart::start)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_quarter_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
     std::istringstream iss{"relative . start-prev-quarter"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1337,10 +1407,10 @@ TEST_F(GncDateOption, test_stream_in_prev_quarter_start)
 
 TEST_F(GncDateOption, test_stream_in_prev_quarter_end)
 {
-    GDate prev_quarter_end;
-    g_date_set_time_t(&prev_quarter_end, time(nullptr));
-    gnc_gdate_set_prev_quarter_end(&prev_quarter_end);
-    time64 time1{time64_from_gdate(&prev_quarter_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_quarter_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-prev-quarter"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1348,10 +1418,10 @@ TEST_F(GncDateOption, test_stream_in_prev_quarter_end)
 
 TEST_F(GncDateOption, test_stream_in_year_start)
 {
-    GDate year_start;
-    g_date_set_time_t(&year_start, time(nullptr));
-    gnc_gdate_set_year_start(&year_start);
-    time64 time1{time64_from_gdate(&year_start, DayPart::start)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_year_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
     std::istringstream iss{"relative . start-cal-year"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1359,10 +1429,10 @@ TEST_F(GncDateOption, test_stream_in_year_start)
 
 TEST_F(GncDateOption, test_stream_in_year_end)
 {
-    GDate year_end;
-    g_date_set_time_t(&year_end, time(nullptr));
-    gnc_gdate_set_year_end(&year_end);
-    time64 time1{time64_from_gdate(&year_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_year_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-cal-year"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1370,10 +1440,10 @@ TEST_F(GncDateOption, test_stream_in_year_end)
 
 TEST_F(GncDateOption, test_stream_in_prev_year_start)
 {
-    GDate prev_year_start;
-    g_date_set_time_t(&prev_year_start, time(nullptr));
-    gnc_gdate_set_prev_year_start(&prev_year_start);
-    time64 time1{time64_from_gdate(&prev_year_start, DayPart::start)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_year_start(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::start)};
     std::istringstream iss{"relative . start-prev-year"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1381,10 +1451,10 @@ TEST_F(GncDateOption, test_stream_in_prev_year_start)
 
 TEST_F(GncDateOption, test_stream_in_prev_year_end)
 {
-    GDate prev_year_end;
-    g_date_set_time_t(&prev_year_end, time(nullptr));
-    gnc_gdate_set_prev_year_end(&prev_year_end);
-    time64 time1{time64_from_gdate(&prev_year_end, DayPart::end)};
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_prev_year_end(&date);
+    time64 time1{time64_from_gdate(&date, DayPart::end)};
     std::istringstream iss{"relative . end-prev-year"};
     iss >> m_option;
     EXPECT_EQ(time1, m_option.get_value<time64>());
@@ -1441,10 +1511,10 @@ TEST_F(GncDateOption, test_date_option_from_scheme)
     m_option.from_scheme(iss);
     EXPECT_EQ(time1, m_option.get_value<time64>());
 
-    GDate month_end;
-    g_date_set_time_t(&month_end, time(nullptr));
-    gnc_gdate_set_month_end(&month_end);
-    time1 = time64_from_gdate(&month_end, DayPart::end);
+    GDate date;
+    g_date_set_time_t(&date, time(nullptr));
+    gnc_gdate_set_month_end(&date);
+    time1 = time64_from_gdate(&date, DayPart::end);
     iss.clear();
     iss.str("'(relative . end-this-month)");
     m_option.from_scheme(iss);

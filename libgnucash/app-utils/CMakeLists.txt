@@ -11,6 +11,7 @@ set (app_utils_noinst_HEADERS
   calculation/finproto.h
   calculation/fin_spl_protos.h
   calculation/fin_static_proto.h
+  gnc-option-date.hpp
   gnc-option-impl.hpp
   gnc-optiondb-impl.hpp
 )
@@ -69,6 +70,7 @@ set (app_utils_SOURCES
   gnc-exp-parser.c
   gnc-gsettings.c
   gnc-helpers.c
+  gnc-option-date.cpp
   gnc-option.cpp
   gnc-option-impl.cpp
   gnc-optiondb.cpp
