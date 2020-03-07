@@ -230,6 +230,7 @@ gnc_add_scheme_deprecated_module ("gnucash report view-column" "gnucash reports 
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME}
     ${reports_common_SCHEME} ${reports_standard_SCHEME}  ${reports_standard_SCHEME_2}
-    ${reports_example_SCHEME} ${reports_us_SCHEME} ${reports_de_DE_SCHEME})
+    ${reports_example_SCHEME} ${reports_us_SCHEME} ${reports_de_DE_SCHEME}
+    ${reports_standard_with_exposed_generator_SCHEME})
 set(reports_DIST ${reports_DIST_local} ${reports_support_DIST}
     ${test_reports_standard_DIST} PARENT_SCOPE)
