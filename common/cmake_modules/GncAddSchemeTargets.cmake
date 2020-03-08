@@ -104,14 +104,19 @@ macro(find_guile_dirs)
             "{GNC_HOME}/${GUILE_REL_UNIX_SITECCACHEDIR}")
 endmacro(find_guile_dirs)
 
-function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
-                                MAKE_LINKS)
+function(make_scheme_targets _TARGET)
+  set(noValues MAKE_LINKS)
+  set(singleValues OUTPUT_DIR)
+  set(multiValues SOURCES DEPENDS)
+  cmake_parse_arguments(SCHEME_TGT "${noValues}" "${singleValues}" "${multiValues}" ${ARGN})
+  
   set(__DEBUG FALSE)
   if (__DEBUG)
     message("Parameters to COMPILE_SCHEME for target ${_TARGET}")
-    message("   SOURCE_FILES: ${_SOURCE_FILES}")
-    message("   GUILE_DEPENDS: ${_GUILE_DEPENDS}")
-    message("   DIRECTORIES: ${BINDIR_BUILD}, ${LIBDIR_BUILD}, ${DATADIR_BUILD}")
+    message("   SOURCE_FILES: ${SCHEME_TGT_SOURCES}")
+    message("   GUILE_DEPENDS: ${SCHEME_TGT_DEPENDS}")
+    message("   MAKE_LINKS: ${SCHEME_TGT_MAKE_LINKS}")
+    message("   DIRECTORIES: ${BINDIR_BUILD}, ${LIBDIR_BUILD}, ${DATADIR_BUILD}, ${SCHEME_TGT_OUTPUT_DIR}")
   endif()
   set(_CMD "create_symlink")
   if(WIN32)
@@ -133,11 +138,11 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   endif()
 
   # If links are requested, we simply link (or copy, for Windows) each source file to the dest directory
-  if(MAKE_LINKS)
-    set(_LINK_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}/${_OUTPUT_DIR})
+  if(SCHEME_TGT_MAKE_LINKS)
+    set(_LINK_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}/${SCHEME_TGT_OUTPUT_DIR})
     file(MAKE_DIRECTORY ${_LINK_DIR})
     set(_SCHEME_LINKS "")
-    foreach(scheme_file ${_SOURCE_FILES})
+    foreach(scheme_file ${SCHEME_TGT_SOURCES})
       set(_SOURCE_FILE ${current_srcdir}/${scheme_file})
       if(IS_ABSOLUTE ${scheme_file})
         set(_SOURCE_FILE ${scheme_file})
@@ -172,14 +177,14 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
 
   set(_TARGET_FILES "")
 
-  foreach(source_file ${_SOURCE_FILES})
-      set(guile_depends ${_GUILE_DEPENDS})
+  foreach(source_file ${SCHEME_TGT_SOURCES})
+      set(guile_depends ${SCHEME_TGT_DEPENDS})
       get_filename_component(basename ${source_file} NAME_WE)
 
       set(output_file ${basename}.go)
-      set(_TMP_OUTPUT_DIR ${_OUTPUT_DIR})
+      set(_TMP_OUTPUT_DIR ${SCHEME_TGT_OUTPUT_DIR})
       if (_TMP_OUTPUT_DIR)
-        set(output_file ${_OUTPUT_DIR}/${basename}.go)
+        set(output_file ${SCHEME_TGT_OUTPUT_DIR}/${basename}.go)
       endif()
       set(output_file ${_GUILE_CACHE_DIR}/${output_file})
       list(APPEND _TARGET_FILES ${output_file})
@@ -244,16 +249,36 @@ endfunction()
 
 function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_LINKS)
-  make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
-                      "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
+  if(MAKE_LINKS)
+  make_scheme_targets("${_TARGET}"
+                        SOURCES "${_SOURCE_FILES}"
+                        OUTPUT_DIR "${_OUTPUT_DIR}"
+                        DEPENDS "${_GUILE_DEPENDS}"
+                        MAKE_LINKS)
+  else()
+  make_scheme_targets("${_TARGET}"
+                        SOURCES "${_SOURCE_FILES}"
+                        OUTPUT_DIR "${_OUTPUT_DIR}"
+                        DEPENDS "${_GUILE_DEPENDS}")
+  endif()
   install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
   install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
 endfunction()
 
 function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_LINKS)
-  make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
-                      "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
+  if(MAKE_LINKS)
+  make_scheme_targets("${_TARGET}"
+                        SOURCES "${_SOURCE_FILES}"
+                        OUTPUT_DIR "${_OUTPUT_DIR}"
+                        DEPENDS "${_GUILE_DEPENDS}"
+                        MAKE_LINKS)
+  else()
+  make_scheme_targets("${_TARGET}"
+                        SOURCES "${_SOURCE_FILES}"
+                        OUTPUT_DIR "${_OUTPUT_DIR}"
+                        DEPENDS "${_GUILE_DEPENDS}")
+  endif()
   add_dependencies(check ${_TARGET})
 endfunction()
 
