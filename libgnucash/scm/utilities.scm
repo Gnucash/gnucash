@@ -69,7 +69,7 @@
   (gnc-scm-log-msg (strify items)))
 
 (define (gnc:debug . items)
-  (when (qof-log-check "gnc:scm" QOF-LOG-DEBUG)
+  (when (qof-log-check "gnc.scm" QOF-LOG-DEBUG)
     (gnc-scm-log-debug (strify items))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
