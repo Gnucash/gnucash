@@ -5,18 +5,14 @@ set (scm-guile-json-details
 )
 
 gnc_add_scheme_targets (guile-json-details
-  "${scm-guile-json-details}"
-  gnucash/json
-  ""
-  TRUE
-)
+    SOURCES "${scm-guile-json-details}"
+    OUTPUT_DIR gnucash/json
+    MAKE_LINKS)
 
 gnc_add_scheme_targets (guile-json
-  json.scm
-  "gnucash"
-  "guile-json-details"
-  FALSE
-)
+    SOURCES json.scm
+    OUTPUT_DIR "gnucash"
+    DEPENDS "guile-json-details")
 
 set_local_dist(guile-json_DIST_LOCAL
   AUTHORS

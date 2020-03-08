@@ -72,25 +72,20 @@ set(GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-qif-import-0
-  "${qif_import_SCHEME_0}"
-  "gnucash"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "${qif_import_SCHEME_0}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_targets(scm-qif-import-2
-  "${qif_import_SCHEME_2}"
-  "gnucash"
-  "${GUILE_DEPENDS};scm-qif-import-0"
-  FALSE
-)
+    SOURCES "${qif_import_SCHEME_2}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS "${GUILE_DEPENDS};scm-qif-import-0")
 
 gnc_add_scheme_targets(scm-qif-import
-  "${qif_import_SCHEME}"
-  "gnucash/qif-import"
-  "${GUILE_DEPENDS};scm-qif-import-0"
-  TRUE
-)
+    SOURCES "${qif_import_SCHEME}"
+    OUTPUT_DIR "gnucash/qif-import"
+    DEPENDS "${GUILE_DEPENDS};scm-qif-import-0"
+    MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("gnucash import-export qif-import" "gnucash qif-import" "scm-qif-import-2" "")

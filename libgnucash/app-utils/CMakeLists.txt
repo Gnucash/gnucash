@@ -175,18 +175,15 @@ set(GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-app-utils-1
-  "${app_utils_SCHEME_1}"
-  "gnucash/app-utils"
-  "${GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${app_utils_SCHEME_1}"
+    OUTPUT_DIR "gnucash/app-utils"
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-app-utils-2
-  "${app_utils_SCHEME_2}"
-  "gnucash"
-  "scm-app-utils-1"
-  FALSE
-)
+    SOURCES "${app_utils_SCHEME_2}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS "scm-app-utils-1")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("migrate-prefs" "" "" "")

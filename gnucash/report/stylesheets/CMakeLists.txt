@@ -6,7 +6,6 @@ set(stylesheets_SCHEME
   head-or-tail.scm
 )
 
-set(GUILE_OUTPUT_DIR gnucash/report/stylesheets)
 set(GUILE_DEPENDS
   scm-gnc-module
   scm-core-utils
@@ -17,11 +16,10 @@ set(GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-report-stylesheets-1
-  "${stylesheets_SCHEME}"
-  ${GUILE_OUTPUT_DIR}
-  "${GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${stylesheets_SCHEME}"
+    OUTPUT_DIR "gnucash/report/stylesheets"
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("gnucash report stylesheet-easy" "gnucash report stylesheets footer" "scm-report-stylesheets-1" "")

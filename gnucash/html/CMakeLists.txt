@@ -40,11 +40,9 @@ set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS      gncmod-html gnucash-guile)
 
 gnc_add_scheme_targets(scm-gnc-html
-    "${gnc_html_SCHEME}"
-    ${GUILE_OUTPUT_DIR}
-    "${GUILE_DEPENDS}"
-    FALSE
-)
+    SOURCES "${gnc_html_SCHEME}"
+    OUTPUT_DIR ${GUILE_OUTPUT_DIR}
+    DEPENDS "${GUILE_DEPENDS}")
 
 set_dist_list(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST} html.scm)
 

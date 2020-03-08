@@ -244,23 +244,14 @@ function(make_scheme_targets _TARGET)
     message("TARGET_FILES are ${_TARGET_FILES}")
   endif()
   add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
+
   set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
+  set(_SOURCE_FILES "${SCHEME_TGT_SOURCES}" PARENT_SCOPE)
+  set(_OUTPUT_DIR "${SCHEME_TGT_OUTPUT_DIR}" PARENT_SCOPE)
 endfunction()
 
-function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
-    MAKE_LINKS)
-  if(MAKE_LINKS)
-  make_scheme_targets("${_TARGET}"
-                        SOURCES "${_SOURCE_FILES}"
-                        OUTPUT_DIR "${_OUTPUT_DIR}"
-                        DEPENDS "${_GUILE_DEPENDS}"
-                        MAKE_LINKS)
-  else()
-  make_scheme_targets("${_TARGET}"
-                        SOURCES "${_SOURCE_FILES}"
-                        OUTPUT_DIR "${_OUTPUT_DIR}"
-                        DEPENDS "${_GUILE_DEPENDS}")
-  endif()
+function(gnc_add_scheme_targets)
+  make_scheme_targets(${ARGN})
   install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
   install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
 endfunction()
@@ -277,7 +268,8 @@ function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DE
   make_scheme_targets("${_TARGET}"
                         SOURCES "${_SOURCE_FILES}"
                         OUTPUT_DIR "${_OUTPUT_DIR}"
-                        DEPENDS "${_GUILE_DEPENDS}")
+                        DEPENDS "${_GUILE_DEPENDS}"
+                        MAKE_LINKS)
   endif()
   add_dependencies(check ${_TARGET})
 endfunction()
@@ -344,5 +336,8 @@ ${DEPWARNING}
      (module-use! i (resolve-interface '(${_NEWMOD}))))")
     endif()
 
-    gnc_add_scheme_targets("${_TARGET}" "${SOURCEFILE}" "${MODPATH}" "${_DEPENDS}" FALSE)
+    gnc_add_scheme_targets("${_TARGET}"
+                           SOURCES "${SOURCEFILE}"
+                           OUTPUT_DIR "${MODPATH}"
+                           DEPENDS "${_DEPENDS}")
 endfunction()

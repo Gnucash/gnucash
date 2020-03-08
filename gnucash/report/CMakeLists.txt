@@ -98,32 +98,25 @@ set(GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-report-1
-  "${report_SCHEME_1}"
-  "gnucash/report"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "${report_SCHEME_1}"
+    OUTPUT_DIR "gnucash/report"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_targets(scm-report-2
-  "${report_SCHEME_2}"
-  "gnucash"
-  scm-report-1
-  TRUE
-)
+    SOURCES "${report_SCHEME_2}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS scm-report-1
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-report-eguile-parts
-  "${report_eguile_parts_SCHEME}"
-  "gnucash/eguile"
-  scm-report-2
-  FALSE
-)
+    SOURCES "${report_eguile_parts_SCHEME}"
+    OUTPUT_DIR "gnucash/eguile"
+    DEPENDS scm-report-2)
 
 gnc_add_scheme_targets(scm-report-eguile
-  "${report_eguile_SCHEME}"
-  "gnucash"
-  scm-report-eguile-parts
-  FALSE
-)
+    SOURCES "${report_eguile_SCHEME}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS scm-report-eguile-parts)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("gnucash report eguile-gnc" "gnucash eguile" "scm-report-eguile" "")

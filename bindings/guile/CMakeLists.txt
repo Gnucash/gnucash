@@ -73,11 +73,9 @@ set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS      gnc-core-utils gnucash-guile)
 
 gnc_add_scheme_targets(scm-core-utils
-    "${core_utils_SCHEME}"
-    ${GUILE_OUTPUT_DIR}
-    "${GUILE_DEPENDS}"
-    FALSE
-)
+    SOURCES "${core_utils_SCHEME}"
+    OUTPUT_DIR ${GUILE_OUTPUT_DIR}
+    DEPENDS "${GUILE_DEPENDS}")
 
 set (engine_SCHEME_0
     commodity-table.scm
@@ -105,25 +103,20 @@ set(GUILE_DEPENDS
 
 
 gnc_add_scheme_targets(scm-engine-0
-    "${engine_SCHEME_0}"
-    "gnucash/engine"
-    "${GUILE_DEPENDS}"
-    TRUE
-)
+    SOURCES "${engine_SCHEME_0}"
+    OUTPUT_DIR "gnucash/engine"
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-engine-1
-    "${engine_SCHEME_1}"
-    gnucash
-    "scm-engine-0;${GUILE_DEPENDS}"
-    FALSE
-)
+    SOURCES "${engine_SCHEME_1}"
+    OUTPUT_DIR gnucash
+    DEPENDS "scm-engine-0;${GUILE_DEPENDS}")
 
 gnc_add_scheme_targets(scm-engine-2
-    "${engine_SCHEME_2}"
-    gnucash
-    "scm-engine-1;${GUILE_DEPENDS}"
-    FALSE
-)
+    SOURCES "${engine_SCHEME_2}"
+    OUTPUT_DIR gnucash
+    DEPENDS "scm-engine-1;${GUILE_DEPENDS}")
 
 add_custom_target(scm-engine ALL DEPENDS scm-engine-2 scm-engine-1 scm-engine-0)
 
@@ -131,11 +124,9 @@ set(scm_gnc_module_DEPENDS
     gnucash-guile)
 
 gnc_add_scheme_targets(scm-gnc-module
-    gnc-module.scm
-    gnucash
-    "${scm_gnc_module_DEPENDS}"
-    FALSE
-)
+    SOURCES gnc-module.scm
+    OUTPUT_DIR gnucash
+    DEPENDS "${scm_gnc_module_DEPENDS}")
 
 set_local_dist(guile_DIST_local
     CMakeLists.txt

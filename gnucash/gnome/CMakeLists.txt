@@ -241,7 +241,6 @@ set(gnome_SCHEME
     report-menus.scm
 )
 
-set(GUILE_OUTPUT_DIR   gnucash)
 set(GUILE_DEPENDS
     gncmod-gnome-utils
     scm-engine
@@ -253,11 +252,9 @@ set(GUILE_DEPENDS
 )
 
 gnc_add_scheme_targets(scm-gnome
-"${gnome_SCHEME}"
-${GUILE_OUTPUT_DIR}
-"${GUILE_DEPENDS}"
-FALSE
-)
+    SOURCES "${gnome_SCHEME}"
+    OUTPUT_DIR gnucash
+    DEPENDS "${GUILE_DEPENDS}")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("gnucash report report-gnome" "gnucash report-menus" "scm-gnome" "")

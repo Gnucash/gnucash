@@ -114,60 +114,52 @@ set(scm_rpt_std_GUILE_DEPENDS
   )
 
 gnc_add_scheme_targets(scm-reports-common
-  "${reports_common_SCHEME}"
-  "gnucash/reports"
-  "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_common_SCHEME}"
+    OUTPUT_DIR "gnucash/reports"
+    DEPENDS "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-standard-with-exposed-generator
-  "${reports_standard_with_exposed_generator_SCHEME}"
-  "gnucash/reports/standard"
-  "${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_standard_with_exposed_generator_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/standard"
+    DEPENDS "${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-rpt-reports
-  "${reports_SCHEME}"
-  "gnucash"
-  "scm-reports-standard-with-exposed-generator;${scm_rpts_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_SCHEME}"
+    OUTPUT_DIR "gnucash"
+    DEPENDS "scm-reports-standard-with-exposed-generator;${scm_rpts_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-standard
-  "${reports_standard_SCHEME}"
-  "gnucash/reports/standard"
-  "scm-reports-common;${scm_rpt_std_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_standard_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/standard"
+    DEPENDS "scm-reports-common;${scm_rpt_std_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-example
-  "${reports_example_SCHEME}"
-  "gnucash/reports/example"
-  "${scm_rpt_example_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_example_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/example"
+    DEPENDS "${scm_rpt_example_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-us
-  "${reports_us_SCHEME}"
-  "gnucash/reports/locale-specific/us"
-  "${scm_rpt_locale_specific_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_us_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/locale-specific/us"
+    DEPENDS "${scm_rpt_locale_specific_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-de_DE
-  "${reports_de_DE_SCHEME}"
-  "gnucash/reports/locale-specific/de_DE"
-  "${scm_rpt_locale_specific_GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES "${reports_de_DE_SCHEME}"
+    OUTPUT_DIR "gnucash/reports/locale-specific/de_DE"
+    DEPENDS "${scm_rpt_locale_specific_GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-standard-2
-  "${reports_standard_SCHEME_2}"
-  "gnucash/reports/standard"
-  "scm-rpt-reports"
-  TRUE
-)
+    SOURCES "${reports_standard_SCHEME_2}"
+    OUTPUT_DIR "gnucash/reports/standard"
+    DEPENDS "scm-rpt-reports"
+    MAKE_LINKS)
 
 add_custom_target(scm-reports ALL DEPENDS
     scm-reports-standard

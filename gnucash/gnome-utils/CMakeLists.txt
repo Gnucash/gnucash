@@ -256,19 +256,16 @@ install(FILES ${gnome_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnu
 set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-engine scm-app-utils)
 
 gnc_add_scheme_targets(scm-gnome-utils-1
-  gnome-utils.scm
-  gnucash
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES gnome-utils.scm
+    OUTPUT_DIR gnucash
+    DEPENDS "${GUILE_DEPENDS}")
 
 
 gnc_add_scheme_targets(scm-gnome-utils-2
-  gnc-menu-extensions.scm
-  "gnucash/gnome-utils"
-  "${GUILE_DEPENDS}"
-  TRUE
-)
+    SOURCES gnc-menu-extensions.scm
+    OUTPUT_DIR "gnucash/gnome-utils"
+    DEPENDS "${GUILE_DEPENDS}"
+    MAKE_LINKS)
 
 add_custom_target(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
 

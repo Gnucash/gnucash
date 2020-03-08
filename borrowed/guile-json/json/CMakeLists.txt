@@ -5,11 +5,9 @@ set (scm-guile-json-details
 )
 
 gnc_add_scheme_targets (guile-json-details
-  "${scm-guile-json-details}"
-  gnucash/json
-  ""
-  TRUE
-)
+    SOURCES "${scm-guile-json-details}"
+    OUTPUT_DIR gnucash/json
+    MAKE_LINKS)
 
 set_dist_list (guile-json-details_DIST
   CMakeLists.txt
