@@ -522,8 +522,8 @@ class OptionUIItem : public GncOptionUIItem
     GncUIType m_widget;
     bool m_dirty = false;
 public:
+    OptionUIItem() : GncOptionUIItem{GncOptionUIType::STRING} {}
     ~OptionUIItem() = default;
-    GncOptionUIType get_ui_type() const noexcept override { return GncOptionUIType::STRING; }
     void set_dirty(bool status) noexcept override { m_dirty = status; }
     bool get_dirty() const noexcept override { return m_dirty; }
     void clear_ui_item() override { m_widget.clear(); }
