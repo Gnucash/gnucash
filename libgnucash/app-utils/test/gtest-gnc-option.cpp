@@ -757,29 +757,34 @@ TEST_F(GncOptionAccountTest, test_option_value_limited_constructor)
     EXPECT_THROW({
             GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
                                          GncOptionUIType::ACCOUNT_LIST,
-                                         acclistbad, {ACCT_TYPE_BANK});
+                                         acclistbad,
+                                         GncOptionAccountTypeList{ACCT_TYPE_BANK});
         }, std::invalid_argument);
 
     EXPECT_THROW({
             GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
                                          GncOptionUIType::ACCOUNT_SEL,
-                                         acclistgood, {ACCT_TYPE_BANK});
+                                         acclistgood,
+                                         GncOptionAccountTypeList{ACCT_TYPE_BANK});
         }, std::invalid_argument);
 
     EXPECT_NO_THROW({
             GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
                                          GncOptionUIType::ACCOUNT_LIST,
-                                         acclistgood, {ACCT_TYPE_BANK});
+                                         acclistgood,
+                                         GncOptionAccountTypeList{ACCT_TYPE_BANK});
         });
 
     EXPECT_NO_THROW({
             GncOptionAccountList accsel{acclistgood[0]};
             GncOptionAccountValue option("foo", "bar", "baz", "Bogus Option",
                                          GncOptionUIType::ACCOUNT_LIST,
-                                         accsel, {ACCT_TYPE_BANK});
+                                         accsel,
+                                         GncOptionAccountTypeList{ACCT_TYPE_BANK});
         });
     GncOptionAccountValue option {"foo", "bar", "baz", "Bogus Option",
-            GncOptionUIType::ACCOUNT_LIST, acclistgood, {ACCT_TYPE_BANK}};
+                                  GncOptionUIType::ACCOUNT_LIST, acclistgood,
+                                  GncOptionAccountTypeList{ACCT_TYPE_BANK}};
     EXPECT_FALSE(option.get_value().empty());
     EXPECT_FALSE(option.get_default_value().empty());
     EXPECT_EQ(true, option.validate(acclistgood));
@@ -804,7 +809,8 @@ TEST_F(GncOptionAccountTest, test_account_list_out)
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
                                                GncOptionUIType::ACCOUNT_LIST,
-                                               accsel, {ACCT_TYPE_BANK}}};
+                                               accsel,
+                                               GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     acc_guids = gnc::GUID{*qof_instance_get_guid(accsel[0])}.to_string();
 
     oss.str("");
@@ -830,7 +836,8 @@ TEST_F(GncOptionAccountTest, test_account_list_in)
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
                                                GncOptionUIType::ACCOUNT_LIST,
-                                               accsel, {ACCT_TYPE_BANK}}};
+                                               accsel,
+                                               GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
     acc_guids = gnc::GUID{*qof_instance_get_guid(acclistbad[1])}.to_string();
     acc_guids += " ";
@@ -885,7 +892,8 @@ TEST_F(GncOptionAccountTest, test_account_list_to_scheme)
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
                                                GncOptionUIType::ACCOUNT_LIST,
-                                               accsel, {ACCT_TYPE_BANK}}};
+                                               accsel,
+                                               GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     acc_guids = make_account_list_SCM_str(accsel);
 
     oss.str("");
@@ -909,7 +917,8 @@ TEST_F(GncOptionAccountTest, test_account_list_from_scheme)
     GncOption sel_option{GncOptionAccountValue{"foo", "bar", "baz",
                                                "Bogus Option",
                                                GncOptionUIType::ACCOUNT_LIST,
-                                               accsel, {ACCT_TYPE_BANK}}};
+                                               accsel,
+                                               GncOptionAccountTypeList{ACCT_TYPE_BANK}}};
     GncOptionAccountList acclistbad{list_of_types({ACCT_TYPE_STOCK})};
     acc_guids = make_account_list_SCM_str(acclistbad);
     iss.str(acc_guids);

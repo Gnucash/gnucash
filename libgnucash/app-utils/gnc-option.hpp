@@ -86,6 +86,7 @@ public:
     void set_option_from_ui_item();
     void make_internal();
     bool is_changed() const noexcept;
+    bool is_multiselect() const noexcept;
     template <typename ValueType> bool validate(ValueType value) const;
     std::size_t num_permissible_values() const;
     std::size_t permissible_value_index(const char* value) const;

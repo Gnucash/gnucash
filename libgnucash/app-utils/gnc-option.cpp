@@ -201,6 +201,18 @@ GncOption::is_changed() const noexcept
                       }, *m_option);
 }
 
+bool
+GncOption::is_multiselect() const noexcept
+{
+    return std::visit([](const auto& option)->bool {
+                          if constexpr (std::is_same_v<std::decay_t<decltype(option)>,
+                                        GncOptionAccountValue>)
+                              return option.is_multiselect();
+                          else
+                              return false;
+                      }, *m_option);
+}
+
 template<typename ValueType> bool
 GncOption::validate(ValueType value) const
 {

@@ -544,32 +544,32 @@ class GncOptionAccountValue : public OptionClassifier
 public:
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
-                          GncOptionUIType ui_type) :
-        OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_value{}, m_default_value{}, m_allowed{} {}
+                          GncOptionUIType ui_type, bool multi=true) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{}, m_multiselect{multi} {}
 
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
-                          const GncOptionAccountList& value) :
-        OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_value{value},
-        m_default_value{std::move(value)}, m_allowed{} {}
+                          const GncOptionAccountList& value, bool multi=true) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{value}, m_default_value{std::move(value)}, m_allowed{},
+        m_multiselect{multi}  {}
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
-                          GncOptionAccountTypeList&& allowed) :
-        OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_value{},
-        m_default_value{}, m_allowed{std::move(allowed)} {}
+                          GncOptionAccountTypeList&& allowed, bool multi=true) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{std::move(allowed)},
+        m_multiselect{multi} {}
     GncOptionAccountValue(const char* section, const char* name,
                           const char* key, const char* doc_string,
                           GncOptionUIType ui_type,
                           const GncOptionAccountList& value,
-                          GncOptionAccountTypeList&& allowed) :
-        OptionClassifier{section, name, key, doc_string},
-        m_ui_type{ui_type}, m_value{},
-        m_default_value{}, m_allowed{std::move(allowed)} {
+                          GncOptionAccountTypeList&& allowed, bool multi=true) :
+        OptionClassifier{section, name, key, doc_string}, m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_allowed{std::move(allowed)},
+        m_multiselect{multi} {
             if (!validate(value))
                 throw std::invalid_argument("Supplied Value not in allowed set.");
             m_value = value;
@@ -588,11 +588,13 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_multiselect() const noexcept { return m_multiselect; }
 private:
     GncOptionUIType m_ui_type;
     GncOptionAccountList m_value;
     GncOptionAccountList m_default_value;
     GncOptionAccountTypeList m_allowed;
+    bool m_multiselect;
 };
 
 template<> inline std::ostream&
