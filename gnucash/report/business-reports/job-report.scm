@@ -399,22 +399,10 @@
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
-	     
+
 (define (job-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-JOB
                      (_ "Invoice") #f))
-
-(define (customer-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
-                     (_ "Invoice") #f))
-
-(define (vendor-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR
-                     (_ "Bill") #t))
-
-(define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE
-                     (_ "Expense Report") #t))
 
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID owner)))
@@ -455,24 +443,6 @@
     (gnc:html-table-append-row!
      table (gnc:make-html-text (gnc:html-markup-br)))
 
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
-    table))
-
-(define (make-date-row! table label date)
-  (gnc:html-table-append-row!
-   table
-   (list
-    (string-append label " ")
-    (qof-print-date date))))
-
-(define (make-date-table)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellpadding" 0))
     (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
@@ -618,40 +588,6 @@
 
     (qof-query-destroy query)
     document))
-
-(define (find-first-account type)
-  (define (find-first account num index)
-    (if (>= index num)
-	'()
-	(let* ((this-child (gnc-account-nth-child account index))
-	       (account-type (xaccAccountGetType this-child)))
-	  (if (eq? account-type type)
-	      this-child
-	      (find-first account num (+ index 1))))))
-
-  (let* ((current-root (gnc-get-current-root-account))
-	 (num-accounts (gnc-account-n-children current-root)))
-    (if (> num-accounts 0)
-	(find-first current-root num-accounts 0)
-	'())))
-
-(define (find-first-account-for-owner owner)
-  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (find-first-account ACCT-TYPE-RECEIVABLE))
-
-      ((eqv? type GNC-OWNER-VENDOR)
-       (find-first-account ACCT-TYPE-PAYABLE))
-
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (find-first-account ACCT-TYPE-PAYABLE))
-
-      ((eqv? type GNC-OWNER-JOB)
-       (find-first-account-for-owner (gncOwnerGetEndOwner owner)))
-
-      (else
-       '()))))
 
 (gnc:define-report
  'version 1
