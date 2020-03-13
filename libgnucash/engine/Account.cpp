@@ -3364,56 +3364,27 @@ GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing)
      * xaccAccountForEachTransaction by using gpointer return
      * values rather than gints.
      */
-    AccountPrivate *priv;
-    GList   *lp;
-    gboolean found = FALSE;
-    gnc_numeric balance;
+    Split *latest = nullptr;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
     xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
     xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
 
-    priv = GET_PRIVATE(acc);
+    for (GList *lp = GET_PRIVATE(acc)->splits; lp; lp = lp->next)
+    {
+        if (xaccTransGetDate (xaccSplitGetParent ((Split *)lp->data)) >= date)
+            break;
+        latest = (Split *)lp->data;
+    }
+
+    if (!latest)
+        return gnc_numeric_zero();
+
     if (ignclosing)
-        balance = priv->noclosing_balance;
+        return xaccSplitGetNoclosingBalance (latest);
     else
-        balance = priv->balance;
-
-    lp = priv->splits;
-    while ( lp && !found )
-    {
-        time64 trans_time = xaccTransRetDatePosted( xaccSplitGetParent( (Split *)lp->data ));
-        if ( trans_time >= date )
-            found = TRUE;
-        else
-            lp = lp->next;
-    }
-
-    if ( lp )
-    {
-        if ( lp->prev )
-        {
-            /* Since lp is now pointing to a split which was past the reconcile
-             * date, get the running balance of the previous split.
-             */
-            if (ignclosing)
-                balance = xaccSplitGetNoclosingBalance( (Split *)lp->prev->data );
-            else
-                balance = xaccSplitGetBalance( (Split *)lp->prev->data );
-        }
-        else
-        {
-            /* AsOf date must be before any entries, return zero. */
-            balance = gnc_numeric_zero();
-        }
-    }
-
-    /* Otherwise there were no splits posted after the given date,
-     * so the latest account balance should be good enough.
-     */
-
-    return( balance );
+        return xaccSplitGetBalance (latest);
 }
 
 gnc_numeric
