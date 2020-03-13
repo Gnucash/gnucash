@@ -46,7 +46,7 @@
          (test-day (tm:mday ts-now))
          (test-month (+ 1 (tm:mon ts-now)))
          (test-year (+ 1900 (tm:year ts-now)))
-         (end-date (gnc-dmy2time64-neutral test-day test-month test-year))
+         (end-date (gnc-dmy2time64 test-day test-month test-year))
          (start-date (NDayDelta end-date 10))
          (q-end-date (gnc-dmy2time64-end test-day test-month test-year))
          (q-start-date (gnc-dmy2time64 test-day test-month test-year))
