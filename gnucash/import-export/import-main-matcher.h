@@ -178,5 +178,11 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
  */
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
 
+/** Checks whether there are no transactions to match.
+ */
+gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info);
+
+
+
 #endif
 /**@}*/

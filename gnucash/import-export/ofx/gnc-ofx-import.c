@@ -1064,6 +1064,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
         DEBUG("Filename found: %s", selected_filename);
 
         /* Create the Generic transaction importer GUI. */
+        // JEAN IMPORT: Trans list UI created
         gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42);
 
         /* Look up the needed preferences */
@@ -1085,7 +1086,15 @@ void gnc_file_ofx_import (GtkWindow *parent)
 #endif
 
         DEBUG("Opening selected file");
+        // JEAN: Where the ofx file is loaded.
         libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
+        // Now would be a good time to see whether the view has anything in it!
+        gboolean is_empty = gnc_gen_trans_list_empty(gnc_ofx_importer_gui);
+        if(is_empty) {
+            // JEAN CLOSE THE WINDOW NO TRANS
+            gnc_gen_trans_list_delete (gnc_ofx_importer_gui);
+            gnc_info_dialog(parent,_("OFX file imported, no new transactions"));
+        }
         g_free(selected_filename);
     }
 

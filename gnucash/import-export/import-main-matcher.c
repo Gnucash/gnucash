@@ -177,6 +177,17 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     g_free (info);
 }
 
+gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info) {
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GNCImportTransInfo *trans_info;
+    
+    g_assert (info);
+    
+    model = gtk_tree_view_get_model (info->view);
+    return !gtk_tree_model_get_iter_first (model, &iter);
+}
+
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -189,8 +200,11 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     /*   DEBUG ("Begin") */
 
     model = gtk_tree_view_get_model (info->view);
-    if (!gtk_tree_model_get_iter_first (model, &iter))
+    if (!gtk_tree_model_get_iter_first (model, &iter)) {
+        // No transaction, we can just close the dialog. JEAN OK CLICKED NO TRANS
+        gnc_gen_trans_list_delete (info);
         return;
+      }
 
     /* Don't run any queries and/or split sorts while processing the matcher
     results. */
