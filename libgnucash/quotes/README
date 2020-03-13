@@ -8,11 +8,11 @@ gnc-fq-check.in:
   gnucash to determine if Finance::Quote is installed properly.  The
   responses is a scheme form.
 
-gnc-fq-dump:
+gnc-fq-dump.in:
 
-  A perl script that retrieves a quote from Finance::Quote and dumps
-  the response to the terminal.  Its useful for determining problems
-  with F::Q.
+  Source file for gnc-fq-dump which is a perl script that retrieves
+  a quote from Finance::Quote and dumps the response to the terminal.
+  Its useful for determining problems with F::Q.
 
 gnc-fq-helper.in:
 

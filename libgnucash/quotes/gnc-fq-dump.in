@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!@PERL@ -w
 #
 #    Copyright (C) 2003, David Hampton <hampton@employees.org>
 #
