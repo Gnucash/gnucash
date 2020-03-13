@@ -1033,6 +1033,95 @@ TEST_F(GncMultichoiceOption, test_multichoice_scheme_in)
     EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
 }
 
+class GncOptionListTest : public ::testing::Test
+{
+protected:
+    GncOptionListTest() :
+        m_option{GncOptionMultichoiceValue{"foo", "bar", "baz",
+                                           "Phony Option",
+                                           GncMultichoiceOptionIndexVec{0, 2},
+                                           {
+                                               {"plugh", "xyzzy", "thud"},
+                                               {"waldo", "pepper", "salt"},
+                                               {"pork", "sausage", "links"},
+                                               {"corge", "grault", "garply"}
+                                           }}} {}
+    GncOption m_option;
+};
+
+using GncListOption = GncOptionListTest;
+
+TEST_F(GncListOption, test_option_ui_type)
+{
+    EXPECT_EQ(GncOptionUIType::LIST, m_option.get_ui_type());
+}
+
+TEST_F(GncListOption, test_validate)
+{
+    EXPECT_TRUE(m_option.validate(std::string{"pork"}));
+    EXPECT_TRUE(m_option.validate(GncMultichoiceOptionIndexVec{1, 3}));
+    EXPECT_FALSE(m_option.validate(GncMultichoiceOptionIndexVec{2, 6}));
+}
+
+TEST_F(GncListOption, test_set_value)
+{
+    EXPECT_NO_THROW({
+            m_option.set_value(GncMultichoiceOptionIndexVec{1, 3});
+            EXPECT_STREQ("multiple values",
+                         m_option.get_value<std::string>().c_str());
+            EXPECT_EQ(1U, m_option.get_value<size_t>());
+            auto vec{m_option.get_value<GncMultichoiceOptionIndexVec>()};
+            ASSERT_EQ(2U, vec.size());
+            EXPECT_EQ(1U, vec[0]);
+            EXPECT_EQ(3U, vec[1]);
+        });
+    EXPECT_THROW({ m_option.set_value(GncMultichoiceOptionIndexVec{2, 5}); }, std::invalid_argument);
+    EXPECT_EQ(1U, m_option.get_value<size_t>());
+}
+
+TEST_F(GncListOption, test_list_out)
+{
+    auto vec{m_option.get_value<GncMultichoiceOptionIndexVec>()};
+    std::string value{m_option.permissible_value(vec[0])};
+    value += " ";
+    value += m_option.permissible_value(vec[1]);
+    std::ostringstream oss;
+    oss << m_option;
+    EXPECT_EQ(oss.str(), value);
+}
+
+TEST_F(GncListOption, test_list_in)
+{
+    std::istringstream iss{"grault"};
+    EXPECT_THROW({
+            iss >> m_option;
+        }, std::invalid_argument);
+    iss.clear(); //reset failedbit
+    iss.str("pork");
+    iss >> m_option;
+    EXPECT_EQ(iss.str(), m_option.get_value<std::string>());
+}
+
+TEST_F(GncListOption, test_list_scheme_out)
+{
+    std::ostringstream oss;
+    m_option.to_scheme(oss);
+    std::string value{"'('"};
+    auto vec{m_option.get_value<GncMultichoiceOptionIndexVec>()};
+    value += m_option.permissible_value(vec[0]);
+    value += " '";
+    value += m_option.permissible_value(vec[1]);
+    value += ")";
+    EXPECT_EQ(value, oss.str());
+}
+
+TEST_F(GncListOption, test_list_scheme_in)
+{
+    std::istringstream iss{"'('pork 'waldo)"};
+    m_option.from_scheme(iss);
+    EXPECT_STREQ("pork", m_option.get_value<std::string>().c_str());
+}
+
 static time64
 time64_from_gdate(const GDate* g_date, DayPart when)
 {

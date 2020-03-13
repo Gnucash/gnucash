@@ -412,13 +412,14 @@ private:
     ValueType m_step;
 };
 
-using GncMultiChoiceOptionEntry = std::tuple<const std::string,
+using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
                                              const std::string>;
-using GncMultiChoiceOptionChoices = std::vector<GncMultiChoiceOptionEntry>;
+using GncMultichoiceOptionIndexVec = std::vector<std::size_t>;
+using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 
-/** MultiChoice options have a vector of valid options
- * (GncMultiChoiceOptionChoices) and validate the selection as being one of
+/** Multichoice options have a vector of valid options
+ * (GncMultichoiceOptionChoices) and validate the selection as being one of
  * those values. The value is the index of the selected item in the vector. The
  * tuple contains three strings, a key, a display
  * name and a brief description for the tooltip. Both name and description
@@ -433,22 +434,48 @@ public:
     GncOptionMultichoiceValue(const char* section, const char* name,
                               const char* key, const char* doc_string,
                               const char* value,
-                              GncMultiChoiceOptionChoices&& choices,
+                              GncMultichoiceOptionChoices&& choices,
                               GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
         OptionClassifier{section, name, key, doc_string},
         m_ui_type{ui_type},
-        m_value{}, m_default_value{}, m_choices{std::move(choices)} {
-            if (value)
+        m_value{}, m_default_value{}, m_choices{std::move(choices)}
+    {
+        if (value)
+        {
+            if (auto index = find_key(value);
+                index != size_t_max)
             {
-                if (auto index = find_key(value);
-                    index != size_t_max)
-                {
-                    m_value = index;
-                    m_default_value = index;
-                }
+                m_value.push_back(index);
+                m_default_value.push_back(index);
             }
         }
+    }
 
+    GncOptionMultichoiceValue(const char* section, const char* name,
+                              const char* key, const char* doc_string,
+                              size_t index,
+                              GncMultichoiceOptionChoices&& choices,
+                              GncOptionUIType ui_type = GncOptionUIType::MULTICHOICE) :
+        OptionClassifier{section, name, key, doc_string},
+        m_ui_type{ui_type},
+        m_value{}, m_default_value{}, m_choices{std::move(choices)}
+    {
+        if (index < m_choices.size())
+        {
+            m_value.push_back(index);
+            m_default_value.push_back(index);
+        }
+    }
+
+    GncOptionMultichoiceValue(const char* section, const char* name,
+                              const char* key, const char* doc_string,
+                              GncMultichoiceOptionIndexVec&& indices,
+                              GncMultichoiceOptionChoices&& choices,
+                              GncOptionUIType ui_type = GncOptionUIType::LIST) :
+        OptionClassifier{section, name, key, doc_string},
+        m_ui_type{ui_type},
+        m_value{indices}, m_default_value{std::move(indices)},
+        m_choices{std::move(choices)} {}
     GncOptionMultichoiceValue(const GncOptionMultichoiceValue&) = default;
     GncOptionMultichoiceValue(GncOptionMultichoiceValue&&) = default;
     GncOptionMultichoiceValue& operator=(const GncOptionMultichoiceValue&) = default;
@@ -456,26 +483,83 @@ public:
 
     const std::string& get_value() const
     {
-        return std::get<0>(m_choices.at(m_value));
+        auto vec{m_value.size() > 0 ? m_value : m_default_value};
+        if (vec.size() == 0)
+            return c_empty_string;
+        if (vec.size() == 1)
+            return std::get<0>(m_choices.at(vec[0]));
+        else
+            return c_list_string;
     }
     const std::string& get_default_value() const
     {
-        return std::get<0>(m_choices.at(m_default_value));
+        if (m_default_value.size() == 1)
+            return std::get<0>(m_choices.at(m_default_value[0]));
+        else if (m_default_value.size() == 0)
+            return c_empty_string;
+        else
+            return c_list_string;
     }
-     bool validate(const std::string& value) const noexcept
+
+    size_t get_index() const
+    {
+        if (m_value.size() > 0)
+            return m_value[0];
+        if (m_default_value.size() > 0)
+            return m_default_value[0];
+        return 0;
+    }
+    const GncMultichoiceOptionIndexVec& get_multiple() const noexcept
+    {
+        return m_value;
+    }
+    const GncMultichoiceOptionIndexVec& get_default_multiple() const noexcept
+    {
+        return m_default_value;
+    }
+    bool validate(const std::string& value) const noexcept
     {
         auto index = find_key(value);
         return index != size_t_max;
+
+    }
+    bool validate(const GncMultichoiceOptionIndexVec& indexes) const noexcept
+    {
+        for (auto index : indexes)
+            if (index >= m_choices.size())
+                return false;
+        return true;
 
     }
     void set_value(const std::string& value)
     {
         auto index = find_key(value);
         if (index != size_t_max)
-            m_value = index;
+        {
+            m_value.clear();
+            m_value.push_back(index);
+        }
         else
             throw std::invalid_argument("Value not a valid choice.");
 
+    }
+    void set_value(size_t index)
+    {
+        if (index < m_choices.size())
+        {
+            m_value.clear();
+            m_value.push_back(index);
+        }
+        else
+            throw std::invalid_argument("Value not a valid choice.");
+
+    }
+    void set_multiple(const GncMultichoiceOptionIndexVec& indexes)
+    {
+        if (validate(indexes))
+            m_value = indexes;
+        else
+            throw std::invalid_argument("One of the supplied indexes was out of range.");
     }
     std::size_t num_permissible_values() const noexcept
     {
@@ -513,10 +597,118 @@ private:
 
     }
     GncOptionUIType m_ui_type;
-    std::size_t m_value;
-    std::size_t m_default_value;
-    GncMultiChoiceOptionChoices m_choices;
+    GncMultichoiceOptionIndexVec m_value;
+    GncMultichoiceOptionIndexVec m_default_value;
+    GncMultichoiceOptionChoices m_choices;
+    static const std::string c_empty_string;
+    static const std::string c_list_string;
 };
+
+template<> inline std::ostream&
+operator<< <GncOptionMultichoiceValue>(std::ostream& oss,
+                                       const GncOptionMultichoiceValue& opt)
+{
+    auto vec{opt.get_multiple()};
+    bool first{true};
+    for (auto index : vec)
+    {
+        if (first)
+            first = false;
+        else
+            oss << " ";
+        oss << opt.permissible_value(index);
+    }
+    return oss;
+}
+
+template<> inline std::istream&
+operator>> <GncOptionMultichoiceValue>(std::istream& iss,
+                                       GncOptionMultichoiceValue& opt)
+{
+    GncMultichoiceOptionIndexVec values;
+    while (true)
+    {
+        std::string str;
+        std::getline(iss, str, ' ');
+        if (!str.empty())
+        {
+            auto index = opt.permissible_value_index(str.c_str());
+            if (index != size_t_max)
+                values.push_back(index);
+            else
+            {
+                std::string err = str + " is not one of ";
+                err += opt.m_name;
+                err += "'s permissible values.";
+                throw std::invalid_argument(err);
+            }
+        }
+        else
+            break;
+    }
+    opt.set_multiple(values);
+    iss.clear();
+    return iss;
+}
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionMultichoiceValue>, int> = 0>
+inline std::ostream&
+gnc_option_to_scheme(std::ostream& oss, const OptType& opt)
+{
+    auto indexes{opt.get_multiple()};
+    if (indexes.size() > 1)
+        oss << "'(";
+    bool first = true;
+    for (auto index : indexes)
+    {
+        if (first)
+            first = false;
+        else
+            oss << " ";
+        oss << "'" << opt.permissible_value(index);
+    }
+    if (indexes.size() > 1)
+        oss << ')';
+    return oss;
+}
+
+template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionMultichoiceValue>, int> = 0>
+inline std::istream&
+gnc_option_from_scheme(std::istream& iss, OptType& opt)
+{
+    iss.ignore(3, '\'');
+    auto c{iss.peek()};
+    if (static_cast<char>(c) == '(')
+    {
+        GncMultichoiceOptionIndexVec values;
+        iss.ignore(3, '\'');
+        while (true)
+        {
+            std::string str;
+            std::getline(iss, str, ' ');
+            if (!str.empty())
+            {
+                if (str.back() == ')')
+                {
+                    str.pop_back();
+                    break;
+                }
+                values.push_back(opt.permissible_value_index(str.c_str()));
+                iss.ignore(2, '\'');
+            }
+            else
+                break;
+        }
+        opt.set_multiple(values);
+    }
+    else
+    {
+        std::string str;
+        std::getline(iss, str, ' ');
+        opt.set_value(str);
+    }
+    return iss;
+}
 
 using GncOptionAccountList = std::vector<const Account*>;
 

@@ -32,6 +32,9 @@ extern "C"
 #include "gnc-ui-util.h"
 }
 
+const std::string GncOptionMultichoiceValue::c_empty_string{""};
+const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
+
 bool
 GncOptionAccountValue::validate(const GncOptionAccountList& values) const
 {
