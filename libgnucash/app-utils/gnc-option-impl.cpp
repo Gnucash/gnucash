@@ -97,7 +97,7 @@ GncOptionDateValue::get_default_value() const noexcept
 /* Use asserts for pre- and post-conditions to deliberately crash if they're not
  * met as the program design should prevent that from happening.
  */
-int8_t
+size_t
 GncOptionDateValue::get_period_index() const noexcept
 {
     assert (m_period != RelativeDatePeriod::ABSOLUTE);
@@ -107,7 +107,7 @@ GncOptionDateValue::get_period_index() const noexcept
     return item - m_period_set.begin();
 }
 
-int8_t
+size_t
 GncOptionDateValue::get_default_period_index() const noexcept
 {
     assert(m_period != RelativeDatePeriod::ABSOLUTE);

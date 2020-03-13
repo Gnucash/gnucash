@@ -731,8 +731,8 @@ public:
     time64 get_default_value() const noexcept;
     RelativeDatePeriod get_period() const noexcept { return m_period; }
     RelativeDatePeriod get_default_period() const noexcept { return m_default_period; }
-    int8_t get_period_index() const noexcept;
-    int8_t get_default_period_index() const noexcept;
+    size_t get_period_index() const noexcept;
+    size_t get_default_period_index() const noexcept;
     std::ostream& out_stream(std::ostream& oss) const noexcept;
     std::istream& in_stream(std::istream& iss);
     bool validate(RelativeDatePeriod value);
