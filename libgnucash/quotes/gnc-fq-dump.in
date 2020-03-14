@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!@PERL@ -w
 #
 #    Copyright (C) 2003, David Hampton <hampton@employees.org>
 #
@@ -157,7 +157,7 @@ if ($#ARGV < 1) {
 }
 
 my $verbose = 0;
-if (@ARGV[0] eq "-v") {
+if ($ARGV[0] eq "-v") {
   $verbose = 1;
   shift;
 }
