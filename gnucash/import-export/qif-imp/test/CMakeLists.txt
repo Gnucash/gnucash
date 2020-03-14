@@ -23,11 +23,9 @@ if (HAVE_SRFI64)
   gnc_add_scheme_tests("${scm_qifimp_test_with_srfi64_SOURCES}")
 
   gnc_add_scheme_test_targets(scm-test-qif-imp-srfi64
-    "${scm_qifimp_test_with_srfi64_SOURCES}"
-    "tests"
-    "${GUILE_DEPENDS};scm-srfi64-extras"
-    FALSE
-    )
+    SOURCES "${scm_qifimp_test_with_srfi64_SOURCES}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
   add_dependencies(check scm-qif-import-2 scm-qif-import)
 endif()
 

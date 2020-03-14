@@ -38,29 +38,23 @@ set(GUILE_DEPENDS
 gnc_add_scheme_tests("${scm_test_report_SOURCES}")
 
 if (HAVE_SRFI64)
-  gnc_add_scheme_test_targets(scm-test-report-srfi64
-    "${scm_test_report_with_srfi64_SOURCES}"
-    "tests"
-    "${GUILE_DEPENDS};scm-srfi64-extras"
-    FALSE
-    )
+    gnc_add_scheme_test_targets(scm-test-report-srfi64
+        SOURCES "${scm_test_report_with_srfi64_SOURCES}"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
 
-  gnc_add_scheme_tests ("${scm_test_report_with_srfi64_SOURCES}")
+    gnc_add_scheme_tests ("${scm_test_report_with_srfi64_SOURCES}")
 endif()
 
 gnc_add_scheme_test_targets(scm-test-report
-  "test-report-extras.scm"
-  "tests"
-  "${GUILE_DEPENDS}"
-  FALSE
-  )
+    SOURCES "test-report-extras.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_test_targets(scm-test-report-2
-  "${scm_test_report_SOURCES}"
-  "tests"
-  "scm-test-report"
-  FALSE
-)
+    SOURCES "${scm_test_report_SOURCES}"
+    OUTPUT_DIR "tests"
+    DEPENDS "scm-test-report")
 
 add_dependencies(check scm-test-report)
 set_dist_list(test_report_DIST

@@ -256,21 +256,8 @@ function(gnc_add_scheme_targets)
   install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
 endfunction()
 
-function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
-    MAKE_LINKS)
-  if(MAKE_LINKS)
-  make_scheme_targets("${_TARGET}"
-                        SOURCES "${_SOURCE_FILES}"
-                        OUTPUT_DIR "${_OUTPUT_DIR}"
-                        DEPENDS "${_GUILE_DEPENDS}"
-                        MAKE_LINKS)
-  else()
-  make_scheme_targets("${_TARGET}"
-                        SOURCES "${_SOURCE_FILES}"
-                        OUTPUT_DIR "${_OUTPUT_DIR}"
-                        DEPENDS "${_GUILE_DEPENDS}"
-                        MAKE_LINKS)
-  endif()
+function(gnc_add_scheme_test_targets _TARGET)
+  make_scheme_targets(${_TARGET} ${ARGN})
   add_dependencies(check ${_TARGET})
 endfunction()
 

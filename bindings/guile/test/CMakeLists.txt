@@ -38,21 +38,17 @@ set(GUILE_DEPENDS
     scm-engine)
 
 gnc_add_scheme_test_targets(scm-test-engine-extras
-    "test-engine-extras.scm"
-    "tests"
-    "${GUILE_DEPENDS}"
-    FALSE
-)
+    SOURCES "test-engine-extras.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
 gnc_add_scheme_deprecated_module ("gnucash engine test test-extras" "tests test-engine-extras" "scm-test-engine-extras" "")
 
 gnc_add_scheme_test_targets(scm-test-engine
-    "${bindings_test_SCHEME}"
-    "tests"
-    "${GUILE_DEPENDS};scm-test-engine-extras"
-    FALSE
-)
+    SOURCES "${bindings_test_SCHEME}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras")
 
 
 add_dependencies(check scm-test-engine)
@@ -60,11 +56,9 @@ gnc_add_scheme_tests("${engine_test_SCHEME}")
 
 if (HAVE_SRFI64)
     gnc_add_scheme_test_targets (scm-srfi64-extras
-        "srfi64-extras.scm"
-        "tests"
-        "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras"
-        FALSE
-    )
+        SOURCES "srfi64-extras.scm"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras")
 
     # Module interfaces deprecated in 4.x, will be removed for 5.x
     gnc_add_scheme_deprecated_module ("gnucash engine test srfi64-extras" "tests srfi64-extras" "scm-srfi64-extras" "")
@@ -74,11 +68,9 @@ if (HAVE_SRFI64)
         )
 
     gnc_add_scheme_test_targets (scm-test-with-srfi64
-        "${scm_tests_with_srfi64_SOURCES}"
-        "tests"
-        "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras;gnc-engine"
-        FALSE
-    )
+        SOURCES "${scm_tests_with_srfi64_SOURCES}"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras;gnc-engine")
 
     gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
     add_dependencies(check scm-srfi64-extras)
@@ -101,11 +93,9 @@ set(GUILE_DEPENDS
 
 if (HAVE_SRFI64)
   gnc_add_scheme_test_targets(scm-test-scm
-    "${test_scm_SCHEME}"
-    "tests"
-    "${GUILE_DEPENDS}"
-    FALSE
-    )
+    SOURCES "${test_scm_SCHEME}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
   gnc_add_scheme_tests("${test_scm_SCHEME}")
 

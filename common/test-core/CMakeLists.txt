@@ -60,11 +60,9 @@ set(GUILE_DEPENDS      test-core-guile)
 
 
 gnc_add_scheme_test_targets(scm-test-core
-  ${test_core_SCHEME}
-  ${GUILE_OUTPUT_DIR}
-  "${GUILE_DEPENDS}"
-  FALSE
-  )
+    SOURCES ${test_core_SCHEME}
+    OUTPUT_DIR ${GUILE_OUTPUT_DIR}
+    DEPENDS "${GUILE_DEPENDS}")
 
 add_dependencies(check scm-test-core)
 

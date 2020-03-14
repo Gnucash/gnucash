@@ -48,30 +48,24 @@ set (test_app_utils_scheme_SRFI64_SOURCES
 )
 
 gnc_add_scheme_test_targets(scm-test-load-app-utils-module
-  "test-load-app-utils-module.scm"
-  "tests"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "test-load-app-utils-module.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_test_targets(scm-test-c-interface
-  "test-c-interface.scm"
-  "tests"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "test-c-interface.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 
 if (HAVE_SRFI64)
-  gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
-    "${test_app_utils_scheme_SRFI64_SOURCES}"
-    "tests"
-    "${GUILE_DEPENDS};scm-srfi64-extras"
-    FALSE
-    )
+    gnc_add_scheme_test_targets(scm-test-app-utils-srfi64
+        SOURCES "${test_app_utils_scheme_SRFI64_SOURCES}"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
 
-  gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
+    gnc_add_scheme_tests("${test_app_utils_scheme_SRFI64_SOURCES}")
 endif()
 
 # Doesn't work yet:

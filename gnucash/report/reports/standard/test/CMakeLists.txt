@@ -39,33 +39,27 @@ set(GUILE_DEPENDS
   )
 
 if (HAVE_SRFI64)
-  gnc_add_scheme_test_targets(scm-test-reports-standard-srfi64
-    "${scm_test_with_srfi64_SOURCES}"
-    "tests"
-    "${GUILE_DEPENDS};scm-srfi64-extras"
-    FALSE
-    )
+    gnc_add_scheme_test_targets(scm-test-reports-standard-srfi64
+        SOURCES "${scm_test_with_srfi64_SOURCES}"
+        OUTPUT_DIR "tests"
+        DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
+    gnc_add_scheme_tests("${scm_test_with_srfi64_SOURCES}")
 
-  gnc_add_scheme_tests("${scm_test_with_srfi64_SOURCES}")
-  if (HAVE_TEXT_PORTS)
-    gnc_add_scheme_test_targets(scm-test-reports-standard-tp
-      "${scm_test_with_textual_ports_SOURCES}"
-      "tests"
-      "${GUILE_DEPENDS};scm-srfi64-extras"
-      FALSE
-    )
-    gnc_add_scheme_tests("${scm_test_with_textual_ports_SOURCES}")
-  endif()
+    if (HAVE_TEXT_PORTS)
+        gnc_add_scheme_test_targets(scm-test-reports-standard-tp
+            SOURCES "${scm_test_with_textual_ports_SOURCES}"
+            OUTPUT_DIR "tests"
+            DEPENDS "${GUILE_DEPENDS};scm-srfi64-extras")
+        gnc_add_scheme_tests("${scm_test_with_textual_ports_SOURCES}")
+    endif()
 endif()
 
 gnc_add_scheme_tests("${scm_test_reports_standard_SOURCES}")
 
 gnc_add_scheme_test_targets(scm-test-reports-standard
-  "${scm_test_reports_standard_SOURCES}"
-  "tests"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "${scm_test_reports_standard_SOURCES}"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 add_dependencies(check scm-test-reports-standard)
 

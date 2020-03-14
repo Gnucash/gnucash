@@ -37,11 +37,9 @@ set(GUILE_DEPENDS
 )
 
 gnc_add_scheme_test_targets(scm-test-load-gnome-utils-module
-  "test-load-gnome-utils-module.scm"
-  "tests"
-  "${GUILE_DEPENDS}"
-  FALSE
-)
+    SOURCES "test-load-gnome-utils-module.scm"
+    OUTPUT_DIR "tests"
+    DEPENDS "${GUILE_DEPENDS}")
 
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
