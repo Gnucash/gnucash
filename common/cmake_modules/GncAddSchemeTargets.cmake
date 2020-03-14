@@ -67,7 +67,7 @@ function(find_one_guile_dir _DIRCLASS _DIRCMD _PREFIX)
         set(GUILE_REL_UNIX_${CLASS_UPPER} ${CMD_REL_UNIX_OUTPUT} PARENT_SCOPE)
     endif()
 
-endfunction(find_one_guile_dir)
+endfunction()
 
 # Query the guile executable for path information. We're interested in guile's
 # datadir, libdir, sitedir, ccachedir and siteccachedir
@@ -240,7 +240,7 @@ function(make_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   endif()
   add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
   set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
-endfunction(make_scheme_targets)
+endfunction()
 
 function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_LINKS)
@@ -248,14 +248,14 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
                       "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
   install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
   install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
-endfunction(gnc_add_scheme_targets)
+endfunction()
 
 function(gnc_add_scheme_test_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_LINKS)
   make_scheme_targets("${_TARGET}" "${_SOURCE_FILES}" "${_OUTPUT_DIR}"
                       "${_GUILE_DEPENDS}" "${MAKE_LINKS}")
   add_dependencies(check ${_TARGET})
-endfunction(gnc_add_scheme_test_targets)
+endfunction()
 
 # Function to write boilerplate code for deprecated guile modules
 # All but the _OLDMOD parameter are optional
@@ -320,4 +320,4 @@ ${DEPWARNING}
     endif()
 
     gnc_add_scheme_targets("${_TARGET}" "${SOURCEFILE}" "${MODPATH}" "${_DEPENDS}" FALSE)
-endfunction(gnc_add_scheme_deprecated_module)
+endfunction()
