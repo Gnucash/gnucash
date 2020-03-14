@@ -1020,6 +1020,7 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
     }
 }
 
+// Let the user selecct a ofx qfx file and start the import
 void gnc_file_ofx_import (GtkWindow *parent)
 {
     extern int ofx_PARSER_msg;
@@ -1031,6 +1032,8 @@ void gnc_file_ofx_import (GtkWindow *parent)
     char *selected_filename;
     char *default_dir;
     LibofxContextPtr libofx_context = libofx_get_new_context();
+    GList *filters = NULL;
+    GtkFileFilter* filter = gtk_file_filter_new ();
 
     ofx_PARSER_msg = false;
     ofx_DEBUG_msg = false;
@@ -1042,9 +1045,13 @@ void gnc_file_ofx_import (GtkWindow *parent)
     DEBUG("gnc_file_ofx_import(): Begin...\n");
 
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
+    gtk_file_filter_set_name (filter, "ofx/qfx files (*.ofx,*.qfx)");
+    gtk_file_filter_add_pattern (filter, "*.[oqOQ][fF][xX]");
+    filters = g_list_prepend( filters, filter );
+
     selected_filename = gnc_file_dialog(parent,
                                         _("Select an OFX/QFX file to process"),
-                                        NULL,
+                                        filters,
                                         default_dir,
                                         GNC_FILE_DIALOG_IMPORT);
     g_free(default_dir);
