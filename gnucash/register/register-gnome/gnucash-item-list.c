@@ -89,7 +89,6 @@ gnc_item_list_append (GncItemList *item_list, const char *string)
     g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
     g_return_if_fail(item_list->list_store != NULL);
     g_return_if_fail(string != NULL);
-
     gtk_list_store_append (item_list->list_store, &iter);
     gtk_list_store_set (item_list->list_store, &iter, 0, string, -1);
 }
@@ -317,6 +316,7 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
                        gnc_item_list_signals[ACTIVATE_ITEM],
                        0,
                        string);
+        g_signal_emit (G_OBJECT (item_list), gnc_item_list_signals[CHANGE_ITEM], 0, string);
         g_free(string);
         return TRUE;
 

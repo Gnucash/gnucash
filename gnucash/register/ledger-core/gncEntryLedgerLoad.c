@@ -195,6 +195,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     ComboCell *cell;
     QuickFill *qf = NULL;
     GtkListStore *store = NULL;
+    GtkListStore *store_full = NULL;
 
     root = gnc_book_get_root_account (ledger->book);
     if (root == NULL) return;
@@ -215,6 +216,8 @@ load_xfer_type_cells (GncEntryLedger *ledger)
                 skip_expense_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, IKEY,
                 skip_expense_acct_cb, NULL);
+        store_full = gnc_get_shared_account_name_list_store_full (root, IKEY,
+                                                        skip_expense_acct_cb, NULL);
         break;
 
     case GNCENTRY_BILL_ENTRY:
@@ -230,6 +233,8 @@ load_xfer_type_cells (GncEntryLedger *ledger)
                 skip_income_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, EKEY,
                 skip_income_acct_cb, NULL);
+        store_full = gnc_get_shared_account_name_list_store_full (root, EKEY,
+                                                        skip_income_acct_cb, NULL);
         break;
     default:
 	PWARN ("Bad GncEntryLedgerType");
@@ -239,12 +244,12 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     cell = (ComboCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store);
+    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
 
     cell = (ComboCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store);
+    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
 }
 
 /* ===================================================================== */

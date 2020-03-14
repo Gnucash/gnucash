@@ -49,6 +49,7 @@ typedef struct
 {
     BasicCell cell;
     gpointer shared_store;
+    gpointer shared_store_full;
 } ComboCell;
 
 
@@ -98,8 +99,7 @@ void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
  *  quickfill object.  The combocell will *not* make a copy of the quickfill.
  */
 void gnc_combo_cell_use_quickfill_cache (ComboCell *cell, QuickFill *shared_qf);
-
-void gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data);
+void gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data, gpointer data2);
 
 /** @} */
 #endif
