@@ -182,9 +182,7 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
-    
     g_assert (info);
-    
     model = gtk_tree_view_get_model (info->view);
     return !gtk_tree_model_get_iter_first (model, &iter);
 }
