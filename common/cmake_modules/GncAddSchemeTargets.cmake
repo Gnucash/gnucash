@@ -104,9 +104,43 @@ macro(find_guile_dirs)
             "{GNC_HOME}/${GUILE_REL_UNIX_SITECCACHEDIR}")
 endmacro(find_guile_dirs)
 
-# Internal function called by gnc_add_scheme_targets and gnc_add_schemte_test_targets
-function(_make_scheme_targets _TARGET)
-  set(noValues MAKE_LINKS)
+# gnc_add_scheme_targets (target
+#                         SOURCES source1 source2 ...
+#                         OUTPUT_DIR directory
+#                         [DEPENDS depedency1 dependency2 ...]
+#                         [MAKE_LINKS] [TEST])
+#
+#̉ Use this function to add scheme targets, that is *.scm files to
+# compile into their corresponding *.go files.
+#
+# SOURCES is a list of scm source files to compile.
+#
+# The resulting *.go binaries will be generated in OUTPUT_DIR directory.
+# This directory is interpreted as a path relative to the build's guile compiled directory
+# directory. For example if guile binaries in the build directory are located in
+# $HOME/gnucash/build/lib/x86_64-linux-gnu/guile/2.0/site-cache and OUTPUT_DIR is "gnucash"
+# the binary .go files will go into
+# $HOME/gnucash/build/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
+#
+# If cmake targets are provided via the DEPENDS keyword those will be added to
+# the guile targets as dependencies.
+#
+# If MAKE_LINKS is set links (or copies on Windows) will be set up
+# from the source directory to the build's guile sources directory.
+# For example if guile source path in the build directory is
+# $HOME/gnucash/build/share/guile/site/2.0 and OUTPUT_DIR is "gnucash"
+# the links or copies will go into
+# $HOME/gnucash/build/share/guile/site/2.0/gnucash
+#
+# If keyword TEST is specified this target will be treated as a test target.
+# That is its compiled files won't be installed and will be added to the set
+# of tests to run via the "check" target. If TEST is not set the targets are
+# considerd normal targets and will be added to the list of files to install.
+# They will be installed in the guile compied directory relative to the prefix
+# set up for this build, with the OUTPUT_DIR appended to it. For example:
+# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
+function(gnc_add_scheme_targets _TARGET)
+  set(noValues MAKE_LINKS TEST)
   set(singleValues OUTPUT_DIR)
   set(multiValues SOURCES DEPENDS)
   cmake_parse_arguments(SCHEME_TGT "${noValues}" "${singleValues}" "${multiValues}" ${ARGN})
@@ -117,6 +151,7 @@ function(_make_scheme_targets _TARGET)
     message("   SOURCE_FILES: ${SCHEME_TGT_SOURCES}")
     message("   GUILE_DEPENDS: ${SCHEME_TGT_DEPENDS}")
     message("   MAKE_LINKS: ${SCHEME_TGT_MAKE_LINKS}")
+    message("   TEST: ${SCHEME_TGT_TEST}")
     message("   DIRECTORIES: ${BINDIR_BUILD}, ${LIBDIR_BUILD}, ${DATADIR_BUILD}, ${SCHEME_TGT_OUTPUT_DIR}")
   endif()
   set(_CMD "create_symlink")
@@ -247,39 +282,15 @@ function(_make_scheme_targets _TARGET)
   add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
 
   set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
-  set(_SOURCE_FILES "${SCHEME_TGT_SOURCES}" PARENT_SCOPE)
-  set(_OUTPUT_DIR "${SCHEME_TGT_OUTPUT_DIR}" PARENT_SCOPE)
+
+  if(TEST)
+    add_dependencies(check ${_TARGET})
+  else()
+    install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${SCHEME_TGT_OUTPUT_DIR})
+    install(FILES ${SCHEME_TGT_SOURCES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${SCHEME_TGT_OUTPUT_DIR})
+  endif()
 endfunction()
 
-
-# gnc_add_scheme_targets (target
-#                         SOURCES source1 source2 ...
-#                         OUTPUT_DIR directory
-#                         [DEPENDS depedency1 dependency2 ...]
-#                         [MAKE_LINKS])
-#
-#̉ Use this function to add scheme targets, that is *.scm files to
-# compile into their corresponding *.go files.
-# SOURCES is a list of scm source files to compile
-# The resulting *.go binaries will be installed in OUTPUT_DIR directory.
-# This directory is interpreted as a path relative to the system's or build's guile compiled directory
-# directory. For example if guile binaries are installed in
-# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache and OUTPUT_DIR is "gnucash"
-# the binary .go files will go into
-# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
-# If cmake targets are provided via the DEPENDS keyword those will be added to
-# the guile targets as dependencies.
-# Finally if MAKE_LINKS is set links (or copies on Windows) will be set up
-# from the source directory to the build's guile sources directory.
-# For example if guile source path in the build directory is
-# $HOME/gnucash/build/share/guile/site/2.0 and OUTPUT_DIR is "gnucash"
-# the links or copies will go into
-# $HOME/gnucash/build/share/guile/site/2.0/gnucash
-function(gnc_add_scheme_targets)
-  _make_scheme_targets(${ARGN})
-  install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
-  install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
-endfunction()
 
 # gnc_add_scheme_test_targets (target
 #                              SOURCES source1 source2 ...
@@ -287,12 +298,10 @@ endfunction()
 #                              [DEPENDS depedency1 dependency2 ...]
 #                              [MAKE_LINKS])
 #
-# Exactly like gnc_add_scheme_targets except
-# - these targets  will never be installed
-# - they will be marked to be run as tests
+# Calls gnc_add_scheme_targets with the TEST keyword set
+# See that function's description for more details.
 function(gnc_add_scheme_test_targets _TARGET)
-  _make_scheme_targets(${_TARGET} ${ARGN})
-  add_dependencies(check ${_TARGET})
+  gnc_add_scheme_targets(${_TARGET} ${ARGN} TEST)
 endfunction()
 
 # Function to write boilerplate code for deprecated guile modules
