@@ -412,7 +412,6 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     GtkWindow *parent = GTK_WINDOW (user_data);
 
     g_assert(gnc_ofx_importer_gui);
-    num_trans_processed += 1;
 
     if (!data.account_id_valid)
     {
@@ -891,7 +890,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
         xaccTransDestroy(transaction);
         xaccTransCommitEdit(transaction);
     }
-
+    num_trans_processed += 1;
     return 0;
 }//end ofx_proc_transaction()
 
@@ -1066,7 +1065,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
         DEBUG("Filename found: %s", selected_filename);
 
         /* Create the Generic transaction importer GUI. */
-        gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42);
+        gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
 
         /* Look up the needed preferences */
         auto_create_commodity =
@@ -1093,10 +1092,15 @@ void gnc_file_ofx_import (GtkWindow *parent)
         if(gnc_gen_trans_list_empty(gnc_ofx_importer_gui))
         {
             gnc_gen_trans_list_delete (gnc_ofx_importer_gui);
-            g_print("%d transactions imported\n",num_trans_processed);
-            gnc_info_dialog(parent,_("OFX file imported, %d transactions processed, no new transactions"),num_trans_processed);
+            if(num_trans_processed)
+                gnc_info_dialog(parent,_("OFX file imported, %d transactions processed, no transactions to match"),num_trans_processed);
+        }
+        else
+        {
+            gnc_gen_trans_list_show_all(gnc_ofx_importer_gui);
         }
         g_free(selected_filename);
+        
     }
 
     if (ofx_created_commodites)

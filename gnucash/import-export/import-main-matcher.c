@@ -187,6 +187,11 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
     return !gtk_tree_model_get_iter_first (model, &iter);
 }
 
+void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
+{
+    gtk_widget_show_all (GTK_WIDGET (info->main_widget));
+}
+
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -907,7 +912,8 @@ show_account_column_toggled_cb (GtkToggleButton *togglebutton,
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         const gchar* heading,
         gboolean all_from_same_account,
-        gint match_date_hardlimit)
+        gint match_date_hardlimit,
+        gboolean show_all)
 {
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
@@ -962,7 +968,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget), GTK_WINDOW (parent));
-    gtk_widget_show_all (GTK_WIDGET (info->main_widget));
+    if(show_all)
+        gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 
     info->transaction_processed_cb = NULL;
 

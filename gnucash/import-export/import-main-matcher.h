@@ -62,12 +62,15 @@ typedef void (*GNCTransactionProcessedCB) (GNCImportTransInfo *trans_info,
  * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
  * appropriate.
  *
+ @param show_all if true, all widgets are shown
+ *
  * @return A pointer to the GNCImportMainMatcher which has been setup.
 */
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         const gchar* heading,
         gboolean all_from_same_account,
-        gint match_date_hardlimit);
+        gint match_date_hardlimit,
+        gboolean show_all);
 
 
 
@@ -187,5 +190,11 @@ GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info);
  * @return A boolean indicating whether the transaction list is empty.
  */
 gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info);
+
+/** Shows widgets.
+ * @param info A pointer to a the GNCImportMainMatcher structure.
+ */
+void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info);
+
 #endif
 /**@}*/

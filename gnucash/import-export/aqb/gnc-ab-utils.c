@@ -940,7 +940,7 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     if (!data->generic_importer)
     {
         data->generic_importer = gnc_gen_trans_list_new(data->parent, NULL,
-                                 TRUE, 14);
+                                 TRUE, 14, TRUE);
         if (data->execute_txns)
         {
             gnc_gen_trans_list_add_tp_cb(data->generic_importer,
