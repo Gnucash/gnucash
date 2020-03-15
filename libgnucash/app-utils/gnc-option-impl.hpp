@@ -400,6 +400,12 @@ public:
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
+    void get_limits(ValueType& upper, ValueType& lower, ValueType& step) const noexcept
+    {
+        upper = m_max;
+        lower = m_min;
+        step = m_step;
+    }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }

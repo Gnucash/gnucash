@@ -87,6 +87,8 @@ public:
     void make_internal();
     bool is_changed() const noexcept;
     bool is_multiselect() const noexcept;
+    template <typename ValueType> void get_limits(ValueType&, ValueType&,
+                                                  ValueType&) const noexcept;
     template <typename ValueType> bool validate(ValueType value) const;
     std::size_t num_permissible_values() const;
     std::size_t permissible_value_index(const char* value) const;

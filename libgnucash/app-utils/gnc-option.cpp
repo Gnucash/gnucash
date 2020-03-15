@@ -123,6 +123,17 @@ GncOption::set_value(ValueType value)
                }, *m_option);
 }
 
+template <typename ValueType> void
+GncOption::get_limits(ValueType& max, ValueType& min, ValueType& step) const noexcept
+{
+    std::visit([&max, &min, &step](const auto& option) {
+                   if constexpr
+                       (std::is_same_v<std::decay_t<decltype(option)>,
+                        GncOptionRangeValue<ValueType>>)
+                       option.get_limits(max, min, step);
+               }, *m_option);
+}
+
 const std::string&
 GncOption::get_section() const
 {
@@ -478,6 +489,8 @@ template void GncOption::set_value(RelativeDatePeriod);
 template void GncOption::set_value(size_t);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
 
+template void GncOption::get_limits(double&, double&, double&) const noexcept;
+template void GncOption::get_limits(int&, int&, int&) const noexcept;
 template bool GncOption::validate(bool) const;
 template bool GncOption::validate(int) const;
 template bool GncOption::validate(int64_t) const;

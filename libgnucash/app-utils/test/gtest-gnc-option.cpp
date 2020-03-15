@@ -622,6 +622,20 @@ TEST_F(GncRangeOption, test_setter)
     EXPECT_EQ(1.5, m_doubleoption.get_default_value<double>());
 }
 
+TEST_F(GncRangeOption, test_get_info)
+{
+    int imax{}, imin{}, istep{};
+    double dmax{}, dmin{}, dstep{};
+    m_intoption.get_limits(imax, imin, istep);
+    m_doubleoption.get_limits(dmax, dmin, dstep);
+    EXPECT_EQ(30, imax);
+    EXPECT_EQ(1, imin);
+    EXPECT_EQ(1, istep);
+    EXPECT_EQ(1.0, dmin);
+    EXPECT_EQ(3.0, dmax);
+    EXPECT_EQ(0.1, dstep);
+}
+
 TEST_F(GncRangeOption, test_range_out)
 {
     std::ostringstream oss;
