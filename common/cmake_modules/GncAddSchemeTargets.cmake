@@ -104,7 +104,8 @@ macro(find_guile_dirs)
             "{GNC_HOME}/${GUILE_REL_UNIX_SITECCACHEDIR}")
 endmacro(find_guile_dirs)
 
-function(make_scheme_targets _TARGET)
+# Internal function called by gnc_add_scheme_targets and gnc_add_schemte_test_targets
+function(_make_scheme_targets _TARGET)
   set(noValues MAKE_LINKS)
   set(singleValues OUTPUT_DIR)
   set(multiValues SOURCES DEPENDS)
@@ -250,14 +251,47 @@ function(make_scheme_targets _TARGET)
   set(_OUTPUT_DIR "${SCHEME_TGT_OUTPUT_DIR}" PARENT_SCOPE)
 endfunction()
 
+
+# gnc_add_scheme_targets (target
+#                         SOURCES source1 source2 ...
+#                         OUTPUT_DIR directory
+#                         [DEPENDS depedency1 dependency2 ...]
+#                         [MAKE_LINKS])
+#
+#̉ Use this function to add scheme targets, that is *.scm files to
+# compile into their corresponding *.go files.
+# SOURCES is a list of scm source files to compile
+# The resulting *.go binaries will be installed in OUTPUT_DIR directory.
+# This directory is interpreted as a path relative to the system's or build's guile compiled directory
+# directory. For example if guile binaries are installed in
+# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache and OUTPUT_DIR is "gnucash"
+# the binary .go files will go into
+# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
+# If cmake targets are provided via the DEPENDS keyword those will be added to
+# the guile targets as dependencies.
+# Finally if MAKE_LINKS is set links (or copies on Windows) will be set up
+# from the source directory to the build's guile sources directory.
+# For example if guile source path in the build directory is
+# $HOME/gnucash/build/share/guile/site/2.0 and OUTPUT_DIR is "gnucash"
+# the links or copies will go into
+# $HOME/gnucash/build/share/guile/site/2.0/gnucash
 function(gnc_add_scheme_targets)
-  make_scheme_targets(${ARGN})
+  _make_scheme_targets(${ARGN})
   install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${_OUTPUT_DIR})
   install(FILES ${_SOURCE_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${_OUTPUT_DIR})
 endfunction()
 
+# gnc_add_scheme_test_targets (target
+#                              SOURCES source1 source2 ...
+#                              OUTPUT_DIR directory
+#                              [DEPENDS depedency1 dependency2 ...]
+#                              [MAKE_LINKS])
+#
+# Exactly like gnc_add_scheme_targets except
+# - these targets  will never be installed
+# - they will be marked to be run as tests
 function(gnc_add_scheme_test_targets _TARGET)
-  make_scheme_targets(${_TARGET} ${ARGN})
+  _make_scheme_targets(${_TARGET} ${ARGN})
   add_dependencies(check ${_TARGET})
 endfunction()
 
