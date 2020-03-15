@@ -64,6 +64,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
 #include "import-account-matcher.h"
+#include "import-utilities.h"
 #ifndef AQBANKING6
 # include <aqbanking/dlg_setup.h>
 #endif
@@ -682,7 +683,8 @@ static void
 clear_kvp_acc_cb(gpointer gnc_acc, gpointer ab_acc, gpointer user_data)
 {
     g_return_if_fail(gnc_acc);
-    /* Delete complete "hbci..." KVPs for GnuCash account */
+    /* Delete "online-id" and complete "hbci..." KVPs for GnuCash account */
+    gnc_account_delete_map_entry((Account *) gnc_acc, "online_id", NULL, NULL, FALSE);
     gnc_account_delete_map_entry((Account *) gnc_acc, "hbci", NULL, NULL, FALSE);
 }
 
@@ -694,6 +696,10 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     guint32 ab_account_uid;
     const gchar *ab_accountid, *gnc_accountid;
     const gchar *ab_bankcode, *gnc_bankcode;
+#ifdef AQBANKING6
+    gchar *ab_online_id;
+    const gchar *gnc_online_id;
+#endif
 
     g_return_if_fail(ab_acc && gnc_acc);
 
@@ -726,6 +732,14 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
             && (!gnc_bankcode
                 || (strcmp(gnc_bankcode, ab_bankcode) != 0)))
         gnc_ab_set_account_bankcode(gnc_acc, ab_bankcode);
+
+#ifdef AQBANKING6
+    ab_online_id = gnc_ab_create_online_id(ab_bankcode, ab_accountid);
+    gnc_online_id = gnc_import_get_acc_online_id(gnc_acc);
+    if (ab_online_id && (!gnc_online_id || (strcmp(ab_online_id, gnc_online_id) != 0)))
+        gnc_import_set_acc_online_id(gnc_acc, ab_online_id);
+    g_free(ab_online_id);
+#endif
 }
 
 static void
