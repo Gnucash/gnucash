@@ -66,6 +66,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
 static gboolean auto_create_commodity = FALSE;
 static Account *ofx_parent_account = NULL;
+static gint num_trans_processed = 0;
 
 GList *ofx_created_commodites = NULL;
 
@@ -411,6 +412,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     GtkWindow *parent = GTK_WINDOW (user_data);
 
     g_assert(gnc_ofx_importer_gui);
+    num_trans_processed += 1;
 
     if (!data.account_id_valid)
     {
@@ -1085,12 +1087,14 @@ void gnc_file_ofx_import (GtkWindow *parent)
 #endif
 
         DEBUG("Opening selected file");
+        num_trans_processed = 0;
         libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
         // Now would be a good time to see whether the view has anything in it!
         if(gnc_gen_trans_list_empty(gnc_ofx_importer_gui))
         {
             gnc_gen_trans_list_delete (gnc_ofx_importer_gui);
-            gnc_info_dialog(parent,_("OFX file imported, no new transactions"));
+            g_print("%d transactions imported\n",num_trans_processed);
+            gnc_info_dialog(parent,_("OFX file imported, %d transactions processed, no new transactions"),num_trans_processed);
         }
         g_free(selected_filename);
     }
