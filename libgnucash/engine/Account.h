@@ -1457,10 +1457,10 @@ GList *gnc_account_imap_get_info_bayes (Account *acc);
  */
 GList *gnc_account_imap_get_info (Account *acc, const char *category);
 
-/** Returns the text string pointed to by full_category for the Account, free
+/** Returns the text string pointed to by head and category for the Account, free
  *  the returned text
  */
-gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
+gchar *gnc_account_get_map_entry (Account *acc, const char *head, const char *category);
 
 /** Delete the entry for Account pointed to by head,category and match_string,
  *  if empty is TRUE then use delete if empty

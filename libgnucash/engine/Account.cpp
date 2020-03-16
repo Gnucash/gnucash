@@ -5802,11 +5802,13 @@ gnc_account_imap_get_info (Account *acc, const char *category)
 /*******************************************************************************/
 
 gchar *
-gnc_account_get_map_entry (Account *acc, const char *full_category)
+gnc_account_get_map_entry (Account *acc, const char *head, const char *category)
 {
     GValue v = G_VALUE_INIT;
     gchar *text = NULL;
-    std::vector<std::string> path {full_category};
+    std::vector<std::string> path {head};
+    if (category)
+        path.emplace_back (category);
     if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
     {
         qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);

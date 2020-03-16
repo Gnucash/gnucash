@@ -549,6 +549,9 @@ list_type_selected_cb (GtkToggleButton* button, ImapDialog *imap_dialog)
     else
         type = ONLINE;
 
+    if (type != ONLINE)
+        gtk_widget_grab_focus (GTK_WIDGET(imap_dialog->filter_text_entry));
+
     // Lets do this only on change of list type
     if (type != imap_dialog->type)
     {
@@ -736,30 +739,61 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
     {
+        gchar  *hbci_account_id = NULL;
+        gchar  *hbci_bank_code = NULL;
         gchar  *text = NULL;
         Account *acc = ptr->data;
 
-        // Save source account
-        imapInfo.source_account = acc;
-        imapInfo.head = "online_id";
-        imapInfo.category = " ";
-
-        text = gnc_account_get_map_entry (acc, imapInfo.head);
+        // Check for online_id
+        text = gnc_account_get_map_entry (acc, "online_id", NULL);
 
         if (text != NULL)
         {
+            // Save source account
+            imapInfo.source_account = acc;
+            imapInfo.head = "online_id";
+            imapInfo.category = " ";
+
             if (g_strcmp0 (text, "") == 0)
                 imapInfo.map_account = NULL;
             else
                 imapInfo.map_account = imapInfo.source_account;
 
-            imapInfo.match_string  = text;
+            imapInfo.match_string = text;
             imapInfo.count = " ";
 
             // Add top level entry and pass iter to add_to_store
             gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
             add_to_store (imap_dialog, &toplevel, _("Online Id"), &imapInfo);
         }
+        g_free (text);
+
+        // Check for aqbanking hbci
+        hbci_account_id = gnc_account_get_map_entry (acc, "hbci", "account-id");
+        hbci_bank_code = gnc_account_get_map_entry (acc, "hbci", "bank-code");
+        text = g_strconcat (hbci_bank_code, ",", hbci_account_id, NULL);
+
+        if ((hbci_account_id != NULL) || (hbci_bank_code != NULL))
+        {
+            // Save source account
+            imapInfo.source_account = acc;
+            imapInfo.head = "hbci";
+            imapInfo.category = " ";
+
+            if (g_strcmp0 (text, "") == 0)
+                imapInfo.map_account = NULL;
+            else
+                imapInfo.map_account = imapInfo.source_account;
+
+            imapInfo.match_string = text;
+            imapInfo.count = " ";
+
+            // Add top level entry and pass iter to add_to_store
+            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
+            add_to_store (imap_dialog, &toplevel, _("Online HBCI"), &imapInfo);
+        }
+        g_free (hbci_account_id);
+        g_free (hbci_bank_code);
         g_free (text);
     }
 }
