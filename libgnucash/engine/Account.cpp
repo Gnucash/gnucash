@@ -61,6 +61,7 @@ static bool imap_convert_bayes_to_flat_run = false;
 /* Predefined KVP paths */
 static const std::string KEY_ASSOC_INCOME_ACCOUNT("ofx/associated-income-account");
 static const std::string KEY_RECONCILE_INFO("reconcile-info");
+static const std::string KEY_BALANCE_ASSERTIONS("balance-assertion");
 static const std::string KEY_INCLUDE_CHILDREN("include-children");
 static const std::string KEY_POSTPONE("postpone");
 static const std::string KEY_LOT_MGMT("lot-mgmt");
@@ -2213,6 +2214,80 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
     LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
 }
 
+/********************************************************************\
+ * gnc_account_assertions_are_valid
+ *
+ * scans the account splits in reconciled_date order, and compare
+ * the running balance with the account's balance assertion data.
+ * returns TRUE if the balance assertions pass, FALSE if it does
+ * not.
+ *
+ * args:   account -- the account for which to recompute balances   *
+ * Return: gboolean                                                 *
+\********************************************************************/
+
+static gint cmp_rec_date (Split *split1, Split *split2)
+{
+    if (xaccSplitGetReconcile (split1) != YREC) return 1;
+    if (xaccSplitGetReconcile (split2) != YREC) return -1;
+    return (xaccSplitGetDateReconciled (split1) - xaccSplitGetDateReconciled (split2));
+}
+
+gboolean gnc_account_assertions_are_valid (Account *acc)
+{
+    GList *splits, *assertion_dates, *split_iter;
+    gnc_numeric balance = gnc_numeric_zero ();
+    gboolean retval = TRUE;
+
+    g_return_val_if_fail (acc, FALSE);
+    assertion_dates = xaccAccountGetBalanceAssertionDates (acc);
+    splits = g_list_copy (xaccAccountGetSplitList (acc));
+    splits = g_list_sort (splits, (GCompareFunc)cmp_rec_date);
+    split_iter = splits;
+    for (GList *dates = assertion_dates; dates; dates = dates->next)
+    {
+        time64 *date = (time64*)dates->data;
+        time64 d = *date;
+        gnc_numeric *assertion_bal = xaccAccountGetBalanceAssertionAtDate (acc, d);
+
+        if (!assertion_bal)
+        {
+            gchar *accname = gnc_account_get_full_name (acc);
+            gchar *datestr = qof_print_date (d);
+            PERR ("Account %s has assertion date %s but no balance", accname, datestr);
+            g_free (datestr);
+            g_free (accname);
+            retval = FALSE;
+            goto end;
+        }
+        // PWARN ("Date %s Balance %s",
+        //        qof_print_date (d),
+        //        gnc_numeric_to_string (assertion));
+        for (; split_iter; split_iter = split_iter->next)
+        {
+            Split *split = (Split*)split_iter->data;
+            // PWARN ("Split %s Reconciled %s Amount %s Running-Bal %s",
+            //        qof_print_date (xaccTransGetDate (xaccSplitGetParent (split))),
+            //        qof_print_date (xaccSplitGetDateReconciled (split)),
+            //        gnc_numeric_to_string (xaccSplitGetAmount (split))
+            //        gnc_numeric_to_string (balance));
+            if ((xaccSplitGetReconcile (split) == YREC) &&
+                (xaccSplitGetDateReconciled (split) <= d))
+                balance = gnc_numeric_add_fixed (balance, xaccSplitGetAmount (split));
+            else if (gnc_numeric_compare (balance, *assertion_bal))
+            {
+                retval = FALSE;
+                goto end;
+            }
+            else
+                break;
+        }
+    }
+ end:
+    g_list_free (assertion_dates);
+    g_list_free (splits);
+    return retval;
+}
 
 /********************************************************************\
  * xaccAccountRecomputeBalance                                      *
@@ -4613,6 +4688,107 @@ xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
     g_value_set_int64 (&v, last_date);
     xaccAccountBeginEdit (acc);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {KEY_RECONCILE_INFO, "last-date"});
+    mark_account (acc);
+    xaccAccountCommitEdit (acc);
+}
+
+
+void
+xaccAccountClearBalanceAssertions (Account *acc)
+{
+    g_return_if_fail (acc);
+
+    qof_instance_slot_path_delete
+        (QOF_INSTANCE(acc), {KEY_BALANCE_ASSERTIONS});
+}
+
+void
+xaccAccountDeleteBalanceAssertionAtDate (const Account *acc, time64 date)
+{
+    char date_str[MAX_DATE_LENGTH + 1] {};
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+    gnc_time64_to_iso8601_buff (date, date_str);
+    if (qof_instance_has_path_slot(QOF_INSTANCE(acc),
+                                   {KEY_BALANCE_ASSERTIONS, date_str}))
+        qof_instance_slot_path_delete (QOF_INSTANCE(acc),
+                                       {KEY_BALANCE_ASSERTIONS, date_str});
+    else
+    {
+        auto *name = gnc_account_get_full_name (acc);
+        PERR ("%s no assertion at %s", name, date_str);
+        g_free (name);
+    }
+}
+
+static int datecomparefunc (time64 *a, time64 *b)
+{
+    return (*a - *b);
+}
+
+DatesList *
+xaccAccountGetBalanceAssertionDates (Account *acc)
+{
+    GList *list = nullptr;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
+
+    auto slots = qof_instance_get_slots(QOF_INSTANCE(acc));
+    if (!slots) return nullptr;
+
+    auto slot = slots->get_child_frame_or_nullptr({KEY_BALANCE_ASSERTIONS});
+    if (!slot) return nullptr;
+
+    for (auto datestr : slot->get_keys())
+    {
+        auto date = gnc_iso8601_to_time64_gmt(datestr.c_str());
+        if (date == INT64_MAX)
+            continue;
+        time64 *d = g_new (time64, 1);
+        *d = date;
+        list = g_list_prepend(list, d);
+    }
+
+    return g_list_sort(list, (GCompareFunc)datecomparefunc);
+}
+
+gnc_numeric *
+xaccAccountGetBalanceAssertionAtDate (const Account *acc, time64 date)
+{
+    char date_str[MAX_DATE_LENGTH + 1] {};
+    gnc_numeric *bal;
+    GValue v = G_VALUE_INIT;
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
+
+    gnc_time64_to_iso8601_buff (date, date_str);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
+                               {KEY_BALANCE_ASSERTIONS, date_str});
+
+    if (!G_VALUE_HOLDS_BOXED (&v))
+        return nullptr;
+
+    bal = (gnc_numeric*) g_value_get_boxed (&v);
+
+    if (!bal->denom)
+        return nullptr;
+
+    return bal;
+}
+
+void
+xaccAccountSetBalanceAssertionAtDate (Account *acc, time64 date, gnc_numeric balance)
+{
+    char date_str[MAX_DATE_LENGTH + 1] {};
+    GValue v = G_VALUE_INIT;
+
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    gnc_time64_to_iso8601_buff (date, date_str);
+    g_value_init (&v, GNC_TYPE_NUMERIC);
+    g_value_set_boxed (&v, &balance);
+
+    xaccAccountBeginEdit (acc);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
+                               {KEY_BALANCE_ASSERTIONS, date_str});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }

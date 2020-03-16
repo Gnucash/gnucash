@@ -423,6 +423,8 @@ GNCPolicy *gnc_account_get_policy (Account *account);
 /** Get the account's flag for deferred balance computation */
 gboolean gnc_account_get_defer_bal_computation (Account *acc);
 
+gboolean gnc_account_assertions_are_valid (Account *acc);
+
 /** The following recompute the partial balances (stored with the
  *  transaction) and the total balance, for this account
  */
@@ -1145,6 +1147,64 @@ gboolean xaccAccountGetReconcileLastDate (const Account *account,
         time64 *last_date);
 /** DOCUMENT ME! */
 void xaccAccountSetReconcileLastDate (Account *account, time64 last_date);
+
+/** The xaccAccountSetBalanceAssertionAtDate() method will
+ *  register the statment date and reconciled balance for this
+ *  account.  This is performed at the end of reconciliation. It can
+ *  function as a 'soft' balance assertion and may be useful for
+ *  hunting errant splits.
+ *
+ * @param acc the account to set reconcile info
+ *
+ * @param statement_date a time64 for statement date
+ *
+ * @param ending_balance a gnc_numeric specifying reconciled balance
+ */
+void xaccAccountSetBalanceAssertionAtDate (Account *acc,
+                                           time64 statement_date,
+                                           gnc_numeric ending_balance);
+
+/** The xaccAccountClearBalanceAssertions() method clears all
+ *  account reconciled statement date and reconciled balance info.
+ *
+ * @param acc the account to set reconcile info
+ */
+void xaccAccountClearBalanceAssertions (Account *acc);
+
+/** The xaccAccountGetBalanceAssertionDates() routine returns a
+ *   GList of time64 dates which have reconciled_balances
+ *   attached. This list is sorted.
+ *
+ * @param acc the account to set reconcile info
+ *
+ * @return a GList of time64 dates, or nullptr
+ */
+DatesList * xaccAccountGetBalanceAssertionDates (Account *acc);
+
+/** The xaccAccountDeleteBalanceAssertionBalanceAtDate() routine
+ * deletes the statement_date -> reconciled_balance KVP pair. If the
+ * statement_date does not exist, it returns.
+ *
+ * @param acc the account to set reconcile info
+ *
+ * @param statement_date a time64
+ */
+void xaccAccountDeleteBalanceAssertionAtDate (const Account *acc,
+                                              time64 statement_date);
+
+/** The xaccAccountGetBalanceAssertionBalanceAtDate() routine
+ *   retrieves a pointer to gnc_numeric if the account has a
+ *   reconciled_balance stored for statement_date.
+ *
+ * @param acc the account to set reconcile info
+ *
+ * @param statement_date a time64
+ *
+ * @return a gnc_numeric* reconciled_balance, or nullptr
+ */
+gnc_numeric *
+xaccAccountGetBalanceAssertionAtDate (const Account *acc,
+                                      time64 statement_date);
 
 /** DOCUMENT ME! */
 gboolean xaccAccountGetReconcileLastInterval (const Account *account,
