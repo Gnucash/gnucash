@@ -96,6 +96,8 @@ public:
     const char* permissible_value_name(std::size_t index) const;
     const char* permissible_value_description(std::size_t index) const;
     GList* account_type_list() const noexcept;
+    bool is_alternate() const noexcept;
+    void set_alternate(bool) noexcept;
     std::ostream& out_stream(std::ostream& oss) const;
     std::istream& in_stream(std::istream& iss);
     std::ostream& to_scheme(std::ostream& oss) const;

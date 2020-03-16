@@ -107,6 +107,7 @@ struct OptionClassifier
     std::string m_doc_string;
 };
 
+
 #ifndef SWIG
 auto constexpr size_t_max = std::numeric_limits<std::size_t>::max();
 #endif
@@ -207,14 +208,18 @@ std::string qof_instance_to_string(const QofInstance* inst);
  * to parse the templates to figure out the symbols.
  */
 #ifndef SWIG
-template<class OptionValueClass,
+template<class OptType,
          typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
-                                                     std::decay_t<OptionValueClass>> &&
-                                   !(std::is_same_v<std::decay_t<OptionValueClass>,
-                                     GncOptionValue<const QofInstance*>> ||
-                                     std::is_same_v<std::decay_t<OptionValueClass>,
-                                     GncOptionValidatedValue<const QofInstance*>>), int> = 0>
-std::ostream& operator<<(std::ostream& oss, const OptionValueClass& opt)
+                                                     std::decay_t<OptType>> &&
+                                   ! (std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionValue<const QofInstance*>> ||
+                                      std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionValidatedValue<const QofInstance*>> ||
+                                      std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionRangeValue<int>> ||
+                                      std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionRangeValue<double>>), int> = 0>
+std::ostream& operator<<(std::ostream& oss, const OptType& opt)
 {
     oss << opt.get_value();
     return oss;
@@ -228,7 +233,11 @@ operator<< <GncOptionValue<bool>>(std::ostream& oss,
     return oss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<const QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<const QofInstance*> >, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionValidatedValue<const QofInstance*>> ||
+                                   std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionValue<const QofInstance*> >, int> = 0>
 inline std::ostream&
 operator<< (std::ostream& oss, const OptType& opt)
 {
@@ -249,13 +258,18 @@ operator<< (std::ostream& oss, const OptType& opt)
     return oss;
 }
 
-template<class OptionValueClass,
-         typename std::enable_if_t<std::is_base_of_v<OptionClassifier, std::decay_t<OptionValueClass>> &&
-                                   !(std::is_same_v<std::decay_t<OptionValueClass>,
+template<class OptType,
+         typename std::enable_if_t<std::is_base_of_v<OptionClassifier,
+                                                     std::decay_t<OptType>> &&
+                                   !(std::is_same_v<std::decay_t<OptType>,
                                      GncOptionValue<const QofInstance*>> ||
-                                     std::is_same_v<std::decay_t<OptionValueClass>,
-                                     GncOptionValidatedValue<const QofInstance*>>), int> = 0>
-std::istream& operator>>(std::istream& iss, OptionValueClass& opt)
+                                     std::is_same_v<std::decay_t<OptType>,
+                                     GncOptionValidatedValue<const QofInstance*>> ||
+                                      std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionRangeValue<int>> ||
+                                      std::is_same_v<std::decay_t<OptType>,
+                                      GncOptionRangeValue<double>>), int> = 0>
+std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     std::decay_t<decltype(opt.get_value())> value;
     iss >> value;
@@ -263,7 +277,12 @@ std::istream& operator>>(std::istream& iss, OptionValueClass& opt)
     return iss;
 }
 
-template<class OptType, typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>, GncOptionValidatedValue<const QofInstance*>> || std::is_same_v<std::decay_t<OptType>, GncOptionValue<const QofInstance*> >, int> = 0>
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionValidatedValue<const QofInstance*>> ||
+                                   std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionValue<const QofInstance*> >,
+                                   int> = 0>
 std::istream&
 operator>> (std::istream& iss, OptType& opt)
 {
@@ -409,6 +428,11 @@ public:
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
+    bool is_alternate() const noexcept { return m_alternate; }
+    void set_alternate(bool value) noexcept {
+        if (m_ui_type == GncOptionUIType::PLOT_SIZE)
+            m_alternate = value;
+    }
 private:
     GncOptionUIType m_ui_type = GncOptionUIType::NUMBER_RANGE;
     ValueType m_value;
@@ -416,7 +440,55 @@ private:
     ValueType m_min;
     ValueType m_max;
     ValueType m_step;
+    bool m_alternate = false;
 };
+
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionRangeValue<int>> ||
+                                   std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionRangeValue<double>>,
+                                   int> = 0>
+inline std::ostream&
+operator<< (std::ostream& oss, const OptType& opt)
+{
+    if (opt.get_ui_type() == GncOptionUIType::PLOT_SIZE)
+        oss << (opt.is_alternate() ? "pixels" : "percent") << " ";
+    oss << opt.get_value();
+    return oss;
+}
+
+template<class OptType,
+         typename std::enable_if_t<std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionRangeValue<int>> ||
+                                   std::is_same_v<std::decay_t<OptType>,
+                                                  GncOptionRangeValue<double>>,
+                                   int> = 0>
+inline std::istream&
+operator>> (std::istream& iss, OptType& opt)
+{
+    if (opt.get_ui_type() == GncOptionUIType::PLOT_SIZE)
+    {
+        std::string alt;
+        iss >> alt;
+        opt.set_alternate(strncmp(alt.c_str(), "percent",
+                                  strlen("percent")) == 0);
+    }
+    if constexpr (std::is_same_v<std::decay_t<OptType>,
+                  GncOptionRangeValue<double>>)
+    {
+        double d;
+        iss >> d;
+        opt.set_value(d);
+    }
+    else
+    {
+        int i;
+        iss >> i;
+        opt.set_value(i);
+    }
+    return iss;
+}
 
 using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,

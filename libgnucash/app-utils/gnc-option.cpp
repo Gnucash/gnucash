@@ -350,6 +350,31 @@ GncOption::account_type_list() const noexcept
                       }, *m_option);
 }
 
+bool
+GncOption::is_alternate() const noexcept
+{
+    return std::visit([](auto& option) -> bool {
+                          if constexpr(std::is_same_v<std::decay_t<decltype(option)>,
+                                       GncOptionRangeValue<int>> ||
+                       std::is_same_v<std::decay_t<decltype(option)>,
+                                       GncOptionRangeValue<double>>)
+                              return option.is_alternate();
+                          return false;
+                      }, *m_option);
+}
+
+void
+GncOption::set_alternate(bool alt) noexcept
+{
+    std::visit([alt](auto& option) {
+                   if constexpr(std::is_same_v<std::decay_t<decltype(option)>,
+                                GncOptionRangeValue<int>> ||
+                       std::is_same_v<std::decay_t<decltype(option)>,
+                                GncOptionRangeValue<double>>)
+                       option.set_alternate(alt);
+               }, *m_option);
+}
+
 std::ostream&
 GncOption::out_stream(std::ostream& oss) const
 {
@@ -390,6 +415,19 @@ GncOption::to_scheme(std::ostream& oss) const
                               (std::is_same_v<std::decay_t<decltype(option.get_value())>,
                                std::string>)
                                   oss << '"' << option << '"';
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<int>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<double>>)
+                          {
+                              if (option.get_ui_type() == GncOptionUIType::PLOT_SIZE)
+                                  oss << "'(" << (option.is_alternate() ?
+                                          "\"percent\" . " : "\"pixels\" . ");
+                              oss << option.get_value();
+                              if (option.get_ui_type() == GncOptionUIType::PLOT_SIZE)
+                                  oss << ")";
+                          }
                           else
                               oss << option;
                           return oss;
@@ -426,6 +464,36 @@ GncOption::from_scheme(std::istream& iss)
                               std::string input;
                               std::getline(iss, input, '"');
                               option.set_value(input);
+                          }
+                          else if constexpr
+                              (std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<int>> ||
+                               std::is_same_v<std::decay_t<decltype(option)>,
+                               GncOptionRangeValue<double>>)
+                          {
+                              if (option.get_ui_type() == GncOptionUIType::PLOT_SIZE)
+                              {
+                                  iss.ignore(3, '"');
+                                  std::string alt;
+                                  iss >> alt;
+                                  option.set_alternate(
+                                      strncmp(alt.c_str(), "pixels",
+                                              strlen("pixels")) == 0);
+                                  iss.ignore(4, ' ');
+                              }
+                              if constexpr(std::is_same_v<std::decay_t<decltype(option)>,
+                                           GncOptionRangeValue<int>>)
+                              {
+                                  int val;
+                                  iss >> val;
+                                  option.set_value(val);
+                              }
+                              else
+                              {
+                                  double val;
+                                  iss >> val;
+                                  option.set_value(val);
+                              }
                           }
                           else
                               iss >> option;
