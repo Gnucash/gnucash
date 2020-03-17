@@ -33,6 +33,11 @@ auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
 GncOptionDB::GncOptionDB() : m_default_section{std::nullopt} {}
 
 GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
+static bool
+operator==(const std::string& str, const char* cstr)
+{
+    return strcmp(str.c_str(), cstr) == 0;
+}
 
 void
 GncOptionDB::save_to_book(QofBook* book, bool do_clear) const
@@ -377,23 +382,14 @@ unquote_scheme_string(const std::string& str)
     return str;
 }
 
-static inline bool
-string_equal_charptr(const std::string& str, const char* chars)
-{
-    if (!chars || str.empty() || strlen(chars) != str.size())
-        return false;
-    return strcmp(str.c_str(), chars) == 0;
-}
-
 static std::optional<std::reference_wrapper<const SchemeId>>
 find_form(const SchemeId& toplevel, IdentType type, const char* name)
 {
-    if (toplevel.m_type == type &&
-        string_equal_charptr(toplevel.m_name.c_str(), name))
+    if (toplevel.m_type == type && toplevel.m_name == name)
         return std::ref(toplevel);
     for (const auto& id : toplevel.m_ids)
     {
-        if (id.m_type == type && string_equal_charptr(id.m_name.c_str(), name))
+        if (id.m_type == type && id.m_name == name)
             return std::ref(id);
         auto child{find_form(id, type, name)};
         if (child)
