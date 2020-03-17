@@ -342,6 +342,9 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     }
 %}
 
+%ignore gnc_option_to_scheme;
+%ignore gnc_option_from_scheme;
+
 %include "gnc-option-date.hpp"
 %include "gnc-option.hpp"
 %include "gnc-option-impl.hpp"
@@ -387,7 +390,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto db_opt = optiondb->find_option(section, name);
         if (!db_opt)
             return SCM_BOOL_F;
-        return GncOption_get_scm_value(&(db_opt->get()));
+        return GncOption_get_scm_value(db_opt);
     }
 
     static SCM
@@ -397,7 +400,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto db_opt = optiondb->find_option(section, name);
         if (!db_opt)
             return SCM_BOOL_F;
-        return GncOption_get_scm_default_value(&(db_opt->get()));
+        return GncOption_get_scm_default_value(db_opt);
     }
 
     static void
@@ -410,7 +413,7 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
 //          PWARN("Attempt to write non-existent option %s/%s", section, name);
             return;
         }
-        GncOption_set_value_from_scm(&(db_opt->get()), new_value);
+        GncOption_set_value_from_scm(db_opt, new_value);
     }
 %}
 

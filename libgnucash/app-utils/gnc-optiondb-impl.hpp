@@ -41,7 +41,25 @@ extern "C"
 }
 
 using GncOptionVec = std::vector<GncOption>;
-using GncOptionSection = std::pair<std::string, GncOptionVec>;
+
+class GncOptionSection
+{
+    std::string m_name;
+    GncOptionVec m_options;
+public:
+    GncOptionSection(const char* name) : m_name{name}, m_options{} {}
+    ~GncOptionSection() = default;
+
+    void foreach_option(std::function<void(GncOption&)> func);
+    const std::string& get_name() const noexcept { return m_name; }
+    size_t get_num_options() const noexcept { return m_options.size(); }
+    void add_option(GncOption&& option);
+    void remove_option(const char* name);
+    const GncOption* find_option(const char* name) const;
+};
+
+using GncOptionSectionPtr = std::shared_ptr<GncOptionSection>;
+
 class GncOptionDB
 {
 public:
@@ -49,15 +67,27 @@ public:
     GncOptionDB(QofBook* book);
     ~GncOptionDB() = default;
 
+/* The non-const version can't be redirected to the const one because the
+ * function parameters are incompatible.
+ */
+    void foreach_section(std::function<void(GncOptionSectionPtr&)> func)
+    {
+        for (auto& section : m_sections)
+            func(section);
+    }
+    void foreach_section(std::function<void(const GncOptionSectionPtr&)> func) const
+    {
+        for (auto& section : m_sections)
+            func(section);
+    }
+    size_t num_sections() const noexcept { return m_sections.size(); }
     void save_to_book(QofBook* book, bool do_clear) const;
-    int num_sections() const noexcept { return m_sections.size(); }
     bool get_changed() const noexcept { return m_dirty; }
     void register_option(const char* section, GncOption&& option);
     void unregister_option(const char* section, const char* name);
     void set_default_section(const char* section);
     const GncOptionSection* const get_default_section() const noexcept;
-    std::string lookup_string_option(const char* section,
-                                            const char* name);
+    std::string lookup_string_option(const char* section, const char* name);
     template <typename ValueType>
     bool set_option(const char* section, const char* name, ValueType value)
     {
@@ -66,7 +96,7 @@ public:
             auto option{find_option(section, name)};
             if (!option)
                 return false;
-            option->get().set_value(value);
+            option->set_value(value);
             return true;
         }
         catch(const std::invalid_argument& err)
@@ -78,11 +108,16 @@ public:
 //    void set_selectable(const char* section, const char* name);
     void make_internal(const char* section, const char* name);
     void commit() {};
-    std::optional<std::reference_wrapper<GncOptionSection>> find_section(const std::string& section);
-    std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) {
-        return static_cast<const GncOptionDB&>(*this).find_option(section, name);
+    GncOptionSection* find_section(const std::string& sectname)
+    {
+        return const_cast<GncOptionSection*>(static_cast<const GncOptionDB&>(*this).find_section(sectname));
     }
-    std::optional<std::reference_wrapper<GncOption>> find_option(const std::string& section, const std::string& name) const;
+    const GncOptionSection* find_section(const std::string& sectname) const;
+    GncOption* find_option(const std::string& section, const char* name)
+    {
+        return const_cast<GncOption*>(static_cast<const GncOptionDB&>(*this).find_option(section, name));
+    }
+    const GncOption* find_option(const std::string& section, const char* name) const;
     std::ostream& save_to_scheme(std::ostream& oss,
                                  const char* options_prolog) const noexcept;
     std::istream& load_from_scheme(std::istream& iss) noexcept;
@@ -100,8 +135,8 @@ public:
                                         const std::string& name) const noexcept;
     std::istream& load_option_key_value(std::istream& iss);
 private:
-    std::optional<std::reference_wrapper<GncOptionSection>> m_default_section;
-    std::vector<GncOptionSection> m_sections;
+    GncOptionSection* m_default_section;
+    std::vector<GncOptionSectionPtr> m_sections;
     bool m_dirty = false;
 
     std::function<GncOptionUIItem*()> m_get_ui_value;
