@@ -226,10 +226,11 @@ struct KvpFrameImpl
     bool empty() const noexcept { return m_valuemap.empty(); }
     friend int compare(const KvpFrameImpl&, const KvpFrameImpl&) noexcept;
 
+    KvpFrame * get_child_frame_or_nullptr (Path const &) noexcept;
+
     private:
     map_type m_valuemap;
 
-    KvpFrame * get_child_frame_or_nullptr (Path const &) noexcept;
     KvpFrame * get_child_frame_or_create (Path const &) noexcept;
     void flatten_kvp_impl(std::vector <std::string>, std::vector <KvpEntry> &) const noexcept;
     KvpValue * set_impl (std::string const &, KvpValue *) noexcept;
