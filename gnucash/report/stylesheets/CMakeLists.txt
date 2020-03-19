@@ -22,11 +22,26 @@ gnc_add_scheme_targets(scm-report-stylesheets-1
     MAKE_LINKS)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash report stylesheet-easy" "gnucash report stylesheets footer" "scm-report-stylesheets-1" "")
-gnc_add_scheme_deprecated_module ("gnucash report stylesheet-fancy" "gnucash report stylesheets footer" "scm-report-stylesheets-1" "")
-gnc_add_scheme_deprecated_module ("gnucash report stylesheet-footer" "gnucash report stylesheets footer" "scm-report-stylesheets-1" "")
-gnc_add_scheme_deprecated_module ("gnucash report stylesheet-head-or-tail" "gnucash report stylesheets head-or-tail" "scm-report-stylesheets-1" "")
-gnc_add_scheme_deprecated_module ("gnucash report stylesheet-plain" "gnucash report stylesheets plain" "scm-report-stylesheets-1" "")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report stylesheet-easy"
+    NEW_MODULE "gnucash report stylesheets footer"
+    DEPENDS "scm-report-stylesheets-1")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE  "gnucash report stylesheet-fancy"
+    NEW_MODULE "gnucash report stylesheets footer"
+    DEPENDS "scm-report-stylesheets-1")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE  "gnucash report stylesheet-footer"
+    NEW_MODULE "gnucash report stylesheets footer"
+    DEPENDS "scm-report-stylesheets-1")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE  "gnucash report stylesheet-head-or-tail"
+    NEW_MODULE "gnucash report stylesheets head-or-tail"
+    DEPENDS "scm-report-stylesheets-1")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE  "gnucash report stylesheet-plain"
+    NEW_MODULE "gnucash report stylesheets plain"
+    DEPENDS "scm-report-stylesheets-1")
 
 add_custom_target(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1)
 

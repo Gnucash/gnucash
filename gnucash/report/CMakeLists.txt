@@ -119,16 +119,28 @@ gnc_add_scheme_targets(scm-report-eguile
     DEPENDS scm-report-eguile-parts)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash report eguile-gnc" "gnucash eguile" "scm-report-eguile" "")
-gnc_add_scheme_deprecated_module ("gnucash report eguile-html-utilities" "gnucash eguile" "scm-report-eguile" "")
-gnc_add_scheme_deprecated_module ("gnucash report eguile-utilities" "gnucash eguile" "scm-report-eguile" "")
-gnc_add_scheme_deprecated_module ("gnucash report report-system" "gnucash report" "scm-report-2" "")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report eguile-gnc"
+    NEW_MODULE "gnucash eguile"
+    DEPENDS "scm-report-eguile")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report eguile-html-utilities"
+    NEW_MODULE "gnucash eguile"
+    DEPENDS "scm-report-eguile")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report eguile-utilities"
+    NEW_MODULE "gnucash eguile"
+    DEPENDS "scm-report-eguile")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report report-system"
+    NEW_MODULE "gnucash report"
+    DEPENDS "scm-report-2")
 
-gnc_add_scheme_deprecated_module ("gnucash report business-reports" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash report report-system collectors" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash report report-system report-collectors" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash report stylesheets" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash report utility-reports" "" "" "")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash report business-reports")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash report report-system collectors")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash report report-system report-collectors")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash report stylesheets")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash report utility-reports")
 
 add_custom_target(scm-report ALL DEPENDS scm-report-2 scm-report-eguile)
 

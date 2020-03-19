@@ -171,54 +171,198 @@ add_custom_target(scm-reports ALL DEPENDS
     scm-reports-de_DE)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports" "gnucash reports" "scm-rpt-reports" "")
-gnc_add_scheme_deprecated_module ("gnucash report aging" "gnucash reports aging" "scm-reports-common" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports average-balance" "gnucash reports example average-balance" "scm-reports-example" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports daily-reports" "gnucash reports example daily-reports" "scm-reports-example" "")
-gnc_add_scheme_deprecated_module ("gnucash report hello-world" "gnucash reports example hello-world" "scm-reports-example" "")
-gnc_add_scheme_deprecated_module ("gnucash report test-graphing" "gnucash reports example sample-graphs" "scm-reports-example" "")
-gnc_add_scheme_deprecated_module ("gnucash report locale-specific de_DE" "gnucash reports locale-specific de_DE taxtxf" "scm-reports-de_DE" "")
-gnc_add_scheme_deprecated_module ("gnucash report taxtxf-de_DE" "gnucash reports locale-specific de_DE taxtxf" "scm-reports-de_DE" "")
-gnc_add_scheme_deprecated_module ("gnucash report locale-specific us" "gnucash reports locale-specific us taxtxf" "scm-reports-us" "")
-gnc_add_scheme_deprecated_module ("gnucash report taxtxf" "gnucash reports locale-specific us taxtxf" "scm-reports-us" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports account-piecharts" "gnucash reports standard account-piecharts" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports account-summary" "gnucash reports standard account-summary" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports advanced-portfolio" "gnucash reports standard advanced-portfolio" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports balance-forecast" "gnucash reports standard balance-forecast" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports balance-sheet" "gnucash reports standard balance-sheet" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report balsheet-eg" "gnucash reports standard balsheet-eg" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports balsheet-pnl" "gnucash reports standard balsheet-pnl" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports budget-balance-sheet" "gnucash reports standard budget-balance-sheet" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports budget-barchart" "gnucash reports standard budget-barchart" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports budget-flow" "gnucash reports standard budget-flow" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports budget" "gnucash reports standard budget" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports budget-income-statement" "gnucash reports standard budget-income-statement" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports cashflow-barchart" "gnucash reports standard cashflow-barchart" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports cash-flow" "gnucash reports standard cash-flow" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports category-barchart" "gnucash reports standard category-barchart" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report customer-summary" "gnucash reports standard customer-summary" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report welcome-to-gnucash" "gnucash reports standard dashboard" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports equity-statement" "gnucash reports standard equity-statement" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports general-journal" "gnucash reports standard general-journal" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports general-ledger" "gnucash reports standard general-ledger" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports income-gst-statement" "gnucash reports standard income-gst-statement" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports income-statement" "gnucash reports standard income-statement" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report invoice" "gnucash reports standard invoice" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report job-report" "gnucash reports standard job-report" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports net-charts" "gnucash reports standard net-charts" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report owner-report" "gnucash reports standard owner-report" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report payables" "gnucash reports standard payables" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports portfolio" "gnucash reports standard portfolio" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports price-scatter" "gnucash reports standard price-scatter" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report receipt" "gnucash reports standard receipt" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report receivables" "gnucash reports standard receivables" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports reconcile-report" "gnucash reports standard reconcile-report" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports register" "gnucash reports standard register" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports sx-summary" "gnucash reports standard account-summary" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report taxinvoice" "gnucash reports standard taxinvoice" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports transaction" "gnucash reports standard transaction" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report standard-reports trial-balance" "gnucash reports standard trial-balance" "scm-reports-standard" "")
-gnc_add_scheme_deprecated_module ("gnucash report view-column" "gnucash reports standard view-column" "scm-reports-standard" "")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports"
+    NEW_MODULE "gnucash reports"
+    DEPENDS "scm-rpt-reports")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report aging"
+    NEW_MODULE "gnucash reports aging"
+    DEPENDS "scm-reports-common")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports average-balance"
+    NEW_MODULE "gnucash reports example average-balance"
+    DEPENDS "scm-reports-example")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports daily-reports"
+    NEW_MODULE "gnucash reports example daily-reports"
+    DEPENDS "scm-reports-example")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report hello-world"
+    NEW_MODULE "gnucash reports example hello-world"
+    DEPENDS "scm-reports-example")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report test-graphing"
+    NEW_MODULE "gnucash reports example sample-graphs"
+    DEPENDS "scm-reports-example")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report locale-specific de_DE"
+    NEW_MODULE "gnucash reports locale-specific de_DE taxtxf"
+    DEPENDS "scm-reports-de_DE")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report taxtxf-de_DE"
+    NEW_MODULE "gnucash reports locale-specific de_DE taxtxf"
+    DEPENDS "scm-reports-de_DE")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report locale-specific us"
+    NEW_MODULE "gnucash reports locale-specific us taxtxf"
+    DEPENDS "scm-reports-us")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report taxtxf"
+    NEW_MODULE "gnucash reports locale-specific us taxtxf"
+    DEPENDS "scm-reports-us")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports account-piecharts"
+    NEW_MODULE "gnucash reports standard account-piecharts"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports account-summary"
+    NEW_MODULE "gnucash reports standard account-summary"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports advanced-portfolio"
+    NEW_MODULE "gnucash reports standard advanced-portfolio"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports balance-forecast"
+    NEW_MODULE "gnucash reports standard balance-forecast"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports balance-sheet"
+    NEW_MODULE "gnucash reports standard balance-sheet"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report balsheet-eg"
+    NEW_MODULE "gnucash reports standard balsheet-eg"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports balsheet-pnl"
+    NEW_MODULE "gnucash reports standard balsheet-pnl"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports budget-balance-sheet"
+    NEW_MODULE "gnucash reports standard budget-balance-sheet"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports budget-barchart"
+    NEW_MODULE "gnucash reports standard budget-barchart"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports budget-flow"
+    NEW_MODULE "gnucash reports standard budget-flow"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports budget"
+    NEW_MODULE "gnucash reports standard budget"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports budget-income-statement"
+    NEW_MODULE "gnucash reports standard budget-income-statement"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports cashflow-barchart"
+    NEW_MODULE "gnucash reports standard cashflow-barchart"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports cash-flow"
+    NEW_MODULE "gnucash reports standard cash-flow"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports category-barchart"
+    NEW_MODULE "gnucash reports standard category-barchart"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report customer-summary"
+    NEW_MODULE "gnucash reports standard customer-summary"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report welcome-to-gnucash"
+    NEW_MODULE "gnucash reports standard dashboard"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports equity-statement"
+    NEW_MODULE "gnucash reports standard equity-statement"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports general-journal"
+    NEW_MODULE "gnucash reports standard general-journal"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports general-ledger"
+    NEW_MODULE "gnucash reports standard general-ledger"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports income-gst-statement"
+    NEW_MODULE "gnucash reports standard income-gst-statement"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports income-statement"
+    NEW_MODULE "gnucash reports standard income-statement"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report invoice"
+    NEW_MODULE "gnucash reports standard invoice"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report job-report"
+    NEW_MODULE "gnucash reports standard job-report"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports net-charts"
+    NEW_MODULE "gnucash reports standard net-charts"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report owner-report"
+    NEW_MODULE "gnucash reports standard owner-report"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report payables"
+    NEW_MODULE "gnucash reports standard payables"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports portfolio"
+    NEW_MODULE "gnucash reports standard portfolio"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports price-scatter"
+    NEW_MODULE "gnucash reports standard price-scatter"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report receipt"
+    NEW_MODULE "gnucash reports standard receipt"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report receivables"
+    NEW_MODULE "gnucash reports standard receivables"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports reconcile-report"
+    NEW_MODULE "gnucash reports standard reconcile-report"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports register"
+    NEW_MODULE "gnucash reports standard register"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports sx-summary"
+    NEW_MODULE "gnucash reports standard account-summary"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report taxinvoice"
+    NEW_MODULE "gnucash reports standard taxinvoice"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports transaction"
+    NEW_MODULE "gnucash reports standard transaction"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report standard-reports trial-balance"
+    NEW_MODULE "gnucash reports standard trial-balance"
+    DEPENDS "scm-reports-standard")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash report view-column"
+    NEW_MODULE "gnucash reports standard view-column"
+    DEPENDS "scm-reports-standard")
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME}
     ${reports_common_SCHEME} ${reports_standard_SCHEME}  ${reports_standard_SCHEME_2}

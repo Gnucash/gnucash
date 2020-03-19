@@ -67,7 +67,10 @@ gnc_add_scheme_test_targets(scm-test-core
 add_dependencies(check scm-test-core)
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash unittest-support" "tests unittest-support" "scm-test-core" "")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash unittest-support"
+    NEW_MODULE "tests unittest-support"
+    DEPENDS "scm-test-core")
 
 
 if (GTEST_SRC_DIR)

@@ -43,7 +43,10 @@ gnc_add_scheme_test_targets(scm-test-engine-extras
     DEPENDS "${GUILE_DEPENDS}")
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module ("gnucash engine test test-extras" "tests test-engine-extras" "scm-test-engine-extras" "")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash engine test test-extras"
+    NEW_MODULE "tests test-engine-extras"
+    DEPENDS "scm-test-engine-extras")
 
 gnc_add_scheme_test_targets(scm-test-engine
     SOURCES "${bindings_test_SCHEME}"
@@ -61,7 +64,10 @@ if (HAVE_SRFI64)
         DEPENDS "${GUILE_DEPENDS};scm-test-engine-extras;scm-srfi64-extras")
 
     # Module interfaces deprecated in 4.x, will be removed for 5.x
-    gnc_add_scheme_deprecated_module ("gnucash engine test srfi64-extras" "tests srfi64-extras" "scm-srfi64-extras" "")
+    gnc_add_scheme_deprecated_module (
+        OLD_MODULE "gnucash engine test srfi64-extras"
+        NEW_MODULE "tests srfi64-extras"
+        DEPENDS "scm-srfi64-extras")
 
     set (scm_tests_with_srfi64_SOURCES
         test-business-core.scm
@@ -121,5 +127,8 @@ set(test_guile_DIST
 )
 
 # Define two imaginary deprecated guile modules to test the compat file generation code
-gnc_add_scheme_deprecated_module ("gnucash deprecated-module" "" "" "")
-gnc_add_scheme_deprecated_module ("gnucash superseded-module" "gnucash utilities" "scm-engine" "")
+gnc_add_scheme_deprecated_module (OLD_MODULE "gnucash deprecated-module")
+gnc_add_scheme_deprecated_module (
+    OLD_MODULE "gnucash superseded-module"
+    NEW_MODULE "gnucash utilities"
+    DEPENDS "scm-engine")
