@@ -1591,10 +1591,26 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     GDate start_date, first_date;
 
     g_date_clear(&start_date, 1);
-
+    
+    /* There is an issue is with gnc_frequency_save_to_recurrence: it sets the first date to
+     * the selected one without checking that it's not a weekend, which is problematic if the
+     * user does not want recurrences to fall on a weekend. */
     gnc_frequency_save_to_recurrence(sxed->gncfreq, &recurrences, &start_date);
+    /* One simple solution: if monthly, subtract 1 month from the first and second (in case of by-montly)
+     * instances of recurrence. The mechanism for selecting the next recurrences then fixes the problem. */
+    Recurrence* first_rec = (Recurrence*) recurrences->data;
+    if(first_rec != NULL && first_rec->ptype == PERIOD_MONTH)
+    {
+        g_date_subtract_months(&first_rec->start,1);
+        GList* second = recurrences->next;
+        if(second != NULL)
+            g_date_subtract_months(&((Recurrence*) second->data)->start,1);
+    }
+    
     g_date_subtract_days(&start_date, 1);
     recurrenceListNextInstance(recurrences, &start_date, &first_date);
+    /* Re-add 1 to the start date, otherwise you'll allow the first recurrence to fall before the start date */
+    g_date_add_days(&start_date, 1);
 
     /* Deal with the fact that this SX may have been run before [the
      * calendar should only show upcoming instances]... */
