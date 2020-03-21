@@ -252,6 +252,16 @@ recn_get_account (RecnWindow *recnData)
 }
 
 
+static void
+gnc_add_colorized_amount (gpointer obj, gnc_numeric amt,
+                          GNCPrintAmountInfo print_info, gboolean reverse)
+{
+    if (!obj) return;
+    if (reverse) amt = gnc_numeric_neg (amt);
+    gnc_set_label_color (GTK_WIDGET (obj), amt);
+    gtk_label_set_text (GTK_LABEL (obj), xaccPrintAmount (amt, print_info));
+}
+
 /********************************************************************\
  * recnRecalculateBalance                                           *
  *   refreshes the balances in the reconcile window                 *
@@ -264,7 +274,6 @@ static gnc_numeric
 recnRecalculateBalance (RecnWindow *recnData)
 {
     Account *account;
-    const char *amount;
     gnc_numeric debit;
     gnc_numeric credit;
     gnc_numeric starting;
@@ -280,73 +289,33 @@ recnRecalculateBalance (RecnWindow *recnData)
         return gnc_numeric_zero ();
 
     reverse_balance = gnc_reverse_balance(account);
-
-    /* update the starting balance */
     include_children = xaccAccountGetReconcileChildrenStatus(account);
     starting = gnc_ui_account_get_reconciled_balance(account, include_children);
     print_info = gnc_account_print_info (account, TRUE);
 
-    /*
-     * Do not reverse the balance here.  It messes up the math in the
-     * reconciliation window.  Also, the balance should show up as a
-     * positive number in the reconciliation window to match the positive
-     * number that shows in the register window.
-     */
-
-    amount = xaccPrintAmount(starting, print_info);
-    gnc_set_label_color(recnData->starting, starting);
-    gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
-    if (reverse_balance)
-        starting = gnc_numeric_neg (starting);
-
-    /* update the statement date */
-    amount = qof_print_date(recnData->statement_date);
-    gtk_label_set_text(GTK_LABEL(recnData->recn_date), amount);
-
-    /* update the ending balance */
     ending = recnData->new_ending;
-    if (reverse_balance)
-        ending = gnc_numeric_neg (ending);
-    amount = xaccPrintAmount(ending, print_info);
-    gnc_set_label_color(recnData->ending, ending);
-    gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
-    if (reverse_balance)
-        ending = gnc_numeric_neg (ending);
-
     debit = gnc_reconcile_view_reconciled_balance
             (GNC_RECONCILE_VIEW(recnData->debit));
-
     credit = gnc_reconcile_view_reconciled_balance
              (GNC_RECONCILE_VIEW(recnData->credit));
 
-    /* Update the total debit and credit fields */
-    amount = xaccPrintAmount(debit, print_info);
-    gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
-
-    amount = xaccPrintAmount(credit, print_info);
-
-    gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
-
-    /* update the reconciled balance */
-    reconciled = gnc_numeric_add_fixed (starting,
-                                        gnc_numeric_sub_fixed (debit, credit));
+    reconciled = gnc_numeric_sub_fixed (debit, credit);
     if (reverse_balance)
-        reconciled = gnc_numeric_neg (reconciled);
-    amount = xaccPrintAmount(reconciled, print_info);
-    gnc_set_label_color(recnData->reconciled, reconciled);
-    gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
-    if (reverse_balance)
-        reconciled = gnc_numeric_neg (reconciled);
+        reconciled = gnc_numeric_sub_fixed (reconciled, starting);
+    else
+        reconciled = gnc_numeric_add_fixed (reconciled, starting);
 
-    /* update the difference */
     diff = gnc_numeric_sub_fixed (ending, reconciled);
-    if (reverse_balance)
-        diff = gnc_numeric_neg (diff);
-    amount = xaccPrintAmount(diff, print_info);
-    gnc_set_label_color(recnData->difference, diff);
-    gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
-    if (reverse_balance)
-        diff = gnc_numeric_neg (diff);
+
+    gtk_label_set_text(GTK_LABEL(recnData->recn_date),
+                       qof_print_date(recnData->statement_date));
+
+    gnc_add_colorized_amount (recnData->starting, starting, print_info, FALSE);
+    gnc_add_colorized_amount (recnData->ending, ending, print_info, reverse_balance);
+    gnc_add_colorized_amount (recnData->total_debit, debit, print_info, FALSE);
+    gnc_add_colorized_amount (recnData->total_credit, credit, print_info, FALSE);
+    gnc_add_colorized_amount (recnData->reconciled, reconciled, print_info, reverse_balance);
+    gnc_add_colorized_amount (recnData->difference, diff, print_info, reverse_balance);
 
     action = gtk_action_group_get_action (recnData->action_group,
                                           "RecnFinishAction");
