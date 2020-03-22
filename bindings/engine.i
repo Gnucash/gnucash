@@ -71,6 +71,23 @@ GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
 %typemap(newfree) gchar * "g_free($1);"
+%typemap(newfree) DatesList * "g_list_free_full($1, g_free);"
+
+%typemap(out) DatesList *
+{
+    SCM lst = SCM_EOL;
+    for (GList* node = $1; node; node = node->next)
+    {
+        time64 *date = node->data;
+        lst = scm_cons (scm_from_int64 (*date), lst);
+    }
+    $result = scm_reverse (lst);
+}
+
+%typemap(out) gnc_numeric *
+{
+    $result = ($1) ? gnc_numeric_to_scm(*($1)) : SCM_BOOL_F;
+}
 
 /* These need to be here so that they are *before* the function
 declarations in the header files, some of which are included by

@@ -211,6 +211,8 @@ typedef GList                  TransList;
 typedef GList                  AccountGUIDList;
 /** GList of GUIDs of a QofBook */
 typedef GList                  BookGUIDList;
+/** GList of time64 */
+typedef GList                  DatesList;
 
 typedef void (*EngineCommitErrorCallback)( gpointer data, QofBackendError errcode );
 
