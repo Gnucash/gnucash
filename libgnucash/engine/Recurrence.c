@@ -183,6 +183,7 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
 {
     PeriodType pt;
     const GDate *start;
+    GDate adjusted_start;
     guint mult;
     WeekendAdjust wadj;
 
@@ -191,20 +192,40 @@ recurrenceNextInstance(const Recurrence *r, const GDate *ref, GDate *next)
     g_return_if_fail(g_date_valid(&r->start));
     g_return_if_fail(g_date_valid(ref));
 
-    /* If the ref date comes before the start date then the next
-       occurrence is always the start date, and we're done. */
     start = &r->start;
-    if (g_date_compare(ref, start) < 0)
+    mult = r->mult;
+    pt = r->ptype;
+    wadj = r->wadj;
+    /* If the ref date comes before the start date then the next
+     occurrence is always the start date, and we're done. */
+    // However, it's possible for the start date to fall on an exception (a weekend), in that case, it needs to be corrected.
+    adjusted_start = *start;
+    if (pt == PERIOD_YEAR || pt == PERIOD_MONTH || pt == PERIOD_END_OF_MONTH)
     {
-        g_date_set_julian(next, g_date_get_julian(start));
+        if (g_date_get_weekday(&adjusted_start) == G_DATE_SATURDAY || g_date_get_weekday(&adjusted_start) == G_DATE_SUNDAY)
+        {
+            switch (wadj)
+            {
+                case WEEKEND_ADJ_BACK:
+                    g_date_subtract_days(&adjusted_start, g_date_get_weekday(&adjusted_start) == G_DATE_SATURDAY ? 1 : 2);
+                    break;
+                case WEEKEND_ADJ_FORWARD:
+                    g_date_add_days(&adjusted_start, g_date_get_weekday(&adjusted_start) == G_DATE_SATURDAY ? 2 : 1);
+                    break;
+                case WEEKEND_ADJ_NONE:
+                default:
+                    break;
+            }
+        }
+    }
+    if (g_date_compare(ref, &adjusted_start) < 0)
+    {
+        g_date_set_julian(next, g_date_get_julian(&adjusted_start));
         return;
     }
     g_date_set_julian(next, g_date_get_julian(ref)); /* start at refDate */
 
     /* Step 1: move FORWARD one period, passing exactly one occurrence. */
-    mult = r->mult;
-    pt = r->ptype;
-    wadj = r->wadj;
     switch (pt)
     {
     case PERIOD_YEAR:
