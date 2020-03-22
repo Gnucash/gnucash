@@ -501,8 +501,42 @@ gnc_reconcile_view_class_init (GNCReconcileViewClass *klass)
 }
 
 
-static void
+static gboolean
 gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
+{
+    Split *current;
+
+    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), FALSE);
+    g_return_val_if_fail (view->reconciled != NULL, FALSE);
+
+    current = g_hash_table_lookup (view->reconciled, split);
+
+    if (current == NULL)
+    {
+        g_hash_table_insert (view->reconciled, split, split);
+        return TRUE;
+    }
+    else
+    {
+        g_hash_table_remove (view->reconciled, split);
+        return FALSE;
+    }
+}
+
+
+/** Insert or remove a split from the list of splits to be reconciled
+ *   (view->reconciled) so that all other splits in the same transaction
+ *   for the account being reconciled (including children), are the same
+ *   reconciliation state as the split that has been toggled.
+ *
+ *  @param view The view to use.
+ *
+ *  @param split The split to be inserted or removed
+ *
+ *  @param reconcile TRUE=insert, FALSE=remove
+ */
+static void
+gnc_reconcile_view_rec_or_unrec_split (GNCReconcileView *view, Split *split, gboolean reconcile)
 {
     Split *current;
 
@@ -511,15 +545,15 @@ gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
 
     current = g_hash_table_lookup (view->reconciled, split);
 
-    if (current == NULL)
+    if (current == NULL && reconcile)
         g_hash_table_insert (view->reconciled, split, split);
-    else
+    if ((current != NULL) && (!reconcile))
         g_hash_table_remove (view->reconciled, split);
 }
 
 
 static void
-gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Split *split)
+gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Split *split, gboolean reconcile)
 {
     GList       *child_accounts, *node;
     Transaction *transaction;
@@ -529,7 +563,8 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
      * in the same hierarchy as the account being reconciled (not necessarily
      * the account this split is from.)
      *
-     * For each of these splits toggle them all to the same state.
+     * For each of these splits set them to the same state as the split whose
+     * checkbox was toggled.
      */
     child_accounts = gnc_account_get_descendants (account);
     child_accounts = g_list_prepend (child_accounts, account);
@@ -578,7 +613,8 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
             {
                 gboolean toggled;
                 gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, !toggled, -1);
+                if (toggled != reconcile)
+                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, reconcile, -1);
                 break;
             }
 
@@ -586,7 +622,7 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
         }
 
         /* ...and toggle its reconciled state in the internal hash */
-        gnc_reconcile_view_toggle_split (current_view, other_split);
+        gnc_reconcile_view_rec_or_unrec_split (current_view, other_split, reconcile);
     }
     g_list_free (child_accounts);
 }
@@ -596,15 +632,16 @@ static void
 gnc_reconcile_view_toggle (GNCReconcileView *view, Split *split)
 {
     gboolean include_children;
+    gboolean is_reconciled;
 
     g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
     g_return_if_fail (view->reconciled != NULL);
 
-    gnc_reconcile_view_toggle_split (view, split);
+    is_reconciled = gnc_reconcile_view_toggle_split (view, split);
 
     include_children = xaccAccountGetReconcileChildrenStatus (view->account);
     if (include_children)
-        gnc_reconcile_view_toggle_children (view->account, view, split);
+        gnc_reconcile_view_toggle_children (view->account, view, split, is_reconciled);
 
     g_signal_emit (G_OBJECT (view),
                    reconcile_view_signals[TOGGLE_RECONCILED], 0, split);
