@@ -519,6 +519,58 @@ gnc_combo_cell_set_value (ComboCell *cell, const char *str)
     gnc_basic_cell_set_value (&cell->cell, str);
 }
 
+/* This function looks through full_store for a partial match with newval and returns the first
+ match (which must be subsequently freed). It fills out box->item_list with found matches */
+static gchar*
+gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, PopBox *box)
+{
+    gchar *case_normalized_newval = NULL;
+    GtkTreeIter iter;
+    gboolean valid;
+    gchar *normalized_newval = g_utf8_normalize (newval, -1, G_NORMALIZE_ALL);
+    int num_found=0;
+    gchar *first_found = NULL;
+    gchar *match_str = NULL;
+
+    if (normalized_newval)
+        case_normalized_newval = g_utf8_casefold (normalized_newval, -1);
+    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(full_store), &iter);
+    // Clear result list.
+    gnc_item_list_clear(box->item_list);
+    while (valid)
+    {
+        static const gint MAX_NUM_MATCHES = 30;
+        gchar *str_data = NULL;
+        gchar* case_normalized_str_data = NULL;
+        gchar* normalized_str_data = NULL;
+        gchar* ret = NULL;
+        gtk_tree_model_get (GTK_TREE_MODEL(full_store), &iter,0, &str_data,-1);
+        normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_ALL);
+        if (normalized_str_data)
+            case_normalized_str_data = g_utf8_casefold (normalized_str_data, -1);
+        // Does case_normalized_str_data contain case_normalized_newval?
+        ret = g_strrstr(case_normalized_str_data, case_normalized_newval);
+        if(ret!=NULL)
+        {
+            if(!num_found) first_found = g_strdup(str_data);
+            ++num_found;
+            /* The pop box can be very slow to display if it has too many items and it's not very useful
+             to have many. So limit that to a reasonable number. */
+            if(num_found < MAX_NUM_MATCHES)
+                gnc_item_list_append (box->item_list, str_data);
+        }
+        g_free(str_data);
+        g_free(case_normalized_str_data);
+        g_free(normalized_str_data);
+        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(full_store), &iter);
+    }
+    if(num_found)
+        match_str = first_found;
+    g_free(case_normalized_newval);
+    g_free(normalized_newval);
+    return match_str;
+}
+
 static void
 gnc_combo_cell_modify_verify (BasicCell *_cell,
                               const char *change,
@@ -531,14 +583,11 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
 {
     ComboCell *cell = (ComboCell *) _cell;
     PopBox *box = cell->cell.gui_private;
-    const char *match_str;
-    QuickFill *match;
-    gboolean pop_list;
+    gchar *match_str = NULL;
     glong newval_chars;
     glong change_chars;
-    GtkListStore* the_store;
-    int num_found=0;
-    gchar *first_found = NULL;
+    GtkListStore* full_store;
+    const gchar *box_str = NULL;
 
     newval_chars = g_utf8_strlen (newval, newval_len);
     change_chars = g_utf8_strlen (change, change_len);
@@ -546,11 +595,9 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
     if (box->in_list_select)
     {
         gnc_basic_cell_set_value_internal (_cell, newval);
-
         *cursor_position = -1;
         *start_selection = 0;
         *end_selection = -1;
-
         return;
     }
 
@@ -567,95 +614,43 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         gnc_basic_cell_set_value_internal (_cell, newval);
         return;
     }
-    // Legacy account name match.
-    match = gnc_quickfill_get_string_match (box->qf, newval);
-    match_str = gnc_quickfill_string (match);
-    the_store = cell->shared_store_full;
 
     if (type_ahead_search)
     {
-        // Type ahead account name match code.
-        gchar *case_normalized_newval = NULL;
-        GtkTreeIter iter;
-        gboolean valid;
-        gchar *normalized_newval = g_utf8_normalize (newval, -1, G_NORMALIZE_ALL);
-        if (normalized_newval)
-            case_normalized_newval = g_utf8_casefold (normalized_newval, -1);
-        valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(the_store), &iter);
-        // Clear result list.
-        gnc_item_list_clear(box->item_list);
-        while (valid)
-        {
-            static gint MAX_NUM_MATCHES = 30;
-            gchar *str_data = NULL;
-            gchar* case_normalized_str_data = NULL;
-            gchar* normalized_str_data = NULL;
-            gchar* ret = NULL;
-            gtk_tree_model_get (GTK_TREE_MODEL(the_store), &iter,0, &str_data,-1);
-            normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_ALL);
-            if (normalized_str_data)
-                case_normalized_str_data = g_utf8_casefold (normalized_str_data, -1);
-            // Does case_normalized_str_data contain case_normalized_newval?
-            ret = g_strrstr(case_normalized_str_data, case_normalized_newval);
-            if(ret!=NULL)
-            {
-                // We have match.
-                if(!num_found) first_found = g_strdup(str_data);
-                ++num_found	;
-                // The pop box can be very slow to display if it has too many items and it's not very useful
-                // to have many. So limit that to a reasonable number.
-                if(num_found < MAX_NUM_MATCHES)
-                    gnc_item_list_append (box->item_list, str_data);
-            }
-            g_free(str_data);
-            g_free(case_normalized_str_data);
-            g_free(normalized_str_data);
-            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(the_store), &iter);
-        }
-        if(!num_found)
-        {
-            match_str = NULL;
-        }
-        else
-        {
-            // This is probably wasteful.
-            match = gnc_quickfill_get_string_match (box->qf, first_found);
-            match_str = first_found;
-        }
-        g_free(case_normalized_newval);
-        g_free(normalized_newval);
-    }
-
-    if ((!type_ahead_search && match == NULL) || (match_str == NULL))
-    {
-        gnc_basic_cell_set_value_internal (_cell, newval);
-
-        block_list_signals (cell);
-        gnc_item_list_select (box->item_list, NULL);
-        unblock_list_signals (cell);
-        return;
-    }
-
-    if(type_ahead_search)
-    {
+        // Type-ahead search, we match any substring of the account name.
+        full_store = cell->shared_store_full;
+        match_str = gnc_combo_cell_type_ahead_search(newval, full_store, box);
         *start_selection = newval_chars;
         *end_selection = -1;
         *cursor_position = newval_chars;
+        // Do not change the string in the type-in box.
+        box_str = newval;
     }
     else
     {
-        // For type-ahead, we let the user type freely.
+        QuickFill *match = NULL;
+        // Match at start of account name using the quickfill
+        match = gnc_quickfill_get_string_match (box->qf, newval);
+        match_str = g_strdup(gnc_quickfill_string (match));
         *start_selection = newval_chars;
         *end_selection = -1;
         *cursor_position += change_chars;
+        // Update the string in the type-in box with the matched string.
+        box_str = match_str;
     }
 
-    if (!box->list_popped)
-        pop_list = auto_pop_combos;
-    else
-        pop_list = FALSE;
+    if (match_str == NULL)
+    {
+        // No match. Remove any selection in popup, don't change the type-in box
+        gnc_basic_cell_set_value_internal (_cell, newval);
+        block_list_signals (cell);
+        gnc_item_list_select (box->item_list, NULL);
+        unblock_list_signals (cell);
+        g_free(match_str);
+        return;
+    }
 
-    if (pop_list)
+    if (!box->list_popped && auto_pop_combos)
     {
         gnc_item_edit_show_popup (box->item_edit);
         box->list_popped = TRUE;
@@ -665,16 +660,8 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
     gnc_item_list_select (box->item_list, match_str);
     unblock_list_signals (cell);
 
-    if(!type_ahead_search)
-    {
-        gnc_basic_cell_set_value_internal (_cell, match_str);
-    }
-    else
-    {
-        // For type-ahead, don't change what the user typed.
-        gnc_basic_cell_set_value_internal (_cell, newval);
-    }
-    g_free(first_found);
+    gnc_basic_cell_set_value_internal (_cell, box_str);
+    g_free(match_str);
 }
 
 static gboolean
