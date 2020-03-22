@@ -7,8 +7,8 @@ set(test_aqb_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
   ${CMAKE_SOURCE_DIR}/gnucash/gnome
   ${CMAKE_SOURCE_DIR}/gnucash/register/ledger-core
-  ${CMAKE_SOURCE_DIR}/gnucash/register/regiser-gnome
-  ${CMAKE_SOURCE_DIR}/gnucash/register/regitser-core
+  ${CMAKE_SOURCE_DIR}/gnucash/register/register-gnome
+  ${CMAKE_SOURCE_DIR}/gnucash/register/register-core
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
