@@ -66,6 +66,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
 static gboolean auto_create_commodity = FALSE;
 static Account *ofx_parent_account = NULL;
+static gint num_trans_processed = 0;
 
 GList *ofx_created_commodites = NULL;
 
@@ -889,7 +890,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
         xaccTransDestroy(transaction);
         xaccTransCommitEdit(transaction);
     }
-
+    num_trans_processed += 1;
     return 0;
 }//end ofx_proc_transaction()
 
@@ -1064,7 +1065,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
         DEBUG("Filename found: %s", selected_filename);
 
         /* Create the Generic transaction importer GUI. */
-        gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42);
+        gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
 
         /* Look up the needed preferences */
         auto_create_commodity =
@@ -1085,8 +1086,21 @@ void gnc_file_ofx_import (GtkWindow *parent)
 #endif
 
         DEBUG("Opening selected file");
+        num_trans_processed = 0;
         libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
+        // Now would be a good time to see whether the view has anything in it!
+        if(gnc_gen_trans_list_empty(gnc_ofx_importer_gui))
+        {
+            gnc_gen_trans_list_delete (gnc_ofx_importer_gui);
+            if(num_trans_processed)
+                gnc_info_dialog(parent,_("OFX file imported, %d transactions processed, no transactions to match"),num_trans_processed);
+        }
+        else
+        {
+            gnc_gen_trans_list_show_all(gnc_ofx_importer_gui);
+        }
         g_free(selected_filename);
+        
     }
 
     if (ofx_created_commodites)
