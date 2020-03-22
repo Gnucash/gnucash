@@ -380,11 +380,17 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
         gnc_numeric i_num;
         GncSxVariable *as_var;
 
+        // JEAN: Xch TRANS is re-created.
         instance_i_value = gnc_sx_get_instance_count(rtn->parent->sx, rtn->temporal_state);
-        i_num = gnc_numeric_create(instance_i_value, 1);
+        SchedXaction* Foo = rtn->parent->sx;
+        Account* Faa = Foo->template_acct;
+        i_num = gnc_numeric_create(instance_i_value*1000, 1);
         as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
-
         g_hash_table_insert(rtn->variable_bindings, g_strdup("i"), as_var);
+        
+        i_num = gnc_numeric_create(31415, 1);
+        as_var = gnc_sx_variable_new_full("j", i_num, FALSE);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup("j"), as_var);
     }
 
     return rtn;
@@ -1034,7 +1040,7 @@ _get_sx_formula_value(const SchedXaction* sx,
         {
             parser_vars = gnc_sx_instance_get_variables_for_parser(variable_bindings);
         }
-        if (!gnc_exp_parser_parse_separate_vars(formula_str,
+        if (!gnc_exp_parser_parse_separate_vars(formula_str, // JEAN: THE FORMULA IS PARSED HERE.
                                                 numeric,
                                                 &parseErrorLoc,
                                                 parser_vars))
@@ -1082,7 +1088,7 @@ split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
     gnc_numeric final;
     gint gncn_error;
     SchedXaction *sx = creation_data->instance->parent->sx;
-
+    // JEAN: The value of the formula is computed here?
     _get_credit_formula_value(creation_data->instance, split, &credit_num,
                               creation_data->creation_errors);
     _get_debit_formula_value(creation_data->instance, split, &debit_num,
@@ -1326,7 +1332,7 @@ create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_gu
 {
     SxTxnCreationData creation_data;
     Account *sx_template_account;
-
+    // JEAN: ACCOUNT ACCESS FOR TANSACT?
     sx_template_account = gnc_sx_get_template_transaction_account(instance->parent->sx);
 
     creation_data.instance = instance;
