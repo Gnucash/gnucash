@@ -524,18 +524,17 @@ gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
 }
 
 
-/*****************************************************************************\
- * gnc_reconcile_view_rec_or_unrec_split                                     *
- *   insert or remove a child split from the list of splits to be reconciled *
- *   (view->reconciled) so that all other splits in the same transaction     *
- *   for the account being reconciled (including children), are the same     *
- *   reconciliation state as the split that has  been toggled                *
- *                                                                           *
- * Args: view           - the view to use                                    *
- *       split          - the split to be inserted or removed                *
- *       reconcile      - TRUE=insert, FALSE=remove                          *
- * Returns: void                                                             *
-\*****************************************************************************/
+/** Insert or remove a split from the list of splits to be reconciled
+ *   (view->reconciled) so that all other splits in the same transaction
+ *   for the account being reconciled (including children), are the same
+ *   reconciliation state as the split that has been toggled.
+ *
+ *  @param view The view to use.
+ *
+ *  @param split The split to be inserted or removed
+ *
+ *  @param reconcile TRUE=insert, FALSE=remove
+ */
 static void
 gnc_reconcile_view_rec_or_unrec_split (GNCReconcileView *view, Split *split, gboolean reconcile)
 {
