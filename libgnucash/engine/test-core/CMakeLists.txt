@@ -7,7 +7,6 @@ set(libgncmod_test_engine_SOURCES
 add_library(gncmod-test-engine STATIC ${libgncmod_test_engine_SOURCES})
 
 target_include_directories(gncmod-test-engine PRIVATE
-  ${CMAKE_PREFIX_PATH}/include
   ${GMODULE_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${CMAKE_BINARY_DIR}/common # for config.h
