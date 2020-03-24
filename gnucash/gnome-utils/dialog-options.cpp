@@ -189,9 +189,10 @@ section_reset_widgets(GncOptionSection* section)
 }
 
 GtkWidget* const
-gnc_option_get_gtk_widget (const GncOption& option)
+gnc_option_get_gtk_widget (const GncOption* option)
 {
-    auto ui_item{dynamic_cast<const GncOptionGtkUIItem*>(option.get_ui_item())};
+    if (!option) return nullptr;
+    auto ui_item{dynamic_cast<const GncOptionGtkUIItem*>(option->get_ui_item())};
     if (ui_item)
         return ui_item->get_widget();
 
@@ -250,12 +251,14 @@ gnc_options_dialog_changed (GNCOptionWin *win)
 static void
 widget_changed_cb(GtkWidget *widget, GncOption* option)
 {
+    if (!option) return;
     const_cast<GncOptionUIItem*>(option->get_ui_item())->set_dirty(true);
 }
 
 void
 option_changed_cb(GtkWidget *dummy, GncOption* option)
 {
+    if (!option) return;
     option->set_ui_item_from_option();
 }
 
@@ -274,7 +277,7 @@ option_changed_cb(GtkWidget *dummy, GncOption* option)
 static void
 set_selectable (GncOption& option, bool selectable)
 {
-    auto widget = gnc_option_get_gtk_widget(option);
+    auto widget = gnc_option_get_gtk_widget(&option);
     if (widget)
         gtk_widget_set_sensitive (widget, selectable);
 }
@@ -1490,7 +1493,7 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box,
     }
 
     option.set_ui_item_from_option();
-    auto widget{gnc_option_get_gtk_widget(option)};
+    auto widget{gnc_option_get_gtk_widget(&option)};
     if (type == GncOptionUIType::DATE_RELATIVE)
     {
         *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
@@ -1570,7 +1573,7 @@ account_select_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (*option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_select_all(selection);
@@ -1584,7 +1587,7 @@ account_clear_all_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GtkTreeSelection *selection;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (*option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_unselect_all(selection);
     widget_changed_cb(widget, option);
@@ -1597,7 +1600,7 @@ account_select_children_cb(GtkWidget *widget, gpointer data)
     GncTreeViewAccount *tree_view;
     GList *acct_list = NULL, *acct_iter = NULL;
 
-    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (*option));
+    tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     acct_list = gnc_tree_view_account_get_selected_accounts (tree_view);
 
     for (acct_iter = acct_list; acct_iter; acct_iter = acct_iter->next)
@@ -1815,7 +1818,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
     *packed = TRUE;
 
-    auto widget = gnc_option_get_gtk_widget(option);
+    auto widget = gnc_option_get_gtk_widget(&option);
     auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
     g_signal_connect(G_OBJECT(selection), "changed",
                      G_CALLBACK(widget_changed_cb), &option);
@@ -1877,7 +1880,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
 static void
 list_changed_cb(GtkTreeSelection *selection, GncOption* option)
 {
-    GtkTreeView *view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (*option));
+    GtkTreeView *view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (option));
     widget_changed_cb(GTK_WIDGET(view), option);
 }
 
@@ -1888,7 +1891,7 @@ list_select_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(*option));
+    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_select_all(selection);
     widget_changed_cb(GTK_WIDGET(view), option);
@@ -1901,7 +1904,7 @@ list_clear_all_cb(GtkWidget *widget, gpointer data)
     GtkTreeView *view;
     GtkTreeSelection *selection;
 
-    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (*option));
+    view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_unselect_all(selection);
     widget_changed_cb(GTK_WIDGET(view), option);
@@ -2045,7 +2048,7 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
                                          (G_OBJECT(page_box), "options-grid-row"));
 
     *enclosing = create_list_widget(option, NULL);
-    value = gnc_option_get_gtk_widget (option);
+    auto value = gnc_option_get_gtk_widget(&option);
 
     align_label (name_label);
 
@@ -2524,7 +2527,7 @@ gnc_plot_size_option_set_select_method(GncOption& option, bool set_buttons)
     GtkWidget *px_widget, *p_widget;
     GtkWidget *widget;
 
-    widget = gnc_option_get_gtk_widget (option);
+    widget = gnc_option_get_gtk_widget(&option);
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     // px_button item 0

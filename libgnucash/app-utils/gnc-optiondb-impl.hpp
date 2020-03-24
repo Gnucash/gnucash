@@ -51,6 +51,7 @@ public:
     ~GncOptionSection() = default;
 
     void foreach_option(std::function<void(GncOption&)> func);
+    void foreach_option(std::function<void(const GncOption&)> func) const;
     const std::string& get_name() const noexcept { return m_name; }
     size_t get_num_options() const noexcept { return m_options.size(); }
     void add_option(GncOption&& option);

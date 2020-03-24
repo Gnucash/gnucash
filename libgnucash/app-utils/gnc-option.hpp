@@ -81,7 +81,7 @@ public:
     const std::string& get_docstring() const;
     void set_ui_item(GncOptionUIItemPtr&& ui_elem);
     const GncOptionUIType get_ui_type() const;
-    const GncOptionUIItem* get_ui_item() const;
+    GncOptionUIItem* const get_ui_item() const;
     void set_ui_item_from_option();
     void set_option_from_ui_item();
     void make_internal();

@@ -192,7 +192,7 @@ GncOption::get_ui_type() const
                       }, *m_option);
 }
 
-const GncOptionUIItem*
+GncOptionUIItem* const
 GncOption::get_ui_item() const
 {
     return m_ui_item.get();

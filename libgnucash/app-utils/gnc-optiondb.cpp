@@ -44,6 +44,12 @@ GncOptionSection::foreach_option(std::function<void(GncOption&)> func)
 }
 
 void
+GncOptionSection::foreach_option(std::function<void(const GncOption&)> func) const
+{
+    std::for_each(m_options.begin(), m_options.end(), func);
+}
+
+void
 GncOptionSection::add_option(GncOption&& option)
 {
     m_options.emplace_back(std::move(option));
@@ -615,7 +621,7 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
         [book](GncOptionSectionPtr& section)
         {
             section->foreach_option(
-                [book, &section](auto& option)
+                [book, &section](GncOption& option)
                 {
                     /* qof_book_set_option wants a GSList path. Let's avoid allocating
                      * and make one here.
