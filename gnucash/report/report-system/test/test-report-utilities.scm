@@ -644,6 +644,13 @@
 (define (split->amount split)
   (and split (xaccSplitGetAmount split)))
 
+(define (set-reconcile txn date)
+  (for-each
+   (lambda (s)
+     (xaccSplitSetReconcile s #\y)
+     (xaccSplitSetDateReconciledSecs s date))
+   (xaccTransGetSplitList txn)))
+
 (define (test-get-account-at-dates)
   (test-group-with-cleanup "test-get-balance-at-dates"
     (let* ((env (create-test-env))
@@ -729,5 +736,40 @@
 
       (test-equal "1 txn in early slot"
         '(#f 10 10 10)
-        (gnc:account-accumulate-at-dates bank4 dates)))
+        (gnc:account-accumulate-at-dates bank4 dates))
+
+      ;; Tests split->date sorting. note the 3 txns created below are
+      ;; initially sorted by posted_date ie txn2 < txn3 <
+      ;; txn1. However the reconciled_date sorting will be
+      ;; different. The accumulator will test both the reconciled_date
+      ;; sorting and the splits being accumulated in the correct date
+      ;; buckets.
+      (let ((txn1 (env-transfer env 15 03 1971 income bank1 2))
+            (txn2 (env-transfer env 15 01 1971 income bank1 3))
+            (txn3 (env-transfer env 15 02 1971 income bank1 11)))
+
+        (define split->reconciled
+          (let ((accum 0))
+            (lambda (s)
+              (when (eqv? (xaccSplitGetReconcile s) #\y)
+                (set! accum (+ accum (xaccSplitGetAmount s))))
+              accum)))
+
+        (define (split->reconciled-date s)
+          (if (eqv? (xaccSplitGetReconcile s) #\y)
+              (xaccSplitGetDateReconciled s)
+              +inf.0))
+
+        (set-reconcile txn1 (gnc-dmy2time64 1 4 1971))
+        (set-reconcile txn2 (gnc-dmy2time64 1 4 1971))
+        (set-reconcile txn3 (gnc-dmy2time64 1 5 1971))
+
+        (test-equal "sort by reconcile-date"
+          '(#f 5 16)
+          (gnc:account-accumulate-at-dates
+           bank1 (list (gnc-dmy2time64 1 3 1971)
+                       (gnc-dmy2time64 1 4 1971)
+                       (gnc-dmy2time64 1 5 1971))
+           #:split->date split->reconciled-date
+           #:split->elt split->reconciled))))
     (teardown)))
