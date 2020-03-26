@@ -36,7 +36,7 @@ extern "C"
 class GncOptionDBTest : public ::testing::Test
 {
 protected:
-    GncOptionDBTest() : m_db{gnc_option_db_new()} {}
+    GncOptionDBTest() : m_db{std::make_unique<GncOptionDB>()} {}
 
     GncOptionDBPtr m_db;
 };
@@ -271,7 +271,9 @@ TEST_F(GncOptionDBTest, test_register_start_date_option)
 class GncOptionDBIOTest : public ::testing::Test
 {
 protected:
-    GncOptionDBIOTest() : m_book{gnc_get_current_book()}, m_root{gnc_account_create_root(m_book)}, m_db{gnc_option_db_new()}
+    GncOptionDBIOTest() :
+        m_book{gnc_get_current_book()}, m_root{gnc_account_create_root(m_book)},
+        m_db{std::make_unique<GncOptionDB>()}
     {
         auto create_account = [this](Account* parent, GNCAccountType type,
                                        const char* name)->Account* {

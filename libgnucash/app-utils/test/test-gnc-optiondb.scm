@@ -45,7 +45,7 @@
 
 (define (test-gnc-make-text-option)
   (test-begin "test-gnc-test-string-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (string-opt (gnc-register-string-option option-db "foo" "bar" "baz"
                                                  "Phony Option" "waldo")))
     (test-equal "waldo" (gnc-option-value option-db "foo" "bar"))
@@ -89,7 +89,7 @@
 
   (define (test-make-account-list-option book)
     (test-group "test-make-account-list-option"
-    (let ((optiondb (gnc-option-db-new))
+    (let ((optiondb (new-gnc-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-list-option optiondb "foo" "bar" "baz"
@@ -100,7 +100,7 @@
 
   (define (test-make-account-list-limited-option book)
     (test-group "test-make-account-list-option"
-    (let ((optiondb (gnc-option-db-new))
+    (let ((optiondb (new-gnc-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-list-limited-option optiondb "foo" "bar" "baz"
@@ -115,7 +115,7 @@
 
   (define (test-make-account-sel-limited-option book)
     (test-group "test-make-account-list-option"
-    (let ((optiondb (gnc-option-db-new))
+    (let ((optiondb (new-gnc-optiondb))
           (acctlist (gnc-account-list-from-types book
                                (list ACCT-TYPE-STOCK))))
       (gnc-register-account-sel-limited-option optiondb "salt" "pork" "baz"
@@ -148,7 +148,7 @@
   (assq-ref (assq-ref keylist key) info))
 
   (test-begin "test-gnc-test-multichoice-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (multilist (list
                        (list "plugh" (cons 'text "xyzzy") (cons 'tip "thud"))
                        (list "waldo" (cons 'text "pepper") (cons 'tip "salt"))
@@ -166,7 +166,7 @@
 
 (define (test-gnc-make-list-option)
   (test-begin "test-gnc-test-list-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (value-list (list (vector "AvgBalPlot" "Average" "Average Balance")
                            (vector "GainPlot" "Profit" "Profit (Gain minus Loss)")
                            (vector "GLPlot" "Gain/Loss" "Gain and Loss")))
@@ -181,7 +181,7 @@
 
 (define (test-gnc-make-date-option)
   (test-begin "test-gnc-test-date-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option option-db "foo" "bar"
                                              "baz" "Phony Option"
                                              (RelativeDatePeriod-today)))
@@ -193,7 +193,7 @@
 
 (define (test-gnc-make-date-set-option)
   (test-begin "test-gnc-test-date-set-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (date-opt (gnc-register-date-option-set
                     option-db "foo" "bar" "baz" "Phony Option"
                     (list (RelativeDatePeriod-today)
@@ -210,7 +210,7 @@
 
 (define (test-gnc-make-number-range-option)
   (test-begin "test-gnc-number-range-option")
-  (let* ((option-db (gnc-option-db-new))
+  (let* ((option-db (new-gnc-optiondb))
          (number-opt (gnc-register-number-range-option option-db "foo" "bar"
                                                        "baz" "Phony Option"
                                                        15 5 30 1)))

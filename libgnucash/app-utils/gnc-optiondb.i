@@ -415,6 +415,13 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         }
         GncOption_set_value_from_scm(db_opt, new_value);
     }
+
+    GncOptionDBPtr
+    new_gnc_optiondb()
+    {
+        auto db_ptr{std::make_unique<GncOptionDB>()};
+        return db_ptr;
+    }
 %}
 
 #endif //SWIGGUILE
