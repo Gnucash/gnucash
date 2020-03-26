@@ -174,7 +174,7 @@ TEST_F(GncOptionDBTest, test_register_account_sel_limited_option_fail_construct)
 
 TEST_F(GncOptionDBTest, test_register_multichoice_option)
 {
-    GncMultiChoiceOptionChoices choices{
+    GncMultichoiceOptionChoices choices{
         { "plugh", "xyzzy", "thud"},
         { "waldo", "pepper", "salt"},
         { "pork", "sausage", "links"},

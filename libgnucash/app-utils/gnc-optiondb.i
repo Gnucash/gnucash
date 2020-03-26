@@ -233,7 +233,7 @@ gnc_option_test_book_destroy(QofBook* book)
     $1 = &period_set;
 }
 
-%typemap(in) GncMultiChoiceOptionChoices&& (GncMultiChoiceOptionChoices choices)
+%typemap(in) GncMultichoiceOptionChoices&& (GncMultichoiceOptionChoices choices)
 {
     auto len = scm_to_size_t(scm_length($input));
     for (std::size_t i = 0; i < len; ++i)

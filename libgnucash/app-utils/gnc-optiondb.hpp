@@ -47,10 +47,10 @@ class GncOptionDB;
 using GncOptionAccountList = std::vector<const Account*>;
 
 using GncOptionAccountTypeList = std::vector<GNCAccountType>;
-using GncMultiChoiceOptionEntry = std::tuple<const std::string,
+using GncMultichoiceOptionEntry = std::tuple<const std::string,
                                              const std::string,
                                              const std::string>;
-using GncMultiChoiceOptionChoices = std::vector<GncMultiChoiceOptionEntry>;
+using GncMultichoiceOptionChoices = std::vector<GncMultichoiceOptionEntry>;
 
 /**
  * Extract a list of accounts in the book having one of the GNCAccountTypes in
@@ -141,12 +141,12 @@ void gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
 void gnc_register_multichoice_option(const GncOptionDBPtr& db,
                                      const char* section, const char* name,
                                      const char* key, const char* doc_string,
-                                     GncMultiChoiceOptionChoices&& value);
+                                     GncMultichoiceOptionChoices&& value);
 
 void gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, const char* value,
-                              GncMultiChoiceOptionChoices&& list);
+                              GncMultichoiceOptionChoices&& list);
 
 void gnc_register_number_range_option(const GncOptionDBPtr& db,
                                       const char* section, const char* name,

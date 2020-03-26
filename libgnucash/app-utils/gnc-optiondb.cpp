@@ -839,7 +839,7 @@ void
 gnc_register_multichoice_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string,
-                                GncMultiChoiceOptionChoices&& choices)
+                                GncMultichoiceOptionChoices&& choices)
 {
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
                 std::get<0>(choices.at(0)).c_str(), std::move(choices)}};
@@ -850,7 +850,7 @@ void
 gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, const char* value,
-                         GncMultiChoiceOptionChoices&& list)
+                         GncMultichoiceOptionChoices&& list)
 {
     GncOption option{GncOptionMultichoiceValue{section, name, key, doc_string,
                 value,  std::move(list), GncOptionUIType::LIST}};
