@@ -196,4 +196,4 @@
    counter-types))
 
 
-(gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)
+;;(gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)

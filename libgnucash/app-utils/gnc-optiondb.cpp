@@ -25,11 +25,14 @@
 #include <limits>
 #include <sstream>
 #include <kvp-value.hpp>
+#include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
 #include "gnc-option-ui.hpp"
 
-auto constexpr stream_max = std::numeric_limits<std::streamsize>::max();
+constexpr const char* log_module{G_LOG_DOMAIN};
+
+constexpr auto stream_max = std::numeric_limits<std::streamsize>::max();
 
 static bool
 operator==(const std::string& str, const char* cstr)
@@ -659,12 +662,6 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
         });
 }
 
-GncOptionDBPtr
-gnc_option_db_new(void)
-{
-    return GncOptionDBPtr{new GncOptionDB};
-}
-
 void
 gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
                            const char* name, const char* key,
@@ -1069,4 +1066,79 @@ gnc_register_end_date_option(const GncOptionDBPtr& db, const char* section,
     GncOption option{GncOptionDateValue(section, name, key, doc_string,
                                         ui_type, end_dates)};
     db->register_option(section, std::move(option));
+}
+
+GncOptionDB*
+gnc_option_db_new(void)
+{
+    return new GncOptionDB;
+}
+
+GncOptionDB*
+gnc_option_db_new_for_type(QofIdType type)
+{
+    if (strcmp(type, QOF_ID_BOOK))
+        return nullptr;
+    auto db = new GncOptionDB;
+    gnc_option_db_book_options(db);
+    return db;
+}
+
+void
+gnc_option_db_destroy(GncOptionDB* odb)
+{
+    delete odb;
+}
+
+GList*
+gnc_option_db_commit(GncOptionDB* odb)
+{
+    GList* errors{};
+    odb->foreach_section(
+        [&errors](GncOptionSectionPtr& section){
+            section->foreach_option(
+                [&errors](GncOption& option) {
+                    try
+                    {
+                        option.set_option_from_ui_item();
+                    }
+                    catch (const std::invalid_argument& err)
+                    {
+                        PWARN("Option %s:%s failed to set its value %s",
+                              option.get_section().c_str(),
+                              option.get_name().c_str(), err.what());
+                        errors = g_list_prepend(errors,
+                                                (void*)option.get_name().c_str());
+                    } });
+        });
+    return errors;
+}
+
+void
+gnc_option_db_clean(GncOptionDB* odb)
+{
+        odb->foreach_section(
+        [](GncOptionSectionPtr& section){
+            section->foreach_option(
+                [](GncOption& option) {
+                    option.set_ui_item_from_option();
+                });
+        });
+}
+
+void gnc_option_db_load(GncOptionDB* odb, QofBook* book)
+{
+    odb->load_from_kvp(book);
+}
+
+void
+gnc_option_db_save(GncOptionDB* odb, QofBook* book,
+                        gboolean clear_options)
+{
+    odb->save_to_book(book, static_cast<bool>(clear_options));
+}
+
+void
+gnc_option_db_book_options(GncOptionDB*)
+{
 }

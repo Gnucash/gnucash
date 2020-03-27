@@ -31,6 +31,7 @@ set (app_utils_HEADERS
   gnc-help-utils.h
   gnc-helpers.h
   gnc-option.hpp
+  gnc-optiondb.h
   gnc-optiondb.hpp
   gnc-prefs-utils.h
   gnc-state.h

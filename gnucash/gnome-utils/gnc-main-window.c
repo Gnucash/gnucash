@@ -70,7 +70,6 @@
 #include "gnc-warnings.h"
 #include "gnc-window.h"
 #include "gnc-prefs.h"
-#include "option-util.h"
 // +JSLED
 //#include "gnc-html.h"
 #include "gnc-autosave.h"
@@ -114,6 +113,19 @@ enum
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
+
+/**
+ * Processes selected options in the Book Options dialog: checks book_currency
+ * and use_split_action_for_num to see if features kvp should be set. To be used
+ * where ever a new book situation requires book option selection (e.g., not
+ * just in Book Options dialog opened from main window but also in new-file
+ * assistant).
+ *
+ *  @param GncOptionDB * options.
+ *
+ *  @return TRUE if gnc_gui_refresh_all should be called; otherwise FALSE.
+ **/
+extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
 
 /* Static Globals *******************************************************/
 
@@ -4164,7 +4176,7 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
 }
 
 gboolean
-gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
+gnc_book_options_dialog_apply_helper(GncOptionDB * options)
 {
     QofBook *book = gnc_get_current_book ();
     gboolean use_split_action_for_num_before =
@@ -4218,7 +4230,7 @@ static void
 gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
                                  gpointer user_data)
 {
-    GNCOptionDB * options = user_data;
+    GncOptionDB * options = user_data;
 
     if (!options) return;
 
@@ -4230,7 +4242,7 @@ static void
 gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
                                  gpointer user_data)
 {
-    GNCOptionDB * options = user_data;
+    GncOptionDB * options = user_data;
 
     gnc_options_dialog_destroy(optionwin);
     gnc_option_db_destroy(options);
@@ -4275,7 +4287,7 @@ GtkWidget *
 gnc_book_options_dialog_cb (gboolean modal, gchar *title, GtkWindow* parent)
 {
     QofBook *book = gnc_get_current_book ();
-    GNCOptionDB *options;
+    GncOptionDB *options;
     GNCOptionWin *optionwin;
 
     options = gnc_option_db_new_for_type (QOF_ID_BOOK);

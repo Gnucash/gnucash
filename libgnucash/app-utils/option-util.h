@@ -35,8 +35,7 @@
 
 typedef struct gnc_option GNCOption;
 typedef struct gnc_option_section GNCOptionSection;
-/* typedef struct gnc_option_db GNCOptionDB is in qof-book.h */
-
+typedef struct gnc_option_db GNCOptionDB;
 typedef int GNCOptionDBHandle;
 
 typedef SCM (*GNCOptionGetUIValue) (GNCOption *option);
@@ -64,18 +63,17 @@ SCM  gnc_option_get_ui_value (GNCOption *option);
 void gnc_option_set_ui_value (GNCOption *option, gboolean use_default);
 void gnc_option_set_selectable (GNCOption *option, gboolean selectable);
 
-GNCOptionDB * gnc_option_db_new (SCM guile_options);
-void          gnc_option_db_destroy (GNCOptionDB *odb);
+GNCOptionDB * gnc_option_db_new(SCM guile_options);
+void          gnc_option_db_destroy(GNCOptionDB *odb);
 
 /* Create an option DB for a particular type, and save/load from a kvp.
  * This assumes the gnc:*kvp-option-path* location for the options
  * in the kvp.
  */
-GNCOptionDB * gnc_option_db_new_for_type (QofIdType id_type);
-void gnc_option_db_load (GNCOptionDB* odb, QofBook *book);
-void gnc_option_db_save (GNCOptionDB* odb, QofBook *book, gboolean clear_all);
-
-void gnc_register_kvp_option_generator (QofIdType id_type, SCM generator);
+GNCOptionDB * gnc_option_db_new_for_type(QofIdType id_type);
+void gnc_option_db_load(GNCOptionDB* odb, QofBook *book);
+void gnc_option_db_save(GNCOptionDB* odb, QofBook *book, gboolean clear_all);
+void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
 
 void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionGetUIValue get_ui_value,

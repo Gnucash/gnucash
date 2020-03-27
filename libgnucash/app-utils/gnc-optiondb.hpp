@@ -73,15 +73,6 @@ gnc_account_list_from_types(QofBook *book,
 
 
 using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
-/**
- * Create an empty option database.
- *
- * It would be nice to use a std::shared_ptr here but Swig doesn't implement
- * that for Guile.
- * @return A newly allocated GncOptionDB. Use delete to destroy it.
- */
-GncOptionDBPtr gnc_option_db_new(void);
-
 void gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string, std::string value);

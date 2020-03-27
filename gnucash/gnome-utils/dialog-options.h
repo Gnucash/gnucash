@@ -24,7 +24,6 @@
 #define OPTIONS_DIALOG_H
 
 #include <libguile.h>
-#include <gtk/gtk.h>
 #ifdef __cplusplus
 class GncOption;
 class GncOptionDB;
@@ -37,10 +36,18 @@ extern "C"
 typedef GNCOption GncOption;
 typedef GNCOptionDB GncOptionDB;
 #endif
+#include <guile-mappings.h>
+#include <gtk/gtk.h>
 
-/** A simple wrapper that casts the gpointer result of
- * gnc_option_get_widget() already into a GtkWidget*. */
-GtkWidget* const gnc_option_get_gtk_widget (GncOption *option);
+
+/**
+ * Retrieve the GtkWidget* used for packing the option control.
+ *
+ * This is not ncessarily the widget that has the input or handles signals.
+ * @param option The option
+ * @return a GtkWidget* const
+ */
+GtkWidget* const gnc_option_get_gtk_widget (const GncOption* option);
 
 typedef struct gnc_option_win GNCOptionWin;
 

@@ -126,6 +126,8 @@ typedef struct
 
 } hierarchy_data;
 
+extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
+
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                  hierarchy_data  *data);
 void on_choose_account_categories_prepare (hierarchy_data  *data);

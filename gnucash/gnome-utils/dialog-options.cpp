@@ -24,11 +24,11 @@
 
 extern "C"
 {
-#include <config.h>
+#include <config.h> // Need this to include Account.h
 }
 
 #include <Account.h> // To include as C++ overriding later indirect includes
-#include "dialog-options.h"
+#include <libguile.h>
 extern "C"
 {
 #include <gtk/gtk.h>
@@ -62,6 +62,8 @@ extern "C"
 #include "misc-gnome-utils.h"
 }
 
+#include "dialog-options.h"
+#include <gnc-optiondb.hpp>
 #include <gnc-optiondb-impl.hpp>
 
 #define GNC_PREF_CLOCK_24H "clock-24h"
@@ -204,8 +206,7 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 {
     while (widget && !GTK_IS_WINDOW(widget))
         widget = gtk_widget_get_parent(widget);
-    if (widget == NULL)
-        return;
+    if (!widget) return;
 
     /* find the ok and cancel buttons, we know where they will be so do it
        this way as opposed to using gtk_container_foreach, much less iteration */
@@ -263,17 +264,16 @@ option_changed_cb(GtkWidget *dummy, GncOption* option)
 }
 
 
-/********************************************************************\
+/*
  * set_selectable                               *
- *   Change the selectable state of the widget that represents a    *
- *   GUI option.                                                    *
- *                                                                  *
- * Args: option      - option to change widget state for            *
- *       selectable  - if false, update the widget so that it       *
- *                     cannot be selected by the user.  If true,    *
- *                     update the widget so that it can be selected.*
- * Return: nothing                                                  *
-\********************************************************************/
+ *   Change the selectable state of the widget that represents a
+ *   GUI option.
+ *
+ * option      - option to change widget state for
+ * selectable  - if false, update the widget so that it
+ *                     cannot be selected by the user.  If true,
+ *                     update the widget so that it can be selected.
+ */
 static void
 set_selectable (GncOption& option, bool selectable)
 {
@@ -282,6 +282,7 @@ set_selectable (GncOption& option, bool selectable)
         gtk_widget_set_sensitive (widget, selectable);
 }
 
+// This do-nothing template is specialized for each GncOptionUIType.
 template<GncOptionUIType type> GtkWidget*
 create_option_widget(GncOption& option, GtkGrid*, GtkLabel*, char*, GtkWidget**,
                      bool*)
@@ -489,9 +490,8 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
  *   builds an options dialog given a property box and an options   *
  *   database and make the dialog visible                           *
  *                                                                  *
- * Args: propertybox - gnome property box to use                    *
- *       odb         - option database to use                       *
- * Return: nothing                                                  *
+ * @param propertybox - gnome property box to use                    *
+ * @param odb         - option database to use                       *
 \********************************************************************/
 void
 gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
@@ -506,10 +506,9 @@ gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
  *   database and make the dialog visible depending on the          *
  *   show_dialog flag                                               *
  *                                                                  *
- * Args: propertybox - gnome property box to use                    *
- *       odb         - option database to use                       *
- *       show_dialog - should dialog be made visible or not         *
- * Return: nothing                                                  *
+ * @param propertybox - gnome property box to use                    *
+ * @param odb         - option database to use                       *
+ * @param show_dialog - should dialog be made visible or not         *
 \********************************************************************/
 void
 gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
@@ -723,8 +722,7 @@ gnc_options_dialog_new(gchar *title, GtkWindow *parent)
     return gnc_options_dialog_new_modal(FALSE, title, NULL, parent);
 }
 
-/* gnc_options_dialog_new_modal:
- *
+/**
  *   - Opens the dialog-options glade file
  *   - Connects signals specified in the builder file
  *   - Sets the window's title
@@ -1000,7 +998,7 @@ public:
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_TEXT_VIEW(get_widget())};
-        option.set_value(xxxgtk_textview_get_text(widget));
+        option.set_value(std::string{xxxgtk_textview_get_text(widget)});
     }
 };
 
@@ -1625,7 +1623,7 @@ show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
         option->get_ui_type() != GncOptionUIType::ACCOUNT_SEL)
         return;
 
-    auto tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
+    auto tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget(option));
     AccountViewInfo avi;
     gnc_tree_view_account_get_view_info (tree_view, &avi);
     avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -2042,10 +2040,8 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
                                              GtkWidget **enclosing,
                                              bool *packed)
 {
-    GtkWidget *value;
-    GtkWidget *eventbox;
-    gint       grid_row = GPOINTER_TO_INT(g_object_get_data
-                                         (G_OBJECT(page_box), "options-grid-row"));
+    auto grid_row = GPOINTER_TO_INT(g_object_get_data
+                                    (G_OBJECT(page_box), "options-grid-row"));
 
     *enclosing = create_list_widget(option, NULL);
     auto value = gnc_option_get_gtk_widget(&option);
@@ -2054,7 +2050,7 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
 
     /* Pack option widget into an extra eventbox because otherwise the
        "documentation" tooltip is not displayed. */
-    eventbox = gtk_event_box_new();
+    auto eventbox = gtk_event_box_new();
     gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
 
     gtk_grid_attach (GTK_GRID(page_box), eventbox, 1, grid_row, 1, 1);
@@ -2166,7 +2162,7 @@ public:
         auto color_button = GTK_COLOR_CHOOSER(get_widget());
         gtk_color_chooser_set_rgba(color_button, &color);
         auto rgba_str = gdk_rgba_to_string(&color);
-        option.set_value(rgba_str);
+        option.set_value(std::string{rgba_str});
         g_free(rgba_str);
     }
 };
@@ -2288,13 +2284,6 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::PIXMAP} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
-        DEBUG("filename %s", string ? string : "(null)");
-        option.set_value(string);
-        g_free(string);
-    }
-    void set_option_from_ui_item(GncOption& option) noexcept override
-    {
         auto string{option.get_value<std::string>()};
         if (!string.empty())
         {
@@ -2308,6 +2297,13 @@ public:
                   filename ? filename : "(null)");
             update_preview_cb(chooser, &option);
         }
+    }
+    void set_option_from_ui_item(GncOption& option) noexcept override
+    {
+        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
+        DEBUG("filename %s", string ? string : "(null)");
+        option.set_value(std::string{string});
+        g_free(string);
     }
 };
 
@@ -2359,11 +2355,10 @@ static void
 radiobutton_set_cb(GtkWidget *w, gpointer data)
 {
     GncOption* option = static_cast<decltype(option)>(data);
-    GtkWidget *widget;
     gpointer _current, _new_value;
     gint current, new_value;
 
-    widget = gnc_option_get_gtk_widget (option);
+    auto widget = gnc_option_get_gtk_widget(option);
 
     _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
     current = GPOINTER_TO_INT (_current);
