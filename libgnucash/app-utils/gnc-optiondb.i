@@ -202,14 +202,20 @@ gnc_option_test_book_destroy(QofBook* book)
 %rename(end_this_month) RelativeDatePeriod::END_THIS_MONTH;
 %rename(start_prev_month) RelativeDatePeriod::START_PREV_MONTH;
 %rename(end_prev_month) RelativeDatePeriod::END_PREV_MONTH;
+%rename(start_next_month) RelativeDatePeriod::START_NEXT_MONTH;
+%rename(end_next_month) RelativeDatePeriod::END_NEXT_MONTH;
 %rename(start_current_quarter) RelativeDatePeriod::START_CURRENT_QUARTER;
 %rename(end_current_quarter) RelativeDatePeriod::END_CURRENT_QUARTER;
 %rename(start_prev_quarter) RelativeDatePeriod::START_PREV_QUARTER;
 %rename(end_prev_quarter) RelativeDatePeriod::END_PREV_QUARTER;
+%rename(start_next_quarter) RelativeDatePeriod::START_NEXT_QUARTER;
+%rename(end_next_quarter) RelativeDatePeriod::END_NEXT_QUARTER;
 %rename(start_cal_year) RelativeDatePeriod::START_CAL_YEAR;
-%rename(end_cal_yea) RelativeDatePeriod::END_CAL_YEAR;
+%rename(end_cal_year) RelativeDatePeriod::END_CAL_YEAR;
 %rename(start_prev_year) RelativeDatePeriod::START_PREV_YEAR;
 %rename(end_prev_year) RelativeDatePeriod::END_PREV_YEAR;
+%rename(start_next_year) RelativeDatePeriod::START_NEXT_YEAR;
+%rename(end_next_year) RelativeDatePeriod::END_NEXT_YEAR;
 %rename(start_accounting_period) RelativeDatePeriod::START_ACCOUNTING_PERIOD;
 %rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
