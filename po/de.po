@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.6+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-26 23:28+0100\n"
+"POT-Creation-Date: 2020-03-27 11:46-0700\n"
 "PO-Revision-Date: 2019-12-30 00:37+0100\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -1748,7 +1748,7 @@ msgstr "Wertpapier-/Anteilspreis"
 #: gnucash/report/report-system/trep-engine.scm:1051
 #: gnucash/report/report-system/trep-engine.scm:1328
 #: gnucash/report/report-system/trep-engine.scm:1344
-#: gnucash/report/report-system/trep-engine.scm:2023
+#: gnucash/report/report-system/trep-engine.scm:2025
 #: gnucash/report/standard-reports/general-journal.scm:110
 #: gnucash/report/standard-reports/general-ledger.scm:88
 #: gnucash/report/standard-reports/general-ledger.scm:108
@@ -3246,7 +3246,7 @@ msgstr "Im Budget verbleibend"
 #: gnucash/report/locale-specific/us/taxtxf-de_DE.scm:295
 #: gnucash/report/report-system/html-acct-table.scm:799
 #: gnucash/report/report-system/html-utilities.scm:609
-#: gnucash/report/report-system/trep-engine.scm:1903
+#: gnucash/report/report-system/trep-engine.scm:1905
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1058
 #: gnucash/report/standard-reports/budget-flow.scm:169
 #: gnucash/report/standard-reports/budget-flow.scm:248
@@ -7248,8 +7248,8 @@ msgid "Show the income and expense accounts"
 msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 
 #: gnucash/gnome-utils/dialog-transfer.c:702
-#: gnucash/report/report-system/trep-engine.scm:2089
-#: gnucash/report/report-system/trep-engine.scm:2095
+#: gnucash/report/report-system/trep-engine.scm:2091
+#: gnucash/report/report-system/trep-engine.scm:2097
 msgid "Error"
 msgstr "Fehler"
 
@@ -19722,7 +19722,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:427
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
-msgstr
+msgstr ""
 "Zeile %d, Rechnung %s/%u: Konto %s ist nicht vom Typ »offene Forderungen«.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:465
@@ -19733,14 +19733,16 @@ msgstr "Zeile %d, Rechnung %s/%u: Preis nicht angegeben.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:534
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
-msgstr "Wegen eines oder mehrerer Fehler in Rechnung %s werden alle Zeilen "
-"dieser Rechnung ignoriert.\n"
+msgstr ""
+"Wegen eines oder mehrerer Fehler in Rechnung %s werden alle Zeilen dieser "
+"Rechnung ignoriert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:540
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
-msgstr "Wegen eines oder mehrerer Fehler in einer Rechnung ohne Nummer werden "
-"alle Zeilen dieser Rechnung ignoriert.\n"
+msgstr ""
+"Wegen eines oder mehrerer Fehler in einer Rechnung ohne Nummer werden alle "
+"Zeilen dieser Rechnung ignoriert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
 #, c-format
@@ -19763,14 +19765,12 @@ msgstr "Wollen Sie diese existierenden Rechnungen aktualisieren?"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:740
 #, c-format
 msgid "Invoice %s not updated because it already exists.\n"
-msgstr ""
-"Rechnung %s wurde nicht aktualisiert, da sie bereits existierte.\n"
+msgstr "Rechnung %s wurde nicht aktualisiert, da sie bereits existierte.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:755
 #, c-format
 msgid "Invoice %s not updated because it is already posted.\n"
-msgstr ""
-"Rechnung %s wurde nicht aktualisiert, da sie bereits eingebucht war.\n"
+msgstr "Rechnung %s wurde nicht aktualisiert, da sie bereits eingebucht war.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:768
 #, c-format
@@ -21025,7 +21025,8 @@ msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1102
 #, c-format
 msgid "OFX file imported, %d transactions processed, no transactions to match"
-msgstr "OFX-Datei importiert, %d Buchungen verarbeitet, keine Buchungen zuzuordnen."
+msgstr ""
+"OFX-Datei importiert, %d Buchungen verarbeitet, keine Buchungen zuzuordnen."
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
@@ -26232,32 +26233,34 @@ msgstr "Nr."
 msgid "Transfer from/to"
 msgstr "Umbuchen von/nach"
 
-#: gnucash/report/report-system/trep-engine.scm:1407
+#. Translators: Balance b/f stands for "Balance
+#. brought forward".
+#: gnucash/report/report-system/trep-engine.scm:1409
 #, fuzzy
 msgid "Balance b/f"
 msgstr "Saldo"
 
-#: gnucash/report/report-system/trep-engine.scm:1550
+#: gnucash/report/report-system/trep-engine.scm:1552
 #: gnucash/report/standard-reports/balsheet-pnl.scm:494
 #: gnucash/report/standard-reports/balsheet-pnl.scm:651
 msgid "Total For "
 msgstr "Gesamtsumme für "
 
-#: gnucash/report/report-system/trep-engine.scm:1561
+#: gnucash/report/report-system/trep-engine.scm:1563
 msgid "Split Transaction"
 msgstr "Mehrteilige Buchung"
 
-#: gnucash/report/report-system/trep-engine.scm:1619
-#: gnucash/report/report-system/trep-engine.scm:1889
+#: gnucash/report/report-system/trep-engine.scm:1621
+#: gnucash/report/report-system/trep-engine.scm:1891
 #: gnucash/report/standard-reports/category-barchart.scm:734
 msgid "Grand Total"
 msgstr "Gesamtbetrag"
 
-#: gnucash/report/report-system/trep-engine.scm:1820
+#: gnucash/report/report-system/trep-engine.scm:1822
 msgid "CSV disabled for double column amounts"
 msgstr "CSV nicht möglich bei zweispaltigen Beträgen"
 
-#: gnucash/report/report-system/trep-engine.scm:1904
+#: gnucash/report/report-system/trep-engine.scm:1906
 #: gnucash/report/standard-reports/advanced-portfolio.scm:94
 #: gnucash/report/standard-reports/average-balance.scm:127
 #: gnucash/report/standard-reports/average-balance.scm:147
@@ -26265,13 +26268,13 @@ msgstr "CSV nicht möglich bei zweispaltigen Beträgen"
 msgid "Average"
 msgstr "Durchschnitt"
 
-#: gnucash/report/report-system/trep-engine.scm:2198
+#: gnucash/report/report-system/trep-engine.scm:2200
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "Von ~a bis ~a"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2241
+#: gnucash/report/report-system/trep-engine.scm:2243
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr "Fehler ~a während CSV Export nach ~a: ~s"
