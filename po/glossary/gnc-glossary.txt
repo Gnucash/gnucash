@@ -45,6 +45,8 @@
 "amount"	"A sum of money"
 "average"	"The result of adding several amounts together and then dividing this total by the number of amounts"
 "balance (noun)"	"The amount of money that is in one's account"
+"balance b/f"	"Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
+"balance c/f"	"Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 "balance sheet"	"A written record of money received and paid out, showing the difference between the two total amounts"
 "balance, to"	"To arrange for income and spending to be equal"
 "bank"	"-"
