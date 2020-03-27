@@ -26236,9 +26236,8 @@ msgstr "Umbuchen von/nach"
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
 #: gnucash/report/report-system/trep-engine.scm:1409
-#, fuzzy
 msgid "Balance b/f"
-msgstr "Saldo"
+msgstr "Voriger Saldo"
 
 #: gnucash/report/report-system/trep-engine.scm:1552
 #: gnucash/report/standard-reports/balsheet-pnl.scm:494
