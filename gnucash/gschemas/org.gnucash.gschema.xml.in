@@ -245,11 +245,6 @@
       <summary>"Enter" key moves to bottom of register</summary>
       <description>If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line.</description>
     </key>
-    <key name="type-ahead-search" type="b">
-      <default>false</default>
-      <summary>Ues type-ahead search</summary>
-      <description>If active, account name completion matches any substring of the account name.</description>
-    </key>
     <key name="auto-raise-lists" type="b">
       <default>true</default>
       <summary>Automatically raise the list of accounts or actions during input</summary>

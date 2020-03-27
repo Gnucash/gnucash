@@ -46,6 +46,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
+#include "Account.h"
 
 #define GNC_PREF_AUTO_RAISE_LISTS "auto-raise-lists"
 
@@ -87,7 +88,6 @@ static void gnc_combo_cell_destroy (BasicCell *bcell);
 
 static GOnce auto_pop_init_once = G_ONCE_INIT;
 static gboolean auto_pop_combos = FALSE;
-static gboolean type_ahead_search = FALSE;
 
 
 // Two Callbacks called when the user changes preferences
@@ -98,13 +98,6 @@ gnc_combo_cell_set_autopop (gpointer prefs, gchar *pref, gpointer user_data)
                                           GNC_PREF_AUTO_RAISE_LISTS);
 }
 
-static void
-gnc_combo_cell_set_type_ahead_search (gpointer prefs, gchar *pref, gpointer user_data)
-{
-    type_ahead_search = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                          GNC_PREF_TYPE_AHEAD_SEARCH);
-}
-
 static gpointer
 gnc_combo_cell_autopop_init (gpointer unused)
 {
@@ -112,19 +105,12 @@ gnc_combo_cell_autopop_init (gpointer unused)
     auto_pop_combos = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                           GNC_PREF_AUTO_RAISE_LISTS);
     
-    type_ahead_search = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                          GNC_PREF_TYPE_AHEAD_SEARCH);
-
     // Register callbacks for when the user changes preferences.
     id = gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
                            GNC_PREF_AUTO_RAISE_LISTS,
                            gnc_combo_cell_set_autopop,
                            NULL);
     gnc_prefs_set_reg_auto_raise_lists_id (id);
-    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                           GNC_PREF_TYPE_AHEAD_SEARCH,
-                           gnc_combo_cell_set_type_ahead_search,
-                           NULL);
     return NULL;
 }
 
@@ -524,16 +510,22 @@ gnc_combo_cell_set_value (ComboCell *cell, const char *str)
 static gchar*
 gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, PopBox *box)
 {
-    gchar *case_normalized_newval = NULL;
     GtkTreeIter iter;
     gboolean valid;
-    gchar *normalized_newval = g_utf8_normalize (newval, -1, G_NORMALIZE_ALL);
     int num_found=0;
     gchar *first_found = NULL;
     gchar *match_str = NULL;
+    GError *gerror = NULL;
+    GMatchInfo *match_info = NULL;
+    GRegex *regex = NULL;
+    gchar *rep_str = NULL;
+    GRegex *regex0 = g_regex_new (gnc_get_account_separator_string(), 0, 0, &gerror);
 
-    if (normalized_newval)
-        case_normalized_newval = g_utf8_casefold (normalized_newval, -1);
+    // Replace ":" in newval with ".*:.*" so we can use regexp to match.
+    rep_str = g_regex_replace (regex0,newval,-1,0,".*:.*",0,&gerror);
+    // Then compile the regular expression based on rep_str.
+    regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, &gerror);
+
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(full_store), &iter);
     // Clear result list.
     gnc_item_list_clear(box->item_list);
@@ -541,16 +533,11 @@ gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, 
     {
         static const gint MAX_NUM_MATCHES = 30;
         gchar *str_data = NULL;
-        gchar* case_normalized_str_data = NULL;
         gchar* normalized_str_data = NULL;
-        gchar* ret = NULL;
         gtk_tree_model_get (GTK_TREE_MODEL(full_store), &iter,0, &str_data,-1);
         normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_ALL);
-        if (normalized_str_data)
-            case_normalized_str_data = g_utf8_casefold (normalized_str_data, -1);
-        // Does case_normalized_str_data contain case_normalized_newval?
-        ret = g_strrstr(case_normalized_str_data, case_normalized_newval);
-        if(ret!=NULL)
+        
+        if(g_regex_match (regex, normalized_str_data, 0, NULL))
         {
             if(!num_found) first_found = g_strdup(str_data);
             ++num_found;
@@ -560,14 +547,14 @@ gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, 
                 gnc_item_list_append (box->item_list, str_data);
         }
         g_free(str_data);
-        g_free(case_normalized_str_data);
         g_free(normalized_str_data);
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(full_store), &iter);
     }
     if(num_found)
         match_str = first_found;
-    g_free(case_normalized_newval);
-    g_free(normalized_newval);
+    g_regex_unref(regex);
+    g_regex_unref(regex0);
+    g_free(rep_str);
     return match_str;
 }
 
@@ -588,6 +575,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
     glong change_chars;
     GtkListStore* full_store;
     const gchar *box_str = NULL;
+    QuickFill *match = NULL;
 
     newval_chars = g_utf8_strlen (newval, newval_len);
     change_chars = g_utf8_strlen (change, change_len);
@@ -600,24 +588,28 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         *end_selection = -1;
         return;
     }
+    
+    // JEAN: If change == ":" do an autocompletion: if there's only 1 account that is currently matched
 
-    /* If deleting, just accept */
-    if (change == NULL && !type_ahead_search)
+    // Try the start-of-name match using the quickfill
+    match = gnc_quickfill_get_string_match (box->qf, newval);
+    match_str = g_strdup(gnc_quickfill_string (match));
+    if(match_str != NULL)
     {
-        gnc_basic_cell_set_value_internal (_cell, newval);
-        return;
+        // We have a match, but if we were deleting or inserting in the middle, just accept.
+        if (change == NULL || *cursor_position < _cell->value_chars)
+        {
+            gnc_basic_cell_set_value_internal (_cell, newval);
+            return;
+        }
+        *start_selection=newval_chars;
+        *end_selection=-1;
+        *cursor_position+= change_chars;
+        box_str=match_str;
     }
-
-    /* If we are inserting in the middle, just accept */
-    if (*cursor_position < _cell->value_chars && !type_ahead_search)
+    else
     {
-        gnc_basic_cell_set_value_internal (_cell, newval);
-        return;
-    }
-
-    if (type_ahead_search)
-    {
-        // Type-ahead search, we match any substring of the account name.
+        // No start-of-name match, try type-ahead search, we match any substring of the account name.
         full_store = cell->shared_store_full;
         match_str = gnc_combo_cell_type_ahead_search(newval, full_store, box);
         *start_selection = newval_chars;
@@ -626,19 +618,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         // Do not change the string in the type-in box.
         box_str = newval;
     }
-    else
-    {
-        QuickFill *match = NULL;
-        // Match at start of account name using the quickfill
-        match = gnc_quickfill_get_string_match (box->qf, newval);
-        match_str = g_strdup(gnc_quickfill_string (match));
-        *start_selection = newval_chars;
-        *end_selection = -1;
-        *cursor_position += change_chars;
-        // Update the string in the type-in box with the matched string.
-        box_str = match_str;
-    }
-
+    
     if (match_str == NULL)
     {
         // No match. Remove any selection in popup, don't change the type-in box
@@ -646,7 +626,6 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         block_list_signals (cell);
         gnc_item_list_select (box->item_list, NULL);
         unblock_list_signals (cell);
-        g_free(match_str);
         return;
     }
 
@@ -757,6 +736,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
             (*end_selection < bcell->value_chars))
         return FALSE;
 
+    // JEAN: WHERE : IS MATCHED
     find_pos = -1;
     if (*start_selection < bcell->value_chars)
     {
