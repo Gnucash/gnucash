@@ -5,7 +5,7 @@
 # Copyright (C) 2005-2019 by the translators:
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2019.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2020.
 # Christian Stimming <stimming@tuhh.de>, 2001-2019.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
@@ -3216,22 +3216,19 @@ msgstr "Lieferant suchen"
 
 #: gnucash/gnome/gnc-budget-view.c:450
 msgid "Inflow from Income"
-msgstr ""
+msgstr "Zufluß von Einkünften"
 
 #: gnucash/gnome/gnc-budget-view.c:452
-#, fuzzy
 msgid "Outflow to Expenses"
-msgstr "Gesamt-Aufwand"
+msgstr "Abfluß in Aufwendungen"
 
 #: gnucash/gnome/gnc-budget-view.c:454
-#, fuzzy
 msgid "Outflow to Asset/Equity/Liability"
-msgstr "Aktiva und Fremdkapital anzeigen"
+msgstr "Abfluß in Aktiva und Passiva"
 
 #: gnucash/gnome/gnc-budget-view.c:456
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Existierendes Budget öffnen"
+msgstr "Im Budget verbleibend"
 
 #: gnucash/gnome/gnc-budget-view.c:1504 gnucash/gnome/window-reconcile2.c:1148
 #: gnucash/gnome/window-reconcile.c:1199
@@ -8324,7 +8321,7 @@ msgid "translator-credits"
 msgstr ""
 "Andreas Hentze, 2019\n"
 "Joachim Wetzig, 2019\n"
-"Frank H. Ellenberger, 2007, 2009-2019\n"
+"Frank H. Ellenberger, 2007, 2009-2020\n"
 "Christian Stimming, 2001-2019\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
@@ -18716,20 +18713,19 @@ msgid "Start Online Banking Wizard"
 msgstr "Onlinebanking Einrichtungs-Assistenten starten"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:132
-#, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Doppelklicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-"
-"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Weiter«, wenn alle "
+"Doppelklicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem ein "
+"GnuCash-Konto zuzuordnen oder selektieren Sie fehlerhafte Zuordnungen und "
+"klicken »Ausgewählte Zuordnungen löschen«. Klicken Sie »Weiter«, wenn alle "
 "gewünschten Konten zugeordnet sind."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:168
-#, fuzzy
 msgid "_Delete selected matches"
-msgstr "Ausgewähltes Konto löschen"
+msgstr "Ausgewählte Zuordnungen _löschen"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:191
 msgid "Match Online accounts with GnuCash accounts"
@@ -19676,104 +19672,110 @@ msgstr ""
 "Namen des AqBanking-Profils an."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "application"
+msgstr "Validierung...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:328
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
+msgstr "Zeile %d: keine Rechnungsnummer in erster Zeile der Import-Datei.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:336
 #, c-format
 msgid "Row %d, invoice %s/%u: owner not set.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: Partner nicht angegeben.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:348
 #, c-format
 msgid "Row %d, invoice %s/%u: vendor %s does not exist.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: Lieferant %s existiert nicht.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:360
 #, c-format
 msgid "Row %d, invoice %s/%u: customer %s does not exist.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: Kunde %s existiert nicht.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:373
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: %s ist kein gültiges Rechnungsdatum.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:381
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid due date.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: %s ist kein gültiges Fälligkeitsdatum.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:405
 #: gnucash/import-export/bi-import/dialog-bi-import.c:476
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "Zeile %u, Konto %s nicht in %s\n"
+msgstr "Zeile %d, Rechnung %s/%u: Konto %s existiert nicht.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:417
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
 msgstr ""
+"Zeile %d, Rechnung %s/%u: Konto %s ist nicht vom Typ »offene "
+"Verbindlichkeiten«.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:427
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
-msgstr ""
+msgstr
+"Zeile %d, Rechnung %s/%u: Konto %s ist nicht vom Typ »offene Forderungen«.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:465
 #, c-format
 msgid "Row %d, invoice %s/%u: price not set.\n"
-msgstr ""
+msgstr "Zeile %d, Rechnung %s/%u: Preis nicht angegeben.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:534
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "Wegen eines oder mehrerer Fehler in Rechnung %s werden alle Zeilen "
+"dieser Rechnung ignoriert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:540
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "Wegen eines oder mehrerer Fehler in einer Rechnung ohne Nummer werden "
+"alle Zeilen dieser Rechnung ignoriert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "_Zahlung verarbeiten..."
+msgstr ""
+"\n"
+"Verarbeitend...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:717
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "Rechnung %s wurde eingebucht.\n"
+msgstr "Rechnung %s wurde erstellt.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:732
-#, fuzzy
 msgid "Do you want to update existing bills/invoices?"
-msgstr "Wollen Sie diese Rechnungen wirklich buchen?"
+msgstr "Wollen Sie diese existierenden Rechnungen aktualisieren?"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:740
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s not updated because it already exists.\n"
 msgstr ""
-"Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
+"Rechnung %s wurde nicht aktualisiert, da sie bereits existierte.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:755
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s not updated because it is already posted.\n"
 msgstr ""
-"Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
+"Rechnung %s wurde nicht aktualisiert, da sie bereits eingebucht war.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:768
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "Rechnung %s wurde eingebucht.\n"
+msgstr "Rechnung %s wurde aktualisiert.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:891
 #, c-format
@@ -19793,9 +19795,9 @@ msgstr ""
 "Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:926
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "Keine Warnungen, die zurückgesetzt werden können."
+msgstr "Nichts zur Verarbeitung vorhanden.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:141
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:127
@@ -19880,6 +19882,15 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
+"Import:\n"
+"- Zeilen ignoriert: %i\n"
+"- Zeilen importiert: %i\n"
+"\n"
+"Validierung & Verarbeitung:\n"
+"- Zeilen repariert: %u\n"
+"- Zeilen ignoriert: %u\n"
+"- Rechnungen erstellt: %u\n"
+"- Rechnungen aktualisiert: %u"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:228
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:204
@@ -21014,7 +21025,7 @@ msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1102
 #, c-format
 msgid "OFX file imported, %d transactions processed, no transactions to match"
-msgstr ""
+msgstr "OFX-Datei importiert, %d Buchungen verarbeitet, keine Buchungen zuzuordnen."
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
@@ -23464,9 +23475,8 @@ msgid "Click on the \"Options\" button to select a company."
 msgstr "Klicken Sie auf »Optionen«, um eine Firma zu wählen."
 
 #: gnucash/report/business-reports/lot-viewer.scm:61
-#, fuzzy
 msgid "The account to search for lots."
-msgstr "Das Konto, in dem nach Buchungen gesucht werden soll."
+msgstr "Das Konto, in dem nach Posten gesucht werden soll."
 
 #: gnucash/report/business-reports/new-aging.scm:66
 msgid ""
@@ -23498,7 +23508,7 @@ msgstr "Hinweis: Einige Buchungen wurden nicht berücksichtigt"
 #: gnucash/report/business-reports/new-aging.scm:396
 #, scheme-format
 msgid "Invalid Txn Type ~a"
-msgstr ""
+msgstr "Ungültige Buchungsart ~a"
 
 #: gnucash/report/business-reports/new-aging.scm:407
 msgid "Payment has no owner"
@@ -23565,26 +23575,23 @@ msgid "This report requires a vendor to be selected."
 msgstr "Für diesen Bericht muß ein Lieferant ausgewählt werden."
 
 #: gnucash/report/business-reports/new-owner-report.scm:237
-#, fuzzy
 msgid "Partial Amount"
-msgstr "_Übergeordnetes Konto"
+msgstr "Angerechneter Betrag"
 
 #: gnucash/report/business-reports/new-owner-report.scm:290
-#, fuzzy
 msgid "Link"
-msgstr "Zuordnungen"
+msgstr "Zuordnung"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
 #: gnucash/report/business-reports/new-owner-report.scm:338
 #, scheme-format
 msgid "~a History"
-msgstr ""
+msgstr "Verlauf von ~a"
 
 #: gnucash/report/business-reports/new-owner-report.scm:340
-#, fuzzy
 msgid "Linked Details"
-msgstr "Darlehensdetails"
+msgstr "Verknüpfte Details"
 
 #: gnucash/report/business-reports/new-owner-report.scm:494
 #: gnucash/report/business-reports/owner-report.scm:465
@@ -23607,12 +23614,10 @@ msgid "Display the tax column?"
 msgstr "Steuer-Spalte anzeigen?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
-#, fuzzy
 msgid "Display the period debits column?"
 msgstr "Soll-Spalte pro Periode anzeigen?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
 msgid "Display a period credits column?"
 msgstr "Haben-Spalte pro Periode anzeigen?"
 
@@ -23725,7 +23730,7 @@ msgstr "Verbindlichkeiten Konto"
 
 #: gnucash/report/business-reports/payables.scm:50
 msgid "The payable account you wish to examine."
-msgstr "Das -Konto der Verbindlichkeiten, welche Sie untersuchen wollen."
+msgstr "Das Konto der Verbindlichkeiten, welche Sie untersuchen wollen."
 
 #: gnucash/report/business-reports/payables.scm:78
 msgid "Payable Aging"
@@ -24620,22 +24625,23 @@ msgid "Make Pdf"
 msgstr "PDF erstellen"
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1147
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s. "
 msgstr ""
-"Berichtskonfiguration im Menü »Benutzerdefiniert« aktualisieren. Der Bericht "
+"Gespeicherte Konfiguration des aktuellen Berichts aktualisieren. Der Bericht "
 "wird in der Datei %s gespeichert."
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1150
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add the current report's configuration to the `Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s. "
 msgstr ""
-"Berichtskonfiguration zum Menü »Benutzerdefiniert« hinzufügen. Der Bericht "
-"wird in der Datei %s gespeichert."
+"Konfiguration des aktuellen Berichts zum Menü »Berichte->Gespeicherte "
+"Berichtskonfigurationen« hinzufügen. Der Bericht wird in der Datei %s "
+"gespeichert."
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1156
 msgid "_Print Report..."
@@ -30646,68 +30652,3 @@ msgstr "Finance::Quote Version ~A wurde gefunden."
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#, c-format
-#~ msgid "ROW %d DELETED, PRICE_NOT_SET: id=%s\n"
-#~ msgstr "Zeile %d GELÖSCHT, Preis fehlt: id=%s\n"
-
-#, c-format
-#~ msgid "ROW %d DELETED, QTY_NOT_SET: id=%s\n"
-#~ msgstr "Zeile %d GELÖSCHT, Anzahl fehlt: id=%s\n"
-
-#, c-format
-#~ msgid "ROW %d DELETED, ID_NOT_SET\n"
-#~ msgstr "Zeile %d GELÖSCHT, ID fehlt!\n"
-
-#, c-format
-#~ msgid "ROW %d DELETED, OWNER_NOT_SET: id=%s\n"
-#~ msgstr "Zeile %d GELÖSCHT, Lieferant fehlt: id=%s\n"
-
-#, c-format
-#~ msgid "ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"
-#~ msgstr "Zeile %d GELÖSCHT, Lieferant existiert nicht: id=%s\n"
-
-#, c-format
-#~ msgid "ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"
-#~ msgstr "Zeile %d GELÖSCHT, Kunde existiert nicht: id=%s\n"
-
-#~ msgid "These rows were deleted:"
-#~ msgstr "Diese Zeilen wurden gelöscht:"
-
-#~ msgid "Are you sure you have bills/invoices to update?"
-#~ msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
-
-#, c-format
-#~ msgid "Cannot post invoice %s because account name \"%s\" is invalid!\n"
-#~ msgstr ""
-#~ "Rechnung %s kann nicht eingebucht werden, da die Kontenbezeichnung \"%s\" "
-#~ "ungültig ist!\n"
-
-#, c-format
-#~ msgid ""
-#~ "Import results:\n"
-#~ "%i lines were ignored\n"
-#~ "%i lines imported:\n"
-#~ "   %u fixes\n"
-#~ "   %u ignored (not fixable)\n"
-#~ "\n"
-#~ "   %u created\n"
-#~ "   %u updated (based on id)"
-#~ msgstr ""
-#~ "Import-Ergebnis:\n"
-#~ "%i Zeilen wurden ignoriert\n"
-#~ "%i Zeilen wurden importiert:\n"
-#~ "   %u repariert\n"
-#~ "   %u ignoriert (reparieren nicht möglich)\n"
-#~ "\n"
-#~ "   %u neu angelegt\n"
-#~ "   %u aktualisiert (gemäß ID)"
-
-#~ msgid "Expense Report"
-#~ msgstr "Bericht Aufwendungen"
-
-#~ msgid "Prepayments"
-#~ msgstr "Vorauszahlungen"
-
-#~ msgid "Pre-payment"
-#~ msgstr "Vorauszahlung"
