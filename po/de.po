@@ -20682,9 +20682,8 @@ msgid "Value can't be parsed into a valid reconcile state."
 msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:218
-#, fuzzy
 msgid "Price can't be parsed into a number."
-msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
+msgstr "Preis kann nicht als Zahl erkannt werden."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:374
 msgid "Account value can't be mapped back to an account."
@@ -22109,7 +22108,7 @@ msgstr ""
 "Buchung ändern, auch wenn diese einen abgeglichenem Buchungsteil enthält?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2197
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The transaction you are about to change is contains reconciled splits in the "
 "following accounts:\n"
@@ -22117,12 +22116,11 @@ msgid ""
 "\n"
 "Are you sure you want to continue with this change ?"
 msgstr ""
-"Die Buchung, welche Sie ändern wollen, ist geschützt, da sie abgeglichene "
-"Buchungsteile in den folgenden Konten enthält:\n"
+"Die Buchung, welche Sie ändern wollen, enthält abgeglichene "
+"Buchungsteile in den folgenden Konten:\n"
 "%s\n"
 "\n"
-"Wenn sie fortfahren, werden diese wieder auf »Nicht abgeglichen« gesetzt. "
-"Dies kann das nächste Abgleichen erschweren. Wollen Sie trotzdem fortfahren?"
+"Wollen Sie trotzdem fortfahren?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2208
 msgid ""
