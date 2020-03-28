@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GnuCash \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2009-07-15 11:40+0900\n"
 "Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
 "Language-Team: Korean <yongdoria@gmail.com>\n"
@@ -22556,13 +22556,15 @@ msgid "Display the tax column?"
 msgstr "계정을 보일까요?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "기재사항 할인율을 보일까요?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "기재사항 할인율을 보일까요?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -22668,16 +22670,6 @@ msgstr "선택된 계정 없음"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "이 보고서는 선택된 계정이 필요합니다."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "기재사항 할인율을 보일까요?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "기재사항 할인율을 보일까요?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25354,13 +25346,14 @@ msgstr ""
 msgid "Average"
 msgstr "평균"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%s 에서 %s 까지"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -29772,15 +29765,15 @@ msgstr "공 거래"
 msgid "Transaction Voided"
 msgstr "공 거래"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "견적 검색을 위해 표시된 상품이 없음."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "견적을 얻거나 또는 프로그램 진단할 수 없음."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -29788,32 +29781,32 @@ msgstr ""
 "빠진 몇몇 필요한 펄 라이브러리가 필요합니다.\n"
 "그들을 설치하기 위하여 루트에서 'gnc-fq-update' 실행."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "가격 견적을 검색하는 동안 시스템 오류 발생."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "가격 견적을 검색하는 동안 미지의 오류 발생."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "이들 항목의 견적을 검색할 수 없음:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "계속 좋은 견적으로만 계속하겠습니까?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "이들 항목 가격으로 생성할 수 없음:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "여분의 좋은 견적으로 더하겠습니까?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -29822,6 +29815,14 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "변수 아님"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "기재사항 할인율을 보일까요?"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "기재사항 할인율을 보일까요?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

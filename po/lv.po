@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2017-08-16 12:19+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -23287,13 +23287,14 @@ msgid "Display the tax column?"
 msgstr "Rādīt nodokļa kolonnu?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Rādīt perioda debeta kolonnu?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "Rādīt perioda kredītu kolonnu?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23394,14 +23395,6 @@ msgstr "Nav izvēlēts pareizs konts"
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "Šajā pārskatā nepieciešams izvēlēties pareizu kontu."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "Rādīt perioda kredītu kolonnu?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "Rādīt perioda debeta kolonnu?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25932,13 +25925,14 @@ msgstr ""
 msgid "Average"
 msgstr "Vidējais"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "No %s Uz %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30184,15 +30178,15 @@ msgstr "Anulēts grāmatojums"
 msgid "Transaction Voided"
 msgstr "Grāmatojums anulēts"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "Nav atzīmētu preču piedāvājuma atjaunošanai."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Nevar saņemt kvotas, vai arī diagnosticēt kļūdu."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30200,32 +30194,32 @@ msgstr ""
 "Nav dažas nepieciešamas Perl bibliotēkas.\n"
 "Palaidiet 'gnc-fq-update' kā sakni, lai uzstādītu tās."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Sistēmas kļūda atjaunojot cenu kvotas."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Nezināma kļūda atjaunojot cenu kvotas."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Neizdevās atjaunot kvotas šīm akcijām:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "Turpināt izmantot tikai labās kvotas?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "Neizdevās izveidot cenas šiem vienumiem:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "Pievienot atlikušās labās kvotas?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30233,6 +30227,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Palīdzība nav pieejama."
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Rādīt perioda kredītu kolonnu?"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "Rādīt perioda debeta kolonnu?"
 
 #~ msgid "Delete Settings"
 #~ msgstr "Dzēst iestatījumus"

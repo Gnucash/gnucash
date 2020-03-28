@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2014-06-02 10:43+0530\n"
 "Last-Translator: Ritu Panwar <ritup@cdac.in> \n"
 "Language-Team: NONE\n"
@@ -23397,13 +23397,14 @@ msgid "Display the tax column?"
 msgstr "ಖಾತೆಯನ್ನು ಪ್ರದರ್ಶಿಸಬೇಕೆ?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಡೆಬಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಕ್ರೆಡಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23504,14 +23505,6 @@ msgstr "ಯಾವುದೇ ಮಾನ್ಯವಾದ ಖಾತೆಯನ್ನು 
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "ಈ ವರದಿಗಾಗಿ ಒಂದು ಮಾನ್ಯವಾದ ಖಾತೆಯನ್ನು ಆರಿಸಬೇಕು."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಕ್ರೆಡಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಡೆಬಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -26071,13 +26064,14 @@ msgstr ""
 msgid "Average"
 msgstr "ಸರಾಸರಿ"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "ಇಂದ %s ಗೆ %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30373,15 +30367,15 @@ msgstr "ಅನೂರ್ಜಿತಗೊಂಡ ವ್ಯವಹಾರ"
 msgid "Transaction Voided"
 msgstr "ವ್ಯವಹಾರವು ಅನೂರ್ಜಿತಗೊಂಡಿದೆ"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "ಬೆಲೆಹೇಳಿಕೆಯನ್ನು ಪಡೆಯಲು ಯಾವುದೆ ಸರಕುಗಳನ್ನು (ಕಮಾಡಿಟೀಸ್) ಗುರುತುಹಾಕಿಲ್ಲ."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಪಡೆಯಲು ಅಥವ ತೊಂದರೆಯನ್ನು ನಿರ್ಣಯಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30389,32 +30383,32 @@ msgstr ""
 "ನಿಮ್ಮಲ್ಲಿ ಕೆಲವು ಪರ್ಲ್ ಲೈಬ್ರರಿಗಳು ಇಲ್ಲ.\n"
 "ಅವನ್ನು ಸ್ಥಾಪಿಸಲು ನಿರ್ವಾಹಕರಾಗಿ 'gnc-fq-update' ಅನ್ನು ಚಲಾಯಿಸಿ."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಪಡೆಯುವಲ್ಲಿ ಒಂದು ವ್ಯವಸ್ಥೆಯ ದೋಷ ಎದುರಾಗಿದೆ."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಪಡೆಯುವಲ್ಲಿ ಒಂದು ಅಜ್ಞಾತ ದೋಷ ಎದುರಾಗಿದೆ."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "ಈ ಕೆಳಗಿನ ಅಂಶಗಳ ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "ಕೇವಲ ಉತ್ತಮ ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಬಳಸುವುದನ್ನು ಮುಂದುವರೆಸಬೇಕೆ?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "ಈ ಅಂಶಗಳಿಗೆ ದರಗಳನ್ನು ಸೂಚಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "ಮಿಕ್ಕಿರುವ ಉತ್ತಮ ಬೆಲೆಹೇಳಿಕೆಗಳನ್ನು ಸೇರಿಸಬೇಕೆ?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30422,6 +30416,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "ಯಾವುದೆ ನೆರವು ಲಭ್ಯವಿಲ್ಲ."
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಕ್ರೆಡಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "ಅವಧಿ (ಪಿರಿಯಡ್‌) ಡೆಬಿಟ್‌ಗಳ ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

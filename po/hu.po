@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2011-07-30 16:57+0100\n"
 "Last-Translator: Takó Kornél <takokornel@gmail.com>\n"
 "Language-Team: Hungarian\n"
@@ -23150,13 +23150,15 @@ msgid "Display the tax column?"
 msgstr "Számla megjelenítése?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Tétel-kedvezmény megjelenítése"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "Tétel-kedvezmény megjelenítése"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23262,16 +23264,6 @@ msgstr "Nincs kiválasztott számla"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "E jelentéshez ki kell választani számlákat."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "Tétel-kedvezmény megjelenítése"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "Tétel-kedvezmény megjelenítése"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25941,13 +25933,14 @@ msgstr ""
 msgid "Average"
 msgstr "közepes"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%s és %s között"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30315,15 +30308,15 @@ msgstr "Érvénytelen tranzakció"
 msgid "Transaction Voided"
 msgstr "Tranzakció érvénytelenítve"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "Nincs adatlekérésre kijelölt árucikk."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Adatkérés sikertelen vagy a probléma nem diagnosztizálható."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30331,32 +30324,32 @@ msgstr ""
 "Néhány Perl-könyvtár hiányzik.\n"
 "Adja ki a gnc-fq-update parancsot."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Áradatlekérés során rendszerhiba történt."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Áradatlekérés során ismeretlen hiba történt."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "A következő tételek adatait nem lehet lekérni:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "Folytatás csak a jó adatokkal?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "A következő tételek számára nem lehet az árat megállapítani:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "A maradék jó adat felvétele?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30364,6 +30357,14 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Segítség nem áll rendelkezésre."
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Tétel-kedvezmény megjelenítése"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "Tétel-kedvezmény megjelenítése"
 
 #, fuzzy
 #~ msgid "Delete Settings"

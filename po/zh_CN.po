@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2019-12-25 22:26-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -23043,13 +23043,15 @@ msgid "Display the tax column?"
 msgstr "是否显示科目？"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "显示交易的折扣"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "显示交易的折扣"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23155,16 +23157,6 @@ msgstr "没有选定科目"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "这个报表需要有选定的科目。"
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "显示交易的折扣"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "显示交易的折扣"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25822,13 +25814,14 @@ msgstr ""
 msgid "Average"
 msgstr "均值"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "从 %s 到 %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30164,15 +30157,15 @@ msgstr "无效的交易事项"
 msgid "Transaction Voided"
 msgstr "交易事项已无效"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "没有标记为接收报价的商品。"
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "无法获取报价或诊断问题。"
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30180,32 +30173,32 @@ msgstr ""
 "您遗失了某些必要的 Perl 程序库。\n"
 "请以 root 身分运行“gnc-fq-update”来安装它们。"
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "取回报价时产生系统错误。"
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "取回报价时产生不明错误。"
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "无法捕捉以下项目的报价："
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "继续只使用货物报价么？"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "无法为以下项目创建价格："
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "添加剩余货物报价么？"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr "已找到 Finance::Quote 版本 ~A。"
@@ -30213,6 +30206,14 @@ msgstr "已找到 Finance::Quote 版本 ~A。"
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "没有可用帮助。"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "显示交易的折扣"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "显示交易的折扣"
 
 #, fuzzy
 #~ msgid "Delete Settings"

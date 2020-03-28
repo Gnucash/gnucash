@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2018-12-22 08:51+0800\n"
 "Last-Translator: Christopher Lam\n"
 "Language-Team: français <traduc@traduc.fr>\n"
@@ -25565,14 +25565,15 @@ msgstr "Afficher la colonne de taxes ?"
 
 # messages-i18n.c:96
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Afficher la colonne des débits de l'escompte ?"
 
 # messages-i18n.c:96
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "Afficher la colonne des crédits de l'escompte ?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -25685,16 +25686,6 @@ msgstr "Aucun compte sélectionné"
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "Ce rapport nécessite de sélectionner un compte."
-
-# messages-i18n.c:96
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "Afficher la colonne des crédits de l'escompte ?"
-
-# messages-i18n.c:96
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "Afficher la colonne des débits de l'escompte ?"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: gnucash/report/business-reports/owner-report.scm:767
@@ -28656,13 +28647,14 @@ msgstr ""
 msgid "Average"
 msgstr "Moyenne"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "Du ~a au ~a"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -33513,15 +33505,15 @@ msgstr "Transaction invalidée"
 msgid "Transaction Voided"
 msgstr "Transaction invalidée"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "Aucun produit n'est sélectioné pour télécharger ses cours en ligne."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Impossible de récupérer les cotations ou de diagnostiquer le problème."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -33530,33 +33522,33 @@ msgstr ""
 "Exécuter \"gnc-fq-update\" en tant qu'administrateur pour les installer."
 
 # messages-i18n.c:34
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Une erreur système s'est produite en récupérant les cours."
 
 # messages-i18n.c:34
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Une erreur inconnue s'est produite en récupérant les cours."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Impossible de récupérer les cotations pour ces éléments :"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "Continuer à utiliser seulement les bonnes cotations ?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "Impossible de créer un cours pour ces éléments :"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "Ajouter les bonnes cotations restantes ?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -33564,6 +33556,15 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "Aide non disponible."
+
+# messages-i18n.c:96
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Afficher la colonne des crédits de l'escompte ?"
+
+# messages-i18n.c:96
+#~ msgid "Display a period debits column?"
+#~ msgstr "Afficher la colonne des débits de l'escompte ?"
 
 # messages-i18n.c:137
 #, fuzzy

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2018-02-16 13:42+0100\n"
 "Last-Translator: John Erling Blad <jeblad@gmail.com>\n"
 "Language-Team: Norwegian <>\n"
@@ -23498,13 +23498,15 @@ msgid "Display the tax column?"
 msgstr "Vis konto?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Vis oppføringens rabatt"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "Vis oppføringens rabatt"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23610,16 +23612,6 @@ msgstr "Ingen kontoer er valgt"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "Du må velge kontoer for å bruke denne rapporten."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "Vis oppføringens rabatt"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "Vis oppføringens rabatt"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -26336,13 +26328,14 @@ msgstr ""
 msgid "Average"
 msgstr "Gjennomsnitt"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "Fra %s til %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30813,15 +30806,15 @@ msgstr "Annullert transaksjon"
 msgid "Transaction Voided"
 msgstr "Transaksjonen er annullert"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "Ingen varer merket for noteringsmottak."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Klarer ikke å hente noteringer eller diagnostisere problemet."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30829,32 +30822,32 @@ msgstr ""
 "Du mangler noen nødvendige Perl-bibloteker.\n"
 "Kjør 'gnc-fq-update' som root for å installere dem."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Det oppstod en systemfeil under henting av noteringer."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Det oppstod en ukjent feil under henting av noteringer."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Kunne ikke hente noteringer for følgende varer:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "Bruk kun riktige noteringer?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "Kunne ikke opprette priser for følgende varer:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "Legg til gjenværende riktige noteringer?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30863,6 +30856,14 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "Ikke en variabel"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Vis oppføringens rabatt"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "Vis oppføringens rabatt"
 
 #, fuzzy
 #~ msgid "Delete Settings"

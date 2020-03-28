@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2014-10-19 16:48-0500\n"
 "Last-Translator: Ravikumar Ragam <ragamrravi@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -23384,13 +23384,14 @@ msgid "Display the tax column?"
 msgstr "khatem dakhol korum?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Kallachea khorchache rok'komecho khonn dakhol korum?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "Kallachea zomeachea duddvancho khonn dakol korum?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23491,14 +23492,6 @@ msgstr "Khoinchench void khatem venchunk na"
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "Hea vakeak ek void khatem venchlelem zai"
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "Kallachea zomeachea duddvancho khonn dakol korum?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "Kallachea khorchache rok'komecho khonn dakhol korum?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -26065,13 +26058,14 @@ msgstr ""
 msgid "Average"
 msgstr "sorasor"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%s tem %s haka"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30373,15 +30367,15 @@ msgstr "Rito vevhar"
 msgid "Transaction Voided"
 msgstr "vehar khali kelo"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "khoinchoch mhal sangnneachea portun mellovpak khunnavnk na"
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "sangnneank vo pench prosong topasunk ghoddunk na."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30389,32 +30383,32 @@ msgstr ""
 "Tum thoddea Perl vachonaloi chukta.\n"
 " tim sthapunk 'gnc-fq-aiche tarkhent korunk'choloi"
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "molachem sangnnem portun mellovpak ek iontronnachi chuk asli"
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "molaangnnem porot mellovpant ek onvollkhi chuk asli"
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "hea nogank sangnneo portunk mellovpak xokio zaina"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "fokot boreo sangnneo vaprunk chalu dovorta?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "hea nogank mol rochunk xokio zaina:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "urleleo sangnnio zoddum?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30422,6 +30416,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "mozot upolobdh na"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Kallachea zomeachea duddvancho khonn dakol korum?"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "Kallachea khorchache rok'komecho khonn dakhol korum?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

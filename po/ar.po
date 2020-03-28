@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnucash 3.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2019-02-09 19:15+0300\n"
 "Last-Translator: Abdorhman Ayman <abdorhman.ayman@protonmail.com>\n"
 "Language-Team: Arabic <(nothing)>\n"
@@ -23090,13 +23090,14 @@ msgid "Display the tax column?"
 msgstr "عرض الحساب؟"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "عرض عمود  المدين الفترة؟"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "عرض عمود الدائن للفترة؟"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23197,14 +23198,6 @@ msgstr "لم يتم تحديد حساب صالح"
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "يتطلب هذا التقرير حساب صالح ليتم تحديده."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "عرض عمود الدائن للفترة؟"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "عرض عمود  المدين الفترة؟"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25748,13 +25741,14 @@ msgstr ""
 msgid "Average"
 msgstr "المتوسط"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "من %s إلى %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30026,15 +30020,15 @@ msgstr "المعاملات الملغاة"
 msgid "Transaction Voided"
 msgstr "ابطلت المعاملة"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "لا سلع محددة لعرض الأسعار."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "غير قادر على الحصول على عروض الأسعار أو تشخيص المشكلة."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30042,32 +30036,32 @@ msgstr ""
 "بعض ملفات بيرل غير موجودة. \n"
 " أعد تشغيل\"gnc-fq-update\" ك \"root\" لتثبيتها."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "وكان هناك خطأ في النظام أثناء استرداد عروض الأسعار."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "حدث خطأ غير معروف أثناء استرداد عروض الأسعار."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "غير قادر على استرداد عروض الأسعار الخاصة بهذه العناصر:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "الاستمرار في استخدام علامات الاقتباس الجيدة فقط؟"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "غير قادر على إنشاء أسعار لهذه العناصر:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "أضف الاقتباسات المتبقية الجيدة؟"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30075,6 +30069,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "لا توجد مساعدة متوفرة."
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "عرض عمود الدائن للفترة؟"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "عرض عمود  المدين الفترة؟"
 
 #, fuzzy
 #~ msgid "Delete Settings"

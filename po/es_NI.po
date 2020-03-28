@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: GNUCash 1.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2001-10-22 14:04-0600\n"
 "Last-Translator: Georg Lehner, Jorge.Lehner@gmx.net, Juan Manuel García "
 "Molina juanmagm@mail.com\"\n"
@@ -23887,13 +23887,15 @@ msgid "Display the tax column?"
 msgstr "¿Mostrar la cuenta?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "¿Mostrar la cuenta?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "¿Mostrar la cuenta?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23999,16 +24001,6 @@ msgstr "No ha seleccionado ninguna cuenta"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "Este reporte requiere que se seleccionen cuentas."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "¿Mostrar la cuenta?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "¿Mostrar la cuenta?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 #, fuzzy
@@ -26750,13 +26742,14 @@ msgstr ""
 msgid "Average"
 msgstr "Promedio"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "De %s a %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -31288,15 +31281,15 @@ msgstr "Buscar Transacciones"
 msgid "Transaction Voided"
 msgstr "Informe de Transacción"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr ""
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Imposible obtener cotizaciones o diagnosticar el problema."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 #, fuzzy
 msgid ""
 "You are missing some needed Perl libraries.\n"
@@ -31306,7 +31299,7 @@ msgstr ""
 "Lanze \"update-finance-quote\" como root para instalarlos, o contacte a su "
 "administrador de sistema."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 #, fuzzy
 msgid "There was a system error while retrieving the price quotes."
 msgstr ""
@@ -31315,7 +31308,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 #, fuzzy
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr ""
@@ -31324,24 +31317,24 @@ msgstr ""
 "\n"
 "%s"
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Imposible obtener las quotas para estos incisos:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "¿Continuar, usando solamente las cotizaciones buenas?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "Imposible crear precios para estos incisos:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "¿Agregar cotizaciones restantes buenas?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -31350,6 +31343,14 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "No es una variable"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "¿Mostrar la cuenta?"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "¿Mostrar la cuenta?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.4.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2012-03-29 11:39+0200\n"
 "Last-Translator: Petr Pisar <petr.pisar@atlas.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -23344,13 +23344,15 @@ msgid "Display the tax column?"
 msgstr "Zobrazovat účet?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Zobrazovat slevu položky?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "Zobrazovat slevu položky?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23456,16 +23458,6 @@ msgstr "Nevybrány žádné účty"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "Tato sestava vyžaduje vybrání účtů."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "Zobrazovat slevu položky?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "Zobrazovat slevu položky?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -26157,13 +26149,14 @@ msgstr ""
 msgid "Average"
 msgstr "Průměr"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "Od %s do %s"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30633,15 +30626,15 @@ msgstr "Neplatná účetní položka"
 msgid "Transaction Voided"
 msgstr "Účetní položka zneplatněna"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "Pro získávání cen nebyly vybrány žádné komodity."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Nemohu získat uvedené ceny nebo rozpoznat problém."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30649,32 +30642,32 @@ msgstr ""
 "Chybí vám některé potřebné knihovny Perlu. Nainstalujte je spuštěním 'gnc-fq-"
 "update' jako root."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Při získávání cen došlo k systémové chybě."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Při získávání cen došlo k neznámé chybě."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Nemohu získat uvedené ceny těchto položek:"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "Pokračovat jen s dobrými uvedenými cenami?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "Nemohu vytvořit ceny pro tyto položky:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "Přidat zbývající dobré uvedené ceny?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30683,6 +30676,14 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "Není proměnná"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "Zobrazovat slevu položky?"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "Zobrazovat slevu položky?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

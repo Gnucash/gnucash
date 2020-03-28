@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2014-08-19 15:04+0530\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: Manipuri (Bengali Script) <gistlrc@gmail.com>\n"
@@ -23334,13 +23334,14 @@ msgid "Display the tax column?"
 msgstr "একাউন্ত উৎকদ্রা?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "পেরিওদ দেবিতস কলম অমা উৎকদ্রা?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "পেরিওদ ক্রেদিতস কলম অদু উৎকদ্রা?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23441,14 +23442,6 @@ msgstr "চৎনবা য়াবা একাউন্ত অমত্তা �
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "রিপোর্ত অসিদা খনগদবা চৎনবা য়াবা একাউন্ত অমগী মথৌ তাই।"
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "পেরিওদ ক্রেদিতস কলম অদু উৎকদ্রা?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "পেরিওদ দেবিতস কলম অমা উৎকদ্রা?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -26031,13 +26024,14 @@ msgstr ""
 msgid "Average"
 msgstr "চাংচৎ"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%s দগী %s দা"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30325,15 +30319,15 @@ msgstr "য়াদ্রবা ত্রান্সেকনস"
 msgid "Transaction Voided"
 msgstr "ত্রান্সেকসন য়াদ্রে"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "কোত রিত্রিভেলগীদমক কমোদিতি অমত্তা মার্ক তৌদে."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "কোত ফংবা ঙমদে নত্রগা খুদোংচাদবা খঙদোকপা ঙমদে."
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30341,32 +30335,32 @@ msgstr ""
 "অদোমগী তঙাইফদবা পর্ল লাইব্রেরি খরা মাংলে.\n"
 "মখোয় রুত অমা ওইনা ইনস্তোল তৌনবা 'gnc-fq-update' রন তৌবিয়ু."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "মমলগী কোত রিত্রিভ তৌবা মতমদা সিস্তেমগী অশোয়বা অমা থোক্লে."
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "মমলগী কোত রিত্রিভ তৌবা মতমদা শকখঙদবা অশোয়বা অমা থোক্লে."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "আইতেমশিংসিগী কোত রিত্রিভ তৌবা ঙমদে."
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "অফবা কোতশিংতমক শিজিন্নদুনা মখা চত্থগদ্রা?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "আইতেমশিংসিগী মমল শেমগৎপা ঙমদে:"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "ৱাৎলিবা অফবা কোতশিংসি হপচিনগদ্রা?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30374,6 +30368,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "মতেং অমত্তা ফংদে."
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "পেরিওদ ক্রেদিতস কলম অদু উৎকদ্রা?"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "পেরিওদ দেবিতস কলম অমা উৎকদ্রা?"
 
 #, fuzzy
 #~ msgid "Delete Settings"

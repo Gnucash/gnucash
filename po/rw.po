@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -24357,13 +24357,15 @@ msgid "Display the tax column?"
 msgstr "i Aderesi"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "i Igabanya"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
+#: gnucash/report/business-reports/owner-report.scm:594
 #, fuzzy
-msgid "Display a period credits column?"
+msgid "Display the period credits column?"
 msgstr "i Igabanya"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -24467,16 +24469,6 @@ msgstr "Konti Byahiswemo"
 #, fuzzy
 msgid "This report requires a valid account to be selected."
 msgstr "Icyegeranyo Konti Kuri Byahiswemo"
-
-#: gnucash/report/business-reports/owner-report.scm:594
-#, fuzzy
-msgid "Display the period credits column?"
-msgstr "i Igabanya"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
-msgid "Display a period debits column?"
-msgstr "i Igabanya"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 #, fuzzy
@@ -27262,13 +27254,14 @@ msgstr ""
 msgid "Average"
 msgstr "Impuzandengo"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%sKuri"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -31802,54 +31795,54 @@ msgstr "Ibikorwa by'ubucuruzi"
 msgid "Transaction Voided"
 msgstr "Ibikorwa by'ubucuruzi"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 #, fuzzy
 msgid "No commodities marked for quote retrieval."
 msgstr "Konti cy/ byagarajwe kugirango Gushyiraho akugarizo"
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 #, fuzzy
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "Kuri Kubona Cyangwa i"
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 #, fuzzy
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
 msgstr "Ibuze Amasomero Kuvugurura Nka Imizi Kuri Kwinjiza porogaramu"
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 #, fuzzy
 msgid "There was a system error while retrieving the price quotes."
 msgstr "a Sisitemu Ikosa i Igiciro"
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 #, fuzzy
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "Kitazwi Ikosa i Igiciro"
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 #, fuzzy
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Kuri kugirango"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 #, fuzzy
 msgid "Continue using only the good quotes?"
 msgstr "Dukomeza ikoresha i"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 #, fuzzy
 msgid "Unable to create prices for these items:"
 msgstr "Kuri Kurema kugirango"
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr ""
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -31858,6 +31851,14 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "a IMPINDURAGACIRO"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "i Igabanya"
+
+#, fuzzy
+#~ msgid "Display a period debits column?"
+#~ msgstr "i Igabanya"
 
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text

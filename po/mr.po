@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-27 11:46-0700\n"
+"POT-Creation-Date: 2020-03-28 06:15+0100\n"
 "PO-Revision-Date: 2014-09-26 19:58-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: NONE\n"
@@ -23127,13 +23127,14 @@ msgid "Display the tax column?"
 msgstr "खाते दर्शवायचे का?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:889
+#: gnucash/report/business-reports/owner-report.scm:599
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "कालावधी जमा स्तंभ प्रदर्शित करायचा का?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:894
-#, fuzzy
-msgid "Display a period credits column?"
+#: gnucash/report/business-reports/owner-report.scm:594
+msgid "Display the period credits column?"
 msgstr "कालावधी खर्च स्तंभ प्रदर्शित करायचे का?"
 
 #: gnucash/report/business-reports/new-owner-report.scm:899
@@ -23234,14 +23235,6 @@ msgstr "कोणतेही वैध खाते निवडले ना�
 #: gnucash/report/business-reports/owner-report.scm:110
 msgid "This report requires a valid account to be selected."
 msgstr "या अहवालासाठी वैध खाते निवडणे आवश्यक आहे."
-
-#: gnucash/report/business-reports/owner-report.scm:594
-msgid "Display the period credits column?"
-msgstr "कालावधी खर्च स्तंभ प्रदर्शित करायचे का?"
-
-#: gnucash/report/business-reports/owner-report.scm:599
-msgid "Display a period debits column?"
-msgstr "कालावधी जमा स्तंभ प्रदर्शित करायचा का?"
 
 #: gnucash/report/business-reports/owner-report.scm:767
 msgid "Report:"
@@ -25785,13 +25778,14 @@ msgstr ""
 msgid "Average"
 msgstr "सरासरी"
 
-#: gnucash/report/report-system/trep-engine.scm:2200
+#. Translators: Both ~a's are dates
+#: gnucash/report/report-system/trep-engine.scm:2201
 #, fuzzy, scheme-format
 msgid "From ~a to ~a"
 msgstr "%s पासून %s पर्यंत"
 
 #. Translators: ~a error type, ~a filename, ~s error details
-#: gnucash/report/report-system/trep-engine.scm:2243
+#: gnucash/report/report-system/trep-engine.scm:2244
 #, scheme-format
 msgid "error ~a during csv output to ~a: ~s"
 msgstr ""
@@ -30062,15 +30056,15 @@ msgstr "रद्दबादल व्यवहार"
 msgid "Transaction Voided"
 msgstr "व्यवहार रद्दबादल झाला"
 
-#: libgnucash/scm/price-quotes.scm:439
+#: libgnucash/scm/price-quotes.scm:441
 msgid "No commodities marked for quote retrieval."
 msgstr "क्वोट रिट्रिव्हलसाठी कमोडिटी चिन्हीत केलेल्या नाहीत."
 
-#: libgnucash/scm/price-quotes.scm:443 libgnucash/scm/price-quotes.scm:460
+#: libgnucash/scm/price-quotes.scm:445 libgnucash/scm/price-quotes.scm:462
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "क्वोट्स मिळविण्यात किंवा अडचणीचे निदान करण्यात असमर्थ"
 
-#: libgnucash/scm/price-quotes.scm:447
+#: libgnucash/scm/price-quotes.scm:449
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -30078,32 +30072,32 @@ msgstr ""
 "तुमच्याजवळ काही आवश्यक पर्ल लायब्ररी नाहीत.\n"
 "त्यांना प्रतिस्थापित करण्यासाठी रूटच्या रूपात 'gnc-fq-update' रन करा."
 
-#: libgnucash/scm/price-quotes.scm:452
+#: libgnucash/scm/price-quotes.scm:454
 msgid "There was a system error while retrieving the price quotes."
 msgstr "किंमतीचे क्वोट्स प्राप्त करताना सिस्टिम त्रुटी आली. "
 
-#: libgnucash/scm/price-quotes.scm:456
+#: libgnucash/scm/price-quotes.scm:458
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr "किंमतीचे क्वोट्स प्राप्त करताना एक अपरिचित त्रुटी आली."
 
-#: libgnucash/scm/price-quotes.scm:479 libgnucash/scm/price-quotes.scm:490
+#: libgnucash/scm/price-quotes.scm:481 libgnucash/scm/price-quotes.scm:492
 msgid "Unable to retrieve quotes for these items:"
 msgstr "या घटकांसाठी क्वोट्स मिळविण्यात अयशस्वी :"
 
-#: libgnucash/scm/price-quotes.scm:483
+#: libgnucash/scm/price-quotes.scm:485
 msgid "Continue using only the good quotes?"
 msgstr "फक्त चांगले क्वोट्स मिळविणे चालू ठेवायचे का?"
 
-#: libgnucash/scm/price-quotes.scm:505
+#: libgnucash/scm/price-quotes.scm:507
 msgid "Unable to create prices for these items:"
 msgstr "या घटकांसाठी किमती तयार करण्यात अयशस्वी: "
 
-#: libgnucash/scm/price-quotes.scm:509
+#: libgnucash/scm/price-quotes.scm:511
 msgid "Add remaining good quotes?"
 msgstr "उरलेले चांगले क्वोट्स टाकायचे का?"
 
 #. Translators: ~A is the version string
-#: libgnucash/scm/price-quotes.scm:527
+#: libgnucash/scm/price-quotes.scm:529
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
 msgstr ""
@@ -30111,6 +30105,13 @@ msgstr ""
 #: libgnucash/tax/us/txf.scm:96
 msgid "No help available."
 msgstr "मदत उपलब्ध नाही"
+
+#, fuzzy
+#~ msgid "Display a period credits column?"
+#~ msgstr "कालावधी खर्च स्तंभ प्रदर्शित करायचे का?"
+
+#~ msgid "Display a period debits column?"
+#~ msgstr "कालावधी जमा स्तंभ प्रदर्शित करायचा का?"
 
 #, fuzzy
 #~ msgid "Delete Settings"
