@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gnucash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 11:37-0700\n"
+"POT-Creation-Date: 2020-03-28 12:48-0700\n"
 "PO-Revision-Date: 2014-04-28 20:16-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <chandrakantd@cdac.in>\n"
 "Language-Team: Dogri (doi) Chandrakant Dhutadmal <chandrakantd@cdac.in>\n"
@@ -938,7 +938,7 @@ msgstr "कर्जा पुनर्भुगतान कैलकुले�
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:611
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:47
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:52
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
 #: gnucash/import-export/import-main-matcher.c:767
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
@@ -1041,7 +1041,7 @@ msgstr "कीमत जोड़ने च गल्ती "
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:526
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:768
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
@@ -1142,7 +1142,7 @@ msgstr "चलान "
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:675
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:46
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:50
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:51
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/report-system/trep-engine.scm:256
 #: gnucash/report/report-system/trep-engine.scm:289
@@ -1787,7 +1787,7 @@ msgstr "नंबर आप्शन"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:131
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:321
 #: gnucash/report/business-reports/invoice.scm:94
@@ -1846,7 +1846,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-payment.glade:519
 #: gnucash/gtkbuilder/dialog-transfer.glade:222
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 #: gnucash/import-export/import-main-matcher.c:772
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
@@ -1879,7 +1879,7 @@ msgstr "मेमो "
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:536
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:55
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:137
 #: gnucash/register/ledger-core/split-register-model.c:485
 #: gnucash/report/business-reports/balsheet-eg.scm:229
@@ -1909,7 +1909,7 @@ msgstr "नोट्स "
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:54
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:55
 #: gnucash/import-export/import-main-matcher.c:771
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
@@ -2323,7 +2323,7 @@ msgstr "खुऱल्ला"
 #: gnucash/gnome/reconcile-view.c:443
 #: gnucash/gtkbuilder/dialog-payment.glade:506
 #: gnucash/gtkbuilder/dialog-transfer.glade:170
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:54
 #: gnucash/register/ledger-core/split-register-model.c:249
 #: gnucash/register/ledger-core/split-register-model.c:269
 #: gnucash/report/report-system/trep-engine.scm:929
@@ -5555,7 +5555,7 @@ msgstr "मंजूर "
 #: gnucash/gnome/gnc-plugin-page-register.c:3243
 #: gnucash/gnome-search/search-reconciled.c:221
 #: gnucash/gnome-utils/gnc-tree-view-account.c:818
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/import-export/import-match-picker.c:437
 #: gnucash/report/report-system/trep-engine.scm:124
 #: gnucash/report/report-system/trep-engine.scm:403
@@ -8799,7 +8799,7 @@ msgstr "इक्विटी "
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2936
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #: gnucash/register/ledger-core/split-register.c:2664
 #: gnucash/register/ledger-core/split-register-model.c:396
 #: gnucash/report/business-reports/invoice.scm:234
@@ -9303,7 +9303,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #, fuzzy
 msgid "Void Reason"
 msgstr "सिर्फ निरस्त "
@@ -9324,7 +9324,7 @@ msgid "Amount / Value"
 msgstr "देन-रकम "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2948
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: libgnucash/app-utils/prefs.scm:81
 msgid "Withdrawal"
 msgstr "निकासी "
@@ -9347,7 +9347,7 @@ msgid "Credit Formula"
 msgstr "क्रैडिट फार्मूला "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3033
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: libgnucash/app-utils/prefs.scm:64
 msgid "Deposit"
 msgstr "जमा "
@@ -15777,7 +15777,7 @@ msgid "Transaction Details"
 msgstr " लैन-देन   दी      रिपोट  "
 
 #: gnucash/gtkbuilder/dialog-payment.glade:738
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 msgid "Transfer Account"
 msgstr "तबादला खाता "
 
@@ -19994,7 +19994,7 @@ msgid "Rate/Price"
 msgstr "कुल कीमत "
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:51
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:52
 #, fuzzy
 msgid "Transaction ID"
 msgstr "लैन-देन"
@@ -20010,7 +20010,7 @@ msgid "Full Account Name"
 msgstr "पूरा खाता-नांऽ  दी    बरतून  करो "
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "नबेड़ा  तरीक   "
@@ -20441,21 +20441,22 @@ msgid "Currency To"
 msgstr "करंसी: "
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:64
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:111
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:112
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:206
 msgid "Value doesn't appear to contain a valid number."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:77
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:82
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:87
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:124
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:129
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:134
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:125
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:130
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:119
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:191
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:192
 #, fuzzy
 msgid "Value can't be parsed into a valid commodity."
 msgstr "इस जिनस दे मुल्ल दी गणना करो. "
@@ -20487,18 +20488,18 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:233
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:241
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:257
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:265
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:476
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:484
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:539
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:547
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:284
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:503
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:566
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
 #, fuzzy
 msgid " could not be understood.\n"
 msgstr "%s स्तंभ  गी समझेआ नेईं जाई सकेआ. "
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:274
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:291
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:318
 msgid "No date column."
 msgstr "कोई तरीक स्तंभ नेईं. "
 
@@ -20522,61 +20523,66 @@ msgstr "जिनस स्तंभ दस्सो"
 msgid "Failed to create price from selected columns."
 msgstr "इऱनें आइटमें आस्तै कीमतां बनाने च असमर्थ:"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 #, fuzzy
 msgid "Transaction Commodity"
 msgstr "लैन-देन दी रकम"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #, fuzzy
 msgid "Transfer Action"
 msgstr "तबादला खाता "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #, fuzzy
 msgid "Transfer Memo"
 msgstr "गी स्थानांतरत करो "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 #, fuzzy
 msgid "Transfer Reconciled"
 msgstr "नबेड़ेआ "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #, fuzzy
 msgid "Transfer Reconcile Date"
 msgstr "खीरी नबेड़न  तरीक   "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:154
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:155
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:347
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:218
+#, fuzzy
+msgid "Price can't be parsed into a number."
+msgstr "इस जिनस दे मुल्ल दी गणना करो. "
+
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:374
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:348
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:375
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:397
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:424
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:408
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:435
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:559
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:586
 #, fuzzy
 msgid "No deposit or withdrawal column."
 msgstr "कोई बैलेंस, जमा जां निकासी स्तंभ नेईं. "
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:565
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:592
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:572
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:599
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
