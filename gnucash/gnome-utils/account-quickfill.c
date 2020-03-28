@@ -54,8 +54,8 @@ typedef struct
     QuickFill *qf;
     gboolean load_list_store;
     GtkListStore *list_store;
-    // For the type-ahead search, we need two lists, list_store contains the accounts that
-    // match the search. list_store_full contain the original full list of accounts.
+    /* For the type-ahead search, we need two lists, list_store contains the accounts that
+     match the search. list_store_full contain the original full list of accounts. */
     GtkListStore *list_store_full;
     QofBook *book;
     Account *root;
@@ -124,7 +124,6 @@ load_shared_qf_cb (Account *account, gpointer data)
     char *name;
     GtkTreeIter iter;
 
-    // A callback to disable adding the account
     if (qfb->dont_add_cb)
     {
         gboolean skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);

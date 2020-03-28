@@ -90,7 +90,6 @@ static GOnce auto_pop_init_once = G_ONCE_INIT;
 static gboolean auto_pop_combos = FALSE;
 
 
-// Two Callbacks called when the user changes preferences
 static void
 gnc_combo_cell_set_autopop (gpointer prefs, gchar *pref, gpointer user_data)
 {
@@ -104,12 +103,12 @@ gnc_combo_cell_autopop_init (gpointer unused)
     gulong id;
     auto_pop_combos = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
                                           GNC_PREF_AUTO_RAISE_LISTS);
-    
-    // Register callbacks for when the user changes preferences.
+
     id = gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                           GNC_PREF_AUTO_RAISE_LISTS,
-                           gnc_combo_cell_set_autopop,
-                           NULL);
+                                GNC_PREF_AUTO_RAISE_LISTS,
+                                gnc_combo_cell_set_autopop,
+                                NULL);
+
     gnc_prefs_set_reg_auto_raise_lists_id (id);
     return NULL;
 }
@@ -519,10 +518,13 @@ gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, 
     GMatchInfo *match_info = NULL;
     GRegex *regex = NULL;
     gchar *rep_str = NULL;
+    gchar *newval_rep = NULL;
     GRegex *regex0 = g_regex_new (gnc_get_account_separator_string(), 0, 0, &gerror);
 
     // Replace ":" in newval with ".*:.*" so we can use regexp to match.
-    rep_str = g_regex_replace (regex0,newval,-1,0,".*:.*",0,&gerror);
+    newval_rep = g_strconcat (".*", gnc_get_account_separator_string(), ".*",
+                               NULL);
+    rep_str = g_regex_replace (regex0, newval, -1, 0, newval_rep, 0, &gerror);
     // Then compile the regular expression based on rep_str.
     regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, &gerror);
 
@@ -555,6 +557,7 @@ gnc_combo_cell_type_ahead_search(const gchar* newval, GtkListStore* full_store, 
     g_regex_unref(regex);
     g_regex_unref(regex0);
     g_free(rep_str);
+    g_free(newval_rep);
     return match_str;
 }
 
@@ -589,8 +592,6 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         return;
     }
     
-    // JEAN: If change == ":" do an autocompletion: if there's only 1 account that is currently matched
-
     // Try the start-of-name match using the quickfill
     match = gnc_quickfill_get_string_match (box->qf, newval);
     match_str = g_strdup(gnc_quickfill_string (match));
@@ -736,7 +737,6 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
             (*end_selection < bcell->value_chars))
         return FALSE;
 
-    // JEAN: WHERE : IS MATCHED
     find_pos = -1;
     if (*start_selection < bcell->value_chars)
     {

@@ -217,7 +217,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
         store = gnc_get_shared_account_name_list_store (root, IKEY,
                 skip_expense_acct_cb, NULL);
         store_full = gnc_get_shared_account_name_list_store_full (root, IKEY,
-                                                        skip_expense_acct_cb, NULL);
+                skip_expense_acct_cb, NULL);
         break;
 
     case GNCENTRY_BILL_ENTRY:
@@ -234,7 +234,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
         store = gnc_get_shared_account_name_list_store (root, EKEY,
                 skip_income_acct_cb, NULL);
         store_full = gnc_get_shared_account_name_list_store_full (root, EKEY,
-                                                        skip_income_acct_cb, NULL);
+                skip_income_acct_cb, NULL);
         break;
     default:
 	PWARN ("Bad GncEntryLedgerType");
