@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2018-12-22 08:51+0800\n"
 "Last-Translator: Christopher Lam\n"
 "Language-Team: français <traduc@traduc.fr>\n"
@@ -9419,7 +9419,7 @@ msgstr "_Non rapproché"
 
 # po/guile_strings.txt:219
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "Modification d'une répartition de transaction rapprochée ?"
 
@@ -9448,7 +9448,7 @@ msgstr ""
 
 # messages-i18n.c:256
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "_Modifier la répartition"
 
@@ -10443,13 +10443,13 @@ msgstr "Saisir le cours effectif du titre"
 
 # messages-i18n.c:123
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "Saisir la formule de crédit pour la transaction réelle"
 
 # messages-i18n.c:123
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "Saisir la formule de débit pour la transaction réelle"
 
@@ -23850,19 +23850,17 @@ msgstr "Modifier la répartition associée à une répartition rapprochée ?"
 #: gnucash/register/ledger-core/split-register-model.c:2197
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "Vous êtes sur le point de modifier une répartition qui est liée à une "
 "répartition rapprochée. Cela peut rendre difficile un futur rapprochement ! "
 "Êtes-vous sûr de vouloir faire cela ?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -23874,7 +23872,7 @@ msgstr ""
 "Êtes-vous sûr de vouloir faire cela ?"
 
 # messages-i18n.c:57
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "_Abandonner la transaction"

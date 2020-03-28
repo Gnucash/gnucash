@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2019-10-17 19:45+0300\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: he <avi.markovitz@gmail.com>\n"
@@ -8300,7 +8300,7 @@ msgid "_Unreconcile"
 msgstr "_ביטול התאמה"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "שינוי פיצול מותאם?"
 
@@ -8325,7 +8325,7 @@ msgstr ""
 "העתידיות לקשה יותר! האם להמשיך בשינוי זה?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "שינו_י פיצול"
 
@@ -9208,12 +9208,12 @@ msgid "Enter the effective share price"
 msgstr "נא להזין מחיר מניה אפקטיבי"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "הזנת נוסחת זכות לתנועה אמיתית"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "הזנת נוסחת חובה לתנועה אמיתית"
 
@@ -21257,15 +21257,13 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "שינוי תנועה עם פיצול מותאם?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2197
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "התנועה מוגנת שכן היא מכילה פיצולים מותאמים בחשבונות הבאים:\n"
 "%s\n"
@@ -21273,7 +21271,7 @@ msgstr ""
 "המשך עריכת התנועה תבטל את התאמות הפיצולים. מה שעשוי להקשות על התאמה עתידית! "
 "להמשיך עם שינוי זה?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
@@ -21282,7 +21280,7 @@ msgstr ""
 "פעולה זו תשנה שדה מוגן של פיצול מותאם. המשך עריכת הפיצול תבטל את ההתאמה, מה "
 "שעשוי להקשות על התאמות עתידיות! האם להמשיך עם השינוי?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 msgid "Chan_ge Transaction"
 msgstr "שינו_י תנועה"
 

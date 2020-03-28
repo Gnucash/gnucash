@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.7.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2018-05-10 14:11+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -8563,7 +8563,7 @@ msgid "_Unreconcile"
 msgstr "Afstemming ter_ugdraaien"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "Afgestemde boekregel veranderen?"
 
@@ -8589,7 +8589,7 @@ msgstr ""
 "met deze wijziging?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "Boekregel _wijzigen"
 
@@ -9478,12 +9478,12 @@ msgid "Enter the effective share price"
 msgstr "De effectieve aandelenkoers invoeren"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "De formule voor de uiteindelijke boeking aan creditzijde invoeren"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "De formule voor de uiteindelijke boeking aan debetzijde invoeren"
 
@@ -21991,19 +21991,17 @@ msgstr "Aan afgestemde boekregel gekoppelde boekregel veranderen?"
 #: gnucash/register/ledger-core/split-register-model.c:2197
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "U staat op het punt een boekregel te veranderen die is gekoppeld aan een "
 "afgestemde boekregel. Dit kan toekomstige afstemming bemoeilijken! Doorgaan "
 "met deze wijziging?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -22014,7 +22012,7 @@ msgstr ""
 "afgestemde boekregel. Dit kan toekomstige afstemming bemoeilijken! Doorgaan "
 "met deze wijziging?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "Boeking _annuleren"

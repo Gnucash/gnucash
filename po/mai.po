@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2014-11-09 17:59+0530\n"
 "Last-Translator: Sangeeta <gistlrc@gmail.com>\n"
 "Language-Team: Maithili <gistlrc@gmail.com>\n"
@@ -8435,7 +8435,7 @@ msgid "_Unreconcile"
 msgstr "असंगत (_U)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "संगत विभाजन केँ बदलू?"
 
@@ -8460,7 +8460,7 @@ msgstr ""
 "एहन करब सँ भविष्य केर समाधान कठिन भ सकैत अछि! की एहि बदलाव क सँग आगाँ बढ़ब?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "विभाजन केँ बदलू (_g)"
 
@@ -9357,12 +9357,12 @@ msgid "Enter the effective share price"
 msgstr "प्रभावी शेयर मूल्य दर्ज करू"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "वास्तविक लेनदेन क' लेल क्रेडिट फार्मूला दर्ज करू"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "वास्तविक लेनदेन क' लेल डेबिट फार्मूला दर्ज करू"
 
@@ -21648,18 +21648,16 @@ msgstr "की एकटा समाधानकृत विभाजन स�
 #: gnucash/register/ledger-core/split-register-model.c:2197
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "अहाँ एकटा एहिना विभाजन केँ बदलए जाए रहल छी जे एकटा समाधानकृत विभाजन सँ लिंक्ड अछि. "
 "एहन करब सँ भविष्य केर समाधान कठिन भ सकैत अछि! की एहि बदलाव क सँग आगाँ बढ़ब?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -21669,7 +21667,7 @@ msgstr ""
 "अहाँ एकटा एहिना विभाजन केँ बदलए जाए रहल छी जे एकटा समाधानकृत विभाजन सँ लिंक्ड अछि. "
 "एहन करब सँ भविष्य केर समाधान कठिन भ सकैत अछि! की एहि बदलाव क सँग आगाँ बढ़ब?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "लेनदेन केँ रद्द करू (_n) "

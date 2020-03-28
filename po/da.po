@@ -107,7 +107,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.6.14\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2016-09-20 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -8525,7 +8525,7 @@ msgid "_Unreconcile"
 msgstr "_Afstem"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr ""
 
@@ -8552,7 +8552,7 @@ msgstr ""
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 #, fuzzy
 msgid "Chan_ge Split"
 msgstr "_Opdel"
@@ -9474,13 +9474,13 @@ msgid "Enter the effective share price"
 msgstr "Indtast den effektive aktiepris"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 #, fuzzy
 msgid "Enter credit formula for real transaction"
 msgstr "Indtast noter for transaktionen"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 #, fuzzy
 msgid "Enter debit formula for real transaction"
 msgstr "Indtast noter for transaktionen"
@@ -21509,18 +21509,16 @@ msgstr "Ændr indhold af afstemt opdeling"
 #: gnucash/register/ledger-core/split-register-model.c:2197
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "Vil du virkelig markere denne transaktion som ikke-afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -21530,7 +21528,7 @@ msgstr ""
 "Vil du virkelig markere denne transaktion som ikke-afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "_Afbryd transaktion"

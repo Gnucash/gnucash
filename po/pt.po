@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2019-07-07 09:03+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -8454,7 +8454,7 @@ msgid "_Unreconcile"
 msgstr "_Não reconciliada"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "Alterar parcela reconciliada?"
 
@@ -8479,7 +8479,7 @@ msgstr ""
 "poderá tornar reconciliações futuras difíceis! Continuar com a alteração?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "_Alterar parcela"
 
@@ -9367,12 +9367,12 @@ msgid "Enter the effective share price"
 msgstr "Insira o preço efectivo da acção"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "Insira fórmula de crédito para a transacção real"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "Insira fórmula de débito para a transacção real"
 
@@ -21866,15 +21866,13 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "Alterar transacção contendo uma parcela reconciliada?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2197
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "A transacção que está prestes a alterar está protegida porque contém "
 "parcelas reconciliadas nas seguintes contas:\n"
@@ -21884,7 +21882,7 @@ msgstr ""
 "reconciliadas. Isto pode dificultar futuras reconciliações. Continuar com a "
 "alteração)"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
@@ -21894,7 +21892,7 @@ msgstr ""
 "continuar a editar a parcela, ficará não reconciliada. Fazê-lo poderá tornar "
 "reconciliações futuras difíceis! Continuar com a alteração?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 msgid "Chan_ge Transaction"
 msgstr "_Alterar transacção"
 

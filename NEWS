@@ -37,6 +37,8 @@ The following bugs have been fixed:
                  accounts
     Bug 797042 - OK button in OFX importer doesn't work if nothing is
 		 imported.
+    Bug 797133 - CSV Import of multicurrency transaction export in multiline
+                 form
     Bug 797139 - test-report-utilities failure after 10-march in travis
     Bug 797419 - equity-statement unrealized-gain calculator uses
 		 weighted-average

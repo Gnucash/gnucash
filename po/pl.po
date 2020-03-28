@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gnucash\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2020-01-01 17:51+0000\n"
 "Last-Translator: Michał Ciołek <michalciolek@gmail.com>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
@@ -8523,7 +8523,7 @@ msgid "_Unreconcile"
 msgstr "_Nieuzgodnione"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "Zmienić uzgodniony podział?"
 
@@ -8550,7 +8550,7 @@ msgstr ""
 "spowodować trudności w przyszłych uzgodnieniach! Kontynuować?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "Z_mień podział"
 
@@ -9464,12 +9464,12 @@ msgid "Enter the effective share price"
 msgstr "Wprowadź rzeczywistą cenę udziału"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "Wprowadź formułę Ma dla rzeczywistej transakcji"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "Wprowadź formułę Winien(Wn) dla rzeczywistej transakcji"
 
@@ -21922,18 +21922,16 @@ msgstr "Zmienić uzgodniony podział?"
 #: gnucash/register/ledger-core/split-register-model.c:2197
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "Za chwilę zostanie zmieniony istniejący podział. Zrobienie tego może "
 "spowodować trudności w przyszłych uzgodnieniach! Kontynuować?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -21943,7 +21941,7 @@ msgstr ""
 "Za chwilę zostanie zmieniony istniejący podział. Zrobienie tego może "
 "spowodować trudności w przyszłych uzgodnieniach! Kontynuować?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "_Anuluj transakcję"

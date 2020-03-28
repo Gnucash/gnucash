@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gnucash 3.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 06:15+0100\n"
+"POT-Creation-Date: 2020-03-28 11:37-0700\n"
 "PO-Revision-Date: 2018-12-30 04:38+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -8375,7 +8375,7 @@ msgid "_Unreconcile"
 msgstr "照合解除(_U)"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2207
+#: gnucash/register/ledger-core/split-register-model.c:2206
 msgid "Change reconciled split?"
 msgstr "照合済のスプリットを変更しますか?"
 
@@ -8400,7 +8400,7 @@ msgstr ""
 "合、後ほど照合するのが難しくなります! この変更を続けますか?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2231
+#: gnucash/register/ledger-core/split-register-model.c:2230
 msgid "Chan_ge Split"
 msgstr "スプリットを変更(_G)"
 
@@ -9282,12 +9282,12 @@ msgid "Enter the effective share price"
 msgstr "実効的な株価を入力します。"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2372
+#: gnucash/register/ledger-core/split-register-model.c:2363
 msgid "Enter credit formula for real transaction"
 msgstr "実際の取引で予定している貸方の数式を入力します。"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2338
+#: gnucash/register/ledger-core/split-register-model.c:2329
 msgid "Enter debit formula for real transaction"
 msgstr "実際の取引で予定している借方の数式を入力します。"
 
@@ -21456,15 +21456,13 @@ msgid "Change transaction containing a reconciled split?"
 msgstr "照合済のスプリットを含む取引を変更しますか?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2197
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is protected because it contains "
-"reconciled splits in the following accounts:\n"
+"The transaction you are about to change is contains reconciled splits in the "
+"following accounts:\n"
 "%s\n"
 "\n"
-"If you continue editing this transaction all reconciled splits will be "
-"unreconciled. This might make future reconciliation difficult! Continue with "
-"this change?"
+"Are you sure you want to continue with this change ?"
 msgstr ""
 "変更しようとしている取引は保護されています。これは次の勘定科目に照合済のスプ"
 "リットが含まれているためです:\n"
@@ -21473,7 +21471,7 @@ msgstr ""
 "この取引の編集を続けると、照合済の全スプリットが未照合になります。この場合、"
 "後ほど照合するのが難しくなります! この変更を続けますか?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2209
+#: gnucash/register/ledger-core/split-register-model.c:2208
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
@@ -21483,7 +21481,7 @@ msgstr ""
 "を続けると未照合になります。この場合、後ほど照合するのが難しくなります! この"
 "変更を続けますか?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2234
+#: gnucash/register/ledger-core/split-register-model.c:2233
 msgid "Chan_ge Transaction"
 msgstr "取引を変更(_G)"
 
