@@ -2197,6 +2197,7 @@ be excluded from periodic reporting.")
            (gnc:make-html-text
             (gnc:html-markup-h3
              (format #f
+                     ;; Translators: Both ~a's are dates
                      (_ "From ~a to ~a")
                      (qof-print-date begindate)
                      (qof-print-date enddate)))))
