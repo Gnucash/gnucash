@@ -35,6 +35,7 @@ extern "C" {
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-pricedb.h"
+#include <gnc-exp-parser.h>
 
 }
 
@@ -191,6 +192,32 @@ gnc_commodity* parse_commodity (const std::string& comm_str)
         throw std::invalid_argument (_("Value can't be parsed into a valid commodity."));
     else
         return comm;
+}
+
+
+static GncNumeric parse_price (const std::string &str)
+{
+    /* An empty field is treated as zero */
+    if (str.empty())
+        return GncNumeric{};
+
+    /* Strings otherwise containing not digits will be considered invalid */
+    if(!boost::regex_search(str, boost::regex("[0-9]")))
+        throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
+
+    auto expr = boost::make_u32regex("[[:Sc:]]");
+    std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
+
+    /* Convert based on user chosen currency format */
+    gnc_numeric val = gnc_numeric_zero();
+    char *endptr;
+
+    auto success = gnc_exp_parser_parse (str.c_str(), &val, &endptr);
+    gnc_exp_parser_shutdown();
+    if (!success)
+        throw std::invalid_argument (_("Price can't be parsed into a number."));
+
+    return GncNumeric(val);
 }
 
 void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
@@ -437,7 +464,7 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
 
             case GncTransPropType::PRICE:
                 m_price = boost::none;
-                m_price = parse_amount (value, m_currency_format); // Will throw if parsing fails
+                m_price = parse_price (value); // Will throw if parsing fails
                 break;
 
             case GncTransPropType::REC_STATE:
