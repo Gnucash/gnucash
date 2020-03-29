@@ -2194,9 +2194,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         }
         title = _("Change transaction containing a reconciled split?");
         message_format =
-         _("The transaction you are about to change is protected because it contains reconciled splits in the following accounts:\n%s"
-           "\n\nIf you continue editing this transaction all reconciled splits will be unreconciled. "
-          "This might make future reconciliation difficult! Continue with this change?");
+         _("The transaction you are about to change is contains reconciled splits in the following accounts:\n%s"
+           "\n\nAre you sure you want to continue with this change ?");
 
         message = g_strdup_printf (message_format, acc_list);
         g_free (acc_list);
@@ -2248,14 +2247,6 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
                     ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
                      NREC);
             }
-        }
-
-        if (protected_trans_cell)
-        {
-            if (reg->unrecn_splits != NULL)
-                g_list_free (reg->unrecn_splits);
-
-            reg->unrecn_splits = g_list_copy (xaccTransGetSplitList (trans));
         }
 
         PINFO ("Unreconcile split list length is %d", g_list_length(reg->unrecn_splits));

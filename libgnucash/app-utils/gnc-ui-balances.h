@@ -110,6 +110,10 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
 						   time64 date,
 						   gboolean include_children);
+gnc_numeric
+gnc_ui_account_get_reconciled_balance_as_of_date (Account *account,
+                                                  time64 date,
+                                                  gboolean include_children);
 
 /********************************************************************
  * Balance calculations related to owners

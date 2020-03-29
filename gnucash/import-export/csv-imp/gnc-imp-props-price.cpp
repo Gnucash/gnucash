@@ -332,7 +332,9 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         gnc_price_set_commodity (price, *m_from_commodity);
         gnc_price_set_currency (price, *m_to_currency);
 
-        auto amount_conv = amount.convert<RoundType::half_up>(CURRENCY_DENOM);
+        int scu = gnc_commodity_get_fraction (*m_to_currency);
+        auto amount_conv = amount.convert<RoundType::half_up>(scu * COMMODITY_DENOM_MULT);
+
         gnc_price_set_value (price, static_cast<gnc_numeric>(amount_conv));
 
         gnc_price_set_time64 (price, date);

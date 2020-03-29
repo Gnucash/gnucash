@@ -888,7 +888,7 @@ hide_progress(GncGWENGui *gui, Progress *progress)
                 /* Last other progress to be hidden */
                 gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
                                      OTHER_ENTRIES_ROW_OFFSET);
-                gtk_widget_destroy(box);
+                /* Box destroyed, Null the reference. */
                 gui->other_entries_box = NULL;
             }
             g_list_free(entries);

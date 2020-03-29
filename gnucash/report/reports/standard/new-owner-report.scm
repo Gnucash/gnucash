@@ -888,7 +888,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") credit-header
-    "had" (N_ "Display a period credits column?") #t))
+    "had" (N_ "Display the period credits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

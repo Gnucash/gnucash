@@ -385,7 +385,8 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 {
     const ymd aymd = { 2017, 04, 20 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::neutral);
-    GncDateTime gncdt(1492685940); /* 20 Apr 2017 10:59:00 Z */
+    time64 date{1492685940};
+    GncDateTime gncdt(date); /* 20 Apr 2017 10:59:00 Z */
     /* The ymd constructor sets the time of day at 10:59:00 for
      * timezones between UTC-10 and UTC+13. For other timezones the
      * time of day is adjusted to ensure a consistent date and the
@@ -397,7 +398,46 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
         gncdt.offset() <= max_eastern_offset)
     {
         EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %Z"), "20-04-2017 10:59:00 UTC");
+//        EXPECT_EQ(atime, gncdt);
+        EXPECT_EQ(date, static_cast<time64>(gncdt));
+        EXPECT_EQ(date, static_cast<time64>(atime));
     }
+}
+
+TEST(gnc_datetime_constructors, test_neutral_across_timezones)
+{
+    const ymd begins = {2018, 03, 05};
+    const ymd ends = {2018, 03, 15};
+    const time64 ten_days = 864000;
+#ifdef __MINGW32__
+    TimeZoneProvider tzp_lon{"GMT Standard Time"};
+    TimeZoneProvider tzp_perth{"W. Australia Standard Time"};
+    TimeZoneProvider tzp_la{"Pacific Standard Time"};
+#else
+    TimeZoneProvider tzp_lon("Europe/London");
+    TimeZoneProvider tzp_perth("Australia/Perth");
+    TimeZoneProvider tzp_la("America/Los_Angeles");
+#endif
+    _set_tzp(tzp_lon);
+    GncDateTime btime_lon(GncDate(begins.year, begins.month, begins.day), DayPart::neutral);
+    GncDateTime etime_lon(GncDate(ends.year, ends.month, ends.day), DayPart::neutral);
+    _reset_tzp();
+    _set_tzp(tzp_perth);
+    GncDateTime btime_perth(GncDate(begins.year, begins.month, begins.day), DayPart::neutral);
+    GncDateTime etime_perth(GncDate(ends.year, ends.month, ends.day), DayPart::neutral);
+    _reset_tzp();
+    _set_tzp(tzp_la);
+    GncDateTime btime_la(GncDate(begins.year, begins.month, begins.day), DayPart::neutral);
+    GncDateTime etime_la(GncDate(ends.year, ends.month, ends.day), DayPart::neutral);
+    _reset_tzp();
+
+    EXPECT_EQ(static_cast<time64>(btime_lon), static_cast<time64>(btime_perth));
+    EXPECT_EQ(static_cast<time64>(btime_lon), static_cast<time64>(btime_la));
+    EXPECT_EQ(static_cast<time64>(etime_lon), static_cast<time64>(etime_perth));
+    EXPECT_EQ(static_cast<time64>(etime_lon), static_cast<time64>(etime_la));
+    EXPECT_EQ(ten_days, static_cast<time64>(etime_lon) - static_cast<time64>(btime_lon));
+    EXPECT_EQ(ten_days, static_cast<time64>(etime_perth) - static_cast<time64>(btime_perth));
+    EXPECT_EQ(ten_days, static_cast<time64>(etime_la) - static_cast<time64>(btime_la));
 }
 
 TEST(gnc_datetime_functions, test_format)

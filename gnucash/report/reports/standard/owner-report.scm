@@ -594,7 +594,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") debit-header
-    "had" (N_ "Display a period debits column?") #t))
+    "had" (N_ "Display the period debits column?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

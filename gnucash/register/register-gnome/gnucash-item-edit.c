@@ -61,7 +61,7 @@ enum
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
-
+static void gnc_item_edit_destroying(GtkWidget *this, gpointer data);
 static void
 gnc_item_edit_tb_init (GncItemEditTb *item_edit_tb)
 {
@@ -662,28 +662,6 @@ gnc_item_edit_get_property (GObject *object,
     }
 }
 
-/* FIXME: Idle events calling gnc_item_edit_update can fire after the
- * GncItemEdit is finalized, but because the GncItemEdit class is
- * defined by hand instead of with the GType macros there's no way to
- * run gnc_item_edit_dispose or gnc_item_edit_finalize to null out the
- * pointers. We resort instead to a weak reference to null out the
- * sheet when it gets finalized to prevent gnc_item_edit_upate from
- * accessing the freed sheet.
- *
- * https://bugs.gnucash.org/show_bug.cgi?id=797481
- *
- * Note that this is still not bulletproof, after all we're still
- * using the GncItemEdit after it has been freed but without a dispose
- * function to do this correctly we're a bit stuck.
- */
-static void
-sheet_destroyed (gpointer data, GObject *table)
-{
-     GncItemEdit *item_edit = (GncItemEdit*)data;
-     if (item_edit)
-          item_edit->sheet = NULL;
-}
-
 static void
 gnc_item_edit_set_property (GObject *object,
                             guint param_id,
@@ -694,15 +672,7 @@ gnc_item_edit_set_property (GObject *object,
     switch (param_id)
     {
     case PROP_SHEET:
-         if (item_edit->sheet)
-             g_object_weak_unref(G_OBJECT(item_edit->sheet),
-                                 (GWeakNotify)sheet_destroyed,
-                                 (gpointer)item_edit);
         item_edit->sheet = GNUCASH_SHEET (g_value_get_object (value));
-        if (item_edit->sheet)
-            g_object_weak_ref(G_OBJECT(item_edit->sheet),
-                              (GWeakNotify)sheet_destroyed,
-                              (gpointer)item_edit);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -963,7 +933,16 @@ gnc_item_edit_new (GnucashSheet *sheet)
 
     gtk_box_pack_start (GTK_BOX(item_edit), vb, FALSE, FALSE, 0);
     gtk_widget_show_all(GTK_WIDGET(item_edit));
+    g_signal_connect(G_OBJECT(item_edit), "destroy",
+                     G_CALLBACK(gnc_item_edit_destroying), NULL);
     return GTK_WIDGET(item_edit);
+}
+
+static void
+gnc_item_edit_destroying(GtkWidget *item_edit, gpointer data)
+{
+    while (g_idle_remove_by_data((gpointer)item_edit))
+        continue;
 }
 
 static void

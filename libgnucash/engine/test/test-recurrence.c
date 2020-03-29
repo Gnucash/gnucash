@@ -30,13 +30,13 @@
 
 static QofBook *book;
 
-static void check_valid(GDate *next, GDate *ref, GDate *start,
+static gboolean check_valid(GDate *next, GDate *ref, GDate *start,
                         guint16 mult, PeriodType pt, WeekendAdjust wadj)
 {
     gboolean valid;
+    GDate adj_date;
     gint startToNext;
-    /* FIXME: The WeekendAdjust argument is completely ignored for
-       now. */
+    gboolean ret_val = TRUE;
 
     valid = g_date_valid(next);
     if (pt == PERIOD_ONCE && g_date_compare(start, ref) <= 0)
@@ -44,7 +44,7 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
     else
         do_test(valid, "incorrectly invalid");
 
-    if (!valid) return;
+    if (!valid) return valid;
 
     do_test(g_date_compare(ref, next) < 0,
             "next date not strictly later than ref date");
@@ -54,13 +54,41 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
     switch (pt)
     {
     case PERIOD_YEAR:
-        do_test((g_date_get_year(next) - g_date_get_year(start)) % mult == 0,
+        ret_val &= do_test((g_date_get_year(next) - g_date_get_year(start)) % mult == 0,
                 "year period phase wrong"); // redundant
         mult *= 12;
         // fall through
     case PERIOD_END_OF_MONTH:
         if (pt == PERIOD_END_OF_MONTH)
-            do_test(g_date_is_last_of_month(next), "end of month phase wrong");
+        {
+            if(wadj == WEEKEND_ADJ_NONE)
+                ret_val &= do_test(g_date_is_last_of_month(next), "end of month phase wrong");
+            else
+            {
+                gboolean result;
+                if(!g_date_is_last_of_month(next))
+                {
+                    adj_date = *next;
+                    if(wadj == WEEKEND_ADJ_BACK)
+                    {
+                        // If adjusting back, one of the next two days to be end of month
+                        g_date_add_days(&adj_date,1);
+                        result = g_date_is_last_of_month(&adj_date);
+                        g_date_add_days(&adj_date,1);
+                        result |= g_date_is_last_of_month(&adj_date);
+                    }
+                    if(wadj == WEEKEND_ADJ_FORWARD)
+                    {
+                        // If adjusting forward, one of the two previous days has to be end of month
+                        g_date_subtract_days(&adj_date,1);
+                        result = g_date_is_last_of_month(&adj_date);
+                        g_date_subtract_days(&adj_date,1);
+                        result |= g_date_is_last_of_month(&adj_date);
+                    }
+                    ret_val &= do_test(result, "end of month phase wrong");
+                }
+            }
+        }
         // fall through
     case PERIOD_LAST_WEEKDAY:
     case PERIOD_NTH_WEEKDAY:
@@ -71,13 +99,14 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
 
         monthdiff = (g_date_get_month(next) - g_date_get_month(start)) +
                     12 * (g_date_get_year(next) - g_date_get_year(start));
-        do_test(monthdiff % mult == 0, "month or year phase wrong");
+        monthdiff %= mult;
+        ret_val &= do_test(monthdiff == 0 || (monthdiff == -1 && wadj == WEEKEND_ADJ_BACK) || (monthdiff == 1 && wadj == WEEKEND_ADJ_FORWARD), "month or year phase wrong");
 
         if (pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY)
         {
             guint sweek, nweek;
 
-            do_test(g_date_get_weekday(next) == g_date_get_weekday(start),
+            ret_val &= do_test(g_date_get_weekday(next) == g_date_get_weekday(start),
                     "weekday phase wrong");
             sweek = (g_date_get_day(start) - 1) / 7;
             nweek = (g_date_get_day(next) - 1) / 7;
@@ -87,7 +116,7 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
                4th, OR 'start' didn't have 5 of the weekday that
                'next' does and we want the LAST weekday, so it's the
                5th of that weekday */
-            do_test(sweek == nweek ||
+            ret_val &= do_test(sweek == nweek ||
                     (sweek == 4 && nweek == 3 && (g_date_get_day(next) + 7) >
                      g_date_get_days_in_month(
                          g_date_get_month(next), g_date_get_year(next))) ||
@@ -97,16 +126,61 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         }
         else
         {
+            GDateWeekday week_day;
+            GDateWeekday week_day_1;
+            GDateWeekday week_day_2;
             day_start = g_date_get_day(start);
             day_next = g_date_get_day(next);
             if (day_start < 28)
-                do_test(day_start == day_next, "dom don't match");
-            else if (pt != PERIOD_END_OF_MONTH)
+            {
+                gboolean result;
+                week_day = g_date_get_weekday (next);
+                switch (wadj) {
+                    case WEEKEND_ADJ_NONE:
+                        ret_val &= do_test(day_start == day_next, "dom don't match");
+                        break;
+                    case WEEKEND_ADJ_BACK:
+                        // Week_day cannot be a weekend.
+                        result = (week_day != G_DATE_SATURDAY && week_day != G_DATE_SUNDAY);
+                        if(day_start != day_next)
+                        {
+                            // If the dom don't match day must be a Friday
+                            result &= (week_day == G_DATE_FRIDAY);
+                            // Either day_next+1 or day_next+2 matches day_start
+                            g_date_add_days(next,1);
+                            week_day_1 = g_date_get_day(next);
+                            g_date_add_days(next,1);
+                            week_day_2 = g_date_get_day(next);
+                            result &= week_day_1 == day_start || week_day_2 == day_start;
+                        }
+                        ret_val &= do_test(result, "dom don't match");
+                        break;
+                    case WEEKEND_ADJ_FORWARD:
+                        // Week_day cannot be a weekend.
+                        result = (week_day != G_DATE_SATURDAY && week_day != G_DATE_SUNDAY);
+                        if(day_start != day_next)
+                        {
+                            // If the dom don't match day must be a Monday
+                            result &= (week_day == G_DATE_MONDAY);
+                            // Either day_next-1 or day_next-2 matches day_start
+                            g_date_subtract_days(next,1);
+                            week_day_1 = g_date_get_day(next);
+                            g_date_subtract_days(next,1);
+                            week_day_2 = g_date_get_day(next);
+                            result &= week_day_1 == day_start || week_day_2 == day_start;
+                        }
+                        ret_val &= do_test(result, "dom don't match");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (pt != PERIOD_END_OF_MONTH && wadj == WEEKEND_ADJ_NONE)
             {
                 // the end of month case was already checked above.  near
                 // the end of the month, the days should still agree,
                 // unless they can't because of a short month.
-                do_test(day_start == day_next || g_date_is_last_of_month(next),
+                ret_val &= do_test(day_start == day_next || g_date_is_last_of_month(next),
                         "dom don't match and next is not eom");
             }
         }
@@ -116,16 +190,16 @@ static void check_valid(GDate *next, GDate *ref, GDate *start,
         mult *= 7;
         // fall through
     case PERIOD_DAY:
-        do_test((startToNext % mult) == 0, "week or day period phase wrong");
+        ret_val &= do_test((startToNext % mult) == 0, "week or day period phase wrong");
         break;
     case PERIOD_ONCE:
-        do_test(startToNext == 0, "period once not on start date");
+        ret_val &= do_test(startToNext == 0, "period once not on start date");
         break;
     default:
-        do_test(FALSE, "invalid PeriodType");
+        ret_val &=do_test(FALSE, "invalid PeriodType");
         break;
     }
-
+    return ret_val;
 }
 
 #define NUM_DATES_TO_TEST 300
@@ -168,9 +242,9 @@ static void test_all()
                         wadj_reg = recurrenceGetWeekendAdjust(&r);
 
                         recurrenceNextInstance(&r, &d_ref, &d_next);
-                        check_valid(&d_next, &d_ref, &d_start_reg,
-                                    mult_reg, pt_reg, wadj_reg);
-
+                        if (!check_valid(&d_next, &d_ref, &d_start_reg,
+                                    mult_reg, pt_reg, wadj_reg))
+                            return;
                     }
                 }
             }

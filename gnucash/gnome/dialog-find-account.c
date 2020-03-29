@@ -77,8 +77,19 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
     ENTER(" ");
     gnc_unregister_gui_component_by_data (DIALOG_FIND_ACCOUNT_CM_CLASS, facc_dialog);
 
+    if (facc_dialog->event_handler_id)
+    {
+        qof_event_unregister_handler (facc_dialog->event_handler_id);
+        facc_dialog->event_handler_id = 0;
+    }
+
+    if (facc_dialog->saved_filter_text)
+        g_free (facc_dialog->saved_filter_text);
+
     if (facc_dialog->window)
     {
+        gnc_save_window_size (GNC_PREFS_GROUP,
+                              GTK_WINDOW(facc_dialog->window));
         gtk_widget_destroy (facc_dialog->window);
         facc_dialog->window = NULL;
     }
@@ -463,17 +474,6 @@ close_handler (gpointer user_data)
     FindAccountDialog *facc_dialog = user_data;
 
     ENTER(" ");
-
-    if (facc_dialog->event_handler_id)
-    {
-        qof_event_unregister_handler (facc_dialog->event_handler_id);
-        facc_dialog->event_handler_id = 0;
-    }
-
-    if (facc_dialog->saved_filter_text)
-        g_free (facc_dialog->saved_filter_text);
-
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(facc_dialog->window));
     gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
     LEAVE(" ");
 }

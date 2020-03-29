@@ -1404,6 +1404,8 @@ be excluded from periodic reporting.")
              (data (if (and (any (lambda (c) (eq? 'bal-bf (vector-ref c 5)))
                                  calculated-cells)
                             (memq sortkey ACCOUNT-SORTING-TYPES))
+                       ;; Translators: Balance b/f stands for "Balance
+                       ;; brought forward".
                        (string-append data ": " (_ "Balance b/f"))
                        data))
              (renderer-fn (keylist-get-info
@@ -2195,6 +2197,7 @@ be excluded from periodic reporting.")
            (gnc:make-html-text
             (gnc:html-markup-h3
              (format #f
+                     ;; Translators: Both ~a's are dates
                      (_ "From ~a to ~a")
                      (qof-print-date begindate)
                      (qof-print-date enddate)))))

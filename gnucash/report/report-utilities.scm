@@ -383,9 +383,14 @@
 (define* (gnc:account-accumulate-at-dates
           acc dates #:key
           (nosplit->elt #f)
-          (split->date (compose xaccTransGetDate xaccSplitGetParent))
+          (split->date #f)
           (split->elt xaccSplitGetBalance))
-  (let lp ((splits (xaccAccountGetSplitList acc))
+  (define to-date (or split->date (compose xaccTransGetDate xaccSplitGetParent)))
+  (define (less? a b) (< (to-date a) (to-date b)))
+
+  (let lp ((splits (if split->date
+                       (stable-sort! (xaccAccountGetSplitList acc) less?)
+                       (xaccAccountGetSplitList acc)))
            (dates (sort dates <))
            (result '())
            (last-result nosplit->elt))
@@ -395,8 +400,8 @@
       (() (reverse result))
 
       ((date . rest)
-       (define (before-date? s) (< (split->date s) date))
-       (define (after-date? s) (< date (split->date s)))
+       (define (before-date? s) (<= (to-date s) date))
+       (define (after-date? s) (< date (to-date s)))
        (match splits
 
          ;; end of splits, but still has dates. pad with last-result

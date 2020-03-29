@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.18\n"
-"POT-Creation-Date: 2019-12-29 22:22+0100\n"
+"POT-Creation-Date: 2020-03-27 21:58+0100\n"
 "PO-Revision-Date: 2019-12-29 22:15+0100\n"
 "Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <gnucash-de@gnucash.org>\n"
@@ -206,6 +206,14 @@ msgstr "Durchschnitt/Durchschnittlich"
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
 msgstr "Saldo (Bestand, Kontostand?)"
+
+#. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
+msgid "balance b/f"
+msgstr "Voriger Saldo"
+
+#. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
+msgid "balance c/f"
+msgstr "Saldo"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"

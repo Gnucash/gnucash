@@ -19,7 +19,7 @@ endmacro()
 
 add_executable(test-link EXCLUDE_FROM_ALL test-link.c)
 target_link_libraries(test-link gnc-core-utils)
-add_test(NAME test-link COMMAND test-link)
+add_test(NAME test-link COMMAND test-link CONFIGURATIONS Debug;Release)
 add_dependencies(check test-link)
 
 #################################################

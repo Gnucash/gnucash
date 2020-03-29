@@ -3409,56 +3409,27 @@ GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing)
      * xaccAccountForEachTransaction by using gpointer return
      * values rather than gints.
      */
-    AccountPrivate *priv;
-    GList   *lp;
-    gboolean found = FALSE;
-    gnc_numeric balance;
+    Split *latest = nullptr;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
     xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
     xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
 
-    priv = GET_PRIVATE(acc);
+    for (GList *lp = GET_PRIVATE(acc)->splits; lp; lp = lp->next)
+    {
+        if (xaccTransGetDate (xaccSplitGetParent ((Split *)lp->data)) >= date)
+            break;
+        latest = (Split *)lp->data;
+    }
+
+    if (!latest)
+        return gnc_numeric_zero();
+
     if (ignclosing)
-        balance = priv->noclosing_balance;
+        return xaccSplitGetNoclosingBalance (latest);
     else
-        balance = priv->balance;
-
-    lp = priv->splits;
-    while ( lp && !found )
-    {
-        time64 trans_time = xaccTransRetDatePosted( xaccSplitGetParent( (Split *)lp->data ));
-        if ( trans_time >= date )
-            found = TRUE;
-        else
-            lp = lp->next;
-    }
-
-    if ( lp )
-    {
-        if ( lp->prev )
-        {
-            /* Since lp is now pointing to a split which was past the reconcile
-             * date, get the running balance of the previous split.
-             */
-            if (ignclosing)
-                balance = xaccSplitGetNoclosingBalance( (Split *)lp->prev->data );
-            else
-                balance = xaccSplitGetBalance( (Split *)lp->prev->data );
-        }
-        else
-        {
-            /* AsOf date must be before any entries, return zero. */
-            balance = gnc_numeric_zero();
-        }
-    }
-
-    /* Otherwise there were no splits posted after the given date,
-     * so the latest account balance should be good enough.
-     */
-
-    return( balance );
+        return xaccSplitGetBalance (latest);
 }
 
 gnc_numeric
@@ -3473,34 +3444,34 @@ xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
     return GetBalanceAsOfDate (acc, date, TRUE);
 }
 
+gnc_numeric
+xaccAccountGetReconciledBalanceAsOfDate (Account *acc, time64 date)
+{
+    gnc_numeric balance = gnc_numeric_zero();
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
+
+    for (GList *node = GET_PRIVATE(acc)->splits; node; node = node->next)
+    {
+        Split *split = (Split*) node->data;
+        if ((xaccSplitGetReconcile (split) == YREC) &&
+            (xaccSplitGetDateReconciled (split) <= date))
+            balance = gnc_numeric_add_fixed (balance, xaccSplitGetAmount (split));
+    };
+
+    return balance;
+}
+
 /*
  * Originally gsr_account_present_balance in gnc-split-reg.c
- *
- * How does this routine compare to xaccAccountGetBalanceAsOfDate just
- * above?  These two routines should eventually be collapsed into one.
- * Perhaps the startup logic from that one, and the logic from this
- * one that walks from the tail of the split list.
  */
 gnc_numeric
 xaccAccountGetPresentBalance (const Account *acc)
 {
-    AccountPrivate *priv;
-    GList *node;
-    time64 today;
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
-    priv = GET_PRIVATE(acc);
-    today = gnc_time64_get_today_end();
-    for (node = g_list_last(priv->splits); node; node = node->prev)
-    {
-        Split *split = static_cast<Split*>(node->data);
-
-        if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-            return xaccSplitGetBalance (split);
-    }
-
-    return gnc_numeric_zero ();
+    return xaccAccountGetBalanceAsOfDate (GNC_ACCOUNT (acc),
+                                          gnc_time64_get_today_end ());
 }
 
 

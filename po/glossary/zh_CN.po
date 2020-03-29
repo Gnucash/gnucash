@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2017-10-20 19:04+0200\n"
+"POT-Creation-Date: 2020-03-27 21:58+0100\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "术语 (翻译人员好，这个文件将不会被最终用户所看到)
 msgid "account"
 msgstr "会计科目"
 
-#. "-"
+#. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
 msgstr "科目编号"
 
@@ -216,6 +216,10 @@ msgstr "操作：电报"
 msgid "action: withdraw"
 msgstr "操作：取款"
 
+#. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
+msgid "aging"
+msgstr ""
+
 #. "A sum of money"
 msgid "amount"
 msgstr "金额"
@@ -228,6 +232,18 @@ msgstr "平均"
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
 msgstr "余额 (名词)"
+
+# 安排收入与支出相等
+#. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
+#, fuzzy
+msgid "balance b/f"
+msgstr "平衡，于"
+
+# 安排收入与支出相等
+#. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
+#, fuzzy
+msgid "balance c/f"
+msgstr "平衡，于"
 
 # 一种记录资金收到与支付的书面记录，显示两者之间的总差额。
 #. "A written record of money received and paid out, showing the difference between the two total amounts"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.4\n"
-"POT-Creation-Date: 2017-10-20 19:04+0200\n"
+"POT-Creation-Date: 2020-03-27 21:58+0100\n"
 "PO-Revision-Date: 2018-10-09 09:47+0100\n"
 "Last-Translator: Tiago Neiva <tneiva@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -27,7 +27,7 @@ msgstr "Termo"
 msgid "account"
 msgstr "conta"
 
-#. "-"
+#. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
 msgstr "código de conta"
 
@@ -191,6 +191,10 @@ msgstr "transferência electrónica"
 msgid "action: withdraw"
 msgstr "levantamento"
 
+#. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
+msgid "aging"
+msgstr ""
+
 #. "A sum of money"
 msgid "amount"
 msgstr "montante"
@@ -202,6 +206,16 @@ msgstr "média"
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
 msgstr "saldo"
+
+#. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
+#, fuzzy
+msgid "balance b/f"
+msgstr "reconciliar"
+
+#. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
+#, fuzzy
+msgid "balance c/f"
+msgstr "reconciliar"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"

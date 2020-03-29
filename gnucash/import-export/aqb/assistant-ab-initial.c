@@ -64,6 +64,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
 #include "import-account-matcher.h"
+#include "import-utilities.h"
 #ifndef AQBANKING6
 # include <aqbanking/dlg_setup.h>
 #endif
@@ -89,6 +90,7 @@ gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 void aai_wizard_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data);
+void aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data);
 
 #ifdef AQBANKING6
 static guint aai_ab_account_hash(gconstpointer v);
@@ -106,6 +108,8 @@ static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                                      GtkTreeViewColumn  *col, gpointer user_data);
+static void delete_account_match(ABInitialInfo *info, RevLookupData *data);
+static void delete_selected_match_cb(gpointer data, gpointer user_data);
 static void insert_acc_into_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
 static void remove_acc_from_revhash_cb(gpointer ab_acc, gpointer gnc_acc, gpointer revhash);
 static void clear_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data);
@@ -303,6 +307,66 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
 
     LEAVE(" ");
+}
+
+static void delete_account_match(ABInitialInfo *info, RevLookupData *data)
+{
+    g_return_if_fail(info && info->gnc_hash &&
+        info->account_view && data && data->ab_acc);
+
+    g_hash_table_remove(info->gnc_hash, data->ab_acc);
+    gtk_tree_model_foreach(
+        GTK_TREE_MODEL(info->account_store),
+        (GtkTreeModelForeachFunc) clear_line_cb,
+        data);
+}
+
+static void
+delete_selected_match_cb(gpointer data, gpointer user_data)
+{
+    GNC_AB_ACCOUNT_SPEC *ab_acc = NULL;
+    GtkTreeIter iter;
+    GtkTreeModel *model = NULL;
+    RevLookupData revLookupData = {NULL, NULL};
+
+    GtkTreePath *path = (GtkTreePath *) data;
+    ABInitialInfo *info = (ABInitialInfo *) user_data;
+    g_return_if_fail(path && info && info->account_view);
+
+    model = gtk_tree_view_get_model(info->account_view);
+    g_return_if_fail(model);
+
+    if (gtk_tree_model_get_iter(model, &iter, path))
+    {
+        gtk_tree_model_get(model, &iter, ACCOUNT_LIST_COL_AB_ACCT, &revLookupData.ab_acc, -1);
+        if (revLookupData.ab_acc)
+            delete_account_match(info, &revLookupData);
+    }
+}
+
+void
+aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data)
+{
+    GList *selected_matches = NULL;
+    GtkTreeSelection *selection = NULL;
+    ABInitialInfo *info = (ABInitialInfo *) user_data;
+
+    g_return_if_fail(info && info->api && info->account_view && info->gnc_hash);
+
+    PINFO("Selected account matches are deleted");
+
+    selection = gtk_tree_view_get_selection (info->account_view);
+    if (selection)
+    {
+        selected_matches = gtk_tree_selection_get_selected_rows (selection, NULL);
+        if (selected_matches)
+        {
+            g_list_foreach (selected_matches, delete_selected_match_cb, info);
+            g_list_free_full (
+                selected_matches,
+                (GDestroyNotify) gtk_tree_path_free);
+        }
+    }
 }
 
 #ifdef AQBANKING6
@@ -648,13 +712,7 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
                 g_hash_table_find(info->gnc_hash, (GHRFunc) find_gnc_acc_cb,
                                   &data);
                 if (data.ab_acc)
-                {
-                    g_hash_table_remove(info->gnc_hash, data.ab_acc);
-                    gtk_tree_model_foreach(
-                        GTK_TREE_MODEL(info->account_store),
-                        (GtkTreeModelForeachFunc) clear_line_cb,
-                        &data);
-                }
+                    delete_account_match(info, &data);
 
                 /* Map ab_acc to gnc_acc */
                 g_hash_table_insert(info->gnc_hash, ab_acc, gnc_acc);
@@ -682,7 +740,8 @@ static void
 clear_kvp_acc_cb(gpointer gnc_acc, gpointer ab_acc, gpointer user_data)
 {
     g_return_if_fail(gnc_acc);
-    /* Delete complete "hbci..." KVPs for GnuCash account */
+    /* Delete "online-id" and complete "hbci..." KVPs for GnuCash account */
+    gnc_account_delete_map_entry((Account *) gnc_acc, "online_id", NULL, NULL, FALSE);
     gnc_account_delete_map_entry((Account *) gnc_acc, "hbci", NULL, NULL, FALSE);
 }
 
@@ -694,6 +753,10 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
     guint32 ab_account_uid;
     const gchar *ab_accountid, *gnc_accountid;
     const gchar *ab_bankcode, *gnc_bankcode;
+#ifdef AQBANKING6
+    gchar *ab_online_id;
+    const gchar *gnc_online_id;
+#endif
 
     g_return_if_fail(ab_acc && gnc_acc);
 
@@ -726,6 +789,14 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
             && (!gnc_bankcode
                 || (strcmp(gnc_bankcode, ab_bankcode) != 0)))
         gnc_ab_set_account_bankcode(gnc_acc, ab_bankcode);
+
+#ifdef AQBANKING6
+    ab_online_id = gnc_ab_create_online_id(ab_bankcode, ab_accountid);
+    gnc_online_id = gnc_import_get_acc_online_id(gnc_acc);
+    if (ab_online_id && (!gnc_online_id || (strcmp(ab_online_id, gnc_online_id) != 0)))
+        gnc_import_set_acc_online_id(gnc_acc, ab_online_id);
+    g_free(ab_online_id);
+#endif
 }
 
 static void
@@ -800,7 +871,7 @@ gnc_ab_initial_assistant_new(void)
     gtk_tree_view_append_column(info->account_view, column);
 
     selection = gtk_tree_view_get_selection(info->account_view);
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));

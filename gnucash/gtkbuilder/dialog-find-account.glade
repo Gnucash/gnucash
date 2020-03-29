@@ -185,6 +185,8 @@
           <object class="GtkLabel" id="filter-label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">3</property>
+            <property name="margin_bottom">3</property>
             <property name="label" translatable="yes">Case insensitive searching is available on 'Account Full Name'.</property>
             <property name="justify">center</property>
           </object>
@@ -213,6 +215,9 @@
               <object class="GtkEntry" id="filter-text-entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="invisible_char">●</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
@@ -259,6 +264,8 @@
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">3</property>
+            <property name="margin_bottom">3</property>
             <property name="label" translatable="yes">Select a row and then press 'jump to' to jump to account in the Account Tree,
 if account should not be shown, this will be temporarily overridden.</property>
             <property name="justify">center</property>

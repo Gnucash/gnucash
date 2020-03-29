@@ -126,6 +126,19 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
+          <object class="GtkLabel" id="account_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Double Click on the line of an Online Banking account name if you want to match it to a GnuCash account or select incorrect matches and click "Delete selected matches". Click "Next" when all desired accounts are matching.</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="account_scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -143,20 +156,34 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="account_label">
+          <object class="GtkBox" id="button_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Double Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click "Next" when all desired accounts are matching.</property>
-            <property name="wrap">True</property>
+            <child>
+              <object class="GtkButton" id="ab_match_delete_button">
+                <property name="label" translatable="yes">_Delete selected matches</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">start</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="aai_match_delete_button_clicked_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

@@ -276,6 +276,17 @@ gboolean gnc_ab_ieci_run_matcher(GncABImExContextImport *ieci);
  */
 GWEN_DB_NODE *gnc_ab_get_permanent_certs(void);
 
+/**
+ * Creates an online ID from bank code and account number.
+ *
+ * The returned string must be g_free'd by the caller.
+ *
+ * @param bankcode       Bank code
+ * @param accountnumber  Account number
+ * @return an online ID
+ */
+gchar* gnc_ab_create_online_id(const gchar *bankcode, const gchar *accountnumber);
+
 G_END_DECLS
 
 /** @} */
