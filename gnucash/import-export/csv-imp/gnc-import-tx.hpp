@@ -98,7 +98,7 @@ struct ErrorList;
  *   the result of this step can be queried from tokenizer
  * - the user should now map the columns to types, which is stored in column_types
  * - last step is convert the mapped columns into a list of transactions
- * - this list will then be passed on the the generic importer for further processing */
+ * - this list will then be passed on the generic importer for further processing */
 class GncTxImport
 {
 public:

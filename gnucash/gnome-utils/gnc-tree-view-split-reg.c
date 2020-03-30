@@ -592,7 +592,7 @@ gnc_tree_view_split_reg_pref_changed (gpointer prefs, gchar *pref, gpointer user
 
 /* Define which columns are in which views */
 static ViewCol *
-gnc_tree_view_split_reg_get_colummn_list (GncTreeModelSplitReg *model)
+gnc_tree_view_split_reg_get_column_list (GncTreeModelSplitReg *model)
 {
     DEBUG("Model-type is %d", model->type);
 
@@ -1024,7 +1024,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     gnc_tree_view_set_sort_user_data (GNC_TREE_VIEW (view), s_model);
 
     /* Set up the columns */
-    gnc_tree_view_split_reg_set_cols (view, model, gnc_tree_view_split_reg_get_colummn_list (model));
+    gnc_tree_view_split_reg_set_cols (view, model, gnc_tree_view_split_reg_get_column_list (model));
 
     PINFO("#### Before View connected to Model ####");
 

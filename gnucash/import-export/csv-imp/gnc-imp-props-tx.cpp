@@ -708,7 +708,7 @@ void GncPreSplit::create_split (Transaction* trans)
     if (taccount)
     {
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
-         * will be the negative of the the first split amount.
+         * will be the negative of the first split amount.
          */
         auto inv_price = m_price;
         if (m_price)

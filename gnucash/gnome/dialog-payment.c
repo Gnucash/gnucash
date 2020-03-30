@@ -1084,7 +1084,7 @@ gnc_payment_leave_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
     gnc_payment_window_check_payment (pw);
 }
 
-/* Select the list of accoutns to show in the tree */
+/* Select the list of accounts to show in the tree */
 static void
 gnc_payment_set_account_types (GncTreeViewAccount *tree)
 {

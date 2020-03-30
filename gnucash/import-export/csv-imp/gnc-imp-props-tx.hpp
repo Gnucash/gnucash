@@ -122,7 +122,7 @@ public:
      *  match those of another one (the "parent"). Note this function is *not*
      *  symmetrical. This instance can have empty properties and still be considered
      *  part of the parent if the other properties match the parent's.
-     *  A fully empty instance will will equally be considered part of the parent.
+     *  A fully empty instance will equally be considered part of the parent.
      *
      *  This function is intended to discover multi-split transaction lines in an import
      *  file where the first line defines the transaction (with a first split) and subsequent

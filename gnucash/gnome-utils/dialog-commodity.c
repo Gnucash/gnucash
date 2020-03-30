@@ -624,7 +624,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         }
     }
 
-    /* Next insert insert "All non-currency" entry if requested */
+    /* Next insert "All non-currency" entry if requested */
     if (mode == DIAG_COMM_NON_CURRENCY_SELECT || mode == DIAG_COMM_ALL)
     {
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);

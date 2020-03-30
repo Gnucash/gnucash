@@ -129,7 +129,7 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
     model = user_data;
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-    // destroy/recreate the cached acount value hash to force update
+    // destroy/recreate the cached account value hash to force update
     g_hash_table_destroy (priv->account_values_hash);
     priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        g_free, g_free);
@@ -252,7 +252,7 @@ gnc_tree_model_account_dispose (GObject *object)
     if (priv->negative_color)
         g_free (priv->negative_color);
 
-    // destroy the cached acount values
+    // destroy the cached account values
     g_hash_table_destroy (priv->account_values_hash);
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
@@ -599,7 +599,7 @@ gnc_tree_model_account_clear_cache (GncTreeModelAccount *model)
     {
         GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-        // destroy the cached acount values and recreate
+        // destroy the cached account values and recreate
         g_hash_table_destroy (priv->account_values_hash);
         priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                            g_free, g_free);

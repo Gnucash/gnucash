@@ -1899,7 +1899,7 @@
         // series data.
         this._stackData = [];
         // array that holds the data to be plotted. This will be the series data
-        // merged with the the appropriate data from _stackData according to the stackAxis.
+        // merged with the appropriate data from _stackData according to the stackAxis.
         this._plotData = [];
         this._width = null;
         this._height = null; 
@@ -3223,7 +3223,7 @@
         }
         
         
-        // function to check if event location is over a area area
+        // function to check if event location is over an area
         function checkIntersection(gridpos, plot) {
             var series = plot.series;
             var i, j, k, s, r, x, y, theta, sm, sa, minang, maxang;

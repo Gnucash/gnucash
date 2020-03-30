@@ -494,7 +494,7 @@ show_handler (const char *klass, gint component_id,
     ENTER(" ");
     if (!facc_dialog)
     {
-        LEAVE("No data strucure");
+        LEAVE("No data structure");
         return(FALSE);
     }
     gtk_window_present (GTK_WINDOW(facc_dialog->window));
