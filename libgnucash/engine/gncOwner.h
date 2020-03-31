@@ -206,6 +206,11 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
  */
 gboolean gncOwnerGetOwnerFromTxn (Transaction *txn, GncOwner *owner);
 
+/** From lot, get owner. The resulting owner must be freed with
+ *  gncOwnerFree when not needed anymore.
+ */
+GncOwner* gncOwnerFromLot (GNCLot *lot);
+
 gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GncGUID *guid);
 
 /**

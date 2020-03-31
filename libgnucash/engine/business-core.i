@@ -112,6 +112,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
   $result = scm_reverse(list);
 }
+%typemap(newfree) GncOwner * "gncOwnerFree($1);"
 #endif
 
 

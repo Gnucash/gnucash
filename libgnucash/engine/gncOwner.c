@@ -1559,6 +1559,23 @@ owner_from_lot (GNCLot *lot)
     return NULL;
 }
 
+GncOwner* gncOwnerFromLot (GNCLot *lot)
+{
+    GncOwner* owner, ownercopy;
+
+    if (!lot) return NULL;
+    owner = owner_from_lot (lot);
+
+    if (owner)
+    {
+        GncOwner *ownercopy = gncOwnerNew ();
+        gncOwnerCopy (owner, ownercopy);
+        return ownercopy;
+    }
+    else
+        return NULL;
+}
+
 static void
 reg_lot (void)
 {
