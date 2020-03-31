@@ -81,8 +81,8 @@ static char * un_escape(char *str);
  that matches each field of the import row and the user selected field
  separators (, or ;), optionally with the fields enclosed in quotes.
  
- If the match is succesful, the fields of the import row are transferred to
- a row in the GtkListStore store. If the the match is not succesful, the
+ If the match is successful, the fields of the import row are transferred to
+ a row in the GtkListStore store. If the match is not successful, the
  row is ignored. Maintains information about number of rows imported,
  the number of rows ignored, and the actual ignored rows.
  
@@ -175,7 +175,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
         line_utf8 = g_locale_to_utf8 (line, -1, NULL, NULL, NULL);
 
         // parse the line
-        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not alsways set -> g_match_info_free will segfault
+        match_info = NULL;	// it seems, that in contrast to documentation, match_info is not always set -> g_match_info_free will segfault
         if (g_regex_match (regexpat, line_utf8, 0, &match_info))
         {
             // match found

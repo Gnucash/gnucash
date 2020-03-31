@@ -569,7 +569,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     commodity = xaccAccountGetCommodity( leader );
 
-    /* no EURO converson, if account is already EURO or no EURO currency */
+    /* no EURO conversion, if account is already EURO or no EURO currency */
     if (commodity != NULL)
         euro = (gnc_is_euro_currency( commodity ) &&
                 (strncasecmp(gnc_commodity_get_mnemonic(commodity), "EUR", 3)));

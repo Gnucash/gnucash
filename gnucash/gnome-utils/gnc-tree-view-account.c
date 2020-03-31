@@ -1574,7 +1574,7 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
 }
 
 /*
- * Selects all sub-accounts of an acccount.
+ * Selects all sub-accounts of an account.
  */
 void
 gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,

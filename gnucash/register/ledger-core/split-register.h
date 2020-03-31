@@ -549,7 +549,7 @@ gboolean gnc_split_register_is_blank_split (SplitRegister *reg, Split *split);
 void gnc_split_register_change_blank_split_ref (SplitRegister *reg, Split *split);
 
 /** Pop up the exchange-rate dialog, maybe, for the current split.
- * If force_dialog is TRUE, the forces the dialog to to be called.
+ * If force_dialog is TRUE, the forces the dialog to be called.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
  */

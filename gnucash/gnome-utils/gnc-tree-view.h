@@ -79,7 +79,7 @@ GType gnc_tree_view_get_type (void);
 #define REAL_TITLE  "real_title"
 
 /* The name of this column to use when saving the view's state.  It is
- * used internally to map this colum's properties to the saved state. */
+ * used internally to map this column's properties to the saved state. */
 #define PREF_NAME  "pref-name"
 
 /* A column with this attribute set cannot be hidden from view. Valid

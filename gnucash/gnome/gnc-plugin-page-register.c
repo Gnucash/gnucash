@@ -1155,7 +1155,7 @@ get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
 
 /* For setting the focus on a register page, the default gnc_plugin
  * function for 'focus_page' is overridden so that the page focus
- * can be condionally set. This is to allow for enabling the setting
+ * can be conditionally set. This is to allow for enabling the setting
  * of the sheet focus only when the page is the current one.
  */
 static void

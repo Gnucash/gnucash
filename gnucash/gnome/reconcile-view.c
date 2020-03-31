@@ -584,7 +584,7 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
         other_account = xaccSplitGetAccount (other_split);
         if (other_split == split)
             continue;
-        /* Check this 'other' account in in the same hierarchy */
+        /* Check this 'other' account is in the same hierarchy */
         if (!g_list_find (child_accounts, other_account))
             continue;
         /* Search our sibling view for this split first.  We search the

@@ -2413,7 +2413,7 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
  * You probably want to end with something like:
  *   gtk_widget_show_all(*enclosing);
  *
- * If you can can detect state changes for your widget's value, you should also
+ * If you can detect state changes for your widget's value, you should also
  * gnc_option_changed_widget_cb() upon changes.
  *
  * The widget you return from this function should be the widget in
