@@ -25,6 +25,7 @@
 (export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
 (export gnc:price-quotes-install-sources)
 
+(use-modules (gnucash engine))
 (use-modules (gnucash gettext))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
