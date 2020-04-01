@@ -39,6 +39,7 @@
 #include "gnc-plugin-basic-commands.h"
 #include "gnc-ui-util.h"
 
+#include "dialog-assoc.h"
 #include "dialog-book-close.h"
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
@@ -47,7 +48,6 @@
 #include "dialog-imap-editor.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
-#include "dialog-trans-assoc.h"
 #include "assistant-acct-period.h"
 #include "assistant-loan.h"
 #include "gnc-engine.h"

@@ -13,6 +13,7 @@ set (gtkbuilder_SOURCES
         business-prefs.glade
         dialog-account-picker.glade
         dialog-account.glade
+        dialog-assoc.glade
         dialog-bi-import-gui.glade
         dialog-billterms.glade
         dialog-book-close.glade
@@ -49,7 +50,6 @@ set (gtkbuilder_SOURCES
         dialog-tax-info.glade
         dialog-tax-table.glade
         dialog-totd.glade
-        dialog-trans-assoc.glade
         dialog-transfer.glade
         dialog-userpass.glade
         dialog-vendor.glade

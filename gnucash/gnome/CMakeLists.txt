@@ -7,6 +7,7 @@ set (gnc_gnome_noinst_HEADERS
   business-options-gnome.h
   business-urls.h
   business-gnome-utils.h
+  dialog-assoc.h
   dialog-billterms.h
   dialog-choose-owner.h
   dialog-customer.h
@@ -32,7 +33,6 @@ set (gnc_gnome_noinst_HEADERS
   dialog-sx-editor2.h
   dialog-sx-from-trans.h
   dialog-sx-since-last-run.h
-  dialog-trans-assoc.h
   dialog-vendor.h
   gnc-budget-view.h
   gnc-plugin-account-tree.h
@@ -75,6 +75,7 @@ set (gnc_gnome_SOURCES
   business-options-gnome.c
   business-urls.c
   business-gnome-utils.c
+  dialog-assoc.c
   dialog-billterms.c
   dialog-choose-owner.c
   dialog-commodities.c
@@ -104,7 +105,6 @@ set (gnc_gnome_SOURCES
   dialog-sx-from-trans.c
   dialog-sx-since-last-run.c
   dialog-tax-info.c
-  dialog-trans-assoc.c
   dialog-vendor.c
   gnc-budget-view.c
   gnc-plugin-account-tree.c

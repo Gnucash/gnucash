@@ -53,6 +53,7 @@ gnucash/gnome/assistant-stock-split.c
 gnucash/gnome/business-gnome-utils.c
 gnucash/gnome/business-options-gnome.c
 gnucash/gnome/business-urls.c
+gnucash/gnome/dialog-assoc.c
 gnucash/gnome/dialog-billterms.c
 gnucash/gnome/dialog-choose-owner.c
 gnucash/gnome/dialog-commodities.c
@@ -82,7 +83,6 @@ gnucash/gnome/dialog-sx-editor.c
 gnucash/gnome/dialog-sx-from-trans.c
 gnucash/gnome/dialog-sx-since-last-run.c
 gnucash/gnome/dialog-tax-info.c
-gnucash/gnome/dialog-trans-assoc.c
 gnucash/gnome/dialog-vendor.c
 gnucash/gnome/gnc-budget-view.c
 gnucash/gnome/gnc-plugin-account-tree.c
@@ -241,6 +241,7 @@ gnucash/gtkbuilder/business-options-gnome.glade
 gnucash/gtkbuilder/business-prefs.glade
 gnucash/gtkbuilder/dialog-account.glade
 gnucash/gtkbuilder/dialog-account-picker.glade
+gnucash/gtkbuilder/dialog-assoc.glade
 gnucash/gtkbuilder/dialog-bi-import-gui.glade
 gnucash/gtkbuilder/dialog-billterms.glade
 gnucash/gtkbuilder/dialog-book-close.glade
@@ -277,7 +278,6 @@ gnucash/gtkbuilder/dialog-sx.glade
 gnucash/gtkbuilder/dialog-tax-info.glade
 gnucash/gtkbuilder/dialog-tax-table.glade
 gnucash/gtkbuilder/dialog-totd.glade
-gnucash/gtkbuilder/dialog-trans-assoc.glade
 gnucash/gtkbuilder/dialog-transfer.glade
 gnucash/gtkbuilder/dialog-userpass.glade
 gnucash/gtkbuilder/dialog-vendor.glade

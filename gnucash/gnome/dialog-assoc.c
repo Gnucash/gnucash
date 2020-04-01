@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "dialog-trans-assoc.h"
+#include "dialog-assoc.h"
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -470,8 +470,8 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "list-store");
-    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "transaction_association_window");
+    gnc_builder_add_from_file (builder, "dialog-assoc.glade", "list-store");
+    gnc_builder_add_from_file (builder, "dialog-assoc.glade", "transaction_association_window");
 
     window = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_window"));
     assoc_dialog->window = window;
