@@ -1202,10 +1202,9 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
             switch (row_type)
             {
                 case TOTALS_TYPE_ASSET_LIAB_EQ:
-                    if ((acctype == ACCT_TYPE_LIABILITY) ||
-                        (acctype == ACCT_TYPE_EQUITY))
-                        neg = !neg;
-                    else if (acctype != ACCT_TYPE_ASSET)
+                    if ((acctype != ACCT_TYPE_ASSET) &&
+                        (acctype != ACCT_TYPE_EQUITY) &&
+                        (acctype != ACCT_TYPE_LIABILITY))
                         continue;
                     break;
                 case TOTALS_TYPE_EXPENSES:
@@ -1218,10 +1217,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                     neg = !neg;
                     break;
                 case TOTALS_TYPE_REMAINDER:
-                    if ((acctype == ACCT_TYPE_ASSET) ||
-                        (acctype == ACCT_TYPE_INCOME) ||
-                        (acctype == ACCT_TYPE_EXPENSE))
-                        neg = !neg;
+                    neg = !neg;
                     break;
                 default:
                     continue;       /* don't count if unexpected total row type is passed in... */
@@ -1235,6 +1231,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
             switch (row_type)
             {
                 case TOTALS_TYPE_ASSET_LIAB_EQ:
+                    neg = (acctype == ACCT_TYPE_ASSET);
                     if ((acctype != ACCT_TYPE_ASSET) &&
                         (acctype != ACCT_TYPE_LIABILITY) &&
                         (acctype != ACCT_TYPE_EQUITY))
@@ -1249,7 +1246,8 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         continue;
                     break;
                 case TOTALS_TYPE_REMAINDER:
-                    neg = (acctype != ACCT_TYPE_INCOME);
+                    neg = ((acctype == ACCT_TYPE_ASSET) ||
+                           (acctype == ACCT_TYPE_EXPENSE));
                     break;
                 default:
                     continue;       /* don't count if unexpected total row type is passed in... */
