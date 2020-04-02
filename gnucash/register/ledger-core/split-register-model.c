@@ -1352,7 +1352,6 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
     Account *account;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-
     if (split == xaccSplitLookup (&info->blank_split_guid,
                                   gnc_get_current_book ()))
         return NULL;
@@ -1372,7 +1371,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
     if (gnc_reverse_balance (account))
         balance = gnc_numeric_neg (balance);
 
-    return xaccPrintAmount (balance, gnc_account_print_info (account, FALSE));
+    return xaccPrintAmount (balance, gnc_account_print_info (account, reg->mismatched_commodities));
 }
 
 static const char *
@@ -1655,7 +1654,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
 
     total = gnc_numeric_abs (total);
 
-    return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
+    return xaccPrintAmount (total, gnc_split_amount_print_info (split, reg->mismatched_commodities));
 }
 
 /* return TRUE if we have a RATE_CELL; return FALSE if we do not.
@@ -1811,7 +1810,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                                              GNC_HOW_RND_ROUND_HALF_UP);
         }
 
-        return xaccPrintAmount (imbalance, gnc_account_print_info (acc, FALSE));
+        return xaccPrintAmount (imbalance, gnc_account_print_info (acc, reg->mismatched_commodities));
     }
 
     {
@@ -1874,22 +1873,20 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
             * currency != the account commodity, then use the SplitAmount
             * instead of the SplitValue.
             */
+            gboolean currency_match;
             switch (reg->type)
             {
             case STOCK_REGISTER:
             case CURRENCY_REGISTER:
             case PORTFOLIO_LEDGER:
                 amount = xaccSplitGetValue (split);
-                print_info = gnc_commodity_print_info (currency, FALSE);
+                print_info = gnc_commodity_print_info (currency, reg->mismatched_commodities);
                 break;
 
             default:
-                if (commodity && !gnc_commodity_equal (commodity, currency))
-                    /* Convert this to the "local" value */
-                    amount = xaccSplitConvertAmount(split, account);
-                else
-                    amount = xaccSplitGetValue (split);
-                print_info = gnc_account_print_info (account, FALSE);
+                amount = xaccSplitGetValue (split);
+                print_info = gnc_account_print_info (account, reg->mismatched_commodities);
+                print_info.commodity = currency;
                 break;
             }
         }
@@ -1929,7 +1926,7 @@ gnc_split_register_get_rbaln_entry (VirtualLocation virt_loc,
     if (split == xaccSplitLookup (&info->blank_split_guid,
                                   gnc_get_current_book ()))
         return NULL;
-
+    
     trans = xaccSplitGetParent (split);
     if (!trans)
         return NULL;
@@ -2421,7 +2418,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
 
     amount2 = gnc_numeric_abs (*amount);
     g_free (amount);
-    return xaccPrintAmount (amount2, gnc_default_print_info (FALSE));
+    return xaccPrintAmount (amount2, gnc_default_print_info (reg->mismatched_commodities));
 }
 
 static void

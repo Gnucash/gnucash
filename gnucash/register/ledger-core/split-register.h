@@ -254,6 +254,8 @@ struct split_register
 
     gboolean is_template;
     gboolean do_auto_complete; /**< whether to use auto-completion */
+    gboolean mismatched_commodities; /**< indicates the register includes transactions in
+                                      mismatched commodities */
 
     SplitList *unrecn_splits; /**< list of splits to unreconcile after transaction edit */
 
@@ -282,7 +284,8 @@ typedef GtkWidget *(*SRGetParentCallback) (gpointer user_data);
 SplitRegister * gnc_split_register_new (SplitRegisterType type,
                                         SplitRegisterStyle style,
                                         gboolean use_double_line,
-                                        gboolean is_template);
+                                        gboolean is_template,
+                                        gboolean mismatched_commodities);
 
 /** Destroys a split register.
  *

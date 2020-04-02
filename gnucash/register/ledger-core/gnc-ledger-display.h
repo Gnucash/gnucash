@@ -85,7 +85,7 @@ GNCLedgerDisplay * gnc_ledger_display_simple (Account *account);
 
 /** opens up a register window to display the parent account and all of
  * its children. */
-GNCLedgerDisplay * gnc_ledger_display_subaccounts (Account *account);
+GNCLedgerDisplay * gnc_ledger_display_subaccounts (Account *account, gboolean mismatched_commodities);
 
 /** opens up a general ledger window */
 GNCLedgerDisplay * gnc_ledger_display_gl (void);

@@ -88,7 +88,8 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
                              gboolean use_double_line,
-                             gboolean is_template);
+                             gboolean is_template,
+                             gboolean mismatched_commodities);
 
 static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
                              GList *splits);
@@ -370,7 +371,7 @@ gnc_ledger_display_simple (Account *account)
 
     ld = gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
                                       gnc_get_default_register_style(acc_type),
-                                      use_double_line, FALSE);
+                                      use_double_line, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
 }
@@ -378,7 +379,7 @@ gnc_ledger_display_simple (Account *account)
 /* Opens up a register window to display an account, and all of its
  *   children, in the same window */
 GNCLedgerDisplay *
-gnc_ledger_display_subaccounts (Account *account)
+gnc_ledger_display_subaccounts (Account *account,gboolean mismatched_commodities)
 {
     SplitRegisterType reg_type;
     GNCLedgerDisplay *ld;
@@ -389,7 +390,7 @@ gnc_ledger_display_subaccounts (Account *account)
 
     ld = gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
                                       reg_type, REG_STYLE_JOURNAL, FALSE,
-                                      FALSE);
+                                      FALSE,mismatched_commodities);
     LEAVE("%p", ld);
     return ld;
 }
@@ -439,7 +440,7 @@ gnc_ledger_display_gl (void)
                              QOF_QUERY_AND);
 
     ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_JOURNAL,
-                                      REG_STYLE_JOURNAL, FALSE, FALSE);
+                                      REG_STYLE_JOURNAL, FALSE, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
 }
@@ -484,7 +485,8 @@ gnc_ledger_display_template_gl (char *id)
                                       SEARCH_LEDGER,
                                       REG_STYLE_JOURNAL,
                                       FALSE,
-                                      isTemplateModeTrue);
+                                      isTemplateModeTrue,
+                                      FALSE);
 
     sr = gnc_ledger_display_get_split_register (ld);
     if ( acct )
@@ -526,7 +528,7 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY
                                          | GNC_EVENT_ITEM_CHANGED);
-
+    
     for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
@@ -697,7 +699,7 @@ gnc_ledger_display_query (Query *query, SplitRegisterType type,
     ENTER("query=%p", query);
 
     ld = gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
-                                      FALSE, FALSE);
+                                      FALSE, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
 }
@@ -708,7 +710,8 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
                              gboolean use_double_line,
-                             gboolean is_template )
+                             gboolean is_template,
+                             gboolean mismatched_commodities)
 {
     GNCLedgerDisplay *ld;
     gint limit;
@@ -808,8 +811,9 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
     \******************************************************************/
 
     ld->use_double_line_default = use_double_line;
+
     ld->reg = gnc_split_register_new (reg_type, style, use_double_line,
-                                      is_template);
+                                      is_template,mismatched_commodities);
 
     gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 

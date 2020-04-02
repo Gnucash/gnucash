@@ -2816,7 +2816,8 @@ gnc_split_register_init (SplitRegister *reg,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
                          gboolean do_auto_complete,
-                         gboolean is_template)
+                         gboolean is_template,
+                         gboolean mismatched_commodities)
 {
     TableLayout *layout;
     TableModel *model;
@@ -2857,6 +2858,7 @@ gnc_split_register_init (SplitRegister *reg,
     reg->use_double_line = use_double_line;
     reg->do_auto_complete = do_auto_complete;
     reg->is_template = is_template;
+    reg->mismatched_commodities = mismatched_commodities;
     reg->use_tran_num_for_num_field =
                 (qof_book_use_split_action_for_num_field(gnc_get_current_book())
                     ? FALSE : TRUE);
@@ -2914,7 +2916,8 @@ SplitRegister *
 gnc_split_register_new (SplitRegisterType type,
                         SplitRegisterStyle style,
                         gboolean use_double_line,
-                        gboolean is_template)
+                        gboolean is_template,
+                        gboolean mismatched_commodities)
 {
     SplitRegister * reg;
     gboolean default_do_auto_complete = TRUE;
@@ -2929,7 +2932,8 @@ gnc_split_register_new (SplitRegisterType type,
                              style,
                              use_double_line,
                              default_do_auto_complete,
-                             is_template);
+                             is_template,
+                             mismatched_commodities);
 
     return reg;
 }
