@@ -16,12 +16,11 @@
 import os
 import sys
 import re
-from StringIO import StringIO
+from io import StringIO
 try:
     import IPython
-    from IPython import ipapi
-except Exception,e:
-    raise "Error importing IPython (%s)" % str(e)
+except Exception as e:
+    raise Exception("Error importing IPython (%s)" % str(e))
 
 
 # ------------------------------------------------------------------ class Shell
@@ -54,11 +53,11 @@ class Shell:
                                                 header='IPython system call: ',
                                                 verbose=self.IP.rc.system_verbose)
         # Get a hold of the public IPython API object and use it
-        self.ip = ipapi.get()
+        self.ip = IPython.core.getipython.get_ipython()
         self.ip.magic('colors LightBG')                
         sys.excepthook = excepthook
         self.iter_more = 0
-        self.complete_sep =  re.compile('[\s\{\}\[\]\(\)]')
+        self.complete_sep =  re.compile(r'[\s\{\}\[\]\(\)]')
 
 
     def namespace(self):
