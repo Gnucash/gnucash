@@ -802,15 +802,6 @@ gnc_plugin_page_register_new (Account* account, gboolean subaccounts)
     com0 = gnc_account_get_currency_or_parent (account);
     com1 = gnc_account_foreach_descendant_until (account,
                                                  gnc_plug_page_register_check_commodity, com0);
-    if (0 && com1 != NULL)
-    {
-        const gchar* com0_str = gnc_commodity_get_fullname (com0);
-        const gchar* com1_str = gnc_commodity_get_fullname (com1);
-        gnc_info_dialog (NULL,
-                         _ ("Cannot open sub-accounts because sub-accounts and parent account have different commodities or currencies\nFound:\n%s\n%s\n(There may be more mismatches)"),
-                         com0_str, com1_str);
-        return NULL;
-    }
 
     if (subaccounts)
         ledger = gnc_ledger_display_subaccounts (account, com1 != NULL);

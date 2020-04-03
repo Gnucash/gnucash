@@ -451,7 +451,7 @@ gnc_tree_model_split_reg_dispose (GObject *object)
 /* Create a new tree model */
 GncTreeModelSplitReg *
 gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 style,
-                        gboolean use_double_line, gboolean is_template)
+                        gboolean use_double_line, gboolean is_template, gboolean mismatched_commodities)
 {
     GncTreeModelSplitReg *model;
     GncTreeModelSplitRegPrivate *priv;
@@ -469,6 +469,7 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
     model->style = style;
     model->use_double_line = use_double_line;
     model->is_template = is_template;
+    model->mismatched_commodities = mismatched_commodities;
 
     model->sort_col = 1;
     model->sort_depth = 1;
