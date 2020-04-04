@@ -1938,7 +1938,7 @@ class GncGtkListUIItem : public GncOptionGtkUIItem
 {
 public:
     GncGtkListUIItem(GtkWidget* widget) :
-        GncOptionGtkUIItem{widget, GncOptionUIType::MULTICHOICE} {}
+        GncOptionGtkUIItem{widget, GncOptionUIType::LIST} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_TREE_VIEW(get_widget())};
@@ -2496,7 +2496,7 @@ class GncGtkDateFormatUIItem : public GncOptionGtkUIItem
 {
 public:
     GncGtkDateFormatUIItem(GtkWidget* widget) :
-        GncOptionGtkUIItem{widget, GncOptionUIType::STRING} {}
+        GncOptionGtkUIItem{widget, GncOptionUIType::DATE_FORMAT} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_DATE_FORMAT(get_widget())};
@@ -2723,10 +2723,13 @@ public:
 };
 
 template<> GtkWidget *
-create_option_widget<GncOptionUIType::BUDGET> (GncOption& option, GtkGrid *page_box,
-                                 GtkLabel *name_label, char *documentation,
+create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
+                                               GtkGrid *page_box,
+                                               GtkLabel *name_label,
+                                               char *documentation,
                                  /* Return values */
-                                 GtkWidget **enclosing, bool *packed)
+                                               GtkWidget **enclosing,
+                                               bool *packed)
 {
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
