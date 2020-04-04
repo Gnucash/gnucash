@@ -1132,9 +1132,15 @@ gnc_option_db_save(GncOptionDB* odb, QofBook* book,
 {
     odb->save_to_kvp(book, static_cast<bool>(clear_options));
 }
+const char*
+gnc_option_db_lookup_string_value(GncOptionDB*, const char*, const char*)
+{
+    return nullptr;
+}
 
 void
-gnc_option_db_book_options(GncOptionDB*)
+gnc_option_db_set_string_value(GncOptionDB*, const char*,
+                               const char*, const char*)
 {
 }
 
