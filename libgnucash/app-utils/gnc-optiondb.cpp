@@ -663,7 +663,7 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
 }
 
 void
-gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_string_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, std::string value)
 {
@@ -673,7 +673,7 @@ gnc_register_string_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_text_option(const GncOptionDBPtr& db, const char* section, const char* name,
+gnc_register_text_option(GncOptionDB* db, const char* section, const char* name,
                          const char* key, const char* doc_string,
                          std::string value)
 {
@@ -684,7 +684,7 @@ gnc_register_text_option(const GncOptionDBPtr& db, const char* section, const ch
 }
 
 void
-gnc_register_font_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_font_option(GncOptionDB* db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, std::string value)
 {
@@ -694,7 +694,7 @@ gnc_register_font_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_budget_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, GncBudget *value)
 {
@@ -704,7 +704,7 @@ gnc_register_budget_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_color_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_color_option(GncOptionDB* db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, std::string value)
 {
@@ -714,7 +714,7 @@ gnc_register_color_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_commodity_option(GncOptionDB* db, const char* section,
                               const char* name, const char* key,
                               const char* doc_string, gnc_commodity *value)
 {
@@ -724,7 +724,7 @@ gnc_register_commodity_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
+gnc_register_simple_boolean_option(GncOptionDB* db,
                                    const char* section, const char* name,
                                    const char* key, const char* doc_string,
                                    bool value)
@@ -735,7 +735,7 @@ gnc_register_simple_boolean_option(const GncOptionDBPtr& db,
 }
 
 void
-gnc_register_complex_boolean_option(const GncOptionDBPtr& db,
+gnc_register_complex_boolean_option(GncOptionDB* db,
                                     const char* section, const char* name,
                                     const char* key, const char* doc_string,
                                     bool value)
@@ -746,7 +746,7 @@ gnc_register_complex_boolean_option(const GncOptionDBPtr& db,
 }
 
 void
-gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_pixmap_option(GncOptionDB* db, const char* section,
                            const char* name, const char* key,
                            const char* doc_string, std::string value)
 {
@@ -756,7 +756,7 @@ gnc_register_pixmap_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_account_list_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_account_list_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string,
                                  const GncOptionAccountList& value)
@@ -767,7 +767,7 @@ gnc_register_account_list_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_account_list_limited_option(const GncOptionDBPtr& db,
+gnc_register_account_list_limited_option(GncOptionDB* db,
                                          const char* section, const char* name,
                                          const char* key,
                                          const char* doc_string,
@@ -814,7 +814,7 @@ gnc_account_list_from_types(QofBook *book,
 
 
 void
-gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
+gnc_register_account_sel_limited_option(GncOptionDB* db,
                                         const char* section, const char* name,
                                         const char* key, const char* doc_string,
                                         const GncOptionAccountList& value,
@@ -833,7 +833,7 @@ gnc_register_account_sel_limited_option(const GncOptionDBPtr& db,
 }
 
 void
-gnc_register_multichoice_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_multichoice_option(GncOptionDB* db, const char* section,
                                 const char* name, const char* key,
                                 const char* doc_string,
                                 GncMultichoiceOptionChoices&& choices)
@@ -844,7 +844,7 @@ gnc_register_multichoice_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_list_option(GncOptionDB* db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, const char* value,
                          GncMultichoiceOptionChoices&& list)
@@ -858,7 +858,7 @@ gnc_register_list_option(const GncOptionDBPtr& db, const char* section,
  * use decimals and fractional steps and they can be worked around.
  */
 void
-gnc_register_number_range_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_number_range_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
                                  const char* doc_string, int value, int min,
                                  int max, int step)
@@ -869,7 +869,7 @@ gnc_register_number_range_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
+gnc_register_number_plot_size_option(GncOptionDB* db,
                                      const char* section, const char* name,
                                      const char* key, const char* doc_string,
                                      int value)
@@ -880,7 +880,7 @@ gnc_register_number_plot_size_option(const GncOptionDBPtr& db,
 }
 
 void
-gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_query_option(GncOptionDB* db, const char* section,
                           const char* name, const char* key,
                           const char* doc_string, QofQuery* value)
 {
@@ -890,7 +890,7 @@ gnc_register_query_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_internal_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_internal_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, std::string value)
 {
@@ -900,7 +900,7 @@ gnc_register_internal_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_invoice_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_owner_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, GncInvoice* value)
 {
@@ -910,7 +910,7 @@ gnc_register_invoice_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_owner_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_invoice_option(GncOptionDB* db, const char* section,
                           const char* name, const char* key,
                           const char* doc_string, GncOwner* value)
 {
@@ -920,7 +920,7 @@ gnc_register_owner_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_taxtable_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_taxtable_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, GncTaxTable* value)
 {
@@ -930,7 +930,7 @@ gnc_register_taxtable_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_counter_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_counter_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
                             const char* doc_string, int value)
 {
@@ -940,7 +940,7 @@ gnc_register_counter_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_counter_format_option(const GncOptionDBPtr& db,
+gnc_register_counter_format_option(GncOptionDB* db,
                                    const char* section, const char* name,
                                    const char* key, const char* doc_string,
                                    std::string value)
@@ -951,7 +951,7 @@ gnc_register_counter_format_option(const GncOptionDBPtr& db,
 }
 
 void
-gnc_register_dateformat_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_dateformat_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, std::string value)
 {
@@ -961,7 +961,7 @@ gnc_register_dateformat_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_currency_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, gnc_commodity *value)
 {
@@ -978,7 +978,7 @@ gnc_register_currency_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_date_option(GncOptionDB* db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, time64 time,
                          RelativeDateUI ui)
@@ -992,7 +992,7 @@ gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_date_option(GncOptionDB* db, const char* section,
                          const char* name, const char* key,
                          const char* doc_string, RelativeDatePeriod period,
                          RelativeDateUI ui)
@@ -1006,7 +1006,7 @@ gnc_register_date_option(const GncOptionDBPtr& db, const char* section,
 }
 
 void
-gnc_register_date_option(const GncOptionDBPtr& db,
+gnc_register_date_option(GncOptionDB* db,
                                   const char* section, const char* name,
                                   const char* key, const char* doc_string,
                                   RelativeDatePeriodVec& period_set,
@@ -1033,7 +1033,7 @@ static const RelativeDatePeriodVec begin_dates
 };
 
 void
-gnc_register_start_date_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_start_date_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
                                const char* doc_string, bool both)
 {
@@ -1057,7 +1057,7 @@ static const RelativeDatePeriodVec end_dates
 };
 
 void
-gnc_register_end_date_option(const GncOptionDBPtr& db, const char* section,
+gnc_register_end_date_option(GncOptionDB* db, const char* section,
                              const char* name, const char* key,
                              const char* doc_string, bool both)
 {
