@@ -1605,7 +1605,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         *buf = '\0';
         return 0;
     }
-
+    
+    // Value may now be decimal, for example if the factional part is zero
+    value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
     /* print the integer part without separators */
     sprintf(temp_buf, "%" G_GINT64_FORMAT, whole.num);
     num_whole_digits = strlen (temp_buf);
