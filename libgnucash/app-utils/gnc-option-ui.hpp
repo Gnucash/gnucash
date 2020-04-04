@@ -24,8 +24,10 @@
 #ifndef GNC_OPTION_UI_HPP_
 #define GNC_OPTION_UI_HPP_
 
+#include <memory>
 #include "gnc-option-uitype.hpp"
 
+class GncOption;
 class GncOptionUIItem;
 using GncOptionUIItemPtr = std::unique_ptr<GncOptionUIItem>;
 
