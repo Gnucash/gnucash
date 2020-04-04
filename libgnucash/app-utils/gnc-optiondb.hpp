@@ -174,7 +174,8 @@ void gnc_register_invoice_option(GncOptionDB* db, const char* section,
 
 void gnc_register_owner_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
-                               const char* doc_string, GncOwner* value);
+                               const char* doc_string, GncOwner* value,
+                               GncOwnerType type);
 
 void gnc_register_taxtable_option(GncOptionDB* db, const char* section,
                                   const char* name, const char* key,
