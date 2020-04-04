@@ -54,7 +54,7 @@
 
 (define-public safe-cadr
   (match-lambda
-    ((_ x . _) x)
+    ((_ x . y) x)
     (_ '())))
 
 (define-public (find-file fname)
