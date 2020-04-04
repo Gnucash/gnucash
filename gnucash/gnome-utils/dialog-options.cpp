@@ -926,7 +926,7 @@ public:
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_TOGGLE_BUTTON(get_widget())};
-        option.set_value(gtk_toggle_button_get_active(widget));
+        option.set_value(static_cast<bool>(gtk_toggle_button_get_active(widget)));
     }
 };
 
@@ -944,7 +944,7 @@ create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     auto widget = gtk_check_button_new ();
 
-    auto ui_item{std::make_unique<GncGtkBooleanUIItem>(GncGtkBooleanUIItem{widget})};
+    auto ui_item{std::make_unique<GncGtkBooleanUIItem>(widget)};
 
     g_signal_connect(G_OBJECT(widget), "toggled",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
