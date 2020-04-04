@@ -1137,14 +1137,14 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 }
 
 void
-qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
+qof_book_load_options (QofBook *book, GncOptionLoad load_cb, GncOptionDB *odb)
 {
     load_cb (odb, book);
 }
 
 void
-qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-               GNCOptionDB* odb, gboolean clear)
+qof_book_save_options (QofBook *book, GncOptionSave save_cb,
+                       GncOptionDB* odb, gboolean clear)
 {
     /* Wrap this in begin/commit so that it commits only once instead of doing
      * so for every option. Qof_book_set_option will take care of dirtying the

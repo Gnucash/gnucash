@@ -119,7 +119,7 @@ typedef struct
     gboolean use_defaults;
     gboolean new_book;  /* presumably only used for new book creation but we check*/
 
-    GNCOptionDB *options;
+    GncOptionDB *options;
     GNCOptionWin *optionwin;
 
     GncHierarchyAssistantFinishedCallback when_completed;
@@ -1503,7 +1503,7 @@ static void
 book_options_dialog_close_cb(GNCOptionWin * optionwin,
                                gpointer user_data)
 {
-    GNCOptionDB * options = user_data;
+    GncOptionDB * options = user_data;
 
     gnc_options_dialog_destroy(optionwin);
     gnc_option_db_destroy(options);
@@ -1516,7 +1516,8 @@ assistant_insert_book_options_page (hierarchy_data *data)
     GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
-    data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
+    data->options = gnc_option_db_new();
+    gnc_option_db_book_options(data->options);
     qof_book_load_options (gnc_get_current_book (),
 			   gnc_option_db_load, data->options);
     gnc_option_db_clean (data->options);

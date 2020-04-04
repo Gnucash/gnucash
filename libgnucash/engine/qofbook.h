@@ -42,6 +42,12 @@
 
 #ifdef __cplusplus
 #include <glib.h> //To preempt it being included extern "C" in a later header.
+class GncOptionDB;
+#else
+#include <option-util.h>
+typedef GNCOptionDB GncOptionDB;
+#endif
+#ifdef __cplusplus
 extern "C"
 {
 #endif
@@ -74,15 +80,8 @@ typedef struct KvpValueImpl KvpValue;
 
 typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
-#ifdef __cplusplus
-class GncOptionDB;
-using GNCOptionDB = GncOptionDB;
-#else
-typedef struct gnc_option_db GNCOptionDB;
-#endif
-
-typedef void (*GNCOptionSave) (GNCOptionDB*, QofBook*, gboolean);
-typedef void (*GNCOptionLoad) (GNCOptionDB*, QofBook*);
+typedef void (*GncOptionSave) (GncOptionDB*, QofBook*, gboolean);
+typedef void (*GncOptionLoad) (GncOptionDB*, QofBook*);
 
 /* Book structure */
 struct _QofBook
@@ -375,21 +374,21 @@ void qof_book_commit_edit(QofBook *book);
 /** @ingroup KVP
  @{
  */
-/** Load a GNCOptionsDB from KVP data.
+/** Load a GncOptionsDB from KVP data.
  * @param book: The book.
  * @param load_cb: A callback function that does the loading.
- * @param odb: The GNCOptionDB to load.
+ * @param odb: The GncOptionDB to load.
  */
-void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
-                GNCOptionDB *odb);
-/** Save a GNCOptionsDB back to the book's KVP.
+void qof_book_load_options (QofBook *book, GncOptionLoad load_cb,
+                            GncOptionDB *odb);
+/** Save a GncOptionsDB back to the book's KVP.
  * @param book: The book.
  * @param save_cb: A callback function that does the saving.
- * @param odb: The GNCOptionsDB to save from.
- * @param clear: Should the GNCOptionsDB be emptied after the save?
+ * @param odb: The GncOptionsDB to save from.
+ * @param clear: Should the GncOptionsDB be emptied after the save?
  */
-void qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-                            GNCOptionDB* odb, gboolean clear);
+void qof_book_save_options (QofBook *book, GncOptionSave save_cb,
+                            GncOptionDB* odb, gboolean clear);
 /** Save a single option value.
  * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
  * in kvp-scm.c and automated by SWIG. The starting element is set as

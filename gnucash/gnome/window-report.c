@@ -63,8 +63,7 @@ reportWindow(int report_id, GtkWindow *parent)
 struct report_default_params_data
 {
     GNCOptionWin * win;
-    GNCOptionDB  * db;
-    SCM          scm_options;
+    GncOptionDB  * odb;
     SCM          cur_report;
 };
 
@@ -78,7 +77,7 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
     GList *results = NULL, *iter;
 
     if (!win) return;
-    results = gnc_option_db_commit (win->db);
+    results = gnc_option_db_commit (win->odb);
     for (iter = results; iter; iter = iter->next)
     {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW (win->win),
@@ -124,8 +123,7 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 
     scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
     gnc_options_dialog_destroy(win->win);
-    gnc_option_db_destroy(win->db);
-    scm_gc_unprotect_object(win->scm_options);
+    gnc_option_db_destroy(win->odb);
     g_free(win);
 }
 
@@ -149,7 +147,7 @@ gnc_report_raise_editor(SCM report)
 
 
 GtkWidget *
-gnc_report_window_default_params_editor(SCM options, SCM report,
+gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report,
                                         GtkWindow *parent)
 {
     SCM get_report_type   = scm_c_eval_string("gnc:report-type");
@@ -166,9 +164,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report,
         struct report_default_params_data * prm =
             g_new0(struct report_default_params_data, 1);
 
-        prm->scm_options = options;
+        prm->odb         = odb;
         prm->cur_report  = report;
-        prm->db          = gnc_option_db_new(prm->scm_options);
 
         /* Get the title of the report's template. */
         ptr = scm_call_1(get_report_type, report);
@@ -188,11 +185,10 @@ gnc_report_window_default_params_editor(SCM options, SCM report,
 
         g_free ((gpointer *) title);
 
-        scm_gc_protect_object(prm->scm_options);
         scm_gc_protect_object(prm->cur_report);
 
-        gnc_options_dialog_build_contents(prm->win, prm->db);
-        gnc_option_db_clean(prm->db);
+        gnc_options_dialog_build_contents(prm->win, prm->odb);
+        gnc_option_db_clean(prm->odb);
 
         gnc_options_dialog_set_apply_cb(prm->win,
                                         gnc_options_dialog_apply_cb,
@@ -215,6 +211,7 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     SCM get_report_type   = scm_c_eval_string("gnc:report-type");
     SCM ptr;
     SCM options;
+    GncOptionDB* odb;
     GtkWidget *options_widget = NULL;
 
     /* If the options editor widget already exists we simply raise it */
@@ -229,16 +226,19 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
                             _("There are no options for this report."));
         return FALSE;
     }
+    odb = (GncOptionDB*)scm_to_pointer(options);
 
     /* Multi-column type reports need a special options dialog */
     ptr = scm_call_1(get_report_type, report);
     if (scm_is_string(ptr))
     {
         gchar *rpt_type = gnc_scm_to_utf8_string (ptr);
+#if 0
         if (g_strcmp0 (rpt_type, "d8ba4a2e89e8479ca9f6eccdeb164588") == 0)
-            options_widget = gnc_column_view_edit_options (options, report);
+            options_widget = gnc_column_view_edit_options (odb, report);
         else
-            options_widget = gnc_report_window_default_params_editor (options, report, parent);
+#endif
+            options_widget = gnc_report_window_default_params_editor (odb, report, parent);
         g_free (rpt_type);
     }
 

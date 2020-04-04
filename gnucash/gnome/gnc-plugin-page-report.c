@@ -105,14 +105,14 @@ typedef struct GncPluginPageReportPrivate
     /// The report which this Page is satisfying
     SCM cur_report;
     /// The Option DB for this report.
-    GNCOptionDB *cur_odb;
+    GncOptionDB *cur_odb;
     SCM option_change_cb_id;
 
     /* initial_report is special; it's the one that's saved and
      * restored.  The name_change_callback only gets called when
      * the initial_report name is changed. */
     SCM          initial_report;
-    GNCOptionDB  * initial_odb;
+    GncOptionDB  * initial_odb;
     SCM          name_change_cb_id;
 
     /* keep a list of edited reports so that we can destroy them when
@@ -648,18 +648,23 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         DEBUG("calling set_needs_save for report with id=%d", report_id);
         scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 
-        priv->initial_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));
+        priv->initial_odb =
+            (GncOptionDB *)scm_to_pointer(scm_call_1(get_options, inst_report));
+/*
         priv->name_change_cb_id =
             gnc_option_db_register_change_callback(priv->initial_odb,
                     gnc_plugin_page_report_refresh,
                     priv,
                     "General", "Report name");
+*/
     }
 
     if ((priv->cur_report != SCM_BOOL_F) && (priv->cur_odb != NULL))
     {
+/*
         gnc_option_db_unregister_change_callback_id(priv->cur_odb,
                 priv->option_change_cb_id);
+*/
         gnc_option_db_destroy(priv->cur_odb);
         priv->cur_odb = NULL;
     }
@@ -669,12 +674,14 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
     priv->cur_report = inst_report;
     scm_gc_protect_object(priv->cur_report);
 
-    priv->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));
+    priv->cur_odb = (GncOptionDB *)scm_to_pointer(scm_call_1(get_options,
+                                                             inst_report));
+/*
     priv->option_change_cb_id =
         gnc_option_db_register_change_callback(priv->cur_odb,
                 gnc_plugin_page_report_option_change_cb,
                 report, NULL, NULL);
-
+*/
     if (gnc_html_history_forward_p(gnc_html_get_history(priv->html)))
     {
         gnc_plugin_page_report_set_fwd_button(report, TRUE);
@@ -730,8 +737,9 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
 
     /* Update the page (i.e. the notebook tab and window title) */
     old_name = gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(report));
-    new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
-               "Report name", NULL);
+    new_name = g_strdup(gnc_option_db_lookup_string_value(priv->cur_odb,
+                                                          "General",
+                                                          "Report name"));
     if (strcmp(old_name, new_name) != 0)
     {
         /* Bug 727130, 760711 - remove only the non-printable
@@ -1033,8 +1041,8 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
 
     /* Is this a redundant call? */
-    old_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
-               "Report name", NULL);
+    old_name = gnc_option_db_lookup_string_value(priv->cur_odb, "General",
+                                                 "Report name");
     DEBUG("Comparing old name '%s' to new name '%s'",
           old_name ? old_name : "(null)", name);
     if (old_name && (strcmp(old_name, name) == 0))
@@ -1044,7 +1052,7 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
     }
 
     /* Store the new name for the report. */
-    gnc_option_db_set_string_option(priv->cur_odb, "General",
+    gnc_option_db_set_string_value(priv->cur_odb, "General",
                                     "Report name", name);
 
     /* Have to manually call the option change hook. */
@@ -1110,9 +1118,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 
     if (priv->initial_odb)
     {
-        gnc_option_db_unregister_change_callback_id(priv->initial_odb,
-                priv->name_change_cb_id);
-
+//Remove this if there's a double-free
         gnc_option_db_destroy(priv->initial_odb);
         priv->initial_odb = NULL;
     }
@@ -1787,14 +1793,10 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
 static GncInvoice*
 lookup_invoice(GncPluginPageReportPrivate *priv)
 {
-    SCM opt_val = gnc_option_db_lookup_option(priv->cur_odb, "General",
-                                              "Invoice Number", NULL);
-    if (opt_val == SCM_UNDEFINED)
-        return NULL;
-
-#define FUNC_NAME G_STRFUNC
-    return SWIG_MustGetPtr(opt_val, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
-#undef FUNC_NAME
+    const QofInstance* opt_val =
+        gnc_option_db_lookup_qofinstance_value(priv->cur_odb, "General",
+                                               "Invoice Number");
+    return GNC_INVOICE(opt_val);
 }
 
 #define GNC_PREFS_GROUP_REPORT_PDFEXPORT GNC_PREFS_GROUP_GENERAL_REPORT ".pdf-export"
@@ -1849,8 +1851,9 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
          *        so I added yet another hack below for this. cstim.
          */
         GncInvoice *invoice;
-        report_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
-                      "Report name", NULL);
+        report_name = g_strdup(gnc_option_db_lookup_string_value(priv->cur_odb,
+                                                                 "General",
+                                                                 "Report name"));
         if (!report_name)
             report_name = g_strdup (_(default_jobname));
         if (g_strcmp0(report_name, _("Printable Invoice")) == 0

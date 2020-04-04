@@ -55,10 +55,10 @@ struct _stylesheetdialog
 
 typedef struct ss_info
 {
-    GNCOptionWin        * odialog;
-    GNCOptionDB         * odb;
-    SCM                   stylesheet;
-    GtkTreeRowReference * row_ref;
+    GNCOptionWin  * odialog;
+    GncOptionDB   * odb;
+    SCM           stylesheet;
+    GtkTreeRowReference *row_ref;
 } ss_info;
 
 enum
@@ -169,9 +169,9 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
     gchar          * title;
     GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(ss->list_view)));
 
-    title = g_strdup_printf (_("HTML Style Sheet Properties: %s"), name);
-    ssinfo->odialog = gnc_options_dialog_new (title, parent);
-    ssinfo->odb     = gnc_option_db_new (scm_options);
+    title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
+    ssinfo->odialog = gnc_options_dialog_new(title, parent);
+    ssinfo->odb     = (GncOptionDB *)scm_to_pointer(scm_options);
     ssinfo->stylesheet = sheet_info;
     ssinfo->row_ref    = row_ref;
     g_free (title);

@@ -27,13 +27,14 @@
 
 //#include "gnc-html.h"
 #include "qof.h"
+#include <gnc-optiondb.h>
 
 typedef struct gnc_report_window_s gnc_report_window;
 
 /** PROTOTYPES ******************************************************/
 
 // scm-exposed
-GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report, GtkWindow *parent);
+GtkWidget * gnc_report_window_default_params_editor(GncOptionDB* odb, SCM report, GtkWindow *parent);
 
 // called from multiple places
 // [gnome-business/dialog-invoice.c;gnome/window-register.c]; and

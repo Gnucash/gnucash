@@ -897,7 +897,7 @@ gnc_register_internal_option(GncOptionDB* db, const char* section,
 void
 gnc_register_owner_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
-                            const char* doc_string, GncInvoice* value)
+                            const char* doc_string, GncOwner* value)
 {
     GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::INVOICE};
@@ -907,7 +907,7 @@ gnc_register_owner_option(GncOptionDB* db, const char* section,
 void
 gnc_register_invoice_option(GncOptionDB* db, const char* section,
                           const char* name, const char* key,
-                          const char* doc_string, GncOwner* value)
+                          const char* doc_string, GncInvoice* value)
 {
     GncOption option{section, name, key, doc_string, (const QofInstance*)value,
             GncOptionUIType::OWNER};
@@ -1131,7 +1131,6 @@ gnc_option_db_save(GncOptionDB* odb, QofBook* book,
                         gboolean clear_options)
 {
     odb->save_to_kvp(book, static_cast<bool>(clear_options));
-}
 }
 
 void
