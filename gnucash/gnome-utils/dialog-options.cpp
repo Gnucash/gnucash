@@ -270,6 +270,7 @@ gnc_option_changed_widget_cb(GtkWidget *widget, GncOption* option)
 {
     if (!option) return;
     const_cast<GncOptionUIItem*>(option->get_ui_item())->set_dirty(true);
+    dialog_changed_internal(widget, true);
 }
 
 void
