@@ -83,11 +83,6 @@ GncOptionDB::GncOptionDB() : m_default_section{} {}
 GncOptionDB::GncOptionDB(QofBook* book) : GncOptionDB() {}
 
 void
-GncOptionDB::save_to_book(QofBook* book, bool do_clear) const
-{
-}
-
-void
 GncOptionDB::register_option(const char* sectname, GncOption&& option)
 {
     auto section = find_section(sectname);
@@ -1135,7 +1130,8 @@ void
 gnc_option_db_save(GncOptionDB* odb, QofBook* book,
                         gboolean clear_options)
 {
-    odb->save_to_book(book, static_cast<bool>(clear_options));
+    odb->save_to_kvp(book, static_cast<bool>(clear_options));
+}
 }
 
 void

@@ -82,7 +82,6 @@ public:
             func(section);
     }
     size_t num_sections() const noexcept { return m_sections.size(); }
-    void save_to_book(QofBook* book, bool do_clear) const;
     bool get_changed() const noexcept { return m_dirty; }
     void register_option(const char* section, GncOption&& option);
     void unregister_option(const char* section, const char* name);
