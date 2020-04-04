@@ -1142,3 +1142,21 @@ void
 gnc_option_db_book_options(GncOptionDB*)
 {
 }
+
+const QofInstance*
+gnc_option_db_lookup_qofinstance_value(GncOptionDB*, const char*, const char*)
+{
+    return nullptr;
+}
+
+GList*
+gnc_option_db_lookup_glist_value(GncOptionDB*, const char*, const char*)
+{
+    return nullptr;
+}
+
+void
+gnc_option_db_set_glist_value(GncOptionDB*, const char*, const char*, GList*)
+{
+}
+
