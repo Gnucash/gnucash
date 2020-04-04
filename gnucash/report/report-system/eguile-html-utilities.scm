@@ -70,7 +70,7 @@
   (string-append "<span class=\"foreign\">" item "</span>"))
 
 ;; Convert any x into something printable as HTML
-(define-public (dump x) (escape-html (object->string x)))
+(define-public (dump x) (gnc:html-string-sanitize (object->string x)))
 ; ddump does the display as well -- for use in eguile reports
 ; where anything 'display'ed becomes part of the report
 (define-public (ddump x) (display (dump x)))
