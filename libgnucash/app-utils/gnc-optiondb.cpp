@@ -25,6 +25,7 @@
 #include <limits>
 #include <sstream>
 #include <kvp-value.hpp>
+#include <qofbookslots.h>
 #include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
@@ -1132,6 +1133,156 @@ gnc_option_db_save(GncOptionDB* odb, QofBook* book,
 {
     odb->save_to_kvp(book, static_cast<bool>(clear_options));
 }
+
+void
+gnc_option_db_book_options(GncOptionDB* odb)
+{
+    constexpr const char* business_section{N_("Business")};
+    constexpr const char* counter_section{N_("Counters")};
+    static const std::string empty_string{""};
+
+//Accounts Tab
+
+    gnc_register_number_range_option(odb, OPTION_SECTION_ACCOUNTS,
+                                     OPTION_NAME_AUTO_READONLY_DAYS, "a",
+                                     N_("Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only."),
+                                     0.0, 0.0, 3650.0, 1.0);
+
+    gnc_register_simple_boolean_option(odb, OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_NUM_FIELD_SOURCE, "b",
+                                       N_("Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports."),
+                                       false);
+    gnc_register_simple_boolean_option(odb, OPTION_SECTION_ACCOUNTS,
+                                       OPTION_NAME_TRADING_ACCOUNTS, "a",
+                                       N_("Check to have trading accounts used for transactions involving more than one currency or commodity."),
+                                       false);
+
+//Budgeting Tab
+
+    gnc_register_budget_option(odb, OPTION_SECTION_BUDGETING,
+                               OPTION_NAME_DEFAULT_BUDGET, "a",
+                               N_("Budget to be used when none has been otherwise specified."),
+                               nullptr);
+
+//Counters Tab
+
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Customer number"), "a",
+                                N_("The previous customer number generated. This number will be incremented to generate the next customer number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Customer number format"), "b",
+                                       N_("The format string to use for generating customer numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Employee number"), "a",
+                                N_("The previous employee number generated. This number will be incremented to generate the next employee number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Employee number format"), "b",
+                                       N_("The format string to use for generating employee numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Invoice number"), "a",
+                                N_("The previous invoice number generated. This number will be incremented to generate the next invoice number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Invoice number format"), "b",
+                                       N_("The format string to use for generating invoice numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Bill number"), "a",
+                                N_("The previous bill number generated. This number will be incremented to generate the next bill number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Bill number format"), "b",
+                                       N_("The format string to use for generating bill numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Expense voucher number"), "a",
+                                N_("The previous expense voucher number generated. This number will be incremented to generate the next voucher number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Expense voucher number format"), "b",
+                                       N_("The format string to use for generating expense voucher numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Job number"), "a",
+                                N_("The previous job number generated. This number will be incremented to generate the next job number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Job number format"), "b",
+                                       N_("The format string to use for generating job numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Order number"), "a",
+                                N_("The previous order number generated. This number will be incremented to generate the next order number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Order number format"), "b",
+                                       N_("The format string to use for generating order numbers. This is a printf-style format string."),
+                                       empty_string);
+    gnc_register_counter_option(odb, counter_section,
+                                N_("Vendor number"), "a",
+                                N_("The previous vendor number generated. This number will be incremented to generate the next vendor number."),
+                                0.0);
+    gnc_register_counter_format_option(odb, counter_section,
+                                       N_("Vendor number format"), "b",
+                                       N_("The format string to use for generating vendor numbers. This is a printf-style format string."),
+                                       empty_string);
+
+//Business Tab
+
+    gnc_register_string_option(odb, business_section, N_("Company Name"), "a",
+                               N_("The name of your business."),
+                               empty_string);
+    gnc_register_text_option(odb, business_section, N_("Company Address"), "b1",
+                             N_("The address of your business."),
+                             empty_string);
+    gnc_register_string_option(odb, business_section,
+                               N_("Company Contact Person"), "b2",
+                               N_("The contact person to print on invoices."),
+                               empty_string);
+    gnc_register_string_option(odb, business_section,
+                               N_("Company Phone Number"), "c1",
+                               N_("The contact person to print on invoices."),
+                               empty_string);
+    gnc_register_string_option(odb, business_section,
+                               N_("Company Fax Number"), "c2",
+                               N_("The fax number of your business."),
+                               empty_string);
+    gnc_register_string_option(odb, business_section,
+                               N_("Company Email Address"), "c3",
+                               N_ ("The email address of your business."),
+                               empty_string);
+    gnc_register_string_option(odb, business_section,
+                               N_("Company Website URL"), "c4",
+                               N_("The URL address of your website."),
+                               empty_string);
+    gnc_register_string_option(odb, business_section, N_("Company ID"), "c5",
+                               N_("The ID for your company (eg 'Tax-ID: 00-000000)."),
+                               empty_string);
+
+    gnc_register_taxtable_option(odb, business_section,
+                                 N_("Default Customer TaxTable"), "e",
+                                 N_("The default tax table to apply to customers."),
+                                 nullptr);
+    gnc_register_taxtable_option(odb, business_section,
+                                 N_("Default Vendor TaxTable"), "f",
+                                 N_("The default tax table to apply to vendors."),
+                                 nullptr);
+    gnc_register_dateformat_option(odb, business_section,
+                                   N_("Fancy Date Format"), "g",
+                                   N_("The default date format used for fancy printed dates."),
+                                   empty_string);
+
+//Tax Tab
+
+    gnc_register_string_option(odb, N_("Tax"), N_("Tax Number"), "a",
+                               N_("The electronic tax number of your business"),
+                               empty_string);
+}
+
 const char*
 gnc_option_db_lookup_string_value(GncOptionDB*, const char*, const char*)
 {
