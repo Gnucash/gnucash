@@ -542,13 +542,14 @@ gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
     auto num_sections = odb->num_sections();
     auto default_section = odb->get_default_section();
 
-    PINFO("Default Section name is %s", default_section->get_name().c_str());
+    PINFO("Default Section name is %s",
+          default_section ? default_section->get_name().c_str() : "NULL");
 
     odb->foreach_section(
         [propertybox, default_section, &default_page]
         (GncOptionSectionPtr& section) {
             auto page = gnc_options_dialog_append_page(propertybox, section);
-            if (section.get() == default_section)
+            if (default_section && section.get() == default_section)
                 default_page = page;
         });
 
