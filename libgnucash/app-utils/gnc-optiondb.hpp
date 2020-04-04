@@ -138,10 +138,12 @@ void gnc_register_list_option(GncOptionDB* db, const char* section,
                               const char* doc_string, const char* value,
                               GncMultichoiceOptionChoices&& list);
 
+template <typename ValueType>
 void gnc_register_number_range_option(GncOptionDB* db,
                                       const char* section, const char* name,
                                       const char* key, const char* doc_string,
-                                      int value, int min, int max, int step);
+                                      ValueType value, ValueType min,
+                                      ValueType max, ValueType step);
 
 void gnc_register_number_plot_size_option(GncOptionDB* db,
                                           const char* section, const char* name,
@@ -180,7 +182,7 @@ void gnc_register_taxtable_option(GncOptionDB* db, const char* section,
 
 void gnc_register_counter_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
-                                 const char* doc_string, int value);
+                                 const char* doc_string, double value);
 
 void gnc_register_counter_format_option(GncOptionDB* db,
                                         const char* section, const char* name,

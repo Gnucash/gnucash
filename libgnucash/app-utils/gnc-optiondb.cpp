@@ -853,14 +853,15 @@ gnc_register_list_option(GncOptionDB* db, const char* section,
 /* Only balance-forecast.scm, hello-world.scm, and net-charts.scm
  * use decimals and fractional steps and they can be worked around.
  */
-void
+template <typename ValueType> void
 gnc_register_number_range_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
-                                 const char* doc_string, int value, int min,
-                                 int max, int step)
+                                 const char* doc_string, ValueType value,
+                                 ValueType min, ValueType max, ValueType step)
 {
-    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
-                value, min, max, step}};
+    GncOption option{GncOptionRangeValue<ValueType>{section, name, key,
+                                                    doc_string, value, min,
+                                                    max, step}};
     db->register_option(section, std::move(option));
 }
 
@@ -928,10 +929,10 @@ gnc_register_taxtable_option(GncOptionDB* db, const char* section,
 void
 gnc_register_counter_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
-                            const char* doc_string, int value)
+                            const char* doc_string, double value)
 {
-    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
-                value, 0, 999999999, 1}};
+    GncOption option{GncOptionRangeValue<double>{section, name, key, doc_string,
+                value, 0.0, 999999999.0, 1.0}};
     db->register_option(section, std::move(option));
 }
 
@@ -1312,3 +1313,13 @@ gnc_option_db_set_glist_value(GncOptionDB*, const char*, const char*, GList*)
 {
 }
 
+// Force creation of templates
+template void gnc_register_number_range_option(GncOptionDB* db,
+                                      const char* section, const char* name,
+                                      const char* key, const char* doc_string,
+                                      int value, int min, int max, int step);
+template void gnc_register_number_range_option(GncOptionDB* db,
+                                      const char* section, const char* name,
+                                      const char* key, const char* doc_string,
+                                      double value, double min,
+                                      double max, double step);
