@@ -726,7 +726,7 @@ gnc_register_simple_boolean_option(GncOptionDB* db,
                                    bool value)
 {
     GncOption option{section, name, key, doc_string, value,
-            GncOptionUIType::INTERNAL};
+            GncOptionUIType::BOOLEAN};
     db->register_option(section, std::move(option));
 }
 
