@@ -53,6 +53,7 @@ enum GncOptionUIType
     INVOICE,
     TAX_TABLE,
     QUERY,
+    MAX_VALUE,  //Nake sure this one is always last
 };
 
 #endif // GNC_OPTION_UITYPE_H__

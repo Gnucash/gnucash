@@ -1,8 +1,9 @@
 /********************************************************************\
- * dialog-options.cpp -- GNOME option handling                      *
+ * dialog-options.cpp -- option handling                      *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  * Copyright (c) 2011 Robert Fewell                                 *
+ * Copyright 2020 John Ralls                                        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -62,7 +63,10 @@ extern "C"
 #include "misc-gnome-utils.h"
 }
 
-#include "dialog-options.h"
+#include <iostream>
+#include <sstream>
+
+#include "dialog-options.hpp"
 #include <gnc-optiondb.hpp>
 #include <gnc-optiondb-impl.hpp>
 
@@ -82,13 +86,6 @@ extern "C"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-
-template <typename Instance> inline const QofInstance*
-qof_instance_cast(Instance inst)
-{
-    static_assert(std::is_pointer_v<Instance>, "Pointers Only!");
-    return reinterpret_cast<const QofInstance*>(inst);
-}
 
 static constexpr const char* DIALOG_OPTIONS_CM_CLASS{"dialog-options"};
 static constexpr const char* GNC_PREFS_GROUP{"dialogs.options"};
@@ -137,45 +134,64 @@ enum page_tree
     NUM_COLUMNS
 };
 
-class GncOptionGtkUIItem : public GncOptionUIItem
+//Init the class static.
+std::vector<WidgetCreateFunc> GncOptionUIFactory::s_registry{static_cast<size_t>(GncOptionUIType::MAX_VALUE)};
+
+void
+GncOptionUIFactory::set_func(GncOptionUIType type, WidgetCreateFunc func)
 {
-public:
-    GncOptionGtkUIItem(GtkWidget* widget, GncOptionUIType type) :
-        GncOptionUIItem(type),
-        m_widget{static_cast<GtkWidget*>(g_object_ref(widget))} {}
-    GncOptionGtkUIItem(const GncOptionGtkUIItem& item) :
+    s_registry[static_cast<size_t>(type)] = func;
+}
+
+GtkWidget*
+GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
+                     char* description, GtkWidget** enclosing, bool* packed)
+{
+    auto type{option.get_ui_type()};
+    auto func{s_registry[static_cast<size_t>(type)]};
+    if (func)
+        return func(option, page, name, description, enclosing, packed);
+    return nullptr;
+}
+
+GncOptionGtkUIItem::GncOptionGtkUIItem(GtkWidget* widget,
+                                       GncOptionUIType type) :
+    GncOptionUIItem{type},
+    m_widget{static_cast<GtkWidget*>(g_object_ref(widget))} {}
+
+GncOptionGtkUIItem::GncOptionGtkUIItem(const GncOptionGtkUIItem& item) :
         GncOptionUIItem{item.get_ui_type()},
         m_widget{static_cast<GtkWidget*>(g_object_ref(item.get_widget()))} {}
-    GncOptionGtkUIItem(GncOptionGtkUIItem&&) = default;
-    virtual ~GncOptionGtkUIItem() override
-    {
-        if (m_widget)
-            g_object_unref(m_widget);
-    }
-    void clear_ui_item() override
-    {
-        if (m_widget)
-            g_object_unref(m_widget);
-        m_widget = nullptr;
-    }
-    void set_widget(GtkWidget* widget)
-    {
-        if (get_ui_type() == GncOptionUIType::INTERNAL)
-        {
-            std::string error{"INTERNAL option, setting the UI item forbidden."};
-            throw std::logic_error(std::move(error));
-        }
 
-        if (m_widget)
-            g_object_unref(m_widget);
+GncOptionGtkUIItem::~GncOptionGtkUIItem()
+{
+    if (m_widget)
+        g_object_unref(m_widget);
+}
 
-        m_widget = static_cast<GtkWidget*>(g_object_ref(widget));
+void
+GncOptionGtkUIItem::clear_ui_item()
+{
+    if (m_widget)
+        g_object_unref(m_widget);
+    m_widget = nullptr;
+}
+
+void
+GncOptionGtkUIItem::set_widget(GtkWidget* widget)
+{
+    if (get_ui_type() == GncOptionUIType::INTERNAL)
+    {
+        std::string error{"INTERNAL option, setting the UI item forbidden."};
+        throw std::logic_error(std::move(error));
     }
-    virtual GtkWidget* const get_widget() const { return m_widget; }
 
-private:
-    GtkWidget* m_widget;
-};
+    if (m_widget)
+        g_object_unref(m_widget);
+
+    m_widget = static_cast<GtkWidget*>(g_object_ref(widget));
+}
+
 
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
@@ -249,18 +265,19 @@ gnc_options_dialog_changed (GNCOptionWin *win)
     dialog_changed_internal (win->window, TRUE);
 }
 
-static void
-widget_changed_cb(GtkWidget *widget, GncOption* option)
+void
+gnc_option_changed_widget_cb(GtkWidget *widget, GncOption* option)
 {
     if (!option) return;
     const_cast<GncOptionUIItem*>(option->get_ui_item())->set_dirty(true);
 }
 
 void
-option_changed_cb(GtkWidget *dummy, GncOption* option)
+gnc_option_changed_option_cb(GtkWidget *dummy, GncOption* option)
 {
     if (!option) return;
-    option->set_ui_item_from_option();
+    auto widget{gnc_option_get_gtk_widget(option)};
+    gnc_option_changed_widget_cb(widget, option);
 }
 
 
@@ -290,9 +307,6 @@ create_option_widget(GncOption& option, GtkGrid*, GtkLabel*, char*, GtkWidget**,
     return nullptr;
 }
 
-static GtkWidget* option_widget_factory(GncOption& option, GtkGrid* page,
-                                        GtkLabel* name, char* description,
-                                        GtkWidget** enclosing, bool* packed);
 static void
 gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
 {
@@ -326,8 +340,9 @@ gnc_option_set_ui_widget(GncOption& option, GtkGrid *page_box, gint grid_row)
         documentation = nullptr;
 
     name_label = GTK_LABEL(gtk_label_new (name));
-    auto widget = option_widget_factory(option, page_box, name_label,
-                                        documentation, &enclosing, &packed);
+    auto widget = GncOptionUIFactory::create(option, page_box, name_label,
+                                             documentation, &enclosing,
+                                             &packed);
     /* attach the name label to the first column of the grid and
        align to the end */
     gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
@@ -930,7 +945,7 @@ create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
     auto ui_item{std::make_unique<GncGtkBooleanUIItem>(GncGtkBooleanUIItem{widget})};
 
     g_signal_connect(G_OBJECT(widget), "toggled",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
@@ -976,7 +991,7 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
     auto ui_item{std::make_unique<GncGtkStringUIItem>(widget)};
 
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1032,7 +1047,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     auto ui_item{std::make_unique<GncGtkTextUIItem>(widget)};
     auto text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_signal_connect(G_OBJECT(text_buffer), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1072,7 +1087,7 @@ create_option_widget<GncOptionUIType::CURRENCY> (GncOption& option, GtkGrid *pag
     auto widget = gnc_currency_edit_new();
     auto ui_item{std::make_unique<GncGtkCurrencyUIItem>(widget)};
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1117,7 +1132,7 @@ create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *pa
     auto ui_item{std::make_unique<GncGtkCommodityUIItem>(widget)};
 
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
@@ -1126,7 +1141,7 @@ create_option_widget<GncOptionUIType::COMMODITY> (GncOption& option, GtkGrid *pa
                                     documentation);
 
     g_signal_connect(G_OBJECT(GNC_GENERAL_SELECT(widget)->entry), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
@@ -1164,7 +1179,7 @@ create_multichoice_widget(GncOption& option)
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     return widget;
 }
@@ -1243,7 +1258,7 @@ AbsoluteDateEntry::AbsoluteDateEntry(GncOption& option) :
 {
     auto entry = GNC_DATE_EDIT(m_entry)->date_entry;
     g_signal_connect(G_OBJECT(entry), "changed",
-                     G_CALLBACK(option_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_option_cb), &option);
 }
 
 void
@@ -1300,7 +1315,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option) :
     g_object_unref(store);
 
     g_signal_connect(G_OBJECT(m_entry), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 }
 
 void
@@ -1448,7 +1463,7 @@ date_set_absolute_cb(GtkWidget *widget, gpointer data1)
     if (auto date_ui = dynamic_cast<const GncOptionDateUIItem* const>(ui_item))
     {
         const_cast<GncOptionDateUIItem*>(date_ui)->get_entry()->toggle_relative(true);
-        option_changed_cb(widget, option);
+        gnc_option_changed_option_cb(widget, option);
     }
 }
 
@@ -1460,7 +1475,7 @@ date_set_relative_cb(GtkWidget *widget, gpointer data1)
     if (auto date_ui = dynamic_cast<const GncOptionDateUIItem* const>(ui_item))
     {
         const_cast<GncOptionDateUIItem*>(date_ui)->get_entry()->toggle_relative(false);
-        option_changed_cb(widget, option);
+        gnc_option_changed_option_cb(widget, option);
     }
 }
 
@@ -1575,7 +1590,7 @@ account_select_all_cb(GtkWidget *widget, gpointer data)
     gtk_tree_view_expand_all(GTK_TREE_VIEW(tree_view));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_select_all(selection);
-    widget_changed_cb(widget, option);
+    gnc_option_changed_widget_cb(widget, option);
 }
 
 static void
@@ -1588,7 +1603,7 @@ account_clear_all_cb(GtkWidget *widget, gpointer data)
     tree_view = GNC_TREE_VIEW_ACCOUNT(gnc_option_get_gtk_widget (option));
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
     gtk_tree_selection_unselect_all(selection);
-    widget_changed_cb(widget, option);
+    gnc_option_changed_widget_cb(widget, option);
 }
 
 static void
@@ -1628,7 +1643,7 @@ show_hidden_toggled_cb(GtkWidget *widget, GncOption* option)
     gnc_tree_view_account_get_view_info (tree_view, &avi);
     avi.show_hidden = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
     gnc_tree_view_account_set_view_info (tree_view, &avi);
-    widget_changed_cb(widget, option);
+    gnc_option_changed_widget_cb(widget, option);
 }
 
 class GncGtkAccountListUIItem : public GncOptionGtkUIItem
@@ -1819,7 +1834,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     auto widget = gnc_option_get_gtk_widget(&option);
     auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
     g_signal_connect(G_OBJECT(selection), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
     //  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * 10);
@@ -1861,7 +1876,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
                                      acct_type_list, NULL);
     g_list_free(acct_type_list);
     g_signal_connect(widget, "account_sel_changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
 
 // gnc_account_sel doesn't emit a changed signal
@@ -1879,7 +1894,7 @@ static void
 list_changed_cb(GtkTreeSelection *selection, GncOption* option)
 {
     GtkTreeView *view = GTK_TREE_VIEW(gnc_option_get_gtk_widget (option));
-    widget_changed_cb(GTK_WIDGET(view), option);
+    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static void
@@ -1892,7 +1907,7 @@ list_select_all_cb(GtkWidget *widget, gpointer data)
     view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_select_all(selection);
-    widget_changed_cb(GTK_WIDGET(view), option);
+    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static void
@@ -1905,7 +1920,7 @@ list_clear_all_cb(GtkWidget *widget, gpointer data)
     view = GTK_TREE_VIEW(gnc_option_get_gtk_widget(option));
     selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_unselect_all(selection);
-    widget_changed_cb(GTK_WIDGET(view), option);
+    gnc_option_changed_widget_cb(GTK_WIDGET(view), option);
 }
 
 static void
@@ -2133,7 +2148,7 @@ create_option_widget<GncOptionUIType::NUMBER_RANGE> (GncOption& option,
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), GTK_WIDGET(widget),
                        FALSE, FALSE, 0);
@@ -2185,7 +2200,7 @@ create_option_widget<GncOptionUIType::COLOR> (GncOption& option, GtkGrid *page_b
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(widget), "color-set",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
@@ -2229,7 +2244,7 @@ create_option_widget<GncOptionUIType::FONT> (GncOption& option, GtkGrid *page_bo
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(widget), "font-set",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
@@ -2331,7 +2346,7 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
                  "preview-widget", gtk_image_new(),
                  (char *)NULL);
     g_signal_connect(G_OBJECT (widget), "selection-changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     g_signal_connect(G_OBJECT (widget), "selection-changed",
                      G_CALLBACK(change_image_cb), &option);
     g_signal_connect(G_OBJECT (widget), "update-preview",
@@ -2371,7 +2386,7 @@ radiobutton_set_cb(GtkWidget *w, gpointer data)
 
     g_object_set_data (G_OBJECT(widget), "gnc_radiobutton_index",
                        GINT_TO_POINTER(new_value));
-    widget_changed_cb(widget, option);
+    gnc_option_changed_widget_cb(widget, option);
 }
 
 class GncGtkRadioButtonUIItem : public GncOptionGtkUIItem
@@ -2510,7 +2525,7 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
     option.set_ui_item_from_option();
 
     g_signal_connect(G_OBJECT(*enclosing), "format_changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
     gtk_widget_show_all(*enclosing);
     return *enclosing;
 }
@@ -2547,14 +2562,14 @@ static void
 gnc_rd_option_px_set_cb(GtkWidget *widget, GncOption* option)
 {
     option->set_alternate(true);
-    option_changed_cb(widget, option);
+    gnc_option_changed_option_cb(widget, option);
 }
 
 static void
 gnc_rd_option_p_set_cb(GtkWidget *widget, GncOption* option)
 {
     option->set_alternate(false);
-    option_changed_cb(widget, option);
+    gnc_option_changed_option_cb(widget, option);
 }
 
 class GncGtkPlotSizeUIItem : public GncOptionGtkUIItem
@@ -2625,7 +2640,7 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     auto value_px = create_range_spinner(option);
 
     g_signal_connect(G_OBJECT(value_px), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     adj_percent = GTK_ADJUSTMENT(gtk_adjustment_new(1, 10, 100, 1, 5.0, 0));
     value_percent = gtk_spin_button_new(adj_percent, 1, 0);
@@ -2635,7 +2650,7 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     gtk_widget_set_sensitive(value_percent, FALSE);
 
     g_signal_connect(G_OBJECT(value_percent), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     px_butt = gtk_radio_button_new_with_label(NULL, _("Pixels"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(px_butt), TRUE);
@@ -2721,120 +2736,58 @@ create_option_widget<GncOptionUIType::BUDGET> (GncOption& option, GtkGrid *page_
 
     /* Maybe connect destroy handler for tree model here? */
     g_signal_connect(G_OBJECT(widget), "changed",
-                     G_CALLBACK(widget_changed_cb), &option);
+                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return widget;
 }
 
-static GtkWidget*
-option_widget_factory(GncOption& option, GtkGrid* page, GtkLabel* name,
-                      char* description, GtkWidget** enclosing, bool* packed)
+void
+gnc_options_ui_initialize(void)
 {
-    switch(option.get_ui_type())
-    {
-        case INTERNAL:
-            return nullptr;
-        case BOOLEAN:
-            return create_option_widget<BOOLEAN>(option, page, name,
-                                                 description, enclosing,
-                                                 packed);
-        case STRING:
-            return create_option_widget<STRING>(option, page, name, description,
-                                                enclosing, packed);
-        case TEXT:
-            return create_option_widget<TEXT>(option, page, name, description,
-                                              enclosing, packed);
-        case CURRENCY:
-            return create_option_widget<CURRENCY>(option, page, name,
-                                                  description, enclosing,
-                                                  packed);
-        case COMMODITY:
-            return create_option_widget<COMMODITY>(option, page, name,
-                                                   description, enclosing,
-                                                   packed);
-        case MULTICHOICE:
-            return create_option_widget<MULTICHOICE>(option, page, name,
-                                                     description, enclosing,
-                                                     packed);
-        case DATE_ABSOLUTE:
-            return create_option_widget<DATE_ABSOLUTE>(option, page, name,
-                                                       description, enclosing,
-                                                       packed);
-        case DATE_RELATIVE:
-            return create_option_widget<DATE_RELATIVE>(option, page, name,
-                                                       description,
-                                                       enclosing, packed);
-        case DATE_BOTH:
-            return create_option_widget<DATE_BOTH>(option, page, name,
-                                                   description, enclosing,
-                                                   packed);
-        case ACCOUNT_LIST:
-            return create_option_widget<ACCOUNT_LIST>(option, page, name,
-                                                      description, enclosing,
-                                                      packed);
-        case ACCOUNT_SEL:
-            return create_option_widget<ACCOUNT_SEL>(option, page, name,
-                                                     description, enclosing,
-                                                     packed);
-        case LIST:
-            return create_option_widget<LIST>(option, page, name, description,
-                                              enclosing, packed);
-        case NUMBER_RANGE:
-            return create_option_widget<NUMBER_RANGE>(option, page, name,
-                                                      description, enclosing,
-                                                      packed);
-        case COLOR:
-            return create_option_widget<COLOR>(option, page, name, description,
-                                               enclosing, packed);
-        case FONT:
-            return create_option_widget<FONT>(option, page, name, description,
-                                              enclosing, packed);
-        case PLOT_SIZE:
-            return create_option_widget<PLOT_SIZE>(option, page, name,
-                                                   description, enclosing,
-                                                   packed);
-        case BUDGET:
-            return create_option_widget<BUDGET>(option, page, name, description,
-                                                enclosing, packed);
-        case PIXMAP:
-            return create_option_widget<PIXMAP>(option, page, name, description,
-                                                enclosing, packed);
-        case RADIOBUTTON:
-            return create_option_widget<RADIOBUTTON>(option, page, name,
-                                                     description, enclosing,
-                                                     packed);
-        case DATE_FORMAT:
-            return create_option_widget<DATE_FORMAT>(option, page, name,
-                                                     description, enclosing,
-                                                     packed);
-        case OWNER:
-            return create_option_widget<OWNER>(option, page, name, description,
-                                               enclosing, packed);
-        case CUSTOMER:
-            return create_option_widget<CUSTOMER>(option, page, name,
-                                                  description, enclosing,
-                                                  packed);
-        case VENDOR:
-            return create_option_widget<VENDOR>(option, page, name, description,
-                                                enclosing, packed);
-        case EMPLOYEE:
-            return create_option_widget<EMPLOYEE>(option, page, name,
-                                                  description, enclosing,
-                                                  packed);
-        case INVOICE:
-            return create_option_widget<INVOICE>(option, page, name,
-                                                 description, enclosing,
-                                                 packed);
-        case TAX_TABLE:
-            return create_option_widget<TAX_TABLE>(option, page, name,
-                                                   description, enclosing,
-                                                   packed);
-        case QUERY:
-            return create_option_widget<QUERY>(option, page, name, description,
-                                               enclosing, packed);
-    }
+    GncOptionUIFactory::set_func(GncOptionUIType::BOOLEAN,
+                                 create_option_widget<GncOptionUIType::BOOLEAN>);
+    GncOptionUIFactory::set_func(GncOptionUIType::STRING,
+                                 create_option_widget<GncOptionUIType::STRING>);
+    GncOptionUIFactory::set_func(GncOptionUIType::TEXT,
+                                 create_option_widget<GncOptionUIType::TEXT>);
+    GncOptionUIFactory::set_func(GncOptionUIType::CURRENCY,
+                                 create_option_widget<GncOptionUIType::CURRENCY>);
+    GncOptionUIFactory::set_func(GncOptionUIType::COMMODITY,
+                                 create_option_widget<GncOptionUIType::COMMODITY>);
+    GncOptionUIFactory::set_func(GncOptionUIType::MULTICHOICE,
+                                 create_option_widget<GncOptionUIType::MULTICHOICE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::DATE_ABSOLUTE,
+                                 create_option_widget<GncOptionUIType::DATE_ABSOLUTE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::DATE_RELATIVE,
+                                 create_option_widget<GncOptionUIType::DATE_RELATIVE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::DATE_BOTH,
+                                 create_option_widget<GncOptionUIType::DATE_BOTH>);
+    GncOptionUIFactory::set_func(GncOptionUIType::ACCOUNT_LIST,
+                                 create_option_widget<GncOptionUIType::ACCOUNT_LIST>);
+    GncOptionUIFactory::set_func(GncOptionUIType::ACCOUNT_SEL,
+                                 create_option_widget<GncOptionUIType::ACCOUNT_SEL>);
+    GncOptionUIFactory::set_func(GncOptionUIType::LIST,
+                                 create_option_widget<GncOptionUIType::LIST>);
+    GncOptionUIFactory::set_func(GncOptionUIType::NUMBER_RANGE,
+                                 create_option_widget<GncOptionUIType::NUMBER_RANGE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::COLOR,
+                                 create_option_widget<GncOptionUIType::COLOR>);
+    GncOptionUIFactory::set_func(GncOptionUIType::FONT,
+                                 create_option_widget<GncOptionUIType::FONT>);
+    GncOptionUIFactory::set_func(GncOptionUIType::PLOT_SIZE,
+                                 create_option_widget<GncOptionUIType::PLOT_SIZE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::BUDGET,
+                                 create_option_widget<GncOptionUIType::BUDGET>);
+    GncOptionUIFactory::set_func(GncOptionUIType::PIXMAP,
+                                 create_option_widget<GncOptionUIType::PIXMAP>);
+    GncOptionUIFactory::set_func(GncOptionUIType::RADIOBUTTON,
+                                 create_option_widget<GncOptionUIType::RADIOBUTTON>);
+    GncOptionUIFactory::set_func(GncOptionUIType::DATE_FORMAT,
+                                 create_option_widget<GncOptionUIType::DATE_FORMAT>);
+
+
 }
 
 void
@@ -2876,10 +2829,4 @@ GtkWidget* const
 gnc_option_get_gtk_widget (GncOption *option)
 {
     return nullptr;
-}
-
-void
-gnc_options_ui_initialize (void)
-{
-    return;
 }

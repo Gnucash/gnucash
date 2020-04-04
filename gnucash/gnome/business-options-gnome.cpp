@@ -22,464 +22,195 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include <libguile.h>
+
+extern "C"
+{
 #include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include <libguile.h>
 
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
 #include "qof.h"
-#include "option-util.h"
 #include "gnc-general-search.h"
 
-#include "dialog-options.h"
 #include "business-options-gnome.h"
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
+}
 
+#include <iostream>
+#include <sstream>
+#include <exception>
+
+#include <dialog-options.hpp>
+#include <gnc-option.hpp>
 #define FUNC_NAME G_STRFUNC
-/* To be consolidated into dialog-options.cpp later. */
-#if 0
-static GtkWidget *
-create_owner_widget (GncOption *option, GncOwnerType type, GtkWidget *hbox)
-{
-    GtkWidget *widget;
-    GncOwner owner;
 
-    switch (type)
+
+static inline GncOwnerType
+ui_type_to_owner_type(GncOptionUIType ui_type)
+{
+    if (ui_type == GncOptionUIType::CUSTOMER)
+        return GNC_OWNER_CUSTOMER;
+    if (ui_type == GncOptionUIType::VENDOR)
+        return GNC_OWNER_VENDOR;
+    if (ui_type == GncOptionUIType::EMPLOYEE)
+        return GNC_OWNER_EMPLOYEE;
+
+    std::ostringstream oss;
+    oss << "UI type " << ui_type << " could not be converted to owner type\n";
+    throw std::invalid_argument(oss.str());
+}
+
+
+class GncGtkOwnerUIItem : public GncOptionGtkUIItem
+{
+public:
+    GncGtkOwnerUIItem(GtkWidget* widget, GncOptionUIType type) :
+        GncOptionGtkUIItem(widget, type) {}
+    void set_ui_item_from_option(GncOption& option) noexcept override
     {
-    case GNC_OWNER_CUSTOMER:
-        gncOwnerInitCustomer (&owner, NULL);
-        break;
-    case GNC_OWNER_VENDOR:
-        gncOwnerInitVendor (&owner, NULL);
-        break;
-    case GNC_OWNER_EMPLOYEE:
-        gncOwnerInitEmployee (&owner, NULL);
-        break;
-    case GNC_OWNER_JOB:
-        gncOwnerInitJob (&owner, NULL);
-        break;
-    default:
-        return NULL;
+        GncOwner owner{};
+        owner.type = ui_type_to_owner_type(option.get_ui_type());
+        owner.owner.undefined = (void*)option.get_value<const QofInstance*>();
+        gnc_owner_set_owner(get_widget(), &owner);
     }
-
-    widget = gnc_owner_select_create (NULL, hbox,
-                                      gnc_get_current_book (), &owner);
-    gnc_option_set_widget (option, widget);
-
-    g_signal_connect (G_OBJECT (widget), "changed",
-                      G_CALLBACK (gnc_option_changed_option_cb), option);
-
-    return widget;
-}
-
-static GtkWidget *
-make_name_label (char *name)
-{
-    GtkWidget *label = gtk_label_new (name);
-    gnc_label_set_alignment (label, 1.0, 0.5);
-
-    return label;
-}
-
-/********************************************************************/
-/* "Owner" Option functions */
-
-
-static GncOwnerType
-get_owner_type_from_option (GncOption *option)
-{
-    SCM odata = gnc_option_get_option_data (option);
-
-    /* The option data is enum-typed.  It's just the enum value. */
-    return (GncOwnerType) scm_to_int(odata);
-}
-
-
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-owner_set_widget (GncOption *option, GtkGrid *page_box,
-                  GtkLabel *name_label, char *documentation,
-                  /* Return values */
-                  GtkWidget **enclosing, gboolean *packed)
-{
-    GtkWidget *value;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    value = create_owner_widget (option, get_owner_type_from_option (option),
-                                 *enclosing);
-
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-owner_set_value (GncOption *option, gboolean use_default,
-                 GtkWidget *widget, SCM value)
-{
-    GncOwner owner_def;
-    GncOwner *owner;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:owner_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    owner = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncOwner"), 1, 0);
-
-    /* XXX: should we verify that the owner type is correct? */
-    if (!owner)
+    void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        owner_def.type = get_owner_type_from_option (option);
-        owner_def.owner.undefined = NULL;
-        owner = &owner_def;
+        GncOwner owner{};
+        gnc_owner_get_owner(get_widget(), &owner);
+        if (owner.type == ui_type_to_owner_type(option.get_ui_type()))
+            option.set_value(static_cast<const QofInstance*>(owner.owner.undefined));
     }
+};
 
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_owner_set_owner (widget, owner);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-owner_get_value (GncOption *option, GtkWidget *widget)
+template<> GtkWidget*
+create_option_widget<GncOptionUIType::OWNER>(GncOption& option,
+                                                GtkGrid *page_box,
+                                                GtkLabel *name_label,
+                                                char *documentation,
+                                                /* Return values */
+                                                GtkWidget **enclosing,
+                                                bool *packed)
 {
-    static GncOwner owner;	/* XXX: might cause trouble? */
-    GncOwnerType type;
-
-    type = get_owner_type_from_option (option);
-    owner.type = type;
-    gnc_owner_get_owner (widget, &owner);
-
-    return SWIG_NewPointerObj(&owner, SWIG_TypeQuery("_p__gncOwner"), 0);
-}
-
-
-/********************************************************************/
-/* "Customer" Option functions */
-
-
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-customer_set_widget (GncOption *option, GtkGrid *page_box,
-                     GtkLabel *name_label, char *documentation,
-                     /* Return values */
-                     GtkWidget **enclosing, gboolean *packed)
-{
-    GtkWidget *value;
-
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
-    value = create_owner_widget (option, GNC_OWNER_CUSTOMER, *enclosing);
+    GncOwner owner{};
+    auto ui_type{option.get_ui_type()};
+    owner.type = ui_type_to_owner_type(ui_type);
+    auto widget = gnc_owner_select_create(nullptr, *enclosing,
+                                          gnc_get_current_book(),
+                                          &owner);
 
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-customer_set_value (GncOption *option, gboolean use_default,
-                    GtkWidget *widget, SCM value)
-{
-    GncOwner owner;
-    GncCustomer *customer;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:customer_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    customer = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCustomer"), 1, 0);
-    gncOwnerInitCustomer (&owner, customer);
-
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_owner_set_owner (widget, &owner);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-customer_get_value (GncOption *option, GtkWidget *widget)
-{
-    GncOwner owner;
-
-    gnc_owner_get_owner (widget, &owner);
-    return SWIG_NewPointerObj(owner.owner.undefined,
-                              SWIG_TypeQuery("_p__gncCustomer"), 0);
-}
-
-
-/********************************************************************/
-/* "Vendor" Option functions */
-
-
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-vendor_set_widget (GncOption *option, GtkGrid *page_box,
-                   GtkLabel *name_label, char *documentation,
-                   /* Return values */
-                   GtkWidget **enclosing, gboolean *packed)
-{
-    GtkWidget *value;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    value = create_owner_widget (option, GNC_OWNER_VENDOR, *enclosing);
-
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-vendor_set_value (GncOption *option, gboolean use_default,
-                  GtkWidget *widget, SCM value)
-{
-    GncOwner owner;
-    GncVendor *vendor;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:vendor_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    vendor = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncVendor"), 1, 0);
-    gncOwnerInitVendor (&owner, vendor);
-
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_owner_set_owner (widget, &owner);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-vendor_get_value (GncOption *option, GtkWidget *widget)
-{
-    GncOwner owner;
-
-    gnc_owner_get_owner (widget, &owner);
-    return SWIG_NewPointerObj(owner.owner.undefined,
-                              SWIG_TypeQuery("_p__gncVendor"), 0);
-}
-
-/********************************************************************/
-/* "Employee" Option functions */
-
-
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-employee_set_widget (GncOption *option, GtkGrid *page_box,
-                     GtkLabel *name_label, char *documentation,
-                     /* Return values */
-                     GtkWidget **enclosing, gboolean *packed)
-{
-    GtkWidget *value;
-
-    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-    value = create_owner_widget (option, GNC_OWNER_EMPLOYEE, *enclosing);
-
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-employee_set_value (GncOption *option, gboolean use_default,
-                    GtkWidget *widget, SCM value)
-{
-    GncOwner owner;
-    GncEmployee *employee;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:employee_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    employee = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncEmployee"), 1, 0);
-    gncOwnerInitEmployee (&owner, employee);
-
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_owner_set_owner (widget, &owner);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-employee_get_value (GncOption *option, GtkWidget *widget)
-{
-    GncOwner owner;
-
-    gnc_owner_get_owner (widget, &owner);
-
-    return SWIG_NewPointerObj(owner.owner.undefined,
-                              SWIG_TypeQuery("_p__gncEmployee"), 0);
-}
-
-/********************************************************************/
-/* "Invoice" Option functions */
-
-
-static GtkWidget *
-create_invoice_widget (GncOption *option, GtkWidget *hbox)
-{
-    GtkWidget *widget;
-
-    /* No owner or starting invoice here, but that's okay. */
-    widget = gnc_invoice_select_create (hbox, gnc_get_current_book(),
-                                        NULL, NULL, NULL);
-
-    gnc_option_set_widget (option, widget);
+    option.set_ui_item(std::make_unique<GncGtkOwnerUIItem>(widget, ui_type));
+    option.set_ui_item_from_option();
     g_signal_connect (G_OBJECT (widget), "changed",
-                      G_CALLBACK (gnc_option_changed_option_cb), option);
-
+                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    gtk_widget_show_all(*enclosing);
     return widget;
 }
 
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-invoice_set_widget (GncOption *option, GtkGrid *page_box,
-                    GtkLabel *name_label, char *documentation,
-                    /* Return values */
-                    GtkWidget **enclosing, gboolean *packed)
+class GncGtkInvoiceUIItem : public GncOptionGtkUIItem
 {
-    GtkWidget *value;
+public:
+    GncGtkInvoiceUIItem(GtkWidget* widget) :
+        GncOptionGtkUIItem(widget, GncOptionUIType::INVOICE) {}
+    void set_ui_item_from_option(GncOption& option) noexcept override
+    {
+        gnc_general_search_set_selected(GNC_GENERAL_SEARCH(get_widget()),
+                                        GNC_INVOICE(option.get_value<const QofInstance*>()));
+    }
+    void set_option_from_ui_item(GncOption& option) noexcept override
+    {
+        option.set_value(qof_instance_cast(gnc_general_search_get_selected(GNC_GENERAL_SEARCH(get_widget()))));
+    }
+};
 
+template<> GtkWidget*
+create_option_widget<GncOptionUIType::INVOICE>(GncOption& option,
+                                               GtkGrid *page_box,
+                                               GtkLabel *name_label,
+                                               char *documentation,
+                                               /* Return values */
+                                               GtkWidget **enclosing,
+                                               bool *packed)
+{
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+    auto widget{gnc_invoice_select_create(*enclosing, gnc_get_current_book(),
+                                          nullptr, nullptr, nullptr)};
 
-    value = create_invoice_widget (option, *enclosing);
-
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
-}
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-invoice_set_value (GncOption *option, gboolean use_default,
-                   GtkWidget *widget, SCM value)
-{
-    GncInvoice *invoice;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:invoice_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    invoice = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
-
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-invoice_get_value (GncOption *option, GtkWidget *widget)
-{
-    GncInvoice *invoice;
-
-    invoice = gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
-    return SWIG_NewPointerObj(invoice, SWIG_TypeQuery("_p__gncInvoice"), 0);
-}
-
-
-/********************************************************************/
-/* "Tax Table" Option functions */
-
-
-static GtkWidget *
-create_taxtable_widget (GncOption *option, GtkWidget *hbox)
-{
-    GtkWidget *widget;
-    GtkBuilder *builder;
-
-    builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "business-options-gnome.glade", "taxtable_store");
-    gnc_builder_add_from_file (builder, "business-options-gnome.glade", "taxtable_menu");
-
-    widget = GTK_WIDGET (gtk_builder_get_object (builder, "taxtable_menu"));
-    gnc_taxtables_combo (GTK_COMBO_BOX(widget), gnc_get_current_book (), TRUE, NULL);
-    gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-    gnc_option_set_widget (option, widget);
-
-    g_signal_connect (widget, "changed",
-                      G_CALLBACK (gnc_option_changed_option_cb), option);
-
-    g_object_unref(G_OBJECT(builder));
+    option.set_ui_item(std::make_unique<GncGtkInvoiceUIItem>(widget));
+    option.set_ui_item_from_option();
+    g_signal_connect(G_OBJECT (widget), "changed",
+                     G_CALLBACK (gnc_option_changed_widget_cb), &option);
+    gtk_widget_show_all(*enclosing);
     return widget;
 }
 
-/* Function to set the UI widget based upon the option */
-static GtkWidget *
-taxtable_set_widget (GncOption *option, GtkGrid *page_box,
-                     GtkLabel *name_label, char *documentation,
-                     /* Return values */
-                     GtkWidget **enclosing, gboolean *packed)
+class GncGtkTaxTableUIItem : public GncOptionGtkUIItem
 {
-    GtkWidget *value;
+public:
+    GncGtkTaxTableUIItem(GtkWidget* widget) :
+        GncOptionGtkUIItem(widget, GncOptionUIType::TAX_TABLE) {}
+    void set_ui_item_from_option(GncOption& option) noexcept override
+    {
+    }
+    void set_option_from_ui_item(GncOption& option) noexcept override
+    {
+    }
+};
 
+template<> GtkWidget*
+create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
+                                                 GtkGrid *page_box,
+                                                 GtkLabel *name_label,
+                                                 char *documentation,
+                                                 /* Return values */
+                                                 GtkWidget **enclosing,
+                                                 bool *packed)
+{
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+    constexpr const char* glade_file{"business-options-gnome.glade"};
+    constexpr const char* glade_store{"taxtable-store"};
+    constexpr const char* glade_menu{"taxtable-menu"};
+    auto builder{gtk_builder_new()};
+    gnc_builder_add_from_file(builder, glade_file, glade_store);
+    gnc_builder_add_from_file(builder, glade_file, glade_menu);
+    auto widget{GTK_WIDGET(gtk_builder_get_object(builder, glade_menu))};
+    g_object_unref(builder);
+    gnc_taxtables_combo(GTK_COMBO_BOX(widget), gnc_get_current_book(), TRUE,
+                        nullptr);
+    gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
+    option.set_ui_item(std::make_unique<GncGtkTaxTableUIItem>(widget));
+    option.set_ui_item_from_option();
+    g_signal_connect (G_OBJECT (widget), "changed",
+                      G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
-    value = create_taxtable_widget (option, *enclosing);
-
-    gnc_option_set_ui_value (option, FALSE);
-
-    gtk_widget_show_all (*enclosing);
-    return value;
+    gtk_widget_show_all(*enclosing);
+    return widget;
 }
-
-/* Function to set the UI Value for a particular option */
-static gboolean
-taxtable_set_value (GncOption *option, gboolean use_default,
-                    GtkWidget *widget, SCM value)
-{
-    GncTaxTable *taxtable;
-
-    if (!SWIG_IsPointer (value))
-        scm_misc_error("business_options:taxtable_set_value",
-                       "SCM is not a wrapped pointer.", value);
-
-    taxtable = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncTaxTable"), 1, 0);
-
-    widget = gnc_option_get_gtk_widget (option);
-    gnc_simple_combo_set_value (GTK_COMBO_BOX(widget), taxtable);
-    return FALSE;
-}
-
-/* Function to get the UI Value for a particular option */
-static SCM
-taxtable_get_value (GncOption *option, GtkWidget *widget)
-{
-    GncTaxTable *taxtable;
-
-    taxtable = gnc_simple_combo_get_value (GTK_COMBO_BOX(widget));
-    return SWIG_NewPointerObj(taxtable, SWIG_TypeQuery("_p__gncTaxTable"), 0);
-}
-
-#endif
-
 
 void
-gnc_business_options_gnome_initialize (void)
+gnc_business_options_gnome_initialize(void)
 {
-/* Create the above option types. */
+    GncOptionUIFactory::set_func(GncOptionUIType::OWNER,
+                                 create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::CUSTOMER,
+                                 create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::VENDOR,
+                                 create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::EMPLOYEE,
+                                 create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::INVOICE,
+                                 create_option_widget<GncOptionUIType::INVOICE>);
+    GncOptionUIFactory::set_func(GncOptionUIType::TAX_TABLE,
+                                 create_option_widget<GncOptionUIType::TAX_TABLE>);
 }

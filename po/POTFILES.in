@@ -52,7 +52,7 @@ gnucash/gnome/assistant-hierarchy.c
 gnucash/gnome/assistant-loan.cpp
 gnucash/gnome/assistant-stock-split.c
 gnucash/gnome/business-gnome-utils.c
-gnucash/gnome/business-options-gnome.c
+gnucash/gnome/business-options-gnome.cpp
 gnucash/gnome/business-urls.c
 gnucash/gnome/dialog-billterms.c
 gnucash/gnome/dialog-choose-owner.c

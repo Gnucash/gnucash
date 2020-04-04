@@ -113,6 +113,7 @@ set (gnome_utils_SOURCES
 
 set(gnome_utils_noinst_HEADERS
   dialog-tax-table.h
+  dialog-options.hpp
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h

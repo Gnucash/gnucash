@@ -72,7 +72,7 @@ set (gnc_gnome_SOURCES
   assistant-hierarchy.c
   assistant-loan.cpp
   assistant-stock-split.c
-  business-options-gnome.c
+  business-options-gnome.cpp
   business-urls.c
   business-gnome-utils.c
   dialog-doclink.c

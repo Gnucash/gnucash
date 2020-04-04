@@ -97,7 +97,13 @@ void gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win);
 /** Set the initial values of new book options to values specified in user
  *  preferences.
  */
-void gnc_options_dialog_set_new_book_option_values (GNCOptionDB *odb);
+void gnc_options_dialog_set_new_book_option_values (GncOptionDB *odb);
+
+/**
+ * Initialize the option UI elements.
+ */
+void gnc_options_ui_initialize(void);
+
 #ifdef __cplusplus
 }
 #endif
