@@ -415,8 +415,9 @@ gnc_employee_new_window (GtkWindow *parent,
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(ew->dialog), "GncEmployeeDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(ew->dialog), "gnc-id-employee");
+    gnc_widget_style_context_add_class (GTK_WIDGET(ew->dialog), "gnc-class-employees");
 
     g_object_set_data (G_OBJECT (ew->dialog), "dialog_info", ew);
 
