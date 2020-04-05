@@ -126,8 +126,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gdf), GTK_ORIENTATION_HORIZONTAL);
 
-    // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(gdf), "GncDateFormat");
+    // Set the name for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(gdf), "gnc-id-date-format");
 
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();

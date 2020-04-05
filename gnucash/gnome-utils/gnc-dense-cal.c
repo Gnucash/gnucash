@@ -267,9 +267,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
 
     // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dcal), "calendar");
+    gnc_widget_style_context_add_class (GTK_WIDGET(dcal), "calendar");
 
-    gtk_widget_set_name (GTK_WIDGET(dcal), "dense-cal");
+    // Set the name of this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dcal), "gnc-id-dense-calendar");
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_CALENDAR);
     {
@@ -331,7 +332,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
-        gtk_widget_set_name (GTK_WIDGET(dcal->transPopup), "dense-cal-popup");
+        gtk_widget_set_name (GTK_WIDGET(dcal->transPopup), "gnc-id-dense-calendar-popup");
 
         l = gtk_label_new(_("Date: "));
         gtk_widget_set_margin_start (l, 5);

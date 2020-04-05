@@ -2570,8 +2570,8 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     priv->merged_actions_table =
         g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-    // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(window), "GncMainWindow");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-main-window");
 
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
@@ -3008,6 +3008,10 @@ gnc_main_window_open_page (GncMainWindow *window,
     gtk_widget_show (label);
 
     tab_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+
+    if (g_strcmp0 (gnc_plugin_page_get_plugin_name (page), "GncPluginPageAccountTree") == 0)
+        gtk_widget_set_name (GTK_WIDGET(tab_hbox), "gnc-id-account-page-tab-box");
+
     gtk_box_set_homogeneous (GTK_BOX (tab_hbox), FALSE);
     gtk_widget_show (tab_hbox);
 

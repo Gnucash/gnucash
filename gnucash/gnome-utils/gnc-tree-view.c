@@ -256,8 +256,8 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     priv->sort_column_changed_cb_id = 0;
     priv->size_allocate_cb_id = 0;
 
-    // Set the style context for this page so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(view), "GncTreeView");
+    // Set the name for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(view), "gnc-id-tree-view");
 
     /* Handle column drag and drop */
     gtk_tree_view_set_column_drag_function (GTK_TREE_VIEW(view),
