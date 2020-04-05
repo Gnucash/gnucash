@@ -34,38 +34,6 @@
 (use-modules (srfi srfi-13)) ; for extra string functions
 (use-modules (ice-9 format)) ; for number formatting
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Report-specific routines
-
-(define (taxrate taxable taxtable curr)
-  ;; Display the tax rate applicable to an invoice line.
-  ;; This may be e.g. "15%" or "£5.00" or "15% + £5.00" or "n/a"
-  ;; depending on how complicated the tax table is.
-  ;; (When called from within the eguile template, anything
-  ;; (display)ed becomes part of the HTML string.)
-  (if (or (not taxable) (eq? taxtable '()))
-    (display "&nbsp;")
-    (let* ((amttot  (gnc:make-commodity-collector))
-           (pctot   (gnc:make-value-collector))
-           (entries (gncTaxTableGetEntries taxtable))
-           (amt?    #f)  ; becomes #t if any entries are amounts
-           (pc?     #f)) ; becomes #t if any entries are percentages
-      (for entry in entries do
-          (let ((tttype (gncTaxTableEntryGetType   entry))
-                (ttamt  (gncTaxTableEntryGetAmount entry)))
-            (if (equal? tttype GNC-AMT-TYPE-VALUE)
-              (begin
-                (set! amt? #t)
-                (amttot 'add curr ttamt))
-              (begin
-                (set! pc? #t)
-                (pctot 'add ttamt)))))
-      (if pc? (begin (display (fmtnumeric (pctot 'total #f))) (display "%")))
-      (if (and amt? pc?) (display " +&nbsp;"))        ; both - this seems unlikely in practice
-      (if amt?
-        (display-comm-coll-total amttot #f))
-      (if (and (not amt?) (not pc?)) (display (_ "n/a"))))))        ; neither
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
 
@@ -102,20 +70,6 @@
 (define optname-extra-notes    (N_ "Extra notes"))
 (define optname-date-format    (N_ "Today date format"))
 
-; Choose only customer invoices
-; (This doesn't work very nicely -- all invoices and bills
-;  are offered for selection, but if a non-customer invoice
-;  is selected, the user is dumped back to viewing the
-;  previous invoice (or none) with no error message)
-(define (customers-only invoice)
-  (let* ((owner     (gncInvoiceGetOwner  invoice))
-         (endowner  (gncOwnerGetEndOwner owner))
-         (ownertype (gncOwnerGetType     endowner)))
-    ;(gnc:debug "ownertype is ")(gnc:debug ownertype)
-    (if (eqv? ownertype GNC-OWNER-CUSTOMER)
-      (list #t invoice)
-      (list #f invoice))))
-
 (define (options-generator)
   ;; Options
   (define report-options (gnc:new-options))
@@ -125,8 +79,7 @@
   (add-option
     (gnc:make-invoice-option ; defined in gnucash/scm/business-options.scm
       generalpage optname-invoice-number
-      "a" "" (lambda () '())
-      #f))        ;customers-only)) ;-- see above
+      "a" "" (lambda () '()) #f))
 
   ;; Display options
   (add-option (gnc:make-string-option displaypage optname-template-file "a"
