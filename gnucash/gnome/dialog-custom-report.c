@@ -530,8 +530,8 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
 
     gtk_window_set_transient_for (GTK_WINDOW (crd->dialog), GTK_WINDOW(window));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(crd->dialog), "GncCustomReportDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(crd->dialog), "gnc-id-custom-report");
 
     gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS,
                              GTK_WINDOW(crd->dialog), GTK_WINDOW(window));
