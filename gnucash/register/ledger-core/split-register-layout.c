@@ -35,15 +35,15 @@ static QofLogModule log_module = GNC_MOD_REGISTER;
 
 
 static void
-gnc_register_add_cell (TableLayout *layout,
-                       const char *cell_name,
-                       const char *cell_type_name,
-                       const char *sample_text,
+gnc_register_add_cell (TableLayout* layout,
+                       const char* cell_name,
+                       const char* cell_type_name,
+                       const char* sample_text,
                        CellAlignment alignment,
                        gboolean expandable,
                        gboolean span)
 {
-    BasicCell *cell;
+    BasicCell* cell;
 
     g_return_if_fail (layout != NULL);
     g_return_if_fail (cell_type_name != NULL);
@@ -61,13 +61,13 @@ gnc_register_add_cell (TableLayout *layout,
 }
 
 static void
-copy_cursor_row (TableLayout *layout, CellBlock *to, CellBlock *from, int row)
+copy_cursor_row (TableLayout* layout, CellBlock* to, CellBlock* from, int row)
 {
     int col;
 
     for (col = 0; col < from->num_cols; col++)
     {
-        BasicCell *cell;
+        BasicCell* cell;
 
         cell = gnc_cellblock_get_cell (from, row, col);
         if (!cell || !cell->cell_name)
@@ -78,10 +78,10 @@ copy_cursor_row (TableLayout *layout, CellBlock *to, CellBlock *from, int row)
 }
 
 static void
-gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
+gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 {
-    CellBlock *curs;
-    CellBlock *curs_last;
+    CellBlock* curs;
+    CellBlock* curs_last;
 
     switch (reg->type)
     {
@@ -291,8 +291,16 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         {
             gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
             gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
-            gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
-            gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 8);
+            if (!reg->mismatched_commodities)
+            {
+                gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
+                gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 8);
+            }
+            else
+            {
+                // Don't display the balance if there are mismatched commodities
+                gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 7);
+            }
         }
 
         curs_last = curs;
@@ -328,8 +336,16 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
             gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 7);
         else
         {
-            gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
-            gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 8);
+            if (!reg->mismatched_commodities)
+            {
+                gnc_table_layout_set_cell (layout, curs, RBALN_CELL, 0, 7);
+                gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 8);
+            }
+            else
+            {
+                // Don't display the balance if there are mismatched commodities
+                gnc_table_layout_set_cell (layout, curs, RATE_CELL,  0, 7);
+            }
         }
 
         curs_last = curs;
@@ -549,10 +565,10 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
 }
 
 static void
-gnc_split_register_layout_add_cursors (SplitRegister *reg,
-                                       TableLayout *layout)
+gnc_split_register_layout_add_cursors (SplitRegister* reg,
+                                       TableLayout* layout)
 {
-    CellBlock *cursor;
+    CellBlock* cursor;
     int num_cols;
 
     switch (reg->type)
@@ -577,7 +593,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
     case INCOME_LEDGER:
     case GENERAL_JOURNAL:
     case SEARCH_LEDGER:
-        if (reg->is_template)
+        if (reg->is_template || reg->mismatched_commodities)
             num_cols = 8;
         else
             num_cols = 9;
@@ -593,7 +609,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
         break;
 
     default:
-        PERR("Bad register type");
+        PERR ("Bad register type");
         g_assert (FALSE);
         return;
     }
@@ -628,8 +644,8 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
 }
 
 static void
-gnc_split_register_layout_add_cells (SplitRegister *reg,
-                                     TableLayout *layout)
+gnc_split_register_layout_add_cells (SplitRegister* reg,
+                                     TableLayout* layout)
 {
     gnc_register_add_cell (layout,
                            DATE_CELL,
@@ -637,7 +653,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            /* Translators: The 'sample:' items are
                               strings which are not displayed, but only
                               used to estimate widths. */
-                           C_("sample", "22/02/2000"),
+                           C_ ("sample", "22/02/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -645,7 +661,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DDUE_CELL,
                            DATE_CELL_TYPE_NAME,
-                           C_("sample", "22/02/2000"),
+                           C_ ("sample", "22/02/2000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -656,7 +672,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            /* Translators: The 'sample' items are
                               strings which are not displayed, but only
                               used to estimate widths. */
-                           C_("sample", "99999"),
+                           C_ ("sample", "99999"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -664,7 +680,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TNUM_CELL,
                            BASIC_CELL_TYPE_NAME,
-                           C_("sample", "99999"),
+                           C_ ("sample", "99999"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -672,7 +688,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DESC_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           C_("sample", "Description of a transaction"),
+                           C_ ("sample", "Description of a transaction"),
                            CELL_ALIGN_LEFT,
                            TRUE,
                            FALSE);
@@ -688,7 +704,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            RECN_CELL,
                            RECN_CELL_TYPE_NAME,
-	                   C_("Column header for 'Reconciled'", "R"),
+                           C_ ("Column header for 'Reconciled'", "R"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -696,7 +712,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            ASSOC_CELL,
                            RECN_CELL_TYPE_NAME,
-                           C_("Column header for 'Associate'", "A"),
+                           C_ ("Column header for 'Associate'", "A"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -704,7 +720,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            BALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -712,7 +728,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            XFRM_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           _("Transfer"),
+                           _ ("Transfer"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -720,7 +736,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            MXFRM_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           C_("sample", "Expenses:Automobile:Gasoline"),
+                           C_ ("sample", "Expenses:Automobile:Gasoline"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -728,7 +744,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            ACTN_CELL,
                            COMBO_CELL_TYPE_NAME,
-                           C_("sample", "Expenses:Automobile:Gasoline"),
+                           C_ ("sample", "Expenses:Automobile:Gasoline"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -736,7 +752,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            MEMO_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           C_("sample", "Memo field sample text string"),
+                           C_ ("sample", "Memo field sample text string"),
                            CELL_ALIGN_LEFT,
                            TRUE,
                            FALSE);
@@ -744,7 +760,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            DEBT_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -752,7 +768,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            CRED_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -760,7 +776,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            SHRS_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -770,7 +786,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            PRIC_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -778,7 +794,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TDEBT_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -786,7 +802,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TCRED_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -794,7 +810,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TSHRS_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -802,7 +818,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TBALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
@@ -810,7 +826,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            TYPE_CELL,
                            RECN_CELL_TYPE_NAME,
-	                   C_("Column header for 'Type'", "T"),
+                           C_ ("Column header for 'Type'", "T"),
                            CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
@@ -818,7 +834,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            NOTES_CELL,
                            QUICKFILL_CELL_TYPE_NAME,
-                           C_("sample", "Notes field sample text string"),
+                           C_ ("sample", "Notes field sample text string"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            TRUE);
@@ -826,7 +842,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            VNOTES_CELL,
                            BASIC_CELL_TYPE_NAME,
-                           C_("sample", "No Particular Reason"),
+                           C_ ("sample", "No Particular Reason"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            TRUE);
@@ -834,7 +850,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            FCRED_CELL,
                            FORMULA_CELL_TYPE_NAME,
-                           C_("sample", "(x + 0.33 * y + (x+y) )"),
+                           C_ ("sample", "(x + 0.33 * y + (x+y) )"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -842,7 +858,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            FDEBT_CELL,
                            FORMULA_CELL_TYPE_NAME,
-                           C_("sample", "(x + 0.33 * y + (x+y) )"),
+                           C_ ("sample", "(x + 0.33 * y + (x+y) )"),
                            CELL_ALIGN_LEFT,
                            FALSE,
                            FALSE);
@@ -850,19 +866,19 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
     gnc_register_add_cell (layout,
                            RBALN_CELL,
                            PRICE_CELL_TYPE_NAME,
-                           C_("sample", "999,999.000"),
+                           C_ ("sample", "999,999.000"),
                            CELL_ALIGN_RIGHT,
                            FALSE,
                            FALSE);
 
 }
 
-TableLayout *
-gnc_split_register_layout_new (SplitRegister *reg)
+TableLayout*
+gnc_split_register_layout_new (SplitRegister* reg)
 {
-    TableLayout *layout;
+    TableLayout* layout;
 
-    layout = gnc_table_layout_new ();
+    layout = gnc_table_layout_new();
 
     gnc_split_register_layout_add_cells (reg, layout);
     gnc_split_register_layout_add_cursors (reg, layout);
