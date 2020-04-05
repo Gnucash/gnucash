@@ -588,7 +588,9 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                         if (type == GncOptionUIType::BOOLEAN)
                         {
                             auto val{option.template get_value<bool>()};
-                            auto kvp{new KvpValue(val ? "t" : "f")};
+                            // ~KvpValue will g_free the value.
+                            auto kvp{new KvpValue(val ? g_strdup("t") :
+                                                  g_strdup("f"))};
                             qof_book_set_option(book, kvp, &list_head);
                         }
                         else if (type > GncOptionUIType::DATE_FORMAT)
