@@ -74,6 +74,7 @@ public:
     template <typename ValueType> void set_value(ValueType value);
     template <typename ValueType> ValueType get_default_value() const;
     template <typename ValueType> ValueType get_value() const;
+    void reset_default_value();
 
     const std::string& get_section() const;
     const std::string& get_name() const;

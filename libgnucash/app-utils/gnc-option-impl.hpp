@@ -129,6 +129,7 @@ public:
     ValueType get_value() const { return m_value; }
     ValueType get_default_value() const { return m_default_value; }
     void set_value(ValueType new_value) { m_value = new_value; }
+    void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -182,6 +183,7 @@ public:
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
+    void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     std::ostream& to_scheme(std::ostream&) const;
     std::istream& from_scheme(std::istream&);
@@ -425,6 +427,7 @@ public:
         lower = m_min;
         step = m_step;
     }
+    void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -659,6 +662,7 @@ public:
     {
         return std::get<2>(m_choices.at(index)).c_str();
     }
+    void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -855,6 +859,7 @@ public:
             m_value = values;
     }
     GList* account_type_list() const noexcept;
+    void reset_default_value() { m_value = m_default_value; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -1042,6 +1047,10 @@ public:
     const char* permissible_value_description(std::size_t index) const
     {
         return gnc_relative_date_description(m_period_set.at(index));
+    }
+    void reset_default_value() {
+        m_period = m_default_period;
+        m_date = m_default_date;
     }
     bool is_changed() const noexcept { return m_period != m_default_period &&
             m_date != m_default_date; }

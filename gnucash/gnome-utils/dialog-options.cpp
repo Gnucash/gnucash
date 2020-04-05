@@ -241,17 +241,24 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
                         GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
                         for (GList *it = children; it; it = it->next)
                         {
-                            if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "ok_button") == 0)
-                                gtk_widget_set_sensitive (GTK_WIDGET(it->data), sensitive);
+                            GtkWidget* widget = GTK_WIDGET(it->data);
+                            const gchar* name = gtk_widget_get_name(widget);
 
-                            if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "apply_button") == 0)
-                                gtk_widget_set_sensitive (GTK_WIDGET(it->data), sensitive);
+                            if (g_strcmp0 (name, "ok_button") == 0 ||
+                                g_strcmp0 (name, "apply_button") == 0)
+                                gtk_widget_set_sensitive (widget, sensitive);
+                            else if (g_strcmp0 (name, "cancel_button") == 0)
+                                gtk_button_set_label (GTK_BUTTON (widget),
+                                                      sensitive ? _("_Cancel") :
+                                                      _("_Close"));
                         }
                         g_list_free (children);
                     }
+                    break; // Found the button-box, no need to continue.
                 }
                 g_list_free (children);
             }
+            break; // Found the box, no need to continue.
         }
         g_list_free (children);
     }
@@ -684,6 +691,7 @@ dialog_reset_cb(GtkWidget * w, gpointer data)
 {
     GNCOptionWin *win = static_cast<decltype(win)>(data);
     gpointer val;
+    bool dialog_changed = false;
 
     val = g_object_get_data(G_OBJECT(w), "section");
     g_return_if_fail (val);
@@ -691,12 +699,17 @@ dialog_reset_cb(GtkWidget * w, gpointer data)
 
     auto section = static_cast<GncOptionSection*>(val);
     section->foreach_option(
-        [](GncOption& option) {
+        [&dialog_changed](GncOption& option) {
+            if (option.is_changed())
+            {
+                option.reset_default_value();
+                option.get_ui_item()->set_dirty(true);
+                dialog_changed = true;
+            }
             option.set_ui_item_from_option();
-            const_cast<GncOptionUIItem*>(option.get_ui_item())->set_dirty(true);
         });
 
-    dialog_changed_internal (win->window, TRUE);
+    dialog_changed_internal (win->window, dialog_changed);
 }
 
 void
@@ -768,6 +781,9 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
     retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(retval->window), "gnc-id-options");
+
     /* Page List */
     {
         GtkTreeView *view;
@@ -808,7 +824,10 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window), parent);
+    // when added to a page of the hierarchy assistant there will be no parent
+    if (parent)
+        gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window),
+                                 parent);
 
     if (title)
         gtk_window_set_title(GTK_WINDOW(retval->window), title);
@@ -942,7 +961,8 @@ create_option_widget<GncOptionUIType::BOOLEAN> (GncOption& option,
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    auto widget = gtk_check_button_new ();
+    auto widget =
+        gtk_check_button_new_with_label (gtk_label_get_text(name_label));
 
     auto ui_item{std::make_unique<GncGtkBooleanUIItem>(widget)};
 
@@ -1791,8 +1811,8 @@ create_account_widget(GncOption& option, char *name)
 
     if (multiple_selection)
     {
-        /* Put the "Show hidden" checkbox on a separate line since the 4 buttons make
-           the dialog too wide. */
+        /* Put the "Show hidden" checkbox on a separate line since
+           the 4 buttons make the dialog too wide. */
         bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
         gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
         gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
@@ -2824,7 +2844,7 @@ gnc_options_dialog_set_book_options_help_cb (GNCOptionWin *win)
 {
     gnc_options_dialog_set_help_cb(win,
                                 (GNCOptionWinCallback)gnc_book_options_help_cb,
-                                NULL);
+                                nullptr);
 }
 
 /* Dummy function impls. The following functions are declared in

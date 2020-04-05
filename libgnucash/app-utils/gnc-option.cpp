@@ -123,6 +123,12 @@ GncOption::set_value(ValueType value)
                }, *m_option);
 }
 
+void
+GncOption::reset_default_value()
+{
+    std::visit([](auto& option) { option.reset_default_value(); }, *m_option);
+}
+
 template <typename ValueType> void
 GncOption::get_limits(ValueType& max, ValueType& min, ValueType& step) const noexcept
 {
