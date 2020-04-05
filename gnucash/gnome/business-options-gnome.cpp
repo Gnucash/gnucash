@@ -161,9 +161,14 @@ public:
         GncOptionGtkUIItem(widget, GncOptionUIType::TAX_TABLE) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
+        auto taxtable{option.get_value<const QofInstance*>()};
+        gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
+                                                 GNC_TAXTABLE(taxtable));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
+        auto taxtable{gnc_simple_combo_get_value(GTK_COMBO_BOX(get_widget()))};
+        option.set_value<const QofInstance*>(qof_instance_cast(taxtable));
     }
 };
 
@@ -179,18 +184,18 @@ create_option_widget<GncOptionUIType::TAX_TABLE>(GncOption& option,
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     constexpr const char* glade_file{"business-options-gnome.glade"};
-    constexpr const char* glade_store{"taxtable-store"};
-    constexpr const char* glade_menu{"taxtable-menu"};
+    constexpr const char* glade_store{"taxtable_store"};
+    constexpr const char* glade_menu{"taxtable_menu"};
     auto builder{gtk_builder_new()};
     gnc_builder_add_from_file(builder, glade_file, glade_store);
     gnc_builder_add_from_file(builder, glade_file, glade_menu);
     auto widget{GTK_WIDGET(gtk_builder_get_object(builder, glade_menu))};
-    g_object_unref(builder);
     gnc_taxtables_combo(GTK_COMBO_BOX(widget), gnc_get_current_book(), TRUE,
                         nullptr);
     gtk_box_pack_start(GTK_BOX(*enclosing), widget, FALSE, FALSE, 0);
     option.set_ui_item(std::make_unique<GncGtkTaxTableUIItem>(widget));
     option.set_ui_item_from_option();
+    g_object_unref(builder); // Needs to wait until after widget has been reffed.
     g_signal_connect (G_OBJECT (widget), "changed",
                       G_CALLBACK (gnc_option_changed_widget_cb), &option);
 
