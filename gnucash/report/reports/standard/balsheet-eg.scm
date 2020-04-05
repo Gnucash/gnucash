@@ -391,8 +391,7 @@
 
     (define (foreignstyle item)
       ;; apply styling for amount in foreign currency
-        (string-append "<span class=\"foreign\">" item "</span>")
-        (string-append "<small><i>" item "</i></small>"))
+      (string-append "<span class=\"foreign\">" item "</span>"))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; accrec-related routines
@@ -591,11 +590,6 @@
     (define (format-comm-coll-total cc)
       ;; Format the total value of a commodity collector
       (format-monetary (gnc:sum-collector-commodity cc opt-report-commodity exchange-fn)))
-
-    (define (fmtmoney2 mny)
-      ;; format a monetary amount in the given currency/commodity
-      ;; !! this takes a gnc-monetary
-      (nbsp (gnc:monetary->string (monetary-rounded mny))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
