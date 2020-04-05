@@ -29,8 +29,12 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
+  (define (display-report opt-invoice)
 
-  (define (display-report opt-invoice owner endowner ownertype)
+    (define (date<? s1 s2)
+      (< (xaccTransGetDate (xaccSplitGetParent s1))
+         (xaccTransGetDate (xaccSplitGetParent s2))))
+
     ;; Main function that creates the tax invoice report
     (let* (; invoice and company details
            (invoiceid    (gncInvoiceGetID         opt-invoice))
@@ -47,7 +51,7 @@
            (txn          (gncInvoiceGetPostedTxn  opt-invoice))
            (currency     (gncInvoiceGetCurrency   opt-invoice))
            (entries      (gncInvoiceGetEntries    opt-invoice))
-           (splits      '());'
+           (splits       (sort (gnc-lot-get-split-list lot) date<?))
            (dateformat   (gnc:options-fancy-date book))
            (coyname      (gnc:company-info book gnc:*company-name*))
            (coycontact   (gnc:company-info book gnc:*company-contact*))
@@ -57,70 +61,41 @@
            (coyfax       (gnc:company-info book gnc:*company-fax*))
            (coyurl       (gnc:company-info book gnc:*company-url*))
            (coyemail     (gnc:company-info book gnc:*company-email*))
+           (owner        (gncInvoiceGetOwner  opt-invoice))
            (owneraddr  (gnc:owner-get-address-dep owner))
            (ownername  (gnc:owner-get-name-dep owner))
            (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  opt-invoice))))
            (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  opt-invoice))))
            (billcontact  (gncAddressGetName (gnc:owner-get-address owner)))
-           (cust-doc?  #f)
+           (cust-doc? (eqv? (gncInvoiceGetType opt-invoice) GNC-INVOICE-CUST-INVOICE))
            (reverse-payments? (not (gncInvoiceAmountPositive opt-invoice)))
            ; flags and counters
            (discount?  #f) ; any discounts on this invoice?
            (tax?       #f) ; any taxable entries on this invoice?
-           (taxtables? #t) ; are tax tables available in this version?
            (payments?  #f) ; have any payments been made on this invoice?
            (units?     #f) ; does any row specify units?
            (qty?       #f) ; does any row have qty <> 1?
            (tbl_cols   0)) ; number of columns for 'colspan' attributes
-
-      ; load splits, if any
-      (if (not (null? lot))
-        (set! splits
-          (sort-list (gnc-lot-get-split-list lot) ; sort by date
-                     (lambda (s1 s2)
-                       (let ((t1 (xaccSplitGetParent s1))
-                             (t2 (xaccSplitGetParent s2)))
-                         (< (xaccTransGetDate t1)
-                            (xaccTransGetDate t2)))))))
-
-
-      ;; Is this an invoice or something else
-      (if (not (null? opt-invoice))
-          (begin
-            (set! owner (gncInvoiceGetOwner  opt-invoice))
-            (let ((type (gncInvoiceGetType  opt-invoice)))
-              (cond
-               ((eqv? type GNC-INVOICE-CUST-INVOICE)
-                (set! cust-doc? #t))
-               
-               ))))
       
-      ; pre-scan invoice entries to look for discounts and taxes
-      (for entry in entries do
-          (let ((action    (gncEntryGetAction entry))
-                (qty       (gncEntryGetDocQuantity entry credit-note?))
-                (discount  (gncEntryGetInvDiscount entry))
-                (taxable?  (if cust-doc? (gncEntryGetInvTaxable entry) (gncEntryGetBillTaxable entry)))
-                (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry) (gncEntryGetBillTaxTable entry))))
-            (if (not (string=? action ""))
-              (set! units? #t))
-            (if (not (= (gnc-numeric-to-double qty) 1.0))
-              (set! qty? #t))
-            (if cust-doc? ; Only invoices have discounts
-                (if (not (gnc-numeric-zero-p discount)) (set! discount? #t)))
-            ;(if taxable - no, this flag is redundant
-            (if taxable? ; Also check if the taxable flag is set
-              (if  (not (eq? taxtable '()))
-              (begin ; presence of a tax table AND taxable flag means it's taxed
-                (set! tax? #t))))))
+      ;; pre-scan invoice entries to look for discounts and taxes
+      (for-each
+       (lambda (entry)
+         (unless (string-null? (gncEntryGetAction entry)) (set! units? #t))
+         (unless (= 1 (gncEntryGetDocQuantity entry credit-note?)) (set! qty? #t))
+         (cond
+          (cust-doc?
+           (unless (zero? (gncEntryGetInvDiscount entry)) (set! discount? #t))
+           (unless (null? (gncEntryGetInvTaxTable entry)) (set! tax? #t)))
+          (else
+           (unless (null? (gncEntryGetBillTaxTable entry)) (set! tax? #t)))))
+       entries)
 
-      ; pre-scan invoice splits to see if any payments have been made
-      (for split in splits do
-          (let* ((t (xaccSplitGetParent split)))
-            (if (not (equal? t txn))
-              (set! payments? #t))))
-
-
+      ;; pre-scan invoice splits to see if any payments have been made
+      (let lp ((splits splits))
+        (cond
+         ((null? splits) #f)
+         ((equal? (xaccSplitGetParent (car splits)) txn) (lp (cdr splits)))
+         (else (set! payments? #t))))
 ?>
 
 <!-- ====================================================================== -->
@@ -306,7 +281,7 @@
         <th align="right"><?scm:d opt-disc-rate-heading ?></th>
         <th align="right"><?scm:d opt-disc-amount-heading ?></th>
       <?scm (set! tbl_cols (+ tbl_cols 2)) )) ?>
-      <?scm (if (and tax? taxtables?) (begin ?>
+      <?scm (if tax? (begin ?>
         <th align="right"><?scm:d opt-net-price-heading ?></th>
         <?scm (set! tbl_cols (+ tbl_cols 1)) ?>
         <?scm (if opt-col-taxrate (begin ?>
@@ -326,7 +301,8 @@
              (dsc-total (- inv-total tax-total sub-total))
              (total-col (gnc:make-commodity-collector)))
         (total-col 'add currency inv-total)
-        (for entry in entries do
+        (for-each
+         (lambda (entry)
             (let ((qty       (gncEntryGetDocQuantity entry credit-note?))
                   (each      (gncEntryGetPrice entry cust-doc? opt-netprice))
                   (action    (gncEntryGetAction entry))
@@ -364,7 +340,7 @@
         <?scm )) ?>
         <td align="right"><?scm:d (fmtmoney currency rdiscval) ?></td>
       <?scm )) ?>
-      <?scm (if (and tax? taxtables?) (begin ?>
+      <?scm (if tax? (begin ?>
         <td align="right"><?scm:d (fmtmoney currency rval) ?></td>
         <?scm (if opt-col-taxrate (begin ?>
         <td align="right"><?scm (taxrate taxable taxtable currency) ?></td>
@@ -374,20 +350,21 @@
       <!-- TO DO: need an option about whether to display the tax-inclusive total? -->
       <td align="right"><?scm:d (fmtmoney currency (gnc-numeric-add rval rtaxval GNC-DENOM-AUTO GNC-RND-ROUND)) ?></td>
     </tr>
-    <?scm )) ?>
+    <?scm ))
+         entries) ?>
 
     <!-- subtotals row -->
     <?scm (if (or tax? discount? payments?) (begin ?>
       <tr valign="top">
         <td align="left" class="subtotal" colspan="<?scm:d
-        (- tbl_cols (if (and tax? taxtables? opt-col-taxrate) 1 0)
-                    (if (and tax? taxtables?) 1 -1)
+        (- tbl_cols (if (and tax? opt-col-taxrate) 1 0)
+                    (if tax? 1 -1)
                     (if (and discount?) 1 0)
         ) ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
         <?scm (if discount? (begin ?>
         <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency dsc-total) ?></strong></td>
         <?scm )) ?>
-        <?scm (if (and tax? taxtables?) (begin ?>
+        <?scm (if tax? (begin ?>
           <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency sub-total) ?></strong></td>
           <?scm (if opt-col-taxrate (begin ?>
           <td>&nbsp;</td>
@@ -400,25 +377,26 @@
 
     <!-- payments row -->
     <?scm
-      (if payments?
-        (for split in splits do
-            (let ((t (xaccSplitGetParent split)))
-              (if (not (equal? t txn)) ; don't process the entry itself as a split ;'
-                (let ((c (xaccTransGetCurrency t))
-                (a (if reverse-payments?
-                    (gnc-numeric-neg(xaccSplitGetValue split))
-                    (xaccSplitGetValue split)))
-                )
-                  (total-col 'add c a) ;'
+      (when payments?
+        (for-each
+         (lambda (split)
+           (let ((t (xaccSplitGetParent split)))
+             (unless (equal? t txn) ; don't process the entry itself as a split ;'
+               (let ((c (xaccTransGetCurrency t))
+                     (a (if reverse-payments?
+                            (- (xaccSplitGetValue split))
+                            (xaccSplitGetValue split))))
+                 (total-col 'add c a)
     ?>
     <tr valign="top">
-      <?scm (if opt-col-date (begin ?>
+      <?scm (when opt-col-date ?>
       <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
-      <?scm )) ?>
+      <?scm ) ?>
       <td align="left" colspan="<?scm:d (+ tbl_cols (if opt-col-date 0 1)) ?>"><?scm:d opt-payment-recd-heading ?></td>
       <td align="right"><?scm:d (fmtmoney c a) ?></td>
     </tr>
-    <?scm ))))) ?>
+    <?scm ))))
+         splits)) ?>
 
     <!-- total row -->
     <tr valign="top">
@@ -437,18 +415,16 @@
 
 <?scm )) ; end of display-report function
 
-  ; 'mainline' code: check for a valid invoice, then display the report
+  ;; 'mainline' code: check for a valid invoice, then display the report
 
 
-    (if (null? opt-invoice)
-    (begin
-      (display (string-append "<h2>" (_ "Tax Invoice") "</h2>"))
-      (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>"))
-    )
-    (let* ((owner     (gncInvoiceGetOwner  opt-invoice))
-           (endowner  (gncOwnerGetEndOwner owner))
-           (ownertype (gncOwnerGetType     endowner)))
-      (display-report opt-invoice owner endowner ownertype)))
+  (cond
+   ((null? opt-invoice)
+    (display (string-append "<h2>" (_ "Tax Invoice") "</h2>"))
+    (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
+
+   (else
+    (display-report opt-invoice)))
 
 ?>
 </div>
