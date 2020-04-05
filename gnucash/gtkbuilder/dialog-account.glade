@@ -388,6 +388,9 @@
       <action-widget response="-6">cancelbutton3</action-widget>
       <action-widget response="-5">okbutton3</action-widget>
     </action-widgets>
+    <style>
+      <class name="gnc-class-account"/>
+    </style>
   </object>
   <object class="GtkDialog" id="account_delete_dialog">
     <property name="can_focus">False</property>
@@ -822,6 +825,9 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-3">deletebutton</action-widget>
     </action-widgets>
+    <style>
+      <class name="gnc-class-account"/>
+    </style>
   </object>
   <object class="GtkDialog" id="account_filter_by_dialog">
     <property name="can_focus">False</property>
@@ -1077,6 +1083,9 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <style>
+      <class name="gnc-class-account"/>
+    </style>
   </object>
   <object class="GtkListStore" id="fraction_liststore">
     <columns>
@@ -1669,6 +1678,9 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="gnc-class-account"/>
+                </style>
               </object>
               <packing>
                 <property name="tab_expand">True</property>
@@ -1855,6 +1867,9 @@
                     <property name="position">0</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="gnc-class-account"/>
+                </style>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -1872,6 +1887,9 @@
                 <property name="tab_fill">False</property>
               </packing>
             </child>
+            <style>
+              <class name="gnc-class-account"/>
+            </style>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1879,6 +1897,9 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <style>
+          <class name="gnc-class-account"/>
+        </style>
       </object>
     </child>
     <action-widgets>
@@ -1886,6 +1907,9 @@
       <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
+    <style>
+      <class name="gnc-class-account"/>
+    </style>
   </object>
   <object class="GtkAdjustment" id="interval_adjustment">
     <property name="lower">1</property>
@@ -2096,5 +2120,8 @@
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
+    <style>
+      <class name="gnc-class-account"/>
+    </style>
   </object>
 </interface>

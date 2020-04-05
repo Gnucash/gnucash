@@ -42,7 +42,7 @@
 }
 
 /* Make label more important */
-.emphasize-label {
+.gnc-class-emphasize-label {
   font-size: large;
   font-weight: bold;
 }
