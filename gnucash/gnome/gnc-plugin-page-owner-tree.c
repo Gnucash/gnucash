@@ -576,8 +576,8 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
 
-    // Set the style context for this page so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncBusinessPage");
+    // Set the name for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-owner-page");
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -609,32 +609,32 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     case GNC_OWNER_UNDEFINED :
         PWARN("missing owner_type");
         label = _("Unknown");
-        style_label = "GncUnknown";
+        style_label = "gnc-class-unknown";
         break;
     case GNC_OWNER_CUSTOMER :
         label = _("Customers");
         state_section = "Customers Overview";
-        style_label = "GncCustomers";
+        style_label = "gnc-class-customers";
         break;
     case GNC_OWNER_JOB :
         label = _("Jobs");
         state_section = "Jobs Overview";
-        style_label = "GncJobs";
+        style_label = "gnc-class-jobs";
         break;
     case GNC_OWNER_VENDOR :
         label = _("Vendors");
         state_section = "Vendors Overview";
-        style_label = "GncVendors";
+        style_label = "gnc-class-vendors";
         break;
     case GNC_OWNER_EMPLOYEE :
         label = _("Employees");
         state_section = "Employees Overview";
-        style_label = "GncEmployees";
+        style_label = "gnc-class-employees";
         break;
     }
 
     // Set a secondary style context for this page so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), style_label);
+    gnc_widget_style_context_add_class (GTK_WIDGET(priv->widget), style_label);
 
     g_object_set(G_OBJECT(tree_view), "state-section", state_section,
                                       "show-column-menu", TRUE,
