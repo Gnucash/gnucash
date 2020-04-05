@@ -963,7 +963,7 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
                                      params, columns, q, q2, buttons, NULL,
                                      new_customer_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "GncFindCustomerDialog");
+                                     "gnc-class-customers");
 }
 
 GNCSearchWindow *

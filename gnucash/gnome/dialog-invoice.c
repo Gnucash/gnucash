@@ -3331,21 +3331,21 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     case GNC_OWNER_VENDOR:
         title = _("Find Bill");
         label = _("Bill");
-        style_class = "GncFindBillDialog";
+        style_class = "gnc-class-bills";
         params = bill_params;
         buttons = bill_buttons;
         break;
     case GNC_OWNER_EMPLOYEE:
         title = _("Find Expense Voucher");
         label = _("Expense Voucher");
-        style_class = "GncFindExpenseVoucherDialog";
+        style_class = "gnc-class-vouchers";
         params = emp_params;
         buttons = emp_buttons;
         break;
     default:
         title = _("Find Invoice");
         label = _("Invoice");
-        style_class = "GncFindInvoiceDialog";
+        style_class = "gnc-class-invoices";
         params = inv_params;
         buttons = inv_buttons;
         break;

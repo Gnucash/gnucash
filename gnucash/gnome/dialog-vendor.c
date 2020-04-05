@@ -765,7 +765,7 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
                                      params, columns, q, q2, buttons, NULL,
                                      new_vendor_cb, sw, free_vendor_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "GncFindVendorDialog");
+                                     "gnc-class-vendors");
 }
 
 GNCSearchWindow *

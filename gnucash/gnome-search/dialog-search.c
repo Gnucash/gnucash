@@ -1127,8 +1127,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_window_set_title(GTK_WINDOW(sw->dialog), title);
     g_object_set_data (G_OBJECT (sw->dialog), "dialog-info", sw);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(sw->dialog), "gnc-id-search");
+    gnc_widget_style_context_add_class (GTK_WIDGET(sw->dialog), "gnc-class-search");
 
     /* Grab the result hbox */
     sw->result_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "result_hbox"));
@@ -1328,11 +1329,9 @@ gnc_search_dialog_create (GtkWindow *parent,
                                                 gtk_widget_get_allocated_height (
                                                 GTK_WIDGET(sw->grouping_combo)) * 1.5);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    if (style_class == NULL)
-        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
-    else
-        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), style_class);
+    // Add a style context for this dialog so it can be easily manipulated with css
+    if (style_class != NULL)
+        gnc_widget_style_context_add_class (GTK_WIDGET(sw->dialog), style_class);
 
     /* Maybe display the original query results? */
     if (callbacks && show_start_query)

@@ -228,7 +228,7 @@ gnc_ui_find_transactions_dialog_create(GtkWindow *parent, GNCLedgerDisplay * ori
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
                                         ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL,
-                                        "GncFindTransDialog");
+                                        "gnc-class-transactions");
     if (!ftd->sw)
     {
         free_ftd_cb (ftd);

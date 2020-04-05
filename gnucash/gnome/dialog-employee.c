@@ -741,7 +741,7 @@ gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
                                      buttons, NULL, new_employee_cb,
                                      sw, free_employee_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "GncFindEmployeeDialog");
+                                     "gnc-class-employees");
 }
 
 GNCSearchWindow *

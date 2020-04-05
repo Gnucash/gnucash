@@ -644,7 +644,7 @@ gnc_job_search (GtkWindow *parent, GncJob *start, GncOwner *owner, QofBook *book
                                      params, columns, q, q2, buttons, NULL,
                                      new_job_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "GncFindJobDialog");
+                                     "gnc-class-jobs");
 }
 
 /* Functions for widgets for job selection */

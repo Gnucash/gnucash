@@ -948,7 +948,7 @@ gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *
                                      params, columns, q, q2,
                                      buttons, NULL, new_order_cb,
                                      sw, free_order_cb, GNC_PREFS_GROUP_SEARCH,
-                                     NULL, "GncFindOrderDialog");
+                                     NULL, "gnc-class-orders");
 }
 
 GNCSearchWindow *
