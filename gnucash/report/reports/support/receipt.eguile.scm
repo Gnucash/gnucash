@@ -25,7 +25,12 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;; 02111-1307 USA
 
-  (define (display-report opt-invoice owner endowner ownertype)
+  (define (display-report opt-invoice)
+
+    (define (date<? s1 s2)
+      (< (xaccTransGetDate (xaccSplitGetParent s1))
+         (xaccTransGetDate (xaccSplitGetParent s2))))
+
     ;; Main function that creates the receipt invoice report
     (let* (; invoice and company details
            (invoiceid  (gncInvoiceGetID         opt-invoice))
@@ -40,7 +45,7 @@
            (txn        (gncInvoiceGetPostedTxn  opt-invoice))
            (currency   (gncInvoiceGetCurrency   opt-invoice))
            (entries    (gncInvoiceGetEntries    opt-invoice))
-           (splits     '())
+           (splits     (sort (gnc-lot-get-split-list lot) date<?))
            (coyname    (gnc:company-info book gnc:*company-name*))
            (coycontact (gnc:company-info book gnc:*company-contact*))
            (coyaddr    (gnc:company-info book gnc:*company-addy*))
@@ -49,55 +54,32 @@
            (coyfax     (gnc:company-info book gnc:*company-fax*))
            (coyurl     (gnc:company-info book gnc:*company-url*))
            (coyemail   (gnc:company-info book gnc:*company-email*))
+           (owner      (gncInvoiceGetOwner opt-invoice))
            (owneraddr  (gnc:owner-get-name-and-address-dep owner))
            (billcontact (gncAddressGetName (gnc:owner-get-address owner)))
            ; flags and counters
            (discount?  #f) ; any discounts on this invoice?
            (tax?       #f) ; any taxable entries on this invoice?
-           (taxtables? #t) ; are tax tables available in this version?
            (payments?  #f) ; have any payments been made on this invoice?
            (units?     #f) ; does any row specify units?
            (qty?       #f) ; does any row have qty <> 1?
-           (maxcols    5)  ; cols of product line
-           (no-of-items 0)) ; number of items
+           (maxcols    5))  ; cols of product line
 
-      ; load splits, if any
-      (if (not (null? lot))
-        (set! splits
-          (sort-list (gnc-lot-get-split-list lot) ; sort by date
-                     (lambda (s1 s2)
-                       (let ((t1 (xaccSplitGetParent s1))
-                             (t2 (xaccSplitGetParent s2)))
-                         (< (xaccTransGetDate t1)
-                            (xaccTransGetDate t2)))))))
+      ;; pre-scan invoice entries to look for discounts and taxes
+      (for-each
+       (lambda (entry)
+         (unless (string-null? (gncEntryGetAction entry)) (set! units? #t))
+         (unless (= 1   (gncEntryGetQuantity entry))      (set! qty? #t))
+         (unless (zero? (gncEntryGetInvDiscount entry))   (set! discount? #t))
+         (unless (null? (gncEntryGetInvTaxTable entry))   (set! tax? #t)))
+       entries)
 
-      ; pre-scan invoice entries to look for discounts and taxes
-      (for entry in entries do
-          (let ((action    (gncEntryGetAction entry))
-                (qty       (gncEntryGetQuantity entry))
-                (discount  (gncEntryGetInvDiscount entry))
-                (taxtable  (gncEntryGetInvTaxTable entry)))
-            (set! no-of-items (+ no-of-items 1))
-            (if (not (string=? action ""))
-              (set! units? #t))
-            (if (not (= (gnc-numeric-to-double qty) 1.0))
-              (set! qty? #t))
-            (if (not (gnc-numeric-zero-p discount)) (set! discount? #t))
-            ;(if taxable - no, this flag is redundant
-            (if (not (eq? taxtable '()))
-              (begin ; presence of a tax table means it's taxed
-                (set! tax? #t)
-                (let ((ttentries (gncTaxTableGetEntries taxtable)))
-                  (if (string-prefix? "#<swig-pointer PriceList" (object->string ttentries))
-                    ; error in SWIG binding -- disable display of tax details
-                    ; (see https://bugs.gnucash.org/show_bug.cgi?id=573645)
-                    (set! taxtables? #f))))))) ; hack required until Swig is fixed
-
-      ; pre-scan invoice splits to see if any payments have been made
-      (for split in splits do
-          (let* ((t (xaccSplitGetParent split)))
-            (if (not (equal? t txn))
-              (set! payments? #t))))
+      ;; pre-scan invoice splits to see if any payments have been made
+      (let lp ((splits splits))
+        (cond
+         ((null? splits) #f)
+         ((equal? (xaccSplitGetParent (car splits)) txn) (lp (cdr splits)))
+         (else (set! payments? #t))))
 
 ?>
 
@@ -174,7 +156,8 @@
                  (dsc-total (- inv-total tax-total sub-total))
                  (total-col (gnc:make-commodity-collector)))
             (total-col 'add currency inv-total)
-            (for entry in entries do
+            (for-each
+             (lambda (entry)
                 (let ((qty       (gncEntryGetQuantity entry))
                       (each      (gncEntryGetInvPrice entry))
                       (action    (gncEntryGetAction entry))
@@ -194,7 +177,7 @@
           <td align="right"><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double each)) ?></td>
           <td align="right" nowrap><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double rval)) ?>
           <!-- <td align="right" nowrap><?scm:d (fmtnumeric rval) ?> -->
-              <?scm (if (and tax? taxtables?) (begin ?>
+              <?scm (if tax? (begin ?>
                 &nbsp;T
               <?scm ) (begin ?>
                 &nbsp;&nbsp;
@@ -202,20 +185,21 @@
           </td>
         </tr>
 
-        <?scm (if (not(equal? 0 (string-length (gncEntryGetNotes entry)))) (begin ?>
+        <?scm (if (string-null? (gncEntryGetNotes entry)) (begin ?>
           <tr>
             <td align="left">&nbsp;</td>
             <td align="left" colspan="<?scm:d (- maxcols 1) ?>"><?scm:d (gncEntryGetNotes entry) ?></td>
           </tr>
         <?scm )) ?>
 
-        <?scm )) ?>
+        <?scm ))
+             entries) ?>
 
         <!-- display subtotals row -->
         <tr valign="top">
           <td align="center" class="total total_first" colspan="<?scm:d maxcols ?>">
               <?scm:d "Total No. Items:" ?>&nbsp;
-              <?scm:d no-of-items ?>
+              <?scm:d (length entries) ?>
           </td>
         </tr>
 
@@ -240,10 +224,11 @@
         <?scm )) ?>
 
         <?scm
-          (if payments?
-            (for split in splits do
+          (when payments?
+            (for-each
+             (lambda (split)
                 (let ((t (xaccSplitGetParent split)))
-                  (if (not (equal? t txn)) ; don't process the entry itself as a split
+                  (unless (equal? t txn) ; don't process the entry itself as a split
                     (let ((c (xaccTransGetCurrency t))
                           (a (xaccSplitGetValue    split)))
                       (total-col 'add c a)
@@ -253,7 +238,8 @@
           <td align="left" colspan="<?scm:d (- maxcols 3) ?>"><?scm:d opt-payment-recd-heading ?></td>
           <td align="right" colspan="2"><?scm:d (fmtmoney c a) ?></td>
         </tr>
-        <?scm ))))) ?>
+        <?scm ))))
+             splits)) ?>
 
         <!-- total row -->
         <tr valign="top">
@@ -287,18 +273,20 @@
 <?scm )) ; end of display-report function
 
   ; 'mainline' code: check for a valid invoice, then display the report
-  (if (null? opt-invoice)
-    (begin
-      (display (string-append "<h2>" (_ "Receipt") "</h2>"))
-      (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
-    (let* ((owner     (gncInvoiceGetOwner  opt-invoice))
-           (endowner  (gncOwnerGetEndOwner owner))
-           (ownertype (gncOwnerGetType     endowner)))
-      (if (not (eqv? ownertype GNC-OWNER-CUSTOMER))
-        (begin
-          (display (string-append "<h2>" (_ "Receipt") "</h2>"))
-          (display (string-append "<p>" (_ "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.") "</p>")))
-        (display-report opt-invoice owner endowner ownertype))))
+  (cond
+   ((null? opt-invoice)
+    (display (string-append "<h2>" (_ "Receipt") "</h2>"))
+    (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
+
+   ((not (eqv? GNC-OWNER-CUSTOMER
+               (gncOwnerGetType
+                (gncOwnerGetEndOwner
+                 (gncInvoiceGetOwner opt-invoice)))))
+    (display (string-append "<h2>" (_ "Receipt") "</h2>"))
+    (display (string-append "<p>" (_ "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.") "</p>")))
+
+   (else
+    (display-report opt-invoice)))
 
 ?>
 </div>
