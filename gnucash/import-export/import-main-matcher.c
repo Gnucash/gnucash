@@ -91,9 +91,9 @@ enum downloaded_cols
     NUM_DOWNLOADED_COLS
 };
 
-#define CSS_INT_REQUIRED_CLASS      "intervention-required"
-#define CSS_INT_PROB_REQUIRED_CLASS "intervention-probably-required"
-#define CSS_INT_NOT_REQUIRED_CLASS  "intervention-not-required"
+#define CSS_INT_REQUIRED_CLASS      "gnc-class-intervention-required"
+#define CSS_INT_PROB_REQUIRED_CLASS "gnc-class-intervention-probably-required"
+#define CSS_INT_NOT_REQUIRED_CLASS  "gnc-class-intervention-not-required"
 
 /* Define log domain for extended debugging of matcher */
 #define G_MOD_IMPORT_MATCHER "gnc.import.main-matcher"
@@ -291,13 +291,13 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     int_not_required_class = g_strconcat (CSS_INT_NOT_REQUIRED_CLASS, class_extension, NULL);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_required_box"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), int_required_class);
+    gnc_widget_style_context_add_class (GTK_WIDGET(box), int_required_class);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_probably_required_box"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), int_prob_required_class);
+    gnc_widget_style_context_add_class (GTK_WIDGET(box), int_prob_required_class);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_not_required_box"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), int_not_required_class);
+    gnc_widget_style_context_add_class (GTK_WIDGET(box), int_not_required_class);
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(help_dialog), GTK_WINDOW(info->main_widget));
