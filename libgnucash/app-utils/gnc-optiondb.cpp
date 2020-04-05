@@ -670,7 +670,7 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                             if (option.get_ui_type() == GncOptionUIType::BOOLEAN)
                                 option.set_value(*str == 't' ? true : false);
                             else
-                                option.set_value(str);
+                                option.set_value(std::string{str});
                             break;
                         }
                         case KvpValue::Type::GUID:
