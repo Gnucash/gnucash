@@ -596,11 +596,11 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
     if (clear_options)
         qof_book_options_delete(book, nullptr);
     const_cast<GncOptionDB*>(this)->foreach_section(
-        [book](GncOptionSectionPtr& section)
+        [clear_options, book](GncOptionSectionPtr& section)
         {
             section->foreach_option(
-                [book, &section](auto& option) {
-                    if (option.is_changed())
+                [clear_options, book, &section](auto& option) {
+                    if (clear_options || option.is_changed())
                     {
                         // qof_book_set_option wants a GSList path. Let's avoid
                         // allocating and make one here.
