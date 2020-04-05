@@ -151,6 +151,7 @@ GncOptionUIFactory::create(GncOption& option, GtkGrid* page, GtkLabel* name,
     auto func{s_registry[static_cast<size_t>(type)]};
     if (func)
         return func(option, page, name, description, enclosing, packed);
+    PERR("No function registered for type %d", type);
     return nullptr;
 }
 
