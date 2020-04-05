@@ -123,8 +123,10 @@ public:
         GncOptionGtkUIItem(widget, GncOptionUIType::INVOICE) {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
-        gnc_general_search_set_selected(GNC_GENERAL_SEARCH(get_widget()),
-                                        GNC_INVOICE(option.get_value<const QofInstance*>()));
+        auto instance{option.get_value<const QofInstance*>()};
+        if (instance)
+            gnc_general_search_set_selected(GNC_GENERAL_SEARCH(get_widget()),
+                                            GNC_INVOICE(instance));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
@@ -162,8 +164,9 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto taxtable{option.get_value<const QofInstance*>()};
-        gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
-                                                 GNC_TAXTABLE(taxtable));
+        if (taxtable)
+            gnc_simple_combo_set_value(GTK_COMBO_BOX(get_widget()),
+                                       GNC_TAXTABLE(taxtable));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {

@@ -1086,9 +1086,9 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_CURRENCY_EDIT(get_widget())};
-        auto currency =
-            GNC_COMMODITY(option.get_value<const QofInstance*>());
-        gnc_currency_edit_set_currency(widget, currency);
+        auto instance{option.get_value<const QofInstance*>()};
+        if (instance)
+            gnc_currency_edit_set_currency(widget, GNC_COMMODITY(instance));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
@@ -1126,9 +1126,9 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_GENERAL_SELECT(get_widget())};
-        auto commodity =
-            GNC_COMMODITY(option.get_value<const QofInstance*>());
-        gnc_general_select_set_selected(widget, commodity);
+        auto instance{option.get_value<const QofInstance*>()};
+        if (instance)
+            gnc_general_select_set_selected(widget, GNC_COMMODITY(instance));
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
@@ -1872,9 +1872,9 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_ACCOUNT_SEL(get_widget())};
-        gnc_account_sel_set_account(widget,
-                                    GNC_ACCOUNT(option.get_value<const QofInstance*>()),
-                                    FALSE);
+        auto instance{option.get_value<const QofInstance*>()};
+        if (instance)
+            gnc_account_sel_set_account(widget, GNC_ACCOUNT(instance), FALSE);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
@@ -2725,12 +2725,14 @@ public:
     {
         GtkTreeIter iter;
         auto widget{GTK_COMBO_BOX(get_widget())};
-        auto budget{GNC_BUDGET(option.get_value<const QofInstance*>())};
-        auto tree_model{gtk_combo_box_get_model(widget)};
-        if (gnc_tree_model_budget_get_iter_for_budget(tree_model, &iter,
-                                                      budget))
-            gtk_combo_box_set_active_iter(widget, &iter);
-
+        auto instance{option.get_value<const QofInstance*>()};
+        if (instance)
+        {
+            auto tree_model{gtk_combo_box_get_model(widget)};
+            if (gnc_tree_model_budget_get_iter_for_budget(tree_model, &iter,
+                                                          GNC_BUDGET(instance)))
+                gtk_combo_box_set_active_iter(widget, &iter);
+        }
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
