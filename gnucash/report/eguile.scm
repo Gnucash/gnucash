@@ -169,49 +169,6 @@
 
 ;end of (template->script)
 
-;; Evaluate input containing Scheme code, trapping errors
-;; e.g. (display "Text ")(display (+ x 2))(display ".") -> Text 42.
-;; Parameters:
-;;   env  - environment in which to do the evaluation;
-;;          if #f, (the-environment) will be used
-(define (script->output env)
-
-  ;; Placeholder for the error stack in case of an error
-  (define error-stack #f)
-  (define local-env (or env (the-environment)))
-
-  ;; Actual evaluation function. This is where the work happens.
-  (define (eval-input)
-    (let lp ((next (read)))
-      (cond
-       ((eof-object? next) #f)
-       (else
-        (local-eval next local-env)
-        (lp (read))))))
-
-  ;; Error handler to display any errors while evaluating the template
-  (define (error-handler key subr message args . rest)
-    (display "<p>")
-    (display (_ "An error occurred when processing the template:"))
-    (display "<br/><pre>")
-    (display
-     (gnc:html-string-sanitize
-      (with-output-to-string
-        (lambda ()
-          (display-backtrace error-stack (current-output-port))
-          (newline)
-          (display-error #f (current-output-port) subr message args rest)))))
-    (display "</pre><br/>"))
-
-  (define (pre-unwind-handler key . rest)
-    ;; Capture the stack here, cut the last 3 frames which are
-    ;; make-stack, this one, and the throw handler.
-    (set! error-stack (make-stack #t 3)))
-
-  (catch #t eval-input error-handler pre-unwind-handler))
-
-; end of (script->output)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Process a template file and return the result as a string
@@ -223,11 +180,15 @@
     (let ((script (with-input-from-file infile
                     (lambda ()
                       (with-output-to-string template->script)))))
+      (define local-env (or environment (the-environment)))
       (with-output-to-string
         (lambda ()
           (with-input-from-string script
             (lambda ()
-              (script->output environment)))))))))
+              (let lp ((next (read)))
+                (unless (eof-object? next)
+                  (local-eval next local-env)
+                  (lp (read))))))))))))
 
 (export eguile-file-to-string)
 
