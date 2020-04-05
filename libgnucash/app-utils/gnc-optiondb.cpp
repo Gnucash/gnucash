@@ -568,6 +568,28 @@ GncOptionDB::load_from_key_value(std::istream& iss)
     return iss;
 }
 
+bool
+is_qofinstance_ui_type(GncOptionUIType type)
+{
+    switch (type)
+    {
+        case CURRENCY:
+        case COMMODITY:
+        case ACCOUNT_SEL:
+        case BUDGET:
+        case OWNER:
+        case CUSTOMER:
+        case VENDOR:
+        case EMPLOYEE:
+        case INVOICE:
+        case TAX_TABLE:
+        case QUERY:
+            return true;
+        default:
+            return false;
+    }
+}
+
 void
 GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
 {
@@ -593,7 +615,7 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                                                   g_strdup("f"))};
                             qof_book_set_option(book, kvp, &list_head);
                         }
-                        else if (type > GncOptionUIType::DATE_FORMAT)
+                        else if (is_qofinstance_ui_type(type))
                         {
                             const QofInstance* inst{QOF_INSTANCE(option.template get_value<const QofInstance*>())};
                             auto guid = guid_copy(qof_instance_get_guid(inst));
