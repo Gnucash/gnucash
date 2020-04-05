@@ -602,7 +602,9 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                         }
                         else if (type == GncOptionUIType::NUMBER_RANGE)
                         {
-                            auto kvp{new KvpValue(option.template get_value<int64_t>())};
+                            /* The Gtk control uses a double so that's what we
+                             * have to store. */
+                            auto kvp{new KvpValue(option.template get_value<double>())};
                             qof_book_set_option(book, kvp, &list_head);
                         }
                         else
@@ -634,6 +636,9 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                         return;
                     switch (kvp->get_type())
                     {
+                        case KvpValue::Type::DOUBLE:
+                            option.set_value(kvp->get<double>());
+                            break;
                         case KvpValue::Type::INT64:
                             option.set_value(kvp->get<int64_t>());
                             break;
@@ -1166,7 +1171,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
 
 //Accounts Tab
 
-    gnc_register_number_range_option(odb, OPTION_SECTION_ACCOUNTS,
+    gnc_register_number_range_option<double>(odb, OPTION_SECTION_ACCOUNTS,
                                      OPTION_NAME_AUTO_READONLY_DAYS, "a",
                                      N_("Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only."),
                                      0.0, 0.0, 3650.0, 1.0);
