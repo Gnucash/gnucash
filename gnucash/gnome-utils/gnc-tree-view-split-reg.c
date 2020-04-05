@@ -979,7 +979,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     GtkTreeSelection    *selection;
 
     view = g_object_new (gnc_tree_view_split_reg_get_type(), NULL);
-    g_object_set (view, "name", "split_reg_tree", NULL);
+    g_object_set (view, "name", "gnc-id-split-reg-tree", NULL);
 
     view->priv->anchor = gnc_tree_model_split_reg_get_anchor (model);
     view->priv->reg_comm = xaccAccountGetCommodity (view->priv->anchor);

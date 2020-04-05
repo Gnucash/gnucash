@@ -367,7 +367,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     }
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_OWNER,
-                         "name", "owner_tree", NULL);
+                         "name", "gnc-id-owner-tree", NULL);
 
     priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(GNC_TREE_VIEW_OWNER (view));
 
