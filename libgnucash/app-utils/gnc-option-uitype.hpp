@@ -53,6 +53,7 @@ enum GncOptionUIType
     INVOICE,
     TAX_TABLE,
     QUERY,
+    REPORT_LIST,
     MAX_VALUE,  //Nake sure this one is always last
 };
 

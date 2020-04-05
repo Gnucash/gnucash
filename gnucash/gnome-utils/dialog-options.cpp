@@ -971,7 +971,7 @@ public:
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        option.set_value(gtk_entry_get_text(widget));
+        option.set_value(std::string{gtk_entry_get_text(widget)});
     }
 };
 
@@ -2091,7 +2091,7 @@ public:
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        option.set_value(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
+        option.set_value<double>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
     }
 };
 
@@ -2217,13 +2217,14 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         GtkFontButton *font_button = GTK_FONT_BUTTON(get_widget());
-        gtk_font_button_set_font_name(font_button, option.get_value<std::string>().c_str());
+        gtk_font_button_set_font_name(font_button,
+                                      option.get_value<std::string>().c_str());
 
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         GtkFontButton *font_button = GTK_FONT_BUTTON(get_widget());
-        option.set_value(gtk_font_button_get_font_name(font_button));
+        option.set_value(std::string{gtk_font_button_get_font_name(font_button)});
     }
 };
 
@@ -2727,7 +2728,7 @@ create_option_widget<GncOptionUIType::BUDGET> (GncOption& option,
                                                GtkGrid *page_box,
                                                GtkLabel *name_label,
                                                char *documentation,
-                                 /* Return values */
+                                               /* Return values */
                                                GtkWidget **enclosing,
                                                bool *packed)
 {

@@ -60,12 +60,11 @@ struct gncp_column_view_edit
     GtkTreeView  * available;
     GtkTreeView  * contents;
 
-    SCM          options;
     SCM          view;
-    GNCOptionDB  * odb;
+    GncOptionDB  * odb;
 
     SCM       available_list;
-    SCM       contents_list;
+    GList*       contents_list;
     int       contents_selected;
 
     GtkWidget *add_button;
@@ -82,26 +81,16 @@ void gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data);
 void gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data);
 
 static void
-gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
-                           SCM new_value)
+gnc_column_view_set_option(GncOptionDB * odb, char * section, char * name,
+                           GList* new_value)
 {
-    GNCOption *  option =
-        gnc_option_db_get_option_by_name(odb, section, name);
-
-    if (option)
-    {
-        gnc_option_db_set_option(odb, section, name, new_value);
-
-        /* set_option doesn't do this */
-        gnc_option_set_changed (option, TRUE);
-    }
+    gnc_option_db_set_glist_value(section, name, new_value);
 }
 
 static void
 gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 {
     gnc_options_dialog_destroy(view->optwin);
-    scm_gc_unprotect_object(view->options);
     scm_gc_unprotect_object(view->view);
     gnc_option_db_destroy(view->odb);
     g_free(view);
@@ -175,12 +164,11 @@ static void
 update_contents_lists(gnc_column_view_edit * view)
 {
     SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
-    SCM   contents =
-        gnc_option_db_lookup_option(view->odb, "__general", "report-list",
-                                    SCM_BOOL_F);
+    GList* contents = gnc_option_db_lookup_glist_option(view->odb,
+                                                        "__general",
+                                                        "report-list");
     SCM   this_report;
-    SCM   selection;
-    gchar *name;
+    gchar*   selection;
 
     GtkListStore *store;
     GtkTreeIter iter;
@@ -189,41 +177,38 @@ update_contents_lists(gnc_column_view_edit * view)
     /* Update the list of selected reports (right selection box). */
     tree_selection = gtk_tree_view_get_selection(view->contents);
 
-    if (scm_is_list(view->contents_list) && !scm_is_null (view->contents_list))
+    if (g_list_length(contents))
     {
         int row = view->contents_selected;
-        row = MIN (row, scm_ilength (view->contents_list) - 1);
-        selection = scm_list_ref (view->contents_list, scm_from_int (row));
+        row = MIN (row,  g_list_length(view->contents_list) - 1);
+        selection = g_list_nth_value(view->contents_list, row);
     }
     else
-        selection = SCM_UNDEFINED;
+        selection = NULL;
 
-    scm_gc_unprotect_object(view->contents_list);
     view->contents_list = contents;
-    scm_gc_protect_object(view->contents_list);
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(view->contents));
     gtk_list_store_clear(store);
 
-    if (scm_is_list(contents))
+    for (GList* node = contents; node; g_list_next(node))
     {
-        for (int i = 0; !scm_is_null(contents); contents = SCM_CDR(contents), i++)
-        {
-            SCM contents_temp = SCM_CAR(contents);
+        gchar *name;
+        SCM contents_temp = SCM_CAR(node);
+        int id = scm_to_int(SCM_CAAR(node));
 
-            int id = scm_to_int(SCM_CAAR(contents));
+        this_report = gnc_report_find(id);
+        name = gnc_scm_to_utf8_string (scm_call_1(report_menu_name, this_report));
 
-            this_report = gnc_report_find(id);
-            name = gnc_scm_to_utf8_string (scm_call_1(report_menu_name, this_report));
-
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set
-            (store, &iter,
-             CONTENTS_COL_NAME, _(name),
-             CONTENTS_COL_ROW, i,
-             CONTENTS_COL_REPORT_COLS, scm_to_int(SCM_CADR(contents_temp)),
-             CONTENTS_COL_REPORT_ROWS, scm_to_int(SCM_CADDR(contents_temp)),
-             -1);
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set (store, &iter,
+                            CONTENTS_COL_NAME, _(name),
+                            CONTENTS_COL_ROW, i,
+                            CONTENTS_COL_REPORT_COLS,
+                            scm_to_int(SCM_CADR(contents_temp)),
+                            CONTENTS_COL_REPORT_ROWS,
+                            scm_to_int(SCM_CADDR(contents_temp)),
+                            -1);
 
             if (scm_is_equal (contents_temp, selection))
                 gtk_tree_selection_select_iter (tree_selection, &iter);
@@ -324,7 +309,7 @@ gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data)
  ********************************************************************/
 
 GtkWidget *
-gnc_column_view_edit_options(SCM options, SCM view)
+gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
 {
     SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
     SCM ptr;
@@ -366,12 +351,11 @@ gnc_column_view_edit_options(SCM options, SCM view)
         r->down_button = GTK_WIDGET(gtk_builder_get_object (builder, "down_button1"));
         r->size_button = GTK_WIDGET(gtk_builder_get_object (builder, "size_button1"));
 
-        r->options   = options;
         r->view      = view;
         r->available_list = SCM_EOL;
         r->contents_selected = 0;
         r->contents_list = SCM_EOL;
-        r->odb       = gnc_option_db_new(r->options);
+        r->odb       = odb;
 
         gnc_options_dialog_build_contents(r->optwin, r->odb);
 
@@ -380,7 +364,6 @@ gnc_column_view_edit_options(SCM options, SCM view)
                                  editor,
                                  gtk_label_new(_("Contents")));
 
-        scm_gc_protect_object(r->options);
         scm_gc_protect_object(r->view);
         scm_gc_protect_object(r->available_list);
         scm_gc_protect_object(r->contents_list);
