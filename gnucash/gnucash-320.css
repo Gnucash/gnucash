@@ -13,12 +13,12 @@
 }
 
 /* Register Cursor settings, top, right, bottom, left */
-cursor entry {
+gnc-id-cursor entry {
   margin: 2px 5px 2px 5px;
   padding: 0px 2px 0px 2px;
 }
 
-cursor button {
+gnc-id-cursor button {
   margin: 1px 1px 1px 1px;
 }
 
@@ -30,52 +30,52 @@ cursor button {
 @define-color register_cursor_bg_color #FFEF98;
 @define-color register_fg_color black;
 
-*.register-foreground {
+*.gnc-class-register-foreground {
   color: @register_fg_color;
 }
 
-*.register-header {
+*.gnc-class-register-header {
   background-color: @register_header_bg_color;
 }
 
-*.register-primary {
+*.gnc-class-register-primary {
   background-color: @register_primary_bg_color;
 }
 
-*.register-primary:disabled {
+*.gnc-class-register-primary:disabled {
   background-color: mix (@register_primary_bg_color, grey, 0.2);
 }
 
-*.register-secondary {
+*.gnc-class-register-secondary {
   background-color: @register_secondary_bg_color;
 }
 
-*.register-secondary:disabled {
+*.gnc-class-register-secondary:disabled {
   background-color: mix (@register_secondary_bg_color, grey, 0.2);
 }
 
-*.register-split {
+*.gnc-class-register-split {
   background-color: @register_split_bg_color;
 }
 
-*.register-split:disabled {
+*.gnc-class-register-split:disabled {
   background-color: mix (@register_split_bg_color, grey, 0.2);
 }
 
-*.register-cursor {
+*.gnc-class-register-cursor {
   background-color: @register_cursor_bg_color;
 }
 
-*.register-cursor:disabled {
+*.gnc-class-register-cursor:disabled {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
 }
 
 /* Change font color by mixing with grey */
-.lighter-grey-mix {
+.gnc-class-lighter-grey-mix {
   color: mix (currentColor, grey, 0.8);
 }
 
-.darker-grey-mix {
+.gnc-class-darker-grey-mix {
   color: mix (currentColor, grey, 0.2);
 }
 

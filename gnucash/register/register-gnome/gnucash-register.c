@@ -318,7 +318,7 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
     gobject_class = G_OBJECT_CLASS (klass);
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "register");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "gnc-id-register");
 #endif
 
     register_parent_class = g_type_class_peek_parent (klass);
@@ -379,7 +379,7 @@ gnucash_register_init (GnucashRegister *g_reg)
     gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_set_css_name (GTK_WIDGET(g_reg), "register");
+    gnc_widget_add_style_class (GTK_WIDGET(g_reg), "gnc-class-register");
 
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);
