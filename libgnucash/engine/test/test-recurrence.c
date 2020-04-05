@@ -34,7 +34,6 @@ static gboolean check_valid(GDate *next, GDate *ref, GDate *start,
                         guint16 mult, PeriodType pt, WeekendAdjust wadj)
 {
     gboolean valid;
-    GDate adj_date;
     gint startToNext;
     gboolean ret_val = TRUE;
 
@@ -65,10 +64,10 @@ static gboolean check_valid(GDate *next, GDate *ref, GDate *start,
                 ret_val &= do_test(g_date_is_last_of_month(next), "end of month phase wrong");
             else
             {
-                gboolean result;
+                gboolean result = TRUE;
                 if(!g_date_is_last_of_month(next))
                 {
-                    adj_date = *next;
+                    GDate adj_date = *next;
                     if(wadj == WEEKEND_ADJ_BACK)
                     {
                         // If adjusting back, one of the next two days to be end of month
@@ -133,7 +132,7 @@ static gboolean check_valid(GDate *next, GDate *ref, GDate *start,
             day_next = g_date_get_day(next);
             if (day_start < 28)
             {
-                gboolean result;
+                gboolean result = TRUE;
                 week_day = g_date_get_weekday (next);
                 switch (wadj) {
                     case WEEKEND_ADJ_NONE:
