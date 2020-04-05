@@ -1069,7 +1069,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     auto ui_item{std::make_unique<GncGtkTextUIItem>(widget)};
     auto text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_signal_connect(G_OBJECT(text_buffer), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), &option);
+                     G_CALLBACK(gnc_option_changed_option_cb), &option);
     option.set_ui_item(std::move(ui_item));
     option.set_ui_item_from_option();
 
