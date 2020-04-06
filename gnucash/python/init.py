@@ -1,14 +1,13 @@
 import sys
 import gnucash._sw_app_utils as _sw_app_utils
 from gnucash import *
-from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled
+from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled, gnc_prefs_is_debugging_enabled
 from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 sys.path.append(os.path.dirname(__file__))
-noisy = gnc_prefs_is_extra_enabled()
-if noisy:
+if gnc_prefs_is_extra_enabled():
     print("woop", os.path.dirname(__file__))
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
@@ -21,7 +20,7 @@ import pycons.console as cons
 # Restore the SIGTTOU handler
 signal.signal(signal.SIGTTOU, old_sigttou)
 
-if noisy:
+if gnc_prefs_is_extra_enabled() and gnc_prefs_is_debugging_enabled():
     print("Hello from python!")
     print("test", sys.modules.keys())
     print("test2", dir(_sw_app_utils))
