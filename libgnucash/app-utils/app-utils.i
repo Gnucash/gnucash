@@ -56,6 +56,7 @@ void
 #endif
 SWIG_init (void);
 %}
+%import <gnucash_core.i>
 #endif
 
 %import "base-typemaps.i"

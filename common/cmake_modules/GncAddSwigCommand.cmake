@@ -84,7 +84,8 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
             ${CMAKE_SOURCE_DIR}/common
             ${CMAKE_SOURCE_DIR}/libgnucash/engine
             ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
-        )
+       	    ${CMAKE_SOURCE_DIR}/bindings/python
+	)
 
         set (PYTHON_SWIG_FLAGS ${DEFAULT_SWIG_PYTHON_FLAGS})
         foreach (dir ${DEFAULT_SWIG_PYTHON_C_INCLUDES})

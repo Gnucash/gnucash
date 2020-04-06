@@ -75,7 +75,7 @@ class Session(GnuCashCoreClass):
     """
 
     def __init__(self, book_uri=None, ignore_lock=False, is_new=False,
-                 force_new= False):
+                 force_new=False, instance=None):
         """A convenient constructor that allows you to specify a book URI,
         begin the session, and load the book.
 
@@ -95,13 +95,15 @@ class Session(GnuCashCoreClass):
         ignore_lock is passed to qof_session_begin's argument of the
         same name and is used to break an existing lock on a dataset.
 
+        instance argument can be passed if new Session is used as a
+        wrapper for an existing session instance
 
 
         This function can raise a GnuCashBackendException. If it does,
         you don't need to cleanup and call end() and destroy(), that is handled
         for you, and the exception is raised.
         """
-        GnuCashCoreClass.__init__(self)
+        GnuCashCoreClass.__init__(self, instance=instance)
         if book_uri is not None:
             try:
                 self.begin(book_uri, ignore_lock, is_new, force_new)
