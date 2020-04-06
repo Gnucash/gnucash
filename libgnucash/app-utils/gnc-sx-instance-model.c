@@ -387,6 +387,8 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
         as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
         g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
         
+        /* This variable can be used in a formula, it will contain the balance of the split main account.
+         * For now it needs to be created with an arbitrary value. */
         var_name = "balance";
         num_value = gnc_numeric_create(0, 1);
         as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
@@ -1088,7 +1090,7 @@ split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
     gnc_numeric final;
     gint gncn_error;
     SchedXaction *sx = creation_data->instance->parent->sx;
-    
+
     _get_credit_formula_value(creation_data->instance, split, &credit_num,
                               creation_data->creation_errors);
     _get_debit_formula_value(creation_data->instance, split, &debit_num,
@@ -1283,7 +1285,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
            it. --jsled */
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
-        
+
         _get_template_split_account(sx, template_split, &split_acct,
                                     creation_data->creation_errors);
 
@@ -1291,15 +1293,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         {
             // Update the balance variable the first time around, it will remain the same for every split
             gnc_numeric balance = xaccAccountGetBalance(split_acct);
-            const gchar* name = gnc_account_get_full_name(split_acct);
-            const gchar* desc = xaccAccountGetDescription(split_acct);
-            g_print("ACCOUNT NAME %s Desc %s Bal %d %d\n",name,desc,(gint)balance.num,(gint) balance.denom);
-            g_print("memo split %s\n",xaccSplitGetMemo (copying_split));
             as_var = gnc_sx_variable_new_full("balance", balance, FALSE);
             g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("balance"), as_var);
         }
-
-
+        
         split_cmdty = xaccAccountGetCommodity(split_acct);
         xaccSplitSetAccount(copying_split, split_acct);
 
@@ -1346,7 +1343,7 @@ create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_gu
 {
     SxTxnCreationData creation_data;
     Account *sx_template_account;
-    
+
     sx_template_account = gnc_sx_get_template_transaction_account(instance->parent->sx);
 
     creation_data.instance = instance;
