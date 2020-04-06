@@ -526,7 +526,7 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
                       trans_numeric, numeric_ops, negate_numeric, g_free,
                       func_op);
 
-    error_loc = parse_string (&result, expression, pe); // JEAN VALUE COMPUTED HERE?
+    error_loc = parse_string (&result, expression, pe);
 
     pnum = result.value;
 

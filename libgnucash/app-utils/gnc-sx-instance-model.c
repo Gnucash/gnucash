@@ -353,9 +353,6 @@ _clone_sx_var_hash_entry(gpointer key, gpointer value, gpointer user_data)
     g_hash_table_insert(to, g_strdup(key), var);
 }
 
-#define GET_PRIVATE(o)  \
-((AccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_ACCOUNT))
-
 static GncSxInstance*
 gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num)
 {
@@ -380,18 +377,20 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
 
     {
         int instance_i_value;
-        gnc_numeric i_num;
+        gnc_numeric num_value;
         GncSxVariable *as_var;
+        gchar* var_name = NULL;
 
-        // JEAN: Xch TRANS is re-created.
+        var_name = "i";
         instance_i_value = gnc_sx_get_instance_count(rtn->parent->sx, rtn->temporal_state);
-        i_num = gnc_numeric_create(instance_i_value*1000, 1);
-        as_var = gnc_sx_variable_new_full("i", i_num, FALSE);
-        g_hash_table_insert(rtn->variable_bindings, g_strdup("i"), as_var);
+        num_value = gnc_numeric_create(instance_i_value, 1);
+        as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
         
-        i_num = gnc_numeric_create(1111, 1);
-        as_var = gnc_sx_variable_new_full("j", i_num, FALSE);
-        g_hash_table_insert(rtn->variable_bindings, g_strdup("j"), as_var);
+        var_name = "balance";
+        num_value = gnc_numeric_create(0, 1);
+        as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
+        g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
     }
 
     return rtn;
@@ -1041,7 +1040,7 @@ _get_sx_formula_value(const SchedXaction* sx,
         {
             parser_vars = gnc_sx_instance_get_variables_for_parser(variable_bindings);
         }
-        if (!gnc_exp_parser_parse_separate_vars(formula_str, // JEAN: THE FORMULA IS PARSED HERE.
+        if (!gnc_exp_parser_parse_separate_vars(formula_str,
                                                 numeric,
                                                 &parseErrorLoc,
                                                 parser_vars))
@@ -1081,15 +1080,6 @@ _get_debit_formula_value(GncSxInstance *instance, const Split *template_split,
                           "sx-debit-numeric", instance->variable_bindings);
 }
 
-static void
-xaccJean(Account* acc)
-{
-    gnc_numeric balance = xaccAccountGetBalance(acc);
-    const gchar* name = gnc_account_get_full_name(acc);
-    const gchar* desc = xaccAccountGetDescription(acc);
-    g_print("ACCOUNT NAME %s Desc %s Bal %d %d\n",name,desc,(gint)balance.num,(gint) balance.denom);
-
-}
 static gnc_numeric
 split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
 {
@@ -1098,16 +1088,11 @@ split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
     gnc_numeric final;
     gint gncn_error;
     SchedXaction *sx = creation_data->instance->parent->sx;
-    // JEAN: The value of the formula is computed here?
+    
     _get_credit_formula_value(creation_data->instance, split, &credit_num,
                               creation_data->creation_errors);
     _get_debit_formula_value(creation_data->instance, split, &debit_num,
                              creation_data->creation_errors);
-
-    Account* foo;
-    _get_template_split_account(NULL, split, &foo,NULL);
-    xaccJean(foo);
-
 
     final = gnc_numeric_sub_fixed(debit_num, credit_num);
 
@@ -1237,6 +1222,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     SchedXaction *sx = creation_data->instance->parent->sx;
     gnc_commodity *txn_cmdty = get_transaction_currency (creation_data,
                                                          sx, template_txn);
+    GncSxVariable *as_var = NULL;
 
     /* No txn_cmdty means there was a defective split. Bail. */
     if (txn_cmdty == NULL)
@@ -1289,30 +1275,29 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
          txn_splits = txn_splits->next, template_splits = template_splits->next)
     {
         const Split *template_split;
-        Account *split_acct;
+        Account *split_acct = NULL;
         gnc_commodity *split_cmdty = NULL;
-        int instance_i_value;
-        gnc_numeric i_num;
-        GncSxVariable *as_var;
-        GHashTable* var_hash;
 
         /* FIXME: Ick.  This assumes that the split lists will be ordered
            identically. :( They are, but we'd rather not have to count on
            it. --jsled */
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
-        // JEAN: HERE'S WHERE THE ACCOUNT IS GRABBED FROM THE TEMPLATE
+        
         _get_template_split_account(sx, template_split, &split_acct,
                                     creation_data->creation_errors);
 
-        gnc_numeric balance = xaccAccountGetBalance(split_acct);
-        const gchar* name = gnc_account_get_full_name(split_acct);
-        const gchar* desc = xaccAccountGetDescription(split_acct);
-        g_print("ACCOUNT NAME %s Desc %s Bal %d %d\n",name,desc,(gint)balance.num,(gint) balance.denom);
-        
-        i_num = gnc_numeric_create((float)balance.num / balance.denom, 1);
-        as_var = gnc_sx_variable_new_full("j", i_num, FALSE);
-        g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("j"), as_var);
+        if(as_var == NULL)
+        {
+            // Update the balance variable the first time around, it will remain the same for every split
+            gnc_numeric balance = xaccAccountGetBalance(split_acct);
+            const gchar* name = gnc_account_get_full_name(split_acct);
+            const gchar* desc = xaccAccountGetDescription(split_acct);
+            g_print("ACCOUNT NAME %s Desc %s Bal %d %d\n",name,desc,(gint)balance.num,(gint) balance.denom);
+            g_print("memo split %s\n",xaccSplitGetMemo (copying_split));
+            as_var = gnc_sx_variable_new_full("balance", balance, FALSE);
+            g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("balance"), as_var);
+        }
 
 
         split_cmdty = xaccAccountGetCommodity(split_acct);
@@ -1361,7 +1346,7 @@ create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_gu
 {
     SxTxnCreationData creation_data;
     Account *sx_template_account;
-    // JEAN: ACCOUNT ACCESS FOR TANSACT?
+    
     sx_template_account = gnc_sx_get_template_transaction_account(instance->parent->sx);
 
     creation_data.instance = instance;
@@ -1450,7 +1435,7 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                     }
                     increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
                     break;
-                case SX_INSTANCE_STATE_TO_CREATE: // Where the sx instance is effected?
+                case SX_INSTANCE_STATE_TO_CREATE:
                     create_transactions_for_instance (inst,
                                                       created_transaction_guids,
                                                       &instance_errors);
