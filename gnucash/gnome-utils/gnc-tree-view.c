@@ -43,6 +43,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
+#include "gnc-cell-renderer-text-view.h"
 #include "gnc-state.h"
 #include "gnc-prefs.h"
 #include "dialog-utils.h"
@@ -1830,26 +1831,18 @@ renderer_edited_cb (GtkCellRendererText *renderer, gchar *path,
         (priv->editing_finished_cb)(view, priv->editing_cb_data);
 }
 
-/** This function adds a new text column to a GncTreeView base view.
- *  It takes all the parameters necessary to hook a GtkTreeModel
- *  column to a GtkTreeViewColumn.  If the tree has a state section
- *  associated with it, this function also wires up the column so that
- *  its visibility and width are remembered.
- *
- *  Parameters are defined in gnc-tree-view.h
- */
-GtkTreeViewColumn *
-gnc_tree_view_add_text_column (GncTreeView *view,
-                               const gchar *column_title,
-                               const gchar *pref_name,
-                               const gchar *icon_name,
-                               const gchar *sizing_text,
-                               gint model_data_column,
-                               gint model_visibility_column,
-                               GtkTreeIterCompareFunc column_sort_fn)
+
+static GtkTreeViewColumn *
+add_text_column_variant (GncTreeView *view, GtkCellRenderer *renderer,
+                         const gchar *column_title,
+                         const gchar *pref_name,
+                         const gchar *icon_name,
+                         const gchar *sizing_text,
+                         gint model_data_column,
+                         gint model_visibility_column,
+                         GtkTreeIterCompareFunc column_sort_fn)
 {
     GtkTreeViewColumn *column;
-    GtkCellRenderer *renderer;
     PangoLayout* layout;
     int default_width, title_width;
 
@@ -1861,13 +1854,12 @@ gnc_tree_view_add_text_column (GncTreeView *view,
     /* Set up an icon renderer if requested */
     if (icon_name)
     {
-        renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "icon-name", icon_name, NULL);
-        gtk_tree_view_column_pack_start (column, renderer, FALSE);
+        GtkCellRenderer *renderer_pix = gtk_cell_renderer_pixbuf_new ();
+        g_object_set (renderer_pix, "icon-name", icon_name, NULL);
+        gtk_tree_view_column_pack_start (column, renderer_pix, FALSE);
     }
 
     /* Set up a text renderer and attributes */
-    renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_column_pack_start (column, renderer, TRUE);
 
     /* Set up the callbacks for when editing */
@@ -1905,6 +1897,70 @@ gnc_tree_view_add_text_column (GncTreeView *view,
     return column;
 }
 
+
+/** This function adds a new text column to a GncTreeView base view.
+ *  It takes all the parameters necessary to hook a GtkTreeModel
+ *  column to a GtkTreeViewColumn.  If the tree has a state section
+ *  associated with it, this function also wires up the column so that
+ *  its visibility and width are remembered.
+ *
+ *  Parameters are defined in gnc-tree-view.h
+ */
+GtkTreeViewColumn *
+gnc_tree_view_add_text_column (GncTreeView *view,
+                               const gchar *column_title,
+                               const gchar *pref_name,
+                               const gchar *icon_name,
+                               const gchar *sizing_text,
+                               gint model_data_column,
+                               gint model_visibility_column,
+                               GtkTreeIterCompareFunc column_sort_fn)
+{
+    GtkCellRenderer *renderer;
+
+    g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
+
+    renderer = gtk_cell_renderer_text_new ();
+
+    return add_text_column_variant (view, renderer,
+                                    column_title, pref_name,
+                                    icon_name, sizing_text,
+                                    model_data_column,
+                                    model_visibility_column,
+                                    column_sort_fn);
+}
+
+/** This function adds a new text view column to a GncTreeView base view.
+ *  It takes all the parameters necessary to hook a GtkTreeModel
+ *  column to a GtkTreeViewColumn.  If the tree has a state section
+ *  associated with it, this function also wires up the column so that
+ *  its visibility and width are remembered.
+ *
+ *  Parameters are defined in gnc-tree-view.h
+ */
+GtkTreeViewColumn *
+gnc_tree_view_add_text_view_column (GncTreeView *view,
+                                    const gchar *column_title,
+                                    const gchar *pref_name,
+                                    const gchar *icon_name,
+                                    const gchar *sizing_text,
+                                    gint model_data_column,
+                                    gint model_visibility_column,
+                                    GtkTreeIterCompareFunc column_sort_fn)
+{
+    GtkCellRenderer *renderer;
+
+    g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
+
+    renderer = gnc_cell_renderer_text_view_new ();
+
+    return add_text_column_variant (view, renderer,
+                                    column_title, pref_name,
+                                    icon_name, sizing_text,
+                                    model_data_column,
+                                    model_visibility_column,
+                                    column_sort_fn);
+}
 
 
 /** This function adds a new date column to a GncTreeView base view.

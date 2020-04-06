@@ -51,6 +51,8 @@ set (gnome_utils_SOURCES
   gnc-cell-renderer-popup.c
   gnc-cell-renderer-popup-entry.c
   gnc-cell-renderer-text-flag.c
+  gnc-cell-renderer-text-view.c
+  gnc-cell-view.c
   gnc-combott.c
   gnc-commodity-edit.c
   gnc-component-manager.c
@@ -140,6 +142,8 @@ set (gnome_utils_HEADERS
   gnc-cell-renderer-popup.h
   gnc-cell-renderer-popup-entry.h
   gnc-cell-renderer-text-flag.h
+  gnc-cell-renderer-text-view.h
+  gnc-cell-view.h
   gnc-combott.h
   gnc-commodity-edit.h
   gnc-component-manager.h
