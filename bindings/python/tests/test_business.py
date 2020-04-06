@@ -9,7 +9,7 @@ from gnucash.gnucash_business import Vendor, Employee, Customer, Job, Invoice, E
 
 from test_book import BookSession
 
-class BusinessSession( BookSession ):
+class BusinessSession(BookSession):
     def setUp(self):
         BookSession.setUp(self)
 
@@ -43,7 +43,7 @@ class BusinessSession( BookSession ):
         self.invoice.PostToAccount(self.receivable,
             self.today, self.today, "", True, False)
 
-class TestBusiness( BusinessSession ):
+class TestBusiness(BusinessSession):
     def test_equal(self):
         self.assertTrue( self.vendor.Equal( self.vendor.GetVendor() ) )
         self.assertTrue( self.customer.Equal( self.job.GetOwner() ) )
