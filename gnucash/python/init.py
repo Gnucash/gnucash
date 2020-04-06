@@ -43,8 +43,9 @@ class Console (cons.Console):
     """ GTK python console """
 
     def __init__(self, argv=[], shelltype='python', banner=[],
-                 filename=None, size=100):
-        cons.Console.__init__(self, argv, shelltype, banner, filename, size)
+                 filename=None, size=100, user_local_ns=None, user_global_ns=None):
+        cons.Console.__init__(self, argv, shelltype, banner, filename, size,
+                        user_local_ns=user_local_ns, user_global_ns=user_global_ns)
         self.buffer.create_tag('center',
                                justification=Gtk.Justification.CENTER,
                                font='Mono 4')
@@ -101,12 +102,15 @@ if False:
     title = "gnucash "+shelltype+" shell"
     banner_style = 'title'
     banner = "Welcome to "+title+"!\n"
-    console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
     window.set_position(Gtk.WindowPosition.CENTER)
     window.set_default_size(800,600)
     window.set_border_width(0)
+
+    console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]],
+                            size = 100, user_local_ns=locals(), user_global_ns=globals())
+
     window.connect('destroy-event', console.quit_event)
     window.connect('delete-event', console.quit_event)
     window.add (console)
