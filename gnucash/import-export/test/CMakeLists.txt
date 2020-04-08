@@ -69,10 +69,12 @@ set(gtest_import_backend_SOURCES
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-settings.c
   ${CMAKE_SOURCE_DIR}/gnucash/import-export/import-utilities.c
   gmock-qofinstance.cpp
+  gmock-gnc-prefs.cpp
   gmock-qofbook.cpp
   gmock-Account.cpp
   gmock-Transaction.cpp
   gmock-Split.cpp
+  gmock-qofquery.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-numeric.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-rational.cpp
   ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-int128.cpp

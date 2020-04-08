@@ -9,6 +9,7 @@ extern "C"
 #include <import-backend.h>
 }
 
+#include "gmock-gnc-prefs.h"
 #include "gmock-qofbook.h"
 #include "gmock-Account.h"
 #include "gmock-Transaction.h"
@@ -43,6 +44,8 @@ class ImportBackendTest : public testing::Test
 protected:
     void SetUp()
     {
+        m_prefs = MockPrefsBackend::getInstance();
+        ASSERT_NE(m_prefs, nullptr);
         m_import_acc = new MockAccount();
         m_dest_acc   = new MockAccount();
         m_trans      = new MockTransaction();
@@ -63,6 +66,7 @@ protected:
         m_split->free();
     }
 
+    MockPrefsBackend* m_prefs;
     MockAccount*      m_import_acc;
     MockAccount*      m_dest_acc;
     MockTransaction*  m_trans;
