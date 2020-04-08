@@ -568,7 +568,37 @@ GncOptionDB::load_from_key_value(std::istream& iss)
     return iss;
 }
 
-bool
+static inline void
+counter_option_path(const GncOption& option, GSList* list, std::string& name)
+{
+    constexpr const char* counters{"counters"};
+    constexpr const char* formats{"counter_formats/"};
+    auto key = option.get_key();
+    name = key.substr(0, key.size() - 1);
+    list->next->data = (void*)name.c_str();
+    if (option.get_name().rfind("format")
+        != std::string::npos)
+        list->data = (void*)formats;
+    else
+        list->data = (void*)counters;
+}
+
+static inline void
+option_path(const GncOption& option, GSList* list)
+{
+    list->next->data = (void*)option.get_name().c_str();
+    list->data = (void*)option.get_section().c_str();
+}
+
+static inline KvpValue*
+kvp_value_from_bool_option(const GncOption& option)
+{
+    auto val{option.template get_value<bool>()};
+    // ~KvpValue will g_free the value.
+    return new KvpValue(val ? g_strdup("t") : g_strdup("f"));
+}
+
+static bool
 is_qofinstance_ui_type(GncOptionUIType type)
 {
     switch (type)
@@ -590,53 +620,71 @@ is_qofinstance_ui_type(GncOptionUIType type)
     }
 }
 
+static inline KvpValue*
+kvp_value_from_qof_instance_option(const GncOption& option)
+{
+    const QofInstance* inst{QOF_INSTANCE(option.template get_value<const QofInstance*>())};
+    auto guid = guid_copy(qof_instance_get_guid(inst));
+    return new KvpValue(guid);
+}
+
 void
 GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
 {
     if (clear_options)
         qof_book_options_delete(book, nullptr);
     const_cast<GncOptionDB*>(this)->foreach_section(
-        [clear_options, book](GncOptionSectionPtr& section)
+        [book](GncOptionSectionPtr& section)
         {
             section->foreach_option(
-                [clear_options, book, &section](auto& option) {
-                    if (clear_options || option.is_changed())
+                [book, &section](auto& option) {
+                    if (option.is_changed())
                     {
-                        // qof_book_set_option wants a GSList path. Let's avoid
-                        // allocating and make one here.
-                        GSList list_tail{(void*)option.get_name().c_str(), nullptr};
-                        GSList list_head{(void*)section->get_name().c_str(), &list_tail};
+                        /* We need the string name out here so that it stays in
+                         * scope long enough to pass its c_str to
+                         * gnc_book_set_option. */
+                        std::string name;
+                        /* qof_book_set_option wants a GSList path. Let's avoid
+                         * allocating and make one here. */
+                        GSList list_tail{}, list_head{nullptr, &list_tail};
+                        if (strcmp(section->get_name().c_str(), "Counters") == 0)
+                            counter_option_path(option, &list_head, name);
+                        else
+                            option_path(option, &list_head);
                         auto type{option.get_ui_type()};
+                        KvpValue* kvp{};
                         if (type == GncOptionUIType::BOOLEAN)
-                        {
-                            auto val{option.template get_value<bool>()};
-                            // ~KvpValue will g_free the value.
-                            auto kvp{new KvpValue(val ? g_strdup("t") :
-                                                  g_strdup("f"))};
-                            qof_book_set_option(book, kvp, &list_head);
-                        }
+                            kvp = kvp_value_from_bool_option(option);
                         else if (is_qofinstance_ui_type(type))
-                        {
-                            const QofInstance* inst{QOF_INSTANCE(option.template get_value<const QofInstance*>())};
-                            auto guid = guid_copy(qof_instance_get_guid(inst));
-                            auto kvp{new KvpValue(guid)};
-                            qof_book_set_option(book, kvp, &list_head);
-                        }
+                            kvp = kvp_value_from_qof_instance_option(option);
                         else if (type == GncOptionUIType::NUMBER_RANGE)
-                        {
                             /* The Gtk control uses a double so that's what we
                              * have to store. */
-                            auto kvp{new KvpValue(option.template get_value<double>())};
-                            qof_book_set_option(book, kvp, &list_head);
-                        }
+                            kvp = new KvpValue(option.template get_value<double>());
                         else
-                        {
-                            auto kvp{new KvpValue{g_strdup(option.template get_value<std::string>().c_str())}};
-                            qof_book_set_option(book, kvp, &list_head);
-                        }
+                            kvp = new KvpValue{g_strdup(option.template get_value<std::string>().c_str())};
+                        qof_book_set_option(book, kvp, &list_head);
                     }
                 });
         });
+}
+
+static inline void
+fill_option_from_string_kvp(GncOption& option, KvpValue* kvp)
+{
+    auto str{kvp->get<const char*>()};
+    if (option.get_ui_type() == GncOptionUIType::BOOLEAN)
+        option.set_value(*str == 't' ? true : false);
+    else
+        option.set_value(std::string{str});
+}
+
+static inline void
+fill_option_from_guid_kvp(GncOption& option, KvpValue* kvp)
+{
+    auto guid{kvp->get<GncGUID*>()};
+    option.set_value(
+        (const QofInstance*)qof_instance_from_guid(guid, option.get_ui_type()));
 }
 
 void
@@ -648,11 +696,15 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
             section->foreach_option(
                 [book, &section](GncOption& option)
                 {
-                    /* qof_book_set_option wants a GSList path. Let's avoid allocating
-                     * and make one here.
-                     */
-                    GSList list_tail{(void*)option.get_name().c_str(), nullptr};
-                    GSList list_head{(void*)section->get_name().c_str(), &list_tail};
+                    // Make path list as above.
+                    std::string name;
+                    /* qof_book_set_option wants a GSList path. Let's avoid
+                     * allocating and make one here. */
+                    GSList list_tail{}, list_head{nullptr, &list_tail};
+                    if (strcmp(section->get_name().c_str(), "Counters") == 0)
+                        counter_option_path(option, &list_head, name);
+                    else
+                        option_path(option, &list_head);
                     auto kvp = qof_book_get_option(book, &list_head);
                     if (!kvp)
                         return;
@@ -665,20 +717,11 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                             option.set_value(kvp->get<int64_t>());
                             break;
                         case KvpValue::Type::STRING:
-                        {
-                            auto str{kvp->get<const char*>()};
-                            if (option.get_ui_type() == GncOptionUIType::BOOLEAN)
-                                option.set_value(*str == 't' ? true : false);
-                            else
-                                option.set_value(std::string{str});
+                            fill_option_from_string_kvp(option, kvp);
                             break;
-                        }
                         case KvpValue::Type::GUID:
-                        {
-                            auto guid{kvp->get<GncGUID*>()};
-                            option.set_value((const QofInstance*)qof_instance_from_guid(guid, option.get_ui_type()));
-                            break;
-                        }
+                            fill_option_from_guid_kvp(option, kvp);
+                          break;
                         default:
                             return;
                             break;
@@ -1224,67 +1267,71 @@ gnc_option_db_book_options(GncOptionDB* odb)
 //Counters Tab
 
     gnc_register_counter_option(odb, counter_section,
-                                N_("Customer number"), "a",
+                                N_("Customer number"), "gncCustomera",
                                 N_("The previous customer number generated. This number will be incremented to generate the next customer number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Customer number format"), "b",
+                                       N_("Customer number format"),
+                                       "gncCustomerb",
                                        N_("The format string to use for generating customer numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Employee number"), "a",
+                                N_("Employee number"), "gncEmployeea",
                                 N_("The previous employee number generated. This number will be incremented to generate the next employee number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Employee number format"), "b",
+                                       N_("Employee number format"),
+                                       "gncEmployeeb",
                                        N_("The format string to use for generating employee numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Invoice number"), "a",
+                                N_("Invoice number"), "gncInvoicea",
                                 N_("The previous invoice number generated. This number will be incremented to generate the next invoice number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Invoice number format"), "b",
+                                       N_("Invoice number format"),
+                                       "gncInvoiceb",
                                        N_("The format string to use for generating invoice numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Bill number"), "a",
+                                N_("Bill number"), "gncBilla",
                                 N_("The previous bill number generated. This number will be incremented to generate the next bill number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Bill number format"), "b",
+                                       N_("Bill number format"), "gncBillb",
                                        N_("The format string to use for generating bill numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Expense voucher number"), "a",
+                                N_("Expense voucher number"), "gncExpVouchera",
                                 N_("The previous expense voucher number generated. This number will be incremented to generate the next voucher number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Expense voucher number format"), "b",
+                                       N_("Expense voucher number format"),
+                                       "gncExpVoucherb",
                                        N_("The format string to use for generating expense voucher numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Job number"), "a",
+                                N_("Job number"), "gncJoba",
                                 N_("The previous job number generated. This number will be incremented to generate the next job number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Job number format"), "b",
+                                       N_("Job number format"), "gncJobb",
                                        N_("The format string to use for generating job numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Order number"), "a",
+                                N_("Order number"), "gncOrdera",
                                 N_("The previous order number generated. This number will be incremented to generate the next order number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Order number format"), "b",
+                                       N_("Order number format"), "gncOrderb",
                                        N_("The format string to use for generating order numbers. This is a printf-style format string."),
                                        empty_string);
     gnc_register_counter_option(odb, counter_section,
-                                N_("Vendor number"), "a",
+                                N_("Vendor number"), "gncVendora",
                                 N_("The previous vendor number generated. This number will be incremented to generate the next vendor number."),
                                 0.0);
     gnc_register_counter_format_option(odb, counter_section,
-                                       N_("Vendor number format"), "b",
+                                       N_("Vendor number format"), "gncVendorb",
                                        N_("The format string to use for generating vendor numbers. This is a printf-style format string."),
                                        empty_string);
 
