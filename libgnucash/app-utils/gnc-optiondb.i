@@ -142,6 +142,12 @@ scm_to_value<int64_t>(SCM new_value)
     return scm_to_int64(new_value);
 }
 
+template <> inline double
+scm_to_value<double>(SCM new_value)
+{
+    return scm_to_double(new_value);
+}
+
 template <>inline SCM
 scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
 {
@@ -384,7 +390,10 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
     %template(set_option_string) set_option<std::string>;
     %template(set_option_int) set_option<int>;
     %template(set_option_time64) set_option<time64>;
- };
+};
+
+%template(gnc_register_number_range_option_double) gnc_register_number_range_option<double>;
+%template(gnc_register_number_range_option_int) gnc_register_number_range_option<int>;
 
 %inline %{
     using GncOptionDBPtr = std::unique_ptr<GncOptionDB>;
