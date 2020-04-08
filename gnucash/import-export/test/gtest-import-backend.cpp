@@ -119,3 +119,43 @@ protected:
     MockSplit*        m_split;
 };
 
+
+
+/* Tests using fixture ImportBackendTest */
+
+//! Test for function gnc_import_TransInfo_new()
+TEST_F(ImportBackendTest, CreateTransInfo)
+{
+    GncMockImportMatchMap imap(m_import_acc);
+    gchar* online_id;
+
+    using namespace testing;
+
+    //qof_instance_get (QOF_INSTANCE (split), "online-id", &online_id, NULL);
+
+    // Define first split
+    ON_CALL(*m_trans, getSplit(0))
+        .WillByDefault(Return(m_split));
+    // define description of the transaction
+    ON_CALL(*m_trans, getDescription())
+        .WillByDefault(Return("This is the description"));
+
+    // function gnc_import_TransInfo_new() should try to find account using the description from the transaction
+    EXPECT_CALL(imap, findAccount(_, StrEq("This is the description")))
+        .WillOnce(Return(m_dest_acc));
+
+    // call function to be tested
+    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, &imap);
+
+    // check 'trans_info'
+    EXPECT_EQ(gnc_import_TransInfo_get_fsplit(trans_info),  m_split);
+    EXPECT_EQ(gnc_import_TransInfo_get_destacc(trans_info), m_dest_acc);
+
+    // transaction is not open anymore
+    ON_CALL(*m_trans, isOpen())
+        .WillByDefault(Return(false));
+
+    // delete transaction info
+    gnc_import_TransInfo_delete(trans_info);
+};
+
