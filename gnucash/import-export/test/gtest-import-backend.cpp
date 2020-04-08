@@ -85,6 +85,7 @@ gnc_get_current_book (void)
 
 
 
+// Test fixture for tests without bayesian matching
 class ImportBackendTest : public testing::Test
 {
 protected:
@@ -157,5 +158,28 @@ TEST_F(ImportBackendTest, CreateTransInfo)
 
     // delete transaction info
     gnc_import_TransInfo_delete(trans_info);
+};
+
+
+
+// Test fixture for tests with bayesian matching
+class ImportBackendBayesTest : public ImportBackendTest
+{
+protected:
+    void SetUp()
+    {
+        ImportBackendTest::SetUp();
+
+        using namespace testing;
+
+        // set bayesian import matching in preferences
+        ON_CALL(*m_prefs, getBool(StrEq(GNC_PREFS_GROUP_IMPORT), StrEq(GNC_PREF_USE_BAYES)))
+            .WillByDefault(Return(true));
+    }
+
+    void TearDown()
+    {
+        ImportBackendTest::TearDown();
+    };
 };
 
