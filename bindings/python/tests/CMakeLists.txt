@@ -16,6 +16,7 @@ endif()
 
 set(test_python_bindings_DATA
         runTests.py.in
+        test_gettext.py
         test_account.py
         test_book.py
         test_business.py
