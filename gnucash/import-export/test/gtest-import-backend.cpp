@@ -7,6 +7,8 @@
 extern "C"
 {
 #include <import-backend.h>
+#include <engine-helpers.h>
+#include <gnc-ui-util.h>
 }
 
 #include "gmock-gnc-prefs.h"
@@ -36,6 +38,50 @@ public:
 };
 
 testing::Environment* const env = testing::AddGlobalTestEnvironment(new TestEnvironment);
+
+
+
+/* mock functions, which can not be mocked by mock classes */
+
+gint
+safe_strcasecmp (const gchar * da, const gchar * db)
+{
+    // use simplified case-sensitive string comparison as mock up
+    return g_strcmp0(da, db);
+}
+
+const char *
+qof_log_prettify (const char *name)
+{
+    // do nothing
+    return name;
+}
+
+// this is a slightly modified version of the function from engine-helpers.c
+const char *
+gnc_get_num_action (const Transaction *trans, const Split *split)
+{
+    gboolean num_action = qof_book_use_split_action_for_num_field(gnc_get_current_book());
+
+    if (trans && !split)
+        return xaccTransGetNum(trans);
+    if (split && !trans)
+        return xaccSplitGetAction(split);
+    if (trans && split)
+    {
+        if (num_action)
+            return xaccSplitGetAction(split);
+        else
+            return xaccTransGetNum(trans);
+    }
+    else return NULL;
+}
+
+QofBook *
+gnc_get_current_book (void)
+{
+    return ((TestEnvironment*)env)->m_book;
+}
 
 
 
