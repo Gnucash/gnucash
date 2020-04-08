@@ -1867,6 +1867,43 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     g_signal_connect (recnData->window, "key_press_event",
                       G_CALLBACK(recn_key_press_cb), recnData);
 
+
+    /* if account has a reconciled split where reconciled_date is
+       later than statement_date, emit a warning into statusbar */
+    {
+        GtkStatusbar *bar = GTK_STATUSBAR (statusbar);
+        guint context = gtk_statusbar_get_context_id (bar, "future_dates");
+        GtkWidget *box = gtk_statusbar_get_message_area (bar);
+        GtkWidget *image = gtk_image_new_from_icon_name
+            ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+
+        for (GList *n = xaccAccountGetSplitList (account); n; n = n->next)
+        {
+            Split* split = n->data;
+            time64 recn_date = xaccSplitGetDateReconciled (split);
+            if ((xaccSplitGetReconcile (split) != YREC) ||
+                (recn_date <= statement_date))
+                continue;
+
+            PWARN ("split posting_date=%s, recn_date=%s",
+                   qof_print_date (xaccTransGetDate (xaccSplitGetParent (split))),
+                   qof_print_date (recn_date));
+
+            gtk_statusbar_push (bar, context, _("WARNING! Account contains \
+splits whose reconcile date is after statement date. Reconciliation may be \
+difficult."));
+
+            gtk_widget_set_tooltip_text (GTK_WIDGET (bar), _("This account \
+has splits whose Reconciled Date is after this reconciliation statement date. \
+These splits may make reconciliation difficult. If this is the case, you may \
+use Find Transactions to find them, unreconcile, and re-reconcile."));
+
+            gtk_box_pack_start (GTK_BOX(box), image, FALSE, FALSE, 0);
+            gtk_box_reorder_child (GTK_BOX(box), image, 0);
+            break;
+        }
+    }
+
     /* The main area */
     {
         GtkWidget *frame = gtk_frame_new(NULL);
