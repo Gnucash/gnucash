@@ -425,10 +425,19 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
         auto db_opt = optiondb->find_option(section, name);
         if (!db_opt)
         {
-//          PWARN("Attempt to write non-existent option %s/%s", section, name);
+            std::cerr <<"Attempt to write non-existent option " << section
+                << "/" << name;
             return;
         }
-        GncOption_set_value_from_scm(db_opt, new_value);
+        try
+        {
+            GncOption_set_value_from_scm(db_opt, new_value);
+        }
+        catch(const std::invalid_argument& err)
+        {
+            std::cerr << "Failed to set option " << section << "/" << name
+                      << ": " << err.what() << "\n";
+        }
     }
 
     GncOptionDBPtr

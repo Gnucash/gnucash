@@ -888,10 +888,17 @@ gnc_register_number_range_option(GncOptionDB* db, const char* section,
                                  const char* doc_string, ValueType value,
                                  ValueType min, ValueType max, ValueType step)
 {
-    GncOption option{GncOptionRangeValue<ValueType>{section, name, key,
-                                                    doc_string, value, min,
-                                                    max, step}};
-    db->register_option(section, std::move(option));
+    try
+    {
+        GncOption option{GncOptionRangeValue<ValueType>{section, name, key,
+                                                        doc_string, value, min,
+                                                        max, step}};
+        db->register_option(section, std::move(option));
+    }
+    catch(const std::invalid_argument& err)
+    {
+        std::cerr <<"Number Range Option " << err.what() << ", option not registerd.\n";
+    }
 }
 
 void
