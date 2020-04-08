@@ -220,7 +220,7 @@ gnc_option_test_book_destroy(QofBook* book)
 %rename(end_accounting_period) RelativeDatePeriod::END_ACCOUNTING_PERIOD;
 
 %rename(gnc_register_date_option_set)
-    gnc_register_date_option(const GncOptionDBPtr&, const char*, const char*,
+    gnc_register_date_option(GncOptionDB*, const char*, const char*,
                              const char*, const char*, RelativeDatePeriodVec&,
                              bool);
 
