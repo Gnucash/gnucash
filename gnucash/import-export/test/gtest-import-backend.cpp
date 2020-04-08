@@ -4,6 +4,8 @@
 
 #include <config.h>
 
+#include <gnc-datetime.hpp>
+
 extern "C"
 {
 #include <import-backend.h>
@@ -81,6 +83,27 @@ QofBook *
 gnc_get_current_book (void)
 {
     return ((TestEnvironment*)env)->m_book;
+}
+
+
+
+/* GMock MATCHERS */
+
+// GMock MATCHER to check for duplicates in containers
+MATCHER(HasDuplicates, std::string("has ") + std::string(negation ? "no " : "") + std::string("duplicated elements"))
+{
+    bool ret = false;
+
+    for (auto e : arg)
+    {
+        if (std::count(arg.begin(), arg.end(), e) > 1)
+        {
+            ret = true;
+            break;
+        }
+    }
+
+    return ret;
 }
 
 
@@ -183,3 +206,68 @@ protected:
     };
 };
 
+
+
+/* Tests using fixture ImportBackendBayesTest */
+
+//! Test for function gnc_import_TransInfo_new()
+TEST_F(ImportBackendBayesTest, CreateTransInfo)
+{
+    using namespace testing;
+
+    GncMockImportMatchMap imap(m_import_acc);
+    time64 date(GncDateTime(GncDate(2020, 3, 18)));
+    struct tm *tm_struct;
+    char local_day_of_week[16];
+
+    // get local day of week
+    tm_struct = gnc_gmtime(&date);
+    qof_strftime(local_day_of_week, sizeof(local_day_of_week), "%A", tm_struct);
+    gnc_tm_free(tm_struct);
+
+    // Define first split
+    ON_CALL(*m_trans, getSplit(0))
+        .WillByDefault(Return(m_split));
+    // Transaction has no further splits
+    ON_CALL(*m_trans, getSplit(Gt(0)))
+        .WillByDefault(Return(nullptr));
+    // Define description and memo of first split
+    // This transaction is used for testing tokenization of its content.
+    // Therefore the description text and the memo should contain
+    //   * consecutive separators
+    //   * separators at the beginning and end of string
+    //   * duplicated tokens within and between description text end memo
+    // The token separator is space.
+    ON_CALL(*m_trans, getDescription())
+        .WillByDefault(Return(" test  tokens within   description  tokens  "));
+    ON_CALL(*m_split, getMemo())
+        .WillByDefault(Return("  test   the memo test "));
+    // Define transaction date
+    ON_CALL(*m_trans, getDate())
+        .WillByDefault(Return(date));
+
+    // check tokens created from transaction
+    EXPECT_CALL(imap, findAccountBayes(AllOf(
+            Each(Not(IsEmpty())),                // tokens must not be empty strings
+            Each(Not(HasSubstr(" "))),           // tokens must not contain separator
+            Not(HasDuplicates()),                // tokens must be unique
+            Contains(StrEq(local_day_of_week)),  // tokens must contain local day of week
+            Contains(StrEq("description")),      // spot sample
+            Contains(StrEq("memo"))              // spot sample
+            )))
+        .WillOnce(Return(m_dest_acc));
+
+    // call function to be tested
+    GNCImportTransInfo *trans_info = gnc_import_TransInfo_new(m_trans, &imap);
+
+    // check 'trans_info'
+    EXPECT_EQ(gnc_import_TransInfo_get_fsplit(trans_info),  m_split);
+    EXPECT_EQ(gnc_import_TransInfo_get_destacc(trans_info), m_dest_acc);
+
+    // transaction is not open anymore
+    ON_CALL(*m_trans, isOpen())
+        .WillByDefault(Return(false));
+
+    // delete transaction info
+    gnc_import_TransInfo_delete(trans_info);
+};
