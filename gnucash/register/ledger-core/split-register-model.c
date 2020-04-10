@@ -1591,10 +1591,11 @@ gnc_split_register_get_mxfrm_help (VirtualLocation virt_loc,
     return g_strdup (help);
 }
 
-/* Return the total amount of the transaction for splits of default account
- * and all subaccounts of the register. */
+/* Return the total value in the register currency of the transaction
+ * for splits of default account and all subaccounts of the register.
+ */
 static gnc_numeric
-get_trans_total_amount_subaccounts (SplitRegister* reg, Transaction* trans)
+get_trans_total_value_subaccounts (SplitRegister* reg, Transaction* trans)
 {
     GList* children, *child;
     Account* parent;
@@ -1607,12 +1608,13 @@ get_trans_total_amount_subaccounts (SplitRegister* reg, Transaction* trans)
            has no account then we have no way of picking out the desired splits,
            return zero. */
         return total;
+
     children = gnc_account_get_descendants (parent);
     children = g_list_append (children, parent);
 
     for (child = children; child; child = child->next)
     {
-        total = gnc_numeric_add_fixed (total, xaccTransGetAccountAmount (trans,
+        total = gnc_numeric_add_fixed (total, xaccTransGetAccountValue (trans,
                                        child->data));
     }
 
@@ -1642,7 +1644,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
     {
     case GENERAL_JOURNAL:
     case INCOME_LEDGER:
-        total = get_trans_total_amount_subaccounts (reg, xaccSplitGetParent (split));
+        total = get_trans_total_value_subaccounts (reg, xaccSplitGetParent (split));
         break;
     default:
         total = get_trans_total_amount (reg, xaccSplitGetParent (split));
