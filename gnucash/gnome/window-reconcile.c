@@ -281,8 +281,7 @@ recnRecalculateBalance (RecnWindow *recnData)
 
     /* update the starting balance */
     include_children = xaccAccountGetReconcileChildrenStatus(account);
-    starting = gnc_ui_account_get_reconciled_balance_as_of_date
-        (account, recnData->statement_date, include_children);
+    starting = gnc_ui_account_get_reconciled_balance(account, include_children);
     print_info = gnc_account_print_info (account, TRUE);
 
     /*
