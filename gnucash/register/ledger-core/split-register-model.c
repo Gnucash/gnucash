@@ -1879,10 +1879,6 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
         }
         else
         {
-            /* If this account is not a stock/mutual/currency account, and
-            * currency != the account commodity, then use the SplitAmount
-            * instead of the SplitValue.
-            */
             gboolean currency_match;
             switch (reg->type)
             {
@@ -1893,10 +1889,21 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                 print_info = gnc_commodity_print_info (currency, reg->mismatched_commodities);
                 break;
 
+            /* If the register is not a stock/fund register that
+             * displays both amount and value, display the split value
+             * in the register's currency instead of the transaction's
+             * currency. Note that we don't want the split amount as
+             * some splits will be in a different currency.
+             */
             default:
-                amount = xaccSplitGetValue (split);
+                if (commodity && !gnc_commodity_equal (commodity, currency))
+                    /* Convert this to the "local" value */
+                    amount = xaccSplitConvertAmount(split, account);
+                else
+                    amount = xaccSplitGetValue (split);
+
                 print_info = gnc_account_print_info (account, reg->mismatched_commodities);
-                print_info.commodity = currency;
+                print_info.commodity = commodity;
                 break;
             }
         }
