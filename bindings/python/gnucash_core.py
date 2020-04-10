@@ -49,10 +49,10 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
 
 try:
     import gettext
-    # install gettext for _-function, needs path to locales
+    import locale
+
     _localedir = _sw_core_utils.gnc_path_get_localedir()
-    _translation = gettext.translation(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
-    _ = _translation.gettext
+    gettext.install(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
 except:
     print("\nProblem importing gettext!")
     import traceback
@@ -60,10 +60,18 @@ except:
     exc_type, exc_value, exc_traceback = sys.exc_info()
     traceback.print_exception(exc_type, exc_value, exc_traceback)
     print()
+    import locale
+    sys_locale = locale.setlocale(locale.LC_ALL, '')
+    print("locale: ", sys_locale)
+    print("getlocale(): " + str(locale.getlocale()))
+    print("localedir: " + _localedir)
 
     def _(s):
         """Null translator function, gettext not available"""
         return s
+
+    import builtins
+    builtins.__dict__['_'] = _
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
