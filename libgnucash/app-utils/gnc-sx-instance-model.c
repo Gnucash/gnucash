@@ -387,7 +387,7 @@ gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *dat
         as_var = gnc_sx_variable_new_full(var_name, num_value, FALSE);
         g_hash_table_insert(rtn->variable_bindings, g_strdup(var_name), as_var);
         
-        /* This variable can be used in a formula, it will contain the balance of the split main account.
+        /* This variable can be used in a formula, it will contain the balance of liability account.
          * For now it needs to be created with an arbitrary value. */
         var_name = "balance";
         num_value = gnc_numeric_create(0, 1);
@@ -1225,6 +1225,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     gnc_commodity *txn_cmdty = get_transaction_currency (creation_data,
                                                          sx, template_txn);
     GncSxVariable *as_var = NULL;
+    gnc_numeric balance = gnc_numeric_zero();
 
     /* No txn_cmdty means there was a defective split. Bail. */
     if (txn_cmdty == NULL)
@@ -1272,6 +1273,31 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     }
     xaccTransSetCurrency(new_txn, txn_cmdty);
 
+    // Find the first liability account among the splits, use that to set the balance
+    for (;
+         txn_splits && template_splits;
+         txn_splits = txn_splits->next, template_splits = template_splits->next)
+    {
+        const Split *template_split;
+        Account *split_acct = NULL;
+        GNCAccountType acct_type;
+        template_split = (Split*)template_splits->data;
+        _get_template_split_account(sx, template_split, &split_acct,creation_data->creation_errors);
+        acct_type = xaccAccountGetType (split_acct);
+        if(acct_type == ACCT_TYPE_LIABILITY)
+        {
+            balance = xaccAccountGetBalance(split_acct);
+            // Update the balance variable
+            balance = xaccAccountGetBalanceAsOfDate(split_acct, xaccTransRetDatePosted(new_txn));
+            // The balance is a negative number for a liability account, but it's easier to present it as a positive number.
+            as_var = gnc_sx_variable_new_full("balance", gnc_numeric_neg(balance), FALSE);
+            g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("balance"), as_var);
+            break;
+        }
+    }
+    
+    template_splits = xaccTransGetSplitList(template_txn);
+    txn_splits = xaccTransGetSplitList(new_txn);
     for (;
          txn_splits && template_splits;
          txn_splits = txn_splits->next, template_splits = template_splits->next)
@@ -1289,16 +1315,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         _get_template_split_account(sx, template_split, &split_acct,
                                     creation_data->creation_errors);
 
-        if(as_var == NULL)
-        {
-            // Update the balance variable the first time around, it will remain the same for every split
-            gnc_numeric balance = xaccAccountGetBalance(split_acct);
-            balance = xaccAccountGetBalanceAsOfDate(split_acct, xaccTransRetDatePosted(new_txn));
-            // The balance is a negative number for a liability account, but it's easier to present it as a positive number.
-            as_var = gnc_sx_variable_new_full("balance", gnc_numeric_neg(balance), FALSE);
-            g_hash_table_insert(creation_data->instance->variable_bindings, g_strdup("balance"), as_var);
-        }
-        
         split_cmdty = xaccAccountGetCommodity(split_acct);
         xaccSplitSetAccount(copying_split, split_acct);
 
@@ -1377,15 +1393,6 @@ compare_func(GList* first, GList* second)
     GncSxInstance *inst1 = (GncSxInstance*) i1->inst;
     GncSxInstance *inst2 = (GncSxInstance*) i2->inst;
     return g_date_compare(&inst1->date,&inst2->date);
-}
-
-// Convenience debug function to show a date.
-static void
-print_date(GDate *date)
-{
-    gchar faa[1000];
-    g_date_strftime (faa,1000,"%b %d",date);
-    g_print("Date %s\n",faa);
 }
 
 void
@@ -1477,7 +1484,6 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
                 increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
                 break;
             case SX_INSTANCE_STATE_TO_CREATE:
-                print_date(&inst->date);
                 create_transactions_for_instance (inst,
                                                   created_transaction_guids,
                                                   &instance_errors);
