@@ -475,7 +475,7 @@ find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
     prefix = gnc_gbr_find_prefix (NULL);
     if (prefix == NULL)
         return g_strdup (default_dir ? default_dir : compiled_dir);
-    if (!g_getenv("GNC_UNINSTALLE"))
+    if (!g_getenv("GNC_UNINSTALLED"))
     {
         if (!g_strcmp0 (prefix, PREFIX))
             return g_strdup (compiled_dir);
