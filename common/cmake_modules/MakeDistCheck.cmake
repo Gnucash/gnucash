@@ -47,6 +47,7 @@ function(run_dist_check PACKAGE_PREFIX EXT)
               -D CMAKE_INSTALL_PREFIX=../${INSTALL_DIR}
               -D GTEST_ROOT=${GTEST_ROOT}
               -D GMOCK_ROOT=${GMOCK_ROOT}
+              -D WITH_PYTHON=YES
               ../${PACKAGE_PREFIX}
             WORKING_DIRECTORY ${BUILD_DIR}
             ERROR_MSG "CMake configure command failed."
