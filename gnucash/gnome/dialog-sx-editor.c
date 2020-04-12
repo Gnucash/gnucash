@@ -644,7 +644,8 @@ gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
                       NULL);
     acct = xaccAccountLookup (acct_guid, gnc_get_current_book ());
     guid_free (acct_guid);
-    if (acct == NULL)
+    // If the split is being destroyed always return TRUE.
+    if (acct == NULL && !qof_instance_get_destroying(s))
         return FALSE;
     split_cmdty = xaccAccountGetCommodity(acct);
     split_amount = xaccSplitGetAmount(s);
