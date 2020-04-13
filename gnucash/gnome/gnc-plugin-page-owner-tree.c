@@ -46,6 +46,7 @@
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
+#include "dialog-payment.h"
 
 #include "gncOwner.h"
 #include "dialog-utils.h"
@@ -128,6 +129,7 @@ static void gnc_plugin_page_owner_tree_cmd_refresh (GtkAction *action, GncPlugin
 static void gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action, GncPluginPageOwnerTree *page);
 static void gnc_plugin_page_owner_tree_cmd_owners_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
 static void gnc_plugin_page_owner_tree_cmd_owner_report (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
+static void gnc_plugin_page_owner_tree_cmd_process_payment (GtkAction *action, GncPluginPageOwnerTree *plugin_page);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -230,6 +232,11 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         N_("Show employee report"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owner_report)
     },
+    {
+        "OTProcessPaymentAction", GNC_ICON_INVOICE_PAY,
+        N_("Process Payment"), NULL, N_("Process Payment"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_process_payment)
+    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_owner_tree_actions);
@@ -242,6 +249,7 @@ static const gchar *actions_requiring_owner_rw[] =
     "OTEditVendorAction",
     "OTEditCustomerAction",
     "OTEditEmployeeAction",
+    "OTProcessPaymentAction",
 /* FIXME disabled due to crash    "EditDeleteOwnerAction", */
     NULL
 };
@@ -253,6 +261,7 @@ static const gchar *actions_requiring_owner_always[] =
     "OTVendorReportAction",
     "OTCustomerReportAction",
     "OTEmployeeReportAction",
+    "OTProcessPaymentAction",
     NULL
 };
 
@@ -265,6 +274,7 @@ static const gchar* readonly_inactive_actions[] =
     "OTNewBillAction",
     "OTNewInvoiceAction",
     "OTNewVoucherAction",
+    "OTProcessPaymentAction",
     NULL
 };
 
@@ -283,6 +293,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "OTNewVoucherAction",             N_("New Voucher") },
     { "OTVendorListingReportAction",    N_("Vendor Listing") },
     { "OTCustomerListingReportAction",  N_("Customer Listing") },
+    { "OTProcessPaymentAction",         N_("Process Payment") },
 /* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
 };
@@ -1244,5 +1255,20 @@ gnc_plugin_page_owner_tree_cmd_owner_report (GtkAction *action,
     LEAVE(" ");
 }
 
+
+static void
+gnc_plugin_page_owner_tree_cmd_process_payment (GtkAction *action,
+                                                GncPluginPageOwnerTree *plugin_page)
+{
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
+
+    gnc_ui_payment_new (GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window),
+                        gnc_plugin_page_owner_tree_get_current_owner (plugin_page),
+                        gnc_get_current_book ());
+
+    LEAVE(" ");
+}
 /** @} */
 /** @} */
