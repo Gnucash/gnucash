@@ -1073,6 +1073,7 @@ gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
 {
     int max_places =  max_decimal_places == NULL ? max_leg_digits :
         *max_decimal_places;
+    if (a->num == 0) return TRUE;
     try
     {
         GncNumeric an (*a);

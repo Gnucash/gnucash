@@ -51,7 +51,7 @@
 
 (define-public safe-cadr
   (match-lambda
-    ((_ x . _) x)
+    ((_ x . y) x)
     (_ '())))
 
 ; deprecated - use find-stylesheet or find-template instead

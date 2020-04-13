@@ -50,7 +50,7 @@ typedef gboolean (*AccountBoolCB) (Account*, gpointer);
 /** Create/fetch a quickfill of account names.
  *
  *  The quickfill is created out of all of the subaccounts
- *  the the account group, filtered by the 'skip_cb' callback.
+ *  in the account group, filtered by the 'skip_cb' callback.
  *  If 'skip_cb' is not NULL, and if it returns TRUE when passed
  *  a particular account, then that account won't be included in
  *  the quickfill.  The 'cb_data' is passed to the callback.

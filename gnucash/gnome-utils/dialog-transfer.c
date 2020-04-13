@@ -72,6 +72,7 @@ struct _xferDialog
     GtkWidget *date_entry;
     GtkWidget *num_entry;
     GtkWidget *description_entry;
+    GtkWidget *notes_entry;
     GtkWidget *memo_entry;
     GtkWidget *conv_forward;
     GtkWidget *conv_reverse;
@@ -1269,6 +1270,7 @@ gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData,
     gtk_widget_set_sensitive (xferData->date_entry, FALSE);
     gtk_widget_set_sensitive (xferData->num_entry, FALSE);
     gtk_widget_set_sensitive (xferData->description_entry, FALSE);
+    gtk_widget_set_sensitive (xferData->notes_entry, FALSE);
     gtk_widget_set_sensitive (xferData->memo_entry, FALSE);
 
 
@@ -1542,6 +1544,10 @@ create_transaction(XferDialog *xferData, time64 time,
     /* Set the transaction number or split action field based on book option*/
     string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
     gnc_set_num_action (trans, from_split, string, NULL);
+
+    /* Set the transaction notes */
+    string = gtk_entry_get_text(GTK_ENTRY(xferData->notes_entry));
+    xaccTransSetNotes(trans, string);
 
     /* Set the memo fields */
     string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
@@ -1930,6 +1936,9 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         entry = GTK_WIDGET(gtk_builder_get_object (builder, "description_entry"));
         xferData->description_entry = entry;
+
+        entry = GTK_WIDGET(gtk_builder_get_object (builder, "notes_entry"));
+        xferData->notes_entry = entry;
 
         entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
         xferData->memo_entry = entry;

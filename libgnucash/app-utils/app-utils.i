@@ -48,6 +48,7 @@ SCM scm_init_sw_app_utils_module (void);
 /* avoid no previous prototype warning/error */
 PyObject* SWIG_init (void);
 %}
+%import <gnucash_core.i>
 #endif
 
 %import "base-typemaps.i"

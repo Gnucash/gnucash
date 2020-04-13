@@ -126,7 +126,7 @@ class Console (Gtk.ScrolledWindow):
     """ GTK python console """
 
     def __init__(self, argv=[], shelltype='python', banner=[],
-                 filename=None, size=100):
+                 filename=None, size=100, user_local_ns=None, user_global_ns=None):
 
         """ Console interface building + initialization"""
 
@@ -184,12 +184,18 @@ class Console (Gtk.ScrolledWindow):
         self.history_init(filename, size)
         self.cout = io.StringIO()
         self.cout.truncate(0)
+
+        if not user_local_ns:
+            user_local_ns = locals()
+        if not user_global_ns:
+            user_global_ns = globals()
+
         if shelltype=='ipython':
-            self.shell = ishell.Shell(argv,locals(),globals(),
+            self.shell = ishell.Shell(argv,user_local_ns, user_global_ns,
                                 cout=self.cout, cerr=self.cout,
                                 input_func=self.raw_input)
         else:
-            self.shell = shell.Shell(locals(),globals())
+            self.shell = shell.Shell(user_local_ns,user_global_ns)
         self.interrupt = False
         self.input_mode = False
         self.input = None

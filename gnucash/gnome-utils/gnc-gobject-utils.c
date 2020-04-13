@@ -127,7 +127,7 @@ gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
     g_return_if_fail(G_IS_OBJECT(object));
 
     /* Little dance here to handle startup conditions. During object
-     * initialization the object type changes as each each parent class
+     * initialization the object type changes as each parent class
      * is initialized.  The class passed to the initialization function
      * is always the ultimate class of the object. */
     if (klass == NULL)

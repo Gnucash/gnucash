@@ -1,172 +1,51 @@
 Version history:
 ------- -------
-3.9 - 29 March 2020
-The tenth release of the 3.x stable series.
+3.10 - 10 April 2020
+The eleventh release of the 3.x stable series.
 
-Note for Online Banking users: When used with the latest releases of
-AQBanking and Gwenhywfar (provided in the MacOS and Microsoft Windows
-bundles) this release is fully stable for both FinTS and OFX Direct
-Connect.
-
+This is a snap release to reverse the changes to the reconcile
+window's filtering reconciled transactions with a reconcile date after
+the current statement date when computing the starting balance. It
+seems that many users' books have accounts with reconcile dates in the
+future that were suddenly filtered out, creating an incorrect starting
+balance and making it impossible to reconcile the book.
 
 The following bugs have been fixed:
-    Bug 685102 - Scheduled Transactions don't always respect weekends for
-		 first occurrence
-    Bug 794916 - Fails to find environment file at startup when installation
-                 prefix is '/opt
-    Bug 796579 - Cannot go forward with empty duplicates screen
-    Bug 796911 - Minimum window width to large.
-                 To fix this the text labels used have been enabled to ellipsize
-		 at the end
-    Bug 796984 - Import Bills & Invoices: date of line item is not validated;
-                 can lead to unexpected results
-    Bug 796985 - Import Bills & Invoices: option 'open not yet posted docs in
-                 tab' does not open tab if invoice could not be posted
-    Bug 796986 - Import Bills & Invoices: in case of invalid posting date
-                 in import file, invoice is posted with unexpected date
-    Bug 796987 - Import Bills & Invoices: fixing import items only works
-                 in special case
-    Bug 797022 - Import Bills & Invoices: expense/income account is not
-                 validated - leads to one-sided posting if account is invalid
-    Bug 797023 - Import Bills & Invoices: no user confirmation requested
-                 for update of invoices, if new invoice is created first
-    Bug 797024 - Import Bills & Invoices: import matches csv data rows with
-                 too few separators, messing up the import data
-    Bug 797025 - Import Bills & Invoices: the type of the post to account
-                 is not validated - enabling A/P and A/R postings on regular
-                 accounts
-    Bug 797042 - OK button in OFX importer doesn't work if nothing is
-		 imported.
-    Bug 797133 - CSV Import of multicurrency transaction export in multiline
-                 form
-    Bug 797139 - test-report-utilities failure after 10-march in travis
-    Bug 797419 - equity-statement unrealized-gain calculator uses
-		 weighted-average
-    Bug 797481 - crash on close of unsaved tabs by pressing [X]
-    Bug 797522 - Focus after reconcile jumps to a different account
-    Bug 797536 - cmake errors out because it cannot find GncPkgConfig
-                 (cmake 3.5.2)
-    Bug 797540 - Mapping of aqbanking accounts to gnucash accounts doesn't
-		 work
-    Bug 797546 - Autocomplete not updated when account names changed
-    Bug 797548 - multicolumn income statement: some closing entries are not
-		 ignored when within reporting period
-    Bug 797549 - Reconcile window shows S_tatement Date rather than
-		 Statement Date.
-    Bug 797550 - Crash when changing register tab position
-    Bug 797551 - Budget totals line missing in 3.8
-                 Reinstate Income/Expense/Transfer/Total, but rename to:
-                 * Inflow from Income
-                 * Outflow to Expense
-                 * Outflow to Asset/Equity/Liability
-                 * Remaining to Budget
-    Bug 797566 - Crash on use of context menu in importer
-    Bug 797569 - Swedish account templates not accessible
-    Bug 797570 - Unable to import vendors.
-		 In the import of Customer/Vendor or Bill/Invoice, the
-		 dialog that lists rows that were not imported shows a
-		 scrollable view of only four rows.
-    Bug 797572 - Customer Report (beta): "Period Totals" includes total debit
-                 and credits outside the current period
-                 Change to formal accounting convention. Can swap to informal
-                 headers if set by global preference.
-    Bug 797573 - Incorrect value of securities in the Asset Chart
-    Bug 797576 - xaccAccountOrder shouldn't sort account codes as base-36
-    Bug 797583 - gnc:book-add-quotes crashes when there are no quotes
-    Bug 797584 - New-owner - bill amount field links to wrong account
-    Bug 797588 - Gnucash segfaults when using mysql backend with empty
-		 password
-    Bug 797591 - multiperiod b/s and PnL reports: add style sheet 'easy'
-    Bug 797609 - Backtraces for eguile report errors strips wrong part of
-		 stack
-    Bug 797613 - Due Invoices Reminder shows Job Name instead of Company
-		 Name
-    Bug 797624 - At some point Vietnam Dong seemed to drop xu (decimals)
-    Bug 797631 - Superfluous account selection dialog on first online
-		 retrieval
-		 The online id, which is needed to find a GnuCash account
-		 for a transaction or the balance retrieved from an online
-		 account, is already assigned to each matched GnuCash
-		 account within the Online Banking Setup tool. The online
-		 id is removed from the GnuCash account if it is no longer
-		 matched with an AqBanking account.
-    Bug 797636 - Incorrect Online account matches cannot be deleted
-		 A push button with text "Delete selected matches" is added
-		 to the "Match Online accounts with GnuCash accounts" page
-		 of the "Online Banking Setup" tool. Additionally, the
-		 underlying tree view is set to multiple selection mode
-		 from single selection mode. Pushing the button will remove
-		 the matched GnuCash account from all selected AqBanking
-		 (Online) accounts.
-    Bug 797638 - SIGSEGV editing transaction after closing Find Accounts
-		 dialog.
-    Bug 797640 - The Reconciliation Window starting balance calculator
-		 needs to ignore splits after statement date
-    Bug 797648 - Cannot reconcile both splits of a transaction with 2 splits
-                 for bank account subaccounts if only 1 is cleared
-		 Force all splits in a transaction for the account being
-		 reconciled and its children to have the same
-		 reconciliation status.
-    Bug 797656 - Immediate crash when retrieving quotes
+    Bug 620848 - Transfer Funds window - add Notes field
+    Bug 797006 - Balance is misleading in open subaccounts when different
+		 currencies are involved
+    Bug 797318 - Amounts ending in zero displayed as fractions
+    Bug 797659 - Liabilities in budget report no longer calculate correctly
+		 candidate fix.
+    Bug 797666 - libgnucash/engine/test/test-recurrence.c: In function
+		 'check_valid': 'result' may be used uninitialized
+    Bug 797676 - Register displays amount in transaction currency...
+		 instead of register currency.
 
 Other repairs or enhancements not marked as bugs:
-   [report-utilities] fix gnc:account-accumulate-at-dates sorting &
-      operator
-      This commit performs 2 important fixes:
-      1. The account splitlist walking assumes that the split->date always
-         increases. This is now enforced by sorting the splitlist, *only* if
-         a custom split->date is offered. By default the splits are sorted by
-         posted_date, and if a custom split->date is used, will be
-         stable-sorted to ensure the algorithm works.
-      2. The handling of splits *ON* date boundaries is fixed. Previously if
-         a split->date was equal to a date boundary, it would be considered
-         part of the "after" date section. It is more intuitive that a date
-         boundary includes all splits on and before the date.
-    When selecting a file for OFX import, restrict the files listed to .OFX
-      (or .QFX)
-    Fix crash when changing account-separator.
-    Change the default focus to search entry for 'Find Account'
-    Fix rounding precision when importing prices from CSV
-    [trep-engine] subtotals when cells have monetary only
-      Instead of accumulating subtotals from any non-#f value, ensure value
-      is a gnc-monetary before accumulating subtotals. This paves the way
-      to allow non-monetary in RHS custom-calculated-cells.
-    Travis - don't try to copy the removed after-failure file to the test
-      container
-    Travis - use ctest built-in feature to verbosely log test failures
-    Fix tokenize_string()to prevent empty strings as Bayes account-matching
-      tokens and remove duplicated tokens.
-    Fix calculation of Bayes account-matching token info to find exactly
-      matching tokens only.
-    Clear online banking KVP from accounts no longer associated with an online
-      one
-    Account template improvements for Swiss-German KMU and Germany SKR04.
-    Appdata file allows packagers to include distribution release information.
-    Ensure that new budgets are saved instead of saving only the state
-      information.
-    Update US Income Tax information for 2019.
-    Correct double-counting of accounts in some cases in US Income Tax
-      Report.
-    Housekeeping - reduce the number of PACKAGE and VERSION related cmake
-      variables
-    Restrict gnucash.pot comment collection to ones beginning with
-      "Translators". At the recommendation of the Translation Project
-      coordinator.
-    [html-table][API] html-table can have multirow-col-headers
-      * NEW API: gnc:html-table-multirow-col-headers and
-        gnc:html-table-set-multirow-col-headers! gnc:html-table col-headers
-        have been augmented to support list of <th> rows.
-      * BACKWARD COMPATIBILITY is offered. Old use of single-row headers API
-        gnc:html-table-col-headers and gnc:html-table-set-col-headers! should
-        be unchanged; will get/set a single row of <th> elements.
-      * NEW functions gnc:html-table-multirow-col-headers and
-        gnc:html-table-set-multirow-col-headers! will get/set an arbitrary
-        number of rows of <th> elements.
-      * using old API gnc:html-table-col-headers on a table, whose multiple
-        row headers have been set, will lead to a warning and return the first
-        row only.
+    [window-reconcile] when reconciling, warn on splits having a
+      reconcile date > statement_date
+    [window-reconcile] when inputing statement_date, warn if it's after today
+    [find-transactions] add search for reconciled date
+    Show transaction value, not amount, for registers with subaccounts.
+      If the register has subaccounts in different currencies and a
+      transaction has splits in more than one, the transaction will
+      incorrectly appear to be unbalanced if we total amounts because the
+      balancing logic works on split values.
+    Revert "Bug 797659 - Liabilities in budget report no longer calculate
+      correctly"
+      Reverted for snap release. Not tested thoroughly yet.
+    Add instance argument to Session constructor in python bindings.
+      Enables a python console to connect to the running GnuCash's session.
+    Make python console less noisy without --debug.
+    Provide locals and globals of calling context to the python console's
+      shell on shell init
+    Make pycons/ishell.py compatible with Python 3 and current IPython
+    [eguile-utilities] prevent crash in balsheet-eg.scm
+    [eguile] escape-html -> gnc:html-string-sanitize
+    [qif-to-gnc] Properly mark intra-QIF internal transfers.
 
-Translations Updated: Croatian, German, Polish, Ukrainian.
+Translations Updated: Ukrainian.
 
 3.8 - 29 December 2019
 The ninth release of the 3.x stable series.

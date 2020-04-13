@@ -29,7 +29,7 @@
 
 /** The gnc_file_log_replay() routine will pop up a standard file
  *     selection dialogue asking the user to pick a log file to replay. If one
- *     is selected the the .log file is opened and read.  It's contents
+ *     is selected the .log file is opened and read.  Its contents
  *     are then silently merged in the current log file. */
 void              gnc_file_log_replay (GtkWindow *parent);
 #endif

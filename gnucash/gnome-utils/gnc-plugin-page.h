@@ -423,7 +423,7 @@ void gnc_plugin_page_set_page_color (GncPluginPage *page, const char *color);
 
 
 /** Set up the page_changed callback for when the current page is changed.
- *  This will store a pointer to the page focus funtion passed as a parameter
+ *  This will store a pointer to the page focus function passed as a parameter
  *  so that it can be used in setting up the g_idle_add
  *
  *  @param page The page the callback is setup for.

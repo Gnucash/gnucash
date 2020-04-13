@@ -3,7 +3,7 @@ from unittest import TestCase, main
 from gnucash import GncNumeric, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED, \
     GNC_HOW_RND_NEVER, GNC_HOW_RND_FLOOR, GNC_HOW_RND_CEIL
 
-class TestGncNumeric( TestCase ):
+class TestGncNumeric(TestCase):
     def test_defaut(self):
         num = GncNumeric()
         self.assertEqual(str(num), "0/1")

@@ -5,7 +5,7 @@ from unittest_support import *
 
 from test_book import BookSession
 
-class TransactionSession( BookSession ):
+class TransactionSession(BookSession):
     def setUp(self):
         self.domain1 = "gnc.engine"
         self.domain2 = "gnc.engine.scrub"
@@ -40,7 +40,7 @@ class TransactionSession( BookSession ):
         g_log_remove_handler(self.domain2, self.hdlr2)
         test_clear_error_list ()
 
-class TestTransaction( TransactionSession ):
+class TestTransaction(TransactionSession):
     def test_equal(self):
         TRANS = self.trans
         self.assertTrue( TRANS.Equal(self.trans, True, False, False, False) )

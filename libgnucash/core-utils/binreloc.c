@@ -469,23 +469,26 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
 static gchar*
 find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
 {
-    gchar *prefix = NULL, *dir = NULL, *subdir = NULL;
+    gchar *prefix = NULL, *dir = NULL;
+    gchar *subdir = gnc_file_path_relative_part(PREFIX, compiled_dir);
 
     prefix = gnc_gbr_find_prefix (NULL);
     if (prefix == NULL)
         return g_strdup (default_dir ? default_dir : compiled_dir);
-    else if (!g_strcmp0 (prefix, PREFIX))
-        return g_strdup (compiled_dir);
-
-    subdir = gnc_file_path_relative_part(PREFIX, compiled_dir);
-    if (g_strcmp0 (compiled_dir, subdir) == 0)
+    if (!g_getenv("GNC_UNINSTALLED"))
     {
-        /* compiled_dir isn't a subdir of PREFIX. This isn't relocatable so
-         * return compiled_dir.
-         */
-        g_free (subdir);
-        g_free (prefix);
-        return g_strdup (compiled_dir);
+        if (!g_strcmp0 (prefix, PREFIX))
+            return g_strdup (compiled_dir);
+
+        if (g_strcmp0 (compiled_dir, subdir) == 0)
+        {
+            /* compiled_dir isn't a subdir of PREFIX. This isn't relocatable so
+             * return compiled_dir.
+             */
+            g_free (subdir);
+            g_free (prefix);
+            return g_strdup (compiled_dir);
+        }
     }
     dir = g_build_filename (prefix, subdir, NULL);
     g_free (subdir);

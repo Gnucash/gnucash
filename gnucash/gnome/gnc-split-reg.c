@@ -569,7 +569,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     commodity = xaccAccountGetCommodity( leader );
 
-    /* no EURO converson, if account is already EURO or no EURO currency */
+    /* no EURO conversion, if account is already EURO or no EURO currency */
     if (commodity != NULL)
         euro = (gnc_is_euro_currency( commodity ) &&
                 (strncasecmp(gnc_commodity_get_mnemonic(commodity), "EUR", 3)));
@@ -2619,27 +2619,38 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
     {
         dialog_args *args;
         char *string = NULL;
-        switch (gnc_split_reg_get_placeholder(gsr))
+        reg = gnc_ledger_display_get_split_register( gsr->ledger );
+        if(reg->mismatched_commodities)
         {
-        case PLACEHOLDER_NONE:
-            /* stay as false. */
-            return;
+            string = _("This account may not be edited because its"
+                       " subaccounts have mismatched commodities or currencies."
+                       "You need to open each account individually to "
+                       "edit transactions.");
+        }
+        else
+        {
+            switch (gnc_split_reg_get_placeholder(gsr))
+            {
+            case PLACEHOLDER_NONE:
+                /* stay as false. */
+                return;
 
-        case PLACEHOLDER_THIS:
-            string = _("This account may not be edited. If you want "
-                             "to edit transactions in this register, please "
-                             "open the account options and turn off the "
-                             "placeholder checkbox.");
-            break;
+            case PLACEHOLDER_THIS:
+                string = _("This account may not be edited. If you want "
+                                 "to edit transactions in this register, please "
+                                 "open the account options and turn off the "
+                                 "placeholder checkbox.");
+                break;
 
-        default:
-            string = _("One of the sub-accounts selected may not be "
-                             "edited. If you want to edit transactions in "
-                             "this register, please open the sub-account "
-                             "options and turn off the placeholder checkbox. "
-                             "You may also open an individual account instead "
-                             "of a set of accounts.");
-            break;
+            default:
+                string = _("One of the sub-accounts selected may not be "
+                                 "edited. If you want to edit transactions in "
+                                 "this register, please open the sub-account "
+                                 "options and turn off the placeholder checkbox. "
+                                 "You may also open an individual account instead "
+                                 "of a set of accounts.");
+                break;
+            }
         }
         gsr->read_only = TRUE;
         /* Put up a warning dialog */

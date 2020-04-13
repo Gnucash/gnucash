@@ -1,7 +1,7 @@
 add_subdirectory(example_scripts)
 add_subdirectory(tests)
 
-set(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
+set(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py app_utils.py)
 
 set(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/time64.i)
 set(GNUCASH_CORE_C_INCLUDES

@@ -800,7 +800,7 @@ show_handler (const char *klass, gint component_id,
     ENTER(" ");
     if (!pdb_dialog)
     {
-        LEAVE("no data strucure");
+        LEAVE("no data structure");
         return(FALSE);
     }
 

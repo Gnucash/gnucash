@@ -1807,7 +1807,7 @@ csv_tximp_acct_match_text_parse (std::string acct_name)
 void
 CsvImpTransAssist::acct_match_select(GtkTreeModel *model, GtkTreeIter* iter)
 {
-    // Get the the stored string and account (if any)
+    // Get the stored string and account (if any)
     gchar *text = nullptr;
     Account *account = nullptr;
     gtk_tree_model_get (model, iter, MAPPING_STRING, &text,

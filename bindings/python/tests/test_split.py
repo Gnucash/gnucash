@@ -5,7 +5,7 @@ from unittest_support import *
 
 from test_book import BookSession
 
-class SplitSession( BookSession ):
+class SplitSession(BookSession):
     def setUp(self):
 
         BookSession.setUp(self)
@@ -14,7 +14,7 @@ class SplitSession( BookSession ):
     def tearDown(self):
         pass
 
-class TestSplit( SplitSession ):
+class TestSplit(SplitSession):
     def test_memo(self):
         MEMO = "cookie monster"
         self.assertEqual( '', self.split.GetMemo() )

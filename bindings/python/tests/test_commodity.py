@@ -2,7 +2,7 @@ from unittest import TestCase, main
 
 from gnucash import Session
 
-class CommoditySession( TestCase ):
+class CommoditySession(TestCase):
     def setUp(self):
         self.ses = Session()
         self.book = self.ses.get_book()
@@ -11,12 +11,12 @@ class CommoditySession( TestCase ):
     def tearDown(self):
         self.ses.end()
 
-class TestCommodity( CommoditySession ):
+class TestCommodity(CommoditySession):
     def test_iso_currency(self):
         eur = self.table.lookup('CURRENCY', 'EUR')
         self.assertIsNotNone(eur)
 
-class TestCommodityNamespace( CommoditySession ):
+class TestCommodityNamespace(CommoditySession):
     def test_namespaces(self):
         #print(self.table.__class__)
         namespace_names = self.table.get_namespaces()

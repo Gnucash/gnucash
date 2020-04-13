@@ -31,7 +31,7 @@
  * GtkTreeViews allow the creation of columns in any order, not just
  * the order they appear in the underlying model.  The most likely use
  * of this code will have the first view column mapped to this extra
- * boolean model column, and the column value diaplayed by a checkbox.
+ * boolean model column, and the column value displayed by a checkbox.
  */
 
 #ifndef __GNC_TREE_MODEL_SELECTION_H

@@ -36,7 +36,7 @@ SCM               gnc_ui_qif_import_assistant_get_mappings(QIFImportWindow * w);
 
 /* The gnc_file_qif_import() routine will pop up a standard file
  *     selection dialogue asking the user to pick a QIF file. If one
- *     is selected then the QIF file is opened and read. It's contents
+ *     is selected then the QIF file is opened and read. Its contents
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
 void              gnc_file_qif_import (void);

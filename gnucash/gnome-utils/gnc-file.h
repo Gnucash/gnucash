@@ -105,7 +105,7 @@
  *    will inform the user of the error.
  *
  * The gnc_file_quit() routine will close out and destroy the current session.
- *    The user WILL NOT BE PROMPTED to confirm this action, or do do
+ *    The user WILL NOT BE PROMPTED to confirm this action, or do
  *    any kind of saving beforehand.
  *
  * HISTORY:

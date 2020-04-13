@@ -59,12 +59,15 @@ class ClassFromFunctions(object):
         self._module[self._new_instance] or using existing instance
         data. (specified with the keyword argument, instance)
 
+        if instance argument is None it will be ignored and the
+        constructor will be called to get a new instance
+
         Pass the arguments that should be passed on to
-        self._module[self._new_instance] . Any arguments of that
+        self._module[self._new_instance]. Any arguments of that
         are instances of ClassFromFunctions will be switched with the instance
         data. (by calling the .instance property)
         """
-        if INSTANCE_ARGUMENT in kargs:
+        if INSTANCE_ARGUMENT in kargs and kargs[INSTANCE_ARGUMENT] is not None:
             self.__instance = kargs[INSTANCE_ARGUMENT]
         else:
             self.__instance = getattr(self._module, self._new_instance)(

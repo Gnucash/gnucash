@@ -2521,7 +2521,7 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
      *
      * The "page_changed" signal is emitted when a new page is
      * selected in the notebook of a GncMainWindow.  This can be
-     * used to to adjust menu actions based upon which page is
+     * used to adjust menu actions based upon which page is
      * currently displayed in a window.
      */
     main_window_signals[PAGE_CHANGED] =

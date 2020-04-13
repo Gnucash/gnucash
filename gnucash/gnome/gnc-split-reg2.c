@@ -517,7 +517,7 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
 
     commodity = xaccAccountGetCommodity( leader );
 
-    /* no EURO converson, if account is already EURO or no EURO currency */
+    /* no EURO conversion, if account is already EURO or no EURO currency */
     if (commodity != NULL)
         euro = (gnc_is_euro_currency( commodity ) &&
                 (strncasecmp(gnc_commodity_get_mnemonic(commodity), "EUR", 3)));

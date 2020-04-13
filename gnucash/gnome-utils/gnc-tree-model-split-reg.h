@@ -144,6 +144,7 @@ typedef struct
     gboolean                     use_double_line;       /**<FIXME ? As above, whether to use two lines per transaction */
 
     gboolean                     is_template;           /**< Are we using a template */
+    gboolean                     mismatched_commodities; /**< Are there different commodities */
 
     gint                         sort_depth;            /**< This is the row the sort direction is based on. */
     gint                         sort_col;              /**< This is the column the sort direction is based on. */
@@ -201,7 +202,7 @@ GType gnc_tree_model_split_reg_get_type (void);
 /** Create new model and set options for register. */
 GncTreeModelSplitReg *
 gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 style,
-                        gboolean use_double_line, gboolean is_template);
+                        gboolean use_double_line, gboolean is_template, gboolean mismatched_commodities);
 
 /** Load the model from a slist and set default account for register. */
 void gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList * slist, Account *default_account);

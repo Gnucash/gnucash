@@ -72,13 +72,15 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
         -python -py3
         -Wall -Werror
         ${SWIG_ARGS}
-    )
+        )
     set (DEFAULT_SWIG_PYTHON_C_INCLUDES
-        ${GLIB2_INCLUDE_DIRS}
-        ${CMAKE_SOURCE_DIR}/common
-        ${CMAKE_SOURCE_DIR}/libgnucash/engine
-        ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
-    )
+         ${GLIB2_INCLUDE_DIRS}
+         ${CMAKE_SOURCE_DIR}/common
+         ${CMAKE_SOURCE_DIR}/libgnucash/engine
+         ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
+       	 ${CMAKE_SOURCE_DIR}/bindings
+       	 ${CMAKE_SOURCE_DIR}/bindings/python
+	 )
 
     set (PYTHON_SWIG_FLAGS ${DEFAULT_SWIG_PYTHON_FLAGS})
     foreach (dir ${DEFAULT_SWIG_PYTHON_C_INCLUDES} ${_include_dirs})
@@ -87,8 +89,9 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
     add_custom_command(OUTPUT ${outfile} ${py_outfile}
         COMMAND ${SWIG_EXECUTABLE} ${PYTHON_SWIG_FLAGS} -o ${outfile} ${_input}
         DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${ARGN}
-    )
-    add_custom_target(${_target} ALL DEPENDS ${outfile} ${py_outfile} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${_input} ${ARGN})
+        )
+    add_custom_target(${_target} ALL DEPENDS ${outfile} ${py_outfile}
+        ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${_input} ${ARGN})
 endmacro()
 
 

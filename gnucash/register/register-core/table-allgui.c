@@ -1022,7 +1022,7 @@ gnc_table_virtual_loc_valid(Table *table,
         return FALSE;
 
     /* verify that offsets are valid. This may occur if the app that is
-     * using the table has a paritally initialized cursor. (probably due
+     * using the table has a partially initialized cursor. (probably due
      * to a programming error, but maybe they meant to do this). */
     if ((0 > virt_loc.phys_row_offset) || (0 > virt_loc.phys_col_offset))
         return FALSE;

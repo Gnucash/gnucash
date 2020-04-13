@@ -1045,7 +1045,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
     DEBUG("gnc_file_ofx_import(): Begin...\n");
 
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
-    gtk_file_filter_set_name (filter, "ofx/qfx files (*.ofx,*.qfx)");
+    gtk_file_filter_set_name (filter, _("Open/Quicken Financial Exchange file (*.ofx, *.qfx)"));
     gtk_file_filter_add_pattern (filter, "*.[oqOQ][fF][xX]");
     filters = g_list_prepend( filters, filter );
 

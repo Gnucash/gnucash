@@ -1034,7 +1034,7 @@ show_handler (const char *klass, gint component_id,
     ENTER(" ");
     if (!imap_dialog)
     {
-        LEAVE("No data strucure");
+        LEAVE("No data structure");
         return(FALSE);
     }
     gtk_window_present (GTK_WINDOW(imap_dialog->dialog));

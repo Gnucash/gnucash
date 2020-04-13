@@ -907,8 +907,8 @@
       (if (not (and far-acct-name near-acct-name))
           (if errorproc
               (errorproc "Transaction with no or only one associated account."))
-          (if (and (not (qif-xtn:mark (car xtns))))
-              (string=? (qif-xtn:from-acct (car xtns)) far-acct-name)
+          (if (and (not (qif-xtn:mark (car xtns)))
+                   (string=? (qif-xtn:from-acct (car xtns)) far-acct-name))
               (begin
                 (set! how
                       (qif-import:xtn-has-matches? (car xtns) near-acct-name

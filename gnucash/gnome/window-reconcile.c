@@ -113,6 +113,8 @@ typedef struct _startRecnWindowData
     GtkWidget     *startRecnWindow; /* the startRecnWindow dialog              */
     GtkWidget     *xfer_button;     /* the dialog's interest transfer button   */
     GtkWidget     *date_value;      /* the dialog's ending date field          */
+    GtkWidget     *future_icon;
+    GtkWidget     *future_text;
     GNCAmountEdit *end_value;       /* the dialog's ending balance amount edit */
     gnc_numeric    original_value;  /* the dialog's original ending balance    */
     gboolean       user_set_value;  /* the user changed the ending value       */
@@ -280,8 +282,7 @@ recnRecalculateBalance (RecnWindow *recnData)
 
     /* update the starting balance */
     include_children = xaccAccountGetReconcileChildrenStatus(account);
-    starting = gnc_ui_account_get_reconciled_balance_as_of_date
-        (account, recnData->statement_date, include_children);
+    starting = gnc_ui_account_get_reconciled_balance(account, include_children);
     print_info = gnc_account_print_info (account, TRUE);
 
     /*
@@ -383,9 +384,57 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
     gnc_numeric new_balance;
     time64 new_date;
 
+    gboolean show_warning = FALSE;
+    gint days_after_today;
+    static const time64 secs_per_day = 86400;
+    static const time64 secs_per_hour = 3600;
+
+    new_date = gnc_date_edit_get_date_end (gde);
+
+    /* Add secs_per_hour to the difference to compensate for the short
+     * day when transitioning from standard to daylight time.
+     */
+    days_after_today = (gnc_time64_get_day_end (new_date) -
+                        gnc_time64_get_today_end () +
+                        secs_per_hour) / secs_per_day;
+
+    if (days_after_today > 0)
+    {
+        /* Translators: This is a ngettext(3) message, %d is the
+           number of days in the future */
+        gchar *str = g_strdup_printf
+            (ngettext ("Statement Date is %d day after today.",
+                       "Statement Date is %d days after today.",
+                       days_after_today),
+             days_after_today);
+
+        /* Translators: This is a ngettext(3) message, %d is the
+           number of days in the future */
+        gchar *tip_start = g_strdup_printf
+            (ngettext ("The statement date you have chosen is %d day in the future.",
+                       "The statement date you have chosen is %d days in the future.",
+                       days_after_today),
+             days_after_today);
+
+        gchar *tip_end = g_strdup (_("This may cause issues for future reconciliation \
+actions on this account. Please double-check this is the date you intended."));
+        gchar *tip = g_strdup_printf ("%s %s", tip_start, tip_end);
+
+        show_warning = TRUE;
+
+        gtk_label_set_text (GTK_LABEL(data->future_text), str);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(data->future_text), tip);
+        g_free (str);
+        g_free (tip_end);
+        g_free (tip_start);
+        g_free (tip);
+    }
+    gtk_widget_set_visible (GTK_WIDGET(data->future_icon), show_warning);
+    gtk_widget_set_visible (GTK_WIDGET(data->future_text), show_warning);
+
     if (data->user_set_value)
         return;
-    new_date = gnc_date_edit_get_date_end (gde);
+
     /* get the balance for the account as of the new date */
     new_balance = gnc_ui_account_get_balance_as_of_date (data->account, new_date,
                   data->include_children);
@@ -771,6 +820,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
         data.end_value = GNC_AMOUNT_EDIT(end_value);
         data.original_value = *new_ending;
         data.user_set_value = FALSE;
+
+        data.future_icon = GTK_WIDGET(gtk_builder_get_object (builder, "future_icon"));
+        data.future_text = GTK_WIDGET(gtk_builder_get_object (builder, "future_text"));
+
         box = GTK_WIDGET(gtk_builder_get_object (builder, "ending_value_box"));
         gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
         label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
@@ -820,6 +873,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
         }
 
         gtk_widget_show_all(dialog);
+
+        gtk_widget_hide (data.future_text);
+        gtk_widget_hide (data.future_icon);
 
         gtk_widget_grab_focus(gnc_amount_edit_gtk_entry
                               (GNC_AMOUNT_EDIT (end_value)));
@@ -1787,6 +1843,43 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
                       G_CALLBACK(recn_delete_cb), recnData);
     g_signal_connect (recnData->window, "key_press_event",
                       G_CALLBACK(recn_key_press_cb), recnData);
+
+
+    /* if account has a reconciled split where reconciled_date is
+       later than statement_date, emit a warning into statusbar */
+    {
+        GtkStatusbar *bar = GTK_STATUSBAR (statusbar);
+        guint context = gtk_statusbar_get_context_id (bar, "future_dates");
+        GtkWidget *box = gtk_statusbar_get_message_area (bar);
+        GtkWidget *image = gtk_image_new_from_icon_name
+            ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+
+        for (GList *n = xaccAccountGetSplitList (account); n; n = n->next)
+        {
+            Split* split = n->data;
+            time64 recn_date = xaccSplitGetDateReconciled (split);
+            if ((xaccSplitGetReconcile (split) != YREC) ||
+                (recn_date <= statement_date))
+                continue;
+
+            PWARN ("split posting_date=%s, recn_date=%s",
+                   qof_print_date (xaccTransGetDate (xaccSplitGetParent (split))),
+                   qof_print_date (recn_date));
+
+            gtk_statusbar_push (bar, context, _("WARNING! Account contains \
+splits whose reconcile date is after statement date. Reconciliation may be \
+difficult."));
+
+            gtk_widget_set_tooltip_text (GTK_WIDGET (bar), _("This account \
+has splits whose Reconciled Date is after this reconciliation statement date. \
+These splits may make reconciliation difficult. If this is the case, you may \
+use Find Transactions to find them, unreconcile, and re-reconcile."));
+
+            gtk_box_pack_start (GTK_BOX(box), image, FALSE, FALSE, 0);
+            gtk_box_reorder_child (GTK_BOX(box), image, 0);
+            break;
+        }
+    }
 
     /* The main area */
     {

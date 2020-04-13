@@ -5,12 +5,12 @@ from gnucash import Book, Account, Split, GncCommodity, GncNumeric, \
 
 from test_book import BookSession
 
-class AccountSession( BookSession ):
+class AccountSession(BookSession):
     def setUp(self):
         BookSession.setUp(self)
         self.account = Account(self.book)
 
-class TestAccount( AccountSession ):
+class TestAccount(AccountSession):
     def test_name(self):
         NAME = "Money"
         self.assertEqual( '', self.account.GetName() )

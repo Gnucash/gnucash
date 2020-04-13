@@ -1371,7 +1371,7 @@ gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
     if (!g_strcmp0 (pagename, "summary_page"))
     {
         /* Hitting the window close button on the summary page should not
-           invoke a cancel action. The import has finised at that point. */
+           invoke a cancel action. The import has finished at that point. */
         gnc_ui_qif_import_close_cb (gtkassistant, user_data);
     }
     else

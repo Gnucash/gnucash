@@ -532,7 +532,7 @@ Dies ist der Grundplan gemäss offiziellem Plan.
   <act:parent type="new">c58b830157164df9aa197f9a0a0d3525</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Darlehnen</act:name>
+  <act:name>Darlehen</act:name>
   <act:id type="new">6982fd93c9f34a76801c8e9dbae14d9b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -720,7 +720,7 @@ Dies ist der Grundplan gemäss offiziellem Plan.
   <act:parent type="new">d0e005ee0f924d68aa5c27de625c106b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Wertberichtigungen Geschäftsliegenschafte</act:name>
+  <act:name>Wertberichtigungen Geschäftsliegenschaften</act:name>
   <act:id type="new">1a70c4acc8a746aeba59021390ac3f89</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -1918,7 +1918,7 @@ Dies ist der Grundplan gemäss offiziellem Plan.
   <act:parent type="new">ff17758ba51149a3a16c2e50f4dd12f3</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Betriebsfremder, ausserordentlicher, einmaliger oder perioden-fremder Aufwand und Ertrag</act:name>
+  <act:name>Betriebsfremder, ausserordentlicher, einmaliger oder periodenfremder Aufwand und Ertrag</act:name>
   <act:id type="new">67be6ac625cc4b8f8ee6706b0434a335</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>

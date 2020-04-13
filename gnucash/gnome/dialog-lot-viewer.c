@@ -317,7 +317,7 @@ lv_select_row (GNCLotViewer *lv,
 }
 
 /* ======================================================================== */
-/* Un-select a row the the lot list */
+/* Un-select a row of the lot list */
 
 static void
 lv_unselect_row (GNCLotViewer *lv)
