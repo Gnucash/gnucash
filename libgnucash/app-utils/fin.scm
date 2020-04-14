@@ -298,6 +298,22 @@
 
 ;; Calculate the balance remaining after the nth payment
 ;; (n must be greater than or equal to zero)
+(define (gnc:amort_balance py cy iy pv pmt n places)
+  (cond
+    ((< pv 0) 0)
+    ((< n 0) -1) ;; Returning #f here causes gnucash to crash on startup
+    ((and (zero? pv) (>= pmt 0)) 0)
+    ((zero? n) pv)
+    (else
+      (let* ((bal-after-int (amort_balanceAfterInterest pv py cy iy places))
+            (bal-after-pmt (amort_balanceAfterPayment bal-after-int pmt)))
+        (gnc:amort_balance py cy iy bal-after-pmt pmt (- n 1) places)))))
+
+;; Calculate the size of the nth payment
+;; (it will just be pmt for all the payments before the final payment,
+;; then less,
+;; then zero if you keep trying to make payments)
+;; (n must be greater than zero)
 (define (gnc:amort_pmt py cy iy pv pmt n places)
   (if (< n 1) -1 ;; Returning #f here causes gnucash to crash on startup
     (let* ((prevBal (gnc:amort_balance py cy iy pv pmt (- n 1) places))
