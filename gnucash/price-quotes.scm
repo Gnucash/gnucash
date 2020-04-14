@@ -26,8 +26,7 @@
 (export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash engine))
-(use-modules (gnucash gettext))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))

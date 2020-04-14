@@ -1634,7 +1634,6 @@ new_price(XferDialog *xferData, time64 time)
     else if (from == gnc_default_currency() && to != gnc_default_currency())
         value = swap_commodities (&from, &to, value);
 
-    value = round_price (from, to, value);
     price = gnc_price_create (xferData->book);
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, from);
