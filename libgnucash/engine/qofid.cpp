@@ -303,7 +303,7 @@ qof_collection_set_data (QofCollection *col, gpointer user_data)
 
 /* =============================================================== */
 
-struct _iterate
+struct _qofid_iterate
 {
     QofInstanceForeachCB      fcn;
     gpointer                data;
@@ -312,7 +312,7 @@ struct _iterate
 static void
 foreach_cb (gpointer item, gpointer arg)
 {
-    struct _iterate *iter = static_cast<_iterate*>(arg);
+    struct _qofid_iterate *iter = static_cast<_qofid_iterate*>(arg);
     QofInstance *ent = static_cast<QofInstance*>(item);
 
     iter->fcn (ent, iter->data);
@@ -322,7 +322,7 @@ void
 qof_collection_foreach (const QofCollection *col, QofInstanceForeachCB cb_func,
                         gpointer user_data)
 {
-    struct _iterate iter;
+    struct _qofid_iterate iter;
     GList *entries;
 
     g_return_if_fail (col);
