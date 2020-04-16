@@ -73,4 +73,19 @@ gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
 gboolean
 gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *date);
 
+/**
+ * Opens up a window to ask for a date for the duplicated element
+ *
+ * \param parent The parent of the window to be created
+ * \param window_title The title of the dialog window
+ * \param title The text of the title label
+ * \param date  The initial time64 date to use, and the output
+ *                   parameter for the new date. Must not be NULL.
+ *
+ * \return TRUE if user closes dialog with 'OK', otherwise FALSE
+ */
+gboolean
+gnc_dup_time64_dialog (GtkWidget * parent, const char *window_title,
+                       const char* title, time64 *date);
+
 #endif // DIALOGDUPTRANS_H
