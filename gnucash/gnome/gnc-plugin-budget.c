@@ -54,6 +54,8 @@ static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
         GncMainWindowActionData *data);
+static void gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
+        GncMainWindowActionData *data);
 
 static GtkActionEntry gnc_plugin_actions [] =
 {
@@ -74,6 +76,12 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Copy an existing Budget"),
         G_CALLBACK(gnc_plugin_budget_cmd_copy_budget)
     },
+    {
+        "DeleteBudgetAction", NULL, N_("Delete Budget"), NULL,
+        N_("Deletes an existing Budget"),
+        G_CALLBACK(gnc_plugin_budget_cmd_delete_budget)
+    },
+
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -231,6 +239,26 @@ gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
     }
     else     /* if no budgets exist yet, just open a new budget */
         gnc_plugin_budget_cmd_new_budget (action, user_data);
+}
+
+/* user selects budget to delete */
+static void
+gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
+                                     GncMainWindowActionData *user_data)
+{
+    GncBudget *bgt;
+    QofBook *book;
+
+    g_return_if_fail (user_data != NULL);
+
+    book = gnc_get_current_book ();
+    if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
+        return;
+
+    bgt = gnc_budget_gui_select_budget (GTK_WINDOW(user_data->window), book);
+    if (!bgt) return;
+
+    gnc_budget_gui_delete_budget (bgt);
 }
 
 /************************************************************
