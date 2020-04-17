@@ -939,7 +939,7 @@
               <object class="GtkLabel" id="label847797">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"U+R"</property>
+                <property name="label" translatable="yes">"U+C"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -950,7 +950,7 @@
               <object class="GtkLabel" id="label847798">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"R"</property>
+                <property name="label" translatable="yes">"C"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -974,7 +974,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "U+R" to update and reconcile a matching transaction.</property>
+                <property name="label" translatable="yes">Select "U+C" to update and clear ('c") a matching transaction.</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -986,7 +986,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "R" to reconcile a matching transaction.</property>
+                <property name="label" translatable="yes">Select "C" to set the reconcile status of a matching transaction to "c".</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>

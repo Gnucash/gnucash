@@ -775,13 +775,13 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                        _("A"), DOWNLOADED_COL_ACTION_ADD,
                        G_CALLBACK(gnc_gen_trans_add_toggled_cb), info);
     column = add_toggle_column (view,
-            /* toggle column: update existing transaction & mark it reconciled */
-            _("U+R"), DOWNLOADED_COL_ACTION_UPDATE,
+            /* toggle column: update existing transaction & mark it cleared */
+            _("U+C"), DOWNLOADED_COL_ACTION_UPDATE,
                                G_CALLBACK(gnc_gen_trans_update_toggled_cb), info);
     gtk_tree_view_column_set_visible (column, show_update);
     add_toggle_column (view,
-            /* toggle column: mark existing transaction reconciled */
-            _("R"), DOWNLOADED_COL_ACTION_CLEAR,
+            /* toggle column: mark existing transaction cleared */
+            _("C"), DOWNLOADED_COL_ACTION_CLEAR,
                       G_CALLBACK(gnc_gen_trans_clear_toggled_cb), info);
 
     /* The last column has multiple renderers */
