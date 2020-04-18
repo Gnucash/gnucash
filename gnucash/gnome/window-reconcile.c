@@ -1239,6 +1239,59 @@ gnc_reconcile_window_create_view_box(Account *account,
 }
 
 
+/** Get the split that should be selected after the current split is
+ *   deleted, so that the working position in the debit or credit view
+ *   is maintained. This will be the next split if it exists (so that
+ *   it is possible to delete multiple splits just be clicking the
+ *   Delete button multiple times), otherwise the previous split.
+ *   The returned split must be for a different transaction as the
+ *   Delete button will delete all splits in the transaction.
+ *
+ *  @param view The view to use.
+ *
+ *  @param split The split to be removed
+ */
+static Split *
+gnc_reconcile_window_get_next_split(GNCReconcileView *view, Split *split)
+{
+    gboolean valid;
+    gpointer pointer;
+    GtkTreeIter iter;
+    Split *next_split=NULL, *temp_split;
+    Transaction *trans=NULL;
+    GtkTreeModel* model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+
+    trans = xaccSplitGetParent (split);
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+    while (valid)
+    {
+        // Walk through the model list, reading each row
+        gtk_tree_model_get (model, &iter, REC_POINTER, &pointer, -1);
+        if(pointer == split)
+        {
+            // find next split from a different transaction
+            while (valid)
+            {
+                valid = gtk_tree_model_iter_next (model, &iter);
+                if (valid)
+                {
+                    gtk_tree_model_get (model, &iter, REC_POINTER, &temp_split, -1);
+                    if (trans != xaccSplitGetParent (temp_split))
+                        return temp_split;
+                }
+            }
+        }
+        if (valid)
+        {
+            if (trans != xaccSplitGetParent (pointer))
+                next_split = pointer;
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
+    return next_split;
+}
+
+
 static Split *
 gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 {
@@ -1347,7 +1400,10 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 {
     RecnWindow *recnData = data;
     Transaction *trans;
-    Split *split;
+    Split *split, *next_split=NULL;
+    GtkTreePath *save_path=NULL;
+    GNCReconcileView *save_view;    /* debit or credit view */
+    GtkTreeSelection *selection;
 
     split = gnc_reconcile_window_get_current_split(recnData);
     /* This should never be true, but be paranoid */
@@ -1365,10 +1421,49 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
             return;
     }
 
+    /* Save the view and split to be selected after split is deleted */
+    save_view = GNC_RECONCILE_VIEW (recnData->debit);
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (save_view));
+    if (gtk_tree_selection_count_selected_rows(selection) == 0)
+    {
+        save_view = GNC_RECONCILE_VIEW (recnData->credit);
+        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (save_view));
+    }
+    if (gtk_tree_selection_count_selected_rows(selection) > 0)
+    {
+        /* get the split that should be selected and visible after the deletion */
+        next_split = gnc_reconcile_window_get_next_split (save_view, split);
+    }
+
     gnc_suspend_gui_refresh ();
 
     trans = xaccSplitGetParent(split);
     xaccTransDestroy(trans);
+
+    /* set the selected split to be the one after the deleted one,
+     *  or if there were no more, the last one.
+     *  gnc_reconcile_view_refresh() triggered by
+     *  the deletion will ensure the selected split can be seen.
+     */
+    if (next_split)
+    {
+        gpointer pointer;
+        GtkTreeIter iter;
+        GtkTreeModel* model = gtk_tree_view_get_model (GTK_TREE_VIEW (save_view));
+        gboolean valid = gtk_tree_model_get_iter_first (model, &iter);
+
+        while (valid)
+        {
+            // Walk through the model list, reading each row
+            gtk_tree_model_get (model, &iter, REC_POINTER, &pointer, -1);
+            if (pointer == next_split)
+            {
+                gtk_tree_selection_select_iter (selection, &iter);
+                break;
+            }
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
 
     gnc_resume_gui_refresh ();
 }
