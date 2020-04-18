@@ -607,6 +607,10 @@ Defaulting to today."))
     (set-tm:isdst now -1)
     (gnc-mktime now)))
 
+;;
+;; Accounting Period - Global (deprecated)
+;;
+
 (define (gnc:get-start-accounting-period)
   (issue-deprecation-warning "gnc:get-start-accounting-period is deprecated")
   (gnc-accounting-period-fiscal-start))
@@ -614,6 +618,16 @@ Defaulting to today."))
 (define (gnc:get-end-accounting-period)
   (issue-deprecation-warning "gnc:get-end-accounting-period is deprecated")
   (gnc-accounting-period-fiscal-end))
+
+;; returns the duration of global accounting period, in seconds
+(define (global-accounting-period-duration)
+  (+ (* 60 60 24)
+     (- (time64CanonicalDayTime (gnc-accounting-period-fiscal-end))
+        (time64CanonicalDayTime (gnc-accounting-period-fiscal-start)))))
+
+;;
+;; Accounting Period - Book Property
+;;
 
 ;; returns the stored book eofy option, or #f if it is not set.
 (define (get-book-eofy)
@@ -662,7 +676,8 @@ Defaulting to today."))
                       (book-eofy -2)
                       (book-eofy -1))
                   DayDelta)))
-      (decdate (gnc-accounting-period-fiscal-start) YearDelta)))
+      (- (gnc-accounting-period-fiscal-start)
+         (global-accounting-period-duration))))
 
 ;; returns the end previous book accounting period
 (define (gnc:get-end-book-prev-accounting-period)
@@ -672,7 +687,8 @@ Defaulting to today."))
          (if (< (current-time) eofy)
              (book-eofy -1)
              eofy)))
-      (decdate (gnc-accounting-period-fiscal-end) YearDelta)))
+      (- (gnc-accounting-period-fiscal-end)
+         (global-accounting-period-duration))))
 
 (define (gnc:get-start-this-month)
   (let ((now (gnc-localtime (current-time))))
