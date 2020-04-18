@@ -659,7 +659,7 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
 
     /*
      * See if we need to remember days(weeks) or months.  The only trick
-     * value is 28 days which could be wither 4 weeks or 1 month.
+     * value is 28 days which could be either 4 weeks or 1 month.
      */
     if (days == 28)
     {
@@ -2144,7 +2144,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
 
 /********************************************************************\
- * gnc_ui_reconile_window_raise                                     *
+ * gnc_ui_reconcile_window_raise                                     *
  *   shows and raises an account editing window                     *
  *                                                                  *
  * Args:   editAccData - the edit window structure                  *
