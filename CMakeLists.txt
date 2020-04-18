@@ -883,7 +883,7 @@ if (WITH_SQL)
 endif()
 
 if (WITH_GNUCASH)
-  list(APPEND _MODULES gnc-gnome)
+  list(APPEND _MODULES gnc-gnome gnc-html)
 endif()
 
 set_target_properties(${_MODULES} PROPERTIES

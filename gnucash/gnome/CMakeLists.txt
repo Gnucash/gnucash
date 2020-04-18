@@ -139,12 +139,12 @@ add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_G
 target_link_libraries(gnc-gnome
     gncmod-gnome-search
     gncmod-ledger-core
-    gncmod-html
     gncmod-report
     gncmod-register-gnome
     gncmod-register-core
     gncmod-gnome-utils
     gnc-engine
+    gnc-html
     gnc-locale-tax
     gnucash-guile
     ${Boost_LIBRARIES}

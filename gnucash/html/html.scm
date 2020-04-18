@@ -29,7 +29,7 @@
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-html" "scm_init_sw_gnc_html_module"))
+      (load-extension "libgnc-html" "scm_init_sw_gnc_html_module"))
 (use-modules (sw_gnc_html))
 
 ; Export the swig-wrapped symbols in the public interface of this module

@@ -11,7 +11,7 @@ set(GUILE_DEPENDS
   scm-core-utils
   scm-core-utils
   scm-engine
-  gncmod-html
+  gnc-html
   scm-report
   )
 
