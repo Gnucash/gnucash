@@ -85,10 +85,13 @@ endif()
 
   install(FILES ${aqbanking_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
-  file(COPY ${aqbanking_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  file(COPY ${aqbanking_GLADE}
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+  foreach(ui_file ${aqbanking_UI})
+      configure_file(${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
+  endforeach()
+
+  foreach(glade_file ${aqbanking_GLADE})
+      configure_file(${glade_file} ${DATADIR_BUILD}/gnucash/gtkbuilder/${glade_file} COPYONLY)
+  endforeach()
 endif()
 
 set_local_dist(aqbanking_DIST_local CMakeLists.txt

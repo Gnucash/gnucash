@@ -31,8 +31,10 @@ endif()
   install(FILES ${pycons_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python/pycons)
   install(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
 
-  file(COPY ${pycons_DATA} DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
-  file(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
+  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
+  foreach(py_file ${pycons_DATA} init.py)
+      configure_file(${py_file} ${CMAKE_BINARY_DIR}/share/gnucash/python/${py_file} COPYONLY)
+  endforeach()
 endif()
 
 set_local_dist(pycons_DIST ${pycons_DATA})

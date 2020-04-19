@@ -102,7 +102,9 @@ if(WITH_PYTHON)
     DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
-  file(COPY ${PYEXEC_FILES} DESTINATION ${PYTHON_SYSCONFIG_BUILD}/gnucash)
+  foreach(PYEXEC_FILE ${PYEXEC_FILES})
+      configure_file(${PYEXEC_FILE} ${PYTHON_SYSCONFIG_BUILD}/gnucash/${PYEXEC_FILE} COPYONLY)
+  endforeach()
 
   add_custom_target(gnucash-core-c-py ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_GNUCASH_CORE_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash

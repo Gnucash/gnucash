@@ -34,7 +34,9 @@ set (ui_SOURCES
       gnc-windows-menu-ui.xml
       osx_accel_map)
 
-file (COPY ${ui_SOURCES} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+foreach (ui_file ${ui_SOURCES})
+    configure_file (${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
+endforeach()
 
 install (FILES ${ui_SOURCES} DESTINATION share/gnucash/ui)
 

@@ -28,7 +28,9 @@ install(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 set_local_dist(doc_DIST_local ${doc_DATA} ${doc_noinst_DATA})
 set(doc_DIST ${doc_DIST_local} ${examples_DIST} PARENT_SCOPE)
 
-file(COPY ${doc_DATA} DESTINATION ${DATADIR_BUILD}/doc/gnucash)
+foreach(doc_file ${doc_DATA})
+    configure_file(${doc_file} ${DATADIR_BUILD}/doc/gnucash/${doc_file} COPYONLY)
+endforeach()
 
 # Generate the tip of the day file.
 

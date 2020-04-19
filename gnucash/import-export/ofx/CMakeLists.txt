@@ -38,8 +38,9 @@ endif()
 
   install(FILES ${ofx_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
-  file(COPY ${ofx_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+  foreach(ui_file ${ofx_UI})
+      configure_file(${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
+  endforeach()
 endif()
 
 set_local_dist(ofx_DIST_local CMakeLists.txt ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})

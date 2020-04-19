@@ -10,6 +10,8 @@ set(checks_DATA
 
 install(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/checks)
 
-file(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
+foreach(check_file ${checks_DATA})
+    configure_file(${check_file} ${DATADIR_BUILD}/gnucash/checks/${check_file} COPYONLY)
+endforeach()
 
 set_dist_list(checks_DIST CMakeLists.txt ${checks_DATA})
