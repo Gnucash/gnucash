@@ -1131,14 +1131,27 @@ void gnc_file_ofx_import (GtkWindow *parent)
                                                           NULL, NULL);
             if (account)
             {
-                // Grab the balance value and date from the statement and open a reconcile window for this account.
-                gnc_numeric value = double_to_gnc_numeric (-statement->ledger_balance, xaccAccountGetCommoditySCU (account), GNC_HOW_RND_ROUND_HALF_UP);
-                recnWindowWithBalance (GTK_WIDGET (parent),
-                                       account,
-                                       value,
-                                       statement->ledger_balance_date);
+                if (statement->ledger_balance_valid)
+                {
+                    // The balance needs to be corrected for credit-card and loan accounts.
+                    float sign = 1;
+                    switch(xaccAccountGetType (account))
+                    {
+                        case ACCT_TYPE_CREDIT:
+                        case ACCT_TYPE_LIABILITY:
+                            sign = -1;
+                        default:
+                            sign = 1;
+                    }
+                    // Grab the balance value and date from the statement and open a reconcile window for this account.
+                    gnc_numeric value = double_to_gnc_numeric (sign*statement->ledger_balance, xaccAccountGetCommoditySCU (account), GNC_HOW_RND_ROUND_HALF_UP);
+                    recnWindowWithBalance (GTK_WIDGET (parent),
+                                           account,
+                                           value,
+                                           statement->ledger_balance_date);
+                }
+                g_free (statement);
             }
-            g_free (statement);
         }
         g_free (selected_filename);
         g_slist_free (info.statement);
