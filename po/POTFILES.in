@@ -323,7 +323,6 @@ gnucash/import-export/customer-import/dialog-customer-import.c
 gnucash/import-export/customer-import/dialog-customer-import-gui.c
 gnucash/import-export/customer-import/gncmod-customer-import.c
 gnucash/import-export/customer-import/gnc-plugin-customer-import.c
-gnucash/import-export/gncmod-generic-import.c
 gnucash/import-export/import-account-matcher.c
 gnucash/import-export/import-backend.c
 gnucash/import-export/import-commodity-matcher.c

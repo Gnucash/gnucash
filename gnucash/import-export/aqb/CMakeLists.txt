@@ -55,7 +55,7 @@ if(WITH_AQBANKING)
   endif()
 
   target_link_libraries(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
-         gncmod-generic-import gncmod-register-core
+         gnc-generic-import gncmod-register-core
          gncmod-register-gnome gncmod-ledger-core gnc-engine gwengui-gtk3
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
          ${GWENHYWFAR_LDFLAGS} ${GWEN_GTK3_LDFLAGS}

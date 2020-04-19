@@ -65,10 +65,6 @@ libgncmod_log_replay_gnc_module_init(int refcount)
     {
         return FALSE;
     }
-    if (!gnc_module_load("gnucash/import-export", 0))
-    {
-        return FALSE;
-    }
 
     /* Add menu items with C callbacks */
     gnc_plugin_log_replay_create_plugin();

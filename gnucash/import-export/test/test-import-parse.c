@@ -177,7 +177,7 @@ static void
 main_helper(void *closure, int argc, char **argv)
 {
     gnc_module_system_init ();
-    gnc_module_load("gnucash/import-export", 0);
+    gnc_module_load("gnucash/gnome-utils", 0);
     test_import_parse();
     print_test_results();
     exit(get_rv());

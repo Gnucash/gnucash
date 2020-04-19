@@ -1250,6 +1250,10 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_formats");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "atm_fee_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_add_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_clear_adj");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "match_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "gnucash_preferences_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_preferences_dialog"));

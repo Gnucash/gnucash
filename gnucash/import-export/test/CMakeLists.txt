@@ -11,7 +11,7 @@ set(GENERIC_IMPORT_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-set(GENERIC_IMPORT_TEST_LIBS gncmod-generic-import gncmod-test-engine test-core)
+set(GENERIC_IMPORT_TEST_LIBS gnc-generic-import gncmod-test-engine test-core)
 
 gnc_add_test_with_guile(test-import-parse test-import-parse.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
@@ -34,7 +34,7 @@ set(IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS
   ${GTEST_INCLUDE_DIR}
   )
 
-set(IMPORT_ACCOUNT_MATCHER_TEST_LIBS gncmod-generic-import gnc-engine test-core gtest)
+set(IMPORT_ACCOUNT_MATCHER_TEST_LIBS gnc-generic-import gnc-engine test-core gtest)
 gnc_add_test(test-import-account-matcher gtest-import-account-matcher.cpp
   IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS IMPORT_ACCOUNT_MATCHER_TEST_LIBS)
 
