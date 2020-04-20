@@ -1,5 +1,4 @@
 import sys
-import gnucash._sw_app_utils as _sw_app_utils
 from gnucash import *
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled, gnc_prefs_is_debugging_enabled
 from gi import require_version
@@ -23,9 +22,9 @@ signal.signal(signal.SIGTTOU, old_sigttou)
 if gnc_prefs_is_extra_enabled() and gnc_prefs_is_debugging_enabled():
     print("Hello from python!")
     print("test", sys.modules.keys())
-    print("test2", dir(_sw_app_utils))
 
-   #root = _sw_app_utils.gnc_get_current_root_account()
+    #session = app_utils.gnc_get_current_session()
+    #root account can later on be accessed by session.get_book().get_root_account()
 
    #print("test", dir(root), root.__class__)
     print("test3", dir(gnucash_core_c))
