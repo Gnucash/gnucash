@@ -289,8 +289,7 @@
 ;; The payment number (n) must be non-negative for amort_balance.  (In this
 ;;  case, payment zero is at the _beginning_ of the first period, so
 ;;  amort_balance will just be the initial balance.)
-;; If the above conditions on n are violated, the functions return -1 (#f is
-;;  not used, because it causes gnucash to crash).
+;; If the above conditions on n are violated, the functions returns #f
 ;;
 ;; A negative interest rate works (if you can find a lender who charges
 ;;  negative rates), but negative compounding frequency, or negative payment
@@ -301,7 +300,7 @@
 (define (gnc:amort_balance py cy iy pv pmt n places)
   (cond
     ((< pv 0) 0)
-    ((< n 0) -1) ;; Returning #f here causes gnucash to crash on startup
+    ((< n 0) #f)
     ((and (zero? pv) (>= pmt 0)) 0)
     ((zero? n) pv)
     (else
@@ -315,28 +314,27 @@
 ;; then zero if you keep trying to make payments)
 ;; (n must be greater than zero)
 (define (gnc:amort_pmt py cy iy pv pmt n places)
-  (if (< n 1) -1 ;; Returning #f here causes gnucash to crash on startup
-    (let* ((prevBal (gnc:amort_balance py cy iy pv pmt (- n 1) places))
-           (balBeforePayment
-		     (amort_balanceAfterInterest prevBal py cy iy places))
-           (balAfterPayment (amort_balanceAfterPayment balBeforePayment pmt)))
-      (- balBeforePayment balAfterPayment))))
+  (and (>= n 1)
+       (let* ((prevBal (gnc:amort_balance py cy iy pv pmt (- n 1) places))
+              (balBeforePayment (amort_balanceAfterInterest prevBal py cy iy places))
+              (balAfterPayment (amort_balanceAfterPayment balBeforePayment pmt)))
+         (- balBeforePayment balAfterPayment))))
 
 ;; Calculate the amount of the nth payment that is principal
 ;; (n must be greater than zero)
 (define (gnc:amort_ppmt py cy iy pv pmt n places)
-  (if (< n 1) -1
-    (let* ((prevBal (gnc:amort_balance py cy iy pv pmt (- n 1) places))
-	       (bal-after-int (amort_balanceAfterInterest prevBal py cy iy places))
-           (newBal (amort_balanceAfterPayment bal-after-int pmt)))
-      (- prevBal newBal))))
+  (and (>= n 1)
+       (let* ((prevBal (gnc:amort_balance py cy iy pv pmt (- n 1) places))
+              (bal-after-int (amort_balanceAfterInterest prevBal py cy iy places))
+              (newBal (amort_balanceAfterPayment bal-after-int pmt)))
+         (- prevBal newBal))))
 
 ;; Calculate the amount of the nth payment that is interest
 ;; (n must be greater than zero)
 (define (gnc:amort_ipmt py cy iy pv pmt n places)
-  (if (< n 1) -1
-    (let* ((prevBal(gnc:amort_balance py cy iy pv pmt (- n 1) places)))
-      (amort_interest prevBal py cy iy places))))
+  (and (>= n 1)
+       (amort_interest (gnc:amort_balance py cy iy pv pmt (- n 1) places)
+                       py cy iy places)))
 
 ;; "Private" helper functions:
 
