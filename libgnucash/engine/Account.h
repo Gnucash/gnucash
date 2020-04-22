@@ -975,6 +975,11 @@ guint32 xaccAccountTypesValid(void);
  *  Asset or Liability type, but not a business account type
  *  (meaning not an Accounts Payable/Accounts Receivable). */
 gboolean xaccAccountIsAssetLiabType(GNCAccountType t);
+    
+/** Convenience function to return the fundamental type
+ * asset/liability/income/expense/equity given an account type. */
+GNCAccountType xaccAccountTypeGetFundamental (GNCAccountType t);
+
 
 /** Convenience function to check if the account is a valid
  *  business account type

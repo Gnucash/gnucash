@@ -4391,6 +4391,35 @@ gboolean xaccAccountIsAssetLiabType(GNCAccountType t)
     }
 }
 
+GNCAccountType
+xaccAccountTypeGetFundamental (GNCAccountType t)
+{
+    switch (t)
+    {
+        case ACCT_TYPE_BANK:
+        case ACCT_TYPE_STOCK:
+        case ACCT_TYPE_MUTUAL:
+        case ACCT_TYPE_CURRENCY:
+        case ACCT_TYPE_CASH:
+        case ACCT_TYPE_ASSET:
+        case ACCT_TYPE_RECEIVABLE:
+            return ACCT_TYPE_ASSET;
+        case ACCT_TYPE_CREDIT:
+        case ACCT_TYPE_LIABILITY:
+        case ACCT_TYPE_PAYABLE:
+            return ACCT_TYPE_LIABILITY;
+        case ACCT_TYPE_INCOME:
+            return ACCT_TYPE_INCOME;
+        case ACCT_TYPE_EXPENSE:
+            return ACCT_TYPE_EXPENSE;
+        case ACCT_TYPE_EQUITY:
+            return ACCT_TYPE_EQUITY;
+        case ACCT_TYPE_TRADING:
+        default:
+            return ACCT_TYPE_NONE;
+    }
+}
+
 gboolean xaccAccountIsAPARType(GNCAccountType t)
 {
     switch (t)

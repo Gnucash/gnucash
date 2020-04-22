@@ -57,6 +57,7 @@
 #include "gnc-window.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
+#include "gnc-session.h"
 #ifdef MAC_INTEGRATION
 #include <gtkmacintegration/gtkosxapplication.h>
 #endif
@@ -1765,6 +1766,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
                                     refresh_handler, close_handler,
                                     recnData);
+    // This window should close if we close the session.
+    gnc_gui_component_set_session (recnData->component_id, gnc_get_current_session());
 
     recn_set_watches (recnData);
 
