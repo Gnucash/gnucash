@@ -186,8 +186,8 @@ if (WIN32)
   set(REGEX_LDFLAGS "-L${REGEX_LIB_PATH} -lregex")
   #set(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
   #set(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
-#Prevent creating a console window on startup.
-  set(CMAKE_EXE_LINKER_FLAGS -mwindows)
+#Prevent creating a console window on startup and harden the executable.
+  set(CMAKE_EXE_LINKER_FLAGS "-mwindows -Wl,--nxcompat -Wl,--dynamicbase")
 endif()
 
 find_package(PkgConfig REQUIRED)
@@ -953,8 +953,14 @@ install(CODE
 #For windows, copy in some DLLs from Mingw
 
 if (WIN32)
-  find_library(LIBSTDC++ libstdc++-6.dll)
-  find_library(LIBDW2 libgcc_s_dw2-1.dll)
+  find_file(LIBSTDC++ libstdc++-6.dll)
+  if (NOT LIBSTDC++)
+    message(FATAL_ERROR "libstdc++ not found.")
+  endif()
+  find_file(LIBDW2 libgcc_s_dw2-1.dll)
+  if (NOT LIBDW2)
+    message(FATAL_ERROR "libgcc_s_dw2-l not found.")
+  endif()
   set(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
   install(PROGRAMS ${MINGW_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR})
   file(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
