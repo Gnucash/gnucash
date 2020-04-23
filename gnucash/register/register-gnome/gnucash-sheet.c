@@ -920,6 +920,76 @@ typedef struct
 } select_info;
 
 static void
+gnucash_sheet_im_context_reset_flags(GnucashSheet *sheet)
+{
+    sheet->preedit_length = 0;
+    sheet->preedit_char_length = 0;
+    sheet->preedit_start_position = -1;
+    sheet->preedit_cursor_position = 0;
+    sheet->preedit_selection_length = 0;
+}
+
+static void
+gnucash_sheet_im_context_reset(GnucashSheet *sheet)
+{
+    if (sheet->need_im_reset)
+    {
+        if (sheet->preedit_attrs)
+        {
+            pango_attr_list_unref (sheet->preedit_attrs);
+            sheet->preedit_attrs = NULL;
+        }
+        gtk_entry_reset_im_context (GTK_ENTRY(sheet->entry));
+        sheet->need_im_reset = FALSE;
+    }
+    gnucash_sheet_im_context_reset_flags(sheet);
+}
+
+static gboolean
+gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
+{
+    GtkEditable *editable;
+    Table *table = sheet->table;
+    VirtualLocation virt_loc;
+    gboolean result;
+
+    char *new_text = NULL;
+
+    int cursor_position, start_sel, end_sel;
+    int new_position, new_start, new_end;
+
+    gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
+
+    if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
+        return FALSE;
+
+    if (gnc_table_model_read_only (table->model))
+        return FALSE;
+
+    editable = GTK_EDITABLE(sheet->entry);
+
+    cursor_position = gtk_editable_get_position (editable);
+    gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+
+    new_position = cursor_position;
+    new_start = start_sel;
+    new_end = end_sel;
+    result = gnc_table_direct_update (table, virt_loc,
+                                      &new_text,
+                                      &new_position,
+                                      &new_start, &new_end,
+                                      event);
+    if (new_text != NULL)
+    {
+        gnucash_sheet_set_entry_value (sheet, new_text);
+        gnucash_sheet_set_position_and_selection (sheet, new_position,
+                                                  new_start, new_end);
+    }
+    return result;
+}
+
+
+static void
 gnucash_sheet_insert_cb (GtkWidget *widget,
                          const gchar *insert_text,
                          const gint insert_text_len,
@@ -1605,77 +1675,6 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
     return handled;
 }
 
-static gboolean
-gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
-{
-    GtkEditable *editable;
-    Table *table = sheet->table;
-    VirtualLocation virt_loc;
-//    gboolean changed;
-    gboolean result;
-
-    char *new_text = NULL;
-
-    int cursor_position, start_sel, end_sel;
-    int new_position, new_start, new_end;
-
-    gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
-
-    if (!gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
-        return FALSE;
-
-    if (gnc_table_model_read_only (table->model))
-        return FALSE;
-
-    editable = GTK_EDITABLE(sheet->entry);
-
-    cursor_position = gtk_editable_get_position (editable);
-    gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-
-    new_position = cursor_position;
-    new_start = start_sel;
-    new_end = end_sel;
-
-    result = gnc_table_direct_update (table, virt_loc,
-                                      &new_text,
-                                      &new_position,
-                                      &new_start, &new_end,
-                                      event);
-
-//    changed = FALSE;
-
-    if (new_text != NULL)
-    {
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->insert_signal);
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->delete_signal);
-
-        gtk_entry_set_text (GTK_ENTRY (sheet->entry), new_text);
-
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->delete_signal);
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->insert_signal);
-
-//        changed = TRUE;
-    }
-
-    if (new_position != cursor_position)
-    {
-        gtk_editable_set_position (editable, new_position);
-//        changed = TRUE;
-    }
-
-    if ((new_start != start_sel) || (new_end != end_sel))
-    {
-        gtk_editable_select_region(editable, new_start, new_end);
-//        changed = TRUE;
-    }
-
-    return result;
-}
-
 static gint
 gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 {
@@ -1927,32 +1926,6 @@ gnucash_sheet_key_release_event(GtkWidget *widget, GdkEventKey *event)
     }
 
     return FALSE;
-}
-
-static void
-gnucash_sheet_im_context_reset_flags(GnucashSheet *sheet)
-{
-    sheet->preedit_length = 0;
-    sheet->preedit_char_length = 0;
-    sheet->preedit_start_position = -1;
-    sheet->preedit_cursor_position = 0;
-    sheet->preedit_selection_length = 0;
-}
-
-static void
-gnucash_sheet_im_context_reset(GnucashSheet *sheet)
-{
-    if (sheet->need_im_reset)
-    {
-        if (sheet->preedit_attrs)
-        {
-            pango_attr_list_unref (sheet->preedit_attrs);
-            sheet->preedit_attrs = NULL;
-        }
-        gtk_im_context_reset (sheet->im_context);
-        sheet->need_im_reset = FALSE;
-    }
-    gnucash_sheet_im_context_reset_flags(sheet);
 }
 
 static void
