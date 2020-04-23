@@ -1,12 +1,12 @@
 # Croatian translation of GNUCash glossary.
 # Copyright (C) 2019 Free Software Foundation, Inc.
-# Milo Ivir <mail@milotype.de>, 2019.
+# Milo Ivir <mail@milotype.de>, 2019., 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.4\n"
+"Project-Id-Version: GnuCash Glossary 3.10\n"
 "POT-Creation-Date: 2020-03-27 21:58+0100\n"
-"PO-Revision-Date: 2019-03-24 11:37+0100\n"
+"PO-Revision-Date: 2020-04-17 17:25+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -15,13 +15,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgstr ""
-"Izraz (Dragi prevoditelji: ova datoteka nikada neće biti prikazana korisniku "
-"programa!)"
+"Izraz (Napomena za prevodioce: ova datoteka služi isključivo kao pomoć pri "
+"prevođenju i nikada se neće prikazati korisniku programa!)"
 
 #. "A detailed record of money spent and received"
 msgid "account"
@@ -193,7 +193,7 @@ msgstr "radnja: isplata"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "razvoj"
 
 #. "A sum of money"
 msgid "amount"
@@ -208,14 +208,12 @@ msgid "balance (noun)"
 msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "bilanciraj"
+msgstr "preuzet prethodni saldo"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "bilanciraj"
+msgstr "saldo za prijenos"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -800,6 +798,3 @@ msgstr "vaučer"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "isplata (u dijalogu za usklađivanje)"
-
-#~ msgid "invoice owner"
-#~ msgstr "Kunde, Rechnungsempfänger"
