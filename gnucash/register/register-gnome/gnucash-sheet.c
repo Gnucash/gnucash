@@ -103,6 +103,23 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 
 /** Implementation *****************************************************/
 
+static inline void
+gnucash_sheet_set_entry_value (GnucashSheet *sheet, const char* value)
+{
+    g_signal_handler_block (G_OBJECT (sheet->entry),
+                            sheet->insert_signal);
+    g_signal_handler_block (G_OBJECT (sheet->entry),
+                            sheet->delete_signal);
+
+    gtk_entry_set_text (GTK_ENTRY (sheet->entry), value);
+
+    g_signal_handler_unblock (G_OBJECT (sheet->entry),
+                              sheet->delete_signal);
+    g_signal_handler_unblock (G_OBJECT (sheet->entry),
+                              sheet->insert_signal);
+
+}
+
 static inline gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc)
@@ -884,17 +901,8 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
 
     if (retval)
     {
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->insert_signal);
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->delete_signal);
+        gnucash_sheet_set_entry_value (sheet, retval);
 
-        gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->delete_signal);
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->insert_signal);
     }
 
     gtk_editable_set_position (editable, cursor_position);
@@ -1011,18 +1019,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
             ((strcmp (retval, new_text) != 0) ||
              (*position != old_position)))
     {
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->insert_signal);
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->delete_signal);
-
-        gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->delete_signal);
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->insert_signal);
-
+        gnucash_sheet_set_entry_value (sheet, table_val);
         g_signal_stop_emission_by_name (G_OBJECT(sheet->entry),
                                         "insert_text");
     }
@@ -1131,18 +1128,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 
     if (retval && (strcmp (retval, new_text) != 0))
     {
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->insert_signal);
-        g_signal_handler_block (G_OBJECT (sheet->entry),
-                                sheet->delete_signal);
-
-        gtk_entry_set_text (GTK_ENTRY (sheet->entry), retval);
-
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->delete_signal);
-        g_signal_handler_unblock (G_OBJECT (sheet->entry),
-                                  sheet->insert_signal);
-
+        gnucash_sheet_set_entry_value (sheet, retval);
         g_signal_stop_emission_by_name (G_OBJECT(sheet->entry),
                                         "delete_text");
     }
