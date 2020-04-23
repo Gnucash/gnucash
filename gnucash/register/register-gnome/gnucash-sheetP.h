@@ -114,7 +114,7 @@ struct _GnucashSheet
 
     guint shift_state;
     guint keyval_state;
-    int start_sel, end_sel;
+    int pos, bound ; /** Corresponds to GtkEditable's current_pos and selection_bound */
 
 };
 
