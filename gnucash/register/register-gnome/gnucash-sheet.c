@@ -105,9 +105,6 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 
 static inline gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
-                                       VirtualCellLocation vcell_loc);
-gboolean
-gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc)
 {
     return (vcell_loc.virt_row < 1 ||
