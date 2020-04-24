@@ -92,7 +92,6 @@ gnucash/gnome/window-reconcile.c
 gnucash/gnome/window-report.c
 gnucash/gnome-search/dialog-search.c
 gnucash/gnome-search/gnc-general-search.c
-gnucash/gnome-search/gncmod-gnome-search.c
 gnucash/gnome-search/search-account.c
 gnucash/gnome-search/search-boolean.c
 gnucash/gnome-search/search-core-type.c

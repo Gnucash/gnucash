@@ -57,6 +57,7 @@
 #include "gnc-engine-guile.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
+#include "search-core-type.h"
 #include "window-report.h"
 #ifdef __MINGW32__
 #include <Windows.h>
@@ -487,7 +488,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/gnome-search", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
@@ -609,6 +609,8 @@ inner_main (void *closure, int argc, char **argv)
     gnc_gsettings_version_upgrade ();
 
     gnc_gnome_utils_init();
+    gnc_search_core_initialize ();
+    gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);
 
     load_gnucash_modules();
 

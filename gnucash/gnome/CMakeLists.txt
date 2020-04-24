@@ -137,7 +137,7 @@ set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 
 add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 target_link_libraries(gnc-gnome
-    gncmod-gnome-search
+    gnc-gnome-search
     gnc-ledger-core
     gncmod-report
     gncmod-register-gnome
