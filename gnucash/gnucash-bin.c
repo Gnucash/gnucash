@@ -55,6 +55,7 @@
 #include "dialog-new-user.h"
 #include "gnc-session.h"
 #include "gnc-engine-guile.h"
+#include "gnucash-register.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "search-core-type.h"
@@ -488,7 +489,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/csv-import", 0, TRUE },
@@ -611,6 +611,7 @@ inner_main (void *closure, int argc, char **argv)
     gnc_gnome_utils_init();
     gnc_search_core_initialize ();
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);
+    gnucash_register_add_cell_types ();
 
     load_gnucash_modules();
 

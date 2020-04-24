@@ -140,7 +140,7 @@ target_link_libraries(gnc-gnome
     gnc-gnome-search
     gnc-ledger-core
     gncmod-report
-    gncmod-register-gnome
+    gnc-register-gnome
     gnc-register-core
     gnc-gnome-utils
     gnc-engine

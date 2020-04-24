@@ -388,7 +388,6 @@ gnucash/register/register-core/table-model.c
 gnucash/register/register-gnome/combocell-gnome.c
 gnucash/register/register-gnome/datecell-gnome.c
 gnucash/register/register-gnome/formulacell-gnome.c
-gnucash/register/register-gnome/gncmod-register-gnome.c
 gnucash/register/register-gnome/gnucash-color.c
 gnucash/register/register-gnome/gnucash-cursor.c
 gnucash/register/register-gnome/gnucash-date-picker.c
