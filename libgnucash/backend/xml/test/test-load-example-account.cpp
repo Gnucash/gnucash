@@ -32,7 +32,6 @@ extern "C"
 #include <unistd.h>
 #include <dirent.h>
 
-#include "gnc-module.h"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 }

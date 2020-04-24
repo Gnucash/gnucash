@@ -47,7 +47,6 @@
 #include "qof.h"
 #include "guile-mappings.h"
 #include "gnc-prefs.h"
-#include "gnc-module.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-engine.h"

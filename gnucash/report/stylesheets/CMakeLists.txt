@@ -7,7 +7,6 @@ set(stylesheets_SCHEME
 )
 
 set(GUILE_DEPENDS
-  scm-gnc-module
   scm-core-utils
   scm-core-utils
   scm-engine

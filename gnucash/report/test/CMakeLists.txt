@@ -15,7 +15,6 @@ set (scm_test_report_with_srfi64_SOURCES
   )
 
 set(GUILE_DEPENDS
-  scm-gnc-module
   scm-app-utils
   scm-core-utils
   scm-core-utils

@@ -26,7 +26,6 @@ extern "C"
 #include <glib.h>
 
 #include "gnc-engine-guile.h"
-#include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Query.h"

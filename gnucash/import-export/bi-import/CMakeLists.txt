@@ -23,7 +23,6 @@ target_link_libraries(gnc-bi-import
   gnc-app-utils
   gnc-engine
   gnc-core-utils
-  gnc-module
   gnc-gnome
 )
 

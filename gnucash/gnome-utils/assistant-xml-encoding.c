@@ -33,7 +33,6 @@
 #include "gnc-backend-xml.h"
 #include "gnc-component-manager.h"
 #include "gnc-uri-utils.h"
-#include "gnc-module.h"
 #include "gnc-ui.h"
 
 /* The following are copied from src/backend/xml/io-gncxml2-v2.h as a temporary

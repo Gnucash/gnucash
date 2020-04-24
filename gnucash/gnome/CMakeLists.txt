@@ -246,7 +246,6 @@ set(GUILE_DEPENDS
     scm-engine
     scm-core-utils
     scm-gnome-utils
-    scm-gnc-module
     scm-report
     scm-reports
 )

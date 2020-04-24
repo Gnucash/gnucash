@@ -51,7 +51,7 @@ add_library (gnc-html
   ${html_HEADERS}
 )
 
-target_link_libraries(gnc-html gnc-engine gnc-module gnc-gnome-utils
+target_link_libraries(gnc-html gnc-engine gnc-gnome-utils
   PkgConfig::GTK3 PkgConfig::WEBKIT ${GUILE_LDFLAGS})
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")

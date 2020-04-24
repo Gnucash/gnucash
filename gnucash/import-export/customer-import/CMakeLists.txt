@@ -16,8 +16,13 @@ set(customer_import_noinst_HEADERS
 
 add_library(gnc-customer-import ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
 
-target_link_libraries(gnc-customer-import gnc-gnome gnc-gnome-utils gnc-app-utils
-     gnc-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
+target_link_libraries(gnc-customer-import
+    gnc-gnome
+    gnc-gnome-utils
+    gnc-app-utils
+    gnc-engine
+    gnc-core-utils
+    ${GLIB2_LDFLAGS})
 
 target_include_directories(gnc-customer-import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

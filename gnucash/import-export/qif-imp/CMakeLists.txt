@@ -69,7 +69,6 @@ set(GUILE_DEPENDS
   gnc-qif-import
   gnc-gnome
   scm-core-utils
-  scm-gnc-module
   scm-app-utils
   scm-engine
   scm-gnome-utils

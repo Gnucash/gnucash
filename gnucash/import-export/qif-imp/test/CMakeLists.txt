@@ -10,7 +10,6 @@ set(scm_qifimp_test_with_srfi64_SOURCES
   )
 
 set (GUILE_DEPENDS
-  scm-gnc-module
   scm-app-utils
   scm-engine
   scm-test-engine

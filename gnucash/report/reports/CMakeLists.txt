@@ -87,7 +87,6 @@ set(scm_rpts_GUILE_DEPENDS
   scm-engine
   scm-gnome-utils
   scm-app-utils
-  scm-gnc-module
   scm-report
   )
 

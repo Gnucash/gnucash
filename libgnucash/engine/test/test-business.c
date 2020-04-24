@@ -27,7 +27,6 @@
 #include <glib.h>
 
 #include "qof.h"
-#include "gnc-module.h"
 
 #include "gncBusiness.h"
 #include "test-stuff.h"

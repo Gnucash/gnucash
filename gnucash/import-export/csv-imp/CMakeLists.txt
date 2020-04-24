@@ -69,8 +69,7 @@ target_link_libraries(
   gnc-gnome-utils
   gnc-app-utils
   gnc-engine
-  gnc-core-utils
-  gnc-module)
+  gnc-core-utils)
 
 
 target_compile_definitions(gnc-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")

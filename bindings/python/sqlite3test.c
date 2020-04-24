@@ -26,7 +26,6 @@ int main()
     const char* testurl = "sqlite3://" TESTFILE;
     qof_log_init();
     qof_init();
-    gnc_module_system_init();
     char * no_args[1] = { NULL };
     gnc_engine_init(0, no_args);
 

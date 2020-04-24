@@ -56,7 +56,6 @@
 #include "guid.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
-#include "gnc-module.h"
 #include "gnc-engine.h"
 #include "Transaction.h"
 #include "Split.h"
@@ -221,7 +220,6 @@ gnc_environment_setup();
 qof_log_init();
 qof_init();
 qof_query_init();
-gnc_module_system_init();
 char * no_args[1] = { NULL };
 gnc_engine_init(0, no_args);
 gnc_prefs_init();

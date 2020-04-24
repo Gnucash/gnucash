@@ -31,7 +31,6 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "gnc-module.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"

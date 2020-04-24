@@ -6,11 +6,16 @@ set(locale_tax_SOURCES gnc-locale-tax.c gnc-locale-tax.h)
 set_source_files_properties (${locale_tax_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 add_library(gnc-locale-tax ${locale_tax_SOURCES})
-target_link_libraries(gnc-locale-tax gnc-module ${GLIB2_LDFLAGS} ${GUILE_LDFLAGS})
+target_link_libraries(gnc-locale-tax
+    ${GLIB2_LDFLAGS}
+    ${GUILE_LDFLAGS})
 
 target_include_directories(gnc-locale-tax
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${CMAKE_BINARY_DIR}/common ${GUILE_INCLUDE_DIRS})
+    PRIVATE
+        ${CMAKE_BINARY_DIR}/common
+        ${GUILE_INCLUDE_DIRS}
+        ${GLIB2_INCLUDE_DIRS})
 
 if (APPLE)
   set_target_properties (gnc-locale-tax PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
@@ -30,7 +35,7 @@ set(gncmod_tax_us_SCHEME_2 us/tax.scm)
 set(gncmod_tax_de_DE_SCHEME_1 de_DE/txf.scm de_DE/txf-help.scm)
 set(gncmod_tax_de_DE_SCHEME_2 de_DE/tax.scm)
 
-set(GUILE_DEPENDS scm-app-utils scm-gnc-module)
+set(GUILE_DEPENDS scm-app-utils)
 
 gnc_add_scheme_targets(scm-tax-us-1
     SOURCES "${gncmod_tax_us_SCHEME_1}"

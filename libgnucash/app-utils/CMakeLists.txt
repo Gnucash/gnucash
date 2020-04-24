@@ -73,7 +73,6 @@ set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
 set(app_utils_ALL_LIBRARIES
     gnc-engine
-    gnc-module
     gnc-locale-tax
     gnucash-guile
     ${GIO_LDFLAGS}
@@ -98,8 +97,11 @@ add_library (gnc-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
 target_link_libraries(gnc-app-utils ${app_utils_ALL_LIBRARIES})
 
 target_include_directories (gnc-app-utils
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${app_utils_ALL_INCLUDES}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${GLIB2_INCLUDE_DIRS}
+    PRIVATE
+        ${app_utils_ALL_INCLUDES}
 )
 target_compile_definitions (gnc-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
@@ -168,11 +170,9 @@ set (app_utils_SCHEME_2
 )
 
 set(GUILE_DEPENDS
-  gnc-app-utils
-  scm-core-utils
-  scm-engine
-  scm-gnc-module
-  )
+    gnc-app-utils
+    scm-core-utils
+    scm-engine)
 
 gnc_add_scheme_targets(scm-app-utils-1
     SOURCES "${app_utils_SCHEME_1}"

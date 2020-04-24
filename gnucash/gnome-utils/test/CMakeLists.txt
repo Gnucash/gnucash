@@ -1,20 +1,13 @@
 
-set(GNOME_UTILS_TEST_INCLUDE_DIRS
-  ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
-  ${GLIB2_INCLUDE_DIRS}
-  ${GUILE_INCLUDE_DIRS}
-)
-set(GNOME_UTILS_TEST_LIBS gnc-module test-core)
-
-
 set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
-  ${GNOME_UTILS_TEST_INCLUDE_DIRS}
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
+  ${GLIB2_INCLUDE_DIRS}
+  ${GUILE_INCLUDE_DIRS}
 )
 set(GNOME_UTILS_GUI_TEST_LIBS
-  ${GNOME_UTILS_TEST_LIBS}
+  test-core
   gnc-gnome-utils
 )
 #This is a GUI test
@@ -23,7 +16,6 @@ set(GNOME_UTILS_GUI_TEST_LIBS
 #  GNOME_UTILS_GUI_TEST_LIBS
 #
 set(GUILE_DEPENDS
-  scm-gnc-module
   scm-gnome-utils
   test-core
   gnc-test-engine

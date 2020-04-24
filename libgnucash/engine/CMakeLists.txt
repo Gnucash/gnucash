@@ -216,7 +216,6 @@ add_dependencies (gnc-engine iso-4217-c)
 
 target_link_libraries(gnc-engine
     gnc-core-utils
-    gnc-module
     ${Boost_DATE_TIME_LIBRARIES}
     ${Boost_REGEX_LIBRARIES}
     ${ICU4C_I18N_LDFLAGS}

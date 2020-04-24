@@ -26,7 +26,6 @@ add_library (gnc-report
 target_compile_definitions(gnc-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 
 target_link_libraries(gnc-report
-    gnc-module
     gnc-app-utils
     gnucash-guile
     PkgConfig::GTK3
@@ -92,7 +91,6 @@ set(GUILE_DEPENDS
   gnc-report
   scm-app-utils
   scm-engine
-  scm-gnc-module
   guile-json
   )
 

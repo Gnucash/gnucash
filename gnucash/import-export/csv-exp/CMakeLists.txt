@@ -17,8 +17,15 @@ set(csv_export_noinst_HEADERS
 
 add_library(gnc-csv-export ${csv_export_noinst_HEADERS} ${csv_export_SOURCES})
 
-target_link_libraries(gnc-csv-export gnc-register-gnome gnc-register-core gnc-ledger-core gnc-engine
-                         gnc-module gnc-gnome-utils gnc-gnome gnc-app-utils gnc-core-utils)
+target_link_libraries(gnc-csv-export
+    gnc-register-gnome
+    gnc-register-core
+    gnc-ledger-core
+    gnc-engine
+    gnc-gnome-utils
+    gnc-gnome
+    gnc-app-utils
+    gnc-core-utils)
 
 target_include_directories(gnc-csv-export
     PUBLIC
