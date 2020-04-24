@@ -193,13 +193,13 @@ if (NOT PKG_CONFIG_FOUND)
  endif()
 
 # glib et al.
-pkg_check_modules (GLIB2 REQUIRED glib-2.0>=2.40)
+pkg_check_modules (GLIB2 REQUIRED glib-2.0>=2.56.1)
 pkg_check_modules (GIO REQUIRED gio-2.0)
-pkg_check_modules (GOBJECT REQUIRED gobject-2.0>=2.20)
-pkg_check_modules (GMODULE REQUIRED gmodule-2.0>=2.20)
-pkg_check_modules (GTHREAD REQUIRED gthread-2.0>=2.20)
+pkg_check_modules (GOBJECT REQUIRED gobject-2.0)
+pkg_check_modules (GMODULE REQUIRED gmodule-2.0)
+pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 
-pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.7.0)
+pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
   if (WIN32 OR APPLE)
@@ -210,7 +210,7 @@ if (WITH_GNUCASH)
     set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
   endif()
 
-  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=3.18.0)
+  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=3.22.30)
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
