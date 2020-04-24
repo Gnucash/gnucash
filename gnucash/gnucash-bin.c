@@ -50,6 +50,8 @@
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-plugin-csv-export.h"
+#include "gnc-plugin-csv-import.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-plugin-qif-import.h"
 #include "gnc-plugin-report-system.h"
@@ -482,6 +484,8 @@ gnc_parse_command_line(int *argc, char ***argv)
 static void
 load_gnucash_plugins()
 {
+    gnc_plugin_csv_export_create_plugin();
+    gnc_plugin_csv_import_create_plugin();
     gnc_plugin_qif_import_create_plugin ();
 }
 
@@ -497,8 +501,6 @@ load_gnucash_modules()
     } modules[] =
     {
         { "gnucash/import-export/ofx", 0, TRUE },
-        { "gnucash/import-export/csv-import", 0, TRUE },
-        { "gnucash/import-export/csv-export", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
         { "gnucash/import-export/bi-import", 0, TRUE},
