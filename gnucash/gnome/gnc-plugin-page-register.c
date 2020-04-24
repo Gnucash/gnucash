@@ -51,6 +51,7 @@
 #include "gnc-plugin-business.h"
 
 #include "dialog-account.h"
+#include "dialog-dup-trans.h"
 #include "dialog-find-account.h"
 #include "dialog-find-transactions.h"
 #include "dialog-print-check.h"
@@ -3959,6 +3960,10 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     SplitRegister* reg;
     GNCSplitReg* gsr;
     Transaction* trans, *new_trans;
+    time64 date = gnc_time (NULL);
+    GtkWidget *window;
+    Account *account;
+    Split *split;
 
     ENTER ("(action %p, page %p)", action, page);
 
@@ -3966,30 +3971,41 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     trans = gnc_split_register_get_current_trans (reg);
     if (trans == NULL)
         return;
 
     if (xaccTransGetReversedBy (trans))
     {
-        gnc_error_dialog (GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (
-                page))), "%s",
+        gnc_error_dialog (GTK_WINDOW (window), "%s",
                           _ ("A reversing entry has already been created for this transaction."));
         return;
     }
 
-    qof_event_suspend();
+    split = gnc_split_register_get_current_split (reg);
+    account = xaccSplitGetAccount (split);
+
+    if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
+                                _("New Transaction Information"), &date))
+    {
+        LEAVE ("reverse cancelled");
+        return;
+    }
+
+    gnc_suspend_gui_refresh();
     new_trans = xaccTransReverse (trans);
 
     /* Clear transaction level info */
-    xaccTransSetDatePostedSecsNormalized (new_trans, gnc_time (NULL));
+    xaccTransSetDatePostedSecsNormalized (new_trans, date);
     xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
-    qof_event_resume();
+    gnc_resume_gui_refresh();
 
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
-    gnc_split_reg_jump_to_split (gsr, xaccTransGetSplit (new_trans, 0));
+    split = xaccTransFindSplitByAccount(new_trans, account);
+    gnc_split_reg_jump_to_split (gsr, split);
     LEAVE (" ");
 }
 

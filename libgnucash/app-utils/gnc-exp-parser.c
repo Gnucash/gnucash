@@ -344,6 +344,12 @@ func_op(const char *fname, int argc, void **argv)
         return NULL;
     }
 
+    if (!scm_is_number (scmTmp))
+    {
+        PERR("function gnc:%s does not return a number", fname);
+        return NULL;
+    }
+
     result = g_new0( gnc_numeric, 1 );
     *result = double_to_gnc_numeric( scm_to_double(scmTmp),
                                      GNC_DENOM_AUTO,

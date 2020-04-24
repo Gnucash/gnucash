@@ -320,6 +320,54 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
         gtk_widget_hide (GTK_WIDGET(picker->whbox)); // hide the warning
 }
 
+static gboolean
+account_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    // Expand the tree when the user starts typing, this will allow sub-accounts to be found.
+    if (event->length == 0)
+        return FALSE;
+    
+    switch (event->keyval)
+    {
+        case GDK_KEY_plus:
+        case GDK_KEY_minus:
+        case GDK_KEY_asterisk:
+        case GDK_KEY_slash:
+        case GDK_KEY_KP_Add:
+        case GDK_KEY_KP_Subtract:
+        case GDK_KEY_KP_Multiply:
+        case GDK_KEY_KP_Divide:
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+        case GDK_KEY_Home:
+        case GDK_KEY_KP_Home:
+        case GDK_KEY_End:
+        case GDK_KEY_KP_End:
+        case GDK_KEY_Page_Up:
+        case GDK_KEY_KP_Page_Up:
+        case GDK_KEY_Page_Down:
+        case GDK_KEY_KP_Page_Down:
+        case GDK_KEY_Right:
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Right:
+        case GDK_KEY_KP_Left:
+        case GDK_KEY_space:
+        case GDK_KEY_KP_Space:
+        case GDK_KEY_backslash:
+        case GDK_KEY_Return:
+        case GDK_KEY_ISO_Enter:
+        case GDK_KEY_KP_Enter:
+            return FALSE;
+            break;
+        default:
+            gtk_tree_view_expand_all (GTK_TREE_VIEW(user_data));
+            return FALSE;
+    }
+    return FALSE;
+}
+
 
 /*******************************************************
  * account_tree_row_activated_cb
@@ -427,10 +475,13 @@ Account * gnc_import_select_account(GtkWidget *parent,
         }
         gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
         build_acct_tree(picker);
-
         gtk_window_set_modal(GTK_WINDOW(picker->dialog), TRUE);
         g_signal_connect(picker->account_tree, "row-activated",
                          G_CALLBACK(account_tree_row_activated_cb), picker);
+        
+        /* Connect key press event so we can expand the tree when the user starts typing, allowing
+        * any subaccount to match */
+        g_signal_connect (picker->account_tree, "key-press-event", G_CALLBACK (account_tree_key_press_cb), picker->account_tree);
 
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(picker->account_tree));
         g_signal_connect(selection, "changed",
