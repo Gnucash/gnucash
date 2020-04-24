@@ -51,6 +51,7 @@
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-file-history.h"
+#include "gnc-plugin-qif-import.h"
 #include "gnc-plugin-report-system.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
@@ -479,6 +480,12 @@ gnc_parse_command_line(int *argc, char ***argv)
 }
 
 static void
+load_gnucash_plugins()
+{
+    gnc_plugin_qif_import_create_plugin ();
+}
+
+static void
 load_gnucash_modules()
 {
     int i, len;
@@ -489,7 +496,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/csv-import", 0, TRUE },
         { "gnucash/import-export/csv-export", 0, TRUE },
@@ -613,6 +619,7 @@ inner_main (void *closure, int argc, char **argv)
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);
     gnucash_register_add_cell_types ();
 
+    load_gnucash_plugins();
     load_gnucash_modules();
 
     /* Load the config before starting up the gui. This insures that

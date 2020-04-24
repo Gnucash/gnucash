@@ -6,7 +6,6 @@ set (qif_import_SOURCES
     dialog-account-picker.c
     assistant-qif-import.c
     gnc-plugin-qif-import.c
-    gncmod-qif-import.c
 )
 
 # Add dependency on config.h
@@ -18,21 +17,26 @@ set (qif_import_noinst_HEADERS
     gnc-plugin-qif-import.h
 )
 
-add_library	(gncmod-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
+add_library	(gnc-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
 
-target_link_libraries(gncmod-qif-import
+target_link_libraries(gnc-qif-import
     gnc-app-utils
     gnc-gnome-utils
     gnc-gnome
     gnucash-guile)
 
-target_compile_definitions(gncmod-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
+target_include_directories(gnc-qif-import
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_compile_definitions(gnc-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
 
 if (APPLE)
-  set_target_properties (gncmod-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gnc-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gncmod-qif-import
+install(TARGETS gnc-qif-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -62,7 +66,7 @@ set(qif_import_SCHEME_2
 )
 
 set(GUILE_DEPENDS
-  gncmod-qif-import
+  gnc-qif-import
   gnc-gnome
   scm-core-utils
   scm-gnc-module
