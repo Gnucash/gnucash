@@ -12,7 +12,7 @@ set(ENGINE_TEST_INCLUDE_DIRS
 
 set(ENGINE_TEST_LIBS
     gnc-engine
-    gncmod-test-engine
+    gnc-test-engine
     test-core
     gnucash-guile
     ${LIBXML2_LDFLAGS}

@@ -26,7 +26,7 @@ set(GUILE_DEPENDS
   scm-gnc-module
   scm-gnome-utils
   test-core
-  gncmod-test-engine
+  gnc-test-engine
   gnc-app-utils
   gnc-core-utils
   gnc-engine

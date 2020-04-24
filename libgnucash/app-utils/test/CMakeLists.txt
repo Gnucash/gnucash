@@ -9,7 +9,7 @@ set(APP_UTILS_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-set(APP_UTILS_TEST_LIBS gnc-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
+set(APP_UTILS_TEST_LIBS gnc-app-utils gnc-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
 
 set(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 
