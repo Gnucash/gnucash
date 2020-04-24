@@ -54,6 +54,7 @@ target_link_libraries (gnucash
    gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
    gnc-engine gnc-module gnc-core-utils gncmod-report gnucash-guile
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
+   gnc-bi-import gnc-customer-import
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )
 

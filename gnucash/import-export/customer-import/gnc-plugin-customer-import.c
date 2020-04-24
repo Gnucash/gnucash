@@ -36,6 +36,7 @@
 
 #include "gnc-plugin-customer-import.h"
 #include "dialog-customer-import-gui.h"
+#include "gnc-plugin-manager.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -98,6 +99,18 @@ gnc_plugin_customer_import_init (GncPlugincustomer_import *plugin)
 static void
 gnc_plugin_customer_import_finalize (GObject *object)
 {
+}
+
+/************************************************************
+ *                    Plugin Bootstrapping                   *
+ ************************************************************/
+
+void
+gnc_plugin_customer_import_create_plugin (void)
+{
+    GncPlugin *plugin = gnc_plugin_customer_import_new ();
+
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }
 
 /************************************************************

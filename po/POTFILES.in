@@ -291,7 +291,6 @@ gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.i
 gnucash/import-export/bi-import/dialog-bi-import.c
 gnucash/import-export/bi-import/dialog-bi-import-gui.c
 gnucash/import-export/bi-import/dialog-bi-import-helper.c
-gnucash/import-export/bi-import/gncmod-bi-import.c
 gnucash/import-export/bi-import/gnc-plugin-bi-import.c
 gnucash/import-export/csv-exp/assistant-csv-export.c
 gnucash/import-export/csv-exp/csv-transactions-export.c
@@ -317,7 +316,6 @@ gnucash/import-export/csv-imp/gnc-tokenizer-dummy.cpp
 gnucash/import-export/csv-imp/gnc-tokenizer-fw.cpp
 gnucash/import-export/customer-import/dialog-customer-import.c
 gnucash/import-export/customer-import/dialog-customer-import-gui.c
-gnucash/import-export/customer-import/gncmod-customer-import.c
 gnucash/import-export/customer-import/gnc-plugin-customer-import.c
 gnucash/import-export/import-account-matcher.c
 gnucash/import-export/import-backend.c
