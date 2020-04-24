@@ -25,7 +25,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
 (eval-when (compile load eval expand)
-  (load-extension "libgncmod-report" "scm_init_sw_report_module"))
+  (load-extension "libgnc-report" "scm_init_sw_report_module"))
 (use-modules (sw_report))
 
 (use-modules (ice-9 match))

@@ -42,11 +42,22 @@
 #include "gnc-report.h"
 #include "gnc-engine.h"
 
+extern SCM scm_init_sw_report_module(void);
+
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /* Fow now, this is global, like it was in guile.  It _should_ be per-book. */
 static GHashTable *reports = NULL;
 static gint report_next_serial_id = 0;
+
+void
+gnc_report_init (void)
+{
+    scm_init_sw_report_module();
+    scm_c_use_module ("gnucash report");
+    scm_c_eval_string("(report-module-loader (list '(gnucash report stylesheets)))");
+}
+
 
 static void
 gnc_report_init_table(void)

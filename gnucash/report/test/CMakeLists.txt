@@ -1,14 +1,4 @@
 
-set(REPORT_TEST_INCLUDE_DIRS
-  ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
-  ${GUILE_INCLUDE_DIRS}
-)
-set(REPORT_TEST_LIBS gnc-module)
-
-gnc_add_test_with_guile(test-link-module-report test-link-module.c
-  REPORT_TEST_INCLUDE_DIRS REPORT_TEST_LIBS
-)
-
 set(scm_test_report_SOURCES
   test-load-report-module.scm
   test-test-extras.scm
@@ -57,12 +47,12 @@ gnc_add_scheme_test_targets(scm-test-report-2
     DEPENDS "scm-test-report")
 
 add_dependencies(check scm-test-report)
+
 set_dist_list(test_report_DIST
   CMakeLists.txt
   ${scm_test_report_with_srfi64_SOURCES}
   ${scm_test_report_SOURCES}
   test-report-extras.scm
-  test-link-module.c
 )
 
 # Module interfaces deprecated in 4.x, will be removed for 5.x

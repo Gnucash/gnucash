@@ -14,35 +14,34 @@ gnc_add_swig_guile_command (swig-report-c
 )
 
 set (report_SOURCES
-  gncmod-report.c
   gnc-report.c
 )
 
-add_library (gncmod-report
+add_library (gnc-report
   ${report_SOURCES}
   ${report_HEADERS}
   ${SWIG_REPORT_C}
 )
 
-target_compile_definitions(gncmod-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
+target_compile_definitions(gnc-report PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 
-target_link_libraries(gncmod-report
+target_link_libraries(gnc-report
     gnc-module
     gnc-app-utils
     gnucash-guile
     PkgConfig::GTK3
     ${GUILE_LDFLAGS})
 
-target_include_directories (gncmod-report
+target_include_directories (gnc-report
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 
 if (APPLE)
-  set_target_properties (gncmod-report PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gnc-report PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gncmod-report
+install(TARGETS gnc-report
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -90,7 +89,7 @@ set (report_eguile_SCHEME
 set(GUILE_DEPENDS
   scm-gnc-html
   scm-gnome-utils
-  gncmod-report
+  gnc-report
   scm-app-utils
   scm-engine
   scm-gnc-module

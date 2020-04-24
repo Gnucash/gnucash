@@ -31,6 +31,13 @@
 #define SAVED_REPORTS_FILE "saved-reports-2.8"
 #define SAVED_REPORTS_FILE_OLD_REV "saved-reports-2.4"
 
+/** Initialize report library.
+ *
+ *  Should be called once before using any of its features.
+ */
+void gnc_report_init (void);
+
+
 gboolean gnc_run_report (gint report_id, char ** data);
 gboolean gnc_run_report_id_string (const char * id_string, char **data);
 

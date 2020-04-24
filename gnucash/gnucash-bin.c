@@ -508,7 +508,6 @@ load_gnucash_modules()
     {
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
-        { "gnucash/report", 0, FALSE },
         { "gnucash/python", 0, TRUE },
     };
 
@@ -623,6 +622,7 @@ inner_main (void *closure, int argc, char **argv)
     gnc_search_core_initialize ();
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);
     gnucash_register_add_cell_types ();
+    gnc_report_init ();
 
     load_gnucash_plugins();
     load_gnucash_modules();
