@@ -151,7 +151,6 @@ gnucash/gnome-utils/gnc-keyring.c
 gnucash/gnome-utils/gnc-main-window.c
 gnucash/gnome-utils/gnc-menu-extensions.c
 gnucash/gnome-utils/gnc-menu-extensions.scm
-gnucash/gnome-utils/gncmod-gnome-utils.c
 gnucash/gnome-utils/gnc-period-select.c
 gnucash/gnome-utils/gnc-plugin.c
 gnucash/gnome-utils/gnc-plugin-file-history.c

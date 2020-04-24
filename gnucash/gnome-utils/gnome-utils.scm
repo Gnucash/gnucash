@@ -24,7 +24,7 @@
 (use-modules (gnucash app-utils))
 
 (eval-when (compile load eval expand)
-  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
+  (load-extension "libgnc-gnome-utils" "scm_init_sw_gnome_utils_module"))
 (use-modules (sw_gnome_utils))
 
 ; Export the swig-wrapped symbols in the public interface of this module

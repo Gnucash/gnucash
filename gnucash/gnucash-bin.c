@@ -487,7 +487,6 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/gnome-utils", 0, FALSE },
         { "gnucash/gnome-search", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
@@ -608,6 +607,8 @@ inner_main (void *closure, int argc, char **argv)
 
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();
+
+    gnc_gnome_utils_init();
 
     load_gnucash_modules();
 

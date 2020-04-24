@@ -47,11 +47,11 @@ target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
-  target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+  target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
 endif()
 
 target_link_libraries (gnucash
-   gnc-ledger-core gnc-gnome gncmod-gnome-utils gnc-app-utils
+   gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
    gnc-engine gnc-module gnc-core-utils gncmod-report gnucash-guile
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )

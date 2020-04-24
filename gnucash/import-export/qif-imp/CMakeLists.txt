@@ -22,7 +22,7 @@ add_library	(gncmod-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS
 
 target_link_libraries(gncmod-qif-import
     gnc-app-utils
-    gncmod-gnome-utils
+    gnc-gnome-utils
     gnc-gnome
     gnucash-guile)
 

@@ -65,11 +65,6 @@ libgncmod_register_gnome_gnc_module_description(void)
 int
 libgncmod_register_gnome_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     if (refcount == 0)
     {
         gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);

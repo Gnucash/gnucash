@@ -67,7 +67,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${ICU4C_I18N_LDFLAGS}
   gnc-generic-import
-  gncmod-gnome-utils
+  gnc-gnome-utils
   gnc-app-utils
   gnc-engine
   gnc-core-utils

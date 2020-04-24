@@ -59,11 +59,6 @@ libgncmod_csv_export_gnc_module_description(void)
 int
 libgncmod_csv_export_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     /* Add menu items with C callbacks */
     gnc_plugin_csv_export_create_plugin();
 

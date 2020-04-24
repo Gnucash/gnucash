@@ -29,7 +29,6 @@
 #include "gnc-prefs-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
-//#include "gnc-html.h"
 #include "gnc-engine.h"
 #include "gnc-path.h"
 #include "gnc-ui.h"
@@ -56,6 +55,8 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+extern SCM scm_init_sw_gnome_utils_module(void);
+
 static QofLogModule log_module = GNC_MOD_GUI;
 static int gnome_is_running = FALSE;
 static int gnome_is_terminating = FALSE;
@@ -65,6 +66,18 @@ static int gnome_is_initialized = FALSE;
 #define ACCEL_MAP_NAME "accelerator-map"
 
 static void gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat);
+
+void
+gnc_gnome_utils_init (void)
+{
+    gnc_component_manager_init ();
+    gnc_options_ui_initialize ();
+
+    scm_init_sw_gnome_utils_module();
+    scm_c_use_module ("sw_gnome_utils");
+    scm_c_use_module("gnucash gnome-utils");
+}
+
 
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
@@ -787,6 +800,7 @@ gnc_gui_shutdown (void)
         map = gnc_build_userdata_path(ACCEL_MAP_NAME);
         gtk_accel_map_save(map);
         g_free(map);
+        gnc_component_manager_shutdown ();
         gtk_main_quit();
     }
 }

@@ -61,12 +61,6 @@ libgncmod_aqbanking_gnc_module_description(void)
 gint
 libgncmod_aqbanking_gnc_module_init(gint refcount)
 {
-    /* Load modules we depend on */
-    if (!gnc_module_load("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     /* Add menu items with C callbacks */
     gnc_plugin_aqbanking_create_plugin();
 

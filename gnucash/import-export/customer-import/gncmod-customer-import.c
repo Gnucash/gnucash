@@ -65,11 +65,6 @@ libgncmod_customer_import_gnc_module_description (void)
 int
 libgncmod_customer_import_gnc_module_init (int refcount)
 {
-    if (!gnc_module_load ("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     if (refcount == 0)
     {
         /* this is the first time the module is loaded */

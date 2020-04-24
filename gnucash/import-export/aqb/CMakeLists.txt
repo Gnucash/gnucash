@@ -54,7 +54,7 @@ if(WITH_AQBANKING)
     set(AQB_LIBSTDCXX "-lstdc++")
   endif()
 
-  target_link_libraries(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
+  target_link_libraries(gncmod-aqbanking gnc-gnome gnc-gnome-utils
          gnc-generic-import gnc-register-core
          gncmod-register-gnome gnc-ledger-core gnc-engine gwengui-gtk3
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}

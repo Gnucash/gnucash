@@ -6,10 +6,6 @@ set(GNOME_UTILS_TEST_INCLUDE_DIRS
 )
 set(GNOME_UTILS_TEST_LIBS gnc-module test-core)
 
-gnc_add_test_with_guile(test-link-module-gnome-utils test-link-module.c
-  GNOME_UTILS_TEST_INCLUDE_DIRS GNOME_UTILS_TEST_LIBS
-)
-
 
 set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
   ${GNOME_UTILS_TEST_INCLUDE_DIRS}
@@ -19,7 +15,7 @@ set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
 )
 set(GNOME_UTILS_GUI_TEST_LIBS
   ${GNOME_UTILS_TEST_LIBS}
-  gncmod-gnome-utils
+  gnc-gnome-utils
 )
 #This is a GUI test
 #gnc_add_test(test-gnc-recurrence test-gnc-recurrence.c
@@ -44,4 +40,4 @@ gnc_add_scheme_test_targets(scm-test-load-gnome-utils-module
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
-set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-link-module.c test-load-gnome-utils-module.scm)
+set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-load-gnome-utils-module.scm)

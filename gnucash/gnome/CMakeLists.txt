@@ -142,7 +142,7 @@ target_link_libraries(gnc-gnome
     gncmod-report
     gncmod-register-gnome
     gnc-register-core
-    gncmod-gnome-utils
+    gnc-gnome-utils
     gnc-engine
     gnc-html
     gnc-locale-tax
@@ -242,7 +242,7 @@ set(gnome_SCHEME
 )
 
 set(GUILE_DEPENDS
-    gncmod-gnome-utils
+    gnc-gnome-utils
     scm-engine
     scm-core-utils
     scm-gnome-utils

@@ -2,7 +2,6 @@
 
 set(GENERIC_IMPORT_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
-  ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
   ${CMAKE_SOURCE_DIR}/common/test-core
   ${CMAKE_SOURCE_DIR}/libgnucash/engine

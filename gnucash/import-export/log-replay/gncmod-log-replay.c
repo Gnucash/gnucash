@@ -61,11 +61,6 @@ libgncmod_log_replay_gnc_module_description(void)
 int
 libgncmod_log_replay_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     /* Add menu items with C callbacks */
     gnc_plugin_log_replay_create_plugin();
 

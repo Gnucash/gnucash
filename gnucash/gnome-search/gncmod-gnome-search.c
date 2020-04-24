@@ -60,11 +60,6 @@ libgncmod_gnome_search_gnc_module_description(void)
 int
 libgncmod_gnome_search_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/gnome-utils", 0))
-    {
-        return FALSE;
-    }
-
     if (refcount == 0)
     {
         /* initialize known types */
