@@ -65,11 +65,6 @@ libgncmod_register_gnome_gnc_module_description(void)
 int
 libgncmod_register_gnome_gnc_module_init(int refcount)
 {
-    if (!gnc_module_load("gnucash/register/register-core", 0))
-    {
-        return FALSE;
-    }
-
     if (!gnc_module_load("gnucash/gnome-utils", 0))
     {
         return FALSE;

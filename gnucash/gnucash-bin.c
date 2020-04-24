@@ -489,8 +489,6 @@ load_gnucash_modules()
     {
         { "gnucash/gnome-utils", 0, FALSE },
         { "gnucash/gnome-search", 0, FALSE },
-        { "gnucash/register/ledger-core", 0, FALSE },
-        { "gnucash/register/register-core", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },

@@ -18,7 +18,7 @@ set(csv_export_noinst_HEADERS
 
 add_library(gncmod-csv-export ${csv_export_noinst_HEADERS} ${csv_export_SOURCES})
 
-target_link_libraries(gncmod-csv-export gncmod-register-gnome gncmod-register-core gncmod-ledger-core gnc-engine
+target_link_libraries(gncmod-csv-export gncmod-register-gnome gnc-register-core gnc-ledger-core gnc-engine
                          gnc-module gncmod-gnome-utils gnc-gnome gnc-app-utils gnc-core-utils)
 
 target_compile_definitions(gncmod-csv-export PRIVATE -DG_LOG_DOMAIN=\"gnc.export.csv\")

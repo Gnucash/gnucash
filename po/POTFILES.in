@@ -364,7 +364,6 @@ gnucash/register/ledger-core/gncEntryLedgerLoad.c
 gnucash/register/ledger-core/gncEntryLedgerModel.c
 gnucash/register/ledger-core/gnc-ledger-display2.c
 gnucash/register/ledger-core/gnc-ledger-display.c
-gnucash/register/ledger-core/gncmod-ledger-core.c
 gnucash/register/ledger-core/split-register.c
 gnucash/register/ledger-core/split-register-control.c
 gnucash/register/ledger-core/split-register-copy-ops.c
@@ -378,7 +377,6 @@ gnucash/register/register-core/cellblock.c
 gnucash/register/register-core/cell-factory.c
 gnucash/register/register-core/checkboxcell.c
 gnucash/register/register-core/formulacell.c
-gnucash/register/register-core/gncmod-register-core.c
 gnucash/register/register-core/gtable.c
 gnucash/register/register-core/numcell.c
 gnucash/register/register-core/pricecell.c

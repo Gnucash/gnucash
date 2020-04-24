@@ -21,7 +21,7 @@ set(SPLIT_REG_TEST_INCLUDE_DIRS
 
 set(SPLIT_REG_TEST_LIBS
     gnc-engine
-    gncmod-ledger-core
+    gnc-ledger-core
 )
 
 gnc_add_test(test-split-register-copy-ops
