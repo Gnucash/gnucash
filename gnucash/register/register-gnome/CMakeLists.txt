@@ -1,4 +1,3 @@
-add_subdirectory(test)
 include(CheckSymbolExists)
 
 set (register_gnome_SOURCES

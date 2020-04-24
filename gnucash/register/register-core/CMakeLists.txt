@@ -1,5 +1,3 @@
-add_subdirectory(test)
-
 set (register_core_SOURCES
   basiccell.c
   cell-factory.c

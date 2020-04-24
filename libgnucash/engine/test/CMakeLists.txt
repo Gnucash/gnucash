@@ -15,13 +15,6 @@ macro(add_engine_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 endmacro()
 
-# Not via macro because of unique link requirements
-
-add_executable(test-link EXCLUDE_FROM_ALL test-link.c)
-target_link_libraries(test-link gnc-core-utils)
-add_test(NAME test-link COMMAND test-link CONFIGURATIONS Debug;Release)
-add_dependencies(check test-link)
-
 #################################################
 
 add_engine_test(test-load-engine test-load-engine.c)
@@ -227,7 +220,6 @@ set(test_engine_SOURCES_DIST
         test-job.c
         test-kvp-value.cpp
         test-kvp-frame.cpp
-        test-link.c
         test-load-engine.c
         test-lots.cpp
         test-numeric.cpp
