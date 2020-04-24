@@ -330,7 +330,6 @@ gnucash/import-export/import-pending-matches.c
 gnucash/import-export/import-settings.c
 gnucash/import-export/import-utilities.c
 gnucash/import-export/log-replay/gnc-log-replay.c
-gnucash/import-export/log-replay/gncmod-log-replay.c
 gnucash/import-export/log-replay/gnc-plugin-log-replay.c
 gnucash/import-export/ofx/gncmod-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-import.c

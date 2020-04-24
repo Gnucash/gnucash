@@ -53,6 +53,7 @@
 #include "gnc-plugin-csv-export.h"
 #include "gnc-plugin-csv-import.h"
 #include "gnc-plugin-file-history.h"
+#include "gnc-plugin-log-replay.h"
 #include "gnc-plugin-qif-import.h"
 #include "gnc-plugin-report-system.h"
 #include "dialog-new-user.h"
@@ -487,6 +488,7 @@ load_gnucash_plugins()
     gnc_plugin_csv_export_create_plugin();
     gnc_plugin_csv_import_create_plugin();
     gnc_plugin_qif_import_create_plugin ();
+    gnc_plugin_log_replay_create_plugin();
 }
 
 static void
@@ -501,7 +503,6 @@ load_gnucash_modules()
     } modules[] =
     {
         { "gnucash/import-export/ofx", 0, TRUE },
-        { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
         { "gnucash/import-export/bi-import", 0, TRUE},
         { "gnucash/import-export/customer-import", 0, TRUE},
