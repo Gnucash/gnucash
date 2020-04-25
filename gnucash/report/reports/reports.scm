@@ -80,14 +80,9 @@
         0
         ))
 
-(use-modules (gnucash reports standard payables))
-(define (gnc:payables-report-create account title show-zeros?)
-  (payables-report-create-internal account title show-zeros?))
+(use-modules (gnucash reports standard new-aging))
+(define gnc:payables-report-create payables-report-create-internal)
+(define gnc:receivables-report-create receivables-report-create-internal)
 
-(use-modules (gnucash reports standard receivables))
-(define (gnc:receivables-report-create account title show-zeros?)
-  (receivables-report-create-internal account title show-zeros?))
-
-(use-modules (gnucash reports standard owner-report))
-(define* (gnc:owner-report-create owner account #:key currency)
-  (owner-report-create owner account #:currency currency))
+(use-modules (gnucash reports standard new-owner-report))
+(define gnc:owner-report-create owner-report-create)
