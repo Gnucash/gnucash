@@ -931,11 +931,12 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                            g_strdup(_("Account Color")), g_free);
 
     priv->notes_column
-        = gnc_tree_view_add_text_column(view, _("Notes"), "notes", NULL,
+        = gnc_tree_view_add_text_view_column(view, _("Notes"), "notes", NULL,
                                         "Sample account notes.",
                                         GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
+
     tax_info_column
         = gnc_tree_view_add_text_column(view, _("Tax Info"), "tax-info", NULL,
                                         "Sample tax info.",
