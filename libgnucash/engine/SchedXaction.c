@@ -931,13 +931,13 @@ xaccSchedXactionGetNextInstance (const SchedXaction *sx, SXTmpStateData *tsd)
      * we're at the beginning. We want to pretend prev_occur is the day before
      * the start_date in case the start_date is today so that the SX will fire
      * today. If start_date isn't valid either then the SX will fire anyway, no
-     * harm done.
+     * harm done. prev_occur cannot be before start_date either.
      */
-    if (! g_date_valid( &prev_occur ) && g_date_valid(&sx->start_date))
+    if (g_date_valid (&sx->start_date) && (!g_date_valid ( &prev_occur ) || g_date_compare (&prev_occur, &sx->start_date)<0))
     {
         /* We must be at the beginning. */
         prev_occur = sx->start_date;
-        g_date_subtract_days( &prev_occur, 1 );
+        g_date_subtract_days (&prev_occur, 1 );
     }
 
     recurrenceListNextInstance(sx->schedule, &prev_occur, &next_occur);

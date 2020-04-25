@@ -809,7 +809,6 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 
     ld->use_double_line_default = use_double_line;
 
-    // JEAN: add mismatched_commodities
     ld->model = gnc_tree_model_split_reg_new (reg_type, style, use_double_line, is_template, mismatched_commodities);
 
     gnc_tree_model_split_reg_set_data (ld->model, ld, gnc_ledger_display2_parent);

@@ -1598,7 +1598,6 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
     g_date_clear(&start_date, 1);
 
     gnc_frequency_save_to_recurrence(sxed->gncfreq, &recurrences, &start_date);
-    g_date_subtract_days(&start_date, 1);
     recurrenceListNextInstance(recurrences, &start_date, &first_date);
 
     /* Deal with the fact that this SX may have been run before [the
@@ -1609,10 +1608,10 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         last_sx_inst = xaccSchedXactionGetLastOccurDate(sxed->sx);
         if (g_date_valid(last_sx_inst)
             && g_date_valid(&first_date)
-            && g_date_compare(last_sx_inst, &first_date) != 0)
+            && g_date_compare(last_sx_inst, &first_date) > 0)
         {
             /* last occurrence will be passed as initial date to update store
-             * later on as well */
+             * later on as well, but only if it's past first_date */
             start_date = *last_sx_inst;
             recurrenceListNextInstance(recurrences, &start_date, &first_date);
         }
