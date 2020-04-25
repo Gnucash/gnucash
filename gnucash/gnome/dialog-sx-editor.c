@@ -62,6 +62,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnucash-sheet.h"
+#include "gnc-session.h"
 
 #include "gnc-split-reg.h"
 
@@ -1123,6 +1124,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     GtkBuilder *builder;
     GtkWidget *button;
     int i;
+    int id;
     GList *dlgExists = NULL;
 
     static struct widgetSignalCallback
@@ -1208,10 +1210,12 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
                             TRUE, TRUE, 0 );
     }
 
-    gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                NULL, /* no refresh handler */
-                                sxed_close_handler,
-                                sxed );
+    id = gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                     NULL, /* no refresh handler */
+                                     sxed_close_handler,
+                                     sxed );
+    // This ensure this dialog is closed when the session is closed.
+    gnc_gui_component_set_session (id, gnc_get_current_session());
 
     g_signal_connect( sxed->dialog, "delete_event",
                       G_CALLBACK(sxed_delete_event), sxed );
