@@ -379,7 +379,7 @@
                              (gncOwnerGetName owner) comm markup
                              comm-profit comm-sales comm-expense
                              (gnc:report-anchor-text
-                              (gnc:owner-report-create owner '() #:currency comm)))
+                              (gnc:owner-report-create owner '())))
                             sortingtable)))))
               commodities)))
          results)

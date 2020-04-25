@@ -15,7 +15,7 @@
 (use-modules (system vm coverage))
 (use-modules (system vm vm))
 
-(define uuid "c146317be32e4948a561ec7fc89d15c1-new")
+(define uuid "c146317be32e4948a561ec7fc89d15c1")
 
 (setlocale LC_ALL "C")
 
