@@ -58,7 +58,6 @@ set (qif_import_SCHEME
   qif-parse.scm
   qif-to-gnc.scm
   qif-utils.scm
-  qif-import.scm # yes, included in both SETs
 )
 
 set(qif_import_SCHEME_2
@@ -82,7 +81,7 @@ gnc_add_scheme_targets(scm-qif-import-0
 gnc_add_scheme_targets(scm-qif-import-2
     SOURCES "${qif_import_SCHEME_2}"
     OUTPUT_DIR "gnucash"
-    DEPENDS "${GUILE_DEPENDS};scm-qif-import-0")
+    DEPENDS "${GUILE_DEPENDS};scm-qif-import")
 
 gnc_add_scheme_targets(scm-qif-import
     SOURCES "${qif_import_SCHEME}"
