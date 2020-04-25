@@ -38,6 +38,7 @@
       <toolitem name="ToolbarNewVoucher"       action="OTNewVoucherAction"/>
       <toolitem name="ToolbarVendorListing"    action="OTVendorListingReportAction"/>
       <toolitem name="ToolbarCustomerListing"  action="OTCustomerListingReportAction"/>
+      <toolitem name="ToolbarProcessPayment"   action="OTProcessPaymentAction"/>
     </placeholder>
   </toolbar>
 
@@ -54,6 +55,7 @@
         <menuitem name="OTVendorReport"        action="OTVendorReportAction"/>
         <menuitem name="OTCustomerReport"      action="OTCustomerReportAction"/>
         <menuitem name="OTEmployeeReport"      action="OTEmployeeReportAction"/>
+        <menuitem name="ProcessPayment"        action="OTProcessPaymentAction"/>
     </placeholder>
   </popup>
 </ui>
