@@ -419,8 +419,8 @@ gbv_create_widget (GncBudgetView *budget_view)
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
     vbox = GTK_BOX(budget_view);
 
-    // Set the style context for this page so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(vbox), "GncBudgetPage");
+    // Set the name for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(vbox), "gnc-id-budget-page");
 
     // Accounts scroll window
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);

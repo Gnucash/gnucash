@@ -524,6 +524,10 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "CSV Price Assistant");
     csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "CSV Price Assistant"));
 
+    // Set the name for this assistant so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(csv_imp_asst), "gnc-id-assistant-csv-price-import");
+    gnc_widget_style_context_add_class (GTK_WIDGET(csv_imp_asst), "gnc-class-imports");
+
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (csv_imp_asst,
                                      GTK_WIDGET(gtk_builder_get_object (builder, "start_page")),

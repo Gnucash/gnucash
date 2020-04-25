@@ -746,7 +746,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     ENTER(" ");
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT,
-                         "name", "account_tree", NULL);
+                         "name", "gnc-id-account-tree", NULL);
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
 

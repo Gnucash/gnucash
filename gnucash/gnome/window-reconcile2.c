@@ -693,8 +693,8 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncReconcileDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-reconcile2-start");
 
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title (GTK_WINDOW (dialog), title);
@@ -1665,6 +1665,9 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_container_add (GTK_CONTAINER(recnData->window), vbox);
 
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(recnData->window), "gnc-id-reconcile2");
+
     dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
     gtk_widget_show (dock);
@@ -1751,9 +1754,15 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
                      (account, RECLIST_DEBIT, recnData,
                       &recnData->debit, &recnData->total_debit);
 
+        // Add a style context for this widget so it can be easily manipulated with css
+        gnc_widget_style_context_add_class (GTK_WIDGET(debits_box), "gnc-class-debits");
+
         credits_box = gnc_reconcile_window_create_view_box
                       (account, RECLIST_CREDIT, recnData,
                        &recnData->credit, &recnData->total_credit);
+
+        // Add a style context for this widget so it can be easily manipulated with css
+        gnc_widget_style_context_add_class (GTK_WIDGET(credits_box), "gnc-class-credits");
 
         GNC_RECONCILE_VIEW (recnData->debit)->sibling = GNC_RECONCILE_VIEW (recnData->credit);
         GNC_RECONCILE_VIEW (recnData->credit)->sibling = GNC_RECONCILE_VIEW (recnData->debit);
@@ -1786,6 +1795,9 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             /* frame to hold totals */
             frame = gtk_frame_new (NULL);
             gtk_box_pack_end (GTK_BOX (hbox), frame, FALSE, FALSE, 0);
+
+            // Set the name for this dialog so it can be easily manipulated with css
+            gtk_widget_set_name (GTK_WIDGET(frame), "gnc-id-reconcile-totals");
 
             /* hbox to hold title/value vboxes */
             totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);

@@ -363,12 +363,6 @@ gnc_tree_view_get_grid_lines_pref (void)
  * Returns:  nothing                                                *
 \********************************************************************/
 void
-gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
-{
-    gnc_widget_style_context_add_class (widget, gnc_class);
-}
-
-void
 gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class)
 {
     GtkStyleContext *context = gtk_widget_get_style_context (widget);

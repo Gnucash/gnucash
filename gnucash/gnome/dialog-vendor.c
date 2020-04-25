@@ -443,8 +443,9 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "vendor_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(vw->dialog), "GncVendorDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(vw->dialog), "gnc-id-vendor");
+    gnc_widget_style_context_add_class (GTK_WIDGET(vw->dialog), "gnc-class-vendors");
 
     /* Get entry points */
     vw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "id_entry"));
@@ -765,7 +766,7 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
                                      params, columns, q, q2, buttons, NULL,
                                      new_vendor_cb, sw, free_vendor_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "GncFindVendorDialog");
+                                     "gnc-class-vendors");
 }
 
 GNCSearchWindow *

@@ -2227,8 +2227,8 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
     retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(retval->window), "GncOptionsDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(retval->window), "gnc-id-options");
 
     /* Page List */
     {

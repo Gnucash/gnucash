@@ -1258,8 +1258,8 @@ gnc_preferences_dialog_create(GtkWindow *parent)
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_preferences_dialog"));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncPreferenceDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-preferences");
 
     /* parent */
     gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));

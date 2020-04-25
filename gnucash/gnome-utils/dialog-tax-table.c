@@ -235,8 +235,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     ntt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_tax_table_dialog"));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(ntt->dialog), "GncTaxTableDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(ntt->dialog), "gnc-id-tax-table");
+    gnc_widget_style_context_add_class (GTK_WIDGET(ntt->dialog), "gnc-class-taxes");
 
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
@@ -813,8 +814,9 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     gtk_window_set_transient_for (GTK_WINDOW (ttw->dialog), parent);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(ttw->dialog), "GncTaxTableDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(ttw->dialog), "gnc-id-new-tax-table");
+    gnc_widget_style_context_add_class (GTK_WIDGET(ttw->dialog), "gnc-class-taxes");
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);

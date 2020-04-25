@@ -1576,8 +1576,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
     data->dialog = dialog;
 
-    // Set the style context for this assistant so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistAccountHierarchy");
+    // Set the name for this assistant so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-account-hierarchy");
 
     /* Enable buttons on first and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),

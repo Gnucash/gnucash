@@ -8,27 +8,27 @@
 @define-color intervention-probably-required_bg_color gold;
 @define-color intervention-not-required_bg_color DarkSeaGreen1;
 
-.intervention-required {
+.gnc-class-intervention-required {
   background-color: @intervention-required_bg_color;
 }
 
-.intervention-probably-required {
+.gnc-class-intervention-probably-required {
   background-color: @intervention-probably-required_bg_color;
 }
 
-.intervention-not-required {
+.gnc-class-intervention-not-required {
   background-color: @intervention-not-required_bg_color;
 }
 
-.intervention-required-dark {
+.gnc-class-intervention-required-dark {
   background-color: shade (@intervention-required_bg_color, 0.7);
 }
 
-.intervention-probably-required-dark {
+.gnc-class-intervention-probably-required-dark {
   background-color: shade (@intervention-probably-required_bg_color, 0.8);
 }
 
-.intervention-not-required-dark {
+.gnc-class-intervention-not-required-dark {
   background-color: shade (@intervention-not-required_bg_color, 0.3);
 }
 
@@ -37,12 +37,12 @@
 @define-color negative-numbers rgb(75%, 0%, 0%);
 
 /* Register2 grid lines color */
-.register2_grid_lines {
+.gnc-class-register2-grid-lines {
   border-color: black;
 }
 
 /* Make label more important */
-.emphasize-label {
+.gnc-class-emphasize-label {
   font-size: large;
   font-weight: bold;
 }

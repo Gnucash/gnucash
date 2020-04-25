@@ -89,7 +89,6 @@ GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
  *       gnc_class - character string for css class name            *
  * Returns:  nothing                                                *
 \********************************************************************/
-void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
 void gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class);
 
 /********************************************************************\

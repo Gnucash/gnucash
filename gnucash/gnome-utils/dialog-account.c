@@ -677,7 +677,7 @@ verify_children_compatible (AccountWindow *aw)
     gnc_label_set_alignment (label, 0.0, 0.0);
 
     /* make label large */
-    gnc_widget_set_style_context (GTK_WIDGET(label), "emphasize-label");
+    gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-emphasize-label");
 
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
@@ -1327,8 +1327,10 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(aw->dialog), "GncAccountDialog");
+    // Set the name for this dialog so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(aw->dialog), "gnc-id-account");
+    gnc_widget_style_context_add_class (GTK_WIDGET(aw->dialog), "gnc-class-account");
+
 
     g_object_set_data (awo, "dialog_info", aw);
 

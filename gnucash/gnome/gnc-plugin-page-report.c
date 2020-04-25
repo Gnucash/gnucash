@@ -429,8 +429,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     priv->container = GTK_CONTAINER(gtk_frame_new(NULL));
     gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
 
-    // Set the style context for this page so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(priv->container), "GncReportPage");
+    // Set the name for this widget so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(priv->container), "gnc-id-report-page");
 
     gtk_container_add(GTK_CONTAINER(priv->container),
                       gnc_html_get_widget(priv->html));

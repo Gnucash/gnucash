@@ -641,8 +641,9 @@ csv_import_assistant_create (CsvImportInfo *info)
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "csv_account_import_assistant");
     info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
 
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(info->assistant), "GncAssistAccountImport");
+    // Set the name for this assistant so it can be easily manipulated with css
+    gtk_widget_set_name (GTK_WIDGET(info->assistant), "gnc-id-assistant-csv-account-import");
+    gnc_widget_style_context_add_class (GTK_WIDGET(info->assistant), "gnc-class-imports");
 
     /* Load default settings */
     load_settings (info);
