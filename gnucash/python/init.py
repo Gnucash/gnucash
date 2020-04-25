@@ -6,8 +6,12 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 sys.path.append(os.path.dirname(__file__))
+
+# output file location if gnucash has been started with
+# gnucash --extra
 if gnc_prefs_is_extra_enabled():
-    print("woop", os.path.dirname(__file__))
+    print("Python shell init file: %s" % (__file__))
+
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
 # so ignore it for the duration
@@ -19,15 +23,18 @@ import pycons.console as cons
 # Restore the SIGTTOU handler
 signal.signal(signal.SIGTTOU, old_sigttou)
 
+# output debug information if gnucash has been started with
+# gnucash --debug --extra
 if gnc_prefs_is_extra_enabled() and gnc_prefs_is_debugging_enabled():
-    print("Hello from python!")
-    print("test", sys.modules.keys())
+    print("Hello from python!\n")
+    print("sys.modules.keys(): ", sys.modules.keys(), "\n")
+    print("dir(_sw_app_utils): ", dir(_sw_app_utils), "\n")
 
     #session = app_utils.gnc_get_current_session()
     #root account can later on be accessed by session.get_book().get_root_account()
 
    #print("test", dir(root), root.__class__)
-    print("test3", dir(gnucash_core_c))
+    print("dir(gnucash_core_c): ", dir(gnucash_core_c))
 
    #acct = Account(instance = root)
 
