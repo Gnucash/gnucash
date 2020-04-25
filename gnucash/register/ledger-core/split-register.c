@@ -1223,6 +1223,7 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
         xaccTransCommitEdit (trans);
     }
     gnc_resume_gui_refresh();
+    gnc_split_register_redraw (reg);
     LEAVE (" ");
 }
 
