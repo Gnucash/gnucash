@@ -69,7 +69,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
-(define reportname (N_ "Balance Sheet"))
+(define reportname "Balance Sheet (legacy)")
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
@@ -559,9 +559,10 @@
 (gnc:define-report
  'version 1
  'name reportname
- 'report-guid "c4173ac99b2b448289bf4d11c731af13"
+ 'report-guid "c4173ac99b2b448289bf4d11c731af13-old"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator balance-sheet-options-generator
- 'renderer balance-sheet-renderer)
+ 'renderer balance-sheet-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 ;; END

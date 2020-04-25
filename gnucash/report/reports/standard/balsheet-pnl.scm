@@ -44,12 +44,6 @@
   (split-balance col-datum-get-split-balance)
   (split-value-balance col-datum-get-split-value-balance))
 
-(define FOOTER-TEXT
-  (gnc:make-html-text
-   (_ "WARNING: Foreign currency conversions, and unrealized gains
-calculations are not confirmed correct. This report may be modified
-without notice. Bug reports are very welcome at
-https://bugs.gnucash.org/")))
 
 ;; define all option's names and help text so that they are properly
 
@@ -1279,30 +1273,36 @@ also show overall period profit & loss."))
       (gnc:html-document-add-object!
        doc multicol-table))
 
-    (gnc:html-document-add-object!
-     doc FOOTER-TEXT)
-
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
     doc))
 
-(define balsheet-reportname (_ "Balance Sheet (Multicolumn)"))
-(define pnl-reportname (_ "Income Statement (Multicolumn)"))
+(define balsheet-reportname (_ "Balance Sheet"))
+(define is-reportname (_ "Income Statement"))
+(define pnl-reportname (_ "Profit & Loss"))
 
 (gnc:define-report
  'version 1
  'name balsheet-reportname
- 'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
- 'menu-path (list gnc:menuname-experimental)
+ 'report-guid "c4173ac99b2b448289bf4d11c731af13"
+ 'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (multicol-report-options-generator 'balsheet))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
 
 (gnc:define-report
  'version 1
+ 'name is-reportname
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
+ 'menu-path (list gnc:menuname-income-expense)
+ 'options-generator (lambda () (multicol-report-options-generator 'pnl))
+ 'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
+
+(gnc:define-report
+ 'version 1
  'name pnl-reportname
- 'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
- 'menu-path (list gnc:menuname-experimental)
+ 'report-guid "8758ba23984c40dea5527f5f0ca2779e"
+ 'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (multicol-report-options-generator 'pnl))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
 

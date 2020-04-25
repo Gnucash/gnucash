@@ -569,8 +569,8 @@
 
     doc))
 
-(define is-reportname (N_ "Income Statement"))
-(define pnl-reportname (N_ "Profit & Loss"))
+(define is-reportname "Income Statement (legacy)")
+(define pnl-reportname "Profit & Loss (legacy)")
 
 (define (income-statement-options-generator)
   (income-statement-options-generator-internal is-reportname))
@@ -586,19 +586,21 @@
 (gnc:define-report 
  'version 1
  'name is-reportname
- 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc-old"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
- 'renderer income-statement-renderer)
+ 'renderer income-statement-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 ;; Also make a "Profit & Loss" report, even if it's the exact same one,
 ;; just relabeled.
 (gnc:define-report 
  'version 1
  'name pnl-reportname
- 'report-guid "8758ba23984c40dea5527f5f0ca2779e"
+ 'report-guid "8758ba23984c40dea5527f5f0ca2779e-old"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator profit-and-loss-options-generator
- 'renderer profit-and-loss-renderer)
+ 'renderer profit-and-loss-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 ;; END
