@@ -1933,10 +1933,13 @@ gdc_model_added_cb(GncDenseCalModel *model, guint added_tag, gpointer user_data)
 static void
 gdc_model_update_cb(GncDenseCalModel *model, guint update_tag, gpointer user_data)
 {
-    GncDenseCal *cal = GNC_DENSE_CAL(user_data);
-    g_debug("gdc_model_update_cb update for tag [%d]\n", update_tag);
-    gdc_mark_remove(cal, update_tag, FALSE);
-    gdc_add_tag_markings(cal, update_tag);
+    GncDenseCal *cal = GNC_DENSE_CAL (user_data);
+    gint num_marks = 0;
+    g_debug ("gdc_model_update_cb update for tag [%d]\n", update_tag);
+    num_marks = gnc_dense_cal_model_get_instance_count (cal->model, update_tag);
+    // We need to redraw if there are no mark, to ensure they're all erased.
+    gdc_mark_remove (cal, update_tag, num_marks==0);
+    gdc_add_tag_markings (cal, update_tag);
 
 }
 

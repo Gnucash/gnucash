@@ -51,9 +51,10 @@
 #include "import-pending-matches.h"
 #include "gnc-component-manager.h"
 #include "guid.h"
+#include "gnc-session.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
-
+#define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
 
 struct _main_matcher_info
 {
@@ -951,6 +952,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gboolean show_update;
     GtkStyleContext *stylectxt;
     GdkRGBA color;
+    GtkWidget *button;
+    gint id;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -1009,7 +1012,14 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
 
     g_object_unref (G_OBJECT(builder));
-
+    
+    // Register this UI, it needs to be closed when the session is closed.
+    id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,
+                                    NULL, /* no refresh handler */
+                                    (GNCComponentCloseHandler)gnc_gen_trans_list_delete,
+                                    info);
+    // This ensure this dialog is closed when the session is closed.
+    gnc_gui_component_set_session (id, gnc_get_current_session());
     return info;
 }
 
