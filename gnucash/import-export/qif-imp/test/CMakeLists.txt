@@ -10,7 +10,7 @@ set (GUILE_DEPENDS
   scm-engine
   scm-test-engine
   scm-core-utils
-  scm-qif-import
+  scm-qif-import-2
 )
 
 if (HAVE_SRFI64)

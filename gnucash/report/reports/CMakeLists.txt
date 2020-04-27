@@ -115,13 +115,13 @@ set(scm_rpt_std_GUILE_DEPENDS
 gnc_add_scheme_targets(scm-reports-common
     SOURCES "${reports_common_SCHEME}"
     OUTPUT_DIR "gnucash/reports"
-    DEPENDS "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
+    DEPENDS "scm-reports-common-links;${scm_rpts_GUILE_DEPENDS}"
     MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-reports-standard-with-exposed-generator
     SOURCES "${reports_standard_with_exposed_generator_SCHEME}"
     OUTPUT_DIR "gnucash/reports/standard"
-    DEPENDS "${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}"
+    DEPENDS "scm-reports-common;${scm_rpt_std_w_exposed_generator_GUILE_DEPENDS}"
     MAKE_LINKS)
 
 gnc_add_scheme_targets(scm-rpt-reports
