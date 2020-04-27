@@ -1,7 +1,9 @@
 Version history:
 ------- -------
-3.901 - 26 April 2020
+3.902 - 27 April 2020
 The first unstable release leading to the new 4.x stable series.
+
+3.901 should have been the first release but it had build problems after tagging.
 
 Baseline requirements
 
