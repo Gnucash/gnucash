@@ -1364,6 +1364,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     GList *splits;
     GList* list;
     gint response;
+    gboolean ta_match = FALSE;
 
     if (NULL == account)
         return;
@@ -1400,6 +1401,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         GtkWidget *dialog = NULL;
         GtkWidget *widget = NULL;
         gchar *title = NULL;
+        gnc_commodity *account_currency = NULL;
 
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "dialog-account.glade", "account_delete_dialog");
@@ -1499,21 +1501,49 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
          * Note that one effect of the modal dialog is preventing
          * the account selectors from being repopulated.
          */
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        if (GTK_RESPONSE_ACCEPT != response)
+        account_currency = gnc_account_get_currency_or_parent (account);
+        // Ideally we should check all subaccount currencies, and verify they're all identical. If not, it's not advisable
+        // to move subaccount currencies to a new account.
+        while (!ta_match)
         {
-            /* Account deletion is cancelled, so clean up and return. */
-            gtk_widget_destroy(dialog);
-            g_list_free(filter);
-            g_free(acct_name);
-            return;
+            response = gtk_dialog_run(GTK_DIALOG(dialog));
+            ta_match = TRUE;
+            if (response != GTK_RESPONSE_ACCEPT)
+            {
+                /* Account deletion is cancelled, so clean up and return. */
+                gtk_widget_destroy(dialog);
+                g_list_free(filter);
+                g_free(acct_name);
+                return;
+            }
+            if (trans_mas && gtk_widget_is_sensitive(trans_mas))
+            {
+                ta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(trans_mas));
+                ta_match = gnc_account_get_currency_or_parent (ta) == account_currency;
+            }
+            if (sa_mas && gtk_widget_is_sensitive(sa_mas))
+                saa = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_mas));
+            if (sa_trans_mas && gtk_widget_is_sensitive(sa_trans_mas))
+                sta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_trans_mas));
+            if (!ta_match)
+            {
+                // The currencies in the account that we're deleting and the account we're moving transactions to don't match.
+                char* message = g_strdup_printf (_("Account %s does not have the same currency as the account you're deleting.\nAre you sure you want to do this?"), gnc_account_get_full_name (ta));
+                GtkWidget *error_dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                                  GTK_MESSAGE_ERROR,
+                                                                  GTK_BUTTONS_NONE,
+                                                                  "%s", message);
+                gtk_dialog_add_buttons (GTK_DIALOG(error_dialog),
+                                        _("_Pick another account"), GTK_RESPONSE_CANCEL,
+                                        _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
+                                        (gchar *)NULL);
+                response = gtk_dialog_run (GTK_DIALOG (error_dialog));
+                gtk_widget_destroy (error_dialog);
+                g_free (message);
+                if (response == GTK_RESPONSE_ACCEPT) break;
+            }
         }
-        if (trans_mas && gtk_widget_is_sensitive(trans_mas))
-            ta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(trans_mas));
-        if (sa_mas && gtk_widget_is_sensitive(sa_mas))
-            saa = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_mas));
-        if (sa_trans_mas && gtk_widget_is_sensitive(sa_trans_mas))
-            sta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_trans_mas));
         gtk_widget_destroy(dialog);
         g_list_free(filter);
     } /* (NULL != splits) || (NULL != children) */
