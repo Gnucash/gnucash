@@ -19,7 +19,8 @@ class TestGettext(TestCase):
         _localedir = _sw_core_utils.gnc_path_get_localedir()
 
     def test_translation(self):
-        raise MyException({'_(""): ':_(""), '_sw_core_utils.gnc_path_get_localedir(): ':_sw_core_utils.gnc_path_get_localedir()})
+        import inspect
+        raise MyException({'_(""): ':_(""), '_sw_core_utils.gnc_path_get_localedir(): ':_sw_core_utils.gnc_path_get_localedir(),'_.__doc__': _.__doc__, 'inspect: ': inspect.getsource(_)})
         self.assertTrue("Project-Id-Version: GnuCash" in _(""))
 
 if __name__ == '__main__':
