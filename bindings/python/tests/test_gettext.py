@@ -20,7 +20,8 @@ class TestGettext(TestCase):
 
     def test_translation(self):
         import inspect
-        raise MyException({'_(""): ':_(""), '_sw_core_utils.gnc_path_get_localedir(): ':_sw_core_utils.gnc_path_get_localedir(),'_.__doc__': _.__doc__, 'inspect: ': inspect.getsource(_)})
+        import locale
+        raise MyException({'_(""): ':_(""), '_sw_core_utils.gnc_path_get_localedir(): ':_sw_core_utils.gnc_path_get_localedir(),'_.__doc__': _.__doc__, 'inspect.getsource(_): ': inspect.getsource(_), '_("Welcome to GnuCash")':_("Welcome to GnuCash"), 'locale.getlocale(): ': locale.getlocale()})
         self.assertTrue("Project-Id-Version: GnuCash" in _(""))
 
 if __name__ == '__main__':
