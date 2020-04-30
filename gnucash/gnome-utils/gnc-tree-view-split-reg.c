@@ -2450,7 +2450,7 @@ gtv_sr_begin_edit (GncTreeViewSplitReg *view, Transaction *trans)
             //is a new transaction and set the time to current time to show current
             //date on new transactions
             time = gnc_time (NULL);
-            xaccTransSetDatePostedSecs (trans, time);
+            xaccTransSetDatePostedSecsNormalized (trans, time);
         }
     }
     LEAVE(" ");

@@ -1,6 +1,6 @@
 from unittest import main
 
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 
 from gnucash import Account, \
     ACCT_TYPE_RECEIVABLE, ACCT_TYPE_INCOME, ACCT_TYPE_BANK, \
@@ -56,8 +56,8 @@ class TestBusiness(BusinessSession):
         self.assertEqual( NAME, self.employee.GetUsername() )
 
     def test_post(self):
-        self.assertEqual(self.today - timedelta(0, 0, self.today.microsecond),
-                         self.invoice.GetDatePosted())
+        self.assertEqual(datetime.now(timezone.utc).replace(hour=10, minute=59, second=0, microsecond=0).astimezone(),
+                         self.invoice.GetDatePosted().astimezone())
         self.assertTrue( self.invoice.IsPosted() )
 
     def test_owner(self):
