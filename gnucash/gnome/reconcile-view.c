@@ -501,42 +501,8 @@ gnc_reconcile_view_class_init (GNCReconcileViewClass *klass)
 }
 
 
-static gboolean
-gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
-{
-    Split *current;
-
-    g_return_val_if_fail (GNC_IS_RECONCILE_VIEW (view), FALSE);
-    g_return_val_if_fail (view->reconciled != NULL, FALSE);
-
-    current = g_hash_table_lookup (view->reconciled, split);
-
-    if (current == NULL)
-    {
-        g_hash_table_insert (view->reconciled, split, split);
-        return TRUE;
-    }
-    else
-    {
-        g_hash_table_remove (view->reconciled, split);
-        return FALSE;
-    }
-}
-
-
-/** Insert or remove a split from the list of splits to be reconciled
- *   (view->reconciled) so that all other splits in the same transaction
- *   for the account being reconciled (including children), are the same
- *   reconciliation state as the split that has been toggled.
- *
- *  @param view The view to use.
- *
- *  @param split The split to be inserted or removed
- *
- *  @param reconcile TRUE=insert, FALSE=remove
- */
 static void
-gnc_reconcile_view_rec_or_unrec_split (GNCReconcileView *view, Split *split, gboolean reconcile)
+gnc_reconcile_view_toggle_split (GNCReconcileView *view, Split *split)
 {
     Split *current;
 
@@ -545,103 +511,20 @@ gnc_reconcile_view_rec_or_unrec_split (GNCReconcileView *view, Split *split, gbo
 
     current = g_hash_table_lookup (view->reconciled, split);
 
-    if (current == NULL && reconcile)
+    if (current == NULL)
         g_hash_table_insert (view->reconciled, split, split);
-    if ((current != NULL) && (!reconcile))
+    else
         g_hash_table_remove (view->reconciled, split);
-}
-
-
-static void
-gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Split *split, gboolean reconcile)
-{
-    GList       *child_accounts, *node;
-    Transaction *transaction;
-
-    /*
-     * Need to get all splits in this transaction and identify any that are
-     * in the same hierarchy as the account being reconciled (not necessarily
-     * the account this split is from.)
-     *
-     * For each of these splits set them to the same state as the split whose
-     * checkbox was toggled.
-     */
-    child_accounts = gnc_account_get_descendants (account);
-    child_accounts = g_list_prepend (child_accounts, account);
-    transaction = xaccSplitGetParent (split);
-    for (node = xaccTransGetSplitList (transaction); node; node = node->next)
-    {
-        Split *other_split;
-        Account *other_account;
-        GNCReconcileView *current_view;
-
-        GtkTreeModel *model;
-        GtkTreeIter   iter;
-        gboolean      valid;
-        gpointer      pointer;
-
-        other_split = node->data;
-        other_account = xaccSplitGetAccount (other_split);
-        if (other_split == split)
-            continue;
-        /* Check this 'other' account is in the same hierarchy */
-        if (!g_list_find (child_accounts, other_account))
-            continue;
-        /* Search our sibling view for this split first.  We search the
-         * sibling list first because that it where it is most likely to be.
-         */
-        current_view = view->sibling;
-        if (!gnc_query_view_item_in_view (GNC_QUERY_VIEW (current_view), other_split))
-        {
-            /* Not in the sibling view, try this view */
-            current_view = view;
-            if (!gnc_query_view_item_in_view (GNC_QUERY_VIEW (current_view), other_split))
-                /* We can't find it, nothing more I can do about it */
-                continue;
-        }
-
-        /* Found the other split. Toggle the reconciled check mark in the view... */
-        model = gtk_tree_view_get_model (GTK_TREE_VIEW (current_view));
-        valid = gtk_tree_model_get_iter_first (model, &iter);
-
-        while (valid)
-        {
-            // Walk through the list, reading each row
-            gtk_tree_model_get (model, &iter, REC_POINTER, &pointer, -1);
-
-            if(pointer == other_split)
-            {
-                gboolean toggled;
-                gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
-                if (toggled != reconcile)
-                    gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, reconcile, -1);
-                break;
-            }
-
-            valid = gtk_tree_model_iter_next (model, &iter);
-        }
-
-        /* ...and toggle its reconciled state in the internal hash */
-        gnc_reconcile_view_rec_or_unrec_split (current_view, other_split, reconcile);
-    }
-    g_list_free (child_accounts);
 }
 
 
 static void
 gnc_reconcile_view_toggle (GNCReconcileView *view, Split *split)
 {
-    gboolean include_children;
-    gboolean is_reconciled;
-
     g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
     g_return_if_fail (view->reconciled != NULL);
 
-    is_reconciled = gnc_reconcile_view_toggle_split (view, split);
-
-    include_children = xaccAccountGetReconcileChildrenStatus (view->account);
-    if (include_children)
-        gnc_reconcile_view_toggle_children (view->account, view, split, is_reconciled);
+    gnc_reconcile_view_toggle_split (view, split);
 
     g_signal_emit (G_OBJECT (view),
                    reconcile_view_signals[TOGGLE_RECONCILED], 0, split);
