@@ -191,7 +191,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     x = root_x + cur_x + 10;
                     y = root_y + cur_y + 10;
 
-                    mon = gdk_display_get_monitor_at_point (gdk_display_get_default(), x, y);
+                    mon = gdk_display_get_monitor_at_point (gdk_window_get_display (parent_window), x, y);
                     gdk_monitor_get_geometry (mon, &monitor);
 
                     if (x + requisition.width > monitor.x + monitor.width)

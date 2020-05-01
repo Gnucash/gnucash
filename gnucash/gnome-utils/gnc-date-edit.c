@@ -149,12 +149,15 @@ gnc_date_edit_popdown(GNCDateEdit *gde)
 {
     GdkSeat *seat;
     GdkDevice *pointer;
+    GdkWindow *window;
 
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     ENTER("gde %p", gde);
 
-    seat = gdk_display_get_default_seat (gdk_display_get_default());
+    window = gtk_widget_get_window (GTK_WIDGET(gde));
+
+    seat = gdk_display_get_default_seat (gdk_window_get_display (window));
     pointer = gdk_seat_get_pointer (seat);
 
     gtk_grab_remove (gde->cal_popup);
@@ -253,7 +256,7 @@ popup_grab_on_window (GdkWindow *window,
                       GdkDevice *pointer,
                       guint32    activate_time)
 {
-    GdkDisplay *display = gdk_display_get_default ();
+    GdkDisplay *display = gdk_window_get_display (window);
     GdkSeat *seat = gdk_display_get_default_seat (display);
     GdkEvent *event = gtk_get_current_event ();
 

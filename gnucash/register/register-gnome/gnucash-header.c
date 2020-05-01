@@ -399,8 +399,13 @@ static gint
 gnc_header_event (GtkWidget *widget, GdkEvent *event)
 {
     GncHeader *header = GNC_HEADER(widget);
+    GdkWindow *window = gtk_widget_get_window (widget);
     int x, y;
     int col;
+
+    if (!header->resize_cursor)
+        header->resize_cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
+                                                            GDK_SB_H_DOUBLE_ARROW);
 
     switch (event->type)
     {
@@ -425,11 +430,9 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
 
         if (pointer_on_resize_line(header, x, y, &col) &&
                 gnucash_style_col_is_resizable (header->style, col))
-            gdk_window_set_cursor (gtk_widget_get_window (widget),
-                                   header->resize_cursor);
+            gdk_window_set_cursor (window, header->resize_cursor);
         else
-            gdk_window_set_cursor (gtk_widget_get_window (widget),
-                                   header->normal_cursor);
+            gdk_window_set_cursor (window, header->normal_cursor);
         break;
 
     case GDK_BUTTON_PRESS:
@@ -589,7 +592,7 @@ gnc_header_init (GncHeader *header)
     header->cursor_name = NULL;
     header->in_resize = FALSE;
     header->resize_col = -1;
-    header->resize_cursor = gdk_cursor_new_for_display (gdk_display_get_default (), GDK_SB_H_DOUBLE_ARROW);
+    header->resize_cursor = NULL;
     header->normal_cursor = NULL;
     header->height = 20;
     header->width = 400;

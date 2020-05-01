@@ -1413,15 +1413,17 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
     GdkModifierType mods;
     GdkDevice *device;
     GdkSeat *seat;
+    GdkWindow *window;
 
     if (!sheet->grabbed)
         return;
 
-    seat = gdk_display_get_default_seat (gdk_display_get_default());
+    window = gtk_widget_get_window (GTK_WIDGET(sheet));
+
+    seat = gdk_display_get_default_seat (gdk_window_get_display (window));
     device = gdk_seat_get_pointer (seat);
 
-    gdk_device_get_state (device, gtk_widget_get_window (GTK_WIDGET(sheet)),
-                          0, &mods);
+    gdk_device_get_state (device, window, 0, &mods);
 
     if (!(mods & GDK_BUTTON1_MASK))
     {

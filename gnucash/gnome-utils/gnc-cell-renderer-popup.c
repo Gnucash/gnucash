@@ -217,7 +217,7 @@ static gboolean
 gcrp_grab_on_window (GdkWindow *window,
                      guint32    activate_time)
 {
-    GdkDisplay *display = gdk_display_get_default ();
+    GdkDisplay *display = gdk_window_get_display (window);
     GdkSeat *seat;
     GdkEvent *event = gtk_get_current_event ();
 

@@ -104,15 +104,18 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
 
     g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
+    g_return_if_fail(parent != NULL);
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
     geometry = gnc_prefs_get_value (group, GNC_PREF_LAST_GEOMETRY);
+
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
+        GdkWindow *win = gtk_widget_get_window (GTK_WIDGET(parent));
         GdkRectangle monitor_size;
-        GdkDisplay *display = gdk_display_get_default ();
+        GdkDisplay *display = gdk_window_get_display (win);
         GdkMonitor *mon;
 
         g_variant_get (geometry, "(iiii)",
@@ -234,7 +237,8 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
-    GdkDisplay *display = gdk_display_get_default ();
+    GdkWindow *win;
+    GdkDisplay *display;
     GdkMonitor *mon;
     GdkRectangle monitor_size;
     gint wpos[2];
@@ -249,6 +253,9 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     g_return_if_fail(GTK_IS_WINDOW(window));
     if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
+
+    win = gtk_widget_get_window (GTK_WIDGET(window));
+    display = gdk_window_get_display (win);
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
     gtk_window_get_size(GTK_WINDOW(window), &width, &height);
