@@ -33,36 +33,60 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Income and GST Statement"))
 (define pagename-sorting (N_ "Sorting"))
 (define pagename-filter (N_ "Filter"))
+(define pagename-format (N_ "Format"))
+
 (define TAX-SETUP-DESC
   (gnc:make-html-text
-   (_ "This report is useful to calculate periodic business tax payable/receivable from \
-authorities. From 'Edit report options' above, choose your Business Income and Business Expense accounts. \
-Each transaction may contain, in addition to the accounts payable/receivable or bank accounts, \
-a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100.")
-   (gnc:html-markup-br)
-   (gnc:html-markup-br)
-   (_ "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills \
-which will require Tax Tables to be set up correctly. Please see the documentation.")
-   (gnc:html-markup-br)
-   (gnc:html-markup-br)
-   (_ "From the Report Options, you will need to select the accounts which will \
+
+   (gnc:html-markup-p
+    (_ "This report is useful to calculate periodic business tax \
+payable/receivable from authorities. From 'Edit report options', \
+choose your business sales and purchase accounts. Each transaction \
+may contain, in addition to the asset, liability, A/Payable or \
+A/Receivable accounts, a split to a tax account, e.g. Income:Sales \
+-$1000, A/Receivable $1100, Liability:GST on Sales -$100."))
+
+   (gnc:html-markup-p
+    (_ "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills \
+which will require Tax Tables to be set up correctly. Please see the documentation."))
+
+   (gnc:html-markup-p
+    (_ "From the Report Options, you will need to select the accounts which will \
 hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
 monies which are wholly sent or claimed from tax authorities during periodic GST/VAT returns. These \
-accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
-   (gnc:html-markup-br)
-   (gnc:html-markup-br)))
+accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales."))
 
-(define (gst-statement-renderer rpt)
-  (gnc:trep-renderer
-   rpt
-   #:custom-calculated-cells gst-calculated-cells
-   #:empty-report-message TAX-SETUP-DESC
-   #:custom-split-filter gst-custom-split-filter))
+   (gnc:html-markup-p
+    (_ "Note the UK variant may specify EU VAT accounts may be tagged \
+with *EUVAT* in the VAT account description. EU Goods sales and purchase \
+accounts may be tagged with *EUGOODS* in the account description."))
+
+   (gnc:html-markup-p
+    (_ "This message will be removed when tax accounts are specified."))))
+
+(define* (gst-statement-renderer rpt #:optional export-type file-name)
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option (gnc:report-options rpt) section name)))
+  (define sales-purch-accounts
+    (append (opt-val "Accounts" "Sales") (opt-val "Accounts" "Purchases")))
+  (define document
+    (gnc:trep-renderer
+     rpt
+     #:custom-calculated-cells gst-calculated-cells
+     #:custom-source-accounts sales-purch-accounts
+     #:custom-split-filter gst-custom-split-filter
+     #:export-type export-type
+     #:filename file-name))
+  (when (null? (opt-val "Accounts" "Tax Accounts"))
+    (gnc:html-document-add-object! document TAX-SETUP-DESC))
+  document)
 
 (define (gst-custom-split-filter split)
   ;; split -> bool
@@ -76,6 +100,23 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
   ;; Retrieve the list of options specified within the transaction report
   (define options (gnc:trep-options-generator))
+  (define all-accounts
+    (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+  (define format-options
+    (list
+     (list (N_ "Individual sales columns") "p"
+           (N_ "Display individual sales columns rather than their sum") #f)
+     (list (N_ "Individual purchases columns") "q"
+           (N_ "Display individual purchases columns rather than their sum") #f)
+     (list (N_ "Individual tax columns") "r"
+           (N_ "Display individual tax columns rather than their sum") #f)
+     (list (N_ "Gross Balance") "s"
+           (N_ "Display the gross balance (gross sales - gross purchases)") #f)
+     (list (N_ "Net Balance") "t"
+           (N_ "Display the net balance (sales without tax - purchases without tax)")
+           #f)
+     (list (N_ "Tax payable") "u"
+           (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
 
   ;; Delete Accounts selector
   (gnc:unregister-option options gnc:pagename-accounts (N_ "Accounts"))
@@ -83,10 +124,22 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
   ;;  and recreate with limited account types
   (gnc:register-option
    options
-   (gnc:make-account-list-limited-option
-    gnc:pagename-accounts (N_ "Accounts") "b1" (N_ "Report on these accounts.")
-    (lambda () '()) #f #t
-    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)))
+   (gnc:make-account-list-option
+    gnc:pagename-accounts (N_ "Sales") "a" (N_ "Report on these accounts.")
+    (lambda ()
+      (gnc:filter-accountlist-type
+       (list ACCT-TYPE-INCOME)
+       all-accounts))
+    #f #t))
+
+  (gnc:register-option
+   options
+   (gnc:make-account-list-option
+    gnc:pagename-accounts (N_ "Purchases") "b" (N_ "Report on these accounts.")
+    (lambda ()
+      (gnc:filter-accountlist-type
+       (list ACCT-TYPE-EXPENSE)
+       all-accounts)) #f #t))
 
   (gnc:register-option
    options
@@ -99,29 +152,83 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     (lambda () '()) #f #t
     (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)))
 
+  (gnc:register-option
+   options
+   (gnc:make-multichoice-callback-option
+    pagename-format (N_ "Report format")
+    "a" (_ "Report Format") 'default
+    (list (vector 'default
+                  (_ "default format")
+                  (_ "default format"))
+          (vector 'au-bas
+                  (_ "Australia BAS")
+                  (_ "Australia BAS. Specify sales, purchase and tax \
+accounts."))
+          (vector 'uk-vat
+                  (_ "UK VAT Return")
+                  (_ "UK VAT Return. Specify sales, purchase and tax \
+accounts. EU rules may be used. Denote EU VAT accounts *EUVAT* in \
+account description, and denote EU goods sales and purchases accounts \
+with *EUGOODS* in the account description."))) #f
+    (lambda (x)
+      (for-each
+       (match-lambda
+         ((name . _)
+          (gnc-option-db-set-option-selectable-by-name
+           options pagename-format name (eq? x 'default))))
+       format-options))))
+
   (for-each
-   (lambda (l)
-     (gnc:register-option
-      options
-      (gnc:make-simple-boolean-option
-       gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l))))
-   (list
-    (list (N_ "Individual sales columns")     "p" (N_ "Display individual sales columns rather than their sum") #f)
-    (list (N_ "Individual purchases columns") "q" (N_ "Display individual purchases columns rather than their sum") #f)
-    (list (N_ "Individual tax columns")       "r" (N_ "Display individual tax columns rather than their sum") #f)
-    (list (N_ "Gross Balance")                "s" (N_ "Display the gross balance (gross sales - gross purchases)") #f)
-    (list (N_ "Net Balance")                  "t" (N_ "Display the net balance (sales without tax - purchases without tax)") #f)
-    (list (N_ "Tax payable")                  "u" (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
+   (match-lambda
+     ((name sort help default)
+      (gnc:register-option options
+                           (gnc:make-simple-boolean-option
+                            pagename-format name sort help default))))
+   format-options)
 
   ;; Enable option to retrieve unique transactions only
-  (gnc:option-set-value (gnc:lookup-option options "__trep" "unique-transactions") #t)
+  (gnc:option-set-default-value
+   (gnc:lookup-option options "__trep" "unique-transactions") #t)
   ;; Disable account filtering
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter By...")
   (gnc:option-make-internal! options gnc:pagename-general "Show original currency amount")
+
+  ;; Enforce compulsory common-currency. It's senseless to allow
+  ;; multiple currencies in a government report. Plus, single currency
+  ;; means only 1 amount per heading for CSV output.
+  (gnc:option-set-default-value
+   (gnc:lookup-option options gnc:pagename-general "Common Currency") #t)
+  (gnc:option-make-internal! options gnc:pagename-general "Common Currency")
+
+  ;; Set default dates to report on last quarter.
+  (gnc:option-set-default-value
+   (gnc:lookup-option options gnc:pagename-general "Start Date")
+   '(relative . start-prev-quarter))
+  (gnc:option-set-default-value
+   (gnc:lookup-option options gnc:pagename-general "End Date")
+   '(relative . end-prev-quarter))
+
   ;; Disallow closing transactions
-  (gnc:option-set-value (gnc:lookup-option options pagename-filter "Closing transactions") 'exclude-closing)
   (gnc:option-make-internal! options pagename-filter "Closing transactions")
+  (gnc:option-set-default-value
+   (gnc:lookup-option options pagename-filter "Closing transactions")
+   'exclude-closing)
+
+  ;; Set good sorting options
+  (gnc:option-set-default-value
+   (gnc:lookup-option options pagename-sorting "Primary Key")
+   'date)
+  (gnc:option-set-default-value
+   (gnc:lookup-option options pagename-sorting "Primary Subtotal for Date Key")
+   'none)
+  (gnc:option-set-default-value
+   (gnc:lookup-option options pagename-sorting "Secondary Key")
+   'none)
+  (gnc:option-set-default-value
+   (gnc:lookup-option options pagename-sorting "Secondary Subtotal")
+   'none)
+
   ;; Disable display options not being used anymore
   (gnc:option-make-internal! options gnc:pagename-display "Shares")
   (gnc:option-make-internal! options gnc:pagename-display "Price")
@@ -133,65 +240,53 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   (gnc:option-make-internal! options pagename-sorting "Show Informal Debit/Credit Headers")
   options)
 
+(define (myadd a b)
+  (if a (if b (gnc:monetary+ a b) a) b))
+
+(define (myneg X)
+  (and X (gnc:monetary-neg X)))
+
+(define (accfilter accounts type)
+  (filter (lambda (acc) (eqv? (xaccAccountGetType acc) type)) accounts))
+
+(define split->date (compose xaccTransGetDate xaccSplitGetParent))
+(define split->currency (compose xaccAccountGetCommodity xaccSplitGetAccount))
+
 (define (gst-calculated-cells options)
   (define (opt-val section name)
     (gnc:option-value (gnc:lookup-option options section name)))
-  (define (accfilter accounts type)
-    (filter
-     (lambda (acc)
-       (eqv? (xaccAccountGetType acc) type))
-     accounts))
-  (letrec*
-      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))
-       (myneg (lambda (X) (and X (gnc:monetary-neg X))))
-       (accounts (opt-val gnc:pagename-accounts "Accounts"))
-       (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
-       (accounts-tax-collected (accfilter tax-accounts ACCT-TYPE-LIABILITY))
-       (accounts-tax-paid      (accfilter tax-accounts ACCT-TYPE-ASSET))
-       (accounts-sales         (accfilter accounts ACCT-TYPE-INCOME))
-       (accounts-purchases     (accfilter accounts ACCT-TYPE-EXPENSE))
-       (common-currency (and (opt-val gnc:pagename-general "Common Currency")
-                             (opt-val gnc:pagename-general "Report's currency")))
-       (split->date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
-       (split->currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
-       (split-adder (lambda (split accountlist)
-                      (let* ((txn (xaccSplitGetParent split))
-                             (filtered-splits (filter
-                                               (lambda (s)
-                                                 (member (xaccSplitGetAccount s)
-                                                         accountlist))
-                                               (xaccTransGetSplitList txn)))
-                             (split->monetary (lambda (s)
-                                                (gnc:make-gnc-monetary
-                                                 (split->currency s)
-                                                 (if (xaccTransGetVoidStatus txn)
-                                                     (xaccSplitVoidFormerAmount s)
-                                                     (xaccSplitGetAmount s)))))
-                             (split->converted
-                              (lambda (s)
-                                (gnc:exchange-by-pricedb-nearest
-                                 (split->monetary s)
-                                 (or common-currency (split->currency split))
-                                 (time64CanonicalDayTime (split->date s)))))
-                             (list-of-values (map split->converted filtered-splits)))
-                        (fold myadd #f list-of-values))))
-       (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
-       (account-adder-neg (lambda (acc) (lambda (s) (myneg (split-adder s (list acc))))))
+  (let* ((tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
+         (accounts-tax-collected (accfilter tax-accounts ACCT-TYPE-LIABILITY))
+         (accounts-tax-paid      (accfilter tax-accounts ACCT-TYPE-ASSET))
+         (accounts-sales         (opt-val gnc:pagename-accounts "Sales"))
+         (accounts-purchases     (opt-val gnc:pagename-accounts "Purchases"))
+         (common-currency        (opt-val gnc:pagename-general "Report's currency")))
 
-       ;; Calculate sales amounts
-       (sales-without-tax (lambda (s) (myneg (split-adder s accounts-sales))))
-       (tax-on-sales (lambda (s) (myneg (split-adder s accounts-tax-collected))))
-       (gross-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+    (define (split-adder split accountlist)
+      (define txn (xaccSplitGetParent split))
+      (define (not-in-accountlist? s)
+        (not (member (xaccSplitGetAccount s) accountlist)))
+      (let lp ((splits (xaccTransGetSplitList txn)) (result #f))
+        (match splits
+          (() result)
+          (((? not-in-accountlist?) . rest) (lp rest result))
+          ((split . rest)
+           (lp rest
+               (myadd (gnc:exchange-by-pricedb-nearest
+                       (gnc:make-gnc-monetary
+                        (split->currency split)
+                        (if (xaccTransGetVoidStatus txn)
+                            (xaccSplitVoidFormerAmount split)
+                            (xaccSplitGetAmount split)))
+                       common-currency
+                       (time64CanonicalDayTime (split->date split)))
+                      result))))))
 
-       ;; Calculate purchase amounts
-       (purchases-without-tax (lambda (s) (split-adder s accounts-purchases)))
-       (tax-on-purchases (lambda (s) (split-adder s accounts-tax-paid)))
-       (gross-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+    (define (account-adder acc)
+      (lambda (s) (split-adder s (list acc))))
 
-       ;; Calculate derived amounts
-       (gross-balance (lambda (s) (myadd (gross-sales s) (myneg (gross-purchases s)))))
-       (net-balance (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
-       (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
+    (define (account-adder-neg acc)
+      (lambda (s) (myneg (split-adder s (list acc)))))
 
     ;; each column will be a vector
     ;; (vector heading              - string
@@ -200,66 +295,122 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     ;;         subtotal?            - #t - all columns need subtotals
     ;;         start-dual-column?   - unused in GST report
     ;;         friendly-heading-fn  - unused in GST report
-    (append
-     ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
-     (list (vector (_ "Gross Sales")
-                   gross-sales
-                   #f #t #f #f))
-     (if (opt-val gnc:pagename-display (N_ "Individual sales columns"))
-         (map (lambda (acc) (vector (xaccAccountGetName acc)
-                                    (account-adder-neg acc)
-                                    #f #t #f #f))
-              accounts-sales)
-         (list (vector (_ "Net Sales")
-                       sales-without-tax
-                       #f #t #f #f)))
-     (if (opt-val gnc:pagename-display (N_ "Individual tax columns"))
-         (map (lambda (acc) (vector (xaccAccountGetName acc)
-                                    (account-adder-neg acc)
-                                    #f #t #f #f))
-              accounts-tax-collected)
-         (list (vector (_ "Tax on Sales")
-                       tax-on-sales
-                       #f #t #f #f)))
-     ;; Translators: "Gross Purchases" refer to Net Purchase + GST/VAT on Purchase
-     (list (vector (_ "Gross Purchases")
-                   gross-purchases
-                   #f #t #f #f))
-     (if (opt-val gnc:pagename-display (N_ "Individual purchases columns"))
-         (map (lambda (acc) (vector (xaccAccountGetName acc)
-                                    (account-adder acc)
-                                    #f #t #f #f))
-              accounts-purchases)
-         (list (vector (_ "Net Purchases")
-                       purchases-without-tax
-                       #f #t #f #f)))
-     (if (opt-val gnc:pagename-display (N_ "Individual tax columns"))
-         (map (lambda (acc) (vector (xaccAccountGetName acc)
-                                    (account-adder acc)
-                                    #f #t #f #f))
-              accounts-tax-paid)
-         (list (vector (_ "Tax on Purchases")
-                       tax-on-purchases
-                       #f #t #f #f)))
-     (if (opt-val gnc:pagename-display (N_ "Gross Balance"))
-         ;; Translators: "Gross Balance" refer to "Gross Sales - Gross Purchases" in GST Report
-         (list (vector (_ "Gross Balance")
-                       gross-balance
-                       #f #t #f #f))
-         '())
-         ;; Note: Net income = net balance - other costs
-     (if (opt-val gnc:pagename-display (N_ "Net Balance"))
-         ;; Translators: "Net Balance" refer to Net Sales - Net Purchases in GST Report
-         (list (vector (_ "Net Balance")
-                       net-balance
-                       #f #t #f #f))
-         '())
-     (if (opt-val gnc:pagename-display (N_ "Tax payable"))
-         ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
-         (list (vector (_ "Tax payable")
-                       tax-payable
-                       #f #t #f #f))
-         '()))))
+
+    (case (opt-val pagename-format "Report format")
+      ((default)
+       (let* ((net-sales (lambda (s) (myneg (split-adder s accounts-sales))))
+              (tax-sales (lambda (s) (myneg (split-adder s accounts-tax-collected))))
+              (tot-sales (lambda (s) (myadd (tax-sales s) (net-sales s))))
+              (net-purch (lambda (s) (split-adder s accounts-purchases)))
+              (tax-purch (lambda (s) (split-adder s accounts-tax-paid)))
+              (tot-purch (lambda (s) (myadd (tax-purch s) (net-purch s))))
+              (tot-bal   (lambda (s) (myadd (tot-sales s) (myneg (tot-purch s)))))
+              (net-bal   (lambda (s) (myadd (net-sales s) (myneg (net-purch s)))))
+              (tax-diff  (lambda (s) (myadd (tax-sales s) (myneg (tax-purch s))))))
+         (append
+
+          ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
+          (list (vector (_ "Gross Sales") tot-sales #f #t #f #f))
+
+          (if (opt-val pagename-format "Individual sales columns")
+              (map
+               (lambda (acc)
+                 (vector (xaccAccountGetName acc) (account-adder-neg acc) #f #t #f #f))
+               accounts-sales)
+              (list (vector (_ "Net Sales") net-sales #f #t #f #f)))
+
+          (if (opt-val pagename-format "Individual tax columns")
+              (map
+               (lambda (acc)
+                 (vector (xaccAccountGetName acc) (account-adder-neg acc) #f #t #f #f))
+               accounts-tax-collected)
+              (list (vector (_ "Tax on Sales") tax-sales #f #t #f #f)))
+
+          ;; Translators: "Gross Purchases" refer to Net Purchase +
+          ;; GST/VAT on Purchase
+          (list (vector (_ "Gross Purchases") tot-purch #f #t #f #f))
+
+          (if (opt-val pagename-format "Individual purchases columns")
+              (map
+               (lambda (acc)
+                 (vector (xaccAccountGetName acc) (account-adder acc) #f #t #f #f))
+               accounts-purchases)
+              (list
+               (vector (_ "Net Purchases") net-purch #f #t #f #f)))
+
+          (if (opt-val pagename-format "Individual tax columns")
+              (map
+               (lambda (acc)
+                 (vector (xaccAccountGetName acc) (account-adder acc) #f #t #f #f))
+               accounts-tax-paid)
+              (list
+               (vector (_ "Tax on Purchases") tax-purch #f #t #f #f)))
+
+          (if (opt-val pagename-format "Gross Balance")
+              ;; Translators: "Gross Balance" refer to "Gross Sales
+              ;; minus Gross Purchases" in GST Report
+              (list
+               (vector (_ "Gross Balance") tot-bal #f #t #f #f))
+              '())
+
+          ;; Note: Net income = net balance - other costs
+          (if (opt-val pagename-format "Net Balance")
+              ;; Translators: "Net Balance" refer to Net Sales - Net
+              ;; Purchases in GST Report
+              (list
+               (vector (_ "Net Balance") net-bal #f #t #f #f))
+              '())
+
+          (if (opt-val pagename-format "Tax payable")
+              ;; Translators: "Tax Payable" refer to the difference
+              ;; GST Sales - GST Purchases
+              (list
+               (vector (_ "Tax payable") tax-diff #f #t #f #f))
+              '()))))
+
+      ((au-bas)
+       (let* ((gst-sales (lambda (s) (myneg (split-adder s accounts-tax-collected))))
+              (gst-purch (lambda (s) (split-adder s accounts-tax-paid)))
+              (sales-net (lambda (s) (myneg (split-adder s accounts-sales))))
+              (sales-gross (lambda (s) (myadd (sales-net s) (gst-sales s)))))
+         (list
+          (vector "G1 Total Sales inc GST" sales-gross #f #t #f #f)
+          (vector "1A GST on Sales"        gst-sales   #f #t #f #f)
+          (vector "1B GST on Purchases"    gst-purch   #f #t #f #f))))
+
+      ((uk-vat)
+       (let* ((EUVAT?
+               (lambda (acc)
+                 (string-contains (xaccAccountGetDescription acc) "*EUVAT*")))
+              (EUGOODS?
+               (lambda (acc)
+                 (string-contains (xaccAccountGetDescription acc) "*EUGOODS*")))
+              (vat-non-ec (filter (negate EUVAT?) tax-accounts))
+              (vat-on-sales (accfilter vat-non-ec ACCT-TYPE-LIABILITY))
+              (vat-on-purchases (accfilter vat-non-ec ACCT-TYPE-ASSET))
+              (eu-sales-accts (filter EUGOODS? accounts-sales))
+              (eu-purch-accts (filter EUGOODS? accounts-purchases))
+              (eu-vat-accounts (filter EUVAT? tax-accounts))
+              (eu-vat-rev-purchases (accfilter eu-vat-accounts ACCT-TYPE-LIABILITY))
+              (box-1 (lambda (s) (myneg (split-adder s vat-on-sales))))
+              (box-2 (lambda (s) (myneg (split-adder s eu-vat-rev-purchases))))
+              (box-3 (lambda (s) (myadd (box-1 s) (box-2 s))))
+              (box-4 (lambda (s) (split-adder s vat-on-purchases)))
+              (box-5 (lambda (s) (myadd (box-3 s) (myneg (box-4 s)))))
+              (box-6 (lambda (s) (myneg (split-adder s accounts-sales))))
+              (box-7 (lambda (s) (split-adder s accounts-purchases)))
+              (box-8 (lambda (s) (myneg (split-adder s eu-sales-accts))))
+              (box-9 (lambda (s) (split-adder s eu-purch-accts))))
+         (list
+          (vector "Box 1 VAT Sales"          box-1 #f #t #f #f)
+          (vector "Box 2 VAT Reverse EU"     box-2 #f #t #f #f)
+          (vector "Box 3 VAT Output"         box-3 #f #t #f #f)
+          (vector "Box 4 VAT Purchases"      box-4 #f #t #f #f)
+          (vector "Box 5 VAT Difference"     box-5 #f #t #f #f)
+          (vector "Box 6 Tot Sales"          box-6 #f #t #f #f)
+          (vector "Box 7 Tot Purchases"      box-7 #f #t #f #f)
+          (vector "Box 8 EU Goods Sales"     box-8 #f #t #f #f)
+          (vector "Box 9 EU Goods Purchases" box-9 #f #t #f #f)))))))
 
 ;; Define the report.
 (gnc:define-report
@@ -269,12 +420,5 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
  'report-guid "5bf27f249a0d11e7abc4cec278b6b50a"
  'options-generator gst-statement-options-generator
  'renderer gst-statement-renderer
- 'export-types (list (cons "CSV" 'csv))
- 'export-thunk (lambda (report-obj export-type file-name)
-                 (gnc:trep-renderer
-                  report-obj
-                  #:custom-calculated-cells gst-calculated-cells
-                  #:empty-report-message TAX-SETUP-DESC
-                  #:custom-split-filter gst-custom-split-filter
-                  #:export-type export-type
-                  #:filename file-name)))
+ 'export-types '(("CSV" . csv))
+ 'export-thunk gst-statement-renderer)
