@@ -218,46 +218,20 @@ gcrp_grab_on_window (GdkWindow *window,
                      guint32    activate_time)
 {
     GdkDisplay *display = gdk_display_get_default ();
-#if GTK_CHECK_VERSION(3,20,0)
     GdkSeat *seat;
-#else
-    GdkDeviceManager *device_manager;
-    GdkDevice *device;
-#endif
-
-#if GTK_CHECK_VERSION(3,20,0)
     GdkEvent *event = gtk_get_current_event ();
-#endif
 
-#if GTK_CHECK_VERSION(3,20,0)
     seat = gdk_display_get_default_seat (display);
-#else
-    device_manager = gdk_display_get_device_manager (display);
-    device = gdk_device_manager_get_client_pointer (device_manager);
-#endif
 
-#if GTK_CHECK_VERSION(3,20,0)
     if ((gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_POINTER, TRUE, NULL,
-                        event, NULL, NULL) == GDK_GRAB_SUCCESS )) {
+                        event, NULL, NULL) == GDK_GRAB_SUCCESS))
+    {
         if (gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_KEYBOARD, TRUE, NULL,
-                        event, NULL, NULL) == GDK_GRAB_SUCCESS )
-#else
-    if ((gdk_device_grab (device, window, GDK_OWNERSHIP_WINDOW, TRUE,
-                          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                          GDK_POINTER_MOTION_MASK,
-                          NULL, activate_time) == GDK_GRAB_SUCCESS)) {
-
-        if (gdk_device_grab (device, window, GDK_OWNERSHIP_WINDOW, TRUE,
-                             GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                 NULL, activate_time) == GDK_GRAB_SUCCESS)
-#endif
+                        event, NULL, NULL) == GDK_GRAB_SUCCESS)
             return TRUE;
-        else {
-#if GTK_CHECK_VERSION(3,20,0)
+        else
+        {
             gdk_seat_ungrab (seat);
-#else
-            gdk_device_ungrab (device, activate_time);
-#endif
             return FALSE;
         }
     }
@@ -272,11 +246,9 @@ gcrp_show_popup (GncCellRendererPopup *cell,
                  gint                  x2,
                  gint                  y2)
 {
-#if GTK_CHECK_VERSION(3,22,0)
-        GdkWindow *win;
-        GdkMonitor *mon;
-        GdkRectangle monitor_size;
-#endif
+    GdkWindow *win;
+    GdkMonitor *mon;
+    GdkRectangle monitor_size;
     GtkAllocation alloc;
     gint          x, y;
     gint          screen_height, screen_width;
@@ -299,17 +271,12 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 
     button_height = y2 - y1;
 
-#if GTK_CHECK_VERSION(3,22,0)
     win = gdk_screen_get_root_window (gtk_window_get_screen (GTK_WINDOW(cell->popup_window)));
     mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(cell->popup_window)), win);
     gdk_monitor_get_geometry (mon, &monitor_size);
 
     screen_width = monitor_size.width;
     screen_height = monitor_size.height - y;
-#else
-    screen_width = gdk_screen_width();
-    screen_height = gdk_screen_height() - y;
-#endif
 
     /* Check if it fits in the available height. */
     if (alloc.height > screen_height)

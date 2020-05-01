@@ -410,11 +410,9 @@ gnc_gnome_help (const char *file_name, const char *anchor)
         uri = g_strconcat ("ghelp:", file_name, NULL);
 
     DEBUG ("Attempting to opening help uri %s", uri);
-#if GTK_CHECK_VERSION(3,22,0)
+
     success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-#else
-    success = gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error);
-#endif
+
     g_free (uri);
     if (success)
         return;
@@ -507,11 +505,9 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
         return;
 
     DEBUG ("Attempting to open uri %s", uri);
-#if GTK_CHECK_VERSION(3,22,0)
+
     success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
-#else
-    success = gtk_show_uri (NULL, uri, gtk_get_current_event_time (), &error);
-#endif
+
     if (success)
         return;
 

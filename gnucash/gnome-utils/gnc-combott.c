@@ -93,14 +93,6 @@ static void gnc_combott_get_property (GObject *object,
 
 static void gnc_combott_finalize (GObject *object);
 
-#if !GTK_CHECK_VERSION(3,22,0)
-static void gnc_combott_menu_position (GtkMenu *menu,
-                                        gint *x,
-                                        gint *y,
-                                        gint *push_in,
-                                        gpointer user_data);
-#endif
-
 static void gnc_combott_changed (GncCombott *combott);
 static void gnc_combott_set_model (GncCombott *combott, GtkTreeModel *model);
 static void gnc_combott_refresh_menu (GncCombott *combott, GtkTreeModel *model);
@@ -441,61 +433,6 @@ gnc_combott_changed(GncCombott *combott)
 }
 
 
-#if !GTK_CHECK_VERSION(3,22,0)
-static void
-gnc_combott_menu_position (GtkMenu  *menu,
-                            gint     *x,
-                            gint     *y,
-                            gint     *push_in,
-                            gpointer  user_data)
-{
-    GncCombott *combott = GNC_COMBOTT (user_data);
-    GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
-    gint sx, sy;
-    GtkWidget *child;
-    GtkRequisition req;
-    GtkAllocation alloc;
-    GtkBorder padding;
-    GtkStyleContext *sc = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
-    GtkStateFlags state_flags = gtk_style_context_get_state (sc);
-
-    child = gtk_bin_get_child (GTK_BIN (priv->button));
-
-    sx = sy = 0;
-
-    if (!gtk_widget_get_has_window (child))
-    {
-        gtk_widget_get_allocation (child, &alloc);
-        sx += alloc.x;
-        sy += alloc.y;
-    }
-
-    gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
-
-    gtk_style_context_get_padding (sc, state_flags, &padding);
-
-    sx -= padding.left;
-
-    gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
-
-    if (gtk_widget_get_direction (GTK_WIDGET (priv->button)) == GTK_TEXT_DIR_LTR)
-        *x = sx;
-    else
-    {
-        gtk_widget_get_allocation (child, &alloc);
-        *x = sx + alloc.width - req.width;
-    }
-
-    if(priv->active == -1 || priv->active == 0)
-        *y = sy;
-    else
-        *y = sy - ((req.height / priv->num_items) * (priv->active - 1));
-
-    *push_in = FALSE;
-}
-#endif
-
-
 static void
 button_getsize_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer *user_data)
 {
@@ -557,20 +494,11 @@ button_press_cb (GtkWidget *widget, GdkEvent *event, gpointer *user_data )
     {
         if (event->type == GDK_BUTTON_PRESS)
         {
-            GdkEventButton *bevent = (GdkEventButton *) event;
-
-#if GTK_CHECK_VERSION(3,22,0)
             gtk_menu_popup_at_widget (GTK_MENU(priv->menu),
                                       widget,
                                       GDK_GRAVITY_SOUTH_WEST,
                                       GDK_GRAVITY_NORTH_WEST,
                                       event);
-#else
-            gtk_menu_popup (GTK_MENU (priv->menu),
-                            NULL, NULL,
-                            gnc_combott_menu_position, combott,
-                            bevent->button, bevent->time);
-#endif
 
             /* Tell calling code that we have handled this event; the buck
              * stops here. */

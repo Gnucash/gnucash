@@ -993,10 +993,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
         gtk_style_context_save (stylectxt);
         gtk_style_context_add_class (stylectxt, marker_color_class);
-#if GTK_CHECK_VERSION(3,22,0)
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
-#endif
 
         for (i = 0; i < dcal->numMarks; i++)
         {
@@ -1250,27 +1248,18 @@ static gint
 gnc_dense_cal_button_press(GtkWidget *widget,
                            GdkEventButton *evt)
 {
-#if GTK_CHECK_VERSION(3,22,0)
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
     GdkRectangle work_area_size;
-#else
-    GdkScreen *screen = gdk_screen_get_default ();
-#endif
     GtkAllocation alloc;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
     gint win_xpos = evt->x_root + 5;
     gint win_ypos = evt->y_root + 5;
 
-#if GTK_CHECK_VERSION(3,22,0)
     gdk_monitor_get_workarea (mon, &work_area_size);
 
     dcal->screen_width = work_area_size.width;
     dcal->screen_height = work_area_size.height;
-#else
-    dcal->screen_width = gdk_screen_get_width (screen);
-    dcal->screen_height = gdk_screen_get_height (screen);
-#endif
 
     dcal->doc = wheres_this(dcal, evt->x, evt->y);
     dcal->showPopup = ~(dcal->showPopup);
@@ -1325,13 +1314,8 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     /* As per https://www.gtk.org/tutorial/sec-eventhandling.html */
     if (event->is_hint)
     {
-#if GTK_CHECK_VERSION(3,20,0)
         GdkSeat *seat = gdk_display_get_default_seat (gdk_window_get_display (event->window));
         GdkDevice *pointer = gdk_seat_get_pointer (seat);
-#else
-        GdkDeviceManager *device_manager = gdk_display_get_device_manager (gdk_window_get_display (event->window));
-        GdkDevice *pointer = gdk_device_manager_get_client_pointer (device_manager);
-#endif
 
         gdk_window_get_device_position (event->window, pointer,  &unused,  &unused, &unused2);
     }

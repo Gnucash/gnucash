@@ -106,67 +106,6 @@ static void go_option_menu_select_item(GOOptionMenu *option_menu,
     go_option_menu_update_contents(option_menu);
 }
 
-#if !GTK_CHECK_VERSION(3,22,0)
-static void go_option_menu_position(GtkMenu *menu, gint *x, gint *y,
-        gboolean *push_in, gpointer user_data)
-{
-    GOOptionMenu *option_menu = user_data;
-    GtkWidget *widget;
-    GtkRequisition requisition;
-    GList *children;
-    gint screen_width;
-    gint menu_xpos;
-    gint menu_ypos;
-    gint menu_width;
-    GtkAllocation allocation;
-
-    widget = GTK_WIDGET(option_menu);
-
-    gtk_widget_get_preferred_size(GTK_WIDGET(menu), &requisition, NULL);
-    menu_width = requisition.width;
-
-    gdk_window_get_origin(gtk_widget_get_window(widget), &menu_xpos,
-            &menu_ypos);
-
-    gtk_widget_get_allocation(widget, &allocation);
-    menu_xpos += allocation.x;
-    menu_ypos += allocation.y + allocation.height / 2 - 2;
-
-    children = gtk_container_get_children(GTK_CONTAINER(option_menu->menu));
-    while (children)
-    {
-        GtkWidget *child = children->data;
-
-        if (GTK_IS_CHECK_MENU_ITEM(child)
-                && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(child)))
-        {
-            gtk_widget_get_preferred_size(child, &requisition, NULL);
-            menu_ypos -= requisition.height / 2;
-            break;
-        }
-
-        if (gtk_widget_get_visible(child))
-        {
-            gtk_widget_get_preferred_size(child, &requisition, NULL);
-            menu_ypos -= requisition.height;
-        }
-
-        children = children->next;
-    }
-
-    screen_width = gdk_screen_get_width(gtk_widget_get_screen(widget));
-
-    if (menu_xpos + menu_width > screen_width)
-        menu_xpos -= (menu_xpos + menu_width) - screen_width;
-    if (menu_xpos < 0)
-        menu_xpos = 0;
-
-    *x = menu_xpos;
-    *y = menu_ypos;
-    *push_in = TRUE;
-}
-#endif
-
 static gint go_option_menu_button_press(GtkWidget *widget,
         GdkEventButton *event)
 {
@@ -179,21 +118,13 @@ static gint go_option_menu_button_press(GtkWidget *widget,
 
     if (event->type == GDK_BUTTON_PRESS && event->button == 1)
     {
-#if GTK_CHECK_VERSION(3,22,0)
         gtk_menu_popup_at_widget (GTK_MENU(option_menu->menu),
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
                                   (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(option_menu->menu), NULL, NULL,
-                go_option_menu_position, option_menu, event->button,
-                event->time);
-
-#endif
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -205,16 +136,11 @@ static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
     {
     case GDK_KEY_KP_Space:
     case GDK_KEY_space:
-#if GTK_CHECK_VERSION(3,22,0)
         gtk_menu_popup_at_widget (GTK_MENU(option_menu->menu),
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
                                   (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(option_menu->menu), NULL, NULL,
-                go_option_menu_position, option_menu, 0, event->time);
-#endif
         return TRUE;
     }
 

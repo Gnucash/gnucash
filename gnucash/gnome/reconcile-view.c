@@ -150,11 +150,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
             if (keyboard_mode == FALSE)
             {
-#if GTK_CHECK_VERSION(3,20,0)
                 GdkSeat *seat;
-#else
-                GdkDeviceManager *device_manager;
-#endif
                 GdkDevice *pointer;
                 GtkWindow *tip_win = NULL;
                 GdkWindow *parent_window;
@@ -162,13 +158,9 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 parent_window = gtk_widget_get_parent_window (GTK_WIDGET (qview));
 
-#if GTK_CHECK_VERSION(3,20,0)
                 seat = gdk_display_get_default_seat (gdk_window_get_display (parent_window));
                 pointer = gdk_seat_get_pointer (seat);
-#else
-                device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent_window));
-                pointer = gdk_device_manager_get_client_pointer (device_manager);
-#endif
+
                 gdk_window_get_device_position (parent_window, pointer, &cur_x, &cur_y, NULL);
 
                 gdk_window_get_origin (parent_window, &root_x, &root_y);
@@ -189,12 +181,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 if (GTK_IS_WINDOW (tip_win))
                 {
-#if GTK_CHECK_VERSION(3,22,0)
                     GdkMonitor *mon;
-#else
-                    GdkScreen *screen;
-                    gint monitor_num;
-#endif
                     GdkRectangle monitor;
                     GtkRequisition requisition;
                     gint x, y;
@@ -204,14 +191,9 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     x = root_x + cur_x + 10;
                     y = root_y + cur_y + 10;
 
-#if GTK_CHECK_VERSION(3,22,0)
                     mon = gdk_display_get_monitor_at_point (gdk_display_get_default(), x, y);
                     gdk_monitor_get_geometry (mon, &monitor);
-#else
-                    screen = gtk_widget_get_screen (GTK_WIDGET (qview));
-                    monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-                    gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-#endif
+
                     if (x + requisition.width > monitor.x + monitor.width)
                         x -= x - (monitor.x + monitor.width) + requisition.width;
                     else if (x < monitor.x)

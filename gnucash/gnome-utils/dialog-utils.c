@@ -112,26 +112,15 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
         GdkRectangle monitor_size;
-
-#if GTK_CHECK_VERSION(3,22,0)
         GdkDisplay *display = gdk_display_get_default ();
         GdkMonitor *mon;
-#else
-        GdkScreen *screen = gdk_screen_get_default ();
-        gint mon_num;
-#endif
 
         g_variant_get (geometry, "(iiii)",
                        &wpos[0],  &wpos[1],
                        &wsize[0], &wsize[1]);
 
-#if GTK_CHECK_VERSION(3,22,0)
         mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
         gdk_monitor_get_geometry (mon, &monitor_size);
-#else
-        mon_num = gdk_screen_get_monitor_at_point (screen, wpos[0], wpos[1]);
-        gdk_screen_get_monitor_geometry (screen, mon_num, &monitor_size);
-#endif
 
         DEBUG("monitor left top corner x: %d, y: %d, width: %d, height: %d",
               monitor_size.x, monitor_size.y, monitor_size.width, monitor_size.height);
@@ -245,18 +234,12 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
+    GdkDisplay *display = gdk_display_get_default ();
+    GdkMonitor *mon;
     GdkRectangle monitor_size;
     gint wpos[2];
     gint width;
     gint height;
-
-#if GTK_CHECK_VERSION(3,22,0)
-    GdkDisplay *display = gdk_display_get_default ();
-    GdkMonitor *mon;
-#else
-    GdkScreen *screen = gdk_screen_get_default ();
-    gint mon_num;
-#endif
 
     ENTER("");
 
@@ -270,13 +253,8 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
     gtk_window_get_size(GTK_WINDOW(window), &width, &height);
 
-#if GTK_CHECK_VERSION(3,22,0)
     mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
     gdk_monitor_get_geometry (mon, &monitor_size);
-#else
-    mon_num = gdk_screen_get_monitor_at_point (screen, wpos[0], wpos[1]);
-    gdk_screen_get_monitor_geometry (screen, mon_num, &monitor_size);
-#endif
 
     DEBUG("monitor width is %d, height is %d; wwindow width is %d, height is %d",
            monitor_size.width, monitor_size.height, width, height);

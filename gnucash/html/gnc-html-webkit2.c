@@ -245,15 +245,9 @@ gnc_html_webkit_dispose( GObject* obj )
 
      if ( priv->web_view != NULL )
      {
-         // In Gtk Version 3.20 they relaxed the fact that the widget should be a
-         // direct child of the container otherwise it would be a critical error
-#if GTK_CHECK_VERSION(3,20,0)
-          gtk_container_remove( GTK_CONTAINER(priv->base.container),
-                                GTK_WIDGET(priv->web_view) );
-#else
-          GtkWidget *parent = gtk_widget_get_parent(GTK_WIDGET(priv->web_view));
-          gtk_container_remove( GTK_CONTAINER(priv->base.container), parent);
-#endif
+          gtk_container_remove (GTK_CONTAINER(priv->base.container),
+                                GTK_WIDGET(priv->web_view));
+
           priv->web_view = NULL;
      }
 

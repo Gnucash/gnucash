@@ -702,12 +702,3 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 }
-
-void
-gnc_widget_add_style_class (GtkWidget *widget, const char *name)
-{
-#if !GTK_CHECK_VERSION(3,20,0)
-    GtkStyleContext *context = gtk_widget_get_style_context (widget);
-    gtk_style_context_add_class (context, name);
-#endif
-}

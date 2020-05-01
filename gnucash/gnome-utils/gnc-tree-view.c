@@ -279,11 +279,8 @@ gnc_tree_view_init (GncTreeView *view, void *data)
     priv->column_menu_icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(priv->column_menu_icon_box), FALSE);
 
-#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(icon), 5);
-#else
-    gtk_widget_set_margin_left (GTK_WIDGET(icon), 5);
-#endif
+
     gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), icon, FALSE, FALSE, 0);
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
@@ -1405,12 +1402,7 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
     gtk_widget_show_all (menu);
 
     /* Pop the menu up at the button */
-#if GTK_CHECK_VERSION(3,22,0)
     gtk_menu_popup_at_pointer (GTK_MENU(priv->column_menu), NULL);
-#else
-    gtk_menu_popup (GTK_MENU(priv->column_menu), NULL, GTK_WIDGET(menu),
-                    NULL, NULL, 0, gtk_get_current_event_time ());
-#endif
 }
 
 

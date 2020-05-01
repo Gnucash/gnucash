@@ -886,31 +886,12 @@ gnc_reconcile_window_row_cb (GNCReconcileView *view, gpointer item,
 static void
 do_popup_menu (RecnWindow2 *recnData, GdkEventButton *event)
 {
-    GtkWidget *menu;
-    int button, event_time;
+    GtkWidget *menu = gtk_ui_manager_get_widget (recnData->ui_merge, "/MainPopup");
 
-    menu = gtk_ui_manager_get_widget (recnData->ui_merge, "/MainPopup");
     if (!menu)
-    {
         return;
-    }
 
-#if GTK_CHECK_VERSION(3,22,0)
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#else
-    if (event)
-    {
-        button = event->button;
-        event_time = event->time;
-    }
-    else
-    {
-        button = 0;
-        event_time = gtk_get_current_event_time ();
-    }
-
-    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
-#endif
 }
 
 

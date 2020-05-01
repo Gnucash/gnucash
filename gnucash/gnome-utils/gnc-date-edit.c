@@ -147,33 +147,21 @@ gnc_strtok_r (char *s, const char *delim, char **save_ptr)
 static void
 gnc_date_edit_popdown(GNCDateEdit *gde)
 {
-#if GTK_CHECK_VERSION(3,20,0)
     GdkSeat *seat;
-#else
-    GdkDeviceManager *device_manager;
-#endif
     GdkDevice *pointer;
 
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     ENTER("gde %p", gde);
 
-#if GTK_CHECK_VERSION(3,20,0)
     seat = gdk_display_get_default_seat (gdk_display_get_default());
     pointer = gdk_seat_get_pointer (seat);
-#else
-    device_manager = gdk_display_get_device_manager (gdk_display_get_default());
-    pointer = gdk_device_manager_get_client_pointer (device_manager);
-#endif
 
     gtk_grab_remove (gde->cal_popup);
     gtk_widget_hide (gde->cal_popup);
+
     if (pointer)
-#if GTK_CHECK_VERSION(3,20,0)
         gdk_seat_ungrab (seat);
-#else
-        gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
-#endif
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
                                   FALSE);
@@ -265,39 +253,20 @@ popup_grab_on_window (GdkWindow *window,
                       GdkDevice *pointer,
                       guint32    activate_time)
 {
-
-#if GTK_CHECK_VERSION(3,20,0)
     GdkDisplay *display = gdk_display_get_default ();
     GdkSeat *seat = gdk_display_get_default_seat (display);
     GdkEvent *event = gtk_get_current_event ();
 
     if (keyboard && gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_KEYBOARD, TRUE, NULL,
-                                   event, NULL, NULL) != GDK_GRAB_SUCCESS )
-#else
-    if (keyboard && gdk_device_grab (keyboard, window,
-                                     GDK_OWNERSHIP_WINDOW, TRUE,
-                                     GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                                     NULL, activate_time) != GDK_GRAB_SUCCESS)
-#endif
+                                   event, NULL, NULL) != GDK_GRAB_SUCCESS)
         return FALSE;
 
-#if GTK_CHECK_VERSION(3,20,0)
     if (pointer && gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_POINTER, TRUE, NULL,
-                                  event, NULL, NULL) != GDK_GRAB_SUCCESS )
-#else
-    if (pointer && gdk_device_grab (pointer, window,
-                                    GDK_OWNERSHIP_WINDOW, TRUE,
-                                    GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                                    GDK_POINTER_MOTION_MASK,
-                                    NULL, activate_time) != GDK_GRAB_SUCCESS)
-#endif
+                                  event, NULL, NULL) != GDK_GRAB_SUCCESS)
     {
         if (keyboard)
-#if GTK_CHECK_VERSION(3,20,0)
             gdk_seat_ungrab (seat);
-#else
-            gdk_device_ungrab (keyboard, activate_time);
-#endif
+
         return FALSE;
     }
     return TRUE;

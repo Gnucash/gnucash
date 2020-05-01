@@ -1412,22 +1412,13 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 {
     GdkModifierType mods;
     GdkDevice *device;
-#if GTK_CHECK_VERSION(3,20,0)
     GdkSeat *seat;
-#else
-    GdkDeviceManager *device_manager;
-#endif
 
     if (!sheet->grabbed)
         return;
 
-#if GTK_CHECK_VERSION(3,20,0)
     seat = gdk_display_get_default_seat (gdk_display_get_default());
     device = gdk_seat_get_pointer (seat);
-#else
-    device_manager = gdk_display_get_device_manager (gdk_display_get_default());
-    device = gdk_device_manager_get_client_pointer (device_manager);
-#endif
 
     gdk_device_get_state (device, gtk_widget_get_window (GTK_WIDGET(sheet)),
                           0, &mods);
@@ -1519,13 +1510,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
         sheet->editing && do_popup)
     {
-#if GTK_CHECK_VERSION(3,22,0)
         gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
-                       sheet->popup_data, event->button, event->time);
-#endif
-
         return TRUE;
     }
 
@@ -1548,12 +1533,8 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnucash_sheet_check_grab (sheet);
 
     if (do_popup)
-#if GTK_CHECK_VERSION(3,22,0)
         gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
-                       sheet->popup_data, event->button, event->time);
-#endif
+
     return button_1 || do_popup;
 }
 
