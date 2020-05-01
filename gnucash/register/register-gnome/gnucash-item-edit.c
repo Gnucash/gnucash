@@ -146,9 +146,7 @@ gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
     GObjectClass  *object_class;
     GtkWidgetClass *widget_class;
 
-#if GTK_CHECK_VERSION(3,20,0)
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "button");
-#endif
 
     gnc_item_edit_tb_parent_class = g_type_class_peek_parent (gnc_item_edit_tb_class);
 
@@ -207,9 +205,6 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
             g_object_new (GNC_TYPE_ITEM_EDIT_TB,
                           "sheet", sheet,
                            NULL);
-
-    // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(item_edit_tb), "button");
 
     context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -552,15 +547,12 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     // Now draw a vertical line
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
-#if GTK_CHECK_VERSION(3,20,0)
+
     cairo_move_to (cr, cursor_x + 0.5, gnc_item_edit_get_margin (item_edit, top) +
                                        gnc_item_edit_get_padding_border (item_edit, top));
     cairo_rel_line_to (cr, 0, height - gnc_item_edit_get_margin (item_edit, top_bottom) -
                                        gnc_item_edit_get_padding_border (item_edit, top_bottom));
-#else
-    cairo_move_to (cr, cursor_x + 0.5, gnc_item_edit_get_padding_border (item_edit, top));
-    cairo_rel_line_to (cr, 0, height - gnc_item_edit_get_padding_border (item_edit, top_bottom));
-#endif
+
     cairo_stroke (cr);
 
     return FALSE;
@@ -710,9 +702,7 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
     GObjectClass  *object_class;
     GtkWidgetClass *widget_class;
 
-#if GTK_CHECK_VERSION(3,20,0)
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "gnc-id-cursor");
-#endif
 
     gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
 
@@ -865,9 +855,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
                            NULL);
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
-    // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(item_edit), "gnc-class-cursor");
-
     /* Create the text entry */
     item_edit->editor = gtk_entry_new();
     sheet->entry = item_edit->editor;
@@ -888,17 +875,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Make sure the Entry can not have focus and no frame
     gtk_widget_set_can_focus (GTK_WIDGET(item_edit->editor), FALSE);
     gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
-
-#if !GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_set_margin_start (GTK_WIDGET(item_edit->editor),
-                                 gnc_item_edit_get_margin (item_edit, left));
-    gtk_widget_set_margin_end (GTK_WIDGET(item_edit->editor),
-                               gnc_item_edit_get_margin (item_edit, right));
-    gtk_widget_set_margin_top (GTK_WIDGET(item_edit->editor),
-                               gnc_item_edit_get_margin (item_edit, top));
-    gtk_widget_set_margin_bottom (GTK_WIDGET(item_edit->editor),
-                                  gnc_item_edit_get_margin (item_edit, bottom));
-#endif
 
     // Connect to the draw signal so we can draw a cursor
     g_signal_connect_after (item_edit->editor, "draw",

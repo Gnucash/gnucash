@@ -2,8 +2,7 @@
 
 <gresources>
   <gresource prefix="/org/gnucash">
-    <file>gnucash-310.css</file>
-    <file>gnucash-320.css</file>
-    <file>gnucash-fallback-310.css</file>
+    <file>gnucash.css</file>
+    <file>gnucash-fallback.css</file>
   </gresource>
 </gresources>

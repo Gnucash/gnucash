@@ -198,12 +198,8 @@ gnc_add_css_file (void)
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-#if GTK_CHECK_VERSION(3,20,0)
-    gtk_css_provider_load_from_resource (provider_app, "/org/gnucash/gnucash-320.css");
-#else
-    gtk_css_provider_load_from_resource (provider_app, "/org/gnucash/gnucash-310.css");
-#endif
-    gtk_css_provider_load_from_resource (provider_fallback,  "/org/gnucash/gnucash-fallback-310.css");
+    gtk_css_provider_load_from_resource (provider_app, "/org/gnucash/gnucash.css");
+    gtk_css_provider_load_from_resource (provider_fallback,  "/org/gnucash/gnucash-fallback.css");
 
     var = gnc_userconfig_dir ();
     if (var)

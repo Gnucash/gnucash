@@ -222,9 +222,7 @@ gnc_dense_cal_class_init(GncDenseCalClass *klass)
     object_class = G_OBJECT_CLASS (klass);
     widget_class = GTK_WIDGET_CLASS (klass);
 
-#if GTK_CHECK_VERSION(3,20,0)
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "calendar");
-#endif
 
     parent_class = g_type_class_peek_parent (klass);
 

@@ -38,33 +38,23 @@ scrollbar slider {
 }
 
 
-/* Register sheet font setting, use .gnc-class-sheet < gtk3.20 */
+/* Register sheet font setting */
 gnc-id-sheet {
   font: 10px arial, sans-serif;
 }
 
 
-/* Register header font setting, use .gnc-class-header < gtk3.20 */
+/* Register header font setting */
 gnc-id-header {
   background-color: pink;
   color:blue;
 }
 
 
-/* Register cursor font setting, use .gnc-class-cursor < gtk3.20 */
+/* Register cursor font setting */
 gnc-id-cursor {
   background-color: #BDB76B;
   color: white;
-}
-
-xgnc-id-cursor entry {
-  background-color: pink;
-
-  margin: 2px 5px 2px 5px;
-  padding: 0px 2px 0px 2px;
-
-/*  border-color: green;
-  color: white; */
 }
 
 gnc-id-cursor button {

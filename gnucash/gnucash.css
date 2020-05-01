@@ -79,6 +79,11 @@ gnc-id-cursor button {
   color: mix (currentColor, grey, 0.2);
 }
 
+/* Highlight some text */
+.gnc-class-highlight {
+  color: blue;
+}
+
 /* Some tweaks for the about dialog */
 dialog#GnuCash > box > box > label
 {
