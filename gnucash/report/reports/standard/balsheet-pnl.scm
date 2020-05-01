@@ -124,7 +124,7 @@ also show overall period profit & loss."))
 
 (define periodlist
   (list
-   (list #f
+   (list 'disabled
          (cons 'text (_ "Disabled"))
          (cons 'tip (_ "Disabled")))
 
@@ -180,29 +180,30 @@ also show overall period profit & loss."))
      (gnc:make-multichoice-callback-option
       gnc:pagename-general optname-period
       "c2" opthelp-period
-      #f
+      'disabled
       (keylist->vectorlist periodlist)
       #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options
-         gnc:pagename-general optname-disable-amount-indent
-         (not x))
-        (gnc-option-db-set-option-selectable-by-name
-         options
-         gnc:pagename-general optname-dual-columns
-         (not x))
-        (case report-type
-          ((balsheet)
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-include-chart x)
+        (let ((x (not (eq? x 'disabled))))
+          (gnc-option-db-set-option-selectable-by-name
+           options
+           gnc:pagename-general optname-disable-amount-indent
+           (not x))
+          (gnc-option-db-set-option-selectable-by-name
+           options
+           gnc:pagename-general optname-dual-columns
+           (not x))
+          (case report-type
+            ((balsheet)
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-include-chart x)
 
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-startdate x))
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-startdate x))
 
-          ((pnl)
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-include-overall-period x))))))
+            ((pnl)
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-include-overall-period x)))))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -704,10 +705,10 @@ also show overall period profit & loss."))
          (disable-account-indent? (get-option gnc:pagename-display
                                               optname-account-full-name))
          (incr (get-option gnc:pagename-general optname-period))
-         (disable-amount-indent? (and (not incr)
+         (disable-amount-indent? (and (eq? incr 'disabled)
                                       (get-option gnc:pagename-general
                                                   optname-disable-amount-indent)))
-         (enable-dual-columns? (and (not incr)
+         (enable-dual-columns? (and (eq? incr 'disabled)
                                     (get-option gnc:pagename-general
                                                 optname-dual-columns)))
          (accounts (get-option gnc:pagename-accounts
@@ -753,7 +754,8 @@ also show overall period profit & loss."))
 
          (report-dates
           (cond
-           (incr (gnc:make-date-list startdate enddate (gnc:deltasym-to-delta incr)))
+           ((not (eq? incr 'disabled))
+            (gnc:make-date-list startdate enddate (gnc:deltasym-to-delta incr)))
            ((eq? report-type 'pnl) (list startdate enddate))
            (else (list enddate))))
 
@@ -901,7 +903,7 @@ also show overall period profit & loss."))
            (lambda ()
              (display report-title)
              (display " ")
-             (if (or incr (eq? report-type 'pnl))
+             (if (or (not (eq? incr 'disabled)) (eq? report-type 'pnl))
                  (format #t (_ "~a to ~a")
                          (qof-print-date startdate) (qof-print-date enddate))
                  (display (qof-print-date enddate))))))
@@ -1017,7 +1019,7 @@ also show overall period profit & loss."))
                       (income-expense-balance 'format gnc:make-gnc-monetary #f)))))
 
              (chart (and-let* (include-chart?
-                               incr
+                               (not (eq? incr 'disabled))
                                (curr (or common-currency book-main-currency))
                                (price (or price-source 'pricedb-nearest)))
                       (gnc:make-report-anchor
@@ -1072,7 +1074,7 @@ also show overall period profit & loss."))
                                                         get-cell-anchor-fn)
                               ))))
 
-        (when incr
+        (unless (eq? incr 'disabled)
           (add-to-table multicol-table-left (_ "Date") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f
@@ -1110,7 +1112,7 @@ also show overall period profit & loss."))
                           #:show-accounts? #f
                           #:show-total? #f))
 
-        (if (and include-chart? incr)
+        (if (and include-chart? (not (eq? incr 'disabled)))
             (gnc:html-document-add-object!
              doc
              (gnc:make-html-text
@@ -1149,7 +1151,7 @@ also show overall period profit & loss."))
                 (let ((datepair (col-idx->datepair col-idx))
                       (show-orig? (and common-currency #t))
                       (curr (or common-currency book-main-currency))
-                      (delta (or incr 'MonthDelta))
+                      (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
                       (price (or price-source 'pricedb-nearest))
                       (accts (if (pair? account) account (list account))))
                   (gnc:make-report-anchor
@@ -1166,7 +1168,7 @@ also show overall period profit & loss."))
              (chart
               (and-let* (include-chart?
                          (curr (or common-currency book-main-currency))
-                         (delta (or incr 'MonthDelta))
+                         (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
                          (price (or price-source 'pricedb-nearest)))
                 (gnc:make-report-anchor
                  pnl-barchart-uuid report-obj
@@ -1225,7 +1227,7 @@ also show overall period profit & loss."))
                               #:get-cell-anchor-fn (and use-amount-links?
                                                         get-cell-anchor-fn)))))
 
-        (when incr
+        (unless (eq? incr 'disabled)
           (add-to-table multicol-table-left (_ "Period") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f

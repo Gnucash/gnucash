@@ -540,7 +540,7 @@
     ;; the following includes non-zero retained earnings of $1,270
     (set-option! multi-bs-options "General" "End Date"
                  (cons 'absolute (gnc-dmy2time64 1 3 1980)))
-    (set-option! multi-bs-options "General" "Period duration" #f)
+    (set-option! multi-bs-options "General" "Period duration" 'disabled)
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol-balsheet-retained")))
       (test-equal "bal-1/3/80"
