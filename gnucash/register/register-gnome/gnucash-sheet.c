@@ -1727,6 +1727,125 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
     return handled;
 }
 
+static gboolean
+process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
+                     gncTableTraversalDir *direction,
+                     VirtualLocation* new_virt_loc)
+{
+    int distance;
+    VirtualLocation cur_virt_loc = *new_virt_loc;
+
+    switch (event->keyval)
+    {
+        case GDK_KEY_Return:
+        case GDK_KEY_KP_Enter:
+            g_signal_emit_by_name(sheet->reg, "activate_cursor");
+	    /* Clear the saved selection. */
+	    sheet->pos = sheet->bound;
+            return TRUE;
+            break;
+        case GDK_KEY_Tab:
+        case GDK_KEY_ISO_Left_Tab:
+            if (event->state & GDK_SHIFT_MASK)
+            {
+                *direction = GNC_TABLE_TRAVERSE_LEFT;
+                gnc_table_move_tab (sheet->table, new_virt_loc,
+                                    FALSE);
+            }
+            else
+            {
+                *direction = GNC_TABLE_TRAVERSE_RIGHT;
+                gnc_table_move_tab (sheet->table, new_virt_loc,
+                                    TRUE);
+            }
+            break;
+        case GDK_KEY_KP_Page_Up:
+        case GDK_KEY_Page_Up:
+            *direction = GNC_TABLE_TRAVERSE_UP;
+            new_virt_loc->phys_col_offset = 0;
+            if (event->state & GDK_SHIFT_MASK)
+                new_virt_loc->vcell_loc.virt_row = 1;
+            else
+            {
+                distance = sheet->num_visible_phys_rows - 1;
+                gnc_table_move_vertical_position
+                    (sheet->table, new_virt_loc, -distance);
+            }
+            break;
+        case GDK_KEY_KP_Page_Down:
+        case GDK_KEY_Page_Down:
+            *direction = GNC_TABLE_TRAVERSE_DOWN;
+            new_virt_loc->phys_col_offset = 0;
+            if (event->state & GDK_SHIFT_MASK)
+                new_virt_loc->vcell_loc.virt_row =
+                    sheet->num_virt_rows - 1;
+            else
+            {
+                distance = sheet->num_visible_phys_rows - 1;
+                gnc_table_move_vertical_position
+                    (sheet->table, new_virt_loc, distance);
+            }
+            break;
+        case GDK_KEY_KP_Up:
+        case GDK_KEY_Up:
+            *direction = GNC_TABLE_TRAVERSE_UP;
+            gnc_table_move_vertical_position (sheet->table,
+                                              new_virt_loc, -1);
+            break;
+        case GDK_KEY_KP_Down:
+        case GDK_KEY_Down:
+        case GDK_KEY_Menu:
+            if (event->keyval == GDK_KEY_Menu ||
+                (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR))
+            {
+                GncItemEdit *item_edit;
+
+                item_edit = GNC_ITEM_EDIT (sheet->item_editor);
+
+                if (gnc_table_confirm_change (sheet->table,
+                                              cur_virt_loc))
+                    gnc_item_edit_show_popup (item_edit);
+		/* Clear the saved selection for the new cell. */
+		sheet->pos = sheet->bound;
+
+                return TRUE;
+            }
+
+            *direction = GNC_TABLE_TRAVERSE_DOWN;
+            gnc_table_move_vertical_position (sheet->table,
+                                              new_virt_loc, 1);
+            break;
+        case GDK_KEY_Control_L:
+        case GDK_KEY_Control_R:
+        case GDK_KEY_Shift_L:
+        case GDK_KEY_Shift_R:
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
+            *pass_on = TRUE;
+            break;
+        case GDK_KEY_KP_Right:
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Left:
+        case GDK_KEY_Left:
+        case GDK_KEY_Home:
+        case GDK_KEY_End:
+	    /* Clear the saved selection, we're not using it. */
+	    sheet->pos = sheet->bound;
+	    *pass_on = TRUE;
+	    break;
+        default:
+            if (gnucash_sheet_clipboard_event(sheet, event))
+	    {
+		/* Clear the saved selection. */
+		sheet->pos = sheet->bound;
+                return TRUE;
+	    }
+            *pass_on = TRUE;
+            break;
+    }
+    return FALSE;
+}
+
 static gint
 gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 {
@@ -1762,114 +1881,9 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Calculate tentative physical values */
     if (!pass_on)
     {
-        switch (event->keyval)
-        {
-        case GDK_KEY_Return:
-        case GDK_KEY_KP_Enter:
-            g_signal_emit_by_name(sheet->reg, "activate_cursor");
-	    /* Clear the saved selection. */
-	    sheet->pos = sheet->bound;
+        if (process_motion_keys (sheet, event, &pass_on,
+                                 &direction, &new_virt_loc))
             return TRUE;
-            break;
-        case GDK_KEY_Tab:
-        case GDK_KEY_ISO_Left_Tab:
-            if (event->state & GDK_SHIFT_MASK)
-            {
-                direction = GNC_TABLE_TRAVERSE_LEFT;
-                gnc_table_move_tab (table, &new_virt_loc,
-                                    FALSE);
-            }
-            else
-            {
-                direction = GNC_TABLE_TRAVERSE_RIGHT;
-                gnc_table_move_tab (table, &new_virt_loc,
-                                    TRUE);
-            }
-            break;
-        case GDK_KEY_KP_Page_Up:
-        case GDK_KEY_Page_Up:
-            direction = GNC_TABLE_TRAVERSE_UP;
-            new_virt_loc.phys_col_offset = 0;
-            if (event->state & GDK_SHIFT_MASK)
-                new_virt_loc.vcell_loc.virt_row = 1;
-            else
-            {
-                distance = sheet->num_visible_phys_rows - 1;
-                gnc_table_move_vertical_position
-                (table, &new_virt_loc, -distance);
-            }
-            break;
-        case GDK_KEY_KP_Page_Down:
-        case GDK_KEY_Page_Down:
-            direction = GNC_TABLE_TRAVERSE_DOWN;
-            new_virt_loc.phys_col_offset = 0;
-            if (event->state & GDK_SHIFT_MASK)
-                new_virt_loc.vcell_loc.virt_row =
-                    sheet->num_virt_rows - 1;
-            else
-            {
-                distance = sheet->num_visible_phys_rows - 1;
-                gnc_table_move_vertical_position
-                (table, &new_virt_loc, distance);
-            }
-            break;
-        case GDK_KEY_KP_Up:
-        case GDK_KEY_Up:
-            direction = GNC_TABLE_TRAVERSE_UP;
-            gnc_table_move_vertical_position (table,
-                                              &new_virt_loc, -1);
-            break;
-        case GDK_KEY_KP_Down:
-        case GDK_KEY_Down:
-        case GDK_KEY_Menu:
-            if (event->keyval == GDK_KEY_Menu ||
-                    (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR))
-            {
-                GncItemEdit *item_edit;
-
-                item_edit = GNC_ITEM_EDIT (sheet->item_editor);
-
-                if (gnc_table_confirm_change (table,
-                                              cur_virt_loc))
-                    gnc_item_edit_show_popup (item_edit);
-		/* Clear the saved selection for the new cell. */
-		sheet->pos = sheet->bound;
-
-                return TRUE;
-            }
-
-            direction = GNC_TABLE_TRAVERSE_DOWN;
-            gnc_table_move_vertical_position (table,
-                                              &new_virt_loc, 1);
-            break;
-        case GDK_KEY_Control_L:
-        case GDK_KEY_Control_R:
-        case GDK_KEY_Shift_L:
-        case GDK_KEY_Shift_R:
-        case GDK_KEY_Alt_L:
-        case GDK_KEY_Alt_R:
-            pass_on = TRUE;
-            break;
-        case GDK_KEY_KP_Right:
-        case GDK_KEY_Right:
-        case GDK_KEY_KP_Left:
-        case GDK_KEY_Left:
-        case GDK_KEY_Home:
-        case GDK_KEY_End:
-	    /* Clear the saved selection, we're not using it. */
-	    sheet->pos = sheet->bound;
-	    pass_on = TRUE;
-	    break;
-        default:
-            if (gnucash_sheet_clipboard_event(sheet, event))
-	    {
-		/* Clear the saved selection. */
-		sheet->pos = sheet->bound;
-                return TRUE;
-	    }
-            pass_on = TRUE;
-            break;
-        }
     }
 
     /* Forward the keystroke to the input line */
