@@ -730,6 +730,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay* ledger)
     gchar* label_color;
     QofQuery* q;
 
+    // added for version 4.0 onwards
+    if (!gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
+        gnc_features_set_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER);
+
     /* Is there an existing page? */
     gsr = gnc_ledger_display_get_user_data (ledger);
     if (gsr)
@@ -1656,10 +1660,6 @@ static const gchar* style_names[] =
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
 
-#define KEY_PAGE_SORT           "register_order"
-#define KEY_PAGE_SORT_REV       "register_reversed"
-#define KEY_PAGE_FILTER         "register_filter"
-
 #define LABEL_ACCOUNT       "Account"
 #define LABEL_SUBACCOUNT    "SubAccount"
 #define LABEL_GL            "GL"
@@ -2061,6 +2061,18 @@ gnc_plugin_page_register_get_tab_color (GncPluginPage* plugin_page)
     return g_strdup (color ? color : "Not Set");
 }
 
+static void
+gnc_plugin_page_register_check_for_empty_group (GKeyFile *state_file, const gchar *state_section)
+{
+    gsize num_keys;
+    gchar **keys = g_key_file_get_keys (state_file, state_section, &num_keys, NULL);
+
+    if (num_keys == 0)
+        gnc_state_drop_sections_for (state_section);
+
+    g_strfreev (keys);
+}
+
 static const gchar*
 gnc_plugin_page_register_get_filter_gcm (Account* leader)
 {
@@ -2094,7 +2106,6 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
     const char* filter = NULL;
 
@@ -2102,19 +2113,12 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
                           _ ("unknown"));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
 
-    // load from gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        filter = gnc_plugin_page_register_get_filter_gcm (leader);
-    else // load from kvp
-    {
-        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-            filter = xaccAccountGetFilter (leader);
-    }
+    ledger_type = gnc_ledger_display_type (priv->ledger);
+    leader = gnc_ledger_display_leader (priv->ledger);
+
+    // load from gcm file
+    filter = gnc_plugin_page_register_get_filter_gcm (leader);
 
     return filter ? g_strdup (filter) : g_strdup_printf ("%s,%s,%s,%s",
                                                          DEFAULT_FILTER,
@@ -2137,6 +2141,8 @@ gnc_plugin_page_register_set_filter_gcm (Account* leader, const gchar* filter,
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, NULL))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_FILTER, NULL);
+
+        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
     }
     else
     {
@@ -2156,32 +2162,20 @@ gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
 {
     GncPluginPageRegisterPrivate* priv;
     GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
     gchar* default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+
+    ledger_type = gnc_ledger_display_type (priv->ledger);
+    leader = gnc_ledger_display_leader (priv->ledger);
 
     default_filter = g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
                                       "0", "0", get_filter_default_num_of_days (ledger_type));
 
-    // save to gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        gnc_plugin_page_register_set_filter_gcm (leader, filter, default_filter);
-    else // save to kvp
-    {
-        if (leader != NULL)
-        {
-            if (!filter || (g_strcmp0 (filter, default_filter) == 0))
-                xaccAccountSetFilter (leader, NULL);
-            else
-                xaccAccountSetFilter (leader, filter);
-        }
-    }
+    // save to gcm file
+    gnc_plugin_page_register_set_filter_gcm (leader, filter, default_filter);
+
     g_free (default_filter);
     return;
 }
@@ -2217,8 +2211,6 @@ static gchar*
 gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
     const char* sort_order = NULL;
 
@@ -2226,19 +2218,12 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage* plugin_page)
                           _ ("unknown"));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
 
-    // load from gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        sort_order = gnc_plugin_page_register_get_sort_order_gcm (leader);
-    else // load from kvp
-    {
-        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-            sort_order = xaccAccountGetSortOrder (leader);
-    }
+    leader = gnc_ledger_display_leader (priv->ledger);
+
+    // load from gcm file
+    sort_order = gnc_plugin_page_register_get_sort_order_gcm (leader);
+
     return g_strdup (sort_order ? sort_order : DEFAULT_SORT_ORDER);
 }
 
@@ -2257,6 +2242,8 @@ gnc_plugin_page_register_set_sort_order_gcm (Account* leader,
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, NULL))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, NULL);
+
+        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
     }
     else
         g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_order);
@@ -2268,30 +2255,14 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage* plugin_page,
                                          const gchar* sort_order)
 {
     GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
 
-    // save to gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        gnc_plugin_page_register_set_sort_order_gcm (leader, sort_order);
-    else // save to kvp
-    {
-        if (leader != NULL)
-        {
-            if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
-                xaccAccountSetSortOrder (leader, NULL);
-            else
-                xaccAccountSetSortOrder (leader, sort_order);
-        }
-    }
-    return;
+    leader = gnc_ledger_display_leader (priv->ledger);
+
+    // save to gcm file
+    gnc_plugin_page_register_set_sort_order_gcm (leader, sort_order);
 }
 
 static gboolean
@@ -2320,27 +2291,17 @@ static gboolean
 gnc_plugin_page_register_get_sort_reversed (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
     gboolean sort_reversed = FALSE;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
 
-    // load from gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        sort_reversed = gnc_plugin_page_register_get_sort_reversed_gcm (leader);
-    else // load from kvp
-    {
-        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-            sort_reversed = xaccAccountGetSortReversed (leader);
-    }
+    leader = gnc_ledger_display_leader (priv->ledger);
+
+    // load from gcm file
+    sort_reversed = gnc_plugin_page_register_get_sort_reversed_gcm (leader);
     return sort_reversed;
 }
 
@@ -2359,6 +2320,8 @@ gnc_plugin_page_register_set_sort_reversed_gcm (Account* leader,
     {
         if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL))
             g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL);
+
+        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
     }
     else
         g_key_file_set_boolean (state_file, state_section, KEY_PAGE_SORT_REV,
@@ -2372,25 +2335,13 @@ gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
                                             gboolean reverse_order)
 {
     GncPluginPageRegisterPrivate* priv;
-    GNCLedgerDisplayType ledger_type;
-    GNCLedgerDisplay* ld;
     Account* leader;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
-    ld = priv->ledger;
-    ledger_type = gnc_ledger_display_type (ld);
-    leader = gnc_ledger_display_leader (ld);
+    leader = gnc_ledger_display_leader (priv->ledger);
 
-    // save to gcm file for LD_GL or when feature is set
-    if (ledger_type == LD_GL ||
-        gnc_features_check_used (gnc_get_current_book(), GNC_FEATURE_REG_SORT_FILTER))
-        gnc_plugin_page_register_set_sort_reversed_gcm (leader, reverse_order);
-    else // save to kvp
-    {
-        if (leader != NULL)
-            xaccAccountSetSortReversed (leader, reverse_order);
-    }
-    return;
+    // save to gcm file
+    gnc_plugin_page_register_set_sort_reversed_gcm (leader, reverse_order);
 }
 
 static gchar*
@@ -2556,7 +2507,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
     else
     {
         // clear the sort when unticking the save option
-        if ((priv->sd.save_order == FALSE) && (priv->sd.original_save_order == TRUE))
+        if ((!priv->sd.save_order) && ((priv->sd.original_save_order) || (priv->sd.original_reverse_order)))
         {
             gnc_plugin_page_register_set_sort_order (plugin_page, DEFAULT_SORT_ORDER);
             gnc_plugin_page_register_set_sort_reversed (plugin_page, FALSE);
