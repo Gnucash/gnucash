@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="auto_decimal_places_adj">
@@ -105,7 +105,7 @@
     <property name="default_height">400</property>
     <property name="type_hint">normal</property>
     <signal name="response" handler="gnc_preferences_response_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -2854,6 +2854,7 @@ many months before the current month:</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
                         <property name="adjustment">default_zoom_adj</property>
+                        <property name="digits">1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
