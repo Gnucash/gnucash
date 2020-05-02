@@ -83,17 +83,9 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
     CellBlock* curs;
     CellBlock* curs_last;
 
-    switch (reg->type)
+    switch (gnc_split_register_get_register_group (reg))
     {
-    case BANK_REGISTER:
-    case CASH_REGISTER:
-    case ASSET_REGISTER:
-    case CREDIT_REGISTER:
-    case LIABILITY_REGISTER:
-    case INCOME_REGISTER:
-    case EXPENSE_REGISTER:
-    case EQUITY_REGISTER:
-    case TRADING_REGISTER:
+    case REG_TYPE_GROUP_CURRENCY:
     {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -191,8 +183,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
     }
     /* --------------------------------------------------------- */
 
-    case PAYABLE_REGISTER:
-    case RECEIVABLE_REGISTER:
+    case REG_TYPE_GROUP_APAR:
     {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -269,9 +260,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
     }
 
     /* --------------------------------------------------------- */
-    case INCOME_LEDGER:
-    case GENERAL_JOURNAL:
-    case SEARCH_LEDGER:
+    case REG_TYPE_GROUP_JOURNAL:
     {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -391,8 +380,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
     }
 
     /* --------------------------------------------------------- */
-    case STOCK_REGISTER:
-    case CURRENCY_REGISTER:
+    case REG_TYPE_GROUP_STOCK:
     {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -476,7 +464,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
     }
 
     /* --------------------------------------------------------- */
-    case PORTFOLIO_LEDGER:
+    case REG_TYPE_GROUP_PORTFOLIO:
     {
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_LEDGER);
@@ -559,7 +547,7 @@ gnc_split_register_set_cells (SplitRegister* reg, TableLayout* layout)
 
     /* --------------------------------------------------------- */
     default:
-        PERR ("unknown register type %d \n", reg->type);
+        PERR ("unknown register group type for %d \n", reg->type);
         break;
     }
 }

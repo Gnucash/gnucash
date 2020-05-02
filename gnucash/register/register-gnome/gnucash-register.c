@@ -186,10 +186,6 @@ void
 gnucash_register_reset_sheet_layout (GnucashRegister *reg)
 {
     GNCHeaderWidths widths;
-    Table *table;
-    GList *node;
-    gchar *key;
-    guint value;
     GnucashSheet *sheet;
     gint current_width;
 

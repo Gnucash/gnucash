@@ -167,6 +167,19 @@ typedef enum
     NUM_REGISTER_TYPES
 } SplitRegisterType;
 
+/** @brief Register group types
+ *
+ * used for grouping registers that have the same layout */
+typedef enum
+{
+    REG_TYPE_GROUP_UNKNOWN,
+    REG_TYPE_GROUP_CURRENCY,
+    REG_TYPE_GROUP_APAR,
+    REG_TYPE_GROUP_STOCK,
+    REG_TYPE_GROUP_JOURNAL,
+    REG_TYPE_GROUP_PORTFOLIO,
+} SplitRegisterTypeGroup;
+
 /** Register styles */
 typedef enum
 {
@@ -327,6 +340,12 @@ void gnc_split_register_set_auto_complete (SplitRegister* reg,
  */
 void gnc_split_register_set_read_only (SplitRegister* reg, gboolean read_only);
 
+/** Group registers for common layouts.
+ *  @param reg a ::SplitRegister
+ *
+ *  @return the ::SplitRegisterTypeGroup that groups registers together
+ */
+SplitRegisterTypeGroup gnc_split_register_get_register_group (SplitRegister *reg);
 
 /** Set the template account for use in a template register.
  *
