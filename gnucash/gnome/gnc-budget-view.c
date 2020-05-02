@@ -447,11 +447,11 @@ gbv_create_widget (GncBudgetView *budget_view)
     // Create totals tree view
     totals_tree_model = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, _("Inflow from Income"), 1, TOTALS_TYPE_INCOME, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Income"), 1, TOTALS_TYPE_INCOME, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, _("Outflow to Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Expenses"), 1, TOTALS_TYPE_EXPENSES, -1);
     gtk_list_store_append(totals_tree_model, &iter);
-    gtk_list_store_set(totals_tree_model, &iter, 0, _("Outflow to Asset/Equity/Liability"), 1, TOTALS_TYPE_ASSET_LIAB_EQ, -1);
+    gtk_list_store_set(totals_tree_model, &iter, 0, _("Transfer"), 1, TOTALS_TYPE_ASSET_LIAB_EQ, -1);
     gtk_list_store_append(totals_tree_model, &iter);
     gtk_list_store_set(totals_tree_model, &iter, 0, _("Remaining to Budget"), 1, TOTALS_TYPE_REMAINDER, -1);
 
@@ -1202,11 +1202,11 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
             switch (row_type)
             {
                 case TOTALS_TYPE_ASSET_LIAB_EQ:
-                    if ((acctype == ACCT_TYPE_LIABILITY) ||
-                        (acctype == ACCT_TYPE_EQUITY))
-                        neg = !neg;
-                    else if (acctype != ACCT_TYPE_ASSET)
+                    if ((acctype != ACCT_TYPE_ASSET) &&
+                        (acctype != ACCT_TYPE_LIABILITY) &&
+                        (acctype != ACCT_TYPE_EQUITY))
                         continue;
+                    neg = !neg;
                     break;
                 case TOTALS_TYPE_EXPENSES:
                     if (acctype != ACCT_TYPE_EXPENSE)
@@ -1218,10 +1218,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                     neg = !neg;
                     break;
                 case TOTALS_TYPE_REMAINDER:
-                    if ((acctype == ACCT_TYPE_ASSET) ||
-                        (acctype == ACCT_TYPE_INCOME) ||
-                        (acctype == ACCT_TYPE_EXPENSE))
-                        neg = !neg;
+                    neg = !neg;
                     break;
                 default:
                     continue;       /* don't count if unexpected total row type is passed in... */
@@ -1239,6 +1236,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         (acctype != ACCT_TYPE_LIABILITY) &&
                         (acctype != ACCT_TYPE_EQUITY))
                         continue;
+                    neg = (acctype == ACCT_TYPE_ASSET);
                     break;
                 case TOTALS_TYPE_EXPENSES:
                     if (acctype != ACCT_TYPE_EXPENSE)
@@ -1249,7 +1247,8 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         continue;
                     break;
                 case TOTALS_TYPE_REMAINDER:
-                    neg = (acctype != ACCT_TYPE_INCOME);
+                    neg = ((acctype == ACCT_TYPE_ASSET) ||
+                           (acctype == ACCT_TYPE_EXPENSE));
                     break;
                 default:
                     continue;       /* don't count if unexpected total row type is passed in... */
