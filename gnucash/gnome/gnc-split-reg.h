@@ -85,6 +85,8 @@ struct _GNCSplitReg
     /** The actual gnucash register widget. **/
     GnucashRegister *reg;
 
+    const gchar *page_state_name; /* Used for loading open state information */
+
     gint numRows;
 
     guint    sort_type;
@@ -179,11 +181,13 @@ GType gnc_split_reg_get_type(void);
  * @param parent        The containing window.
  * @param numberOfLines The initial number of lines for the register.
  * @param read_only      If the contained register should be setup read-only.
+ * @param group_name     The group name of the page state section for this page
  **/
 GtkWidget* gnc_split_reg_new( GNCLedgerDisplay *ld,
                               GtkWindow *parent,
                               gint numberOfLines,
-                              gboolean read_only );
+                              gboolean read_only,
+                              const gchar *group_name );
 
 /**
  * Returns the GnucashRegister in effect for this GNCSplitReg.
@@ -249,6 +253,14 @@ void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
  **/
 void gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr);
 void gnc_split_reg_set_sheet_focus (GNCSplitReg *gsr, gboolean has_focus);
+
+/**
+ * Save/Reset/Has functions used for the user default register layouts.
+ **/
+void gnc_split_reg_save_register_layout_to_user_state (GNCSplitReg *gsr);
+void gnc_split_reg_reset_register_layout_and_clear_user_state (GNCSplitReg *gsr);
+gboolean gnc_split_reg_register_has_user_state (GNCSplitReg *gsr);
+const gchar *gnc_split_reg_get_register_state_group (GNCSplitReg *gsr);
 
 /*
  * Create a transaction entry with given amount and date. One account is
