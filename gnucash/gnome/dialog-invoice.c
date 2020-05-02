@@ -544,7 +544,7 @@ gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw)
     Table *table = gnc_entry_ledger_get_table (iw->ledger);
     const gchar *group = gnc_invoice_window_get_state_group (iw);
 
-    gnc_table_save_state (table, group, NULL);
+    gnc_table_save_state (table, group);
 }
 
 /* Removes the user state layout information for Invoice/Bill/Voucher
@@ -2368,7 +2368,7 @@ gnc_invoice_save_page (InvoiceWindow *iw,
         g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID, guidstr);
     }
     // save the open table layout
-    gnc_table_save_state (table, group_name, NULL);
+    gnc_table_save_state (table, group_name);
 }
 
 GtkWidget *

@@ -508,7 +508,7 @@ gsr_create_table( GNCSplitReg *gsr )
     if (g_key_file_has_group (gnc_state_get_current (), register_state_section))
     {
         if (!gnc_split_reg_register_has_user_state (gsr))
-             gnc_table_save_state (sr->table, default_state_section, NULL);
+             gnc_table_save_state (sr->table, default_state_section);
         // drop the register state
         gnc_state_drop_sections_for (register_state_section);
     }
@@ -2008,7 +2008,7 @@ gnc_split_reg_save_register_layout_to_user_state (GNCSplitReg *gsr)
     SplitRegister *split_reg = gnc_ledger_display_get_split_register (gsr->ledger);
     const gchar *group = gnc_split_reg_get_register_state_group (gsr);
 
-    gnc_table_save_state (split_reg->table, group, NULL);
+    gnc_table_save_state (split_reg->table, group);
 }
 
 /* Removes the user state layout information for the register group
