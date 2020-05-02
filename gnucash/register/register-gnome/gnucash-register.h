@@ -83,5 +83,6 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
                                     GFunc cb, gpointer cb_data);
 
 GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg);
+void gnucash_register_reset_sheet_layout (GnucashRegister *reg);
 /** @} */
 #endif
