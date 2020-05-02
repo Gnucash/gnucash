@@ -182,6 +182,37 @@ gnucash_register_refresh_from_prefs (GnucashRegister *reg)
     gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
 }
 
+void
+gnucash_register_reset_sheet_layout (GnucashRegister *reg)
+{
+    GNCHeaderWidths widths;
+    Table *table;
+    GList *node;
+    gchar *key;
+    guint value;
+    GnucashSheet *sheet;
+    gint current_width;
+
+    g_return_if_fail (reg != NULL);
+
+    sheet = GNUCASH_SHEET(reg->sheet);
+
+    g_return_if_fail (sheet != NULL);
+    g_return_if_fail (GNUCASH_IS_SHEET (sheet));
+
+    current_width = sheet->window_width - 1;
+
+    widths = gnc_header_widths_new ();
+    gnucash_sheet_set_header_widths (sheet, widths);
+
+    gnucash_sheet_styles_set_dimensions (sheet, current_width);
+
+    gnucash_sheet_compile_styles (sheet);
+    gnucash_sheet_table_load (sheet, TRUE);
+    gnucash_sheet_cursor_set_from_table (sheet, TRUE);
+    gnucash_sheet_redraw_all (sheet);
+    gnc_header_widths_destroy (widths);
+}
 
 void
 gnucash_register_goto_virt_cell (GnucashRegister *reg,

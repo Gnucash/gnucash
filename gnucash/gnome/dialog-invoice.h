@@ -110,6 +110,10 @@ void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_payment_cb (GtkWindow *parent, gpointer data);
 void gnc_invoice_window_report_owner_cb (GtkWindow *parent, gpointer data);
 
+void gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw);
+void gnc_invoice_window_reset_document_layout_and_clear_user_state (InvoiceWindow *iw);
+gboolean gnc_invoice_window_document_has_user_state (InvoiceWindow *iw);
+
 void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data);
 
