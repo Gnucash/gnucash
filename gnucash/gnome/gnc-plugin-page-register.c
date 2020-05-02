@@ -1739,7 +1739,7 @@ gnc_plugin_page_register_save_page (GncPluginPage* plugin_page,
                             reg->use_double_line);
 
     // save the open table layout
-    gnc_table_save_state (reg->table, group_name, NULL);
+    gnc_table_save_state (reg->table, group_name);
 
     LEAVE(" ");
 }

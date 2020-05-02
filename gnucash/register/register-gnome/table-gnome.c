@@ -68,7 +68,7 @@ static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 /** Implementation *****************************************************/
 
 void
-gnc_table_save_state (Table *table, const gchar * state_section, gchar * account_fullname)
+gnc_table_save_state (Table *table, const gchar * state_section)
 {
     GnucashSheet *sheet;
     GNCHeaderWidths widths;
@@ -106,12 +106,6 @@ gnc_table_save_state (Table *table, const gchar * state_section, gchar * account
         }
         else if (g_key_file_has_key (state_file, state_section, key, NULL))
             g_key_file_remove_key (state_file, state_section, key, NULL);
-        g_free (key);
-    }
-    if (account_fullname)
-    {
-        key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
-        g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
         g_free (key);
     }
     gnc_header_widths_destroy (widths);
