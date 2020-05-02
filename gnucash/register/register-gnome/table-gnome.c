@@ -68,7 +68,7 @@ static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 /** Implementation *****************************************************/
 
 void
-gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fullname)
+gnc_table_save_state (Table *table, const gchar * state_section, gchar * account_fullname)
 {
     GnucashSheet *sheet;
     GNCHeaderWidths widths;

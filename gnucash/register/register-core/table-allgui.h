@@ -201,7 +201,7 @@ Table *     gnc_table_new (TableLayout *layout,
                            TableControl *control);
 void        gnc_virtual_location_init (VirtualLocation *vloc);
 
-void        gnc_table_save_state (Table *table, gchar *state_section, gchar *account_fullname);
+void        gnc_table_save_state (Table *table, const gchar *state_section, gchar *account_fullname);
 void        gnc_table_destroy (Table *table);
 
 
