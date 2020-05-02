@@ -56,6 +56,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-register.h"
 #include "table-allgui.h"
+#include "gnc-state.h"
 
 #include "dialog-utils.h"
 
@@ -325,7 +326,8 @@ GtkWidget*
 gnc_split_reg_new( GNCLedgerDisplay *ld,
                    GtkWindow *parent,
                    gint numberOfLines,
-                   gboolean read_only )
+                   gboolean read_only,
+                   const gchar *group_name )
 {
     GNCSplitReg *gsrToRet;
 
@@ -339,6 +341,8 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 
     gsrToRet->ledger = ld;
     gsrToRet->window = GTK_WIDGET(parent);
+
+    gsrToRet->page_state_name = group_name;
 
     gnc_split_reg_init2( gsrToRet );
 
@@ -359,6 +363,7 @@ gnc_split_reg_init( GNCSplitReg *gsr )
     gsr->height = -1;
     gsr->numRows = 10;
     gsr->read_only = FALSE;
+    gsr->page_state_name = NULL;
 }
 
 static void
@@ -402,6 +407,46 @@ gsr_setup_table( GNCSplitReg *gsr )
     LEAVE(" ");
 }
 
+const gchar *
+gnc_split_reg_get_register_state_group (GNCSplitReg *gsr)
+{
+    SplitRegister *split_reg = gnc_ledger_display_get_split_register (gsr->ledger);
+
+    switch (gnc_split_register_get_register_group (split_reg))
+    {
+        case REG_TYPE_GROUP_CURRENCY:
+        {
+            return N_("Currency account registers");
+            break;
+        }
+        case REG_TYPE_GROUP_APAR:
+        {
+            return N_("Business account registers");
+            break;
+        }
+        case REG_TYPE_GROUP_JOURNAL:
+        {
+            return N_("Journal registers");
+            break;
+        }
+        case REG_TYPE_GROUP_STOCK:
+        {
+            return N_("Stock account registers");
+            break;
+        }
+        case REG_TYPE_GROUP_PORTFOLIO:
+        {
+            return N_("Portfolio registers");
+            break;
+        }
+        default:
+        {
+            return N_("Register group Unknown");
+            break;
+        }
+    }
+}
+
 static
 void
 gsr_create_table( GNCSplitReg *gsr )
@@ -412,12 +457,31 @@ gsr_create_table( GNCSplitReg *gsr )
     Account * account = gnc_ledger_display_leader(gsr->ledger);
     const GncGUID * guid = xaccAccountGetGUID(account);
     gchar guidstr[GUID_ENCODING_LENGTH+1];
-    const gchar *state_section = NULL;
-    guid_to_string_buff(guid, guidstr);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
+    gchar *register_state_section;
+    const gchar *default_state_section;
+    const gchar *group;
+
+    guid_to_string_buff (guid, guidstr);
+
+    register_state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     ENTER("gsr=%p", gsr);
 
+    sr = gnc_ledger_display_get_split_register (gsr->ledger);
+    default_state_section = gnc_split_reg_get_register_state_group (gsr);
+
+    // if this is from a page recreate and no register state use those settings,
+    // register state is dropped at the end of function.
+    if (gsr->page_state_name && !g_key_file_has_group (gnc_state_get_current (), register_state_section))
+        group = gsr->page_state_name;
+    else
+    {
+        // if no default state, use register state if available
+        if (gnc_split_reg_register_has_user_state (gsr))
+            group = default_state_section;
+        else
+            group = register_state_section;
+    }
     gnc_ledger_display_set_user_data( gsr->ledger, (gpointer)gsr );
     gnc_ledger_display_set_handlers( gsr->ledger,
                                      gnc_split_reg_ld_destroy,
@@ -425,7 +489,7 @@ gsr_create_table( GNCSplitReg *gsr )
 
     /* FIXME: We'd really rather pass this down... */
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
-    register_widget = gnucash_register_new( sr->table, state_section );
+    register_widget = gnucash_register_new( sr->table, group );
     gsr->reg = GNUCASH_REGISTER( register_widget );
 
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
@@ -440,6 +504,15 @@ gsr_create_table( GNCSplitReg *gsr )
     g_signal_connect (gsr->reg, "show_popup_menu",
                       G_CALLBACK(gsr_emit_show_popup_menu), gsr);
 
+    // if no default state and register has state, copy it.
+    if (g_key_file_has_group (gnc_state_get_current (), register_state_section))
+    {
+        if (!gnc_split_reg_register_has_user_state (gsr))
+             gnc_table_save_state (sr->table, default_state_section, NULL);
+        // drop the register state
+        gnc_state_drop_sections_for (register_state_section);
+    }
+    g_free (register_state_section);
     LEAVE(" ");
 }
 
@@ -721,37 +794,10 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
 
-    Account * account = gnc_ledger_display_leader(ledger);
-    const GncGUID * guid = xaccAccountGetGUID(account);
-    gchar guidstr[GUID_ENCODING_LENGTH+1];
-    gchar *state_section;
-    gchar *acct_fullname;
-    guid_to_string_buff(guid, guidstr);
-
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
-
-    if (g_strcmp0(guidstr, "00000000000000000000000000000000") == 0)
-        acct_fullname = g_strdup(_("General Journal"));
-    else
-        acct_fullname = gnc_account_get_full_name(account);
-
-    if (gsr)
-    {
-        SplitRegister *reg;
-
-        reg = gnc_ledger_display_get_split_register (ledger);
-
-        if (reg && reg->table)
-            gnc_table_save_state (reg->table, state_section, acct_fullname);
-
-        /*
-         * Don't destroy the window here any more.  The register no longer
-         * owns it.
-         */
-    }
-    g_free (state_section);
-    g_free (acct_fullname);
-
+   /*
+    * Don't destroy the window here any more.  The register no longer
+    * owns it.
+    */
     gnc_ledger_display_set_user_data (ledger, NULL);
     g_object_unref (gsr);
 }
@@ -1950,6 +1996,44 @@ gnc_split_reg_set_sheet_focus (GNCSplitReg *gsr, gboolean has_focus)
     GnucashRegister *reg = gsr->reg;
     GnucashSheet *sheet = gnucash_register_get_sheet (reg);
     gnucash_sheet_set_has_focus (sheet, has_focus);
+}
+
+/* Save user state layout information to the register group that
+ * this register belongs to so it can be used as the default
+ * user layout
+ */
+void
+gnc_split_reg_save_register_layout_to_user_state (GNCSplitReg *gsr)
+{
+    SplitRegister *split_reg = gnc_ledger_display_get_split_register (gsr->ledger);
+    const gchar *group = gnc_split_reg_get_register_state_group (gsr);
+
+    gnc_table_save_state (split_reg->table, group, NULL);
+}
+
+/* Removes the user state layout information for the register group
+ * that this register belongs to and also resets the current layout to
+ * the built-in defaults
+ */
+void
+gnc_split_reg_reset_register_layout_and_clear_user_state (GNCSplitReg *gsr)
+{
+    GnucashRegister *reg = gsr->reg;
+    const gchar *group = gnc_split_reg_get_register_state_group (gsr);
+
+    gnucash_register_reset_sheet_layout (reg);
+    gnc_state_drop_sections_for (group);
+}
+
+/* Checks to see if there is user state layout information for the
+ * register group that this register belongs to.
+ */
+gboolean
+gnc_split_reg_register_has_user_state (GNCSplitReg *gsr)
+{
+    GKeyFile *state_file = gnc_state_get_current ();
+    const gchar *group = gnc_split_reg_get_register_state_group (gsr);
+    return g_key_file_has_group (state_file, group);
 }
 
 void
