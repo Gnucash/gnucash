@@ -37,6 +37,9 @@
 #define IS_GNC_SPLIT_REG(obj)      G_TYPE_CHECK_INSTANCE_TYPE( obj, gnc_split_reg_get_type() )
 
 #define STATE_SECTION_REG_PREFIX "Register"
+#define KEY_PAGE_SORT            "register_order"
+#define KEY_PAGE_SORT_REV        "register_reversed"
+#define KEY_PAGE_FILTER          "register_filter"
 
 typedef struct _GNCSplitReg GNCSplitReg;
 typedef struct _GNCSplitRegClass GNCSplitRegClass;

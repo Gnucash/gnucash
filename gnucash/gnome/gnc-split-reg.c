@@ -447,6 +447,82 @@ gnc_split_reg_get_register_state_group (GNCSplitReg *gsr)
     }
 }
 
+static void
+gsr_drop_register_width_state (GNCSplitReg *gsr, GKeyFile* state_file, const gchar *state_section)
+{
+    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay* ld;
+
+    gboolean sort_reversed = FALSE;
+    gchar* sort_text = NULL;
+    gchar* filter_text = NULL;
+
+    // Look for any old kvp entries and add them to .gcm file
+    ledger_type = gnc_ledger_display_type (gsr->ledger);
+
+    // General ledger should already be using .gcm file
+    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+    {
+        Account *leader = gnc_ledger_display_leader (gsr->ledger);
+        const char* kvp_filter = NULL;
+        const char* kvp_sort_order = NULL;
+        gboolean kvp_sort_reversed = FALSE;
+
+        kvp_filter = xaccAccountGetFilter (leader);
+        if (kvp_filter)
+        {
+            gchar *temp_filter_text = g_strdup (kvp_filter);
+            temp_filter_text = g_strdelimit (temp_filter_text, ",",
+                                             ';'); // make it conform to .gcm file list
+            g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
+                                   temp_filter_text);
+            g_free (temp_filter_text);
+            xaccAccountSetFilter (leader, NULL);
+        }
+
+        kvp_sort_order = xaccAccountGetSortOrder (leader);
+        if (kvp_sort_order)
+        {
+            g_key_file_set_string (state_file, state_section,
+                                   KEY_PAGE_SORT, kvp_sort_order);
+            xaccAccountSetSortOrder (leader, NULL);
+        }
+
+        kvp_sort_reversed = xaccAccountGetSortReversed (leader);
+        if (kvp_sort_reversed)
+        {
+            g_key_file_set_boolean (state_file, state_section,
+                                    KEY_PAGE_SORT_REV, kvp_sort_reversed);
+            xaccAccountSetSortReversed (leader, FALSE);
+        }
+    }
+
+    sort_reversed = g_key_file_get_boolean (state_file, state_section,
+                                            KEY_PAGE_SORT_REV, NULL);
+
+    sort_text = g_key_file_get_string (state_file, state_section,
+                                       KEY_PAGE_SORT, NULL);
+
+    filter_text = g_key_file_get_string (state_file, state_section,
+                                         KEY_PAGE_FILTER, NULL);
+
+    // drop the register state widths
+    gnc_state_drop_sections_for (state_section);
+
+    if (filter_text)
+        g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER,
+                               filter_text);
+    if (sort_text)
+        g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_text);
+
+    if (sort_reversed)
+        g_key_file_set_boolean (state_file, state_section, KEY_PAGE_SORT_REV,
+                                sort_reversed);
+
+    g_free (filter_text);
+    g_free (sort_text);
+}
+
 static
 void
 gsr_create_table( GNCSplitReg *gsr )
@@ -457,9 +533,11 @@ gsr_create_table( GNCSplitReg *gsr )
     Account * account = gnc_ledger_display_leader(gsr->ledger);
     const GncGUID * guid = xaccAccountGetGUID(account);
     gchar guidstr[GUID_ENCODING_LENGTH+1];
+    GKeyFile* state_file = gnc_state_get_current();
     gchar *register_state_section;
     const gchar *default_state_section;
     const gchar *group;
+    gboolean has_date_width = FALSE;
 
     guid_to_string_buff (guid, guidstr);
 
@@ -470,9 +548,12 @@ gsr_create_table( GNCSplitReg *gsr )
     sr = gnc_ledger_display_get_split_register (gsr->ledger);
     default_state_section = gnc_split_reg_get_register_state_group (gsr);
 
+    // see if register group has the date_width key, old format pre 4.0
+    has_date_width = g_key_file_has_key (state_file, register_state_section, "date_width", NULL);
+
     // if this is from a page recreate and no register state use those settings,
-    // register state is dropped at the end of function.
-    if (gsr->page_state_name && !g_key_file_has_group (gnc_state_get_current (), register_state_section))
+    // register state width information is dropped at the end of function.
+    if (gsr->page_state_name && !has_date_width)
         group = gsr->page_state_name;
     else
     {
@@ -505,12 +586,13 @@ gsr_create_table( GNCSplitReg *gsr )
                       G_CALLBACK(gsr_emit_show_popup_menu), gsr);
 
     // if no default state and register has state, copy it.
-    if (g_key_file_has_group (gnc_state_get_current (), register_state_section))
+    if (has_date_width) // we have old register state section 
     {
         if (!gnc_split_reg_register_has_user_state (gsr))
              gnc_table_save_state (sr->table, default_state_section);
-        // drop the register state
-        gnc_state_drop_sections_for (register_state_section);
+
+        // drop the register width state information
+        gsr_drop_register_width_state (gsr, state_file, register_state_section);
     }
     g_free (register_state_section);
     LEAVE(" ");
