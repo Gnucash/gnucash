@@ -2486,10 +2486,6 @@ gnc_tree_view_account_save_filter (GncTreeViewAccount *view,
                            fd->show_zero_total);
     g_key_file_set_boolean (key_file, group_name, SHOW_UNUSED_ACCOUNTS,
                            fd->show_unused);
-
-    g_key_file_set_comment (key_file, group_name, ACCOUNT_TYPES,
-                            "Account Filter Section below, four lines", NULL);
-
     LEAVE("");
 }
 
