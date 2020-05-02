@@ -486,7 +486,7 @@ gnucash_register_attach_popup (GnucashRegister *reg,
  *  to pass NULL as second parameter. */
 
 static void
-gnucash_register_configure (GnucashSheet *sheet, gchar * state_section)
+gnucash_register_configure (GnucashSheet *sheet, const gchar * state_section)
 {
     GNCHeaderWidths widths;
     Table *table;
@@ -644,7 +644,7 @@ gnucash_register_create_widget (Table *table)
 
 
 GtkWidget *
-gnucash_register_new (Table *table, gchar *state_section)
+gnucash_register_new (Table *table, const gchar *state_section)
 {
     GnucashRegister *reg;
     GtkWidget *widget;

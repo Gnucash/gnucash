@@ -518,19 +518,19 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
     gnc_gnome_help(HF_HELP, HL_USAGE_INVOICE);
 }
 
-static gchar *
+static const gchar *
 gnc_invoice_window_get_state_group (InvoiceWindow *iw)
 {
     switch (gncOwnerGetType (gncOwnerGetEndOwner (&iw->owner)))
     {
         case GNC_OWNER_VENDOR:
-            return g_strdup ("Vendor documents");
+            return "Vendor documents";
             break;
         case GNC_OWNER_EMPLOYEE:
-            return g_strdup ("Employee documents");
+            return "Employee documents";
             break;
         default:
-            return g_strdup ("Customer documents");
+            return "Customer documents";
             break;
     }
 }
@@ -542,10 +542,9 @@ void
 gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw)
 {
     Table *table = gnc_entry_ledger_get_table (iw->ledger);
-    gchar *group = gnc_invoice_window_get_state_group (iw);
+    const gchar *group = gnc_invoice_window_get_state_group (iw);
 
     gnc_table_save_state (table, group, NULL);
-    g_free (group);
 }
 
 /* Removes the user state layout information for Invoice/Bill/Voucher
@@ -555,11 +554,10 @@ void
 gnc_invoice_window_reset_document_layout_and_clear_user_state (InvoiceWindow *iw)
 {
     GnucashRegister *reg = iw->reg;
-    gchar *group = gnc_invoice_window_get_state_group (iw);
+    const gchar *group = gnc_invoice_window_get_state_group (iw);
 
     gnucash_register_reset_sheet_layout (reg);
     gnc_state_drop_sections_for (group);
-    g_free (group);
 }
 
 /* Checks to see if there is user state layout information for
@@ -570,10 +568,8 @@ gboolean
 gnc_invoice_window_document_has_user_state (InvoiceWindow *iw)
 {
     GKeyFile *state_file = gnc_state_get_current ();
-    gchar *group = gnc_invoice_window_get_state_group (iw);
-    gboolean has_group = g_key_file_has_group (state_file, group);
-    g_free (group);
-    return has_group;
+    const gchar *group = gnc_invoice_window_get_state_group (iw);
+    return g_key_file_has_group (state_file, group);
 }
 
 void
@@ -2351,7 +2347,6 @@ gnc_invoice_save_page (InvoiceWindow *iw,
                        const gchar *group_name)
 {
     Table *table = gnc_entry_ledger_get_table (iw->ledger);
-    gchar *group = g_strdup (group_name);
     gchar guidstr[GUID_ENCODING_LENGTH+1];
     guid_to_string_buff(&iw->invoice_guid, guidstr);
     g_key_file_set_string(key_file, group_name, KEY_INVOICE_TYPE,
@@ -2373,8 +2368,7 @@ gnc_invoice_save_page (InvoiceWindow *iw,
         g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID, guidstr);
     }
     // save the open table layout
-    gnc_table_save_state (table, group, NULL);
-    g_free (group);
+    gnc_table_save_state (table, group_name, NULL);
 }
 
 GtkWidget *
@@ -2568,21 +2562,20 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     /* Create the register */
     {
         GtkWidget *regWidget, *frame, *window;
-        gchar *default_group = gnc_invoice_window_get_state_group (iw);
-        gchar *group;
+        const gchar *default_group = gnc_invoice_window_get_state_group (iw);
+        const gchar *group;
 
         // if this is from a page recreate, use those settings
         if (iw->page_state_name)
-            group = g_strdup (iw->page_state_name);
+            group = iw->page_state_name;
         else
-            group = g_strdup (default_group);
+            group = default_group;
 
         /* Watch the order of operations, here... */
         regWidget = gnucash_register_new (gnc_entry_ledger_get_table
                                           (entry_ledger), group);
         gtk_widget_show(regWidget);
-        g_free (default_group);
-        g_free (group);
+
         frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
         gtk_container_add (GTK_CONTAINER (frame), regWidget);
 

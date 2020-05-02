@@ -412,7 +412,7 @@ gsr_create_table( GNCSplitReg *gsr )
     Account * account = gnc_ledger_display_leader(gsr->ledger);
     const GncGUID * guid = xaccAccountGetGUID(account);
     gchar guidstr[GUID_ENCODING_LENGTH+1];
-    gchar *state_section = NULL;
+    const gchar *state_section = NULL;
     guid_to_string_buff(guid, guidstr);
     state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
@@ -427,7 +427,7 @@ gsr_create_table( GNCSplitReg *gsr )
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
     register_widget = gnucash_register_new( sr->table, state_section );
     gsr->reg = GNUCASH_REGISTER( register_widget );
-    g_free (state_section);
+
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );

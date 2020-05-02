@@ -54,7 +54,7 @@ GType gnucash_register_get_type (void);
 void gnucash_register_add_cell_types (void);
 
 /** this already has scrollbars attached */
-GtkWidget *gnucash_register_new (Table *table, gchar *state_section);
+GtkWidget *gnucash_register_new (Table *table, const gchar *state_section);
 
 void gnucash_register_goto_virt_cell (GnucashRegister *reg,
                                       VirtualCellLocation vcell_loc);
