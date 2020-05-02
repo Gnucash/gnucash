@@ -1846,6 +1846,21 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
     return FALSE;
 }
 
+static gboolean
+pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
+{
+    gboolean result = FALSE;
+    GtkEditable *editable = GTK_EDITABLE(sheet->entry);
+
+    // If sheet is readonly, entry is not realized
+    if (gtk_widget_get_realized (GTK_WIDGET(editable)))
+    {
+        gnucash_sheet_clear_selection (sheet);
+        result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event);
+    }
+    return result;
+}
+
 static gint
 gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 {
@@ -1889,16 +1904,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Forward the keystroke to the input line */
     if (pass_on)
     {
-        gboolean result = FALSE;
-        GtkEditable *editable = GTK_EDITABLE(sheet->entry);
-
-        // If sheet is readonly, entry is not realized
-        if (gtk_widget_get_realized (GTK_WIDGET(editable)))
-	{
-            gnucash_sheet_clear_selection (sheet);
-            result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event);
-	}
-        return result;
+        return pass_to_entry_handler (sheet, event);
     }
 
     abort_move = gnc_table_traverse_update (table, cur_virt_loc,
