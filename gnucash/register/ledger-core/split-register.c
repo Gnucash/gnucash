@@ -3183,3 +3183,52 @@ gnc_split_register_set_read_only (SplitRegister* reg, gboolean read_only)
 {
     gnc_table_model_set_read_only (reg->table->model, read_only);
 }
+
+SplitRegisterTypeGroup
+gnc_split_register_get_register_group (SplitRegister *reg)
+{
+    switch (reg->type)
+    {
+        case BANK_REGISTER:
+        case CASH_REGISTER:
+        case ASSET_REGISTER:
+        case CREDIT_REGISTER:
+        case LIABILITY_REGISTER:
+        case INCOME_REGISTER:
+        case EXPENSE_REGISTER:
+        case EQUITY_REGISTER:
+        case TRADING_REGISTER:
+        {
+            return REG_TYPE_GROUP_CURRENCY;
+            break;
+        }
+        case PAYABLE_REGISTER:
+        case RECEIVABLE_REGISTER:
+        {
+            return REG_TYPE_GROUP_APAR;
+            break;
+        }
+        case INCOME_LEDGER:
+        case GENERAL_JOURNAL:
+        case SEARCH_LEDGER:
+        {
+            return REG_TYPE_GROUP_JOURNAL;
+            break;
+        }
+        case STOCK_REGISTER:
+        case CURRENCY_REGISTER:
+        {
+            return REG_TYPE_GROUP_STOCK;
+            break;
+        }
+        case PORTFOLIO_LEDGER:
+        {
+            return REG_TYPE_GROUP_PORTFOLIO;
+            break;
+        }
+        default:
+            return REG_TYPE_GROUP_UNKNOWN;
+            PERR ("unknown register type %d \n", reg->type);
+        break;
+    }
+}
