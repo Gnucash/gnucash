@@ -96,25 +96,10 @@ struct _GnucashSheet
     GFunc moved_cb;
     gpointer moved_cb_data;
 
-    /* IMContext */
-    GtkIMContext *im_context;
-    gint preedit_length; /** num of bytes */
-    gint preedit_char_length; /** num of chars in UTF-8 */
-    gint preedit_start_position; /** save preedit start position   *
-                                      * combined with selection start */
-    gint preedit_cursor_position; /** save preedit cursor position */
-    gint preedit_selection_length;
-    PangoAttrList *preedit_attrs;
-    gboolean need_im_reset;
-    gboolean direct_update_cell;
-    guint commit_signal;
-    guint preedit_changed_signal;
-    guint retrieve_surrounding_signal;
-    guint delete_surrounding_signal;
-
     guint shift_state;
     guint keyval_state;
-    int pos, bound ; /** Corresponds to GtkEditable's current_pos and selection_bound */
+    gboolean direct_update_cell; /** Indicates that this cell has special operation keys. */
+    int pos, bound; /** Corresponds to GtkEditable's current_pos and selection_bound */
 
 };
 
