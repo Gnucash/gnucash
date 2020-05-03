@@ -334,9 +334,8 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     window = GTK_WIDGET(gtk_builder_get_object (builder, "find_account_window"));
     facc_dialog->window = window;
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-find-account");
-    gnc_widget_style_context_add_class (GTK_WIDGET(window), "gnc-class-account");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncFindAccountDialog");
 
     facc_dialog->session = gnc_get_current_session();
     facc_dialog->parent = parent;

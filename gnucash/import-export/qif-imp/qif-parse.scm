@@ -23,7 +23,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash string))
+(use-modules (gnucash import-export string))
 (use-modules (srfi srfi-13))
 
 (define regexp-enabled?

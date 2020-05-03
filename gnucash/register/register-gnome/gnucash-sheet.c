@@ -2519,20 +2519,19 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 /** Map a cell color type to a css style class. */
 void
 gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
-                           RegisterColor field_type, gboolean use_neg_class)
+                           RegisterColor field_type)
 {
     gchar *full_class, *style_class = NULL;
 
     if (field_type >= COLOR_NEGATIVE) // Require a Negative fg color
     {
-        if (use_neg_class)
-            gtk_style_context_add_class (stylectxt, "gnc-class-negative-numbers");
+        gtk_style_context_add_class (stylectxt, "negative-numbers");
         field_type -= COLOR_NEGATIVE;
     }
     else
     {
         if (sheet->use_gnc_color_theme) // only add this class if builtin colors used
-            gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
+            gtk_style_context_add_class (stylectxt, "register-foreground");
     }
 
     switch (field_type)
@@ -2567,11 +2566,11 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
     }
 
     if (sheet->use_gnc_color_theme)
-        full_class = g_strconcat ("gnc-class-register-", style_class, NULL);
+        full_class = g_strconcat ("register-", style_class, NULL);
     else
     {
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
-        full_class = g_strconcat ("gnc-class-user-register-", style_class, NULL);
+        full_class = g_strconcat (style_class, "-color", NULL);
     }
 
     gtk_style_context_add_class (stylectxt, full_class);
@@ -2591,7 +2590,7 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     widget_class = GTK_WIDGET_CLASS (klass);
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "gnc-id-sheet");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "sheet");
 #endif
 
     sheet_parent_class = g_type_class_peek_parent (klass);
@@ -2621,7 +2620,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
     gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(sheet), "gnc-class-sheet");
+    gnc_widget_set_css_name (GTK_WIDGET(sheet), "sheet");
 
     sheet->num_visible_blocks = 1;
     sheet->num_visible_phys_rows = 1;

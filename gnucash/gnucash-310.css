@@ -4,21 +4,21 @@
 
 
 /* Negative value label colors */
-.gnc-class-default-color {
+.default-color {
   color: @default-color;
 }
 
-.gnc-class-negative-numbers {
+.negative-numbers {
   color: @negative-numbers;
 }
 
 /* Register Cursor settings, top, right, bottom, left */
-.gnc-class-cursor .entry {
+.cursor .entry {
   margin: 2px 5px 2px 5px;  /* this only works by doing it in code, yellow area */
   padding: 2px 2px 2px 2px; /* all work with different values, around the text blue area */
 }
 
-.gnc-class-cursor .button {
+.cursor .button {
   margin: 1px 1px 1px 1px; /* does not work, not used, here for completeness */
 }
 
@@ -30,52 +30,52 @@
 @define-color register_cursor_bg_color #FFEF98;
 @define-color register_fg_color black;
 
-*.gnc-class-register-foreground {
+*.register-foreground {
   color: @register_fg_color;
 }
 
-*.gnc-class-register-header {
+*.register-header {
   background-color: @register_header_bg_color;
 }
 
-*.gnc-class-register-primary {
+*.register-primary {
   background-color: @register_primary_bg_color;
 }
 
-*.gnc-class-register-primary:insensitive {
+*.register-primary:insensitive {
   background-color: mix (@register_primary_bg_color, grey, 0.2);
 }
 
-*.gnc-class-register-secondary {
+*.register-secondary {
   background-color: @register_secondary_bg_color;
 }
 
-*.gnc-class-register-secondary:insensitive {
+*.register-secondary:insensitive {
   background-color: mix (@register_secondary_bg_color, grey, 0.2);
 }
 
-*.gnc-class-register-split {
+*.register-split {
   background-color: @register_split_bg_color;
 }
 
-*.gnc-class-register-split:insensitive {
+*.register-split:insensitive {
   background-color: mix (@register_split_bg_color, grey, 0.2);
 }
 
-*.gnc-class-register-cursor {
+*.register-cursor {
   background-color: @register_cursor_bg_color;
 }
 
-*.gnc-class-register-cursor:insensitive {
+*.register-cursor:insensitive {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
 }
 
 /* Change font color by mixing with grey */
-.gnc-class-lighter-grey-mix {
+.lighter-grey-mix {
   color: mix (currentColor, grey, 0.8);
 }
 
-.gnc-class-darker-grey-mix {
+.darker-grey-mix {
   color: mix (currentColor, grey, 0.2);
 }
 

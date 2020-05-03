@@ -6,7 +6,5 @@ set(account_DATA
 set_dist_list(SV_AX_DIST ${account_DATA} CMakeLists.txt)
 
 install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/sv_AX)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/sv_AX)
 
-foreach(acct_file ${account_DATA})
-    configure_file(${acct_file} ${ACCOUNTS_BUILD_DIR}/sv_AX/${acct_file} COPYONLY)
-endforeach()

@@ -57,8 +57,13 @@ libgncmod_python_gnc_module_description(void)
     return g_strdup("An embedded Python interpreter");
 }
 
+#if PY_VERSION_HEX >= 0x03000000
 //extern PyObject* PyInit__sw_app_utils(void);
 //extern PyObject* PyInit__sw_core_utils(void);
+#else
+//extern void init_sw_app_utils(void);
+//extern void init_sw_core_utils(void);
+#endif
 
 int
 libgncmod_python_gnc_module_init(int refcount)
@@ -68,15 +73,23 @@ libgncmod_python_gnc_module_init(int refcount)
     */
     FILE *fp;
     gchar *pkgdatadir, *init_filename;
+#if PY_VERSION_HEX >= 0x03000000
     wchar_t* argv = NULL;
-
+#else
+    char* argv = "";
+#endif
     Py_Initialize();
     PySys_SetArgv(0, &argv);
     // I don't quite understand why these are loaded here
     // - these are python modules so should be able to just import them
     // in init.py
+#if PY_VERSION_HEX >= 0x03000000
     //PyInit__sw_app_utils();
     //PyInit__sw_core_utils();
+#else
+    //init_sw_app_utils();
+    //init_sw_core_utils();
+#endif
 
     /* There isn't yet a python module to init.
     pName = PyString_FromString("path/to/init.py");

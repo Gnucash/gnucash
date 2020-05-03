@@ -124,19 +124,3 @@ void gnc_prefs_init (void)
                            file_compression_changed_cb, NULL);
 
 }
-
-void
-gnc_prefs_remove_registered (void)
-{
-    // remove the registered pref call backs above
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_DAYS,
-                           file_retain_changed_cb, NULL);
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_NEVER,
-                           file_retain_type_changed_cb, NULL);
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_DAYS,
-                           file_retain_type_changed_cb, NULL);
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_RETAIN_TYPE_FOREVER,
-                           file_retain_type_changed_cb, NULL);
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_FILE_COMPRESSION,
-                           file_compression_changed_cb, NULL);
-}

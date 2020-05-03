@@ -140,8 +140,8 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
     gae->fraction = 0;
     gae->evaluate_on_enter = FALSE;
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gae), "GncAmountEdit");
 
     g_signal_connect (G_OBJECT (gae), "changed",
                       G_CALLBACK (gnc_amount_edit_changed), NULL);

@@ -4,6 +4,20 @@
 set(SCHEMADIR_BUILD ${DATADIR_BUILD}/glib-2.0/schemas)
 file(MAKE_DIRECTORY ${SCHEMADIR_BUILD})
 unset(gschema_depends CACHE)
+# Check for GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK; it's Gtk3-14 and later.
+include(CheckCSourceCompiles)
+unset(have_mod_mask CACHE)
+set(CMAKE_REQUIRED_INCLUDES ${GTK3_INCLUDE_DIRS})
+check_c_source_compiles("
+#include <gdk/gdk.h>
+
+int main (int argc, char** argv) {
+  GdkModifierIntent foo = GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK;
+  return 0;
+}
+"
+ have_mod_mask)
+
 # The subdirectories
 add_subdirectory (gnome)
 add_subdirectory (gnome-utils)
@@ -47,14 +61,12 @@ target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 if (BUILDING_FROM_VCS)
   target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
-  target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+  target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
 endif()
 
 target_link_libraries (gnucash
-   gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
-   gnc-engine gnc-module gnc-core-utils gnucash-guile
-   gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
-   gnc-bi-import gnc-customer-import gnc-report
+   gncmod-ledger-core gncmod-report-gnome gnc-gnome gncmod-gnome-utils
+   gncmod-app-utils gncmod-engine gnc-module gnc-core-utils gncmod-report-system
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )
 
@@ -252,15 +264,9 @@ foreach(gres_file ${gresource_files})
   list(APPEND gresource_files ${rel_file})
 endforeach()
 
-
-gnc_add_scheme_targets(price-quotes
-    SOURCES price-quotes.scm
-    OUTPUT_DIR gnucash
-    DEPENDS "scm-engine;scm-app-utils;scm-gnome-utils")
-
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
                gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
-               price-quotes.scm ${gnucash_EXTRA_DIST})
+               ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}
     ${gschemas_DIST} ${gtkbuilder_DIST} ${html_DIST} ${import_export_DIST} ${python_DIST} ${register_DIST}

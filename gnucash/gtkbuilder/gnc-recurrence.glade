@@ -41,7 +41,6 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
         <child>
           <object class="GtkBox" id="hbox218">
             <property name="visible">True</property>

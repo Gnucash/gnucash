@@ -4,9 +4,9 @@ add_subdirectory(test)
 set (ledger_core_SOURCES
   gnc-ledger-display.c
   gnc-ledger-display2.c
+  gncmod-ledger-core.c
   split-register.c
   split-register-control.c
-  split-register-copy-ops.c
   split-register-layout.c
   split-register-load.c
   split-register-model.c
@@ -26,7 +26,6 @@ set (ledger_core_HEADERS
   gnc-ledger-display2.h
   split-register.h
   split-register-control.h
-  split-register-copy-ops.h
   split-register-layout.h
   split-register-model.h
   split-register-model-save.h
@@ -41,24 +40,24 @@ set (ledger_core_HEADERS
 # Add dependency on config.h
 set_source_files_properties (${ledger_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-add_library (gnc-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
+add_library (gncmod-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 
-target_link_libraries(gnc-ledger-core gnc-register-gnome gnc-register-core gnc-gnome-utils
-        gnc-engine gnc-core-utils PkgConfig::GTK3)
+target_link_libraries(gncmod-ledger-core gncmod-register-gnome gncmod-register-core gncmod-gnome-utils
+        gncmod-engine gnc-core-utils PkgConfig::GTK3)
 
-target_compile_definitions (gnc-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
+target_compile_definitions (gncmod-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
 
-target_include_directories(gnc-ledger-core
+target_include_directories(gncmod-ledger-core
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/gnucash/gnome-utils # for gnc-warnings.h
 )
 
 if (APPLE)
-  set_target_properties (gnc-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gncmod-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gnc-ledger-core
+install(TARGETS gncmod-ledger-core
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

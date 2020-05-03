@@ -98,8 +98,8 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
                                "%s",
                                _("Save file automatically?"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-auto-save");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAutoSaveDialog");
 
     gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG(dialog),

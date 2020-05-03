@@ -342,9 +342,8 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     jw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "job_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(jw->dialog), parent);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(jw->dialog), "gnc-id-job");
-    gnc_widget_style_context_add_class (GTK_WIDGET(jw->dialog), "gnc-class-jobs");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(jw->dialog), "GncJobDialog");
 
     /* Get entry points */
     jw->id_entry  = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
@@ -645,7 +644,7 @@ gnc_job_search (GtkWindow *parent, GncJob *start, GncOwner *owner, QofBook *book
                                      params, columns, q, q2, buttons, NULL,
                                      new_job_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
-                                     "gnc-class-jobs");
+                                     "GncFindJobDialog");
 }
 
 /* Functions for widgets for job selection */

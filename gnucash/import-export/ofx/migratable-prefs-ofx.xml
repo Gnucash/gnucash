@@ -1,0 +1,10 @@
+  <prefsgroup>
+    <gschemaid>org.gnucash.dialogs.import.ofx</gschemaid>
+    <gconfpath>dialogs-import-ofx.xml</gconfpath>
+    
+    <pref>
+      <gschemaname>last-path</gschemaname>
+      <gschematype>s</gschematype>
+      <gconfkey>last_path</gconfkey>
+    </pref>
+  </prefsgroup>

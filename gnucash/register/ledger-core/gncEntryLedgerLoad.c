@@ -45,43 +45,43 @@
 static const QofLogModule log_module = "Business Entry Ledger";
 
 /* XXX: This should go elsewhere */
-const char* gnc_entry_ledger_type_string_getter (char flag)
+const char * gnc_entry_ledger_type_string_getter (char flag)
 {
     switch (flag)
     {
     case '1':
-        return _ ("$");
+        return _("$");
     case '2':
-        return _ ("%");
+        return _("%");
     default:
         break;
     };
     return "?";
 }
 
-const char* gnc_entry_ledger_how_string_getter (char flag)
+const char * gnc_entry_ledger_how_string_getter (char flag)
 {
     switch (flag)
     {
     case '1':
-        return _ ("<");
+        return _("<");
     case '2':
-        return _ ("=");
+        return _("=");
     case '3':
-        return _ (">");
+        return _(">");
     default:
         break;
     };
-    return "?";
+        return "?";
 }
 
-static void load_discount_type_cells (GncEntryLedger* ledger)
+static void load_discount_type_cells (GncEntryLedger *ledger)
 {
-    RecnCell* cell;
+    RecnCell *cell;
 
     if (!ledger) return;
 
-    cell = (RecnCell*)
+    cell = (RecnCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISTYPE_CELL);
 
     if (!cell) return;
@@ -91,13 +91,13 @@ static void load_discount_type_cells (GncEntryLedger* ledger)
     gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
 
-static void load_discount_how_cells (GncEntryLedger* ledger)
+static void load_discount_how_cells (GncEntryLedger *ledger)
 {
-    RecnCell* cell;
+    RecnCell *cell;
 
     if (!ledger) return;
 
-    cell = (RecnCell*)
+    cell = (RecnCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISHOW_CELL);
 
     if (!cell) return;
@@ -107,14 +107,14 @@ static void load_discount_how_cells (GncEntryLedger* ledger)
     gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_how_string_getter);
 }
 
-static void load_payment_type_cells (GncEntryLedger* ledger)
+static void load_payment_type_cells (GncEntryLedger *ledger)
 {
-    ComboCell* cell;
-    const GncOwner* owner;
-    GncEmployee* employee;
+    ComboCell *cell;
+    const GncOwner *owner;
+    GncEmployee *employee;
 
-    cell = (ComboCell*) gnc_table_layout_get_cell (ledger->table->layout,
-                                                   ENTRY_PAYMENT_CELL);
+    cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+            ENTRY_PAYMENT_CELL);
     if (!cell) return;
 
     if (!ledger->invoice) return;
@@ -127,25 +127,25 @@ static void load_payment_type_cells (GncEntryLedger* ledger)
     g_return_if_fail (employee);
 
     gnc_combo_cell_clear_menu (cell);
-    gnc_combo_cell_add_menu_item (cell, _ ("Cash"));
+    gnc_combo_cell_add_menu_item (cell, _("Cash"));
 
     if (gncEmployeeGetCCard (employee))
-        gnc_combo_cell_add_menu_item (cell, _ ("Charge"));
+        gnc_combo_cell_add_menu_item (cell, _("Charge"));
 }
 
 /* ==================================================================== */
 /* Return TRUE if we don't want to add this account to the xfer menu */
 
 static gboolean
-skip_expense_acct_cb (Account* account, gpointer user_data)
+skip_expense_acct_cb (Account *account, gpointer user_data)
 {
     GNCAccountType type;
 
     /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
     type = xaccAccountGetType (account);
     if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
-        type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
-        type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
+            type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
+            type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
     {
         return TRUE;
     }
@@ -160,15 +160,15 @@ skip_expense_acct_cb (Account* account, gpointer user_data)
 }
 
 static gboolean
-skip_income_acct_cb (Account* account, gpointer user_data)
+skip_income_acct_cb (Account *account, gpointer user_data)
 {
     GNCAccountType type;
 
     /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
     type = xaccAccountGetType (account);
     if (type == ACCT_TYPE_PAYABLE || type == ACCT_TYPE_RECEIVABLE ||
-        type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
-        type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
+            type == ACCT_TYPE_CASH || type == ACCT_TYPE_BANK ||
+            type == ACCT_TYPE_EQUITY || type == ACCT_TYPE_TRADING)
     {
         return TRUE;
     }
@@ -189,13 +189,12 @@ skip_income_acct_cb (Account* account, gpointer user_data)
 #define IKEY "Income Business entry quickfill"
 
 static void
-load_xfer_type_cells (GncEntryLedger* ledger)
+load_xfer_type_cells (GncEntryLedger *ledger)
 {
-    Account* root;
-    ComboCell* cell;
-    QuickFill* qf = NULL;
-    GtkListStore* store = NULL;
-    GtkListStore* store_full = NULL;
+    Account *root;
+    ComboCell *cell;
+    QuickFill *qf = NULL;
+    GtkListStore *store = NULL;
 
     root = gnc_book_get_root_account (ledger->book);
     if (root == NULL) return;
@@ -213,11 +212,9 @@ load_xfer_type_cells (GncEntryLedger* ledger)
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         qf = gnc_get_shared_account_name_quickfill (root, IKEY,
-                                                    skip_expense_acct_cb, NULL);
+                skip_expense_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, IKEY,
-                                                        skip_expense_acct_cb, NULL);
-        store_full = gnc_get_shared_account_name_list_store_full (root, IKEY,
-                                                                  skip_expense_acct_cb, NULL);
+                skip_expense_acct_cb, NULL);
         break;
 
     case GNCENTRY_BILL_ENTRY:
@@ -230,51 +227,49 @@ load_xfer_type_cells (GncEntryLedger* ledger)
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
         qf = gnc_get_shared_account_name_quickfill (root, EKEY,
-                                                    skip_income_acct_cb, NULL);
+                skip_income_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, EKEY,
-                                                        skip_income_acct_cb, NULL);
-        store_full = gnc_get_shared_account_name_list_store_full (root, EKEY,
-                                                                  skip_income_acct_cb, NULL);
+                skip_income_acct_cb, NULL);
         break;
     default:
-        PWARN ("Bad GncEntryLedgerType");
-        break;
+	PWARN ("Bad GncEntryLedgerType");
+	break;
     }
 
-    cell = (ComboCell*)
+    cell = (ComboCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
+    gnc_combo_cell_use_list_store_cache (cell, store);
 
-    cell = (ComboCell*)
+    cell = (ComboCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
+    gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
 /* ===================================================================== */
 
-static void load_taxtable_type_cells (GncEntryLedger* ledger)
+static void load_taxtable_type_cells (GncEntryLedger *ledger)
 {
-    GList* list;
-    ComboCell* cell;
+    GList *list;
+    ComboCell *cell;
 
-    cell = (ComboCell*)
+    cell = (ComboCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
     gnc_combo_cell_clear_menu (cell);
 
     list = gncTaxTableGetTables (ledger->book);
-    for (; list ; list = list->next)
+    for ( ; list ; list = list->next )
     {
-        GncTaxTable* table = list->data;
-        const char* name = gncTaxTableGetName (table);
+        GncTaxTable *table = list->data;
+        const char *name = gncTaxTableGetName (table);
         if (name != NULL)
             gnc_combo_cell_add_menu_item (cell, (char*)name);
     }
 }
 
 static void
-gnc_entry_ledger_show_entry (GncEntryLedger* ledger,
+gnc_entry_ledger_show_entry (GncEntryLedger *ledger,
                              VirtualCellLocation start_loc)
 {
     VirtualCellLocation end_loc;
@@ -291,10 +286,10 @@ gnc_entry_ledger_show_entry (GncEntryLedger* ledger,
 #define DESC_QF_KEY_BILLS "ENTRY_DESC_CELL_QF_BILLS"
 
 static void
-load_description_cell (GncEntryLedger* ledger)
+load_description_cell (GncEntryLedger *ledger)
 {
-    QuickFill* shared_quickfill;
-    QuickFillCell* cell;
+    QuickFill *shared_quickfill;
+    QuickFillCell *cell;
 
     switch (ledger->type)
     {
@@ -302,21 +297,19 @@ load_description_cell (GncEntryLedger* ledger)
     case GNCENTRY_INVOICE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
-        shared_quickfill = gnc_get_shared_entry_desc_quickfill (ledger->book,
-                                                                DESC_QF_KEY_INVOICES, TRUE);
+        shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_INVOICES, TRUE);
         break;
     default:
-        shared_quickfill = gnc_get_shared_entry_desc_quickfill (ledger->book,
-                                                                DESC_QF_KEY_BILLS, FALSE);
+        shared_quickfill = gnc_get_shared_entry_desc_quickfill(ledger->book, DESC_QF_KEY_BILLS, FALSE);
         break;
     };
 
-    cell = (QuickFillCell*)
+    cell = (QuickFillCell *)
            gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DESC_CELL);
     gnc_quickfill_cell_use_quickfill_cache (cell, shared_quickfill);
 }
 
-void gnc_entry_ledger_load_xfer_cells (GncEntryLedger* ledger)
+void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 {
     load_xfer_type_cells (ledger);
     load_taxtable_type_cells (ledger);
@@ -330,14 +323,14 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger* ledger)
  * the split-register should be generalized to the point where a cut-n-paste
  * like this isn't required, and this should be trashed.
  */
-void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
+void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 {
-    GncEntry* blank_entry, *find_entry;
-    CursorBuffer* cursor_buffer;
-    Table* table;
+    GncEntry *blank_entry, *find_entry;
+    CursorBuffer *cursor_buffer;
+    Table *table;
 
-    GList* node;
-    CellBlock* cursor_header, *cursor;
+    GList *node;
+    CellBlock *cursor_header, *cursor;
     VirtualCellLocation vcell_loc;
     VirtualLocation save_loc;
     gboolean start_primary_color = TRUE;
@@ -368,30 +361,29 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
         case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
 
-            gnc_suspend_gui_refresh();
+            gnc_suspend_gui_refresh ();
 
             blank_entry = gncEntryCreate (ledger->book);
             gncEntrySetDateGDate (blank_entry, &ledger->last_date_entered);
             ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
 
-            gnc_resume_gui_refresh();
+            gnc_resume_gui_refresh ();
 
             /* The rest of this does not apply to expense vouchers */
             if (ledger->type != GNCENTRY_EXPVOUCHER_ENTRY)
             {
-                const GncOwner* owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (
-                                                                 ledger->invoice));
-                GncTaxTable* table = NULL;
+                const GncOwner *owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
+                GncTaxTable *table = NULL;
                 GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
                 gboolean taxincluded = FALSE;
-                gnc_numeric discount = gnc_numeric_zero();
-                gnc_numeric price = gnc_numeric_zero();
+                gnc_numeric discount = gnc_numeric_zero ();
+                gnc_numeric price = gnc_numeric_zero ();
 
                 /* Determine the Price from Customer's or Vendor's Job */
                 switch (gncOwnerGetType (gncInvoiceGetOwner (ledger->invoice)))
                 {
                 case GNC_OWNER_JOB:
-                    price = gncJobGetRate (gncOwnerGetJob (gncInvoiceGetOwner (ledger->invoice)));
+                    price = gncJobGetRate( gncOwnerGetJob (gncInvoiceGetOwner (ledger->invoice)));
                     break;
                 default:
                     break;
@@ -474,7 +466,7 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
 
             break;
         default:
-            ledger->blank_entry_guid = *guid_null();
+            ledger->blank_entry_guid = *guid_null ();
             break;
         }
         ledger->blank_entry_edited = FALSE;
@@ -496,16 +488,16 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
     }
     else
     {
-        find_entry = gnc_entry_ledger_get_current_entry (ledger);
+        find_entry = gnc_entry_ledger_get_current_entry(ledger);
         /* XXX: get current entry (cursor_hint_xxx) */
     }
 
     /* If the current cursor has changed we save the values for later
      * possible restoration. */
     if (gnc_table_current_cursor_changed (table, TRUE) &&
-        (find_entry == gnc_entry_ledger_get_current_entry (ledger)))
+            (find_entry == gnc_entry_ledger_get_current_entry (ledger)))
     {
-        cursor_buffer = gnc_cursor_buffer_new();
+        cursor_buffer = gnc_cursor_buffer_new ();
         gnc_table_save_current_cursor (table, cursor_buffer);
     }
     else
@@ -543,7 +535,7 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
     /* Populate the table */
     for (node = entry_list; node; node = node->next)
     {
-        GncEntry* entry = node->data;
+        GncEntry *entry = node->data;
 
         /* Don't load the blank entry */
         if (entry == blank_entry)
@@ -607,14 +599,14 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
 
     /* Set completion character */
     gnc_combo_cell_set_complete_char
-    ((ComboCell*)
+    ((ComboCell *)
      gnc_table_layout_get_cell (table->layout, ENTRY_IACCT_CELL),
-     gnc_get_account_separator());
+     gnc_get_account_separator ());
 
     gnc_combo_cell_set_complete_char
-    ((ComboCell*)
+    ((ComboCell *)
      gnc_table_layout_get_cell (table->layout, ENTRY_BACCT_CELL),
-     gnc_get_account_separator());
+     gnc_get_account_separator ());
 
     /* enable callback for cursor user-driven moves */
     gnc_table_control_allow_move (table->control, TRUE);

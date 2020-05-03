@@ -18,7 +18,5 @@ set(account_DATA
 set_dist_list(SK_DIST ${account_DATA} CMakeLists.txt)
 
 install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/sk)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/sk)
 
-foreach(acct_file ${account_DATA})
-    configure_file(${acct_file} ${ACCOUNTS_BUILD_DIR}/sk/${acct_file} COPYONLY)
-endforeach()

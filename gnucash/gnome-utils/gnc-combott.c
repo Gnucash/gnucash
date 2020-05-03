@@ -190,8 +190,8 @@ gnc_combott_init (GncCombott *combott)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(combott), GTK_ORIENTATION_HORIZONTAL);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(combott), "gnc-id-combo-tooltip");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(combott), "GncCombott");
 
     priv->active = 0;
     priv->text_col = 0;
@@ -205,7 +205,11 @@ gnc_combott_init (GncCombott *combott)
     g_signal_connect (G_OBJECT (arrow), "draw",
                       G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
 
+#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(arrow), 5);
+#endif
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);

@@ -46,13 +46,6 @@
 #include "gnc-prefs.h"
 #include "gnc-state.h"
 
-#include "combocell.h"
-#include "datecell.h"
-#include "formulacell-gnome.h"
-#include "pricecell-gnome.h"
-#include "quickfillcell-gnome.h"
-#include "table-gnome.h"
-
 
 /* Register signals */
 enum
@@ -94,20 +87,6 @@ struct _GnucashRegisterClass
 };
 
 /** Implementation *****************************************************/
-
-void
-gnucash_register_add_cell_types (void)
-{
-    gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);
-    gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, gnc_date_cell_new);
-    gnc_register_add_cell_type (PRICE_CELL_TYPE_NAME,
-                                gnc_price_cell_gnome_new);
-    gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
-                                gnc_quickfill_cell_gnome_new);
-    gnc_register_add_cell_type( FORMULA_CELL_TYPE_NAME,
-                                gnc_formula_cell_gnome_new );
-    gnc_table_gnome_init ();
-}
 
 gboolean
 gnucash_register_has_selection (GnucashRegister *reg)
@@ -339,7 +318,7 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
     gobject_class = G_OBJECT_CLASS (klass);
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "gnc-id-register");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "register");
 #endif
 
     register_parent_class = g_type_class_peek_parent (klass);
@@ -400,7 +379,7 @@ gnucash_register_init (GnucashRegister *g_reg)
     gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(g_reg), "gnc-class-register");
+    gnc_widget_set_css_name (GTK_WIDGET(g_reg), "register");
 
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);

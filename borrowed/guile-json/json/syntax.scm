@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-(define-module (gnucash json syntax)
+(define-module (json syntax)
   #:use-module (ice-9 deprecated)
   #:use-module (ice-9 match)
   #:export (json))

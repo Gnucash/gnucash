@@ -13,13 +13,19 @@ set(common_EXTRA_DIST
         platform.h)
 
 
-set (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
-# Command to generate the swig-runtime.h header
-add_custom_command (
-    OUTPUT ${SWIG_RUNTIME_H}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-    COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
-)
+if (GENERATE_SWIG_WRAPPERS)
+    set (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
+    # Command to generate the swig-runtime.h header
+    add_custom_command (
+        OUTPUT ${SWIG_RUNTIME_H}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+        COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
+    )
+else()
+    set (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h)
+endif()
+dist_add_generated (${GENERATE_SWIG_WRAPPERS} swig-runtime.h)
+
 add_custom_target (swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
 
 set_local_dist(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})

@@ -396,19 +396,12 @@ draw_cell (GnucashSheet *sheet,
     int x_offset;
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(sheet));
     GdkRGBA color;
-    gboolean use_neg_class = TRUE;
 
     gtk_style_context_save (stylectxt);
 
-    text = gnc_table_get_entry (table, virt_loc);
-
-    // test for any text, if no text we do not want to add gnc-class-negative-numbers
-    if (!text || *text == '\0')
-        use_neg_class = FALSE;
-
     // Get the color type and apply the css class
     color_type = gnc_table_get_color (table, virt_loc, &hatching);
-    gnucash_get_style_classes (sheet, stylectxt, color_type, use_neg_class);
+    gnucash_get_style_classes (sheet, stylectxt, color_type);
 
     // Are we in a read-only row? Then make the background color somewhat more grey.
     if ((virt_loc.phys_row_offset < block->style->nrows)
@@ -484,6 +477,8 @@ draw_cell (GnucashSheet *sheet,
                            table->model->dividing_row_lower, block->style->nrows,
                            fg_color, x, y, width, height);
 
+    text = gnc_table_get_entry (table, virt_loc);
+
     layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
 
     if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_VIEW))
@@ -501,7 +496,7 @@ draw_cell (GnucashSheet *sheet,
             && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
     {
         // Make text color greyed
-        gtk_style_context_add_class (stylectxt, "gnc-class-lighter-grey-mix");
+        gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
     }
 #endif
 
@@ -516,7 +511,7 @@ draw_cell (GnucashSheet *sheet,
             goto exit;
 
         // Make text color greyed
-        gtk_style_context_add_class (stylectxt, "gnc-class-lighter-grey-mix");
+        gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
 
         pango_layout_set_text (layout, text, strlen (text));
         pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
@@ -704,7 +699,7 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
 }
 
 void
-gnc_widget_add_style_class (GtkWidget *widget, const char *name)
+gnc_widget_set_css_name (GtkWidget *widget, const char *name)
 {
 #if !GTK_CHECK_VERSION(3,20,0)
     GtkStyleContext *context = gtk_widget_get_style_context (widget);

@@ -11,15 +11,15 @@ from gnucash import Session
 uri = "xml:///tmp/simple_book.gnucash"
 
 print("uri:", uri)
-with Session(uri, is_new=True) as ses:
-    book = ses.get_book()
+ses = Session(uri, is_new=True)
+book = ses.get_book()
 
-    #Call some methods that produce output to show that Book works
-    book.get_root_account().SetDescription("hello, book")
-    print("Book is saved:", not book.session_not_saved())
+#Call some methods that produce output to show that Book works
+book.get_root_account().SetDescription("hello, book")
+print("Book is saved:", not book.session_not_saved())
 
-    #As long as there's no exceptions, book is automatically saved
-    #when session ends.
-    print("saving...")
+print("saving...")
+ses.save()
 
 print("Book is saved:", not book.session_not_saved())
+ses.end()

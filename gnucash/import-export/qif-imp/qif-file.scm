@@ -26,7 +26,7 @@
 
 
 (use-modules (gnucash core-utils))
-(use-modules (gnucash string))
+(use-modules (gnucash import-export string))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 rdelim))

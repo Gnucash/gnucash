@@ -321,9 +321,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     cd->book = qof_session_get_book(cd->session);
     cd->show_currencies = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_INCL_ISO);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(cd->window), "gnc-id-commodity");
-    gnc_widget_style_context_add_class (GTK_WIDGET(cd->window), "gnc-class-securities");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(cd->window), "GncCommoditiesDialog");
 
     /* buttons */
     cd->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));

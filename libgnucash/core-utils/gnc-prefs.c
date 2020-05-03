@@ -35,12 +35,6 @@ static gboolean use_compression   = TRUE; // This is also the default in the pre
 static gint file_retention_policy = 1;    // 1 = "days", the default in the prefs backend
 static gint file_retention_days   = 30;   // This is also the default in the prefs backend
 
-
-/* Global variables used to remove the preference registered callbacks
- * that were setup via a g_once. */
-static gulong reg_auto_raise_lists_id;
-static gulong reg_negative_color_pref_id;
-
 PrefsBackend *prefsbackend = NULL;
 
 const gchar *
@@ -133,7 +127,7 @@ gulong gnc_prefs_register_cb (const char *group,
     if (prefsbackend && prefsbackend->register_cb)
         return (prefsbackend->register_cb) (group, pref_name, func, user_data);
     else
-        g_warning ("no preferences backend loaded, or the backend doesn't define register_cb, returning 0");
+        g_warning ("no backend loaded, or the backend doesn't define register_cb, returning 0");
         return 0;
 }
 
@@ -385,24 +379,3 @@ void gnc_prefs_unblock_all (void)
     if (prefsbackend && prefsbackend->unblock_all)
         (prefsbackend->unblock_all) ();
 }
-
-gulong gnc_prefs_get_reg_auto_raise_lists_id (void)
-{
-    return reg_auto_raise_lists_id;
-}
-
-void gnc_prefs_set_reg_auto_raise_lists_id (gulong id)
-{
-    reg_auto_raise_lists_id = id;
-}
-
-gulong gnc_prefs_get_reg_negative_color_pref_id (void)
-{
-    return reg_negative_color_pref_id;
-}
-
-void gnc_prefs_set_reg_negative_color_pref_id (gulong id)
-{
-    reg_negative_color_pref_id = id;
-}
-

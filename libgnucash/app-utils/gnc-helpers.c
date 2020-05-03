@@ -29,7 +29,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-engine.h"
-#include "gnc-engine-guile.h"
+#include "engine-helpers-guile.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
 

@@ -1,0 +1,114 @@
+/* Stylesheet for receipt.scm -- eguile-based Gnucash invoice report */
+/* Version 0.03 */
+
+/**
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+;; 02111-1307 USA
+**/
+
+/* Note that body and table font family and size will be overridden */
+/* by separate report options.                                      */
+  table { /* table does not inherit font sizes for some reason */
+      width: 72mm;
+      table-layout: auto;
+  }
+  table.entries {
+    border: 0;
+    border-spacing: 0.1em;
+    empty-cells: show;
+  }
+  table.entries th {
+    font-weight: bold;
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+    border-top: 1px dashed black;
+    border-bottom: 1px dashed black;
+  }
+  table.entries td {
+    padding: 0.2em 0.4em;
+  }
+  td.invnum {
+    font-size: 120%;
+    font-weight: bold;
+  }
+  td.subtotal {
+    font-weight: bold;
+  }
+
+  td.total_first {
+    border-top: 1px dashed black;
+  }
+  td.total {
+    font-size: 1.1em;
+    /* font-weight: bold; */
+  }
+  td.total_last {
+    border-bottom: 1px dashed black;
+  }
+
+
+  table.coytable td, table.coytable tr {
+    vertical-align: top;
+  }
+  h1.coyname {
+    margin-top: 0em;
+    padding-top: 0em;
+    text-align: left;
+  }
+  h2.invoice {
+    padding-top: 0em;
+    margin-top: 0em;
+  }
+/* new entries below */
+
+body {
+  color: black; background-color: white;
+  font-size: 100.01%;
+  font-family: Helvetica,Arial,sans-serif;
+  text-align: center;
+  margin: 11mm 4mm 0mm 4mm;  /* padding: 1em; */
+  width:  72mm;
+}
+
+img.logo {
+  margin: 0;
+}
+
+div#content {
+  min-width: 16em;
+}
+div#content h1 {
+  font-size: 1.2em;
+  margin: 0.5em 0 0.5em 0;
+}
+div#content h2 {
+  font-size: 1.1em;
+  margin: 0.5em 0 0.5em 0;
+}
+div#content p {
+  font-size:1em;
+  margin: 0;
+}
+div#products {
+  margin: 0;
+  text-align: left;
+}
+div#totals {
+  margin: 0;
+  text-align: left;
+  border-top: 1px dashed black;
+  border-bottom: 1px dashed black;
+}
+

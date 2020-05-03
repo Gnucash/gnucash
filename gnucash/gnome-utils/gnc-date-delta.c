@@ -162,8 +162,8 @@ gnc_date_delta_init (GNCDateDelta *gdd)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gdd), GTK_ORIENTATION_HORIZONTAL);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gdd), "gnc-id-date-delta");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gdd), "GncDateDelta");
 
     gdd->value_spin = NULL;
     gdd->units_combo = NULL;

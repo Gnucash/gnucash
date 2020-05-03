@@ -979,7 +979,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     GtkTreeSelection    *selection;
 
     view = g_object_new (gnc_tree_view_split_reg_get_type(), NULL);
-    g_object_set (view, "name", "gnc-id-split-reg-tree", NULL);
+    g_object_set (view, "name", "split_reg_tree", NULL);
 
     view->priv->anchor = gnc_tree_model_split_reg_get_anchor (model);
     view->priv->reg_comm = xaccAccountGetCommodity (view->priv->anchor);
@@ -989,7 +989,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     view->help_text = g_strdup ("Help Text");
 
     /* Set the grid lines to be solid */
-    gnc_widget_style_context_add_class (GTK_WIDGET(view), "gnc-class-register2-grid-lines");
+    gnc_widget_set_style_context (GTK_WIDGET(view), "register2_grid_lines");
 
     /* TreeView Grid lines */
     if (view->priv->use_horizontal_lines)

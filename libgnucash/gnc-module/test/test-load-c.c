@@ -21,80 +21,47 @@
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libguile.h>
 #include <unittest-support.h>
-#include "test/mod-ordinary/ordinary.h"
-#include "test/mod-withdep/withdep.h"
 
 #include "gnc-module.h"
+
+static void
+guile_main(void *closure, int argc, char ** argv)
+{
+    GNCModule foo;
+    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod-futuremodsys.so' requires newer module system\n";
+    gchar *logdomain = "gnc.module";
+    guint loglevel = G_LOG_LEVEL_WARNING;
+    TestErrorStruct check = { loglevel, logdomain, msg };
+    g_log_set_handler (logdomain, loglevel,
+                       (GLogFunc)test_checked_handler, &check);
+
+    g_test_message("  test-load-c.c: testing module load/unload from C ... ");
+
+    gnc_module_system_init();
+
+    foo = gnc_module_load("gnucash/foo", 0);
+
+    if (!foo)
+    {
+        g_test_message("  Failed to load foo\n");
+        exit(-1);
+    }
+
+    if (!gnc_module_unload(foo))
+    {
+        g_test_message("  Failed to unload foo\n");
+        exit(-1);
+    }
+    g_test_message(" successful.\n");
+
+    exit(0);
+}
 
 int
 main(int argc, char ** argv)
 {
-    gint retval = 0;
-    GNCModule testmod;
-
-    gnc_module_system_init();
-
-    g_test_message("  test-load-c.c: load module gnucash/ordinary from C ... ");
-    testmod = gnc_module_load("gnucash/ordinary", 0);
-    if (!testmod)
-    {
-        g_test_message("  failed\n");
-        exit(-1);
-    }
-    g_test_message(" ok\n");
-
-    g_test_message("  test-load-c.c: call function ordinary_hello in module gnucash/ordinary ... ");
-    retval = ordinary_hello();
-    if (retval != 10)
-    {
-        g_test_message("  failed. Expected 10, got %i\n", retval);
-        exit(-1);
-    }
-    g_test_message(" ok\n");
-
-    g_test_message("  test-load-c.c: unload module gnucash/ordinary from C ... ");
-    if (!gnc_module_unload(testmod))
-    {
-        g_test_message("  failed\n");
-        exit(-1);
-    }
-    g_test_message(" ok.\n");
-
-    g_test_message("  test-load-c.c: load module gnucash/withdep from C ... ");
-    testmod = gnc_module_load("gnucash/withdep", 0);
-    if (!testmod)
-    {
-        g_test_message("  failed\n");
-        exit(-1);
-    }
-    g_test_message(" ok\n");
-
-    g_test_message("  test-load-c.c: call function withdep_hello in module gnucash/withdep ... ");
-    retval = withdep_hello();
-    if (retval != 11)
-    {
-        g_test_message("  failed. Expected 11, got %i\n", retval);
-        exit(-1);
-    }
-    g_test_message(" ok\n");
-
-    g_test_message("  test-load-c.c: call function ordinary_hello in depended on module gnucash/ordinary ... ");
-    retval = ordinary_hello();
-    if (retval != 10)
-    {
-        g_test_message("  failed. Expected 10, got %i\n", retval);
-        exit(-1);
-    }
-    g_test_message(" ok\n");
-
-    g_test_message("  test-load-c.c: unload module gnucash/withdep from C ... ");
-    if (!gnc_module_unload(testmod))
-    {
-        g_test_message("  failed\n");
-        exit(-1);
-    }
-    g_test_message(" ok.\n");
-
-    exit(0);
+    scm_boot_guile(argc, argv, guile_main, NULL);
+    return 0;
 }

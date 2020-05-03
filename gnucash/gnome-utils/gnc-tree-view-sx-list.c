@@ -125,7 +125,7 @@ gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
     GncTreeViewSxListPrivate *priv;
 
     view = (GncTreeView*)g_object_new(GNC_TYPE_TREE_VIEW_SX_LIST, NULL);
-    g_object_set(view, "name", "gnc-id-sx-list-tree", NULL);
+    g_object_set(view, "name", "sx_list_tree", NULL);
 
     priv = GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(view);
 

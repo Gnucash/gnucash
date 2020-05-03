@@ -50,22 +50,12 @@
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-plugin-bi-import.h"
-#include "gnc-plugin-csv-export.h"
-#include "gnc-plugin-csv-import.h"
-#include "gnc-plugin-customer-import.h"
 #include "gnc-plugin-file-history.h"
-#include "gnc-plugin-log-replay.h"
-#include "gnc-plugin-qif-import.h"
-#include "gnc-plugin-report-system.h"
 #include "dialog-new-user.h"
 #include "gnc-session.h"
-#include "gnc-engine-guile.h"
-#include "gnucash-register.h"
+#include "engine-helpers-guile.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
-#include "search-core-type.h"
-#include "window-report.h"
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
@@ -485,17 +475,6 @@ gnc_parse_command_line(int *argc, char ***argv)
 }
 
 static void
-load_gnucash_plugins()
-{
-    gnc_plugin_bi_import_create_plugin ();
-    gnc_plugin_csv_export_create_plugin ();
-    gnc_plugin_csv_import_create_plugin();
-    gnc_plugin_customer_import_create_plugin ();
-    gnc_plugin_qif_import_create_plugin ();
-    gnc_plugin_log_replay_create_plugin ();
-}
-
-static void
 load_gnucash_modules()
 {
     int i, len;
@@ -506,8 +485,25 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
+        { "gnucash/engine", 0, FALSE },
+        { "gnucash/app-utils", 0, FALSE },
+        { "gnucash/gnome-utils", 0, FALSE },
+        { "gnucash/gnome-search", 0, FALSE },
+        { "gnucash/register/ledger-core", 0, FALSE },
+        { "gnucash/register/register-core", 0, FALSE },
+        { "gnucash/register/register-gnome", 0, FALSE },
+        { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
+        { "gnucash/import-export/csv-import", 0, TRUE },
+        { "gnucash/import-export/csv-export", 0, TRUE },
+        { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
+        { "gnucash/import-export/bi-import", 0, TRUE},
+        { "gnucash/import-export/customer-import", 0, TRUE},
+        { "gnucash/report/report-system", 0, FALSE },
+        { "gnucash/report/stylesheets", 0, FALSE },
+        { "gnucash/report/locale-specific/us", 0, FALSE },
+        { "gnucash/report/report-gnome", 0, FALSE },
         { "gnucash/python", 0, TRUE },
     };
 
@@ -522,6 +518,15 @@ load_gnucash_modules()
         else
             gnc_module_load(modules[i].name, modules[i].version);
         DEBUG("Loading module %s finished", modules[i].name);
+    }
+    if (!gnc_engine_is_initialized())
+    {
+        /* On Windows this check used to fail anyway, see
+         * https://lists.gnucash.org/pipermail/gnucash-devel/2006-September/018529.html
+         * but more recently it seems to work as expected
+         * again. 2006-12-20, cstim. */
+        g_warning("GnuCash engine failed to initialize.  Exiting.\n");
+        exit(1);
     }
 }
 
@@ -600,31 +605,20 @@ get_file_to_load()
         return gnc_history_get_last();
 }
 
-extern SCM scm_init_sw_gnome_module(void);
-
 static void
 inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
     char* fn = NULL;
 
-
     scm_c_eval_string("(debug-set! stack 200000)");
 
     main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
-    scm_c_use_module("gnucash app-utils");
 
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();
 
-    gnc_gnome_utils_init();
-    gnc_search_core_initialize ();
-    gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_search_core_finalize, NULL, NULL);
-    gnucash_register_add_cell_types ();
-    gnc_report_init ();
-
-    load_gnucash_plugins();
     load_gnucash_modules();
 
     /* Load the config before starting up the gui. This insures that
@@ -634,14 +628,15 @@ inner_main (void *closure, int argc, char **argv)
     load_user_config();
 
     /* Setting-up the report menu must come after the module
-     loading but before the gui initializat*ion. */
-    gnc_plugin_report_system_new();
+       loading but before the gui initialization. */
+    scm_c_use_module("gnucash report report-gnome");
+    scm_c_eval_string("(gnc:report-menu-setup)");
 
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */
     gnc_main_gui_init();
 
-    gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL, NULL);
+    gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     /* Install Price Quote Sources */
     gnc_update_splash_screen(_("Checking Finance::Quote..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
@@ -905,7 +900,6 @@ main(int argc, char ** argv)
         g_print("\n\n%s\n", userdata_migration_msg);
 
     gnc_log_init();
-    gnc_engine_init (0, NULL);
 
     /* Write some locale details to the log to simplify debugging */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");

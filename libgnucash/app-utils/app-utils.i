@@ -26,13 +26,16 @@
 #include <gnc-euro.h>
 #include <gnc-exp-parser.h>
 #include <gnc-ui-util.h>
+#include <gnc-gettext-util.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-helpers.h>
 #include <gnc-accounting-period.h>
 #include <gnc-session.h>
+#include <gnc-component-manager.h>
+#include <guile-util.h>
 #include <gnc-sx-instance-model.h>
 
-#include "gnc-engine-guile.h"
+#include "engine-helpers-guile.h"
 %}
 
 #if defined(SWIGGUILE)
@@ -46,7 +49,12 @@ SCM scm_init_sw_app_utils_module (void);
 #if defined(SWIGPYTHON)
 %{
 /* avoid no previous prototype warning/error */
-PyObject* SWIG_init (void);
+#if PY_VERSION_HEX >= 0x03000000
+PyObject*
+#else
+void
+#endif
+SWIG_init (void);
 %}
 %import <gnucash_core.i>
 #endif
@@ -63,6 +71,9 @@ QofSession * gnc_get_current_session (void);
 const gchar * gnc_get_current_book_tax_name (void);
 const gchar * gnc_get_current_book_tax_type (void);
 Account * gnc_get_current_root_account (void);
+
+%newobject gnc_gettext_helper;
+char * gnc_gettext_helper(const char *string);
 
 GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void gnc_option_db_destroy(GNCOptionDB *odb);
@@ -120,6 +131,32 @@ time64 gnc_accounting_period_fiscal_start(void);
 time64 gnc_accounting_period_fiscal_end(void);
 
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
+
+%typemap(in) GList * {
+  SCM path_scm = $input;
+  GList *path = NULL;
+  while (!scm_is_null (path_scm))
+  {
+    SCM key_scm = SCM_CAR (path_scm);
+    char *key;
+    gchar* gkey;
+    if (!scm_is_string (key_scm))
+      break;
+    key = scm_to_locale_string (key_scm);
+    gkey = g_strdup (key);
+    free (key);
+    path = g_list_prepend (path, gkey);
+    path_scm = SCM_CDR (path_scm);
+  }
+  $1 = g_list_reverse (path);
+}
+Process *gnc_spawn_process_async(GList *argl, const gboolean search_path);
+%clear GList *;
+
+gint gnc_process_get_fd(const Process *proc, const guint std_fd);
+void gnc_detach_process(Process *proc, const gboolean kill_it);
+
+time64 gnc_parse_time_to_time64(const gchar *s, const gchar *format);
 
 %typemap(out) GHashTable * {
   SCM table = scm_c_make_hash_table (g_hash_table_size($1) + 17);

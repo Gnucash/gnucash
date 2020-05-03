@@ -21,7 +21,5 @@ set(account_DATA
 set_dist_list(C_DIST ${account_DATA} acctchrt_full.gnucash-xea CMakeLists.txt)
 
 install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/C)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/C)
 
-foreach(acct_file ${account_DATA})
-    configure_file(${acct_file} ${ACCOUNTS_BUILD_DIR}/C/${acct_file} COPYONLY)
-endforeach()

@@ -23,9 +23,9 @@
 
 ;;; Code:
 
-(define-module (gnucash json)
-  #:use-module (gnucash json builder)
-  #:use-module (gnucash json parser))
+(define-module (json)
+  #:use-module (json builder)
+  #:use-module (json parser))
 
 (define-syntax re-export-modules
   (syntax-rules ()
@@ -35,7 +35,7 @@
                     (resolve-interface '(mod ...)))
        ...))))
 
-(re-export-modules (gnucash json builder)
-                   (gnucash json parser))
+(re-export-modules (json builder)
+                   (json parser))
 
 ;;; (json) ends here

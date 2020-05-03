@@ -64,9 +64,7 @@ set (gtkbuilder_SOURCES
         window-reconcile.glade
 )
 
-foreach (gtkbuilder_file ${gtkbuilder_SOURCES})
-    configure_file (${gtkbuilder_file} ${DATADIR_BUILD}/gnucash/gtkbuilder/${gtkbuilder_file} COPYONLY)
-endforeach()
+file (COPY ${gtkbuilder_SOURCES} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
 
 install (FILES ${gtkbuilder_SOURCES} DESTINATION share/gnucash/gtkbuilder)
 

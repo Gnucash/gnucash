@@ -89,6 +89,7 @@ GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
  *       gnc_class - character string for css class name            *
  * Returns:  nothing                                                *
 \********************************************************************/
+void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
 void gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class);
 
 /********************************************************************\
@@ -160,9 +161,6 @@ gboolean gnc_new_book_option_display (GtkWidget *parent);
 GtkWidget *
 gnc_cost_policy_select_new (void);
 
-/** This function returns the color string for the CSS 'gnc-class-negative-numbers' class,
- *  the returned value must be freed.
- */
-gchar* gnc_get_negative_color (void);
+gchar* get_negative_color (void);
 
 #endif /* DIALOG_UTILS_H */

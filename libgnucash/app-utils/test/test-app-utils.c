@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <qof.h>
 #include <libguile.h>
+#include <gnc-module.h>
 
 extern void test_suite_option_util (void);
 extern void test_suite_gnc_ui_util (void);
@@ -31,8 +32,10 @@ extern void test_suite_gnc_ui_util (void);
 static void
 guile_main (void *closure, int argc, char **argv)
 {
+    GNCModule mod;
     int retval;
-    scm_c_use_module("gnucash app-utils");
+    gnc_module_system_init ();
+    mod = gnc_module_load ("gnucash/app-utils", 0);
 
     test_suite_option_util ();
     test_suite_gnc_ui_util ();

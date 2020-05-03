@@ -1,8 +1,9 @@
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gnc-module))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (srfi srfi-64))
-(use-modules (tests srfi64-extras))
-(use-modules (gnucash qif-import))
-(use-modules (gnucash string))
+(use-modules (gnucash engine test srfi64-extras))
+(use-modules (gnucash import-export qif-import))
+(use-modules (gnucash import-export string))
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
@@ -27,27 +28,27 @@
 
 ;; the following isn't exported but can be tested anyway!
 (define qif-parse:fix-year
-  (@@ (gnucash qif-import) qif-parse:fix-year))
+  (@@ (gnucash import-export qif-import) qif-parse:fix-year))
 (define qif-parse:parse-acct-type
-  (@@ (gnucash qif-import) qif-parse:parse-acct-type))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-acct-type))
 (define qif-parse:parse-cleared-field
-  (@@ (gnucash qif-import) qif-parse:parse-cleared-field))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-cleared-field))
 (define qif-split:parse-category
-  (@@ (gnucash qif-import) qif-split:parse-category))
+  (@@ (gnucash import-export qif-import) qif-split:parse-category))
 (define qif-parse:parse-action-field
-  (@@ (gnucash qif-import) qif-parse:parse-action-field))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-action-field))
 (define qif-parse:check-date-format
-  (@@ (gnucash qif-import) qif-parse:check-date-format))
+  (@@ (gnucash import-export qif-import) qif-parse:check-date-format))
 (define qif-parse:parse-date/format
-  (@@ (gnucash qif-import) qif-parse:parse-date/format))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-date/format))
 (define qif-parse:check-number-format
-  (@@ (gnucash qif-import) qif-parse:check-number-format))
+  (@@ (gnucash import-export qif-import) qif-parse:check-number-format))
 (define qif-parse:parse-number/format
-  (@@ (gnucash qif-import) qif-parse:parse-number/format))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-number/format))
 (define qif-parse:check-number-formats
-  (@@ (gnucash qif-import) qif-parse:check-number-formats))
+  (@@ (gnucash import-export qif-import) qif-parse:check-number-formats))
 (define qif-parse:parse-numbers/format
-  (@@ (gnucash qif-import) qif-parse:parse-numbers/format))
+  (@@ (gnucash import-export qif-import) qif-parse:parse-numbers/format))
 
 
 (define (test-qif-parse:fix-year)

@@ -13,7 +13,7 @@ set(pycons_DATA
 if (WITH_PYTHON)
 
   add_library(gncmod-python ${gncmod_python_SOURCES})
-  # target_link_libraries(gncmod-python gnc-module gnc-core-utils-python gnc-app-utils-python
+  # target_link_libraries(gncmod-python gnc-module gnc-core-utils-python gncmod-app-utils-python
   target_link_libraries(gncmod-python gnc-module gnc-core-utils
    ${PYTHON_LIBRARIES} ${GLIB_LIBS})   # ${PYTHON_EXTRA_LIBS}
   target_include_directories(gncmod-python
@@ -31,10 +31,8 @@ endif()
   install(FILES ${pycons_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python/pycons)
   install(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
 
-  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
-  foreach(py_file ${pycons_DATA} init.py)
-      configure_file(${py_file} ${CMAKE_BINARY_DIR}/share/gnucash/python/${py_file} COPYONLY)
-  endforeach()
+  file(COPY ${pycons_DATA} DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
+  file(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
 endif()
 
 set_local_dist(pycons_DIST ${pycons_DATA})

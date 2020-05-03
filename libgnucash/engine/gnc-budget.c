@@ -589,60 +589,6 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
 }
 
 
-void
-gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
-                                    guint period_num, const gchar *note)
-{
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-
-    /* Watch out for an off-by-one error here:
-     * period_num starts from 0 while num_periods starts from 1 */
-    if (period_num >= GET_PRIVATE(budget)->num_periods)
-    {
-        PWARN("Period %i does not exist", period_num);
-        return;
-    }
-
-    g_return_if_fail (budget != NULL);
-    g_return_if_fail (account != NULL);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-
-    gnc_budget_begin_edit(budget);
-    if (note == NULL)
-        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    else
-    {
-        GValue v = G_VALUE_INIT;
-        g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, note);
-
-        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    }
-    qof_instance_set_dirty(&budget->inst);
-    gnc_budget_commit_edit(budget);
-
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
-
-}
-
-const gchar *
-gnc_budget_get_account_period_note(const GncBudget *budget,
-                                   const Account *account, guint period_num)
-{
-    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
-    gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
-    GValue v = G_VALUE_INIT;
-
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
-    g_return_val_if_fail(account, NULL);
-
-    make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 3, GNC_BUDGET_NOTES_PATH, path_part_one, path_part_two);
-    return (G_VALUE_HOLDS_STRING(&v)) ? g_value_get_string(&v) : NULL;
-}
-
 time64
 gnc_budget_get_period_start_date(const GncBudget *budget, guint period_num)
 {

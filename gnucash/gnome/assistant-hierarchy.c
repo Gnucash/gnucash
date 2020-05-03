@@ -92,12 +92,6 @@ typedef struct
     GtkWidget *currency_selector;
     GtkWidget *currency_selector_label;
 
-    GtkWidget   *language_combo;
-    GtkWidget   *region_combo;
-    GtkWidget   *region_label;
-
-    const gchar *gnc_accounts_dir;
-
     GtkTreeView *categories_tree;
     GtkTreeRowReference *initial_category;
     GtkTextView *category_description;
@@ -138,10 +132,6 @@ void on_select_currency_prepare (hierarchy_data  *data);
 void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
 void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
 
-
-static void add_one_category (GncExampleAccount *acc, hierarchy_data *data);
-static void categories_page_enable_next (hierarchy_data *data);
-static void categories_tree_selection_changed (GtkTreeSelection *selection, hierarchy_data *data);
 // ------------------------------------------------------------
 
 static void
@@ -297,290 +287,6 @@ gnc_get_ea_locale_dir(const char *top_dir)
     return ret;
 }
 
-typedef enum
-{
-    LANGUAGE_STRING,
-    REGION_STRING,
-    LANG_REG_STRING,
-    REGION_FILTER
-}GncLanguageRegionCombos;
-
-static void
-region_combo_changed_cb (GtkComboBox *widget, hierarchy_data  *data)
-{
-    GtkTreeModel *filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->region_combo));
-    GtkTreeModel *region_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter_model));
-    GtkTreeIter filter_iter, region_iter;
-    gchar *lang_reg = NULL;
-    gchar *account_path = NULL;
-
-    if (gtk_combo_box_get_active_iter (widget, &filter_iter))
-    {
-        GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
-        GtkTreeModel *cat_model = gtk_tree_view_get_model (data->categories_tree);
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(data->categories_tree));
-        GSList *list;
-        GtkTreePath *path;
-
-        gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                          &region_iter,
-                                                          &filter_iter);
-
-        gtk_tree_model_get (region_model, &region_iter, LANG_REG_STRING, &lang_reg, -1);
-
-        gnc_suspend_gui_refresh ();
-
-        /* Remove the old account tree */
-        if (data->category_accounts_tree)
-            gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
-        data->category_accounts_tree = NULL;
-
-        // clear the categories list store in prep for new load
-        if (cat_list)
-            gtk_list_store_clear (cat_list);
-
-        account_path = g_build_filename (data->gnc_accounts_dir, lang_reg, NULL);
-
-        qof_event_suspend ();
-        list = gnc_load_example_account_list (account_path);
-        qof_event_resume ();
-
-        if (data->initial_category)
-        {
-            gtk_tree_row_reference_free (data->initial_category);
-            data->initial_category = NULL;
-        }
-
-        // repopulate the category list
-        g_slist_foreach (list, (GFunc)add_one_category, data);
-
-        if (data->initial_category)
-        {
-            path = gtk_tree_row_reference_get_path (data->initial_category);
-            gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(data->categories_tree),
-                                          path, NULL, TRUE, 0.5, 0.5);
-        }
-        else
-            path = gtk_tree_path_new_first ();
-
-        gtk_tree_selection_select_path (selection, path);
-        gtk_tree_path_free (path);
-
-        // now load the account tree
-        categories_tree_selection_changed (selection, data);
-
-        gnc_resume_gui_refresh ();
-
-        g_slist_free (list);
-    }
-    g_free (account_path);
-    g_free (lang_reg);
-}
-
-
-static void
-region_combo_change_filter_cb (GtkComboBox *widget, hierarchy_data  *data)
-{
-    GtkTreeModel *filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->region_combo));
-    GtkTreeModel *region_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter_model));
-    GtkTreeIter language_iter, region_iter, sorted_iter;
-    gboolean have_one_region = FALSE;
-
-    if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX(data->language_combo), &sorted_iter))
-    {
-        GtkTreeModel *sort_model = gtk_combo_box_get_model (GTK_COMBO_BOX(data->language_combo));
-        GtkTreeModel *language_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(sort_model));
-        GtkListStore *cat_list = GTK_LIST_STORE(gtk_tree_view_get_model (data->categories_tree));
-        GtkTreeIter *iter = NULL;
-        gchar *language = NULL;
-        gint count = 0;
-        gboolean valid;
-
-        gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(sort_model),
-                                                        &language_iter,
-                                                        &sorted_iter);
-
-        gtk_tree_model_get (language_model, &language_iter, LANGUAGE_STRING, &language, -1);
-        valid = gtk_tree_model_get_iter_first (region_model, &region_iter);
-
-        // loop through the regions and filter any out that are not linked to language setting
-        while (valid)
-        {
-            gchar *region_test = NULL;
-
-            gtk_tree_model_get (region_model, &region_iter,
-                                LANGUAGE_STRING, &region_test, -1);
-
-            if (g_strcmp0 (language, region_test) == 0)
-            {
-                gtk_list_store_set (GTK_LIST_STORE(region_model),
-                                    &region_iter, REGION_FILTER, TRUE, -1);
-                if (count == 0)
-                    iter = gtk_tree_iter_copy (&region_iter);
-                count++;
-            }
-            else
-                gtk_list_store_set (GTK_LIST_STORE(region_model),
-                                    &region_iter, REGION_FILTER, FALSE, -1);
-
-            g_free (region_test);
-
-            valid = gtk_tree_model_iter_next (region_model, &region_iter);
-        }
-
-        // if we only have a language or just one region activate it
-        if (count == 1)
-        {
-            gchar *region_label = NULL;
-            GtkTreeIter filter_iter;
-            gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                              &filter_iter,
-                                                              iter);
-
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-
-            have_one_region = TRUE;
-
-            gtk_tree_model_get (region_model, iter, REGION_STRING, &region_label, -1);
-
-            gtk_label_set_text (GTK_LABEL(data->region_label), region_label);
-            g_free (region_label);
-        }
-        else
-        {
-            // if the combo is not already active, set it to first on in filtered list
-            if (gtk_combo_box_get_active (GTK_COMBO_BOX(data->region_combo)) == -1)
-            {
-                GtkTreeIter filter_iter;
-
-                gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                                  &filter_iter,
-                                                                  iter);
-
-                gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-            }
-        }
-        gtk_widget_set_visible (GTK_WIDGET(data->region_label), have_one_region);
-        gtk_widget_set_visible (GTK_WIDGET(data->region_combo), !have_one_region);
-
-        gtk_tree_iter_free (iter);
-        g_free (language);
-    }
-}
-
-
-static void
-update_language_region_combos (hierarchy_data *data, const gchar *locale_dir)
-{
-    GtkListStore *language_store = gtk_list_store_new (1, G_TYPE_STRING);
-    GtkListStore *region_store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-    GtkTreeModel *filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL(region_store), NULL);
-    GtkTreeModel *sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(language_store));
-    GtkTreeIter language_iter, region_iter;
-    gchar *start_region = NULL;
-    gboolean valid;
-
-    // set sort order
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model), LANGUAGE_STRING, GTK_SORT_ASCENDING);
-
-    gtk_combo_box_set_model (GTK_COMBO_BOX(data->language_combo), GTK_TREE_MODEL(sort_model));
-    gtk_combo_box_set_model (GTK_COMBO_BOX(data->region_combo), GTK_TREE_MODEL(filter_model));
-
-    gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter_model), REGION_FILTER);
-
-    g_signal_connect (data->language_combo, "changed",
-                      G_CALLBACK(region_combo_change_filter_cb), (gpointer)data);
-
-    if (g_file_test (data->gnc_accounts_dir, G_FILE_TEST_IS_DIR))
-    {
-        GHashTable *testhash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-        GDir *acct_dir = g_dir_open (data->gnc_accounts_dir, 0, NULL);
-        const gchar *name = "a";
-
-        while (name != NULL)
-        {
-            name = g_dir_read_name (acct_dir);
-
-            if (name)
-            {
-                gchar **parts = g_strsplit (name, "_", -1);
-                gchar *lang_name;
-
-                gtk_list_store_append (region_store, &region_iter);
-                gtk_list_store_set (region_store, &region_iter, LANG_REG_STRING, name,
-                                    LANGUAGE_STRING, parts[0], REGION_FILTER, TRUE, -1);
-
-                // set the region combo to the default region
-                if (g_str_has_suffix (locale_dir, name))
-                {
-                    GtkTreeIter filter_iter;
-                    gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(filter_model),
-                                                                      &filter_iter,
-                                                                      &region_iter);
-
-                    gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->region_combo), &filter_iter);
-                    start_region = g_strdup (parts[0]);
-                }
-                // add the region part to the region model store
-                if (parts[1] != NULL)
-                    gtk_list_store_set (region_store, &region_iter, REGION_STRING, parts[1], -1);
-                else
-                    gtk_list_store_set (region_store, &region_iter, REGION_STRING, "--", -1);
-
-                // to make it less confusing to non-programmers, change C to en_US
-                if (g_strcmp0 (name, "C") == 0)
-                {
-                    gtk_list_store_set (region_store, &region_iter, LANGUAGE_STRING, "en", REGION_STRING, "US", -1);
-                    lang_name = g_strdup ("en");
-                    g_free (start_region);
-                    start_region = g_strdup (lang_name);
-                }
-                else
-                    lang_name = g_strdup (parts[0]);
-
-                // see if language is in hash table so we only add it once.
-                if (g_hash_table_lookup (testhash, lang_name) == NULL)
-                {
-                    gtk_list_store_append (language_store, &language_iter);
-                    gtk_list_store_set (language_store, &language_iter, LANGUAGE_STRING, lang_name, -1);
-
-                    g_hash_table_insert (testhash, g_strdup (lang_name), "test");
-                }
-                g_strfreev (parts);
-                g_free (lang_name);
-            }
-        }
-        g_hash_table_destroy (testhash);
-        g_dir_close (acct_dir);
-    }
-
-    // now try and set the language combo to the defualt language
-    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(language_store), &language_iter);
-    while (valid)
-    {
-        gchar *language_test = NULL;
-
-        gtk_tree_model_get (GTK_TREE_MODEL(language_store), &language_iter, LANGUAGE_STRING, &language_test, -1);
-
-        if (g_strcmp0 (language_test, start_region) == 0)
-        {
-            GtkTreeIter sort_iter;
-            gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model),
-                                                            &sort_iter,
-                                                            &language_iter);
-
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(data->language_combo), &sort_iter);
-        }
-        g_free (language_test);
-
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(language_store), &language_iter);
-    }
-    g_signal_connect (data->region_combo, "changed",
-                      G_CALLBACK(region_combo_changed_cb), (gpointer)data);
-
-    g_free (start_region);
-}
-
 /************************************************************
  *                  Choose Categories Page                  *
  ************************************************************/
@@ -714,6 +420,7 @@ static void
 account_categories_tree_view_prepare (hierarchy_data  *data)
 {
     GSList *list;
+    gchar *gnc_accounts_dir;
     gchar *locale_dir;
     GtkTreeView *tree_view;
     GtkListStore *model;
@@ -722,15 +429,10 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
     GtkTreeSelection *selection;
     GtkTreePath *path;
 
-    data->gnc_accounts_dir = gnc_path_get_accountsdir ();
-    locale_dir = gnc_get_ea_locale_dir (data->gnc_accounts_dir);
-
-    qof_event_suspend ();
+    gnc_accounts_dir = gnc_path_get_accountsdir ();
+    locale_dir = gnc_get_ea_locale_dir (gnc_accounts_dir);
     list = gnc_load_example_account_list (locale_dir);
-    qof_event_resume ();
-
-    update_language_region_combos (data, locale_dir);
-
+    g_free (gnc_accounts_dir);
     g_free (locale_dir);
 
     /* Prepare the account_categories GtkTreeView with a model and with some columns */
@@ -780,20 +482,14 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
                                           COL_TITLE,
                                           GTK_SORT_ASCENDING);
 
-    selection = gtk_tree_view_get_selection (tree_view);
-
     if (data->initial_category)
     {
-        path = gtk_tree_row_reference_get_path (data->initial_category);
-        gtk_tree_view_scroll_to_cell (tree_view, path, NULL, TRUE, 0.5, 0.5);
+        path = gtk_tree_row_reference_get_path(data->initial_category);
+        selection = gtk_tree_view_get_selection(tree_view);
+        gtk_tree_view_scroll_to_cell(tree_view, path, NULL, TRUE, 0.5, 0.5);
+        gtk_tree_selection_select_path(selection, path);
+        gtk_tree_path_free(path);
     }
-    else
-        path = gtk_tree_path_new_first ();
-
-    gtk_tree_selection_select_path (selection, path);
-    gtk_tree_path_free (path);
-
-    g_slist_free (list);
 }
 
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
@@ -1576,8 +1272,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
     data->dialog = dialog;
 
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-account-hierarchy");
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistAccountHierarchy");
 
     /* Enable buttons on first and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
@@ -1609,10 +1305,6 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
                       G_CALLBACK (categories_tree_selection_changed), data);
     gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
     data->categories_tree = tree_view;
-
-    data->language_combo = GTK_WIDGET(gtk_builder_get_object (builder, "language_combo"));
-    data->region_combo = GTK_WIDGET(gtk_builder_get_object (builder, "region_combo"));
-    data->region_label = GTK_WIDGET(gtk_builder_get_object (builder, "region_label"));
 
     data->category_accounts_label = GTK_LABEL(gtk_builder_get_object (builder, "accounts_in_category_label"));
     data->category_accounts_container = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_in_category"));
@@ -1677,5 +1369,5 @@ void
 gnc_ui_hierarchy_assistant_initialize (void)
 {
     gnc_hook_add_dangler(HOOK_NEW_BOOK,
-                         (GFunc)gnc_ui_hierarchy_assistant_hook, NULL, NULL);
+                         (GFunc)gnc_ui_hierarchy_assistant_hook, NULL);
 }

@@ -43,6 +43,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
 #include "gnc-combott.h"
+#include "guile-util.h"
 #include "gnc-main-window.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -70,13 +71,13 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 
     if (deficit)
     {
-        gnc_widget_style_context_remove_class (GTK_WIDGET(label), "gnc-class-default-color");
-        gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-negative-numbers");
+        gnc_widget_style_context_remove_class (GTK_WIDGET(label), "default-color");
+        gnc_widget_style_context_add_class (GTK_WIDGET(label), "negative-numbers");
     }
     else
     {
-        gnc_widget_style_context_remove_class (GTK_WIDGET(label), "gnc-class-negative-numbers");
-        gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-default-color");
+        gnc_widget_style_context_remove_class (GTK_WIDGET(label), "negative-numbers");
+        gnc_widget_style_context_add_class (GTK_WIDGET(label), "default-color");
     }
 }
 
@@ -324,8 +325,12 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 void
 gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign)
 {
+#if GTK_CHECK_VERSION(3,16,0)
     gtk_label_set_xalign (GTK_LABEL (widget), xalign);
     gtk_label_set_yalign (GTK_LABEL (widget), yalign);
+#else
+    gtk_misc_set_alignment (GTK_MISC (widget), xalign, yalign);
+#endif
 }
 
 /********************************************************************\
@@ -362,6 +367,12 @@ gnc_tree_view_get_grid_lines_pref (void)
  *       gnc_class - character string for css class name            *
  * Returns:  nothing                                                *
 \********************************************************************/
+void
+gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
+{
+    gnc_widget_style_context_add_class (widget, gnc_class);
+}
+
 void
 gnc_widget_style_context_add_class (GtkWidget *widget, const char *gnc_class)
 {
@@ -883,16 +894,13 @@ gnc_cost_policy_select_new (void)
     return cost_policy_widget;
 }
 
-/* This function returns a string for the CSS 'gnc-class-negative-numbers' class,
- * the returned string must be freed
- */
 gchar*
-gnc_get_negative_color (void)
+get_negative_color (void)
 {
     GdkRGBA color;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
-    gtk_style_context_add_class (context, "gnc-class-negative-numbers");
+    gtk_style_context_add_class (context, "negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
 
     return gdk_rgba_to_string (&color);

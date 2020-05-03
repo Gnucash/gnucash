@@ -72,8 +72,7 @@
               <object class="GtkGrid" id="table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">3</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="transferinfo-label">
                     <property name="visible">True</property>
@@ -105,13 +104,14 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="resize_mode">immediate</property>
-                    <property name="row_spacing">3</property>
-                    <property name="column_spacing">6</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
                         <property name="label" translatable="yes">Amount</property>
                       </object>
                       <packing>
@@ -137,7 +137,8 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
                         <property name="label" translatable="yes">Date</property>
                       </object>
                       <packing>
@@ -164,7 +165,8 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
                         <property name="label" translatable="yes">Num</property>
                       </object>
                       <packing>
@@ -188,7 +190,8 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
                         <property name="label" translatable="yes">Description</property>
                       </object>
                       <packing>
@@ -214,7 +217,8 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
+                        <property name="margin_left">12</property>
                         <property name="label" translatable="yes">Memo</property>
                       </object>
                       <packing>
@@ -277,8 +281,7 @@
               <object class="GtkGrid" id="table2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">3</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="left_trans_label">
                     <property name="visible">True</property>
@@ -297,19 +300,25 @@
                   <object class="GtkBox" id="hbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="spacing">12</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkLabel" id="label7">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Currency</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="left_currency_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">3</property>
-                        <property name="margin_top">3</property>
-                        <property name="margin_bottom">3</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -318,13 +327,25 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <style>
-                      <class name="frame"/>
-                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="left_show_button">
+                    <property name="label" translatable="yes">Show Income/Expense</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -353,22 +374,39 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">    </property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="spacing">12</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkLabel" id="label10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Currency</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="right_currency_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">6</property>
-                        <property name="margin_right">3</property>
-                        <property name="margin_top">3</property>
-                        <property name="margin_bottom">3</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -377,9 +415,6 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <style>
-                      <class name="frame"/>
-                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -387,20 +422,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="left_trans_window">
+                  <object class="GtkCheckButton" id="right_show_button">
+                    <property name="label" translatable="yes">Show Income/Expense</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">2</property>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -415,68 +448,48 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label7">
+                  <object class="GtkScrolledWindow" id="left_trans_window">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Currency</property>
-                    <property name="justify">center</property>
+                    <property name="label">    </property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label10">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Currency</property>
-                    <property name="justify">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="left_show_button">
-                    <property name="label" translatable="yes">Show Income/Expense</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="halign">center</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="right_show_button">
-                    <property name="label" translatable="yes">Show Income/Expense</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="halign">center</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -489,9 +502,7 @@
               <object class="GtkGrid" id="curr_transfer_table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="row_spacing">3</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
@@ -521,8 +532,9 @@
                   <object class="GtkGrid" id="table3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">3</property>
-                    <property name="column_spacing">6</property>
+                    <property name="margin_left">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="price_radio">
                         <property name="label" translatable="yes">Exchange Rate</property>

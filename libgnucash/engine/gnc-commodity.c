@@ -138,7 +138,7 @@ struct gnc_new_iso_code
     {"TRL", "TRY"}, /* New Turkish Lira: changed 2005 */
 
     /* Only add currencies to this table when the old currency no longer
-     * exists in the file iso-4217-currencies.xml */
+     * exists in the file iso-4217-currencies.scm */
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))

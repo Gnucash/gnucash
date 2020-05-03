@@ -47,7 +47,7 @@
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "engine-helpers.h"
-#include "gnc-engine-guile.h"
+#include "engine-helpers-guile.h"
 #include "QuickFill.h"
 #include <gnc-commodity.h>
 
@@ -1884,9 +1884,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     xferData->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transfer_dialog"));
     g_object_set_data_full (G_OBJECT (xferData->dialog), "builder", builder, g_object_unref);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(xferData->dialog), "gnc-id-transfer");
-    gnc_widget_style_context_add_class (GTK_WIDGET(xferData->dialog), "gnc-class-securities");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(xferData->dialog), "GncTransferDialog");
 
     /* parent */
     if (parent != NULL)

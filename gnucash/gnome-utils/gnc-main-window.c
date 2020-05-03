@@ -48,11 +48,9 @@
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "engine-helpers.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
-#include "gnc-features.h"
 #include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
@@ -177,8 +175,6 @@ static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *wi
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified(void);
-static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
-static void gnc_main_window_remove_prefs (GncMainWindow *window);
 
 #ifdef MAC_INTEGRATION
 static void gnc_quartz_shutdown(GtkosxApplication *theApp, gpointer data);
@@ -1386,9 +1382,6 @@ gnc_main_window_quit(GncMainWindow *window)
     }
     if (do_shutdown)
     {
-        /* remove the preference callbacks from the main window */
-        window->window_quitting = TRUE;
-        gnc_main_window_remove_prefs (window);
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
         return TRUE;
     }
@@ -2544,9 +2537,9 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
                            NULL);
 
     gnc_hook_add_dangler(HOOK_BOOK_SAVED,
-                         (GFunc)gnc_main_window_update_all_titles, NULL, NULL);
+                         (GFunc)gnc_main_window_update_all_titles, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
-                         (GFunc)gnc_main_window_attach_to_book, NULL, NULL);
+                         (GFunc)gnc_main_window_attach_to_book, NULL);
 
 }
 
@@ -2570,8 +2563,8 @@ gnc_main_window_init (GncMainWindow *window, void *data)
     priv->merged_actions_table =
         g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-main-window");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncMainWindow");
 
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
@@ -2618,63 +2611,6 @@ gnc_main_window_finalize (GObject *object)
 
 
 static void
-gnc_main_window_remove_prefs (GncMainWindow *window)
-{
-    // remove the registered preference callbacks setup in this file.
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_COLOR,
-                                 gnc_main_window_update_tab_color,
-                                 window);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_SHOW_CLOSE_BUTTON,
-                                 gnc_main_window_update_tab_close,
-                                 NULL);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_WIDTH,
-                                 gnc_main_window_update_tab_width,
-                                 NULL);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_POSITION_TOP,
-                                 gnc_main_window_update_tab_position,
-                                 window);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_POSITION_BOTTOM,
-                                 gnc_main_window_update_tab_position,
-                                 window);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_POSITION_LEFT,
-                                 gnc_main_window_update_tab_position,
-                                 window);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_TAB_POSITION_RIGHT,
-                                 gnc_main_window_update_tab_position,
-                                 window);
-
-    // remove the registered negative color preference callback.
-    if (gnc_prefs_get_reg_negative_color_pref_id() > 0 && window->window_quitting)
-    {
-        gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL,
-                                   gnc_prefs_get_reg_negative_color_pref_id());
-        gnc_prefs_set_reg_negative_color_pref_id (0);
-    }
-
-    // remove the registered auto_raise_lists preference callback.
-    if (gnc_prefs_get_reg_auto_raise_lists_id() > 0 && window->window_quitting)
-    {
-        gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                   gnc_prefs_get_reg_auto_raise_lists_id());
-        gnc_prefs_set_reg_auto_raise_lists_id (0);
-    }
-}
-
-
-static void
 gnc_main_window_destroy (GtkWidget *widget)
 {
     GncMainWindow *window;
@@ -2704,8 +2640,10 @@ gnc_main_window_destroy (GtkWidget *widget)
         /* Update the "Windows" menu in all other windows */
         gnc_main_window_update_all_menu_items();
 #endif
-        /* remove the preference callbacks from the main window */
-        gnc_main_window_remove_prefs (window);
+        gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_TAB_COLOR,
+                                     gnc_main_window_update_tab_color,
+                                     window);
 
         qof_event_unregister_handler(priv->event_handler_id);
         priv->event_handler_id = 0;
@@ -2748,8 +2686,6 @@ gnc_main_window_new (void)
     }
     active_windows = g_list_append (active_windows, window);
     gnc_main_window_update_title(window);
-    window->window_quitting = FALSE;
-    window->just_plugin_prefs = FALSE;
 #ifdef MAC_INTEGRATION
     gnc_quartz_set_menu(window);
 #else
@@ -3008,10 +2944,6 @@ gnc_main_window_open_page (GncMainWindow *window,
     gtk_widget_show (label);
 
     tab_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-
-    if (g_strcmp0 (gnc_plugin_page_get_plugin_name (page), "GncPluginPageAccountTree") == 0)
-        gtk_widget_set_name (GTK_WIDGET(tab_hbox), "gnc-id-account-page-tab-box");
-
     gtk_box_set_homogeneous (GTK_BOX (tab_hbox), FALSE);
     gtk_widget_show (tab_hbox);
 
@@ -3020,7 +2952,11 @@ gnc_main_window_open_page (GncMainWindow *window,
         image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
+#else
+        gtk_widget_set_margin_left (GTK_WIDGET(image), 5);
+#endif
         gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
     }
     else
@@ -3070,7 +3006,11 @@ gnc_main_window_open_page (GncMainWindow *window,
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
         gtk_box_pack_start (GTK_BOX (tab_hbox), close_button, FALSE, FALSE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(close_button), 5);
+#endif
         g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
 
@@ -3125,18 +3065,6 @@ gnc_main_window_close_page (GncPluginPage *page)
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     if (priv->installed_pages == NULL)
     {
-        GncPluginManager *manager = gnc_plugin_manager_get ();
-        GList *plugins = gnc_plugin_manager_get_plugins (manager);
-
-        /* remove only the preference callbacks from the window plugins */
-        window->just_plugin_prefs = TRUE;
-        g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
-        window->just_plugin_prefs = FALSE;
-        g_list_free (plugins);
-
-        /* remove the preference callbacks from the main window */
-        gnc_main_window_remove_prefs (window);
-
         if (g_list_length(active_windows) > 1)
         {
             gtk_widget_destroy(GTK_WIDGET(window));
@@ -4120,44 +4048,6 @@ gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
 
     gnc_options_dialog_destroy(optionwin);
     gnc_option_db_destroy(options);
-}
-
-/** Calls gnc_book_option_num_field_source_change to initiate registered
- * callbacks when num_field_source book option changes so that
- * registers/reports can update themselves; sets feature flag */
-void
-gnc_book_option_num_field_source_change_cb (gboolean num_action)
-{
-    gnc_suspend_gui_refresh ();
-    if (num_action)
-    {
-        /* Set a feature flag in the book for use of the split action field as number.
-         * This will prevent older GnuCash versions that don't support this feature
-         * from opening this file. */
-        gnc_features_set_used (gnc_get_current_book(),
-                               GNC_FEATURE_NUM_FIELD_SOURCE);
-    }
-    gnc_book_option_num_field_source_change (num_action);
-    gnc_resume_gui_refresh ();
-}
-
-/** Calls gnc_book_option_book_currency_selected to initiate registered
- * callbacks when currency accounting book option changes to book-currency so
- * that registers/reports can update themselves; sets feature flag */
-void
-gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
-{
-    gnc_suspend_gui_refresh ();
-    if (use_book_currency)
-    {
-        /* Set a feature flag in the book for use of book currency. This will
-         * prevent older GnuCash versions that don't support this feature from
-         * opening this file. */
-        gnc_features_set_used (gnc_get_current_book(),
-                               GNC_FEATURE_BOOK_CURRENCY);
-    }
-    gnc_book_option_book_currency_selected (use_book_currency);
-    gnc_resume_gui_refresh ();
 }
 
 static gboolean

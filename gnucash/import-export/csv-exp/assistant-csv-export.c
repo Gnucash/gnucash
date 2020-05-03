@@ -855,9 +855,8 @@ csv_export_assistant_create (CsvExportInfo *info)
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
     info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
 
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(info->assistant), "gnc-id-assistant-csv-export");
-    gnc_widget_style_context_add_class (GTK_WIDGET(info->assistant), "gnc-class-exports");
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(info->assistant), "GncAssistExport");
 
     /* Load default settings */
     load_settings (info);

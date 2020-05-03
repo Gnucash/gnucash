@@ -53,6 +53,8 @@ extern "C"
 #define QOF_MOD_BACKEND "qof.backend"
 
 /** \brief The errors that can be reported to the GUI & other front-end users
+ *  \warning (GnuCash) If you modify QofBackendError, please update
+ *   src/engine/gw-engine-spec.scm
 */
 typedef enum
 {

@@ -140,8 +140,8 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_close_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(ddc->dialog), "gnc-id-date-close");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ddc->dialog), "GncDateCloseDialog");
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -234,12 +234,11 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
     ddc->memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(ddc->dialog), "gnc-id-date-close");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ddc->dialog), "GncDateCloseDialog");
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ddc->acct_combo), TRUE);
     gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
@@ -353,14 +352,13 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(ddc->dialog), "gnc-id-date-close");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ddc->dialog), "GncDateCloseDialog");
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
     if (*acct)
         gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ddc->acct_combo), TRUE);
     gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));

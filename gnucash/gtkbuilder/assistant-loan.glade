@@ -101,12 +101,10 @@
       <object class="GtkLabel" id="loan_intro_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
         <property name="label" translatable="yes">This is a step-by-step method for creating a loan repayment within GnuCash. In this assistant, you can input the details of your loan and its repayment along with the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
 
 If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly.</property>
+        <property name="justify">center</property>
         <property name="wrap">True</property>
       </object>
       <packing>
@@ -142,10 +140,9 @@ If you make a mistake or want to make changes later, you can edit the created Sc
           <object class="GtkGrid" id="param_table">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
             <property name="border_width">5</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
             <child>
               <object class="GtkLabel" id="label847897">
                 <property name="visible">True</property>
@@ -270,6 +267,86 @@ If you make a mistake or want to make changes later, you can edit the created Sc
               </packing>
             </child>
             <child>
+              <object class="GtkAlignment" id="alignment11">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="xscale">0.25</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment12">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="xscale">0.5</property>
+                <child>
+                  <object class="GtkBox" id="hbox170">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkComboBox" id="irate_type_combobox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">rate_liststore</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="irate_spin">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Enter the annual interest rate in percent. Accepts values from 0.001 - 100. The Mortgage Assistant does not support zero-interest loans.</property>
+                        <property name="invisible_char">●</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="climb_rate">1</property>
+                        <property name="digits">3</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label847921">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">%</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label847898">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -297,6 +374,40 @@ If you make a mistake or want to make changes later, you can edit the created Sc
               </packing>
             </child>
             <child>
+              <object class="GtkAlignment" id="alignment23">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xscale">0.5</property>
+                <property name="yscale">0.75</property>
+                <child>
+                  <object class="GtkFrame" id="type_freq_frame">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label_xalign">0.5</property>
+                    <child>
+                      <object class="GtkBox" id="type_freq_hbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="border_width">10</property>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="label847976">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Interest Rate Change Frequency</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkComboBox" id="type_combobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -312,95 +423,6 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="left_attach">3</property>
                 <property name="top_attach">2</property>
               </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="hbox170">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkComboBox" id="irate_type_combobox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="model">rate_liststore</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="irate_spin">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Enter the annual interest rate in percent. Accepts values from 0.001 - 100. The Mortgage Assistant does not support zero-interest loans.</property>
-                    <property name="invisible_char">●</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
-                    <property name="climb_rate">1</property>
-                    <property name="digits">3</property>
-                    <property name="snap_to_ticks">True</property>
-                    <property name="numeric">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label847921">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">%</property>
-                    <property name="justify">center</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="type_freq_frame">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0.5</property>
-                <child>
-                  <object class="GtkBox" id="type_freq_hbox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">10</property>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label847976">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Interest Rate Change Frequency</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">4</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -485,29 +507,33 @@ Do you utilise an escrow account, if so an account must be specified...</propert
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="opt_escrow_hbox">
+              <object class="GtkAlignment" id="alignment19">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="margin_left">12</property>
-                <property name="spacing">6</property>
+                <property name="xscale">0.75</property>
                 <child>
-                  <object class="GtkLabel" id="label847963">
+                  <object class="GtkBox" id="opt_escrow_hbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Escrow Account</property>
-                    <property name="justify">center</property>
+                    <child>
+                      <object class="GtkLabel" id="label847963">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Escrow Account</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -560,10 +586,9 @@ All accounts must have valid entries to continue.
           <object class="GtkGrid" id="repay_table">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
             <property name="border_width">5</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
             <child>
               <object class="GtkLabel" id="label847910">
                 <property name="visible">True</property>
@@ -630,12 +655,19 @@ All accounts must have valid entries to continue.
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="txn_title">
+              <object class="GtkAlignment" id="alignment13">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <child>
+                  <object class="GtkEntry" id="txn_title">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">●</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -644,13 +676,20 @@ All accounts must have valid entries to continue.
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="amount_ent">
+              <object class="GtkAlignment" id="alignment14">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="editable">False</property>
-                <property name="invisible_char">●</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <child>
+                  <object class="GtkEntry" id="amount_ent">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="invisible_char">●</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -659,22 +698,30 @@ All accounts must have valid entries to continue.
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="freq_frame">
+              <object class="GtkAlignment" id="alignment21">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label_xalign">0.5</property>
+                <property name="xscale">0.5</property>
+                <property name="yscale">0.89999997615814209</property>
                 <child>
-                  <object class="GtkBox" id="freq_frame_hbox">
+                  <object class="GtkFrame" id="freq_frame">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="border_width">10</property>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label847977">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Repayment Frequency</property>
+                    <property name="label_xalign">0.5</property>
+                    <child>
+                      <object class="GtkBox" id="freq_frame_hbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="border_width">10</property>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="label847977">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Repayment Frequency</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -737,7 +784,6 @@ All enabled option pages must contain valid entries to continue.
           <object class="GtkEventBox" id="eventbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
             <child>
               <object class="GtkBox" id="vbox158">
                 <property name="visible">True</property>
@@ -748,8 +794,8 @@ All enabled option pages must contain valid entries to continue.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">5</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="row_spacing">5</property>
+                    <property name="column_spacing">5</property>
                     <child>
                       <object class="GtkLabel" id="label847916">
                         <property name="visible">True</property>
@@ -800,6 +846,48 @@ All enabled option pages must contain valid entries to continue.
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment16">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <object class="GtkEntry" id="pay_txn_title">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">●</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment17">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <child>
+                          <object class="GtkEntry" id="pay_amt_ent">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">●</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">3</property>
                       </packing>
                     </child>
                     <child>
@@ -859,34 +947,6 @@ All enabled option pages must contain valid entries to continue.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="pay_txn_title">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="pay_amt_ent">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <placeholder/>
                     </child>
                     <child>
@@ -924,50 +984,32 @@ All enabled option pages must contain valid entries to continue.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="frame92">
+                  <object class="GtkAlignment" id="alignment22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="label_xalign">0.5</property>
+                    <property name="xscale">0.5</property>
+                    <property name="yscale">0.75</property>
                     <child>
-                      <object class="GtkBox" id="vbox159">
+                      <object class="GtkFrame" id="frame92">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
+                        <property name="halign">start</property>
+                        <property name="label_xalign">0.5</property>
                         <child>
-                          <object class="GtkRadioButton" id="pay_txn_part_rb">
-                            <property name="label" translatable="yes">Part of Payment Transaction</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="halign">start</property>
-                            <property name="use_underline">True</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="vbox160">
+                          <object class="GtkBox" id="vbox159">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="border_width">10</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkRadioButton" id="pay_uniq_freq_rb">
-                                <property name="label" translatable="yes">Other</property>
+                              <object class="GtkRadioButton" id="pay_txn_part_rb">
+                                <property name="label" translatable="yes">Part of Payment Transaction</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="use_underline">True</property>
+                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">pay_txn_part_rb</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -976,36 +1018,62 @@ All enabled option pages must contain valid entries to continue.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="pay_freq_hbox">
+                              <object class="GtkBox" id="vbox160">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="border_width">10</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="pay_uniq_freq_rb">
+                                    <property name="label" translatable="yes">Other</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">pay_txn_part_rb</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="pay_freq_hbox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">True</property>
+                                <property name="fill">False</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label847978">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Payment Frequency</property>
+                        <child type="label">
+                          <object class="GtkLabel" id="label847978">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Payment Frequency</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="expand">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1161,7 +1229,6 @@ Review the details below and if correct press Apply to create the schedule.</pro
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="border_width">10</property>
-                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label847971">
                             <property name="visible">True</property>

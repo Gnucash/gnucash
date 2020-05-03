@@ -153,7 +153,6 @@ struct _invoice_window
     GtkWidget  * info_label; /*Default in glade is "Invoice Information"*/
     GtkWidget  * id_label; /* Default in glade is Invoice ID */
     GtkWidget  * type_label;
-    GtkWidget  * type_label_hbox;
     GtkWidget  * type_hbox;
     GtkWidget  * type_choice;
     GtkWidget  * id_entry;
@@ -257,29 +256,14 @@ iw_ask_unpost (InvoiceWindow *iw)
     GtkToggleButton *toggle;
     GtkBuilder *builder;
     gint response;
-    const gchar *style_label = NULL;
-    GncOwnerType owner_type = gncOwnerGetType (&iw->owner);
-
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "unpost_message_dialog");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "unpost_message_dialog"));
     toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
 
-    switch (owner_type)
-    {
-        case GNC_OWNER_VENDOR:
-            style_label = "gnc-class-vendors";
-            break;
-        case GNC_OWNER_EMPLOYEE:
-            style_label = "gnc-class-employees";
-            break;
-        default:
-            style_label = "gnc-class-customers";
-            break;
-    }
-    // Set a secondary style context for this page so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), style_label);
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
 
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   GTK_WINDOW(iw_get_window(iw)));
@@ -1276,7 +1260,6 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
 
     summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
     gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
-    gtk_widget_set_name (summarybar, "gnc-id-summarybar");
 
     iw->total_label           = add_summary_label (summarybar, _("Total:"));
 
@@ -2322,7 +2305,6 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     GncEntryLedgerType ledger_type;
     const gchar *prefs_group = NULL;
     gboolean is_credit_note = FALSE;
-    const gchar *style_label = NULL;
 
     invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
     is_credit_note = gncInvoiceGetIsCreditNote (invoice);
@@ -2334,6 +2316,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
 
     /* Autoconnect all the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
@@ -2353,7 +2338,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
     iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
 
-    // Add a style context for this label so it can be easily manipulated with css
+    // Set the style context for this label so it can be easily manipulated with css
     gnc_widget_style_context_add_class (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
 
     /* grab the project widgets */
@@ -2456,25 +2441,19 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     }
     /* Default labels are for invoices, change them if they are anything else. */
     switch (owner_type)
-    {
+        {
         case GNC_OWNER_VENDOR:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
-            style_label = "gnc-class-vendors";
             break;
         case GNC_OWNER_EMPLOYEE:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
-            style_label = "gnc-class-employees";
-            break;
         default:
-            style_label = "gnc-class-customers";
             break;
-    }
-    // Set a secondary style context for this page so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), style_label);
+        }
 
     entry_ledger = gnc_entry_ledger_new (iw->book, ledger_type);
 
@@ -2546,7 +2525,6 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     const GncOwner *start_owner;
     GncBillTerm *owner_terms = NULL;
     GncOwnerType owner_type;
-    const gchar *style_label = NULL;
 
     g_assert (dialog_type == NEW_INVOICE || dialog_type == MOD_INVOICE || dialog_type == DUP_INVOICE);
 
@@ -2625,14 +2603,13 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "new_invoice_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(iw->dialog), parent);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(iw->dialog), "gnc-id-invoice");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(iw->dialog), "GncInvoiceDialog");
 
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 
     /* Grab the widgets */
     iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label"));
-    iw->type_label_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label_hbox"));
     iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
     iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label1"));
     invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
@@ -2649,21 +2626,16 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Bill"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
-            style_label = "gnc-class-vendors";
+
             break;
         case GNC_OWNER_EMPLOYEE:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Voucher"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
-            style_label = "gnc-class-employees";
-            break;
         default:
-            style_label = "gnc-class-customers";
         break;
     }
-    // Set a secondary style context for this page so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(iw->dialog), style_label);
 
     /* configure the type related widgets based on dialog type and invoice type */
     switch (dialog_type)
@@ -2671,12 +2643,10 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     case NEW_INVOICE:
     case DUP_INVOICE:
         gtk_widget_show_all (iw->type_hbox);
-        gtk_widget_hide (iw->type_label_hbox);
         gtk_widget_hide (iw->type_label);
         break;
     case MOD_INVOICE:
         gtk_widget_hide (iw->type_hbox);
-        gtk_widget_show (iw->type_label_hbox);
         gtk_widget_show (iw->type_label);
         break;
     default:
@@ -3357,21 +3327,21 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     case GNC_OWNER_VENDOR:
         title = _("Find Bill");
         label = _("Bill");
-        style_class = "gnc-class-bills";
+        style_class = "GncFindBillDialog";
         params = bill_params;
         buttons = bill_buttons;
         break;
     case GNC_OWNER_EMPLOYEE:
         title = _("Find Expense Voucher");
         label = _("Expense Voucher");
-        style_class = "gnc-class-vouchers";
+        style_class = "GncFindExpenseVoucherDialog";
         params = emp_params;
         buttons = emp_buttons;
         break;
     default:
         title = _("Find Invoice");
         label = _("Invoice");
-        style_class = "gnc-class-invoices";
+        style_class = "GncFindInvoiceDialog";
         params = inv_params;
         buttons = inv_buttons;
         break;

@@ -13,6 +13,7 @@ set(GNUCASH_CORE_C_INCLUDES
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/qofutil.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/qofid.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/guid.h
+    ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module/gnc-module.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-engine.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/Transaction.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/Split.h
@@ -38,34 +39,23 @@ set(GNUCASH_CORE_C_INCLUDES
 gnc_add_swig_python_command (swig-gnucash-core
     SWIG_GNUCASH_CORE_C SWIG_GNUCASH_CORE_PY
     gnucash_core.c gnucash_core_c.py
-    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i
-    ${CMAKE_SOURCE_DIR}/bindings
-    ${CMAKE_CURRENT_SOURCE_DIR}/time64.i
+    ${SWIG_FILES}
     ${CMAKE_SOURCE_DIR}/common/base-typemaps.i
-    ${CMAKE_SOURCE_DIR}/bindings/engine-common.i
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine/engine-common.i
     ${GNUCASH_CORE_C_INCLUDES}
 )
 
-# Command to generate the swig-core-utils-python.c wrapper file
-gnc_swig_extract_header_files (gnc-core-utils CORE_UTILS_HEADERS)
-gnc_add_swig_python_command (swig-core-utils-python
-    SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
-    swig-core-utils-python.c sw_core_utils.py
-    ${CMAKE_SOURCE_DIR}/bindings/core-utils.i ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
-    ${CORE_UTILS_HEADERS}
-)
-
 if(WITH_PYTHON)
-
-  ### gnucash_core_c
 
   set(gnucash_core_c_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/libgnucash
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
+    ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
     ${CMAKE_SOURCE_DIR}/gnucash/gnome
     ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
+    ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
     ${GLIB_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
   )
@@ -73,7 +63,7 @@ if(WITH_PYTHON)
   add_library(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   target_include_directories(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
-  target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  target_link_libraries(gnucash_core_c gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
   set_target_properties(gnucash_core_c PROPERTIES PREFIX "_")
   target_compile_options(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)
@@ -81,7 +71,7 @@ if(WITH_PYTHON)
   endif()
 
   add_executable(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
-  target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  target_link_libraries(sqlite3test gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
   target_include_directories(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
   target_compile_options(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)
@@ -99,9 +89,7 @@ if(WITH_PYTHON)
     DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
-  foreach(PYEXEC_FILE ${PYEXEC_FILES})
-      configure_file(${PYEXEC_FILE} ${PYTHON_SYSCONFIG_BUILD}/gnucash/${PYEXEC_FILE} COPYONLY)
-  endforeach()
+  file(COPY ${PYEXEC_FILES} DESTINATION ${PYTHON_SYSCONFIG_BUILD}/gnucash)
 
   add_custom_target(gnucash-core-c-py ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_GNUCASH_CORE_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
@@ -110,41 +98,6 @@ if(WITH_PYTHON)
   add_custom_target(gnucash-core-c-build ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_gnucash_core_c${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS gnucash_core_c)
-
-
-  ### sw_core_utils
-
-  add_library (sw_core_utils MODULE ${SWIG_CORE_UTILS_PYTHON_C})
-
-  target_link_libraries(sw_core_utils gnc-core-utils ${PYTHON_LIBRARIES})
-  set_target_properties(sw_core_utils PROPERTIES PREFIX "_")
-
-  if (HAVE_STRINGOP_TRUNCATION)
-    target_compile_options(sw_core_utils PRIVATE -Wno-error=stringop-truncation)
-  endif()
-
-  target_include_directories (sw_core_utils
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${PYTHON_INCLUDE_DIRS}
-  )
-  target_compile_definitions (sw_core_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\")
-
-  if (APPLE)
-    set_target_properties (sw_core_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-  endif()
-
-  install(TARGETS sw_core_utils
-    LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
-    ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
-  )
-
-  add_custom_target(sw-core-utils-py ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_CORE_UTILS_PYTHON_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
-    DEPENDS ${SWIG_CORE_UTILS_PYTHON_C})
-
-  add_custom_target(sw-core-utils-build ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_core_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
-    DEPENDS sw_core_utils)
 
 endif()
 

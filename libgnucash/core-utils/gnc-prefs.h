@@ -553,16 +553,6 @@ void gnc_prefs_reset (const gchar *group,
  */
 void gnc_prefs_reset_group (const gchar *group);
 
-/** Get and Set registered preference id for register auto_raise_lists
- */
-gulong gnc_prefs_get_reg_auto_raise_lists_id (void);
-void gnc_prefs_set_reg_auto_raise_lists_id (gulong id);
-
-/** Get and Set registered preference id for register negative_color_pref
- */
-gulong gnc_prefs_get_reg_negative_color_pref_id (void);
-void gnc_prefs_set_reg_negative_color_pref_id (gulong id);
-
 /** @} */
 
 

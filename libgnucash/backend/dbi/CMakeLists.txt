@@ -33,7 +33,7 @@ if (WITH_SQL)
   if(MINGW64)
     set(WINSOCK_LIB "-lws2_32")
   endif()
-  target_link_libraries(gncmod-backend-dbi gnc-backend-sql gnc-engine ${GTK2_LDFLAGS} ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY} ${WINSOCK_LIB})
+  target_link_libraries(gncmod-backend-dbi gnc-backend-sql gncmod-engine ${GTK2_LDFLAGS} ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY} ${WINSOCK_LIB})
 
   target_compile_definitions(gncmod-backend-dbi PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.dbi\")
 

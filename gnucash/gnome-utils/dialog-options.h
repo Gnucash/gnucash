@@ -84,8 +84,8 @@ void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
 
 /* Function to set the UI widget based upon the option */
 typedef GtkWidget *
-(*GNCOptionUISetWidget) (GNCOption *option, GtkGrid *page_box,
-                         GtkLabel *name_label, char *documentation,
+(*GNCOptionUISetWidget) (GNCOption *option, GtkBox *page_box,
+                         char *name, char *documentation,
                          /* Return values */
                          GtkWidget **enclosing, gboolean *packed);
 

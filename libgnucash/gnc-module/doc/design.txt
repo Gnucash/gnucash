@@ -68,23 +68,26 @@ gnc_module_description should return a newly-allocated 1-line
 description of what the module does.  This can be displayed by GUI
 elements to allow users to select modules to load.
 
-While the module system used to have wrappers for scheme access
-this functionality is now deprecated. Scheme code should no longer
-try to use any gnc-module functionality. All C code that is potentially
-useful for scheme has been or can be wrapped using swig. That wrapped
-code can be made available to scheme code using guile's load-extension
-functionality. For convenience, most of this wrapped code is
-accompanied by a scheme module that handles the load-extension part for you.
-So in most cases simply calling (use-module (gnucash <module-name>)) will
-do the trick.
 
 Initializing the module system
 ------------------------------
 
 Somewhere at program startup time, you need to call
-gnc_module_system_init from C.  This scans the
+gnc_module_system_init from C (see below from Scheme).  This scans the
 directories in the GNC_MODULE_PATH and builds a database of the
 available modules.
+
+In Scheme, you need to (use-modules (gnucash gnc-module)) and call
+(gnc:module-system-init) if it was not called from C.  You will need
+to use-modules this module is you intend to use any module system 
+functions from Scheme.  
+
+On the Scheme side, gnc:module-system-init is not a g-wrapped
+function.  It uses Guile's dynamic-link to open the libgncmodule.la
+library directly and call gnc_module_system_init.  dynamic-link uses
+lt_dlopen() under the hood, so you need to make sure that the
+libgncmodule.la install directory is in your LD_LIBRARY_PATH or
+LTDL_LIBRARY_PATH.  The Gnucash app will set up this path by default.
 
 You can rebuild the module database at any time (say, if you know a
 new module has been installed or the user has changed the module path
@@ -93,9 +96,10 @@ via some in-program mechanism) by calling gnc_module_system_refresh.
 Loading modules
 ---------------
 
-From C call gnc_module_load(path, interface).  This returns a GNCModule
-if a qualifying module was successfully loaded, FALSE otherwise.
-GNCModule is an opaque type.
+From C call gnc_module_load(path, interface), or gnc:module-load from
+Scheme.  This returns a GNCModule (<gnc:module>) if a qualifying
+module was successfully loaded, #f / FALSE otherside.  GNCModule is an
+opaque type.
 
 A qualifying module is any module whose gnc_module_path matches the
 path specification and for whom "interface" falls between

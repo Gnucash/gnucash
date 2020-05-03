@@ -9,11 +9,18 @@ set(ENGINE_TEST_INCLUDE_DIRS
   ${GLIB2_INCLUDE_DIRS}
 )
 
-set(ENGINE_TEST_LIBS gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
+set(ENGINE_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lm)
 
 macro(add_engine_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 endmacro()
+
+# Not via macro because of unique link requirements
+
+add_executable(test-link EXCLUDE_FROM_ALL test-link.c)
+target_link_libraries(test-link gnc-core-utils)
+add_test(NAME test-link COMMAND test-link CONFIGURATIONS Debug;Release)
+add_dependencies(check test-link)
 
 #################################################
 
@@ -82,10 +89,10 @@ add_engine_test(test-numeric "${test_numeric_SOURCES}")
 
 set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 set(gtest_old_engine_LIBS
-  gnc-engine
+  gncmod-engine
   ${GLIB2_LDFLAGS}
   ${Boost_LIBRARIES}
-  gtest)
+  ${GTEST_LIB})
 
 set(gtest_qof_LIBS
   ${GLIB2_LDFLAGS}
@@ -94,7 +101,7 @@ set(gtest_qof_LIBS
   ${GTHREAD_LDFLAGS}
   ${ICU4C_I18N_LDFLAGS}
   ${Boost_LIBRARIES}
-  gtest)
+  ${GTEST_LIB})
 
 set(gtest_engine_INCLUDES
   ${MODULEPATH}
@@ -102,6 +109,7 @@ set(gtest_engine_INCLUDES
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
   ${GLIB2_INCLUDE_DIRS}
+  ${GTEST_INCLUDE_DIR}
   ../../../borrowed/libc
 )
 
@@ -194,6 +202,59 @@ gtest-qofquerycore.cpp)
 gnc_add_test(test-qofquerycore "${test_qofquerycore_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+############################
+# This is a C test that needs GUILE environment variables set.
+# It does not pass on Win32.
+gnc_add_test_with_guile(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
+############################
+
+
+set(engine_test_SCHEME
+  test-account.scm
+  test-create-account.scm
+  test-split.scm
+  )
+
+#list(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
+
+set(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-scm scm-engine)
+
+gnc_add_scheme_targets(scm-test-engine-extras
+  "test-extras.scm"
+  "gnucash/engine/test/"
+  "${GUILE_DEPENDS}"
+  FALSE
+  )
+
+if (HAVE_SRFI64)
+  gnc_add_scheme_targets (scm-srfi64-extras
+    "srfi64-extras.scm"
+    "gnucash/engine/test/"
+    "${GUILE_DEPENDS}"
+    FALSE
+    )
+
+  set(srfi64_extras_SCHEME_DIST
+    srfi64-extras.scm
+    )
+
+  set (scm_tests_with_srfi64_SOURCES
+    test-business-core.scm
+    )
+
+  gnc_add_scheme_tests("${scm_tests_with_srfi64_SOURCES}")
+  add_dependencies(check scm-srfi64-extras)
+endif()
+
+gnc_add_scheme_targets(scm-test-engine
+  "${engine_test_SCHEME}"
+  ""
+  "${GUILE_DEPENDS};scm-test-engine-extras"
+  FALSE
+  )
+
+add_dependencies(check scm-test-engine)
+gnc_add_scheme_tests("${engine_test_SCHEME}")
 
 set(test_engine_SOURCES_DIST
         dummy.cpp
@@ -220,6 +281,7 @@ set(test_engine_SOURCES_DIST
         test-job.c
         test-kvp-value.cpp
         test-kvp-frame.cpp
+        test-link.c
         test-load-engine.c
         test-lots.cpp
         test-numeric.cpp
@@ -233,6 +295,7 @@ set(test_engine_SOURCES_DIST
         test-query.cpp
         test-querynew.c
         test-recurrence.c
+        test-scm-query.cpp
         test-split-vs-account.cpp
         test-transaction-reversal.cpp
         test-transaction-voiding.cpp
@@ -246,9 +309,19 @@ set(test_engine_SOURCES_DIST
         utest-gnc-pricedb.c
 )
 
+set(test_engine_SCHEME_DIST
+        test-account.scm
+        test-create-account.scm
+        test-extras.scm
+        test-scm-query-import.scm
+        test-split.scm
+        test-business-core.scm
+)
+
 set(test_engine_EXTRA_DIST
         README
 )
 
 set_dist_list(test_engine_DIST CMakeLists.txt
-        ${test_engine_SOURCES_DIST} ${test_engine_EXTRA_DIST})
+        ${srfi64_extras_SCHEME_DIST}
+        ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})

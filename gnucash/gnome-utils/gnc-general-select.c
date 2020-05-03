@@ -145,8 +145,8 @@ gnc_general_select_init (GNCGeneralSelect *gsl)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gsl), GTK_ORIENTATION_HORIZONTAL);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gsl), "gnc-id-general-select");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gsl), "GncGeneralSelect");
 
     gsl->disposed = FALSE;
     gsl->selected_item = NULL;

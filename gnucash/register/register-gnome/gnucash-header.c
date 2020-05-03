@@ -74,7 +74,7 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     // Get the color type and apply the css class
     color_type = gnc_table_get_color (table, virt_loc, NULL);
-    gnucash_get_style_classes (header->sheet, stylectxt, color_type, FALSE);
+    gnucash_get_style_classes (header->sheet, stylectxt, color_type);
 
     if (header->surface)
         cairo_surface_destroy (header->surface);
@@ -596,7 +596,7 @@ gnc_header_init (GncHeader *header)
     header->style = NULL;
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(header), "gnc-class-header");
+    gnc_widget_set_css_name (GTK_WIDGET(header), "header");
 
     gtk_widget_add_events(GTK_WIDGET(header), (GDK_EXPOSURE_MASK
                           | GDK_BUTTON_PRESS_MASK
@@ -617,7 +617,7 @@ gnc_header_class_init (GncHeaderClass *header_class)
     GtkWidgetClass *item_class = GTK_WIDGET_CLASS (header_class);
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(header_class), "gnc-id-header");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(header_class), "header");
 #endif
 
     parent_class = g_type_class_peek_parent (header_class);

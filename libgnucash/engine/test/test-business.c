@@ -25,8 +25,10 @@
 
 #include <config.h>
 #include <glib.h>
+#include <libguile.h>
 
 #include "qof.h"
+#include "gnc-module.h"
 
 #include "gncBusiness.h"
 #include "test-stuff.h"
@@ -119,9 +121,9 @@ test_printable (const char *name, gpointer obj)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
-    gnc_engine_init(argc, argv);
+    gnc_module_load("gnucash/engine", 0);
     test_business();
     print_test_results();
     exit(get_rv());
@@ -132,6 +134,6 @@ int
 main (int argc, char **argv)
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
-    //main_helper (argc, argv);
+    //  scm_boot_guile (argc, argv, main_helper, NULL);
     return get_rv();
 }

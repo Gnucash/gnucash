@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 #include <ctype.h>
 
-#include "gnc-guile-utils.h"
+#include "guile-util.h"
 #include "gnc-engine.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"

@@ -123,17 +123,17 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="warning_hbox">
+          <object class="GtkBox" id="placeholder_warning_hbox">
             <property name="can_focus">False</property>
             <property name="margin_left">6</property>
             <property name="margin_right">6</property>
             <property name="margin_top">6</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkImage" id="warning_image">
+              <object class="GtkImage" id="placeholder_warning_image">
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="icon_name">dialog-warning</property>
+                <property name="stock">gtk-dialog-warning</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -142,7 +142,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="warning_label">
+              <object class="GtkLabel" id="placeholder_warning_label">
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="wrap">True</property>
@@ -167,6 +167,26 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="atm_fee_adj">
+    <property name="upper">1000</property>
+    <property name="value">2</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="auto_add_adj">
+    <property name="lower">1</property>
+    <property name="upper">6</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="auto_clear_adj">
+    <property name="lower">6</property>
+    <property name="upper">12</property>
+    <property name="value">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="format_picker_dialog">
     <property name="can_focus">False</property>
@@ -296,6 +316,266 @@
     <action-widgets>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="match_adj">
+    <property name="upper">6</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkWindow" id="Preferences">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Preferences</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkGrid" id="matcher_prefs">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable skip transaction action</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
+            <property name="tooltip_text" translatable="yes">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-update">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable update match action</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
+            <property name="tooltip_text" translatable="yes">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847785">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;b&gt;Generic Importer&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/atm-fee-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won&amp;apos;t match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+            <property name="tooltip_text" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">atm_fee_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="digits">2</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-clear-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
+            <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">auto_clear_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-add-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
+            <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">auto_add_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/match-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">The minimum score a potential match must have to be displayed in the match list.</property>
+            <property name="tooltip_text" translatable="yes">The minimum score a potential match must have to be displayed in the match list.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">match_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847789">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Commercial ATM _fees threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/atm-fee-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847788">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-c_lear threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-clear-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847787">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-_add threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-add-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847786">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Match _display threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/match-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/use-bayes">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Use _bayesian matching</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Use bayesian algorithms to match new transactions with existing accounts.</property>
+            <property name="tooltip_text" translatable="yes">Use bayesian algorithms to match new transactions with existing accounts.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto-create-commodity">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Automatically create new commodities</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</property>
+            <property name="tooltip_text" translatable="yes">Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkDialog" id="match_picker_dialog">
     <property name="can_focus">False</property>
@@ -472,7 +752,7 @@
     <property name="text" translatable="yes">This transaction requires your intervention or it will NOT be imported.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer5">
-    <property name="text" translatable="yes">Double click on the transaction to either change the matching transaction in GnuCash or the destination account of the auto-balance split (if required).</property>
+    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
   </object>
   <object class="GtkDialog" id="matcher_help_dialog">
     <property name="can_focus">False</property>
@@ -522,8 +802,8 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="label847790">
                 <property name="visible">True</property>
@@ -659,7 +939,7 @@
               <object class="GtkLabel" id="label847797">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"U+C"</property>
+                <property name="label" translatable="yes">"U+R"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -670,7 +950,7 @@
               <object class="GtkLabel" id="label847798">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">"C"</property>
+                <property name="label" translatable="yes">"R"</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -694,7 +974,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "U+C" to update a matching transaction and mark it as cleared (c).</property>
+                <property name="label" translatable="yes">Select "U+R" to update and reconcile a matching transaction.</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -706,7 +986,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select "C" to mark a matching transaction as cleared (c).</property>
+                <property name="label" translatable="yes">Select "R" to reconcile a matching transaction.</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -873,7 +1153,7 @@
       <object class="GtkLabel" id="heading_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">List of downloaded transactions (source split and matched information shown)</property>
+        <property name="label" translatable="yes">List of downloaded transactions (source split shown)</property>
         <property name="justify">center</property>
       </object>
       <packing>
@@ -910,46 +1190,18 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkCheckButton" id="show_source_account_button">
+        <property name="label" translatable="yes">Show the Source Account column</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
         <property name="halign">center</property>
-        <child>
-          <object class="GtkCheckButton" id="show_source_account_button">
-            <property name="label" translatable="yes">Show the _Account column</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">center</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="show_matched_info_button">
-            <property name="label" translatable="yes">Show _matched information</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        <property name="draw_indicator">True</property>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
   </object>
@@ -975,23 +1227,6 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="matcher__help">
-                <property name="label" translatable="yes">_Help</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_matcher_help_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="matcher_cancel">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
@@ -1004,7 +1239,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -1017,6 +1252,22 @@
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_matcher_ok_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="matcher__help">
+                <property name="label" translatable="yes">_Help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_matcher_help_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1035,9 +1286,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">matcher__help</action-widget>
       <action-widget response="-6">matcher_cancel</action-widget>
       <action-widget response="-5">matcher_ok</action-widget>
+      <action-widget response="-11">matcher__help</action-widget>
     </action-widgets>
   </object>
 </interface>

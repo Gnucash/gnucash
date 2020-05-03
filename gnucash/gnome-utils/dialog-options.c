@@ -34,8 +34,8 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "gnc-engine-guile.h"
-#include "glib-guile.h"
+#include "engine-helpers-guile.h"
+#include "glib-helpers.h"
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-tree-model-account.h"
@@ -50,6 +50,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
+#include "guile-util.h"
 #include "gnc-guile-utils.h"
 #include "option-util.h"
 #include "guile-mappings.h"
@@ -1159,7 +1160,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
     frame = gtk_frame_new (name);
 
     /* Create the button box */
-    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
@@ -1215,7 +1216,11 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     gtk_widget_set_halign (GTK_WIDGET(vbox), GTK_ALIGN_FILL);
     gtk_widget_set_hexpand (GTK_WIDGET(vbox), TRUE);
 
+#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_end (GTK_WIDGET(vbox), 12);
+#else
+    gtk_widget_set_margin_right (GTK_WIDGET(vbox), 12);
+#endif
     gtk_widget_set_margin_bottom (GTK_WIDGET(vbox), 12);
 
     /* Iterate over the three options and create a radio button for each one */
@@ -1301,7 +1306,11 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                          book_currency_data->book_currency_table,
                                          TRUE, TRUE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(book_currency_data->book_currency_table), 12);
+#else
+            gtk_widget_set_margin_left (GTK_WIDGET(book_currency_data->book_currency_table), 12);
+#endif
             gtk_grid_set_row_spacing (GTK_GRID (policy_table), 6);
             gtk_grid_set_column_spacing (GTK_GRID (policy_table), 6);
 
@@ -1324,7 +1333,11 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
 
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                          policy_table, TRUE, TRUE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(policy_table), 12);
+#else
+            gtk_widget_set_margin_left (GTK_WIDGET(policy_table), 12);
+#endif
             book_currency_data->gain_loss_account_table = gtk_grid_new ();
             gtk_grid_set_row_spacing (GTK_GRID (book_currency_data->gain_loss_account_table), 6);
             gtk_grid_set_column_spacing (GTK_GRID (book_currency_data->gain_loss_account_table), 6);
@@ -1342,7 +1355,11 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_box_pack_start (GTK_BOX (book_currency_data->book_currency_vbox),
                                 book_currency_data->gain_loss_account_table,
                                 TRUE, TRUE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
             gtk_widget_set_margin_start (GTK_WIDGET(book_currency_data->gain_loss_account_table), 12);
+#else
+            gtk_widget_set_margin_left (GTK_WIDGET(book_currency_data->gain_loss_account_table), 12);
+#endif
             gtk_grid_attach (GTK_GRID(table), book_currency_data->book_currency_vbox, 1, 2, 1, 1);
         }
         else /* trading or neither */
@@ -1527,9 +1544,6 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(gnc_option_default_cb), option);
 
-    gtk_widget_set_margin_start (GTK_WIDGET(bbox), 6);
-    gtk_widget_set_margin_end (GTK_WIDGET(bbox), 6);
-
     if (multiple_selection)
     {
         /* Put the "Show hidden" checkbox on a separate line since the 4 buttons make
@@ -1642,7 +1656,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
 
     bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_end(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 10);
 
     button = gtk_button_new_with_label(_("Select All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
@@ -1665,8 +1679,6 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(gnc_option_default_cb), option);
 
-    g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
-
     gnc_option_set_widget (option, GTK_WIDGET(view));
 
     return frame;
@@ -1685,7 +1697,8 @@ gnc_option_font_changed_cb(GtkFontButton *font_button, GNCOption *option)
 }
 
 static void
-gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
+gnc_option_set_ui_widget(GNCOption *option,
+                         GtkBox *page_box)
 {
     GtkWidget *enclosing = NULL;
     GtkWidget *value = NULL;
@@ -1694,7 +1707,6 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
     char *name, *documentation;
     char *type;
     GNCOptionDef_t *option_def;
-    GtkLabel *name_label;
 
     ENTER("option %p(%s), box %p",
           option, gnc_option_name(option), page_box);
@@ -1722,13 +1734,11 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
     else
         documentation = NULL;
 
-    name_label = GTK_LABEL(gtk_label_new (name));
-
     option_def = gnc_options_ui_get_option (type);
     if (option_def && option_def->set_widget)
     {
         value = option_def->set_widget (option, page_box,
-                                        name_label, documentation,
+                                        name, documentation,
                                         /* Return values */
                                         &enclosing, &packed);
     }
@@ -1736,13 +1746,6 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
     {
         PERR("Unknown option type. Ignoring option \"%s\".\n", name);
     }
-
-    /* attach the name label to the first column of the grid and
-       align to the end */
-    gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
-                     0, grid_row, // left, top
-                     1, 1);  // width, height
-    gtk_widget_set_halign (GTK_WIDGET(name_label), GTK_ALIGN_END);
 
     if (!packed && (enclosing != NULL))
     {
@@ -1752,10 +1755,11 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
 
         gtk_container_add (GTK_CONTAINER (eventbox), enclosing);
 
-        /* attach the option widget to the second column of the grid */
-        gtk_grid_attach (GTK_GRID(page_box), eventbox,
-                         1, grid_row, // left, top
-                         1, 1);  // width, height
+        /* Allow the text widget to expand and fill remaining space */
+        if (g_strcmp0 (type, "text") == 0)
+            gtk_box_pack_start (page_box, eventbox, TRUE, TRUE, 0);
+        else
+            gtk_box_pack_start (page_box, eventbox, FALSE, FALSE, 0);
 
         gtk_widget_set_tooltip_text (eventbox, documentation);
     }
@@ -1773,10 +1777,9 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
 
 static void
 gnc_options_dialog_add_option(GtkWidget *page,
-                              GNCOption *option, gint row)
+                              GNCOption *option)
 {
-    g_object_set_data (G_OBJECT(page), "options-grid-row", GINT_TO_POINTER(row));
-    gnc_option_set_ui_widget(option, GTK_GRID(page), row);
+    gnc_option_set_ui_widget(option, GTK_BOX(page));
 }
 
 static gint
@@ -1814,7 +1817,6 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
     /* Build this options page */
     page_content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-    gtk_widget_set_name (page_content_box, "page-content-box");
     gtk_box_set_homogeneous (GTK_BOX (page_content_box), FALSE);
 
     gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 12);
@@ -1823,12 +1825,8 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gtk_box_pack_start(GTK_BOX(page_content_box), options_scrolled_win, TRUE, TRUE, 0);
 
     /* Build space for the content - the options box */
-    options_box = gtk_grid_new(); // this will have two columns
-    gtk_widget_set_name (options_box, "options-box");
-    gtk_grid_set_row_homogeneous (GTK_GRID(options_box), FALSE);
-    gtk_grid_set_column_homogeneous (GTK_GRID(options_box), FALSE);
-    gtk_grid_set_row_spacing (GTK_GRID(options_box), 6);
-    gtk_grid_set_column_spacing (GTK_GRID(options_box), 6);
+    options_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (options_box), FALSE);
 
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
     gtk_container_add (GTK_CONTAINER(options_scrolled_win), GTK_WIDGET(options_box));
@@ -1839,7 +1837,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     for (i = 0; i < num_options; i++)
     {
         option = gnc_get_option_section_option(section, i);
-        gnc_options_dialog_add_option(options_box, option, i);
+        gnc_options_dialog_add_option(options_box, option);
     }
 
     /* Add a button box at the bottom of the page */
@@ -2227,8 +2225,8 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
     retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->window), "gnc-id-options");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->window), "GncOptionsDialog");
 
     /* Page List */
     {
@@ -2421,19 +2419,9 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
  * The widget you return from this function should be the widget in
  * which you're storing the option value.
  */
- 
-static void
-gnc_option_set_ui_label_alignment (GtkLabel *name_label)
-{
-    /* some option widgets have a large vertical foot print so align
-       the label name to the top and add a small top margin */
-    gtk_widget_set_valign (GTK_WIDGET(name_label), GTK_ALIGN_START);
-    gtk_widget_set_margin_top (GTK_WIDGET(name_label), 6); 
-}
-
 static GtkWidget *
-gnc_option_set_ui_widget_boolean (GNCOption *option, GtkGrid *page_box,
-                                  GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_boolean (GNCOption *option, GtkBox *page_box,
+                                  char *name, char *documentation,
                                   /* Return values */
                                   GtkWidget **enclosing, gboolean *packed)
 {
@@ -2441,7 +2429,7 @@ gnc_option_set_ui_widget_boolean (GNCOption *option, GtkGrid *page_box,
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    value = gtk_check_button_new ();
+    value = gtk_check_button_new_with_label(name);
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
@@ -2456,35 +2444,36 @@ gnc_option_set_ui_widget_boolean (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_string (GNCOption *option, GtkGrid *page_box,
-                                 GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_string (GNCOption *option, GtkBox *page_box,
+                                 char *name, char *documentation,
                                  /* Return values */
                                  GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_entry_new();
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
 
-    if (gtk_widget_get_direction (GTK_WIDGET(value)) == GTK_TEXT_DIR_RTL)
-        gtk_entry_set_alignment (GTK_ENTRY(value), 1.0);
-
     g_signal_connect(G_OBJECT(value), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, TRUE, TRUE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_text (GNCOption *option, GtkGrid *page_box,
-                               GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
+                               char *name, char *documentation,
                                /* Return values */
                                GtkWidget **enclosing, gboolean *packed)
 {
@@ -2493,9 +2482,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkGrid *page_box,
     GtkWidget *scroll;
     GtkTextBuffer* text_buffer;
 
-    frame = gtk_frame_new(NULL);
-
-    gnc_option_set_ui_label_alignment (name_label);
+    frame = gtk_frame_new(name);
 
     scroll = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
@@ -2506,8 +2493,6 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkGrid *page_box,
     gtk_container_add(GTK_CONTAINER(frame), scroll);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_widget_set_vexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_text_view_new();
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(value), GTK_WRAP_WORD);
@@ -2528,12 +2513,16 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_currency (GNCOption *option, GtkGrid *page_box,
-                                   GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_currency (GNCOption *option, GtkBox *page_box,
+                                   char *name, char *documentation,
                                    /* Return values */
                                    GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2545,18 +2534,23 @@ gnc_option_set_ui_widget_currency (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(value), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_commodity (GNCOption *option, GtkGrid *page_box,
-                                    GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_commodity (GNCOption *option, GtkBox *page_box,
+                                    char *name, char *documentation,
                                     /* Return values */
                                     GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2575,18 +2569,23 @@ gnc_option_set_ui_widget_commodity (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(GNC_GENERAL_SELECT(value)->entry), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkGrid *page_box,
-                                      GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkBox *page_box,
+                                      char *name, char *documentation,
                                       /* Return values */
                                       GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2595,54 +2594,41 @@ gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkGrid *page_box,
     gnc_option_set_widget (option, value);
 
     gnc_option_set_ui_value(option, FALSE);
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_date (GNCOption *option, GtkGrid *page_box,
-                               GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
+                               char *name, char *documentation,
                                /* Return values */
                                GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
     gchar *colon_name;
     GtkWidget *eventbox;
-    gchar *type = gnc_option_date_option_get_subtype (option);
 
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
-    gint  grid_row = GPOINTER_TO_INT(g_object_get_data
-                                    (G_OBJECT(page_box), "options-grid-row"));
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_date_widget(option);
 
     gnc_option_set_widget (option, value);
 
-    if (g_strcmp0(type, "relative") == 0)
-    {
-        *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-        gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-
-        gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
-    }
-    else
-    {
-        *enclosing = gtk_frame_new (NULL);
-        g_object_set (G_OBJECT(value), "margin", 3, NULL);
-
-        gtk_container_add (GTK_CONTAINER(*enclosing), value);
-    }
-    g_free (type);
-
-    gtk_widget_set_halign (GTK_WIDGET(*enclosing), GTK_ALIGN_START);
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
 
     /* Pack option widget into an extra eventbox because otherwise the
        "documentation" tooltip is not displayed. */
     eventbox = gtk_event_box_new();
     gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
-
-    gtk_grid_attach (GTK_GRID(page_box), eventbox, 1, grid_row, 1, 1);
+    gtk_box_pack_start(page_box, eventbox, FALSE, FALSE, 5);
     *packed = TRUE;
 
     gtk_widget_set_tooltip_text (eventbox, documentation);
@@ -2653,26 +2639,20 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_account_list (GNCOption *option, GtkGrid *page_box,
-                                       GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
+                                       char *name, char *documentation,
                                        /* Return values */
                                        GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
     GtkTreeSelection *selection;
-    gint  grid_row = GPOINTER_TO_INT(g_object_get_data
-                                    (G_OBJECT(page_box), "options-grid-row"));
 
-    gnc_option_set_ui_label_alignment (name_label);
-
-    *enclosing = gnc_option_create_account_widget(option, NULL);
-    gtk_widget_set_vexpand (GTK_WIDGET(*enclosing), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(*enclosing), TRUE);
+    *enclosing = gnc_option_create_account_widget(option, name);
     value = gnc_option_get_gtk_widget (option);
 
     gtk_widget_set_tooltip_text(*enclosing, documentation);
 
-    gtk_grid_attach (GTK_GRID(page_box), *enclosing, 1, grid_row, 1, 1);
+    gtk_box_pack_start(page_box, *enclosing, TRUE, TRUE, 5);
     *packed = TRUE;
 
     //gtk_widget_realize(value);
@@ -2690,14 +2670,20 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkGrid *page_box,
-                                      GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
+                                      char *name, char *documentation,
                                       /* Return values */
                                       GtkWidget **enclosing, gboolean *packed)
 {
-    GtkWidget *value = gnc_account_sel_new ();
-    GList *acct_type_list = gnc_option_get_account_type_list (option);
-    
+    GtkWidget *value;
+    GtkWidget *label;
+    GList *acct_type_list;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
+
+    acct_type_list = gnc_option_get_account_type_list(option);
+    value = gnc_account_sel_new();
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list, NULL);
 
     g_signal_connect(value, "account_sel_changed",
@@ -2709,33 +2695,29 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkGrid *page_box,
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_list (GNCOption *option, GtkGrid *page_box,
-                               GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
+                               char *name, char *documentation,
                                /* Return values */
                                GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
     GtkWidget *eventbox;
-    gint       grid_row = GPOINTER_TO_INT(g_object_get_data
-                                         (G_OBJECT(page_box), "options-grid-row"));
 
-    *enclosing = gnc_option_create_list_widget(option, NULL);
+    *enclosing = gnc_option_create_list_widget(option, name);
     value = gnc_option_get_gtk_widget (option);
-
-    gnc_option_set_ui_label_alignment (name_label);
 
     /* Pack option widget into an extra eventbox because otherwise the
        "documentation" tooltip is not displayed. */
     eventbox = gtk_event_box_new();
     gtk_container_add (GTK_CONTAINER (eventbox), *enclosing);
-
-    gtk_grid_attach (GTK_GRID(page_box), eventbox, 1, grid_row, 1, 1);
+    gtk_box_pack_start(page_box, eventbox, FALSE, FALSE, 5);
     *packed = TRUE;
 
     gtk_widget_set_tooltip_text(eventbox, documentation);
@@ -2746,17 +2728,21 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_number_range (GNCOption *option, GtkGrid *page_box,
-                                       GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
+                                       char *name, char *documentation,
                                        /* Return values */
                                        GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
     GtkAdjustment *adj;
     gdouble lower_bound = G_MINDOUBLE;
     gdouble upper_bound = G_MAXDOUBLE;
     gdouble step_size = 1.0;
     int num_decimals = 0;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2798,19 +2784,24 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(value), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_color (GNCOption *option, GtkGrid *page_box,
-                                GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
+                                char *name, char *documentation,
                                 /* Return values */
                                 GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
     gboolean use_alpha;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2818,6 +2809,7 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkGrid *page_box,
     use_alpha = gnc_option_use_alpha(option);
 
     value = gtk_color_button_new();
+    gtk_color_button_set_title(GTK_COLOR_BUTTON(value), name);
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(value), use_alpha);
 
     gnc_option_set_widget (option, value);
@@ -2826,18 +2818,23 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(value), "color-set",
                      G_CALLBACK(gnc_option_color_changed_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_font (GNCOption *option, GtkGrid *page_box,
-                               GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_font (GNCOption *option, GtkBox *page_box,
+                               char *name, char *documentation,
                                /* Return values */
                                GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
+
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2855,19 +2852,25 @@ gnc_option_set_ui_widget_font (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(value), "font-set",
                      G_CALLBACK(gnc_option_font_changed_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkGrid *page_box,
-                                 GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
+                                 char *name, char *documentation,
                                  /* Return values */
                                  GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
     GtkWidget *button;
+
+    ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -2894,18 +2897,20 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkGrid *page_box,
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
 
-    gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
 
     gtk_widget_show(value);
+    gtk_widget_show(label);
     gtk_widget_show(*enclosing);
-
+    LEAVE("new widget = %p", value);
     return value;
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkGrid *page_box,
-                                      GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkBox *page_box,
+                                      char *name, char *documentation,
                                       /* Return values */
                                       GtkWidget **enclosing, gboolean *packed)
 {
@@ -2914,9 +2919,7 @@ gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkGrid *page_box,
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
-    gnc_option_set_ui_label_alignment (name_label);
-
-    value = gnc_option_create_radiobutton_widget(NULL, option);
+    value = gnc_option_create_radiobutton_widget(name, option);
     gnc_option_set_widget (option, value);
 
     gnc_option_set_ui_value(option, FALSE);
@@ -2926,15 +2929,13 @@ gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_dateformat (GNCOption *option, GtkGrid *page_box,
-                                     GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_dateformat (GNCOption *option, GtkBox *page_box,
+                                     char *name, char *documentation,
                                      /* Return values */
                                      GtkWidget **enclosing, gboolean *packed)
 {
-    *enclosing = gnc_date_format_new_without_label ();
+    *enclosing = gnc_date_format_new_with_label(name);
     gnc_option_set_widget (option, *enclosing);
-
-    gnc_option_set_ui_label_alignment (name_label);
 
     gnc_option_set_ui_value(option, FALSE);
     g_signal_connect(G_OBJECT(*enclosing), "format_changed",
@@ -2990,12 +2991,13 @@ gnc_rd_option_p_set_cb(GtkWidget *widget, gpointer *raw_option)
 
 
 static GtkWidget *
-gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkGrid *page_box,
-                                     GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkBox *page_box,
+                                     char *name, char *documentation,
                                      /* Return values */
                                      GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value_px, *value_percent;
+    GtkWidget *label;
     GtkWidget *px_butt, *p_butt;
     GtkWidget *hbox;
     GtkAdjustment *adj_px, *adj_percent;
@@ -3004,14 +3006,17 @@ gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkGrid *page_box,
     gdouble step_size = 1.0;
     int num_decimals = 0;
 
-    *enclosing = gtk_frame_new(NULL);
-    gtk_widget_set_halign (GTK_WIDGET(*enclosing), GTK_ALIGN_START);
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    g_object_set (G_OBJECT(hbox), "margin", 3, NULL);
 
-    gtk_container_add(GTK_CONTAINER(*enclosing), hbox);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), hbox, FALSE, FALSE, 0);
 
     gnc_option_get_range_info(option, &lower_bound, &upper_bound,
                               &num_decimals, &step_size);
@@ -3081,13 +3086,16 @@ gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkGrid *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_budget (GNCOption *option, GtkGrid *page_box,
-                                 GtkLabel *name_label, char *documentation,
+gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
+                                 char *name, char *documentation,
                                  /* Return values */
                                  GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
+    GtkWidget *label;
 
+    label = gtk_label_new(name);
+    gnc_label_set_alignment(label, 1.0, 0.5);
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
@@ -3101,6 +3109,7 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkGrid *page_box,
     g_signal_connect(G_OBJECT(value), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
     return value;
@@ -3108,8 +3117,8 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkGrid *page_box,
 
 static GtkWidget *
 gnc_option_set_ui_widget_currency_accounting (GNCOption *option,
-                                              GtkGrid *page_box,
-                                              GtkLabel *name_label, char *documentation,
+                                              GtkBox *page_box,
+                                              char *name, char *documentation,
                                               /* Return values */
                                               GtkWidget **enclosing,
                                               gboolean *packed)
@@ -3119,7 +3128,7 @@ gnc_option_set_ui_widget_currency_accounting (GNCOption *option,
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
-    value = gnc_option_create_currency_accounting_widget(NULL, option);
+    value = gnc_option_create_currency_accounting_widget(name, option);
     gnc_option_set_widget (option, value);
 
     gnc_option_set_ui_value(option, FALSE);

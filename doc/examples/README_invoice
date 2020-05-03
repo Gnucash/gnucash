@@ -1,4 +1,6 @@
-Some notes on the bill and invoice importer:
+The Bill Invoice importer is an optional module and needs to enabled by editing the file $HOME/.gnucash/config.user, adding the line:
+
+(gnc:module-load "gnucash/plugins/bi_import" 0)
 
 The example csv file must have the 22 elements for it to work.
 

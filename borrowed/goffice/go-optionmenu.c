@@ -428,8 +428,16 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
+#if GTK_CHECK_VERSION(3,14,0)
     arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
+    arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+#endif
+#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(arrow), 5);
+#endif
 
     gtk_box_pack_end(GTK_BOX(box), arrow, FALSE, FALSE, 0);
 

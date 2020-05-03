@@ -17,7 +17,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (tests unittest-support))
+(define-module (gnucash unittest-support))
 (eval-when
       (compile load eval expand)
       (load-extension "libtest-core-guile" "scm_init_unittest_support_module"))

@@ -531,7 +531,7 @@ gnc_module_load_common(const char * module_name, gint iface, gboolean optional)
             if (!info->init_func(0))
             {
                 /* init failed. unload the module. */
-                g_warning ("Initialization failed for module %s", module_name);
+                g_warning ("Initialization failed for module %s\n", module_name);
                 g_hash_table_remove(loaded_modules, info);
                 g_free(info->filename);
                 g_free(info);

@@ -207,8 +207,8 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "progress_dialog"));
     progress->dialog = dialog;
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-progress");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncProgressDialog");
 
     /* parent */
     if (parent != NULL)

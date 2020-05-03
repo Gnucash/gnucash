@@ -51,8 +51,8 @@ gnc_get_username_password (GtkWidget *parent,
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "username_password_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-user-password");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncUserPassDialog");
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));

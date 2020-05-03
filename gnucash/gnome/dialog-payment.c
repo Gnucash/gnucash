@@ -725,39 +725,6 @@ gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
     gnc_payment_dialog_owner_changed(pw);
 }
 
-static void
-gnc_payment_update_style_classes (PaymentWindow *pw)
-{
-    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(pw->dialog));
-    const gchar *style_label = NULL;
-
-    if (gtk_style_context_has_class (stylectxt, "gnc-class-customers"))
-        gtk_style_context_remove_class (stylectxt, "gnc-class-customers");
-
-    if (gtk_style_context_has_class (stylectxt, "gnc-class-vendors"))
-        gtk_style_context_remove_class (stylectxt, "gnc-class-vendors");
-
-    if (gtk_style_context_has_class (stylectxt, "gnc-class-employees"))
-        gtk_style_context_remove_class (stylectxt, "gnc-class-employees");
-
-    switch (pw->owner_type)
-    {
-        case GNC_OWNER_CUSTOMER:
-            style_label = "gnc-class-customers";
-            break;
-        case GNC_OWNER_VENDOR:
-            style_label = "gnc-class-vendors";
-            break;
-        case GNC_OWNER_EMPLOYEE:
-            style_label = "gnc-class-employees";
-            break;
-        default:
-            style_label = "gnc-class-unknown";
-            break;
-    }
-    // Set a secondary style context for this page so it can be easily manipulated with css
-    gtk_style_context_add_class (stylectxt, style_label);
-}
 
 static void
 gnc_payment_set_owner_type (PaymentWindow *pw, GncOwnerType owner_type)
@@ -790,7 +757,6 @@ gnc_payment_set_owner_type (PaymentWindow *pw, GncOwnerType owner_type)
         }
         valid = gtk_tree_model_iter_next (store, &iter);
     }
-    gnc_payment_update_style_classes (pw);
 
     gnc_payment_dialog_owner_type_changed (pw);
 }
@@ -1222,8 +1188,8 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(pw->dialog), parent);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(pw->dialog), "gnc-id-payment");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(pw->dialog), "GncPaymentDialog");
 
     /* Grab the widgets and build the dialog */
     pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));

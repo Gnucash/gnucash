@@ -47,11 +47,6 @@
  */
 void gnc_prefs_init (void);
 
-/** This function is called to remove the registered preference
- *  call backs setup in this file
- */
-void gnc_prefs_remove_registered (void);
-
 #endif /* GNC_PREFS_UTILS_H_ */
 /** @} */
 /** @} */

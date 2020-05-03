@@ -20,7 +20,5 @@ set(account_DATA
 set_dist_list(JA_DIST ${account_DATA} CMakeLists.txt)
 
 install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/ja)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/ja)
 
-foreach(acct_file ${account_DATA})
-    configure_file(${acct_file} ${ACCOUNTS_BUILD_DIR}/ja/${acct_file} COPYONLY)
-endforeach()

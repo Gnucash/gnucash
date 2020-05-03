@@ -1172,7 +1172,7 @@
 	* src/import-export/qif-import/druid-qif-import.c:
 	(gnc_ui_qif_import_create_plugin):
 	* src/import-export/qif-import/druid-qif-import.h:
-	* src/import-export/qif-import/gnc-qif-import.c:
+	* src/import-export/qif-import/gncmod-qif-import.c:
 	(libgncmod_qif_import_LTX_gnc_module_init):
 	* src/import-export/qif-import/gnc-plugin-qif-import.[ch]:
 	* src/import-export/qif-import/gnc-plugin-qif-import-ui.xml:

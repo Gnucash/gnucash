@@ -1,0 +1,14 @@
+---------------------------------------------------------------------
+Die Datei "txf-USt-Bericht.html"
+enthält den von GnuCash Vers. 2.4.0 unter Berichte > Steuer-Bericht & Elster Export
+generierten Bericht zur USt-VA, und
+
+die Datei "txf-USt-VA Anleitung 2011.pdf"
+enthält die BMF-amtliche Anleitung zur USt-VA 2011
+
+Diese beiden Dateien können natürlich an einen beliebigen Ort kopiert werden.
+
+
+-------------------------------------------------------------------------------
+EOF
+FJSW

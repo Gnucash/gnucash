@@ -169,8 +169,8 @@ gnc_file_dialog (GtkWindow *parent,
 
     response = gtk_dialog_run(GTK_DIALOG(file_box));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(file_box), "gnc-id-file");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(file_box), "GncFileDialog");
 
     if (response == GTK_RESPONSE_ACCEPT)
     {

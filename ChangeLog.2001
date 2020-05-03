@@ -2357,7 +2357,7 @@
 
 	* src/guile/gnc-helpers.c: fix warnings
 
-	* src/import-export/qif-import/gnc-qif-import.c: include api
+	* src/import-export/qif-import/gncmod-qif-import.c: include api
 	header
 
 	* src/register/register-gnome/gncmod-register-gnome.c: include api

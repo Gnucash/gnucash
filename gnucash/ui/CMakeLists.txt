@@ -25,7 +25,7 @@ set (ui_SOURCES
       gnc-plugin-register22-ui.xml
       gnc-plugin-register2-ui.xml
       gnc-plugin-register-ui.xml
-      gnc-plugin-report-system-ui.xml
+      gnc-plugin-stylesheets-ui.xml
       gnc-reconcile-window-ui.xml
       gnc-sxed-to-create-window-ui.xml
       gnc-sxed-window-ui-full.xml
@@ -34,9 +34,7 @@ set (ui_SOURCES
       gnc-windows-menu-ui.xml
       osx_accel_map)
 
-foreach (ui_file ${ui_SOURCES})
-    configure_file (${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
-endforeach()
+file (COPY ${ui_SOURCES} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 
 install (FILES ${ui_SOURCES} DESTINATION share/gnucash/ui)
 

@@ -66,8 +66,8 @@ gcoi_create_dialog(Split* split)
     dco->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "choose_owner_dialog"));
     g_assert(dco->dialog);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dco->dialog), "gnc-id-owner");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dco->dialog), "GncChooseOwnerDialog");
 
     /* Get the title widget and set the title */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "title_label"));

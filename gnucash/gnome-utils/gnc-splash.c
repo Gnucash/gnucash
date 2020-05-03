@@ -69,8 +69,8 @@ gnc_show_splash_screen (void)
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(splash), "gnc-id-splash");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(splash), "GncSplash");
 
     g_signal_connect (splash, "destroy",
                       G_CALLBACK (splash_destroy_cb), NULL);

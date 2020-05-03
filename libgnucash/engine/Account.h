@@ -975,11 +975,6 @@ guint32 xaccAccountTypesValid(void);
  *  Asset or Liability type, but not a business account type
  *  (meaning not an Accounts Payable/Accounts Receivable). */
 gboolean xaccAccountIsAssetLiabType(GNCAccountType t);
-    
-/** Convenience function to return the fundamental type
- * asset/liability/income/expense/equity given an account type. */
-GNCAccountType xaccAccountTypeGetFundamental (GNCAccountType t);
-
 
 /** Convenience function to check if the account is a valid
  *  business account type
@@ -1246,17 +1241,6 @@ gint64 xaccAccountGetTaxUSCopyNumber (const Account *account);
 void xaccAccountSetTaxUSCopyNumber (Account *account, gint64 copy_number);
 /** @} */
 
-/** @name Account type debit/credit string getters
- @ {      *
- */
-
-/** Get the debit string associated with this account type */
-const char *gnc_account_get_debit_string (GNCAccountType acct_type);
-/** Get the credit string associated with this account type */
-const char *gnc_account_get_credit_string (GNCAccountType acct_type);
-
-/** @} */
-
 
 /** @name Account marking
 @{
@@ -1465,10 +1449,10 @@ GList *gnc_account_imap_get_info_bayes (Account *acc);
  */
 GList *gnc_account_imap_get_info (Account *acc, const char *category);
 
-/** Returns the text string pointed to by head and category for the Account, free
+/** Returns the text string pointed to by full_category for the Account, free
  *  the returned text
  */
-gchar *gnc_account_get_map_entry (Account *acc, const char *head, const char *category);
+gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
 
 /** Delete the entry for Account pointed to by head,category and match_string,
  *  if empty is TRUE then use delete if empty

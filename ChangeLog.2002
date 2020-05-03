@@ -3750,7 +3750,7 @@ v	  fix the print_info
 
 	* src/gnome/window-main.c:
 	* src/import-export/qif-import/druid-qif-import.[ch]:
-	* src/import-export/qif-import/gnc-qif-import.c: Create the
+	* src/import-export/qif-import/gncmod-qif-import.c: Create the
 	"Import QIF" menu item from within the QIF module.
 
 2002-06-21  Derek Atkins   <derek@ihtfp.com>

@@ -36,15 +36,8 @@ gchar * gnc_hook_create(const gchar *name, gint num_args, const gchar *desc);
  * add and remove C-style dangers from a hook.  The callback is called
  *   function(hook_run_data, cb_data)
  */
-void gnc_hook_add_dangler(const gchar *name, GFunc callback,
-                          GDestroyNotify destroy, gpointer cb_data);
+void gnc_hook_add_dangler(const gchar *name, GFunc callback, gpointer cb_data);
 void gnc_hook_remove_dangler(const gchar *name, GFunc callback);
-
-/**
- * helper function to retrieve the number of arguments
- * a hook expects
- */
-int gnc_hook_num_args (const gchar *name);
 
 /**
  * Run the hook danglers.

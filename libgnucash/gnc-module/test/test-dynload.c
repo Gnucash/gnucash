@@ -26,18 +26,24 @@
 
 #include <config.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <gmodule.h>
+#include <libguile.h>
 #include <unittest-support.h>
 
 #include "gnc-module.h"
 
-int
-main(int argc, char ** argv)
+static void
+guile_main(void *closure, int argc, char ** argv)
 {
     GModule *gmodule;
+    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
+    gchar *logdomain = "gnc.module";
     gchar *modpath;
+    guint loglevel = G_LOG_LEVEL_WARNING;
     const char *libdir = g_getenv("LIBDIR");
+    TestErrorStruct check = { loglevel, logdomain, msg };
+    g_log_set_handler (logdomain, loglevel,
+                       (GLogFunc)test_checked_handler, &check);
 
     if (libdir == NULL)
     {
@@ -96,3 +102,11 @@ main(int argc, char ** argv)
         exit(-1);
     }
 }
+
+int
+main(int argc, char ** argv)
+{
+    scm_boot_guile(argc, argv, guile_main, NULL);
+    return 0;
+}
+

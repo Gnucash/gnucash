@@ -19,254 +19,78 @@
   the widget type can be configured unless they are named in code.
 */
 
+/* Register sheet font setting */
+.sheet {
+  font: 18px arial, sans-serif;
+}
 
-/* Application wide font setting */
-* {
+.sheet calendar {
   font: 12px arial, sans-serif;
 }
 
 
-/* Scollbar size */
-scrollbar slider {
-    /* Size of the slider */
-    min-width: 20px;
-    min-height: 20px;
-    border-radius: 22px;
-
-    /* Padding around the slider */
-    border: 5px solid transparent;
-}
-
-
-/* Register sheet font setting, use .gnc-class-sheet < gtk3.20 */
-gnc-id-sheet {
-  font: 10px arial, sans-serif;
-}
-
-
-/* Register header font setting, use .gnc-class-header < gtk3.20 */
-gnc-id-header {
-  background-color: pink;
-  color:blue;
-}
-
-
-/* Register cursor font setting, use .gnc-class-cursor < gtk3.20 */
-gnc-id-cursor {
-  background-color: #BDB76B;
-  color: white;
-}
-
-xgnc-id-cursor entry {
-  background-color: pink;
-
-  margin: 2px 5px 2px 5px;
-  padding: 0px 2px 0px 2px;
-
-/*  border-color: green;
-  color: white; */
-}
-
-gnc-id-cursor button {
-  border-width: 1px;
-  border-color: green;
-}
-
-
-/* Register sheet calendar */
-gnc-id-sheet calendar {
-  font: 13px arial, sans-serif;
-  background-color:lightgreen;
-  border-color: green;
-  border-width: 1px;
-}
-
-
-/* Register User Colors, remove 'user' for builtin register values */
-.gnc-class-user-register-header {
+/* Register User Colors */
+.header-color {
   background-color: seagreen;
   color: white;
 }
 
-.gnc-class-user-register-primary {
+.primary-color {
   background-color: pink;
 }
 
-.gnc-class-user-register-primary:disabled {
+.primary-color:disabled {
   background-color: plum;
 }
 
-.gnc-class-user-register-secondary {
+.secondary-color {
   background-color: lightgreen;
 }
 
-.gnc-class-user-register-secondary:disabled {
+.secondary-color:disabled {
   background-color: plum;
 }
 
-.gnc-class-user-register-split {
+.split-color {
   background-color: lightblue;
 }
 
-.gnc-class-user-register-split:disabled {
+.split-color:disabled {
   background-color: plum;
 }
 
-.gnc-class-user-register-cursor {
+.cursor-color {
   background-color: #00BFFF;
   color: white;
-  border-radius: 0px;
+}
+
+cursor entry {
+  background-color: #00BFFF;
+  color: white;
 }
 
 
-/* Toolbar Button size and spacing */
-toolbar {
-  background-color: darkgrey;
+/* Dense Calendar Settings */
+.calendar {
+  border-color: white;
 }
 
-/* Toolbar font size, 0 to remove text */
-toolbar toolbutton label {
-  font-size: 0px;
-}
-
-toolbar toolbutton button {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-toolbar toolbutton label {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-
-/* Negative number color */
-.gnc-class-negative-numbers {
-  color: orange;
-}
-
-
-/* Gnucash Main Window, reduce size */
-#gnc-id-main-window notebook tab {
-  min-height: 0px;
-  min-width: 0px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  border-top: 0px;
-  border-bottom: 0px;
-}
-
-#gnc-id-main-window notebook label {
-  font: 14px arial, sans-serif;
-}
-
-#gnc-id-main-window notebook tab button {
-  min-height: 0;
-  min-width: 0;
-  padding: 0px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-
-/* Dense Calendar Settings, use widget name gnc-id-dense-calendar
- * or gtk css name calendar which would also apply to other calendar
- * widgets */
-#gnc-id-dense-calendar .frame {
-  border-color: blue;
-  border-width: 1px;
-}
-
-calendar .frame {
-  border-color: blue;
-  border-width: 1px;
-}
-
-#gnc-id-dense-calendar .header {
+.calendar.header {
  background-color: lightgreen;
 }
 
-calendar .header {
- background-color: lightgreen;
-}
-
-#gnc-id-dense-calendar .primary {
+.calendar.primary {
   background-color: darksalmon;
 }
 
-#gnc-id-dense-calendar .secondary {
+.calendar.secondary {
   background-color: darkseagreen;
 }
 
-#gnc-id-dense-calendar .markers {
+.calendar.markers {
   background-color: indianred;
 }
 
-#gnc-id-dense-calendar-popup {
-  background-color: darksalmon;
-  color: black;
-}
-
-#gnc-id-dense-calendar-popup treeview {
+#dense-cal-popup treeview {
   background-color: lightcoral;
-}
-
-
-/* Progress bar */
-progressbar progress {
-  background-color: lime;
-}
-
-
-/* Status Bar */
-statusbar frame {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-statusbar label {
-  font-size: 12px;
-  color: red;
-}
-
-
-/* Reconcile Window */
-#gnc-id-reconcile-totals * {
-  background-color: darkgrey;
-}
-
-.gnc-class-credits treeview {
-  background-color: pink;
-}
-
-.gnc-class-credits treeview:selected {
-  background-color: cornflowerblue;
-  color: white;
-}
-
-.gnc-class-debits treeview {
-  background-color: lightblue;
-}
-
-.gnc-class-debits treeview:selected {
-  background-color: cornflowerblue;
-  color: white;
-}
-
-
-/* Highlight Text */
-.gnc-class-highlight {
-  color: blue;
-}
-
-
-/* Summary bar */
-#gnc-id-summarybar {
-  background-color:lightblue;
-}
-
-#gnc-id-summarybar .gnc-class-highlight {
-  color: red;
 }

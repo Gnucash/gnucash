@@ -37,8 +37,4 @@ const char * gnc_locale_default_iso_currency_code (void);
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);
 
-/* Return the name of the currently set locale.
- * The returned string should be freed by the caller. */
-gchar *gnc_locale_name (void);
-
 #endif /* GNC_LOCALE_UTILS_H */

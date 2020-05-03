@@ -1,6 +1,6 @@
 /*********************************************************************
  * test-customer.c
- * Test the customer object
+ * Test the customer object (without Guile/Scheme)
  *
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
  * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>

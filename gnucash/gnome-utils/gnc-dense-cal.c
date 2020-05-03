@@ -267,10 +267,9 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
 
     // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(dcal), "calendar");
+    gnc_widget_set_style_context (GTK_WIDGET(dcal), "calendar");
 
-    // Set the name of this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dcal), "gnc-id-dense-calendar");
+    gtk_widget_set_name (GTK_WIDGET(dcal), "dense-cal");
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_CALENDAR);
     {
@@ -293,7 +292,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
         gtk_widget_set_halign (label, GTK_ALIGN_END);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (label, 5);
+#else
+        gtk_widget_set_margin_right (label, 5);
+#endif
         gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
 
@@ -332,10 +335,14 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
-        gtk_widget_set_name (GTK_WIDGET(dcal->transPopup), "gnc-id-dense-calendar-popup");
+        gtk_widget_set_name (GTK_WIDGET(dcal->transPopup), "dense-cal-popup");
 
         l = gtk_label_new(_("Date: "));
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_start (l, 5);
+#else
+        gtk_widget_set_margin_left (l, 5);
+#endif
         gtk_container_add(GTK_CONTAINER(hbox), l);
         l = gtk_label_new("YY/MM/DD");
         g_object_set_data(G_OBJECT(dcal->transPopup), "dateLabel", l);
@@ -414,8 +421,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     dcal->numMonths = 12;
     dcal->monthsPerCol = 3;
-    dcal->leftPadding = 4;
-    dcal->topPadding = 4;
+    dcal->leftPadding = 2;
+    dcal->topPadding = 2;
 
     {
     GDate now;
@@ -1011,16 +1018,15 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 center_y = (y1 + y2 ) / 2;
                 radius = MIN((x2 - x1), (y2 - y1)) * .75;
 
-                // try to compensate for row height/width being odd or even
-                if (((y2 - y1) % 2) != 0)
-                    center_y = center_y + 1;
-
-                if (((x2 - x1) % 2) != 0)
-                    center_x = center_x + 1;
-
-                gtk_render_background (stylectxt, cr,
-                                       center_x - (radius + 2), center_y - radius,
-                                        (radius * 2) + 4, radius * 2);
+                // try to compensate for row height being odd or even
+                if (((y2 -y1) % 2) == 0)
+                    gtk_render_background (stylectxt, cr,
+                                           center_x - radius - 2, center_y - radius - 1,
+                                            (radius * 2) + 4, radius * 2);
+                else
+                    gtk_render_background (stylectxt, cr,
+                                           center_x - radius - 2, center_y - radius,
+                                            (radius * 2) + 4, (radius * 2) + 1);
             }
         }
         gtk_style_context_restore (stylectxt);
@@ -1038,7 +1044,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
         x = dcal->leftPadding
             + (i * (col_width(dcal) + COL_BORDER_SIZE))
-            + dcal->label_height + 1;
+            + dcal->label_width;
         y = dcal->topPadding + dcal->dayLabelHeight;
         w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width;
         h = col_height(dcal);
@@ -1112,7 +1118,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     /* Month labels. */
     {
         gint i;
-        gint x_offset = dcal->leftPadding;
+        gint x_offset = dcal->label_height - (dcal->leftPadding * 2);
 
         gtk_style_context_save (stylectxt);
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
@@ -1122,8 +1128,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             if (dcal->monthPositions[i].x == -1)
                 break;
 
-            gtk_render_background (stylectxt, cr, dcal->monthPositions[i].x + x_offset, dcal->topPadding,
-                                   dcal->dayLabelHeight + 1, col_height(dcal) + dcal->dayLabelHeight + 1);
+            gtk_render_background (stylectxt, cr, dcal->monthPositions[i].x + x_offset + 1, dcal->topPadding,
+                                   dcal->dayLabelHeight, col_height(dcal) + dcal->dayLabelHeight + 1);
         }
 
         for (i = 0; i < 12; i++)
@@ -1585,7 +1591,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
         rect->x = dcal->leftPadding
                   + MINOR_BORDER_SIZE
                   + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
-                  + dcal->label_height
+                  + dcal->label_width
                   + (start * day_width(dcal));
         rect->y = dcal->topPadding
                   + dcal->dayLabelHeight
@@ -1612,7 +1618,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
             rect = g_new0(GdkRectangle, 1);
             rect->x = dcal->leftPadding
                       + MINOR_BORDER_SIZE
-                      + dcal->label_height
+                      + dcal->label_width
                       + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
             rect->y = dcal->topPadding
                       + dcal->dayLabelHeight
@@ -1639,7 +1645,7 @@ month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList)
         rect = g_new0(GdkRectangle, 1);
         rect->x = dcal->leftPadding
                   + MINOR_BORDER_SIZE
-                  + dcal->label_height
+                  + dcal->label_width
                   + (colNum * (col_width(dcal) + COL_BORDER_SIZE));
         rect->y = dcal->topPadding
                   + MINOR_BORDER_SIZE
@@ -1705,7 +1711,7 @@ doc_coords(GncDenseCal *dcal, int dayOfCal,
      * which it shouldn't. */
     *x1 = dcal->leftPadding
           + MINOR_BORDER_SIZE
-          + dcal->label_height
+          + dcal->label_width
           + (colNum * (col_width(dcal) + COL_BORDER_SIZE))
           + (dayCol * day_width(dcal))
           + (day_width(dcal) / 4);

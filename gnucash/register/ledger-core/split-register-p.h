@@ -126,8 +126,8 @@ struct sr_info
     GncGUID template_account;
 
     /** configured strings for debit/credit headers */
-    const char *debit_str;
-    const char *credit_str;
+    char *debit_str;
+    char *credit_str;
     char *tdebit_str;
     char *tcredit_str;
 

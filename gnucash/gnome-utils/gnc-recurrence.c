@@ -189,8 +189,8 @@ gnc_recurrence_init( GncRecurrence *gr )
 
     recurrenceSet(&gr->recurrence, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gr), "gnc-id-recurrence");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gr), "GncRecurrence");
 
     /* Open up the builder file */
     builder = gtk_builder_new();

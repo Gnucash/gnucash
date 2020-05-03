@@ -1,9 +1,9 @@
 # CMakeLists.txt for GnuCash
 
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.5)
 
 project (gnucash
-    VERSION 3.902
+    VERSION 3.10
 )
 
 enable_testing()
@@ -62,6 +62,7 @@ option (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 # Use gsettings-desktop-schemas for a better integration with GNOME
 set(COMPILE_GSCHEMAS ON CACHE BOOL "Compile the GSettings schema")
 
+# GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
 
 # Support for downstream packagers
 set(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
@@ -158,6 +159,10 @@ endif()
 # location once here.
 set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
 
+# Determine whether to generate the swig wrappers.
+# By default they will only be generated when building from a git worktree
+set(GENERATE_SWIG_WRAPPERS ${BUILDING_FROM_VCS} CACHE BOOL "Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree")
+
 if (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
   # GnuCash has been followed and that these dependencies live underneath something like C:/GCDEV, which
@@ -185,32 +190,63 @@ if (WIN32)
   set(CMAKE_EXE_LINKER_FLAGS "-mwindows -Wl,--nxcompat -Wl,--dynamicbase")
 endif()
 
-find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 if (NOT PKG_CONFIG_FOUND)
    message (SEND_ERROR "pkg-config not found, but is required")
  endif()
 
-# glib et al.
-pkg_check_modules (GLIB2 REQUIRED glib-2.0>=2.56.1)
-pkg_check_modules (GIO REQUIRED gio-2.0)
-pkg_check_modules (GOBJECT REQUIRED gobject-2.0)
-pkg_check_modules (GMODULE REQUIRED gmodule-2.0)
-pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
+if (CMAKE_VERSION VERSION_LESS 3.6)
+  include(GncPkgConfig)
+endif()
 
-pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
+# glib et al.
+pkg_check_modules (GLIB2 REQUIRED glib-2.0>=2.40)
+pkg_check_modules (GIO REQUIRED gio-2.0)
+pkg_check_modules (GOBJECT REQUIRED gobject-2.0>=2.20)
+pkg_check_modules (GMODULE REQUIRED gmodule-2.0>=2.20)
+pkg_check_modules (GTHREAD REQUIRED gthread-2.0>=2.20)
+
+pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.7.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
   if (WIN32 OR APPLE)
-    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
+    if (NOT CMAKE_VERSION VERSION_LESS 3.6)
+      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
+    else()
+      pkg_check_modules (WEBKIT REQUIRED webkitgtk-3.0)
+      _pkg_create_imp_target(WEBKIT)
+    endif()
     set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
   else()
-    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
-    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
+    If (NOT CMAKE_VERSION VERSION_LESS 3.6)
+      pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0)
+    else()
+      pkg_check_modules (WEBKIT webkit2gtk-4.0)
+    endif()
+    if (NOT WEBKIT_FOUND)
+      if (NOT CMAKE_VERSION VERSION_LESS 3.6)
+        pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-3.0)
+      else()
+        pkg_check_modules (WEBKIT REQUIRED webkit2gtk-3.0)
+      endif()
+      set(WEBKIT2_3 1 CACHE INTERNAL "WebKit2Gtk3")
+    else()
+      if (NOT WEBKIT2_3)
+        set(WEBKIT2_4 1 CACHE INTERNAL "WebKit2Gtk4")
+      endif()
+    endif()
+    if (CMAKE_VERSION VERSION_LESS 3.6)
+      _pkg_create_imp_target(WEBKIT)
+    endif()
   endif()
 
-  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=3.22.30)
+  if (NOT CMAKE_VERSION VERSION_LESS 3.6)
+    pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=3.10.0)
+  else()
+    pkg_check_modules (GTK3 REQUIRED gtk+-3.0>=3.10.0)
+    _pkg_create_imp_target(GTK3)
+  endif()
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
@@ -240,8 +276,10 @@ find_library (REGEX_LIBRARY NAMES regex)
 # I18N
 # Potfile generation will only be enabled if building from a git worktree
 set (BUILD_GNUCASH_POT ${BUILDING_FROM_VCS})
+set (TRANSLATE_GNUCASH_APPDATA ON)
+set (TRANSLATE_GNUCASH_DESKTOP ON)
 
-find_package (Gettext 0.19.6 REQUIRED)
+find_package (Gettext 0.18.1 REQUIRED)
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
     message (WARNING "Gettext version 0.20 or more recent is required to translate the 'developer_name' tag in gnucash.appdata.xml. All but that tag will be translated in the generated file.")
     if(BUILD_GNUCASH_POT)
@@ -249,6 +287,14 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
         message (WARNING "Gettext version 0.20 or more recent is required to extract all translatable strings. Potfile generation will be disabled.")
     endif()
     set (BUILD_GNUCASH_POT OFF)
+endif()
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
+    set (TRANSLATE_GNUCASH_APPDATA OFF)
+    message (WARNING "Gettext version 0.19.6 or more recent is required to translate gnucash.appdata.xml. The build will be configured to generate an untranslated gnucash.appdata.xml.")
+endif()
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
+    set (TRANSLATE_GNUCASH_DESKTOP OFF)
+    message (WARNING "Gettext version 0.19 or more recent is required to translate gnucash.desktop. The build will be configured to generate an untranslated gnucash.desktop.")
 endif()
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
@@ -265,9 +311,11 @@ endif()
 # ############################################################
 
 # SWIG
-find_package (SWIG 3.0.12 REQUIRED)
-include (${SWIG_USE_FILE})
-string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
+if(GENERATE_SWIG_WRAPPERS)
+  find_package (SWIG 2.0.10 REQUIRED)
+  include (${SWIG_USE_FILE})
+  string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
+endif()
 
 # Find Guile and determine which version we are using.
 # Look for guile versions in this order: 2.2 > 2.0
@@ -333,23 +381,15 @@ if (GNC_TEXT_PORTS_RESULT EQUAL 0)
   set (HAVE_TEXT_PORTS TRUE)
 endif()
 
-# Determine where to install our guile modules libraries.
-find_guile_dirs()
-
 # ############################################################
 if (WITH_AQBANKING)
-  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.20)
-  pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.7.8)
-  set(CMAKE_REQUIRED_INCLUDES "${AQBANKING_INCLUDE_DIRS}"
-    "${GWENHYWFAR_INCLUDE_DIRS}")
-  set(CMAKE_REQUIRED_LIBRARIES "${AQBANKING_LD_FLAGS}")
-  include(CheckSymbolExists)
-  check_symbol_exists("AB_Banking_RuntimeConfig_SetCharValue"
-    "aqbanking/banking.h" AQB_HAS_RUNTIME_CONFIG)
-  set(CMAKE_REQUIRED_INCLUDES)
-  set(CMAKE_REQUIRED_LIBRARIES)
+  pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.9.99)
+  pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.3.4)
   if(WITH_GNUCASH)
-    pkg_check_modules (GWEN_GTK3 REQUIRED gwengui-gtk3)
+    pkg_check_modules (GWEN_GTK3 gwengui-gtk3)
+    if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")
+      set(HAVE_GWEN_GTK3 1 CACHE BOOL "True if gwen-gtk3.pc exists")
+    endif()
   endif()
 endif()
 
@@ -399,7 +439,7 @@ if(APPLE)
   if(TARGET_RESULT STREQUAL "quartz")
     set(GNC_PLATFORM_COCOA 1)
     set(GDK_QUARTZ 1)
-    pkg_check_modules(GTK_MAC IMPORTED_TARGET gtk-mac-integration-gtk3)
+    pkg_check_modules(GTK_MAC gtk-mac-integration-gtk3)
     if (GTK_MAC_FOUND)
       set(MAC_INTEGRATION 1)
       find_library(COCOA_LIBRARY Cocoa)
@@ -512,28 +552,13 @@ set (Boost_FIND_QUIETLY ON)
 if (NOT DEFINED ${BOOST_ROOT})
   set(BOOST_ROOT $ENV{BOOST_ROOT})
 endif()
-find_package (Boost 1.67.0 COMPONENTS date_time regex locale filesystem system)
+find_package (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem system)
 
 if (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   set(HAVE_BOOST 1)
 else()
-  find_package (Boost 1.60.0 REQUIRED COMPONENTS date_time regex locale filesystem system)
-  if (Boost_FOUND)
-    include (CheckIncludeFileCXX)
-    set(CMAKE_REQUIRED_FLAGS "-std=c++17")
-    set(CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
-    check_include_file_cxx("boost/locale.hpp" AUTO_PTR)
-    unset(CMAKE_REQUIRED_FLAGS)
-    unset(CMAKE_REQUIRED_INCLUDES)
-    if(AUTO_PTR)
-      include_directories(${Boost_INCLUDE_DIRS})
-      set(HAVE_BOOST 1)
-    endif()
-  endif()
-endif()
-if (NOT HAVE_BOOST)
-message (SEND_ERROR "A suitable Boost is not installed, and is required. GnuCash requires that Boost be compatible and compiled with C++17. Boost 1.67 is the first compatible release but some distributions have patched earlier ones to work with C++17. Please install it and ensure that the following libraries are built: date_time, filesystem, locale, and regex.")
+  message (SEND_ERROR "Boost 1.54.0 or later is not installed, and is required. Please install it and ensure that the following libraries are built: chrono, date_time, filesystem, log, program_options, regex, signals, system, and test.")
 endif()
 
 
@@ -546,25 +571,32 @@ if (have_stringop_truncation)
     set(HAVE_STRINGOP_TRUNCATION TRUE)
 endif()
 
+if (SWIG_MAJOR LESS 3)
+check_cxx_compiler_flag(-Wno-register have_no_register)
+if (have_no_register)
+  set(REGISTER_CXXFLAG -Wno-register)
+else()
+  check_cxx_compiler_flag(-Wno-deprecated-register have_no_dep_register)
+  if (have_no_dep_register)
+    set(REGISTER_CXXFLAG -Wno-deprecated-register)
+  endif()
+endif()
+endif()
 add_definitions(-D_GNU_SOURCE)
 
 # Also, set the C++ version to c++11
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS ON)
+set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=c++11
+
 
 if (UNIX)
   set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused ${CMAKE_C_FLAGS}")
-  set( CMAKE_C_FLAGS "-Wno-error=deprecated-declarations -Wno-error=parentheses ${CMAKE_C_FLAGS}")
+  set( CMAKE_C_FLAGS "-Wno-error=deprecated-declarations -std=gnu11 -Wno-error=parentheses ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
   set( CMAKE_CXX_FLAGS "-Wno-error=deprecated-declarations ${REGISTER_CXXFLAG} ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
-  set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations ${CMAKE_C_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11 ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
@@ -740,7 +772,7 @@ set(PLATFORM_OSX 1)
 set(HAVE_OSX_KEYCHAIN 1)
 endif()
 
-if(GLIB2_VERSION VERSION_GREATER_EQUAL 2.46.0)
+if(GLIB2_VERSION VERSION_GREATER 2.46.0 OR GLIB2_VERSION VERSION_EQUAL 2.46.0)
 set(HAVE_GLIB_2_46 1)
 endif()
 
@@ -762,6 +794,9 @@ add_definitions (-DHAVE_CONFIG_H)
 
 set (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/common/config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H})
+
+set(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_DATADIR}/gnucash/scm)
+set(SCHEME_INSTALLED_CACHE_DIR ${PKGLIBDIR}/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
 # The subdirectories
 add_subdirectory (borrowed)
@@ -855,6 +890,7 @@ add_custom_target(distcheck DEPENDS dist
             -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
             -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
             -D GTEST_ROOT=${GTEST_ROOT}
+            -D GMOCK_ROOT=${GMOCK_ROOT}
             -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
@@ -869,14 +905,14 @@ configure_file(
 add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-set(_MODULES gnc-core-utils gnc-engine gnc-app-utils gnc-module gnc-locale-tax gnc-backend-xml-utils gnucash-guile)
+set(_MODULES gnc-core-utils gnc-module gnc-backend-xml-utils)
 
 if (WITH_SQL)
   list(APPEND _MODULES gnc-backend-sql)
 endif()
 
 if (WITH_GNUCASH)
-  list(APPEND _MODULES gnc-gnome gnc-html)
+  list(APPEND _MODULES gnc-gnome)
 endif()
 
 set_target_properties(${_MODULES} PROPERTIES
@@ -894,7 +930,7 @@ set_target_properties(${_MODULES} PROPERTIES
 )
 
 if (WIN32)
-  set_target_properties(gncmod-backend-xml PROPERTIES
+  set_target_properties(gncmod-backend-xml gncmod-stylesheets PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
   )
 endif()

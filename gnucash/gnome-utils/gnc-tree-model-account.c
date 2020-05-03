@@ -140,7 +140,7 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
         g_free (priv->negative_color);
 
     if (use_red)
-        priv->negative_color = gnc_get_negative_color ();
+        priv->negative_color = get_negative_color ();
     else
         priv->negative_color = NULL;
 }
@@ -175,7 +175,7 @@ static void
 gnc_tree_model_account_init (GncTreeModelAccount *model)
 {
     GncTreeModelAccountPrivate *priv;
-    gboolean use_red;
+    gboolean red;
 
     ENTER("model %p", model);
     while (model->stamp == 0)
@@ -183,7 +183,7 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
         model->stamp = g_random_int ();
     }
 
-    use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
+    red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     priv->book = NULL;
@@ -192,8 +192,8 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
     if (priv->negative_color)
         g_free (priv->negative_color);
 
-    if (use_red)
-        priv->negative_color = gnc_get_negative_color ();
+    if (red)
+        priv->negative_color = get_negative_color ();
     else
         priv->negative_color = NULL;
 
@@ -418,7 +418,6 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model, int index)
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD:
         return G_TYPE_STRING;
 
-    case GNC_TREE_MODEL_ACCOUNT_COL_HIDDEN:
     case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
         return G_TYPE_BOOLEAN;
 
@@ -943,11 +942,6 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
         g_value_init (value, G_TYPE_STRING);
         g_value_set_string (value, xaccAccountGetLastNum (account));
-        break;
-
-    case GNC_TREE_MODEL_ACCOUNT_COL_HIDDEN:
-        g_value_init (value, G_TYPE_BOOLEAN);
-        g_value_set_boolean (value, xaccAccountGetHidden (account));
         break;
 
     case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:

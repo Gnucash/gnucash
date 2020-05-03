@@ -333,8 +333,8 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     gnc_builder_add_from_file (builder, "dialog-book-close.glade", "close_book_dialog");
     cbw->dialog = GTK_WIDGET(gtk_builder_get_object (builder,  "close_book_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(cbw->dialog), "gnc-id-book-close");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(cbw->dialog), "GncBookCloseDialog");
 
     /* parent */
     if (parent != NULL)
@@ -351,7 +351,6 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     equity_list = g_list_prepend(equity_list, GINT_TO_POINTER(ACCT_TYPE_EQUITY));
     box = GTK_WIDGET(gtk_builder_get_object (builder, "income_acct_box"));
     cbw->income_acct_widget = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->income_acct_widget),
                                      equity_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->income_acct_widget), TRUE);
@@ -360,7 +359,6 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     /* expense acct */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "expense_acct_box"));
     cbw->expense_acct_widget = gnc_account_sel_new();
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(cbw->expense_acct_widget),
                                      equity_list, NULL);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(cbw->expense_acct_widget), TRUE);

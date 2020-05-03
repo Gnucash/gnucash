@@ -7,6 +7,7 @@ set(csv_import_remote_SOURCES
 )
 
 set(csv_import_SOURCES
+  gncmod-csv-import.c
   assistant-csv-account-import.c
   assistant-csv-price-import.cpp
   assistant-csv-trans-import.cpp
@@ -57,36 +58,34 @@ set(csv_import_noinst_HEADERS
   gnc-tokenizer-fw.hpp
 )
 
-add_library(gnc-csv-import ${csv_import_noinst_HEADERS}
+add_library(gncmod-csv-import ${csv_import_noinst_HEADERS}
   ${csv_import_remote_HEADERS} ${csv_import_remote_SOURCES} ${csv_import_SOURCES}
 )
 
 target_link_libraries(
-  gnc-csv-import
+  gncmod-csv-import
   ${Boost_LIBRARIES}
   ${ICU4C_I18N_LDFLAGS}
-  gnc-generic-import
-  gnc-gnome-utils
-  gnc-app-utils
-  gnc-engine
-  gnc-core-utils)
+  gncmod-generic-import
+  gncmod-gnome-utils
+  gncmod-app-utils
+  gncmod-engine
+  gnc-core-utils
+  gnc-module)
 
 
-target_compile_definitions(gnc-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
+target_compile_definitions(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
 
-target_include_directories(gnc-csv-import
-    PRIVATE
-        ${ICU4C_I18N_INCLUDE_DIRS}
-        ${CMAKE_SOURCE_DIR}/borrowed/goffice
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(gncmod-csv-import PRIVATE
+     ${ICU4C_I18N_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}/borrowed/goffice
 )
 
 if (APPLE)
-  set_target_properties (gnc-csv-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gncmod-csv-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gnc-csv-import
+install(TARGETS gncmod-csv-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

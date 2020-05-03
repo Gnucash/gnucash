@@ -24,6 +24,7 @@ set (generic_import_SOURCES
   import-settings.c
   import-main-matcher.c
   import-pending-matches.c
+  gncmod-generic-import.c
 )
 
 # Add dependency on config.h
@@ -44,26 +45,26 @@ set (generic_import_noinst_HEADERS
   import-utilities.h
 )
 
-add_library (gnc-generic-import
+add_library (gncmod-generic-import
   ${generic_import_SOURCES}
   ${generic_import_HEADERS}
   ${generic_import_noinst_HEADERS}
 )
 
-target_link_libraries(gnc-generic-import gnc-gnome-utils gnc-engine PkgConfig::GTK3 ${GLIB2_LDFLAGS})
+target_link_libraries(gncmod-generic-import gncmod-gnome-utils gncmod-engine PkgConfig::GTK3 ${GLIB2_LDFLAGS})
 
-target_compile_definitions (gnc-generic-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import\")
+target_compile_definitions (gncmod-generic-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import\")
 
-target_include_directories(gnc-generic-import PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gncmod-generic-import PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 if (APPLE)
-  set_target_properties (gnc-generic-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+  set_target_properties (gncmod-generic-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gnc-generic-import
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+install(TARGETS gncmod-generic-import
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 

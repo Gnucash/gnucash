@@ -282,8 +282,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     gtk_window_set_transient_for (GTK_WINDOW (faw->dialog), parent);
     g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw, g_free );
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(faw->dialog), "gnc-id-file-access");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(faw->dialog), "GncFileAccessDialog");
 
     faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));

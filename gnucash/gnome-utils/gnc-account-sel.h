@@ -106,6 +106,5 @@ void gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
 
 gint gnc_account_sel_get_num_account( GNCAccountSel *gas );
 void gnc_account_sel_purge_account( GNCAccountSel *gas, Account *acc, gboolean recursive);
-void gnc_account_sel_set_hexpand ( GNCAccountSel *gas, gboolean expand);
 
 #endif /* GNC_ACCOUNT_SEL_H */

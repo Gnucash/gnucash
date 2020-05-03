@@ -1,49 +1,79 @@
+add_subdirectory(test)
 
-set(stylesheets_SCHEME
-  css.scm
-  plain.scm
-  footer.scm
-  head-or-tail.scm
+set(stylesheets_SOURCES
+  gnc-plugin-stylesheets.c
+  gncmod-stylesheets.c
 )
 
+set(stylesheets_noinst_HEADERS
+  gnc-plugin-stylesheets.h
+)
+
+add_library(gncmod-stylesheets MODULE ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS})
+
+target_link_libraries(gncmod-stylesheets gncmod-report-gnome gncmod-report-system gncmod-gnome-utils gnc-module
+    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
+
+target_compile_definitions(gncmod-stylesheets PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
+
+set(LIB_DIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
+if (WIN32)
+  set(LIB_DIR ${CMAKE_INSTALL_BINDIR})
+endif()
+
+
+if (APPLE)
+  set_target_properties (gncmod-stylesheets PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
+
+install(TARGETS gncmod-stylesheets
+  LIBRARY DESTINATION ${LIB_DIR}
+  ARCHIVE DESTINATION ${LIB_DIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# No headers to install
+
+# Scheme
+
+set(stylesheets_SCHEME_1
+  stylesheet-css.scm
+  stylesheet-plain.scm
+  stylesheet-footer.scm
+  stylesheet-head-or-tail.scm
+)
+
+set(stylesheets_SCHEME_2
+  stylesheets.scm
+)
+
+set(GUILE_OUTPUT_DIR gnucash/report)
 set(GUILE_DEPENDS
+  scm-gnc-module
   scm-core-utils
-  scm-core-utils
-  scm-engine
-  gnc-html
-  scm-report
+  scm-gettext
+  scm-scm
+  gncmod-html
+  scm-report-system
   )
 
 gnc_add_scheme_targets(scm-report-stylesheets-1
-    SOURCES "${stylesheets_SCHEME}"
-    OUTPUT_DIR "gnucash/report/stylesheets"
-    DEPENDS "${GUILE_DEPENDS}"
-    MAKE_LINKS)
+  "${stylesheets_SCHEME_1}"
+  ${GUILE_OUTPUT_DIR}
+  "${GUILE_DEPENDS}"
+  TRUE
+)
 
-# Module interfaces deprecated in 4.x, will be removed for 5.x
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE "gnucash report stylesheet-easy"
-    NEW_MODULE "gnucash report stylesheets footer"
-    DEPENDS "scm-report-stylesheets-1")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE  "gnucash report stylesheet-fancy"
-    NEW_MODULE "gnucash report stylesheets footer"
-    DEPENDS "scm-report-stylesheets-1")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE  "gnucash report stylesheet-footer"
-    NEW_MODULE "gnucash report stylesheets footer"
-    DEPENDS "scm-report-stylesheets-1")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE  "gnucash report stylesheet-head-or-tail"
-    NEW_MODULE "gnucash report stylesheets head-or-tail"
-    DEPENDS "scm-report-stylesheets-1")
-gnc_add_scheme_deprecated_module (
-    OLD_MODULE  "gnucash report stylesheet-plain"
-    NEW_MODULE "gnucash report stylesheets plain"
-    DEPENDS "scm-report-stylesheets-1")
+gnc_add_scheme_targets(scm-report-stylesheets-2
+  "${stylesheets_SCHEME_2}"
+  ${GUILE_OUTPUT_DIR}
+  "scm-report-stylesheets-1;${GUILE_DEPENDS}"
+  TRUE
+)
 
-add_custom_target(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1)
+add_custom_target(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1 scm-report-stylesheets-2)
 
-set_local_dist(stylesheets_DIST_local CMakeLists.txt ${stylesheets_SCHEME})
+set_local_dist(stylesheets_DIST_local CMakeLists.txt
+        ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS}
+        ${stylesheets_SCHEME_1} ${stylesheets_SCHEME_2})
 
-set(stylesheets_DIST ${stylesheets_DIST_local} PARENT_SCOPE)
+set(stylesheets_DIST ${stylesheets_DIST_local} ${test_stylesheets_DIST} PARENT_SCOPE)

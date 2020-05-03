@@ -135,9 +135,8 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
     notebook->notebook = GTK_WIDGET(gtk_builder_get_object (builder, "term_notebook"));
     parent = GTK_WIDGET(gtk_builder_get_object (builder, "terms_notebook_window"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(notebook->notebook), "gnc-id-bill-term");
-    gnc_widget_style_context_add_class (GTK_WIDGET(notebook->notebook), "gnc-class-bill-terms");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(notebook->notebook), "GncBillTermsDialog");
 
     /* load the "days" widgets */
     notebook->days_due_days = read_widget (builder, "days:due_days", read_only);
@@ -436,9 +435,8 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     nbt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     nbt->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, dialog_desc));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(nbt->dialog), "gnc-id-new-bill-terms");
-    gnc_widget_style_context_add_class (GTK_WIDGET(nbt->dialog), "gnc-class-bill-terms");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(nbt->dialog), "GncBillTermsDialog");
 
     if (name)
         gtk_entry_set_text (GTK_ENTRY (nbt->name_entry), name);
@@ -777,9 +775,8 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     btw->type_label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
     btw->term_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "term_vbox"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(btw->dialog), "gnc-id-bill-terms");
-    gnc_widget_style_context_add_class (GTK_WIDGET(btw->dialog), "gnc-class-bill-terms");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(btw->dialog), "GncBillTermsDialog");
 
     gtk_window_set_transient_for (GTK_WINDOW (btw->dialog), parent);
 

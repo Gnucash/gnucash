@@ -33,13 +33,14 @@ set(gtest_core_utils_INCLUDES
   ${CMAKE_SOURCE_DIR}/common # for platform.h
   ${CMAKE_BINARY_DIR}/libgnucash/core-utils # for gncla-dir.h
   ${GLIB2_INCLUDE_DIRS}
+  ${GTEST_INCLUDE_DIR}
   )
 
 set(gtest_core_utils_LIBS
   ${GLIB2_LDFLAGS}
   ${Boost_LIBRARIES}
   ${GTHREAD_LDFLAGS}
-  gtest)
+  ${GTEST_LIB})
 
 set(test_gnc_path_util_SOURCES
   ${MODULEPATH}/gnc-path.c

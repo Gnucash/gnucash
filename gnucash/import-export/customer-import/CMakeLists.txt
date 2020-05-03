@@ -1,5 +1,6 @@
 set(customer_import_SOURCES
   gnc-plugin-customer-import.c
+  gncmod-customer-import.c
   dialog-customer-import-gui.c
   dialog-customer-import.c
 )
@@ -14,28 +15,23 @@ set(customer_import_noinst_HEADERS
   dialog-customer-import.h
 )
 
-add_library(gnc-customer-import ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
+add_library(gncmod-customer-import ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
 
-target_link_libraries(gnc-customer-import
-    gnc-gnome
-    gnc-gnome-utils
-    gnc-app-utils
-    gnc-engine
-    gnc-core-utils
-    ${GLIB2_LDFLAGS})
+target_link_libraries(gncmod-customer-import gnc-gnome gncmod-gnome-utils gncmod-app-utils
+     gncmod-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
 
-target_include_directories(gnc-customer-import
+target_include_directories(gncmod-customer-import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE ${CMAKE_SOURCE_DIR}/gnucash/gnome
 )
 
-target_compile_definitions(gnc-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
+target_compile_definitions(gncmod-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
 
 if (APPLE)
-  set_target_properties (gnc-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gncmod-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gnc-customer-import
+install(TARGETS gncmod-customer-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

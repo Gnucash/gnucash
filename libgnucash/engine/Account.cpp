@@ -25,10 +25,6 @@
 
 #include <config.h>
 
-extern "C" {
-#include "gnc-prefs.h"
-}
-
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -48,7 +44,6 @@ extern "C" {
 #include "guid.hpp"
 
 #include <numeric>
-#include <map>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -131,46 +126,6 @@ enum
 
 #define GET_PRIVATE(o)  \
     ((AccountPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_ACCOUNT))
-
-/* This map contains a set of strings representing the different column types. */
-std::map<GNCAccountType, const char*> gnc_acct_debit_strs = {
-    { ACCT_TYPE_NONE,       _("Funds In") },
-    { ACCT_TYPE_BANK,       _("Deposit") },
-    { ACCT_TYPE_CASH,       _("Receive") },
-    { ACCT_TYPE_CREDIT,     _("Payment") },
-    { ACCT_TYPE_ASSET,      _("Increase") },
-    { ACCT_TYPE_LIABILITY,  _("Decrease") },
-    { ACCT_TYPE_STOCK,      _("Buy") },
-    { ACCT_TYPE_MUTUAL,     _("Buy") },
-    { ACCT_TYPE_CURRENCY,   _("Buy") },
-    { ACCT_TYPE_INCOME,     _("Charge") },
-    { ACCT_TYPE_EXPENSE,    _("Expense") },
-    { ACCT_TYPE_PAYABLE,    _("Payment") },
-    { ACCT_TYPE_RECEIVABLE, _("Invoice") },
-    { ACCT_TYPE_TRADING,    _("Decrease") },
-    { ACCT_TYPE_EQUITY,     _("Decrease") },
-};
-const char* dflt_acct_debit_str = _("Debit");
-
-/* This map contains a set of strings representing the different column types. */
-std::map<GNCAccountType, const char*> gnc_acct_credit_strs = {
-    { ACCT_TYPE_NONE,       _("Funds Out") },
-    { ACCT_TYPE_BANK,       _("Withdrawal") },
-    { ACCT_TYPE_CASH,       _("Spend") },
-    { ACCT_TYPE_CREDIT,     _("Charge") },
-    { ACCT_TYPE_ASSET,      _("Decrease") },
-    { ACCT_TYPE_LIABILITY,  _("Increase") },
-    { ACCT_TYPE_STOCK,      _("Sell") },
-    { ACCT_TYPE_MUTUAL,     _("Sell") },
-    { ACCT_TYPE_CURRENCY,   _("Sell") },
-    { ACCT_TYPE_INCOME,     _("Income") },
-    { ACCT_TYPE_EXPENSE,    _("Rebate") },
-    { ACCT_TYPE_PAYABLE,    _("Bill") },
-    { ACCT_TYPE_RECEIVABLE, _("Payment") },
-    { ACCT_TYPE_TRADING,    _("Increase") },
-    { ACCT_TYPE_EQUITY,     _("Increase") },
-};
-const char* dflt_acct_credit_str = _("Credit");
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -4028,34 +3983,6 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
     xaccAccountCommitEdit (acc);
 }
 
-/*********************************************************************\
-\ ********************************************************************/
-
-
-const char *gnc_account_get_debit_string (GNCAccountType acct_type)
-{
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_debit_str;
-
-    auto result = gnc_acct_debit_strs.find(acct_type);
-    if (result != gnc_acct_debit_strs.end())
-        return result->second;
-    else
-        return dflt_acct_debit_str;
-}
-
-const char *gnc_account_get_credit_string (GNCAccountType acct_type)
-{
-    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
-        return dflt_acct_credit_str;
-
-    auto result = gnc_acct_credit_strs.find(acct_type);
-    if (result != gnc_acct_credit_strs.end())
-        return result->second;
-    else
-        return dflt_acct_credit_str;
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -4388,35 +4315,6 @@ gboolean xaccAccountIsAssetLiabType(GNCAccountType t)
     default:
         return (xaccAccountTypesCompatible(ACCT_TYPE_ASSET, t)
                 || xaccAccountTypesCompatible(ACCT_TYPE_LIABILITY, t));
-    }
-}
-
-GNCAccountType
-xaccAccountTypeGetFundamental (GNCAccountType t)
-{
-    switch (t)
-    {
-        case ACCT_TYPE_BANK:
-        case ACCT_TYPE_STOCK:
-        case ACCT_TYPE_MUTUAL:
-        case ACCT_TYPE_CURRENCY:
-        case ACCT_TYPE_CASH:
-        case ACCT_TYPE_ASSET:
-        case ACCT_TYPE_RECEIVABLE:
-            return ACCT_TYPE_ASSET;
-        case ACCT_TYPE_CREDIT:
-        case ACCT_TYPE_LIABILITY:
-        case ACCT_TYPE_PAYABLE:
-            return ACCT_TYPE_LIABILITY;
-        case ACCT_TYPE_INCOME:
-            return ACCT_TYPE_INCOME;
-        case ACCT_TYPE_EXPENSE:
-            return ACCT_TYPE_EXPENSE;
-        case ACCT_TYPE_EQUITY:
-            return ACCT_TYPE_EQUITY;
-        case ACCT_TYPE_TRADING:
-        default:
-            return ACCT_TYPE_NONE;
     }
 }
 
@@ -5802,13 +5700,11 @@ gnc_account_imap_get_info (Account *acc, const char *category)
 /*******************************************************************************/
 
 gchar *
-gnc_account_get_map_entry (Account *acc, const char *head, const char *category)
+gnc_account_get_map_entry (Account *acc, const char *full_category)
 {
     GValue v = G_VALUE_INIT;
     gchar *text = NULL;
-    std::vector<std::string> path {head};
-    if (category)
-        path.emplace_back (category);
+    std::vector<std::string> path {full_category};
     if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
     {
         qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);

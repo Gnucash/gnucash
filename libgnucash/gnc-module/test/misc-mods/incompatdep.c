@@ -51,7 +51,7 @@ libgncmod_incompatdep_gnc_module_description(void)
 int
 libgncmod_incompatdep_gnc_module_init(int refcount)
 {
-    if (gnc_module_load("gnucash/ordinary", 25))
+    if (gnc_module_load("gnucash/foo", 25))
     {
         return TRUE;
     }

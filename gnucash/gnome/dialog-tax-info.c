@@ -30,12 +30,12 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
+#include "guile-util.h"
 #include "gnc-guile-utils.h"
 
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
-#include "gnc-locale-tax.h"
 #include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
@@ -145,8 +145,6 @@ typedef struct
 static void
 initialize_getters (void)
 {
-    gnc_locale_tax_init();
-
     getters.payer_name_source = scm_c_eval_string ("gnc:txf-get-payer-name-source");
     getters.form              = scm_c_eval_string ("gnc:txf-get-form");
     getters.description       = scm_c_eval_string ("gnc:txf-get-description");
@@ -1291,9 +1289,8 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_information_dialog"));
     ti_dialog->dialog = dialog;
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-tax-information");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-taxes");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTaxInfoDialog");
 
     initialize_getters ();
 

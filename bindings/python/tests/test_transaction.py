@@ -44,11 +44,6 @@ class TestTransaction(TransactionSession):
     def test_equal(self):
         TRANS = self.trans
         self.assertTrue( TRANS.Equal(self.trans, True, False, False, False) )
-        # test __eq__ implementation
-        SPLIT = Split(self.book)
-        SPLIT.SetParent(TRANS)
-        self.assertTrue( self.trans == SPLIT.GetParent() )
-        self.assertTrue( self.trans != Transaction(self.book) )
 
     def test_clone(self):
         domain = "gnc.engine"

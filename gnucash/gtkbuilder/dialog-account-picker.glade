@@ -13,8 +13,6 @@
       <object class="GtkGrid" id="prefs_table">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label847718">
             <property name="visible">True</property>
@@ -267,7 +265,7 @@
                   <object class="GtkImage" id="placeholder_warning_image">
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="icon_name">dialog-warning</property>
+                    <property name="stock">gtk-dialog-warning</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -353,7 +353,8 @@
 #cmakedefine _POSIX_SOURCE 1
 
 /* Definitions for what WEBKIT version we're compiling against: */
-#cmakedefine WEBKIT2 1
+#cmakedefine WEBKIT2_4 1
+#cmakedefine WEBKIT2_3 1
 #cmakedefine WEBKIT1 1
 
 /* Definitions for all OS */

@@ -1,0 +1,5 @@
+(if (or (string=? (version) "1.3")
+        (string=? (version) "1.3.4"))
+    (dynamic-link "libgnc-module.so")
+    (dynamic-link "libgnc-module"))
+(exit 0)

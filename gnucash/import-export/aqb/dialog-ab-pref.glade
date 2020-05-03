@@ -13,8 +13,6 @@
       <object class="GtkGrid" id="aqbanking_prefs">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label8877457">
             <property name="visible">True</property>

@@ -20,8 +20,8 @@ set(ofx_UI gnc-plugin-ofx-ui.xml)
 if (WITH_OFX)
   add_library(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
 
-  target_link_libraries(gncmod-ofx gnc-generic-import gnc-engine gnc-app-utils gnc-core-utils
-                    gnc-gnome-utils gnc-gnome gnc-module ${LIBOFX_LDFLAGS})
+  target_link_libraries(gncmod-ofx gncmod-generic-import gncmod-engine gncmod-app-utils gnc-core-utils
+                    gncmod-gnome-utils ${LIBOFX_LDFLAGS})
 
   target_compile_definitions(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
 
@@ -38,10 +38,9 @@ endif()
 
   install(FILES ${ofx_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
-  foreach(ui_file ${ofx_UI})
-      configure_file(${ui_file} ${DATADIR_BUILD}/gnucash/ui/${ui_file} COPYONLY)
-  endforeach()
+  file(COPY ${ofx_UI}
+    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 endif()
 
-set_local_dist(ofx_DIST_local CMakeLists.txt ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
+set_local_dist(ofx_DIST_local CMakeLists.txt migratable-prefs-ofx.xml ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
 set(ofx_DIST ${ofx_DIST_local} ${test_ofx_DIST} ${ofx_gschema_DIST} PARENT_SCOPE)

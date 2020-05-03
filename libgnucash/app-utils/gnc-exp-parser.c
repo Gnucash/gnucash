@@ -32,7 +32,6 @@
 #include "fin_spl_protos.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
-#include "gnc-hooks.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
 #include "gnc-locale-utils.h"
@@ -82,7 +81,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         gnc_exp_parser_shutdown ();
 
     /* The parser uses fin.scm for financial functions, so load it here. */
-    scm_primitive_load_path(scm_from_utf8_string("gnucash/app-utils/fin"));
+    scm_primitive_load_path(scm_from_utf8_string("fin"));
     variable_bindings = g_hash_table_new (g_str_hash, g_str_equal);
 
     /* This comes after the statics have been initialized. Not at the end! */
@@ -108,8 +107,6 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         }
         g_free(filename);
     }
-
-    gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)gnc_exp_parser_shutdown, NULL, NULL);
 }
 
 static gboolean
@@ -160,8 +157,6 @@ gnc_exp_parser_shutdown (void)
     last_gncp_error = NO_ERR;
 
     parser_inited = FALSE;
-
-    gnc_hook_run(HOOK_SAVE_OPTIONS, NULL);
 }
 
 void

@@ -33,6 +33,7 @@
 #include "gnc-backend-xml.h"
 #include "gnc-component-manager.h"
 #include "gnc-uri-utils.h"
+#include "gnc-module.h"
 #include "gnc-ui.h"
 
 /* The following are copied from src/backend/xml/io-gncxml2-v2.h as a temporary
@@ -1188,8 +1189,9 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
 
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-xml-encoding");
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistXmlEncoding");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 

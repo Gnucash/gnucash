@@ -233,52 +233,23 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
 
 
 /***********************************************************
- * show_warning
- *
- * show the warning and disable OK button
- ************************************************************/
-static void
-show_warning (AccountPickerDialog *picker, gchar *text)
-{
-    gtk_label_set_text (GTK_LABEL(picker->warning), text);
-    gnc_label_set_alignment (picker->warning, 0.0, 0.5);
-    gtk_widget_show_all (GTK_WIDGET(picker->whbox));
-    g_free (text);
-
-    gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button
-}
-
-
-/***********************************************************
  * show_placeholder_warning
  *
- * show the warning when account is a place holder
+ * show the warning when account is a place holder and disable
+ * OK button
  ************************************************************/
 static void
 show_placeholder_warning (AccountPickerDialog *picker, const gchar *name)
 {
-    gchar *text = g_strdup_printf (_("The account '%s' is a placeholder account and does not allow "
+    gchar *text = g_strdup_printf (_("The account %s is a placeholder account and does not allow "
                                      "transactions. Please choose a different account."), name);
 
-    show_warning (picker, text);
-}
+    gtk_label_set_text (GTK_LABEL(picker->pwarning), text);
+    gnc_label_set_alignment (picker->pwarning, 0.0, 0.5);
+    gtk_widget_show_all (GTK_WIDGET(picker->pwhbox));
+    g_free (text);
 
-
-/***********************************************************
- * show_commodity_warning
- *
- * show the warning when account is a different commodity to that
- * required
- ************************************************************/
-static void
-show_commodity_warning (AccountPickerDialog *picker, const gchar *name)
-{
-    const gchar *com_name = gnc_commodity_get_fullname (picker->new_account_default_commodity);
-    gchar *text = g_strdup_printf (_("The account '%s' has a different commodity to the "
-                                     "one required, '%s'. Please choose a different account."),
-                                      name, com_name);
-
-    show_warning (picker, text);
+    gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button
 }
 
 
@@ -291,14 +262,8 @@ static void
 account_tree_row_changed_cb (GtkTreeSelection *selection,
                              AccountPickerDialog *picker)
 {
-    Account *sel_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
 
-    if (!sel_account)
-    {
-        gtk_widget_hide (GTK_WIDGET(picker->whbox)); // hide the warning
-        gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button
-        return;
-    }
+    Account *sel_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
 
     gtk_widget_set_sensitive (picker->ok_button, TRUE); // enable OK button
 
@@ -309,15 +274,8 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
 
         show_placeholder_warning (picker, retval_name);
     }
-    else if (picker->new_account_default_commodity &&
-                (!gnc_commodity_equal (xaccAccountGetCommodity (sel_account),
-                 picker->new_account_default_commodity))) // check commodity
-    {
-        const gchar *retval_name = xaccAccountGetName (sel_account);
-        show_commodity_warning (picker, retval_name);
-    }
     else
-        gtk_widget_hide (GTK_WIDGET(picker->whbox)); // hide the warning
+        gtk_widget_hide (GTK_WIDGET(picker->pwhbox)); // hide the placeholder warning
 }
 
 static gboolean
@@ -441,8 +399,8 @@ Account * gnc_import_select_account(GtkWidget *parent,
             PERR("Error opening the glade builder interface");
         }
         picker->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker_dialog"));
-        picker->whbox = GTK_WIDGET(gtk_builder_get_object (builder, "warning_hbox"));
-        picker->warning = GTK_WIDGET(gtk_builder_get_object (builder, "warning_label"));
+        picker->pwhbox = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_warning_hbox"));
+        picker->pwarning = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_warning_label"));
         picker->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
 
         if (parent)
@@ -516,14 +474,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
                 if (retval && xaccAccountGetPlaceholder (retval))
                 {
                     show_placeholder_warning (picker, retval_name);
-                    response = GNC_RESPONSE_NEW;
-                    break;
-                }
-                else if (picker->new_account_default_commodity &&
-                            (!gnc_commodity_equal (xaccAccountGetCommodity (retval),
-                             picker->new_account_default_commodity))) // check commodity
-                {
-                    show_commodity_warning (picker, retval_name);
                     response = GNC_RESPONSE_NEW;
                     break;
                 }

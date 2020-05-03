@@ -1,4 +1,7 @@
+add_subdirectory(test)
+
 set (register_core_SOURCES
+  gncmod-register-core.c
   basiccell.c
   cell-factory.c
   cellblock.c
@@ -40,19 +43,19 @@ set (register_core_HEADERS
 # Add dependency on config.h
 set_source_files_properties (${register_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-add_library (gnc-register-core ${register_core_SOURCES} ${register_core_HEADERS})
+add_library (gncmod-register-core ${register_core_SOURCES} ${register_core_HEADERS})
 
-target_link_libraries(gnc-register-core gnc-gnome-utils gnc-app-utils ${GMODULE_LDFLAGS})
+target_link_libraries(gncmod-register-core gncmod-gnome-utils gncmod-app-utils ${GMODULE_LDFLAGS})
 
-target_compile_definitions (gnc-register-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.core\")
+target_compile_definitions (gncmod-register-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.core\")
 
-target_include_directories(gnc-register-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gncmod-register-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 if (APPLE)
-  set_target_properties (gnc-register-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  set_target_properties (gncmod-register-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
-install(TARGETS gnc-register-core
+install(TARGETS gncmod-register-core
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

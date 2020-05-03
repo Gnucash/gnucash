@@ -576,7 +576,7 @@
 	  branches/reshuffle-modules/src/import-export/hbci/gncmod-hbci.c,
 	  branches/reshuffle-modules/src/import-export/log-replay/gncmod-log-replay.c,
 	  branches/reshuffle-modules/src/import-export/ofx/gncmod-ofx-import.c,
-	  branches/reshuffle-modules/src/import-export/qif-import/gnc-qif-import.c,
+	  branches/reshuffle-modules/src/import-export/qif-import/gncmod-qif-import.c,
 	  branches/reshuffle-modules/src/import-export/qif-io-core/gncmod-qifiocore.c,
 	  branches/reshuffle-modules/src/network-utils/gncmod-network-utils.c,
 	  branches/reshuffle-modules/src/register/ledger-core/gncmod-ledger-core.c,
@@ -8053,7 +8053,7 @@
 2006-07-04 20:35  cstim
 
 	* [r14465] trunk/ChangeLog, trunk/po/de.po: Proof-read and
-	  improved German translation by feedback from Andi Kï¿½hler.
+	  improved German translation by feedback from Andi Köhler.
 
 2006-07-04 16:32  jsled
 
@@ -9216,7 +9216,7 @@
 2006-06-01 23:06  warlord
 
 	* [r14289] trunk/ChangeLog, trunk/po/nb.po: * po/nb.po: updated
-	  Norwegian Bokmï¿½l translation by Sigve Indregard
+	  Norwegian Bokmål translation by Sigve Indregard
 
 2006-06-01 21:02  warlord
 
@@ -9964,7 +9964,7 @@
 2006-05-21 12:59  cstim
 
 	* [r14144] trunk/po/sk.po: Updated Slovak translation by Zdenko
-	  Podobnï¿½
+	  Podobný
 
 2006-05-21 12:58  cstim
 
@@ -11186,7 +11186,7 @@
 2006-04-22 19:04  cstim
 
 	* [r13831] trunk/ChangeLog, trunk/src/gnome/gnc-split-reg.c: Mark
-	  string for translation as pointed out by Andreas Kï¿½hler.
+	  string for translation as pointed out by Andreas Köhler.
 
 2006-04-22 05:14  chris
 
@@ -14348,7 +14348,7 @@
 2006-03-01 03:28  hampton
 
 	* [r13428] trunk/ChangeLog, trunk/src/app-utils/options.scm:
-	  Andreas Kï¿½hler's patch to correctly build a html color value.
+	  Andreas Köhler's patch to correctly build a html color value.
 	  Fixes 328933.
 
 2006-02-28 23:13  jsled
@@ -14816,7 +14816,7 @@
 
 	* [r13364] trunk/ChangeLog,
 	  trunk/src/gnome/gnc-plugin-page-register.c,
-	  trunk/src/gtk-compat.h: Cleanup patch from Andreas Kï¿½hler.
+	  trunk/src/gtk-compat.h: Cleanup patch from Andreas Köhler.
 
 2006-02-22 21:52  chris
 
@@ -14901,14 +14901,14 @@
 
 	* [r13354] trunk/ChangeLog,
 	  trunk/src/gnome/gnc-plugin-page-register.c: Fix from Andreas
-	  Kï¿½hler to deactivate the toolbar split button in an auto-split
+	  Köhler to deactivate the toolbar split button in an auto-split
 	  register. Fixes 330621.
 
 2006-02-21 23:58  hampton
 
 	* [r13353] trunk/ChangeLog,
 	  trunk/src/gnome-utils/gnc-tree-model-account.c: Two fixes from
-	  Andreas Kï¿½hler. One fixes 331183, the problem where editing a
+	  Andreas Köhler. One fixes 331183, the problem where editing a
 	  top-level account doesn't set the current parent.
 
 2006-02-21 23:10  jsled
@@ -14981,7 +14981,7 @@
 
 	* [r13340] trunk/ChangeLog,
 	  trunk/src/register/register-gnome/gnucash-date-picker.c: Andreas
-	  Kï¿½hler's patch to prevent a crash in the register date picker
+	  Köhler's patch to prevent a crash in the register date picker
 	  widget when using gtk 2.8.
 
 2006-02-21 03:44  hampton
@@ -14996,7 +14996,7 @@
 
 	* [r13338] trunk/src/gnome-utils/gtktreedatalist.c: Use glib's
 	  slice allocator in favor of GMemChunks for glib >= 2.9. Patch by
-	  Andreas Kï¿½hler <andi5.py@gmx.net>.
+	  Andreas Köhler <andi5.py@gmx.net>.
 
 2006-02-21 00:14  hampton
 
@@ -15498,7 +15498,7 @@
 	  GncTreeModelAccountTypes - now, every accessible account-types
 	  TreeModel is a new GtkTreeModelFilter, and their ref-counting is
 	  always the same. Add some tweaks to
-	  gnc-tree-model-account-types.[ch] from Andreas Kï¿½hler
+	  gnc-tree-model-account-types.[ch] from Andreas Köhler
 	  <andi5.py@gmx.net>, plus the conversion of the Account Dialog's
 	  account-types field to use the filtered GncTreeModelAccountTypes
 	  instead of a GtkListStore, but simplified to use the AccountType
@@ -15606,14 +15606,14 @@
 
 	* [r13259] trunk/ChangeLog,
 	  trunk/src/gnome-utils/dialog-account.c,
-	  trunk/src/gnome/glade/account.glade: Andreas Kï¿½hler's patch to
+	  trunk/src/gnome/glade/account.glade: Andreas Köhler's patch to
 	  convert the account types list in the account edit dialog to a
 	  GtkTreeView/GtkListStore.
 
 2006-02-13 23:21  hampton
 
 	* [r13258] trunk/ChangeLog,
-	  trunk/src/gnome/gnc-plugin-page-register.c: Andreas Kï¿½hler's
+	  trunk/src/gnome/gnc-plugin-page-register.c: Andreas Köhler's
 	  patch to prevent crash when voiding a transaction.
 
 2006-02-13 16:23  warlord
@@ -15625,7 +15625,7 @@
 2006-02-13 15:42  hampton
 
 	* [r13256] trunk/ChangeLog, trunk/src/gnome/glade/account.glade,
-	  trunk/src/gnome/glade/sched-xact.glade: Andreas Kï¿½hler's patch
+	  trunk/src/gnome/glade/sched-xact.glade: Andreas Köhler's patch
 	  to wrap label text in a couple of dialogs.
 
 2006-02-13 14:06  codehelp
@@ -16530,7 +16530,7 @@
 	  trunk/src/gnome-utils/gnc-tree-view-account.c,
 	  trunk/src/gnome-utils/gnc-tree-view-commodity.c,
 	  trunk/src/gnome-utils/gnc-tree-view-price.c,
-	  trunk/src/gnome-utils/gnc-tree-view.c: Andreas Kï¿½hler's patch to
+	  trunk/src/gnome-utils/gnc-tree-view.c: Andreas Köhler's patch to
 	  perform the i18n on column headers before calling the generic
 	  tree view code instead of performing it a couple steps removed.
 	  It also introduces the translatable strings "P" (placeholder)
@@ -16634,7 +16634,7 @@
 
 	* [r13086] trunk/ChangeLog, trunk/src/gnome-utils/gnc-tree-view.c,
 	  trunk/src/gnome-utils/gnc-tree-view.h,
-	  trunk/src/gnome/glade/account.glade: Andreas Kï¿½hler's patch to
+	  trunk/src/gnome/glade/account.glade: Andreas Köhler's patch to
 	  allow explicit specification of which columns in a tree view
 	  expand. Updated to automatically mark a column as expandable if
 	  it is the only visible column.
@@ -16997,7 +16997,7 @@
 2006-01-29 23:19  hampton
 
 	* [r13039] trunk/ChangeLog,
-	  trunk/src/gnome-utils/gnc-main-window.c: Andreas Kï¿½hler's patch
+	  trunk/src/gnome-utils/gnc-main-window.c: Andreas Köhler's patch
 	  to fix a problem where switching windows repeatedly confusing
 	  the Windows menu.
 
@@ -17010,7 +17010,7 @@
 
 	* [r13037] trunk/ChangeLog,
 	  trunk/src/gnome-utils/gnc-tree-model-commodity.c: Andreas
-	  Kï¿½hler's patch to fix commodity editor warnings/crash.
+	  Köhler's patch to fix commodity editor warnings/crash.
 
 2006-01-29 19:32  jsled
 
@@ -18764,7 +18764,7 @@
 	  branches/cashutil/src/import-export/log-replay/gncmod-log-replay.c,
 	  branches/cashutil/src/import-export/mt940/gncmod-mt940-import.c,
 	  branches/cashutil/src/import-export/ofx/gncmod-ofx-import.c,
-	  branches/cashutil/src/import-export/qif-import/gnc-qif-import.c,
+	  branches/cashutil/src/import-export/qif-import/gncmod-qif-import.c,
 	  branches/cashutil/src/register/ledger-core/gncmod-ledger-core.c,
 	  branches/cashutil/src/register/register-core/gncmod-register-core.c,
 	  branches/cashutil/src/report/report-system/gncmod-report-system.c:

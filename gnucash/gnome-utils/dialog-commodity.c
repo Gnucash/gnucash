@@ -266,9 +266,8 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     retval->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ss_ok_button"));
     label = GTK_WIDGET(gtk_builder_get_object (builder, "item_label"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->dialog), "gnc-id-security-select");
-    gnc_widget_style_context_add_class (GTK_WIDGET(retval->dialog), "gnc-class-securities");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncSecurityDialog");
 
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->namespace_combo));
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->commodity_combo));
@@ -911,9 +910,8 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
 
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->dialog), "gnc-id-security");
-    gnc_widget_style_context_add_class (GTK_WIDGET(retval->dialog), "gnc-class-securities");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncSecurityDialog");
 
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), GTK_WINDOW (parent));

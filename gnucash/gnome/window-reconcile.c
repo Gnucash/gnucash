@@ -55,9 +55,9 @@
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
 #include "gnc-window.h"
+#include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
-#include "gnc-session.h"
 #ifdef MAC_INTEGRATION
 #include <gtkmacintegration/gtkosxapplication.h>
 #endif
@@ -754,8 +754,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-reconcile-start");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncReconcileDialog");
 
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title(GTK_WINDOW(dialog), title);
@@ -1130,13 +1130,30 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
 static void
 gnc_reconcile_window_set_titles(RecnWindow *recnData)
 {
-    const gchar *title;
+    gboolean formal;
+    gchar *title;
 
-    title = gnc_account_get_debit_string(ACCT_TYPE_NONE);
+    formal = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
+
+    if (formal)
+        title = _("Debits");
+    else
+        title = gnc_get_debit_string(ACCT_TYPE_NONE);
+
     gtk_frame_set_label(GTK_FRAME(recnData->debit_frame), title);
 
-    title = gnc_account_get_credit_string(ACCT_TYPE_NONE);
+    if (!formal)
+        g_free(title);
+
+    if (formal)
+        title = _("Credits");
+    else
+        title = gnc_get_credit_string(ACCT_TYPE_NONE);
+
     gtk_frame_set_label(GTK_FRAME(recnData->credit_frame), title);
+
+    if (!formal)
+        g_free(title);
 }
 
 
@@ -1211,7 +1228,12 @@ gnc_reconcile_window_create_view_box(Account *account,
     label = gtk_label_new("");
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
     *total_save = label;
+
+#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
+#else
+    gtk_widget_set_margin_right (GTK_WIDGET(label), 10 + nat_sb.width);
+#endif
 
     return vbox;
 }
@@ -1735,8 +1757,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
                                     refresh_handler, close_handler,
                                     recnData);
-    // This window should close if we close the session.
-    gnc_gui_component_set_session (recnData->component_id, gnc_get_current_session());
 
     recn_set_watches (recnData);
 
@@ -1752,9 +1772,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_container_add(GTK_CONTAINER(recnData->window), vbox);
-
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(recnData->window), "gnc-id-reconcile");
 
     dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
@@ -1879,15 +1896,9 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
                      (account, RECLIST_DEBIT, recnData,
                       &recnData->debit, &recnData->total_debit);
 
-        // Add a style context for this widget so it can be easily manipulated with css
-        gnc_widget_style_context_add_class (GTK_WIDGET(debits_box), "gnc-class-debits");
-
         credits_box = gnc_reconcile_window_create_view_box
                       (account, RECLIST_CREDIT, recnData,
                        &recnData->credit, &recnData->total_credit);
-
-        // Add a style context for this widget so it can be easily manipulated with css
-        gnc_widget_style_context_add_class (GTK_WIDGET(credits_box), "gnc-class-credits");
 
         GNC_RECONCILE_VIEW(recnData->debit)->sibling = GNC_RECONCILE_VIEW(recnData->credit);
         GNC_RECONCILE_VIEW(recnData->credit)->sibling = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1920,9 +1931,6 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* frame to hold totals */
             frame = gtk_frame_new(NULL);
             gtk_box_pack_end(GTK_BOX(hbox), frame, FALSE, FALSE, 0);
-
-            // Set the name for this widget so it can be easily manipulated with css
-            gtk_widget_set_name (GTK_WIDGET(frame), "gnc-id-reconcile-totals");
 
             /* hbox to hold title/value vboxes */
             totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -2028,8 +2036,13 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         gint recn_widthc = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->credit), REC_RECN);
         gint recn_widthd = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->debit), REC_RECN);
 
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
         gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#endif
     }
     return recnData;
 }

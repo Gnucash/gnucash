@@ -6,4 +6,15 @@
 #-e so that if any command has an exit code != 0, this script will
 #  exit immediately.
 
+# Python is python 3, but gnucash doesn't work with python 3. There
+# doesn't seem to be a way to tell automake to use /usr/bin/python2,
+# so we'll mock this up
+mkdir ourpython_bin
+ln -s /usr/bin/python2 ourpython_bin/python
+export PATH=/ourpython_bin:"$PATH"
+export PLATFORM_CMAKE_OPTS=
+echo path is "$PATH"
+echo python version is "$(python --version)"
+echo PLATFORM_CMAKE_OPTS= "$PLATFORM_CMAKE_OPTS"
+
 ../commonbuild

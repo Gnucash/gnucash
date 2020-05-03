@@ -231,8 +231,8 @@ gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-embedded-window");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbeddedWindow");
 
     gnc_embedded_window_setup_window (window);
 

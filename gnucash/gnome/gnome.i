@@ -24,10 +24,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <dialog-progress.h>
-#include <config.h>
-#include <gtk/gtk.h>
-#include <gnc-plugin-page-report.h>
-#include <dialog-custom-report.h>
 %}
 #if defined(SWIGGUILE)
 %{
@@ -41,7 +37,4 @@ SCM scm_init_sw_gnome_module (void);
 
 /* Parse the header file to generate wrappers */
 %include <dialog-progress.h>
-
-void gnc_main_window_open_report(int report_id, GncMainWindow *window);
-void gnc_ui_custom_report(GncMainWindow * window);
 

@@ -477,8 +477,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     window = GTK_WIDGET(gtk_builder_get_object (builder, "loan_mortgage_assistant"));
     ldd->window = window;
 
-    // Set the name for this assistant so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-assistant-loan");
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistLoan");
 
     /* Enable buttons on complete pages. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
@@ -636,7 +636,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   gas_data[i].height);
 
                 gtk_widget_set_halign (GTK_WIDGET(gas), GTK_ALIGN_FILL);
-                gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(gas), true);
+                gtk_widget_set_hexpand (GTK_WIDGET(gas), FALSE);
                 g_object_set (GTK_WIDGET(gas), "margin", 2, NULL);
                 *(gas_data[i].loc) = gas;
             }
@@ -729,7 +729,6 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                           G_CALLBACK(loan_opt_escrow_toggle_cb), ldd );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), FALSE );
         ldd->optEscrowGAS = GNC_ACCOUNT_SEL(gnc_account_sel_new());
-        gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(ldd->optEscrowGAS), true);
         gnc_account_sel_set_new_account_ability( ldd->optEscrowGAS, TRUE );
         gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
                            GTK_WIDGET(ldd->optEscrowGAS) );
@@ -754,7 +753,12 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 rouid = ldd->repayOptsUI[i];
                 vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
                 gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
+
+#if GTK_CHECK_VERSION(3, 12, 0)
                 gtk_widget_set_margin_start (GTK_WIDGET(vb), 12);
+#else
+                gtk_widget_set_margin_left (GTK_WIDGET(vb), 12);
+#endif
 
                 /* Add payment checkbox. */
 
@@ -778,8 +782,12 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     FALSE );
 
                 gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb), FALSE, FALSE, 2 );
-                gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
 
+#if GTK_CHECK_VERSION(3, 12, 0)
+                gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
+#else
+                gtk_widget_set_margin_left (GTK_WIDGET(rouid->escrowCb), 12);
+#endif
                 g_signal_connect( rouid->optCb, "toggled",
                                   G_CALLBACK(loan_opt_toggled_cb),
                                   rouid );

@@ -50,8 +50,8 @@ typedef struct
     GNCAccountType       new_account_default_type;       /* new account default type, incoming */
     Account             *default_account;                /* default account for selection, incoming */
     Account             *retAccount;                     /* Account value returned to caller */
-    GtkWidget           *whbox;                          /* Warning HBox */
-    GtkWidget           *warning;                        /* Warning Label */
+    GtkWidget           *pwhbox;                         /* Placeholder Warning HBox */
+    GtkWidget           *pwarning;                       /* Placeholder Warning Label */
 } AccountPickerDialog;
 
 /**  Must be called with a string containing a unique identifier for the

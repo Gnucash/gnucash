@@ -21,13 +21,13 @@
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libguile.h>
 #include <unittest-support.h>
 
 #include "gnc-module.h"
 
-
-int
-main(int argc, char ** argv)
+static void
+guile_main(void *closure, int argc, char ** argv)
 {
     GNCModule foo;
     gchar *msg1 = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
@@ -58,4 +58,11 @@ main(int argc, char ** argv)
         exit(-1);
     }
     test_clear_error_list ();
+}
+
+int
+main(int argc, char ** argv)
+{
+    scm_boot_guile(argc, argv, guile_main, NULL);
+    return 0;
 }

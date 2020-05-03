@@ -27,7 +27,7 @@
 
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 match))
-(use-modules (gnucash string))
+(use-modules (gnucash import-export string))
 
 (define (n- n) (gnc-numeric-neg n))
 (define (nsub a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD))

@@ -15,7 +15,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash string))
+(define-module (gnucash import-export string))
 (use-modules (srfi srfi-13))
 
 

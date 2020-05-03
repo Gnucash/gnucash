@@ -69,7 +69,7 @@ if(WITH_SQL)
     ${backend_sql_noinst_HEADERS}
     )
 
-  target_link_libraries(gnc-backend-sql gnc-engine)
+  target_link_libraries(gnc-backend-sql gncmod-engine)
 
   target_compile_definitions (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
 

@@ -973,9 +973,8 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW (dialog->dialog), parent);
 
-    // Set the name of this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog->dialog), "gnc-id-sx-since-last-run");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog->dialog), "gnc-class-sx");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog->dialog), "GncSxSinceLastRunDialog");
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));

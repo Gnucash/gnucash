@@ -1651,8 +1651,8 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     pcd->builder = builder;
     pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(pcd->dialog), "gnc-id-print-check");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(pcd->dialog), "GncPrintCheckDialog");
 
     /* now pick out the relevant child widgets */
     pcd->format_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "check_format_combobox"));

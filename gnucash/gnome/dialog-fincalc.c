@@ -581,8 +581,8 @@ gnc_ui_fincalc_dialog_create(GtkWindow *parent)
 
     fcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "financial_calculator_dialog"));
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(fcd->dialog), "gnc-id-financial-calc");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(fcd->dialog), "GncFinCalcDialog");
 
     /* parent */
     if (parent != NULL)

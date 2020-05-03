@@ -68,8 +68,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">5</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">12</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkImage" id="image">
                 <property name="visible">True</property>
@@ -193,8 +193,8 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="border_width">5</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">12</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkImage" id="image1">
                 <property name="visible">True</property>

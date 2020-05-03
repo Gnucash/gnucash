@@ -104,9 +104,8 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
     gui->type = "CUSTOMER"; // Set a default type to import
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gui->dialog), "gnc-id-customer-import");
-    gnc_widget_style_context_add_class (GTK_WIDGET(gui->dialog), "gnc-class-imports");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gui->dialog), "GncCustomerImportDialog");
 
     gtk_window_set_transient_for (GTK_WINDOW (gui->dialog), parent);
 

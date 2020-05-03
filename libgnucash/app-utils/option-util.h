@@ -30,7 +30,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-commodity.h"
-#include "gnc-engine-guile.h"
+#include "engine-helpers-guile.h"
 #include "qof.h"
 
 typedef struct gnc_option GNCOption;

@@ -914,7 +914,7 @@
 	  src/import-export/qif-import/druid-qif-import.c,
 	  src/import-export/qif-import/druid-qif-import.h,
 	  src/import-export/qif-import/gnc-plugin-qif-import.c,
-	  src/import-export/qif-import/gnc-qif-import.c,
+	  src/import-export/qif-import/gncmod-qif-import.c,
 	  src/import-export/qif-import/qif.glade: Bug #664877 - Migrate
 	  Qif Import Druid to an Assistant Patch by Robert Fewell
 

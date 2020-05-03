@@ -48,7 +48,7 @@ cache_pin =
 The third argument here is the default value in case the lookup
 fails. The C function prototypes for lookup of other options can be found in
 src/app-utils/global-options.h.  A lookup of a global preference in
-Scheme can be seen e.g. in src/report/reports/standard/register.scm
+Scheme can be seen e.g. in src/report/standard-reports/register.scm
 line 556:
 
 \verbatim

@@ -35,7 +35,12 @@ SCM scm_init_unittest_support_module (void);
 #if defined(SWIGPYTHON)
 %{
 /* avoid no previous prototype warning/error */
-PyObject* SWIG_init (void);
+#if PY_VERSION_HEX >= 0x03000000
+PyObject*
+#else
+void
+#endif
+SWIG_init (void);
 %}
 #endif
 

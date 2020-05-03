@@ -450,7 +450,7 @@ get_negative_color_str (void)
     gchar *color_str;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
-    gtk_style_context_add_class (context, "gnc-class-negative-numbers");
+    gtk_style_context_add_class (context, "negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
     rgba = gdk_rgba_copy (&color);
 
@@ -634,8 +634,8 @@ gnc_main_window_summary_new (void)
     retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
 
-    // Set the name for this wodget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(retval->hbox), "gnc-id-account-summary-bar");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->hbox), "summary-bar");
 
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
     g_object_unref (retval->datamodel);

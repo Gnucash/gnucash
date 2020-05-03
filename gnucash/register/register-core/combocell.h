@@ -49,48 +49,44 @@ typedef struct
 {
     BasicCell cell;
     gpointer shared_store;
-    gpointer shared_store_full;
 } ComboCell;
 
 
-BasicCell*   gnc_combo_cell_new (void);
-void         gnc_combo_cell_init (ComboCell* cell);
+BasicCell *  gnc_combo_cell_new (void);
+void         gnc_combo_cell_init (ComboCell *cell);
 
-void         gnc_combo_cell_set_value (ComboCell* cell, const char* value);
+void         gnc_combo_cell_set_value (ComboCell *cell, const char *value);
 
-void         gnc_combo_cell_clear_menu (ComboCell* cell);
+void         gnc_combo_cell_clear_menu (ComboCell *cell);
 
 /** Add a menu item to the list. */
-void         gnc_combo_cell_add_menu_item (ComboCell* cell,
-                                           const char* menustr);
+void         gnc_combo_cell_add_menu_item (ComboCell *cell, const char * menustr);
 
 /** Add a 'account name' menu item to the list. When testing for
  *  equality with the currently selected item, this function will
  *  ignore the characters normally used to separate account names. */
-void         gnc_combo_cell_add_account_menu_item (ComboCell* cell,
-                                                   char* menustr);
+void         gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr);
 
 /** Enable sorting of the menu item's contents. Loading the item is
  *  much faster with sorting disabled. */
-void         gnc_combo_cell_set_sort_enabled (ComboCell* cell,
-                                              gboolean enabled);
+void         gnc_combo_cell_set_sort_enabled (ComboCell *cell, gboolean enabled);
 
 /** Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
-void         gnc_combo_cell_set_strict (ComboCell* cell, gboolean strict);
+void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
 
 /** Sets a character used for special completion processing. */
-void         gnc_combo_cell_set_complete_char (ComboCell* cell,
-                                               gunichar complete_char);
+void         gnc_combo_cell_set_complete_char (ComboCell *cell,
+        gunichar complete_char);
 
 /** Add a string to a list of strings which, if the cell has that value,
  * will cause the cell to be uneditable on 'enter'. */
-void         gnc_combo_cell_add_ignore_string (ComboCell* cell,
-                                               const char* ignore_string);
+void         gnc_combo_cell_add_ignore_string (ComboCell *cell,
+        const char *ignore_string);
 
 /** Determines whether the popup list autosizes itself or uses
  * all available space. FALSE by default. */
-void         gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize);
+void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
 
 /** Tell the combocell to use a shared QuickFill object.  Using this routine
  *  can dramatically improve performance when creating combocells with a
@@ -101,10 +97,9 @@ void         gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize);
  *  nor delete the quickfill; it is the users resonsibility to manage the
  *  quickfill object.  The combocell will *not* make a copy of the quickfill.
  */
-void gnc_combo_cell_use_quickfill_cache (ComboCell* cell,
-                                         QuickFill* shared_qf);
-void gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data,
-                                          gpointer data2);
+void gnc_combo_cell_use_quickfill_cache (ComboCell *cell, QuickFill *shared_qf);
+
+void gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data);
 
 /** @} */
 #endif

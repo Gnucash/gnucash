@@ -45,19 +45,16 @@
       <object class="GtkGrid" id="date_format_table">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="sample_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_top">3</property>
             <property name="label">December 31, 2000</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -205,19 +202,18 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_top">3</property>
+            <property name="margin_right">5</property>
             <property name="label" translatable="yes">Sample</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="label_box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
             <property name="margin_right">5</property>
             <property name="spacing">8</property>
             <child>
@@ -257,6 +253,15 @@
             <property name="top_attach">0</property>
             <property name="width">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

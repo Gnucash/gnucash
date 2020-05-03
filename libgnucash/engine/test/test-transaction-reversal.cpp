@@ -1,6 +1,7 @@
 /***************************************************************************
  *            test-transaction-reversal.c
  *
+ *  Modified to run without Guile: Mon Aug 22 11:19:56 2005
  *  Copyright  2005  Neil Williams
  *  linux@codehelp.co.uk
  ****************************************************************************/

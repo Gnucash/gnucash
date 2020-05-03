@@ -77,13 +77,12 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">6</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="label847713">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Username</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -98,7 +97,6 @@
               <object class="GtkLabel" id="label847714">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Password</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>

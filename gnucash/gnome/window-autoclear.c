@@ -37,6 +37,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
+#include "guile-util.h"
 #include "window-autoclear.h"
 
 #define WINDOW_AUTOCLEAR_CM_CLASS "window-autoclear"
@@ -313,8 +314,8 @@ autoClearWindow (GtkWidget *parent, Account *account)
     gtk_window_set_title(GTK_WINDOW(data->window), title);
     g_free (title);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(data->window), "gnc-id-auto-clear");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(data->window), "GncAutoClearDialog");
 
     /* Add amount edit box */
     data->end_value = GNC_AMOUNT_EDIT(gnc_amount_edit_new());

@@ -57,11 +57,6 @@ class TestSplit(SplitSession):
     def test_equal(self):
         COPY = self.split
         self.assertTrue( self.split.Equal(COPY, True, False, False) )
-        # test __eq__ implementation
-        TRANS = Transaction(self.book)
-        self.split.SetParent(TRANS)
-        self.assertTrue( self.split == TRANS.GetSplitList()[0] )
-        self.assertTrue( self.split != Split(self.book) )
 
 if __name__ == '__main__':
     main()

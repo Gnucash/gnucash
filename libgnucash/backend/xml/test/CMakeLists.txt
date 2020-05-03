@@ -14,7 +14,7 @@ set(XML_TEST_INCLUDE_DIRS
 )
 
 
-set(XML_TEST_LIBS gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
+set(XML_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
 
 function(add_xml_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" XML_TEST_INCLUDE_DIRS XML_TEST_LIBS ${ARGN})
@@ -76,8 +76,9 @@ add_xml_test(test-load-xml2 test-load-xml2.cpp
 #  GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 #)
 
-add_xml_test(test-load-example-account
+gnc_add_test_with_guile(test-load-example-account
   "${test_backend_xml_module_SOURCES};test-load-example-account.cpp"
+  XML_TEST_INCLUDE_DIRS XML_TEST_LIBS
   GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/data/accounts/C
 )
 target_compile_options(test-load-example-account PRIVATE -DU_SHOW_CPLUSPLUS_API=0)

@@ -161,8 +161,8 @@ gnc_account_sel_init (GNCAccountSel *gas)
 
     g_object_set(gas, "spacing", 2, (gchar*)NULL);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gas), "gnc-id-account-select");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gas), "GncAccountSel");
 
     gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     widget = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(gas->store));
@@ -183,13 +183,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
         qof_event_register_handler( gnc_account_sel_event_cb, gas );
 
     gas->initDone = TRUE;
-}
-
-void
-gnc_account_sel_set_hexpand ( GNCAccountSel *gas, gboolean expand )
-{
-    gtk_widget_set_hexpand( GTK_WIDGET(gas), expand );
-    gtk_widget_set_hexpand( GTK_WIDGET(gas->combo), expand );
 }
 
 typedef struct

@@ -29,6 +29,29 @@
 (define qif-import:paused #f)
 (define qif-import:canceled #f)
 
+(define (string-remove-trailing-space str)
+  (issue-deprecation-warning "string-remove-trailing-space - use string-trim-right")
+  (string-trim-right str))
+
+(define (string-remove-leading-space str)
+  (issue-deprecation-warning "string-remove-leading-space - use string-trim")
+  (string-trim str))
+
+(define (string-remove-char str char)
+  (issue-deprecation-warning "string-remove-char - use gnc:string-delete-chars")
+  (gnc:string-delete-chars s (list char)))
+
+(define (string-replace-char! str old new)
+  (issue-deprecation-warning "string-replace-char! - use gnc:string-replace-char")
+  (gnc:string-replace-char str old new))
+
+(define (string-to-canonical-symbol str)
+  (issue-deprecation-warning "string-to-canonical-symbol - inline instead")
+  (string->symbol 
+   (string-downcase
+    (string-remove-leading-space
+     (string-remove-trailing-space str)))))
+
 (define (qif-import:log progress-dialog proc str)
   (if progress-dialog
       (gnc-progress-dialog-append-log progress-dialog (string-append str "\n"))

@@ -56,8 +56,8 @@ const char *  gnc_get_action_num (const Transaction *trans, const Split *split);
   * sets split-action and, if 'tran' and 'action' are provided, 'action'
   * sets transaction-num; if book option is FALSE (tran-num is to be used for NUM)
   * then 'num' sets transaction-num and, if 'split' and 'action' are
-  * provided, 'action' sets 'split-action'. If any arguments are NULL,
-  * no change is made to the field that would otherwise be
+  * provided, 'action' sets 'split-action'. If any arguments are NULL (#f, for
+  * the guile version), no change is made to the field that would otherwise be
   * affected. If 'tran' and 'num' are passed with 'split and 'action' set to
   * NULL, it is xaccTransSetNum (trans, num). Likewise, if 'split and 'action'
   * are passed with 'tran' and 'num' set to NULL, it is xaccSplitSetAction (split,

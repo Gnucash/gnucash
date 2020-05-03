@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <libguile.h>
 
 #include "combocell.h"
 #include "datecell.h"
@@ -38,7 +39,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-warnings.h"
-#include "split-register-copy-ops.h"
+#include "guile-util.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "quickfillcell.h"
@@ -61,62 +62,53 @@
 static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* The copied split or transaction, if any */
-typedef struct
-{
-    GType ftype;
-    union
-    {
-        FloatingSplit *fs;
-        FloatingTxn *ft;
-    };
-} ft_fs_store;
-
-static ft_fs_store copied_item = { 0, { NULL } };
 static CursorClass copied_class = CURSOR_CLASS_NONE;
+static SCM copied_item = SCM_UNDEFINED;
 static GncGUID copied_leader_guid;
-
 /** static prototypes *****************************************************/
 
-static gboolean gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
-                                                        FloatingTxn *ft,
-                                                        FloatingSplit *fs,
-                                                        gboolean use_cut_semantics);
-static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
-                                              Split *split);
+static gboolean gnc_split_register_save_to_scm (SplitRegister* reg,
+                                                SCM trans_scm, SCM split_scm,
+                                                gboolean use_cut_semantics);
+static gboolean gnc_split_register_auto_calc (SplitRegister* reg,
+                                              Split* split);
 
 
 /** implementations *******************************************************/
 
+/* Uses the scheme split copying routines */
 static void
 gnc_copy_split_onto_split (Split* from, Split* to, gboolean use_cut_semantics)
 {
-    FloatingSplit *fs;
+    SCM split_scm;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    fs = gnc_split_to_float_split (from);
-    if (!fs)
+    split_scm = gnc_copy_split (from, use_cut_semantics);
+    if (split_scm == SCM_UNDEFINED)
         return;
 
-    gnc_float_split_to_split (fs, to);
+    gnc_copy_split_scm_onto_split (split_scm, to, gnc_get_current_book());
 }
 
+/* Uses the scheme transaction copying routines */
 void
 gnc_copy_trans_onto_trans (Transaction* from, Transaction* to,
                            gboolean use_cut_semantics,
                            gboolean do_commit)
 {
-    FloatingTxn *ft;
+    SCM trans_scm;
 
     if ((from == NULL) || (to == NULL))
         return;
 
-    ft = gnc_txn_to_float_txn (from, use_cut_semantics);
-    if (!ft)
+    trans_scm = gnc_copy_trans (from, use_cut_semantics);
+    if (trans_scm == SCM_UNDEFINED)
         return;
 
-    gnc_float_txn_to_txn (ft, to, do_commit);
+    gnc_copy_trans_scm_onto_trans (trans_scm, to, do_commit,
+                                   gnc_get_current_book());
 }
 
 static int
@@ -129,7 +121,7 @@ gnc_split_get_value_denom (Split* split)
     denom = gnc_commodity_get_fraction (currency);
     if (denom == 0)
     {
-        gnc_commodity* commodity = gnc_default_currency ();
+        gnc_commodity* commodity = gnc_default_currency();
         denom = gnc_commodity_get_fraction (commodity);
         if (denom == 0)
             denom = 100;
@@ -146,7 +138,7 @@ gnc_split_get_amount_denom (Split* split)
     denom = xaccAccountGetCommoditySCU (xaccSplitGetAccount (split));
     if (denom == 0)
     {
-        gnc_commodity* commodity = gnc_default_currency ();
+        gnc_commodity* commodity = gnc_default_currency();
         denom = gnc_commodity_get_fraction (commodity);
         if (denom == 0)
             denom = 100;
@@ -172,7 +164,7 @@ gnc_split_register_begin_edit_or_warn (SRInfo* info, Transaction* trans)
     else
     {
         Split*       blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                                    gnc_get_current_book ());
+                                                    gnc_get_current_book());
         Transaction* blank_trans = xaccSplitGetParent (blank_split);
 
         if (trans == blank_trans)
@@ -304,7 +296,7 @@ gnc_split_register_get_current_split (SplitRegister* reg)
         return NULL;
 
     return gnc_split_register_get_split (
-        reg, reg->table->current_cursor_loc.vcell_loc);
+               reg, reg->table->current_cursor_loc.vcell_loc);
 }
 
 Split*
@@ -314,7 +306,7 @@ gnc_split_register_get_blank_split (SplitRegister* reg)
 
     if (!reg) return NULL;
 
-    return xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
+    return xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book());
 }
 
 gboolean
@@ -343,7 +335,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister* reg, Split* split,
             if (!vcell || !vcell->visible)
                 continue;
 
-            s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_book ());
+            s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_book());
 
             if (s == split)
             {
@@ -375,12 +367,12 @@ gnc_split_register_get_split_amount_virt_loc (SplitRegister* reg, Split* split,
 
     switch (cursor_class)
     {
-        case CURSOR_CLASS_SPLIT:
-        case CURSOR_CLASS_TRANS:
-            cell_name = (gnc_numeric_negative_p (value)) ? CRED_CELL : DEBT_CELL;
-            break;
-        default:
-            return FALSE;
+    case CURSOR_CLASS_SPLIT:
+    case CURSOR_CLASS_TRANS:
+        cell_name = (gnc_numeric_negative_p (value)) ? CRED_CELL : DEBT_CELL;
+        break;
+    default:
+        return FALSE;
     }
 
     if (!gnc_table_get_cell_location (reg->table, cell_name,
@@ -410,7 +402,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
     ENTER ("reg=%p", reg);
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     split = gnc_split_register_get_current_split (reg);
     trans = gnc_split_register_get_current_trans (reg);
     trans_split = gnc_split_register_get_current_trans_split (reg, NULL);
@@ -448,7 +440,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         return NULL;
     }
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     /* If the cursor has been edited, we are going to have to commit
      * it before we can duplicate. Make sure the user wants to do that. */
@@ -477,7 +469,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
 
         if (response != GTK_RESPONSE_ACCEPT)
         {
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
             LEAVE ("save cancelled");
             return NULL;
         }
@@ -524,14 +516,14 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                                        title, FALSE, &date, in_num, &out_num,
                                        NULL, NULL, NULL, NULL))
             {
-                gnc_resume_gui_refresh ();
+                gnc_resume_gui_refresh();
                 LEAVE ("dup cancelled");
                 return NULL;
             }
             new_act_num = TRUE;
         }
 
-        new_split = xaccMallocSplit (gnc_get_current_book ());
+        new_split = xaccMallocSplit (gnc_get_current_book());
 
         xaccTransBeginEdit (trans);
         xaccSplitSetParent (new_split, trans);
@@ -582,7 +574,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         char* out_tassoc = NULL;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly (
-            gnc_get_current_book ());
+                                        gnc_get_current_book());
 
         /* We are on a transaction row. Copy the whole transaction. */
 
@@ -604,7 +596,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                                    TRUE, &date, in_num, &out_num, in_tnum, &out_tnum,
                                    xaccTransGetAssociation (trans), &out_tassoc))
         {
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
             LEAVE ("dup cancelled");
             return NULL;
         }
@@ -613,7 +605,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         {
             GDate d;
             GDate* readonly_threshold = qof_book_get_autoreadonly_gdate (
-                gnc_get_current_book ());
+                                            gnc_get_current_book());
             gnc_gdate_set_time64 (&d, date);
             if (g_date_compare (&d, readonly_threshold) < 0)
             {
@@ -640,12 +632,12 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
         /* we should *always* find the split, but be paranoid */
         if (split_index < 0)
         {
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
             LEAVE ("no split");
             return NULL;
         }
 
-        new_trans = xaccMallocTransaction (gnc_get_current_book ());
+        new_trans = xaccMallocTransaction (gnc_get_current_book());
 
         xaccTransBeginEdit (new_trans);
         gnc_copy_trans_onto_trans (trans, new_trans, FALSE, FALSE);
@@ -700,7 +692,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
     }
 
     /* Refresh the GUI. */
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 
     LEAVE (" ");
     return return_split;
@@ -715,16 +707,15 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     Transaction* trans;
     Split* blank_split;
     gboolean changed;
-    Split *split;
-    FloatingSplit *new_fs = NULL;
-    FloatingTxn *new_ft = NULL;
+    Split* split;
+    SCM new_item;
 
     g_return_if_fail (reg);
     ENTER ("reg=%p, use_cut_semantics=%s", reg,
            use_cut_semantics ? "TRUE" : "FALSE");
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     split = gnc_split_register_get_current_split (reg);
     trans = gnc_split_register_get_current_trans (reg);
 
@@ -773,44 +764,44 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     if (cursor_class == CURSOR_CLASS_SPLIT)
     {
         /* We are on a split in an expanded transaction. Just copy the split. */
-        new_fs = gnc_split_to_float_split (split);
+        new_item = gnc_copy_split (split, use_cut_semantics);
 
-        if (new_fs)
+        if (new_item != SCM_UNDEFINED)
         {
             if (changed)
-                gnc_split_register_save_to_copy_buffer (reg, NULL, new_fs,
-                                                        use_cut_semantics);
+                gnc_split_register_save_to_scm (reg, SCM_UNDEFINED, new_item,
+                                                use_cut_semantics);
 
-            copied_leader_guid = *guid_null ();
+            copied_leader_guid = *guid_null();
         }
     }
     else
     {
         /* We are on a transaction row. Copy the whole transaction. */
-        new_ft = gnc_txn_to_float_txn (trans, use_cut_semantics);
+        new_item = gnc_copy_trans (trans, use_cut_semantics);
 
-        if (new_ft)
+        if (new_item != SCM_UNDEFINED)
         {
             if (changed)
             {
                 int split_index;
-                FloatingSplit *fs;
+                SCM split_scm;
 
                 split_index = xaccTransGetSplitIndex (trans, split);
                 if (split_index >= 0)
-                    fs = gnc_float_txn_get_float_split (new_ft, split_index);
+                    split_scm = gnc_trans_scm_get_split_scm (new_item, split_index);
                 else
-                    fs = NULL;
+                    split_scm = SCM_UNDEFINED;
 
-                gnc_split_register_save_to_copy_buffer (reg, new_ft, fs,
-                                                        use_cut_semantics);
+                gnc_split_register_save_to_scm (reg, new_item, split_scm,
+                                                use_cut_semantics);
             }
 
             copied_leader_guid = info->default_account;
         }
     }
 
-    if (!new_fs && !new_ft)
+    if (new_item == SCM_UNDEFINED)
     {
         g_warning ("BUG DETECTED: copy failed");
         LEAVE ("copy failed");
@@ -818,22 +809,11 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     }
 
     /* unprotect the old object, if any */
-    if (copied_item.ftype == GNC_TYPE_SPLIT)
-        g_free (copied_item.fs);
-    if (copied_item.ftype == GNC_TYPE_TRANSACTION)
-        g_free (copied_item.ft);
-    copied_item.ftype = 0;
+    if (copied_item != SCM_UNDEFINED)
+        scm_gc_unprotect_object (copied_item);
 
-    if (new_fs)
-    {
-        copied_item.fs = new_fs;
-        copied_item.ftype = GNC_TYPE_SPLIT;
-    }
-    else if (new_ft)
-    {
-        copied_item.ft = new_ft;
-        copied_item.ftype = GNC_TYPE_TRANSACTION;
-    }
+    copied_item = new_item;
+    scm_gc_protect_object (copied_item);
 
     copied_class = cursor_class;
     LEAVE ("%s %s", use_cut_semantics ? "cut" : "copied",
@@ -857,7 +837,7 @@ gnc_split_register_cut_current (SplitRegister* reg)
     Split* split;
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     split = gnc_split_register_get_current_split (reg);
     trans = gnc_split_register_get_current_trans (reg);
 
@@ -909,7 +889,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
     }
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     blank_trans = xaccSplitGetParent (blank_split);
     split = gnc_split_register_get_current_split (reg);
     trans = gnc_split_register_get_current_trans (reg);
@@ -983,31 +963,25 @@ gnc_split_register_paste_current (SplitRegister* reg)
             return;
         }
 
-        gnc_suspend_gui_refresh ();
+        gnc_suspend_gui_refresh();
 
         if (split == NULL)
         {
             /* We are on a null split in an expanded transaction. */
-            split = xaccMallocSplit (gnc_get_current_book ());
+            split = xaccMallocSplit (gnc_get_current_book());
             xaccSplitSetParent (split, trans);
         }
 
-        if (copied_item.ftype != GNC_TYPE_SPLIT)
-        {
-            LEAVE ("copy buffer doesn't represent a split");
-            return;
-        }
-
-        gnc_float_split_to_split (copied_item.fs, split);
+        gnc_copy_split_scm_onto_split (copied_item, split,
+                                       gnc_get_current_book());
     }
     else
     {
-        const char *message = _("You are about to overwrite an existing "
-                                "transaction. "
-                                "Are you sure you want to do that?");
-        Account * copied_leader;
-        Account * default_account;
-        const GncGUID *new_guid;
+        const char* message = _ ("You are about to overwrite an existing "
+                                 "transaction. "
+                                 "Are you sure you want to do that?");
+        Account* copied_leader;
+        const GncGUID* new_guid;
         int trans_split_index;
         int split_index;
         int num_splits;
@@ -1015,13 +989,6 @@ gnc_split_register_paste_current (SplitRegister* reg)
         if (copied_class == CURSOR_CLASS_SPLIT)
         {
             LEAVE ("can't copy split to transaction");
-            return;
-        }
-
-
-        if (copied_item.ftype != GNC_TYPE_TRANSACTION)
-        {
-            LEAVE ("copy buffer doesn't represent a transaction");
             return;
         }
 
@@ -1041,7 +1008,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
             return;
         }
 
-        gnc_suspend_gui_refresh ();
+        gnc_suspend_gui_refresh();
 
         DEBUG ("Pasting txn, trans=%p, split=%p, blank_trans=%p, blank_split=%p",
                trans, split, blank_trans, blank_split);
@@ -1050,16 +1017,18 @@ gnc_split_register_paste_current (SplitRegister* reg)
         trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
 
         copied_leader = xaccAccountLookup (&copied_leader_guid,
-                                           gnc_get_current_book ());
-        default_account = gnc_split_register_get_default_account (reg);
-        if (copied_leader && default_account)
+                                           gnc_get_current_book());
+        if (copied_leader && (gnc_split_register_get_default_account (reg) != NULL))
         {
-            gnc_float_txn_to_txn_swap_accounts (copied_item.ft, trans,
-                                                copied_leader,
-                                                default_account, FALSE);
+            new_guid = &info->default_account;
+            gnc_copy_trans_scm_onto_trans_swap_accounts (copied_item, trans,
+                                                         &copied_leader_guid,
+                                                         new_guid, FALSE,
+                                                         gnc_get_current_book());
         }
         else
-            gnc_float_txn_to_txn (copied_item.ft, trans, FALSE);
+            gnc_copy_trans_scm_onto_trans (copied_item, trans, FALSE,
+                                           gnc_get_current_book());
 
         num_splits = xaccTransCountSplits (trans);
         if (split_index >= num_splits)
@@ -1087,7 +1056,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
     }
 
     /* Refresh the GUI. */
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
     LEAVE (" ");
 }
 
@@ -1096,7 +1065,7 @@ gnc_split_register_is_blank_split (SplitRegister* reg, Split* split)
 {
     SRInfo* info = gnc_split_register_get_info (reg);
     Split* current_blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                                  gnc_get_current_book ());
+                                                  gnc_get_current_book());
 
     if (split == current_blank_split)
         return TRUE;
@@ -1109,7 +1078,7 @@ gnc_split_register_change_blank_split_ref (SplitRegister* reg, Split* split)
 {
     SRInfo* info = gnc_split_register_get_info (reg);
     Split* current_blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                                  gnc_get_current_book ());
+                                                  gnc_get_current_book());
     Split* pref_split = NULL; // has the same account as incoming split
     Split* other_split = NULL; // other split
     Split* s;
@@ -1148,10 +1117,10 @@ gnc_split_register_delete_current_split (SplitRegister* reg)
     if (!reg) return;
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     /* get the current split based on cursor position */
     split = gnc_split_register_get_current_split (reg);
@@ -1167,7 +1136,7 @@ gnc_split_register_delete_current_split (SplitRegister* reg)
         return;
     }
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     trans = xaccSplitGetParent (split);
 
@@ -1181,13 +1150,13 @@ gnc_split_register_delete_current_split (SplitRegister* reg)
         g_assert (!pending_trans);
         if (gnc_split_register_begin_edit_or_warn (info, trans))
         {
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
             return;
         }
     }
     xaccSplitDestroy (split);
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
     gnc_split_register_redraw (reg);
 }
 
@@ -1209,9 +1178,9 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
     }
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     /* get the current split based on cursor position */
     split = gnc_split_register_get_current_split (reg);
@@ -1221,7 +1190,7 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
         return;
     }
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
     trans = xaccSplitGetParent (split);
 
     /* If we just deleted the blank split, clean up. The user is
@@ -1230,7 +1199,7 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
     if (split == blank_split)
     {
         DEBUG ("deleting blank split");
-        info->blank_split_guid = *guid_null ();
+        info->blank_split_guid = *guid_null();
         info->auto_complete = FALSE;
     }
     else
@@ -1242,7 +1211,7 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
     if (trans == pending_trans)
     {
         DEBUG ("clearing pending trans");
-        info->pending_trans_guid = *guid_null ();
+        info->pending_trans_guid = *guid_null();
         pending_trans = NULL;
     }
 
@@ -1253,7 +1222,7 @@ gnc_split_register_delete_current_trans (SplitRegister* reg)
         DEBUG ("committing");
         xaccTransCommitEdit (trans);
     }
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
     gnc_split_register_redraw (reg);
     LEAVE (" ");
 }
@@ -1270,9 +1239,9 @@ gnc_split_register_void_current_trans (SplitRegister* reg, const char* reason)
     if (!reg) return;
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     /* get the current split based on cursor position */
     split = gnc_split_register_get_current_split (reg);
@@ -1289,7 +1258,7 @@ gnc_split_register_void_current_trans (SplitRegister* reg, const char* reason)
 
     info->trans_expanded = FALSE;
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     trans = xaccSplitGetParent (split);
     xaccTransVoid (trans, reason);
@@ -1297,7 +1266,7 @@ gnc_split_register_void_current_trans (SplitRegister* reg, const char* reason)
     /* Check pending transaction */
     if (trans == pending_trans)
     {
-        info->pending_trans_guid = *guid_null ();
+        info->pending_trans_guid = *guid_null();
         pending_trans = NULL;
     }
     if (xaccTransIsOpen (trans))
@@ -1305,7 +1274,7 @@ gnc_split_register_void_current_trans (SplitRegister* reg, const char* reason)
         PERR ("We should not be voiding an open transaction.");
         xaccTransCommitEdit (trans);
     }
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 }
 
 void
@@ -1320,9 +1289,9 @@ gnc_split_register_unvoid_current_trans (SplitRegister* reg)
     if (!reg) return;
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     /* get the current split based on cursor position */
     split = gnc_split_register_get_current_split (reg);
@@ -1339,7 +1308,7 @@ gnc_split_register_unvoid_current_trans (SplitRegister* reg)
 
     info->trans_expanded = FALSE;
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     trans = xaccSplitGetParent (split);
 
@@ -1348,11 +1317,11 @@ gnc_split_register_unvoid_current_trans (SplitRegister* reg)
     /* Check pending transaction */
     if (trans == pending_trans)
     {
-        info->pending_trans_guid = *guid_null ();
+        info->pending_trans_guid = *guid_null();
         pending_trans = NULL;
     }
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 }
 
 void
@@ -1368,16 +1337,16 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister* reg,
     if ((reg == NULL)  || (split == NULL))
         return;
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
     info = gnc_split_register_get_info (reg);
-    pending = xaccTransLookup (&info->pending_trans_guid, gnc_get_current_book ());
+    pending = xaccTransLookup (&info->pending_trans_guid, gnc_get_current_book());
 
     trans = xaccSplitGetParent (split);
     if (!pending)
     {
         if (gnc_split_register_begin_edit_or_warn (info, trans))
         {
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
             return;
         }
     }
@@ -1385,7 +1354,7 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister* reg,
     {
         g_assert (xaccTransIsOpen (trans));
     }
-    else g_assert_not_reached ();
+    else g_assert_not_reached();
 
     while ((s = xaccTransGetSplit (trans, i)) != NULL)
     {
@@ -1394,7 +1363,7 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister* reg,
         else i++;
     }
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
     gnc_split_register_redraw (reg);
 }
 
@@ -1439,7 +1408,7 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister* reg)
     gboolean refresh_all = FALSE;
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     blank_trans = xaccSplitGetParent (gnc_split_register_get_blank_split (reg));
 
@@ -1458,16 +1427,16 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister* reg)
     if (!pending_trans)
         return;
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     xaccTransRollbackEdit (pending_trans);
 
-    info->pending_trans_guid = *guid_null ();
+    info->pending_trans_guid = *guid_null();
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 
     if (refresh_all)
-        gnc_gui_refresh_all ();  // force a refresh of all registers
+        gnc_gui_refresh_all();  // force a refresh of all registers
     else
         gnc_split_register_redraw (reg);
 }
@@ -1481,12 +1450,12 @@ gnc_split_register_redraw (SplitRegister* reg)
 /* Copy from the register object to scheme. This needs to be
  * in sync with gnc_split_register_save and xaccSRSaveChangedCells. */
 static gboolean
-gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
-                                        FloatingTxn *ft, FloatingSplit *fs,
-                                        gboolean use_cut_semantics)
+gnc_split_register_save_to_scm (SplitRegister* reg,
+                                SCM trans_scm, SCM split_scm,
+                                gboolean use_cut_semantics)
 {
-    FloatingSplit *other_fs = NULL;
-    Transaction *trans;
+    SCM other_split_scm = SCM_UNDEFINED;
+    Transaction* trans;
 
     /* use the changed flag to avoid heavy-weight updates
      * of the split & transaction fields. This will help
@@ -1555,7 +1524,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
         cell = gnc_table_layout_get_cell (reg->table->layout, RECN_CELL);
         flag = gnc_recn_cell_get_flag ((RecnCell*) cell);
 
-        gnc_float_split_set_reconcile_state (fs, flag);
+        gnc_split_scm_set_reconcile_state (split_scm, flag);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, ACTN_CELL, TRUE))
@@ -1563,7 +1532,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
         const char* value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, ACTN_CELL);
-        gnc_float_split_set_action (fs, value);
+        gnc_split_scm_set_action (split_scm, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, MEMO_CELL, TRUE))
@@ -1571,7 +1540,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
         const char* value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, MEMO_CELL);
-        gnc_float_split_set_memo (fs, value);
+        gnc_split_scm_set_memo (split_scm, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, XFRM_CELL, TRUE))
@@ -1581,38 +1550,38 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
         new_account = gnc_split_register_get_account (reg, XFRM_CELL);
 
         if (new_account != NULL)
-            gnc_float_split_set_account (fs, new_account);
+            gnc_split_scm_set_account (split_scm, new_account);
     }
 
     if (reg->style == REG_STYLE_LEDGER)
-        other_fs = gnc_float_txn_get_other_float_split (ft, fs);
+        other_split_scm = gnc_trans_scm_get_other_split_scm (trans_scm, split_scm);
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, MXFRM_CELL, TRUE))
     {
-        other_fs = gnc_float_txn_get_other_float_split (ft, fs);
+        other_split_scm = gnc_trans_scm_get_other_split_scm (trans_scm, split_scm);
 
-        if (!other_fs)
+        if (other_split_scm == SCM_UNDEFINED)
         {
-            if (g_list_length (ft->m_splits) == 1)
+            if (gnc_trans_scm_get_num_splits (trans_scm) == 1)
             {
                 Split* temp_split;
 
-                temp_split = xaccMallocSplit (gnc_get_current_book ());
-                other_fs = gnc_split_to_float_split (temp_split);
+                temp_split = xaccMallocSplit (gnc_get_current_book());
+                other_split_scm = gnc_copy_split (temp_split, use_cut_semantics);
                 xaccSplitDestroy (temp_split);
 
-                gnc_float_txn_append_float_split (ft, other_fs);
+                gnc_trans_scm_append_split_scm (trans_scm, other_split_scm);
             }
         }
 
-        if (other_fs)
+        if (other_split_scm != SCM_UNDEFINED)
         {
             Account* new_account;
 
             new_account = gnc_split_register_get_account (reg, MXFRM_CELL);
 
             if (new_account != NULL)
-                gnc_float_split_set_account (other_fs, new_account);
+                gnc_split_scm_set_account (other_split_scm, new_account);
         }
     }
 
@@ -1634,7 +1603,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
 
         new_value = gnc_numeric_sub_fixed (debit, credit);
 
-        gnc_float_split_set_value (fs, new_value);
+        gnc_split_scm_set_value (split_scm, new_value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, PRIC_CELL, TRUE))
@@ -1651,7 +1620,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
 
         shares = gnc_price_cell_get_value ((PriceCell*) cell);
 
-        gnc_float_split_set_amount (fs, shares);
+        gnc_split_scm_set_amount (split_scm, shares);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout,
@@ -1663,15 +1632,15 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
         gnc_table_layout_get_cell_changed (reg->table->layout,
                                            SHRS_CELL, TRUE))
     {
-        if (other_fs)
+        if (other_split_scm != SCM_UNDEFINED)
         {
             gnc_numeric num;
 
-            num = gnc_float_split_get_amount (fs);
-            gnc_float_split_set_amount (other_fs, gnc_numeric_neg (num));
+            num = gnc_split_scm_get_amount (split_scm);
+            gnc_split_scm_set_amount (other_split_scm, gnc_numeric_neg (num));
 
-            num = gnc_float_split_get_value (fs);
-            gnc_float_split_set_value (other_fs, gnc_numeric_neg (num));
+            num = gnc_split_scm_get_value (split_scm);
+            gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
         }
     }
 
@@ -1700,10 +1669,10 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     }
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
     blank_trans = xaccSplitGetParent (blank_split);
 
@@ -1738,14 +1707,14 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         {
             /* We are going to commit. */
 
-            gnc_suspend_gui_refresh ();
+            gnc_suspend_gui_refresh();
 
             if (trans == blank_trans)
             {
                 /* We have to clear the blank split before the
                  * refresh or a new one won't be created. */
                 info->last_date_entered = xaccTransGetDate (trans);
-                info->blank_split_guid = *guid_null ();
+                info->blank_split_guid = *guid_null();
                 info->blank_split_edited = FALSE;
                 info->auto_complete = FALSE;
             }
@@ -1753,12 +1722,12 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             /* We have to clear the pending guid *before* committing the
              * trans, because the event handler will find it otherwise. */
             if (trans == pending_trans)
-                info->pending_trans_guid = *guid_null ();
+                info->pending_trans_guid = *guid_null();
 
             PINFO ("committing trans (%p)", trans);
             xaccTransCommitEdit (trans);
 
-            gnc_resume_gui_refresh ();
+            gnc_resume_gui_refresh();
         }
         else
             DEBUG ("leaving trans (%p) open", trans);
@@ -1796,7 +1765,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         return TRUE;
     }
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     /* determine whether we should commit the pending transaction */
     if (pending_trans != trans)
@@ -1813,7 +1782,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         {
             g_critical ("BUG DETECTED! pending transaction (%p) not open",
                         pending_trans);
-            g_assert_not_reached ();
+            g_assert_not_reached();
         }
 
         if (trans == blank_trans)
@@ -1829,7 +1798,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
             PINFO ("beginning edit of trans %p", trans);
             if (gnc_split_register_begin_edit_or_warn (info, trans))
             {
-                gnc_resume_gui_refresh ();
+                gnc_resume_gui_refresh();
                 LEAVE ("transaction opened elsewhere");
                 return FALSE;
             }
@@ -1848,7 +1817,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     if (split == blank_split && !info->blank_split_edited)
     {
         /* If we've reached this point, it means that the blank split is
-         * anchoring the transaction - see gnc_split_register_add_transaction ()
+         * anchoring the transaction - see gnc_split_register_add_transaction()
          * for an explanation - and the transaction has been edited (as evidenced
          * by the earlier check for a changed cursor.) Since the blank split
          * itself has not been edited, we'll have to assign a default account. */
@@ -1862,7 +1831,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     {
         /* If we were asked to save data for a row for which there is no
          * associated split, then assume that this was an "empty" row - see
-         * gnc_split_register_add_transaction () for an explanation. This row
+         * gnc_split_register_add_transaction() for an explanation. This row
          * is used to add splits to an existing transaction, or to add the
          * 2nd through nth split rows to a brand new transaction.
          * xaccSRGetCurrent will handle this case, too. We will create
@@ -1870,7 +1839,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
          * the split to the pre-existing transaction. */
         Split* trans_split;
 
-        split = xaccMallocSplit (gnc_get_current_book ());
+        split = xaccMallocSplit (gnc_get_current_book());
         xaccTransAppendSplit (trans, split);
 
         gnc_table_set_virt_cell_data (reg->table,
@@ -1894,9 +1863,9 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         SRSaveData* sd;
 
         sd = gnc_split_register_save_data_new (
-            trans, split, (info->trans_expanded ||
-                           reg->style == REG_STYLE_AUTO_LEDGER ||
-                           reg->style == REG_STYLE_JOURNAL));
+                 trans, split, (info->trans_expanded ||
+                                reg->style == REG_STYLE_AUTO_LEDGER ||
+                                reg->style == REG_STYLE_JOURNAL));
         gnc_table_save_cells (reg->table, sd);
         gnc_split_register_save_data_destroy (sd);
     }
@@ -1915,7 +1884,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
     {
         if (do_commit)
         {
-            info->blank_split_guid = *guid_null ();
+            info->blank_split_guid = *guid_null();
             info->auto_complete = FALSE;
             blank_split = NULL;
             info->last_date_entered = xaccTransGetDate (trans);
@@ -1932,7 +1901,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
         if (pending_trans == trans)
         {
             pending_trans = NULL;
-            info->pending_trans_guid = *guid_null ();
+            info->pending_trans_guid = *guid_null();
         }
         xaccTransCommitEdit (trans);
     }
@@ -1959,7 +1928,7 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
 
     gnc_table_clear_current_cursor_changes (reg->table);
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 
     LEAVE (" ");
     return TRUE;
@@ -1983,10 +1952,10 @@ gnc_split_register_get_account_by_name (SplitRegister* reg, BasicCell* bcell,
         return NULL;
 
     /* Find the account */
-    account = gnc_account_lookup_for_register (gnc_get_current_root_account (),
+    account = gnc_account_lookup_for_register (gnc_get_current_root_account(),
                                                name);
     if (!account)
-        account = gnc_account_lookup_by_code (gnc_get_current_root_account (), name);
+        account = gnc_account_lookup_by_code (gnc_get_current_root_account(), name);
 
     /* if gnc_ui_new_accounts_from_name_window is used, there is a call to
      * refresh which subsequently calls this function again, that's the
@@ -2105,12 +2074,12 @@ recalc_message_box (SplitRegister* reg, gboolean shares_changed,
     else  default_value = 1;  /* change the value */
 
     choice = gnc_choose_radio_option_dialog
-        (gnc_split_register_get_parent (reg),
-         title,
-         message,
-         _ ("_Recalculate"),
-         default_value,
-         radio_list);
+             (gnc_split_register_get_parent (reg),
+              title,
+              message,
+              _ ("_Recalculate"),
+              default_value,
+              radio_list);
 
     for (node = radio_list; node; node = node->next)
         g_free (node->data);
@@ -2418,17 +2387,17 @@ gnc_split_register_auto_calc (SplitRegister* reg, Split* split)
                                      value_changed);
         switch (choice)
         {
-            case 0: /* Modify number of shares */
-                recalc_shares = TRUE;
-                break;
-            case 1: /* Modify the share price */
-                recalc_price = TRUE;
-                break;
-            case 2: /* Modify total value */
-                recalc_value = TRUE;
-                break;
-            default: /* Cancel */
-                return FALSE;
+        case 0: /* Modify number of shares */
+            recalc_shares = TRUE;
+            break;
+        case 1: /* Modify the share price */
+            recalc_price = TRUE;
+            break;
+        case 2: /* Modify total value */
+            recalc_value = TRUE;
+            break;
+        default: /* Cancel */
+            return FALSE;
         }
     }
 
@@ -2460,40 +2429,40 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
 {
     switch (sr_type)
     {
-        case BANK_REGISTER:
-            return ACCT_TYPE_BANK;
-        case CASH_REGISTER:
-            return ACCT_TYPE_CASH;
-        case ASSET_REGISTER:
-            return ACCT_TYPE_ASSET;
-        case CREDIT_REGISTER:
-            return ACCT_TYPE_CREDIT;
-        case LIABILITY_REGISTER:
-            return ACCT_TYPE_LIABILITY;
-        case PAYABLE_REGISTER:
-            return ACCT_TYPE_PAYABLE;
-        case RECEIVABLE_REGISTER:
-            return ACCT_TYPE_RECEIVABLE;
-        case INCOME_LEDGER:
-        case INCOME_REGISTER:
-            return ACCT_TYPE_INCOME;
-        case EXPENSE_REGISTER:
-            return ACCT_TYPE_EXPENSE;
-        case STOCK_REGISTER:
-        case PORTFOLIO_LEDGER:
-            return ACCT_TYPE_STOCK;
-        case CURRENCY_REGISTER:
-            return ACCT_TYPE_CURRENCY;
-        case TRADING_REGISTER:
-            return ACCT_TYPE_TRADING;
-        case GENERAL_JOURNAL:
-            return ACCT_TYPE_NONE;
-        case EQUITY_REGISTER:
-            return ACCT_TYPE_EQUITY;
-        case SEARCH_LEDGER:
-            return ACCT_TYPE_NONE;
-        default:
-            return ACCT_TYPE_NONE;
+    case BANK_REGISTER:
+        return ACCT_TYPE_BANK;
+    case CASH_REGISTER:
+        return ACCT_TYPE_CASH;
+    case ASSET_REGISTER:
+        return ACCT_TYPE_ASSET;
+    case CREDIT_REGISTER:
+        return ACCT_TYPE_CREDIT;
+    case LIABILITY_REGISTER:
+        return ACCT_TYPE_LIABILITY;
+    case PAYABLE_REGISTER:
+        return ACCT_TYPE_PAYABLE;
+    case RECEIVABLE_REGISTER:
+        return ACCT_TYPE_RECEIVABLE;
+    case INCOME_LEDGER:
+    case INCOME_REGISTER:
+        return ACCT_TYPE_INCOME;
+    case EXPENSE_REGISTER:
+        return ACCT_TYPE_EXPENSE;
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+        return ACCT_TYPE_STOCK;
+    case CURRENCY_REGISTER:
+        return ACCT_TYPE_CURRENCY;
+    case TRADING_REGISTER:
+        return ACCT_TYPE_TRADING;
+    case GENERAL_JOURNAL:
+        return ACCT_TYPE_NONE;
+    case EQUITY_REGISTER:
+        return ACCT_TYPE_EQUITY;
+    case SEARCH_LEDGER:
+        return ACCT_TYPE_NONE;
+    default:
+        return ACCT_TYPE_NONE;
     }
 }
 
@@ -2509,7 +2478,7 @@ gnc_split_register_get_debit_string (SplitRegister* reg)
         return info->debit_str;
 
     info->debit_str =
-        gnc_account_get_debit_string
+        gnc_get_debit_string
         (gnc_split_register_type_to_account_type (reg->type));
 
     if (info->debit_str)
@@ -2532,7 +2501,7 @@ gnc_split_register_get_credit_string (SplitRegister* reg)
         return info->credit_str;
 
     info->credit_str =
-        gnc_account_get_credit_string
+        gnc_get_credit_string
         (gnc_split_register_type_to_account_type (reg->type));
 
     if (info->credit_str)
@@ -2564,7 +2533,7 @@ gnc_split_register_changed (SplitRegister* reg)
     }
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
     if (xaccTransIsOpen (pending_trans))
     {
         LEAVE ("open and pending txn");
@@ -2611,117 +2580,117 @@ gnc_split_register_config_action (SplitRegister* reg)
     /* setup strings in the action pull-down */
     switch (reg->type)
     {
-        case BANK_REGISTER:
-            /* broken ! FIXME bg */
-        case SEARCH_LEDGER:
-            gnc_combo_cell_add_menu_item (cell, C_ ("Action Column", "Deposit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Withdraw"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Check"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            gnc_combo_cell_add_menu_item (cell, _ ("ATM Deposit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("ATM Draw"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Teller"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Charge"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Receipt"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
-            /* Action: Point Of Sale */
-            gnc_combo_cell_add_menu_item (cell, _ ("POS"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Phone"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Online"));
-            /* Action: Automatic Deposit ?!? */
-            gnc_combo_cell_add_menu_item (cell, _ ("AutoDep"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Wire"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Direct Debit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Transfer"));
-            break;
-        case CASH_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            break;
-        case ASSET_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
-            break;
-        case CREDIT_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("ATM Deposit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("ATM Draw"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Online"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            break;
-        case LIABILITY_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Loan"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
-            break;
-        case RECEIVABLE_REGISTER:
-        case PAYABLE_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Invoice"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
-            break;
-        case INCOME_LEDGER:
-        case INCOME_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Rebate"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Paycheck"));
-            break;
-        case EXPENSE_REGISTER:
-        case TRADING_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            break;
-        case GENERAL_JOURNAL:
-        case EQUITY_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Equity"));
-            break;
-        case STOCK_REGISTER:
-        case PORTFOLIO_LEDGER:
-        case CURRENCY_REGISTER:
-            gnc_combo_cell_add_menu_item (cell, ACTION_BUY_STR);
-            gnc_combo_cell_add_menu_item (cell, ACTION_SELL_STR);
-            gnc_combo_cell_add_menu_item (cell, _ ("Price"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
-            /* Action: Dividend */
-            gnc_combo_cell_add_menu_item (cell, _ ("Dividend"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
-            /* Action: Long Term Capital Gains */
-            gnc_combo_cell_add_menu_item (cell, _ ("LTCG"));
-            /* Action: Short Term Capital Gains */
-            gnc_combo_cell_add_menu_item (cell, _ ("STCG"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Income"));
-            /* Action: Distribution */
-            gnc_combo_cell_add_menu_item (cell, _ ("Dist"));
-            gnc_combo_cell_add_menu_item (cell, C_ ("Action Column", "Split"));
-            break;
+    case BANK_REGISTER:
+    /* broken ! FIXME bg */
+    case SEARCH_LEDGER:
+        gnc_combo_cell_add_menu_item (cell, C_ ("Action Column", "Deposit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Withdraw"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Check"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        gnc_combo_cell_add_menu_item (cell, _ ("ATM Deposit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("ATM Draw"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Teller"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Charge"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Receipt"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
+        /* Action: Point Of Sale */
+        gnc_combo_cell_add_menu_item (cell, _ ("POS"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Phone"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Online"));
+        /* Action: Automatic Deposit ?!? */
+        gnc_combo_cell_add_menu_item (cell, _ ("AutoDep"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Wire"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Direct Debit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Transfer"));
+        break;
+    case CASH_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        break;
+    case ASSET_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
+        break;
+    case CREDIT_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("ATM Deposit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("ATM Draw"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Online"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        break;
+    case LIABILITY_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Loan"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
+        break;
+    case RECEIVABLE_REGISTER:
+    case PAYABLE_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Invoice"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Credit"));
+        break;
+    case INCOME_LEDGER:
+    case INCOME_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Payment"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Rebate"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Paycheck"));
+        break;
+    case EXPENSE_REGISTER:
+    case TRADING_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        break;
+    case GENERAL_JOURNAL:
+    case EQUITY_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Equity"));
+        break;
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+    case CURRENCY_REGISTER:
+        gnc_combo_cell_add_menu_item (cell, ACTION_BUY_STR);
+        gnc_combo_cell_add_menu_item (cell, ACTION_SELL_STR);
+        gnc_combo_cell_add_menu_item (cell, _ ("Price"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Fee"));
+        /* Action: Dividend */
+        gnc_combo_cell_add_menu_item (cell, _ ("Dividend"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Interest"));
+        /* Action: Long Term Capital Gains */
+        gnc_combo_cell_add_menu_item (cell, _ ("LTCG"));
+        /* Action: Short Term Capital Gains */
+        gnc_combo_cell_add_menu_item (cell, _ ("STCG"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Income"));
+        /* Action: Distribution */
+        gnc_combo_cell_add_menu_item (cell, _ ("Dist"));
+        gnc_combo_cell_add_menu_item (cell, C_ ("Action Column", "Split"));
+        break;
 
-        default:
-            gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
-            gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
-            break;
+    default:
+        gnc_combo_cell_add_menu_item (cell, _ ("Increase"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Decrease"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Buy"));
+        gnc_combo_cell_add_menu_item (cell, _ ("Sell"));
+        break;
     }
 }
 
@@ -2729,61 +2698,61 @@ static void
 gnc_split_register_config_cells (SplitRegister* reg)
 {
     gnc_combo_cell_add_ignore_string
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-         SPLIT_TRANS_STR);
+    ((ComboCell*)
+     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+     SPLIT_TRANS_STR);
 
     gnc_combo_cell_add_ignore_string
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-         STOCK_SPLIT_STR);
+    ((ComboCell*)
+     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+     STOCK_SPLIT_STR);
 
     /* the action cell */
     gnc_combo_cell_set_autosize
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
+    ((ComboCell*)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
     /* Use GNC_COMMODITY_MAX_FRACTION for prices and "exchange rates"  */
     gnc_price_cell_set_fraction
-        ((PriceCell*)
-         gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-         GNC_COMMODITY_MAX_FRACTION);
+    ((PriceCell*)
+     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+     GNC_COMMODITY_MAX_FRACTION);
 
     /* Initialize shares and share balance cells */
     gnc_price_cell_set_print_info
-        ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
-         gnc_default_share_print_info ());
+    ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
+     gnc_default_share_print_info());
 
     gnc_price_cell_set_print_info
-        ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
-         gnc_default_share_print_info ());
+    ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
+     gnc_default_share_print_info());
 
     /* Initialize the rate cell
      * use a share_print_info to make sure we don't have rounding errors
      */
     gnc_price_cell_set_print_info
-        ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
-         gnc_default_share_print_info ());
+    ((PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
+     gnc_default_share_print_info());
 
     /* The action cell should accept strings not in the list */
     gnc_combo_cell_set_strict
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
+    ((ComboCell*)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
 
     /* number format for share quantities in stock ledgers */
     switch (reg->type)
     {
-        case CURRENCY_REGISTER:
-        case STOCK_REGISTER:
-        case PORTFOLIO_LEDGER:
-            gnc_price_cell_set_print_info
-                ((PriceCell*)
-                 gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-                 gnc_default_price_print_info (gnc_default_currency ()));
-            break;
+    case CURRENCY_REGISTER:
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+        gnc_price_cell_set_print_info
+        ((PriceCell*)
+         gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+         gnc_default_price_print_info (gnc_default_currency()));
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     /* add menu items for the action cell */
@@ -2807,7 +2776,9 @@ split_register_pref_changed (gpointer prefs, gchar* pref, gpointer user_data)
     if (g_str_has_suffix (pref, GNC_PREF_ACCOUNTING_LABELS))
     {
         /* Release current strings. Will be reloaded at next reference. */
+        g_free (info->debit_str);
         g_free (info->tdebit_str);
+        g_free (info->credit_str);
         g_free (info->tcredit_str);
 
         info->debit_str = NULL;
@@ -2898,18 +2869,18 @@ gnc_split_register_init (SplitRegister* reg,
     reg->is_template = is_template;
     reg->mismatched_commodities = mismatched_commodities;
     reg->use_tran_num_for_num_field =
-        (qof_book_use_split_action_for_num_field (gnc_get_current_book ())
+        (qof_book_use_split_action_for_num_field (gnc_get_current_book())
          ? FALSE : TRUE);
 
     layout = gnc_split_register_layout_new (reg);
 
     if (is_template)
-        model = gnc_template_register_model_new ();
+        model = gnc_template_register_model_new();
     else
-        model = gnc_split_register_model_new ();
+        model = gnc_split_register_model_new();
     model->handler_user_data = reg;
 
-    control = gnc_split_register_control_new ();
+    control = gnc_split_register_control_new();
     control->user_data = reg;
 
     reg->table = gnc_table_new (layout, model, control);
@@ -3045,7 +3016,9 @@ gnc_split_register_destroy_info (SplitRegister* reg)
     if (!info)
         return;
 
+    g_free (info->debit_str);
     g_free (info->tdebit_str);
+    g_free (info->credit_str);
     g_free (info->tcredit_str);
 
     info->debit_str = NULL;
@@ -3081,12 +3054,12 @@ gnc_split_register_cleanup (SplitRegister* reg)
     ENTER ("reg=%p", reg);
 
     blank_split = xaccSplitLookup (&info->blank_split_guid,
-                                   gnc_get_current_book ());
+                                   gnc_get_current_book());
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                     gnc_get_current_book ());
+                                     gnc_get_current_book());
 
-    gnc_suspend_gui_refresh ();
+    gnc_suspend_gui_refresh();
 
     /* Destroy the transaction containing the "blank split", which was only
      * created to support the area for entering a new transaction. Since the
@@ -3109,10 +3082,10 @@ gnc_split_register_cleanup (SplitRegister* reg)
         /* Update the register info. */
         if (blank_trans == pending_trans)
         {
-            info->pending_trans_guid = *guid_null ();
+            info->pending_trans_guid = *guid_null();
             pending_trans = NULL;
         }
-        info->blank_split_guid = *guid_null ();
+        info->blank_split_guid = *guid_null();
         info->auto_complete = FALSE;
         blank_split = NULL;
     }
@@ -3122,21 +3095,21 @@ gnc_split_register_cleanup (SplitRegister* reg)
     {
         g_critical ("BUG DETECTED: pending_trans=%p, blank_split=%p, blank_trans=%p",
                     pending_trans, blank_split, blank_trans);
-        g_assert_not_reached ();
-        info->pending_trans_guid = *guid_null ();
+        g_assert_not_reached();
+        info->pending_trans_guid = *guid_null();
         /* CAS: It's not clear to me that we'd really want to commit
            here, rather than rollback. But, maybe this is just dead
            code. */
         if (xaccTransIsOpen (pending_trans))
             xaccTransCommitEdit (pending_trans);
-        else g_assert_not_reached ();
+        else g_assert_not_reached();
 
         pending_trans = NULL;
     }
 
     gnc_split_register_destroy_info (reg);
 
-    gnc_resume_gui_refresh ();
+    gnc_resume_gui_refresh();
 
     LEAVE (" ");
 }

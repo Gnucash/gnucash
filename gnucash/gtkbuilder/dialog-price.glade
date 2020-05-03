@@ -124,13 +124,13 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="namespace_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Namespace</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -145,7 +145,7 @@
               <object class="GtkLabel" id="commodity_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Security</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -160,7 +160,7 @@
               <object class="GtkLabel" id="currency_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Cu_rrency</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -174,7 +174,7 @@
               <object class="GtkLabel" id="date__label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Date</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -187,7 +187,7 @@
             <child>
               <object class="GtkLabel" id="source_label">
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">S_ource</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -202,7 +202,7 @@
               <object class="GtkLabel" id="type_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -217,7 +217,7 @@
               <object class="GtkLabel" id="price_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">_Price</property>
                 <property name="use_underline">True</property>
                 <property name="justify">center</property>
@@ -424,8 +424,8 @@
           <object class="GtkGrid" id="table2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">3</property>
-            <property name="column_spacing">6</property>
+            <property name="row_spacing">10</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkLabel" id="label8477429">
                 <property name="visible">True</property>
@@ -615,7 +615,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">From these Commodities</property>
               </object>
               <packing>
@@ -629,7 +628,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Keeping the last available price for option</property>
               </object>
               <packing>
@@ -642,9 +640,8 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="margin_top">6</property>
                 <property name="hexpand">False</property>
                 <property name="label" translatable="yes">Source</property>
               </object>
@@ -668,7 +665,6 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">If activated, prices added by Finance::Quote will be included.</property>
                     <property name="halign">start</property>
-                    <property name="margin_top">6</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -725,7 +721,7 @@ These prices were added so that there's always a "nearest in time" price for eve
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="icon_name">dialog-warning</property>
+                        <property name="stock">gtk-dialog-warning</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -750,8 +746,7 @@ These prices were added so that there's always a "nearest in time" price for eve
               <object class="GtkLabel" id="date_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin_top">6</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Before _Date</property>
                 <property name="use_underline">True</property>
               </object>
@@ -765,7 +760,6 @@ These prices were added so that there's always a "nearest in time" price for eve
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_top">6</property>
                 <property name="hexpand">True</property>
                 <child>
                   <placeholder/>

@@ -47,12 +47,6 @@ typedef struct _GnucashRegisterClass GnucashRegisterClass;
 
 GType gnucash_register_get_type (void);
 
-/** Add cell types defined by gnucash_register to gnc_register
- *
- *  Should be called before any table layout is created using
- *  these new types */
-void gnucash_register_add_cell_types (void);
-
 /** this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table, gchar *state_section);
 

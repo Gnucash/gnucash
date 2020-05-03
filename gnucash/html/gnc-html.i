@@ -48,7 +48,6 @@ SCM scm_init_sw_gnc_html_module(void);
 
 %include "gnc-html-extras.h"
 
-void gnc_html_initialize(void);
 
 %init {
   {

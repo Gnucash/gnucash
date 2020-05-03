@@ -13,7 +13,7 @@
 # 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 # Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-# Guile and ltdl require MSYS paths on MinGW-w64; this function transforms them.
+#Guile and ltdl require MSYS paths on MinGW-w64; this function transforms them.
 function(make_unix_path PATH)
     string(REGEX REPLACE "^([A-Za-z]):" "/\\1" newpath ${${PATH}})
     string(REGEX REPLACE "\\\\" "/" newpath ${newpath})
@@ -26,133 +26,14 @@ function(make_unix_path_list PATH)
     set(${PATH} ${newpath} PARENT_SCOPE)
 endfunction()
 
-# This function will set two or four environment variables to a directory in the parent PARENT_SCOPE
-# * _DIRCLASS (eg "prefix", "sitedir" is used to construct the variable name(s) and in error messages
-# * _DIRCMD is the guile command to run to get the path for the given _DIRCLASS (eg "(display (%site-dir))")
-# * _PREFIX: if set will be used to calculate paths relative to this prefix and
-#   set two more environment variable with this relative path.
-# When run successfully this function will set following variables in the parent scope:
-# * GUILE_${CMDCLASS} and GUILE_UNIX_${CMDCLASS} - the latter is the former transformed
-#   into an msys compatible format (c:\some\directory => /c/some/directory)
-# * If _PREFIX was set: GUILE_${CMDCLASS} and GUILE_REL_UNIX_${CMDCLASS}
-#   which are the former two variables with _PREFIX removed
-#   (_PREFIX=/usr, GUILE_${CMDCLASS} = /usr/share/something
-#    => GUILE_REL_${CMDCLASS} = share/something
-function(find_one_guile_dir _DIRCLASS _DIRCMD _PREFIX)
-
-    string(TOUPPER ${_DIRCLASS} CLASS_UPPER)
-    string(TOLOWER ${_DIRCLASS} CLASS_LOWER)
-    execute_process(
-        COMMAND ${GUILE_EXECUTABLE} -c ${_DIRCMD}
-        RESULT_VARIABLE CMD_RESULT
-        OUTPUT_VARIABLE CMD_OUTPUT
-        ERROR_VARIABLE CMD_ERROR
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_STRIP_TRAILING_WHITESPACE
-    )
-    if (CMD_RESULT)
-        message(SEND_ERROR "Could not determine Guile ${CLASS_LOWER}:\n${CMD_ERROR}")
-    endif()
-
-    set(GUILE_${CLASS_UPPER} ${CMD_OUTPUT} PARENT_SCOPE)
-    set(CMD_UNIX_OUTPUT  ${CMD_OUTPUT})
-    make_unix_path(CMD_UNIX_OUTPUT)
-    set(GUILE_UNIX_${CLASS_UPPER} ${CMD_UNIX_OUTPUT} PARENT_SCOPE)
-
-    if (_PREFIX)
-        string(REGEX REPLACE "^${_PREFIX}[\\/]*" "" CMD_REL_OUTPUT ${CMD_OUTPUT})
-        set(GUILE_REL_${CLASS_UPPER} ${CMD_REL_OUTPUT} PARENT_SCOPE)
-        set(CMD_REL_UNIX_OUTPUT  ${CMD_REL_OUTPUT})
-        make_unix_path(CMD_REL_UNIX_OUTPUT)
-        set(GUILE_REL_UNIX_${CLASS_UPPER} ${CMD_REL_UNIX_OUTPUT} PARENT_SCOPE)
-    endif()
-
-endfunction()
-
-# Query the guile executable for path information. We're interested in guile's
-# datadir, libdir, sitedir, ccachedir and siteccachedir
-macro(find_guile_dirs)
-    # Get GUILE_PREFIX and GUILE_UNIX_PREFIX
-    find_one_guile_dir("prefix" "(display (assoc-ref %guile-build-info 'prefix))" "")
-    # Get GUILE_DATADIR, GUILE_UNIX_DATADIR, GUILE_REL_DATADIR, GUILE_REL_UNIX_DATADIR
-    find_one_guile_dir("datadir" "(display (%package-data-dir))" ${GUILE_PREFIX})
-    # Get GUILE_LIBDIR, GUILE_UNIX_LIBDIR, GUILE_REL_LIBDIR, GUILE_REL_UNIX_LIBDIR
-    find_one_guile_dir("libdir" "(display (%library-dir))" ${GUILE_PREFIX})
-    # Get GUILE_CCACHEDIR, GUILE_UNIX_CCACHEDIR, GUILE_REL_CCACHEDIR, GUILE_REL_UNIX_CCACHEDIR
-    find_one_guile_dir("ccachedir" "(display (assoc-ref %guile-build-info 'ccachedir))" ${GUILE_PREFIX})
-    # Get GUILE_SITEDIR, GUILE_UNIX_SITEDIR, GUILE_REL_SITEDIR, GUILE_REL_UNIX_SITEDIR
-    find_one_guile_dir("sitedir" "(display (%site-dir))" ${GUILE_PREFIX})
-    # Get GUILE_SITECCACHEDIR, GUILE_UNIX_SITECCACHEDIR, GUILE_REL_SITECCACHEDIR, GUILE_REL_UNIX_SITECCACHEDIR
-    find_one_guile_dir("siteccachedir" "(display (%site-ccache-dir))" ${GUILE_PREFIX})
-    string(REGEX REPLACE "[/\\]*${GUILE_EFFECTIVE_VERSION}$" "" GUILE_REL_TOP_SITEDIR ${GUILE_REL_SITEDIR})
-    string(REGEX REPLACE "[/]*${GUILE_EFFECTIVE_VERSION}$" "" GUILE_REL_UNIX_TOP_SITEDIR ${GUILE_REL_UNIX_SITEDIR})
-
-    # Generate replacement strings for use in environment file. The paths used are
-    # the paths found in %load-path and %load-compiled-path by default but
-    # rebased on {GNC_HOME} (which is the runtime resolved variable to where gnucash
-    # gets installed).
-    set (GNC_GUILE_LOAD_PATH
-            "{GNC_HOME}/${GUILE_REL_UNIX_LIBDIR}"
-            "{GNC_HOME}/${GUILE_REL_UNIX_SITEDIR}"
-            "{GNC_HOME}/${GUILE_REL_UNIX_TOP_SITEDIR}"
-            "{GNC_HOME}/${GUILE_REL_UNIX_SITEDIR}/gnucash/deprecated" # Path to gnucash' deprecated modules
-            "{GNC_HOME}/${GUILE_REL_UNIX_DATADIR}")
-
-    set (GNC_GUILE_LOAD_COMPILED_PATH
-            "{GNC_HOME}/${GUILE_REL_UNIX_CCACHEDIR}"
-            "{GNC_HOME}/${GUILE_REL_UNIX_CCACHEDIR}/gnucash/deprecated"
-            "{GNC_HOME}/${GUILE_REL_UNIX_SITECCACHEDIR}")
-endmacro(find_guile_dirs)
-
-# gnc_add_scheme_targets (target
-#                         SOURCES source1 source2 ...
-#                         OUTPUT_DIR directory
-#                         [DEPENDS depedency1 dependency2 ...]
-#                         [MAKE_LINKS] [TEST])
-#
-#̉ Use this function to add scheme targets, that is *.scm files to
-# compile into their corresponding *.go files.
-#
-# SOURCES is a list of scm source files to compile.
-#
-# The resulting *.go binaries will be generated in OUTPUT_DIR directory.
-# This directory is interpreted as a path relative to the build's guile compiled directory
-# directory. For example if guile binaries in the build directory are located in
-# $HOME/gnucash/build/lib/x86_64-linux-gnu/guile/2.0/site-cache and OUTPUT_DIR is "gnucash"
-# the binary .go files will go into
-# $HOME/gnucash/build/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
-#
-# If cmake targets are provided via the DEPENDS keyword those will be added to
-# the guile targets as dependencies.
-#
-# If MAKE_LINKS is set links (or copies on Windows) will be set up
-# from the source directory to the build's guile sources directory.
-# For example if guile source path in the build directory is
-# $HOME/gnucash/build/share/guile/site/2.0 and OUTPUT_DIR is "gnucash"
-# the links or copies will go into
-# $HOME/gnucash/build/share/guile/site/2.0/gnucash
-#
-# If keyword TEST is specified this target will be treated as a test target.
-# That is its compiled files won't be installed and will be added to the set
-# of tests to run via the "check" target. If TEST is not set the targets are
-# considerd normal targets and will be added to the list of files to install.
-# They will be installed in the guile compied directory relative to the prefix
-# set up for this build, with the OUTPUT_DIR appended to it. For example:
-# /usr/local/lib/x86_64-linux-gnu/guile/2.0/site-cache/gnucash
-function(gnc_add_scheme_targets _TARGET)
-  set(noValues MAKE_LINKS TEST)
-  set(singleValues OUTPUT_DIR)
-  set(multiValues SOURCES DEPENDS)
-  cmake_parse_arguments(SCHEME_TGT "${noValues}" "${singleValues}" "${multiValues}" ${ARGN})
-  
+function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
+                                MAKE_LINKS)
   set(__DEBUG FALSE)
   if (__DEBUG)
     message("Parameters to COMPILE_SCHEME for target ${_TARGET}")
-    message("   SOURCE_FILES: ${SCHEME_TGT_SOURCES}")
-    message("   GUILE_DEPENDS: ${SCHEME_TGT_DEPENDS}")
-    message("   MAKE_LINKS: ${SCHEME_TGT_MAKE_LINKS}")
-    message("   TEST: ${SCHEME_TGT_TEST}")
-    message("   DIRECTORIES: ${BINDIR_BUILD}, ${LIBDIR_BUILD}, ${DATADIR_BUILD}, ${SCHEME_TGT_OUTPUT_DIR}")
+    message("   SOURCE_FILES: ${_SOURCE_FILES}")
+    message("   GUILE_DEPENDS: ${_GUILE_DEPENDS}")
+    message("   DIRECTORIES: ${BINDIR_BUILD}, ${LIBDIR_BUILD}, ${DATADIR_BUILD}")
   endif()
   set(_CMD "create_symlink")
   if(WIN32)
@@ -173,12 +54,12 @@ function(gnc_add_scheme_targets _TARGET)
     make_unix_path(CMAKE_SOURCE_DIR)
   endif()
 
-  # If links are requested, we simply link (or copy, for Windows) each source file to the dest directory
-  if(SCHEME_TGT_MAKE_LINKS)
-    set(_LINK_DIR ${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}/${SCHEME_TGT_OUTPUT_DIR})
+  # If links are requested, we simple link (or copy, for Windows) each source file to the dest directory
+  if(MAKE_LINKS)
+    set(_LINK_DIR ${DATADIR_BUILD}/gnucash/scm/${_OUTPUT_DIR})
     file(MAKE_DIRECTORY ${_LINK_DIR})
     set(_SCHEME_LINKS "")
-    foreach(scheme_file ${SCHEME_TGT_SOURCES})
+    foreach(scheme_file ${_SOURCE_FILES})
       set(_SOURCE_FILE ${current_srcdir}/${scheme_file})
       if(IS_ABSOLUTE ${scheme_file})
         set(_SOURCE_FILE ${scheme_file})
@@ -197,30 +78,33 @@ function(gnc_add_scheme_targets _TARGET)
   endif()
 
   # Construct the guile source and compiled load paths
-  set(_GUILE_LOAD_PATH "${current_srcdir}" "${current_bindir}" "${current_bindir}/deprecated")
+  set(_GUILE_LOAD_PATH "${current_srcdir}"
+      "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
   set(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
   # VERSION_GREATER_EQUAL introduced in CMake 3.7.
-  if(MINGW64 AND (${GUILE_EFFECTIVE_VERSION} VERSION_GREATER_EQUAL 2.2))
+  if(MINGW64 AND (${GUILE_EFFECTIVE_VERSION} VERSION_GREATER 2.2 OR
+	${GUILE_EFFECTIVE_VERSION} VERSION_EQUAL 2.2))
     file(TO_CMAKE_PATH $ENV{GUILE_LOAD_PATH} guile_load_path)
     file(TO_CMAKE_PATH $ENV{GUILE_LOAD_COMPILED_PATH} guile_load_compiled_path)
     list(APPEND _GUILE_LOAD_PATH ${guile_load_path})
     list(APPEND _GUILE_LOAD_COMPILED_PATH ${guile_load_compiled_path})
   endif()
-  set(_GUILE_CACHE_DIR "${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITECCACHEDIR}")
-  list(APPEND _GUILE_LOAD_PATH "${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITEDIR}")
-  list(APPEND _GUILE_LOAD_COMPILED_PATH ${_GUILE_CACHE_DIR}
-              "${CMAKE_BINARY_DIR}/${GUILE_REL_UNIX_SITECCACHEDIR}/gnucash/deprecated")
+  set(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
+  if (MAKE_LINKS)
+      list(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
+  endif()
+  list(APPEND _GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
   set(_TARGET_FILES "")
 
-  foreach(source_file ${SCHEME_TGT_SOURCES})
-      set(guile_depends ${SCHEME_TGT_DEPENDS})
+  foreach(source_file ${_SOURCE_FILES})
+      set(guile_depends ${_GUILE_DEPENDS})
       get_filename_component(basename ${source_file} NAME_WE)
 
       set(output_file ${basename}.go)
-      set(_TMP_OUTPUT_DIR ${SCHEME_TGT_OUTPUT_DIR})
+      set(_TMP_OUTPUT_DIR ${_OUTPUT_DIR})
       if (_TMP_OUTPUT_DIR)
-        set(output_file ${SCHEME_TGT_OUTPUT_DIR}/${basename}.go)
+        set(output_file ${_OUTPUT_DIR}/${basename}.go)
       endif()
       set(output_file ${_GUILE_CACHE_DIR}/${output_file})
       list(APPEND _TARGET_FILES ${output_file})
@@ -237,10 +121,10 @@ function(gnc_add_scheme_targets _TARGET)
         file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
         set(LIBRARY_PATH "PATH=${BINDIR_BUILD};${fpath}")
       else()
-        set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash")
+        set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:$ENV{LD_LIBRARY_PATH}")
       endif()
       if (APPLE)
-        set (LIBRARY_PATH "DYLD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash")
+        set (LIBRARY_PATH "DYLD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:$ENV{DYLD_LIBRARY_PATH}")
       endif()
       set(_GNC_MODULE_PATH "")
       if(MINGW64)
@@ -280,110 +164,6 @@ function(gnc_add_scheme_targets _TARGET)
     message("TARGET_FILES are ${_TARGET_FILES}")
   endif()
   add_custom_target(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
-
-  set(_TARGET_FILES "${_TARGET_FILES}" PARENT_SCOPE)
-
-  if(TEST)
-    add_dependencies(check ${_TARGET})
-  else()
-    install(FILES ${_TARGET_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITECCACHEDIR}/${SCHEME_TGT_OUTPUT_DIR})
-    install(FILES ${SCHEME_TGT_SOURCES} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GUILE_REL_SITEDIR}/${SCHEME_TGT_OUTPUT_DIR})
-  endif()
-endfunction()
-
-
-# gnc_add_scheme_test_targets (target
-#                              SOURCES source1 source2 ...
-#                              OUTPUT_DIR directory
-#                              [DEPENDS depedency1 dependency2 ...]
-#                              [MAKE_LINKS])
-#
-# Calls gnc_add_scheme_targets with the TEST keyword set
-# See that function's description for more details.
-function(gnc_add_scheme_test_targets _TARGET)
-  gnc_add_scheme_targets(${_TARGET} ${ARGN} TEST)
-endfunction()
-
-# gnc_add_scheme_deprecated_module (OLD_MODULE old_module_name
-#                                   [NEW_MODULE new_module_name
-#                                    DEPENDS new_module_target]
-#                                   [MESSAGE msg_string])
-#
-# Function to write boilerplate code for deprecated guile modules
-# such that invocation of the old module will emit a deprecation warning
-# message.
-#
-# All but the OLD_MODULE keyword are optional
-#
-# OLD_MODULE and NEW_MODULE should be passed in the form
-# "gnucash mod parts"
-#
-# If NEW_MODULE is set that module will be loaded instead of the
-# deprecated module.
-# If NEW_MODULE is set, DEPENDS should be set to the target for which
-# that module is a source file.
-# For example module (gnucash reports standard transaction)
-# is defined in transaction.scm, which is a source file for
-# cmake target scm-reports-standard so that should be set as DEPENDS.
-#
-# If MESSAGE is left blank, the module will emit a generic message.
-# Otherwise MESSAGE will be emitted.
-function(gnc_add_scheme_deprecated_module)
-
-    set(singleValues OLD_MODULE NEW_MODULE MESSAGE)
-    set(multiValues DEPENDS)
-    cmake_parse_arguments(DM "" "${singleValues}" "${multiValues}" ${ARGN})
-
-    string(STRIP DM_OLD_MODULE "${DM_OLD_MODULE}")
-    string(REPLACE " " "-" _TARGET ${DM_OLD_MODULE})
-    set(_TARGET "scm-deprecated-${_TARGET}")
-
-    string(REPLACE " " ";" MODPARTS "${DM_OLD_MODULE}")
-    list(GET MODPARTS -1 DEPFILENAME)
-    set(SOURCEFILE "${CMAKE_CURRENT_BINARY_DIR}/deprecated/${DEPFILENAME}.scm")
-
-    string(FIND "${DM_OLD_MODULE}" ${DEPFILENAME} POS REVERSE)
-    if (${POS} LESS 2)
-        set(MODPATH "gnucash/deprecated")
-    else()
-        list(REMOVE_AT MODPARTS -1)
-        string(REPLACE ";" "/" MODPATH "${MODPARTS}")
-        set(MODPATH "gnucash/deprecated/${MODPATH}")
-    endif()
-
-    set(DEPPREFIX "* WARN <gnc-guile-deprecation> *: ")
-    if (DM_MESSAGE)
-        set(DEPWARNING "(issue-deprecation-warning \"${DEPPREFIX}${DM_MESSAGE}\")")
-    else()
-        set(DEPWARNING
-            "(issue-deprecation-warning \"${DEPPREFIX}Module '(${DM_OLD_MODULE})' has been deprecated and will be removed in the future.\")")
-        if (DM_NEW_MODULE)
-            set(DEPWARNING "${DEPWARNING}
-                (issue-deprecation-warning \"${DEPPREFIX}Use module '(${DM_NEW_MODULE})' instead.\")")
-        endif()
-    endif()
-
-    # Write the stub file
-    file(WRITE ${SOURCEFILE} "
-;; ${DEPFILENAME}.scm
-;; Compatibility module for deprecated (${DM_OLD_MODULE}).
-;; This file is autogenerated, do not modify by hand.
-
-(define-module (${DM_OLD_MODULE}))
-
-${DEPWARNING}
-")
-
-    if (DM_NEW_MODULE)
-        file(APPEND ${SOURCEFILE} "
-(use-modules (${DM_NEW_MODULE}))
-
-(let ((i (module-public-interface (current-module))))
-     (module-use! i (resolve-interface '(${DM_NEW_MODULE}))))")
-    endif()
-
-    gnc_add_scheme_targets("${_TARGET}"
-                           SOURCES "${SOURCEFILE}"
-                           OUTPUT_DIR "${MODPATH}"
-                           DEPENDS "${DM_DEPENDS}")
-endfunction()
+  install(FILES ${_TARGET_FILES} DESTINATION ${SCHEME_INSTALLED_CACHE_DIR}/${_OUTPUT_DIR})
+  install(FILES ${_SOURCE_FILES} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/${_OUTPUT_DIR})
+endfunction(gnc_add_scheme_targets)

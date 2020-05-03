@@ -150,8 +150,8 @@ gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
 
     gtk_window_set_keep_above (GTK_WINDOW(new_user->window), TRUE);
 
-    // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(new_user->window), "gnc-id-new-user");
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(new_user->window), "GncNewUserDialog");
 
     new_user->new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
     new_user->import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));

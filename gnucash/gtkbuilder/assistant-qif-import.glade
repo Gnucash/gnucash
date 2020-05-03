@@ -39,9 +39,6 @@
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="valign">start</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
         <property name="label" translatable="yes" comments="Run the assistant in your language to see GTK's translation of the button labels.">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. 
 
 The import process has several steps. Your GnuCash accounts will not be changed until you click "Apply" at the end of the process. 

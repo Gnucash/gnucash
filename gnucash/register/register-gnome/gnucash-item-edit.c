@@ -209,7 +209,7 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
                            NULL);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(item_edit_tb), "button");
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit_tb), "button");
 
     context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -498,7 +498,7 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     // Get the color type and apply the css class
     color_type = gnc_table_get_color (item_edit->sheet->table, item_edit->virt_loc, NULL);
-    gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type, FALSE);
+    gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
 
     gtk_render_background (stylectxt, cr, 0, 1, width, height - 2);
 
@@ -711,7 +711,7 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
     GtkWidgetClass *widget_class;
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "gnc-id-cursor");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "cursor");
 #endif
 
     gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
@@ -866,7 +866,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_add_style_class (GTK_WIDGET(item_edit), "gnc-class-cursor");
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit), "cursor");
 
     /* Create the text entry */
     item_edit->editor = gtk_entry_new();
@@ -876,7 +876,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
 
     // Get the CSS space settings for the entry
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
-    gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
+    gtk_style_context_add_class (stylectxt, "register-foreground");
     gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
     gtk_style_context_get_margin (stylectxt, GTK_STATE_FLAG_NORMAL, &margin);
     gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);
@@ -890,10 +890,17 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
 
 #if !GTK_CHECK_VERSION(3,20,0)
+#if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(item_edit->editor),
                                  gnc_item_edit_get_margin (item_edit, left));
     gtk_widget_set_margin_end (GTK_WIDGET(item_edit->editor),
                                gnc_item_edit_get_margin (item_edit, right));
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(item_edit->editor),
+                                gnc_item_edit_get_margin (item_edit, left));
+    gtk_widget_set_margin_right (GTK_WIDGET(item_edit->editor),
+                                 gnc_item_edit_get_margin (item_edit, right));
+#endif
     gtk_widget_set_margin_top (GTK_WIDGET(item_edit->editor),
                                gnc_item_edit_get_margin (item_edit, top));
     gtk_widget_set_margin_bottom (GTK_WIDGET(item_edit->editor),

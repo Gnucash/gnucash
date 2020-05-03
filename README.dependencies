@@ -30,11 +30,16 @@ not actively eradicated.
   GnuCash uses variadic macros for debugging and logging support (via
 qof).
 
+  Declarations after Code
+  -----------------------
+
+  The use of declarations after code (`int i; i = 0; char *foo;') is
+strongly discouraged and actively removed whenever it's caught.
 
 
 Important notice
 ----------------
-You can find the most recent version of the following part at
+You can find the most recent version of the following part at 
 https://wiki.gnucash.org/wiki/Dependencies.
 
 GnuCash Library Dependency Policy
@@ -51,59 +56,43 @@ still has.)
 
 Libraries/Deps
 --------------
-  required              Version
-  --------              _______
-  gcc or clang          8.0 (gcc)/6.0(clang)    C++17 C/C++ compiler
-  cmake                 3.10                    Build system manager
-  glib2                 2.56.1
-  gtk+3                 3.22.30
-  guile                 2.2.0 or 2.0.9          Must be built with regex
+  required		Version
+  --------		_______
+  glib2			2.40.0
+  gtk+3			3.14.0
+  guile			2.2.0 or 2.0.0		Must be built with regex
                                                 support enabled
-  libxml2               2.9.4
-  gettext               0.20                    Required to build gnucash.pot,
-                                                0.19.6 or later permitted but
-                                                won't generate gnucash.pot.
+  libxml2		2.5.10
+  gettext               0.20                    Can use older if you pass
+                                                -DALLOW_OLD_GETTEXT to cmake;
+                                                doesn't include all file types
+                                                when building gnucash.pot.
   libxslt, including xsltproc
   ICU                                           International Components for
                                                 Unicode
-  boost                 1.67.0                  All headers plus date_time,
-                                                filesystem, locale, and
-                                                regex libraries.
-                                                locale and regex libs must be
+  boost			1.50.0                  locale and regex libs must be
                                                 built with ICU support.
-                                                Note that 1.67.0 is the first
-                                                *release* that supports C++17,
-                                                but that some distributions
-                                                have patched earlier versions
-                                                to work.
-  swig                  3.0.12                  Makes Guile and Python Bindings.
-  webkit                2.4.11 (Windows,
-                        2.14.1 (Everything Else)
-  googletest            1.8.0                   Some distros call it gtest.
+  swig			2.0.10			Only required to build from git.
+  webkit		webkitgtk-3.0 (Windows, Mac)
+                        webkit2gtk-3.0 (Everything Else)
+  googletest            1.7.0                   Some distros call it gtest.
                                                 Some distros also separate out
                                                 googlemock or gmock; both are
                                                 required.
 
-  libdbi                0.8.3                    SQL backend; also requires at
-                                                 least one of libdbd-sqlite3,
-                                                 libdbd-mysql, or libdbd-pgsql
-
-  zlib
-
   optional
   --------
-  aqbanking             5.7.8                    online banking; Note that 6.1.0
-  gwenhywfar            4.20.0                   or higher is needed for German
-                                                 FinTS.
+  aqbanking             5.3.4                    online banking; also requires
+                                                 gwenhywfar.
 
-  python                3.6.0                    python bindings; headers
-                                                 required, not just binaries.
-  libofx                0.9.12                   OFX/QFX import
+  libdbi		0.8.3			 SQL backend; also requires at
+						 least one of libdbd-sqlite3,
+						 libdbd-mysql, or libdbd-pgsql
 
-  libsecret             0.18
-  gtk-mac-integration                            MacOS only, for menus to go
-                                                 to the main menu bar instead
-                                                 of one on the window.
+  libofx		0.9.0			 OFX/QFX import
+
+  python		3.2.0			 python bindings; headers
+						 required, not just binaries.
 
   makeinfo                                       Not really needed, it
                                                  just builds the
@@ -130,3 +119,4 @@ Libraries/Deps
   at runtime, suggested
   ---------------------
   isocodes: translation of currency names
+

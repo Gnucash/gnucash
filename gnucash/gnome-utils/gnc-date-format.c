@@ -60,7 +60,6 @@ struct _GNCDateFormatPrivate
     GtkWidget*	format_combobox;
 
     GtkWidget*  label;
-    GtkWidget*  table;
 
     GtkWidget*	months_label;
     GtkWidget*	months_number;
@@ -119,15 +118,15 @@ gnc_date_format_init (GNCDateFormat *gdf)
 {
     GNCDateFormatPrivate *priv;
     GtkBuilder *builder;
-    GtkWidget *dialog;
+    GtkWidget *dialog, *table;
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gdf), GTK_ORIENTATION_HORIZONTAL);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gdf), "gnc-id-date-format");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gdf), "GncDateFormat");
 
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();
@@ -160,11 +159,11 @@ gnc_date_format_init (GNCDateFormat *gdf)
     /* pull in the dialog and table widgets and play the reconnect game */
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnc_date_format_window"));
 
-    priv->table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
-    g_object_ref (G_OBJECT(priv->table));
-    gtk_container_remove (GTK_CONTAINER(dialog), priv->table);
-    gtk_container_add (GTK_CONTAINER(gdf), priv->table);
-    g_object_unref (G_OBJECT(priv->table));
+    table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
+    g_object_ref(G_OBJECT(table));
+    gtk_container_remove(GTK_CONTAINER(dialog), table);
+    gtk_container_add(GTK_CONTAINER(gdf), table);
+    g_object_unref(G_OBJECT(table));
 
     g_object_unref(G_OBJECT(builder));
 
@@ -206,9 +205,9 @@ gnc_date_format_new_without_label (void)
     GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
     GNCDateFormatPrivate *priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
 
-    // remove the first column which has the label
-    gtk_grid_remove_column (GTK_GRID(priv->table), 0);
+    gtk_widget_destroy(priv->label);
     priv->label = NULL;
+
     return widget;
 }
 

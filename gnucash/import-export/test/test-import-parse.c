@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <libguile.h>
 
+#include "gnc-module.h"
 #include "import-parse.h"
 
 #include "test-stuff.h"
@@ -175,6 +176,8 @@ test_import_parse(void)
 static void
 main_helper(void *closure, int argc, char **argv)
 {
+    gnc_module_system_init ();
+    gnc_module_load("gnucash/import-export", 0);
     test_import_parse();
     print_test_results();
     exit(get_rv());

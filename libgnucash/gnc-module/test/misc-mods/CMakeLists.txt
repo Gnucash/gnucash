@@ -13,14 +13,9 @@ target_link_libraries(gncmod-futuremodsys ${GLIB2_LDFLAGS})
 add_library(gncmod-incompatdep  EXCLUDE_FROM_ALL incompatdep.c)
 target_link_libraries(gncmod-incompatdep gnc-module ${GLIB2_LDFLAGS})
 
-set_target_properties(gncmod-agedver gncmod-incompatdep PROPERTIES
+set_target_properties(gncmod-agedver gncmod-futuremodsys gncmod-incompatdep PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
-
-set_target_properties(gncmod-futuremodsys PROPERTIES
-LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test/future
-ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test/future
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test/future)
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set_dist_list(misc_mods_DIST CMakeLists.txt agedver.c futuremodsys.c incompatdep.c)

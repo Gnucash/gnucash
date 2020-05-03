@@ -60,20 +60,16 @@ GType gnc_budget_view_get_type (void);
  *
  *  @return The newly created widget
  */
-GncBudgetView *gnc_budget_view_new (GncBudget *budget, AccountFilterDialog *fd);
-void gnc_budget_view_save (GncBudgetView *budget_view, GKeyFile *key_file, const gchar *group_name);
-void gnc_budget_view_refresh (GncBudgetView *budget_view);
-void gnc_budget_view_delete_budget (GncBudgetView *budget_view);
+GncBudgetView *gnc_budget_view_new (GncBudget *budget, AccountFilterDialog* fd);
+void gnc_budget_view_save (GncBudgetView* budget_view, GKeyFile *key_file, const gchar* group_name);
+void gnc_budget_view_refresh (GncBudgetView* budget_view);
+void gnc_budget_view_delete_budget (GncBudgetView* budget_view);
 void gnc_budget_view_save_account_filter (GncBudgetView *budget_view);
-gboolean gnc_budget_view_restore (GncBudgetView *budget_view, GKeyFile *key_file, const gchar *group_name);
-GtkTreeSelection* gnc_budget_view_get_selection (GncBudgetView *budget_view);
-Account* gnc_budget_view_get_account_from_path (GncBudgetView *budget_view, GtkTreePath *path);
-GList* gnc_budget_view_get_selected_accounts (GncBudgetView *budget_view);
-GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView *budget_view);
-void gnc_budget_view_set_show_account_code (GncBudgetView *budget_view, gboolean show_account_code);
-gboolean gnc_budget_view_get_show_account_code (GncBudgetView *budget_view);
-void gnc_budget_view_set_show_account_description (GncBudgetView *budget_view, gboolean show_account_desc);
-gboolean gnc_budget_view_get_show_account_description (GncBudgetView *budget_view);
+gboolean gnc_budget_view_restore (GncBudgetView* budget_view, GKeyFile *key_file, const gchar* group_name);
+GtkTreeSelection* gnc_budget_view_get_selection (GncBudgetView* budget_view);
+Account* gnc_budget_view_get_account_from_path (GncBudgetView* budget_view, GtkTreePath* path);
+GList* gnc_budget_view_get_selected_accounts (GncBudgetView* budget_view);
+GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView* budget_view);
 
 G_END_DECLS
 

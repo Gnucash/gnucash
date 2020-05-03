@@ -26,6 +26,7 @@ extern "C"
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "gnc-module.h"
 #include "qof.h"
 #include "test-engine-stuff.h"
 

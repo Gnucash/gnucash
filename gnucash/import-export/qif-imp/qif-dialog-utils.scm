@@ -24,7 +24,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash string))
+(use-modules (gnucash import-export string))
 
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc-get-account-separator-string) security))

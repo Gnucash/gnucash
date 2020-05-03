@@ -8,27 +8,27 @@
 @define-color intervention-probably-required_bg_color gold;
 @define-color intervention-not-required_bg_color DarkSeaGreen1;
 
-.gnc-class-intervention-required {
+.intervention-required {
   background-color: @intervention-required_bg_color;
 }
 
-.gnc-class-intervention-probably-required {
+.intervention-probably-required {
   background-color: @intervention-probably-required_bg_color;
 }
 
-.gnc-class-intervention-not-required {
+.intervention-not-required {
   background-color: @intervention-not-required_bg_color;
 }
 
-.gnc-class-intervention-required-dark {
+.intervention-required-dark {
   background-color: shade (@intervention-required_bg_color, 0.7);
 }
 
-.gnc-class-intervention-probably-required-dark {
+.intervention-probably-required-dark {
   background-color: shade (@intervention-probably-required_bg_color, 0.8);
 }
 
-.gnc-class-intervention-not-required-dark {
+.intervention-not-required-dark {
   background-color: shade (@intervention-not-required_bg_color, 0.3);
 }
 
@@ -37,12 +37,12 @@
 @define-color negative-numbers rgb(75%, 0%, 0%);
 
 /* Register2 grid lines color */
-.gnc-class-register2-grid-lines {
+.register2_grid_lines {
   border-color: black;
 }
 
 /* Make label more important */
-.gnc-class-emphasize-label {
+.emphasize-label {
   font-size: large;
   font-weight: bold;
 }
@@ -75,3 +75,4 @@
 *.markers-dark {
   background-color: shade (@marker_bg_color, 0.8);
 }
+

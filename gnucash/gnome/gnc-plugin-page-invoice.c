@@ -631,8 +631,8 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
 
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-invoice-page");
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncInvoicePage");
 
     gtk_widget_show (priv->widget);
 

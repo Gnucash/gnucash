@@ -193,8 +193,8 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
 {
-    // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(gce), "gnc-id-currency-edit");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gce), "GncCurrencyEdit");
 
     g_signal_connect (gce, "notify::mnemonic",
                       G_CALLBACK (gnc_currency_edit_mnemonic_changed), gce);
