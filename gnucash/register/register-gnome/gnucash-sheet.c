@@ -1799,6 +1799,9 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 
     sheet = GNUCASH_SHEET (widget);
     table = sheet->table;
+    /* Don't respond to stand-alone modifier keys. */
+    if (event->is_modifier)
+        return TRUE;
     /* Initially sync the selection, the user might have adjusted it with the
      * mouse.
      */
