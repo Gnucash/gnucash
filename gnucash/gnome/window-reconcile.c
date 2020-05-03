@@ -1608,6 +1608,12 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
     RecnWindow *recnData = (RecnWindow *)user_data;
     GList *node;
 
+    /* add a watch on the account */
+    gnc_gui_component_watch_entity (recnData->component_id,
+                                    xaccAccountGetGUID (account),
+                                    QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+
+    /* add a watch on each unreconciled or cleared split for the account */
     for (node = xaccAccountGetSplitList (account); node; node = node->next)
     {
         Split *split = node->data;
@@ -1643,10 +1649,6 @@ recn_set_watches (RecnWindow *recnData)
     GList *accounts = NULL;
 
     gnc_gui_component_clear_watches (recnData->component_id);
-
-    gnc_gui_component_watch_entity (recnData->component_id,
-                                    &recnData->account,
-                                    QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     account = recn_get_account (recnData);
 
