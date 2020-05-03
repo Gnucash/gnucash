@@ -659,7 +659,7 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
 
     /*
      * See if we need to remember days(weeks) or months.  The only trick
-     * value is 28 days which could be wither 4 weeks or 1 month.
+     * value is 28 days which could be either 4 weeks or 1 month.
      */
     if (days == 28)
     {
@@ -1301,12 +1301,93 @@ gnc_ui_reconcile_window_unrec_cb(GtkButton *button, gpointer data)
 }
 
 
+/** Get the debit or credit view that has at least 1 split selected.
+ *   gnc_reconcile_window_focus_cb() ensures only 1 view
+ *   has a selection.
+ * @param window The reconcile window.
+ */
+static GNCReconcileView *
+gnc_reconcile_window_get_selection_view (RecnWindow *recnData)
+{
+    if (gnc_reconcile_view_num_selected (GNC_RECONCILE_VIEW (recnData->debit)) > 0)
+        return GNC_RECONCILE_VIEW (recnData->debit);
+
+    if (gnc_reconcile_view_num_selected (GNC_RECONCILE_VIEW (recnData->credit)) > 0)
+        return GNC_RECONCILE_VIEW (recnData->credit);
+
+    return NULL;
+}
+
+
+/** Select the next split in the debit or credit view so that after the Delete
+ *   button is actioned, the working position in the list is still in view.
+ *  Unless this is done, the list will be scrolled to the top.
+ *  The new split selected must have a different parent transaction as all splits
+ *   for the transaction will be deleted.
+ */
+static void
+gnc_reconcile_window_delete_set_next_selection (RecnWindow *recnData, Split *split)
+{
+    GNCReconcileView *view = gnc_reconcile_window_get_selection_view (recnData);
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+    Split *this_split = NULL;
+    GtkTreeIter iter;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+    GList *path_list, *node;
+    GtkTreePath *path, *save_del_path;
+    Transaction* trans = xaccSplitGetParent (split); // parent transaction of the split to delete
+
+    if (!view)
+        return; // no selected split
+
+    path_list = gtk_tree_selection_get_selected_rows (selection, &model);
+    // get path of the first split selected - there should be only 1 selected
+    node = g_list_first (path_list);
+    if (!node)
+        return;
+    path = node->data;
+    save_del_path = gtk_tree_path_copy (path);
+
+    gtk_tree_path_next (path);
+    if (gtk_tree_model_get_iter (model, &iter, path))
+    {
+        do
+        {
+            gtk_tree_model_get (model, &iter, REC_POINTER, &this_split, -1);
+        }
+        while (xaccSplitGetParent (this_split) == trans && gtk_tree_model_iter_next (model, &iter));
+    }
+
+    if ((!this_split) || xaccSplitGetParent (this_split) == trans)
+    {
+        // There aren't any splits for a different transaction after the split to be deleted,
+        //  so find the previous split having a different parent transaction
+        path = save_del_path; // split to be deleted
+        if (gtk_tree_path_prev (path) && gtk_tree_model_get_iter (model, &iter, path))
+        {
+            do
+            {
+                gtk_tree_model_get (model, &iter, REC_POINTER, &this_split, -1);
+            }
+            while (xaccSplitGetParent (this_split) == trans && gtk_tree_model_iter_previous (model, &iter));
+        }
+    }
+
+    gtk_tree_path_free (save_del_path);
+    g_list_free_full (path_list, (GDestroyNotify) gtk_tree_path_free);
+    if ((!this_split) || xaccSplitGetParent (this_split) == trans)
+        return;
+
+    gtk_tree_selection_select_iter (selection, &iter);
+}
+
+
 static void
 gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 {
     RecnWindow *recnData = data;
     Transaction *trans;
-    Split *split;
+    Split *split, *next_split;
 
     split = gnc_reconcile_window_get_current_split(recnData);
     /* This should never be true, but be paranoid */
@@ -1323,6 +1404,9 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
         if (!result)
             return;
     }
+
+    /* select the split that should be visible after the deletion */
+    gnc_reconcile_window_delete_set_next_selection(recnData, split);
 
     gnc_suspend_gui_refresh ();
 
@@ -2017,7 +2101,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
 
 /********************************************************************\
- * gnc_ui_reconile_window_raise                                     *
+ * gnc_ui_reconcile_window_raise                                     *
  *   shows and raises an account editing window                     *
  *                                                                  *
  * Args:   editAccData - the edit window structure                  *

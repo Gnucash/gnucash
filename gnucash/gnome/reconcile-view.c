@@ -883,12 +883,26 @@ void
 gnc_reconcile_view_refresh (GNCReconcileView *view)
 {
     GNCQueryView *qview;
+    GtkTreeSelection *selection;
+    GList *path_list, *node;
 
     g_return_if_fail (view != NULL);
     g_return_if_fail (GNC_IS_RECONCILE_VIEW (view));
 
     qview = GNC_QUERY_VIEW (view);
     gnc_query_view_refresh (qview);
+
+    /* Ensure last selected split, if any, can be seen */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    path_list = gtk_tree_selection_get_selected_rows (selection, NULL);
+    node = g_list_last (path_list);
+    if (node)
+    {
+        GtkTreePath *tree_path = node->data;
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (qview),
+                                      tree_path, NULL, FALSE, 0.0, 0.0);
+    }
+    g_list_free_full (path_list, (GDestroyNotify) gtk_tree_path_free);
 
     /* Now verify that everything in the reconcile hash is still in qview */
     if (view->reconciled)
