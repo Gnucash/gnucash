@@ -65,8 +65,10 @@
             (report-options-tested '()))
        (gnc:options-for-each
         (lambda (option)
-          (when (memq (gnc:option-type option)
-                      '(multichoice boolean))
+          (when (case (gnc:option-type option)
+                  ((multichoice) (pair? (cdr (gnc:option-data option))))
+                  ((boolean) #t)
+                  (else #f))
             (set! report-options-tested
               (cons (make-combo
                      (gnc:option-section option)
