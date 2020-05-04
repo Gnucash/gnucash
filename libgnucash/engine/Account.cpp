@@ -4398,6 +4398,9 @@ xaccAccountTypeGetFundamental (GNCAccountType t)
     {
         case ACCT_TYPE_BANK:
         case ACCT_TYPE_STOCK:
+        case ACCT_TYPE_MONEYMRKT:
+        case ACCT_TYPE_CHECKING:
+        case ACCT_TYPE_SAVINGS:
         case ACCT_TYPE_MUTUAL:
         case ACCT_TYPE_CURRENCY:
         case ACCT_TYPE_CASH:
@@ -4407,6 +4410,7 @@ xaccAccountTypeGetFundamental (GNCAccountType t)
         case ACCT_TYPE_CREDIT:
         case ACCT_TYPE_LIABILITY:
         case ACCT_TYPE_PAYABLE:
+        case ACCT_TYPE_CREDITLINE:
             return ACCT_TYPE_LIABILITY;
         case ACCT_TYPE_INCOME:
             return ACCT_TYPE_INCOME;
