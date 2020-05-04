@@ -939,6 +939,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
         /* Start date info */
         info->csvd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
+        gtk_widget_set_sensitive (info->csvd.start_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), info->csvd.start_date, TRUE, TRUE, 0);
         gtk_widget_show (info->csvd.start_date);
@@ -948,6 +949,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
         /* End date info */
         info->csvd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
+        gtk_widget_set_sensitive (info->csvd.end_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), info->csvd.end_date, TRUE, TRUE, 0);
         gtk_widget_show (info->csvd.end_date);

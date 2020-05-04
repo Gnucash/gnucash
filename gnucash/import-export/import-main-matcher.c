@@ -70,6 +70,7 @@ struct _main_matcher_info
     GtkWidget         *show_account_column;
     GtkWidget         *show_matched_info;
     gboolean add_toggled;   // flag to indicate that add has been toggled to stop selection
+    gint id;
 };
 
 enum downloaded_cols
@@ -174,6 +175,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     {
         gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget));
         gnc_import_Settings_delete (info->user_settings);
+        gnc_unregister_gui_component (info->id);
         gtk_widget_destroy (GTK_WIDGET (info->main_widget));
     }
     else
@@ -946,7 +948,6 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     GtkStyleContext *stylectxt;
     GdkRGBA color;
     GtkWidget *button;
-    gint id;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -1007,12 +1008,12 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     g_object_unref (G_OBJECT(builder));
     
     // Register this UI, it needs to be closed when the session is closed.
-    id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,
-                                    NULL, /* no refresh handler */
-                                    (GNCComponentCloseHandler)gnc_gen_trans_list_delete,
-                                    info);
+    info->id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,
+                                           NULL, /* no refresh handler */
+                                           (GNCComponentCloseHandler)gnc_gen_trans_list_delete,
+                                           info);
     // This ensure this dialog is closed when the session is closed.
-    gnc_gui_component_set_session (id, gnc_get_current_session());
+    gnc_gui_component_set_session (info->id, gnc_get_current_session());
     return info;
 }
 

@@ -314,7 +314,7 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
             if (offset < hours(-10))
                 m_time -= hours(offset.hours() + 10);
             if (offset > hours(13))
-                m_time -= hours(offset.hours() - 11);
+                m_time += hours(13 - offset.hours());
         }
         catch(boost::gregorian::bad_year&)
         {

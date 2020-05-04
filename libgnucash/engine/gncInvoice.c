@@ -1506,8 +1506,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Entered and Posted at date */
     xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-    xaccTransSetDatePostedSecs (txn, post_date);
-    gncInvoiceSetDatePosted (invoice, post_date);
+    xaccTransSetDatePostedSecsNormalized (txn, post_date);
+    gncInvoiceSetDatePosted (invoice, xaccTransRetDatePosted(txn));
 
     xaccTransSetDateDue (txn, due_date);
 
