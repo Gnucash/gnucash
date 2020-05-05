@@ -1,7 +1,9 @@
 # CMakeLists.txt for GnuCash
 
 cmake_minimum_required (VERSION 3.10)
-cmake_policy(SET CMP0082 NEW)
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.14.0)
+  cmake_policy(SET CMP0082 NEW)
+endif()
 
 project (gnucash
     VERSION 3.902
