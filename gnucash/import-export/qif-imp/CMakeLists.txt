@@ -8,6 +8,18 @@ set (qif_import_SOURCES
     gnc-plugin-qif-import.c
 )
 
+set (qif_import_remote_HEADERS
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.h
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.h
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.h
+  )
+
+set (qif_import_remote_SOURCES
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.c
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.c
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.c
+  )
+
 # Add dependency on config.h
 set_source_files_properties (${qif_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
@@ -17,7 +29,13 @@ set (qif_import_noinst_HEADERS
     gnc-plugin-qif-import.h
 )
 
-add_library	(gnc-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
+add_library (gnc-qif-import
+  ${qif_import_noinst_HEADERS}
+  ${qif_import_remote_HEADERS}
+  ${qif_import_HEADERS}
+  ${qif_import_remote_SOURCES}
+  ${qif_import_SOURCES}
+)
 
 target_link_libraries(gnc-qif-import
     gnc-app-utils
@@ -31,6 +49,10 @@ target_include_directories(gnc-qif-import
 )
 
 target_compile_definitions(gnc-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
+
+target_include_directories (gnc-qif-import PRIVATE
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice
+  )
 
 if (APPLE)
   set_target_properties (gnc-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")

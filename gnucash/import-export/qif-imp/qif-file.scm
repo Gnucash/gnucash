@@ -56,7 +56,7 @@
 ;;        errors and warnings rather than a single one.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:read-file self path ticker-map progress-dialog)
+(define (qif-file:read-file self path ticker-map progress-dialog encoding)
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-read)
@@ -146,24 +146,6 @@
                   ;; Pick the 1-char tag off from the remainder of the line.
                   (set! tag (string-ref line 0))
                   (set! value (substring line 1))
-
-                  ;; If the line doesn't conform to UTF-8, try a default
-                  ;; character set conversion based on the locale. If that
-                  ;; fails, remove any invalid characters.
-                  (if (not (gnc-utf8? value))
-                      (let ((converted-value (gnc-locale-to-utf8 value)))
-                        (if (or (string=? converted-value "")
-                                (not (gnc-utf8? converted-value)))
-                            (begin
-                              (set! value (gnc-utf8-strip-invalid-strdup value))
-                              (mywarn
-                               (G_ "Some characters have been discarded.")
-                               " " (G_"Converted to: ") value))
-                            (begin
-                              (mywarn
-                               (G_ "Some characters have been converted according to your locale.")
-                               " " (G_"Converted to: ") converted-value)
-                              (set! value converted-value)))))
 
                   (if (eq? tag #\!)
                       ;; The "!" tag has the highest precedence and is used
@@ -516,7 +498,7 @@
                 ;; ...and this is if we read a null or eof line.
                 (if (and (not abort-read)
                          (not (eof-object? line)))
-                    (line-loop))))) #:encoding "UTF-8")
+                    (line-loop))))) #:encoding encoding)
 
       ;; Reverse the transaction list so xtns are in the same order that
       ;; they appeared in the file.  This is important in a few cases.

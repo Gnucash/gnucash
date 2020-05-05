@@ -58,6 +58,7 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "go-charmap-sel.h"
 #include "swig-runtime.h"
 #include "guile-mappings.h"
 #include <gfec.h>
@@ -113,6 +114,7 @@ struct _qifimportwindow
 
     /* Widgets on the file selection page. */
     GtkWidget * filename_entry;
+    GtkWidget * qif_encoding;
 
     /* File loading progress page. */
     GtkWidget * load_pause;
@@ -1750,6 +1752,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     const gchar * path_to_load;
+    const gchar * qif_encoding;
 
     SCM make_qif_file   = scm_c_eval_string ("make-qif-file");
     SCM qif_file_load   = scm_c_eval_string ("qif-file:read-file");
@@ -1767,6 +1770,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
 
     /* Get the file name. */
     path_to_load = gtk_entry_get_text (GTK_ENTRY(wind->filename_entry));
+    qif_encoding = go_charmap_sel_get_encoding (GO_CHARMAP_SEL (wind->qif_encoding));
 
     /* Create the <qif-file> object. */
     scm_qiffile          = scm_call_0 (make_qif_file);
@@ -1796,11 +1800,12 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
 
     /* This step will fill 70% of the bar. */
     gnc_progress_dialog_push (wind->load_progress, 0.7);
-    load_return = scm_call_4 (qif_file_load,
+    load_return = scm_call_5 (qif_file_load,
                               SCM_CAR(imported_files),
                               scm_from_locale_string (path_to_load ? path_to_load : ""),
                               wind->ticker_map,
-                              progress);
+                              progress,
+                              scm_from_utf8_string (qif_encoding));
     gnc_progress_dialog_pop (wind->load_progress);
     if (load_return == SCM_BOOL_T)
     {
@@ -3580,6 +3585,11 @@ get_assistant_widgets (QIFImportWindow *wind, GtkBuilder *builder)
 
     wind->window             = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_assistant"));
     wind->filename_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_filename_entry"));
+    {
+        GtkWidget *enc_con = GTK_WIDGET (gtk_builder_get_object (builder, "encoding_container"));
+        wind->qif_encoding = go_charmap_sel_new (GO_CHARMAP_SEL_TO_UTF8);
+        gtk_container_add (GTK_CONTAINER (enc_con), wind->qif_encoding);
+    }
     wind->load_pause         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_pause"));
     wind->load_start         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_start"));
     wind->load_log           = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_log"));
