@@ -1332,7 +1332,7 @@ Dies ist der Grundplan gemäss offiziellem Plan.
   <act:parent type="new">4f942372d53b486e985f0524ef484a48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Reserven und Jahresgewinn oder Jahresverlus</act:name>
+  <act:name>Reserven und Jahresgewinn oder Jahresverlust</act:name>
   <act:id type="new">35e6318959294d84994376047bef94a7</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
