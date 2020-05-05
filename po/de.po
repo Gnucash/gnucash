@@ -26754,7 +26754,7 @@ msgstr ""
 #: gnucash/report/standard-reports/trial-balance.scm:412
 #, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "Für Periode ~a bis ~a"
+msgstr "für Periode ~a bis ~a"
 
 #: gnucash/report/standard-reports/account-summary.scm:409
 msgid "Account title"
