@@ -507,18 +507,32 @@
       private-retval))
 
 
-  (gnc:backtrace-if-exception
+  (catch #t
     (lambda ()
-      (let ((retval #f))
+      (let ((retval #f)
+            (conv (port-conversion-strategy #f)))
+
+        (set-port-conversion-strategy! #f 'error)
         ;; Safely read the file.
-        (set! retval (gnc:backtrace-if-exception private-read))
+        (set! retval (private-read))
+        (set-port-conversion-strategy! #f conv)
 
         ;; Fill the progress dialog.
-        (if (and progress-dialog
-                 (list? retval))
+        (when (and progress-dialog (list? retval))
           (gnc-progress-dialog-set-value progress-dialog 1))
 
-        retval))))
+        retval))
+
+    (lambda (key . rest)
+      (let ((msg (string-append
+                  (case key
+                    ((decoding-error)
+                     (format #f (_ "Invalid charset ~a specified.") encoding))
+                    ((system-error) (_ "I/O system error. Try again."))
+                    (else (format #f "~a: ~s" key rest)))
+                  "\n")))
+        (gnc-progress-dialog-append-log progress-dialog msg)
+        (list #f)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
