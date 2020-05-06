@@ -1877,7 +1877,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     gnc_progress_dialog_pop (wind->load_progress);
     wind->ask_date_format = FALSE;
     wind->date_format = NULL;
-    }
+
     if (parse_return == SCM_BOOL_T)
     {
         /* Canceled by the user. */
@@ -1992,6 +1992,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
 
     gtk_widget_set_sensitive (wind->load_pause, FALSE);
     wind->busy = FALSE;
+    }
 
     if (wind->load_stop == FALSE)
     {
