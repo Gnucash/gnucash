@@ -321,6 +321,7 @@
      doc (string-append
           company-name " " report-title " "
           (if sx?
+              ;; Translators: This is part of the report title, which is capitalzed in English, but not all other languages
               (format #f (_ "For Period Covering ~a to ~a")
                       (qof-print-date from-date)
                       (qof-print-date to-date))

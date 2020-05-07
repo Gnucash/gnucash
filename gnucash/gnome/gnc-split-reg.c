@@ -2622,10 +2622,11 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
         reg = gnc_ledger_display_get_split_register( gsr->ledger );
         if(reg->mismatched_commodities)
         {
-            string = _("This account may not be edited because its"
-                       " subaccounts have mismatched commodities or currencies."
-                       "You need to open each account individually to "
-                       "edit transactions.");
+            string = _("The transactions of this account may not be edited "
+                       "because its subaccounts have mismatched commodities "
+                       "or currencies.\n"
+                       "You need to open each account individually to edit "
+                       "transactions.");
         }
         else
         {
@@ -2636,19 +2637,19 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
                 return;
 
             case PLACEHOLDER_THIS:
-                string = _("This account may not be edited. If you want "
-                                 "to edit transactions in this register, please "
-                                 "open the account options and turn off the "
-                                 "placeholder checkbox.");
+                string = _("The transactions of this account may not be edited.\n"
+                           "If you want to edit transactions in this register, "
+                           "please open the account options and turn off the "
+                           "placeholder checkbox.");
                 break;
 
             default:
-                string = _("One of the sub-accounts selected may not be "
-                                 "edited. If you want to edit transactions in "
-                                 "this register, please open the sub-account "
-                                 "options and turn off the placeholder checkbox. "
-                                 "You may also open an individual account instead "
-                                 "of a set of accounts.");
+                string = _("The transactions in one of the selected "
+                           "sub-accounts may not be edited.\n"
+                           "If you want to edit transactions in this register, please open "
+                           "the sub-account options and turn off the placeholder checkbox.\n"
+                           "You may also open an individual account instead "
+                           "of a set of accounts.");
                 break;
             }
         }

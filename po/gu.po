@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-03-28 12:48-0700\n"
+"POT-Creation-Date: 2020-05-05 22:02+0200\n"
 "PO-Revision-Date: 2014-10-19 16:37-0500\n"
 "Last-Translator: Ronak Shah <ronaks@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -456,7 +456,15 @@ msgstr ""
 "GnuCash ઓનલાઈન મેન્યુઅલમાં ઘણી બધી ઉપયોગી જાણકારી છે. તમે હેલ્પ મેન્યુને અંતર્ગત આ મેનુઅલને "
 "પ્રાપ્ત કરી શકો છો."
 
-#: doc/tip_of_the_day.list.c:4
+#. Translators: You can replace the link, if a transated page exists.
+#: doc/tip_of_the_day.list.c:5
+msgid ""
+"Mailing lists are the preferred form of communication in the GnuCash "
+"community. For announcements of new releases, user groups etc. see the table "
+"at https://wiki.gnucash.org/wiki/Mailing_Lists"
+msgstr ""
+
+#: doc/tip_of_the_day.list.c:9
 #, fuzzy
 msgid ""
 "The GnuCash developers are easy to contact. As well as several mailing "
@@ -466,7 +474,7 @@ msgstr ""
 "GnuCash  ડેવલપરોનો સરળતાથી સંપર્ક કરી શકાય છે. આ સાથએ કેટલીક મેલિંગ યાદીઓથી તમે તેની "
 "સાથે  IRC પર ચેટ કરી શકો છો! irc.gnome.orgમાં #gnucash પર તેની સાથે જોડાવ.  "
 
-#: doc/tip_of_the_day.list.c:8
+#: doc/tip_of_the_day.list.c:13
 #, fuzzy
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
@@ -479,7 +487,7 @@ msgstr ""
 "મેન્યુ ઈમ્પોર્ટ પર ક્લિક કરો અને QIF અથવા OFX ફાઈલો પર વારાફરથી ક્લિક કરો. ત્યારબાદ, "
 "આપવામાં આવેલા નિર્દેશોનું અનુસરણ કરો. "
 
-#: doc/tip_of_the_day.list.c:13
+#: doc/tip_of_the_day.list.c:18
 #, fuzzy
 msgid ""
 "If you are familiar with other financial programs such as Quicken, note that "
@@ -491,14 +499,14 @@ msgstr ""
 "ખર્ચની જાણકારી મેળવવા માટે GnuCash શ્રેણીઓની જગ્યાએ ખાતાંઓના ઉપયોગ કરે છે. આવક અને "
 "ખર્ચના ખાતાં વિશે અન્ય જાણકારી માટે, કૃપા કરીને GnuCash   ઓનલાઈન મેન્યુઅલને જુઓ."
 
-#: doc/tip_of_the_day.list.c:18
+#: doc/tip_of_the_day.list.c:23
 msgid ""
 "It is possible to change which columns display in the Chart of Accounts. "
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:22
+#: doc/tip_of_the_day.list.c:27
 #, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
@@ -509,7 +517,7 @@ msgstr ""
 "એકાઉન્ટ મેનુ વિકલ્પોને સામે લાવા માટે મુખ્ય વિન્ડોમાં જમણા માઉસ બટન પર ક્લિક કરો.દરેક "
 "નોંધણીની અંદર, જમણા માઉસ બટન પર ક્લિક કરવાથી સોદાના મેનુ વિકલ્પ સામે આવી જાય છે."
 
-#: doc/tip_of_the_day.list.c:27
+#: doc/tip_of_the_day.list.c:32
 #, fuzzy
 msgid ""
 "Create new accounts by clicking the New button in the main window tool bar. "
@@ -522,7 +530,7 @@ msgstr ""
 "ખાતાના એક ચાર્ટને વ્યવસ્થિત કરવા વિષે વધુ જાણકારી પ્રાપ્ત કરવા માટે, કૃપા કરીને GnuCash "
 "ઓનલાઈન મેન્યુઅલને દેખો.  "
 
-#: doc/tip_of_the_day.list.c:33
+#: doc/tip_of_the_day.list.c:38
 msgid ""
 "To enter multiple-split transactions such as a paycheck with multiple "
 "deductions, click the Split button in the tool bar. Alternatively, in the "
@@ -533,7 +541,7 @@ msgstr ""
 "સ્પ્લિટ બટન પર ક્લિક કરો. વૈકલ્પિક રૂપથી વ્યુ મેનુમાં તમે રજિસ્ટર સ્ટાઈલ ઓટો-સ્પ્લિટ લેજરને "
 "પસંદ કરી શકો છો."
 
-#: doc/tip_of_the_day.list.c:38
+#: doc/tip_of_the_day.list.c:43
 #, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
@@ -546,7 +554,7 @@ msgstr ""
 "તેના પછી '+', '-','*', કે '/' ની પસંદગી કરો. બીજું મૂલ્ય ટાઈપ કરો અને ગણતરી થયેલ રકમને "
 "નોંધવા માટે એન્ટર દબાવો. "
 
-#: doc/tip_of_the_day.list.c:43
+#: doc/tip_of_the_day.list.c:48
 #, fuzzy
 msgid ""
 "Quick-fill makes it easy to enter common transactions. When you type the "
@@ -558,7 +566,7 @@ msgstr ""
 "પ્રથમ અક્ષર (રો) ને ટાઈપ કરો છો, તેના પછી ટેબનું બટન દબાવો, પછી GnuCash સ્વચલિત રૂપથી "
 "બાકી બચેલી લેવડ-દેવડને તે જ રીતે પૂર્ણ કરી દેશે. જેમ કે તેની છેલ્લી વખત નોંધવામાં આવ્યું હતું. "
 
-#: doc/tip_of_the_day.list.c:48
+#: doc/tip_of_the_day.list.c:53
 msgid ""
 "Type the first letter(s) of an existing account name in the Transfer "
 "register column, and GnuCash will complete the name from your list of "
@@ -571,7 +579,7 @@ msgstr ""
 "ટાઈપ કરો, ત્યાર બાદ ':' અને ઉપ-ખાતાના પ્રથમ અક્ષર (રો) (જેમ કે એસેટ્સ:કેશ માટે A:C) ને "
 "ટાઈપ કરો."
 
-#: doc/tip_of_the_day.list.c:54
+#: doc/tip_of_the_day.list.c:59
 #, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
@@ -581,7 +589,7 @@ msgstr ""
 "શું તમે તમારા ઉપખાતાના તમામ સોદાઓને એક રજિસ્ટરમાં જોવા ઈચ્છો છો? મુખ્ય મેનુથી, મૂળ ખાતાને "
 "રેખાંકીત કરો અને ખાતા-> મેનુથી ઉપખાતાને ખોલીને પસંદગી કરો."
 
-#: doc/tip_of_the_day.list.c:58
+#: doc/tip_of_the_day.list.c:63
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
@@ -591,14 +599,14 @@ msgstr ""
 "કરી શકો છો. ચેક નંબરોને વધારવા કે ઘટાડવા માટે પણ તમે '+' અને '-' નો ઉપયોગ કરી શકો "
 "છો."
 
-#: doc/tip_of_the_day.list.c:62
+#: doc/tip_of_the_day.list.c:67
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
 "મુખ્ય વિન્ડોમાં વિભિન્ન ટેબોની વચ્ચે અદલ-બદલ કરવા માટે, કંટ્રોલ+પેજ અપ/ડાઉન દબાવો.  "
 
-#: doc/tip_of_the_day.list.c:65
+#: doc/tip_of_the_day.list.c:70
 #, fuzzy
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
@@ -608,7 +616,7 @@ msgstr ""
 "મેળ વિન્ડોમાં, સોદાઓને સંદતના રૂપમાં ચિન્હિત કરવા માટે તમે સ્પેસબારને દબાવી શકો છો. તમે "
 "થાપણો અને ઉપાડ વચ્ચે આવા-જવા માટે ટેબ અને શિફ્ટ-ટેબને પણ દબાવી શકો છો. "
 
-#: doc/tip_of_the_day.list.c:69
+#: doc/tip_of_the_day.list.c:74
 msgid ""
 "To transfer funds between accounts with different currencies, click on the "
 "Transfer button in the register toolbar, select the accounts, and the "
@@ -619,7 +627,7 @@ msgstr ""
 "પર ક્લિક કરો અને વિનિમય દરની એન્ટ્રીઓ માટે ખાતાઓ તેમ જ ચલણના ટ્રાન્સફર વિકલ્પોને પસંદ "
 "કરો અથવા અન્ય ચલણોની રકમ પ્રાપ્ત થશે."
 
-#: doc/tip_of_the_day.list.c:74
+#: doc/tip_of_the_day.list.c:79
 msgid ""
 "You can set the Security Editor screen to display the Quote Source of a "
 "security, which makes it easy to see which online sources your securities "
@@ -627,7 +635,7 @@ msgid ""
 "the display."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:79
+#: doc/tip_of_the_day.list.c:84
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
@@ -637,7 +645,7 @@ msgstr ""
 "વિગતો પ્રદાન કરશે. તેમ કરવા માટે, સેમ્પલ તેમ જ કસ્ટમ-> \"કસ્ટમ મલ્ટિકોલમ રિપોર્ટ\" "
 "અહેવાલનો ઉપયોગ કરો.  "
 
-#: doc/tip_of_the_day.list.c:84
+#: doc/tip_of_the_day.list.c:89
 #, fuzzy
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
@@ -648,7 +656,7 @@ msgstr ""
 "વિકલ્પના રૂપમાં તમારા અહેવાલ માટે એક સ્ટાઈલ શીટની પસંદગી કરો. અને સ્ટાઈલ શીટ્સને "
 "કસ્ટમાઈઝ કરવા માટે એડિટ->સ્ટાઈલ શીટ્ય મેનુનો ઉપયોગ કરો."
 
-#: doc/tip_of_the_day.list.c:88
+#: doc/tip_of_the_day.list.c:93
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
@@ -656,7 +664,7 @@ msgstr ""
 "એકાઉન્ટ્સ મેનુને એક રજિસ્ટર પૃષ્ઠના ટ્રાન્સફર ફિલ્ડમાં દર્શાવવા માટે મેનુ બટન અથવા કન્ટ્રોલ-"
 "ડાઉનનું સંયુક્ત બટન દબાવો.  "
 
-#: doc/tip_of_the_day.list.c:91
+#: doc/tip_of_the_day.list.c:96
 msgid ""
 "The scheduled transaction editor comes with a very flexible frequency "
 "configurator. Basic frequencies to schedule a transaction include daily, "
@@ -670,7 +678,7 @@ msgid ""
 "frequency and then set 'Every 12 months'."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:100
+#: doc/tip_of_the_day.list.c:105
 #, fuzzy
 msgid ""
 "If you work overnight, you should close and reopen your working registers "
@@ -680,21 +688,21 @@ msgstr ""
 "જો તમે રાત્રે કામ કરો છો, તો તમારે નવા સોદા માટે ડિફોલ્ટ રૂપમાં નવી તારીખ લેવા માટે "
 "પોતાના કાર્ય રજિસ્ટરને મધ્યરાત્રી પછી બંધ કરવા અને ફરીથી ખોલવું જોઈએ."
 
-#: doc/tip_of_the_day.list.c:104
+#: doc/tip_of_the_day.list.c:109
 msgid ""
 "To search through all your transactions, start a search (Edit->Find...) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:108
+#: doc/tip_of_the_day.list.c:113
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:112
+#: doc/tip_of_the_day.list.c:117
 #, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
@@ -902,8 +910,8 @@ msgid "via Escrow account?"
 msgstr "એસ્ક્રો ખાતાના માધ્યમથી?"
 
 #: gnucash/gnome/assistant-loan.cpp:930
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2901
-#: gnucash/register/ledger-core/split-register.c:2624
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2902
+#: gnucash/register/ledger-core/split-register.c:2633
 msgid "Loan"
 msgstr "ધિરાણ"
 
@@ -929,13 +937,13 @@ msgstr "ઋણ પુનઃચુકવણી ગણક "
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:47
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
-#: gnucash/import-export/import-main-matcher.c:767
+#: gnucash/import-export/import-main-matcher.c:770
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3698
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3749
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
-#: gnucash/register/ledger-core/split-register-model.c:226
+#: gnucash/register/ledger-core/split-register-model.c:230
 #: gnucash/report/business-reports/customer-summary.scm:71
 #: gnucash/report/business-reports/invoice.scm:90
 #: gnucash/report/business-reports/invoice.scm:214
@@ -968,18 +976,18 @@ msgstr "તારીખ"
 
 #: gnucash/gnome/assistant-loan.cpp:1873 gnucash/gnome/assistant-loan.cpp:2852
 #: gnucash/gnome/assistant-loan.cpp:2914 gnucash/gnome/assistant-loan.cpp:2927
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2862
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2903
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2908
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2919
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2863
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2904
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2909
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2920
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2993
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3079
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
-#: gnucash/register/ledger-core/split-register.c:2585
-#: gnucash/register/ledger-core/split-register.c:2626
-#: gnucash/register/ledger-core/split-register.c:2631
-#: gnucash/register/ledger-core/split-register.c:2642
+#: gnucash/register/ledger-core/split-register.c:2594
+#: gnucash/register/ledger-core/split-register.c:2635
+#: gnucash/register/ledger-core/split-register.c:2640
+#: gnucash/register/ledger-core/split-register.c:2651
 #: gnucash/report/business-reports/new-owner-report.scm:289
 #: gnucash/report/business-reports/owner-report.scm:359
 #: libgnucash/app-utils/prefs.scm:66 libgnucash/app-utils/prefs.scm:74
@@ -994,19 +1002,19 @@ msgid "Principal"
 msgstr "મુદ્લ"
 
 #: gnucash/gnome/assistant-loan.cpp:1885 gnucash/gnome/assistant-loan.cpp:2967
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2857
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2902
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2909
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2918
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2858
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2895
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2903
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2910
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2919
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2946
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:40
-#: gnucash/register/ledger-core/split-register.c:2580
-#: gnucash/register/ledger-core/split-register.c:2617
-#: gnucash/register/ledger-core/split-register.c:2625
-#: gnucash/register/ledger-core/split-register.c:2632
+#: gnucash/register/ledger-core/split-register.c:2589
+#: gnucash/register/ledger-core/split-register.c:2626
+#: gnucash/register/ledger-core/split-register.c:2634
 #: gnucash/register/ledger-core/split-register.c:2641
-#: gnucash/register/ledger-core/split-register.c:2668
+#: gnucash/register/ledger-core/split-register.c:2650
+#: gnucash/register/ledger-core/split-register.c:2677
 msgid "Interest"
 msgstr "વ્યાજ  "
 
@@ -1015,8 +1023,8 @@ msgid "Escrow Payment"
 msgstr "એસ્ક્રો ચુકવણી "
 
 #: gnucash/gnome/assistant-stock-split.c:382
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2953
-#: gnucash/register/ledger-core/split-register.c:2676
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2954
+#: gnucash/register/ledger-core/split-register.c:2685
 #, fuzzy
 msgctxt "Action Column"
 msgid "Split"
@@ -1032,10 +1040,10 @@ msgstr "મૂલ્ય ઉમેરવામાં ખામી"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:526
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
-#: gnucash/import-export/import-main-matcher.c:768
+#: gnucash/import-export/import-main-matcher.c:771
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
-#: gnucash/register/ledger-core/split-register-model.c:335
+#: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/business-reports/job-report.scm:38
 #: gnucash/report/business-reports/lot-viewer.scm:38
 #: gnucash/report/business-reports/new-owner-report.scm:1096
@@ -1061,7 +1069,7 @@ msgstr "સંકેત"
 
 #: gnucash/gnome/assistant-stock-split.c:585
 #: gnucash/gnome/dialog-find-transactions.c:122
-#: gnucash/register/ledger-core/split-register-model.c:413
+#: gnucash/register/ledger-core/split-register-model.c:417
 #: gnucash/report/report-system/trep-engine.scm:938
 #: gnucash/report/report-system/trep-engine.scm:1062
 #: gnucash/report/report-system/trep-engine.scm:1223
@@ -1109,18 +1117,18 @@ msgstr "પહોંચ"
 #: gnucash/gnome/business-gnome-utils.c:225 gnucash/gnome/dialog-invoice.c:3343
 #: gnucash/gnome/gnc-plugin-page-invoice.c:466
 #: gnucash/gnome-search/dialog-search.c:1080
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2907
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2908
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3073
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:186
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
 #: gnucash/gtkbuilder/dialog-invoice.glade:145
 #: gnucash/gtkbuilder/dialog-invoice.glade:747
 #: gnucash/gtkbuilder/dialog-invoice.glade:761
-#: gnucash/register/ledger-core/split-register.c:2630
+#: gnucash/register/ledger-core/split-register.c:2639
 #: gnucash/report/business-reports/invoice.scm:793
 #: gnucash/report/business-reports/job-report.scm:405
 #: gnucash/report/business-reports/receipt.eguile.scm:109
-#: gnucash/report/business-reports/receipt.scm:167
+#: gnucash/report/business-reports/receipt.scm:120
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:131
 #: gnucash/report/business-reports/taxinvoice.scm:192
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1787
@@ -1281,17 +1289,17 @@ msgstr "કોમોડિટીને દૂર કરીએ?"
 #: gnucash/gnome/dialog-commodities.c:202
 #: gnucash/gnome/dialog-price-edit-db.c:191
 #: gnucash/gnome/dialog-price-editor.c:233 gnucash/gnome/dialog-tax-info.c:1166
-#: gnucash/gnome/gnc-plugin-budget.c:261
+#: gnucash/gnome/gnc-plugin-budget.c:289
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1592
 #: gnucash/gnome/gnc-plugin-page-invoice.c:166
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1100
-#: gnucash/gnome/gnc-plugin-page-register2.c:1598
-#: gnucash/gnome/gnc-plugin-page-register.c:1814
+#: gnucash/gnome/gnc-plugin-page-register2.c:1610
+#: gnucash/gnome/gnc-plugin-page-register.c:1922
 #: gnucash/gnome/gnc-split-reg.c:918 gnucash/gnome/gnc-split-reg.c:956
 #: gnucash/gnome/gnc-split-reg.c:1178 gnucash/gnome/gnc-split-reg.c:1222
 #: gnucash/gnome/gnc-split-reg.c:1350 gnucash/gnome/gnc-split-reg.c:1667
 #: gnucash/gnome/gnc-split-reg.c:1707 gnucash/gnome/window-reconcile2.c:2195
-#: gnucash/gnome/window-reconcile.c:2280
+#: gnucash/gnome/window-reconcile.c:2342
 #: gnucash/gnome-search/search-account.c:237
 #: gnucash/gnome-utils/dialog-account.c:657
 #: gnucash/gnome-utils/dialog-tax-table.c:597
@@ -1384,7 +1392,7 @@ msgstr "_રદ કરો "
 #: gnucash/gnome/gnc-plugin-page-invoice.c:171
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1101
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
-#: gnucash/gnome/window-reconcile2.c:2237 gnucash/gnome/window-reconcile.c:2322
+#: gnucash/gnome/window-reconcile2.c:2237 gnucash/gnome/window-reconcile.c:2384
 #: gnucash/gtkbuilder/dialog-account.glade:194
 #: gnucash/gtkbuilder/dialog-billterms.glade:559
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:55
@@ -1560,7 +1568,7 @@ msgid "Username"
 msgstr "યુઝરનેમ"
 
 #: gnucash/gnome/dialog-employee.c:716 gnucash/gnome/dialog-sx-editor2.c:1753
-#: gnucash/gnome/dialog-sx-editor.c:1804 gnucash/gnome/dialog-tax-info.c:1177
+#: gnucash/gnome/dialog-sx-editor.c:1808 gnucash/gnome/dialog-tax-info.c:1177
 #: gnucash/gnome-utils/gnc-dense-cal.c:356
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -1670,8 +1678,8 @@ msgstr "એન્ટ્રી બંધ કરવામાં આવી છે"
 #: gnucash/gnome/dialog-find-transactions2.c:120
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:491
-#: gnucash/gnome/gnc-plugin-page-register.c:524
-#: gnucash/gnome/window-reconcile2.c:1327 gnucash/gnome/window-reconcile.c:1378
+#: gnucash/gnome/gnc-plugin-page-register.c:602
+#: gnucash/gnome/window-reconcile2.c:1327 gnucash/gnome/window-reconcile.c:1403
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 msgid "Reconcile"
@@ -1692,7 +1700,7 @@ msgstr "શેરના ભાવ"
 #: gnucash/gtkbuilder/assistant-loan.glade:804
 #: gnucash/gtkbuilder/dialog-transfer.glade:115
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
-#: gnucash/import-export/import-main-matcher.c:770
+#: gnucash/import-export/import-main-matcher.c:773
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3719
@@ -1742,11 +1750,11 @@ msgstr "મોકલવાની તારીખ "
 #: gnucash/gnome/dialog-find-transactions2.c:132
 #: gnucash/gnome/dialog-find-transactions2.c:171
 #: gnucash/gnome/dialog-find-transactions2.c:177
-#: gnucash/gnome/dialog-find-transactions.c:130
-#: gnucash/gnome/dialog-find-transactions.c:169
-#: gnucash/gnome/dialog-find-transactions.c:175
-#: gnucash/gnome/gnc-plugin-page-register.c:2334
-#: gnucash/gnome/gnc-plugin-page-register.c:3931
+#: gnucash/gnome/dialog-find-transactions.c:132
+#: gnucash/gnome/dialog-find-transactions.c:171
+#: gnucash/gnome/dialog-find-transactions.c:177
+#: gnucash/gnome/gnc-plugin-page-register.c:2463
+#: gnucash/gnome/gnc-plugin-page-register.c:4109
 #: gnucash/gnome-search/dialog-search.c:866
 #: gnucash/gnome-search/dialog-search.c:872
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
@@ -1758,10 +1766,10 @@ msgstr "નંબર વિકલ્પ"
 #: gnucash/gnome/dialog-find-transactions2.c:133
 #: gnucash/gnome/dialog-find-transactions2.c:170
 #: gnucash/gnome/dialog-find-transactions2.c:178
-#: gnucash/gnome/dialog-find-transactions.c:131
-#: gnucash/gnome/dialog-find-transactions.c:168
-#: gnucash/gnome/dialog-find-transactions.c:176
-#: gnucash/gnome/gnc-plugin-page-register.c:2339
+#: gnucash/gnome/dialog-find-transactions.c:133
+#: gnucash/gnome/dialog-find-transactions.c:170
+#: gnucash/gnome/dialog-find-transactions.c:178
+#: gnucash/gnome/gnc-plugin-page-register.c:2468
 #: gnucash/gnome/gnc-split-reg.c:638 gnucash/gnome-search/dialog-search.c:865
 #: gnucash/gnome-search/dialog-search.c:873
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2749
@@ -1773,7 +1781,7 @@ msgstr "નંબર વિકલ્પ"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
-#: gnucash/register/ledger-core/split-register-model.c:321
+#: gnucash/register/ledger-core/split-register-model.c:325
 #: gnucash/report/business-reports/invoice.scm:94
 #: gnucash/report/business-reports/invoice.scm:224
 msgid "Action"
@@ -1782,11 +1790,11 @@ msgstr "એક્શન"
 #: gnucash/gnome/dialog-find-transactions2.c:136
 #: gnucash/gnome/dialog-find-transactions2.c:173
 #: gnucash/gnome/dialog-find-transactions2.c:179
-#: gnucash/gnome/dialog-find-transactions.c:134
-#: gnucash/gnome/dialog-find-transactions.c:171
-#: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2333
-#: gnucash/gnome/gnc-plugin-page-register.c:3930
+#: gnucash/gnome/dialog-find-transactions.c:136
+#: gnucash/gnome/dialog-find-transactions.c:173
+#: gnucash/gnome/dialog-find-transactions.c:179
+#: gnucash/gnome/gnc-plugin-page-register.c:2462
+#: gnucash/gnome/gnc-plugin-page-register.c:4108
 #: gnucash/gnome-search/dialog-search.c:868
 #: gnucash/gnome-search/dialog-search.c:874
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:612
@@ -1799,10 +1807,10 @@ msgstr "સોદાનો અહેવાલ"
 #: gnucash/gnome/dialog-find-transactions2.c:137
 #: gnucash/gnome/dialog-find-transactions2.c:172
 #: gnucash/gnome/dialog-find-transactions2.c:180
-#: gnucash/gnome/dialog-find-transactions.c:135
-#: gnucash/gnome/dialog-find-transactions.c:170
-#: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2338
+#: gnucash/gnome/dialog-find-transactions.c:137
+#: gnucash/gnome/dialog-find-transactions.c:172
+#: gnucash/gnome/dialog-find-transactions.c:180
+#: gnucash/gnome/gnc-plugin-page-register.c:2467
 #: gnucash/gnome/gnc-split-reg.c:626 gnucash/gnome-search/dialog-search.c:867
 #: gnucash/gnome-search/dialog-search.c:875
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2765
@@ -1815,12 +1823,12 @@ msgid "Number"
 msgstr "સંખ્યા"
 
 #: gnucash/gnome/dialog-find-transactions2.c:149
-#: gnucash/gnome/dialog-find-transactions.c:147
+#: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
 msgstr ""
 
 #: gnucash/gnome/dialog-find-transactions2.c:153
-#: gnucash/gnome/dialog-find-transactions.c:151
+#: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:632
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2785
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2787
@@ -1831,10 +1839,10 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:222
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
-#: gnucash/import-export/import-main-matcher.c:772
+#: gnucash/import-export/import-main-matcher.c:775
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
-#: gnucash/register/ledger-core/split-register-model.c:349
+#: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/report-system/trep-engine.scm:242
 #: gnucash/report/report-system/trep-engine.scm:955
 #: gnucash/report/report-system/trep-engine.scm:1078
@@ -1848,7 +1856,7 @@ msgid "Memo"
 msgstr "મેમો "
 
 #: gnucash/gnome/dialog-find-transactions2.c:155
-#: gnucash/gnome/dialog-find-transactions.c:153
+#: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:641
 #: gnucash/gnome-utils/gnc-tree-view-account.c:886
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
@@ -1859,27 +1867,28 @@ msgstr "મેમો "
 #: gnucash/gtkbuilder/dialog-invoice.glade:1069
 #: gnucash/gtkbuilder/dialog-order.glade:351
 #: gnucash/gtkbuilder/dialog-order.glade:701
+#: gnucash/gtkbuilder/dialog-transfer.glade:247
 #: gnucash/gtkbuilder/dialog-vendor.glade:552
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:536
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:137
-#: gnucash/register/ledger-core/split-register-model.c:485
+#: gnucash/register/ledger-core/split-register-model.c:489
 #: gnucash/report/business-reports/balsheet-eg.scm:229
-#: gnucash/report/business-reports/receipt.scm:75
+#: gnucash/report/business-reports/receipt.scm:43
 #: gnucash/report/business-reports/taxinvoice.scm:82
 #: gnucash/report/report-system/trep-engine.scm:249
 #: gnucash/report/report-system/trep-engine.scm:914
 #: gnucash/report/report-system/trep-engine.scm:931
 #: gnucash/report/report-system/trep-engine.scm:1091
 #: gnucash/report/report-system/trep-engine.scm:1191
-#: gnucash/report/standard-reports/account-summary.scm:435
+#: gnucash/report/standard-reports/account-summary.scm:436
 msgid "Notes"
 msgstr "નોંધ"
 
 #: gnucash/gnome/dialog-find-transactions2.c:157
-#: gnucash/gnome/dialog-find-transactions.c:155
+#: gnucash/gnome/dialog-find-transactions.c:157
 #: gnucash/gnome/dialog-lot-viewer.c:924 gnucash/gnome/dialog-tax-info.c:1373
 #: gnucash/gnome/gnc-split-reg.c:635 gnucash/gnome/reconcile-view.c:435
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
@@ -1894,13 +1903,13 @@ msgstr "નોંધ"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:55
-#: gnucash/import-export/import-main-matcher.c:771
+#: gnucash/import-export/import-main-matcher.c:774
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3708
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3759
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
-#: gnucash/register/ledger-core/split-register-model.c:289
+#: gnucash/register/ledger-core/split-register-model.c:293
 #: gnucash/report/business-reports/customer-summary.scm:74
 #: gnucash/report/business-reports/invoice.scm:92
 #: gnucash/report/business-reports/invoice.scm:219
@@ -1913,7 +1922,7 @@ msgstr "નોંધ"
 #: gnucash/report/report-system/trep-engine.scm:930
 #: gnucash/report/report-system/trep-engine.scm:1057
 #: gnucash/report/report-system/trep-engine.scm:1181
-#: gnucash/report/standard-reports/account-summary.scm:407
+#: gnucash/report/standard-reports/account-summary.scm:408
 #: gnucash/report/standard-reports/general-journal.scm:105
 #: gnucash/report/standard-reports/general-ledger.scm:77
 #: gnucash/report/standard-reports/general-ledger.scm:97
@@ -1923,10 +1932,20 @@ msgid "Description"
 msgstr "વર્ણન "
 
 #: gnucash/gnome/dialog-find-transactions2.c:229
-#: gnucash/gnome/dialog-find-transactions.c:227
+#: gnucash/gnome/dialog-find-transactions.c:229
 #: gnucash/gnome-search/dialog-search.c:1474
 msgid "Find Transaction"
 msgstr "લેણદેણ શોધો "
+
+#: gnucash/gnome/dialog-find-transactions.c:129
+#: gnucash/report/report-system/trep-engine.scm:166
+#: gnucash/report/report-system/trep-engine.scm:926
+#: gnucash/report/report-system/trep-engine.scm:1053
+#: gnucash/report/report-system/trep-engine.scm:1148
+#: gnucash/report/standard-reports/general-ledger.scm:74
+#: gnucash/report/standard-reports/general-ledger.scm:95
+msgid "Reconciled Date"
+msgstr "સંગત તારીખ"
 
 #: gnucash/gnome/dialog-imap-editor.c:394
 #, fuzzy
@@ -1978,7 +1997,7 @@ msgstr "આ એન્ટ્રી એક ઓર્ડર સાથે જોડ�
 #: gnucash/gnome/dialog-invoice.c:727 gnucash/gnome/dialog-invoice.c:3149
 #: gnucash/gnome/dialog-invoice.c:3183 gnucash/gnome/dialog-invoice.c:3217
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2736
-#: gnucash/register/ledger-core/split-register-model.c:233
+#: gnucash/register/ledger-core/split-register-model.c:237
 #: gnucash/report/business-reports/aging.scm:413
 #: gnucash/report/business-reports/invoice.scm:259
 #: gnucash/report/business-reports/invoice.scm:610
@@ -2171,7 +2190,7 @@ msgstr "ચલણને જુઓ/એડિટ કરો "
 #: gnucash/gnome/dialog-invoice.c:3116
 #: gnucash/gnome/gnc-plugin-page-invoice.c:371
 #: gnucash/gnome/gnc-plugin-page-register2.c:487
-#: gnucash/gnome/gnc-plugin-page-register.c:520
+#: gnucash/gnome/gnc-plugin-page-register.c:598
 msgid "Duplicate"
 msgstr "નકલ "
 
@@ -2273,18 +2292,18 @@ msgstr "પહોંચની નોંધ "
 #: gnucash/gtkbuilder/dialog-invoice.glade:676
 #: gnucash/gtkbuilder/dialog-payment.glade:302
 #: gnucash/gtkbuilder/dialog-tax-info.glade:142
-#: gnucash/register/ledger-core/split-register-model.c:356
+#: gnucash/register/ledger-core/split-register-model.c:360
 #: gnucash/report/business-reports/customer-summary.scm:73
 #: gnucash/report/business-reports/job-report.scm:45
 #: gnucash/report/business-reports/new-owner-report.scm:54
 #: gnucash/report/business-reports/new-owner-report.scm:234
 #: gnucash/report/business-reports/owner-report.scm:55
-#: gnucash/report/standard-reports/account-summary.scm:406
+#: gnucash/report/standard-reports/account-summary.scm:407
 msgid "Type"
 msgstr "પ્રકાર"
 
 #: gnucash/gnome/dialog-invoice.c:3235
-#: gnucash/register/ledger-core/split-register-model.c:303
+#: gnucash/register/ledger-core/split-register-model.c:307
 #: gnucash/report/business-reports/new-owner-report.scm:790
 msgid "Paid"
 msgstr "ચુકવણી"
@@ -2308,8 +2327,8 @@ msgstr "ખોલેલું"
 #: gnucash/gtkbuilder/dialog-payment.glade:506
 #: gnucash/gtkbuilder/dialog-transfer.glade:170
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:54
-#: gnucash/register/ledger-core/split-register-model.c:249
-#: gnucash/register/ledger-core/split-register-model.c:269
+#: gnucash/register/ledger-core/split-register-model.c:253
+#: gnucash/register/ledger-core/split-register-model.c:273
 #: gnucash/report/report-system/trep-engine.scm:929
 #: gnucash/report/report-system/trep-engine.scm:1056
 #: gnucash/report/report-system/trep-engine.scm:1163
@@ -2406,7 +2425,7 @@ msgstr "ફક્ત સક્રિય?"
 #: gnucash/gnome/dialog-job.c:575 gnucash/gnome/dialog-job.c:588
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2926
 #: gnucash/gtkbuilder/dialog-job.glade:206
-#: gnucash/register/ledger-core/split-register-model.c:363
+#: gnucash/register/ledger-core/split-register-model.c:367
 #, fuzzy
 msgid "Rate"
 msgstr "કરનો દર"
@@ -2429,7 +2448,7 @@ msgstr "કામગીરી શોધો "
 #: gnucash/gnome/dialog-lot-viewer.c:796
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:368
 #: gnucash/gnome/gnc-plugin-page-budget.c:197
-#: gnucash/gnome/window-reconcile2.c:1713 gnucash/gnome/window-reconcile.c:1774
+#: gnucash/gnome/window-reconcile2.c:1713 gnucash/gnome/window-reconcile.c:1799
 #: gnucash/gnome-utils/gnc-file.c:103 gnucash/gnome-utils/gnc-file.c:275
 #: gnucash/gnome-utils/gnc-file.c:1065
 msgid "Open"
@@ -2451,14 +2470,14 @@ msgstr "અધિકાર "
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3112
-#: gnucash/register/ledger-core/split-register-model.c:314
-#: gnucash/register/ledger-core/split-register-model.c:478
+#: gnucash/register/ledger-core/split-register-model.c:318
+#: gnucash/register/ledger-core/split-register-model.c:482
 #: gnucash/report/business-reports/job-report.scm:208
 #: gnucash/report/business-reports/new-owner-report.scm:60
 #: gnucash/report/business-reports/new-owner-report.scm:534
 #: gnucash/report/business-reports/owner-report.scm:321
 #: gnucash/report/report-system/html-utilities.scm:717
-#: gnucash/report/standard-reports/account-summary.scm:420
+#: gnucash/report/standard-reports/account-summary.scm:421
 #: gnucash/report/standard-reports/balance-forecast.scm:241
 #: gnucash/report/standard-reports/register.scm:163
 msgid "Balance"
@@ -2574,7 +2593,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-invoice.glade:420
 #: gnucash/gtkbuilder/dialog-invoice.glade:977
 #: gnucash/gtkbuilder/dialog-payment.glade:40
-#: gnucash/register/ledger-core/split-register-model.c:285
+#: gnucash/register/ledger-core/split-register-model.c:289
 #: gnucash/report/business-reports/customer-summary.scm:289
 #: gnucash/report/business-reports/customer-summary.scm:322
 #: gnucash/report/business-reports/job-report.scm:502
@@ -2591,7 +2610,7 @@ msgstr "ગ્રાહક"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:183
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:568
-#: gnucash/register/ledger-core/split-register-model.c:287
+#: gnucash/register/ledger-core/split-register-model.c:291
 #: gnucash/report/business-reports/job-report.scm:508
 #: gnucash/report/business-reports/new-owner-report.scm:105
 #: gnucash/report/business-reports/owner-report.scm:119
@@ -2648,7 +2667,7 @@ msgstr "સતત"
 #: gnucash/gnome/dialog-payment.c:1534
 #: gnucash/gnome/gnc-plugin-page-invoice.c:369
 #: gnucash/gnome/gnc-plugin-page-register2.c:485
-#: gnucash/gnome/gnc-plugin-page-register.c:518
+#: gnucash/gnome/gnc-plugin-page-register.c:596
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
 msgid "Cancel"
 msgstr "રદ કરો "
@@ -2715,7 +2734,7 @@ msgid "You must select a Currency."
 msgstr "તમારે એક ચલણની પસંદગી કરવી પડશે."
 
 #: gnucash/gnome/dialog-price-editor.c:279
-#: gnucash/gnome-utils/dialog-transfer.c:1708
+#: gnucash/gnome-utils/dialog-transfer.c:1713
 msgid "You must enter a valid amount."
 msgstr "તમારે એક માન્ય મૂલ્ય એન્ટર કરવું પડશે. "
 
@@ -2772,7 +2791,7 @@ msgid "Custom"
 msgstr "જકાત"
 
 #: gnucash/gnome/dialog-print-check.c:2597
-#: gnucash/gtkbuilder/dialog-preferences.glade:3105
+#: gnucash/gtkbuilder/dialog-preferences.glade:3106
 #: gnucash/gtkbuilder/dialog-print-check.glade:248
 msgid "Top"
 msgstr "સૌથી ઉપરનું"
@@ -2785,9 +2804,9 @@ msgstr "(સ્થગિત)"
 msgid "Complete"
 msgstr "પૂર્ણ"
 
-#: gnucash/gnome/dialog-sx-editor2.c:164 gnucash/gnome/dialog-sx-editor.c:166
+#: gnucash/gnome/dialog-sx-editor2.c:164 gnucash/gnome/dialog-sx-editor.c:167
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:150
-#: gnucash/gnome/window-reconcile2.c:2232 gnucash/gnome/window-reconcile.c:2317
+#: gnucash/gnome/window-reconcile2.c:2232 gnucash/gnome/window-reconcile.c:2379
 #: gnucash/gnome-utils/gnc-main-window.c:266
 #: gnucash/gtkbuilder/dialog-billterms.glade:741
 #: gnucash/gtkbuilder/dialog-commodities.glade:158
@@ -2798,22 +2817,22 @@ msgstr "પૂર્ણ"
 msgid "_Edit"
 msgstr "_સુધારો"
 
-#: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:167
-#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2258
+#: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:168
+#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2320
 msgid "_Transaction"
 msgstr "_લેવડદેવડ "
 
-#: gnucash/gnome/dialog-sx-editor2.c:166 gnucash/gnome/dialog-sx-editor.c:168
+#: gnucash/gnome/dialog-sx-editor2.c:166 gnucash/gnome/dialog-sx-editor.c:169
 #: gnucash/gnome-utils/gnc-main-window.c:267
 msgid "_View"
 msgstr "_વ્યૂ"
 
-#: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:169
+#: gnucash/gnome/dialog-sx-editor2.c:167 gnucash/gnome/dialog-sx-editor.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:268
 msgid "_Actions"
 msgstr "_કાર્ય"
 
-#: gnucash/gnome/dialog-sx-editor2.c:199 gnucash/gnome/dialog-sx-editor.c:201
+#: gnucash/gnome/dialog-sx-editor2.c:199 gnucash/gnome/dialog-sx-editor.c:202
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr "આ નિશ્વિત લેવડદેવડ બદલાઈ ગઈ છે; તમે ખરેખર રદ કરવા માંગો છો?  "
@@ -2828,7 +2847,7 @@ msgstr "સ્પ્લિટ \"%s\" માટે જમા ફોર્મ્�
 msgid "Couldn't parse debit formula for split \"%s\"."
 msgstr "સ્પ્લિટ \"%s\" માટે ઉધાર ફોર્મ્યુલાની સમજણ ન પડી. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:690 gnucash/gnome/dialog-sx-editor.c:872
+#: gnucash/gnome/dialog-sx-editor2.c:690 gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.c:261
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
@@ -2837,11 +2856,11 @@ msgstr ""
 "શીડ્યુલ્ડ ટ્રાન્ઝેક્શન એડિટર આ વ્યવહારને ઓટોમેટિક સંતુલિન નહીં કરી શકે. તેમ છતાં એન્ટર કરવું "
 "જોઈએ?"
 
-#: gnucash/gnome/dialog-sx-editor2.c:711 gnucash/gnome/dialog-sx-editor.c:492
+#: gnucash/gnome/dialog-sx-editor2.c:711 gnucash/gnome/dialog-sx-editor.c:493
 msgid "Please name the Scheduled Transaction."
 msgstr "કૃપા કરીને શીડ્યુલ્ડ ટ્રાન્ઝેક્શનને નામ આપો. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:738 gnucash/gnome/dialog-sx-editor.c:518
+#: gnucash/gnome/dialog-sx-editor2.c:738 gnucash/gnome/dialog-sx-editor.c:519
 #, c-format
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
@@ -2854,28 +2873,28 @@ msgstr ""
 msgid "Scheduled Transactions with variables cannot be automatically created."
 msgstr "વેરિએબલ્સ સાથે શીડ્યુલ્ડ ટ્રાન્ઝેક્શન્સ ઓટોમેટિક બનાવી ન શકાય. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:776 gnucash/gnome/dialog-sx-editor.c:627
+#: gnucash/gnome/dialog-sx-editor2.c:776 gnucash/gnome/dialog-sx-editor.c:628
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr "એક ટેમ્પ્લેટ ટ્રાન્ઝેક્શન વિના શીડ્યુલ્ડ ટ્રાન્ઝેક્શન ઓટોમેટિક બનાવી ન શકાય. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:791 gnucash/gnome/dialog-sx-editor.c:542
+#: gnucash/gnome/dialog-sx-editor2.c:791 gnucash/gnome/dialog-sx-editor.c:543
 msgid "Please provide a valid end selection."
 msgstr "મહેરબાની કરીને એક માન્ય અંતિમ પસંદગી પૂરી પાડો. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:809 gnucash/gnome/dialog-sx-editor.c:557
+#: gnucash/gnome/dialog-sx-editor2.c:809 gnucash/gnome/dialog-sx-editor.c:558
 msgid "There must be some number of occurrences."
 msgstr "ઘટનાઓની કેટલીક સંખ્યા હોવી જોઈએ. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:818 gnucash/gnome/dialog-sx-editor.c:565
+#: gnucash/gnome/dialog-sx-editor2.c:818 gnucash/gnome/dialog-sx-editor.c:566
 #, c-format
 msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
 msgstr "બાકીની ઘટનાઓની સંખ્યા (%d) કુલ ઘટનાઓની સંખ્યા (%d)  કરતાં વધારે હોવી જોઈએ. "
 
-#: gnucash/gnome/dialog-sx-editor2.c:850 gnucash/gnome/dialog-sx-editor.c:594
+#: gnucash/gnome/dialog-sx-editor2.c:850 gnucash/gnome/dialog-sx-editor.c:595
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
@@ -2889,54 +2908,54 @@ msgid ""
 "revoke them."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor2.c:1345 gnucash/gnome/dialog-sx-editor.c:1383
+#: gnucash/gnome/dialog-sx-editor2.c:1345 gnucash/gnome/dialog-sx-editor.c:1388
 msgid "(never)"
 msgstr "(ક્યારેય નહીં)"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1513 gnucash/gnome/dialog-sx-editor.c:1551
+#: gnucash/gnome/dialog-sx-editor2.c:1513 gnucash/gnome/dialog-sx-editor.c:1556
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr "હાલના ટેમ્પલેટમાં ફેરફાર કરવામાં આવ્યો છે. તમે આ ફેરફારને રેકોર્ડ કરવા માંગો છો?"
 
-#: gnucash/gnome/dialog-sx-editor2.c:1780 gnucash/gnome/dialog-sx-editor.c:1831
+#: gnucash/gnome/dialog-sx-editor2.c:1780 gnucash/gnome/dialog-sx-editor.c:1835
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:245
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:251
 msgid "Scheduled Transactions"
 msgstr "શીડ્યુલ્ડ ટ્રાન્ઝેક્શન"
 
-#: gnucash/gnome/dialog-sx-editor.c:616
+#: gnucash/gnome/dialog-sx-editor.c:617
 #, fuzzy
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr "વેરિએબલ્સ સાથે શીડ્યુલ્ડ ટ્રાન્ઝેક્શન્સ ઓટોમેટિક બનાવી ન શકાય. "
 
-#: gnucash/gnome/dialog-sx-editor.c:674
+#: gnucash/gnome/dialog-sx-editor.c:676
 #, fuzzy, c-format
 msgid "Couldn't parse %s for split \"%s\"."
 msgstr "સ્પ્લિટ \"%s\" માટે ઉધાર ફોર્મ્યુલાની સમજણ ન પડી. "
 
-#: gnucash/gnome/dialog-sx-editor.c:737
+#: gnucash/gnome/dialog-sx-editor.c:739
 #, c-format
 msgid "Split with memo %s has an invalid account."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor.c:740
+#: gnucash/gnome/dialog-sx-editor.c:742
 #, fuzzy
 msgid "Invalid Account in Split"
 msgstr "ટ્રેંડિગ ખાતાના કુલ સરવાળાને સમાવિષ્ટ કરો"
 
-#: gnucash/gnome/dialog-sx-editor.c:752
+#: gnucash/gnome/dialog-sx-editor.c:754
 #, c-format
 msgid "Split with memo %s has an unparseable Credit Formula."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor.c:755 gnucash/gnome/dialog-sx-editor.c:771
+#: gnucash/gnome/dialog-sx-editor.c:757 gnucash/gnome/dialog-sx-editor.c:773
 msgid "Unparsable Formula in Split"
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor.c:768
+#: gnucash/gnome/dialog-sx-editor.c:770
 #, c-format
 msgid "Split with memo %s has an unparseable Debit Formula."
 msgstr ""
@@ -2973,7 +2992,7 @@ msgid "Reminder"
 msgstr "સૂચના"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:393
-#: gnucash/gnome/gnc-plugin-budget.c:160
+#: gnucash/gnome/gnc-plugin-budget.c:168
 msgid "Created"
 msgstr "બનાવવામાં આવેલ "
 
@@ -3031,7 +3050,7 @@ msgid "Form Line Data: "
 msgstr "ફોર્મ લાઇન ડેટા:"
 
 #: gnucash/gnome/dialog-tax-info.c:286
-#: gnucash/report/standard-reports/account-summary.scm:405
+#: gnucash/report/standard-reports/account-summary.scm:406
 msgid "Code"
 msgstr "કોડ"
 
@@ -3176,7 +3195,7 @@ msgid "Remaining to Budget"
 msgstr "અસ્તિત્વમાં હોય તેવું બજેટ ખોલો "
 
 #: gnucash/gnome/gnc-budget-view.c:1504 gnucash/gnome/window-reconcile2.c:1148
-#: gnucash/gnome/window-reconcile.c:1199
+#: gnucash/gnome/window-reconcile.c:1224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:852
 #: gnucash/report/business-reports/aging.scm:569
 #: gnucash/report/business-reports/aging.scm:853
@@ -3261,13 +3280,13 @@ msgstr "એક નવી GnuCash ડેટાફાઈલમાં ખાતા�
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:145
 #: gnucash/gnome/gnc-plugin-page-register2.c:253
-#: gnucash/gnome/gnc-plugin-page-register.c:276
+#: gnucash/gnome/gnc-plugin-page-register.c:353
 msgid "_Find..."
 msgstr "_ફાઇન્ડ (શોધો)..."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:146
 #: gnucash/gnome/gnc-plugin-page-register2.c:254
-#: gnucash/gnome/gnc-plugin-page-register.c:277
+#: gnucash/gnome/gnc-plugin-page-register.c:354
 msgid "Find transactions with a search"
 msgstr "એક સર્ચ સાથે લેણદેણને શોધો "
 
@@ -3405,35 +3424,45 @@ msgstr[0] ""
 msgstr[1] ""
 "इस समय कोई भी नियत लेनदेने दर्ज किया जाना बाकी नहीं है. (%d लेनदेन स्वतः बनाया गया है)"
 
-#: gnucash/gnome/gnc-plugin-budget.c:61
+#: gnucash/gnome/gnc-plugin-budget.c:63
 msgid "New Budget"
 msgstr "નવું બજેટ"
 
-#: gnucash/gnome/gnc-plugin-budget.c:62
+#: gnucash/gnome/gnc-plugin-budget.c:64
 msgid "Create a new Budget"
 msgstr "એક નવું બજેટ બનાવો"
 
-#: gnucash/gnome/gnc-plugin-budget.c:67
+#: gnucash/gnome/gnc-plugin-budget.c:69
 msgid "Open Budget"
 msgstr "બજેટ ખોલો"
 
-#: gnucash/gnome/gnc-plugin-budget.c:68
+#: gnucash/gnome/gnc-plugin-budget.c:70
 msgid "Open an existing Budget"
 msgstr "અસ્તિત્વમાં હોય તેવું બજેટ ખોલો "
 
-#: gnucash/gnome/gnc-plugin-budget.c:73
+#: gnucash/gnome/gnc-plugin-budget.c:75
 msgid "Copy Budget"
 msgstr "બજેટને કોપી કરો "
 
-#: gnucash/gnome/gnc-plugin-budget.c:74
+#: gnucash/gnome/gnc-plugin-budget.c:76
 msgid "Copy an existing Budget"
 msgstr "અસ્તિત્વમાં હોય તેવા બજેટની કોપી કરો "
 
-#: gnucash/gnome/gnc-plugin-budget.c:260
+#: gnucash/gnome/gnc-plugin-budget.c:80
+#, fuzzy
+msgid "Delete Budget"
+msgstr "_બજેટને દૂર કરો"
+
+#: gnucash/gnome/gnc-plugin-budget.c:81
+#, fuzzy
+msgid "Deletes an existing Budget"
+msgstr "અસ્તિત્વમાં હોય તેવું બજેટ ખોલો "
+
+#: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
 msgstr "એક બજેટ પસંદ કરો"
 
-#: gnucash/gnome/gnc-plugin-budget.c:262 gnucash/gnome/gnc-split-reg.c:1223
+#: gnucash/gnome/gnc-plugin-budget.c:290 gnucash/gnome/gnc-split-reg.c:1223
 #: gnucash/gnome/gnc-split-reg.c:1354 gnucash/gnome-search/search-account.c:238
 #: gnucash/gnome-utils/dialog-account.c:658
 #: gnucash/gnome-utils/gnc-gui-query.c:297
@@ -3824,13 +3853,13 @@ msgstr "પસંદ કરેલું ખાતું અને તેના �
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:223
 #: gnucash/gnome/gnc-plugin-page-register2.c:243
-#: gnucash/gnome/gnc-plugin-page-register.c:266
+#: gnucash/gnome/gnc-plugin-page-register.c:343
 msgid "Edit _Account"
 msgstr "ખાતું એડિટ_કરો"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:224
 #: gnucash/gnome/gnc-plugin-page-register2.c:244
-#: gnucash/gnome/gnc-plugin-page-register.c:267
+#: gnucash/gnome/gnc-plugin-page-register.c:344
 msgid "Edit the selected account"
 msgstr "પસંદ કરેલ ખાતું એડિટ કરો"
 
@@ -3855,7 +3884,7 @@ msgstr "મહેરબાની કરીને એક માન્ય ખા�
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:238
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:243
 #: gnucash/gnome/gnc-plugin-page-register2.c:248
-#: gnucash/gnome/gnc-plugin-page-register.c:271
+#: gnucash/gnome/gnc-plugin-page-register.c:348
 #, fuzzy
 msgid "F_ind Account"
 msgstr "_ખાતાને એડિટ કરો"
@@ -3863,7 +3892,7 @@ msgstr "_ખાતાને એડિટ કરો"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:239
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:244
 #: gnucash/gnome/gnc-plugin-page-register2.c:249
-#: gnucash/gnome/gnc-plugin-page-register.c:272
+#: gnucash/gnome/gnc-plugin-page-register.c:349
 #, fuzzy
 msgid "Find an account"
 msgstr "લેણદેણ શોધો "
@@ -3880,7 +3909,7 @@ msgstr "પસંદ કરેલું ખાતાના બાળકોને
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:183
 #: gnucash/gnome/gnc-plugin-page-register2.c:326
-#: gnucash/gnome/gnc-plugin-page-register.c:363
+#: gnucash/gnome/gnc-plugin-page-register.c:440
 #: gnucash/gnome-utils/gnc-main-window.c:338
 msgid "_Filter By..."
 msgstr "_દ્વારા ફિલ્ડર કરો... "
@@ -3890,7 +3919,7 @@ msgstr "_દ્વારા ફિલ્ડર કરો... "
 #: gnucash/gnome/gnc-plugin-page-invoice.c:154
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:187
 #: gnucash/gnome/gnc-plugin-page-register2.c:330
-#: gnucash/gnome/gnc-plugin-page-register.c:367
+#: gnucash/gnome/gnc-plugin-page-register.c:444
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:169
 #: gnucash/gnome-utils/gnc-main-window.c:342
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1182
@@ -3902,7 +3931,7 @@ msgstr "_રિફ્રેશ"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:155
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:188
 #: gnucash/gnome/gnc-plugin-page-register2.c:331
-#: gnucash/gnome/gnc-plugin-page-register.c:368
+#: gnucash/gnome/gnc-plugin-page-register.c:445
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:170
 #: gnucash/gnome-utils/gnc-main-window.c:343
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1183
@@ -3911,19 +3940,19 @@ msgstr "આ વિન્ડોને રિફ્રેશ કરો"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:266
 #: gnucash/gnome/gnc-plugin-page-register2.c:343
-#: gnucash/gnome/gnc-plugin-page-register.c:380
+#: gnucash/gnome/gnc-plugin-page-register.c:457
 msgid "_Reconcile..."
 msgstr "_મેળવો..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:267
 #: gnucash/gnome/gnc-plugin-page-register2.c:344
-#: gnucash/gnome/gnc-plugin-page-register.c:381
+#: gnucash/gnome/gnc-plugin-page-register.c:458
 msgid "Reconcile the selected account"
 msgstr "પસંદ કરેલા ખાતાનો મેળ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:271
 #: gnucash/gnome/gnc-plugin-page-register2.c:348
-#: gnucash/gnome/gnc-plugin-page-register.c:385
+#: gnucash/gnome/gnc-plugin-page-register.c:462
 msgid "_Auto-clear..."
 msgstr "_ઓટો ક્લીઅર કરો... "
 
@@ -3933,39 +3962,39 @@ msgstr "જુદી જુદી લેણદેણોને ઓટોમેટ
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:276
 #: gnucash/gnome/gnc-plugin-page-register2.c:338
-#: gnucash/gnome/gnc-plugin-page-register.c:375
-#: gnucash/gnome/window-reconcile2.c:2213 gnucash/gnome/window-reconcile.c:2298
+#: gnucash/gnome/gnc-plugin-page-register.c:452
+#: gnucash/gnome/window-reconcile2.c:2213 gnucash/gnome/window-reconcile.c:2360
 msgid "_Transfer..."
 msgstr "_સ્થાનાંતરણ..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:277
 #: gnucash/gnome/gnc-plugin-page-register2.c:339
-#: gnucash/gnome/gnc-plugin-page-register.c:376
-#: gnucash/gnome/window-reconcile2.c:2214 gnucash/gnome/window-reconcile.c:2299
+#: gnucash/gnome/gnc-plugin-page-register.c:453
+#: gnucash/gnome/window-reconcile2.c:2214 gnucash/gnome/window-reconcile.c:2361
 msgid "Transfer funds from one account to another"
 msgstr "એક ખાતામાંથી બીજા ફંડમાં સ્થળાંતરિત કરો "
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:281
 #: gnucash/gnome/gnc-plugin-page-register2.c:353
-#: gnucash/gnome/gnc-plugin-page-register.c:390
+#: gnucash/gnome/gnc-plugin-page-register.c:467
 msgid "Stoc_k Split..."
 msgstr "શેરનું_વિભાજન"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:282
 #: gnucash/gnome/gnc-plugin-page-register2.c:354
-#: gnucash/gnome/gnc-plugin-page-register.c:391
+#: gnucash/gnome/gnc-plugin-page-register.c:468
 msgid "Record a stock split or a stock merger"
 msgstr "શેરનું વિભાજન અથવા શેરનો વિલય રેકોર્ડ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:286
 #: gnucash/gnome/gnc-plugin-page-register2.c:358
-#: gnucash/gnome/gnc-plugin-page-register.c:395
+#: gnucash/gnome/gnc-plugin-page-register.c:472
 msgid "View _Lots..."
 msgstr "લોટ્સ_જુઓ..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:287
 #: gnucash/gnome/gnc-plugin-page-register2.c:359
-#: gnucash/gnome/gnc-plugin-page-register.c:396
+#: gnucash/gnome/gnc-plugin-page-register.c:473
 msgid "Bring up the lot viewer/editor window"
 msgstr "લોટ વ્યૂઅર/એડિટર વિન્ડો સામે લાવો "
 
@@ -3974,7 +4003,7 @@ msgid "Check & Repair A_ccount"
 msgstr "ખાતાની_તપાસ અને સુધારાવધારા કરો "
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:292
-#: gnucash/gnome/window-reconcile2.c:2219 gnucash/gnome/window-reconcile.c:2304
+#: gnucash/gnome/window-reconcile2.c:2219 gnucash/gnome/window-reconcile.c:2366
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -4034,7 +4063,7 @@ msgstr "નવું"
 #: gnucash/gnome/gnc-plugin-page-budget.c:198
 #: gnucash/gnome/gnc-plugin-page-invoice.c:370
 #: gnucash/gnome/gnc-plugin-page-register2.c:486
-#: gnucash/gnome/gnc-plugin-page-register.c:519
+#: gnucash/gnome/gnc-plugin-page-register.c:597
 msgid "Delete"
 msgstr "દૂર કરો"
 
@@ -4231,7 +4260,7 @@ msgstr "કોપી"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:127
 #: gnucash/gnome/gnc-plugin-page-register2.c:238
-#: gnucash/gnome/gnc-plugin-page-register.c:261
+#: gnucash/gnome/gnc-plugin-page-register.c:338
 #: gnucash/gnome-utils/gnc-main-window.c:321
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1177
 msgid "_Paste"
@@ -4329,8 +4358,8 @@ msgstr "પ્રમાણ અનુસાર ગોઠવો "
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1139
 #: gnucash/gtkbuilder/dialog-price.glade:221
-#: gnucash/register/ledger-core/split-register.c:2052
-#: gnucash/register/ledger-core/split-register.c:2055
+#: gnucash/register/ledger-core/split-register.c:2061
+#: gnucash/register/ledger-core/split-register.c:2064
 msgid "_Price"
 msgstr "_મૂલ્ય "
 
@@ -4659,7 +4688,7 @@ msgstr "આ ચલણના માલિક માટે એક કંપની 
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:368
 #: gnucash/gnome/gnc-plugin-page-register2.c:484
-#: gnucash/gnome/gnc-plugin-page-register.c:517
+#: gnucash/gnome/gnc-plugin-page-register.c:595
 msgid "Enter"
 msgstr "એન્ટર "
 
@@ -4675,7 +4704,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:374
 #: gnucash/gnome/gnc-plugin-page-register2.c:490
-#: gnucash/gnome/gnc-plugin-page-register.c:523
+#: gnucash/gnome/gnc-plugin-page-register.c:601
 msgid "Blank"
 msgstr "ખાલી કરો"
 
@@ -4855,153 +4884,153 @@ msgid ""
 msgstr "આ ખાતું સમતુલિત નથી. શું તમે ખરેખર તેને સમાપ્ત કરવા માગો છો?"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:192
-#: gnucash/gnome/gnc-plugin-page-register.c:210
+#: gnucash/gnome/gnc-plugin-page-register.c:287
 msgid "Cu_t Transaction"
 msgstr "લેવડદેવડને ક_ટ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:193
-#: gnucash/gnome/gnc-plugin-page-register.c:211
+#: gnucash/gnome/gnc-plugin-page-register.c:288
 msgid "_Copy Transaction"
 msgstr "_લેવડદેવડને કોપી કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:194
-#: gnucash/gnome/gnc-plugin-page-register.c:212
+#: gnucash/gnome/gnc-plugin-page-register.c:289
 msgid "_Paste Transaction"
 msgstr "_લેવડદેવડને પેસ્ટ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:195
-#: gnucash/gnome/gnc-plugin-page-register.c:213
+#: gnucash/gnome/gnc-plugin-page-register.c:290
 msgid "Dup_licate Transaction"
 msgstr "લેવડદેવડની ન_કલ તૈયાર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:196
-#: gnucash/gnome/gnc-plugin-page-register.c:214
+#: gnucash/gnome/gnc-plugin-page-register.c:291
 #: gnucash/gnome/gnc-split-reg.c:1708
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1064
 msgid "_Delete Transaction"
 msgstr "_લેવડદેવડને દૂર કરો  "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:197
-#: gnucash/gnome/gnc-plugin-page-register.c:219
+#: gnucash/gnome/gnc-plugin-page-register.c:296
 #, fuzzy
 msgid "Cu_t Split"
 msgstr "ઓટો સ્પ્લિટ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:198
-#: gnucash/gnome/gnc-plugin-page-register.c:220
+#: gnucash/gnome/gnc-plugin-page-register.c:297
 #, fuzzy
 msgid "_Copy Split"
 msgstr "ઓટો સ્પ્લિટ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:199
-#: gnucash/gnome/gnc-plugin-page-register.c:221
+#: gnucash/gnome/gnc-plugin-page-register.c:298
 #, fuzzy
 msgid "_Paste Split"
 msgstr "_સ્પ્લિટ્સને દૂર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:200
-#: gnucash/gnome/gnc-plugin-page-register.c:222
+#: gnucash/gnome/gnc-plugin-page-register.c:299
 #, fuzzy
 msgid "Dup_licate Split"
 msgstr "ન_કલી એન્ટ્રી"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:201
-#: gnucash/gnome/gnc-plugin-page-register.c:223
+#: gnucash/gnome/gnc-plugin-page-register.c:300
 #: gnucash/gnome/gnc-split-reg.c:1668
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1024
 msgid "_Delete Split"
 msgstr "_સ્પ્લિટ્સને દૂર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:202
-#: gnucash/gnome/gnc-plugin-page-register.c:224
+#: gnucash/gnome/gnc-plugin-page-register.c:301
 msgid "Cut the selected transaction into clipboard"
 msgstr "પસંદ કરેલી લેવડદેવડને ક્લિપબોર્ડમાં કટ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:203
-#: gnucash/gnome/gnc-plugin-page-register.c:225
+#: gnucash/gnome/gnc-plugin-page-register.c:302
 msgid "Copy the selected transaction into clipboard"
 msgstr "પસંદ કરેલ લેવડદેવડને ક્લિપબોર્ડમાં કોપી કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:204
-#: gnucash/gnome/gnc-plugin-page-register.c:226
+#: gnucash/gnome/gnc-plugin-page-register.c:303
 msgid "Paste the transaction from the clipboard"
 msgstr "ક્લિપબોર્ડમાંથી લેવડદેવડને પેસ્ટ કરો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:205
-#: gnucash/gnome/gnc-plugin-page-register.c:227
+#: gnucash/gnome/gnc-plugin-page-register.c:304
 msgid "Make a copy of the current transaction"
 msgstr "હાલના લેવડદેવડની એક નકલ બનાવો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:206
-#: gnucash/gnome/gnc-plugin-page-register.c:228
+#: gnucash/gnome/gnc-plugin-page-register.c:305
 msgid "Delete the current transaction"
 msgstr "હાલની લેવડદેવડને દૂર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:207
-#: gnucash/gnome/gnc-plugin-page-register.c:233
+#: gnucash/gnome/gnc-plugin-page-register.c:310
 #, fuzzy
 msgid "Cut the selected split into clipboard"
 msgstr "પસંદ કરેલી લેવડદેવડને ક્લિપબોર્ડમાં કટ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:208
-#: gnucash/gnome/gnc-plugin-page-register.c:234
+#: gnucash/gnome/gnc-plugin-page-register.c:311
 #, fuzzy
 msgid "Copy the selected split into clipboard"
 msgstr "પસંદ કરેલ લેવડદેવડને ક્લિપબોર્ડમાં કોપી કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:209
-#: gnucash/gnome/gnc-plugin-page-register.c:235
+#: gnucash/gnome/gnc-plugin-page-register.c:312
 #, fuzzy
 msgid "Paste the split from the clipboard"
 msgstr "ક્લિપબોર્ડમાંથી લેવડદેવડને પેસ્ટ કરો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:210
-#: gnucash/gnome/gnc-plugin-page-register.c:236
+#: gnucash/gnome/gnc-plugin-page-register.c:313
 #, fuzzy
 msgid "Make a copy of the current split"
 msgstr "હાલની એન્ટ્રીની એક નકલ બનાવો  "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:211
-#: gnucash/gnome/gnc-plugin-page-register.c:237
+#: gnucash/gnome/gnc-plugin-page-register.c:314
 #, fuzzy
 msgid "Delete the current split"
 msgstr "હાલની એન્ટ્રીને દૂર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:221
-#: gnucash/gnome/gnc-plugin-page-register.c:244
+#: gnucash/gnome/gnc-plugin-page-register.c:321
 msgid "_Print Checks..."
 msgstr "_વિવિધ ચેકને પ્રિન્ટ કરો..."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:228
-#: gnucash/gnome/gnc-plugin-page-register.c:251
+#: gnucash/gnome/gnc-plugin-page-register.c:328
 #: gnucash/gnome-utils/gnc-main-window.c:311
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1167
 msgid "Cu_t"
 msgstr "ક_ટ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:229
-#: gnucash/gnome/gnc-plugin-page-register.c:252
+#: gnucash/gnome/gnc-plugin-page-register.c:329
 #: gnucash/gnome-utils/gnc-main-window.c:312
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1168
 msgid "Cut the current selection and copy it to clipboard"
 msgstr "હાલની પસંદગીને ક્લિપબોર્ડમાં કટ અને કોપી કરો  "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:233
-#: gnucash/gnome/gnc-plugin-page-register.c:256
+#: gnucash/gnome/gnc-plugin-page-register.c:333
 #: gnucash/gnome-utils/gnc-main-window.c:316
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1172
 msgid "_Copy"
 msgstr "_કોપી કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:234
-#: gnucash/gnome/gnc-plugin-page-register.c:257
+#: gnucash/gnome/gnc-plugin-page-register.c:334
 #: gnucash/gnome-utils/gnc-main-window.c:317
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1173
 msgid "Copy the current selection to clipboard"
 msgstr "હાલની પસંદગીને ક્લિપબોર્ડમાં કોપી કરો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:239
-#: gnucash/gnome/gnc-plugin-page-register.c:262
+#: gnucash/gnome/gnc-plugin-page-register.c:339
 #: gnucash/gnome-utils/gnc-main-window.c:322
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1178
 msgid "Paste the clipboard content at the cursor position"
@@ -5013,42 +5042,42 @@ msgid "Remo_ve All Splits"
 msgstr "_સ્પ્લિટ્સ હટાવો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:287
-#: gnucash/gnome/gnc-plugin-page-register.c:310
+#: gnucash/gnome/gnc-plugin-page-register.c:387
 msgid "Remove all splits in the current transaction"
 msgstr "હાલની લેવડદેવડમાં તમામ સ્પ્લિટ્સને દૂર કરો  "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:291
-#: gnucash/gnome/gnc-plugin-page-register.c:314
+#: gnucash/gnome/gnc-plugin-page-register.c:391
 msgid "_Enter Transaction"
 msgstr "_લેવડદેવડને એન્ટર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:292
-#: gnucash/gnome/gnc-plugin-page-register.c:315
+#: gnucash/gnome/gnc-plugin-page-register.c:392
 msgid "Record the current transaction"
 msgstr "હાલની લેવડદેવડને રેકોર્ડ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:296
-#: gnucash/gnome/gnc-plugin-page-register.c:319
+#: gnucash/gnome/gnc-plugin-page-register.c:396
 msgid "Ca_ncel Transaction"
 msgstr "લેવડદેવડને ર_દ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:297
-#: gnucash/gnome/gnc-plugin-page-register.c:320
+#: gnucash/gnome/gnc-plugin-page-register.c:397
 msgid "Cancel the current transaction"
 msgstr "હાલની લેવડદેવડને કેન્સલ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:301
-#: gnucash/gnome/gnc-plugin-page-register.c:324
+#: gnucash/gnome/gnc-plugin-page-register.c:401
 msgid "_Void Transaction"
 msgstr "_માન્ય લેવડદેવડ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:305
-#: gnucash/gnome/gnc-plugin-page-register.c:328
+#: gnucash/gnome/gnc-plugin-page-register.c:405
 msgid "_Unvoid Transaction"
 msgstr "_અમાન્ય લેવડદેવડ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:309
-#: gnucash/gnome/gnc-plugin-page-register.c:332
+#: gnucash/gnome/gnc-plugin-page-register.c:409
 msgid "Add _Reversing Transaction"
 msgstr "વિપરીત લેવડદેવડને_ઉમેરો"
 
@@ -5076,7 +5105,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:349
-#: gnucash/gnome/gnc-plugin-page-register.c:386
+#: gnucash/gnome/gnc-plugin-page-register.c:463
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
@@ -5084,85 +5113,85 @@ msgstr ""
 "વ્યક્તિગત લેવડદેવડોને ઓટોમેટિક ક્લીઅર કરો જેથી એક નિશ્વિત ક્લીઅર રકમ સુધી પહોંચી શકાય "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:363
-#: gnucash/gnome/gnc-plugin-page-register.c:400
+#: gnucash/gnome/gnc-plugin-page-register.c:477
 msgid "_Blank Transaction"
 msgstr "_ખાલી લેવડદેવડ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:364
-#: gnucash/gnome/gnc-plugin-page-register.c:401
+#: gnucash/gnome/gnc-plugin-page-register.c:478
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "રજિસ્ટરના નીચેના ભાગમાં ખાલી લેવડદેવડમાં જાવ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
-#: gnucash/gnome/gnc-plugin-page-register.c:405
+#: gnucash/gnome/gnc-plugin-page-register.c:482
 msgid "Edit E_xchange Rate"
 msgstr "વિ_નિમય દર એડિટ કરો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:369
-#: gnucash/gnome/gnc-plugin-page-register.c:406
+#: gnucash/gnome/gnc-plugin-page-register.c:483
 msgid "Edit the exchange rate for the current transaction"
 msgstr "વર્તમાન લેવડદેવડ માટે વિનિમય દરને એડિટર કરો"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:373
-#: gnucash/gnome/gnc-plugin-page-register.c:410
+#: gnucash/gnome/gnc-plugin-page-register.c:487
 msgid "_Jump"
 msgstr "_જમ્પ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:374
-#: gnucash/gnome/gnc-plugin-page-register.c:411
+#: gnucash/gnome/gnc-plugin-page-register.c:488
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "અન્ય ખાતામાં પ્રાસંગિક લેવડદેવડમાં જાવ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:378
-#: gnucash/gnome/gnc-plugin-page-register.c:415
+#: gnucash/gnome/gnc-plugin-page-register.c:492
 msgid "Sche_dule..."
 msgstr "કાર્ય_ક્રમ... "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:379
-#: gnucash/gnome/gnc-plugin-page-register.c:416
+#: gnucash/gnome/gnc-plugin-page-register.c:493
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
 msgstr "હાલની લેવડદેવડમાંથી એક ટેમ્પ્લેટ સ્વરૂપે શીડ્યુલ્ડ ટ્રાન્ઝેક્શન બનાવો "
 
 #. Translators: The following 2 are Scrub actions in register view
 #: gnucash/gnome/gnc-plugin-page-register2.c:383
-#: gnucash/gnome/gnc-plugin-page-register.c:422
+#: gnucash/gnome/gnc-plugin-page-register.c:499
 msgid "_All transactions"
 msgstr "_તમામ લેવડદેવડ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:387
-#: gnucash/gnome/gnc-plugin-page-register.c:426
+#: gnucash/gnome/gnc-plugin-page-register.c:503
 msgid "_This transaction"
 msgstr "_આ લેવડદેવડ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:394
-#: gnucash/gnome/gnc-plugin-page-register.c:433
+#: gnucash/gnome/gnc-plugin-page-register.c:510
 msgid "Account Report"
 msgstr "ખાતાનો રીપોર્ટ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:395
-#: gnucash/gnome/gnc-plugin-page-register.c:434
+#: gnucash/gnome/gnc-plugin-page-register.c:511
 msgid "Open a register report for this Account"
 msgstr "આ ખાતા માટે એક રજિસ્ટર રીપોર્ટ ખોલો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:399
-#: gnucash/gnome/gnc-plugin-page-register.c:438
+#: gnucash/gnome/gnc-plugin-page-register.c:515
 #, fuzzy
 msgid "Account Report - Single Transaction"
 msgstr "ઓનલાઈન લેવડદેવડ દાખલ કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:400
-#: gnucash/gnome/gnc-plugin-page-register.c:439
+#: gnucash/gnome/gnc-plugin-page-register.c:516
 msgid "Open a register report for the selected Transaction"
 msgstr "પસંદ કરેલ લેવડદેવડ માટે એક રજિસ્ટર રીપોર્ટ ખોલો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:410
-#: gnucash/gnome/gnc-plugin-page-register.c:449
+#: gnucash/gnome/gnc-plugin-page-register.c:527
 msgid "_Double Line"
 msgstr "_ડબલ લાઇન"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:411
-#: gnucash/gnome/gnc-plugin-page-register.c:450
+#: gnucash/gnome/gnc-plugin-page-register.c:528
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:305
 msgid "Show two lines of information for each transaction"
 msgstr "દરેક લેવડદેવડ માટે જાણકારીની બે લાઇન દેખાડો "
@@ -5178,95 +5207,95 @@ msgid "Show entered and reconciled dates"
 msgstr "સંગત તારીખ અનુસાર સોર્ટ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:422
-#: gnucash/gnome/gnc-plugin-page-register.c:455
+#: gnucash/gnome/gnc-plugin-page-register.c:533
 msgid "S_plit Transaction"
 msgstr "લેણદેણને વિભા_જીત કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:423
-#: gnucash/gnome/gnc-plugin-page-register.c:456
+#: gnucash/gnome/gnc-plugin-page-register.c:534
 msgid "Show all splits in the current transaction"
 msgstr "હાલની લેવડદેવડમાં તમામ વિભાજનને દેખાડો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:434
-#: gnucash/gnome/gnc-plugin-page-register.c:467
+#: gnucash/gnome/gnc-plugin-page-register.c:545
 msgid "_Basic Ledger"
 msgstr "_મૂળ લેજર "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:435
-#: gnucash/gnome/gnc-plugin-page-register.c:468
+#: gnucash/gnome/gnc-plugin-page-register.c:546
 msgid "Show transactions on one or two lines"
 msgstr "લેવડદેવડોને એક કે બે લાઇન પર દેખાડો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:439
-#: gnucash/gnome/gnc-plugin-page-register.c:472
+#: gnucash/gnome/gnc-plugin-page-register.c:550
 msgid "_Auto-Split Ledger"
 msgstr "_ઓટો-સ્પ્લિટ લેજર"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:440
-#: gnucash/gnome/gnc-plugin-page-register.c:473
+#: gnucash/gnome/gnc-plugin-page-register.c:551
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr "લેવડદેવડોને એક કે બે લાઇન પર દેખાડો અને હાલની લેવડદેવડનો વિસ્તાર કરો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:444
-#: gnucash/gnome/gnc-plugin-page-register.c:477
+#: gnucash/gnome/gnc-plugin-page-register.c:555
 #: gnucash/gtkbuilder/dialog-preferences.glade:2423
 msgid "Transaction _Journal"
 msgstr "લેવડદેવડ_જર્નલ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:445
-#: gnucash/gnome/gnc-plugin-page-register.c:478
+#: gnucash/gnome/gnc-plugin-page-register.c:556
 msgid "Show expanded transactions with all splits"
 msgstr "વિસ્તરિત લેવડદેવડોને બધા વિભાજનો સાથે દેખાડો "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:483
-#: gnucash/gnome/gnc-plugin-page-register.c:516
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2875
-#: gnucash/register/ledger-core/split-register.c:2598
-#: gnucash/register/ledger-core/split-register-layout.c:715
-#: gnucash/register/ledger-core/split-register-model.c:342
+#: gnucash/gnome/gnc-plugin-page-register.c:594
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2876
+#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register-layout.c:731
+#: gnucash/register/ledger-core/split-register-model.c:346
 #: gnucash/report/standard-reports/register.scm:143
 msgid "Transfer"
 msgstr "સ્થાનાંતરણ "
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:488
-#: gnucash/gnome/gnc-plugin-page-register.c:521
+#: gnucash/gnome/gnc-plugin-page-register.c:599
 #: gnucash/gnome-search/dialog-search.c:1096
 msgid "Split"
 msgstr "વિભાજન"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:489
-#: gnucash/gnome/gnc-plugin-page-register.c:522
+#: gnucash/gnome/gnc-plugin-page-register.c:600
 msgid "Schedule"
 msgstr "કાર્યક્રમ"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:492
-#: gnucash/gnome/gnc-plugin-page-register.c:525
+#: gnucash/gnome/gnc-plugin-page-register.c:603
 #: gnucash/gnome/window-autoclear.c:92
 msgid "Auto-clear"
 msgstr "ઓટો-ક્લીઅર"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:655
+#: gnucash/gnome/gnc-plugin-page-register2.c:666
 msgid ""
 "You have tried to open an account in the new register while it is open in "
 "the old register."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:728
+#: gnucash/gnome/gnc-plugin-page-register2.c:740
 #, fuzzy
 msgid "General Journal2"
 msgstr "સામાન્ય જર્નલ"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register2.c:1588
-#: gnucash/gnome/gnc-plugin-page-register.c:1804
+#: gnucash/gnome/gnc-plugin-page-register2.c:1600
+#: gnucash/gnome/gnc-plugin-page-register.c:1912
 #, c-format
 msgid "Save changes to %s?"
 msgstr "ફેરફારોને  %sમાં સેવ કરવું છે? "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1592
-#: gnucash/gnome/gnc-plugin-page-register.c:1808
+#: gnucash/gnome/gnc-plugin-page-register2.c:1604
+#: gnucash/gnome/gnc-plugin-page-register.c:1916
 #, fuzzy
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
@@ -5276,99 +5305,99 @@ msgstr ""
 "આ રજિસ્ટરમાં એક લેવડદેવડ માટે ફેરફારો બાકી છે. તમે આ લેવડદેવડને સેવ કરવા, ડિસ્કાર્ડ કરવા કે "
 "ઓપરેશનને રદ કરવાનું પસંદ કરશો?  "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1595
-#: gnucash/gnome/gnc-plugin-page-register.c:1811
+#: gnucash/gnome/gnc-plugin-page-register2.c:1607
+#: gnucash/gnome/gnc-plugin-page-register.c:1919
 msgid "_Discard Transaction"
 msgstr "_લેવડદેવડને સમાપ્ત કરો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1599
-#: gnucash/gnome/gnc-plugin-page-register.c:1815
+#: gnucash/gnome/gnc-plugin-page-register2.c:1611
+#: gnucash/gnome/gnc-plugin-page-register.c:1923
 msgid "_Save Transaction"
 msgstr "_લેવડદેવડને સેવ કરો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1628
-#: gnucash/gnome/gnc-plugin-page-register2.c:1663
+#: gnucash/gnome/gnc-plugin-page-register2.c:1640
 #: gnucash/gnome/gnc-plugin-page-register2.c:1675
-#: gnucash/gnome/gnc-plugin-page-register2.c:1698
-#: gnucash/gnome/gnc-plugin-page-register2.c:1746
-#: gnucash/gnome/gnc-plugin-page-register.c:1847
-#: gnucash/gnome/gnc-plugin-page-register.c:1882
-#: gnucash/gnome/gnc-plugin-page-register.c:1894
-#: gnucash/gnome/gnc-plugin-page-register.c:1944
-#: gnucash/gnome/gnc-plugin-page-register.c:2061
-#: gnucash/gnome/gnc-plugin-page-register.c:2233
+#: gnucash/gnome/gnc-plugin-page-register2.c:1687
+#: gnucash/gnome/gnc-plugin-page-register2.c:1710
+#: gnucash/gnome/gnc-plugin-page-register2.c:1758
+#: gnucash/gnome/gnc-plugin-page-register.c:1956
+#: gnucash/gnome/gnc-plugin-page-register.c:1991
+#: gnucash/gnome/gnc-plugin-page-register.c:2004
+#: gnucash/gnome/gnc-plugin-page-register.c:2056
+#: gnucash/gnome/gnc-plugin-page-register.c:2180
+#: gnucash/gnome/gnc-plugin-page-register.c:2359
 msgid "unknown"
 msgstr "અજ્ઞાત"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1649
-#: gnucash/gnome/gnc-plugin-page-register2.c:2384
-#: gnucash/gnome/gnc-plugin-page-register.c:779
-#: gnucash/gnome/gnc-plugin-page-register.c:1868
-#: gnucash/gnome/gnc-plugin-page-register.c:3331
+#: gnucash/gnome/gnc-plugin-page-register2.c:1661
+#: gnucash/gnome/gnc-plugin-page-register2.c:2396
+#: gnucash/gnome/gnc-plugin-page-register.c:876
+#: gnucash/gnome/gnc-plugin-page-register.c:1977
+#: gnucash/gnome/gnc-plugin-page-register.c:3482
 #: gnucash/gnome/gnc-split-reg.c:734
 #: gnucash/report/standard-reports/general-journal.scm:37
 msgid "General Journal"
 msgstr "સામાન્ય જર્નલ"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1651
-#: gnucash/gnome/gnc-plugin-page-register2.c:2390
-#: gnucash/gnome/gnc-plugin-page-register.c:1870
-#: gnucash/gnome/gnc-plugin-page-register.c:3337
+#: gnucash/gnome/gnc-plugin-page-register2.c:1663
+#: gnucash/gnome/gnc-plugin-page-register2.c:2402
+#: gnucash/gnome/gnc-plugin-page-register.c:1979
+#: gnucash/gnome/gnc-plugin-page-register.c:3488
 msgid "Portfolio"
 msgstr "પોર્ટફોલિયો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:1653
-#: gnucash/gnome/gnc-plugin-page-register2.c:2396
-#: gnucash/gnome/gnc-plugin-page-register.c:1872
-#: gnucash/gnome/gnc-plugin-page-register.c:3343
+#: gnucash/gnome/gnc-plugin-page-register2.c:1665
+#: gnucash/gnome/gnc-plugin-page-register2.c:2408
+#: gnucash/gnome/gnc-plugin-page-register.c:1981
+#: gnucash/gnome/gnc-plugin-page-register.c:3494
 msgid "Search Results"
 msgstr "પરિણામોને શોધો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2386
+#: gnucash/gnome/gnc-plugin-page-register2.c:2398
 #, fuzzy
 msgid "General Journal Report"
 msgstr "સામાન્ય જર્નલ"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2392
-#: gnucash/gnome/gnc-plugin-page-register.c:3339
+#: gnucash/gnome/gnc-plugin-page-register2.c:2404
+#: gnucash/gnome/gnc-plugin-page-register.c:3490
 msgid "Portfolio Report"
 msgstr "પોર્ટફોલિયો રીપોર્ટ "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2398
-#: gnucash/gnome/gnc-plugin-page-register.c:3345
+#: gnucash/gnome/gnc-plugin-page-register2.c:2410
+#: gnucash/gnome/gnc-plugin-page-register.c:3496
 msgid "Search Results Report"
 msgstr "પરિણામોનો અહેવાલ શોધો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2402
-#: gnucash/gnome/gnc-plugin-page-register.c:3349
+#: gnucash/gnome/gnc-plugin-page-register2.c:2414
+#: gnucash/gnome/gnc-plugin-page-register.c:3500
 #: gnucash/gtkbuilder/dialog-preferences.glade:2333
 #: gnucash/report/standard-reports/general-journal.scm:38
 #: gnucash/report/standard-reports/register.scm:683
 msgid "Register"
 msgstr "રજિસ્ટર"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2404
+#: gnucash/gnome/gnc-plugin-page-register2.c:2416
 #: gnucash/report/standard-reports/register.scm:377
 msgid "Register Report"
 msgstr "રજિસ્ટર રીપોર્ટ "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2420
-#: gnucash/gnome/gnc-plugin-page-register.c:3367
+#: gnucash/gnome/gnc-plugin-page-register2.c:2432
+#: gnucash/gnome/gnc-plugin-page-register.c:3518
 msgid "and subaccounts"
 msgstr "અને પેટાખાતા "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2452
-#: gnucash/gnome/gnc-plugin-page-register.c:3395
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2892
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2910
+#: gnucash/gnome/gnc-plugin-page-register2.c:2464
+#: gnucash/gnome/gnc-plugin-page-register.c:3547
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2874
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2893
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2911
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3018
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3023
 #: gnucash/gtkbuilder/dialog-payment.glade:334
-#: gnucash/register/ledger-core/split-register.c:2501
-#: gnucash/register/ledger-core/split-register.c:2596
-#: gnucash/register/ledger-core/split-register.c:2615
-#: gnucash/register/ledger-core/split-register.c:2633
+#: gnucash/register/ledger-core/split-register.c:2510
+#: gnucash/register/ledger-core/split-register.c:2605
+#: gnucash/register/ledger-core/split-register.c:2624
+#: gnucash/register/ledger-core/split-register.c:2642
 #: gnucash/report/report-system/trep-engine.scm:1337
 #: gnucash/report/report-system/trep-engine.scm:1354
 #: gnucash/report/standard-reports/general-journal.scm:90
@@ -5378,12 +5407,12 @@ msgstr "અને પેટાખાતા "
 msgid "Credit"
 msgstr "જમા"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2455
-#: gnucash/gnome/gnc-plugin-page-register.c:3399
+#: gnucash/gnome/gnc-plugin-page-register2.c:2467
+#: gnucash/gnome/gnc-plugin-page-register.c:3551
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3099
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3104
 #: gnucash/gtkbuilder/dialog-payment.glade:318
-#: gnucash/register/ledger-core/split-register.c:2478
+#: gnucash/register/ledger-core/split-register.c:2487
 #: gnucash/report/report-system/trep-engine.scm:1334
 #: gnucash/report/report-system/trep-engine.scm:1351
 #: gnucash/report/standard-reports/general-journal.scm:89
@@ -5393,13 +5422,13 @@ msgstr "જમા"
 msgid "Debit"
 msgstr "ઉધાર"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2621
-#: gnucash/gnome/gnc-plugin-page-register.c:3532
+#: gnucash/gnome/gnc-plugin-page-register2.c:2633
+#: gnucash/gnome/gnc-plugin-page-register.c:3684
 msgid "Print checks from multiple accounts?"
 msgstr "વિવિધ ખાતાના ચેકોને પ્રિન્ટ કરવા છે?"
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2623
-#: gnucash/gnome/gnc-plugin-page-register.c:3534
+#: gnucash/gnome/gnc-plugin-page-register2.c:2635
+#: gnucash/gnome/gnc-plugin-page-register.c:3686
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5407,131 +5436,131 @@ msgstr ""
 "આ શોધ પરિણામમાં એકથી વધુ ખાતાના વિભાજન સામેલ છે. તેમ છતાં તમે એક જ ખાતા સાથે સંબંધિત ન "
 "હોય તેવા તમામ ચેકોનો પ્રિન્ટ કરવા માંગો છો?  "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2633
-#: gnucash/gnome/gnc-plugin-page-register.c:3544
+#: gnucash/gnome/gnc-plugin-page-register2.c:2645
+#: gnucash/gnome/gnc-plugin-page-register.c:3696
 msgid "_Print checks"
 msgstr "_ચેકોને પ્રિન્ટ કરો "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2652
-#: gnucash/gnome/gnc-plugin-page-register.c:3563
+#: gnucash/gnome/gnc-plugin-page-register2.c:2664
+#: gnucash/gnome/gnc-plugin-page-register.c:3715
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "તમે ફક્ત એક બેન્ક ખાતાના રજિસ્ટરમાંથી અથવા પરિણામોના શોધમાંથી ચેકોનો પ્રિન્ટ કરી શકો "
 "છો. "
 
-#: gnucash/gnome/gnc-plugin-page-register2.c:2845
-#: gnucash/gnome/gnc-plugin-page-register.c:3740
+#: gnucash/gnome/gnc-plugin-page-register2.c:2857
+#: gnucash/gnome/gnc-plugin-page-register.c:3895
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "તમે મેળવેલા કે ક્લીઅર કરેલા સ્પ્લિટ્સમાંથી એક લેવડદેવડને રદ ન કરી શકો. "
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register2.c:2988
-#: gnucash/gnome/gnc-plugin-page-register.c:3980
+#: gnucash/gnome/gnc-plugin-page-register2.c:3000
+#: gnucash/gnome/gnc-plugin-page-register.c:4161
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2219
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by..."
 msgstr "....દ્વારા %sને ફિલ્ટર કરો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:215
+#: gnucash/gnome/gnc-plugin-page-register.c:292
 #, fuzzy
 msgid "_Associate File with Transaction"
 msgstr "_નવું ટ્રાન્ઝેક્શન ઓટોમેટિક બનાવો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:216
+#: gnucash/gnome/gnc-plugin-page-register.c:293
 #, fuzzy
 msgid "_Associate Location with Transaction"
 msgstr "_નવું ટ્રાન્ઝેક્શન ઓટોમેટિક બનાવો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:217
+#: gnucash/gnome/gnc-plugin-page-register.c:294
 msgid "_Open Associated File/Location"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:218
+#: gnucash/gnome/gnc-plugin-page-register.c:295
 #, fuzzy
 msgid "Open Associated Invoice"
 msgstr "_ચલણની નકલ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:229
+#: gnucash/gnome/gnc-plugin-page-register.c:306
 #, fuzzy
 msgid "Associate a file with the current transaction"
 msgstr "હાલની લેવડદેવડને દૂર કરો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:230
+#: gnucash/gnome/gnc-plugin-page-register.c:307
 #, fuzzy
 msgid "Associate a location with the current transaction"
 msgstr "હાલના લેવડદેવડની એક નકલ બનાવો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:231
+#: gnucash/gnome/gnc-plugin-page-register.c:308
 #, fuzzy
 msgid "Open the associated file or location with the current transaction"
 msgstr "હાલની લેવડદેવડમાંથી એક ટેમ્પ્લેટ સ્વરૂપે શીડ્યુલ્ડ ટ્રાન્ઝેક્શન બનાવો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:232
+#: gnucash/gnome/gnc-plugin-page-register.c:309
 #, fuzzy
 msgid "Open the associated invoice"
 msgstr "ચલણ શોધવાના ડાયલોગને ખોલો  "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:309
+#: gnucash/gnome/gnc-plugin-page-register.c:386
 #, fuzzy
 msgid "Remo_ve Other Splits"
 msgstr "_સ્પ્લિટ્સ હટાવો"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:359
+#: gnucash/gnome/gnc-plugin-page-register.c:436
 #: gnucash/gnome-utils/gnc-main-window.c:334
 msgid "_Sort By..."
 msgstr "_અનુસાર ગોઠવો... "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:526
+#: gnucash/gnome/gnc-plugin-page-register.c:604
 msgid "Associate File"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:527
+#: gnucash/gnome/gnc-plugin-page-register.c:605
 msgid "Associate Location"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:528
+#: gnucash/gnome/gnc-plugin-page-register.c:606
 msgid "Open File/Location"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:529
+#: gnucash/gnome/gnc-plugin-page-register.c:607
 #, fuzzy
 msgid "Open Invoice"
 msgstr "નવું ચલણ "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:706
+#: gnucash/gnome/gnc-plugin-page-register.c:798
 msgid ""
 "You have tried to open an account in the old register while it is open in "
 "the new register."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3205
+#: gnucash/gnome/gnc-plugin-page-register.c:3349
 #, fuzzy
 msgid "Filter By:"
 msgstr "દ્વારા ફિલ્ટર કરો..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3219
+#: gnucash/gnome/gnc-plugin-page-register.c:3363
 msgid "Start Date:"
 msgstr "શરૂઆતની તારીખ:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3225
+#: gnucash/gnome/gnc-plugin-page-register.c:3369
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "શેરોની સંખ્યા દર્શાવો"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3231
+#: gnucash/gnome/gnc-plugin-page-register.c:3376
 msgid "End Date:"
 msgstr "છેલ્લી તારીખ:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3241
+#: gnucash/gnome/gnc-plugin-page-register.c:3386
 #: gnucash/report/report-system/trep-engine.scm:122
 #: gnucash/report/report-system/trep-engine.scm:393
 #, fuzzy
 msgid "Unreconciled"
 msgstr "_મેળ ન કરેલું "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3242
+#: gnucash/gnome/gnc-plugin-page-register.c:3388
 #: gnucash/gnome-search/search-reconciled.c:218
 #: gnucash/gnome-utils/gnc-tree-view-account.c:804
 #: gnucash/report/report-system/trep-engine.scm:123
@@ -5539,7 +5568,7 @@ msgstr "_મેળ ન કરેલું "
 msgid "Cleared"
 msgstr "મંજૂર"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3243
+#: gnucash/gnome/gnc-plugin-page-register.c:3390
 #: gnucash/gnome-search/search-reconciled.c:221
 #: gnucash/gnome-utils/gnc-tree-view-account.c:818
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
@@ -5549,53 +5578,63 @@ msgstr "મંજૂર"
 msgid "Reconciled"
 msgstr "સુસંગત કરવામાં આવ્યું છે "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3244
+#: gnucash/gnome/gnc-plugin-page-register.c:3392
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/report/report-system/trep-engine.scm:125
 msgid "Frozen"
 msgstr "અટક્યું છે "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3245
+#: gnucash/gnome/gnc-plugin-page-register.c:3394
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/report/report-system/trep-engine.scm:126
 msgid "Voided"
 msgstr "ગેરમાન્ય"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3248
-#: gnucash/gnome/gnc-plugin-page-register.c:3250
+#: gnucash/gnome/gnc-plugin-page-register.c:3398
+#: gnucash/gnome/gnc-plugin-page-register.c:3400
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3250
+#: gnucash/gnome/gnc-plugin-page-register.c:3400
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3333
-#: gnucash/gnome/gnc-plugin-page-register.c:3351
+#: gnucash/gnome/gnc-plugin-page-register.c:3484
+#: gnucash/gnome/gnc-plugin-page-register.c:3502
 #: gnucash/report/standard-reports/transaction.scm:33
 msgid "Transaction Report"
 msgstr "સોદાનો અહેવાલ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3746
+#: gnucash/gnome/gnc-plugin-page-register.c:3902
 #: gnucash/gnome/gnc-split-reg.c:1103
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:68
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "આ લેવડદેવડને આ ટીપ્પણી સાથે વાંચી શકાય તેવી રીતે અંકિત કરવામાં આવી છે: '%s'   "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3819
+#: gnucash/gnome/gnc-plugin-page-register.c:3982
 #: gnucash/gnome/gnc-split-reg.c:1074
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1121
 msgid "A reversing entry has already been created for this transaction."
 msgstr "આ લેવડદેવડ માટે એક વિપરીત એન્ટ્રી અગાઉથી બનાવવામાં આવી છે. "
 
+#: gnucash/gnome/gnc-plugin-page-register.c:3989
+#, fuzzy
+msgid "Reverse Transaction"
+msgstr "વિપરીત લેવડદેવડને_ઉમેરો"
+
+#: gnucash/gnome/gnc-plugin-page-register.c:3990
+#, fuzzy
+msgid "New Transaction Information"
+msgstr "<b>નવી લેવડદેવડની માહિતી </b>"
+
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3897
+#: gnucash/gnome/gnc-plugin-page-register.c:4073
 #, c-format
 msgid "Sort %s by..."
 msgstr "....દ્વારા %sને ગોઠવો "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4667
+#: gnucash/gnome/gnc-plugin-page-register.c:4862
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -5741,7 +5780,7 @@ msgstr ""
 msgid "This account register is read-only."
 msgstr "આ રજિસ્ટર ખાતું ફક્ત વાંચી શકાય તેવું છે. "
 
-#: gnucash/gnome/gnc-split-reg2.c:980 gnucash/gnome/gnc-split-reg.c:2629
+#: gnucash/gnome/gnc-split-reg2.c:980 gnucash/gnome/gnc-split-reg.c:2639
 #, fuzzy
 msgid ""
 "This account may not be edited. If you want to edit transactions in this "
@@ -5751,7 +5790,7 @@ msgstr ""
 "આ ખાતાને એડિટ ન કરી શકાય. તમે આ રજિસ્ટરમાં લેવડદેવડને એડિટ કરવા માંગતા હોય તો ખાતાના "
 "વિકલ્પોને ખોલો અને પ્લેસહોલ્ડર ચેક્સબોક્સને બંધ કરી દો. "
 
-#: gnucash/gnome/gnc-split-reg2.c:987 gnucash/gnome/gnc-split-reg.c:2636
+#: gnucash/gnome/gnc-split-reg2.c:987 gnucash/gnome/gnc-split-reg.c:2646
 #, fuzzy
 msgid ""
 "One of the sub-accounts selected may not be edited. If you want to edit "
@@ -5774,7 +5813,7 @@ msgid "Date of Entry"
 msgstr "એન્ટ્રીની_તારીખ"
 
 #: gnucash/gnome/gnc-split-reg.c:623 gnucash/gnome/window-reconcile2.c:1829
-#: gnucash/gnome/window-reconcile.c:1890
+#: gnucash/gnome/window-reconcile.c:1952
 #, fuzzy
 msgid "Statement Date"
 msgstr "સ્ટેટમેન્ટની તારીખઃ"
@@ -5982,6 +6021,13 @@ msgstr ""
 msgid "Sort By:"
 msgstr "દ્વારા તારવો"
 
+#: gnucash/gnome/gnc-split-reg.c:2625
+msgid ""
+"This account may not be edited because its subaccounts have mismatched "
+"commodities or currencies.You need to open each account individually to edit "
+"transactions."
+msgstr ""
+
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
 #, fuzzy
@@ -6059,8 +6105,8 @@ msgid "gnucash-icon"
 msgstr ""
 
 #: gnucash/gnome/reconcile-view.c:425
-#: gnucash/register/ledger-core/split-register-layout.c:691
-#: gnucash/register/ledger-core/split-register-model.c:306
+#: gnucash/register/ledger-core/split-register-layout.c:707
+#: gnucash/register/ledger-core/split-register-model.c:310
 #, fuzzy
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
@@ -6130,117 +6176,117 @@ msgstr ""
 msgid "The selected amount cannot be cleared."
 msgstr "વ્યાજદર શૂન્ય ન હોઈ શકે."
 
-#: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile.c:496
+#: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile.c:514
 msgid "Interest Payment"
 msgstr "વ્યાજની ચુકવણી"
 
-#: gnucash/gnome/window-reconcile2.c:458 gnucash/gnome/window-reconcile.c:499
+#: gnucash/gnome/window-reconcile2.c:458 gnucash/gnome/window-reconcile.c:517
 msgid "Interest Charge"
 msgstr "વ્યાજનો ચાર્જ"
 
-#: gnucash/gnome/window-reconcile2.c:466 gnucash/gnome/window-reconcile.c:507
+#: gnucash/gnome/window-reconcile2.c:466 gnucash/gnome/window-reconcile.c:525
 #: gnucash/gtkbuilder/dialog-vendor.glade:784
 #: gnucash/gtkbuilder/dialog-vendor.glade:806
 msgid "Payment Information"
 msgstr "ચુકવણીની સૂચના "
 
-#: gnucash/gnome/window-reconcile2.c:476 gnucash/gnome/window-reconcile.c:517
+#: gnucash/gnome/window-reconcile2.c:476 gnucash/gnome/window-reconcile.c:535
 #: gnucash/gtkbuilder/assistant-loan.glade:597
 #: gnucash/gtkbuilder/assistant-loan.glade:817
 msgid "Payment From"
 msgstr "થી ચુકવણી"
 
 #: gnucash/gnome/window-reconcile2.c:482 gnucash/gnome/window-reconcile2.c:492
-#: gnucash/gnome/window-reconcile.c:523 gnucash/gnome/window-reconcile.c:533
+#: gnucash/gnome/window-reconcile.c:541 gnucash/gnome/window-reconcile.c:551
 msgid "Reconcile Account"
 msgstr "મેળવણી ખાતું"
 
-#: gnucash/gnome/window-reconcile2.c:497 gnucash/gnome/window-reconcile.c:538
+#: gnucash/gnome/window-reconcile2.c:497 gnucash/gnome/window-reconcile.c:556
 #: gnucash/gtkbuilder/assistant-loan.glade:911
 msgid "Payment To"
 msgstr "કોઇ ચુકવણી નહીં"
 
-#: gnucash/gnome/window-reconcile2.c:510 gnucash/gnome/window-reconcile.c:551
+#: gnucash/gnome/window-reconcile2.c:510 gnucash/gnome/window-reconcile.c:569
 msgid "No Auto Interest Payments for this Account"
 msgstr "આ ખાતા માટે કોઇ સ્વ વ્યાજની ચુકવણી નથી"
 
-#: gnucash/gnome/window-reconcile2.c:511 gnucash/gnome/window-reconcile.c:552
+#: gnucash/gnome/window-reconcile2.c:511 gnucash/gnome/window-reconcile.c:570
 msgid "No Auto Interest Charges for this Account"
 msgstr "આ ખાતા માટે કોઇ સ્વ વ્યાજનો ચાર્જ નથી"
 
-#: gnucash/gnome/window-reconcile2.c:765 gnucash/gnome/window-reconcile.c:807
+#: gnucash/gnome/window-reconcile2.c:765 gnucash/gnome/window-reconcile.c:829
 #: gnucash/gtkbuilder/window-reconcile.glade:201
 msgid "Enter _Interest Payment..."
 msgstr "વ્યાજની_ચુકવણી એન્ટર કરો... "
 
-#: gnucash/gnome/window-reconcile2.c:767 gnucash/gnome/window-reconcile.c:809
+#: gnucash/gnome/window-reconcile2.c:767 gnucash/gnome/window-reconcile.c:831
 msgid "Enter _Interest Charge..."
 msgstr "વ્યાજનો ચાર્જ _દાખલ કરો..."
 
-#: gnucash/gnome/window-reconcile2.c:1072 gnucash/gnome/window-reconcile.c:1114
+#: gnucash/gnome/window-reconcile2.c:1072 gnucash/gnome/window-reconcile.c:1139
 #: gnucash/report/business-reports/new-owner-report.scm:59
 #: gnucash/report/business-reports/owner-report.scm:60
 msgid "Debits"
 msgstr "ઉધાર"
 
-#: gnucash/gnome/window-reconcile2.c:1082 gnucash/gnome/window-reconcile.c:1124
+#: gnucash/gnome/window-reconcile2.c:1082 gnucash/gnome/window-reconcile.c:1149
 #: gnucash/report/business-reports/new-owner-report.scm:58
 #: gnucash/report/business-reports/owner-report.scm:59
 #: gnucash/report/report-system/report-utilities.scm:111
 msgid "Credits"
 msgstr "જમા"
 
-#: gnucash/gnome/window-reconcile2.c:1282 gnucash/gnome/window-reconcile.c:1333
+#: gnucash/gnome/window-reconcile2.c:1282 gnucash/gnome/window-reconcile.c:1358
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "શું તમે ખરેખર પસંદ કરેલી લેવડદેવડને દૂર કરવા માગો છો?"
 
-#: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1900
+#: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1962
 #: gnucash/gtkbuilder/window-reconcile.glade:122
 #, fuzzy
 msgid "Starting Balance"
 msgstr "શરૂઆતની સિલક "
 
-#: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1910
+#: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1972
 #, fuzzy
 msgid "Ending Balance"
 msgstr "આખરી બેલેન્સઃ"
 
-#: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1920
+#: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1982
 #, fuzzy
 msgid "Reconciled Balance"
 msgstr "મેળવણીનું બેલેન્સઃ"
 
-#: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1930
+#: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1992
 #: gnucash/report/standard-reports/cash-flow.scm:313
 msgid "Difference"
 msgstr "તફાવત"
 
-#: gnucash/gnome/window-reconcile2.c:1958 gnucash/gnome/window-reconcile.c:2043
+#: gnucash/gnome/window-reconcile2.c:1958 gnucash/gnome/window-reconcile.c:2105
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr "તમે આ મેળવણીની વિન્ડોમાં ફેરફાર કર્યો છે. શું તમે ખરેખર તેને રદ કરવા માગો છો?"
 
-#: gnucash/gnome/window-reconcile2.c:2076 gnucash/gnome/window-reconcile.c:2161
+#: gnucash/gnome/window-reconcile2.c:2076 gnucash/gnome/window-reconcile.c:2223
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "આ ખાતું સમતુલિત નથી. શું તમે ખરેખર તેને સમાપ્ત કરવા માગો છો?"
 
-#: gnucash/gnome/window-reconcile2.c:2133 gnucash/gnome/window-reconcile.c:2218
+#: gnucash/gnome/window-reconcile2.c:2133 gnucash/gnome/window-reconcile.c:2280
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "શું તમે આ મેળવણીને મુલતવી રાખવા અને પછીથી તેને સમાપ્ત કરવા માગો છો? "
 
-#: gnucash/gnome/window-reconcile2.c:2171 gnucash/gnome/window-reconcile.c:2256
+#: gnucash/gnome/window-reconcile2.c:2171 gnucash/gnome/window-reconcile.c:2318
 msgid "_Reconcile"
 msgstr "_મેળવણી "
 
-#: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2257
+#: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2319
 #: gnucash/gtkbuilder/dialog-tax-table.glade:454
 msgid "_Account"
 msgstr "_ખાતા"
 
 #: gnucash/gnome/window-reconcile2.c:2174
-#: gnucash/gnome/window-reconcile2.c:2255 gnucash/gnome/window-reconcile.c:2259
-#: gnucash/gnome/window-reconcile.c:2340
+#: gnucash/gnome/window-reconcile2.c:2255 gnucash/gnome/window-reconcile.c:2321
+#: gnucash/gnome/window-reconcile.c:2402
 #: gnucash/gnome-utils/gnc-main-window.c:274
 #: gnucash/gtkbuilder/dialog-account.glade:948
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:26
@@ -6265,96 +6311,130 @@ msgstr "_ખાતા"
 msgid "_Help"
 msgstr "_મદદ"
 
-#: gnucash/gnome/window-reconcile2.c:2179 gnucash/gnome/window-reconcile.c:2264
+#: gnucash/gnome/window-reconcile2.c:2179 gnucash/gnome/window-reconcile.c:2326
 msgid "_Reconcile Information..."
 msgstr "_મેળવણીની સૂચના..."
 
-#: gnucash/gnome/window-reconcile2.c:2180 gnucash/gnome/window-reconcile.c:2265
+#: gnucash/gnome/window-reconcile2.c:2180 gnucash/gnome/window-reconcile.c:2327
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr "સ્ટેટમેન્ટની તારીખ અને આખરી બેલેન્સ સહિત મેળવણીની માહિતીને બદલો. "
 
-#: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2270
+#: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2332
 msgid "_Finish"
 msgstr "_પૂર્ણ"
 
-#: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2271
+#: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2333
 msgid "Finish the reconciliation of this account"
 msgstr "આ ખાતાની મેળવણીનું કાર્ય પૂરું કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2190 gnucash/gnome/window-reconcile.c:2275
+#: gnucash/gnome/window-reconcile2.c:2190 gnucash/gnome/window-reconcile.c:2337
 msgid "_Postpone"
 msgstr "_મુલતવી રાખો"
 
-#: gnucash/gnome/window-reconcile2.c:2191 gnucash/gnome/window-reconcile.c:2276
+#: gnucash/gnome/window-reconcile2.c:2191 gnucash/gnome/window-reconcile.c:2338
 msgid "Postpone the reconciliation of this account"
 msgstr "આ ખાતાની મેળવણીને મુલતવી રાખો"
 
-#: gnucash/gnome/window-reconcile2.c:2196 gnucash/gnome/window-reconcile.c:2281
+#: gnucash/gnome/window-reconcile2.c:2196 gnucash/gnome/window-reconcile.c:2343
 msgid "Cancel the reconciliation of this account"
 msgstr "આ ખાતાની મેળવણીને દૂર કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2288
+#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2350
 msgid "_Open Account"
 msgstr "_ખાતું ખોલો"
 
-#: gnucash/gnome/window-reconcile2.c:2204 gnucash/gnome/window-reconcile.c:2289
+#: gnucash/gnome/window-reconcile2.c:2204 gnucash/gnome/window-reconcile.c:2351
 msgid "Open the account"
 msgstr "ખાતું ખોલો "
 
-#: gnucash/gnome/window-reconcile2.c:2208 gnucash/gnome/window-reconcile.c:2293
+#: gnucash/gnome/window-reconcile2.c:2208 gnucash/gnome/window-reconcile.c:2355
 msgid "_Edit Account"
 msgstr "_ખાતાને એડિટ કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2209 gnucash/gnome/window-reconcile.c:2294
+#: gnucash/gnome/window-reconcile2.c:2209 gnucash/gnome/window-reconcile.c:2356
 msgid "Edit the main account for this register"
 msgstr "આ રજિસ્ટર માટે મુખ્ય ખાતાને એડિટ કરો "
 
-#: gnucash/gnome/window-reconcile2.c:2218 gnucash/gnome/window-reconcile.c:2303
+#: gnucash/gnome/window-reconcile2.c:2218 gnucash/gnome/window-reconcile.c:2365
 #: gnucash/gnome-utils/gnc-main-window.c:349
 msgid "_Check & Repair"
 msgstr "_તપાસ અને ફેરફાર કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2227 gnucash/gnome/window-reconcile.c:2312
+#: gnucash/gnome/window-reconcile2.c:2227 gnucash/gnome/window-reconcile.c:2374
 #: gnucash/gtkbuilder/dialog-account.glade:1510
 msgid "_Balance"
 msgstr "_બેલેન્સ"
 
-#: gnucash/gnome/window-reconcile2.c:2228 gnucash/gnome/window-reconcile.c:2313
+#: gnucash/gnome/window-reconcile2.c:2228 gnucash/gnome/window-reconcile.c:2375
 msgid "Add a new balancing entry to the account"
 msgstr "ખાતામાં એક નવી બેલેસિંગ એન્ટ્રીને ઉમેરો"
 
-#: gnucash/gnome/window-reconcile2.c:2233 gnucash/gnome/window-reconcile.c:2318
+#: gnucash/gnome/window-reconcile2.c:2233 gnucash/gnome/window-reconcile.c:2380
 msgid "Edit the current transaction"
 msgstr "પ્રવર્તમાન લેવડદેવડને એડિટ કરો "
 
-#: gnucash/gnome/window-reconcile2.c:2238 gnucash/gnome/window-reconcile.c:2323
+#: gnucash/gnome/window-reconcile2.c:2238 gnucash/gnome/window-reconcile.c:2385
 msgid "Delete the selected transaction"
 msgstr "પસંદ કરેલી લેવડદેવડને દૂર કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2242 gnucash/gnome/window-reconcile.c:2327
+#: gnucash/gnome/window-reconcile2.c:2242 gnucash/gnome/window-reconcile.c:2389
 #, fuzzy
 msgid "_Reconcile Selection"
 msgstr "મેળવણી ખાતું"
 
-#: gnucash/gnome/window-reconcile2.c:2243 gnucash/gnome/window-reconcile.c:2328
+#: gnucash/gnome/window-reconcile2.c:2243 gnucash/gnome/window-reconcile.c:2390
 #, fuzzy
 msgid "Reconcile the selected transactions"
 msgstr "પસંદ કરેલી લેવડદેવડને દૂર કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2247 gnucash/gnome/window-reconcile.c:2332
+#: gnucash/gnome/window-reconcile2.c:2247 gnucash/gnome/window-reconcile.c:2394
 #, fuzzy
 msgid "_Unreconcile Selection"
 msgstr "_અસંગત"
 
-#: gnucash/gnome/window-reconcile2.c:2248 gnucash/gnome/window-reconcile.c:2333
+#: gnucash/gnome/window-reconcile2.c:2248 gnucash/gnome/window-reconcile.c:2395
 #, fuzzy
 msgid "Unreconcile the selected transactions"
 msgstr "પસંદ કરેલી લેવડદેવડને દૂર કરો"
 
-#: gnucash/gnome/window-reconcile2.c:2256 gnucash/gnome/window-reconcile.c:2341
+#: gnucash/gnome/window-reconcile2.c:2256 gnucash/gnome/window-reconcile.c:2403
 msgid "Open the GnuCash help window"
 msgstr "GnuCash હેલ્પ વિન્ડો ખોલો"
+
+#: gnucash/gnome/window-reconcile.c:376
+#, c-format
+msgid "Statement Date is %d day after today."
+msgid_plural "Statement Date is %d days after today."
+msgstr[0] ""
+msgstr[1] ""
+
+#: gnucash/gnome/window-reconcile.c:384
+#, c-format
+msgid "The statement date you have chosen is %d day in the future."
+msgid_plural "The statement date you have chosen is %d days in the future."
+msgstr[0] ""
+msgstr[1] ""
+
+#: gnucash/gnome/window-reconcile.c:389
+msgid ""
+"This may cause issues for future reconciliation actions on this account. "
+"Please double-check this is the date you intended."
+msgstr ""
+
+#: gnucash/gnome/window-reconcile.c:1861
+msgid ""
+"WARNING! Account contains splits whose reconcile date is after statement "
+"date. Reconciliation may be difficult."
+msgstr ""
+
+#: gnucash/gnome/window-reconcile.c:1865
+msgid ""
+"This account has splits whose Reconciled Date is after this reconciliation "
+"statement date. These splits may make reconciliation difficult. If this is "
+"the case, you may use Find Transactions to find them, unreconcile, and re-"
+"reconcile."
+msgstr ""
 
 #: gnucash/gnome-search/dialog-search.c:229
 msgid "You must select an item from the list"
@@ -6937,8 +7017,8 @@ msgstr "ચ_લણ"
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
 #: gnucash/gtkbuilder/dialog-customer.glade:611
 #: gnucash/gtkbuilder/dialog-employee.glade:724
-#: gnucash/gtkbuilder/dialog-transfer.glade:284
-#: gnucash/gtkbuilder/dialog-transfer.glade:372
+#: gnucash/gtkbuilder/dialog-transfer.glade:309
+#: gnucash/gtkbuilder/dialog-transfer.glade:397
 #: gnucash/gtkbuilder/dialog-vendor.glade:606
 #: libgnucash/engine/Account.cpp:4176
 msgid "Currency"
@@ -6989,7 +7069,7 @@ msgstr ""
 "તમારે કોમોડિટી માટે એક બિન-ખાલી \" સંપૂર્ણ નામ \", \"ચિહ્ન/સંક્ષેપણ\", અને \"પ્રકાર\" "
 "દાખલ કરવાનો રહેશે."
 
-#: gnucash/gnome-utils/dialog-dup-trans.c:245
+#: gnucash/gnome-utils/dialog-dup-trans.c:249
 #, fuzzy
 msgid "Action/Number"
 msgstr "_નંબર "
@@ -7253,28 +7333,28 @@ msgstr ""
 msgid "Are you sure you want to delete this entry?"
 msgstr "તમે ખરેખર આ એન્ટ્રી દૂર કરવા માંગો છો?"
 
-#: gnucash/gnome-utils/dialog-transfer.c:598
+#: gnucash/gnome-utils/dialog-transfer.c:599
 msgid "Show the income and expense accounts"
 msgstr "આવક અને ખર્ચના ખાતા દર્શાવો "
 
-#: gnucash/gnome-utils/dialog-transfer.c:702
+#: gnucash/gnome-utils/dialog-transfer.c:703
 #: gnucash/report/report-system/trep-engine.scm:2091
 #: gnucash/report/report-system/trep-engine.scm:2097
 msgid "Error"
 msgstr "ખામી"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1319
+#: gnucash/gnome-utils/dialog-transfer.c:1321
 msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-transfer.c:1323
+#: gnucash/gnome-utils/dialog-transfer.c:1325
 #, fuzzy
 msgid "Finance::Quote must be installed to enable this button."
 msgstr "ચેતવણીઃનાણાકીયઃ:ક્વોટ યોગ્ય રીતે ઇન્સ્ટોલ કરો કરવામાં આવ્યા નથી."
 
-#: gnucash/gnome-utils/dialog-transfer.c:1425
+#: gnucash/gnome-utils/dialog-transfer.c:1427
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
@@ -7282,19 +7362,19 @@ msgstr ""
 "આ લેવડદેવડ માટે તમારે એક ખાતાને નિર્ધારિત કરવાનું રહેશે જેમાંથી અથવા જેમાં અથવા બંને કરી "
 "શકાશે. "
 
-#: gnucash/gnome-utils/dialog-transfer.c:1435
+#: gnucash/gnome-utils/dialog-transfer.c:1437
 msgid "You can't transfer from and to the same account!"
 msgstr "તમે એક જ ખાતાથી અથવા ખાતામાં સ્થળાતંર કરી શકતા નથી! "
 
-#: gnucash/gnome-utils/dialog-transfer.c:1446
+#: gnucash/gnome-utils/dialog-transfer.c:1448
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1958
 #: gnucash/register/ledger-core/gncEntryLedger.c:85
-#: gnucash/register/ledger-core/split-register.c:1935
+#: gnucash/register/ledger-core/split-register.c:1942
 #, c-format
 msgid "The account %s does not allow transactions."
 msgstr "આ ખાતું %s લેવડ-દેવડની મંજૂરી આપતું નથી. "
 
-#: gnucash/gnome-utils/dialog-transfer.c:1462
+#: gnucash/gnome-utils/dialog-transfer.c:1464
 #, fuzzy
 msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
@@ -7303,42 +7383,42 @@ msgstr ""
 "તમે એક બિન-ચલણ ખાતાથી સ્થળાતંર કરી શકતા નથી. \"થી\" અને \"માં\" ખાતાને ઉલટાવવા અને "
 "નકારાત્મક \"રકમ\" બનાવવાનો પ્રયત્ન કરો."
 
-#: gnucash/gnome-utils/dialog-transfer.c:1480
+#: gnucash/gnome-utils/dialog-transfer.c:1482
 msgid "You must enter a valid price."
 msgstr "તમારે એક માન્ય મૂલ્ય દાખલ કરવાનું રહેશે."
 
-#: gnucash/gnome-utils/dialog-transfer.c:1492
+#: gnucash/gnome-utils/dialog-transfer.c:1494
 msgid "You must enter a valid `to' amount."
 msgstr "તમારે એક માન્યથી રકમ દાખલ કરવાની રહેશે."
 
-#: gnucash/gnome-utils/dialog-transfer.c:1717
+#: gnucash/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
 msgstr "સ્થળાંતર માટે તમારે એક રકમ દાખલ કરવાની રહેશે."
 
-#: gnucash/gnome-utils/dialog-transfer.c:1959
+#: gnucash/gnome-utils/dialog-transfer.c:1967
 #: gnucash/gtkbuilder/dialog-employee.glade:763
 msgid "Credit Account"
 msgstr "જમા ખાતું"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1963
+#: gnucash/gnome-utils/dialog-transfer.c:1971
 msgid "Debit Account"
 msgstr "ઉધાર ખાતું"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1981
+#: gnucash/gnome-utils/dialog-transfer.c:1989
 msgid "Transfer From"
 msgstr "થી સ્થળાંતરિત કરો"
 
-#: gnucash/gnome-utils/dialog-transfer.c:1985
+#: gnucash/gnome-utils/dialog-transfer.c:1993
 msgid "Transfer To"
 msgstr "થી સ્થળાંતરિત કરો"
 
-#: gnucash/gnome-utils/dialog-transfer.c:2042
+#: gnucash/gnome-utils/dialog-transfer.c:2050
 #, fuzzy
 msgid "Debit Amount"
 msgstr "ઉધાર રકમઃ"
 
-#: gnucash/gnome-utils/dialog-transfer.c:2047
-#: gnucash/gtkbuilder/dialog-transfer.glade:555
+#: gnucash/gnome-utils/dialog-transfer.c:2055
+#: gnucash/gtkbuilder/dialog-transfer.glade:580
 #, fuzzy
 msgid "To Amount"
 msgstr "રકમમાઃ"
@@ -8374,7 +8454,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:149
 #: gnucash/register/ledger-core/gncEntryLedger.c:931
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
-#: gnucash/register/ledger-core/split-register.c:465
+#: gnucash/register/ledger-core/split-register.c:466
 msgid "_Record"
 msgstr "_રેકોર્ડ "
 
@@ -8440,7 +8520,7 @@ msgid "The two currencies involved equal each other."
 msgstr "તેમાં સામેલ ચલણો એક બીજાની બરાબર છે."
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1253
-#: gnucash/register/ledger-core/split-register.c:506
+#: gnucash/register/ledger-core/split-register.c:507
 #, fuzzy
 msgid "New Split Information"
 msgstr "<b>વિભાજનની માહિતી</b>"
@@ -8453,14 +8533,14 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1357
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:477
-#: gnucash/register/ledger-core/split-register.c:613
+#: gnucash/register/ledger-core/split-register.c:616
 #: gnucash/register/register-gnome/datecell-gnome.c:107
 #, fuzzy
 msgid "Cannot store a transaction at this date"
 msgstr "લેવડદેવડને અમાન્ય જાહેર કરવાના કારણો આપો"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1359
-#: gnucash/register/ledger-core/split-register.c:615
+#: gnucash/register/ledger-core/split-register.c:618
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File-"
@@ -8510,7 +8590,7 @@ msgid "_Unreconcile"
 msgstr "_અસંગત"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1911
-#: gnucash/register/ledger-core/split-register-model.c:2206
+#: gnucash/register/ledger-core/split-register-model.c:2229
 msgid "Change reconciled split?"
 msgstr "સંગત વિભાજનને બદલો?"
 
@@ -8538,13 +8618,13 @@ msgstr ""
 "ફેરફારને ચાલુ રાખવો છે?"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1934
-#: gnucash/register/ledger-core/split-register-model.c:2230
+#: gnucash/register/ledger-core/split-register-model.c:2253
 msgid "Chan_ge Split"
 msgstr "વિભા_જનને બદલો"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1959
 #: gnucash/register/ledger-core/gncEntryLedger.c:86
-#: gnucash/register/ledger-core/split-register.c:1936
+#: gnucash/register/ledger-core/split-register.c:1943
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "આ ખાતું %s ઉપલબ્ધ નથી. તમે તેને બનાવવું પસંદ કરશો?"
@@ -8557,211 +8637,211 @@ msgstr ""
 msgid "New top level account"
 msgstr "નવું ટોચનું સ્તરીય ખાતું"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2854
-#: gnucash/register/ledger-core/split-register.c:2577
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2855
+#: gnucash/register/ledger-core/split-register.c:2586
 #, fuzzy
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "જમા"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2855
-#: gnucash/register/ledger-core/split-register.c:2578
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2856
+#: gnucash/register/ledger-core/split-register.c:2587
 msgid "Withdraw"
 msgstr "ઉપાડ"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2856
-#: gnucash/register/ledger-core/split-register.c:2579
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2857
+#: gnucash/register/ledger-core/split-register.c:2588
 msgid "Check"
 msgstr "ચેક"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2858
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2889
-#: gnucash/register/ledger-core/split-register.c:2581
-#: gnucash/register/ledger-core/split-register.c:2612
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2859
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2890
+#: gnucash/register/ledger-core/split-register.c:2590
+#: gnucash/register/ledger-core/split-register.c:2621
 msgid "ATM Deposit"
 msgstr "ATM જમા"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2859
-#: gnucash/register/ledger-core/split-register.c:2582
-#: gnucash/register/ledger-core/split-register.c:2613
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2860
+#: gnucash/register/ledger-core/split-register.c:2591
+#: gnucash/register/ledger-core/split-register.c:2622
 msgid "ATM Draw"
 msgstr "ATM ડ્રો"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2860
-#: gnucash/register/ledger-core/split-register.c:2583
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2861
+#: gnucash/register/ledger-core/split-register.c:2592
 msgid "Teller"
 msgstr "ટેલર"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2861
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2862
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2970
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3056
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:529
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1093
-#: gnucash/register/ledger-core/split-register.c:2584
+#: gnucash/register/ledger-core/split-register.c:2593
 #: libgnucash/app-utils/prefs.scm:72 libgnucash/app-utils/prefs.scm:83
 msgid "Charge"
 msgstr "ચાર્જ"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2863
-#: gnucash/register/ledger-core/split-register.c:2586
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
+#: gnucash/register/ledger-core/split-register.c:2595
 #: gnucash/report/business-reports/receipt.eguile.scm:292
 #: gnucash/report/business-reports/receipt.eguile.scm:299
-#: gnucash/report/business-reports/receipt.scm:260
-#: gnucash/report/business-reports/receipt.scm:262
+#: gnucash/report/business-reports/receipt.scm:213
+#: gnucash/report/business-reports/receipt.scm:215
 msgid "Receipt"
 msgstr "પ્રાપ્તિ"
-
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2864
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2878
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2914
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2925
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2957
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2965
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3043
-#: gnucash/register/ledger-core/split-register.c:2587
-#: gnucash/register/ledger-core/split-register.c:2601
-#: gnucash/register/ledger-core/split-register.c:2637
-#: gnucash/register/ledger-core/split-register.c:2648
-#: gnucash/register/ledger-core/split-register.c:2680
-#: libgnucash/app-utils/prefs.scm:67 libgnucash/app-utils/prefs.scm:85
-#: libgnucash/app-utils/prefs.scm:93 libgnucash/app-utils/prefs.scm:94
-msgid "Increase"
-msgstr "વૃદ્ધિ"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2865
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2879
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2915
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2926
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2958
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2965
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3043
+#: gnucash/register/ledger-core/split-register.c:2596
+#: gnucash/register/ledger-core/split-register.c:2610
+#: gnucash/register/ledger-core/split-register.c:2646
+#: gnucash/register/ledger-core/split-register.c:2657
+#: gnucash/register/ledger-core/split-register.c:2689
+#: libgnucash/app-utils/prefs.scm:67 libgnucash/app-utils/prefs.scm:85
+#: libgnucash/app-utils/prefs.scm:93 libgnucash/app-utils/prefs.scm:94
+msgid "Increase"
+msgstr "વૃદ્ધિ"
+
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2866
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2880
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2916
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2959
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2958
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3050
-#: gnucash/register/ledger-core/split-register.c:2588
-#: gnucash/register/ledger-core/split-register.c:2602
-#: gnucash/register/ledger-core/split-register.c:2638
-#: gnucash/register/ledger-core/split-register.c:2649
-#: gnucash/register/ledger-core/split-register.c:2681
+#: gnucash/register/ledger-core/split-register.c:2597
+#: gnucash/register/ledger-core/split-register.c:2611
+#: gnucash/register/ledger-core/split-register.c:2647
+#: gnucash/register/ledger-core/split-register.c:2658
+#: gnucash/register/ledger-core/split-register.c:2690
 #: libgnucash/app-utils/prefs.scm:68 libgnucash/app-utils/prefs.scm:76
 #: libgnucash/app-utils/prefs.scm:77 libgnucash/app-utils/prefs.scm:84
 msgid "Decrease"
 msgstr "ઘટાડો  "
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2867
-#: gnucash/register/ledger-core/split-register.c:2590
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2868
+#: gnucash/register/ledger-core/split-register.c:2599
 msgid "POS"
 msgstr "POS"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2868
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2869
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:442
 #: gnucash/gtkbuilder/dialog-customer.glade:347
 #: gnucash/gtkbuilder/dialog-customer.glade:970
 #: gnucash/gtkbuilder/dialog-employee.glade:330
 #: gnucash/gtkbuilder/dialog-vendor.glade:348
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
-#: gnucash/register/ledger-core/split-register.c:2591
+#: gnucash/register/ledger-core/split-register.c:2600
 #: gnucash/report/business-reports/aging.scm:714
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:200
 msgid "Phone"
 msgstr "ફોન"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2869
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2895
-#: gnucash/register/ledger-core/split-register.c:2592
-#: gnucash/register/ledger-core/split-register.c:2618
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2870
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2896
+#: gnucash/register/ledger-core/split-register.c:2601
+#: gnucash/register/ledger-core/split-register.c:2627
 msgid "Online"
 msgstr "ઓનલાઈન"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2871
-#: gnucash/register/ledger-core/split-register.c:2594
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2872
+#: gnucash/register/ledger-core/split-register.c:2603
 msgid "AutoDep"
 msgstr "AutoDep"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2872
-#: gnucash/register/ledger-core/split-register.c:2595
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2873
+#: gnucash/register/ledger-core/split-register.c:2604
 msgid "Wire"
 msgstr "વાયર"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2874
-#: gnucash/register/ledger-core/split-register.c:2597
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2875
+#: gnucash/register/ledger-core/split-register.c:2606
 msgid "Direct Debit"
 msgstr "સીધું ઉધાર"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2880
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2884
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2891
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2899
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2916
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2927
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2932
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2939
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2959
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3068
-#: gnucash/register/ledger-core/split-register.c:2603
-#: gnucash/register/ledger-core/split-register.c:2607
-#: gnucash/register/ledger-core/split-register.c:2614
-#: gnucash/register/ledger-core/split-register.c:2622
-#: gnucash/register/ledger-core/split-register.c:2639
-#: gnucash/register/ledger-core/split-register.c:2650
-#: gnucash/register/ledger-core/split-register.c:2655
-#: gnucash/register/ledger-core/split-register.c:2682
-#: libgnucash/app-utils/prefs.scm:69 libgnucash/app-utils/prefs.scm:70
-#: libgnucash/app-utils/prefs.scm:71
-msgid "Buy"
-msgstr "ખરીદો"
-
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2881
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2885
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2896
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2892
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2900
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2917
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2928
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2933
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2940
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2960
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2988
-#: gnucash/register/ledger-core/split-register.c:2604
-#: gnucash/register/ledger-core/split-register.c:2608
-#: gnucash/register/ledger-core/split-register.c:2619
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3068
+#: gnucash/register/ledger-core/split-register.c:2612
+#: gnucash/register/ledger-core/split-register.c:2616
 #: gnucash/register/ledger-core/split-register.c:2623
-#: gnucash/register/ledger-core/split-register.c:2640
-#: gnucash/register/ledger-core/split-register.c:2651
-#: gnucash/register/ledger-core/split-register.c:2656
-#: gnucash/register/ledger-core/split-register.c:2683
+#: gnucash/register/ledger-core/split-register.c:2631
+#: gnucash/register/ledger-core/split-register.c:2648
+#: gnucash/register/ledger-core/split-register.c:2659
+#: gnucash/register/ledger-core/split-register.c:2664
+#: gnucash/register/ledger-core/split-register.c:2691
+#: libgnucash/app-utils/prefs.scm:69 libgnucash/app-utils/prefs.scm:70
+#: libgnucash/app-utils/prefs.scm:71
+msgid "Buy"
+msgstr "ખરીદો"
+
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2882
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2886
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2897
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2901
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2918
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2929
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2934
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2941
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2961
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2988
+#: gnucash/register/ledger-core/split-register.c:2613
+#: gnucash/register/ledger-core/split-register.c:2617
+#: gnucash/register/ledger-core/split-register.c:2628
+#: gnucash/register/ledger-core/split-register.c:2632
+#: gnucash/register/ledger-core/split-register.c:2649
+#: gnucash/register/ledger-core/split-register.c:2660
+#: gnucash/register/ledger-core/split-register.c:2665
+#: gnucash/register/ledger-core/split-register.c:2692
 #: libgnucash/app-utils/prefs.scm:86 libgnucash/app-utils/prefs.scm:87
 #: libgnucash/app-utils/prefs.scm:88
 msgid "Sell"
 msgstr "વેચો"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2886
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2893
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
-#: gnucash/register/ledger-core/split-register.c:2609
-#: gnucash/register/ledger-core/split-register.c:2616
-#: gnucash/register/ledger-core/split-register.c:2665
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2887
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2894
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2943
+#: gnucash/register/ledger-core/split-register.c:2618
+#: gnucash/register/ledger-core/split-register.c:2625
+#: gnucash/register/ledger-core/split-register.c:2674
 msgid "Fee"
 msgstr "ફી "
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2890
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2891
 #, fuzzy
 msgid "ATM Withdraw"
 msgstr "ઉપાડ"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2920
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2921
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2981
-#: gnucash/register/ledger-core/split-register.c:2643
+#: gnucash/register/ledger-core/split-register.c:2652
 #: libgnucash/app-utils/prefs.scm:90
 msgid "Rebate"
 msgstr "છુટ "
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2921
-#: gnucash/register/ledger-core/split-register.c:2644
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2922
+#: gnucash/register/ledger-core/split-register.c:2653
 msgid "Paycheck"
 msgstr "પેચેક"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2934
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2935
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:72
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:76
-#: gnucash/register/ledger-core/split-register.c:2657
+#: gnucash/register/ledger-core/split-register.c:2666
 #: gnucash/report/standard-reports/balance-sheet.scm:500
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1100
 #: gnucash/report/standard-reports/budget-balance-sheet.scm:723
@@ -8769,13 +8849,13 @@ msgstr "પેચેક"
 msgid "Equity"
 msgstr "હિસ્સો"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2941
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2942
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2936
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#: gnucash/register/ledger-core/split-register.c:2664
-#: gnucash/register/ledger-core/split-register-model.c:396
+#: gnucash/register/ledger-core/split-register.c:2673
+#: gnucash/register/ledger-core/split-register-model.c:400
 #: gnucash/report/business-reports/invoice.scm:234
 #: gnucash/report/report-system/trep-engine.scm:939
 #: gnucash/report/report-system/trep-engine.scm:1063
@@ -8792,22 +8872,22 @@ msgstr "હિસ્સો"
 msgid "Price"
 msgstr "કિંમત"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2944
-#: gnucash/register/ledger-core/split-register.c:2667
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2945
+#: gnucash/register/ledger-core/split-register.c:2676
 msgid "Dividend"
 msgstr "ડિવિડન્ડ"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2947
-#: gnucash/register/ledger-core/split-register.c:2670
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2948
+#: gnucash/register/ledger-core/split-register.c:2679
 msgid "LTCG"
 msgstr "LTCG"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2949
-#: gnucash/register/ledger-core/split-register.c:2672
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2950
+#: gnucash/register/ledger-core/split-register.c:2681
 msgid "STCG"
 msgstr "STCG"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2950
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2976
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:33
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:39
@@ -8815,7 +8895,7 @@ msgstr "STCG"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:54
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:60
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:66
-#: gnucash/register/ledger-core/split-register.c:2673
+#: gnucash/register/ledger-core/split-register.c:2682
 #: gnucash/report/report-system/report-utilities.scm:117
 #: gnucash/report/standard-reports/advanced-portfolio.scm:1093
 #: gnucash/report/standard-reports/balsheet-pnl.scm:1246
@@ -8826,8 +8906,8 @@ msgstr "STCG"
 msgid "Income"
 msgstr "આવક"
 
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2952
-#: gnucash/register/ledger-core/split-register.c:2675
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2953
+#: gnucash/register/ledger-core/split-register.c:2684
 msgid "Dist"
 msgstr "Dist "
 
@@ -8846,7 +8926,7 @@ msgstr "શેરનું વિભાજન "
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:436
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:576
-#: gnucash/register/ledger-core/split-register-model.c:1008
+#: gnucash/register/ledger-core/split-register-model.c:1013
 #, fuzzy
 msgid "%A %d %B %Y"
 msgstr "%B %#d, %Y "
@@ -8865,12 +8945,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1122
-#: gnucash/register/ledger-core/split-register.c:2038
+#: gnucash/register/ledger-core/split-register.c:2047
 msgid "Recalculate Transaction"
 msgstr "લેવડદેવડની પુનઃગણના કરો"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1123
-#: gnucash/register/ledger-core/split-register.c:2039
+#: gnucash/register/ledger-core/split-register.c:2048
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
@@ -8880,30 +8960,30 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1130
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1132
 #: gnucash/gtkbuilder/assistant-stock-split.glade:124
-#: gnucash/register/ledger-core/split-register.c:2045
-#: gnucash/register/ledger-core/split-register.c:2048
+#: gnucash/register/ledger-core/split-register.c:2054
+#: gnucash/register/ledger-core/split-register.c:2057
 msgid "_Shares"
 msgstr "_શેર"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1130
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1137
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1144
-#: gnucash/register/ledger-core/split-register.c:2046
-#: gnucash/register/ledger-core/split-register.c:2053
-#: gnucash/register/ledger-core/split-register.c:2060
+#: gnucash/register/ledger-core/split-register.c:2055
+#: gnucash/register/ledger-core/split-register.c:2062
+#: gnucash/register/ledger-core/split-register.c:2069
 msgid "Changed"
 msgstr "બદલવામાં આવ્યું"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1144
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1146
 #: gnucash/gtkbuilder/dialog-tax-table.glade:474
-#: gnucash/register/ledger-core/split-register.c:2059
-#: gnucash/register/ledger-core/split-register.c:2062
+#: gnucash/register/ledger-core/split-register.c:2068
+#: gnucash/register/ledger-core/split-register.c:2071
 msgid "_Value"
 msgstr "_મૂલ્ય"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:1166
-#: gnucash/register/ledger-core/split-register.c:2071
+#: gnucash/register/ledger-core/split-register.c:2080
 msgid "_Recalculate"
 msgstr "_પુનઃગણના કરો"
 
@@ -9287,7 +9367,7 @@ msgid "Accounts / Void Reason"
 msgstr "ખાતાનો કોડ"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2862
-#: gnucash/import-export/import-main-matcher.c:784
+#: gnucash/import-export/import-main-matcher.c:787
 msgid "R"
 msgstr "R"
 
@@ -9315,7 +9395,7 @@ msgid "Funds Out"
 msgstr "ફંડ્સ આઉટ"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3012
-#: gnucash/register/ledger-core/split-register-model.c:499
+#: gnucash/register/ledger-core/split-register-model.c:503
 msgid "Credit Formula"
 msgstr "જમા ફોર્મ્યુલા"
 
@@ -9349,7 +9429,7 @@ msgid "Funds In"
 msgstr "ફંડ્સ ઇન"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3093
-#: gnucash/register/ledger-core/split-register-model.c:492
+#: gnucash/register/ledger-core/split-register-model.c:496
 msgid "Debit Formula"
 msgstr "ઉધાર ફોર્મ્યુલા"
 
@@ -9372,43 +9452,43 @@ msgid "Enter the transaction number, such as the check number"
 msgstr "લેવડદેવડની સંખ્યા દાખલ કરો જેમ કે ચેક નંબર"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3193
-#: gnucash/register/ledger-core/split-register-model.c:1140
+#: gnucash/register/ledger-core/split-register-model.c:1145
 msgid "Enter the name of the Customer"
 msgstr "ગ્રાહકનું નામ દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3195
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3204
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3213
-#: gnucash/register/ledger-core/split-register-model.c:1177
+#: gnucash/register/ledger-core/split-register-model.c:1182
 msgid "Enter notes for the transaction"
 msgstr "લેવડદેવડ માટે ટિપ્પણીઓ દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3197
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3206
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3215
-#: gnucash/register/ledger-core/split-register-model.c:1337
+#: gnucash/register/ledger-core/split-register-model.c:1343
 msgid "Enter a description of the split"
 msgstr "વિભાજનનું વિવરણ દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3202
-#: gnucash/register/ledger-core/split-register-model.c:1143
+#: gnucash/register/ledger-core/split-register-model.c:1148
 msgid "Enter the name of the Vendor"
 msgstr "વિક્રેતાનું નામ દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3211
-#: gnucash/register/ledger-core/split-register-model.c:1146
+#: gnucash/register/ledger-core/split-register-model.c:1151
 msgid "Enter a description of the transaction"
 msgstr "લેવડદેવડનું એક વિવરણ દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3225
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3229
-#: gnucash/register/ledger-core/split-register-model.c:1499
-#: gnucash/register/ledger-core/split-register-model.c:1566
+#: gnucash/register/ledger-core/split-register-model.c:1505
+#: gnucash/register/ledger-core/split-register-model.c:1572
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "એ ખાતું દાખલ કરો જેમાંથી ટ્રાન્સફર કરવું છે અથવા યાદીમાંથી એક ખાતું પસંદ કરો "
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3227
-#: gnucash/register/ledger-core/split-register-model.c:1210
+#: gnucash/register/ledger-core/split-register-model.c:1215
 msgid "Reason the transaction was voided"
 msgstr "લેવડદેવડને અમાન્ય જાહેર કરવાના કારણો આપો"
 
@@ -9430,7 +9510,7 @@ msgstr "વેચાયેલા અથવા ખરીદાયેલા શે
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3269
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3281
-#: gnucash/register/ledger-core/split-register-model.c:1447
+#: gnucash/register/ledger-core/split-register-model.c:1453
 msgid "Enter the number of shares bought or sold"
 msgstr "વેચાયેલા અથવા ખરીદાયેલા શેરની સંખ્યા દાખલ કરો"
 
@@ -9445,17 +9525,17 @@ msgid "Enter the rate"
 msgstr "વ્યાજ દર"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3311
-#: gnucash/register/ledger-core/split-register-model.c:1411
+#: gnucash/register/ledger-core/split-register-model.c:1417
 msgid "Enter the effective share price"
 msgstr "અસરકારક શેરમૂલ્ય દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3321
-#: gnucash/register/ledger-core/split-register-model.c:2363
+#: gnucash/register/ledger-core/split-register-model.c:2388
 msgid "Enter credit formula for real transaction"
 msgstr "વાસ્તવિક લેવડદેવડ માટે જમા ફોર્મ્યુલા દાખલ કરો"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3331
-#: gnucash/register/ledger-core/split-register-model.c:2329
+#: gnucash/register/ledger-core/split-register-model.c:2354
 msgid "Enter debit formula for real transaction"
 msgstr "વાસ્તવિક લેવડદેવડ માટે ઉધાર ફોર્મ્યુલા દાખલ કરો"
 
@@ -10562,13 +10642,13 @@ msgstr ""
 "डायलॉग दाखवला जाईल अन्यथा नाही."
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
-#: gnucash/gtkbuilder/dialog-preferences.glade:3296
+#: gnucash/gtkbuilder/dialog-preferences.glade:3297
 msgid "Alpha Vantage API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3295
-#: gnucash/gtkbuilder/dialog-preferences.glade:3307
+#: gnucash/gtkbuilder/dialog-preferences.glade:3296
+#: gnucash/gtkbuilder/dialog-preferences.glade:3308
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
@@ -11022,7 +11102,7 @@ msgstr ""
 "દેખાય. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:195
-#: gnucash/gtkbuilder/dialog-preferences.glade:3018
+#: gnucash/gtkbuilder/dialog-preferences.glade:3019
 msgid "Display the notebook tabs at the top of the window."
 msgstr "નોટબુક ટેબોને વિન્ડોના ટોચના ભાગ પર દર્શાવો."
 
@@ -11040,22 +11120,22 @@ msgstr ""
 "સ્વરૂપે જાય છે. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:200
-#: gnucash/gtkbuilder/dialog-preferences.glade:3038
+#: gnucash/gtkbuilder/dialog-preferences.glade:3039
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "નોટબુક ટેબોને વિન્ડોના નીચેના ભાગમાં દર્શાવો."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:205
-#: gnucash/gtkbuilder/dialog-preferences.glade:3058
+#: gnucash/gtkbuilder/dialog-preferences.glade:3059
 msgid "Display the notebook tabs at the left of the window."
 msgstr "નોટબુક ટેબોને વિન્ડોની ડાબી બાજુએ દર્શાવો."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:210
-#: gnucash/gtkbuilder/dialog-preferences.glade:3078
+#: gnucash/gtkbuilder/dialog-preferences.glade:3079
 msgid "Display the notebook tabs at the right of the window."
 msgstr "નોટબુક ટેબોને વિન્ડોની જમણી બાજુએ દર્શાવો."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:215
-#: gnucash/gtkbuilder/dialog-preferences.glade:3111
+#: gnucash/gtkbuilder/dialog-preferences.glade:3112
 msgid "Display the summary bar at the top of the page."
 msgstr "સારાંશ બારને પૃષ્ઠના ટોચના ભાગમાં દર્શાવો."
 
@@ -11070,12 +11150,12 @@ msgstr ""
 "સંભવિત મૂલ્યો છે \"ટોપ\" અને \"બોટમ\". આ \"બોટમ\" ડિફોલ્ટ સ્વરૂપે જાય છે. "
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:220
-#: gnucash/gtkbuilder/dialog-preferences.glade:3131
+#: gnucash/gtkbuilder/dialog-preferences.glade:3132
 msgid "Display the summary bar at the bottom of the page."
 msgstr "સારાંશ બારને પૃષ્ઠના નીચેના ભાગમાં દર્શાવો."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:225
-#: gnucash/gtkbuilder/dialog-preferences.glade:2975
+#: gnucash/gtkbuilder/dialog-preferences.glade:2976
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "એક ટેબને બંદ કરીએ ત્યારે સૌથી છેલ્લે જોયેલી ટેબમાં જવાય છે. "
 
@@ -16405,77 +16485,77 @@ msgstr ""
 msgid "<b>Default zoom level</b>"
 msgstr "<b>ડિફોલ્ટ સ્ટાઇલ</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2911
+#: gnucash/gtkbuilder/dialog-preferences.glade:2912
 msgid "Reports"
 msgstr "અહેવાલ"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2929
+#: gnucash/gtkbuilder/dialog-preferences.glade:2930
 msgid "<b>Window Geometry</b>"
 msgstr "<b>વિન્ડો જ્યોમેટ્રી </b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2949
+#: gnucash/gtkbuilder/dialog-preferences.glade:2950
 msgid "_Save window size and position"
 msgstr "_વિન્ડોના આકાર અને સ્થિતિને સેવ કરો "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2955
+#: gnucash/gtkbuilder/dialog-preferences.glade:2956
 #, fuzzy
 msgid "Save window size and location when it is closed."
 msgstr "વિન્ડોની સાઇઝો અને લોકેશન્સ સેવ કરો "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2969
+#: gnucash/gtkbuilder/dialog-preferences.glade:2970
 msgid "Bring the most _recent tab to the front"
 msgstr "સૌથી_હાલના ટેબને સામે લાવો "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3002
+#: gnucash/gtkbuilder/dialog-preferences.glade:3003
 msgid "<b>Tab Position</b>"
 msgstr "<b>ટેબની સ્થિતિ </b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3012
+#: gnucash/gtkbuilder/dialog-preferences.glade:3013
 msgid "To_p"
 msgstr "ટો_ચ"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3032
+#: gnucash/gtkbuilder/dialog-preferences.glade:3033
 msgid "B_ottom"
 msgstr "ની_ચે "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3052
+#: gnucash/gtkbuilder/dialog-preferences.glade:3053
 msgid "_Left"
 msgstr "_ડાબી"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3072
+#: gnucash/gtkbuilder/dialog-preferences.glade:3073
 msgid "_Right"
 msgstr "_ડાબી"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3095
+#: gnucash/gtkbuilder/dialog-preferences.glade:3096
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>સારાંશ બારની સ્થિતિ </b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3125
+#: gnucash/gtkbuilder/dialog-preferences.glade:3126
 #: gnucash/gtkbuilder/dialog-print-check.glade:254
 msgid "Bottom"
 msgstr "નીચે"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3158
+#: gnucash/gtkbuilder/dialog-preferences.glade:3159
 msgid "<b>Tabs</b>"
 msgstr "<b>ટેબ</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3168
+#: gnucash/gtkbuilder/dialog-preferences.glade:3169
 msgid "Show close button on _notebook tabs"
 msgstr "નોટબુક ટેબો_પર બંધ બટનને દર્શાવો "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3174
+#: gnucash/gtkbuilder/dialog-preferences.glade:3175
 #, fuzzy
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr "પ્રત્યેક નોટબુક ટેબ પર એક બંધ બટન બતાવો. આ 'બંધ' મેન્યુ આઇટમની જેમ કાર્ય કરે છે. "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3196
+#: gnucash/gtkbuilder/dialog-preferences.glade:3197
 #, fuzzy
 msgid "_Width"
 msgstr "_પહોળાઇઃ"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3217
+#: gnucash/gtkbuilder/dialog-preferences.glade:3218
 #, fuzzy
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
@@ -16484,15 +16564,15 @@ msgstr ""
 "આ બટન નોટબુક ટેબોની મહત્તમ પહોળાઈ સૂચવે છે. ટેબમાં શબ્દ આ મૂલ્ય (તપાસ અંદાજિત છે)થી વધારે "
 "લાંબી છે તો ટેબ સ્તરમાં એક મધ્ય કટ હશે અને તેના સ્થાને ઇલિપ્સિસનો ઉપયોગ કરવામાં આવશે. "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3235
+#: gnucash/gtkbuilder/dialog-preferences.glade:3236
 msgid "characters"
 msgstr "અક્ષર"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3277
+#: gnucash/gtkbuilder/dialog-preferences.glade:3278
 msgid "Windows"
 msgstr "વિન્ડો"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3325
+#: gnucash/gtkbuilder/dialog-preferences.glade:3326
 #, fuzzy
 msgid "Online Quotes"
 msgstr "_ઓનલાઈન ક્વોટ પ્રાપ્ત કરો "
@@ -17364,31 +17444,31 @@ msgstr "ફંડ્સ સ્થળાંતર કરો "
 msgid "<b>Basic Information</b>"
 msgstr "<b>પાયાની માહિતી</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:265
+#: gnucash/gtkbuilder/dialog-transfer.glade:290
 msgid "<b>Transfer From</b>"
 msgstr "<b>થી સ્થળાંતરણ</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:313
-#: gnucash/gtkbuilder/dialog-transfer.glade:401
+#: gnucash/gtkbuilder/dialog-transfer.glade:338
+#: gnucash/gtkbuilder/dialog-transfer.glade:426
 #: gnucash/report/standard-reports/net-charts.scm:48
 #: gnucash/report/standard-reports/price-scatter.scm:49
 msgid "Show Income/Expense"
 msgstr "આવક/ખર્ચ દર્શાવો "
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:342
+#: gnucash/gtkbuilder/dialog-transfer.glade:367
 msgid "<b>Transfer To</b>"
 msgstr "<b>સુધી સ્થળાંતરણ </b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:486
+#: gnucash/gtkbuilder/dialog-transfer.glade:511
 msgid "<b>Currency Transfer</b>"
 msgstr "<b>ચલણ સ્થળાંતરણ</b>"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:515
+#: gnucash/gtkbuilder/dialog-transfer.glade:540
 #, fuzzy
 msgid "Exchange Rate"
 msgstr "વિનિયમ દરઃ"
 
-#: gnucash/gtkbuilder/dialog-transfer.glade:596
+#: gnucash/gtkbuilder/dialog-transfer.glade:621
 msgid "_Fetch Rate"
 msgstr "_ફેચ રેટ"
 
@@ -18348,6 +18428,11 @@ msgid ""
 "Include all descendant accounts in the reconcile. All of them must use the "
 "same commodity as this one."
 msgstr ""
+
+#: gnucash/gtkbuilder/window-reconcile.glade:243
+#, fuzzy
+msgid "Statement Date is after today"
+msgstr "સ્ટેટમેન્ટની તારીખઃ"
 
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:91
 msgid "Not found"
@@ -20561,7 +20646,7 @@ msgstr "સીએસવીથી બિલો અને ચલણોને આ�
 msgid "Import Customers and Vendors from a CSV text file."
 msgstr "ટેક્સ્ટ ફાઈલ પરથી લેવડદેવડ આયાત કરો"
 
-#: gnucash/import-export/import-account-matcher.c:379
+#: gnucash/import-export/import-account-matcher.c:427
 msgid "(Full account ID: "
 msgstr "(પૂર્ણ ખાતા ID:"
 
@@ -20590,74 +20675,74 @@ msgstr "y/m/d"
 msgid "y/d/m"
 msgstr "y/d/m"
 
-#: gnucash/import-export/import-main-matcher.c:329
-#: gnucash/import-export/import-main-matcher.c:472
+#: gnucash/import-export/import-main-matcher.c:332
+#: gnucash/import-export/import-main-matcher.c:475
 msgid "Destination account for the auto-balance split."
 msgstr "ઓટો બેલેન્સ વિભાજન માટે લક્ષ્ય ખાતું"
 
-#: gnucash/import-export/import-main-matcher.c:618
+#: gnucash/import-export/import-main-matcher.c:621
 #, fuzzy
 msgid "Assign a transfer account to the selection."
 msgstr "તમારે વિવિધ ખાતામાંથી એક ટ્રાન્સફર ખાતાની પસંદગી કરવી જોઈએ. "
 
-#: gnucash/import-export/import-main-matcher.c:775
+#: gnucash/import-export/import-main-matcher.c:778
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:779
+#: gnucash/import-export/import-main-matcher.c:782
 msgid "U+R"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.c:790
+#: gnucash/import-export/import-main-matcher.c:793
 msgid "Info"
 msgstr "ઇન્ફો"
 
-#: gnucash/import-export/import-main-matcher.c:1159
+#: gnucash/import-export/import-main-matcher.c:1169
 msgid "New, already balanced"
 msgstr "નવું, પહેલેથી સંતુલિત"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1185
+#: gnucash/import-export/import-main-matcher.c:1195
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "નવું, ટ્રાન્સફર %s to (મેન્યુઅલ) \"%s\"  "
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: gnucash/import-export/import-main-matcher.c:1193
+#: gnucash/import-export/import-main-matcher.c:1203
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "નવું, ટ્રાન્સફર %s to (ઓટો) \"%s\"  "
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1204
+#: gnucash/import-export/import-main-matcher.c:1214
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "નવું, UNBALANCED (%sને ટ્રાન્સફર કરવા માટે ખાતાની જરૂર છે)! "
 
-#: gnucash/import-export/import-main-matcher.c:1216
+#: gnucash/import-export/import-main-matcher.c:1226
 msgid "Reconcile (manual) match"
 msgstr "મિલાન (મેન્યુઅલ) મેળ "
 
-#: gnucash/import-export/import-main-matcher.c:1220
+#: gnucash/import-export/import-main-matcher.c:1230
 msgid "Reconcile (auto) match"
 msgstr "મિલાન (ઓટો) મેળ"
 
-#: gnucash/import-export/import-main-matcher.c:1226
-#: gnucash/import-export/import-main-matcher.c:1245
+#: gnucash/import-export/import-main-matcher.c:1236
+#: gnucash/import-export/import-main-matcher.c:1255
 msgid "Match missing!"
 msgstr "મેળ ઉપલબ્ધ નથી"
 
-#: gnucash/import-export/import-main-matcher.c:1235
+#: gnucash/import-export/import-main-matcher.c:1245
 msgid "Update and reconcile (manual) match"
 msgstr "મેળને અપડેટ કરો અને મિલાન કરો (મેન્યુઅલ) "
 
-#: gnucash/import-export/import-main-matcher.c:1239
+#: gnucash/import-export/import-main-matcher.c:1249
 msgid "Update and reconcile (auto) match"
 msgstr "મેળને અપડેટ કરો અને મિલાન કરો (ઓટો)"
 
-#: gnucash/import-export/import-main-matcher.c:1250
+#: gnucash/import-export/import-main-matcher.c:1260
 msgid "Do not import (no action selected)"
 msgstr "આયાત ન કરો (કોઇ ગતિવિધિ પસંદ ન કરાઇ)"
 
@@ -20755,6 +20840,10 @@ msgstr "અજ્ઞાત OFX ક્રેડિટ કાર્ડ ખાત�
 #: gnucash/import-export/ofx/gnc-ofx-import.c:962
 msgid "Unknown OFX investment account"
 msgstr "અજ્ઞાત OFX રોકાણ ખાતું"
+
+#: gnucash/import-export/ofx/gnc-ofx-import.c:1048
+msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
+msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1053
 msgid "Select an OFX/QFX file to process"
@@ -21324,8 +21413,8 @@ msgstr "%"
 #. Translators: Enter the longest expected path of an Account
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:122
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:127
-#: gnucash/register/ledger-core/split-register-layout.c:723
-#: gnucash/register/ledger-core/split-register-layout.c:731
+#: gnucash/register/ledger-core/split-register-layout.c:739
+#: gnucash/register/ledger-core/split-register-layout.c:747
 #, fuzzy
 msgctxt "sample"
 msgid "Expenses:Automobile:Gasoline"
@@ -21411,8 +21500,8 @@ msgstr "કેવી રીતે વળતર"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:87
 #: gnucash/report/business-reports/invoice.scm:98
-#: gnucash/report/business-reports/receipt.scm:92
-#: gnucash/report/business-reports/receipt.scm:173
+#: gnucash/report/business-reports/receipt.scm:60
+#: gnucash/report/business-reports/receipt.scm:126
 #: gnucash/report/business-reports/taxinvoice.scm:115
 #: gnucash/report/business-reports/taxinvoice.scm:198
 msgid "Unit Price"
@@ -21560,18 +21649,18 @@ msgstr "આ એન્ટ્રી એક ગ્રાહક કે કામ મ
 msgid "How did you pay for this item?"
 msgstr "તમે આ આઇટમ માટે ચુકવણી કેવી રીતે કરી હતી?"
 
-#: gnucash/register/ledger-core/split-register.c:183
+#: gnucash/register/ledger-core/split-register.c:184
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
 msgstr ""
 "આ લેવડદેવડને અન્ય રજિસ્ટરમાં પહેલેથી સંપાદિત કરવામાં આવેલ છે. પહેલા ત્યાં તેનું સંપાદન પુર્ણ કરો. "
 
-#: gnucash/register/ledger-core/split-register.c:450
+#: gnucash/register/ledger-core/split-register.c:451
 msgid "Save transaction before duplicating?"
 msgstr "નકલ બનાવતા પહેલા લેવડદેવડને સેવ કરીએ?"
 
-#: gnucash/register/ledger-core/split-register.c:452
+#: gnucash/register/ledger-core/split-register.c:453
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
@@ -21579,13 +21668,13 @@ msgstr ""
 "વર્તમાન લેવડદેવડને બદલવામાં આવેલ છે. શું તમે લેવડદેવડની નકલ બનાવતા પહેલાં ફેરફારોને રેકોર્ડ "
 "કરવાનું કે નકલ બનાવવાની પ્રક્રિયાને રદ કરવાનું પસંદ કરશો? "
 
-#: gnucash/register/ledger-core/split-register.c:922
+#: gnucash/register/ledger-core/split-register.c:925
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
 msgstr "તમે એક વર્તમાન વિભાજન ભૂંસીને લખવા જઇ રહ્યા છો. શું તમે ખરેખર એમ કરવા ઇચ્છો છો? "
 
-#: gnucash/register/ledger-core/split-register.c:924
+#: gnucash/register/ledger-core/split-register.c:927
 #, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
@@ -21596,7 +21685,7 @@ msgstr ""
 "શકો. તમે આ વિન્ડોમાંથી સંપૂર્ણપણે લેવડદેવડ દૂર કરી શકો છો અથવા આ લેવડદેવડને બીજા પક્ષને "
 "દર્શાવતા હોય અને સ્પ્લિટને આ રજિસ્ટરને દૂર કરે તેવા રજિસ્ટરમાં જઈ શકો છો. "
 
-#: gnucash/register/ledger-core/split-register.c:977
+#: gnucash/register/ledger-core/split-register.c:980
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
@@ -21627,8 +21716,8 @@ msgstr ""
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
 #. used to estimate widths.
-#: gnucash/register/ledger-core/split-register-layout.c:640
-#: gnucash/register/ledger-core/split-register-layout.c:648
+#: gnucash/register/ledger-core/split-register-layout.c:656
+#: gnucash/register/ledger-core/split-register-layout.c:664
 #, fuzzy
 msgctxt "sample"
 msgid "22/02/2000"
@@ -21637,66 +21726,66 @@ msgstr "નમૂનો:12/12/2000"
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
 #. used to estimate widths.
-#: gnucash/register/ledger-core/split-register-layout.c:659
-#: gnucash/register/ledger-core/split-register-layout.c:667
+#: gnucash/register/ledger-core/split-register-layout.c:675
+#: gnucash/register/ledger-core/split-register-layout.c:683
 msgctxt "sample"
 msgid "99999"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-layout.c:675
+#: gnucash/register/ledger-core/split-register-layout.c:691
 #, fuzzy
 msgctxt "sample"
 msgid "Description of a transaction"
 msgstr "નમુંનોઃ એક લેવડદેવડનું વર્ણન"
 
-#: gnucash/register/ledger-core/split-register-layout.c:699
-#: gnucash/register/ledger-core/split-register-model.c:328
+#: gnucash/register/ledger-core/split-register-layout.c:715
+#: gnucash/register/ledger-core/split-register-model.c:332
 #, fuzzy
 msgctxt "Column header for 'Associate'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/register/ledger-core/split-register-layout.c:707
-#: gnucash/register/ledger-core/split-register-layout.c:747
-#: gnucash/register/ledger-core/split-register-layout.c:755
+#: gnucash/register/ledger-core/split-register-layout.c:723
 #: gnucash/register/ledger-core/split-register-layout.c:763
-#: gnucash/register/ledger-core/split-register-layout.c:773
-#: gnucash/register/ledger-core/split-register-layout.c:781
+#: gnucash/register/ledger-core/split-register-layout.c:771
+#: gnucash/register/ledger-core/split-register-layout.c:779
 #: gnucash/register/ledger-core/split-register-layout.c:789
 #: gnucash/register/ledger-core/split-register-layout.c:797
 #: gnucash/register/ledger-core/split-register-layout.c:805
-#: gnucash/register/ledger-core/split-register-layout.c:853
+#: gnucash/register/ledger-core/split-register-layout.c:813
+#: gnucash/register/ledger-core/split-register-layout.c:821
+#: gnucash/register/ledger-core/split-register-layout.c:869
 #, fuzzy
 msgctxt "sample"
 msgid "999,999.000"
 msgstr "નમુનો: 999,999.000 "
 
-#: gnucash/register/ledger-core/split-register-layout.c:739
+#: gnucash/register/ledger-core/split-register-layout.c:755
 #, fuzzy
 msgctxt "sample"
 msgid "Memo field sample text string"
 msgstr "નમુનોઃ મેમો ફિલ્ડ સેમ્પલ ટેક્સ્ડ સ્ટ્રીંગ"
 
-#: gnucash/register/ledger-core/split-register-layout.c:813
+#: gnucash/register/ledger-core/split-register-layout.c:829
 #, fuzzy
 msgctxt "Column header for 'Type'"
 msgid "T"
 msgstr "T"
 
-#: gnucash/register/ledger-core/split-register-layout.c:821
+#: gnucash/register/ledger-core/split-register-layout.c:837
 #, fuzzy
 msgctxt "sample"
 msgid "Notes field sample text string"
 msgstr "નમુનોઃ નોટ્સ મેમો ફિલ્ડ સેમ્પલ ટેક્સ્ટ સ્ટ્રિંગ"
 
-#: gnucash/register/ledger-core/split-register-layout.c:829
+#: gnucash/register/ledger-core/split-register-layout.c:845
 #, fuzzy
 msgctxt "sample"
 msgid "No Particular Reason"
 msgstr "નમુનાઃ કોઇ વિશેષ કારણ નહીં"
 
-#: gnucash/register/ledger-core/split-register-layout.c:837
-#: gnucash/register/ledger-core/split-register-layout.c:845
+#: gnucash/register/ledger-core/split-register-layout.c:853
+#: gnucash/register/ledger-core/split-register-layout.c:861
 #, fuzzy
 msgctxt "sample"
 msgid "(x + 0.33 * y + (x+y) )"
@@ -21711,114 +21800,114 @@ msgstr ""
 "ખાતાનું ચલણ નિર્ધારિત થઇ શક્યું નથી. તમારી સિસ્ટમ દ્વારા આપવામાં આવેલા ડિફોલ્ટ ચલણનો "
 "ઉપયોગ કરવામાં આવ્યો છે. "
 
-#: gnucash/register/ledger-core/split-register-model.c:247
+#: gnucash/register/ledger-core/split-register-model.c:251
 msgid "Ref"
 msgstr "રેફ "
 
-#: gnucash/register/ledger-core/split-register-model.c:263
+#: gnucash/register/ledger-core/split-register-model.c:267
 msgid "T-Ref"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:272
+#: gnucash/register/ledger-core/split-register-model.c:276
 #: gnucash/report/standard-reports/register.scm:133
 msgid "T-Num"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:398
+#: gnucash/register/ledger-core/split-register-model.c:402
 #, fuzzy
 msgid "Exch. Rate"
 msgstr "વિનિયમ દરઃ"
 
-#: gnucash/register/ledger-core/split-register-model.c:415
+#: gnucash/register/ledger-core/split-register-model.c:419
 msgid "Oth. Curr."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:432
-#: gnucash/register/ledger-core/split-register-model.c:456
+#: gnucash/register/ledger-core/split-register-model.c:436
+#: gnucash/register/ledger-core/split-register-model.c:460
 #, c-format
 msgid "Tot %s"
 msgstr "Tot %s "
 
-#: gnucash/register/ledger-core/split-register-model.c:438
+#: gnucash/register/ledger-core/split-register-model.c:442
 msgid "Tot Credit"
 msgstr "કુલ જમા "
 
-#: gnucash/register/ledger-core/split-register-model.c:462
+#: gnucash/register/ledger-core/split-register-model.c:466
 msgid "Tot Debit"
 msgstr "કુલ ઉધાર"
 
-#: gnucash/register/ledger-core/split-register-model.c:471
+#: gnucash/register/ledger-core/split-register-model.c:475
 msgid "Tot Shares"
 msgstr "કુલ શેર"
 
-#: gnucash/register/ledger-core/split-register-model.c:530
+#: gnucash/register/ledger-core/split-register-model.c:534
 #, fuzzy, c-format
 msgid "Reconciled on %s"
 msgstr "સુસંગત કરવામાં આવ્યું છે "
 
-#: gnucash/register/ledger-core/split-register-model.c:1021
+#: gnucash/register/ledger-core/split-register-model.c:1026
 msgid "Scheduled"
 msgstr "નિર્ધારિત"
 
-#: gnucash/register/ledger-core/split-register-model.c:1070
+#: gnucash/register/ledger-core/split-register-model.c:1075
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
 msgstr "લેવડદેવડનો સંદર્ભ દાખલ કરો, જેમ કે ચલણ અથવા ચેક નંબર "
 
-#: gnucash/register/ledger-core/split-register-model.c:1072
+#: gnucash/register/ledger-core/split-register-model.c:1077
 #, fuzzy
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr "લેવડદેવડનો સંદર્ભ દાખલ કરો, જેમ કે ચલણ અથવા ચેક નંબર "
 
-#: gnucash/register/ledger-core/split-register-model.c:1077
+#: gnucash/register/ledger-core/split-register-model.c:1082
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:1079
+#: gnucash/register/ledger-core/split-register-model.c:1084
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:1100
+#: gnucash/register/ledger-core/split-register-model.c:1105
 #, fuzzy
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
 msgstr "લેવડદેવડનો સંદર્ભ દાખલ કરો, જેમ કે ચલણ અથવા ચેક નંબર "
 
-#: gnucash/register/ledger-core/split-register-model.c:1104
+#: gnucash/register/ledger-core/split-register-model.c:1109
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:1308
+#: gnucash/register/ledger-core/split-register-model.c:1314
 #, fuzzy
 msgid "Enter an action type, or choose one from the list"
 msgstr "લેવડદેવડનો પ્રકાર દાખલ કરો અથવા યાદીમાંથી એક પસંદ કરો "
 
-#: gnucash/register/ledger-core/split-register-model.c:1309
+#: gnucash/register/ledger-core/split-register-model.c:1315
 #, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr "આ એન્ટ્રી માટે આવક/ખર્ચ ખાતું એન્ટર કરો, અથવા યાદીમાંથી એકની પસંદગી કરો"
 
-#: gnucash/register/ledger-core/split-register-model.c:1576
+#: gnucash/register/ledger-core/split-register-model.c:1582
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr "આ લેવડદેવડમાં ઘણા વિભાજન હાજર છે. તે તમામ જોવા માટે સ્પ્લિટ બટન દબાવો"
 
-#: gnucash/register/ledger-core/split-register-model.c:1579
+#: gnucash/register/ledger-core/split-register-model.c:1585
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr "આ લેવડદેવડ એક સ્ટોક વિભાજન છે, વિવરણો જોવા માટે સ્પ્લિટ બટન દબાવો. "
 
-#: gnucash/register/ledger-core/split-register-model.c:2078
+#: gnucash/register/ledger-core/split-register-model.c:2094
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -21831,15 +21920,15 @@ msgstr ""
 "\n"
 "'%s'"
 
-#: gnucash/register/ledger-core/split-register-model.c:2195
+#: gnucash/register/ledger-core/split-register-model.c:2218
 #, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "સંગત વિભાજનને બદલો?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2197
+#: gnucash/register/ledger-core/split-register-model.c:2220
 #, fuzzy, c-format
 msgid ""
-"The transaction you are about to change is contains reconciled splits in the "
+"The transaction you are about to change contains reconciled splits in the "
 "following accounts:\n"
 "%s\n"
 "\n"
@@ -21848,7 +21937,7 @@ msgstr ""
 "તમે એક સંગત વિભાજનને બદલવા જઇ રહ્યા છો. આમ કરવાથી ભવિષ્યમાં મિલાનની તકલીફ પડશે. શું આ "
 "ફેરફારને ચાલુ રાખવો છે?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2208
+#: gnucash/register/ledger-core/split-register-model.c:2231
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -21858,7 +21947,7 @@ msgstr ""
 "તમે એક સંગત વિભાજનને બદલવા જઇ રહ્યા છો. આમ કરવાથી ભવિષ્યમાં મિલાનની તકલીફ પડશે. શું આ "
 "ફેરફારને ચાલુ રાખવો છે?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2233
+#: gnucash/register/ledger-core/split-register-model.c:2256
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "લેવડદેવડને ર_દ કરો "
@@ -22399,7 +22488,7 @@ msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
 msgstr "CSS ફોન્ટ આકાર ફોર્મેટમાં ફોન્ટનો આકાર (જેમકે \"મધ્યમ\" અથવા \"10pt\")"
 
 #: gnucash/report/business-reports/balsheet-eg.scm:210
-#: gnucash/report/business-reports/receipt.scm:82
+#: gnucash/report/business-reports/receipt.scm:50
 #: gnucash/report/business-reports/taxinvoice.scm:107
 msgid "Template file"
 msgstr "ટેમ્પલેટ ફાઈલ"
@@ -22415,7 +22504,7 @@ msgstr ""
 "GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરી અંદર પોતાના યોગ્ય સ્થાને ચોક્કસ હોવી જોઇએ. "
 
 #: gnucash/report/business-reports/balsheet-eg.scm:213
-#: gnucash/report/business-reports/receipt.scm:83
+#: gnucash/report/business-reports/receipt.scm:51
 #: gnucash/report/business-reports/taxinvoice.scm:108
 msgid "CSS stylesheet file"
 msgstr "CSS સ્ટાઇલ શીટ ફાઈલ"
@@ -22751,8 +22840,8 @@ msgstr "ગ્રાહક સારાંશ"
 
 #: gnucash/report/business-reports/invoice.scm:104
 #: gnucash/report/business-reports/invoice.scm:249
-#: gnucash/report/business-reports/receipt.scm:97
-#: gnucash/report/business-reports/receipt.scm:183
+#: gnucash/report/business-reports/receipt.scm:65
+#: gnucash/report/business-reports/receipt.scm:136
 #: gnucash/report/business-reports/taxinvoice.scm:120
 #: gnucash/report/business-reports/taxinvoice.scm:208
 msgid "Tax Amount"
@@ -22911,7 +23000,7 @@ msgstr "એન્ટ્રીના મૂલ્યને દર્શાવો"
 #: gnucash/report/business-reports/invoice.scm:334
 #: gnucash/report/business-reports/invoice.scm:339
 #: gnucash/report/business-reports/invoice.scm:344
-#: gnucash/report/business-reports/receipt.scm:77
+#: gnucash/report/business-reports/receipt.scm:45
 #: gnucash/report/business-reports/taxinvoice.scm:83
 #: gnucash/report/report-system/report.scm:70
 #: gnucash/report/standard-reports/register.scm:381
@@ -23105,24 +23194,24 @@ msgid "T"
 msgstr "T"
 
 #: gnucash/report/business-reports/invoice.scm:540
-#: gnucash/report/business-reports/receipt.scm:95
-#: gnucash/report/business-reports/receipt.scm:179
+#: gnucash/report/business-reports/receipt.scm:63
+#: gnucash/report/business-reports/receipt.scm:132
 #: gnucash/report/business-reports/taxinvoice.scm:118
 #: gnucash/report/business-reports/taxinvoice.scm:204
 msgid "Net Price"
 msgstr "ચોખ્ખું મૂલ્ય"
 
 #: gnucash/report/business-reports/invoice.scm:556
-#: gnucash/report/business-reports/receipt.scm:98
-#: gnucash/report/business-reports/receipt.scm:185
+#: gnucash/report/business-reports/receipt.scm:66
+#: gnucash/report/business-reports/receipt.scm:138
 #: gnucash/report/business-reports/taxinvoice.scm:121
 #: gnucash/report/business-reports/taxinvoice.scm:210
 msgid "Total Price"
 msgstr "કુલ મૂલ્ય"
 
 #: gnucash/report/business-reports/invoice.scm:576
-#: gnucash/report/business-reports/receipt.scm:100
-#: gnucash/report/business-reports/receipt.scm:189
+#: gnucash/report/business-reports/receipt.scm:68
+#: gnucash/report/business-reports/receipt.scm:142
 #: gnucash/report/business-reports/taxinvoice.scm:123
 #: gnucash/report/business-reports/taxinvoice.scm:214
 msgid "Amount Due"
@@ -23577,120 +23666,115 @@ msgstr ""
 "આ અહેવાલ માત્ર (વેચાણ) ચલણો માટે ડિઝાઇન કરવામાં આવ્યા છે. કૃપા કરી એક ચલણને પસંદ કરતી "
 "વખતે વિકલ્પ બટનનો ઉપયોગ કરો. બિલ કે ખર્ચ પહોંચનો નહીં "
 
-#: gnucash/report/business-reports/receipt.scm:67
-#: gnucash/report/business-reports/taxinvoice.scm:74
-msgid "n/a"
-msgstr "n/a"
-
-#: gnucash/report/business-reports/receipt.scm:73
+#: gnucash/report/business-reports/receipt.scm:41
 #: gnucash/report/business-reports/taxinvoice.scm:80
 msgid "Headings 1"
 msgstr "શીર્ષક 1  "
 
-#: gnucash/report/business-reports/receipt.scm:74
+#: gnucash/report/business-reports/receipt.scm:42
 #: gnucash/report/business-reports/taxinvoice.scm:81
 msgid "Headings 2"
 msgstr "શીર્ષક 2"
 
-#: gnucash/report/business-reports/receipt.scm:80
+#: gnucash/report/business-reports/receipt.scm:48
 #: gnucash/report/business-reports/taxinvoice.scm:106
 msgid "Report title"
 msgstr "અહેવાલનું શીર્ષક "
 
-#: gnucash/report/business-reports/receipt.scm:81
+#: gnucash/report/business-reports/receipt.scm:49
 #: libgnucash/app-utils/business-prefs.scm:40
 msgid "Invoice number"
 msgstr "ચલણ સંખ્યા"
 
-#: gnucash/report/business-reports/receipt.scm:84
+#: gnucash/report/business-reports/receipt.scm:52
 #: gnucash/report/business-reports/taxinvoice.scm:109
 msgid "Heading font"
 msgstr "શીર્ષકના ફોન્ટ"
 
-#: gnucash/report/business-reports/receipt.scm:85
+#: gnucash/report/business-reports/receipt.scm:53
 #: gnucash/report/business-reports/taxinvoice.scm:110
 msgid "Text font"
 msgstr "લખાણના ફોન્ટ"
 
-#: gnucash/report/business-reports/receipt.scm:86
+#: gnucash/report/business-reports/receipt.scm:54
 #, fuzzy
 msgid "Header logo filename"
 msgstr "લોગો ફાઈલનેમ "
 
-#: gnucash/report/business-reports/receipt.scm:87
+#: gnucash/report/business-reports/receipt.scm:55
 #, fuzzy
 msgid "Header logo width"
 msgstr "લોગોની પહોળાઇ "
 
-#: gnucash/report/business-reports/receipt.scm:88
+#: gnucash/report/business-reports/receipt.scm:56
 #, fuzzy
 msgid "Footer logo filename"
 msgstr "લોગો ફાઈલનેમ "
 
-#: gnucash/report/business-reports/receipt.scm:89
+#: gnucash/report/business-reports/receipt.scm:57
 #, fuzzy
 msgid "Footer logo width"
 msgstr "લોગોની પહોળાઇ "
 
-#: gnucash/report/business-reports/receipt.scm:90
-#: gnucash/report/business-reports/receipt.scm:169
+#: gnucash/report/business-reports/receipt.scm:58
+#: gnucash/report/business-reports/receipt.scm:122
 #: gnucash/report/business-reports/taxinvoice.scm:113
 #: gnucash/report/business-reports/taxinvoice.scm:194
 #: gnucash/report/standard-reports/portfolio.scm:256
 msgid "Units"
 msgstr "એકમો"
 
-#: gnucash/report/business-reports/receipt.scm:91
-#: gnucash/report/business-reports/receipt.scm:171
+#: gnucash/report/business-reports/receipt.scm:59
+#: gnucash/report/business-reports/receipt.scm:124
 #: gnucash/report/business-reports/taxinvoice.scm:114
 #: gnucash/report/business-reports/taxinvoice.scm:196
 msgid "Qty"
 msgstr "પ્રમાણ"
 
-#: gnucash/report/business-reports/receipt.scm:93
-#: gnucash/report/business-reports/receipt.scm:175
+#: gnucash/report/business-reports/receipt.scm:61
+#: gnucash/report/business-reports/receipt.scm:128
 #: gnucash/report/business-reports/taxinvoice.scm:116
 #: gnucash/report/business-reports/taxinvoice.scm:200
 msgid "Discount Rate"
 msgstr "રાહત દર"
 
-#: gnucash/report/business-reports/receipt.scm:94
-#: gnucash/report/business-reports/receipt.scm:177
+#: gnucash/report/business-reports/receipt.scm:62
+#: gnucash/report/business-reports/receipt.scm:130
 #: gnucash/report/business-reports/taxinvoice.scm:117
 #: gnucash/report/business-reports/taxinvoice.scm:202
 msgid "Discount Amount"
 msgstr "રાહતની રકમ"
 
-#: gnucash/report/business-reports/receipt.scm:96
-#: gnucash/report/business-reports/receipt.scm:181
+#: gnucash/report/business-reports/receipt.scm:64
+#: gnucash/report/business-reports/receipt.scm:134
 #: gnucash/report/business-reports/taxinvoice.scm:119
 #: gnucash/report/business-reports/taxinvoice.scm:206
 msgid "Tax Rate"
 msgstr "કરનો દર"
 
-#: gnucash/report/business-reports/receipt.scm:99
-#: gnucash/report/business-reports/receipt.scm:187
+#: gnucash/report/business-reports/receipt.scm:67
+#: gnucash/report/business-reports/receipt.scm:140
 #: gnucash/report/business-reports/taxinvoice.scm:122
 #: gnucash/report/business-reports/taxinvoice.scm:212
 msgid "Sub-total"
 msgstr "પૂર્ણ-યોગ"
 
-#: gnucash/report/business-reports/receipt.scm:101
+#: gnucash/report/business-reports/receipt.scm:69
 #: gnucash/report/business-reports/taxinvoice.scm:124
 msgid "Payment received text"
 msgstr "ચુકવણી પ્રાપ્તિ લખાણ"
 
-#: gnucash/report/business-reports/receipt.scm:102
+#: gnucash/report/business-reports/receipt.scm:70
 #: gnucash/report/business-reports/taxinvoice.scm:125
 msgid "Extra notes"
 msgstr "વધારાની ટિપ્પણીઓ"
 
-#: gnucash/report/business-reports/receipt.scm:103
+#: gnucash/report/business-reports/receipt.scm:71
 #, fuzzy
 msgid "Today date format"
 msgstr "આજની તારીખનું ફોર્મેટ"
 
-#: gnucash/report/business-reports/receipt.scm:133
+#: gnucash/report/business-reports/receipt.scm:86
 #, fuzzy
 msgid ""
 "The file name of the eguile template part of this report.  This file should "
@@ -23700,7 +23784,7 @@ msgstr ""
 "આ અહેવાલના એગ્વિલ ટેમ્પલેટ ભાગનું ફાઈલ નામ. આ ફાઈલ યા તો આપની.gnucash ડિરેક્ટરીમાં "
 "અથવા GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરીમાં તેના ઉચિત સ્થાને ક્યાંક હોવી જોઇએ. "
 
-#: gnucash/report/business-reports/receipt.scm:136
+#: gnucash/report/business-reports/receipt.scm:89
 #, fuzzy
 msgid ""
 "The file name of the CSS stylesheet to use with this report.  This file "
@@ -23711,22 +23795,22 @@ msgstr ""
 "gnucash ડિરેક્ટરીમાં, અથવા તો GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરીમાં પોતાના યોગ્ય સ્થાન પર "
 "ક્યાંક હોવી જોઇએ. "
 
-#: gnucash/report/business-reports/receipt.scm:140
+#: gnucash/report/business-reports/receipt.scm:93
 #, fuzzy
 msgid "Font to use for the main heading"
 msgstr "મુખ્ય શીર્ષક માટે ઉપયોગમાં લેવાનો ફોન્ટ"
 
-#: gnucash/report/business-reports/receipt.scm:143
+#: gnucash/report/business-reports/receipt.scm:96
 #, fuzzy
 msgid "Font to use for everything else"
 msgstr "અન્ય દરેક ચીજો માટે ઉપયોગમાં લેવાનો ફોન્ટ"
 
-#: gnucash/report/business-reports/receipt.scm:146
+#: gnucash/report/business-reports/receipt.scm:99
 #, fuzzy
 msgid "Name of a file containing a logo to be used on the header of the report"
 msgstr "એક ફાઈલનું નામ જેમાં અહેવાલ પર ઉપયોગ કરવામાં આવતો એક લોગો સામેલ છે. "
 
-#: gnucash/report/business-reports/receipt.scm:149
+#: gnucash/report/business-reports/receipt.scm:102
 #, fuzzy
 msgid ""
 "Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
@@ -23736,12 +23820,12 @@ msgstr ""
 "CSS ફોર્મેટમાં લોગોની પહોળાઇ, જેમ કે 10% અથવા 32px. લોગોને તેની સ્વભાવિક પહોળાઇમાં "
 "પ્રદર્શિત કરવા માટે ખાલી છોડી દો. લોગોની ઊંચાઇનું માપ તે પ્રમાણમાં જ હશે."
 
-#: gnucash/report/business-reports/receipt.scm:152
+#: gnucash/report/business-reports/receipt.scm:105
 #, fuzzy
 msgid "Name of a file containing a logo to be used on the footer of the report"
 msgstr "એક ફાઈલનું નામ જેમાં અહેવાલ પર ઉપયોગ કરવામાં આવતો એક લોગો સામેલ છે. "
 
-#: gnucash/report/business-reports/receipt.scm:155
+#: gnucash/report/business-reports/receipt.scm:108
 #, fuzzy
 msgid ""
 "Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
@@ -23751,29 +23835,29 @@ msgstr ""
 "CSS ફોર્મેટમાં લોગોની પહોળાઇ, જેમ કે 10% અથવા 32px. લોગોને તેની સ્વભાવિક પહોળાઇમાં "
 "પ્રદર્શિત કરવા માટે ખાલી છોડી દો. લોગોની ઊંચાઇનું માપ તે પ્રમાણમાં જ હશે."
 
-#: gnucash/report/business-reports/receipt.scm:159
+#: gnucash/report/business-reports/receipt.scm:112
 msgid "The format for the date->string conversion for today's date."
 msgstr "તારીખ માટે ફોર્મેટ->આજની તારીખ માટે સ્ટ્રીંગ રૂપાંતરણ"
 
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
-#: gnucash/report/business-reports/receipt.scm:162
+#: gnucash/report/business-reports/receipt.scm:115
 #, fuzzy
 msgid "%l:%M %P, %e %B %Y"
 msgstr "%B %#d, %Y "
 
-#: gnucash/report/business-reports/receipt.scm:192
+#: gnucash/report/business-reports/receipt.scm:145
 #: gnucash/report/business-reports/taxinvoice.scm:217
 #, fuzzy
 msgid "Payment received, thank you!"
 msgstr "ચુકવણી પ્રાપ્ત થઇ, આભાર"
 
-#: gnucash/report/business-reports/receipt.scm:196
+#: gnucash/report/business-reports/receipt.scm:149
 #, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup"
 msgstr "ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે. "
 
-#: gnucash/report/business-reports/receipt.scm:263
+#: gnucash/report/business-reports/receipt.scm:216
 #, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
 msgstr "ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
@@ -23798,6 +23882,10 @@ msgstr "વેબસાઇટ "
 #: gnucash/report/business-reports/taxinvoice.eguile.scm:254
 msgid "Invoice Date"
 msgstr "ચલણની તારીખ"
+
+#: gnucash/report/business-reports/taxinvoice.scm:74
+msgid "n/a"
+msgstr "n/a"
 
 #: gnucash/report/business-reports/taxinvoice.scm:84
 #, fuzzy
@@ -25544,15 +25632,6 @@ msgstr "ખાતાના નામથી સોર્ટ અને પેટ�
 msgid "Sort & subtotal by account code."
 msgstr "ખાતાના કોડથી સોર્ટ અને પટા સરવાળો કરો"
 
-#: gnucash/report/report-system/trep-engine.scm:166
-#: gnucash/report/report-system/trep-engine.scm:926
-#: gnucash/report/report-system/trep-engine.scm:1053
-#: gnucash/report/report-system/trep-engine.scm:1148
-#: gnucash/report/standard-reports/general-ledger.scm:74
-#: gnucash/report/standard-reports/general-ledger.scm:95
-msgid "Reconciled Date"
-msgstr "સંગત તારીખ"
-
 #: gnucash/report/report-system/trep-engine.scm:167
 #, fuzzy
 msgid "Sort by the Reconciled Date."
@@ -26656,7 +26735,8 @@ msgstr "ખાતાને મિટાવી દો"
 msgid "Disregard completely any accounts deeper than the depth limit."
 msgstr "ઊંડાણ સીમાથી વધારે ઊંડા કોઇ પણ ખાતાની પૂરી રીતે અવગણના કરો "
 
-#: gnucash/report/standard-reports/account-summary.scm:324
+#. Translators: This is part of the report title, which is capitalzed in English, but not all other languages
+#: gnucash/report/standard-reports/account-summary.scm:325
 #: gnucash/report/standard-reports/equity-statement.scm:302
 #: gnucash/report/standard-reports/income-statement.scm:407
 #: gnucash/report/standard-reports/trial-balance.scm:412
@@ -26664,7 +26744,7 @@ msgstr "ઊંડાણ સીમાથી વધારે ઊંડા કો�
 msgid "For Period Covering ~a to ~a"
 msgstr "%sથી %sમાં આવરી લેવાના સમયગાળા માટે  "
 
-#: gnucash/report/standard-reports/account-summary.scm:408
+#: gnucash/report/standard-reports/account-summary.scm:409
 msgid "Account title"
 msgstr "ખાતા શીર્ષક"
 
@@ -30114,39 +30194,39 @@ msgstr "એક વર્ષ બાદ"
 msgid "One Year Ahead."
 msgstr "એક વર્ષ બાદ"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:611
+#: libgnucash/app-utils/gnc-exp-parser.c:617
 msgid "Illegal variable in expression."
 msgstr "અભિવ્યક્તિમાં અમાન્ય વેરિએબલ "
 
-#: libgnucash/app-utils/gnc-exp-parser.c:622
+#: libgnucash/app-utils/gnc-exp-parser.c:628
 msgid "Unbalanced parenthesis"
 msgstr "અસંતુલિત કોષ્ટક"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:624
+#: libgnucash/app-utils/gnc-exp-parser.c:630
 msgid "Stack overflow"
 msgstr "જથ્થાનો પુરવઠો વધી જવો"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:626
+#: libgnucash/app-utils/gnc-exp-parser.c:632
 msgid "Stack underflow"
 msgstr "જથ્થોનો પુરવઠો ઓછો હોવો "
 
-#: libgnucash/app-utils/gnc-exp-parser.c:628
+#: libgnucash/app-utils/gnc-exp-parser.c:634
 msgid "Undefined character"
 msgstr "અવ્યાખ્યાયિત અક્ષર "
 
-#: libgnucash/app-utils/gnc-exp-parser.c:630
+#: libgnucash/app-utils/gnc-exp-parser.c:636
 msgid "Not a variable"
 msgstr "કોઈ વેરિએબલ નથી"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:632
+#: libgnucash/app-utils/gnc-exp-parser.c:638
 msgid "Not a defined function"
 msgstr "કોઈ ચોક્કસ કે વ્યાખ્યાયિત કાર્યપદ્ધતિ નથી"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:634
+#: libgnucash/app-utils/gnc-exp-parser.c:640
 msgid "Out of memory"
 msgstr "મેમરી વપરાઈ ગઈ છે"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:636
+#: libgnucash/app-utils/gnc-exp-parser.c:642
 msgid "Numeric error"
 msgstr "આંકડાકીય ક્ષતિ"
 

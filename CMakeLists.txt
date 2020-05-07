@@ -98,7 +98,9 @@ set(LOCALEDIR ${DATAROOTDIR}/locale CACHE STRING "locale-dependent data")
 set(GNC_HELPDIR ${DATADIR} CACHE STRING "where to store help files")
 set(DATADIRNAME share)
 set(GNC_SYSTEM_XDG_DATA_DIRS /usr/local/share /usr/share)
-set(GNC_DBD_DIR ${CMAKE_PREFIX_LIBDIR}/dbd CACHE PATH "specify location of libdbi drivers")
+if (NOT DEFINED GNC_DBD_DIR)
+  set(GNC_DBD_DIR $ENV{GNC_DBD_DIR} CACHE PATH "Hint for location of libdbi-drivers.")
+endif()
 set(PKGLIBDIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
 set(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
 set(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
@@ -433,11 +435,11 @@ set(PKG_CONFIG_EXECUTABLE ${GNC_PKG_CONFIG_EXE})
 # libdbi
 find_path (LIBDBI_INCLUDE_PATH dbi/dbi.h)
 find_library (LIBDBI_LIBRARY dbi)
-find_library (LIBDBI_DRIVERS_DIR
+find_library (LIBDBI_DRIVERS
   NAMES dbdmysql dbdpgsql dbdsqlite3 NAMES_PER_DIR
   PATH_SUFFIXES dbd libdbi-drivers/dbd
-  HINTS LIBDBI_LIBRARY
-  PATHS GNC_DBD_DIR
+  HINTS ${LIBDBI_LIBRARY}
+  PATHS ${GNC_DBD_DIR}
   DOC "Libdbi Drivers Directory")
 if (WITH_SQL)
   if (NOT LIBDBI_INCLUDE_PATH)
@@ -447,10 +449,10 @@ if (WITH_SQL)
     message (SEND_ERROR "Library libdbi was not found")
   endif()
   set(HAVE_DBI_DBI_H 1)
-  if (NOT LIBDBI_DRIVERS_DIR)
+  if (NOT LIBDBI_DRIVERS)
     message (SEND_ERROR "No libdbi drivers found, SQL tests will fail.")
   else()
-    get_filename_component(drivers_dir ${LIBDBI_DRIVERS_DIR} DIRECTORY)
+    get_filename_component(drivers_dir ${LIBDBI_DRIVERS} DIRECTORY)
     set(LIBDBI_DRIVERS_DIR ${drivers_dir} CACHE FILEPATH "Directory containing the libdbi driver modules." FORCE)
   endif()
 endif()
