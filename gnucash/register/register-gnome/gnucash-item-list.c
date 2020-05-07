@@ -233,12 +233,33 @@ gnc_item_list_autosize (GncItemList* item_list)
     return 100;
 }
 
+void
+gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store)
+{
+
+    g_return_if_fail (item_list != 0);
+
+    item_list->temp_store = store;
+    if (store)
+        gtk_tree_view_set_model (item_list->tree_view,
+                                 GTK_TREE_MODEL (item_list->temp_store));
+    else
+        gtk_tree_view_set_model (item_list->tree_view,
+                                 GTK_TREE_MODEL (item_list->list_store));
+}
+
+gboolean
+gnc_item_list_using_temp (GncItemList *item_list)
+{
+    return item_list && item_list->temp_store;
+}
 
 static void
 gnc_item_list_init (GncItemList* item_list)
 {
     item_list->tree_view = NULL;
     item_list->list_store = NULL;
+    item_list->temp_store = NULL;
 }
 
 

@@ -43,6 +43,7 @@ typedef struct
 
     GtkTreeView *tree_view;
     GtkListStore *list_store; /* Contains the list items */
+    GtkListStore *temp_store; /* Temporary store for typeahead select */
 } GncItemList;
 
 typedef struct
@@ -81,6 +82,9 @@ void gnc_item_list_show_selected (GncItemList *item_list);
 
 int gnc_item_list_autosize (GncItemList *item_list);
 
+void gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store);
+
+gboolean gnc_item_list_using_temp (GncItemList *item_list);
 
 /** @} */
 #endif /* GNUCASH_ITEM_LIST_H */

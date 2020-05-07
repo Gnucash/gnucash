@@ -813,7 +813,6 @@ gnc_split_register_load_xfer_cells (SplitRegister* reg, Account* base_account)
     QuickFill* qf;
     ComboCell* cell;
     GtkListStore* store;
-    GtkListStore* store_full;
 
     if (base_account)
         root = gnc_account_get_root (base_account);
@@ -824,18 +823,16 @@ gnc_split_register_load_xfer_cells (SplitRegister* reg, Account* base_account)
 
     qf = gnc_get_shared_account_name_quickfill (root, QKEY, skip_cb, NULL);
     store = gnc_get_shared_account_name_list_store (root, QKEY, skip_cb, NULL);
-    store_full = gnc_get_shared_account_name_list_store_full (root, QKEY, skip_cb,
-                                                              NULL);
 
     cell = (ComboCell*)
            gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
+    gnc_combo_cell_use_list_store_cache (cell, store);
 
     cell = (ComboCell*)
            gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
     gnc_combo_cell_use_quickfill_cache (cell, qf);
-    gnc_combo_cell_use_list_store_cache (cell, store, store_full);
+    gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
 /* ====================== END OF FILE ================================== */

@@ -56,9 +56,6 @@ typedef struct
     QuickFill* qf;
     gboolean load_list_store;
     GtkListStore* list_store;
-    /* For the type-ahead search, we need two lists, list_store contains the accounts that
-     match the search. list_store_full contain the original full list of accounts. */
-    GtkListStore* list_store_full;
     QofBook* book;
     Account* root;
     gint  listener;
@@ -80,7 +77,6 @@ shared_quickfill_destroy (QofBook* book, gpointer key, gpointer user_data)
                                  qfb);
     gnc_quickfill_destroy (qfb->qf);
     g_object_unref (qfb->list_store);
-    g_object_unref (qfb->list_store_full);
     qof_event_unregister_handler (qfb->listener);
     g_free (qfb);
 }
@@ -144,11 +140,6 @@ load_shared_qf_cb (Account* account, gpointer data)
                             ACCOUNT_NAME, name,
                             ACCOUNT_POINTER, account,
                             -1);
-        gtk_list_store_append (qfb->list_store_full, &iter);
-        gtk_list_store_set (qfb->list_store_full, &iter,
-                            ACCOUNT_NAME, name,
-                            ACCOUNT_POINTER, account,
-                            -1);
     }
     g_free (name);
 }
@@ -162,7 +153,6 @@ shared_quickfill_pref_changed (gpointer prefs, gchar* pref, gpointer user_data)
     /* Reload the quickfill */
     gnc_quickfill_purge (qfb->qf);
     gtk_list_store_clear (qfb->list_store);
-    gtk_list_store_clear (qfb->list_store_full);
     qfb->load_list_store = TRUE;
     gnc_account_foreach_descendant (qfb->root, load_shared_qf_cb, qfb);
     qfb->load_list_store = FALSE;
@@ -187,8 +177,6 @@ build_shared_quickfill (QofBook* book, Account* root, const char* key,
     qfb->dont_add_data = data;
     qfb->load_list_store = TRUE;
     qfb->list_store      = gtk_list_store_new (NUM_ACCOUNT_COLUMNS,
-                                               G_TYPE_STRING, G_TYPE_POINTER);
-    qfb->list_store_full = gtk_list_store_new (NUM_ACCOUNT_COLUMNS,
                                                G_TYPE_STRING, G_TYPE_POINTER);
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
@@ -245,23 +233,6 @@ gnc_get_shared_account_name_list_store (Account* root, const char* key,
     return qfb->list_store;
 }
 
-GtkListStore*
-gnc_get_shared_account_name_list_store_full (Account* root, const char* key,
-                                             AccountBoolCB cb, gpointer cb_data)
-{
-    QFB* qfb;
-    QofBook* book;
-
-    book = gnc_account_get_book (root);
-    qfb = qof_book_get_data (book, key);
-
-    if (qfb)
-        return qfb->list_store_full;
-
-    qfb = build_shared_quickfill (book, root, key, cb, cb_data);
-    return qfb->list_store_full;
-}
-
 /* Since we are maintaining a 'global' quickfill list, we need to
  * update it whenever the user creates a new account.  So listen
  * for account modification events, and add new accounts.
@@ -314,7 +285,7 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
          * full name of all these accounts has changed. */
         data.accounts = gnc_account_get_descendants (account);
         data.accounts = g_list_prepend (data.accounts, account);
-        gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store_full),
+        gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store),
                                 shared_quickfill_find_accounts, &data);
 
         /* Update the existing items in the list store.  Its possible
@@ -326,14 +297,14 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
             gchar* old_name, *new_name;
             path = gtk_tree_row_reference_get_path (tmp->data);
             gtk_tree_row_reference_free (tmp->data);
-            if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (qfb->list_store_full),
+            if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (qfb->list_store),
                                           &iter, path))
             {
                 gtk_tree_path_free (path);
                 continue;
             }
             gtk_tree_path_free (path);
-            gtk_tree_model_get (GTK_TREE_MODEL (qfb->list_store_full), &iter,
+            gtk_tree_model_get (GTK_TREE_MODEL (qfb->list_store), &iter,
                                 ACCOUNT_POINTER, &account,
                                 ACCOUNT_NAME, &old_name,
                                 -1);
@@ -349,12 +320,12 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
                 qfb->dont_add_cb (account, qfb->dont_add_data))
             {
                 gnc_quickfill_remove (qf, new_name, QUICKFILL_ALPHA);
-                gtk_list_store_remove (qfb->list_store_full, &iter);
+                gtk_list_store_remove (qfb->list_store, &iter);
             }
             else
             {
                 gnc_quickfill_insert (qf, new_name, QUICKFILL_ALPHA);
-                gtk_list_store_set (qfb->list_store_full, &iter,
+                gtk_list_store_set (qfb->list_store, &iter,
                                     ACCOUNT_NAME, new_name,
                                     -1);
             }
@@ -376,8 +347,8 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
                 }
             }
             gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
-            gtk_list_store_append (qfb->list_store_full, &iter);
-            gtk_list_store_set (qfb->list_store_full, &iter,
+            gtk_list_store_append (qfb->list_store, &iter);
+            gtk_list_store_set (qfb->list_store, &iter,
                                 ACCOUNT_NAME, name,
                                 ACCOUNT_POINTER, account,
                                 -1);
@@ -392,7 +363,7 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
 
         /* Does the account exist in the model? */
         data.accounts = g_list_append (NULL, account);
-        gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store_full),
+        gtk_tree_model_foreach (GTK_TREE_MODEL (qfb->list_store),
                                 shared_quickfill_find_accounts, &data);
 
         /* Remove from list store */
@@ -400,10 +371,10 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
         {
             path = gtk_tree_row_reference_get_path (tmp->data);
             gtk_tree_row_reference_free (tmp->data);
-            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (qfb->list_store_full),
+            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (qfb->list_store),
                                          &iter, path))
             {
-                gtk_list_store_remove (qfb->list_store_full, &iter);
+                gtk_list_store_remove (qfb->list_store, &iter);
             }
             gtk_tree_path_free (path);
         }
@@ -429,8 +400,8 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
 
         PINFO ("insert new account %s into qf=%p", name, qf);
         gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
-        gtk_list_store_append (qfb->list_store_full, &iter);
-        gtk_list_store_set (qfb->list_store_full, &iter,
+        gtk_list_store_append (qfb->list_store, &iter);
+        gtk_list_store_set (qfb->list_store, &iter,
                             ACCOUNT_NAME, name,
                             ACCOUNT_POINTER, account,
                             -1);
@@ -439,25 +410,6 @@ listen_for_account_events (QofInstance* entity, QofEventId event_type,
     default:
         DEBUG ("other %s", name);
         break;
-    }
-    /* Now that qfb->list_store_full has been updated, qfb->list_store also needs to be updated in
-    case we're using the regular search. */
-    gtk_list_store_clear (qfb->list_store);
-
-    g_debug ("Replicate shared_store_full\n");
-    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (qfb->list_store_full),
-                                           &iter);
-    while (valid)
-    {
-        gchar* str_data = NULL;
-        GtkTreeIter iter2;
-        gtk_tree_model_get (GTK_TREE_MODEL (qfb->list_store_full), &iter, 0, &str_data,
-                            -1);
-        gtk_list_store_append (qfb->list_store, &iter2);
-        gtk_list_store_set (qfb->list_store, &iter2, 0, str_data, -1);
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (qfb->list_store_full),
-                                          &iter);
-        g_free (str_data);
     }
 
     if (data.accounts)

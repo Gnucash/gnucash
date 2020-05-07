@@ -151,7 +151,6 @@ gnc_combo_cell_init (ComboCell* cell)
     box->list_popped = FALSE;
     box->autosize = FALSE;
 
-    cell->shared_store_full = NULL;
     cell->cell.gui_private = box;
 
     box->qf = gnc_quickfill_new();
@@ -386,7 +385,8 @@ gnc_combo_cell_clear_menu (ComboCell* cell)
         block_list_signals (cell);
 
         gnc_item_list_clear (box->item_list);
-
+        gnc_item_edit_hide_popup (box->item_edit);
+        box->list_popped = FALSE;
         unblock_list_signals (cell);
     }
     else
@@ -412,13 +412,11 @@ gnc_combo_cell_use_quickfill_cache (ComboCell* cell, QuickFill* shared_qf)
 }
 
 void
-gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data,
-                                     gpointer data_full)
+gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data)
 {
     if (cell == NULL) return;
 
     cell->shared_store = data;
-    cell->shared_store_full = data_full;
 }
 
 void
@@ -508,64 +506,86 @@ gnc_combo_cell_set_value (ComboCell* cell, const char* str)
     gnc_basic_cell_set_value (&cell->cell, str);
 }
 
-/* This function looks through full_store for a partial match with newval and returns the first
- match (which must be subsequently freed). It fills out box->item_list with found matches */
+static inline void
+list_store_append (GtkListStore *store, char* string)
+{
+    GtkTreeIter iter;
+
+    g_return_if_fail (store != NULL);
+    g_return_if_fail (string != NULL);
+    gtk_list_store_append (store, &iter);
+    gtk_list_store_set (store, &iter, 0, string, -1);
+}
+
+/* This function looks through full_store for a partial match with newval and
+ * returns the first match (which must be subsequently freed). It fills out
+ * box->item_list with found matches.
+ */
 static gchar*
 gnc_combo_cell_type_ahead_search (const gchar* newval,
                                   GtkListStore* full_store, PopBox* box)
 {
     GtkTreeIter iter;
-    gboolean valid;
     int num_found = 0;
-    gchar* first_found = NULL;
     gchar* match_str = NULL;
-    GError* gerror = NULL;
-    GMatchInfo* match_info = NULL;
-    GRegex* regex = NULL;
-    gchar* rep_str = NULL;
-    gchar* newval_rep = NULL;
-    GRegex* regex0 = g_regex_new (gnc_get_account_separator_string(), 0, 0,
-                                  &gerror);
+    const char* sep = gnc_get_account_separator_string ();
+    gchar* newval_rep = g_strdup_printf (".*%s.*", sep);
+    GRegex* regex0 = g_regex_new (sep, 0, 0, NULL);
+    char* rep_str = g_regex_replace_literal (regex0, newval, -1, 0,
+                                             newval_rep, 0, NULL);
+    GRegex *regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, NULL);
 
-    // Replace ":" in newval with ".*:.*" so we can use regexp to match.
-    newval_rep = g_strconcat (".*", gnc_get_account_separator_string(), ".*",
-                              NULL);
-    rep_str = g_regex_replace (regex0, newval, -1, 0, newval_rep, 0, &gerror);
-    // Then compile the regular expression based on rep_str.
-    regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, &gerror);
+    gboolean valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (full_store),
+                                                    &iter);
 
-    valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (full_store), &iter);
-    // Clear result list.
-    gnc_item_list_clear (box->item_list);
-    while (valid)
+    /* Limit the number found to keep the combo box from getting unreasonably
+     * large.
+     */
+    static const gint MAX_NUM_MATCHES = 30;
+
+    g_free (rep_str);
+    g_free (newval_rep);
+    g_regex_unref (regex0);
+
+    gtk_list_store_clear (box->tmp_store);
+
+    while (valid && num_found < MAX_NUM_MATCHES)
     {
-        static const gint MAX_NUM_MATCHES = 30;
         gchar* str_data = NULL;
         gchar* normalized_str_data = NULL;
-        gtk_tree_model_get (GTK_TREE_MODEL (full_store), &iter, 0, &str_data, -1);
+        gtk_tree_model_get (GTK_TREE_MODEL (full_store), &iter, 0,
+                            &str_data, -1);
         normalized_str_data = g_utf8_normalize (str_data, -1, G_NORMALIZE_ALL);
 
         if (g_regex_match (regex, normalized_str_data, 0, NULL))
         {
-            if (!num_found) first_found = g_strdup (str_data);
+            if (!num_found)
+                match_str = g_strdup (str_data);
             ++num_found;
-            /* The pop box can be very slow to display if it has too many items and it's not very useful
-             to have many. So limit that to a reasonable number. */
-            if (num_found < MAX_NUM_MATCHES)
-                gnc_item_list_append (box->item_list, str_data);
+            list_store_append (box->tmp_store, str_data);
         }
         g_free (str_data);
         g_free (normalized_str_data);
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (full_store), &iter);
     }
+
     if (num_found)
-        match_str = first_found;
+    {
+        gnc_item_list_set_temp_store (box->item_list, box->tmp_store);
+        gnc_item_edit_show_popup (box->item_edit);
+        box->list_popped = TRUE;
+    }
     g_regex_unref (regex);
-    g_regex_unref (regex0);
-    g_free (rep_str);
-    g_free (newval_rep);
     return match_str;
 }
+
+static char*
+quickfill_match (QuickFill *qf, const char *string)
+{
+    QuickFill *match = gnc_quickfill_get_string_match (qf, string);
+    return g_strdup (gnc_quickfill_string (match));
+}
+
 
 static void
 gnc_combo_cell_modify_verify (BasicCell* _cell,
@@ -582,9 +602,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     gchar* match_str = NULL;
     glong newval_chars;
     glong change_chars;
-    GtkListStore* full_store;
     const gchar* box_str = NULL;
-    QuickFill* match = NULL;
 
     newval_chars = g_utf8_strlen (newval, newval_len);
     change_chars = g_utf8_strlen (change, change_len);
@@ -598,12 +616,16 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         return;
     }
 
-    // Try the start-of-name match using the quickfill
-    match = gnc_quickfill_get_string_match (box->qf, newval);
-    match_str = g_strdup (gnc_quickfill_string (match));
+    /* If item_list is using temp then we're already partly matched by
+     * type-ahead and a quickfill_match won't work.
+     */
+    if (!gnc_item_list_using_temp (box->item_list))
+        match_str = quickfill_match (box->qf, newval);
     if (match_str != NULL)
     {
-        // We have a match, but if we were deleting or inserting in the middle, just accept.
+        /* We have a match, but if we were deleting or inserting in the middle,
+         * just accept.
+         */
         if (change == NULL || *cursor_position < _cell->value_chars)
         {
             gnc_basic_cell_set_value_internal (_cell, newval);
@@ -616,9 +638,9 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     }
     else
     {
-        // No start-of-name match, try type-ahead search, we match any substring of the account name.
-        full_store = cell->shared_store_full;
-        match_str = gnc_combo_cell_type_ahead_search (newval, full_store, box);
+        // No start-of-name match, try type-ahead search, we match any substring of the full account name.
+        GtkListStore *store = cell->shared_store;
+        match_str = gnc_combo_cell_type_ahead_search (newval, store, box);
         *start_selection = newval_chars;
         *end_selection = -1;
         *cursor_position = newval_chars;
@@ -628,7 +650,11 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
 
     if (match_str == NULL)
     {
-        // No match. Remove any selection in popup, don't change the type-in box
+        if (gnc_item_list_using_temp (box->item_list))
+        {
+            gnc_item_list_set_temp_store (box->item_list, NULL);
+            gtk_list_store_clear (box->tmp_store);
+        }
         gnc_basic_cell_set_value_internal (_cell, newval);
         block_list_signals (cell);
         gnc_item_list_select (box->item_list, NULL);
@@ -720,7 +746,6 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
         *cursor_position += prefix_len;
         *start_selection = *cursor_position;
         *end_selection = -1;
-
         return TRUE;
     }
 
@@ -881,7 +906,11 @@ static void
 popup_set_focus (GtkWidget* widget,
                  G_GNUC_UNUSED gpointer user_data)
 {
-    gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (widget)->tree_view));
+    /* An empty GtkTreeView grabbing focus causes the key_press events to be
+     * lost because there's no entry cell to handle them.
+     */
+    if (gnc_item_list_num_entries (GNC_ITEM_LIST (widget)))
+        gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (widget)->tree_view));
 }
 
 static void
