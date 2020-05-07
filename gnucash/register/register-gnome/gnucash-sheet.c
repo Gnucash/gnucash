@@ -30,7 +30,6 @@
 
 #include <config.h>
 #include <glib.h>
-#include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "gnucash-sheet.h"

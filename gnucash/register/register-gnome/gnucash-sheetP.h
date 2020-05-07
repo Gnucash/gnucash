@@ -88,7 +88,6 @@ struct _GnucashSheet
 
     guint insert_signal;
     guint delete_signal;
-    guint changed_signal;
 
     GtkAdjustment *hadj, *vadj;
     GtkWidget *hscrollbar, *vscrollbar;
