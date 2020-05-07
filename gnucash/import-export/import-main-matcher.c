@@ -189,8 +189,162 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
     return !gtk_tree_model_get_iter_first (model, &iter);
 }
 
+// This returns the transaction ID of the first match candidate in match_list
+static const GncGUID*
+get_top_trans_match_id (GList* match_list)
+{
+    Transaction* trans = NULL;
+    GNCImportMatchInfo* match_info;
+    if (!match_list || !match_list->data) return NULL;
+    match_info = match_list->data;
+    trans = match_info->trans;
+    return xaccTransGetGUID(trans);
+}
+
+// This returns the transaction score of the first match candidate in match_list
+static gint
+get_top_trans_match_score(GList* match_list)
+{
+    GNCImportMatchInfo* match_info;
+    if (!match_list || !match_list->data) return 0;
+    match_info = match_list->data;
+    return match_info->probability;
+}
+
+static GList*
+get_trans_match_list (GtkTreeModel* model, GtkTreeIter* iter)
+{
+    GNCImportTransInfo* transaction_info;
+    gtk_tree_model_get (model, iter,
+                        DOWNLOADED_COL_DATA, &transaction_info,
+                        -1);
+    return gnc_import_TransInfo_get_match_list (transaction_info);
+}
+
+static GNCImportTransInfo*
+get_trans_info(GtkTreeModel* model, GtkTreeIter* iter)
+{
+    GNCImportTransInfo* transaction_info;
+    gtk_tree_model_get (model, iter,
+                        DOWNLOADED_COL_DATA, &transaction_info,
+                        -1);
+    return transaction_info;
+}
+/* This fuction find the top matching register transaction for the imported transaction pointed to by iter
+ * It then goes through the list of all other imported transactions and creates a list of the ones that
+ * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
+ * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their
+ * top match modified. */
+static GList*
+get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gint best_match)
+{
+    GtkTreeIter iter = import_iter;
+    GNCImportTransInfo* best_import = get_trans_info (model, &import_iter);
+    GList* conflicts = g_list_prepend (NULL, best_import);
+
+    while (gtk_tree_model_iter_next (model, &iter))
+    {
+        gint match_score = 0;
+        GNCImportTransInfo* trans_info;
+        GncGUID id2;
+        // Get the ID of the top matching trans for this imported trans.
+        GList* register_iter = get_trans_match_list (model, &iter);
+        if (!register_iter || !register_iter->data)
+            continue;
+
+        id2 = *get_top_trans_match_id (register_iter);
+        if (!guid_equal (id, &id2))
+            continue;
+
+        // Conflict. Get the match score, add this transaction to our list.
+        match_score = get_top_trans_match_score (register_iter);
+        trans_info = get_trans_info (model, &iter);
+        conflicts = g_list_prepend (conflicts, trans_info);
+
+        if (match_score > best_match)
+        {
+            // Keep track of the imported transaction with the best score.
+            best_match = match_score;
+            best_import = trans_info;
+        }
+    }
+
+    // Remove the best match from the list of conflicts, as it will keep its match
+    conflicts = g_list_remove (conflicts, best_import);
+    return conflicts;
+}
+
+static void
+remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* conflicts)
+{
+    GList* iter = conflicts;
+    for (; iter && iter->data; iter=iter->next)
+    {
+        GNCImportTransInfo* trans_info = iter->data;
+        GList* match_trans = gnc_import_TransInfo_get_match_list (trans_info);
+        match_trans = g_list_remove (match_trans, match_trans->data);
+        gnc_import_TransInfo_set_match_list (trans_info, match_trans);
+    }
+
+    g_list_free (conflicts);
+}
+
+static void
+resolve_conflicts (GNCImportMainMatcher *info)
+{
+    GtkTreeModel* model = gtk_tree_view_get_model (info->view);
+    GtkListStore* store = GTK_LIST_STORE (model);
+    GtkTreeIter import_iter, best_import;
+    gint best_match = 0;
+
+    /* A greedy conflict resolution. Find all imported trans that vie for the same
+     * register trans. Assign the reg trans to the imported trans with the best match.
+     * Loop over the imported transactions */
+    gboolean valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    while (valid)
+    {
+        GList* conflicts = NULL;
+        GncGUID id;
+        GList* match_list = get_trans_match_list (model, &import_iter);
+        if (!match_list || !match_list->data)
+        {
+            valid = gtk_tree_model_iter_next (model, &import_iter);
+            continue;
+        }
+
+        // The ID of the best current match for this imported trans
+        id = *get_top_trans_match_id (match_list);
+        best_match = get_top_trans_match_score (match_list);
+        best_import = import_iter;
+        /* Get a list of all imported transactions that have a conflict with this one.
+         * The returned list excludes the best transaction. */
+        conflicts = get_conflict_list (model, import_iter, &id, best_match);
+
+        if (conflicts)
+        {
+            remove_top_matches (info, model, conflicts);
+            /* Go back to the beginning here, because a nth choice
+             * could now conflict with a previously assigned first choice. */
+            valid = gtk_tree_model_get_iter_first (model, &import_iter);
+        }
+        else
+            valid = gtk_tree_model_iter_next (model, &import_iter);
+        /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
+         * we remove at least 1 match, and there's a finite number of them. */
+    }
+
+    // Refresh all
+    valid = gtk_tree_model_get_iter_first (model, &import_iter);
+    while (valid)
+    {
+        refresh_model_row (info, model, &import_iter, get_trans_info (model, &import_iter));
+        valid = gtk_tree_model_iter_next (model, &import_iter);
+    }
+}
+
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
+    resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 }
 
