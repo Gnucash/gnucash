@@ -202,52 +202,49 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
 {
     /* We must have an empty book to load into or bad things will happen. */
     g_return_if_fail(m_book && qof_book_empty(m_book));
-    
+
     if (!m_book_id.size ()) return;
     ENTER ("sess=%p book_id=%s", this, m_book_id.c_str ());
 
     /* At this point, we should are supposed to have a valid book
-    * id and a lock on the file. */
+     * id and a lock on the file. */
     clear_error ();
 
     /* This code should be sufficient to initialize *any* backend,
-    * whether http, postgres, or anything else that might come along.
-    * Basically, the idea is that by now, a backend has already been
-    * created & set up.  At this point, we only need to get the
-    * top-level account group out of the backend, and that is a
-    * generic, backend-independent operation.
-    */
-    qof_book_set_backend (newbook, m_backend);
+     * whether http, postgres, or anything else that might come along.
+     * Basically, the idea is that by now, a backend has already been
+     * created & set up.  At this point, we only need to get the
+     * top-level account group out of the backend, and that is a
+     * generic, backend-independent operation.
+     */
+    qof_book_set_backend (m_book, m_backend);
 
     /* Starting the session should result in a bunch of accounts
-    * and currencies being downloaded, but probably no transactions;
-    * The GUI will need to do a query for that.
-    */
+     * and currencies being downloaded, but probably no transactions;
+     * The GUI will need to do a query for that.
+     */
     if (m_backend)
     {
         m_backend->set_percentage(percentage_func);
-        m_backend->load (newbook, LOAD_TYPE_INITIAL_LOAD);
+        m_backend->load (m_book, LOAD_TYPE_INITIAL_LOAD);
         push_error (m_backend->get_error(), {});
     }
 
     auto err = get_error ();
     if ((err != ERR_BACKEND_NO_ERR) &&
-            (err != ERR_FILEIO_FILE_TOO_OLD) &&
-            (err != ERR_FILEIO_NO_ENCODING) &&
-            (err != ERR_FILEIO_FILE_UPGRADE) &&
-            (err != ERR_SQL_DB_TOO_OLD) &&
-            (err != ERR_SQL_DB_TOO_NEW))
+        (err != ERR_FILEIO_FILE_TOO_OLD) &&
+        (err != ERR_FILEIO_NO_ENCODING) &&
+        (err != ERR_FILEIO_FILE_UPGRADE) &&
+        (err != ERR_SQL_DB_TOO_OLD) &&
+        (err != ERR_SQL_DB_TOO_NEW))
     {
-        /* Something broke, put back the old stuff */
-        delete m_backend;
-        qof_book_set_backend (newbook, NULL);
-        qof_book_destroy (newbook);
-        m_book = oldbook;
-        m_backend = qof_book_get_backend (m_book);
+        // Something failed, delete and restore new ones.
+        destroy_backend();
+        qof_book_destroy (m_book);
+        m_book = qof_book_new();
         LEAVE ("error from backend %d", get_error ());
         return;
     }
-    qof_book_destroy (oldbook);
 
     LEAVE ("sess = %p, book_id=%s", this, m_book_id.c_str ());
 }

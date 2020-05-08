@@ -1152,7 +1152,7 @@ gnc_book_get_root_account (QofBook *book)
     if (!book) return NULL;
     col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
     root = gnc_coll_get_root_account (col);
-    if (root == NULL)
+    if (root == NULL && !qof_book_shutting_down(book))
         root = gnc_account_create_root(book);
     return root;
 }
@@ -5875,6 +5875,8 @@ static void
 gnc_account_book_end(QofBook* book)
 {
     Account *root_account = gnc_book_get_root_account(book);
+    if (!root_account)
+        return;
     xaccAccountBeginEdit(root_account);
     xaccAccountDestroy(root_account);
 }

@@ -175,19 +175,25 @@ TEST (QofSessionTest, load)
      * and create a new one.
      */
     qof_backend_register_provider (get_provider ());
-    QofSession s;
+    QofSession s{qof_book_new()};
     s.begin ("book1", false, false, false);
-    auto book = s.get_book ();
+    char *guidstr1 = guid_to_string(qof_instance_get_guid(s.get_book ()));
     s.load (nullptr);
-    EXPECT_NE (book, s.get_book ());
+    char *guidstr2 = guid_to_string(qof_instance_get_guid(s.get_book ()));
+    EXPECT_STRNE (guidstr1, guidstr2);
+    g_free(guidstr1);
+    g_free(guidstr2);
 
     /* Now we'll do the load without returning an error from the backend,
      * and ensure that it's the new book from the previous test.
      */
     load_error = false;
-    book = s.get_book();
+    guidstr1 = guid_to_string(qof_instance_get_guid(s.get_book ()));
     s.load (nullptr);
-    EXPECT_EQ (book, s.get_book ());
+    guidstr2 = guid_to_string(qof_instance_get_guid(s.get_book ()));
+    EXPECT_STREQ (guidstr1, guidstr2);
+    g_free(guidstr1);
+    g_free(guidstr2);
     EXPECT_EQ (s.get_error(), ERR_BACKEND_NO_ERR);
     //But it's still empty, to the book shouldn't need saving
     EXPECT_FALSE(qof_book_session_not_saved (s.get_book ()));

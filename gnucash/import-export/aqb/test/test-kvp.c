@@ -64,7 +64,8 @@ test_qofsession_aqb_kvp( void )
     if (1)
     {
         // A file with no content at all, but a valid XML file
-        QofSession *new_session = qof_session_new (NULL);
+        QofBook *book = qof_book_new();
+        QofSession *new_session = qof_session_new (book);
         char *newfile = g_strdup_printf("file://%s", file1);
 
         qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
@@ -92,7 +93,8 @@ test_qofsession_aqb_kvp( void )
     {
         // A file with no content except for the book_template_list kvp
         // slot
-        QofSession *new_session = qof_session_new (NULL);
+        QofBook *book = qof_book_new();
+        QofSession *new_session = qof_session_new (book);
         char *newfile = g_strdup_printf("file://%s", file2);
 
         qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);

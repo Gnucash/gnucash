@@ -651,7 +651,7 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 static gboolean
 gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
 {
-    QofSession *current_session, *new_session;
+    QofSession *new_session;
     QofBook *new_book;
     GList *invalid_account_names;
     gboolean uh_oh = FALSE;
@@ -726,7 +726,7 @@ RESTART:
     /* -- this code is almost identical in FileOpen and FileSaveAs -- */
     if (gnc_current_session_exist())
     {
-        current_session = gnc_get_current_session();
+        QofSession *current_session = gnc_get_current_session();
         gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
         gnc_close_gui_component_by_session (current_session);
         gnc_state_save (current_session);
@@ -735,7 +735,7 @@ RESTART:
 
     /* load the accounts from the users datafile */
     /* but first, check to make sure we've got a session going. */
-    new_session = qof_session_new (NULL);
+    new_session = qof_session_new (qof_book_new());
 
     // Begin the new session. If we are in read-only mode, ignore the locks.
     qof_session_begin (new_session, newfile, is_readonly, FALSE, FALSE);
@@ -1299,6 +1299,9 @@ gnc_file_save (GtkWindow *parent)
     QofSession *session;
     ENTER (" ");
 
+    if (!gnc_current_session_exist ())
+        return; //No session means nothing to save.
+
     /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
     /* If we don't have a filename/path to save to get one. */
@@ -1365,6 +1368,12 @@ gnc_file_save_as (GtkWindow *parent)
     gchar *last;
 
     ENTER(" ");
+
+    if (!gnc_current_session_exist ())
+    {
+        LEAVE("No Session.");
+        return;
+    }
 
     last = gnc_history_get_last();
     if ( last && gnc_uri_targets_local_fs (last))

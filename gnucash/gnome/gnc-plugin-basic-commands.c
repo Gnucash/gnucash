@@ -239,6 +239,14 @@ static const gchar *gnc_plugin_important_actions[] =
     NULL,
 };
 
+/** The following items should be made insensitive at startup time.  The
+ *  sensitivity will be changed by some later event. */
+static const gchar *gnc_plugin_initially_insensitive_actions[] =
+{
+    "FileSaveAction",
+    NULL,
+};
+
 /** These actions are made not sensitive (i.e.,
  * their toolbar and menu items are grayed out and do not send events
  * when clicked) when the current book is "Read Only".
@@ -309,6 +317,11 @@ gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin,
         GncMainWindow *window,
         GQuark type)
 {
+    GtkActionGroup *action_group =
+        gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
+    gnc_plugin_update_actions(action_group,
+                              gnc_plugin_initially_insensitive_actions,
+                              "sensitive", FALSE);
     g_signal_connect(window, "page_changed",
                      G_CALLBACK(gnc_plugin_basic_commands_main_window_page_changed),
                      plugin);
