@@ -29,6 +29,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "Query.h"
 #include "Transaction.h"
 
@@ -54,6 +55,8 @@ typedef struct
     GtkWidget    *view;
     const gchar  *path_head;
     gboolean      path_head_set;
+    gint          component_id;
+    QofSession   *session;
 }AssocDialog;
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -67,7 +70,8 @@ gnc_assoc_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
     AssocDialog *assoc_dialog = user_data;
 
     ENTER(" ");
-    gnc_unregister_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
+    gnc_unregister_gui_component (assoc_dialog->component_id);
+
     if (assoc_dialog->window)
     {
         gtk_widget_destroy (assoc_dialog->window);
@@ -263,7 +267,7 @@ static void
 gnc_assoc_dialog_close_button_cb (GtkWidget * widget, gpointer user_data)
 {
     AssocDialog   *assoc_dialog = user_data;
-    gnc_close_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
+    gnc_close_gui_component (assoc_dialog->component_id);
 }
 
 static void
@@ -471,6 +475,8 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
     window = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_window"));
     assoc_dialog->window = window;
+    assoc_dialog->session = gnc_get_current_session();
+
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_button"));
         g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_sort_button_cb), assoc_dialog);
@@ -628,9 +634,12 @@ gnc_trans_assoc_dialog (GtkWindow *parent)
 
     gnc_assoc_dialog_create (parent, assoc_dialog);
 
-    gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
-                   refresh_handler, close_handler,
-                   assoc_dialog);
+    assoc_dialog->component_id = gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
+                                                             refresh_handler, close_handler,
+                                                             assoc_dialog);
+
+    gnc_gui_component_set_session (assoc_dialog->component_id,
+                                   assoc_dialog->session);
 
     LEAVE(" ");
 }
