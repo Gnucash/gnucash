@@ -1002,7 +1002,8 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                                   "%s \"%s\"",
                                   account_type_name,
                                   data.account_name);
-        account = gnc_import_select_account (gnc_gen_trans_list_widget(gnc_ofx_importer_gui),
+        /* use the info->parent as import-matcher is not displayed yet */
+        account = gnc_import_select_account (GTK_WIDGET(info->parent),
                                              data.account_id, 1,
                                              account_description, default_commodity,
                                              default_type, NULL, NULL);
