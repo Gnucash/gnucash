@@ -556,6 +556,7 @@ billterms_window_refresh (BillTermsWindow *btw)
     g_return_if_fail (btw);
     view = GTK_TREE_VIEW (btw->terms_view);
     store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+    selection = gtk_tree_view_get_selection(view);
 
     /* Clear the list */
     gtk_list_store_clear (store);
@@ -607,11 +608,16 @@ billterms_window_refresh (BillTermsWindow *btw)
         gtk_tree_row_reference_free(reference);
         if (path)
         {
-            selection = gtk_tree_view_get_selection(view);
             gtk_tree_selection_select_path(selection, path);
             gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
             gtk_tree_path_free(path);
         }
+    }
+    else
+    {
+        GtkTreeIter iter;
+        if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
+            gtk_tree_selection_select_iter (selection, &iter);
     }
 }
 
@@ -629,7 +635,7 @@ billterm_selection_changed (GtkTreeSelection *selection,
         gtk_tree_model_get(model, &iter, BILL_TERM_COL_TERM, &term, -1);
 
     /* If we've changed, then reset the term list */
-    if (term != btw->current_term)
+    if (GNC_IS_BILLTERM(term) && (term != btw->current_term))
         btw->current_term = term;
 
     /* And force a refresh of the entries */
