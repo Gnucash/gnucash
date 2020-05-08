@@ -56,47 +56,47 @@ void billterms_type_combobox_changed (GtkComboBox *cb, gpointer data);
 
 typedef struct _billterm_notebook
 {
-    GtkWidget *		notebook;
+    GtkWidget *notebook;
 
     /* "Days" widgets */
-    GtkWidget *		days_due_days;
-    GtkWidget *		days_disc_days;
-    GtkWidget *		days_disc;
+    GtkWidget *days_due_days;
+    GtkWidget *days_disc_days;
+    GtkWidget *days_disc;
 
     /* "Proximo" widgets */
-    GtkWidget *		prox_due_day;
-    GtkWidget *		prox_disc_day;
-    GtkWidget *		prox_disc;
-    GtkWidget *		prox_cutoff;
+    GtkWidget *prox_due_day;
+    GtkWidget *prox_disc_day;
+    GtkWidget *prox_disc;
+    GtkWidget *prox_cutoff;
 
     /* What kind of term is this? */
-    GncBillTermType	type;
+    GncBillTermType type;
 } BillTermNB;
 
 struct _billterms_window
 {
-    GtkWidget *	window;
-    GtkWidget *	terms_view;
-    GtkWidget *	desc_entry;
-    GtkWidget *	type_label;
-    GtkWidget *	term_vbox;
-    BillTermNB	notebook;
+    GtkWidget *window;
+    GtkWidget *terms_view;
+    GtkWidget *desc_entry;
+    GtkWidget *type_label;
+    GtkWidget *term_vbox;
+    BillTermNB notebook;
 
-    GncBillTerm *	current_term;
-    QofBook *	book;
-    gint		component_id;
-    QofSession *session;
+    GncBillTerm *current_term;
+    QofBook     *book;
+    gint         component_id;
+    QofSession  *session;
 };
 
 typedef struct _new_billterms
 {
-    GtkWidget *	dialog;
-    GtkWidget *	name_entry;
-    GtkWidget *	desc_entry;
-    BillTermNB	notebook;
+    GtkWidget *dialog;
+    GtkWidget *name_entry;
+    GtkWidget *desc_entry;
+    BillTermNB notebook;
 
-    BillTermsWindow *	btw;
-    GncBillTerm *	this_term;
+    BillTermsWindow *btw;
+    GncBillTerm     *this_term;
 } NewBillTerm;
 
 
@@ -107,8 +107,8 @@ read_widget (GtkBuilder *builder, char *name, gboolean read_only)
     if (read_only)
     {
         GtkAdjustment *adj;
-        gtk_editable_set_editable (GTK_EDITABLE (widget), FALSE);
-        adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
+        gtk_editable_set_editable (GTK_EDITABLE(widget), FALSE);
+        adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(widget));
         gtk_adjustment_set_step_increment (adj, 0.0);
         gtk_adjustment_set_page_increment (adj, 0.0);
     }
@@ -125,7 +125,7 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
     GtkWidget *parent;
 
     /* Load the notebook from Glade File */
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "discount_adj");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "discount_days_adj");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "due_days_adj");
@@ -154,8 +154,8 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
 
     /* Disconnect the notebook from the window */
     g_object_ref (notebook->notebook);
-    gtk_container_remove (GTK_CONTAINER (parent), notebook->notebook);
-    g_object_unref(G_OBJECT(builder));
+    gtk_container_remove (GTK_CONTAINER(parent), notebook->notebook);
+    g_object_unref (G_OBJECT(builder));
     gtk_widget_destroy (parent);
 
     /* NOTE: The caller needs to unref once they attach */
@@ -168,7 +168,7 @@ set_numeric (GtkWidget *widget, GncBillTerm *term,
     gnc_numeric val;
     gdouble fl = 0.0;
 
-    fl = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
+    fl = gtk_spin_button_get_value (GTK_SPIN_BUTTON(widget));
     val = double_to_gnc_numeric (fl, 100000, GNC_HOW_RND_ROUND_HALF_UP);
     func (term, val);
 }
@@ -182,7 +182,7 @@ get_numeric (GtkWidget *widget, GncBillTerm *term,
 
     val = func (term);
     fl = gnc_numeric_to_double (val);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), fl);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), fl);
 }
 
 static void
@@ -191,7 +191,7 @@ set_int (GtkWidget *widget, GncBillTerm *term,
 {
     gint val;
 
-    val = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+    val = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(widget));
     func (term, val);
 }
 
@@ -202,7 +202,7 @@ get_int (GtkWidget *widget, GncBillTerm *term,
     gint val;
 
     val = func (term);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gfloat)val);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), (gfloat)val);
 }
 
 /* return TRUE if anything truly changed */
@@ -216,7 +216,7 @@ ui_to_billterm (NewBillTerm *nbt)
     term = nbt->this_term;
     notebook = &nbt->notebook;
 
-    text = gtk_entry_get_text (GTK_ENTRY (nbt->desc_entry));
+    text = gtk_entry_get_text (GTK_ENTRY(nbt->desc_entry));
     if (text)
         gncBillTermSetDescription (term, text);
 
@@ -244,7 +244,7 @@ ui_to_billterm (NewBillTerm *nbt)
 static void
 billterm_to_ui (GncBillTerm *term, GtkWidget *desc, BillTermNB *notebook)
 {
-    gtk_entry_set_text (GTK_ENTRY (desc), gncBillTermGetDescription (term));
+    gtk_entry_set_text (GTK_ENTRY(desc), gncBillTermGetDescription (term));
     notebook->type = gncBillTermGetType (term);
 
     switch (notebook->type)
@@ -274,28 +274,28 @@ verify_term_ok (NewBillTerm *nbt)
     gint prox_due_days, prox_disc_days;
 
     notebook = &nbt->notebook;
-    result=TRUE;
+    result = TRUE;
 
 
-    days_due_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->days_due_days));
-    days_disc_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->days_disc_days));
-    prox_due_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->prox_due_day));
-    prox_disc_days=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (notebook->prox_disc_day));
+    days_due_days = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(notebook->days_due_days));
+    days_disc_days = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(notebook->days_disc_days));
+    prox_due_days = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(notebook->prox_due_day));
+    prox_disc_days = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(notebook->prox_disc_day));
 
     switch (nbt->notebook.type)
     {
     case GNC_TERM_TYPE_DAYS:
         if (days_due_days<days_disc_days)
         {
-              gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
-              result=FALSE;
+              gnc_error_dialog (GTK_WINDOW(nbt->dialog), "%s", message);
+              result = FALSE;
         }
         break;
     case GNC_TERM_TYPE_PROXIMO:
-	if (prox_due_days<prox_disc_days)
+    if (prox_due_days<prox_disc_days)
         {
-            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
-            result=FALSE;
+            gnc_error_dialog (GTK_WINDOW(nbt->dialog), "%s", message);
+            result = FALSE;
         }
         break;
     }
@@ -318,19 +318,19 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     /* verify the name, maybe */
     if (nbt->this_term == NULL)
     {
-        name = gtk_entry_get_text (GTK_ENTRY (nbt->name_entry));
+        name = gtk_entry_get_text (GTK_ENTRY(nbt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Billing Term.");
-            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(nbt->dialog), "%s", message);
             return FALSE;
         }
         if (gncBillTermLookupByName (btw->book, name))
         {
-            message = g_strdup_printf(_(
+            message = g_strdup_printf (_(
                                           "You must provide a unique name for this Billing Term. "
                                           "Your choice \"%s\" is already in use."), name);
-            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(nbt->dialog), "%s", message);
             g_free (message);
             return FALSE;
         }
@@ -361,7 +361,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     /* Mark the table as changed and commit it */
     gncBillTermCommitEdit (btw->current_term);
 
-    gnc_resume_gui_refresh();
+    gnc_resume_gui_refresh ();
     return TRUE;
 }
 
@@ -369,7 +369,7 @@ static void
 show_notebook (BillTermNB *notebook)
 {
     g_return_if_fail (notebook->type > 0);
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook->notebook),
+    gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook->notebook),
                                    notebook->type - 1);
 }
 
@@ -391,7 +391,7 @@ billterms_type_combobox_changed (GtkComboBox *cb, gpointer data)
     NewBillTerm *nbt = data;
     gint value;
 
-    value = gtk_combo_box_get_active(cb);
+    value = gtk_combo_box_get_active (cb);
     maybe_set_type (nbt, value + 1);
 }
 
@@ -431,7 +431,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
         dialog_combo = "type_combo";
         dialog_nb = "notebook_hbox";
     }
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", dialog_name);
     nbt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, dialog_name));
@@ -443,14 +443,14 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     gnc_widget_style_context_add_class (GTK_WIDGET(nbt->dialog), "gnc-class-bill-terms");
 
     if (name)
-        gtk_entry_set_text (GTK_ENTRY (nbt->name_entry), name);
+        gtk_entry_set_text (GTK_ENTRY(nbt->name_entry), name);
 
     /* Initialize the notebook widgets */
     init_notebook_widgets (&nbt->notebook, FALSE, nbt);
 
     /* Attach the notebook */
     box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_nb));
-    gtk_box_pack_start (GTK_BOX (box), nbt->notebook.notebook, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(box), nbt->notebook.notebook, TRUE, TRUE, 0);
     g_object_unref (nbt->notebook.notebook);
 
     /* Fill in the widgets appropriately */
@@ -461,7 +461,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
 
     /* Create the menu */
     combo_box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_combo));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(combo_box), nbt->notebook.type - 1);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(combo_box), nbt->notebook.type - 1);
 
     /* Show the right notebook page */
     show_notebook (&nbt->notebook);
@@ -484,7 +484,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG (nbt->dialog));
+        response = gtk_dialog_run (GTK_DIALOG(nbt->dialog));
         switch (response)
         {
         case GTK_RESPONSE_OK:
@@ -500,10 +500,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
         }
     }
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy(nbt->dialog);
-    g_free(nbt);
+    gtk_widget_destroy (nbt->dialog);
+    g_free (nbt);
 
     return created_term;
 }
@@ -538,7 +538,7 @@ billterms_term_refresh (BillTermsWindow *btw)
         break;
     }
     show_notebook (&btw->notebook);
-    gtk_label_set_text (GTK_LABEL (btw->type_label), type_label);
+    gtk_label_set_text (GTK_LABEL(btw->type_label), type_label);
 }
 
 static void
@@ -554,9 +554,9 @@ billterms_window_refresh (BillTermsWindow *btw)
     GtkTreeRowReference *reference = NULL;
 
     g_return_if_fail (btw);
-    view = GTK_TREE_VIEW (btw->terms_view);
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
-    selection = gtk_tree_view_get_selection(view);
+    view = GTK_TREE_VIEW(btw->terms_view);
+    store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
+    selection = gtk_tree_view_get_selection (view);
 
     /* Clear the list */
     gtk_list_store_clear (store);
@@ -583,16 +583,16 @@ billterms_window_refresh (BillTermsWindow *btw)
                                         gncBillTermGetGUID (term),
                                         QOF_EVENT_MODIFY);
 
-        gtk_list_store_prepend(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           BILL_TERM_COL_NAME, gncBillTermGetName(term),
-                           BILL_TERM_COL_TERM, term,
-                           -1);
+        gtk_list_store_prepend (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            BILL_TERM_COL_NAME, gncBillTermGetName (term),
+                            BILL_TERM_COL_TERM, term,
+                            -1);
         if (term == btw->current_term)
         {
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-            reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
-            gtk_tree_path_free(path);
+            path = gtk_tree_model_get_path (GTK_TREE_MODEL(store), &iter);
+            reference = gtk_tree_row_reference_new (GTK_TREE_MODEL(store), path);
+            gtk_tree_path_free (path);
         }
     }
 
@@ -604,13 +604,13 @@ billterms_window_refresh (BillTermsWindow *btw)
 
     if (reference)
     {
-        path = gtk_tree_row_reference_get_path(reference);
-        gtk_tree_row_reference_free(reference);
+        path = gtk_tree_row_reference_get_path (reference);
+        gtk_tree_row_reference_free (reference);
         if (path)
         {
-            gtk_tree_selection_select_path(selection, path);
-            gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
-            gtk_tree_path_free(path);
+            gtk_tree_selection_select_path (selection, path);
+            gtk_tree_view_scroll_to_cell (view, path, NULL, TRUE, 0.5, 0.0);
+            gtk_tree_path_free (path);
         }
     }
     else
@@ -631,8 +631,8 @@ billterm_selection_changed (GtkTreeSelection *selection,
 
     g_return_if_fail (btw);
 
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter, BILL_TERM_COL_TERM, &term, -1);
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+        gtk_tree_model_get (model, &iter, BILL_TERM_COL_TERM, &term, -1);
 
     /* If we've changed, then reset the term list */
     if (GNC_IS_BILLTERM(term) && (term != btw->current_term))
@@ -668,13 +668,13 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
 
     if (gncBillTermGetRefcount (btw->current_term) > 0)
     {
-        gnc_error_dialog (GTK_WINDOW (btw->window),
+        gnc_error_dialog (GTK_WINDOW(btw->window),
                           _("Term \"%s\" is in use. You cannot delete it."),
                           gncBillTermGetName (btw->current_term));
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW (btw->window), FALSE,
+    if (gnc_verify_dialog (GTK_WINDOW(btw->window), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncBillTermGetName (btw->current_term)))
     {
@@ -774,10 +774,10 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     /* Didn't find one -- create a new window */
     btw = g_new0 (BillTermsWindow, 1);
     btw->book = book;
-    btw->session = gnc_get_current_session();
+    btw->session = gnc_get_current_session ();
 
     /* Open and read the Glade File */
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_window");
     btw->window = GTK_WIDGET(gtk_builder_get_object (builder, "terms_window"));
     btw->terms_view = GTK_WIDGET(gtk_builder_get_object (builder, "terms_view"));
@@ -792,27 +792,27 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);
     store = gtk_list_store_new (NUM_BILL_TERM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
-    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-    g_object_unref(store);
+    gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+    g_object_unref (store);
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes("", renderer,
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes ("", renderer,
              "text", BILL_TERM_COL_NAME,
              NULL);
-    gtk_tree_view_append_column(view, column);
+    gtk_tree_view_append_column (view, column);
 
-    g_signal_connect(view, "row-activated",
-                     G_CALLBACK(billterm_selection_activated), btw);
-    selection = gtk_tree_view_get_selection(view);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(billterm_selection_changed), btw);
+    g_signal_connect (view, "row-activated",
+                      G_CALLBACK(billterm_selection_activated), btw);
+    selection = gtk_tree_view_get_selection (view);
+    g_signal_connect (selection, "changed",
+                      G_CALLBACK(billterm_selection_changed), btw);
 
     /* Initialize the notebook widgets */
     init_notebook_widgets (&btw->notebook, TRUE, btw);
 
     /* Attach the notebook */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_box"));
-    gtk_box_pack_start (GTK_BOX (widget), btw->notebook.notebook,
+    gtk_box_pack_start (GTK_BOX(widget), btw->notebook.notebook,
                         TRUE, TRUE, 0);
     g_object_unref (btw->notebook.notebook);
 
@@ -831,7 +831,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     gtk_widget_show_all (btw->window);
     billterms_window_refresh (btw);
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
     return btw;
 }
