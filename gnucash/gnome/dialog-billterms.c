@@ -29,6 +29,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
@@ -74,7 +75,7 @@ typedef struct _billterm_notebook
 
 struct _billterms_window
 {
-    GtkWidget *	dialog;
+    GtkWidget *	window;
     GtkWidget *	terms_view;
     GtkWidget *	desc_entry;
     GtkWidget *	type_label;
@@ -84,6 +85,7 @@ struct _billterms_window
     GncBillTerm *	current_term;
     QofBook *	book;
     gint		component_id;
+    QofSession *session;
 };
 
 typedef struct _new_billterms
@@ -117,7 +119,7 @@ read_widget (GtkBuilder *builder, char *name, gboolean read_only)
 /* NOTE: The caller needs to unref once they attach */
 static void
 init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
-                       GtkDialog *dialog, gpointer user_data)
+                       gpointer user_data)
 {
     GtkBuilder *builder;
     GtkWidget *parent;
@@ -444,8 +446,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
         gtk_entry_set_text (GTK_ENTRY (nbt->name_entry), name);
 
     /* Initialize the notebook widgets */
-    init_notebook_widgets (&nbt->notebook, FALSE,
-                           GTK_DIALOG (nbt->dialog), nbt);
+    init_notebook_widgets (&nbt->notebook, FALSE, nbt);
 
     /* Attach the notebook */
     box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_nb));
@@ -469,7 +470,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nbt);
 
     gtk_window_set_transient_for (GTK_WINDOW(nbt->dialog),
-                                  GTK_WINDOW(btw->dialog));
+                                  GTK_WINDOW(btw->window));
 
     /* Show what we should */
     gtk_widget_show_all (nbt->dialog);
@@ -661,13 +662,13 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
 
     if (gncBillTermGetRefcount (btw->current_term) > 0)
     {
-        gnc_error_dialog (GTK_WINDOW (btw->dialog),
+        gnc_error_dialog (GTK_WINDOW (btw->window),
                           _("Term \"%s\" is in use. You cannot delete it."),
                           gncBillTermGetName (btw->current_term));
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW (btw->dialog), FALSE,
+    if (gnc_verify_dialog (GTK_WINDOW (btw->window), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncBillTermGetName (btw->current_term)))
     {
@@ -704,7 +705,7 @@ billterms_window_close_handler (gpointer data)
     BillTermsWindow *btw = data;
     g_return_if_fail (btw);
 
-    gtk_widget_destroy (btw->dialog);
+    gtk_widget_destroy (btw->window);
 }
 
 void
@@ -760,28 +761,27 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
                                         find_handler, book);
     if (btw)
     {
-        gtk_window_present (GTK_WINDOW(btw->dialog));
+        gtk_window_present (GTK_WINDOW(btw->window));
         return btw;
     }
 
     /* Didn't find one -- create a new window */
     btw = g_new0 (BillTermsWindow, 1);
     btw->book = book;
+    btw->session = gnc_get_current_session();
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_dialog");
-    btw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "terms_dialog"));
+    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_window");
+    btw->window = GTK_WIDGET(gtk_builder_get_object (builder, "terms_window"));
     btw->terms_view = GTK_WIDGET(gtk_builder_get_object (builder, "terms_view"));
     btw->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
     btw->type_label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
     btw->term_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "term_vbox"));
 
     // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(btw->dialog), "gnc-id-bill-terms");
-    gnc_widget_style_context_add_class (GTK_WIDGET(btw->dialog), "gnc-class-bill-terms");
-
-    gtk_window_set_transient_for (GTK_WINDOW (btw->dialog), parent);
+    gtk_widget_set_name (GTK_WIDGET(btw->window), "gnc-id-bill-terms");
+    gnc_widget_style_context_add_class (GTK_WIDGET(btw->window), "gnc-class-bill-terms");
 
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);
@@ -802,8 +802,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
                      G_CALLBACK(billterm_selection_changed), btw);
 
     /* Initialize the notebook widgets */
-    init_notebook_widgets (&btw->notebook, TRUE,
-                           GTK_DIALOG (btw->dialog), btw);
+    init_notebook_widgets (&btw->notebook, TRUE, btw);
 
     /* Attach the notebook */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_box"));
@@ -821,7 +820,9 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
                                     billterms_window_close_handler,
                                     btw);
 
-    gtk_widget_show_all (btw->dialog);
+    gnc_gui_component_set_session (btw->component_id, btw->session);
+
+    gtk_widget_show_all (btw->window);
     billterms_window_refresh (btw);
 
     g_object_unref(G_OBJECT(builder));
