@@ -71,29 +71,29 @@ void tax_table_window_destroy_cb (GtkWidget *widget, gpointer data);
 
 struct _taxtable_window
 {
-    GtkWidget *	dialog;
-    GtkWidget *	names_view;
-    GtkWidget *	entries_view;
+    GtkWidget *dialog;
+    GtkWidget *names_view;
+    GtkWidget *entries_view;
 
-    GncTaxTable *	current_table;
-    GncTaxTableEntry *	current_entry;
-    QofBook *	book;
-    gint		component_id;
-    QofSession *session;
+    GncTaxTable      *current_table;
+    GncTaxTableEntry *current_entry;
+    QofBook          *book;
+    gint              component_id;
+    QofSession       *session;
 };
 
 typedef struct _new_taxtable
 {
-    GtkWidget *	dialog;
-    GtkWidget *	name_entry;
-    GtkWidget *	amount_entry;
-    GtkWidget *	acct_tree;
+    GtkWidget *dialog;
+    GtkWidget *name_entry;
+    GtkWidget *amount_entry;
+    GtkWidget *acct_tree;
 
-    GncTaxTable *		created_table;
-    TaxTableWindow *	ttw;
-    GncTaxTableEntry *	entry;
-    gint			type;
-    gboolean		new_table;
+    GncTaxTable      *created_table;
+    TaxTableWindow   *ttw;
+    GncTaxTableEntry *entry;
+    gint              type;
+    gboolean          new_table;
 } NewTaxTable;
 
 static gboolean
@@ -113,32 +113,32 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     /* verify the name, maybe */
     if (ntt->new_table)
     {
-        name = gtk_entry_get_text (GTK_ENTRY (ntt->name_entry));
+        name = gtk_entry_get_text (GTK_ENTRY(ntt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Tax Table.");
-            gnc_error_dialog (GTK_WINDOW (ntt->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
             return FALSE;
         }
         if (gncTaxTableLookupByName (ttw->book, name))
         {
-            message = g_strdup_printf(_(
+            message = g_strdup_printf (_(
                                           "You must provide a unique name for this Tax Table. "
                                           "Your choice \"%s\" is already in use."), name);
-            gnc_error_dialog (GTK_WINDOW (ntt->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
             g_free (message);
             return FALSE;
         }
     }
 
     /* verify the amount. Note that negative values are allowed (required for European tax rules) */
-    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (ntt->amount_entry));
+    amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(ntt->amount_entry));
     if (ntt->type == GNC_AMT_TYPE_PERCENT &&
             gnc_numeric_compare (gnc_numeric_abs (amount),
                                  gnc_numeric_create (100, 1)) > 0)
     {
         message = _("Percentage amount must be between -100 and 100.");
-        gnc_error_dialog (GTK_WINDOW (ntt->dialog), "%s", message);
+        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
         return FALSE;
     }
 
@@ -147,7 +147,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     if (acc == NULL)
     {
         message = _("You must choose a Tax Account.");
-        gnc_error_dialog (GTK_WINDOW (ntt->dialog), "%s", message);
+        gnc_error_dialog (GTK_WINDOW(ntt->dialog), "%s", message);
         return FALSE;
     }
 
@@ -190,7 +190,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     gncTaxTableChanged (ttw->current_table);
     gncTaxTableCommitEdit (ttw->current_table);
 
-    gnc_resume_gui_refresh();
+    gnc_resume_gui_refresh ();
     return TRUE;
 }
 
@@ -199,10 +199,10 @@ combo_changed (GtkWidget *widget, NewTaxTable *ntt)
 {
     gint index;
 
-    g_return_if_fail(GTK_IS_COMBO_BOX(widget));
-    g_return_if_fail(ntt);
+    g_return_if_fail (GTK_IS_COMBO_BOX(widget));
+    g_return_if_fail (ntt);
 
-    index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+    index = gtk_combo_box_get_active (GTK_COMBO_BOX(widget));
     ntt->type = index + 1;
 }
 
@@ -231,7 +231,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         ntt->type = GNC_AMT_TYPE_PERCENT;
 
     /* Open and read the Glade File */
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "new_tax_table_dialog");
 
@@ -243,43 +243,43 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
-        gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
+        gtk_entry_set_text (GTK_ENTRY(ntt->name_entry), name);
 
     /* Create the menu */
     combo = GTK_WIDGET(gtk_builder_get_object (builder, "type_combobox"));
     index = ntt->type ? ntt->type : GNC_AMT_TYPE_VALUE;
-    gtk_combo_box_set_active(GTK_COMBO_BOX(combo), index - 1);
-    g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), ntt);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(combo), index - 1);
+    g_signal_connect (combo, "changed", G_CALLBACK(combo_changed), ntt);
 
     /* Attach our own widgets */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "amount_box"));
     ntt->amount_entry = widget = gnc_amount_edit_new ();
-    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (widget), TRUE);
-    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (widget), 100000);
-    gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(widget), TRUE);
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(widget), 100000);
+    gtk_box_pack_start (GTK_BOX(box), widget, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_window"));
     ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_container_add (GTK_CONTAINER (box), ntt->acct_tree);
+    gtk_container_add (GTK_CONTAINER(box), ntt->acct_tree);
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
 
     /* Make 'enter' do the right thing */
-    gtk_entry_set_activates_default(GTK_ENTRY (gnc_amount_edit_gtk_entry
-                                    (GNC_AMOUNT_EDIT (ntt->amount_entry))),
+    gtk_entry_set_activates_default (GTK_ENTRY(gnc_amount_edit_gtk_entry
+                                    (GNC_AMOUNT_EDIT(ntt->amount_entry))),
                                     TRUE);
 
     /* Fix mnemonics for generated target widgets */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "value_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->amount_entry);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(widget), ntt->amount_entry);
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "account_label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->acct_tree);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(widget), ntt->acct_tree);
 
     /* Fill in the widgets appropriately */
     if (entry)
     {
-        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (ntt->amount_entry),
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(ntt->amount_entry),
                                     gncTaxTableEntryGetAmount (entry));
-        gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (ntt->acct_tree),
+        gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(ntt->acct_tree),
                 gncTaxTableEntryGetAccount (entry));
     }
 
@@ -300,7 +300,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         /* Tables are great for layout, but a pain when you hide widgets */
         GTK_WIDGET(gtk_builder_get_object (builder, "ttd_table"));
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
-                               (GNC_AMOUNT_EDIT (ntt->amount_entry)));
+                               (GNC_AMOUNT_EDIT(ntt->amount_entry)));
     }
     else
         gtk_widget_grab_focus (ntt->name_entry);
@@ -311,7 +311,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG (ntt->dialog));
+        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
         switch (response)
         {
         case GTK_RESPONSE_OK:
@@ -327,10 +327,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         }
     }
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy(ntt->dialog);
-    g_free(ntt);
+    gtk_widget_destroy (ntt->dialog);
+    g_free (ntt);
 
     return created_table;
 }
@@ -351,8 +351,8 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
 
     g_return_if_fail (ttw);
 
-    view = GTK_TREE_VIEW (ttw->entries_view);
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+    view = GTK_TREE_VIEW(ttw->entries_view);
+    store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
 
     /* Clear the list */
     selected_entry = ttw->current_entry;
@@ -392,17 +392,17 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
              break;
         }
 
-        gtk_list_store_prepend(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           TAX_ENTRY_COL_NAME, row_text[0],
-                           TAX_ENTRY_COL_POINTER, entry,
-                           TAX_ENTRY_COL_AMOUNT, row_text[1],
-                           -1);
+        gtk_list_store_prepend (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            TAX_ENTRY_COL_NAME, row_text[0],
+                            TAX_ENTRY_COL_POINTER, entry,
+                            TAX_ENTRY_COL_AMOUNT, row_text[1],
+                            -1);
         if (entry == selected_entry)
         {
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-            reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
-            gtk_tree_path_free(path);
+            path = gtk_tree_model_get_path (GTK_TREE_MODEL(store), &iter);
+            reference = gtk_tree_row_reference_new (GTK_TREE_MODEL(store), path);
+            gtk_tree_path_free (path);
         }
 
         g_free (row_text[0]);
@@ -411,14 +411,14 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
 
     if (reference)
     {
-        path = gtk_tree_row_reference_get_path(reference);
-        gtk_tree_row_reference_free(reference);
+        path = gtk_tree_row_reference_get_path (reference);
+        gtk_tree_row_reference_free (reference);
         if (path)
         {
-            selection = gtk_tree_view_get_selection(view);
-            gtk_tree_selection_select_path(selection, path);
-            gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
-            gtk_tree_path_free(path);
+            selection = gtk_tree_view_get_selection (view);
+            gtk_tree_selection_select_path (selection, path);
+            gtk_tree_view_scroll_to_cell (view, path, NULL, TRUE, 0.5, 0.0);
+            gtk_tree_path_free (path);
         }
     }
 }
@@ -436,8 +436,8 @@ tax_table_window_refresh (TaxTableWindow *ttw)
     GncTaxTable *saved_current_table = ttw->current_table;
 
     g_return_if_fail (ttw);
-    view = GTK_TREE_VIEW (ttw->names_view);
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+    view = GTK_TREE_VIEW(ttw->names_view);
+    store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
 
     /* Clear the list */
     gtk_list_store_clear(store);
@@ -457,17 +457,17 @@ tax_table_window_refresh (TaxTableWindow *ttw)
                                         gncTaxTableGetGUID (table),
                                         QOF_EVENT_MODIFY);
 
-        gtk_list_store_prepend(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           TAX_TABLE_COL_NAME, gncTaxTableGetName (table),
-                           TAX_TABLE_COL_POINTER, table,
-                           -1);
+        gtk_list_store_prepend (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            TAX_TABLE_COL_NAME, gncTaxTableGetName (table),
+                            TAX_TABLE_COL_POINTER, table,
+                            -1);
 
         if (table == saved_current_table)
         {
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-            reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
-            gtk_tree_path_free(path);
+            path = gtk_tree_model_get_path (GTK_TREE_MODEL(store), &iter);
+            reference = gtk_tree_row_reference_new (GTK_TREE_MODEL(store), path);
+            gtk_tree_path_free (path);
         }
     }
 
@@ -480,14 +480,14 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
     if (reference)
     {
-        path = gtk_tree_row_reference_get_path(reference);
-        gtk_tree_row_reference_free(reference);
+        path = gtk_tree_row_reference_get_path (reference);
+        gtk_tree_row_reference_free (reference);
         if (path)
         {
-            selection = gtk_tree_view_get_selection(view);
-            gtk_tree_selection_select_path(selection, path);
-            gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0.0);
-            gtk_tree_path_free(path);
+            selection = gtk_tree_view_get_selection (view);
+            gtk_tree_selection_select_path (selection, path);
+            gtk_tree_view_scroll_to_cell (view, path, NULL, TRUE, 0.5, 0.0);
+            gtk_tree_path_free (path);
         }
     }
 
@@ -506,10 +506,10 @@ tax_table_selection_changed (GtkTreeSelection *selection,
 
     g_return_if_fail (ttw);
 
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
         return;
 
-    gtk_tree_model_get(model, &iter, TAX_TABLE_COL_POINTER, &table, -1);
+    gtk_tree_model_get (model, &iter, TAX_TABLE_COL_POINTER, &table, -1);
     g_return_if_fail (table);
 
     /* If we've changed, then reset the entry list */
@@ -532,13 +532,13 @@ tax_table_entry_selection_changed (GtkTreeSelection *selection,
 
     g_return_if_fail (ttw);
 
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     {
         ttw->current_entry = NULL;
         return;
     }
 
-    gtk_tree_model_get(model, &iter, TAX_ENTRY_COL_POINTER, &ttw->current_entry, -1);
+    gtk_tree_model_get (model, &iter, TAX_ENTRY_COL_POINTER, &ttw->current_entry, -1);
 }
 
 static void
@@ -575,7 +575,7 @@ static const char
     GtkWidget *dvbox;
 
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-    gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
+    gtk_box_set_homogeneous (GTK_BOX(main_vbox), FALSE);
     gtk_container_set_border_width (GTK_CONTAINER(main_vbox), 6);
     gtk_widget_show (main_vbox);
 
@@ -585,7 +585,7 @@ static const char
     gtk_widget_show (label);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-    gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
+    gtk_box_set_homogeneous (GTK_BOX(vbox), TRUE);
     gtk_container_set_border_width (GTK_CONTAINER(vbox), 6);
     gtk_container_add (GTK_CONTAINER(main_vbox), vbox);
     gtk_widget_show (vbox);
@@ -611,7 +611,7 @@ static const char
         return NULL;
     }
 
-    text = g_strdup (gtk_entry_get_text (GTK_ENTRY (textbox)));
+    text = g_strdup (gtk_entry_get_text (GTK_ENTRY(textbox)));
     gtk_widget_destroy (dialog);
     return text;
 }
@@ -631,13 +631,13 @@ tax_table_rename_table_cb (GtkButton *button, TaxTableWindow *ttw)
                                        (_("Please enter new name")),
                                        (_("_Rename")), oldname);
 
-    if (newname && *newname != '\0' && (g_strcmp0(oldname, newname) != 0))
+    if (newname && *newname != '\0' && (g_strcmp0 (oldname, newname) != 0))
     {
         if (gncTaxTableLookupByName (ttw->book, newname))
         {
             char *message = g_strdup_printf (_("Tax table name \"%s\" already exists."),
                                              newname);
-            gnc_error_dialog (GTK_WINDOW (ttw->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(ttw->dialog), "%s", message);
             g_free (message);
         }
         else
@@ -661,12 +661,12 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
         char *message =
             g_strdup_printf (_("Tax table \"%s\" is in use. You cannot delete it."),
                              gncTaxTableGetName (ttw->current_table));
-            gnc_error_dialog (GTK_WINDOW (ttw->dialog), "%s", message);
+            gnc_error_dialog (GTK_WINDOW(ttw->dialog), "%s", message);
         g_free (message);
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW (ttw->dialog), FALSE,
+    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncTaxTableGetName (ttw->current_table)))
     {
@@ -709,11 +709,11 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     {
         char *message = _("You cannot remove the last entry from the tax table. "
                           "Try deleting the tax table if you want to do that.");
-        gnc_error_dialog (GTK_WINDOW (ttw->dialog)  , "%s", message);
+        gnc_error_dialog (GTK_WINDOW(ttw->dialog)  , "%s", message);
         return;
     }
 
-    if (gnc_verify_dialog (GTK_WINDOW (ttw->dialog), FALSE, "%s",
+    if (gnc_verify_dialog (GTK_WINDOW(ttw->dialog), FALSE, "%s",
                            _("Are you sure you want to delete this entry?")))
     {
         /* Ok, let's remove it */
@@ -751,7 +751,7 @@ tax_table_window_close (GtkWidget *widget, gpointer data)
 {
     TaxTableWindow *ttw = data;
 
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog));
     gnc_ui_tax_table_window_destroy (ttw);
 }
 
@@ -806,10 +806,10 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     /* Didn't find one -- create a new window */
     ttw = g_new0 (TaxTableWindow, 1);
     ttw->book = book;
-    ttw->session = gnc_get_current_session();
+    ttw->session = gnc_get_current_session ();
 
     /* Open and read the Glade File */
-    builder = gtk_builder_new();
+    builder = gtk_builder_new ();
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window");
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
@@ -823,51 +823,51 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     view = GTK_TREE_VIEW(ttw->names_view);
     store = gtk_list_store_new (NUM_TAX_TABLE_COLS, G_TYPE_STRING,
                                 G_TYPE_POINTER);
-    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-    g_object_unref(store);
+    gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+    g_object_unref (store);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
                                           TAX_TABLE_COL_NAME,
                                           GTK_SORT_ASCENDING);
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes("", renderer,
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes ("", renderer,
              "text", TAX_TABLE_COL_NAME,
              NULL);
     g_object_set (G_OBJECT(column), "reorderable", TRUE, NULL);
-    gtk_tree_view_append_column(view, column);
+    gtk_tree_view_append_column (view, column);
     gtk_tree_view_column_set_sort_column_id (column, TAX_TABLE_COL_NAME);
 
-    selection = gtk_tree_view_get_selection(view);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(tax_table_selection_changed), ttw);
+    selection = gtk_tree_view_get_selection (view);
+    g_signal_connect (selection, "changed",
+                      G_CALLBACK(tax_table_selection_changed), ttw);
 
     /* Create the tax table entries view */
     view = GTK_TREE_VIEW(ttw->entries_view);
     store = gtk_list_store_new (NUM_TAX_ENTRY_COLS, G_TYPE_STRING,
                                 G_TYPE_POINTER, G_TYPE_STRING);
-    gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
-    g_object_unref(store);
+    gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+    g_object_unref (store);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
                                           TAX_ENTRY_COL_NAME,
                                           GTK_SORT_ASCENDING);
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes("", renderer,
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes ("", renderer,
              "text", TAX_ENTRY_COL_NAME,
              NULL);
     g_object_set (G_OBJECT(column), "reorderable", TRUE, NULL);
-    gtk_tree_view_append_column(view, column);
+    gtk_tree_view_append_column (view, column);
     gtk_tree_view_column_set_sort_column_id (column, TAX_ENTRY_COL_NAME);
 
-    selection = gtk_tree_view_get_selection(view);
-    g_signal_connect(selection, "changed",
-                     G_CALLBACK(tax_table_entry_selection_changed), ttw);
-    g_signal_connect(view, "row-activated",
-                     G_CALLBACK(tax_table_entry_row_activated), ttw);
+    selection = gtk_tree_view_get_selection (view);
+    g_signal_connect (selection, "changed",
+                      G_CALLBACK(tax_table_entry_selection_changed), ttw);
+    g_signal_connect (view, "row-activated",
+                      G_CALLBACK(tax_table_entry_row_activated), ttw);
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
@@ -882,10 +882,10 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     gnc_gui_component_set_session (ttw->component_id, ttw->session);
 
     tax_table_window_refresh (ttw);
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog), parent);
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog), parent);
     gtk_widget_show_all (ttw->dialog);
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 
     return ttw;
 }
