@@ -2059,6 +2059,12 @@ CsvImpTransAssist::assist_match_page_prepare ()
     gtk_assistant_add_action_widget (csv_imp_asst, help_button);
     g_signal_connect (help_button, "clicked",
                      G_CALLBACK(on_matcher_help_clicked), gnc_csv_importer_gui);
+
+    // align the help button on the left side
+    auto action_box = gtk_widget_get_parent (help_button);
+    gtk_widget_set_halign (GTK_WIDGET(action_box), GTK_ALIGN_FILL);  
+    gtk_widget_set_hexpand (GTK_WIDGET(action_box), TRUE);
+    gtk_box_set_child_packing (GTK_BOX(action_box), help_button, FALSE, FALSE, 0, GTK_PACK_START);
     gtk_widget_show (GTK_WIDGET(help_button));
 
     /* Copy all of the transactions to the importer GUI. */
