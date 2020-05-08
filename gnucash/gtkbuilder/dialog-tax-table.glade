@@ -2,49 +2,18 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkDialog" id="tax_table_window_dialog">
+  <object class="GtkWindow" id="tax_table_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Tax Tables</property>
-    <property name="type_hint">normal</property>
     <signal name="destroy" handler="tax_table_window_destroy_cb" swapped="no"/>
     <child>
       <placeholder/>
     </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox4">
+    <child>
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="label" translatable="yes">_Close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="tax_table_window_close" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkBox" id="hbox4">
             <property name="visible">True</property>
@@ -84,7 +53,7 @@
                         <property name="headers_visible">False</property>
                         <property name="rules_hint">True</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                          <object class="GtkTreeSelection"/>
                         </child>
                       </object>
                     </child>
@@ -194,7 +163,7 @@
                         <property name="headers_visible">False</property>
                         <property name="rules_hint">True</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                          <object class="GtkTreeSelection"/>
                         </child>
                       </object>
                     </child>
@@ -274,14 +243,41 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox" id="dialog-action_area">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="border_width">6</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="close_button">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="tax_table_window_close" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-6">close_button</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkListStore" id="type_liststore">
     <columns>

@@ -30,6 +30,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-gtk-utils.h"
@@ -78,6 +79,7 @@ struct _taxtable_window
     GncTaxTableEntry *	current_entry;
     QofBook *	book;
     gint		component_id;
+    QofSession *session;
 };
 
 typedef struct _new_taxtable
@@ -804,15 +806,14 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     /* Didn't find one -- create a new window */
     ttw = g_new0 (TaxTableWindow, 1);
     ttw->book = book;
+    ttw->session = gnc_get_current_session();
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window_dialog");
-    ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window_dialog"));
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window");
+    ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
     ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
-
-    gtk_window_set_transient_for (GTK_WINDOW (ttw->dialog), parent);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(ttw->dialog), "gnc-id-new-tax-table");
@@ -877,6 +878,8 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                                     tax_table_window_refresh_handler,
                                     tax_table_window_close_handler,
                                     ttw);
+
+    gnc_gui_component_set_session (ttw->component_id, ttw->session);
 
     tax_table_window_refresh (ttw);
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog), parent);
