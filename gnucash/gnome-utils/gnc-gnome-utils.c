@@ -64,6 +64,13 @@ static int gnome_is_initialized = FALSE;
 
 #define ACCEL_MAP_NAME "accelerator-map"
 
+const gchar *msg_no_help_found =
+    N_("GnuCash could not find the files of the help documentation.");
+const gchar *msg_no_help_reason =
+    N_("This is likely because the \"gnucash-docs\" package is not properly installed.");
+    /* Translators: URI of missing help files */
+const gchar *msg_no_help_location = N_("Expected location");
+
 static void gnc_book_options_help_cb (GNCOptionWin *win, gpointer dat);
 
 static void
@@ -280,10 +287,9 @@ gnc_gnome_help (const char *dir, const char *detail)
                   componentsJoinedByString: @"-"];
         if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
-            const gchar *message =
-                _("GnuCash could not find the files for the help documentation. "
-                  "This is likely because the 'gnucash-docs' package is not installed");
-            gnc_error_dialog(NULL, "%s at %s", message, [docs_dir UTF8String]);
+            gnc_error_dialog(NULL, "%s\n%s\n%s: %s", _(msg_no_help_found),
+                             _(msg_no_help_reason),
+                             _(msg_no_help_location), [docs_dir UTF8String]);
             [pool release];
             return;
         }
@@ -373,10 +379,7 @@ gnc_gnome_help (const char *dir, const char *detail)
         [[NSWorkspace sharedWorkspace] openURL: url];
     else
     {
-        const gchar *message =
-            _("GnuCash could not find the files for the help documentation. "
-              "This is likely because the 'gnucash-docs' package is not installed.");
-        gnc_error_dialog(NULL, "%s", message);
+       gnc_error_dialog(NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     [pool release];
 }
@@ -404,9 +407,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
     if (!found)
     {
-        const gchar *message =
-            _("GnuCash could not find the files for the help documentation.");
-        gnc_error_dialog (NULL, message);
+        gnc_error_dialog (NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     else
     {
@@ -439,10 +440,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
 
     g_assert(error != NULL);
     {
-        const gchar *message =
-            _("GnuCash could not find the files for the help documentation. "
-              "This is likely because the 'gnucash-docs' package is not installed.");
-        gnc_error_dialog(NULL, "%s", message);
+        gnc_error_dialog(NULL, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
     }
     PERR ("%s", error->message);
     g_error_free(error);
@@ -505,7 +503,7 @@ gnc_launch_assoc (GtkWindow *parent, const char *uri)
                        NULL, NULL, SW_SHOWNORMAL) <= 32)
         {
             const gchar *message =
-            _("GnuCash could not find the associated file");
+            _("GnuCash could not find the associated file.");
             gnc_error_dialog(parent, "%s:\n%s", message, filename);
         }
         g_free (wincmd);
