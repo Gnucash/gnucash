@@ -444,84 +444,84 @@
       ;; non-recursive wrapper around this:
       ;; Convert the account list to a tree structure for easier handling later
       (define (process-acc-list-r
-                account-list       ; list of accounts to process
-                curr-depth         ; set depth to 1 to start with
-                neg?)
+               account-list       ; list of accounts to process
+               curr-depth         ; set depth to 1 to start with
+               neg?)
         (let ((tree '())          ; gets tree of accounts from this depth down
               (maxdepth 0)        ; gets max depth of all at this level
               (any-non-zero? #f)  ; becomes true if any at this level are non-zero
-              (total-cc (gnc:make-commodity-collector)))        ; gets grand total of all accounts
-          ; at this level and below
-          ; loop until no more accounts, or next account is at higher level
+              (total-cc (gnc:make-commodity-collector)))
+
+          ;; at this level and below
+          ;; loop until no more accounts, or next account is at higher level
           (while (and (not (null? account-list))
-                      (>= (gnc-account-get-current-depth (car account-list)) curr-depth))
-                 (let* ((account (car account-list))
-                        (comm    (xaccAccountGetCommodity account))
-                        (bal     (xaccAccountGetBalanceAsOfDate account opt-date))
-                        (depth   (flattened-acc-depth account))
-                        (treedepth 1)
-                        ; Next account only qualifies as 'deeper' if we're not flattening
-                        (next-acc-deeper (and (not (null? (safe-cadr account-list)))
-                                              (> (flattened-acc-depth (safe-cadr account-list)) depth)))
-                        (newacc (newaccrec-clean)))
-                   (accrec-set-account!      newacc account)
-                   (accrec-set-code!         newacc (xaccAccountGetCode account))
-                   (accrec-set-placeholder?! newacc (xaccAccountGetPlaceholder account))
-                   (accrec-set-namelink!     newacc (account-link account))
-                   (accrec-set-commodity!    newacc comm) ;(xaccAccountGetCommodity account))
-                   (accrec-set-balance-num!  newacc
-                                             (if neg?
-                                               (gnc-numeric-neg bal)
-                                               bal))
-                   (accrec-set-depth!        newacc depth) ;(gnc-account-get-current-depth account))
-                   (accrec-set-non-zero?!    newacc (not (gnc-numeric-zero-p bal)))
+                      (>= (gnc-account-get-current-depth (car account-list))
+                          curr-depth))
+            (let* ((account (car account-list))
+                   (comm    (xaccAccountGetCommodity account))
+                   (bal     (xaccAccountGetBalanceAsOfDate account opt-date))
+                   (depth   (flattened-acc-depth account))
+                   (treedepth 1)
+                   ;; Next account only qualifies as 'deeper' if we're not flattening
+                   (next-acc-deeper (and (not (null? (safe-cadr account-list)))
+                                         (> (flattened-acc-depth (safe-cadr account-list)) depth)))
+                   (newacc (newaccrec-clean)))
+              (accrec-set-account!      newacc account)
+              (accrec-set-code!         newacc (xaccAccountGetCode account))
+              (accrec-set-placeholder?! newacc (xaccAccountGetPlaceholder account))
+              (accrec-set-namelink!     newacc (account-link account))
+              (accrec-set-commodity!    newacc comm)
+              (accrec-set-balance-num!  newacc (if neg? (- bal) bal))
+              (accrec-set-depth!        newacc depth)
+              (accrec-set-non-zero?!    newacc (not (zero? bal)))
 
-                   (if (>= depth opt-depth-limit)
-                     (accrec-set-summary?! newacc #t))
-                   (set! xlist (assoc-set! xlist comm #t)) ; even if not opt-show-foreign?
+              (if (>= depth opt-depth-limit)
+                  (accrec-set-summary?! newacc #t))
+              (set! xlist (assoc-set! xlist comm #t)) ; even if not opt-show-foreign?
 
-                   (accrec-set-subtotal-cc! newacc (gnc:make-commodity-collector))
-                   (add-to-cc total-cc comm bal neg?)
-                   (add-to-cc (accrec-subtotal-cc newacc) comm bal neg?)
+              (accrec-set-subtotal-cc! newacc (gnc:make-commodity-collector))
+              (add-to-cc total-cc comm bal neg?)
+              (add-to-cc (accrec-subtotal-cc newacc) comm bal neg?)
 
-                   (if next-acc-deeper
-                     ; recurse to deal with deeper level accounts,
-                     ; then store the resulting list
-                     (let* ((result-v (process-acc-list-r
-                                        (safe-cdr account-list) (1+ curr-depth) neg?))
-                            (subtree (vector-ref result-v 0))
-                            (subtotal-cc (vector-ref result-v 2))
-                            (subtreedepth (vector-ref result-v 3))
-                            (subnonzero?  (vector-ref result-v 4)))
-                       (set! account-list (vector-ref result-v 1))
-                       (if (not (null? subtree)); (it could be null if all sub-accounts were excluded)
-                         (begin
-                           ; add the sub-total from the recursion to the current level's total
-                           (total-cc 'merge subtotal-cc neg?)
-                           ((accrec-subtotal-cc newacc) 'merge subtotal-cc neg?)
-                           (if (< curr-depth opt-depth-limit)
-                             ; fix the subtree to the current tree
-                             ; but only if not beyond the limit
-                             (accrec-set-sublist! newacc subtree))
-                           ; add the subtree's depth to this level's
-                           (set! treedepth (1+ subtreedepth))
-                           (if subnonzero?
-                             (accrec-set-non-zero?! newacc #t)))))
-                     (begin  ; else -- same level -- just pop the account off the list
-                       (set! account-list (cdr account-list)))) ; end if next-acc-deeper
+              (if next-acc-deeper
+                  ;; recurse to deal with deeper level accounts,
+                  ;; then store the resulting list
+                  (let* ((result-v (process-acc-list-r
+                                    (safe-cdr account-list) (1+ curr-depth) neg?))
+                         (subtree (vector-ref result-v 0))
+                         (subtotal-cc (vector-ref result-v 2))
+                         (subtreedepth (vector-ref result-v 3))
+                         (subnonzero?  (vector-ref result-v 4)))
+                    (set! account-list (vector-ref result-v 1))
+                    (unless (null? subtree)
+                      ;; (it could be null if all sub-accounts were excluded)
+                      ;; add the sub-total from the recursion to
+                      ;; the current level's total
+                      (total-cc 'merge subtotal-cc neg?)
+                      ((accrec-subtotal-cc newacc) 'merge subtotal-cc neg?)
+                      (when (< curr-depth opt-depth-limit)
+                        ;; fix the subtree to the current tree
+                        ;; but only if not beyond the limit
+                        (accrec-set-sublist! newacc subtree))
+                      ;; add the subtree's depth to this level's
+                      (set! treedepth (1+ subtreedepth))
+                      (when subnonzero?
+                        (accrec-set-non-zero?! newacc #t))))
+                  ;; else -- same level -- just pop the account off the list
+                  (set! account-list (cdr account-list)))
 
-                   (if (> treedepth maxdepth)
-                     (set! maxdepth treedepth))
-                   ;(display " =D=maxdepth=")(ddump maxdepth)
-                   (if (not (excluded-acc? newacc))
-                     (set! tree (append tree (list newacc))))
-                   (if (accrec-non-zero? newacc)
-                     (set! any-non-zero? #t))
-                   (accrec-set-treedepth!    newacc treedepth)
-                   )); end of while
-          ; next a/c (if any) is at higher level, so return what's
-          ; left of the account list, and the accumulated total
-          ;       0    1            2        3        4
+              (when (> treedepth maxdepth)
+                (set! maxdepth treedepth))
+              ;;(display " =D=maxdepth=")(ddump maxdepth)
+              (unless (excluded-acc? newacc)
+                (set! tree (append tree (list newacc))))
+              (when (accrec-non-zero? newacc)
+                (set! any-non-zero? #t))
+              (accrec-set-treedepth!    newacc treedepth)))
+
+          ;; next a/c (if any) is at higher level, so return what's
+          ;; left of the account list, and the accumulated total
+          ;;       0    1            2        3        4
           (vector tree account-list total-cc maxdepth any-non-zero?)
           )); end of p-a-l-r
       (let* ((result-v (process-acc-list-r account-list 1 neg?))
