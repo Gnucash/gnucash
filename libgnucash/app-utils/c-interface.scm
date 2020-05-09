@@ -15,6 +15,8 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (ice-9 match))
+
 (define (gnc:call-with-error-handling cmd args)
   (let ((captured-stack #f)
         (captured-error #f)
@@ -61,17 +63,13 @@
   (gnc:call-with-error-handling func args))
 
 (define (gnc:backtrace-if-exception proc . args)
-  (let* ((apply-result (gnc:apply-with-error-handling proc args))
-         (result (car apply-result))
-         (captured-error (cadr apply-result)))
-    (cond
-     (captured-error
-      (display captured-error (current-error-port))
-      (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
-      (when (defined? 'gnc:warn)
-        (gnc:warn captured-error))
-      #f)
-     (else result))))
+  (match (gnc:apply-with-error-handling proc args)
+    ((result #f) result)
+    ((_ captured-error)
+     (display captured-error (current-error-port))
+     (set! gnc:last-captured-error (gnc:html-string-sanitize captured-error))
+     (when (defined? 'gnc:warn) (gnc:warn captured-error))
+     #f)))
 
 (define-public gnc:last-captured-error "")
 
@@ -80,16 +78,8 @@
 ;; translated with gettext.
 (define (gnc:make-string-database)
   (define string-hash (make-hash-table))
-  (define (lookup key)
-    (_ (hash-ref string-hash key)))
-  (define (store key string)
-    (hash-set! string-hash key string))
-  (define (dispatch message . args)
-    (let ((func (case message
-                  ((lookup) lookup)
-                  ((store) store)
-                  (else #f))))
-      (if func
-          (apply func args)
-          (gnc:warn "string-database: bad message" message "\n"))))
-  dispatch)
+  (lambda args
+    (match args
+      (('lookup key) (_ (hash-ref string-hash key)))
+      (('store key string) (hash-set! string-hash key string))
+      (_ (gnc:warn "string-database: bad action")))))
