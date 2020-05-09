@@ -627,6 +627,10 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
         Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
 
+        // Do not consider transactions that have been previously matched.
+        if (gnc_import_split_has_online_id (split))
+            return;
+
         /* Matching heuristics */
 
         /* Amount heuristics */
