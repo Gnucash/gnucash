@@ -458,13 +458,12 @@
                       (>= (gnc-account-get-current-depth (car account-list))
                           curr-depth))
             (let* ((account (car account-list))
+                   (accrest (cdr account-list))
+                   (accnext (and (pair? accrest) (car accrest)))
                    (comm    (xaccAccountGetCommodity account))
                    (bal     (xaccAccountGetBalanceAsOfDate account opt-date))
                    (depth   (flattened-acc-depth account))
                    (treedepth 1)
-                   ;; Next account only qualifies as 'deeper' if we're not flattening
-                   (next-acc-deeper (and (not (null? (safe-cadr account-list)))
-                                         (> (flattened-acc-depth (safe-cadr account-list)) depth)))
                    (newacc (newaccrec-clean)))
               (accrec-set-account!      newacc account)
               (accrec-set-code!         newacc (xaccAccountGetCode account))
@@ -483,11 +482,11 @@
               (add-to-cc total-cc comm bal neg?)
               (add-to-cc (accrec-subtotal-cc newacc) comm bal neg?)
 
-              (if next-acc-deeper
+              ;; Next account only qualifies as 'deeper' if we're not flattening
+              (if (and accnext (> (flattened-acc-depth accnext) depth))
                   ;; recurse to deal with deeper level accounts,
                   ;; then store the resulting list
-                  (let* ((result-v (process-acc-list-r
-                                    (safe-cdr account-list) (1+ curr-depth) neg?))
+                  (let* ((result-v (process-acc-list-r accrest (1+ curr-depth) neg?))
                          (subtree (vector-ref result-v 0))
                          (subtotal-cc (vector-ref result-v 2))
                          (subtreedepth (vector-ref result-v 3))

@@ -46,11 +46,13 @@
 ;; 'Safe' versions of cdr and cadr that don't crash
 ;; if the list is empty  (is there a better way?)
 (define-public safe-cdr
+  ;; deprecate
   (match-lambda
     ((_ . x) x)
     (_ '())))
 
 (define-public safe-cadr
+  ;; deprecate
   (match-lambda
     ((_ x . y) x)
     (_ '())))
