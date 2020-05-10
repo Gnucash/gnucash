@@ -32,7 +32,6 @@ set (reports_standard_SCHEME
     standard/budget-income-statement.scm
     standard/budget.scm
     standard/cash-flow.scm
-    standard/cashflow-barchart.scm
     standard/category-barchart.scm
     standard/dashboard.scm
     standard/equity-statement.scm
@@ -57,6 +56,7 @@ set (reports_standard_SCHEME
 )
 
 set (reports_standard_SCHEME_2
+    standard/cashflow-barchart.scm #depends on cash-flow report
     standard/customer-summary.scm # Depends on owner-report
     standard/new-aging.scm        # ditto
 )
@@ -157,7 +157,7 @@ gnc_add_scheme_targets(scm-reports-de_DE
 gnc_add_scheme_targets(scm-reports-standard-2
     SOURCES "${reports_standard_SCHEME_2}"
     OUTPUT_DIR "gnucash/reports/standard"
-    DEPENDS "scm-rpt-reports"
+    DEPENDS "scm-rpt-reports;scm-reports-standard"
     MAKE_LINKS)
 
 add_custom_target(scm-reports ALL DEPENDS
@@ -261,7 +261,7 @@ gnc_add_scheme_deprecated_module (
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash report standard-reports cashflow-barchart"
     NEW_MODULE "gnucash reports standard cashflow-barchart"
-    DEPENDS "scm-reports-standard")
+    DEPENDS "scm-reports-standard-2")
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash report standard-reports cash-flow"
     NEW_MODULE "gnucash reports standard cash-flow"
@@ -273,7 +273,7 @@ gnc_add_scheme_deprecated_module (
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash report customer-summary"
     NEW_MODULE "gnucash reports standard customer-summary"
-    DEPENDS "scm-reports-standard")
+    DEPENDS "scm-reports-standard-2")
 gnc_add_scheme_deprecated_module (
     OLD_MODULE "gnucash report welcome-to-gnucash"
     NEW_MODULE "gnucash reports standard dashboard"
