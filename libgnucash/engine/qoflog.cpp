@@ -57,6 +57,7 @@ extern "C"
 #include <string>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #define QOF_LOG_MAX_CHARS 50
 #define QOF_LOG_MAX_CHARS_WITH_ALLOWANCE 100
