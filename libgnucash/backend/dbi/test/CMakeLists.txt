@@ -36,5 +36,6 @@ if (WITH_SQL AND NOT WIN32)
     TEST_MYSQL_URL=\"${TEST_MYSQL_URL}\"
     TEST_PGSQL_URL=\"${TEST_PGSQL_URL}\"
     DBI_TEST_XML_FILENAME=\"${CMAKE_CURRENT_SOURCE_DIR}/test-dbi.xml\"
+    G_LOG_DOMAIN=\"gnc.backend.dbi\"
   )
 endif()

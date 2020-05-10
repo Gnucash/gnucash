@@ -23,5 +23,8 @@ if(WITH_SQL)
   gnc_add_test(test-sqlbe "${test_backend_sql_SOURCES}"
     BACKEND_SQL_TEST_INCLUDE_DIRS BACKEND_SQL_TEST_LIBS
   )
-  target_compile_definitions(test-sqlbe PRIVATE TESTPROG=test_sqlbe)
+target_compile_definitions(
+  test-sqlbe PRIVATE TESTPROG=test_sqlbe
+  G_LOG_DOMAIN=\"gnc.backend.sql\"
+  )
 endif()
