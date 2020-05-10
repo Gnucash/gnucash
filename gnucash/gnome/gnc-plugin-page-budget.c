@@ -132,37 +132,37 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
     /* File menu */
     {
         "OpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
-        N_("Open the selected account"),
+        N_("Open the selected account."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_open_account)
     },
     {
         "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT,
         N_("Open _Subaccounts"), NULL,
-        N_("Open the selected account and all its subaccounts"),
+        N_("Open the selected account and all its subaccounts."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_open_subaccounts)
     },
 
     /* Edit menu */
     {
         "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
-        NULL, N_("Delete this budget"),
+        NULL, N_("Delete this budget."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_delete_budget)
     },
     {
-        "OptionsBudgetAction", "document-properties", N_("Budget Options"),
-        NULL, N_("Edit this budget's options"),
+        "OptionsBudgetAction", "document-properties", N_("Budget _Options..."),
+        NULL, N_("Edit this budget's options."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_view_options)
     },
     {
-        "EstimateBudgetAction", "system-run", N_("Estimate Budget"),
+        "EstimateBudgetAction", "system-run", N_("Esti_mate Budget..."),
         NULL,
-        N_("Estimate a budget value for the selected accounts from past transactions"),
+        N_("Estimate a budget value for the selected accounts from past transactions."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_estimate_budget)
     },
     {
-        "AllPeriodsBudgetAction", "system-run", N_("All Periods"),
+        "AllPeriodsBudgetAction", "system-run", N_("_All Periods..."),
         NULL,
-        N_("Edit budget for all periods for the selected accounts"),
+        N_("Edit budget for all periods for the selected accounts."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_allperiods_budget)
     },
 
@@ -173,7 +173,7 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
     },
     {
         "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
-        N_("Refresh this window"),
+        N_("Refresh this window."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_refresh)
     },
 
