@@ -2256,9 +2256,9 @@ gppat_filter_response_cb (GtkWidget *dialog,
     }
 
     /* Clean up and delete dialog */
-    gptemp = (gpointer *)fd->dialog;
+    gptemp = (gpointer)fd->dialog;
     g_atomic_pointer_compare_and_exchange(&gptemp,
-                                          dialog, NULL);
+                                          (gpointer)dialog, NULL);
     fd->dialog = gptemp;
     gtk_widget_destroy(dialog);
     LEAVE("types 0x%x", fd->visible_types);
