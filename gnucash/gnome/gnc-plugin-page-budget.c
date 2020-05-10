@@ -144,8 +144,8 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* Edit menu */
     {
-        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
-        NULL, N_("Delete this budget."),
+        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget..."),
+        NULL, N_("Select this or another budget and delete it."),
         G_CALLBACK(gnc_plugin_page_budget_cmd_delete_budget)
     },
     {
