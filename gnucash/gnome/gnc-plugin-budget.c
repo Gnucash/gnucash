@@ -60,25 +60,25 @@ static void gnc_plugin_budget_cmd_delete_budget (GtkAction *action,
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "NewBudgetAction", NULL, N_("New Budget"), NULL,
-        N_("Create a new Budget"),
+        "NewBudgetAction", NULL, N_("_New Budget"), NULL,
+        N_("Create a new Budget."),
         G_CALLBACK(gnc_plugin_budget_cmd_new_budget)
     },
 
     {
-        "OpenBudgetAction", NULL, N_("Open Budget"), NULL,
-        N_("Open an existing Budget"),
+        "OpenBudgetAction", NULL, N_("_Open Budget"), NULL,
+        N_("Open an existing Budget in a new tab. If none exists a new budget will be created."),
         G_CALLBACK(gnc_plugin_budget_cmd_open_budget)
     },
 
     {
-        "CopyBudgetAction", NULL, N_("Copy Budget"), NULL,
-        N_("Copy an existing Budget"),
+        "CopyBudgetAction", NULL, N_("_Copy Budget"), NULL,
+        N_("Copy an existing Budget."),
         G_CALLBACK(gnc_plugin_budget_cmd_copy_budget)
     },
     {
-        "DeleteBudgetAction", NULL, N_("Delete Budget"), NULL,
-        N_("Deletes an existing Budget"),
+        "DeleteBudgetAction", NULL, N_("_Delete Budget"), NULL,
+        N_("Delete an existing Budget."),
         G_CALLBACK(gnc_plugin_budget_cmd_delete_budget)
     },
 

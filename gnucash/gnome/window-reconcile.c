@@ -370,17 +370,15 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
 
     if (days_after_today > 0)
     {
-        /* Translators: This is a ngettext(3) message, %d is the
-           number of days in the future */
         gchar *str = g_strdup_printf
+            /* Translators: %d is the number of days in the future */
             (ngettext ("Statement Date is %d day after today.",
                        "Statement Date is %d days after today.",
                        days_after_today),
              days_after_today);
 
-        /* Translators: This is a ngettext(3) message, %d is the
-           number of days in the future */
         gchar *tip_start = g_strdup_printf
+            /* Translators: %d is the number of days in the future */
             (ngettext ("The statement date you have chosen is %d day in the future.",
                        "The statement date you have chosen is %d days in the future.",
                        days_after_today),
