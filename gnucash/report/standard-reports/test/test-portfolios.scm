@@ -91,7 +91,7 @@
       (set-option! options "General" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml portfolio-uuid options "'weighted-average")))
         (test-equal "portfolio: weighted-average"
-          '("AAPL" "AAPL" "NASDAQ" "1.00" "$233.33" "$233 + 1/3")
+          '("AAPL" "AAPL" "NASDAQ" "1.00" "$233.33" "$233.33")
           (sxml->table-row-col sxml 1 1 #f))))
     (teardown)))
 

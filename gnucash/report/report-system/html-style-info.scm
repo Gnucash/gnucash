@@ -267,9 +267,13 @@
   (xaccPrintAmount datum (gnc-default-print-info #f)))
 
 (define (gnc:default-html-gnc-monetary-renderer datum params)
-  (xaccPrintAmount                                                 
-   (gnc:gnc-monetary-amount datum)                                    
-   (gnc-commodity-print-info (gnc:gnc-monetary-commodity datum) #t)))
+  (let* ((comm (gnc:gnc-monetary-commodity datum))
+         (scu (gnc-commodity-get-fraction comm))
+         (amount (gnc:gnc-monetary-amount datum))
+         (amt-display (if (exact? amount)
+                          (gnc-numeric-convert amount scu GNC-HOW-RND-ROUND)
+                          amount)))
+    (xaccPrintAmount amt-display (gnc-commodity-print-info comm #t))))
 
 (define (gnc:default-html-number-renderer datum params)  
   (xaccPrintAmount
