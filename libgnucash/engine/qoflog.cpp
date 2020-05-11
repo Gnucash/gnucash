@@ -69,6 +69,7 @@ static gchar* function_buffer = NULL;
 static gint qof_log_num_spaces = 0;
 static GLogFunc previous_handler = NULL;
 static gchar* qof_logger_format = NULL;
+static QofLogModule log_module = "qof";
 
 using StrVec = std::vector<std::string>;
 
@@ -85,7 +86,18 @@ struct ModuleEntry
     std::vector<ModuleEntryPtr> m_children;
 };
 
-static ModuleEntryPtr modules = NULL;
+static ModuleEntryPtr _modules = NULL;
+
+static ModuleEntryPtr
+get_modules()
+{
+    if (!_modules)
+    {
+        _modules = std::make_shared<ModuleEntry>("");
+        _modules->m_level = QOF_LOG_WARNING;
+    }
+    return _modules;
+}
 
 static StrVec
 split_domain (const std::string domain)
@@ -187,8 +199,7 @@ void
 qof_log_init_filename(const gchar* log_filename)
 {
     gboolean warn_about_missing_permission = FALSE;
-    if (!modules)
-        modules = std::make_shared<ModuleEntry>("");
+    auto modules = get_modules();
 
     if (!qof_logger_format)
         qof_logger_format = g_strdup ("* %s %*s <%s> %*s%s%s"); //default format
@@ -233,7 +244,7 @@ qof_log_init_filename(const gchar* log_filename)
         fout = stderr;
 
     if (previous_handler == NULL)
-        previous_handler = g_log_set_default_handler(log4glib_handler, &modules);
+        previous_handler = g_log_set_default_handler(log4glib_handler, &_modules);
 
     if (warn_about_missing_permission)
     {
@@ -256,9 +267,9 @@ qof_log_shutdown (void)
         function_buffer = NULL;
     }
 
-    if (modules != NULL)
+    if (_modules != NULL)
     {
-        modules = nullptr;
+        _modules = nullptr;
     }
 
     if (previous_handler != NULL)
@@ -273,13 +284,9 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 {
     if (!log_module || level == 0)
         return;
-    if (!modules)
-    {
-        modules = std::make_shared<ModuleEntry>("");
-        modules->m_level = QOF_LOG_WARNING;
-    }
+
     auto module_parts = split_domain(log_module);
-    auto module = modules;
+    auto module = get_modules();
     for (auto part : module_parts)
     {
         auto iter = std::find_if(module->m_children.begin(),
@@ -305,11 +312,25 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 gboolean
 qof_log_check(QofLogModule domain, QofLogLevel level)
 {
-    g_return_val_if_fail (domain && level && modules, FALSE);
-    if (level < modules->m_level)
+
+    if (!domain)
+    {
+        PWARN ("Domain not set");
+        return FALSE;
+    }
+
+    if (!level)
+    {
+        PWARN("0 is not a valid log level");
+        return FALSE;
+    }
+
+    auto module = get_modules();
+    // If the level is < the default then no need to look further.
+    if (level < module->m_level)
         return TRUE;
     auto domain_vec = split_domain(domain);
-    auto module = modules;
+
     for (auto part : domain_vec)
     {
         auto iter = std::find_if(module->m_children.begin(),
@@ -463,6 +484,7 @@ qof_log_set_default(QofLogLevel log_level)
 {
     qof_log_set_level("", log_level);
     qof_log_set_level("qof", log_level);
+    qof_log_set_level("qof.unknown", log_level);
 }
 
 const gchar*
