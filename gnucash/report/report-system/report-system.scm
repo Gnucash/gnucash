@@ -748,6 +748,7 @@
 (export gnc:select-assoc-account-balance)
 (export gnc:get-assoc-account-balances-total)
 (export gnc:multiline-to-html-text)
+(export gnc:default-price-renderer)
 (export make-file-url)
 (export gnc:strify)
 (export gnc:pk)
