@@ -76,10 +76,14 @@ using StrVec = std::vector<std::string>;
 struct ModuleEntry;
 using ModuleEntryPtr = std::shared_ptr<ModuleEntry>;
 
+static constexpr int parts = 4; //Log domain parts vector preallocation size
+static constexpr QofLogLevel default_level = QOF_LOG_WARNING;
 struct ModuleEntry
 {
-    ModuleEntry(std::string name) :
-        m_name{name}, m_level{QOF_LOG_WARNING}, m_children{4} {}
+    ModuleEntry(std::string name, QofLogLevel level) :
+        m_name{name}, m_level{level} {
+            m_children.reserve(parts);
+        }
     ~ModuleEntry() = default;
     std::string m_name;
     QofLogLevel m_level;
@@ -92,29 +96,33 @@ static ModuleEntryPtr
 get_modules()
 {
     if (!_modules)
-    {
-        _modules = std::make_shared<ModuleEntry>("");
-        _modules->m_level = QOF_LOG_WARNING;
-    }
+        _modules = std::make_shared<ModuleEntry>("", default_level);
     return _modules;
 }
 
 static StrVec
 split_domain (const std::string domain)
 {
-    static constexpr int parts = 4; //enough room for most cases
-    std::vector<std::string> domain_parts{4};
+    StrVec domain_parts;
+    domain_parts.reserve(parts);
     int start = 0;
     auto pos = domain.find(".");
     if (pos == std::string::npos)
+    {
         domain_parts.emplace_back(domain);
+    }
     else
+    {
         while (pos != std::string::npos)
         {
-            domain_parts.emplace_back(domain.substr(start, pos));
+            auto part_name{domain.substr(start, pos - start)};
+            domain_parts.emplace_back(part_name);
             start = pos + 1;
             pos = domain.find(".", start);
         }
+        auto part_name{domain.substr(start, pos)};
+        domain_parts.emplace_back(part_name);
+    }
     return domain_parts;
 }
 
@@ -296,7 +304,7 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
                               });
         if (iter == module->m_children.end())
         {
-            auto child = std::make_shared<ModuleEntry>(part);
+            auto child = std::make_shared<ModuleEntry>(part, default_level);
             module->m_children.push_back(child);
             module = child;
         }
@@ -324,11 +332,11 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
         PWARN("0 is not a valid log level");
         return FALSE;
     }
-
     auto module = get_modules();
     // If the level is < the default then no need to look further.
     if (level < module->m_level)
         return TRUE;
+
     auto domain_vec = split_domain(domain);
 
     for (auto part : domain_vec)
@@ -337,8 +345,13 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
                                module->m_children.end(),
                                [part](ModuleEntryPtr child) {
                                    return child && part == child->m_name; });
-        if (iter == module->m_children.end()) return FALSE;
-        if (level <= (*iter)->m_level) return TRUE;
+
+        if (iter == module->m_children.end())
+            return FALSE;
+
+        if (level <= (*iter)->m_level)
+            return TRUE;
+
         module = *iter;
     }
     return FALSE;
