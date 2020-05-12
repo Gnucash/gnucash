@@ -73,7 +73,6 @@
             <property name="tooltip_markup">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
             <property name="tooltip_text" translatable="yes">If active, extra toolbar buttons for common business functions are shown as well. Otherwise they are not shown.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -92,7 +91,6 @@
             <property name="tooltip_markup">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
             <property name="tooltip_text" translatable="yes">If checked, each invoice will be opened in its own top level window. If clear, the invoice will be opened in the current window.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -111,7 +109,6 @@
             <property name="tooltip_markup">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
             <property name="tooltip_text" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -153,7 +150,6 @@
             <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
             <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -167,7 +163,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="label" translatable="yes">Report for printing</property>
           </object>
           <packing>
@@ -185,7 +180,6 @@
             <property name="tooltip_markup">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
             <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -204,7 +198,6 @@
             <property name="tooltip_markup">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
             <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -246,7 +239,6 @@
             <property name="tooltip_markup">Whether to display the list of Bills Due at startup.</property>
             <property name="tooltip_text" translatable="yes">Whether to display the list of Bills Due at startup.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -265,7 +257,6 @@
             <property name="tooltip_markup">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
             <property name="tooltip_text" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -284,7 +275,6 @@
             <property name="tooltip_markup">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
             <property name="tooltip_text" translatable="yes">At post time, automatically attempt to pay vendor documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same vendor. Counter documents are documents with opposite sign. For example for a bill, vendor credit notes and negative bills are considered counter documents.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>

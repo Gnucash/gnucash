@@ -505,7 +505,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
-        <property name="column_spacing">12</property>
+        <property name="row_spacing">3</property>
+        <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label847981">
             <property name="visible">True</property>
@@ -550,7 +551,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Run the "since last run" process when a file is opened.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
@@ -568,7 +568,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Show the notification window for the "since last run" process when a file is opened.</property>
             <property name="halign">start</property>
-            <property name="margin_left">24</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
@@ -586,7 +585,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Set the 'auto-create' flag on newly created scheduled transactions.</property>
             <property name="halign">start</property>
-            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
@@ -683,7 +681,7 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Set the 'notify' flag on newly created scheduled transactions.</property>
             <property name="halign">start</property>
-            <property name="margin_left">24</property>
+            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_sx_check_toggled_cb" swapped="no"/>
@@ -699,7 +697,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">24</property>
+            <property name="margin_left">12</property>
             <property name="label" translatable="yes">Crea_te in advance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/create-days</property>
@@ -714,7 +712,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="margin_left">24</property>
+            <property name="margin_left">12</property>
             <property name="label" translatable="yes">R_emind in advance</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.sxs.transaction-editor/remind-days</property>

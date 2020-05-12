@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="atm_fee_adj">
@@ -84,6 +84,39 @@
   </object>
   <object class="GtkAdjustment" id="match_adj">
     <property name="upper">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="max_transactions_adj">
+    <property name="upper">999999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="new_search_limit_adj">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="retain_days_adj">
+    <property name="lower">1</property>
+    <property name="upper">99999</property>
+    <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="save_on_close_adj">
+    <property name="lower">1</property>
+    <property name="upper">300</property>
+    <property name="value">20</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="tab_width_adj">
+    <property name="lower">1</property>
+    <property name="upper">100</property>
+    <property name="value">30</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -755,6 +788,7 @@
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="group">pref/general/currency-choice-locale</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -937,7 +971,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">When a date is entered without year, it should be taken:</property>
+                    <property name="label" translatable="yes">When a date is entered without year, it should be taken</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
@@ -967,7 +1001,7 @@
                 <child>
                   <object class="GtkRadioButton" id="pref/general/date-completion-sliding">
                     <property name="label" translatable="yes">In a sliding 12-month window starting this
-many months before the current month:</property>
+many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1201,7 +1235,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">23</property>
+                    <property name="top_attach">24</property>
                   </packing>
                 </child>
                 <child>
@@ -1209,14 +1243,14 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;_Retain log/backup files:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;_Retain log/backup files&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/retain-days</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">21</property>
+                    <property name="top_attach">22</property>
                   </packing>
                 </child>
                 <child>
@@ -1234,7 +1268,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">15</property>
+                    <property name="top_attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -1247,7 +1281,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">14</property>
+                    <property name="top_attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -1265,7 +1299,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Decimal places:</property>
+                    <property name="label" translatable="yes">_Decimal places</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/auto-decimal-places</property>
                   </object>
@@ -1332,7 +1366,7 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general/force-price-decimal">
-                    <property name="label" translatable="yes">Force P_rices to display as decimals.</property>
+                    <property name="label" translatable="yes">Force P_rices to display as decimals</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1381,7 +1415,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">28</property>
+                    <property name="top_attach">30</property>
                   </packing>
                 </child>
                 <child>
@@ -1395,7 +1429,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">29</property>
+                    <property name="top_attach">31</property>
                   </packing>
                 </child>
                 <child>
@@ -1415,7 +1449,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">29</property>
+                    <property name="top_attach">31</property>
                   </packing>
                 </child>
                 <child>
@@ -1447,7 +1481,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">17</property>
+                    <property name="top_attach">18</property>
                   </packing>
                 </child>
                 <child>
@@ -1491,7 +1525,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">17</property>
+                    <property name="top_attach">18</property>
                   </packing>
                 </child>
                 <child>
@@ -1509,7 +1543,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">16</property>
+                    <property name="top_attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -1519,7 +1553,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">20</property>
+                    <property name="top_attach">21</property>
                   </packing>
                 </child>
                 <child>
@@ -1537,7 +1571,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">22</property>
+                    <property name="top_attach">23</property>
                   </packing>
                 </child>
                 <child>
@@ -1555,7 +1589,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">23</property>
+                    <property name="top_attach">24</property>
                   </packing>
                 </child>
                 <child>
@@ -1573,7 +1607,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">24</property>
+                    <property name="top_attach">25</property>
                   </packing>
                 </child>
                 <child>
@@ -1590,7 +1624,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">18</property>
+                    <property name="top_attach">19</property>
                   </packing>
                 </child>
                 <child>
@@ -1598,13 +1632,14 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="margin_left">12</property>
                     <property name="label" translatable="yes">Time to _wait for answer</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">19</property>
+                    <property name="top_attach">20</property>
                   </packing>
                 </child>
                 <child>
@@ -1646,7 +1681,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">19</property>
+                    <property name="top_attach">20</property>
                   </packing>
                 </child>
                 <child>
@@ -1656,7 +1691,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">25</property>
+                    <property name="top_attach">26</property>
                   </packing>
                 </child>
                 <child>
@@ -1670,7 +1705,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">26</property>
+                    <property name="top_attach">28</property>
                   </packing>
                 </child>
                 <child>
@@ -1681,7 +1716,7 @@ many months before the current month:</property>
                       <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Path head for Transaction Association Files&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Path head for Transaction Association Files</property>
                         <property name="use_markup">True</property>
                       </object>
                       <packing>
@@ -1705,7 +1740,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">26</property>
+                    <property name="top_attach">28</property>
                   </packing>
                 </child>
                 <child>
@@ -1741,6 +1776,35 @@ many months before the current month:</property>
                     <property name="top_attach">6</property>
                     <property name="width">2</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Transaction Association&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">27</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label24">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">29</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -1832,6 +1896,7 @@ many months before the current month:</property>
               <object class="GtkGrid" id="matcher_prefs">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="border_width">6</property>
                 <property name="row_spacing">3</property>
                 <property name="column_spacing">6</property>
                 <child>
@@ -2067,12 +2132,6 @@ many months before the current month:</property>
                     <property name="top_attach">8</property>
                     <property name="width">2</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -2972,34 +3031,6 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="hbox5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkSpinButton" id="pref/general.report/default-zoom">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">On high resolution screens reports tend to be hard to read. This option allows you to scale reports up by the set factor. For example setting this to 2.0 will display reports at twice their typical size.</property>
-                        <property name="halign">start</property>
-                        <property name="text" translatable="yes">1</property>
-                        <property name="adjustment">default_zoom_adj</property>
-                        <property name="value">1</property>
-                        <property name="digits">1</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -3022,6 +3053,7 @@ many months before the current month:</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="group">pref/general.report/currency-choice-locale</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -3048,7 +3080,32 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkSpinButton" id="pref/general.report/default-zoom">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">On high resolution screens reports tend to be hard to read. This option allows you to scale reports up by the set factor. For example setting this to 2.0 will display reports at twice their typical size.</property>
+                    <property name="halign">start</property>
+                    <property name="text" translatable="yes">1</property>
+                    <property name="adjustment">default_zoom_adj</property>
+                    <property name="digits">1</property>
+                    <property name="value">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Default zoom level</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">8</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -3454,7 +3511,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -3466,8 +3523,24 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Online Quotes&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -3499,38 +3572,5 @@ many months before the current month:</property>
       <action-widget response="-11">helpbutton2</action-widget>
       <action-widget response="-7">closebutton2</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkAdjustment" id="max_transactions_adj">
-    <property name="upper">999999</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="new_search_limit_adj">
-    <property name="lower">1</property>
-    <property name="upper">100</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="retain_days_adj">
-    <property name="lower">1</property>
-    <property name="upper">99999</property>
-    <property name="value">30</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="save_on_close_adj">
-    <property name="lower">1</property>
-    <property name="upper">300</property>
-    <property name="value">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="tab_width_adj">
-    <property name="lower">1</property>
-    <property name="upper">100</property>
-    <property name="value">30</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
