@@ -833,12 +833,14 @@ also show overall period profit & loss."))
                (lambda (commodity)
                  (let ((orig-monetary (gnc:make-gnc-monetary commodity 1)))
                    (if (has-price? commodity)
-                       (let ((conv-monetary (convert-curr-fn orig-monetary col-idx)))
+                       (let* ((conv-monetary (convert-curr-fn orig-monetary col-idx))
+                              (conv-amount (gnc:gnc-monetary-amount conv-monetary)))
                          (gnc:html-text-append!
                           cell
                           (format #f "~a ~a"
                                   (gnc:monetary->string orig-monetary)
-                                  (gnc:monetary->string conv-monetary))))
+                                  (gnc:default-price-renderer common-currency
+                                                              conv-amount))))
                        (gnc:html-text-append!
                         cell
                         (string-append
