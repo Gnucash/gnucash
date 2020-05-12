@@ -3526,7 +3526,7 @@ set_tip (GtkWidget *widget)
         g_object_get (data->action, "tooltip", &tooltip, NULL);
 
         gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0,
-                            tooltip ? tooltip : "");
+                            tooltip ? tooltip : " ");
 
         g_free (tooltip);
     }

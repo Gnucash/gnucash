@@ -115,7 +115,7 @@ gnc_window_update_status (GncWindow *window, GncPluginPage *page)
     statusbar = gnc_window_get_statusbar (window);
     message = gnc_plugin_page_get_statusbar_text(page);
     gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
-    gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : "");
+    gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : " ");
 }
 
 void
