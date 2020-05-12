@@ -52,6 +52,7 @@
 #include "gnc-component-manager.h"
 #include "guid.h"
 #include "gnc-session.h"
+#include "Query.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
@@ -108,6 +109,8 @@ void on_matcher_cancel_clicked (GtkButton *button, gpointer user_data);
 gboolean on_matcher_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data);
 void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
+
+static void gnc_gen_trans_list_finalize (GNCImportMainMatcher *gui);
 
 /* Local prototypes */
 static void gnc_gen_trans_assign_transfer_account (
@@ -191,6 +194,7 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
 
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
+    gnc_gen_trans_list_finalize (info);
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 }
 
@@ -1435,8 +1439,6 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transa
     GNCImportTransInfo * transaction_info = NULL;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GNCImportMatchInfo *selected_match;
-    gboolean match_selected_manually;
     g_assert (gui);
     g_assert (trans);
 
@@ -1447,26 +1449,116 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transa
     {
         transaction_info = gnc_import_TransInfo_new (trans, NULL);
         gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
+        model = gtk_tree_view_get_model (gui->view);
+        gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+        refresh_model_row (gui, model, &iter, transaction_info);
+    }
+    return;
+}
 
-        gnc_import_TransInfo_init_matches (transaction_info,
-                                           gui->user_settings);
+// This creates a list of all splits that could match one of the imported transactions based on their
+// account and date.
+static GList*
+create_list_of_potential_matches (GtkTreeModel* model, Query *query, gint match_date_hardlimit)
+{
+    GList* list_element = NULL;
+    GtkTreeIter iter;
+    Account *import_trans_account;
+    time64 import_trans_time, min_time=G_MAXINT64, max_time=0;
+    GList* all_accounts = NULL;
 
-        selected_match =
-            gnc_import_TransInfo_get_selected_match (transaction_info);
-        match_selected_manually =
-            gnc_import_TransInfo_get_match_selected_manually (transaction_info);
+    // Go through all imported transactions, gather the list of accounts, and min/max date range.
+    gboolean valid = gtk_tree_model_get_iter_first (model, &iter);
+    while(valid)
+    {
+        GNCImportTransInfo* transaction_info;
+        gtk_tree_model_get (model, &iter,
+                            DOWNLOADED_COL_DATA, &transaction_info,
+                            -1);
+        import_trans_account = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
+        all_accounts = g_list_prepend (all_accounts, import_trans_account);
+        import_trans_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (transaction_info));
+        min_time = MIN (min_time, import_trans_time);
+        max_time = MAX (max_time, import_trans_time);
+
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
+
+    // Make a query to find splits with the right accounts and dates.
+    qof_query_set_book (query, gnc_get_current_book());
+    xaccQueryAddAccountMatch (query, all_accounts,
+                              QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
+    xaccQueryAddDateMatchTT (query,
+                             TRUE, min_time - match_date_hardlimit * 86400,
+                             TRUE, max_time + match_date_hardlimit * 86400,
+                             QOF_QUERY_AND);
+    list_element = qof_query_run (query);
+    g_list_free (all_accounts);
+    return list_element;
+}
+
+static void
+gnc_gen_trans_list_finalize (GNCImportMainMatcher *gui)
+{
+    GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
+    GtkListStore* store = GTK_LIST_STORE (model);
+    GtkTreeIter iter;
+    GNCImportMatchInfo *selected_match;
+    gboolean match_selected_manually;
+    Account *importaccount;
+    GList* list_element = NULL;
+    GList* iter_2 = NULL;
+    Query *query;
+    gint match_date_hardlimit = gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
+    gint display_threshold = gnc_import_Settings_get_display_threshold (gui->user_settings);
+    double fuzzy_amount = gnc_import_Settings_get_fuzzy_amount (gui->user_settings);
+    gboolean valid;
+
+    query = qof_query_create_for (GNC_ID_SPLIT);
+    // Gather the list of splits that could match one of the imported transactions
+    list_element = create_list_of_potential_matches (model, query, match_date_hardlimit);
+
+    // For each imported transaction, go through list_element, select the ones that have the
+    // right account, and evaluate how good a match they are.
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+    while(valid)
+    {
+        GNCImportTransInfo* transaction_info;
+        Account *importaccount;
+        gtk_tree_model_get (model, &iter,
+                            DOWNLOADED_COL_DATA, &transaction_info,
+                            -1);
+        importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
+
+        iter_2 = list_element;
+        while (iter_2 != NULL)
+        {
+            // One issue here is that the accounts may not match since the query was
+            // called for all accounts so we need to check here.
+            Account* split_account = xaccSplitGetAccount(iter_2->data);
+            if (qof_instance_guid_compare (importaccount, split_account) == 0)
+                split_find_match (transaction_info, iter_2->data, display_threshold, fuzzy_amount);
+            iter_2 = g_list_next (iter_2);
+        }
+
+        // Sort the matches, select the best match, and set the action.
+        gnc_import_TransInfo_init_matches (transaction_info, gui->user_settings);
+
+        selected_match = gnc_import_TransInfo_get_selected_match (transaction_info);
+        match_selected_manually = gnc_import_TransInfo_get_match_selected_manually (transaction_info);
 
         if (selected_match)
             gnc_import_PendingMatches_add_match (gui->pending_matches,
                                                  selected_match,
                                                  match_selected_manually);
 
-        model = gtk_tree_view_get_model (gui->view);
-        gtk_tree_store_append (GTK_TREE_STORE(model), &iter, NULL);
         refresh_model_row (gui, model, &iter, transaction_info);
+        valid = gtk_tree_model_iter_next (model, &iter);
     }
+
+    qof_query_destroy (query);
     return;
-}/* end gnc_import_add_trans_with_ref_id() */
+}
 
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {

@@ -66,34 +66,20 @@ typedef enum _action
  * online_id. */
 gboolean gnc_import_exists_online_id (Transaction *trans);
 
-/** Iterate through all splits of the originating account of the given
- * transaction, find all matching splits there, and store them in the
- * GNCImportTransInfo structure.
+/** Evaluates the match between trans_info and split using the provided parameters.
  *
- * @param trans_info The TransInfo for which the corresponding
- * matching existing transactions should be found.
+ * @param trans_info The TransInfo for the imported transaction
  *
- * @param process_threshold Each match whose heuristics are smaller
- * than this value is totally ignored.
+ * @param split The register split that should be evaluated for a match.
  *
- * @param fuzzy_amount_difference For fuzzy amount matching, a certain
- * fuzzyness in the matching amount is allowed up to this value. May
- * be e.g. 3.00 dollars for ATM fees, or 0.0 if you only want to allow
- * exact matches.
+ * @param display_threshold Minimum match score to include split in the list of matches.
  *
- * @param match_date_hardlimit The number of days that a matching
- * split may differ from the given transaction before it is discarded
- * immediately. In other words, any split that is more distant from
- * the given transaction than this match_date_hardlimit days will be
- * ignored altogether. For use cases without paper checks (e.g. HBCI),
- * values like 14 (days) might be appropriate, whereas for use cases
- * with paper checks (e.g. OFX, QIF), values like 42 (days) seem more
- * appropriate.
+ * @param fuzzy_amount_difference Maximum amount difference to consider the match good.
  */
-void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
-                                   gint process_threshold,
-                                   double fuzzy_amount_difference,
-                                   gint match_date_hardlimit);
+void split_find_match (GNCImportTransInfo * trans_info,
+                       Split * split,
+                       gint display_threshold,
+                       double fuzzy_amount_difference);
 
 /** Iterates through all splits of the originating account of
  * trans_info. Sorts the resulting list and sets the selected_match
