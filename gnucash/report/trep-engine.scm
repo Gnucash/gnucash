@@ -92,6 +92,8 @@
   (N_ "Use regular expressions for transaction filter"))
 (define optname-transaction-matcher-exclude
   (N_ "Transaction Filter excludes matched strings"))
+(define optname-transaction-matcher-caseinsensitive
+  (N_ "Transaction Filter is case insensitive"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-closing-transactions (N_ "Closing transactions"))
@@ -612,6 +614,13 @@ tags within description, notes or memo. ")
     pagename-filter optname-transaction-matcher-exclude
     "i3"
     (_ "If this option is selected, transactions matching filter are excluded.")
+    #f))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    pagename-filter optname-transaction-matcher-caseinsensitive
+    "i4"
+    (_ "If this option is selected, transactions matching filter is not case sensitive.")
     #f))
 
   (gnc:register-trep-option
@@ -1985,11 +1994,16 @@ be excluded from periodic reporting.")
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
+         (transaction-filter-case-insensitive?
+          (opt-val pagename-filter optname-transaction-matcher-caseinsensitive))
          (transaction-matcher-regexp
           (and (opt-val pagename-filter optname-transaction-matcher-regex)
                (if (defined? 'make-regexp)
                    (catch 'regular-expression-syntax
-                     (lambda () (make-regexp transaction-matcher))
+                     (lambda ()
+                       (if transaction-filter-case-insensitive?
+                           (make-regexp transaction-matcher regexp/icase)
+                           (make-regexp transaction-matcher)))
                      (const 'invalid-transaction-regex))
                    'no-guile-regex-support)))
          (transaction-filter-exclude?
@@ -2025,11 +2039,16 @@ be excluded from periodic reporting.")
                                (eq? (opt-val gnc:pagename-display (N_ "Amount"))
                                     'single)))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
-         (match? (lambda (str)
-                   (if transaction-matcher-regexp
-                       (regexp-exec transaction-matcher-regexp str)
-                       (string-contains str transaction-matcher))))
          (query (qof-query-create-for-splits)))
+
+    (define (match? str)
+      (cond
+       (transaction-matcher-regexp
+        (regexp-exec transaction-matcher-regexp str))
+       (transaction-filter-case-insensitive?
+        (string-contains-ci str transaction-matcher))
+       (else
+        (string-contains str transaction-matcher))))
 
     (define (generic-less? split-X split-Y sortkey date-subtotal-key ascend?)
       ;; compare splits X and Y, whereby

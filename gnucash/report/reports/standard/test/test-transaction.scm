@@ -355,6 +355,22 @@
           '("$24.00")
           (get-row-col sxml -1 -1)))
 
+      (set-option! options "Filter" "Transaction Filter excludes matched strings" #f)
+      (set-option! options "Filter" "Use regular expressions for transaction filter" #f)
+      (set-option! options "Filter" "Transaction Filter is case insensitive" #t)
+      (set-option! options "Filter" "Transaction Filter" "dEsC-3")
+      (let ((sxml (options->sxml options "transaction filter insensitive")))
+        (test-equal "transaction filter case insensitive"
+          '("$29.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Use regular expressions for transaction filter" #t)
+      (set-option! options "Filter" "Transaction Filter" "NoT.S?")
+      (let ((sxml (options->sxml options "transaction filter regex case insensitive")))
+        (test-equal "transaction filter regex case insensitive"
+          '("-$23.00")
+          (get-row-col sxml -1 -1)))
+
       ;; Test Reconcile Status Filters
       (set! options (default-testing-options))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
