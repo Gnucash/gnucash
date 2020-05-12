@@ -111,6 +111,8 @@ GNCPrintAmountInfo gnc_account_print_info (const Account *account,
         gboolean use_symbol);
 GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
         gboolean use_symbol);
+GNCPrintAmountInfo gnc_price_print_info (const gnc_commodity *curr,
+        gboolean use_symbol);
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 
