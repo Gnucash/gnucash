@@ -74,7 +74,8 @@ static QofLogModule log_module = "qof";
 using StrVec = std::vector<std::string>;
 
 struct ModuleEntry;
-using ModuleEntryPtr = std::shared_ptr<ModuleEntry>;
+using ModuleEntryPtr = std::unique_ptr<ModuleEntry>;
+using MEVec = std::vector<ModuleEntryPtr>;
 
 static constexpr int parts = 4; //Log domain parts vector preallocation size
 static constexpr QofLogLevel default_level = QOF_LOG_WARNING;
@@ -87,17 +88,17 @@ struct ModuleEntry
     ~ModuleEntry() = default;
     std::string m_name;
     QofLogLevel m_level;
-    std::vector<ModuleEntryPtr> m_children;
+    MEVec m_children;
 };
 
 static ModuleEntryPtr _modules = NULL;
 
-static ModuleEntryPtr
+static ModuleEntry*
 get_modules()
 {
     if (!_modules)
-        _modules = std::make_shared<ModuleEntry>("", default_level);
-    return _modules;
+        _modules = std::make_unique<ModuleEntry>("", default_level);
+    return _modules.get();
 }
 
 static StrVec
@@ -252,7 +253,7 @@ qof_log_init_filename(const gchar* log_filename)
         fout = stderr;
 
     if (previous_handler == NULL)
-        previous_handler = g_log_set_default_handler(log4glib_handler, &_modules);
+        previous_handler = g_log_set_default_handler(log4glib_handler, modules);
 
     if (warn_about_missing_permission)
     {
@@ -299,18 +300,18 @@ qof_log_set_level(QofLogModule log_module, QofLogLevel level)
     {
         auto iter = std::find_if(module->m_children.begin(),
                               module->m_children.end(),
-                              [part](ModuleEntryPtr child){
+                              [part](auto& child){
                                   return child && part == child->m_name;
                               });
         if (iter == module->m_children.end())
         {
-            auto child = std::make_shared<ModuleEntry>(part, default_level);
-            module->m_children.push_back(child);
-            module = child;
+            auto child = std::make_unique<ModuleEntry>(part, default_level);
+            module->m_children.emplace_back(std::move(child));
+            module = module->m_children.back().get();
         }
         else
         {
-            module = *iter;
+            module = iter->get();
         }
     }
     module->m_level = level;
@@ -343,7 +344,7 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
     {
         auto iter = std::find_if(module->m_children.begin(),
                                module->m_children.end(),
-                               [part](ModuleEntryPtr child) {
+                               [part](auto& child) {
                                    return child && part == child->m_name; });
 
         if (iter == module->m_children.end())
@@ -352,7 +353,7 @@ qof_log_check(QofLogModule domain, QofLogLevel level)
         if (level <= (*iter)->m_level)
             return TRUE;
 
-        module = *iter;
+        module = iter->get();
     }
     return FALSE;
 }
