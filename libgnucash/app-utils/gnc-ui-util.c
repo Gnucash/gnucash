@@ -1425,7 +1425,7 @@ gnc_share_print_info_places (int decplaces)
 }
 
 GNCPrintAmountInfo
-gnc_default_price_print_info (const gnc_commodity *curr)
+gnc_price_print_info (const gnc_commodity *curr, gboolean use_symbol)
 {
     GNCPrintAmountInfo info;
     gboolean force = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
@@ -1447,7 +1447,7 @@ gnc_default_price_print_info (const gnc_commodity *curr)
     }
 
     info.use_separators = 1;
-    info.use_symbol = 0;
+    info.use_symbol = use_symbol ? 1 : 0;
     info.use_locale = 1;
     info.monetary = 1;
 
@@ -1455,6 +1455,13 @@ gnc_default_price_print_info (const gnc_commodity *curr)
     info.round = force;
     return info;
 }
+
+GNCPrintAmountInfo
+gnc_default_price_print_info (const gnc_commodity *curr)
+{
+    return gnc_price_print_info (curr, FALSE);
+}
+
 
 GNCPrintAmountInfo
 gnc_integral_print_info (void)

@@ -245,8 +245,10 @@
                 (gnc:make-html-table-cell/markup
                  "text-cell"
                  (if split-info?
-                     (gnc:make-gnc-monetary
-                      currency (xaccSplitGetSharePrice split))
+                     (gnc:default-price-renderer
+                      (gnc-account-get-currency-or-parent
+                       (xaccSplitGetAccount split))
+                      (xaccSplitGetSharePrice split))
                      " "))))
     (if (amount-single-col column-vector)
         (addto! row-contents

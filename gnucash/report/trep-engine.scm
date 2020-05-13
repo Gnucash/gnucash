@@ -1238,24 +1238,11 @@ be excluded from periodic reporting.")
                (add-if (column-uses? 'price)
                        (vector (_ "Price")
                                (lambda (split transaction-row?)
-                                 ;; share price is retrieved as an
-                                 ;; exact rational; convert for
-                                 ;; presentation to decimal, rounded
-                                 ;; to the currency SCU, optionally
-                                 ;; increasing precision by 2
-                                 ;; significant digits.
-                                 (let* ((currency (xaccTransGetCurrency
-                                                   (xaccSplitGetParent split)))
-                                        (scu (gnc-commodity-get-fraction currency))
-                                        (price (xaccSplitGetSharePrice split))
-                                        (price-decimal
-                                         (gnc-numeric-convert
-                                          price (min 10000 (* 100 scu))
-                                          GNC-HOW-RND-ROUND)))
-                                   (gnc:make-html-table-cell/markup
-                                    "number-cell"
-                                    (gnc:make-gnc-monetary
-                                     currency price-decimal)))))))))
+                                 (gnc:make-html-table-cell/markup
+                                  "number-cell"
+                                  (gnc:default-price-renderer
+                                   (xaccTransGetCurrency (xaccSplitGetParent split))
+                                   (xaccSplitGetSharePrice split)))))))))
 
         (if (or (column-uses? 'subtotals-only)
                 (and (null? left-cols-list)

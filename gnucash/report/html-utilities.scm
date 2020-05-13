@@ -196,9 +196,12 @@
       (for-each
        (lambda (commodity)
          (let* ((orig-amt (gnc:make-gnc-monetary commodity 1))
-                (exchanged (exchange-fn orig-amt common-commodity)))
+                (exchanged (exchange-fn orig-amt common-commodity))
+                (conv-amount (gnc:gnc-monetary-amount exchanged)))
            (gnc:html-table-append-row!
-            table (map markup (list orig-amt exchanged)))))
+            table (list (markup orig-amt)
+                        (markup (gnc:default-price-renderer common-commodity
+                                                            conv-amount))))))
        comm-list)
       (gnc:html-table-set-col-headers!
        table (list (gnc:make-html-table-header-cell/size

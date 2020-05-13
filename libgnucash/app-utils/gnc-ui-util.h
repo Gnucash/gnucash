@@ -303,6 +303,9 @@ GNCPrintAmountInfo gnc_account_print_info (const Account *account,
 GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
         gboolean use_symbol);
 
+GNCPrintAmountInfo gnc_price_print_info (const gnc_commodity *curr,
+        gboolean use_symbol);
+
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 GNCPrintAmountInfo gnc_default_share_print_info (void);
 GNCPrintAmountInfo gnc_default_price_print_info (const gnc_commodity *curr);
