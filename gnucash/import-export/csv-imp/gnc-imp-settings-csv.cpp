@@ -41,6 +41,10 @@ extern "C"
 #include "gnc-ui-util.h"
 }
 
+#include <algorithm>
+#include <iostream>
+#include <string>
+
 const std::string csv_group_prefix{"CSV-"};
 const std::string no_settings{N_("No Settings")};
 const std::string gnc_exp{N_("GnuCash Export Format")};

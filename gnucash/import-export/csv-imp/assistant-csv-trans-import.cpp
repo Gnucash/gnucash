@@ -64,6 +64,13 @@ extern "C"
 #include "gnc-tokenizer-fw.hpp"
 #include "gnc-tokenizer-csv.hpp"
 
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <tuple>
+
 #include <gnc-locale-utils.hpp>
 #include <boost/locale.hpp>
 

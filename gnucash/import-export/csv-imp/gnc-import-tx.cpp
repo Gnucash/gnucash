@@ -32,6 +32,15 @@ extern "C" {
 #include <glib/gi18n.h>
 }
 
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <utility>
+#include <vector>
+
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
 
