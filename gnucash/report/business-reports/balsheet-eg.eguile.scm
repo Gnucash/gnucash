@@ -281,25 +281,23 @@
 <p><?scm:d (_ "<strong>Exchange Rates</strong> used for this report") ?>
 <table border="0">
 <?scm
-      (for xpair in xlist do
-          (let* ((comm (car xpair))
-                 (one-num 10000/1)
-                 (one-foreign-mny (gnc:make-gnc-monetary comm one-num))
-                 (one-local-mny (exchange-fn one-foreign-mny opt-report-commodity)))
+      (for-each
+       (lambda (xpair)
+         (let* ((comm (car xpair))
+                (one-foreign-mny (gnc:make-gnc-monetary comm 1))
+                (one-local-mny (exchange-fn one-foreign-mny opt-report-commodity))
+                (conv-amount (gnc:gnc-monetary-amount one-local-mny))
+                (price-str (gnc:default-price-renderer
+                            opt-report-commodity conv-amount)))
 ?>
 <tr>
-  <td align="right">1 <?scm:d (gnc-commodity-get-mnemonic comm) ?></td>
+  <td align="right"><?scm:d (gnc:monetary->string one-foreign-mny) ?></td>
   <td>=</td>
-  <td align="left"><?scm:d (fmtnumeric
-                             (gnc-numeric-div
-                               (gnc:gnc-monetary-amount one-local-mny)
-                               (gnc:gnc-monetary-amount one-foreign-mny)
-                               GNC-DENOM-AUTO
-                               (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))) ?>
-                   <?scm:d (gnc-commodity-get-mnemonic opt-report-commodity) ?></td>
+  <td align="right"><?scm:d price-str ?></td>
 </tr>
 <?scm
-          ))
+        ))
+       xlist)
 ?>
 </table>
 <?scm
