@@ -925,18 +925,12 @@ by preventing negative stock balances.<br/>")
 	        "number-cell"
 	        (if use-txn
 	            (if pricing-txn
-                        (gnc:html-transaction-anchor
-                         pricing-txn
-                         price
-                         )
-                         price
-                     )
+                        (gnc:html-transaction-anchor pricing-txn price)
+                        price)
 	 	    (gnc:html-price-anchor
-	 	     price
-	 	     (gnc:make-gnc-monetary
-	  	     (gnc-price-get-currency price)
-		     (gnc-price-get-value price)))
-		    )))))
+	 	     price (gnc:default-price-renderer
+                            (gnc-price-get-currency price)
+                            (gnc-price-get-value price))))))))
  	      (append! activecols (list (if use-txn (if pricing-txn "*" "**") " ")
 					(gnc:make-html-table-header-cell/markup
 					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
