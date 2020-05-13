@@ -1348,7 +1348,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     GtkWidget* gsr;
     SplitRegister* reg;
     Account* acct;
-    gchar** filter;
     gchar* order;
     int filter_changed = 0;
     gboolean create_new_page = FALSE;
@@ -1402,6 +1401,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     ledger_type = gnc_ledger_display_type (priv->ledger);
 
     {
+        gchar** filter;
+        guint filtersize = 0;
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
         order = gnc_plugin_page_register_get_sort_order (plugin_page);
@@ -1429,15 +1430,16 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
         filter = g_strsplit (gnc_plugin_page_register_get_filter (plugin_page), ",",
                              -1);
+        filtersize = g_strv_length (filter);
 
         PINFO ("Loaded Filter Status is %s", filter[0]);
 
         priv->fd.cleared_match = (gint)g_ascii_strtoll (filter[0], NULL, 16);
 
-        if (filter[0] && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
+        if (filtersize > 0 && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
             filter_changed = filter_changed + 1;
 
-        if (filter[1] && (g_strcmp0 (filter[1], "0") != 0))
+        if (filtersize > 1 && (g_strcmp0 (filter[1], "0") != 0))
         {
             PINFO ("Loaded Filter Start Date is %s", filter[1]);
 
@@ -1446,7 +1448,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
             filter_changed = filter_changed + 1;
         }
 
-        if (filter[2] && (g_strcmp0 (filter[2], "0") != 0))
+        if (filtersize > 2 && (g_strcmp0 (filter[2], "0") != 0))
         {
             PINFO ("Loaded Filter End Date is %s", filter[2]);
 
@@ -1459,7 +1461,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         priv->fd.days = (gint)g_ascii_strtoll (
                             get_filter_default_num_of_days (ledger_type), NULL, 10);
 
-        if (filter[3] &&
+        if (filtersize > 3 &&
             (g_strcmp0 (filter[3], get_filter_default_num_of_days (ledger_type)) != 0))
         {
             PINFO ("Loaded Filter Days is %s", filter[3]);
