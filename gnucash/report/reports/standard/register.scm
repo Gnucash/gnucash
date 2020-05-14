@@ -246,9 +246,7 @@
                  "number-cell"
                  (if split-info?
                      (gnc:default-price-renderer
-                      (gnc-account-get-currency-or-parent
-                       (xaccSplitGetAccount split))
-                      (xaccSplitGetSharePrice split))
+                      trans-currency (xaccSplitGetSharePrice split))
                      " "))))
     (if (amount-single-col column-vector)
         (addto! row-contents
@@ -294,7 +292,7 @@
                     " ")))
     (if (value-credit-col column-vector)
         (addto! row-contents
-                (if (and split-info? (negative? (xaccSplitGetValue split)))
+                (if (and split-info? (not (positive? (xaccSplitGetValue split))))
                     (gnc:make-html-table-cell/markup
                      "number-cell"
                      (gnc:make-gnc-monetary trans-currency
