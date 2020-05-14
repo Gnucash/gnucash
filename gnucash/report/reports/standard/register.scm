@@ -265,7 +265,7 @@
                         " "))
             (addto! row-contents " ")))
     (if (credit-col column-vector)
-        (if (negative? (gnc:gnc-monetary-amount split-value))
+        (if (not (positive? (gnc:gnc-monetary-amount split-value)))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup

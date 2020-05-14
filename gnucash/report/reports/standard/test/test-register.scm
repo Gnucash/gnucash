@@ -66,8 +66,8 @@
       (set-option options "__reg" "query" (gnc-query2scm query)))
 
     (let ((sxml (options->sxml options "basic")))
-      (test-equal "table has 231 cells"
-        231
+      (test-equal "table has 232 cells"
+        232
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = $2587"
@@ -80,8 +80,8 @@
 
     (set-option options "__reg" "journal" #t)
     (let ((sxml (options->sxml options "journal")))
-      (test-equal "table has 337 cells"
-        337
+      (test-equal "table has 339 cells"
+        339
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
@@ -102,8 +102,8 @@
 
     (set-option options "__reg" "ledger-type" #t)
     (let ((sxml (options->sxml options "ledger-type")))
-      (test-equal "table has 341 cells"
-        341
+      (test-equal "table has 343 cells"
+        343
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
@@ -132,8 +132,8 @@
 
     (set-option options "__reg" "double" #t)
     (let ((sxml (options->sxml options "double")))
-      (test-equal "table has 345 cells"
-        345
+      (test-equal "table has 347 cells"
+        347
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
