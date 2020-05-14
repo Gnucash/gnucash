@@ -1162,6 +1162,28 @@ static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
     g_free (doc_date_str);
 }
 
+static gint
+doc_sort_func (GtkTreeModel *model,
+               GtkTreeIter  *a,
+               GtkTreeIter  *b,
+               gpointer      user_data)
+{
+    time64 a_date, b_date;
+    gchar *a_id = NULL, *b_id = NULL;
+    int ret;
+
+    gtk_tree_model_get (model, a, 0, &a_date, 1, &a_id, -1);
+    gtk_tree_model_get (model, b, 0, &b_date, 1, &b_id, -1);
+
+    if (a_date < b_date) ret = -1;
+    else if (a_date > b_date) ret = 1;
+    else ret = g_strcmp0 (a_id, b_id);
+
+    g_free (a_id);
+    g_free (b_id);
+    return ret;
+}
+
 static PaymentWindow *
 new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_info)
 {
@@ -1318,10 +1340,16 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
                                         column, "9,999,999.00");
 
-    gtk_tree_sortable_set_sort_column_id (
-        GTK_TREE_SORTABLE (gtk_tree_view_get_model (GTK_TREE_VIEW (pw->docs_list_tree_view))),
-        0, GTK_SORT_ASCENDING);
+    gtk_tree_sortable_set_default_sort_func
+        (GTK_TREE_SORTABLE (gtk_tree_view_get_model
+                            (GTK_TREE_VIEW (pw->docs_list_tree_view))),
+         doc_sort_func, NULL, NULL);
 
+    gtk_tree_sortable_set_sort_column_id
+        (GTK_TREE_SORTABLE (gtk_tree_view_get_model
+                            (GTK_TREE_VIEW (pw->docs_list_tree_view))),
+         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+         GTK_SORT_ASCENDING);
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_window"));
     pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
