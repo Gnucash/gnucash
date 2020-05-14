@@ -853,10 +853,10 @@ gnc_option_changed_gain_loss_account_widget_cb (GtkTreeSelection *selection,
         {
             const char *message = _("The account %s is a placeholder account " \
                 "and does not allow transactions. " \
-        	"Please choose a different account.");
+            "Please choose a different account.");
 
             gnc_error_dialog (gnc_ui_get_gtk_window (book_currency_data->default_gain_loss_account_widget),
-			      message, xaccAccountGetName (account));
+                  message, xaccAccountGetName (account));
             if (book_currency_data->prior_gain_loss_account)
             {
                 (gnc_tree_view_account_set_selected_account
@@ -2435,7 +2435,7 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
  * The widget you return from this function should be the widget in
  * which you're storing the option value.
  */
- 
+
 static void
 gnc_option_set_ui_label_alignment (GtkLabel *name_label)
 {
@@ -2727,7 +2727,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkGrid *page_box,
 {
     GtkWidget *value = gnc_account_sel_new ();
     GList *acct_type_list = gnc_option_get_account_type_list (option);
-    
+
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(value), acct_type_list, NULL);
 
     g_signal_connect(value, "account_sel_changed",
