@@ -563,7 +563,7 @@
                              (set-tm:mon bdtm 7))
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11)) 
-                            (else (set! bdtm (gnc-mktime to-value))))
+                            (else (set! bdtm (gnc-localtime to-value))))
                           ;; Tax quaters equal Real quarters
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31
@@ -577,7 +577,7 @@
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
                             (else 
-                             (set! bdtm (gnc-mktime to-value)))))
+                             (set! bdtm (gnc-localtime to-value)))))
                       (set-tm:isdst bdtm -1)
                       (gnc-mktime bdtm))))
 
