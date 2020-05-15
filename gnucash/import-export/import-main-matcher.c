@@ -69,6 +69,7 @@ struct _main_matcher_info
     GtkTreeViewColumn *account_column;
     GtkWidget         *show_account_column;
     GtkWidget         *show_matched_info;
+    GtkWidget         *reconcile_after_close;
     gboolean add_toggled;   // flag to indicate that add has been toggled to stop selection
     gint id;
 };
@@ -196,6 +197,8 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
+    // By default, do not show this check box.
+    gnc_gen_trans_list_show_reconcile_after_close (info, FALSE, FALSE);
 }
 
 void
@@ -985,6 +988,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
                       G_CALLBACK(show_matched_info_toggled_cb), info);
 
+    // Create the checkbox, but do not show it by default.
+    info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
+
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
     gnc_gen_trans_init_view (info, all_from_same_account, show_update);
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
@@ -1006,7 +1012,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
 
     g_object_unref (G_OBJECT(builder));
-    
+
     // Register this UI, it needs to be closed when the session is closed.
     info->id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,
                                            NULL, /* no refresh handler */
@@ -1068,6 +1074,8 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     info->show_matched_info = GTK_WIDGET(gtk_builder_get_object (builder, "show_matched_info_button"));
     g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
                       G_CALLBACK(show_matched_info_toggled_cb), info);
+
+    info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_when_close_button"));
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
     gnc_gen_trans_init_view (info, all_from_same_account, show_update);
@@ -1447,6 +1455,18 @@ void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans
     gnc_gen_trans_list_add_trans_with_ref_id (gui, trans, 0);
     return;
 }/* end gnc_import_add_trans() */
+
+void gnc_gen_trans_list_show_reconcile_after_close(GNCImportMainMatcher *info, gboolean reconcile_after_close, gboolean active)
+{
+    gtk_widget_set_visible (info->reconcile_after_close,reconcile_after_close);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (info->reconcile_after_close), active);
+}
+
+GtkWidget*
+gnc_gen_trans_list_get_reconcile_widget(GNCImportMainMatcher *info)
+{
+    return info->reconcile_after_close;
+}
 
 void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transaction *trans, guint32 ref_id)
 {

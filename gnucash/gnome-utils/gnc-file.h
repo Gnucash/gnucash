@@ -149,6 +149,12 @@ char * gnc_file_dialog (GtkWindow *parent,
                         const char * starting_dir,
                         GNCFileDialogType type);
 
+GSList * gnc_file_dialog_multi (GtkWindow *parent,
+                                const char * title,
+                                GList * filters,
+                                const char * starting_dir,
+                                GNCFileDialogType type);
+
 gboolean gnc_file_open_file (GtkWindow *parent,
                              const char *filename,
                              gboolean open_readonly);
