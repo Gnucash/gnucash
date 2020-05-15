@@ -67,15 +67,19 @@ static Account *ofx_parent_account = NULL;
 // Structure we use to gather information about statement balance/account etc.
 typedef struct _ofx_info
 {
-    gint num_trans_processed;
-    GSList* statement;
     GtkWindow* parent;
     GNCImportMainMatcher *gnc_ofx_importer_gui;
     Account *last_import_account;
     Account *last_investment_account;
     Account *last_income_account;
-    GList *created_commodites   ;
+    gint num_trans_processed;               // Number of transactions processed
+    struct OfxStatementData* statement;     // Statement, if any
+    gboolean run_reconcile;                 // If TRUE the reconcile window is opened after matching.
+    GList *created_commodites;
+    GSList* file_list;                      // List of OFX files to import
 } ofx_info ;
+
+GList *ofx_created_commodites = NULL;
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -118,13 +122,11 @@ set_associated_income_account(Account* investment_account,
     xaccAccountCommitEdit(investment_account);
 }
 
-int ofx_proc_statement_cb(struct OfxStatementData data,
-                          void *statement_user_data);
-int ofx_proc_security_cb(const struct OfxSecurityData data,
-                         void *security_user_data);
+int ofx_proc_statement_cb (struct OfxStatementData data, void * statement_user_data);
+int ofx_proc_security_cb (const struct OfxSecurityData data, void * security_user_data);
 int ofx_proc_transaction_cb (struct OfxTransactionData data, void *user_data);
-int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
-static double ofx_get_investment_amount(const struct OfxTransactionData* data);
+int ofx_proc_account_cb (struct OfxAccountData data, void * account_user_data);
+static double ofx_get_investment_amount (const struct OfxTransactionData* data);
 
 static const gchar *gnc_ofx_ttype_to_string(TransactionType t)
 {
@@ -917,11 +919,10 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 int ofx_proc_statement_cb (struct OfxStatementData data, void * statement_user_data)
 {
     ofx_info* info = (ofx_info*) statement_user_data;
-    struct OfxStatementData* statement = g_new (struct OfxStatementData, 1);
-    *statement = data;
-    info->statement = g_slist_append (info->statement, statement);
+    info->statement = g_new (struct OfxStatementData, 1);
+    *info->statement = data;
     return 0;
-}//end ofx_proc_statement()
+}
 
 
 int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
@@ -1003,22 +1004,23 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 
         gnc_utf8_strip_invalid(data.account_name);
         gnc_utf8_strip_invalid(data.account_id);
-        account_description = g_strdup_printf( /* This string is a default account
+        account_description = g_strdup_printf (/* This string is a default account
                                                   name. It MUST NOT contain the
                                                   character ':' anywhere in it or
                                                   in any translation.  */
-                                  "%s \"%s\"",
-                                  account_type_name,
-                                  data.account_name);
-        /* use the info->parent as import-matcher is not displayed yet */
-        account = gnc_import_select_account (GTK_WIDGET(info->parent),
+                                               "%s \"%s\"",
+                                               account_type_name,
+                                               data.account_name);
+        account = gnc_import_select_account (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
                                              data.account_id, 1,
                                              account_description, default_commodity,
-                                             default_type, info->last_import_account, NULL);
+                                             default_type, NULL, NULL);
+
         if (account)
         {
             info->last_import_account = account;
         }
+
         g_free(account_description);
     }
     else
@@ -1051,6 +1053,142 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
     }
 }
 
+// Forward declaration, required because several static functions depend on one-another.
+static void
+gnc_file_ofx_import_process_file (ofx_info* info);
+
+// gnc_ofx_process_next_file processes the next file in the info->file_list.
+static void
+gnc_ofx_process_next_file (GtkDialog *dialog, gpointer user_data)
+{
+    ofx_info* info = (ofx_info*) user_data;
+    // Free the statement (if it was allocated)
+    g_free (info->statement);
+    info->statement = NULL;
+
+    // Done with the previous OFX file, process the next one if any.
+    info->file_list = g_slist_delete_link(info->file_list, info->file_list);
+    if (info->file_list)
+        gnc_file_ofx_import_process_file (info);
+    else
+    {
+        // Final cleanup.
+        g_free (info);
+        if (ofx_created_commodites)
+        {
+            /* FIXME: Present some result window about the newly created
+             * commodities */
+            g_warning ("Created %d new commodities during import", g_list_length(ofx_created_commodites));
+            g_list_free (ofx_created_commodites);
+            ofx_created_commodites = NULL;
+        }
+        else
+        {
+            //g_warning("No new commodities created");
+        }
+    }
+}
+
+
+// This callback is called when the user is done matching transactions.
+static void
+gnc_ofx_match_done (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+    ofx_info* info = (ofx_info*) user_data;
+
+    if (response_id == GTK_RESPONSE_OK && info->run_reconcile && info->statement)
+    {
+        // Open a reconcile window.
+        Account* account = gnc_import_select_account (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
+                                                      info->statement->account_id,
+                                                      0, NULL, NULL, ACCT_TYPE_NONE, NULL, NULL);
+        if (account && info->statement->ledger_balance_valid)
+        {
+            gnc_numeric value = double_to_gnc_numeric (info->statement->ledger_balance,
+                                                       xaccAccountGetCommoditySCU (account),
+                                                       GNC_HOW_RND_ROUND_HALF_UP);
+            RecnWindow* rec_window = recnWindowWithBalance (GTK_WIDGET (info->parent), account, value, info->statement->ledger_balance_date);
+            // Connect to destroy, at which point we'll process the next OFX file..
+            g_signal_connect (G_OBJECT (gnc_ui_reconcile_window_get_widget (rec_window)), "destroy", G_CALLBACK (gnc_ofx_process_next_file), info);
+        }
+    }
+    else
+    {
+        gtk_widget_hide (GTK_WIDGET(dialog));
+        gnc_ofx_process_next_file (dialog, info);
+    }
+}
+
+// This callback is triggered when the user checks or unchecks the reconcile after match
+// check box in the matching dialog.
+static void
+reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, ofx_info* info)
+{
+    info->run_reconcile = gtk_toggle_button_get_active (togglebutton);
+}
+
+// Aux function to process the OFX file in info->file_list
+static void
+gnc_file_ofx_import_process_file (ofx_info* info)
+{
+    LibofxContextPtr libofx_context = libofx_get_new_context();
+    char* filename = NULL;
+    GtkWindow *parent = info->parent;
+
+    if (info->file_list == NULL)
+        return;
+
+    filename = info->file_list->data;
+
+#ifdef G_OS_WIN32
+    char * selected_filename = g_win32_locale_filename_from_utf8 (filename);
+    g_free (filename);
+#else
+    char * selected_filename = filename;
+#endif
+    DEBUG("Filename found: %s", selected_filename);
+
+    // Reset the reconciliation information.
+    info->num_trans_processed = 0;
+    info->statement = NULL;
+    info->run_reconcile = FALSE;
+
+    /* Initialize libofx and set the callbacks*/
+    ofx_set_statement_cb (libofx_context, ofx_proc_statement_cb, info);
+    ofx_set_account_cb (libofx_context, ofx_proc_account_cb, info);
+    ofx_set_transaction_cb (libofx_context, ofx_proc_transaction_cb, info);
+    ofx_set_security_cb (libofx_context, ofx_proc_security_cb, info);
+    /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
+
+    // Create the match dialog, and run the ofx file through the importer.
+    info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, TRUE, 42, FALSE);
+    libofx_proc_file (libofx_context, selected_filename, AUTODETECT);
+
+    // See whether the view has anything in it and warn the user if not.
+    if(gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
+    {
+        gnc_gen_trans_list_delete (info->gnc_ofx_importer_gui);
+        if(info->num_trans_processed)
+            gnc_info_dialog (parent, _("OFX file(s) imported, %d transactions processed, no transactions to match"), info->num_trans_processed);
+        // Process the next OFX file if any.
+        gnc_ofx_process_next_file (NULL, info);
+    }
+    else
+    {
+        // Show the match dialog and connect to the "response" signal so we can trigger a reconcile if the user clicks OK when done matching transactions.
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "response", G_CALLBACK (gnc_ofx_match_done), info);
+        gnc_gen_trans_list_show_all (info->gnc_ofx_importer_gui);
+        
+        // Show or hide the check box for reconciling after match, depending on whether a statement was received.
+        gnc_gen_trans_list_show_reconcile_after_close (info->gnc_ofx_importer_gui, info->statement != NULL);
+        // Finally connect to the reconcile after match check box so we can be notified if the user wants/does not want to reconcile.
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_get_reconcile_widget (info->gnc_ofx_importer_gui)), "toggled",
+                          G_CALLBACK (reconcile_when_close_toggled_cb), info);
+    }
+    g_free(selected_filename);
+}
+
+// The main import function. Starts the chain of file imports (if there are several)
 void gnc_file_ofx_import (GtkWindow *parent)
 {
     extern int ofx_PARSER_msg;
@@ -1059,14 +1197,12 @@ void gnc_file_ofx_import (GtkWindow *parent)
     extern int ofx_ERROR_msg;
     extern int ofx_INFO_msg;
     extern int ofx_STATUS_msg;
-    char *selected_filename;
+    GSList* selected_filenames = NULL;
     char *default_dir;
     LibofxContextPtr libofx_context = libofx_get_new_context();
     GList *filters = NULL;
+    GSList* iter = NULL;
     GtkFileFilter* filter = gtk_file_filter_new ();
-    GSList *iter = NULL;
-    // Create the structure we're using to gather reconciliation information.
-    ofx_info info = {0, NULL, parent, NULL, NULL, NULL, NULL, NULL};
 
     ofx_PARSER_msg = false;
     ofx_DEBUG_msg = false;
@@ -1082,97 +1218,34 @@ void gnc_file_ofx_import (GtkWindow *parent)
     gtk_file_filter_add_pattern (filter, "*.[oqOQ][fF][xX]");
     filters = g_list_prepend( filters, filter );
 
-    selected_filename = gnc_file_dialog(parent,
-                                        _("Select an OFX/QFX file to process"),
-                                        filters,
-                                        default_dir,
-                                        GNC_FILE_DIALOG_IMPORT);
+    selected_filenames = gnc_file_dialog_multi (parent,
+                                                _("Select one or multiple OFX/QFX file(s) to process"),
+                                                filters,
+                                                default_dir,
+                                                GNC_FILE_DIALOG_IMPORT);
     g_free(default_dir);
 
-    if (selected_filename != NULL)
+    if (selected_filenames)
     {
-#ifdef G_OS_WIN32
-        gchar *conv_name;
-#endif
-
         /* Remember the directory as the default. */
-        default_dir = g_path_get_dirname(selected_filename);
+        default_dir = g_path_get_dirname(selected_filenames->data);
         gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
         g_free(default_dir);
-
-        /*strncpy(file,selected_filename, 255);*/
-        DEBUG("Filename found: %s", selected_filename);
-
-        /* Create the Generic transaction importer GUI. */
-        info.gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
 
         /* Look up the needed preferences */
         auto_create_commodity =
             gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_COMMODITY);
 
-        /* Initialize libofx and set the callbacks*/
-        ofx_set_statement_cb (libofx_context, ofx_proc_statement_cb, &info);
-        ofx_set_account_cb (libofx_context, ofx_proc_account_cb, &info);
-        ofx_set_transaction_cb (libofx_context, ofx_proc_transaction_cb, &info);
-        ofx_set_security_cb (libofx_context, ofx_proc_security_cb, &info);
-        /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
-
-#ifdef G_OS_WIN32
-        conv_name = g_win32_locale_filename_from_utf8(selected_filename);
-        g_free(selected_filename);
-        selected_filename = conv_name;
-#endif
-
-        DEBUG("Opening selected file");
-        libofx_proc_file(libofx_context, selected_filename, AUTODETECT);
-        // See whether the view has anything in it and warn the user if not.
-        if(gnc_gen_trans_list_empty(info.gnc_ofx_importer_gui))
-        {
-            gnc_gen_trans_list_delete (info.gnc_ofx_importer_gui);
-            if(info.num_trans_processed)
-                gnc_info_dialog (parent, _("OFX file imported, %d transactions processed, no transactions to match"), info.num_trans_processed);
-        }
-        else
-        {
-            gnc_gen_trans_list_show_all(info.gnc_ofx_importer_gui);
-        }
-        // Open a reconcile window for each balance statement found.
-        for (iter=info.statement; iter; iter=iter->next)
-        {
-            struct OfxStatementData* statement = (struct OfxStatementData*) iter->data;
-            Account* account = gnc_import_select_account (gnc_gen_trans_list_widget(info.gnc_ofx_importer_gui),
-                                                          statement->account_id,
-                                                          0, NULL, NULL, ACCT_TYPE_NONE,
-                                                          NULL, NULL);
-            if (account)
-            {
-                if (statement->ledger_balance_valid)
-                {
-                    gnc_numeric value =
-                         double_to_gnc_numeric (statement->ledger_balance,
-                                                xaccAccountGetCommoditySCU (account),
-                                                GNC_HOW_RND_ROUND_HALF_UP);
-                    recnWindowWithBalance (GTK_WIDGET (parent),
-                                           account,
-                                           value,
-                                           statement->ledger_balance_date);
-                }
-            }
-        }
-        g_free (selected_filename);
-        g_slist_free_full (info.statement,g_free);
-    }
-
-    if (info.created_commodites)
-    {
-        /* FIXME: Present some result window about the newly created
-         * commodities */
-        g_warning("Created %d new commodities during import", g_list_length(info.created_commodites));
-        g_list_free(info.created_commodites);
-    }
-    else
-    {
-        //g_warning("No new commodities created");
+        DEBUG("Opening selected file(s)");
+        // Create the structure that holds the list of files to process and the statement info.
+        ofx_info* info = g_new(ofx_info,1);
+        info->num_trans_processed = 0;
+        info->statement = NULL;
+        info->parent = parent;
+        info->run_reconcile = FALSE;
+        info->file_list = selected_filenames;
+        // Call the aux import function.
+        gnc_file_ofx_import_process_file (info);
     }
 }
 

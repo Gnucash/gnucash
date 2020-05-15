@@ -58,6 +58,65 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+/* The following block can be enabled, but the gwen-gtk3 widgets might
+ * still need some work. */
+#if 0 /*#ifdef USING_GWENHYWFAR_GTK3_GUI*/
+
+/* A GWEN_GUI implementation using gtk3 widgets  */
+static GWEN_GUI *gwen_gui = NULL;
+
+void gnc_GWEN_Gui_log_init(void)
+{
+    if (!gwen_gui)
+    {
+        gwen_gui = Gtk3_Gui_new();
+        GWEN_Gui_SetGui(gwen_gui);
+    }
+}
+GncGWENGui *gnc_GWEN_Gui_get(GtkWidget *parent)
+{
+    if (!gwen_gui)
+        gnc_GWEN_Gui_log_init();
+    return (GncGWENGui*) gwen_gui;
+}
+void gnc_GWEN_Gui_release(GncGWENGui *gui)
+{
+}
+void gnc_GWEN_Gui_shutdown(void)
+{
+    if (gwen_gui)
+    {
+        GWEN_Gui_free(gwen_gui);
+        gwen_gui = NULL;
+        GWEN_Gui_SetGui(NULL);
+    }
+}
+void
+gnc_GWEN_Gui_set_close_flag(gboolean close_when_finished)
+{
+    gnc_prefs_set_bool(
+        GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH,
+        close_when_finished);
+}
+gboolean
+gnc_GWEN_Gui_get_close_flag()
+{
+    return gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH);
+}
+
+gboolean
+gnc_GWEN_Gui_show_dialog()
+{
+    return TRUE;
+}
+
+void
+gnc_GWEN_Gui_hide_dialog()
+{
+}
+
+#else
+
 /* A unique full-blown GUI, featuring  */
 static GncGWENGui *full_gui = NULL;
 
@@ -242,7 +301,13 @@ gnc_GWEN_Gui_log_init(void)
 {
     if (!log_gwen_gui)
     {
-        log_gwen_gui = Gtk3_Gui_new();
+        log_gwen_gui =
+#ifdef USING_GWENHYWFAR_GTK3_GUI
+            Gtk3_Gui_new()
+#else
+            GWEN_Gui_new()
+#endif
+            ;
 
         /* Always use our own logging */
         GWEN_Gui_SetLogHookFn(log_gwen_gui, loghook_cb);
@@ -406,7 +471,13 @@ register_callbacks(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    gwen_gui = Gtk3_Gui_new();
+    gwen_gui =
+#ifdef USING_GWENHYWFAR_GTK3_GUI
+        Gtk3_Gui_new()
+#else
+        GWEN_Gui_new()
+#endif
+        ;
     gui->gwen_gui = gwen_gui;
 
     GWEN_Gui_SetMessageBoxFn(gwen_gui, messagebox_cb);
@@ -1674,3 +1745,4 @@ ggg_close_toggled_cb(GtkToggleButton *button, gpointer user_data)
 
     LEAVE(" ");
 }
+#endif

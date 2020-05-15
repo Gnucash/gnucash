@@ -60,29 +60,15 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static GNCShutdownCB shutdown_cb = NULL;
 static gint save_in_progress = 0;
 
-
-/********************************************************************\
- * gnc_file_dialog                                                  *
- *   Pops up a file selection dialog (either a "Save As" or an      *
- *   "Open"), and returns the name of the file the user selected.   *
- *   (This function does not return until the user selects a file   *
- *   or presses "Cancel" or the window manager destroy button)      *
- *                                                                  *
- * Args:   title        - the title of the window                   *
- *         filters      - list of GtkFileFilters to use, will be    *
-                          freed automatically                       *
- *         default_dir  - start the chooser in this directory       *
- *         type         - what type of dialog (open, save, etc.)    *
- * Return: containing the name of the file the user selected        *
-\********************************************************************/
-
-char *
-gnc_file_dialog (GtkWindow *parent,
-                 const char * title,
-                 GList * filters,
-                 const char * starting_dir,
-                 GNCFileDialogType type
-                )
+// gnc_file_dialog_int is used both by gnc_file_dialog and gnc_file_dialog_multi
+static GSList *
+gnc_file_dialog_int (GtkWindow *parent,
+                     const char * title,
+                     GList * filters,
+                     const char * starting_dir,
+                     GNCFileDialogType type,
+                     gboolean multi
+                     )
 {
     GtkWidget *file_box;
     const char *internal_name;
@@ -91,6 +77,7 @@ gnc_file_dialog (GtkWindow *parent,
     const gchar *ok_icon = NULL;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint response;
+    GSList* file_name_list = NULL;
 
     ENTER(" ");
 
@@ -130,6 +117,9 @@ gnc_file_dialog (GtkWindow *parent,
                    action,
                    _("_Cancel"), GTK_RESPONSE_CANCEL,
                    NULL);
+    if (multi)
+        gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (file_box), TRUE);
+    
     if (ok_icon)
         gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
     else
@@ -174,23 +164,85 @@ gnc_file_dialog (GtkWindow *parent,
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        /* look for constructs like postgres://foo */
-        internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
-        if (internal_name != NULL)
+        if (multi)
         {
-            if (strstr (internal_name, "file://") == internal_name)
+            file_name_list = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (file_box));
+        }
+        else
+        {
+            /* look for constructs like postgres://foo */
+            internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+            if (internal_name != NULL)
             {
-                /* nope, a local file name */
-                internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+                if (strstr (internal_name, "file://") == internal_name)
+                {
+                    /* nope, a local file name */
+                    internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+                }
+                file_name = g_strdup(internal_name);
             }
-            file_name = g_strdup(internal_name);
+            file_name_list = g_slist_append (file_name_list, file_name);
         }
     }
     gtk_widget_destroy(GTK_WIDGET(file_box));
     LEAVE("%s", file_name ? file_name : "(null)");
+    return file_name_list;
+}
+
+/********************************************************************\
+ * gnc_file_dialog                                                  *
+ *   Pops up a file selection dialog (either a "Save As" or an      *
+ *   "Open"), and returns the name of the file the user selected.   *
+ *   (This function does not return until the user selects a file   *
+ *   or presses "Cancel" or the window manager destroy button)      *
+ *                                                                  *
+ * Args:   title        - the title of the window                   *
+ *         filters      - list of GtkFileFilters to use, will be    *
+ *                        freed automatically                       *
+ *         default_dir  - start the chooser in this directory       *
+ *         type         - what type of dialog (open, save, etc.)    *
+ * Return: containing the name of the file the user selected        *
+ \********************************************************************/
+char *
+gnc_file_dialog (GtkWindow *parent,
+                 const char * title,
+                 GList * filters,
+                 const char * starting_dir,
+                 GNCFileDialogType type
+                 )
+{
+    gchar* file_name = NULL;
+    GSList* ret = gnc_file_dialog_int (parent, title, filters, starting_dir, type, FALSE);
+    if (ret)
+        file_name = g_strdup (ret->data);
+    g_slist_free_full (ret, g_free);
     return file_name;
 }
 
+/********************************************************************\
+ * gnc_file_dialog_multi                                            *
+ *   Pops up a file selection dialog (either a "Save As" or an      *
+ *   "Open"), and returns the name of the files the user selected.  *
+ *   Similar to gnc_file_dialog with allowing multi-file selection  *
+ *                                                                  *
+ * Args:   title        - the title of the window                   *
+ *         filters      - list of GtkFileFilters to use, will be    *
+ *                        freed automatically                       *
+ *         default_dir  - start the chooser in this directory       *
+ *         type         - what type of dialog (open, save, etc.)    *
+ * Return: GList containing the names of the selected files         *
+ \********************************************************************/
+
+GSList *
+gnc_file_dialog_multi (GtkWindow *parent,
+                       const char * title,
+                       GList * filters,
+                       const char * starting_dir,
+                       GNCFileDialogType type
+                       )
+{
+    return gnc_file_dialog_int (parent, title, filters, starting_dir, type, TRUE);
+}
 
 gboolean
 show_session_error (GtkWindow *parent,

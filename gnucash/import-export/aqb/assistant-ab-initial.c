@@ -288,7 +288,7 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             if (rv <= 0)
             {
                 /* Dialog was aborted/rejected */
-                PERR("Setup Dialog of aqbanking aborted/rejected, code %d", rv);
+                PERR("Setup Dialog of aqbanking aborted/rejected !");
             }
             GWEN_Dialog_free(dlg);
         }
