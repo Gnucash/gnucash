@@ -322,21 +322,13 @@ gboolean
 qof_log_check(QofLogModule domain, QofLogLevel level)
 {
 
-    if (!domain)
-    {
-        PWARN ("Domain not set");
-        return FALSE;
-    }
-
-    if (!level)
-    {
-        PWARN("0 is not a valid log level");
-        return FALSE;
-    }
     auto module = get_modules();
     // If the level is < the default then no need to look further.
     if (level < module->m_level)
         return TRUE;
+
+    if (!domain)
+        return FALSE;
 
     auto domain_vec = split_domain(domain);
 
