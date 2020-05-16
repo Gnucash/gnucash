@@ -1716,14 +1716,6 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
             gnc_table_move_vertical_position (sheet->table,
                                               new_virt_loc, 1);
             break;
-        case GDK_KEY_Control_L:
-        case GDK_KEY_Control_R:
-        case GDK_KEY_Shift_L:
-        case GDK_KEY_Shift_R:
-        case GDK_KEY_Alt_L:
-        case GDK_KEY_Alt_R:
-            *pass_on = TRUE;
-            break;
         case GDK_KEY_KP_Right:
         case GDK_KEY_Right:
         case GDK_KEY_KP_Left:
