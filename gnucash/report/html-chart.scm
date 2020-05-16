@@ -387,7 +387,7 @@ document.getElementById(chartid).onclick = function(evt) {
       var datasetIndex = activepoints[0]['_datasetIndex'];
       var datasetURLs = myChart.data.datasets[datasetIndex].urls;
       // console.log('index=',index,'datasetIndex=',datasetIndex);
-      anchor.style = 'position:absolute; top:' + (evt.clientY - 30) + 'px; left:' + (evt.clientX - 20) + 'px; display: block; padding: 5px; border-radius: 5px; background: #4E9CAF; text-align:center; color:white; ';
+      anchor.style = 'position:absolute; top:' + (evt.clientY - 30) + 'px; left:' + (evt.clientX - 20) + 'px; display: block; padding: 5px; border-radius: 5px; background: #4E9CAF; text-align:center; color:white; z-index: 999;';
       switch (typeof(datasetURLs)) {
         case 'string':
           anchor.href = datasetURLs;
