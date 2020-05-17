@@ -241,11 +241,16 @@ gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store)
 
     item_list->temp_store = store;
     if (store)
+    {
         gtk_tree_view_set_model (item_list->tree_view,
                                  GTK_TREE_MODEL (item_list->temp_store));
+    }
     else
+    {
         gtk_tree_view_set_model (item_list->tree_view,
                                  GTK_TREE_MODEL (item_list->list_store));
+        item_list->temp_store = NULL;
+    }
 }
 
 gboolean
