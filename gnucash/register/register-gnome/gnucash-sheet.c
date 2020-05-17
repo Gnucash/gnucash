@@ -1748,8 +1748,8 @@ pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
     // If sheet is readonly, entry is not realized
     if (gtk_widget_get_realized (GTK_WIDGET(editable)))
     {
-        gnucash_sheet_clear_selection (sheet);
         result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event);
+        gnucash_sheet_set_selection_from_entry (sheet);
     }
     return result;
 }
