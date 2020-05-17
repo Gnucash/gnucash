@@ -1073,7 +1073,7 @@ gnucash_sheet_insert_cb (GtkEditable *editable,
     char *new_text = NULL;
     glong new_text_len = 0;
     const char *retval;
-    int start_sel, end_sel;
+    int start_sel = 0, end_sel = 0;
     int old_position = *position;
     const char* old_text = gtk_entry_get_text (GTK_ENTRY (sheet->entry));
 
