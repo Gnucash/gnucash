@@ -1765,7 +1765,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     VirtualLocation new_virt_loc;
     gncTableTraversalDir direction = 0;
     int distance;
-    GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1796,19 +1795,14 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
     new_virt_loc = cur_virt_loc;
 
-    /* Don't process any keystrokes where a modifier key (Alt,
-     * Meta, etc.) is being held down.  This shouldn't include
-         * MOD2, aka NUM LOCK. */
-    if (event->state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    /* Don't process any keystrokes where a modifier key (Alt, Meta, etc.) is
+     * being held down.  This shouldn't include NUM LOCK.
+     */
+    if (event->state & GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)
         pass_on = TRUE;
-
-    /* Calculate tentative physical values */
-    if (!pass_on)
-    {
-        if (process_motion_keys (sheet, event, &pass_on,
-                                 &direction, &new_virt_loc))
+    else if (process_motion_keys (sheet, event, &pass_on,
+                                  &direction, &new_virt_loc)) //may set pass_on
             return TRUE;
-    }
 
     /* Forward the keystroke to the input line */
     if (pass_on)
