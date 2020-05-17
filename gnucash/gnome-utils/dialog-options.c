@@ -1695,7 +1695,6 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
     char *type;
     GNCOptionDef_t *option_def;
     GtkLabel *name_label;
-    GtkWidget *label_event_box;
 
     ENTER("option %p(%s), box %p",
           option, gnc_option_name(option), page_box);
@@ -1739,19 +1738,9 @@ gnc_option_set_ui_widget(GNCOption *option, GtkGrid *page_box, gint grid_row)
     }
 
     /* attach the name label to the first column of the grid and align to the end
-     * if event_box present, pack the name label into that first so it can be
-     * clicked on */
-    label_event_box = g_object_get_data (G_OBJECT(name_label), "label_event_box");
-
-    if (label_event_box)
-    {
-        gtk_container_add (GTK_CONTAINER(label_event_box), GTK_WIDGET(name_label));
-
-        gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(label_event_box),
-                         0, grid_row, // left, top
-                         1, 1);  // width, height
-    }
-    else
+     * if option is a check button, do not add a label as we are using the biult
+     * in one */
+    if (!GTK_IS_CHECK_BUTTON(value))
         gtk_grid_attach (GTK_GRID(page_box), GTK_WIDGET(name_label),
                          0, grid_row, // left, top
                          1, 1);  // width, height
@@ -2445,15 +2434,6 @@ gnc_option_set_ui_label_alignment (GtkLabel *name_label)
     gtk_widget_set_margin_top (GTK_WIDGET(name_label), 6);
 }
 
-static gboolean
-label_event_toggle_cb (GtkButton *button, GdkEvent *event, gpointer user_data)
-{
-    GtkCheckButton *cb = user_data;
-    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cb));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(cb), !active);
-    return FALSE;
-}
-
 static GtkWidget *
 gnc_option_set_ui_widget_boolean (GNCOption *option, GtkGrid *page_box,
                                   GtkLabel *name_label, char *documentation,
@@ -2461,20 +2441,13 @@ gnc_option_set_ui_widget_boolean (GNCOption *option, GtkGrid *page_box,
                                   GtkWidget **enclosing, gboolean *packed)
 {
     GtkWidget *value;
-    GtkWidget *label_event_box = gtk_event_box_new ();
 
     *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
-    value = gtk_check_button_new ();
+    value = gtk_check_button_new_with_label (gtk_label_get_text (name_label));
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
-
-    g_object_set_data (G_OBJECT(name_label), "label_event_box", label_event_box);
-
-    gtk_widget_set_events (label_event_box, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect (G_OBJECT(label_event_box), "button-press-event",
-                      G_CALLBACK(label_event_toggle_cb), value);
 
     g_signal_connect(G_OBJECT(value), "toggled",
                      G_CALLBACK(gnc_option_changed_widget_cb), option);
