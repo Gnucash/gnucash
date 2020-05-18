@@ -33,6 +33,7 @@
 #include "business-urls.h"
 #include "combocell.h"
 #include "dialog-account.h"
+#include "dialog-assoc.h"
 #include "dialog-commodity.h"
 #include "dialog-invoice.h"
 #include "dialog-preferences.h"
@@ -166,6 +167,16 @@ gnc_html_register_url_cb (const char *location, const char *label,
         }
     }
 
+    else if (strncmp ("trans-association-guid=", location, strlen ("trans-association-guid=")) == 0)
+    {
+        if (!validate_type("trans-association-guid=", location, GNC_ID_TRANS, result, &guid, &entity))
+            return FALSE;
+
+        trans = (Transaction *) entity;
+        gnc_assoc_open_uri (gnc_ui_get_gtk_window (GTK_WIDGET(result->parent)), xaccTransGetAssociation (trans));
+        return TRUE;
+    }
+
     else if (strncmp ("split-guid=", location, strlen ("split-guid=")) == 0)
     {
         if (!validate_type("split-guid=", location, GNC_ID_SPLIT, result, &guid, &entity))
@@ -174,6 +185,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
         split = (Split *) entity;
         account = xaccSplitGetAccount(split);
     }
+
     else
     {
         result->error_message =

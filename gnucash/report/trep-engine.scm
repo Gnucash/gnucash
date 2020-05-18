@@ -945,6 +945,7 @@ be excluded from periodic reporting.")
       (list (N_ "Use Full Other Account Name")  "i"  (_ "Display the full account name?") #f)
       (list (N_ "Other Account Code")           "j"  (_ "Display the other account code?") #f)
       (list (N_ "Shares")                       "k"  (_ "Display the number of shares?") #f)
+      (list (N_ "Association")                  "l5" (_ "Display the transaction association") #f)
       (list (N_ "Price")                        "l"  (_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (_ "Display a subtotal summary table.") #f)
@@ -1070,6 +1071,7 @@ be excluded from periodic reporting.")
                      (opt-val gnc:pagename-display (N_ "Other Account Name"))))
           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
+          (cons 'association (opt-val gnc:pagename-display "Association"))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
           (cons 'common-currency (opt-val gnc:pagename-general optname-common-currency))
@@ -1234,6 +1236,21 @@ be excluded from periodic reporting.")
                                  (gnc:make-html-table-cell/markup
                                   "number-cell"
                                   (xaccSplitGetAmount split)))))
+
+               (add-if (column-uses? 'association)
+                       (vector ""
+                               (lambda (split transaction-row?)
+                                 (let ((url (xaccTransGetAssociation
+                                             (xaccSplitGetParent split))))
+                                   (and (not (string-null? url))
+                                        (gnc:make-html-table-cell/markup
+                                         "text-cell"
+                                         (if opt-use-links?
+                                             (gnc:html-transaction-association-anchor
+                                              (xaccSplitGetParent split)
+                                              ;; Translators: 'A' is short for Association
+                                              (_ "A"))
+                                             (_ "A"))))))))
 
                (add-if (column-uses? 'price)
                        (vector (_ "Price")
