@@ -201,6 +201,22 @@ gnc_item_list_select (GncItemList* item_list, const char* string)
     g_free (to_find_data);
 }
 
+char*
+gnc_item_list_get_selection (GncItemList *item_list)
+{
+    GtkTreeIter iter;
+    GtkTreeModel* model;
+    gchar* string;
+
+    GtkTreeSelection *selection =
+        gtk_tree_view_get_selection (item_list->tree_view);
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+        return FALSE;
+
+    gtk_tree_model_get (model, &iter, 0, &string, -1);
+    return string;
+}
+
 
 void
 gnc_item_list_show_selected (GncItemList* item_list)
@@ -326,21 +342,13 @@ static gboolean
 gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
 {
     GncItemList* item_list = GNC_ITEM_LIST (data);
-    GtkTreeSelection* selection = NULL;
-    GtkTreeIter iter;
-    GtkTreeModel* model;
     gchar* string;
     gboolean retval;
 
     switch (event->keyval)
     {
     case GDK_KEY_Return:
-        selection = gtk_tree_view_get_selection (item_list->tree_view);
-        if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-            return FALSE;
-
-        gtk_tree_model_get (model, &iter, 0, &string, -1);
-
+        string = gnc_item_list_get_selection (item_list);
         g_signal_emit (G_OBJECT (item_list),
                        gnc_item_list_signals[ACTIVATE_ITEM],
                        0,

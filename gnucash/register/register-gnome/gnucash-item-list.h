@@ -80,6 +80,13 @@ void gnc_item_list_select (GncItemList *item_list, const char *string);
 
 void gnc_item_list_show_selected (GncItemList *item_list);
 
+/** Retrieve the selected string from the item_list's active GtkListStore.
+ *
+ * @param item_list the GncItemList
+ * @return the string value. It must be freed with g_free().
+ */
+char* gnc_item_list_get_selection (GncItemList *item_list);
+
 int gnc_item_list_autosize (GncItemList *item_list);
 
 void gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store);

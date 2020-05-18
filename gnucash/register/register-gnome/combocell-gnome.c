@@ -718,6 +718,14 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     /* fall through */
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
+        if (gnc_item_list_using_temp (box->item_list))
+        {
+            char* string = gnc_item_list_get_selection (box->item_list);
+            g_signal_emit_by_name (G_OBJECT (box->item_list), "change_item",
+                                   string, (gpointer)bcell);
+            g_free (string);
+            return FALSE;
+        }
         if (! (event->state & GDK_CONTROL_MASK) &&
             !keep_on_going)
             return FALSE;
