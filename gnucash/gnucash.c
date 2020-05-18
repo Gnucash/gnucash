@@ -1,5 +1,5 @@
 /*
- * gnucash-bin.c -- The program entry point for GnuCash
+ * gnucash.c -- The program entry point for GnuCash
  *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>
  *
