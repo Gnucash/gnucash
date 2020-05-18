@@ -33,6 +33,7 @@
 #include "gnc-session.h"
 #include "Transaction.h"
 
+#include "gnc-plugin-page-invoice.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-main-window.h"
 #include "gnc-prefs.h"
@@ -42,19 +43,22 @@
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
 #include "Account.h"
+#include "dialog-invoice.h"
 
 #define DIALOG_ASSOC_CM_CLASS    "dialog-assoc"
-#define GNC_PREFS_GROUP          "dialogs.trans-assoc"
+#define GNC_PREFS_GROUP_BUS      "dialogs.business-assoc"
+#define GNC_PREFS_GROUP_TRANS    "dialogs.trans-assoc"
 
 /** Enumeration for the tree-store */
 enum GncAssocColumn
 {
-    DATE_TRANS,
+    DATE_ITEM,
     DATE_INT64, // used just for sorting date_trans
-    DESC_TRANS,
+    DESC_ID,
+    DESC_ITEM,
     DISPLAY_URI,
     AVAILABLE,
-    URI_SPLIT,
+    ITEM_POINTER,
     URI,
     URI_RELATIVE, // used just for sorting relative_pix
     URI_RELATIVE_PIX
@@ -66,6 +70,7 @@ typedef struct
     GtkWidget    *view;
     GtkWidget    *path_head_label;
     gchar        *path_head;
+    gboolean      is_list_trans;
     gboolean      book_ro;
     GtkTreeModel *model;
     gint          component_id;
@@ -75,7 +80,7 @@ typedef struct
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-/***********************************************************************/
+/* =================================================================== */
 
 void
 gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri)
@@ -100,7 +105,7 @@ gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri)
     }
 }
 
-/***********************************************************************/
+/* =================================================================== */
 
 static void
 location_ok_cb (GtkEditable *editable, gpointer user_data)
@@ -344,7 +349,7 @@ gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *ur
 }
 
 
-/***********************************************************************/
+/* =================================================================== */
 
 
 static void close_handler (gpointer user_data);
@@ -466,8 +471,87 @@ update_model_with_changes (AssocDialog *assoc_dialog, GtkTreeIter *iter, const g
 }
 
 static void
-row_selected_cb (GtkTreeView *view, GtkTreePath *path,
-                  GtkTreeViewColumn  *col, gpointer user_data)
+row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
+                     GtkTreeViewColumn  *col, gpointer user_data)
+{
+    AssocDialog   *assoc_dialog = user_data;
+    GtkTreeIter    iter;
+    GncInvoice    *invoice;
+    gchar         *uri = NULL;
+
+    // path describes a non-existing row - should not happen
+    g_return_if_fail (gtk_tree_model_get_iter (assoc_dialog->model, &iter, path));
+
+    gtk_tree_model_get (assoc_dialog->model, &iter, URI, &uri, ITEM_POINTER, &invoice, -1);
+
+    // Open associated link, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DISPLAY_URI - 1) == col)
+        gnc_assoc_open_uri (GTK_WINDOW(assoc_dialog->window), uri);
+
+    if (!invoice)
+    {
+        g_free (uri);
+        return;
+    }
+
+    // Open Invoice, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_ID - 1) == col)
+    {
+        GncPluginPage *page;
+        InvoiceWindow *iw;
+
+        iw =  gnc_ui_invoice_edit (GTK_WINDOW(assoc_dialog->window), invoice);
+        gnc_plugin_page_invoice_new (iw);
+    }
+
+    // Open Invoice association dialog, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), AVAILABLE - 1) == col)
+    {
+        gchar *ret_uri = NULL;
+
+        if (assoc_dialog->book_ro)
+        {
+            gnc_warning_dialog (GTK_WINDOW(assoc_dialog->window), "%s", _("Business item can not be modified."));
+            g_free (uri);
+            return;
+        }
+
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Business Association"), uri);
+
+        if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
+        {
+            gncInvoiceSetAssociation (invoice, ret_uri);
+
+            if (g_strcmp0 (ret_uri, "") == 0) // delete uri
+            {
+                // update the asooc parts for invoice window if present
+                gnc_invoice_update_assoc_for_window (invoice, ret_uri);
+                gtk_list_store_remove (GTK_LIST_STORE(assoc_dialog->model), &iter);
+            }
+            else // update uri
+            {
+                gchar *display_uri;
+                gchar *scheme = gnc_uri_get_scheme (ret_uri);
+
+                display_uri = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, ret_uri, scheme);
+
+                update_model_with_changes (assoc_dialog, &iter, ret_uri);
+
+                // update the asooc parts for invoice window if present
+                gnc_invoice_update_assoc_for_window (invoice, display_uri);
+
+                g_free (scheme);
+                g_free (display_uri);
+            }
+        }
+        g_free (ret_uri);
+    }
+    g_free (uri);
+}
+
+static void
+row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
+                       GtkTreeViewColumn  *col, gpointer user_data)
 {
     AssocDialog   *assoc_dialog = user_data;
     GtkTreeIter    iter;
@@ -477,7 +561,7 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
     // path describes a non-existing row - should not happen
     g_return_if_fail (gtk_tree_model_get_iter (assoc_dialog->model, &iter, path));
 
-    gtk_tree_model_get (assoc_dialog->model, &iter, URI, &uri, URI_SPLIT, &split, -1);
+    gtk_tree_model_get (assoc_dialog->model, &iter, URI, &uri, ITEM_POINTER, &split, -1);
 
     // Open associated link, subtract 1 to allow for date_int64
     if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DISPLAY_URI - 1) == col)
@@ -490,13 +574,11 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
     }
 
     // Open transaction, subtract 1 to allow for date_int64
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_TRANS - 1) == col)
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_ITEM - 1) == col)
     {
         GncPluginPage *page;
         GNCSplitReg   *gsr;
-        Account       *account;
-
-        account = xaccSplitGetAccount (split);
+        Account       *account = xaccSplitGetAccount (split);
 
         page = gnc_plugin_page_register_new (account, FALSE);
         gnc_main_window_open_page (NULL, page);
@@ -536,6 +618,66 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
 }
 
 static void
+add_bus_info_to_model (QofInstance* data, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+    GncInvoice *invoice = GNC_INVOICE(data);
+    const gchar* uri = gncInvoiceGetAssociation (invoice);
+    GtkTreeIter   iter;
+
+    if (uri && *uri)
+    {
+        gchar *display_uri;
+        gboolean rel = FALSE;
+        gchar *scheme = gnc_uri_get_scheme (uri);
+        time64 t = gncInvoiceGetDateOpened (invoice);
+        gchar *inv_type;
+        char datebuff[MAX_DATE_LENGTH + 1];
+        memset (datebuff, 0, sizeof(datebuff));
+        if (t == 0)
+            t = gnc_time (NULL);
+        qof_print_date_buff (datebuff, sizeof(datebuff), t);
+
+        switch (gncInvoiceGetType (invoice))
+        {
+            case GNC_INVOICE_VEND_INVOICE:
+            case GNC_INVOICE_VEND_CREDIT_NOTE:
+                inv_type = _("Bill");
+                break;
+            case GNC_INVOICE_EMPL_INVOICE:
+            case GNC_INVOICE_EMPL_CREDIT_NOTE:
+                inv_type = _("Voucher");
+                break;
+            case GNC_INVOICE_CUST_INVOICE:
+            case GNC_INVOICE_CUST_CREDIT_NOTE:
+                inv_type = _("Invoice");
+                break;
+            default:
+                inv_type = _("Undefined");
+        }
+
+        if (!scheme) // path is relative
+            rel = TRUE;
+
+        display_uri = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
+
+        gtk_list_store_append (GTK_LIST_STORE(assoc_dialog->model), &iter);
+
+        gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), &iter,
+                            DATE_ITEM, datebuff,
+                            DATE_INT64, t, // used just for sorting date column
+                            DESC_ID, gncInvoiceGetID (invoice),
+                            DESC_ITEM, inv_type,
+                            DISPLAY_URI, display_uri, AVAILABLE, _("Unknown"),
+                            ITEM_POINTER, invoice, URI, uri,
+                            URI_RELATIVE, rel, // used just for sorting relative column
+                            URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
+        g_free (display_uri);
+        g_free (scheme);
+    }
+}
+
+static void
 add_trans_info_to_model (QofInstance* data, gpointer user_data)
 {
     AssocDialog *assoc_dialog = user_data;
@@ -566,17 +708,39 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
         display_uri = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
 
         gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), &iter,
-                            DATE_TRANS, datebuff,
+                            DATE_ITEM, datebuff,
                             DATE_INT64, t, // used just for sorting date column
-                            DESC_TRANS, xaccTransGetDescription (trans),
+                            DESC_ITEM, xaccTransGetDescription (trans),
                             DISPLAY_URI, display_uri, AVAILABLE, _("Unknown"),
-                            URI_SPLIT, split, URI, uri,
+                            ITEM_POINTER, split, URI, uri,
                             URI_RELATIVE, rel, // used just for sorting relative column
                             URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
         g_free (display_uri);
         g_free (scheme);
         g_free (uri);
     }
+}
+
+static void
+get_bus_info (AssocDialog *assoc_dialog)
+{
+    QofBook *book = gnc_get_current_book();
+
+    /* disconnect the model from the treeview */
+    assoc_dialog->model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
+    g_object_ref (G_OBJECT(assoc_dialog->model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), NULL);
+
+    /* Clear the list store */
+    gtk_list_store_clear (GTK_LIST_STORE(assoc_dialog->model));
+
+    /* Loop through the invoices */
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
+                            add_bus_info_to_model, assoc_dialog);
+
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), assoc_dialog->model);
+    g_object_unref (G_OBJECT(assoc_dialog->model));
 }
 
 static void
@@ -618,7 +782,11 @@ gnc_assoc_dialog_reload_button_cb (GtkWidget *widget, gpointer user_data)
         gnc_assoc_set_path_head_label (assoc_dialog->path_head_label, NULL, NULL);
     }
     g_free (path_head);
-    get_trans_info (assoc_dialog);
+
+    if (assoc_dialog->is_list_trans)
+        get_trans_info (assoc_dialog);
+    else
+        get_bus_info (assoc_dialog);
 }
 
 static void
@@ -672,8 +840,6 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
         g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_close_button_cb), assoc_dialog);
 
-    gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Transaction Associations"));
-
     // Set the widget name and style context for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-transaction-associations");
     gnc_widget_style_context_add_class (GTK_WIDGET(window), "gnc-class-association");
@@ -689,9 +855,6 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     // set the Associate column to be the one that expands
     tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "assoc"));
     gtk_tree_view_column_set_expand (tree_column, TRUE);
-
-    g_signal_connect (assoc_dialog->view, "row-activated",
-                      G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
 
     /* default sort order */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gtk_tree_view_get_model(
@@ -710,12 +873,42 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     g_signal_connect (assoc_dialog->window, "key_press_event",
                       G_CALLBACK(gnc_assoc_dialog_window_key_press_cb), assoc_dialog);
 
+    // Setup the correct parts for each dialog
+    if (assoc_dialog->is_list_trans)
+    {
+        GObject *desc_item_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_item"));
+        GObject *desc_id_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_id"));
+
+        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Associations"));
+
+        gtk_tree_view_column_set_visible (GTK_TREE_VIEW_COLUMN(desc_id_tree_column), FALSE);
+        gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN(desc_item_tree_column), _("Description"));
+
+        g_signal_connect (assoc_dialog->view, "row-activated",
+                          G_CALLBACK(row_selected_trans_cb), (gpointer)assoc_dialog);
+        gnc_restore_window_size (GNC_PREFS_GROUP_TRANS, GTK_WINDOW(assoc_dialog->window), parent);
+        get_trans_info (assoc_dialog);
+    }
+    else
+    {
+        GtkWidget *help_label = GTK_WIDGET(gtk_builder_get_object (builder, "help_label"));
+        const gchar *item_string = N_(
+            "         To jump to the Business Item, double click on the entry in the id\n"
+            " column, Association column to open the Association or Available to update");
+
+        gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Associations"));
+        gtk_label_set_text (GTK_LABEL(help_label), gettext (item_string));
+
+        g_signal_connect (assoc_dialog->view, "row-activated",
+                          G_CALLBACK(row_selected_bus_cb), (gpointer)assoc_dialog);
+        gnc_restore_window_size (GNC_PREFS_GROUP_BUS, GTK_WINDOW(assoc_dialog->window), parent);
+        get_bus_info (assoc_dialog);
+    }
+
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, assoc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window), parent);
-    get_trans_info (assoc_dialog);
     gtk_widget_show_all (GTK_WIDGET(window));
 
     gtk_tree_view_columns_autosize (GTK_TREE_VIEW(assoc_dialog->view));
@@ -728,7 +921,10 @@ close_handler (gpointer user_data)
     AssocDialog *assoc_dialog = user_data;
 
     ENTER(" ");
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window));
+    if (assoc_dialog->is_list_trans)
+        gnc_save_window_size (GNC_PREFS_GROUP_TRANS, GTK_WINDOW(assoc_dialog->window));
+    else
+        gnc_save_window_size (GNC_PREFS_GROUP_BUS, GTK_WINDOW(assoc_dialog->window));
     gtk_widget_destroy (GTK_WIDGET(assoc_dialog->window));
     LEAVE(" ");
 }
@@ -745,37 +941,64 @@ show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     AssocDialog *assoc_dialog = user_data;
+    gboolean is_bus = GPOINTER_TO_INT(iter_data);
 
     ENTER(" ");
     if (!assoc_dialog)
     {
         LEAVE("No data structure");
-        return(FALSE);
+        return (FALSE);
     }
+
+    // test if the dialog is the right one
+    if (is_bus == assoc_dialog->is_list_trans)
+        return (FALSE);
+
     gtk_window_present (GTK_WINDOW(assoc_dialog->window));
     LEAVE(" ");
-    return(TRUE);
+    return (TRUE);
 }
 
-/********************************************************************\
- * gnc_assoc_trans_dialog                                           *
- * opens a window showing the Associations of all Transactions      *
- *                                                                  *
- * Args:   parent  - the parent of the window to be created         *
- * Return: nothing                                                  *
-\********************************************************************/
+void
+gnc_assoc_business_dialog (GtkWindow *parent)
+{
+    AssocDialog *assoc_dialog;
+
+    ENTER(" ");
+    if (gnc_forall_gui_components (DIALOG_ASSOC_CM_CLASS, show_handler, GINT_TO_POINTER(1)))
+    {
+        LEAVE("Existing dialog raised");
+        return;
+    }
+    assoc_dialog = g_new0 (AssocDialog, 1);
+
+    assoc_dialog->is_list_trans = FALSE;
+
+    gnc_assoc_dialog_create (parent, assoc_dialog);
+
+    assoc_dialog->component_id = gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
+                                                             refresh_handler, close_handler,
+                                                             assoc_dialog);
+
+    gnc_gui_component_set_session (assoc_dialog->component_id,
+                                   assoc_dialog->session);
+
+    LEAVE(" ");
+}
+
 void
 gnc_assoc_trans_dialog (GtkWindow *parent)
 {
     AssocDialog *assoc_dialog;
 
     ENTER(" ");
-    if (gnc_forall_gui_components (DIALOG_ASSOC_CM_CLASS, show_handler, NULL))
+    if (gnc_forall_gui_components (DIALOG_ASSOC_CM_CLASS, show_handler, GINT_TO_POINTER(0)))
     {
         LEAVE("Existing dialog raised");
         return;
     }
     assoc_dialog = g_new0 (AssocDialog, 1);
+    assoc_dialog->is_list_trans = TRUE;
 
     gnc_assoc_dialog_create (parent, assoc_dialog);
 

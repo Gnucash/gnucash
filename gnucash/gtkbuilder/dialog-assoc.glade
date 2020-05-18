@@ -469,13 +469,15 @@
       <column type="gchararray"/>
       <!-- column-name date_int64 -->
       <column type="gint64"/>
-      <!-- column-name desc -->
+      <!-- column-name desc_id -->
+      <column type="gchararray"/>
+      <!-- column-name desc_item -->
       <column type="gchararray"/>
       <!-- column-name display_uri -->
       <column type="gchararray"/>
       <!-- column-name available -->
       <column type="gchararray"/>
-      <!-- column-name split -->
+      <!-- column-name item_pointer -->
       <column type="gpointer"/>
       <!-- column-name uri -->
       <column type="gchararray"/>
@@ -621,16 +623,28 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="trans-desc">
+                  <object class="GtkTreeViewColumn" id="desc_id">
+                    <property name="title" translatable="yes">Id</property>
+                    <property name="sort_column_id">2</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="desc_item">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Description</property>
+                    <property name="title" translatable="yes">Type</property>
                     <property name="alignment">0.5</property>
                     <property name="reorderable">True</property>
-                    <property name="sort_column_id">2</property>
+                    <property name="sort_column_id">3</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                       <attributes>
-                        <attribute name="text">2</attribute>
+                        <attribute name="text">3</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -641,13 +655,13 @@
                     <property name="title" translatable="yes">Association</property>
                     <property name="alignment">0.5</property>
                     <property name="reorderable">True</property>
-                    <property name="sort_column_id">3</property>
+                    <property name="sort_column_id">4</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext3">
                         <property name="ellipsize">start</property>
                       </object>
                       <attributes>
-                        <attribute name="text">3</attribute>
+                        <attribute name="text">4</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -657,13 +671,13 @@
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes">Available ?</property>
                     <property name="alignment">0.5</property>
-                    <property name="sort_column_id">4</property>
+                    <property name="sort_column_id">5</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext4">
                         <property name="xpad">10</property>
                       </object>
                       <attributes>
-                        <attribute name="text">4</attribute>
+                        <attribute name="text">5</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -671,11 +685,11 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="relative">
                     <property name="title" translatable="yes">Relative</property>
-                    <property name="sort_column_id">7</property>
+                    <property name="sort_column_id">8</property>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cellrendererpix1"/>
                       <attributes>
-                        <attribute name="icon-name">8</attribute>
+                        <attribute name="icon-name">9</attribute>
                       </attributes>
                     </child>
                   </object>

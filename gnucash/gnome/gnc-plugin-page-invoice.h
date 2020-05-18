@@ -103,6 +103,16 @@ void gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_post
  */
 void gnc_plugin_page_invoice_update_title (GncPluginPage *page);
 
+
+/** Find the Invoice Window amongst the plugin pages for an Invoice,
+ *  if not present return NULL.
+ *
+ *  @param page A pointer to an invoice.
+ * 
+ *  @return The invoice or NULL.
+ */
+InvoiceWindow * gnc_plugin_page_invoice_get_window (GncInvoice *invoice);
+
 G_END_DECLS
 /** @} */
 /** @} */

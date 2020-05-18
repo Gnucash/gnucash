@@ -502,6 +502,26 @@ static GObjectClass *parent_class = NULL;
 /*                      Implementation                      */
 /************************************************************/
 
+InvoiceWindow *
+gnc_plugin_page_invoice_get_window (GncInvoice *invoice)
+{
+    GncPluginPageInvoicePrivate *priv;
+    GncPluginPageInvoice *invoice_page;
+    const GList *item;
+
+    /* Is there an existing page? */
+    item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_INVOICE_NAME);
+    for ( ; item; item = g_list_next(item))
+    {
+        invoice_page = (GncPluginPageInvoice *)item->data;
+        priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_page);
+
+        if (gnc_invoice_window_get_invoice (priv->iw) == invoice)
+            return priv->iw;
+    }
+    return NULL;
+}
+
 GncPluginPage *
 gnc_plugin_page_invoice_new (InvoiceWindow *iw)
 {

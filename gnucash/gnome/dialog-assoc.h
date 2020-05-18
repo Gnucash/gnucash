@@ -45,7 +45,18 @@ gchar * gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const g
  */
 void gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri);
 
-/** Preset a dialog to list all the Transaction associations.
+/** Present a dialog to list all the Invoice associations.
+ *
+ *  A query is run to return all the invoice associations which
+ *  are then added to a tree view. From this tree view the invoice
+ *  and association can be opened along with a dialog to edit the
+ *  association.
+ *
+ *  @param parent The GtkWindow for the parent widget
+ */
+void gnc_assoc_business_dialog (GtkWindow *parent);
+
+/** Present a dialog to list all the Transaction associations.
  *
  *  A query is run to return all the transaction associations which
  *  are then added to a tree view. From this tree view the transaction

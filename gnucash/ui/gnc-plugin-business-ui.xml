@@ -42,6 +42,8 @@
 	  <menuitem name="EmployeeProcessPayment"   action="EmployeeProcessPaymentAction"/>
 	</menu>
 
+	<menuitem name="BusinessAssocOpen" action="BusinessAssocOpenAction"/>
+
         <placeholder name="BusinessPlaceholderTop"/>
         <separator name="Sep1"/>
 

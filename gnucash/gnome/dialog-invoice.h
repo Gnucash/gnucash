@@ -81,6 +81,8 @@ GncInvoice * gnc_invoice_window_get_invoice (InvoiceWindow *iw);
 
 GtkWidget * gnc_invoice_window_get_assoc_link_button (InvoiceWindow *iw);
 
+void gnc_invoice_update_assoc_for_window (GncInvoice *invoice, const gchar *uri);
+
 GncInvoiceType gnc_invoice_get_type_from_window(InvoiceWindow *iw);
 
 #ifdef __GNC_PLUGIN_PAGE_H

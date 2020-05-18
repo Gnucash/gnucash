@@ -42,10 +42,11 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-/***********************************************************************/
+/* =================================================================== */
 
 static gchar *
-convert_uri_to_abs_path (const gchar *path_head, const gchar *uri, gchar *uri_scheme, gboolean return_uri)
+convert_uri_to_abs_path (const gchar *path_head, const gchar *uri, 
+                         gchar *uri_scheme, gboolean return_uri)
 {
     gchar *ret_value = NULL;
 
@@ -159,7 +160,7 @@ gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
     return g_strdup (uri);
 }
 
-/***********************************************************************/
+/* =================================================================== */
 
 static gchar *
 assoc_get_path_head_and_set (gboolean *path_head_set)
@@ -261,7 +262,7 @@ gnc_assoc_set_path_head_label (GtkWidget *path_head_label, const gchar *incoming
     g_free (path_head);
 }
 
-/***********************************************************************/
+/* =================================================================== */
 
 typedef struct
 {

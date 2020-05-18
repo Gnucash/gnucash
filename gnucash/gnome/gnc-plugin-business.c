@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "dialog-assoc.h"
 #include "dialog-billterms.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
@@ -113,6 +114,8 @@ static void gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *ac
 static void gnc_plugin_business_cmd_employee_process_payment      (GtkAction *action,
         GncMainWindowActionData *data);
 
+static void gnc_plugin_business_cmd_assoc              (GtkAction *action,
+        GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_tax_tables         (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_billing_terms      (GtkAction *action,
@@ -271,6 +274,11 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
 
     /* Other menu items */
+    {
+        "BusinessAssocOpenAction", NULL, N_("Business _Associations"), NULL,
+        N_("View all Business Associations"),
+        G_CALLBACK (gnc_plugin_business_cmd_assoc)
+    },
     {
         "TaxTablesOpenAction", NULL, N_("Sales _Tax Table"), NULL,
         N_("View and edit the list of Sales Tax Tables (GST/VAT)"),
@@ -742,6 +750,16 @@ gnc_plugin_business_cmd_employee_process_payment (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     gnc_ui_payment_new (GTK_WINDOW (mw->window), priv->last_employee, gnc_get_current_book ());
+}
+
+static void
+gnc_plugin_business_cmd_assoc (GtkAction *action,
+                               GncMainWindowActionData *mw)
+{
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    gnc_assoc_business_dialog (GTK_WINDOW (mw->window));
 }
 
 static void
