@@ -45,17 +45,6 @@ gchar * gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const g
  */
 void gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri);
 
-/** Corrects an earlier relative file association forrmat.
- *
- *  Prior to version 3.5, relative paths were stored starting as 'file:'
- *  or 'file:/' depending on OS. This function changes them so that
- *  relative paths are stored without a leading "/" and in native form.
- *
- *  @param trans The Transaction holding the association
- *  @param book_ro TRUE if the book is read only
- */
-gchar * gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro);
-
 /** Preset a dialog to list all the Transaction associations.
  *
  *  A query is run to return all the transaction associations which

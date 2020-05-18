@@ -38,6 +38,7 @@
 #include "SX-book.h"
 #include "dialog-account.h"
 #include "dialog-assoc.h"
+#include "dialog-assoc-utils.h"
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "gnc-component-manager.h"

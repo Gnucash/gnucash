@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "dialog-assoc.h"
+#include "dialog-assoc-utils.h"
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -76,168 +77,14 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /***********************************************************************/
 
-static gchar *
-convert_uri_to_abs_path (const gchar *path_head, const gchar *uri, gchar *uri_scheme, gboolean return_uri)
-{
-    gchar *ret_value = NULL;
-
-    if (!uri_scheme) // relative path
-    {
-        gchar *path = gnc_uri_get_path (path_head);
-        gchar *file_path = gnc_file_path_absolute (path, uri);
-
-        if (return_uri)
-            ret_value = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, file_path);
-        else
-            ret_value = g_strdup (file_path);
-
-        g_free (path);
-        g_free (file_path);
-    }
-
-    if (g_strcmp0 (uri_scheme, "file") == 0) // absolute path
-    {
-        if (return_uri)
-            ret_value = g_strdup (uri);
-        else
-            ret_value = gnc_uri_get_path (uri);
-    }
-    return ret_value;
-}
-
-static gchar *
-assoc_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
-{
-    gchar *display_str = NULL;
-
-    if (uri && *uri)
-    {
-        // if scheme is null or 'file' we should get a file path
-        gchar *file_path = convert_uri_to_abs_path (path_head, uri, uri_scheme, FALSE);
-
-        if (file_path)
-            display_str = g_uri_unescape_string (file_path, NULL);
-        else
-            display_str = g_uri_unescape_string (uri, NULL);
-
-        g_free (file_path);
-
-#ifdef G_OS_WIN32 // make path look like a traditional windows path
-        display_str = g_strdelimit (display_str, "/", '\\');
-#endif
-    }
-    DEBUG("Return display string is '%s'", display_str);
-    return display_str;
-}
-
-static gchar *
-assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
-{
-    gchar *use_str = NULL;
-
-    if (uri && *uri)
-    {
-        // if scheme is null or 'file' we should get a file path
-        gchar *file_path = convert_uri_to_abs_path (path_head, uri, uri_scheme, TRUE);
-
-        if (file_path)
-            use_str = g_strdup (file_path);
-        else
-            use_str = g_strdup (uri);
-
-        g_free (file_path);
-    }
-    DEBUG("Return use string is '%s'", use_str);
-    return use_str;
-}
-
-static gchar *
-assoc_get_path_head_and_set (gboolean *path_head_set)
-{
-    gchar *ret_path = NULL;
-    gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
-    *path_head_set = FALSE;
-
-    if (path_head && *path_head) // not default entry
-    {
-        *path_head_set = TRUE;
-        ret_path = g_strdup (path_head);
-    }
-    else
-    {
-        const gchar *doc = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
-
-        if (doc)
-            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, doc);
-        else
-            ret_path = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, gnc_userdata_dir ());
-    }
-    // make sure there is a trailing '/'
-    if (!g_str_has_suffix (ret_path, "/"))
-    {
-        gchar *folder_with_slash = g_strconcat (ret_path, "/", NULL);
-        g_free (ret_path);
-        ret_path = g_strdup (folder_with_slash);
-        g_free (folder_with_slash);
-
-        if (*path_head_set) // prior to 3.5, assoc-head could be with or without a trailing '/'
-        {
-            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path))
-                PINFO ("Failed to save preference at %s, %s with %s",
-                       GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path);
-        }
-    }
-    g_free (path_head);
-    return ret_path;
-}
-
-static gchar *
-assoc_get_path_head (void)
-{
-    gboolean path_head_set = FALSE;
-
-    return assoc_get_path_head_and_set (&path_head_set);
-}
-
-static void
-assoc_set_path_head_label (GtkWidget *path_head_label)
-{
-    gboolean path_head_set = FALSE;
-    gchar *path_head = assoc_get_path_head_and_set (&path_head_set);
-    gchar *scheme = gnc_uri_get_scheme (path_head);
-    gchar *path_head_str = assoc_get_unescape_uri (NULL, path_head, scheme);
-    gchar *path_head_text;
-
-    if (path_head_set)
-    {
-        // test for current folder being present
-        if (g_file_test (path_head_str, G_FILE_TEST_IS_DIR))
-            path_head_text = g_strdup_printf ("%s '%s'", _("Path head for files is,"), path_head_str);
-        else
-            path_head_text = g_strdup_printf ("%s '%s'", _("Path head does not exist,"), path_head_str);
-    }
-    else
-        path_head_text = g_strdup_printf (_("Path head not set, using '%s' for relative paths"), path_head_str);
-
-    gtk_label_set_text (GTK_LABEL(path_head_label), path_head_text);
-
-    // Set the style context for this label so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(path_head_label), "gnc-class-highlight");
-
-    g_free (scheme);
-    g_free (path_head_str);
-    g_free (path_head_text);
-    g_free (path_head);
-}
-
 void
 gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri)
 {
     if (uri && *uri)
     {
         gchar     *scheme = gnc_uri_get_scheme (uri);
-        gchar  *path_head = assoc_get_path_head ();
-        gchar    *run_uri = assoc_get_use_uri (path_head, uri, scheme);
+        gchar  *path_head = gnc_assoc_get_path_head ();
+        gchar    *run_uri = gnc_assoc_get_use_uri (path_head, uri, scheme);
         gchar *run_scheme = gnc_uri_get_scheme (run_uri);
 
         PINFO("Open uri scheme is '%s', uri is '%s'", run_scheme, run_uri);
@@ -344,13 +191,13 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
 static void
 setup_file_dialog (GtkFileChooserWidget *fc, const gchar *path_head, const gchar *uri, gchar *scheme)
 {
-    gchar *display_uri = assoc_get_unescape_uri (path_head, uri, scheme);
+    gchar *display_uri = gnc_assoc_get_unescape_uri (path_head, uri, scheme);
 
     if (display_uri)
     {
         GtkWidget *label, *hbox;
         GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
-        gchar     *use_uri = assoc_get_use_uri (path_head, uri, scheme);
+        gchar     *use_uri = gnc_assoc_get_use_uri (path_head, uri, scheme);
         gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Association is"), display_uri);
 
         hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -391,7 +238,7 @@ gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *ur
     GtkWidget *head_label;
     int result;
     gchar *ret_uri = NULL;
-    gchar *path_head = assoc_get_path_head ();
+    gchar *path_head = gnc_assoc_get_path_head ();
     gchar *scheme = NULL;
 
     /* Create the dialog box */
@@ -431,7 +278,7 @@ gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *ur
     g_signal_connect (button_loc, "toggled", G_CALLBACK(uri_type_selected_cb), entry);
 
     // display path head text and test if present
-    assoc_set_path_head_label (head_label);
+    gnc_assoc_set_path_head_label (head_label, NULL, NULL);
 
     // Check for uri is empty or NULL
     if (uri && *uri)
@@ -565,7 +412,7 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
 
         if (!scheme || gnc_uri_is_file_scheme (scheme))
         {
-            gchar *filename = assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
+            gchar *filename = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
 
             if (g_file_test (filename, G_FILE_TEST_EXISTS))
                 gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("File Found"), -1);
@@ -609,7 +456,7 @@ update_model_with_changes (AssocDialog *assoc_dialog, GtkTreeIter *iter, const g
     if (!scheme) // path is relative
         rel = TRUE;
 
-    display_uri = assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
+    display_uri = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
     gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), iter,
                         DISPLAY_URI, display_uri, AVAILABLE, _("File Found"),
                         URI, uri,
@@ -693,34 +540,6 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
     g_free (uri);
 }
 
-gchar*
-gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
-{
-    const gchar *uri = xaccTransGetAssociation (trans); // get the existing uri
-    const gchar *part = NULL;
-
-    if (!uri)
-        return NULL;
-
-    if (g_str_has_prefix (uri, "file:") && !g_str_has_prefix (uri,"file://"))
-    {
-        /* fix an earlier error when storing relative paths before version 3.5
-         * they were stored starting as 'file:' or 'file:/' depending on OS
-         * relative paths are stored without a leading "/" and in native form
-         */
-        if (g_str_has_prefix (uri,"file:/"))
-            part = uri + strlen ("file:/");
-        else if (g_str_has_prefix (uri,"file:"))
-            part = uri + strlen ("file:");
-
-        if (!xaccTransGetReadOnly (trans) && !book_ro)
-            xaccTransSetAssociation (trans, part);
-
-        return g_strdup (part);
-    }
-    return g_strdup (uri);
-}
-
 static void
 add_trans_info_to_model (QofInstance* data, gpointer user_data)
 {
@@ -749,7 +568,7 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
         if (!scheme) // path is relative
             rel = TRUE;
 
-        display_uri = assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
+        display_uri = gnc_assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
 
         gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), &iter,
                             DATE_TRANS, datebuff,
@@ -793,7 +612,7 @@ static void
 gnc_assoc_dialog_reload_button_cb (GtkWidget *widget, gpointer user_data)
 {
     AssocDialog *assoc_dialog = user_data;
-    gchar          *path_head = assoc_get_path_head ();
+    gchar          *path_head = gnc_assoc_get_path_head ();
 
     if (g_strcmp0 (path_head, assoc_dialog->path_head) != 0)
     {
@@ -801,7 +620,7 @@ gnc_assoc_dialog_reload_button_cb (GtkWidget *widget, gpointer user_data)
         assoc_dialog->path_head = g_strdup (path_head);
 
         // display path head text and test if present
-        assoc_set_path_head_label (assoc_dialog->path_head_label);
+        gnc_assoc_set_path_head_label (assoc_dialog->path_head_label, NULL, NULL);
     }
     g_free (path_head);
     get_trans_info (assoc_dialog);
@@ -867,10 +686,10 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     assoc_dialog->path_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
 
-    assoc_dialog->path_head = assoc_get_path_head ();
+    assoc_dialog->path_head = gnc_assoc_get_path_head ();
 
     // display path head text and test if present
-    assoc_set_path_head_label (assoc_dialog->path_head_label);
+    gnc_assoc_set_path_head_label (assoc_dialog->path_head_label, NULL, NULL);
 
     // set the Associate column to be the one that expands
     tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "assoc"));

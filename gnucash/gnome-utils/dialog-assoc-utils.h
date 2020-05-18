@@ -36,6 +36,43 @@
  */
 gchar * gnc_assoc_get_path_head (void);
 
+/** Sets the label text for displaying the path head in a dialog.
+ *
+ *  @param path_head_label The GtkLabel Widget
+ *  @param incoming_path_head The starting common path head
+ *  @param prefix A text string to place infront of the path head text
+ */
+void gnc_assoc_set_path_head_label (GtkWidget *path_head_label,
+                                    const gchar *incoming_path_head,
+                                    const gchar *prefix);
+
+/** Return a uri that can be used for opening it.
+ *
+ *  The function allocates memory for the uri. The calling function should
+ *  free this memory with g_free when uri is no longer needed.
+ *
+ *  If the uri scheme is 'file' or NULL, an absolute path is created and returned
+ *  otherwise the uri is returned.
+ *
+ *  @param path_head The starting common path head
+ *  @param uri The association
+ *  @param uri_scheme
+ *
+ *  @return The uri used for opening the association.
+ */
+gchar * gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme);
+
+/** Corrects an earlier relative file association forrmat.
+ *
+ *  Prior to version 3.5, relative paths were stored starting as 'file:'
+ *  or 'file:/' depending on OS. This function changes them so that
+ *  relative paths are stored without a leading "/" and in native form.
+ *
+ *  @param trans The Transaction holding the association
+ *  @param book_ro TRUE if the book is read only
+ */
+gchar * gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro);
+
 /** Return an unescaped uri for display use.
  *
  *  The function allocates memory for the uri. The calling function should

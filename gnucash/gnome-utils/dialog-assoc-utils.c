@@ -97,7 +97,7 @@ gnc_assoc_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri
     return display_str;
 }
 
-static gchar *
+gchar *
 gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
 {
     gchar *use_str = NULL;
@@ -118,7 +118,7 @@ gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_sche
     return use_str;
 }
 
-static gchar*
+gchar *
 gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
 {
     const gchar *uri = xaccTransGetAssociation (trans); // get the existing uri
@@ -196,7 +196,7 @@ gnc_assoc_get_path_head (void)
     return assoc_get_path_head_and_set (&path_head_set);
 }
 
-static void
+void
 gnc_assoc_set_path_head_label (GtkWidget *path_head_label, const gchar *incoming_path_head, const gchar *prefix)
 {
     gboolean path_head_set = FALSE;
