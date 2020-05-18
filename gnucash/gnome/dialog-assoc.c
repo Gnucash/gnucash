@@ -600,20 +600,6 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
 }
 
 static void
-gnc_assoc_dialog_check_button_cb (GtkWidget * widget, gpointer user_data)
-{
-    AssocDialog   *assoc_dialog = user_data;
-    assoc_dialog_update (assoc_dialog);
-}
-
-static void
-gnc_assoc_dialog_close_button_cb (GtkWidget * widget, gpointer user_data)
-{
-    AssocDialog   *assoc_dialog = user_data;
-    gnc_close_gui_component (assoc_dialog->component_id);
-}
-
-static void
 row_selected_cb (GtkTreeView *view, GtkTreePath *path,
                   GtkTreeViewColumn  *col, gpointer user_data)
 {
@@ -751,6 +737,47 @@ get_trans_info (AssocDialog *assoc_dialog)
 }
 
 static void
+gnc_assoc_dialog_reload_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+    gchar          *path_head = assoc_get_path_head ();
+
+    if (g_strcmp0 (path_head, assoc_dialog->path_head) != 0)
+    {
+        g_free (assoc_dialog->path_head);
+        assoc_dialog->path_head = g_strdup (path_head);
+
+        // display path head text and test if present
+        assoc_set_path_head_label (assoc_dialog->path_head_label);
+    }
+    g_free (path_head);
+    get_trans_info (assoc_dialog);
+}
+
+static void
+gnc_assoc_dialog_reload_check_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+
+    gnc_assoc_dialog_reload_button_cb (widget, user_data);
+    assoc_dialog_update (assoc_dialog);
+}
+
+static void
+gnc_assoc_dialog_check_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+    assoc_dialog_update (assoc_dialog);
+}
+
+static void
+gnc_assoc_dialog_close_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+    gnc_close_gui_component (assoc_dialog->component_id);
+}
+
+static void
 gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 {
     GtkWidget         *window;
@@ -767,6 +794,11 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     window = GTK_WIDGET(gtk_builder_get_object (builder, "association_window"));
     assoc_dialog->window = window;
     assoc_dialog->session = gnc_get_current_session();
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "reload_button"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_reload_button_cb), assoc_dialog);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "reload_and_check_button"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_reload_check_button_cb), assoc_dialog);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "check_button"));
         g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_check_button_cb), assoc_dialog);
