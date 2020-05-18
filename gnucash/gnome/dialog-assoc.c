@@ -46,7 +46,18 @@
 #define GNC_PREFS_GROUP          "dialogs.trans-assoc"
 
 /** Enumeration for the tree-store */
-enum GncAssocColumn {DATE_TRANS, DESC_TRANS, URI_U, AVAILABLE, URI_SPLIT, URI, URI_RELATIVE};
+enum GncAssocColumn
+{
+    DATE_TRANS,
+    DATE_INT64, // used just for sorting date_trans
+    DESC_TRANS,
+    DISPLAY_URI,
+    AVAILABLE,
+    URI_SPLIT,
+    URI,
+    URI_RELATIVE, // used just for sorting relative_pix
+    URI_RELATIVE_PIX
+};
 
 typedef struct
 {
@@ -528,56 +539,6 @@ gnc_assoc_dialog_window_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpo
         return FALSE;
 }
 
-static gint
-sort_iter_compare_func (GtkTreeModel *model,
-                        GtkTreeIter  *a,
-                        GtkTreeIter  *b,
-                        gpointer  user_data)
-{
-    gint ret = 0;
-    gchar *uri1, *uri2;
-
-    gtk_tree_model_get (model, a, URI_U, &uri1, -1);
-    gtk_tree_model_get (model, b, URI_U, &uri2, -1);
-
-    ret = g_utf8_collate (uri1, uri2);
-
-    g_free (uri1);
-    g_free (uri2);
-
-    return ret;
-}
-
-static void
-assoc_dialog_sort (AssocDialog *assoc_dialog)
-{
-    GtkTreeModel *model;
-    GtkTreeSortable *sortable;
-    gint id;
-    GtkSortType order;
-
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
-
-    sortable = GTK_TREE_SORTABLE(model);
-
-    if (gtk_tree_sortable_get_sort_column_id (sortable, &id, &order))
-    {
-        if (order == GTK_SORT_ASCENDING)
-            order = GTK_SORT_DESCENDING;
-        else
-            order = GTK_SORT_ASCENDING;
-    }
-    else
-    {
-        gtk_tree_sortable_set_sort_func (sortable, URI, sort_iter_compare_func,
-                                         assoc_dialog, NULL);
-
-        order = GTK_SORT_ASCENDING;
-    }
-    /* set sort order */
-    gtk_tree_sortable_set_sort_column_id (sortable, URI, order);
-}
-
 static void
 assoc_dialog_update (AssocDialog *assoc_dialog)
 {
@@ -639,13 +600,6 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
 }
 
 static void
-gnc_assoc_dialog_sort_button_cb (GtkWidget * widget, gpointer user_data)
-{
-    AssocDialog   *assoc_dialog = user_data;
-    assoc_dialog_sort (assoc_dialog);
-}
-
-static void
 gnc_assoc_dialog_check_button_cb (GtkWidget * widget, gpointer user_data)
 {
     AssocDialog   *assoc_dialog = user_data;
@@ -673,14 +627,14 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
 
     gtk_tree_model_get (assoc_dialog->model, &iter, URI, &uri, URI_SPLIT, &split, -1);
 
-    // Open associated link
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), URI_U) == col)
+    // Open associated link, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DISPLAY_URI - 1) == col)
         gnc_assoc_open_uri (GTK_WINDOW(assoc_dialog->window), uri);
 
     g_free (uri);
 
-    // Open transaction
-    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_TRANS) == col)
+    // Open transaction, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_TRANS - 1) == col)
     {
         GncPluginPage *page;
         GNCSplitReg   *gsr;
@@ -760,10 +714,12 @@ add_trans_info_to_model (QofInstance* data, gpointer user_data)
 
         gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), &iter,
                             DATE_TRANS, datebuff,
+                            DATE_INT64, t, // used just for sorting date column
                             DESC_TRANS, xaccTransGetDescription (trans),
-                            URI_U, display_uri, AVAILABLE, _("Unknown"),
+                            DISPLAY_URI, display_uri, AVAILABLE, _("Unknown"),
                             URI_SPLIT, split, URI, uri,
-                            URI_RELATIVE, (rel == TRUE ? "emblem-default" : NULL), -1);
+                            URI_RELATIVE, rel, // used just for sorting relative column
+                            URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
         g_free (display_uri);
         g_free (scheme);
         g_free (uri);
@@ -801,7 +757,6 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     GtkBuilder        *builder;
     GtkTreeSelection  *selection;
     GtkTreeViewColumn *tree_column;
-    GtkCellRenderer   *cr;
     GtkWidget         *button;
 
     ENTER(" ");
@@ -813,8 +768,6 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     assoc_dialog->window = window;
     assoc_dialog->session = gnc_get_current_session();
 
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_button"));
-        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_sort_button_cb), assoc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "check_button"));
         g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_check_button_cb), assoc_dialog);
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
@@ -835,26 +788,16 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     assoc_set_path_head_label (assoc_dialog->path_head_label);
 
     // set the Associate column to be the one that expands
-    tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "uri-entry"));
+    tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "assoc"));
     gtk_tree_view_column_set_expand (tree_column, TRUE);
-
-    /* Need to add toggle renderers here to get the xalign to work. */
-    tree_column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (tree_column, _("Relative"));
-    gtk_tree_view_append_column (GTK_TREE_VIEW(assoc_dialog->view), tree_column);
-    gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    cr = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
-    // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", URI_RELATIVE, NULL);
-    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     g_signal_connect (assoc_dialog->view, "row-activated",
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
 
-    // set the Associate column to be the one that expands
-    tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "uri-entry"));
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(gtk_tree_view_get_model(
+                                          GTK_TREE_VIEW(assoc_dialog->view))),
+                                          DATE_INT64, GTK_SORT_ASCENDING);
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
@@ -876,6 +819,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     get_trans_info (assoc_dialog);
     gtk_widget_show_all (GTK_WIDGET(window));
 
+    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(assoc_dialog->view));
     LEAVE(" ");
 }
 
