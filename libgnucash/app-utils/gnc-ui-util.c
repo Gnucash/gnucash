@@ -902,6 +902,36 @@ gnc_get_reconcile_flag_order (void)
     return flags;
 }
 
+const char *
+gnc_get_association_str (char association_flag)
+{
+    switch (association_flag)
+    {
+    case WASSOC:
+        return C_("Association flag for 'web'", "w");
+    case FASSOC:
+        return C_("Association flag for 'file'", "f");
+    case ' ':
+        return " ";
+    default:
+        PERR("Bad association flag");
+        return NULL;
+    }
+}
+
+const char *
+gnc_get_association_valid_flags (void)
+{
+    static const char flags[] = { FASSOC, WASSOC, ' ', 0 };
+    return flags;
+}
+
+const char *
+gnc_get_association_flag_order (void)
+{
+    static const char flags[] = { FASSOC, WASSOC, ' ', 0 };
+    return flags;
+}
 
 static const char *
 equity_base_name (GNCEquityType equity_type)
@@ -1522,7 +1552,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     }
     min_dp = info->min_decimal_places;
     max_dp = info->max_decimal_places;
-    
+
     /* Don to limit the number of decimal places _UNLESS_ force_fit is
      * true. */
     if (!info->force_fit)

@@ -396,6 +396,7 @@ gnucash/register/ledger-core/split-register-load.c
 gnucash/register/ledger-core/split-register-model.c
 gnucash/register/ledger-core/split-register-model-save.c
 gnucash/register/ledger-core/split-register-util.c
+gnucash/register/register-core/assoccell.c
 gnucash/register/register-core/basiccell.c
 gnucash/register/register-core/cellblock.c
 gnucash/register/register-core/cell-factory.c
