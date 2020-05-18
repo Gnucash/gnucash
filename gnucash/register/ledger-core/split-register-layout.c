@@ -699,7 +699,7 @@ gnc_split_register_layout_add_cells (SplitRegister* reg,
 
     gnc_register_add_cell (layout,
                            ASSOC_CELL,
-                           RECN_CELL_TYPE_NAME,
+                           ASSOC_CELL_TYPE_NAME,
                            C_ ("Column header for 'Associate'", "A"),
                            CELL_ALIGN_CENTER,
                            FALSE,

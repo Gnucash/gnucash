@@ -34,6 +34,7 @@
 #include "gnc-gui-query.h"
 #include "numcell.h"
 #include "quickfillcell.h"
+#include "assoccell.h"
 #include "recncell.h"
 #include "split-register.h"
 #include "split-register-p.h"
@@ -71,19 +72,22 @@ gnc_split_register_load_recn_cells (SplitRegister* reg)
 static void
 gnc_split_register_load_associate_cells (SplitRegister* reg)
 {
-    RecnCell* cell;
+    AssocCell *cell;
+    const char * s;
 
     if (!reg) return;
 
-    cell = (RecnCell*)
+    cell = (AssocCell *)
            gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
 
     if (!cell) return;
 
     /* FIXME: These should get moved to an i18n function */
-    gnc_recn_cell_set_valid_flags (cell, "fw ", ' ');
-    gnc_recn_cell_set_flag_order (cell, "fw ");
-    gnc_recn_cell_set_read_only (cell, TRUE);
+    s = gnc_get_association_valid_flags ();
+    gnc_assoc_cell_set_valid_flags (cell, s, ' ');
+    gnc_assoc_cell_set_flag_order (cell, gnc_get_association_flag_order ());
+    gnc_assoc_cell_set_string_getter (cell, gnc_get_association_str);
+    gnc_assoc_cell_set_read_only (cell, TRUE);
 }
 
 static void
@@ -411,6 +415,9 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     gnc_price_cell_set_print_info
     ((PriceCell*) gnc_table_layout_get_cell (table->layout, CRED_CELL),
      gnc_account_print_info (default_account, FALSE));
+
+    gnc_assoc_cell_set_use_glyphs
+    ((AssocCell *) gnc_table_layout_get_cell (table->layout, ASSOC_CELL));
 
     /* make sure we have a blank split */
     if (blank_split == NULL)

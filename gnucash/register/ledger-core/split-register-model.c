@@ -33,6 +33,7 @@
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
+#include "assoccell.h"
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register.h"
@@ -840,8 +841,13 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
     SplitRegister* reg = user_data;
     Transaction* trans;
     char associate;
-    static char s[2];
     const char* uri;
+    AssocCell *cell;
+
+    cell = (AssocCell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+
+    if (!cell)
+        return NULL;
 
     trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
     if (!trans)
@@ -851,24 +857,41 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
     uri = xaccTransGetAssociation (trans);
 
     // Check for uri is empty or NULL
-    if (uri && g_strcmp0 (uri, "") != 0)
+    if (uri && *uri)
     {
         gchar* scheme = gnc_uri_get_scheme (uri);
 
         if (!scheme || g_strcmp0 (scheme, "file") == 0)
-            associate = 'f';
+            associate = FASSOC;
         else
-            associate = 'w';
+            associate = WASSOC;
 
         g_free (scheme);
     }
     else
         associate = ' ';
 
-    s[0] = associate;
-    s[1] = '\0';
+    if (gnc_assoc_get_use_glyphs (cell))
+        return gnc_assoc_get_glyph_from_flag (associate);
 
-    return s;
+    if (translate)
+        return gnc_get_association_str (associate);
+    else
+    {
+        static char s[2];
+
+        s[0] = associate;
+        s[1] = '\0';
+        return s;
+    }
+}
+
+static char *
+gnc_split_register_get_associate_help (VirtualLocation virt_loc,
+                                       gpointer user_data)
+{
+    // do not want contents displayed as help so return space
+    return g_strdup (" ");
 }
 
 #if 0
@@ -877,13 +900,13 @@ static char
 gnc_split_register_get_associate_value (SplitRegister* reg,
                                         VirtualLocation virt_loc)
 {
-    RecnCell* cell;
+    AssocCell *cell;
 
-    cell = (RecnCell*)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    cell = (AssocCell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
     if (!cell)
         return '\0';
 
-    return gnc_recn_cell_get_flag (cell);
+    return gnc_assoc_cell_get_flag (cell);
 }
 #endif
 
@@ -2028,6 +2051,16 @@ gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
 }
 
 static CellIOFlags
+gnc_split_register_get_assoc_io_flags (VirtualLocation virt_loc,
+                                       gpointer user_data)
+{
+    if (gnc_split_register_cursor_is_readonly (virt_loc, user_data))
+        return XACC_CELL_ALLOW_READ_ONLY;
+
+    return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+}
+
+static CellIOFlags
 gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
@@ -2786,6 +2819,10 @@ gnc_split_register_model_new (void)
                                       gnc_split_register_get_fdebt_help,
                                       FDEBT_CELL);
 
+    gnc_table_model_set_help_handler (model,
+                                      gnc_split_register_get_associate_help,
+                                      ASSOC_CELL);
+
     // io flag handlers
     gnc_table_model_set_io_flags_handler (
         model, gnc_split_register_get_standard_io_flags, DATE_CELL);
@@ -2838,7 +2875,7 @@ gnc_split_register_model_new (void)
         model, gnc_split_register_get_recn_io_flags, RECN_CELL);
 
     gnc_table_model_set_io_flags_handler (
-        model, gnc_split_register_get_recn_io_flags, ASSOC_CELL);
+        model, gnc_split_register_get_assoc_io_flags, ASSOC_CELL);
 
     gnc_table_model_set_io_flags_handler (
         model, gnc_split_register_get_recn_io_flags, TYPE_CELL);
