@@ -107,6 +107,9 @@ static char        *log_to_filename  = NULL;
 static int          nofile           = 0;
 static const gchar *gsettings_prefix = NULL;
 static const char  *add_quotes_file  = NULL;
+static const char  *run_report       = NULL;
+static const char  *export_type      = NULL;
+static const char  *output_file      = NULL;
 static char        *namespace_regexp = NULL;
 static const char  *file_to_load     = NULL;
 static gchar      **args_remaining   = NULL;
@@ -158,6 +161,18 @@ static GOptionEntry options[] =
         /* Translators: Argument description for autohelp; see
            http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
         N_("FILE")
+    },
+    {
+        "run-report", '\0', 0, G_OPTION_ARG_STRING, &run_report,
+        N_("Runs a report"), N_("FILE")
+    },
+    {
+        "export-type", '\0', 0, G_OPTION_ARG_STRING, &export_type,
+        N_("Specify export type"), NULL
+    },
+    {
+        "output-file", '\0', 0, G_OPTION_ARG_STRING, &output_file,
+        N_("Output file for report default gnucash.html"), N_("FILE")
     },
     {
         "namespace", '\0', 0, G_OPTION_ARG_STRING, &namespace_regexp,
@@ -595,6 +610,82 @@ get_file_to_load()
         return gnc_history_get_last();
 }
 
+static void
+report_session_percentage (const char *message, double percent)
+{
+    static double previous = 0.0;
+    if ((percent - previous) < 5.0)
+        return;
+    fprintf (stderr, "\r%3.0f%% complete...", percent);
+    previous = percent;
+    return;
+}
+
+static void
+inner_main_run_report (void *closure, int argc, char **argv)
+{
+    QofSession *session = NULL;
+    SCM cmdline, report, type, file;
+    const gchar *datafile;
+
+    scm_c_eval_string("(debug-set! stack 200000)");
+    scm_c_use_module ("gnucash utilities");
+    scm_c_use_module ("gnucash app-utils");
+    scm_c_use_module ("gnucash reports");
+
+    gnc_report_init ();
+    load_system_config();
+    load_user_config();
+    gnc_prefs_init ();
+    qof_event_suspend ();
+    datafile = get_file_to_load();
+
+    cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
+    report = scm_from_utf8_string (run_report);
+    type = export_type ? scm_from_utf8_string (export_type) : SCM_BOOL_F;
+    file = output_file ? scm_from_utf8_string (output_file) : SCM_BOOL_F;
+
+    /* dry-run? is #t: check options to check validity of options */
+    if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
+        goto fail;
+
+    fprintf (stderr, "Loading datafile %s...\n", datafile);
+
+    session = gnc_get_current_session ();
+    if (!session) goto fail;
+
+    qof_session_begin (session, datafile, TRUE, FALSE, FALSE);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_load (session, report_session_percentage);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    fprintf (stderr, "\n");
+
+    /* dry-run? is #f: run the report */
+    scm_call_4 (cmdline, report, type, file, SCM_BOOL_F);
+
+    qof_session_end (session);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_destroy (session);
+
+    qof_event_resume ();
+    gnc_shutdown (0);
+    return;
+fail:
+    if (session)
+    {
+        if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+            g_warning ("Session Error: %d %s",
+                       qof_session_get_error (session),
+                       qof_session_get_error_message (session));
+        qof_session_destroy (session);
+    }
+    qof_event_resume ();
+    gnc_shutdown (1);
+}
+
 extern SCM scm_init_sw_gnome_module(void);
 
 static void
@@ -914,6 +1005,14 @@ main(int argc, char ** argv)
     {
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
+    }
+
+
+    /* If asked via a command line parameter, run report only */
+    if (run_report)
+    {
+        scm_boot_guile (argc, argv, inner_main_run_report, 0);
+        exit(0);
     }
 
     /* We need to initialize gtk before looking up all modules */
