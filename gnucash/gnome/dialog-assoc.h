@@ -1,6 +1,6 @@
 /********************************************************************\
- * dialog-trans-assoc.h -- Transaction associations dialog          *
- * Copyright (C) 2016 Robert Fewell                                 *
+ * dialog-assoc.h -- Associations dialog                            *
+ * Copyright (C) 2020 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,9 +20,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DIALOG_TRANS_ASSOC_H
-#define DIALOG_TRANS_ASSOC_H
+#ifndef DIALOG_ASSOC_H
+#define DIALOG_ASSOC_H
 
-void gnc_trans_assoc_dialog (GtkWindow *parent);
+void gnc_assoc_trans_dialog (GtkWindow *parent);
 
 #endif

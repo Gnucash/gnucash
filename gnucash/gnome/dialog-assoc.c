@@ -1,6 +1,6 @@
 /********************************************************************\
- * dialog-trans-assoc.c -- Transaction associations dialog          *
- * Copyright (C) 2016 Robert Fewell                                 *
+ * dialog-assoc.c -- Associations dialog                            *
+ * Copyright (C) 2020 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -43,7 +43,7 @@
 #include "gnc-filepath-utils.h"
 #include "Account.h"
 
-#define DIALOG_ASSOC_CM_CLASS    "dialog-trans-assoc"
+#define DIALOG_ASSOC_CM_CLASS    "dialog-assoc"
 #define GNC_PREFS_GROUP          "dialogs.trans-assoc"
 
 /** Enumeration for the tree-store */
@@ -471,9 +471,9 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     ENTER(" ");
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-assoc.glade", "list-store");
-    gnc_builder_add_from_file (builder, "dialog-assoc.glade", "transaction_association_window");
+    gnc_builder_add_from_file (builder, "dialog-assoc.glade", "association_window");
 
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_window"));
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "association_window"));
     assoc_dialog->window = window;
     assoc_dialog->session = gnc_get_current_session();
 
@@ -613,14 +613,14 @@ show_handler (const char *klass, gint component_id,
 }
 
 /********************************************************************\
- * gnc_trans_assoc_dialog                                           *
+ * gnc_assoc_trans_dialog                                           *
  * opens a window showing the Associations of all Transactions      *
  *                                                                  *
  * Args:   parent  - the parent of the window to be created         *
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_trans_assoc_dialog (GtkWindow *parent)
+gnc_assoc_trans_dialog (GtkWindow *parent)
 {
     AssocDialog *assoc_dialog;
 

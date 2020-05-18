@@ -20,7 +20,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="transaction_association_window">
+  <object class="GtkWindow" id="association_window">
     <property name="can_focus">False</property>
     <child type="titlebar">
       <placeholder/>
@@ -30,10 +30,10 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkLabel" id="label3">
+          <object class="GtkLabel" id="title_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">All Transaction Associations</property>
+            <property name="label" translatable="yes">All Associations</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -179,6 +179,9 @@
                     </child>
                   </object>
                 </child>
+                <style>
+                  <class name="gnc-class-treeview"/>
+                </style>
               </object>
             </child>
           </object>
@@ -189,7 +192,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label4">
+          <object class="GtkLabel" id="help_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">     To jump to the Transaction, double click on the entry in the
