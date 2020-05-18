@@ -23,6 +23,48 @@
 #ifndef DIALOG_ASSOC_H
 #define DIALOG_ASSOC_H
 
+/** Present the right edit dialog for the uri.
+ *
+ *  The function allocates memory for the uri. The calling function should
+ *  free this memory with g_free when uri is no longer needed.
+ *
+ *  @param parent The GtkWindow for the parent widget
+ *  @param title The dialog title to be used for the dialog
+ *  @param uri The old uri to be ammended in the dialog
+ *
+ *  @return The ammeded uri, can be NULL if deletion required.
+ */
+gchar * gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *uri);
+
+/** Open the association uri.
+ *
+ *  A check is made for the uri being valid and then gnc_launch_assoc is used
+ *
+ *  @param parent The GtkWindow for the parent widget
+ *  @param uri The association
+ */
+void gnc_assoc_open_uri (GtkWindow *parent, const gchar *uri);
+
+/** Corrects an earlier relative file association forrmat.
+ *
+ *  Prior to version 3.5, relative paths were stored starting as 'file:'
+ *  or 'file:/' depending on OS. This function changes them so that
+ *  relative paths are stored without a leading "/" and in native form.
+ *
+ *  @param trans The Transaction holding the association
+ *  @param book_ro TRUE if the book is read only
+ */
+gchar * gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro);
+
+/** Preset a dialog to list all the Transaction associations.
+ *
+ *  A query is run to return all the transaction associations which
+ *  are then added to a tree view. From this tree view the transaction
+ *  and association can be opened along with a dialog to edit the
+ *  association.
+ *
+ *  @param parent The GtkWindow for the parent widget
+ */
 void gnc_assoc_trans_dialog (GtkWindow *parent);
 
 #endif

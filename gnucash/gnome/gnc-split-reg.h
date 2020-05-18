@@ -275,8 +275,24 @@ const gchar *gnc_split_reg_get_register_state_group (GNCSplitReg *gsr);
 void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file);
-void gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data );
+/** Default transaction association edit handler
+ *
+ *  @param gsr A pointer to GNCSplitReg
+ **/
+void gsr_default_associate_handler (GNCSplitReg *gsr);
+
+/** Default transaction association open handler
+ *
+ *  @param gsr A pointer to GNCSplitReg
+ **/
+void gsr_default_associate_open_handler (GNCSplitReg *gsr);
+
+/** Default transaction association delete handler
+ *
+ *  @param gsr A pointer to GNCSplitReg
+ **/
+void gsr_default_associate_remove_handler (GNCSplitReg *gsr);
+
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
 void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gsr_default_cut_txn_handler( GNCSplitReg *gsr, gpointer data );
