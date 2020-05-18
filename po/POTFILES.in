@@ -128,6 +128,7 @@ gnucash/gnome-utils/account-quickfill.c
 gnucash/gnome-utils/assistant-xml-encoding.c
 gnucash/gnome-utils/cursors.c
 gnucash/gnome-utils/dialog-account.c
+gnucash/gnome-utils/dialog-assoc-utils.c
 gnucash/gnome-utils/dialog-book-close.c
 gnucash/gnome-utils/dialog-commodity.c
 gnucash/gnome-utils/dialog-dup-trans.c

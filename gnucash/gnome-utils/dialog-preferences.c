@@ -77,6 +77,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
+#include "dialog-assoc-utils.h"
 
 #define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
 #define GNC_PREFS_GROUP             "dialogs.preferences"
@@ -749,24 +750,29 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
 {
     GtkImage    *image = g_object_get_data (G_OBJECT(fc), "path_head_error");
     const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
-    const gchar *pref = g_object_get_data (G_OBJECT(fc), "pref");
-    gchar       *folder = gtk_file_chooser_get_uri (fc);
+    const gchar  *pref = g_object_get_data (G_OBJECT(fc), "pref");
+    gchar        *folder_uri = gtk_file_chooser_get_uri (fc);
+    gchar *old_path_head_uri = gnc_assoc_get_path_head ();
 
     // make sure path_head ends with a trailing '/', 3.5 onwards
-    if (!g_str_has_suffix (folder, "/"))
+    if (!g_str_has_suffix (folder_uri, "/"))
     {
-        gchar *folder_with_slash = g_strconcat (folder, "/", NULL);
-        g_free (folder);
-        folder = g_strdup (folder_with_slash);
+        gchar *folder_with_slash = g_strconcat (folder_uri, "/", NULL);
+        g_free (folder_uri);
+        folder_uri = g_strdup (folder_with_slash);
         g_free (folder_with_slash);
     }
 
     gtk_widget_hide (GTK_WIDGET(image));
 
-    if (!gnc_prefs_set_string (group, pref, folder))
-        PINFO("Failed to save preference at %s, %s with %s", group, pref, folder);
-
-    g_free (folder);
+    if (!gnc_prefs_set_string (group, pref, folder_uri))
+        PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
+    else
+        gnc_assoc_pref_path_head_changed (GTK_WINDOW(gtk_widget_get_toplevel (
+                                          GTK_WIDGET(fc))), old_path_head_uri);
+    
+    g_free (old_path_head_uri);
+    g_free (folder_uri);
 }
 
 /** Connect a GtkFileChooserButton widget to its stored value in the preferences database.
@@ -785,10 +791,10 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     gchar *uri;
     gboolean folder_set = TRUE;
 
-    g_return_if_fail(GTK_FILE_CHOOSER_BUTTON(fcb));
+    g_return_if_fail (GTK_FILE_CHOOSER_BUTTON(fcb));
 
     if (boxname == NULL)
-        gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(fcb)), &group, &pref);
+        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref);
     else
         gnc_prefs_split_widget_name (boxname, &group, &pref);
 
@@ -796,7 +802,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
     PINFO("Uri is %s", uri);
 
-    if (uri && *uri != '\0') // default entry
+    if (uri && *uri) // default entry
     {
         gchar *path_head = g_filename_from_uri (uri, NULL, NULL);
 
@@ -809,21 +815,19 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
         g_free (path_head);
     }
 
-    image = g_object_get_data(G_OBJECT(fcb), "path_head_error");
+    image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
 
     if (folder_set) // If current folder missing, display error and tt message
         gtk_widget_hide (GTK_WIDGET(image));
     else
     {
-        gchar *uri_u = g_uri_unescape_string (uri, NULL);
-        gchar *path_head = g_filename_from_uri (uri_u, NULL, NULL);
+        gchar *path_head = gnc_assoc_get_unescape_uri (NULL, uri, "file");
         gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
 
-        gtk_widget_set_tooltip_text(GTK_WIDGET(image), ttip);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(image), ttip);
         gtk_widget_show (GTK_WIDGET(image));
 
         g_free (ttip);
-        g_free (uri_u);
         g_free (path_head);
     }
 
@@ -837,7 +841,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_free (pref);
     g_free (uri);
 
-    gtk_widget_show_all(GTK_WIDGET(fcb));
+    gtk_widget_show_all (GTK_WIDGET(fcb));
 }
 
 /** Callback for a 'Clear' button for GtkFileChooserButton widget.
@@ -858,28 +862,40 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     GtkWidget            *box;
     GtkWidget            *fcb_new;
     gchar                *boxname;
+    gchar                *old_path_head_uri = gnc_assoc_get_path_head ();
 
     /* We need to destroy the GtkFileChooserButton and recreate as there
        does not seem to be away of resetting the folder path to NONE */
     box = gtk_widget_get_parent (GTK_WIDGET(fcb));
-    gtk_widget_destroy (GTK_WIDGET(fcb));
+    g_signal_handlers_disconnect_by_func (button, file_chooser_clear_cb, fcb);
 
     if (!gnc_prefs_set_string (group, pref, ""))
         PINFO("Failed to Clear preference at %s, %s", group, pref);
+    else
+        gnc_assoc_pref_path_head_changed (GTK_WINDOW(gtk_widget_get_toplevel (
+                                          GTK_WIDGET(fcb))), old_path_head_uri);
+
+    gtk_widget_destroy (GTK_WIDGET(fcb));
 
     fcb_new = gtk_file_chooser_button_new (_("Select a folder"),
                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
     g_object_set_data (G_OBJECT(fcb_new), "path_head_error", image);
+    g_object_set_data_full (G_OBJECT(fcb_new),"group", g_strdup (group), (GDestroyNotify) g_free);
+    g_object_set_data_full (G_OBJECT(fcb_new),"pref", g_strdup (pref), (GDestroyNotify) g_free);
 
-    gtk_box_pack_start (GTK_BOX (box), fcb_new, TRUE, TRUE, 0);
-    gtk_box_reorder_child (GTK_BOX (box),fcb_new, 0);
+    gtk_box_pack_start (GTK_BOX(box), fcb_new, TRUE, TRUE, 0);
+    gtk_box_reorder_child (GTK_BOX(box), fcb_new, 0);
     gtk_widget_show (fcb_new);
+
+    g_signal_connect (GTK_BUTTON(button), "clicked",
+                      G_CALLBACK(file_chooser_clear_cb), fcb_new);
 
     boxname = g_strconcat ("pref/", group, "/", pref, NULL);
 
     gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(fcb_new), boxname);
     g_free (boxname);
+    g_free (old_path_head_uri);
 }
 
 /****************************************************************************/
@@ -1385,6 +1401,7 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
             gtk_list_store_set (store, &iter, 1, buf, -1);
     g_date_free(gdate);
+    gtk_tree_path_free (path);
 
     locale_currency = gnc_locale_default_currency ();
     currency_name = gnc_commodity_get_printname(locale_currency);
