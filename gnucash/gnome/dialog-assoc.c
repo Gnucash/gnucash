@@ -69,6 +69,7 @@ typedef struct
     GtkWidget    *window;
     GtkWidget    *view;
     GtkWidget    *path_head_label;
+    GtkWidget    *total_entries_label;
     gchar        *path_head;
     gboolean      is_list_trans;
     gboolean      book_ro;
@@ -471,6 +472,22 @@ update_model_with_changes (AssocDialog *assoc_dialog, GtkTreeIter *iter, const g
 }
 
 static void
+update_total_entries (AssocDialog *assoc_dialog)
+{
+    gint entries = gtk_tree_model_iter_n_children (GTK_TREE_MODEL(assoc_dialog->model), NULL);
+
+    if (entries > 0)
+    {
+        gchar *total = g_strdup_printf ("%s %d", _("Total Entries"), entries);
+        gtk_label_set_text (GTK_LABEL(assoc_dialog->total_entries_label), total);
+        gtk_widget_show (assoc_dialog->total_entries_label);
+        g_free (total);
+    }
+    else
+        gtk_widget_hide (assoc_dialog->total_entries_label);
+}
+
+static void
 row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
                      GtkTreeViewColumn  *col, gpointer user_data)
 {
@@ -527,6 +544,7 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
                 // update the asooc parts for invoice window if present
                 gnc_invoice_update_assoc_for_window (invoice, ret_uri);
                 gtk_list_store_remove (GTK_LIST_STORE(assoc_dialog->model), &iter);
+                update_total_entries (assoc_dialog);
             }
             else // update uri
             {
@@ -608,7 +626,10 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
         {
             xaccTransSetAssociation (trans, ret_uri);
             if (g_strcmp0 (ret_uri, "") == 0) // deleted uri
+            {
                 gtk_list_store_remove (GTK_LIST_STORE(assoc_dialog->model), &iter);
+                update_total_entries (assoc_dialog);
+            }
             else // updated uri
                 update_model_with_changes (assoc_dialog, &iter, ret_uri);
         }
@@ -738,6 +759,8 @@ get_bus_info (AssocDialog *assoc_dialog)
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
                             add_bus_info_to_model, assoc_dialog);
 
+    update_total_entries (assoc_dialog);
+
     /* reconnect the model to the treeview */
     gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), assoc_dialog->model);
     g_object_unref (G_OBJECT(assoc_dialog->model));
@@ -761,6 +784,8 @@ get_trans_info (AssocDialog *assoc_dialog)
     /* Loop through the transactions */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
                             add_trans_info_to_model, assoc_dialog);
+
+    update_total_entries (assoc_dialog);
 
     /* reconnect the model to the treeview */
     gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), assoc_dialog->model);
@@ -846,7 +871,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     assoc_dialog->path_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
-
+    assoc_dialog->total_entries_label = GTK_WIDGET(gtk_builder_get_object (builder, "total_entries_label"));
     assoc_dialog->path_head = gnc_assoc_get_path_head ();
 
     // display path head text and test if present
