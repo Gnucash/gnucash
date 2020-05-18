@@ -29,6 +29,7 @@
 
 #include "dialog-utils.h"
 #include "Transaction.h"
+#include "gncInvoice.h"
 
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
@@ -272,6 +273,43 @@ typedef struct
 }AssocUpdate;
 
 static void
+update_invoice_uri (QofInstance* data, gpointer user_data)
+{
+    AssocUpdate *assoc_update = user_data;
+    GncInvoice *invoice = GNC_INVOICE(data);
+    const gchar* uri = gncInvoiceGetAssociation (invoice);
+
+    if (uri && *uri)
+    {
+        gboolean rel = FALSE;
+        gchar *scheme = gnc_uri_get_scheme (uri);
+
+        if (!scheme) // path is relative
+            rel = TRUE;
+
+        // check for relative and we want to change them
+        if (rel && assoc_update->change_old)
+        {
+            gchar *new_uri = gnc_assoc_get_use_uri (assoc_update->old_path_head_uri, uri, scheme);
+            gncInvoiceSetAssociation (invoice, new_uri);
+            g_free (new_uri);
+        }
+        g_free (scheme);
+
+        // check for not relative and we want to change them
+        if (!rel && assoc_update->change_new && g_str_has_prefix (uri, assoc_update->new_path_head_uri))
+        {
+            // relative paths do not start with a '/'
+            const gchar *part = uri + strlen (assoc_update->new_path_head_uri);
+            gchar *new_uri = g_strdup (part);
+
+            gncInvoiceSetAssociation (invoice, new_uri);
+            g_free (new_uri);
+        }
+    }
+}
+
+static void
 update_trans_uri (QofInstance* data, gpointer user_data)
 {
     AssocUpdate *assoc_update = user_data;
@@ -340,6 +378,10 @@ change_relative_and_absolute_uri_paths (const gchar *old_path_head_uri, gboolean
     /* Loop through the transactions */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
                             update_trans_uri, assoc_update);
+
+    /* Loop through the invoices */
+    qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
+                            update_invoice_uri, assoc_update);
 
     g_free (assoc_update);
 }
