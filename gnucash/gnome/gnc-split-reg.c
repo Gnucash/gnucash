@@ -119,6 +119,7 @@ void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_associate_handler ( GNCSplitReg *w );
 void gsr_default_associate_open_handler ( GNCSplitReg *w );
 void gsr_default_associate_remove_handler ( GNCSplitReg *w );
+static void gsr_default_associate_from_sheet_handler ( GNCSplitReg *w );
 
 static void gsr_emit_simple_signal       ( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed        ( GnucashRegister *reg, gpointer user_data );
@@ -578,6 +579,11 @@ gsr_create_table( GNCSplitReg *gsr )
 
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
+
+    // setup the callback for when the associate cell clicked on
+    gnucash_register_set_open_assoc_cb (gsr->reg,
+        (GFunc)gsr_default_associate_from_sheet_handler, gsr);
+
     gtk_widget_show ( GTK_WIDGET(gsr->reg) );
     g_signal_connect (gsr->reg, "activate_cursor",
                       G_CALLBACK(gnc_split_reg_record_cb), gsr);
@@ -1433,6 +1439,31 @@ gsr_default_associate_remove_handler (GNCSplitReg *gsr)
         return;
 
     xaccTransSetAssociation (trans, "");
+}
+
+static void
+gsr_default_associate_from_sheet_handler (GNCSplitReg *gsr)
+{
+    CursorClass cursor_class;
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+    Transaction *trans;
+    Split *split;
+    gchar *uri = NULL;
+
+    /* get the current split based on cursor position */
+    split = gnc_split_register_get_current_split (reg);
+    if (!split)
+        return;
+
+    trans = xaccSplitGetParent (split);
+
+    // fix an earlier error when storing relative paths before version 3.5
+    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+
+    if (uri)
+        gnc_assoc_open_uri (GTK_WINDOW (gsr->window), uri);
+
+    g_free (uri);
 }
 
 void

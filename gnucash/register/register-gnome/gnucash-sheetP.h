@@ -95,6 +95,9 @@ struct _GnucashSheet
     GFunc moved_cb;
     gpointer moved_cb_data;
 
+    GFunc open_assoc_cb;
+    gpointer open_assoc_cb_data;
+
     guint shift_state;
     guint keyval_state;
     gboolean direct_update_cell; /** Indicates that this cell has special operation keys. */
