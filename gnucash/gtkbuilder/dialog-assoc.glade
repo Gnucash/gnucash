@@ -4,8 +4,7 @@
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="association_dialog">
     <property name="can_focus">False</property>
-    <property name="default_width">900</property>
-    <property name="default_height">500</property>
+    <property name="default_width">600</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -139,10 +138,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserWidget" id="file_chooser">
+                  <object class="GtkFileChooserButton" id="file_chooser_button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="local_only">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -151,13 +149,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="existing_label">
+                  <object class="GtkBox" id="existing_hbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
