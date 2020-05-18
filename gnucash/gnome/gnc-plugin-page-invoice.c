@@ -40,8 +40,11 @@
 #include "gnucash-register.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+#include "gnc-uri-utils.h"
 #include "gnc-window.h"
 #include "dialog-utils.h"
+#include "dialog-assoc.h"
+#include "dialog-assoc-utils.h"
 #include "gncInvoice.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,6 +88,9 @@ static void gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action, GncPl
 static void gnc_plugin_page_invoice_cmd_pay_invoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_save_layout (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_reset_layout (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_associate (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_associate_remove (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_associate_open (GtkAction *action, GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_cmd_company_report (GtkAction *action, GncPluginPageInvoice *plugin_page);
 
 static void gnc_plugin_page_redraw_help_cb( GnucashRegister *gsr, GncPluginPageInvoice *invoice_page );
@@ -202,6 +208,21 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
+        "BusinessAssociationAction", NULL, "_Update Association for Invoice", NULL,
+        "Update Association for current Invoice",
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_associate)
+    },
+    {
+        "BusinessAssociationOpenAction", NULL, "_Open Association for Invoice", NULL,
+        "Open Association for current Invoice",
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_associate_open)
+    },
+    {
+        "BusinessAssociationRemoveAction", NULL, "_Remove Association from Invoice", NULL,
+        "Remove Association from Invoice",
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_associate_remove)
+    },
+    {
         "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, "_Pay Invoice", NULL,
         "Enter a payment for the owner of this invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
@@ -246,6 +267,8 @@ static const gchar *invoice_book_readwrite_actions[] =
     "EditDuplicateInvoiceAction",
     "BusinessNewInvoiceAction",
     "ToolsProcessPaymentAction",
+    "BusinessAssociationAction",
+    "BusinessAssociationRemoveAction",
     NULL
 };
 
@@ -285,6 +308,9 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
+    {"BusinessAssociationAction", N_("_Update Association for Invoice")},
+    {"BusinessAssociationOpenAction", N_("_Open Association for Invoice")},
+    {"BusinessAssociationRemoveAction", N_("_Remove Association from Invoice")},
     {NULL, NULL},
 };
 
@@ -304,6 +330,9 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill")},
+    {"BusinessAssociationAction", N_("_Update Association for Bill")},
+    {"BusinessAssociationOpenAction", N_("_Open Association for Bill")},
+    {"BusinessAssociationRemoveAction", N_("_Remove Association from Bill")},
     {NULL, NULL},
 };
 
@@ -323,6 +352,9 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
+    {"BusinessAssociationAction", N_("_Update Association for Voucher")},
+    {"BusinessAssociationOpenAction", N_("_Open Association for Voucher")},
+    {"BusinessAssociationRemoveAction", N_("_Remove Association from Voucher")},
     {NULL, NULL},
 };
 
@@ -342,6 +374,9 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
+    {"BusinessAssociationAction", N_("_Update Association for Credit Note")},
+    {"BusinessAssociationOpenAction", N_("_Open Association for Credit Note")},
+    {"BusinessAssociationRemoveAction", N_("_Remove Association from Credit Note")},
     {NULL, NULL},
 };
 
@@ -356,6 +391,9 @@ static action_toolbar_labels invoice_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") },
+    {"BusinessAssociationAction", N_("Update Association for current invoice")},
+    {"BusinessAssociationOpenAction", N_("Open Association for current invoice")},
+    {"BusinessAssociationRemoveAction", N_("Remove Association from invoice")},
     {NULL, NULL},
 };
 
@@ -375,6 +413,9 @@ static action_toolbar_labels bill_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") },
+    {"BusinessAssociationAction", N_("Update Association for current bill")},
+    {"BusinessAssociationOpenAction", N_("Open Association for current bill")},
+    {"BusinessAssociationRemoveAction", N_("Remove Association from bill")},
     {NULL, NULL},
 };
 
@@ -394,6 +435,9 @@ static action_toolbar_labels voucher_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the voucher")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this voucher") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") },
+    {"BusinessAssociationAction", N_("Update Association for current voucher")},
+    {"BusinessAssociationOpenAction", N_("Open Association for current voucher")},
+    {"BusinessAssociationRemoveAction", N_("Remove Association from voucher")},
     {NULL, NULL},
 };
 
@@ -413,6 +457,9 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
+    {"BusinessAssociationAction", N_("Update Association for credit note")},
+    {"BusinessAssociationOpenAction", N_("Open Association for credit note")},
+    {"BusinessAssociationRemoveAction", N_("Remove Association from credit note")},
     {NULL, NULL},
 };
 
@@ -551,6 +598,17 @@ gnc_plugin_page_invoice_finalize (GObject *object)
 }
 
 static void
+update_assoc_actions (GncPluginPage *plugin_page, gboolean has_uri)
+{
+    GtkAction *uri_action;
+
+    uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page), "BusinessAssociationOpenAction");
+    gtk_action_set_sensitive (uri_action, has_uri);
+    uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page), "BusinessAssociationRemoveAction");
+    gtk_action_set_sensitive (uri_action, has_uri);
+}
+
+static void
 gnc_plugin_page_invoice_action_update (GtkActionGroup *action_group,
                                        action_toolbar_labels *action_list,
                                        void (*gtkfunc)(gpointer, gpointer))
@@ -590,11 +648,13 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     GtkActionGroup *action_group;
     GncPluginPageInvoicePrivate *priv;
     GncInvoiceType invoice_type;
+    GncInvoice *invoice;
     gint i, j;
     action_toolbar_labels *label_list;
     action_toolbar_labels *tooltip_list;
     action_toolbar_labels *label_layout_list;
     action_toolbar_labels *tooltip_layout_list;
+    gboolean has_uri = FALSE;
 
     gboolean is_readonly = qof_book_is_readonly(gnc_get_current_book());
 
@@ -678,6 +738,13 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     gnc_plugin_page_invoice_action_update (action_group, label_layout_list, (void*)gtk_action_set_label);
     /* update the layout action tooltips */
     gnc_plugin_page_invoice_action_update (action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
+
+    // update association buttons
+    invoice = gnc_invoice_window_get_invoice (priv->iw);
+    if (gncInvoiceGetAssociation (invoice))
+        has_uri = TRUE;
+
+    update_assoc_actions (page, has_uri);
 }
 
 
@@ -1265,6 +1332,107 @@ gnc_plugin_page_invoice_cmd_reset_layout (GtkAction *action,
     layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
                                                 "WindowsResetLayoutAction");
     gtk_action_set_sensitive (layout_action, FALSE);
+
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_invoice_cmd_associate (GtkAction *action,
+        GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+    GtkWindow *parent;
+    GtkAction *uri_action;
+    GncInvoice *invoice;
+    const gchar *uri;
+    gchar *ret_uri;
+    gboolean has_uri = FALSE;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+
+    invoice = gnc_invoice_window_get_invoice (priv->iw);
+    uri = gncInvoiceGetAssociation (invoice);
+
+    ret_uri = gnc_assoc_get_uri_dialog (parent, _("Change a Business Association"), uri);
+
+    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
+    {
+        GtkWidget *assoc_link_button = gnc_invoice_window_get_assoc_link_button (priv->iw);
+
+        if (assoc_link_button)
+        {
+            if (g_strcmp0 (ret_uri, "") == 0)
+                gtk_widget_hide (GTK_WIDGET(assoc_link_button));
+            else
+            {
+                gchar *display_uri = gnc_assoc_get_unescaped_just_uri (ret_uri);
+                gtk_link_button_set_uri (GTK_LINK_BUTTON(assoc_link_button), display_uri);
+                gtk_widget_show (GTK_WIDGET(assoc_link_button));
+                g_free (display_uri);
+            }
+        }
+        gncInvoiceSetAssociation (invoice, ret_uri);
+        has_uri = TRUE;
+    }
+
+    // update the menu actions
+    update_assoc_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
+
+    g_free (ret_uri);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_invoice_cmd_associate_remove (GtkAction *action,
+        GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+    GtkWindow *parent;
+    GtkAction *uri_action;
+    GncInvoice *invoice;
+    GtkWidget *assoc_link_button;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+
+    invoice = gnc_invoice_window_get_invoice (priv->iw);
+    gncInvoiceSetAssociation (invoice, "");
+
+    assoc_link_button = gnc_invoice_window_get_assoc_link_button (priv->iw);
+
+    if (assoc_link_button)
+        gtk_widget_hide (GTK_WIDGET(assoc_link_button));
+
+    // update the menu actions
+    update_assoc_actions (GNC_PLUGIN_PAGE(plugin_page), FALSE);
+
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_invoice_cmd_associate_open (GtkAction *action,
+        GncPluginPageInvoice *plugin_page)
+{
+    GncPluginPageInvoicePrivate *priv;
+    GtkWindow *parent;
+    GncInvoice *invoice;
+    const gchar *uri = NULL;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+    ENTER("(action %p, plugin_page %p)", action, plugin_page);
+    priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+
+    invoice = gnc_invoice_window_get_invoice (priv->iw);
+    uri = gncInvoiceGetAssociation (invoice);
+
+    if (uri)
+        gnc_assoc_open_uri (parent, uri);
 
     LEAVE(" ");
 }

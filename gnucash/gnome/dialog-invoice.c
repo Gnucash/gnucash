@@ -73,7 +73,10 @@
 #include "gnc-main-window.h"
 #include "gnc-state.h"
 
+#include "dialog-assoc.h"
+#include "dialog-assoc-utils.h"
 #include "dialog-transfer.h"
+#include "gnc-uri-utils.h"
 
 /* Disable -Waddress.  GCC 4.2 warns (and fails to compile with -Werror) when
  * passing the address of a guid on the stack to QOF_BOOK_LOOKUP_ENTITY via
@@ -166,6 +169,8 @@ struct _invoice_window
     GtkWidget  * active_check;
     GtkWidget  * paid_label;
 
+    GtkWidget  * assoc_link_button;
+
     GtkWidget  * owner_box;
     GtkWidget  * owner_label;
     GtkWidget  * owner_choice;
@@ -229,12 +234,12 @@ static GtkWidget *
 iw_get_window (InvoiceWindow *iw)
 {
     if (iw->page)
-        return gnc_plugin_page_get_window(iw->page);
+        return gnc_plugin_page_get_window (iw->page);
     return iw->dialog;
 }
 
 GtkWidget *
-gnc_invoice_get_register(InvoiceWindow *iw)
+gnc_invoice_get_register (InvoiceWindow *iw)
 {
     if (iw)
         return (GtkWidget *)iw->reg;
@@ -242,7 +247,7 @@ gnc_invoice_get_register(InvoiceWindow *iw)
 }
 
 GtkWidget *
-gnc_invoice_get_notes(InvoiceWindow *iw)
+gnc_invoice_get_notes (InvoiceWindow *iw)
 {
     if (iw)
         return (GtkWidget *)iw->notes_text;
@@ -311,6 +316,24 @@ iw_get_invoice (InvoiceWindow *iw)
         return NULL;
 
     return gncInvoiceLookup (iw->book, &iw->invoice_guid);
+}
+
+GncInvoice *
+gnc_invoice_window_get_invoice (InvoiceWindow *iw)
+{
+    if (!iw)
+        return NULL;
+
+    return iw_get_invoice (iw);
+}
+
+GtkWidget *
+gnc_invoice_window_get_assoc_link_button (InvoiceWindow *iw)
+{
+    if (!iw)
+        return NULL;
+
+    return iw->assoc_link_button;
 }
 
 static void
@@ -2371,6 +2394,15 @@ gnc_invoice_save_page (InvoiceWindow *iw,
     gnc_table_save_state (table, group_name);
 }
 
+static gboolean
+assoc_link_button_cb (GtkLinkButton *button, InvoiceWindow *iw)
+{
+    GncInvoice *invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
+    gnc_assoc_open_uri (GTK_WINDOW(iw->dialog), gncInvoiceGetAssociation (invoice));
+
+    return TRUE;
+}
+
 GtkWidget *
 gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
@@ -2383,6 +2415,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     const gchar *prefs_group = NULL;
     gboolean is_credit_note = FALSE;
     const gchar *style_label = NULL;
+    const gchar *assoc_uri;
 
     invoice = gncInvoiceLookup (iw->book, &iw->invoice_guid);
     is_credit_note = gncInvoiceGetIsCreditNote (invoice);
@@ -2412,6 +2445,23 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_label"));
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
     iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
+
+    iw->assoc_link_button = GTK_WIDGET(gtk_builder_get_object (builder, "assoc_link_button"));
+    g_signal_connect (G_OBJECT(iw->assoc_link_button), "activate-link",
+                      G_CALLBACK(assoc_link_button_cb), iw);
+
+    /* invoice association */
+    assoc_uri = gncInvoiceGetAssociation (invoice);
+    if (assoc_uri)
+    {
+        gchar *display_uri = gnc_assoc_get_unescaped_just_uri (assoc_uri);
+        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Association:"));
+        gtk_link_button_set_uri (GTK_LINK_BUTTON(iw->assoc_link_button), display_uri);
+        gtk_widget_show (GTK_WIDGET (iw->assoc_link_button));
+        g_free (display_uri);
+    }
+    else
+        gtk_widget_hide (GTK_WIDGET (iw->assoc_link_button));
 
     // Add a style context for this label so it can be easily manipulated with css
     gnc_widget_style_context_add_class (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");

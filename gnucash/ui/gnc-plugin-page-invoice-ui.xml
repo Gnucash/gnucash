@@ -39,6 +39,11 @@
     <placeholder name="AdditionalMenusPlaceholder">
       <menu name="Business" action="BusinessAction">
         <placeholder name="BusinessPlaceholderMiddle">
+          <separator name="BusinessSep1"/>
+          <menuitem name="BusinessAssociation"     action="BusinessAssociationAction"/>
+          <menuitem name="BusinessAssociationOpen"     action="BusinessAssociationOpenAction"/>
+          <menuitem name="BusinessAssociationRemove"     action="BusinessAssociationRemoveAction"/>
+          <separator name="BusinessSep2"/>
           <menuitem name="ToolsProcessPayment"     action="ToolsProcessPaymentAction"/>
         </placeholder>
       </menu>
