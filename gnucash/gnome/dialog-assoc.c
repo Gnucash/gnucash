@@ -600,6 +600,30 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
 }
 
 static void
+update_model_with_changes (AssocDialog *assoc_dialog, GtkTreeIter *iter, const gchar *uri)
+{
+    gchar *display_uri;
+    gboolean rel = FALSE;
+    gchar *scheme = gnc_uri_get_scheme (uri);
+
+    if (!scheme) // path is relative
+        rel = TRUE;
+
+    display_uri = assoc_get_unescape_uri (assoc_dialog->path_head, uri, scheme);
+    gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), iter,
+                        DISPLAY_URI, display_uri, AVAILABLE, _("File Found"),
+                        URI, uri,
+                        URI_RELATIVE, rel, // used just for sorting relative column
+                        URI_RELATIVE_PIX, (rel == TRUE ? "emblem-default" : NULL), -1);
+
+    if (!rel && !gnc_uri_is_file_scheme (scheme))
+        gtk_list_store_set (GTK_LIST_STORE(assoc_dialog->model), iter, AVAILABLE, _("Unknown"), -1);
+
+    g_free (display_uri);
+    g_free (scheme);
+}
+
+static void
 row_selected_cb (GtkTreeView *view, GtkTreePath *path,
                   GtkTreeViewColumn  *col, gpointer user_data)
 {
@@ -617,7 +641,11 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
     if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DISPLAY_URI - 1) == col)
         gnc_assoc_open_uri (GTK_WINDOW(assoc_dialog->window), uri);
 
-    g_free (uri);
+    if (!split)
+    {
+        g_free (uri);
+        return;
+    }
 
     // Open transaction, subtract 1 to allow for date_int64
     if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_TRANS - 1) == col)
@@ -625,9 +653,6 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
         GncPluginPage *page;
         GNCSplitReg   *gsr;
         Account       *account;
-
-        if (!split)
-            return;
 
         account = xaccSplitGetAccount (split);
 
@@ -638,6 +663,34 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
 
         gnc_split_reg_jump_to_split (gsr, split);
     }
+
+    // Open transaction association dialog, subtract 1 to allow for date_int64
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), AVAILABLE - 1) == col)
+    {
+        Transaction *trans;
+        gchar       *ret_uri = NULL;
+
+        trans = xaccSplitGetParent (split);
+
+        if (xaccTransIsReadonlyByPostedDate (trans) || xaccTransGetReadOnly (trans) || assoc_dialog->book_ro)
+        {
+            gnc_warning_dialog (GTK_WINDOW(assoc_dialog->window), "%s", _("Transaction can not be modified."));
+            g_free (uri);
+            return;
+        }
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Transaction Association"), uri);
+
+        if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
+        {
+            xaccTransSetAssociation (trans, ret_uri);
+            if (g_strcmp0 (ret_uri, "") == 0) // deleted uri
+                gtk_list_store_remove (GTK_LIST_STORE(assoc_dialog->model), &iter);
+            else // updated uri
+                update_model_with_changes (assoc_dialog, &iter, ret_uri);
+        }
+        g_free (ret_uri);
+    }
+    g_free (uri);
 }
 
 gchar*

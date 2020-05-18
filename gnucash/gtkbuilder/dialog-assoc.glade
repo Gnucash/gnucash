@@ -500,8 +500,8 @@
             <property name="can_focus">False</property>
             <property name="margin_top">3</property>
             <property name="margin_bottom">3</property>
-            <property name="label" translatable="yes">     To jump to the Transaction, double click on the entry in the
-Description column or Association column to open the Association</property>
+            <property name="label" translatable="yes">   To jump to the Transaction, double click on the entry in the Description
+column, Association column to open the Association or Available to update</property>
           </object>
           <packing>
             <property name="expand">False</property>
