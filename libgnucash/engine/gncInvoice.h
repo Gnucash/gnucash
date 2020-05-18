@@ -172,7 +172,7 @@ AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice);
 
 typedef GList EntryList;
 EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
-GNCPrice * gncInvoiceGetPrice(GncInvoice *invoice, gnc_commodity* commodity);
+GNCPrice * gncInvoiceGetPrice (GncInvoice *invoice, gnc_commodity* commodity);
 
 /** Depending on the invoice type, invoices have a different effect
  *  on the balance. Customer invoices increase the balance, while
@@ -307,14 +307,14 @@ gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 #define INVOICE_FROM_LOT    "invoice-from-lot"
 #define INVOICE_FROM_TXN    "invoice-from-txn"
 
-QofBook *gncInvoiceGetBook(GncInvoice *x);
+QofBook *gncInvoiceGetBook (GncInvoice *x);
 
 /** deprecated functions */
-#define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
+#define gncInvoiceGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
+#define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid (QOF_INSTANCE(x))) : *(guid_null()))
 
 /** Test support function used by test-dbi-business-stuff.c */
-gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b);
+gboolean gncInvoiceEqual (const GncInvoice *a, const GncInvoice *b);
 
 #endif /* GNC_INVOICE_H_ */
 /** @} */
