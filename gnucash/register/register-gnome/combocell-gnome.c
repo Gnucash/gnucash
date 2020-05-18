@@ -960,6 +960,9 @@ gnc_combo_cell_enter (BasicCell* bcell,
                              popup_get_width, box);
 
     block_list_signals (cell);
+    // Clear the temp store to ensure we don't start in type-ahead mode.
+    gnc_item_list_set_temp_store (box->item_list, NULL);
+    gtk_list_store_clear (box->tmp_store);
     gnc_item_list_select (box->item_list, bcell->value);
     unblock_list_signals (cell);
 
