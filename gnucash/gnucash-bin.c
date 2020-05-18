@@ -536,11 +536,6 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
-    /* Don't load the modules since the stylesheet module crashes if the
-       GUI is not initialized */
-#ifdef PRICE_QUOTES_NEED_MODULES
-    load_gnucash_modules();
-#endif
     gnc_prefs_init ();
     qof_event_suspend();
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
@@ -916,8 +911,6 @@ main(int argc, char ** argv)
     /* If asked via a command line parameter, fetch quotes only */
     if (add_quotes_file)
     {
-        /* First initialize the module system, even though gtk hasn't been initialized. */
-        gnc_module_system_init();
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
         exit(0);  /* never reached */
     }
