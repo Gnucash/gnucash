@@ -27,6 +27,7 @@
 
 #include "datecell.h"
 #include "dialog-utils.h"
+#include "dialog-assoc-utils.h"
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
@@ -559,45 +560,8 @@ gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
     uri = xaccTransGetAssociation (trans);
 
     // Check for uri is empty or NULL
-    if (uri && *uri != '\0')
-    {
-        gchar* scheme = gnc_uri_get_scheme (uri);
-        gchar* file_path = NULL;
-
-        if (!scheme) // relative path
-        {
-            gchar* path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL,
-                                                     "assoc-head");
-
-            if (path_head && *path_head != '\0') // not default entry
-                file_path = gnc_file_path_absolute (gnc_uri_get_path (path_head), uri);
-            else
-                file_path = gnc_file_path_absolute (NULL, uri);
-
-            g_free (path_head);
-        }
-
-        if (gnc_uri_is_file_scheme (scheme)) // absolute path
-            file_path = gnc_uri_get_path (uri);
-
-#ifdef G_OS_WIN32 // make path look like a traditional windows path
-        if (file_path)
-            file_path = g_strdelimit (file_path, "/", '\\');
-#endif
-
-        g_free (scheme);
-
-        if (!file_path)
-            return g_uri_unescape_string (uri, NULL);
-        else
-        {
-            gchar* file_uri_u = g_uri_unescape_string (file_path, NULL);
-            const gchar* filename = gnc_uri_get_path (file_uri_u);
-            g_free (file_uri_u);
-            g_free (file_path);
-            return g_strdup (filename);
-        }
-    }
+    if (uri && *uri)
+        return gnc_assoc_get_unescaped_just_uri (uri);
     else
         return NULL;
 }

@@ -119,6 +119,18 @@ gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_sche
 }
 
 gchar *
+gnc_assoc_get_unescaped_just_uri (const gchar *uri)
+{
+    gchar *path_head = gnc_assoc_get_path_head ();
+    gchar *uri_scheme = gnc_uri_get_scheme (uri);
+    gchar *ret_uri = gnc_assoc_get_unescape_uri (path_head, uri, uri_scheme);
+
+    g_free (path_head);
+    g_free (uri_scheme);
+    return ret_uri;
+}
+
+gchar *
 gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
 {
     const gchar *uri = xaccTransGetAssociation (trans); // get the existing uri

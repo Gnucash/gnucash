@@ -89,6 +89,20 @@ gchar * gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
  */
 gchar * gnc_assoc_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme);
 
+/** Return an unescaped uri for display use just based on the uri.
+ *
+ *  The function allocates memory for the uri. The calling function should
+ *  free this memory with g_free when the unescaped uri is no longer needed.
+
+ *  Return an unesacped uri for displaying and if OS is windows change the
+ *  '/' to '\' to look like a traditional windows path
+ *
+ *  @param uri The association
+ *
+ *  @return The unescaped uri used for display purposes.
+ */
+gchar * gnc_assoc_get_unescaped_just_uri (const gchar *uri);
+
 /** Presents a dialog when the path head is changed.
  *
  *  When the path head is changed a dialog is raised that allows for
