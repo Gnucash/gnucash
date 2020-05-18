@@ -523,9 +523,10 @@ list_store_append (GtkListStore *store, char* string)
  */
 static gchar*
 gnc_combo_cell_type_ahead_search (const gchar* newval,
-                                  GtkListStore* full_store, PopBox* box)
+                                  GtkListStore* full_store, ComboCell *cell)
 {
     GtkTreeIter iter;
+    PopBox* box = cell->cell.gui_private;
     int num_found = 0;
     gchar* match_str = NULL;
     const char* sep = gnc_get_account_separator_string ();
@@ -547,7 +548,9 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     g_free (newval_rep);
     g_regex_unref (regex0);
 
+    block_list_signals (cell); //Prevent recursion from gtk_tree_view signals.
     gtk_list_store_clear (box->tmp_store);
+    unblock_list_signals (cell);
 
     while (valid && num_found < MAX_NUM_MATCHES)
     {
@@ -640,7 +643,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     {
         // No start-of-name match, try type-ahead search, we match any substring of the full account name.
         GtkListStore *store = cell->shared_store;
-        match_str = gnc_combo_cell_type_ahead_search (newval, store, box);
+        match_str = gnc_combo_cell_type_ahead_search (newval, store, cell);
         *start_selection = newval_chars;
         *end_selection = -1;
         *cursor_position = newval_chars;
@@ -652,8 +655,10 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
     {
         if (gnc_item_list_using_temp (box->item_list))
         {
+            block_list_signals (cell); //Prevent recursion
             gnc_item_list_set_temp_store (box->item_list, NULL);
             gtk_list_store_clear (box->tmp_store);
+            unblock_list_signals (cell);
         }
         gnc_basic_cell_set_value_internal (_cell, newval);
         block_list_signals (cell);
