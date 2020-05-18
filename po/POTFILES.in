@@ -188,7 +188,6 @@ gnucash/gnome-utils/search-param.c
 gnucash/gnome-utils/tree-view-utils.c
 gnucash/gnome-utils/window-main-summarybar.c
 gnucash/gnucash-bin.c
-gnucash/gnucash-cmd.c
 gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in
 gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
 gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
