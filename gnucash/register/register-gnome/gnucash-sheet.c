@@ -1422,8 +1422,9 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 
     if (event->delta_y == 0)
     {
-        // There are problems with the slider not tracking the value so
-        // when delta_y is 0 hide and showing the scrollbar seems to fix it
+        /* There are problems with the slider not tracking the value so
+           when delta_y is 0 hide and showing the scrollbar seems to fix it
+           observed when using mouse wheel on sheet after a page-up or down */
         gtk_widget_hide (GTK_WIDGET(sheet->vscrollbar));
         gtk_widget_show (GTK_WIDGET(sheet->vscrollbar));
     }
