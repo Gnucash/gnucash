@@ -32,7 +32,7 @@ else()
 endif()
 
 set (gnucash_SOURCES
-  gnucash.c
+  gnucash.cpp
   gnucash-gresources.c
   ${GNUCASH_RESOURCE_FILE}
 )
@@ -259,7 +259,7 @@ gnc_add_scheme_targets(price-quotes
     DEPENDS "scm-engine;scm-app-utils;scm-gnome-utils")
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
-               gnucash.c gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
+               gnucash.cpp gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
                price-quotes.scm ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}

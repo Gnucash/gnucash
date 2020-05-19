@@ -1,5 +1,5 @@
 /*
- * gnucash.c -- The program entry point for GnuCash
+ * gnucash.cpp -- The program entry point for GnuCash
  *
  * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>
  *
@@ -28,48 +28,51 @@
 #include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "glib.h"
-#include "gnc-module.h"
-#include "gnc-path.h"
-#include "binreloc.h"
-#include "gnc-locale-utils.h"
-#include "gnc-version.h"
-#include "gnc-engine.h"
-#include "gnc-environment.h"
-#include "gnc-filepath-utils.h"
-#include "gnc-ui-util.h"
-#include "gnc-file.h"
-#include "gnc-hooks.h"
-#include "top-level.h"
-#include "gfec.h"
-#include "gnc-commodity.h"
-#include "gnc-prefs.h"
-#include "gnc-prefs-utils.h"
-#include "gnc-gsettings.h"
-#include "gnc-report.h"
-#include "gnc-main-window.h"
-#include "gnc-splash.h"
-#include "gnc-gnome-utils.h"
-#include "gnc-plugin-bi-import.h"
-#include "gnc-plugin-csv-export.h"
-#include "gnc-plugin-csv-import.h"
-#include "gnc-plugin-customer-import.h"
-#include "gnc-plugin-file-history.h"
-#include "gnc-plugin-log-replay.h"
-#include "gnc-plugin-qif-import.h"
-#include "gnc-plugin-report-system.h"
-#include "dialog-new-user.h"
-#include "gnc-session.h"
-#include "gnc-engine-guile.h"
-#include "gnucash-register.h"
-#include "swig-runtime.h"
-#include "guile-mappings.h"
-#include "search-core-type.h"
-#include "window-report.h"
+#include <glib.h>
+#include <binreloc.h>
+#include <gnc-locale-utils.h>
+#include <gnc-engine.h>
+#include <gnc-ui-util.h>
+#include <gnc-commodity.h>
+#include <swig-runtime.h>
+#include <guile-mappings.h>
+#include <window-report.h>
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
 #endif
+
+extern "C" {
+#include <dialog-new-user.h>
+#include <gfec.h>
+#include <gnc-engine-guile.h>
+#include <gnc-environment.h>
+#include <gnc-file.h>
+#include <gnc-filepath-utils.h>
+#include <gnc-gnome-utils.h>
+#include <gnc-gsettings.h>
+#include <gnc-hooks.h>
+#include <gnc-main-window.h>
+#include <gnc-module.h>
+#include <gnc-path.h>
+#include <gnc-plugin-bi-import.h>
+#include <gnc-plugin-csv-export.h>
+#include <gnc-plugin-csv-import.h>
+#include <gnc-plugin-customer-import.h>
+#include <gnc-plugin-file-history.h>
+#include <gnc-plugin-log-replay.h>
+#include <gnc-plugin-qif-import.h>
+#include <gnc-plugin-report-system.h>
+#include <gnc-prefs.h>
+#include <gnc-prefs-utils.h>
+#include <gnc-report.h>
+#include <gnc-session.h>
+#include <gnc-splash.h>
+#include <gnc-version.h>
+#include <gnucash-register.h>
+#include <search-core-type.h>
+#include <top-level.h>
+}
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -501,7 +504,7 @@ load_gnucash_modules()
     int i, len;
     struct
     {
-        gchar * name;
+        const gchar * name;
         int version;
         gboolean optional;
     } modules[] =
