@@ -326,6 +326,8 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->popup_set_focus = NULL;
     item_edit->popup_post_show = NULL;
     item_edit->popup_user_data = NULL;
+    item_edit->popup_returned_height = 0;
+    item_edit->popup_height_signal_id = 0;
 
     item_edit->style = NULL;
     item_edit->button_width = MIN_BUTT_WIDTH;
@@ -917,6 +919,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
 static void
 gnc_item_edit_destroying(GtkWidget *item_edit, gpointer data)
 {
+    g_signal_handler_disconnect (GNC_ITEM_EDIT (item_edit)->popup_item,
+                                 GNC_ITEM_EDIT (item_edit)->popup_height_signal_id);
     while (g_idle_remove_by_data((gpointer)item_edit))
         continue;
 }
@@ -1008,8 +1012,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
+    if (!item_edit->popup_height_signal_id)
+        item_edit->popup_height_signal_id =
     g_signal_connect_after (item_edit->popup_item, "size-allocate",
-                            G_CALLBACK(check_popup_height_is_true), item_edit);
+                                    G_CALLBACK(check_popup_height_is_true),
+                                    item_edit);
 
     gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
 
