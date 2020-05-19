@@ -211,7 +211,7 @@ gnc_item_list_get_selection (GncItemList *item_list)
     GtkTreeSelection *selection =
         gtk_tree_view_get_selection (item_list->tree_view);
     if (!gtk_tree_selection_get_selected (selection, &model, &iter))
-        return FALSE;
+        return NULL;
 
     gtk_tree_model_get (model, &iter, 0, &string, -1);
     return string;
