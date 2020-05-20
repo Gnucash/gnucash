@@ -34,7 +34,6 @@
 
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"
-#include "gnucash-scrolled-window.h"
 
 /* Item list signals */
 enum
@@ -486,8 +485,8 @@ gnc_item_list_new (GtkListStore* list_store)
         GNC_ITEM_LIST (g_object_new (GNC_TYPE_ITEM_LIST,
                                      NULL));
 
-    scrollwin = gnc_scrolled_window_new();
-    gtk_container_add (GTK_CONTAINER (item_list), scrollwin);
+    scrollwin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add (GTK_CONTAINER (item_list), GTK_WIDGET (scrollwin));
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
                                     GTK_POLICY_AUTOMATIC,
