@@ -42,6 +42,7 @@ typedef struct
     GtkEventBox ebox;
 
     GtkTreeView *tree_view;
+    GtkScrolledWindow* scrollwin;
     GtkListStore *list_store; /* Contains the list items */
     GtkListStore *temp_store; /* Temporary store for typeahead select */
 } GncItemList;

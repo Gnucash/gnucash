@@ -549,6 +549,7 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     g_regex_unref (regex0);
 
     block_list_signals (cell); //Prevent recursion from gtk_tree_view signals.
+    gnc_item_edit_hide_popup (box->item_edit);
     gtk_list_store_clear (box->tmp_store);
     unblock_list_signals (cell);
 
@@ -896,10 +897,20 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
                   gpointer user_data)
 {
     PopBox* box = user_data;
-    int count, pad = 4;
+    GtkScrolledWindow* scrollwin = GNC_ITEM_LIST(widget)->scrollwin;
+    int count, height;
 
     count = gnc_item_list_num_entries (box->item_list);
-    return MIN (space_available, (count * (row_height + pad)) + pad);
+    height = count * row_height;
+    if (height < space_available)
+    {
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
+                                        GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+        return height;
+    }
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    return space_available;
 }
 
 static int

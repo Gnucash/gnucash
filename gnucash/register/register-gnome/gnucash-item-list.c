@@ -279,6 +279,7 @@ gnc_item_list_using_temp (GncItemList *item_list)
 static void
 gnc_item_list_init (GncItemList* item_list)
 {
+    item_list->scrollwin = NULL;
     item_list->tree_view = NULL;
     item_list->list_store = NULL;
     item_list->temp_store = NULL;
@@ -477,7 +478,6 @@ GtkWidget*
 gnc_item_list_new (GtkListStore* list_store)
 {
     GtkWidget* tree_view;
-    GtkWidget* scrollwin;
     GtkCellRenderer* renderer;
     GtkTreeViewColumn* column;
 
@@ -485,10 +485,12 @@ gnc_item_list_new (GtkListStore* list_store)
         GNC_ITEM_LIST (g_object_new (GNC_TYPE_ITEM_LIST,
                                      NULL));
 
-    scrollwin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_container_add (GTK_CONTAINER (item_list), GTK_WIDGET (scrollwin));
+    item_list->scrollwin =
+        GTK_SCROLLED_WINDOW (gtk_scrolled_window_new(NULL, NULL));
+    gtk_container_add (GTK_CONTAINER (item_list),
+                       GTK_WIDGET (item_list->scrollwin));
 
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (item_list->scrollwin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
@@ -513,7 +515,7 @@ gnc_item_list_new (GtkListStore* list_store)
                                                        NULL);
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
-    gtk_container_add (GTK_CONTAINER (scrollwin), tree_view);
+    gtk_container_add (GTK_CONTAINER (item_list->scrollwin), tree_view);
 
     item_list->tree_view = GTK_TREE_VIEW (tree_view);
     item_list->list_store = list_store;
