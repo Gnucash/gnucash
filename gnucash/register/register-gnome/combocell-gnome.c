@@ -620,18 +620,19 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         return;
     }
 
-    // If we were deleting or inserting in the middle, just accept.
-    if (change == NULL || *cursor_position < _cell->value_chars)
-    {
-        gnc_basic_cell_set_value_internal (_cell, newval);
-        return;
-    }
-
     /* If item_list is using temp then we're already partly matched by
      * type-ahead and a quickfill_match won't work.
      */
     if (!gnc_item_list_using_temp (box->item_list))
+    {
+        // If we were deleting or inserting in the middle, just accept.
+        if (change == NULL || *cursor_position < _cell->value_chars)
+        {
+            gnc_basic_cell_set_value_internal (_cell, newval);
+            return;
+        }
         match_str = quickfill_match (box->qf, newval);
+    }
 
     if (match_str != NULL)
     {
