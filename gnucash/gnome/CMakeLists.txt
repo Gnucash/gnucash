@@ -242,7 +242,7 @@ set(gnome_SCHEME
 )
 
 set(GUILE_DEPENDS
-    gnc-gnome-utils
+    gnc-gnome
     scm-engine
     scm-core-utils
     scm-gnome-utils
