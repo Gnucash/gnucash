@@ -170,20 +170,11 @@ exist but have no suitable transactions."))
     (not (or (eqv? type TXN-TYPE-INVOICE)
              (eqv? type TXN-TYPE-PAYMENT)))))
 
-(define (gnc-owner-equal? a b)
-  (string=? (gncOwnerReturnGUID a) (gncOwnerReturnGUID b)))
-
 (define (split-has-owner? split owner)
-  (let* ((split-owner (split->owner split))
-         (retval (gnc-owner-equal? split-owner owner)))
-    (gncOwnerFree split-owner)
-    retval))
+  (gncOwnerEqual (split->owner split) owner))
 
 (define (split-owner-is-invalid? split)
-  (let* ((owner (split->owner split))
-         (retval (not (gncOwnerIsValid owner))))
-    (gncOwnerFree owner)
-    retval))
+  (not (gncOwnerIsValid (split->owner split))))
 
 (define (split-from-acct? split acct)
   (equal? acct (xaccSplitGetAccount split)))
@@ -192,17 +183,27 @@ exist but have no suitable transactions."))
   (let-values (((list-yes list-no) (partition (lambda (elt) (fn elt cmp)) lst)))
     (cons list-yes list-no)))
 
-;; simpler version of gnc:owner-from-split. must be gncOwnerFree after
-;; use! see split-has-owner? above...
-(define (split->owner split)
-  (let* ((lot (xaccSplitGetLot split))
-         (owner (gncOwnerNew))
-         (use-lot-owner? (gncOwnerGetOwnerFromLot lot owner)))
-    (unless use-lot-owner?
-      (gncOwnerCopy (gncOwnerGetEndOwner
-                     (gncInvoiceGetOwner (gncInvoiceGetInvoiceFromLot lot)))
-                    owner))
-    owner))
+;; optimized from gnc:owner-from-split. It will allocate and memoize
+;; (cache) the owners because gncOwnerGetOwnerFromLot is slow. after
+;; use, it must be called with #f to free the owners.
+(define split->owner
+  (let ((ht (make-hash-table)))
+    (lambda (split)
+      (cond
+       ((not split)
+        (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
+        (hash-clear! ht))
+       ((hashv-ref ht (string-hash (gncSplitGetGUID split))) => identity)
+       (else
+        (let ((lot (xaccSplitGetLot split))
+              (owner (gncOwnerNew)))
+          (unless (gncOwnerGetOwnerFromLot lot owner)
+            (gncOwnerCopy (gncOwnerGetEndOwner
+                           (gncInvoiceGetOwner
+                            (gncInvoiceGetInvoiceFromLot lot)))
+                          owner))
+          (hashv-set! ht (string-hash (gncSplitGetGUID split)) owner)
+          owner))))))
 
 (define (aging-renderer report-obj receivable)
   (define options (gnc:report-options report-obj))
@@ -267,8 +268,7 @@ exist but have no suitable transactions."))
         (let loop ((accounts accounts)
                    (splits splits)
                    (accounts-and-owners '())
-                   (invalid-splits '())
-                   (tofree '()))
+                   (invalid-splits '()))
           (cond
            ((null? accounts)
 
@@ -345,7 +345,7 @@ exist but have no suitable transactions."))
                         acc-totals)))))
                  (reverse accounts-and-owners))
 
-                (for-each gncOwnerFree tofree)
+                (split->owner #f)       ;free the gncOwners
                 (gnc:html-document-add-object! document table)
 
                 (unless (null? invalid-splits)
@@ -371,7 +371,6 @@ exist but have no suitable transactions."))
               (let lp ((acc-splits (car splits-acc-others))
                        (acc-totals (make-list (1+ num-buckets) 0))
                        (invalid-splits invalid-splits)
-                       (tofree tofree)
                        (owners-and-aging '()))
 
                 (match acc-splits
@@ -382,8 +381,7 @@ exist but have no suitable transactions."))
                              accounts-and-owners
                              (cons (list account owners-and-aging acc-totals)
                                    accounts-and-owners))
-                         invalid-splits
-                         tofree))
+                         invalid-splits))
 
                   ;; txn type != TXN_TYPE_INVOICE or TXN_TYPE_PAYMENT.
                   (((? split-is-not-business? this) . rest)
@@ -392,7 +390,6 @@ exist but have no suitable transactions."))
                          acc-totals
                          (cons (list (format #f (_ "Invalid Txn Type ~a") type) this)
                                invalid-splits)
-                         tofree
                          owners-and-aging)))
 
                   ;; some payment splits may have no owner in this
@@ -402,7 +399,6 @@ exist but have no suitable transactions."))
                    (lp rest
                        acc-totals
                        (cons (list (_ "Payment has no owner") this) invalid-splits)
-                       tofree
                        owners-and-aging))
 
                   ((this . _)
@@ -416,7 +412,6 @@ exist but have no suitable transactions."))
                      (lp other-owner-splits
                          (map + acc-totals (reverse (cons aging-total aging)))
                          invalid-splits
-                         (cons owner tofree)
                          (if (or show-zeros (any (negate zero?) aging))
                              (cons (list owner aging aging-total) owners-and-aging)
                              owners-and-aging)))))))))))))
