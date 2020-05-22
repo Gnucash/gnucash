@@ -61,7 +61,7 @@ enum
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
-static void gnc_item_edit_destroying(GtkWidget *this, gpointer data);
+static void gnc_item_edit_destroying (GtkWidget *this, gpointer data);
 static void
 gnc_item_edit_tb_init (GncItemEditTb *item_edit_tb)
 {
@@ -917,10 +917,12 @@ gnc_item_edit_new (GnucashSheet *sheet)
 }
 
 static void
-gnc_item_edit_destroying(GtkWidget *item_edit, gpointer data)
+gnc_item_edit_destroying (GtkWidget *item_edit, gpointer data)
 {
-    g_signal_handler_disconnect (GNC_ITEM_EDIT (item_edit)->popup_item,
-                                 GNC_ITEM_EDIT (item_edit)->popup_height_signal_id);
+    if (GNC_ITEM_EDIT (item_edit)->popup_height_signal_id > 0)
+        g_signal_handler_disconnect (GNC_ITEM_EDIT (item_edit)->popup_item,
+                                     GNC_ITEM_EDIT (item_edit)->popup_height_signal_id);
+
     while (g_idle_remove_by_data((gpointer)item_edit))
         continue;
 }
