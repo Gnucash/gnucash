@@ -283,6 +283,7 @@ gnc_item_list_init (GncItemList* item_list)
     item_list->tree_view = NULL;
     item_list->list_store = NULL;
     item_list->temp_store = NULL;
+    item_list->cell_height = 0;
 }
 
 
@@ -385,6 +386,7 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
 
     gnc_item_list_parent_class = g_type_class_peek_parent (item_list_class);
 
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(item_list_class), "gnc-id-sheet-list");
 
     gnc_item_list_signals[SELECT_ITEM] =
         g_signal_new ("select_item",
@@ -474,11 +476,25 @@ tree_view_selection_changed (GtkTreeSelection* selection,
     g_free (string);
 }
 
+
+gint
+gnc_item_list_get_cell_height (GncItemList *item_list)
+{
+
+   gint min_height, nat_height;
+   gtk_cell_renderer_get_preferred_height (item_list->renderer,
+                                           GTK_WIDGET(item_list->tree_view),
+                                           &min_height,
+                                           &nat_height);
+
+    return min_height;
+}
+
+
 GtkWidget*
 gnc_item_list_new (GtkListStore* list_store)
 {
     GtkWidget* tree_view;
-    GtkCellRenderer* renderer;
     GtkTreeViewColumn* column;
 
     GncItemList* item_list =
@@ -508,9 +524,9 @@ gnc_item_list_new (GtkListStore* list_store)
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
                                           0, GTK_SORT_ASCENDING);
 
-    renderer = gtk_cell_renderer_text_new();
+    item_list->renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes (_ ("List"),
-                                                       renderer,
+                                                       item_list->renderer,
                                                        "text", 0,
                                                        NULL);
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
@@ -526,11 +542,9 @@ gnc_item_list_new (GtkListStore* list_store)
     g_signal_connect (G_OBJECT (tree_view), "key_press_event",
                       G_CALLBACK (gnc_item_list_key_event), item_list);
 
-    g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (
-            tree_view))), "changed",
+    g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (
+                                GTK_TREE_VIEW (tree_view))), "changed",
                       G_CALLBACK (tree_view_selection_changed), item_list);
 
     return GTK_WIDGET (item_list);
 }
-
-

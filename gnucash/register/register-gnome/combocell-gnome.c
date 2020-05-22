@@ -904,7 +904,8 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
     int count, height;
 
     count = gnc_item_list_num_entries (box->item_list);
-    height = count * row_height;
+    height = count * (gnc_item_list_get_cell_height (box->item_list) + 2);
+
     if (height < space_available)
     {
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),

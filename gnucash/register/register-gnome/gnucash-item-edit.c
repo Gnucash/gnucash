@@ -1015,7 +1015,10 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
 
-    gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
+    if (popup_h == popup_max_height)
+        gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
+    else
+        gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, -1);
 
     toggle = GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton);
 
@@ -1083,6 +1086,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 
     gtk_widget_grab_focus (GTK_WIDGET (item_edit->sheet));
 }
+
 
 void
 gnc_item_edit_set_popup (GncItemEdit    *item_edit,

@@ -125,6 +125,8 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 
     object_class = G_OBJECT_CLASS (date_picker_class);
 
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(date_picker_class), "gnc-id-date-picker");
+
     gnc_date_picker_signals[DATE_SELECTED] =
         g_signal_new("date_selected",
                      G_TYPE_FROM_CLASS(object_class),
