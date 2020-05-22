@@ -22,18 +22,7 @@
  */
 #include <config.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <libguile.h>
-#include <glib/gi18n.h>
-#include <glib.h>
-#include <binreloc.h>
-#include <gnc-locale-utils.h>
-#include <gnc-engine.h>
-#include <gnc-ui-util.h>
-#include <gnc-commodity.h>
-#include <swig-runtime.h>
 #include <guile-mappings.h>
 #ifdef __MINGW32__
 #include <Windows.h>
@@ -43,137 +32,17 @@
 #include "gnucash-base.hpp"
 
 extern "C" {
-#include <gfec.h>
 #include <gnc-engine-guile.h>
-#include <gnc-environment.h>
-#include <gnc-filepath-utils.h>
-#include <gnc-hooks.h>
-#include <gnc-path.h>
-#include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-gnome-utils.h>
-#include <gnc-gsettings.h>
-#include <gnc-report.h>
 #include <gnc-session.h>
-#include <gnc-splash.h>
-#include <gnc-version.h>
 }
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-/* Change the following to have a console window attached to GnuCash
- * for displaying stdout and stderr on Windows.
- */
-#define __MSWIN_CONSOLE__ 0
-
-#include <libintl.h>
-#include <locale.h>
-
-#ifdef MAC_INTEGRATION
-#  include <Foundation/Foundation.h>
-#endif
-
-/* GNC_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
-#ifdef GNC_VCS
-static int is_development_version = TRUE;
-#else
-static int is_development_version = FALSE;
-#define GNC_VCS ""
-#endif
-
-static gchar *userdata_migration_msg = NULL;
-
 static void
-gnc_print_unstable_message(void)
-{
-    if (!is_development_version) return;
-
-    g_print("\n\n%s\n%s\n%s %s\n%s %s\n",
-            _("This is a development version. It may or may not work."),
-            _("Report bugs and other problems to gnucash-devel@gnucash.org"),
-	    /* Translators: An URLs follows*/
-            _("You can also lookup and file bug reports at"), PACKAGE_BUGREPORT,
-	    /* Translators: An URLs follows*/
-           _("To find the last stable version, please refer to"), PACKAGE_URL);
-}
-
-static gboolean
-try_load_config_array(const gchar *fns[])
-{
-    gchar *filename;
-    int i;
-
-    for (i = 0; fns[i]; i++)
-    {
-        filename = gnc_build_userdata_path(fns[i]);
-        if (gfec_try_load(filename))
-        {
-            g_free(filename);
-            return TRUE;
-        }
-        g_free(filename);
-    }
-    return FALSE;
-}
-
-static void
-update_message(const gchar *msg)
-{
-    gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    g_message("%s", msg);
-}
-
-static void
-load_system_config(void)
-{
-    static int is_system_config_loaded = FALSE;
-    gchar *system_config_dir;
-    gchar *system_config;
-
-    if (is_system_config_loaded) return;
-
-    update_message("loading system configuration");
-    system_config_dir = gnc_path_get_pkgsysconfdir();
-    system_config = g_build_filename(system_config_dir, "config", NULL);
-    is_system_config_loaded = gfec_try_load(system_config);
-    g_free(system_config_dir);
-    g_free(system_config);
-}
-
-static void
-load_user_config(void)
-{
-    /* Don't continue adding to this list. When 3.0 rolls around bump
-       the 2.4 files off the list. */
-    static const gchar *saved_report_files[] =
-    {
-        SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
-    };
-    static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
-    static int is_user_config_loaded = FALSE;
-
-    if (is_user_config_loaded)
-        return;
-    else is_user_config_loaded = TRUE;
-
-    update_message("loading user configuration");
-    {
-        gchar *config_filename;
-        config_filename = g_build_filename (gnc_userconfig_dir (),
-                                                "config-user.scm", (char *)NULL);
-        gfec_try_load(config_filename);
-        g_free(config_filename);
-    }
-
-    update_message("loading saved reports");
-    try_load_config_array(saved_report_files);
-    update_message("loading stylesheets");
-    try_load_config_array(stylesheet_files);
-}
-
-static void
-inner_main_add_price_quotes(void *data, int argc, char **argv)
+inner_main_add_price_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     const char* add_quotes_file = static_cast<const char*>(data);
     SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;

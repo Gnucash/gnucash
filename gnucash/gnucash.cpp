@@ -22,21 +22,8 @@
  */
 #include <config.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <libguile.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib.h>
-#include <binreloc.h>
-#include <gnc-locale-utils.h>
-#include <gnc-engine.h>
-#include <gnc-ui-util.h>
-#include <gnc-commodity.h>
-#include <swig-runtime.h>
 #include <guile-mappings.h>
-#include <window-report.h>
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
@@ -47,14 +34,10 @@
 extern "C" {
 #include <dialog-new-user.h>
 #include <gfec.h>
-#include <gnc-engine-guile.h>
-#include <gnc-environment.h>
 #include <gnc-file.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-gsettings.h>
-#include <gnc-hooks.h>
-#include <gnc-main-window.h>
 #include <gnc-module.h>
 #include <gnc-path.h>
 #include <gnc-plugin-bi-import.h>
@@ -70,7 +53,6 @@ extern "C" {
 #include <gnc-report.h>
 #include <gnc-session.h>
 #include <gnc-splash.h>
-#include <gnc-version.h>
 #include <gnucash-register.h>
 #include <search-core-type.h>
 #include <top-level.h>
@@ -78,42 +60,7 @@ extern "C" {
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-
-/* Change the following to have a console window attached to GnuCash
- * for displaying stdout and stderr on Windows.
- */
-#define __MSWIN_CONSOLE__ 0
-
-#include <libintl.h>
-#include <locale.h>
-
-#ifdef MAC_INTEGRATION
-#  include <Foundation/Foundation.h>
-#endif
-
-/* GNC_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
-#ifdef GNC_VCS
-static int is_development_version = TRUE;
-#else
-static int is_development_version = FALSE;
-#define GNC_VCS ""
-#endif
-
 static gchar *userdata_migration_msg = NULL;
-
-static void
-gnc_print_unstable_message(void)
-{
-    if (!is_development_version) return;
-
-    g_print("\n\n%s\n%s\n%s %s\n%s %s\n",
-            _("This is a development version. It may or may not work."),
-            _("Report bugs and other problems to gnucash-devel@gnucash.org"),
-	    /* Translators: An URLs follows*/
-            _("You can also lookup and file bug reports at"), PACKAGE_BUGREPORT,
-	    /* Translators: An URLs follows*/
-           _("To find the last stable version, please refer to"), PACKAGE_URL);
-}
 
 static gboolean
 try_load_config_array(const gchar *fns[])
@@ -231,7 +178,7 @@ load_gnucash_modules()
 }
 
 static void
-inner_main_add_price_quotes(void *data, int argc, char **argv)
+inner_main_add_price_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     const char* add_quotes_file = static_cast<const char*>(data);
     SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
@@ -309,7 +256,7 @@ struct t_file_spec {
 };
 
 static void
-inner_main (void *data, int argc, char **argv)
+inner_main (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto user_file_spec = static_cast<t_file_spec*>(data);
     SCM main_mod;

@@ -26,6 +26,8 @@
 #define GNC_PREFS_GROUP_NEW_USER "dialogs.new-user"
 #define GNC_PREF_FIRST_STARTUP "first-startup"
 
+#include <glib.h>
+
 typedef struct _GNCNewUserDialog GNCNewUserDialog;
 
 void gnc_ui_new_user_dialog (void);

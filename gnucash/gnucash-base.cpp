@@ -22,18 +22,10 @@
  */
 #include <config.h>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <libguile.h>
 #include <glib/gi18n.h>
-#include <glib.h>
 #include <binreloc.h>
-#include <gnc-locale-utils.h>
 #include <gnc-engine.h>
-#include <gnc-ui-util.h>
-#include <gnc-commodity.h>
-#include <swig-runtime.h>
 #include <guile-mappings.h>
 #ifdef __MINGW32__
 #include <Windows.h>
@@ -44,17 +36,12 @@
 
 extern "C" {
 #include <gfec.h>
-#include <gnc-engine-guile.h>
 #include <gnc-environment.h>
 #include <gnc-filepath-utils.h>
-#include <gnc-hooks.h>
 #include <gnc-path.h>
 #include <gnc-prefs.h>
-#include <gnc-prefs-utils.h>
-#include <gnc-gnome-utils.h>
 #include <gnc-gsettings.h>
 #include <gnc-report.h>
-#include <gnc-session.h>
 #include <gnc-splash.h>
 #include <gnc-version.h>
 }

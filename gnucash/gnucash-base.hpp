@@ -44,15 +44,15 @@ private:
     int gnucash_show_version = 0;
     int debugging = 0;
     int extra = 0;
-    gchar **log_flags = NULL;
-    char *log_to_filename = NULL;
+    char **log_flags = nullptr;
+    char *log_to_filename = nullptr;
     int nofile = 0;
-    const gchar *gsettings_prefix = NULL;
-    const char *add_quotes_file = NULL;
-    char *namespace_regexp = NULL;
-    const char *file_to_load = NULL;
-    gchar **args_remaining = NULL;
-    gchar *sys_locale = NULL;
+    const char *gsettings_prefix = nullptr;
+    const char *add_quotes_file = nullptr;
+    char *namespace_regexp = nullptr;
+    const char *file_to_load = nullptr;
+    char **args_remaining = nullptr;
+    char *sys_locale = nullptr;
 };
 
 }

@@ -117,6 +117,7 @@
 
 #include <glib.h>
 #include "qof.h"
+#include <gtk/gtk.h>
 
 typedef enum
 {
