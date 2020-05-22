@@ -137,8 +137,8 @@ void gnc_lot_set_cached_invoice(GNCLot* lot, GncInvoice *invoice);
 /** The gnc_lot_get_cached_owner() routine returns the owner guid with
  *    which this lot is associated. */
 /*@ dependent @*/
-GncGUID * gnc_lot_get_cached_owner (const GNCLot *lot);
-void gnc_lot_set_cached_owner (GNCLot* lot, const GncGUID *owner);
+GncOwner * gnc_lot_get_cached_owner (const GNCLot *lot);
+void gnc_lot_set_cached_owner (GNCLot* lot, const GncOwner *owner);
 
 /** The gnc_lot_get_balance() routine returns the balance of the lot.
  *    The commodity in which this balance is expressed is the commodity

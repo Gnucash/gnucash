@@ -627,7 +627,7 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 
     gnc_lot_begin_edit (lot);
 
-    gnc_lot_set_cached_owner (lot, gncOwnerGetGUID (owner));
+    gnc_lot_set_cached_owner (lot, owner);
 
     qof_instance_set (QOF_INSTANCE (lot),
 		      GNC_OWNER_TYPE, (gint64)gncOwnerGetType (owner),
@@ -642,21 +642,23 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     QofBook *book;
     GncOwnerType type = GNC_OWNER_NONE;
     guint64 type64 = 0;
+    GncOwner *cached_owner;
 
     if (!lot || !owner) return FALSE;
 
     book = gnc_lot_get_book (lot);
-    guid = gnc_lot_get_cached_owner (lot);
+    cached_owner = gnc_lot_get_cached_owner (lot);
 
-    if (!guid)
+    if (cached_owner)
     {
-        qof_instance_get (QOF_INSTANCE (lot),
-                          GNC_OWNER_TYPE, &type64,
-                          GNC_OWNER_GUID, &guid,
-                          NULL);
-
-        gnc_lot_set_cached_owner (lot, guid);
+        gncOwnerCopy (cached_owner, owner);
+        return (owner->owner.undefined != NULL);
     }
+
+    qof_instance_get (QOF_INSTANCE (lot),
+                      GNC_OWNER_TYPE, &type64,
+                      GNC_OWNER_GUID, &guid,
+                      NULL);
 
     type = (GncOwnerType) type64;
     switch (type)
@@ -679,6 +681,7 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     }
 
     guid_free (guid);
+    gnc_lot_set_cached_owner (lot, owner);
     return (owner->owner.undefined != NULL);
 }
 
