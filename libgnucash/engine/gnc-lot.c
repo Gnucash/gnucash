@@ -87,6 +87,8 @@ typedef struct GNCLotPrivate
     SplitList *splits;
 
     GncInvoice *cached_invoice;
+    GncGUID *cached_owner;
+
     /* Handy cached value to indicate if lot is closed. */
     /* If value is negative, then the cache is invalid. */
     signed char is_closed;
@@ -115,6 +117,7 @@ gnc_lot_init(GNCLot* lot)
     priv->account = NULL;
     priv->splits = NULL;
     priv->cached_invoice = NULL;
+    priv->cached_owner = NULL;
     priv->is_closed = LOT_CLOSED_UNKNOWN;
     priv->marker = 0;
 }
@@ -297,6 +300,10 @@ gnc_lot_free(GNCLot* lot)
 
     priv->account = NULL;
     priv->is_closed = TRUE;
+
+    if (priv->cached_owner)
+        guid_free (priv->cached_owner);
+
     /* qof_instance_release (&lot->inst); */
     g_object_unref (lot);
 
@@ -385,6 +392,20 @@ GncInvoice * gnc_lot_get_cached_invoice (const GNCLot *lot)
 {
     if (!lot) return NULL;
     return GET_PRIVATE(lot)->cached_invoice;
+}
+
+GncGUID * gnc_lot_get_cached_owner (const GNCLot *lot)
+{
+    if (!lot) return NULL;
+    return GET_PRIVATE(lot)->cached_owner;
+}
+
+
+void
+gnc_lot_set_cached_owner (GNCLot* lot, const GncGUID *owner)
+{
+    if (!lot) return;
+    GET_PRIVATE(lot)->cached_owner = guid_copy (owner);
 }
 
 void

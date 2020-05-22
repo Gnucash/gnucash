@@ -627,6 +627,8 @@ void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 
     gnc_lot_begin_edit (lot);
 
+    gnc_lot_set_cached_owner (lot, gncOwnerGetGUID (owner));
+
     qof_instance_set (QOF_INSTANCE (lot),
 		      GNC_OWNER_TYPE, (gint64)gncOwnerGetType (owner),
 		      GNC_OWNER_GUID, gncOwnerGetGUID (owner),
@@ -644,10 +646,18 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
     if (!lot || !owner) return FALSE;
 
     book = gnc_lot_get_book (lot);
-    qof_instance_get (QOF_INSTANCE (lot),
-		      GNC_OWNER_TYPE, &type64,
-		      GNC_OWNER_GUID, &guid,
-		      NULL);
+    guid = gnc_lot_get_cached_owner (lot);
+
+    if (!guid)
+    {
+        qof_instance_get (QOF_INSTANCE (lot),
+                          GNC_OWNER_TYPE, &type64,
+                          GNC_OWNER_GUID, &guid,
+                          NULL);
+
+        gnc_lot_set_cached_owner (lot, guid);
+    }
+
     type = (GncOwnerType) type64;
     switch (type)
     {
