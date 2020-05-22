@@ -1014,11 +1014,6 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
-    if (!item_edit->popup_height_signal_id)
-        item_edit->popup_height_signal_id =
-    g_signal_connect_after (item_edit->popup_item, "size-allocate",
-                                    G_CALLBACK(check_popup_height_is_true),
-                                    item_edit);
 
     gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
 
@@ -1103,6 +1098,24 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
 
     if (item_edit->is_popup)
         gnc_item_edit_hide_popup (item_edit);
+
+    /* setup size-allocate callback for popup_item height, done here as
+       item_edit is constant and popup_item changes per cell */
+    if (popup_item)
+    {
+        item_edit->popup_height_signal_id = g_signal_connect_after (
+                                            popup_item, "size-allocate",
+                                            G_CALLBACK(check_popup_height_is_true),
+                                            item_edit);
+    }
+    else
+    {
+        if (GNC_ITEM_EDIT (item_edit)->popup_height_signal_id > 0)
+        {
+            g_signal_handler_disconnect (item_edit->popup_item, item_edit->popup_height_signal_id);
+            item_edit->popup_height_signal_id = 0;
+        }
+    }
 
     item_edit->is_popup = popup_item != NULL;
 
