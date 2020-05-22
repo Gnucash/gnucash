@@ -848,7 +848,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
     GtkBorder padding;
     GtkBorder margin;
     GtkBorder border;
-    GtkWidget *vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     GncItemEdit *item_edit =
             g_object_new (GNC_TYPE_ITEM_EDIT,
                           "sheet", sheet,
@@ -904,12 +903,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.ebox),
                       item_edit->popup_toggle.tbutton);
 
-    /* The button needs to be packed into a vertical box so that the height and position
-     * can be controlled in earlier than Gtk3.20 versions */
-    gtk_box_pack_start (GTK_BOX(vb), item_edit->popup_toggle.ebox,
-                        FALSE, FALSE, 0);
-
-    gtk_box_pack_start (GTK_BOX(item_edit), vb, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
     gtk_widget_show_all(GTK_WIDGET(item_edit));
     g_signal_connect(G_OBJECT(item_edit), "destroy",
                      G_CALLBACK(gnc_item_edit_destroying), NULL);
