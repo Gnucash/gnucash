@@ -351,10 +351,56 @@ inner_main (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     return;
 }
 
+namespace Gnucash {
+
+    class Gnucash : public CoreApp
+    {
+    public:
+        void parse_command_line (int *argc, char ***argv);
+    };
+
+}
+
+void
+Gnucash::Gnucash::parse_command_line (int *argc, char ***argv)
+{
+    // The g_option context dance below is done to be able to show a help message
+    // for gtk's options. The options themselves are already parsed out by
+    // gtk_init_check by the time this function is called though. So it really only
+    // serves to be able to display a help message.
+    GError *error = NULL;
+    auto context = g_option_context_new (tagline.c_str());
+    auto gtk_options = gtk_get_option_group(FALSE);
+    g_option_context_add_group (context, gtk_options);
+    gtk_help_msg = std::string (g_option_context_get_help (context, FALSE, gtk_options));
+    g_option_context_free (context);
+
+    // Pass remaining command line bits to our base class for further parsing
+    // This will include a --help-gtk option to display gtk's option help
+    // extracted above
+    Gnucash::CoreApp::parse_command_line (argc, argv);
+
+    if (gtk_show_help)
+    {
+        std::cout << gtk_help_msg;
+        exit(0);
+    }
+}
+
 int
 main(int argc, char ** argv)
 {
-    Gnucash::CoreApp application;
+    Gnucash::Gnucash application;
+
+    /* We need to initialize gtk before looking up all modules */
+    if(!gtk_init_check (&argc, &argv))
+    {
+        std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
+        << "\n"
+        << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
+        "       Perhaps you need to set the $DISPLAY environment variable ?");
+        return 1;
+    }
 
     application.parse_command_line (&argc, &argv);
     application.start();
@@ -365,16 +411,6 @@ main(int argc, char ** argv)
     {
         scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void*) quotes_file);
         exit (0);  /* never reached */
-    }
-
-    /* We need to initialize gtk before looking up all modules */
-    if(!gtk_init_check (&argc, &argv))
-    {
-        std::cerr << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
-                  << "\n"
-                  << bl::translate ("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-                                    "       Perhaps you need to set the $DISPLAY environment variable ?");
-        return 1;
     }
 
     /* Now the module files are looked up, which might cause some library

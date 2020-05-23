@@ -62,6 +62,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #include <libintl.h>
 #include <locale.h>
+#include <gnc-locale-utils.hpp>
 
 #ifdef MAC_INTEGRATION
 #  include <Foundation/Foundation.h>
@@ -541,6 +542,9 @@ Gnucash::CoreApp::CoreApp ()
     textdomain(PROJECT_NAME);
     bind_textdomain_codeset(PROJECT_NAME, "UTF-8");
     g_free(localedir);
+
+    // Now that gettext is properly initialized, set our help tagline.
+    tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
 }
 
 /* Parse command line options, using GOption interface.
@@ -611,15 +615,29 @@ Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
             N_("REGEXP")
         },
         {
-            G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args_remaining, NULL, N_("[datafile]") },
-            { NULL }
+            G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args_remaining, NULL, N_("[datafile]")
+
+        },
+        { NULL }
     };
 
     GError *error = NULL;
-    GOptionContext *context = g_option_context_new (_("- GnuCash, accounting for personal and small business finance"));
+    GOptionContext *context = g_option_context_new (tagline.c_str());
 
     g_option_context_add_main_entries (context, options, PROJECT_NAME);
-    g_option_context_add_group (context, gtk_get_option_group(FALSE));
+    if (!gtk_help_msg.empty())
+    {
+        GOptionEntry gtk_help_options[] =
+        {
+            {
+                "help-gtk", 'v', 0, G_OPTION_ARG_NONE, &gtk_show_help,
+                N_("Show GTK+ Options"), NULL
+            },
+            { NULL }
+        };
+        g_option_group_add_entries (g_option_context_get_main_group (context), gtk_help_options);
+    }
+
     if (!g_option_context_parse (context, argc, argv, &error))
     {
         std::cerr << error->message << "\n"

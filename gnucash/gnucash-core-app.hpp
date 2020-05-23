@@ -40,6 +40,11 @@ public:
     int get_no_file (void);
     const char *get_quotes_file (void);
 
+protected:
+    std::string gtk_help_msg;
+    int gtk_show_help = 0;
+    std::string tagline;
+
 private:
 
     /* Command-line option variables */
