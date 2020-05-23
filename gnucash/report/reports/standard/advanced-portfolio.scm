@@ -904,36 +904,26 @@ by preventing negative stock balances.<br/>")
                        (get-option gnc:pagename-general "Date"))))
         (accounts    (get-option gnc:pagename-accounts "Accounts"))
         (currency    (get-option gnc:pagename-general "Report's currency"))
-        (price-source (get-option gnc:pagename-general
-                                  optname-price-source))
-        (report-title (get-option gnc:pagename-general
-                                  gnc:optname-reportname))
-        (include-empty (get-option gnc:pagename-accounts
-                                  optname-zero-shares))
-	(show-symbol (get-option gnc:pagename-display
-				  optname-show-symbol))
-	(show-listing (get-option gnc:pagename-display
-				  optname-show-listing))
-	(show-shares (get-option gnc:pagename-display
-				  optname-show-shares))
-	(show-price (get-option gnc:pagename-display
-				  optname-show-price))
-	(basis-method (get-option gnc:pagename-general
-				  optname-basis-method))
-	(prefer-pricelist (get-option gnc:pagename-general
-				      optname-prefer-pricelist))
-	(handle-brokerage-fees (get-option gnc:pagename-general
-				  optname-brokerage-fees))
+        (price-source (get-option gnc:pagename-general optname-price-source))
+        (report-title (get-option gnc:pagename-general gnc:optname-reportname))
+        (include-empty (get-option gnc:pagename-accounts optname-zero-shares))
+        (show-symbol (get-option gnc:pagename-display optname-show-symbol))
+        (show-listing (get-option gnc:pagename-display optname-show-listing))
+        (show-shares (get-option gnc:pagename-display optname-show-shares))
+        (show-price (get-option gnc:pagename-display optname-show-price))
+        (basis-method (get-option gnc:pagename-general optname-basis-method))
+        (prefer-pricelist (get-option gnc:pagename-general optname-prefer-pricelist))
+        (handle-brokerage-fees (get-option gnc:pagename-general optname-brokerage-fees))
 
-	(total-basis (gnc:make-commodity-collector))
+        (total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
         (total-moneyin  (gnc:make-commodity-collector))
         (total-moneyout (gnc:make-commodity-collector))
         (total-income   (gnc:make-commodity-collector))
         (total-gain     (gnc:make-commodity-collector)) ;; realized gain
-	(total-ugain (gnc:make-commodity-collector))    ;; unrealized gain
+        (total-ugain (gnc:make-commodity-collector))    ;; unrealized gain
         (total-brokerage (gnc:make-commodity-collector))
-	;;document will be the HTML document that we return.
+        ;;document will be the HTML document that we return.
         (table (gnc:make-html-table))
         (document (gnc:make-html-document)))
 
@@ -942,174 +932,150 @@ by preventing negative stock balances.<br/>")
                report-title
                (format #f " ~a" (qof-print-date to-date))))
 
-    (if (not (null? accounts))
-        ; at least 1 account selected
-        (let* ((exchange-fn (gnc:case-exchange-fn price-source currency to-date))
-               (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
-               (price-fn
-                (case price-source
-                  ((pricedb-latest)
-                   (lambda (foreign domestic date)
-                    (find-price (gnc-pricedb-lookup-latest-any-currency pricedb foreign)
-                                domestic)))
-                  ((pricedb-nearest)
-                   (lambda (foreign domestic date)
-                    (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
-		     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
-	       (headercols (list (_ "Account")))
-	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
-	       (sum-total-moneyin (gnc-numeric-zero))
-	       (sum-total-income (gnc-numeric-zero))
-	       (sum-total-both-gains (gnc-numeric-zero))
-	       (sum-total-gain (gnc-numeric-zero))
-	       (sum-total-ugain (gnc-numeric-zero))
-	       (sum-total-brokerage (gnc-numeric-zero))
-	       (sum-total-totalreturn (gnc-numeric-zero))) ;;end of let
+    (cond
+     ((null? accounts)
+      (gnc:html-document-add-object!
+       document
+       (gnc:html-make-no-account-warning
+        report-title (gnc:report-id report-obj))))
 
-	  ;;begin building lists for which columns to display
-          (if show-symbol
-	      (begin (append! headercols (list (_ "Symbol")))
-		     (append! totalscols (list " "))))
+     (else
+      (let* ((exchange-fn (gnc:case-exchange-fn price-source currency to-date))
+             (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
+             (price-fn
+              (case price-source
+                ((pricedb-latest)
+                 (lambda (foreign domestic date)
+                   (find-price (gnc-pricedb-lookup-latest-any-currency pricedb foreign)
+                               domestic)))
+                ((pricedb-nearest)
+                 (lambda (foreign domestic date)
+                   (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
+                                pricedb foreign (time64CanonicalDayTime date)) domestic)))))
+             (headercols (list (_ "Account")))
+             (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
+             (sum-total-moneyin 0)
+             (sum-total-income 0)
+             (sum-total-both-gains 0)
+             (sum-total-gain 0)
+             (sum-total-ugain 0)
+             (sum-total-brokerage 0)
+             (sum-total-totalreturn 0)) ;;end of let
 
-	  (if show-listing
-	      (begin (append! headercols (list (_ "Listing")))
-		     (append! totalscols (list " "))))
+        ;;begin building lists for which columns to display
+        (when show-symbol
+          (append! headercols (list (_ "Symbol")))
+          (append! totalscols (list " ")))
 
-	  (if show-shares
-	      (begin (append! headercols (list (_ "Shares")))
-		     (append! totalscols (list " "))))
+        (when show-listing
+          (append! headercols (list (_ "Listing")))
+          (append! totalscols (list " ")))
 
-	  (if show-price
-	      (begin (append! headercols (list (_ "Price")))
-		     (append! totalscols (list " "))))
+        (when show-shares
+          (append! headercols (list (_ "Shares")))
+          (append! totalscols (list " ")))
 
-	  (append! headercols (list " "
-				    (_ "Basis")
-				    (_ "Value")
-				    (_ "Money In")
-				    (_ "Money Out")
-				    (_ "Realized Gain")
-				    (_ "Unrealized Gain")
-				    (_ "Total Gain")
-				    (_ "Rate of Gain")
-				    (_ "Income")))
+        (when show-price
+          (append! headercols (list (_ "Price")))
+          (append! totalscols (list " ")))
 
-	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-	      (append! headercols (list (_ "Brokerage Fees"))))
+        (append! headercols (list " "
+                                  (_ "Basis")
+                                  (_ "Value")
+                                  (_ "Money In")
+                                  (_ "Money Out")
+                                  (_ "Realized Gain")
+                                  (_ "Unrealized Gain")
+                                  (_ "Total Gain")
+                                  (_ "Rate of Gain")
+                                  (_ "Income")))
 
-	  (append! headercols (list (_ "Total Return")
-				    (_ "Rate of Return")))
+        (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
+            (append! headercols (list (_ "Brokerage Fees"))))
 
-          (append! totalscols (list " "))
+        (append! headercols (list (_ "Total Return")
+                                  (_ "Rate of Return")))
 
-          (gnc:html-table-set-col-headers!
-           table
-	   headercols)
+        (append! totalscols (list " "))
 
-          (catch 'div/0
-            (lambda ()
-              (table-add-stock-rows
-               table accounts to-date currency price-fn exchange-fn price-source
-               include-empty show-symbol show-listing show-shares show-price basis-method
-               prefer-pricelist handle-brokerage-fees
-               total-basis total-value total-moneyin total-moneyout
-               total-income total-gain total-ugain total-brokerage))
-            (lambda (k reason)
-              (gnc:html-document-add-object!
-               document (format #f OVERFLOW-ERROR reason))))
+        (gnc:html-table-set-col-headers! table headercols)
+
+        (catch 'div/0
+          (lambda ()
+            (table-add-stock-rows
+             table accounts to-date currency price-fn exchange-fn price-source
+             include-empty show-symbol show-listing show-shares show-price basis-method
+             prefer-pricelist handle-brokerage-fees
+             total-basis total-value total-moneyin total-moneyout
+             total-income total-gain total-ugain total-brokerage))
+          (lambda (k reason)
+            (gnc:html-document-add-object!
+             document (format #f OVERFLOW-ERROR reason))))
 
 
-	  (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
-	  (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
-	  (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
-	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
-	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
-										      (gnc:gnc-monetary-amount sum-total-ugain)
-										      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
-	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
-	  (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
-										           (gnc:gnc-monetary-amount sum-total-income)
-										       (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
+        (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
+        (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
+        (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
+        (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
+        (set! sum-total-both-gains (gnc:make-gnc-monetary currency (+ (gnc:gnc-monetary-amount sum-total-gain)
+                                                                      (gnc:gnc-monetary-amount sum-total-ugain))))
+        (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
+        (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (+ (gnc:gnc-monetary-amount sum-total-both-gains)
+                                                                       (gnc:gnc-monetary-amount sum-total-income))))
 
-          (gnc:html-table-append-row/markup!
-           table
-           "grand-total"
+        (gnc:html-table-append-row/markup!
+         table "grand-total"
+         (list (gnc:make-html-table-cell/size
+                1 17 (gnc:make-html-text (gnc:html-markup-hr)))))
+
+        ;; finish building the totals columns, now that totals are complete
+        (append! totalscols (list
+                             (make-total-number-cell (gnc:sum-collector-commodity total-basis currency exchange-fn))
+                             (make-total-number-cell (gnc:sum-collector-commodity total-value currency exchange-fn))
+                             (make-total-number-cell sum-total-moneyin)
+                             (make-total-number-cell (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
+                             (make-total-number-cell sum-total-gain)
+                             (make-total-number-cell sum-total-ugain)
+                             (make-total-number-cell sum-total-both-gains)
+                             (make-total-number-cell
+                              (let* ((totalinvalue (gnc:gnc-monetary-amount sum-total-moneyin))
+                                     (totalgainvalue (gnc:gnc-monetary-amount sum-total-both-gains)))
+                                (if (zero? totalinvalue)
+                                    ""
+                                    (format #f "~,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
+                             (make-total-number-cell sum-total-income)))
+
+        (unless (eq? handle-brokerage-fees 'ignore-brokerage)
+          (append! totalscols (list (make-total-number-cell sum-total-brokerage))))
+
+        (append! totalscols (list
+                             (make-total-number-cell sum-total-totalreturn)
+                             (make-total-number-cell
+                              (let* ((totalinvalue (gnc:gnc-monetary-amount sum-total-moneyin))
+                                     (totalreturnvalue (gnc:gnc-monetary-amount sum-total-totalreturn)))
+                                (if (zero? totalinvalue)
+                                    ""
+                                    (format #f "~,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))))
+
+        (gnc:html-table-append-row/markup! table "grand-total" totalscols )
+
+        (gnc:html-document-add-object! document table)
+        (when warn-price-dirty
+          (gnc:html-document-append-objects!
+           document
            (list
-            (gnc:make-html-table-cell/size
-             1 17 (gnc:make-html-text (gnc:html-markup-hr)))))
+            (gnc:make-html-text
+             (_ "* this commodity data was built using transaction pricing instead of the price list.")
+             (gnc:html-markup-br)
+             (_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
 
-	  ;; finish building the totals columns, now that totals are complete
-	  (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-basis currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-value currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-moneyin)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-gain)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-ugain)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-both-gains)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell"
-				(let* ((totalinvalue (gnc-numeric-to-double
-						      (gnc:gnc-monetary-amount sum-total-moneyin)))
-				       (totalgainvalue (gnc-numeric-to-double
-							(gnc:gnc-monetary-amount sum-total-both-gains)))
-				       )
-				  (if (= 0.0 totalinvalue)
-				      ""
-				      (format #f "~,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-income)))
-	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-	      (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
-                                "total-number-cell" sum-total-brokerage))))
-	  (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
-                                "total-number-cell" sum-total-totalreturn)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell"
-				(let* ((totalinvalue (gnc-numeric-to-double
-						      (gnc:gnc-monetary-amount sum-total-moneyin)))
-				       (totalreturnvalue (gnc-numeric-to-double
-						          (gnc:gnc-monetary-amount sum-total-totalreturn)))
-				 )
-				  (if (= 0.0 totalinvalue)
-				      ""
-				      (format #f "~,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
-			       ))
-
-
-          (gnc:html-table-append-row/markup!
-           table
-           "grand-total"
-           totalscols
-            )
-
-          (gnc:html-document-add-object! document table)
-          (if warn-price-dirty
-              (gnc:html-document-append-objects! document
-                                                 (list (gnc:make-html-text (_ "* this commodity data was built using transaction pricing instead of the price list."))
-						       (gnc:make-html-text (gnc:html-markup-br))
-						       (gnc:make-html-text (_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
-
-          (if warn-no-price
-              (gnc:html-document-append-objects! document
-                                                 (list (gnc:make-html-text (if warn-price-dirty (gnc:html-markup-br) ""))
-                                                       (gnc:make-html-text (_ "** this commodity has no price and a price of 1 has been used.")))))
-)
-
-					;if no accounts selected.
-        (gnc:html-document-add-object!
-         document
-	 (gnc:html-make-no-account-warning
-	  report-title (gnc:report-id report-obj))))
+        (when warn-no-price
+          (gnc:html-document-append-objects!
+           document
+           (list
+            (gnc:make-html-text
+             (if warn-price-dirty (gnc:html-markup-br) "")
+             (_ "** this commodity has no price and a price of 1 has been used."))))))))
 
     (gnc:report-finished)
     document)))
