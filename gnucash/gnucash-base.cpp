@@ -96,9 +96,9 @@ static void
 mac_set_currency_locale(NSLocale *locale, NSString *locale_str)
 {
     /* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
-    NSLocale *cur_locale = [[NSLocale alloc] initWithLocaleIdentifier: locale_str];
-    if (![[locale objectForKey: NSLocaleCurrencyCode] isEqualToString:
-	  [cur_locale objectForKey: NSLocaleCurrencyCode]])
+    NSLocale *cur_locale = [ [NSLocale alloc] initWithLocaleIdentifier: locale_str];
+    if (![ [locale objectForKey: NSLocaleCurrencyCode] isEqualToString:
+	  [cur_locale objectForKey: NSLocaleCurrencyCode] ])
     {
         NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
         NSEnumerator *locale_iter = [all_locales objectEnumerator];
@@ -107,9 +107,9 @@ mac_set_currency_locale(NSLocale *locale, NSString *locale_str)
         NSString *money_locale = nil;
         while ((this_locale = (NSString*)[locale_iter nextObject]))
         {
-            NSLocale *templocale = [[NSLocale alloc]
+            NSLocale *templocale = [ [NSLocale alloc]
                                     initWithLocaleIdentifier: this_locale];
-            if ([[templocale objectForKey: NSLocaleCurrencyCode]
+            if ([ [templocale objectForKey: NSLocaleCurrencyCode]
                  isEqualToString: currency])
             {
                 money_locale = this_locale;
@@ -137,7 +137,7 @@ mac_find_close_country(NSString *locale_str, NSString *country_str,
     PWARN("Apple Locale is set to a value %s not supported"
           " by the C runtime", [locale_str UTF8String]);
     while ((this_locale = (NSString*)[locale_iter nextObject]))
-        if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+        if ([ [ [NSLocale componentsFromLocaleIdentifier: this_locale]
               objectForKey: NSLocaleCountryCode]
              isEqualToString: country_str] &&
             setlocale (LC_ALL, [this_locale UTF8String]))
@@ -147,7 +147,7 @@ mac_find_close_country(NSString *locale_str, NSString *country_str,
         }
     if (!new_locale)
         while ((this_locale = (NSString*)[locale_iter nextObject]))
-            if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+            if ([ [ [NSLocale componentsFromLocaleIdentifier: this_locale]
                   objectForKey: NSLocaleLanguageCode]
                  isEqualToString: lang_str] &&
                 setlocale (LC_ALL, [this_locale UTF8String]))
@@ -179,8 +179,8 @@ mac_convert_complex_language(NSString* this_lang)
     NSArray *elements = [this_lang componentsSeparatedByString: @"-"];
     if ([elements count] == 1)
         return this_lang;
-    if ([[elements objectAtIndex: 0] isEqualToString: @"zh"]) {
-        if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
+    if ([ [elements objectAtIndex: 0] isEqualToString: @"zh"]) {
+        if ([ [elements objectAtIndex: 1] isEqualToString: @"Hans"])
             this_lang = @"zh_CN";
         else
             this_lang = @"zh_TW";
@@ -202,7 +202,7 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
     NSRange not_found = {NSNotFound, 0};
     while ((this_lang = [lang_iter nextObject])) {
         this_lang = [this_lang stringByTrimmingCharactersInSet:
-                     [NSCharacterSet characterSetWithCharactersInString: @"\""]];
+                     [NSCharacterSet characterSetWithCharactersInString: @"\""] ];
         this_lang = mac_convert_complex_language(this_lang);
         new_languages = [new_languages arrayByAddingObject: this_lang];
 /* If it's an English language, add the "C" locale after it so that
@@ -213,7 +213,7 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
             NSArray *temp_array = [NSArray arrayWithObject: lang_str];
             new_languages = [temp_array arrayByAddingObjectsFromArray: new_languages];
         }
-        langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
+        langs = [ [new_languages componentsJoinedByString:@":"] UTF8String];
     }
     if (langs && strlen(langs) > 0)
     {
@@ -225,16 +225,16 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
 static void
 set_mac_locale()
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [ [NSAutoreleasePool alloc] init];
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSLocale *locale = [NSLocale currentLocale];
     NSString *lang_str, *country_str, *locale_str;
-    NSArray *languages = [[defs arrayForKey: @"AppleLanguages"] retain];
+    NSArray *languages = [ [defs arrayForKey: @"AppleLanguages"] retain];
     @try
     {
         lang_str = [locale objectForKey: NSLocaleLanguageCode];
         country_str = [locale objectForKey: NSLocaleCountryCode];
-	locale_str = [[lang_str stringByAppendingString: @"_"]
+	locale_str = [ [lang_str stringByAppendingString: @"_"]
 		      stringByAppendingString: country_str];
     }
     @catch (NSException *err)
@@ -242,7 +242,7 @@ set_mac_locale()
 	PWARN("Locale detection raised error %s: %s. "
 	      "Check that your locale settings in "
 	      "System Preferences>Languages & Text are set correctly.",
-	      [[err name] UTF8String], [[err reason] UTF8String]);
+	      [ [err name] UTF8String], [ [err reason] UTF8String]);
 	locale_str = @"_";
     }
 /* If we didn't get a valid current locale, the string will be just "_" */
