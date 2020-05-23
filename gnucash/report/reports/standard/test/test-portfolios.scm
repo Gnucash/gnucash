@@ -110,8 +110,8 @@
       (let ((sxml (options->sxml advanced-uuid options "basic fifo")))
         (test-equal "advanced: fifo basis"
           '("AAPL" "AAPL" "NASDAQ" "42.00" "$6.0000" "$543.94" "$252.00" "$800.00"
-            "$553.00" "$286.94" "-$291.94" "-$5.00" "-0.63%" "$4.00" "$10.00"
-            "-$1.00" "-0.13%")
+            "$553.00" "$286.94" "-$291.94" "-$5.00" "-0.62%" "$4.00" "$10.00"
+            "-$1.00" "-0.12%")
           (sxml->table-row-col sxml 1 1 #f)))
 
       (set-option! options "General" "Basis calculation method" 'filo-basis)
