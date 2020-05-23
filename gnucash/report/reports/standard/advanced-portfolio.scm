@@ -54,10 +54,6 @@ a negative stock balance, and a subsequent buy transaction causing a
 zero balance. This leads to a division-by-zero error. It can be fixed
 by preventing negative stock balances.<br/>")
 
-;; To avoid overflows in our calculations, define a denominator for prices and unit values
-(define price-denom 100000000)
-(define units-denom 100000000)
-
 (define (options-generator)
   (let* ((options (gnc:new-options))
          ;; This is just a helper function for making options.
