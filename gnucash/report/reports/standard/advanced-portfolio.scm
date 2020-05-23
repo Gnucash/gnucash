@@ -180,6 +180,14 @@ by preventing negative stock balances.<br/>")
     (gnc:options-set-default-section options gnc:pagename-general)
     options))
 
+
+(define (make-text-cell . args)
+  (apply gnc:make-html-table-header-cell/markup "text-cell" args))
+(define (make-number-cell . args)
+  (apply gnc:make-html-table-header-cell/markup "number-cell" args))
+(define (make-total-number-cell . args)
+  (apply gnc:make-html-table-cell/markup "total-number-cell" args))
+
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
 ;; report-html.txt for documentation; the file report-html.scm
