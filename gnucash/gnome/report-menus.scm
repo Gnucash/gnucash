@@ -116,6 +116,6 @@
     (N_ "Dashboard")
     "ad80271c890b11dfa79f2dcedfd72085"
     (N_ "A basic dashboard for your accounting data")
-    (list gnc:menuname-reports gnc:menuname-multicolumn "")
+    (list gnc:menuname-reports gnc:menuname-multicolumn)
     (lambda (window)
       (gnc-main-window-open-report (gnc:make-dashboard) window)))))
