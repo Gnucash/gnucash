@@ -33,6 +33,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 
 (define reportname (N_ "Advanced Portfolio"))
 
@@ -203,40 +204,26 @@ by preventing negative stock balances.<br/>")
   (define (split-account-type? split type)
     (eq? type (xaccAccountGetType (xaccSplitGetAccount split))))
 
-  (define (same-split? s1 s2)
-    (equal? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
-
-  (define (same-account? a1 a2)
-    (equal? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
-
   ;; sum up the contents of the b-list built by basis-builder below
-  (define (sum-basis b-list currency-frac)
-    (if (not (eqv? b-list '()))
-	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND)
-			 (sum-basis (cdr b-list) currency-frac) currency-frac GNC-RND-ROUND)
-	(gnc-numeric-zero)
-	)
-    )
+  (define (sum-basis b-list)
+    (match b-list
+      (() 0)
+      (((units . value) . rest) (+ (* units value) (sum-basis rest)))))
 
   ;; sum up the total number of units in the b-list built by basis-builder below
   (define (units-basis b-list)
-    (if (not (eqv? b-list '()))
-	(gnc-numeric-add (caar b-list) (units-basis (cdr b-list))
-			 units-denom GNC-RND-ROUND)
-	(gnc-numeric-zero)
-	)
-    )
+    (match b-list
+      (() 0)
+      (((units . _) . rest) (+ units (units-basis rest)))))
 
   ;; apply a ratio to an existing basis-list, useful for splits/mergers and spinoffs
   ;; I need to get a brain and use (map) for this.
   (define (apply-basis-ratio b-list units-ratio value-ratio)
-    (if (not (eqv? b-list '()))
-	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) units-denom GNC-RND-ROUND)
-		    (gnc-numeric-mul value-ratio (cdar b-list) price-denom GNC-RND-ROUND))
-	      (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
-	'()
-	)
-    )
+    (match b-list
+      (() '())
+      (((units . value) . rest)
+       (cons (cons (* units-ratio units) (* value-ratio value))
+             (apply-basis-ratio rest units-ratio value-ratio)))))
 
   ;; this builds a list for basis calculation and handles average, fifo and lifo methods
   ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
@@ -344,7 +331,7 @@ by preventing negative stock balances.<br/>")
 	;; with a ratio of 1
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
-      (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
+      (let* ((current-value (sum-basis b-list))
             (value-ratio (if (zero? current-value)
                              (throw 'div/0 (format #f "spinoff of ~,2f currency units" current-value))
                              (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
@@ -382,9 +369,9 @@ by preventing negative stock balances.<br/>")
   (define (parent-or-sibling? a1 a2)
     (let ((a2parent (gnc-account-get-parent a2))
           (a1parent (gnc-account-get-parent a1)))
-          (or (same-account? a2parent a1)
-              (same-account? a1parent a2)
-              (same-account? a1parent a2parent))))
+          (or (equal? a2parent a1)
+              (equal? a1parent a2)
+              (equal? a1parent a2parent))))
 
   ;; Test whether the given split is the source of a spin off transaction
   ;; This will be a no-units split with only one other split.
@@ -393,7 +380,7 @@ by preventing negative stock balances.<br/>")
   (define (spin-off? split current)
      (let ((other-split (xaccSplitGetOtherSplit split)))
           (and (gnc-numeric-zero-p (xaccSplitGetAmount split))
-               (same-account? current (xaccSplitGetAccount split))
+               (equal? current (xaccSplitGetAccount split))
                (not (null? other-split))
                (not (split-account-type? other-split ACCT-TYPE-EXPENSE))
                (not (split-account-type? other-split ACCT-TYPE-INCOME)))))
@@ -583,7 +570,7 @@ by preventing negative stock balances.<br/>")
                                 ((split-account-type? s ACCT-TYPE-EXPENSE)
                                  ;; Brokerage expense unless a two split transaction with other split
                                  ;; in the stock account in which case it's a stock donation to charity.
-                                 (if (not (same-account? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s))))
+                                 (if (not (equal? current (xaccSplitGetAccount (xaccSplitGetOtherSplit s))))
                                    (set! trans-brokerage
                                          (gnc-numeric-add trans-brokerage split-value commod-currency-frac GNC-RND-ROUND))))
 
@@ -591,7 +578,7 @@ by preventing negative stock balances.<br/>")
                                  (set! trans-income (gnc-numeric-sub trans-income split-value
                                                              commod-currency-frac GNC-RND-ROUND)))
 
-                                ((same-account? current (xaccSplitGetAccount s))
+                                ((equal? current (xaccSplitGetAccount s))
                                  (set! trans-shares (gnc-numeric-add trans-shares (gnc-numeric-abs split-units)
                                                   units-denom GNC-RND-ROUND))
                                  (if (gnc-numeric-zero-p split-units)
@@ -733,13 +720,13 @@ by preventing negative stock balances.<br/>")
 
                              (cond
                                ((and (not (gnc-numeric-zero-p split-units))
-                                     (same-account? current (xaccSplitGetAccount s)))
+                                     (equal? current (xaccSplitGetAccount s)))
                                 ;; Split into subject account with non-zero amount.  This is a purchase
                                 ;; or a sale, adjust the basis
 				(let* ((split-value-currency (gnc:gnc-monetary-amount
 								(my-exchange-fn (gnc:make-gnc-monetary
 								   commod-currency split-value) currency)))
-			               (orig-basis (sum-basis basis-list currency-frac))
+			               (orig-basis (sum-basis basis-list))
 			               ;; proportion of the fees attributable to this split
 			               (fee-ratio (gnc-numeric-div (gnc-numeric-abs split-units) trans-shares
 			                                           GNC-DENOM-AUTO GNC-DENOM-REDUCE))
@@ -767,7 +754,7 @@ by preventing negative stock balances.<br/>")
                                        ;; Split value is zero or negative.  If it's zero it's either a stock split/merge
                                        ;; or the stock has become worthless (which looks like a merge where the number
                                        ;; of shares goes to zero).  If the value is negative then it's a disposal of some sort.
-                                       (let ((new-basis (sum-basis basis-list currency-frac)))
+                                       (let ((new-basis (sum-basis basis-list)))
                                               (if (or (gnc-numeric-zero-p new-basis)
                                                       (gnc-numeric-negative-p split-value))
                                                 ;; Split value is negative or new basis is zero (stock is worthless),
@@ -872,8 +859,7 @@ by preventing negative stock balances.<br/>")
 	    (gnc:debug "prefer-pricelist is " prefer-pricelist)
 	    (gnc:debug "price is " price)
 
-	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list
-	                                                            currency-frac)))
+	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list)))
 	    (gnc:debug "but the actual basis list is " basis-list)
 
             (if (eq? handle-brokerage-fees 'include-in-gain)
@@ -888,7 +874,7 @@ by preventing negative stock balances.<br/>")
 		  (gain (gnc:sum-collector-commodity gaincoll currency my-exchange-fn))
 		  (ugain (gnc:make-gnc-monetary currency
 						(gnc-numeric-sub (gnc:gnc-monetary-amount (my-exchange-fn value currency))
-								 (sum-basis basis-list (gnc-commodity-get-fraction currency))
+								 (sum-basis basis-list)
 								 currency-frac GNC-RND-ROUND)))
 		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
 									      (gnc:gnc-monetary-amount ugain)
@@ -914,7 +900,7 @@ by preventing negative stock balances.<br/>")
 	      (total-income 'merge dividendcoll #f)
 	      (total-gain 'merge gaincoll #f)
 	      (total-ugain 'add (gnc:gnc-monetary-commodity ugain) (gnc:gnc-monetary-amount ugain))
-	      (total-basis 'add currency (sum-basis basis-list currency-frac))
+	      (total-basis 'add currency (sum-basis basis-list))
 
 	      ;; build a list for the row  based on user selections
 	      (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
@@ -933,8 +919,7 @@ by preventing negative stock balances.<br/>")
                             (gnc-price-get-value price))))))))
  	      (append! activecols (list (if use-txn (if pricing-txn "*" "**") " ")
 					(gnc:make-html-table-header-cell/markup
-					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
-					                         currency-frac)))
+					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list)))
 					(gnc:make-html-table-header-cell/markup "number-cell" value)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyin)
 					(gnc:make-html-table-header-cell/markup "number-cell" moneyout)
