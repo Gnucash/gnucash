@@ -85,7 +85,7 @@ function(make_gnucash_potfiles)
   foreach (path ${FILES_IN})
     if (${path} MATCHES "^(bindings/|borrowed/|common/|doc/|libgnucash/|gnucash/)"
         AND
-        NOT ${path} MATCHES "gw-|test|experimental|python-bindings|swig-.*\\.c"
+        NOT ${path} MATCHES "gw-|mocks|test|experimental|python-bindings|swig-.*\\.c"
         # Skip POSIX style hidden files even if they have the proper extension
         # These are typically temporary files from editors like emacs
         AND
