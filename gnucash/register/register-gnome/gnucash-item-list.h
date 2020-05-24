@@ -45,6 +45,8 @@ typedef struct
     GtkScrolledWindow* scrollwin;
     GtkListStore *list_store; /* Contains the list items */
     GtkListStore *temp_store; /* Temporary store for typeahead select */
+    GtkCellRenderer *renderer;
+    gint cell_height;
 } GncItemList;
 
 typedef struct
@@ -68,6 +70,8 @@ GType gnc_item_list_get_type (void);
 GtkWidget *gnc_item_list_new (GtkListStore *shared_store);
 
 gint gnc_item_list_num_entries (GncItemList *item_list);
+
+gint gnc_item_list_get_cell_height (GncItemList *item_list);
 
 void gnc_item_list_clear (GncItemList *item_list);
 

@@ -391,7 +391,6 @@ gnucash/register/register-gnome/gnucash-header.c
 gnucash/register/register-gnome/gnucash-item-edit.c
 gnucash/register/register-gnome/gnucash-item-list.c
 gnucash/register/register-gnome/gnucash-register.c
-gnucash/register/register-gnome/gnucash-scrolled-window.c
 gnucash/register/register-gnome/gnucash-sheet.c
 gnucash/register/register-gnome/gnucash-sheet-private.c
 gnucash/register/register-gnome/gnucash-style.c

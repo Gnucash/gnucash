@@ -641,7 +641,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         *cursor_position += change_chars;
         box_str = match_str;
     }
-    else
+    else if (cell->shared_store)
     {
         // No start-of-name match, try type-ahead search, we match any substring of the full account name.
         GtkListStore *store = cell->shared_store;
@@ -655,7 +655,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
 
     if (match_str == NULL)
     {
-        if (gnc_item_list_using_temp (box->item_list))
+        if (cell->shared_store && gnc_item_list_using_temp (box->item_list))
         {
             block_list_signals (cell); //Prevent recursion
             gnc_item_list_set_temp_store (box->item_list, NULL);
@@ -666,6 +666,8 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
         block_list_signals (cell);
         gnc_item_list_select (box->item_list, NULL);
         unblock_list_signals (cell);
+        *cursor_position = *start_selection = newval_chars;
+        *end_selection = -1;
         return;
     }
 
@@ -902,7 +904,8 @@ popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
     int count, height;
 
     count = gnc_item_list_num_entries (box->item_list);
-    height = count * row_height;
+    height = count * (gnc_item_list_get_cell_height (box->item_list) + 2);
+
     if (height < space_available)
     {
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
@@ -980,9 +983,13 @@ gnc_combo_cell_enter (BasicCell* bcell,
                              popup_get_width, box);
 
     block_list_signals (cell);
-    // Clear the temp store to ensure we don't start in type-ahead mode.
-    gnc_item_list_set_temp_store (box->item_list, NULL);
-    gtk_list_store_clear (box->tmp_store);
+
+    if (cell->shared_store && gnc_item_list_using_temp (box->item_list))
+    {
+        // Clear the temp store to ensure we don't start in type-ahead mode.
+        gnc_item_list_set_temp_store (box->item_list, NULL);
+        gtk_list_store_clear (box->tmp_store);
+    }
     gnc_item_list_select (box->item_list, bcell->value);
     unblock_list_signals (cell);
 

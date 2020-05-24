@@ -61,7 +61,7 @@ enum
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
-static void gnc_item_edit_destroying(GtkWidget *this, gpointer data);
+static void gnc_item_edit_destroying (GtkWidget *this, gpointer data);
 static void
 gnc_item_edit_tb_init (GncItemEditTb *item_edit_tb)
 {
@@ -848,7 +848,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
     GtkBorder padding;
     GtkBorder margin;
     GtkBorder border;
-    GtkWidget *vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     GncItemEdit *item_edit =
             g_object_new (GNC_TYPE_ITEM_EDIT,
                           "sheet", sheet,
@@ -904,12 +903,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.ebox),
                       item_edit->popup_toggle.tbutton);
 
-    /* The button needs to be packed into a vertical box so that the height and position
-     * can be controlled in earlier than Gtk3.20 versions */
-    gtk_box_pack_start (GTK_BOX(vb), item_edit->popup_toggle.ebox,
-                        FALSE, FALSE, 0);
-
-    gtk_box_pack_start (GTK_BOX(item_edit), vb, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
     gtk_widget_show_all(GTK_WIDGET(item_edit));
     g_signal_connect(G_OBJECT(item_edit), "destroy",
                      G_CALLBACK(gnc_item_edit_destroying), NULL);
@@ -917,10 +911,12 @@ gnc_item_edit_new (GnucashSheet *sheet)
 }
 
 static void
-gnc_item_edit_destroying(GtkWidget *item_edit, gpointer data)
+gnc_item_edit_destroying (GtkWidget *item_edit, gpointer data)
 {
-    g_signal_handler_disconnect (GNC_ITEM_EDIT (item_edit)->popup_item,
-                                 GNC_ITEM_EDIT (item_edit)->popup_height_signal_id);
+    if (GNC_ITEM_EDIT (item_edit)->popup_height_signal_id > 0)
+        g_signal_handler_disconnect (GNC_ITEM_EDIT (item_edit)->popup_item,
+                                     GNC_ITEM_EDIT (item_edit)->popup_height_signal_id);
+
     while (g_idle_remove_by_data((gpointer)item_edit))
         continue;
 }
@@ -1012,13 +1008,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     // Lets check popup height is the true height
     item_edit->popup_returned_height = popup_h;
-    if (!item_edit->popup_height_signal_id)
-        item_edit->popup_height_signal_id =
-    g_signal_connect_after (item_edit->popup_item, "size-allocate",
-                                    G_CALLBACK(check_popup_height_is_true),
-                                    item_edit);
 
-    gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
+    if (popup_h == popup_max_height)
+        gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
+    else
+        gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, -1);
 
     toggle = GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton);
 
@@ -1087,6 +1081,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     gtk_widget_grab_focus (GTK_WIDGET (item_edit->sheet));
 }
 
+
 void
 gnc_item_edit_set_popup (GncItemEdit    *item_edit,
                          GtkWidget      *popup_item,
@@ -1101,6 +1096,24 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
 
     if (item_edit->is_popup)
         gnc_item_edit_hide_popup (item_edit);
+
+    /* setup size-allocate callback for popup_item height, done here as
+       item_edit is constant and popup_item changes per cell */
+    if (popup_item)
+    {
+        item_edit->popup_height_signal_id = g_signal_connect_after (
+                                            popup_item, "size-allocate",
+                                            G_CALLBACK(check_popup_height_is_true),
+                                            item_edit);
+    }
+    else
+    {
+        if (GNC_ITEM_EDIT (item_edit)->popup_height_signal_id > 0)
+        {
+            g_signal_handler_disconnect (item_edit->popup_item, item_edit->popup_height_signal_id);
+            item_edit->popup_height_signal_id = 0;
+        }
+    }
 
     item_edit->is_popup = popup_item != NULL;
 
