@@ -206,7 +206,7 @@ gnucash_sheet_cell_valid (GnucashSheet *sheet, VirtualLocation virt_loc)
 }
 
 
-void
+static void
 gnucash_sheet_cursor_set (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
     g_return_if_fail (sheet != NULL);

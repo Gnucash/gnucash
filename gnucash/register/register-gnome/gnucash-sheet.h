@@ -75,8 +75,6 @@ void gnucash_sheet_redraw_help (GnucashSheet *sheet);
 void gnucash_sheet_redraw_block (GnucashSheet *sheet,
                                  VirtualCellLocation vcell_loc);
 
-void gnucash_sheet_cursor_set (GnucashSheet *gsheet, VirtualLocation virt_loc);
-
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
         const gchar *new_text);
 
