@@ -85,10 +85,10 @@ to the Reconciliation Date.")
     ;; similar to default-calculated-cells but disable dual-subtotals.
     (list (vector (_ "Funds In")
                   debit-amount #f #t #f
-                  (const ""))
+                  (const "") #t)
           (vector (_ "Funds Out")
                   credit-amount #f #t #f
-                  (const "")))))
+                  (const "") #f))))
 
 (define (reconcile-report-renderer rpt)
   (gnc:trep-renderer

@@ -905,7 +905,7 @@ be excluded from periodic reporting.")
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display optname-grid
-       (eq? amount-value 'single))
+       (not (eq? amount-value 'none)))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display "Enable links"
@@ -947,7 +947,7 @@ be excluded from periodic reporting.")
       (list (N_ "Shares")                       "k"  (_ "Display the number of shares?") #f)
       (list (N_ "Price")                        "l"  (_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
-      (list optname-grid                        "m5" (_ "Display a subtotal summary table. This requires Display/Amount being 'single") #f)
+      (list optname-grid                        "m5" (_ "Display a subtotal summary table.") #f)
       (list (N_ "Running Balance")              "n"  (_ "Display a running balance?") #f)
       (list (N_ "Totals")                       "o"  (_ "Display the totals?") #t)))
 
@@ -1319,43 +1319,44 @@ be excluded from periodic reporting.")
          ;;         friendly-heading-fn (friendly-heading-fn account) to retrieve
          ;;                             friendly name for account debit/credit
          ;;                             or 'bal-bf for balance-brought-forward
+         ;;         start-dual-column?  #t: merge with next cell for subtotal table.
 
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
                            converted-amount #t #t #f
-                           (lambda (a) "")))
+                           (lambda (a) "") #f))
              '())
 
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
                            converted-debit-amount #f #t #t
-                           friendly-debit)
+                           friendly-debit #t)
                    (vector (header-commodity (_ "Credit"))
                            converted-credit-amount #f #t #f
-                           friendly-credit))
+                           friendly-credit #f))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
              (list (vector (_ "Amount")
                            original-amount #t #t #f
-                           (lambda (a) "")))
+                           (lambda (a) "") #f))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-double))
              (list (vector (_ "Debit")
                            original-debit-amount #f #t #t
-                           friendly-debit)
+                           friendly-debit #t)
                    (vector (_ "Credit")
                            original-credit-amount #f #t #f
-                           friendly-credit))
+                           friendly-credit #f))
              '())
 
          (if (column-uses? 'running-balance)
              (list (vector (_ "Running Balance")
                            running-balance #t #f #f
-                           'bal-bf))
+                           'bal-bf #f))
              '()))))
 
     (define calculated-cells
@@ -1447,6 +1448,15 @@ be excluded from periodic reporting.")
                          (fn (xaccSplitGetAccount split))))))))
              calculated-cells))))))
 
+    ;; check first calculated-cell vector's 7th cell. originally these
+    ;; had only 6 cells. backward-compatible upgrade. useful for the
+    ;; next function, add-subtotal-row.
+    (define first-column-merge?
+      (let ((first-cell (and (pair? calculated-cells) (car calculated-cells))))
+        (and first-cell
+             (<= 7 (vector-length first-cell))
+             (vector-ref first-cell 6))))
+
     (define (add-subtotal-row subtotal-string subtotal-collectors
                               subtotal-style level row col)
       (let* ((left-indent (case level
@@ -1525,12 +1535,16 @@ be excluded from periodic reporting.")
                                  "total-number-cell" mon)
                                 result))))))))
 
-        ;; take the first column of each commodity, add onto the subtotal grid
+        (define (get-commodity-grid-amount commodity)
+          (define zero (gnc:make-gnc-monetary commodity 0))
+          (gnc:monetary+
+           (or (retrieve-commodity (car columns) commodity) zero)
+           (gnc:monetary-neg
+            (or (and first-column-merge? (retrieve-commodity (cadr columns) commodity))
+                zero))))
+
         (set! grid
-          (grid-add grid row col
-                    (map (lambda (commodity)
-                           (retrieve-commodity (car columns) commodity))
-                         list-of-commodities)))
+          (grid-add grid row col (map get-commodity-grid-amount list-of-commodities)))
 
         ;; each commodity subtotal gets a separate line in the html-table
         ;; each line comprises: indenting, first-column, data-columns
@@ -2023,8 +2037,8 @@ be excluded from periodic reporting.")
                                    (keylist-get-info date-subtotal-list
                                                      primary-date-subtotal 'renderer-fn)
                                    (opt-val pagename-sorting optname-prime-subtotal))
-                               (eq? (opt-val gnc:pagename-display (N_ "Amount"))
-                                    'single)))
+                               (memq (opt-val gnc:pagename-display (N_ "Amount"))
+                                     '(single double))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
