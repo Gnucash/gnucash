@@ -45,6 +45,8 @@
 #include <unistd.h>
 #ifdef MAC_INTEGRATION
 #include <gtkmacintegration/gtkosxapplication.h>
+#elif GNC_PLATFORM_OSX
+#include <mach-o/dyld.h>
 #endif
 #endif /* ENABLE_BINRELOC */
 #include <stdio.h>
@@ -98,89 +100,46 @@ _br_find_exe (Gnc_GbrInitError *error)
     }
     g_free (prefix);
     return result;
-#elif defined MAC_INTEGRATION
-    gchar *path = gtkosx_application_get_executable_path();
-    g_print ("Application Path %s\n", path);
-    return path;
 #else
-    char *path, *path2, *line, *result;
-    size_t buf_size;
-    ssize_t size;
-    struct stat stat_buf;
+    char path[PATH_MAX + 1], path2[PATH_MAX + 1];
+    char *line, *result;
+    size_t buf_size = PATH_MAX + 1;
     FILE *f;
+    uint32_t size2;
 
-    /* Read from /proc/self/exe (symlink) */
-    if (sizeof (path) > SSIZE_MAX)
-        buf_size = SSIZE_MAX - 1;
-    else
-        buf_size = PATH_MAX - 1;
-    path = (char *) g_try_malloc (buf_size);
-    if (path == NULL)
+#ifdef MAC_INTEGRATION
+    result = gtkosx_application_get_executable_path();
+    strncpy (path2, result, buf_size - 1);
+    g_free (result);
+    g_print ("Application Path %s\n", path2);
+#elif defined GNC_PLATFORM_OSX
+    /* Native Mac, but not Aqua */
+    size2 = buf_size;
+    if (_NSGetExecutablePath (path2, &size2) != 0)
     {
-        /* Cannot allocate memory. */
+        /* buffer not big enough or some other error */
         if (error)
             *error = GNC_GBR_INIT_ERROR_NOMEM;
         return NULL;
     }
-    path2 = (char *) g_try_malloc (buf_size);
-    if (path2 == NULL)
-    {
-        /* Cannot allocate memory. */
-        if (error)
-            *error = GNC_GBR_INIT_ERROR_NOMEM;
-        g_free (path);
-        return NULL;
-    }
-
+#else
     strncpy (path2, "/proc/self/exe", buf_size - 1);
+#endif
 
-    while (1)
+    /* Follow all sym links */
+    if (realpath (path2, path) != NULL)
     {
-        int i;
-
-        size = readlink (path2, path, buf_size - 1);
-        if (size == -1)
-        {
-            /* Error. */
-            g_free (path2);
-            break;
-        }
-
-        /* readlink() success. */
-        path[size] = '\0';
-
-        /* Check whether the symlink's target is also a symlink.
-         * We want to get the final target. */
-        i = stat (path, &stat_buf);
-        if (i == -1)
-        {
-            /* Error. */
-            g_free (path2);
-            break;
-        }
-
-        /* stat() success. */
-        if (!S_ISLNK (stat_buf.st_mode))
-        {
-            /* path is not a symlink. Done. */
-            g_free (path2);
-            return path;
-        }
-
-        /* path is a symlink. Continue loop and resolve this. */
-        strncpy (path, path2, buf_size - 1);
+        return g_strdup (path);
     }
-
-
-    /* readlink() or stat() failed; this can happen when the program is
+    
+    /* realpath() failed; this can happen when the program is
      * running in Valgrind 2.2. Read from /proc/self/maps as fallback. */
 
     buf_size = PATH_MAX + 128;
-    line = (char *) g_try_realloc (path, buf_size);
+    line = (char *) g_try_malloc (buf_size);
     if (line == NULL)
     {
         /* Cannot allocate memory. */
-        g_free (path);
         if (error)
             *error = GNC_GBR_INIT_ERROR_NOMEM;
         return NULL;
@@ -221,10 +180,10 @@ _br_find_exe (Gnc_GbrInitError *error)
         line[buf_size - 1] = 0;
 
     /* Extract the filename; it is always an absolute path. */
-    path = strchr (line, '/');
+    result = strchr (line, '/');
 
     /* Sanity check. */
-    if (strstr (line, " r-xp ") == NULL || path == NULL)
+    if (strstr (line, " r-xp ") == NULL || result == NULL)
     {
         fclose (f);
         g_free (line);
@@ -233,10 +192,9 @@ _br_find_exe (Gnc_GbrInitError *error)
         return NULL;
     }
 
-    path = g_strdup (path);
-    g_free (line);
+    result = g_strdup (result);
     fclose (f);
-    return path;
+    return result;
 #endif /* ENABLE_BINRELOC */
 }
 
@@ -410,12 +368,17 @@ get_mac_bundle_prefix()
 #if defined ENABLE_BINRELOC && defined MAC_INTEGRATION
     gchar *id = gtkosx_application_get_bundle_id ();
     gchar *path = gtkosx_application_get_resource_path ();
-     if (id == NULL)
+    /* If id is nullthe app is unbundled and the path 
+       is just the path to the application directory.
+       We already have that and our version is better.
+       If GNC_UNINSTALLED is set then we're running from
+       GNC_BUILDDIR.
+    */
+    if (id == NULL || g_getenv ("GNC_UNINSTALLED"))
     {
-        gchar *dirname = g_path_get_dirname (path);
         g_free (path);
         g_free (id);
-        return dirname;
+        return NULL;
     }
     g_free (id);
     return path;
