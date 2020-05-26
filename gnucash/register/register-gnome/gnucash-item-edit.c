@@ -568,10 +568,13 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
 
-    cairo_move_to (cr, cursor_x + 0.5, gnc_item_edit_get_margin (item_edit, top) +
-                                       gnc_item_edit_get_padding_border (item_edit, top));
-    cairo_rel_line_to (cr, 0, height - gnc_item_edit_get_margin (item_edit, top_bottom) -
-                                       gnc_item_edit_get_padding_border (item_edit, top_bottom));
+    cairo_move_to (cr, cursor_x + 0.5,
+                   gnc_item_edit_get_margin (item_edit, top) +
+                   gnc_item_edit_get_padding_border (item_edit, top));
+    cairo_rel_line_to (cr, 0,
+                       height - gnc_item_edit_get_margin (item_edit, top_bottom)
+                       - gnc_item_edit_get_padding_border (item_edit,
+                                                           top_bottom));
 
     cairo_stroke (cr);
 
