@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <qof.h>
 
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
@@ -58,6 +59,7 @@ enum
 
 #define MIN_BUTT_WIDTH 20 // minimum size for a button excluding border
 
+static QofLogModule log_module = G_LOG_DOMAIN;
 static GtkBoxClass *gnc_item_edit_parent_class;
 
 static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
@@ -311,6 +313,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 
     item_edit->sheet = NULL;
     item_edit->editor = NULL;
+    item_edit->preedit_length = 0;
 
     item_edit->is_popup = FALSE;
     item_edit->show_popup = FALSE;
@@ -503,6 +506,19 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     return FALSE;
 }
 
+/* The signal is emitted at the beginning of gtk_entry_preedit_changed_cb which
+ * proceeds to set its private members preedit_length = strlen(preedit) and
+ * preeditc_cursor = g_utf8_strlen(preedit, -1), then calls gtk_entry_recompute
+ * which in turn queues a redraw.
+ */
+static void
+preedit_changed_cb (GtkEntry* entry, gchar *preedit, GncItemEdit* item_edit)
+{
+    int pos, bound;
+    item_edit->preedit_length = g_utf8_strlen (preedit, -1); // Note codepoints not bytes
+    DEBUG ("%s %lu", preedit, item_edit->preedit_length);
+}
+
 
 static gboolean
 draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
@@ -512,7 +528,8 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
     GtkStateFlags flags = gtk_widget_get_state_flags (GTK_WIDGET(widget));
     gint height = gtk_widget_get_allocated_height (widget);
-    const gchar *text;
+    PangoLayout *layout = gtk_entry_get_layout (GTK_ENTRY(widget));
+    const char *pango_text = pango_layout_get_text(layout);
     GdkRGBA *fg_color;
     GdkRGBA color;
     gint x_offset;
@@ -526,26 +543,27 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     gtk_style_context_get_color (stylectxt, flags, &color);
     fg_color = &color;
 
-    text = gtk_entry_get_text (GTK_ENTRY (widget));
 
-    if ((text != NULL) && (*text != '\0'))
+    if (pango_text && *pango_text)
     {
-        PangoLayout *layout;
         PangoRectangle strong_pos;
-        gint start_pos, end_pos, cursor_pos, cursor_byte_pos;
-
-        cursor_pos = gtk_editable_get_position (editable);
-        cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
-
-        gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
-
-        layout = gtk_entry_get_layout (GTK_ENTRY(widget));
-        pango_layout_get_cursor_pos (layout, cursor_byte_pos, &strong_pos, NULL);
+        glong text_len = g_utf8_strlen (pango_text, -1);
+        gint cursor_pos =
+            gtk_editable_get_position (editable) + item_edit->preedit_length;
+        gint cursor_byte_pos = cursor_pos < text_len ?
+            g_utf8_offset_to_pointer (pango_text, cursor_pos) - pango_text :
+            strlen (pango_text);
+        DEBUG ("Cursor: %d, byte offset %d, text byte len %ld", cursor_pos,
+               cursor_byte_pos, strlen (pango_text));
+        pango_layout_get_cursor_pos (layout, cursor_byte_pos,
+                                     &strong_pos, NULL);
         cursor_x = x_offset + PANGO_PIXELS (strong_pos.x);
     }
     else
+    {
+        DEBUG ("No text, cursor at %d.", x_offset);
         cursor_x = x_offset;
-
+    }
     // Now draw a vertical line
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
@@ -880,6 +898,9 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Connect to the draw signal so we can draw a cursor
     g_signal_connect_after (item_edit->editor, "draw",
                             G_CALLBACK (draw_text_cursor_cb), item_edit);
+
+    g_signal_connect (item_edit->editor, "preedit-changed",
+                      G_CALLBACK (preedit_changed_cb), item_edit);
 
     // Fill in the background so the underlying sheet cell can not be seen
     g_signal_connect (item_edit, "draw",

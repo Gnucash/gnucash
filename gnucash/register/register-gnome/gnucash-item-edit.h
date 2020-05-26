@@ -77,6 +77,7 @@ typedef struct
 
     /* The editor whose status we reflect on the sheet */
     GtkWidget *editor;
+    gulong preedit_length;
 
     gboolean is_popup;
     gboolean show_popup;
