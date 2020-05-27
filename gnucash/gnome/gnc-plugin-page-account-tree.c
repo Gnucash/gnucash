@@ -1583,67 +1583,76 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 }
 
 static void
-delete_account_next (GtkAction *action, GncPluginPageAccountTree *page, Account* ta,
-                                                      Account* sta, Account* saa, delete_helper_t delete_res)
+delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
+                     Account* ta, Account* sta, Account* saa,
+                     delete_helper_t delete_res)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GList* splits = xaccAccountGetSplitList(account);
     GtkWidget* window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
     gint response;
-    
-    const char *format = _("The account %s will be deleted.");
-    char *lines[8];
+
+    char *lines[5];
     char *message;
-    char *name;
     int i = 0;
     GtkWidget *dialog;
     gchar* acct_name = gnc_account_get_full_name(account);
-    
-    lines[0] = g_strdup_printf(format, acct_name);
+
+    lines[i] = g_strdup_printf (_("The account %s will be deleted."),
+                                acct_name);
     g_free(acct_name);
-    
+
     if (splits)
     {
         if (ta)
         {
-            lines[++i] = g_strdup_printf(_("All transactions in this account will be moved to "
-                                           "the account %s."), gnc_account_get_full_name(ta));
+            char *name = gnc_account_get_full_name(ta);
+            lines[++i] = g_strdup_printf (_("All transactions in this account"
+                                            "will be moved to the account %s."),
+                                          name);
+            g_free (name);
         }
         else
         {
-            lines[++i] = g_strdup_printf("%s", _("All transactions in this account will be deleted."));
+            lines[++i] = g_strdup_printf (_("All transactions in this account "
+                                            "will be deleted."));
         }
     }
     if (gnc_account_n_children(account) > 0)
     {
         if (saa)
         {
-            lines[++i] = g_strdup_printf(_("All of its sub-accounts will be moved to "
-                                           "the account %s."), gnc_account_get_full_name(saa));
+            char *name = gnc_account_get_full_name(saa);
+            lines[++i] = g_strdup_printf (_("All of its sub-accounts will be "
+                                            "moved to the account %s."), name);
+            g_free (name);
         }
         else
         {
-            lines[++i] = g_strdup_printf("%s", _("All of its subaccounts will be deleted."));
+            lines[++i] = g_strdup_printf (_("All of its subaccounts will be "
+                                            "deleted."));
             if (sta)
             {
-                lines[++i] = g_strdup_printf(_("All sub-account transactions will be moved to "
-                                               "the account %s."), gnc_account_get_full_name(sta));
+                char *name = gnc_account_get_full_name(sta);
+                lines[++i] = g_strdup_printf (_("All sub-account transactions "
+                                                "will be moved to the "
+                                                "account %s."), name);
+                g_free (name);
             }
             else if (delete_res.has_splits)
             {
-                lines[++i] = g_strdup_printf("%s", _("All sub-account transactions will be deleted."));
+                lines[++i] = g_strdup_printf(_("All sub-account transactions "
+                                               "will be deleted."));
             }
         }
     }
+
     lines[++i] = _("Are you sure you want to do this?");
-    lines[i] = NULL;
-    i--; /* Don't try to free the constant question. */
+
     message = g_strjoinv(" ", lines);
-    while (i--)
-    {
-        g_free(lines[i]);
-    }
-    
+    for (int j = 0; j < i; ++j) // Don't try to free the last one, it's const.
+        g_free (lines[j]);
+
     dialog =  gtk_message_dialog_new(GTK_WINDOW(window),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
