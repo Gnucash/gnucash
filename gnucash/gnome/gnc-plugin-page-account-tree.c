@@ -1618,19 +1618,18 @@ delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
                                             "will be deleted."));
         }
     }
-    if (gnc_account_n_children(account) > 0)
+    if (gnc_account_n_children(account))
     {
         if (saa)
         {
             char *name = gnc_account_get_full_name(saa);
-            lines[++i] = g_strdup_printf (_("All of its sub-accounts will be "
+            lines[++i] = g_strdup_printf (_("Its sub-account will be "
                                             "moved to the account %s."), name);
             g_free (name);
         }
         else
         {
-            lines[++i] = g_strdup_printf (_("All of its subaccounts will be "
-                                            "deleted."));
+            lines[++i] = g_strdup_printf (_("Its subaccount will be eleted."));
             if (sta)
             {
                 char *name = gnc_account_get_full_name(sta);

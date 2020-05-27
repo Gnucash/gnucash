@@ -504,7 +504,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">This account contains sub-accounts. What would you like to do with these sub-accounts?</property>
+                        <property name="label" translatable="yes">This account has a sub-account. What would you like to do with it?</property>
                         <property name="wrap">True</property>
                       </object>
                       <packing>
@@ -533,7 +533,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="sa_drb">
-                        <property name="label" translatable="yes">Delete all _subaccounts</property>
+                        <property name="label" translatable="yes">Delete the _subaccount</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -761,7 +761,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">One or more sub-accounts contain transactions. What would you like to do with these transactions?</property>
+                        <property name="label" translatable="yes">You've said to delete the subaccount and it contains transactions. What would you like to do with these transactions?</property>
                         <property name="wrap">True</property>
                       </object>
                       <packing>
