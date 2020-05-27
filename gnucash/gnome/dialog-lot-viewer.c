@@ -885,6 +885,7 @@ lv_init_lot_view (GNCLotViewer *lv)
     column = gtk_tree_view_column_new_with_attributes(_("Title"), renderer,
              "text", LOT_COL_TITLE, NULL);
     gtk_tree_view_column_set_sort_column_id(column, LOT_COL_TITLE);
+    gtk_tree_view_column_set_expand (column, TRUE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
@@ -950,7 +951,15 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Description"), renderer,
              "text", SPLIT_COL_DESCRIPTION, NULL);
+
+    g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+    /* as this column is the expander column, if ellipsize is set, the column
+       width would be small, so set a minimum width */
+    gtk_tree_view_column_set_min_width (column, 200);
+
     gtk_tree_view_column_set_sort_column_id(column, SPLIT_COL_DESCRIPTION);
+    gtk_tree_view_column_set_expand (column, TRUE);
+    gtk_tree_view_column_set_resizable (column, TRUE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
