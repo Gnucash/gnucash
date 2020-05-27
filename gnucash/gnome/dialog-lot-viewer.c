@@ -112,6 +112,7 @@ struct _GNCLotViewer
     GtkListStore  * split_in_lot_store;
     GtkTreeView   * split_free_view;
     GtkListStore  * split_free_store;
+    GtkWidget     * split_hpaned;
     GtkButton     * add_split_to_lot_button;
     GtkButton     * remove_split_from_lot_button;
     GtkToggleButton * only_show_open_lots_checkbutton;
@@ -1014,6 +1015,16 @@ lv_init_split_buttons (GNCLotViewer *lv)
 /* ======================================================================== */
 
 static void
+window_realize_set_split_paned_position_cb (GtkWidget *widget, gpointer user_data)
+{
+    GNCLotViewer *lv = user_data;
+    gint width;
+
+    gtk_window_get_size (GTK_WINDOW(lv->window), &width, NULL);
+    gtk_paned_set_position (GTK_PANED(lv->split_hpaned), width / 2);
+}
+
+static void
 lv_create (GNCLotViewer *lv, GtkWindow *parent)
 {
     gchar *win_title;
@@ -1049,6 +1060,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
 
     lv->split_in_lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split_in_lot_view"));
     lv->split_free_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split_free_view"));
+    lv->split_hpaned = GTK_WIDGET(gtk_builder_get_object (builder, "split_hpaned"));
     lv_init_split_views(lv);
 
     lv->add_split_to_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "add_split_to_lot_button"));
@@ -1076,6 +1088,10 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     }
 
     lv->selected_lot = NULL;
+
+    /* set the split paned position to be halfway at the start */
+    g_signal_connect (G_OBJECT(lv->window), "realize",
+                      G_CALLBACK(window_realize_set_split_paned_position_cb), lv);
 
     /* Setup signals */
     gtk_builder_connect_signals(builder, lv);
