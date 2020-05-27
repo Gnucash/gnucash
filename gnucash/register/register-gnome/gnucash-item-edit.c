@@ -1023,7 +1023,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     // Adjust the popup_y point based on popping above or below
     if (up_height > down_height)
-        popup_y = y - popup_h;
+        popup_y = y - popup_h - 1;
     else
         popup_y = y + h;
 
