@@ -1356,6 +1356,29 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     return selector;
 }
 
+static int
+commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
+{
+    int response;
+    char *account_name = gnc_account_get_full_name (account);
+    char* message = g_strdup_printf (
+        _("Account %s does not have the same currency as the account you're "
+          "deleting.\nAre you sure you want to do this?"), account_name);
+    GtkWidget* error_dialog =
+        gtk_message_dialog_new (parent, GTK_DIALOG_DESTROY_WITH_PARENT,
+                                GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE,
+                                "%s", message);
+    gtk_dialog_add_buttons (GTK_DIALOG(error_dialog),
+                            _("_Pick another account"), GTK_RESPONSE_CANCEL,
+                            _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
+                            (gchar *)NULL);
+    response = gtk_dialog_run (GTK_DIALOG (error_dialog));
+    gtk_widget_destroy (error_dialog);
+    g_free (message);
+    return response;
+}
+
+
 static void
 gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
@@ -1514,8 +1537,10 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
      * the account selectors from being repopulated.
      */
     account_currency = gnc_account_get_currency_or_parent (account);
-    // Ideally we should check all subaccount currencies, and verify they're all identical. If not, it's not advisable
-    // to move subaccount currencies to a new account.
+    /* Ideally we should check all subaccount currencies, and verify they're all
+     * identical. If not, it's not advisable to move subaccount currencies to a
+     * new account.
+     */
     while (!ta_match || !sta_match || !saa_match)
     {
         response = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1546,24 +1571,10 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         }
         if (!ta_match || !sta_match || !saa_match)
         {
-            GtkWidget *error_dialog;
-            char* message = NULL;
-            char* a_name = (!ta_match) ?  gnc_account_get_full_name (ta) : (!sta_match) ?  gnc_account_get_full_name (sta) :
-                                          gnc_account_get_full_name (saa);
-            message = g_strdup_printf (_("Account %s does not have the same currency as the account you're deleting.\nAre you sure you want to do this?"), a_name);
-            error_dialog = gtk_message_dialog_new (GTK_WINDOW(window),
-                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_NONE,
-                                                   "%s", message);
-            gtk_dialog_add_buttons (GTK_DIALOG(error_dialog),
-                                    _("_Pick another account"), GTK_RESPONSE_CANCEL,
-                                    _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
-                                    (gchar *)NULL);
-            response = gtk_dialog_run (GTK_DIALOG (error_dialog));
-            gtk_widget_destroy (error_dialog);
-            g_free (message);
-            if (response == GTK_RESPONSE_ACCEPT) break;
+            Account *acc = (!ta_match) ?  ta : (!sta_match) ?  sta : saa;
+            int result = commodity_mismatch_dialog (acc, GTK_WINDOW (window));
+            if (result == GTK_RESPONSE_ACCEPT)
+                break;
         }
     }
     gtk_widget_destroy(dialog);
