@@ -1357,13 +1357,15 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
 }
 
 static int
-commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
+commodity_mismatch_dialog (const Account* account, GtkWindow* parent,
+                           gboolean is_account)
 {
     int response;
     char *account_name = gnc_account_get_full_name (account);
     char* message = g_strdup_printf (
-        _("Account %s does not have the same currency as the account you're "
-          "deleting.\nAre you sure you want to do this?"), account_name);
+        _("Account %s does not have the same currency as the %s you're "
+          "deleting.\nAre you sure you want to do this?"), account_name,
+        is_account ? "account" : "transactions");
     GtkWidget* error_dialog =
         gtk_message_dialog_new (parent, GTK_DIALOG_DESTROY_WITH_PARENT,
                                 GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE,
@@ -1378,6 +1380,44 @@ commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
     return response;
 }
 
+typedef struct
+{
+    Account *account;
+    GNCAccountSel *selector;
+    gboolean match;
+    gboolean for_account;
+} Adopter;
+
+static void
+adopter_set_account_and_match (Adopter* adopter, gnc_commodity *commodity)
+{
+    if (!(adopter->selector &&
+          gtk_widget_is_sensitive (GTK_WIDGET (adopter->selector))))
+        return;
+    adopter->account = gnc_account_sel_get_account(adopter->selector);
+    adopter->match =
+        gnc_account_get_currency_or_parent (adopter->account) == commodity;
+}
+
+static void
+adopter_init (Adopter* adopter, GtkWidget *selector, gboolean for_account)
+{
+    adopter->selector = GNC_ACCOUNT_SEL (selector);
+    adopter->account = NULL;
+    adopter->match = TRUE;
+    adopter->for_account = for_account;
+}
+
+static gboolean
+adopter_match (Adopter* adopter, GtkWindow *parent)
+{
+    int result;
+    if (adopter->match)
+        return TRUE;
+    result = commodity_mismatch_dialog (adopter->account, parent,
+                                        adopter->for_account);
+    return (result == GTK_RESPONSE_ACCEPT);
+}
 
 static void
 gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page)
@@ -1386,18 +1426,12 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     gchar *acct_name;
     delete_helper_t delete_res = { FALSE, FALSE };
     GtkWidget *window;
-    GtkWidget *trans_mas = NULL; /* transaction move to account selector */
-    GtkWidget *sa_mas = NULL;    /* subaccount move to account selector */
-    GtkWidget *sa_trans_mas = NULL; /* subaccount's transaction move to account selector */
-    Account *ta = NULL; /* transaction adopter */
-    Account *saa = NULL; /* subaccount adopter */
-    Account *sta = NULL; /* subaccount transaction adopter */
+    Adopter trans_adopt;
+    Adopter subacct_adopt;
+    Adopter sub_trans_adopt;
     GList *splits;
     GList* list;
     gint response;
-    gboolean ta_match = FALSE;
-    gboolean sta_match = FALSE;
-    gboolean saa_match = FALSE;
     GList *filter = NULL;
     GtkBuilder *builder = NULL;
     GtkWidget *dialog = NULL;
@@ -1463,7 +1497,11 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 
     // Add the account selectors and enable sections as appropriate
     // setup transactions selector
-    trans_mas = gppat_setup_account_selector (builder, dialog, "trans_mas_hbox", DELETE_DIALOG_TRANS_MAS);
+    adopter_init (&trans_adopt,
+                  gppat_setup_account_selector (builder, dialog,
+                                                "trans_mas_hbox",
+                                                DELETE_DIALOG_TRANS_MAS),
+                  FALSE);
 
     // Does the selected account have splits
     if (splits)
@@ -1487,10 +1525,17 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     }
 
     // setup subaccount account selector
-    sa_mas = gppat_setup_account_selector (builder, dialog, "sa_mas_hbox", DELETE_DIALOG_SA_MAS);
+    adopter_init (&subacct_adopt,
+                  gppat_setup_account_selector (builder, dialog,
+                                                "sa_mas_hbox",
+                                                DELETE_DIALOG_SA_MAS), TRUE);
 
     // setup subaccount transaction selector
-    sa_trans_mas = gppat_setup_account_selector (builder, dialog, "sa_trans_mas_hbox", DELETE_DIALOG_SA_TRANS_MAS);
+    adopter_init (&sub_trans_adopt,
+                  gppat_setup_account_selector (builder, dialog,
+                                                "sa_trans_mas_hbox",
+                                                DELETE_DIALOG_SA_TRANS_MAS),
+                  FALSE);
     g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS,
                       GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")));
 
@@ -1541,12 +1586,10 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
      * identical. If not, it's not advisable to move subaccount currencies to a
      * new account.
      */
-    while (!ta_match || !sta_match || !saa_match)
+    while (TRUE)
     {
         response = gtk_dialog_run(GTK_DIALOG(dialog));
-        ta_match = TRUE;
-        sta_match = TRUE;
-        saa_match = TRUE;
+
         if (response != GTK_RESPONSE_ACCEPT)
         {
             /* Account deletion is cancelled, so clean up and return. */
@@ -1554,32 +1597,20 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
             g_list_free(filter);
             return;
         }
-        if (trans_mas && gtk_widget_is_sensitive(trans_mas))
-        {
-            ta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(trans_mas));
-            ta_match = gnc_account_get_currency_or_parent (ta) == account_currency;
-        }
-        if (sa_trans_mas && gtk_widget_is_sensitive(sa_trans_mas))
-        {
-            sta = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_trans_mas));
-            sta_match = gnc_account_get_currency_or_parent (sta) == account_currency;
-        }
-        if (sa_mas && gtk_widget_is_sensitive(sa_mas))
-        {
-            saa = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(sa_mas));
-            saa_match = gnc_account_get_currency_or_parent (saa) == account_currency;
-        }
-        if (!ta_match || !sta_match || !saa_match)
-        {
-            Account *acc = (!ta_match) ?  ta : (!sta_match) ?  sta : saa;
-            int result = commodity_mismatch_dialog (acc, GTK_WINDOW (window));
-            if (result == GTK_RESPONSE_ACCEPT)
-                break;
-        }
+        adopter_set_account_and_match (&trans_adopt, account_currency);
+        adopter_set_account_and_match (&subacct_adopt, account_currency);
+        adopter_set_account_and_match (&sub_trans_adopt, account_currency);
+
+        if (adopter_match (&trans_adopt, GTK_WINDOW (window)) &&
+            adopter_match (&subacct_adopt, GTK_WINDOW (window)) &&
+            adopter_match (&sub_trans_adopt, GTK_WINDOW (window)))
+            break;
     }
     gtk_widget_destroy(dialog);
     g_list_free(filter);
-    delete_account_next (action, page, ta, sta, saa, delete_res);
+    delete_account_next (action, page, trans_adopt.account,
+                         sub_trans_adopt.account, subacct_adopt.account,
+                         delete_res);
 }
 
 static void
@@ -1592,7 +1623,7 @@ delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
     GtkWidget* window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
     gint response;
 
-    char *lines[5];
+    char *lines[6] = {0};
     char *message;
     int i = 0;
     GtkWidget *dialog;
@@ -1607,7 +1638,7 @@ delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
         if (ta)
         {
             char *name = gnc_account_get_full_name(ta);
-            lines[++i] = g_strdup_printf (_("All transactions in this account"
+            lines[++i] = g_strdup_printf (_("All transactions in this account "
                                             "will be moved to the account %s."),
                                           name);
             g_free (name);
