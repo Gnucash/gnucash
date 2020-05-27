@@ -824,6 +824,16 @@ static void print_date (GtkTreeViewColumn *tree_column,
 }
 
 static void
+configure_number_columns (GtkTreeViewColumn *column,
+                          GtkCellRenderer *renderer, gint sort_column)
+{
+    gtk_tree_view_column_set_sort_column_id (column, sort_column);
+    gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5); // right align amount column
+    gtk_tree_view_column_set_alignment (column, 1.0);
+    gtk_cell_renderer_set_padding (renderer, 5, 0); // add padding so its not close to edge
+}
+
+static void
 lv_init_lot_view (GNCLotViewer *lv)
 {
     GtkTreeView *view;
@@ -880,13 +890,13 @@ lv_init_lot_view (GNCLotViewer *lv)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", LOT_COL_BALN, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, LOT_COL_BALN_DOUBLE);
+    configure_number_columns (column, renderer, LOT_COL_BALN_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gains"), renderer,
              "text", LOT_COL_GAINS, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, LOT_COL_GAINS_DOUBLE);
+    configure_number_columns (column, renderer, LOT_COL_GAINS_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     /* Set up signals */
@@ -946,25 +956,25 @@ lv_init_split_view (GNCLotViewer *lv, GtkTreeView *view)
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Amount"), renderer,
              "text", SPLIT_COL_AMOUNT, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, SPLIT_COL_AMOUNT_DOUBLE);
+    configure_number_columns (column, renderer, SPLIT_COL_AMOUNT_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Value"), renderer,
              "text", SPLIT_COL_VALUE, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, SPLIT_COL_VALUE_DOUBLE);
+    configure_number_columns (column, renderer, SPLIT_COL_VALUE_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Gain/Loss"), renderer,
              "text", SPLIT_COL_GAIN_LOSS, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, SPLIT_COL_GAIN_LOSS_DOUBLE);
+    configure_number_columns (column, renderer, SPLIT_COL_GAIN_LOSS_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Balance"), renderer,
              "text", SPLIT_COL_BALANCE, NULL);
-    gtk_tree_view_column_set_sort_column_id (column, SPLIT_COL_BALANCE_DOUBLE);
+    configure_number_columns (column, renderer, SPLIT_COL_BALANCE_DOUBLE);
     gtk_tree_view_append_column(view, column);
 
     /* Set up the selection callbacks */
