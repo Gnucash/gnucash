@@ -553,7 +553,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
         gint cursor_byte_pos = cursor_pos < text_len ?
             g_utf8_offset_to_pointer (pango_text, cursor_pos) - pango_text :
             strlen (pango_text);
-        DEBUG ("Cursor: %d, byte offset %d, text byte len %ld", cursor_pos,
+        DEBUG ("Cursor: %d, byte offset %d, text byte len %zu", cursor_pos,
                cursor_byte_pos, strlen (pango_text));
         pango_layout_get_cursor_pos (layout, cursor_byte_pos,
                                      &strong_pos, NULL);
