@@ -1694,7 +1694,7 @@ confirm_delete_account (GtkAction *action, GncPluginPageAccountTree *page,
         }
         else
         {
-            lines[++i] = g_strdup_printf (_("Its subaccount will be eleted."));
+            lines[++i] = g_strdup_printf (_("Its subaccount will be deleted."));
             if (sta)
             {
                 char *name = gnc_account_get_full_name(sta);
