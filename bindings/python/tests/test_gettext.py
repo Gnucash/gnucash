@@ -4,7 +4,6 @@
 # @author Christoph Holtermann <mail@c-holtermann.net>
 
 from unittest import TestCase, main
-# import gettext
 import gnucash
 from gnucash import _sw_core_utils
 
