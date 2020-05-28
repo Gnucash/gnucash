@@ -49,7 +49,6 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
 
 try:
     import gettext
-    import locale
 
     _localedir = _sw_core_utils.gnc_path_get_localedir()
     gettext.install(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
