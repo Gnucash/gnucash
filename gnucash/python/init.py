@@ -1,16 +1,21 @@
 import sys
 from gnucash import *
+from gnucash import _sw_app_utils
+from gnucash import _sw_core_utils
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled, gnc_prefs_is_debugging_enabled
 from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+
 sys.path.append(os.path.dirname(__file__))
 
 # output file location if gnucash has been started with
 # gnucash --extra
 if gnc_prefs_is_extra_enabled():
     print("Python shell init file: %s" % (__file__))
+    print("\n" + "The following string should appear translated in your preferred language:" + "\n")
+    print("\n" + _("Welcome to GnuCash") +"\n")
 
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
@@ -95,7 +100,7 @@ class Console (cons.Console):
     def quit (self):
         """ quit """
 
-        self.write("\nHave a nice day !\n")
+        self.write("\n" + _("Have a nice day!") + "\n")
         return super(Console, self).quit()
 
 
@@ -104,9 +109,14 @@ class Console (cons.Console):
 # shelltype can either be "python" or "ipython" (the latter is not yet fully functional)
 if False:
     shelltype = "python"
-    title = "gnucash "+shelltype+" shell"
+    if shelltype=="python":
+        shelltypeName = "Python"
+    else:
+        shelltypeName = "IPython"
     banner_style = 'title'
-    banner = "Welcome to "+title+"!\n"
+    # TRANSLATORS: %s is either Python or IPython
+    banner = _("Welcome to GnuCash %s Shell") % shelltypeName
+    console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
     window.set_position(Gtk.WindowPosition.CENTER)
