@@ -38,6 +38,7 @@ extern "C" {
 #include <gfec.h>
 #include <gnc-environment.h>
 #include <gnc-filepath-utils.h>
+#include <gnc-locale-utils.h>
 #include <gnc-path.h>
 #include <gnc-prefs.h>
 #include <gnc-gsettings.h>

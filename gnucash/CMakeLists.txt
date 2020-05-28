@@ -56,7 +56,7 @@ target_link_libraries (gnucash
    gnc-engine gnc-module gnc-core-utils gnucash-guile
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
-   PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
+   PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS}
    ${Boost_LIBRARIES}
 )
 
@@ -125,6 +125,8 @@ add_custom_command(
 if (MAC_INTEGRATION)
   target_compile_options(gnucash PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
   target_link_libraries(gnucash ${OSX_EXTRA_LIBRARIES})
+  target_compile_options(gnucash-cli PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  target_link_libraries(gnucash-cli ${OSX_EXTRA_LIBRARIES})
 endif()
 
 install(TARGETS gnucash gnucash-cli DESTINATION ${CMAKE_INSTALL_BINDIR})
