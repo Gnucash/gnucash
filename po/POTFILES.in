@@ -12,6 +12,7 @@ bindings/guile/gnc-kvp-guile.cpp
 bindings/guile/gnc-module.scm
 bindings/guile/gnc-numeric.scm
 bindings/guile/utilities.scm
+bindings/python/app_utils.py
 bindings/python/example_scripts/account_analysis.py
 bindings/python/example_scripts/change_tax_code.py
 bindings/python/example_scripts/gnc_convenience.py
@@ -610,7 +611,6 @@ libgnucash/core-utils/gnc-path.c
 libgnucash/core-utils/gnc-prefs.c
 libgnucash/core-utils/gnc-version.c
 libgnucash/doc/doxygen_main_page.c
-libgnucash/doc/python-bindings-doxygen.py
 libgnucash/engine/Account.cpp
 libgnucash/engine/cap-gains.c
 libgnucash/engine/cashobjects.c
