@@ -1800,7 +1800,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
                                     refresh_handler, close_handler,
                                     recnData);
-    // This window should close if we close the session.
     gnc_gui_component_set_session (recnData->component_id, gnc_get_current_session());
 
     recn_set_watches (recnData);
@@ -2117,6 +2116,15 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
 
     gtk_window_present(GTK_WINDOW(recnData->window));
 }
+
+GtkWidget*
+gnc_ui_reconcile_window_get_widget(RecnWindow * recnData)
+{
+    if (recnData == NULL || recnData->window == NULL)
+        return NULL;
+    return recnData->window;
+}
+
 
 
 /********************************************************************\

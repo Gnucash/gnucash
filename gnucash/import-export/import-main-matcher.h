@@ -196,5 +196,8 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info);
  */
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info);
 
+void gnc_gen_trans_list_show_reconcile_after_close(GNCImportMainMatcher *info, gboolean reconcile_after_close, gboolean active);
+GtkWidget* gnc_gen_trans_list_get_reconcile_widget(GNCImportMainMatcher *info);
+
 #endif
 /**@}*/
