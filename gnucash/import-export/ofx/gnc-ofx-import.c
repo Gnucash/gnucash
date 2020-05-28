@@ -1173,7 +1173,8 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     {
         gnc_gen_trans_list_delete (info->gnc_ofx_importer_gui);
         if(info->num_trans_processed)
-            gnc_info_dialog (parent, _("OFX file(s) imported, %d transactions processed, no transactions to match"), info->num_trans_processed);
+            gnc_info_dialog (parent, _("OFX file '%s' imported, %d transactions processed, no transactions to match"),
+                                     selected_filename, info->num_trans_processed);
         // Process the next OFX file if any.
         gnc_ofx_process_next_file (NULL, info);
     }
