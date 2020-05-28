@@ -1589,6 +1589,13 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         return;
     }
 
+    // If no transaction or children just delete it.
+          gnc_account_n_children (account)))
+    {
+        do_delete_account (account, NULL, NULL, NULL);
+        return;
+    }
+
     dialog = account_delete_dialog (account, GTK_WINDOW (window), &adopt);
 
     account_currency = gnc_account_get_currency_or_parent (account);
