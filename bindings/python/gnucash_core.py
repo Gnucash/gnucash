@@ -54,17 +54,13 @@ try:
     _localedir = _sw_core_utils.gnc_path_get_localedir()
     gettext.install(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
 except:
-    print("\nProblem importing gettext!")
+    print()
+    print("Problem importing gettext!")
     import traceback
     import sys
     exc_type, exc_value, exc_traceback = sys.exc_info()
     traceback.print_exception(exc_type, exc_value, exc_traceback)
     print()
-    import locale
-    sys_locale = locale.setlocale(locale.LC_ALL, '')
-    print("locale: ", sys_locale)
-    print("getlocale(): " + str(locale.getlocale()))
-    print("localedir: " + _localedir)
 
     def _(s):
         """Null translator function, gettext not available"""
