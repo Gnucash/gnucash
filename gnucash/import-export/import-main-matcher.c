@@ -197,8 +197,6 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info)
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
-    // By default, do not show this check box.
-    gnc_gen_trans_list_show_reconcile_after_close (info, FALSE, FALSE);
 }
 
 void
@@ -1095,7 +1093,8 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     g_signal_connect (G_OBJECT(info->show_matched_info), "toggled",
                       G_CALLBACK(show_matched_info_toggled_cb), info);
 
-    info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_when_close_button"));
+    // Create the checkbox, but do not show it by default.
+    info->reconcile_after_close = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_after_close_button"));
 
     show_update = gnc_import_Settings_get_action_update_enabled (info->user_settings);
     gnc_gen_trans_init_view (info, all_from_same_account, show_update);

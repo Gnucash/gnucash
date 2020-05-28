@@ -946,19 +946,19 @@
           </packing>
         </child>
         <child>
-            <object class="GtkCheckButton" id="reconcile_after_close_button">
-                <property name="label" translatable="yes">Reconcile after match</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
-            </object>
-            <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-            </packing>
+          <object class="GtkCheckButton" id="reconcile_after_close_button">
+            <property name="label" translatable="yes">Reconcile after match</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
       <packing>
