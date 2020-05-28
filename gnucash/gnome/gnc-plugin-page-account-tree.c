@@ -88,11 +88,6 @@ typedef struct _delete_helper
 } delete_helper_t;
 
 
-static void delete_account_next (GtkAction *action, GncPluginPageAccountTree *page, Account* ta,
-                                 Account* sta, Account* saa, delete_helper_t delete_res);
-static void  delete_account_final (Account* account, Account* saa, Account* sta, Account* ta);
-
-
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 #define STATE_SECTION "Account Hierarchy"
 
@@ -179,6 +174,15 @@ static void gnc_plugin_page_account_tree_cmd_cascade_account_properties (GtkActi
 /* Command callback for new Register Test */
 static void gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
+/* Account Deletion Actions. */
+static int confirm_delete_account (GtkAction *action,
+                                   GncPluginPageAccountTree *page, Account* ta,
+                                   Account* sta, Account* saa,
+                                   delete_helper_t delete_res);
+static void  do_delete_account (Account* account, Account* saa, Account* sta,
+                                Account* ta);
+
+
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
 
@@ -1617,15 +1621,17 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         filter = g_object_get_data (G_OBJECT (dialog), DELETE_DIALOG_FILTER);
     gtk_widget_destroy(dialog);
     g_list_free(filter);
-    delete_account_next (action, page, adopt.trans.account,
-                         adopt.subtrans.account, adopt.subacct.account,
-                         adopt.delete_res);
+    if (confirm_delete_account (action, page, adopt.trans.account,
+                                adopt.subtrans.account, adopt.subacct.account,
+                                adopt.delete_res) == GTK_RESPONSE_ACCEPT)
+        do_delete_account (account, adopt.subacct.account,
+                           adopt.subtrans.account, adopt.trans.account);
 }
 
-static void
-delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
-                     Account* ta, Account* sta, Account* saa,
-                     delete_helper_t delete_res)
+static int
+confirm_delete_account (GtkAction *action, GncPluginPageAccountTree *page,
+                        Account* ta, Account* sta, Account* saa,
+                        delete_helper_t delete_res)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
     GList* splits = xaccAccountGetSplitList(account);
@@ -1705,11 +1711,10 @@ delete_account_next (GtkAction *action, GncPluginPageAccountTree *page,
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
-    if (response == GTK_RESPONSE_ACCEPT)
-        delete_account_final (account, saa, sta, ta);
+    return response;
 }
 
-void delete_account_final (Account* account, Account* saa, Account* sta, Account* ta)
+void do_delete_account (Account* account, Account* saa, Account* sta, Account* ta)
 {
     GList *acct_list, *ptr;
     const GncGUID *guid;
