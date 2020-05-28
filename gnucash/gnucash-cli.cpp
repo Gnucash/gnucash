@@ -33,6 +33,7 @@
 
 extern "C" {
 #include <gnc-engine-guile.h>
+#include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-gnome-utils.h>
 #include <gnc-session.h>
@@ -107,17 +108,71 @@ fail:
     gnc_shutdown(1);
 }
 
-int
-main(int argc, char ** argv)
+namespace Gnucash {
+
+    class GnucashCli : public CoreApp
+    {
+    public:
+        GnucashCli (const char* app_name);
+        void parse_command_line (int *argc, char ***argv);
+        void start (int argc, char **argv);
+    private:
+        void configure_program_options (void);
+
+        std::string m_quotes_file;
+    };
+
+}
+
+Gnucash::GnucashCli::GnucashCli (const char *app_name) : Gnucash::CoreApp (app_name)
 {
-    Gnucash::CoreApp application;
+    configure_program_options();
+}
+
+void
+Gnucash::GnucashCli::parse_command_line (int *argc, char ***argv)
+{
+    Gnucash::CoreApp::parse_command_line (argc, argv);
+
+    if (m_opt_map.count ("namespace"))
+        gnc_prefs_set_namespace_regexp(m_opt_map["namespace"].
+        as<std::string>().c_str());
+
+    if (m_opt_map.count ("add-price-quotes"))
+        m_quotes_file = m_opt_map["add-price-quotes"].as<std::string>();
+}
+
+// Define command line options specific to gnucash-cli.
+void
+Gnucash::GnucashCli::configure_program_options (void)
+{
+    bpo::options_description quotes_options(_("Price Retrieval Options"));
+    quotes_options.add_options()
+    ("add-price-quotes", bpo::value<std::string>(),
+     N_("Add price quotes to given GnuCash datafile.\n"))
+    ("namespace", bpo::value<std::string>(),
+     N_("Regular expression determining which namespace commodities will be retrieved"));
+
+    m_opt_desc->add (quotes_options);
+}
+
+void
+Gnucash::GnucashCli::start (int argc, char **argv)
+{
+    Gnucash::CoreApp::start();
+
+    if (not m_quotes_file.empty())
+        scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void *)m_quotes_file.c_str());
+
+}
+
+int
+main(int argc, char **argv)
+{
+    Gnucash::GnucashCli application (argv[0]);
 
     application.parse_command_line (&argc, &argv);
-    application.start ();
-
-    auto quotes_file = application.get_quotes_file ();
-    if (quotes_file)
-        scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void *)quotes_file);
+    application.start (argc, argv);
 
     exit(0);  /* never reached */
 }

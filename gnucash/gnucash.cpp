@@ -356,41 +356,84 @@ namespace Gnucash {
     class Gnucash : public CoreApp
     {
     public:
+        Gnucash (const char* app_name);
         void parse_command_line (int *argc, char ***argv);
+
+        std::string get_quotes_file (void)
+            { return m_quotes_file; }
+    private:
+        void configure_program_options (void);
+
+        std::string m_gtk_help_msg;
+        std::string m_quotes_file; // Deprecated will be removed in gnucash 5.0
     };
 
 }
 
+Gnucash::Gnucash::Gnucash (const char *app_name) : Gnucash::CoreApp (app_name)
+{
+    configure_program_options();
+}
+
+
 void
 Gnucash::Gnucash::parse_command_line (int *argc, char ***argv)
+{
+    Gnucash::CoreApp::parse_command_line (argc, argv);
+
+    if (m_opt_map.count ("help-gtk"))
+    {
+        std::cout << m_gtk_help_msg;
+        exit(0);
+    }
+
+    if (m_opt_map.count ("namespace"))
+        gnc_prefs_set_namespace_regexp (m_opt_map["namespace"].
+            as<std::string>().c_str());
+
+    if (m_opt_map.count ("add-price-quotes"))
+        m_quotes_file = m_opt_map["add-price-quotes"].as<std::string>();
+}
+
+// Define command line options specific to gnucash.
+void
+Gnucash::Gnucash::configure_program_options (void)
 {
     // The g_option context dance below is done to be able to show a help message
     // for gtk's options. The options themselves are already parsed out by
     // gtk_init_check by the time this function is called though. So it really only
     // serves to be able to display a help message.
-    GError *error = NULL;
     auto context = g_option_context_new (tagline.c_str());
     auto gtk_options = gtk_get_option_group(FALSE);
     g_option_context_add_group (context, gtk_options);
-    gtk_help_msg = std::string (g_option_context_get_help (context, FALSE, gtk_options));
+    m_gtk_help_msg = g_option_context_get_help (context, FALSE, gtk_options);
     g_option_context_free (context);
 
-    // Pass remaining command line bits to our base class for further parsing
-    // This will include a --help-gtk option to display gtk's option help
-    // extracted above
-    Gnucash::CoreApp::parse_command_line (argc, argv);
+    bpo::options_description app_options(_("Application Options"));
+    app_options.add_options()
+    ("nofile",
+     N_("Do not load the last file opened"))
+    ("help-gtk", _("Show help for gtk options"))
+    ("add-price-quotes", bpo::value<std::string>(),
+     N_("Add price quotes to given GnuCash datafile.\n"
+        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
+        "Please use \"gnucash-cli --add-price-quotes\" instead."))
+    ("namespace", bpo::value<std::string>(),
+     N_("Regular expression determining which namespace commodities will be retrieved"
+        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
+        "Please use \"gnucash-cli --add-price-quotes\" instead."))
+    ("input-file", bpo::value<std::string>(),
+     N_("[datafile]"));
 
-    if (gtk_show_help)
-    {
-        std::cout << gtk_help_msg;
-        exit(0);
-    }
+    m_pos_opt_desc.add("input-file", -1);
+
+    m_opt_desc->add (app_options);
 }
 
 int
 main(int argc, char ** argv)
 {
-    Gnucash::Gnucash application;
+    Gnucash::Gnucash application (argv[0]);
 
     /* We need to initialize gtk before looking up all modules */
     if(!gtk_init_check (&argc, &argv))
@@ -407,9 +450,9 @@ main(int argc, char ** argv)
 
     /* If asked via a command line parameter, fetch quotes only */
     auto quotes_file = application.get_quotes_file ();
-    if (quotes_file)
+    if (!quotes_file.empty())
     {
-        scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void*) quotes_file);
+        scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void*) quotes_file.c_str());
         exit (0);  /* never reached */
     }
 

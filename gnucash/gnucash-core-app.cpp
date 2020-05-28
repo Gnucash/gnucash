@@ -49,6 +49,8 @@ extern "C" {
 
 #include <boost/locale.hpp>
 #include <iostream>
+#include <string>
+#include <vector>
 
 namespace bl = boost::locale;
 
@@ -542,10 +544,21 @@ Gnucash::CoreApp::CoreApp ()
     textdomain(PROJECT_NAME);
     bind_textdomain_codeset(PROJECT_NAME, "UTF-8");
     g_free(localedir);
+}
+
+Gnucash::CoreApp::CoreApp (const char* app_name)
+{
+
+    CoreApp();
+
+    m_app_name = std::string(app_name);
 
     // Now that gettext is properly initialized, set our help tagline.
     tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
+    m_opt_desc = std::make_unique<bpo::options_description> ((bl::format (bl::gettext ("{1} [options]")) % m_app_name).str() + tagline);
+    add_common_program_options();
 }
+
 
 /* Parse command line options, using GOption interface.
  * We can't let gtk_init_with_args do it because it fails
@@ -560,93 +573,9 @@ Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
     char *tmp_log_to_filename = NULL;
 #endif
 
-    GOptionEntry options[] =
-    {
-        {
-            "version", 'v', 0, G_OPTION_ARG_NONE, &gnucash_show_version,
-            N_("Show GnuCash version"), NULL
-        },
-
-        {
-            "debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-            N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""), NULL
-        },
-
-        {
-            "extra", '\0', 0, G_OPTION_ARG_NONE, &extra,
-            N_("Enable extra/development/debugging features."), NULL
-        },
-
-        {
-            "log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
-            N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."),
-            NULL
-        },
-
-        {
-            "logto", '\0', 0, G_OPTION_ARG_STRING, &tmp_log_to_filename,
-            N_("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."),
-            NULL
-        },
-
-        {
-            "nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
-            N_("Do not load the last file opened"), NULL
-        },
-        {
-            "gsettings-prefix", '\0', 0, G_OPTION_ARG_STRING, &gsettings_prefix,
-            N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."),
-            /* Translators: Argument description for autohelp; see
-             *         http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            N_("GSETTINGSPREFIX")
-        },
-        {
-            "add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
-            N_("Add price quotes to given GnuCash datafile"),
-            /* Translators: Argument description for autohelp; see
-             *         http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            N_("FILE")
-        },
-        {
-            "namespace", '\0', 0, G_OPTION_ARG_STRING, &namespace_regexp,
-            N_("Regular expression determining which namespace commodities will be retrieved"),
-            /* Translators: Argument description for autohelp; see
-             *         http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
-            N_("REGEXP")
-        },
-        {
-            G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args_remaining, NULL, N_("[datafile]")
-
-        },
-        { NULL }
-    };
-
-    GError *error = NULL;
-    GOptionContext *context = g_option_context_new (tagline.c_str());
-
-    g_option_context_add_main_entries (context, options, PROJECT_NAME);
-    if (!gtk_help_msg.empty())
-    {
-        GOptionEntry gtk_help_options[] =
-        {
-            {
-                "help-gtk", 'v', 0, G_OPTION_ARG_NONE, &gtk_show_help,
-                N_("Show GTK+ Options"), NULL
-            },
-            { NULL }
-        };
-        g_option_group_add_entries (g_option_context_get_main_group (context), gtk_help_options);
-    }
-
-    if (!g_option_context_parse (context, argc, argv, &error))
-    {
-        std::cerr << error->message << "\n"
-                  << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
-                  << "\n";
-        g_error_free (error);
-        exit (1);
-    }
-    g_option_context_free (context);
+    bpo::store (bpo::command_line_parser (*argc, *argv).
+        options (*m_opt_desc.get()).positional(m_pos_opt_desc).run(), m_opt_map);
+    bpo::notify (m_opt_map);
 
     if (tmp_log_to_filename != NULL)
     {
@@ -658,7 +587,7 @@ Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
 #endif
     }
 
-    if (gnucash_show_version)
+    if (m_opt_map.count ("version"))
     {
         bl::format rel_fmt (bl::translate ("GnuCash {1}"));
         bl::format dev_fmt (bl::translate ("GnuCash {1} development version"));
@@ -672,17 +601,51 @@ Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
         exit(0);
     }
 
-    gnc_prefs_set_debugging(debugging);
-    gnc_prefs_set_extra(extra);
+    if (m_opt_map.count ("help"))
+    {
+        std::cout << *m_opt_desc.get() << "\n";
+        exit(0);
+    }
 
-    if (gsettings_prefix)
-        gnc_gsettings_set_prefix(g_strdup(gsettings_prefix));
+    gnc_prefs_set_debugging (m_opt_map.count ("debug"));
+    gnc_prefs_set_extra (m_opt_map.count ("extra"));
 
-    if (namespace_regexp)
-        gnc_prefs_set_namespace_regexp(namespace_regexp);
+    if (m_opt_map.count ("gsettings-prefix"))
+        gnc_gsettings_set_prefix (m_opt_map["gsettings-prefix"].
+            as<std::string>().c_str());
 
     if (args_remaining)
         file_to_load = args_remaining[0];
+}
+
+/* Define command line options common to all gnucash binaries. */
+void
+Gnucash::CoreApp::add_common_program_options (void)
+{
+    #ifdef __MINGW64__
+    wchar_t *tmp_log_to_filename = NULL;
+    #else
+    char *tmp_log_to_filename = NULL;
+    #endif
+
+    bpo::options_description common_options(_("Common Options"));
+    common_options.add_options()
+        ("help,h",
+         N_("Show this help message"))
+        ("version,v",
+         N_("Show GnuCash version"))
+        ("debug",
+         N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""))
+        ("extra",
+         N_("Enable extra/development/debugging features."))
+        ("log", bpo::value< std::vector<std::string> >(),
+         N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
+        ("logto", bpo::value<std::string>(),
+         N_("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
+        ("gsettings-prefix", bpo::value<std::string>(),
+         N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."));
+
+        m_opt_desc->add (common_options);
 }
 
 const char*
@@ -695,12 +658,6 @@ int
 Gnucash::CoreApp::get_no_file (void)
 {
     return nofile;
-}
-
-const char*
-Gnucash::CoreApp::get_quotes_file (void)
-{
-    return add_quotes_file;
 }
 
 void
