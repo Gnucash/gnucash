@@ -1107,9 +1107,13 @@ gnc_ofx_match_done (GtkDialog *dialog, gint response_id, gpointer user_data)
             gnc_numeric value = double_to_gnc_numeric (info->statement->ledger_balance,
                                                        xaccAccountGetCommoditySCU (account),
                                                        GNC_HOW_RND_ROUND_HALF_UP);
-            RecnWindow* rec_window = recnWindowWithBalance (GTK_WIDGET (info->parent), account, value, info->statement->ledger_balance_date);
+
+            RecnWindow* rec_window = recnWindowWithBalance (GTK_WIDGET (info->parent), account, value,
+                                                            info->statement->ledger_balance_date);
+
             // Connect to destroy, at which point we'll process the next OFX file..
-            g_signal_connect (G_OBJECT (gnc_ui_reconcile_window_get_widget (rec_window)), "destroy", G_CALLBACK (gnc_ofx_process_next_file), info);
+            g_signal_connect (G_OBJECT(gnc_ui_reconcile_window_get_window (rec_window)), "destroy",
+                              G_CALLBACK(gnc_ofx_process_next_file), info);
         }
     }
     else
@@ -1175,15 +1179,19 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     }
     else
     {
-        // Show the match dialog and connect to the "response" signal so we can trigger a reconcile if the user clicks OK when done matching transactions.
-        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "response", G_CALLBACK (gnc_ofx_match_done), info);
+        /* Show the match dialog and connect to the "response" signal so we can trigger a reconcile when
+           the user clicks OK when done matching transactions if required. */
+        g_signal_connect (G_OBJECT(gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "response",
+                          G_CALLBACK (gnc_ofx_match_done), info);
+
         gnc_gen_trans_list_show_all (info->gnc_ofx_importer_gui);
         
         // Show or hide the check box for reconciling after match, depending on whether a statement was received.
-        gnc_gen_trans_list_show_reconcile_after_close (info->gnc_ofx_importer_gui, info->statement != NULL, info->run_reconcile);
+        gnc_gen_trans_list_show_reconcile_after_close_button (info->gnc_ofx_importer_gui, info->statement != NULL, info->run_reconcile);
+
         // Finally connect to the reconcile after match check box so we can be notified if the user wants/does not want to reconcile.
-        g_signal_connect (G_OBJECT (gnc_gen_trans_list_get_reconcile_widget (info->gnc_ofx_importer_gui)), "toggled",
-                          G_CALLBACK (reconcile_when_close_toggled_cb), info);
+        g_signal_connect (G_OBJECT(gnc_gen_trans_list_get_reconcile_after_close_button (info->gnc_ofx_importer_gui)), "toggled",
+                          G_CALLBACK(reconcile_when_close_toggled_cb), info);
     }
     g_free(selected_filename);
 }

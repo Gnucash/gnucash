@@ -2117,12 +2117,12 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
     gtk_window_present(GTK_WINDOW(recnData->window));
 }
 
-GtkWidget*
-gnc_ui_reconcile_window_get_widget(RecnWindow * recnData)
+GtkWindow *
+gnc_ui_reconcile_window_get_window (RecnWindow * recnData)
 {
     if (recnData == NULL || recnData->window == NULL)
         return NULL;
-    return recnData->window;
+    return GTK_WINDOW(recnData->window);
 }
 
 

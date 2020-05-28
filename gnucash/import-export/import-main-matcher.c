@@ -1475,14 +1475,17 @@ void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans
     return;
 }/* end gnc_import_add_trans() */
 
-void gnc_gen_trans_list_show_reconcile_after_close(GNCImportMainMatcher *info, gboolean reconcile_after_close, gboolean active)
+void
+gnc_gen_trans_list_show_reconcile_after_close_button (GNCImportMainMatcher *info,
+                                                      gboolean reconcile_after_close,
+                                                      gboolean active)
 {
-    gtk_widget_set_visible (info->reconcile_after_close,reconcile_after_close);
+    gtk_widget_set_visible (info->reconcile_after_close, reconcile_after_close);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (info->reconcile_after_close), active);
 }
 
 GtkWidget*
-gnc_gen_trans_list_get_reconcile_widget(GNCImportMainMatcher *info)
+gnc_gen_trans_list_get_reconcile_after_close_button (GNCImportMainMatcher *info)
 {
     return info->reconcile_after_close;
 }

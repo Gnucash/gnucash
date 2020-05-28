@@ -196,8 +196,19 @@ gboolean gnc_gen_trans_list_empty(GNCImportMainMatcher *info);
  */
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info);
 
-void gnc_gen_trans_list_show_reconcile_after_close(GNCImportMainMatcher *info, gboolean reconcile_after_close, gboolean active);
-GtkWidget* gnc_gen_trans_list_get_reconcile_widget(GNCImportMainMatcher *info);
+/** Show and set the reconcile after close check button.
+ * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @param reconcile_after_close A gboolean that shows or hides the button.
+ * @param active A gboolean to set or clear the check button.
+ */
+void gnc_gen_trans_list_show_reconcile_after_close_button (GNCImportMainMatcher *info,
+                                                           gboolean reconcile_after_close,
+                                                           gboolean active);
+/** Returns the reconcile after close check button.
+ * @param info A pointer to a the GNCImportMainMatcher structure.
+ * @return The check button.
+ */
+GtkWidget* gnc_gen_trans_list_get_reconcile_after_close_button (GNCImportMainMatcher *info);
 
 #endif
 /**@}*/
