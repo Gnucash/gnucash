@@ -572,10 +572,19 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 #else
     char *tmp_log_to_filename = NULL;
 #endif
-
+    try
+    {
     bpo::store (bpo::command_line_parser (argc, argv).
         options (*m_opt_desc.get()).positional(m_pos_opt_desc).run(), m_opt_map);
     bpo::notify (m_opt_map);
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << e.what() << "\n\n";
+        std::cerr << *m_opt_desc.get();
+
+        exit(1);
+    }
 
     if (tmp_log_to_filename != NULL)
     {
