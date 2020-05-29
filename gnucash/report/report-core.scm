@@ -817,12 +817,19 @@ not found.")))
 
     (cond
      ((not template)
-      (stderr-log "Cannot find report ~s. Valid reports are:\n" report)
+      (stderr-log "Cannot find ~s. Valid reports:\n" report)
       (for-each
-       (lambda (template)
-         (stderr-log "* ~a\n" (gnc:report-template-name (cdr template))))
-       (gnc:custom-report-templates-list))
-      #f)
+       (lambda (pair)
+         (when (gnc:report-template-in-menu? (cdr pair))
+           (stderr-log "* ~a ~a\n"
+                       (if (gnc:report-template-parent-type (cdr pair)) "C" " ")
+                       (gnc:report-template-name (cdr pair)))))
+       (sort (hash-map->list cons *gnc:_report-templates_*)
+             (lambda (a b)
+               (string<?
+                (gnc:report-template-name (cdr a))
+                (gnc:report-template-name (cdr b))))))
+      (stderr-log "\n"))
      (export-type (template-export report template export-type output-file dry-run?))
      (dry-run? #t)
      (output-file
