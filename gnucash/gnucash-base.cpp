@@ -46,6 +46,11 @@ extern "C" {
 #include <gnc-version.h>
 }
 
+#include <boost/locale.hpp>
+#include <iostream>
+
+namespace bl = boost::locale;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -78,13 +83,12 @@ gnc_print_unstable_message(void)
 {
     if (!is_development_version) return;
 
-    g_print("\n\n%s\n%s\n%s %s\n%s %s\n",
-            _("This is a development version. It may or may not work."),
-            _("Report bugs and other problems to gnucash-devel@gnucash.org"),
-	    /* Translators: An URLs follows*/
-            _("You can also lookup and file bug reports at"), PACKAGE_BUGREPORT,
-	    /* Translators: An URLs follows*/
-           _("To find the last stable version, please refer to"), PACKAGE_URL);
+    std::cerr << bl::translate ("This is a development version. It may or may not work.") << "\n"
+              << bl::translate ("Report bugs and other problems to gnucash-devel@gnucash.org") << "\n"
+              /* Translators: {1} will be replaced with a URL*/
+              << bl::format (bl::translate ("You can also lookup and file bug reports at {1}")) % PACKAGE_BUGREPORT << "\n"
+              /* Translators: {1} will be replaced with a URL*/
+              << bl::format (bl::translate ("To find the last stable version, please refer to {1}")) % PACKAGE_URL << "\n";
 }
 
 #ifdef MAC_INTEGRATION
@@ -501,7 +505,7 @@ Gnucash::Base::Base ()
         GError *binreloc_error = NULL;
         if (!gnc_gbr_init(&binreloc_error))
         {
-            g_print("main: Error on gnc_gbr_init: %s\n", binreloc_error->message);
+            std::cerr << "main: Error on gnc_gbr_init: " << binreloc_error->message << "\n";
             g_error_free(binreloc_error);
         }
     }
@@ -522,8 +526,8 @@ Gnucash::Base::Base ()
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
     if (!sys_locale)
     {
-        g_print ("The locale defined in the environment isn't supported. "
-        "Falling back to the 'C' (US English) locale\n");
+        std::cerr << "The locale defined in the environment isn't supported. "
+                  << "Falling back to the 'C' (US English) locale\n";
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
     }
@@ -617,8 +621,9 @@ Gnucash::Base::parse_command_line (int *argc, char ***argv)
     g_option_context_add_group (context, gtk_get_option_group(FALSE));
     if (!g_option_context_parse (context, argc, argv, &error))
     {
-        g_printerr (_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
-                    error->message, *argv[0]);
+        std::cerr << error->message << "\n"
+                  << bl::format (bl::translate ("Run '{1} --help' to see a full list of available command line options.")) % *argv[0]
+                  << "\n";
         g_error_free (error);
         exit (1);
     }
@@ -636,14 +641,15 @@ Gnucash::Base::parse_command_line (int *argc, char ***argv)
 
     if (gnucash_show_version)
     {
-        const char *format_string;
-        if (is_development_version)
-            format_string = _("GnuCash %s development version");
-            else
-                format_string = _("GnuCash %s");
+        bl::format rel_fmt (bl::translate ("GnuCash {1}"));
+        bl::format dev_fmt (bl::translate ("GnuCash {1} development version"));
 
-            g_print (format_string, gnc_version());
-            g_print ("\n%s: %s\n", _("Build ID"), gnc_build_id());
+        if (is_development_version)
+            std::cout << dev_fmt % gnc_version () << "\n";
+        else
+            std::cout << rel_fmt % gnc_version () << "\n";
+
+        std::cout << bl::translate ("Build ID") << ": " << gnc_build_id () << "\n";
         exit(0);
     }
 

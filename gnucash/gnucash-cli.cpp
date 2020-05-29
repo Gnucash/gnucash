@@ -38,6 +38,11 @@ extern "C" {
 #include <gnc-session.h>
 }
 
+#include <boost/locale.hpp>
+#include <iostream>
+
+namespace bl = boost::locale;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -59,8 +64,8 @@ inner_main_add_price_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unuse
 
     if (!gnc_quote_source_fq_installed())
     {
-        g_print("%s", _("No quotes retrieved. Finance::Quote isn't "
-                        "installed properly.\n"));
+        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
+                                    "installed properly.") << "\n";
         goto fail;
     }
 

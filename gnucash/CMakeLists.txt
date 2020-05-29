@@ -57,6 +57,7 @@ target_link_libraries (gnucash
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
+   ${Boost_LIBRARIES}
 )
 
 add_executable (gnucash-cli
@@ -74,6 +75,7 @@ target_link_libraries (gnucash-cli
    gnc-gnome-utils gnc-app-utils
    gnc-engine gnc-core-utils gnucash-guile gnc-report
    ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS}
+   ${Boost_LIBRARIES}
 )
 
 if (BUILDING_FROM_VCS)
