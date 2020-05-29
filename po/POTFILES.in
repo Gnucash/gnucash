@@ -210,6 +210,7 @@ gnucash/gnome-utils/print-session.c
 gnucash/gnome-utils/search-param.c
 gnucash/gnome-utils/tree-view-utils.c
 gnucash/gnome-utils/window-main-summarybar.c
+gnucash/gnucash-cli.cpp
 gnucash/gnucash.cpp
 gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in
 gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in

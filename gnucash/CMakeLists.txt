@@ -45,11 +45,6 @@ add_dependencies (gnucash gnucash-manpage)
 
 target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
-if (BUILDING_FROM_VCS)
-  target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
-  target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
-endif()
-
 target_link_libraries (gnucash
    gnc-ledger-core gnc-gnome gnc-gnome-utils gnc-app-utils
    gnc-engine gnc-module gnc-core-utils gnucash-guile
@@ -57,6 +52,27 @@ target_link_libraries (gnucash
    gnc-bi-import gnc-customer-import gnc-report
    PkgConfig::GTK3 ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )
+
+add_executable (gnucash-cli
+    gnucash-cli.cpp
+    ${GNUCASH_RESOURCE_FILE}
+)
+
+add_dependencies (gnucash-cli gnucash)
+
+target_compile_definitions(gnucash-cli PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
+
+target_link_libraries (gnucash-cli
+   gnc-gnome-utils gnc-app-utils
+   gnc-engine gnc-core-utils gnucash-guile gnc-report
+   ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS}
+)
+
+if (BUILDING_FROM_VCS)
+    target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
+    target_compile_definitions(gnucash-cli PRIVATE -DGNC_VCS=\"git\")
+    target_compile_definitions(gnc-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+endif()
 
 # Get glib executable for generating the gresource file
 execute_process(
@@ -101,7 +117,7 @@ if (MAC_INTEGRATION)
   target_link_libraries(gnucash ${OSX_EXTRA_LIBRARIES})
 endif()
 
-install(TARGETS gnucash DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS gnucash gnucash-cli DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
 
@@ -259,8 +275,8 @@ gnc_add_scheme_targets(price-quotes
     DEPENDS "scm-engine;scm-app-utils;scm-gnome-utils")
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
-               gnucash.cpp gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
-               price-quotes.scm ${gnucash_EXTRA_DIST})
+    gnucash.cpp gnucash-cli.cpp gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
+    price-quotes.scm ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}
     ${gschemas_DIST} ${gtkbuilder_DIST} ${html_DIST} ${import_export_DIST} ${python_DIST} ${register_DIST}
