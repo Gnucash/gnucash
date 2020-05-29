@@ -49,15 +49,27 @@ namespace bl = boost::locale;
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static void
+scm_cleanup_and_exit_with_failure (QofSession *session)
+{
+    if (session)
+    {
+        if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+            g_warning ("Session Error: %s",
+                       qof_session_get_error_message (session));
+            qof_session_destroy (session);
+    }
+    qof_event_resume();
+    gnc_shutdown (1);
+}
+
+static void
 scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
-    const char* add_quotes_file = static_cast<const char*>(data);
-    SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
-    QofSession *session = NULL;
+    auto add_quotes_file = static_cast<const std::string*>(data);
 
     scm_c_eval_string("(debug-set! stack 200000)");
 
-    mod = scm_c_resolve_module("gnucash price-quotes");
+    auto mod = scm_c_resolve_module("gnucash price-quotes");
     scm_set_current_module(mod);
 
     gnc_prefs_init ();
@@ -68,45 +80,39 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
     {
         std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
                                     "installed properly.") << "\n";
-        goto fail;
+        scm_cleanup_and_exit_with_failure (nullptr);
     }
 
-    add_quotes = scm_c_eval_string("gnc:book-add-quotes");
-    session = gnc_get_current_session();
-    if (!session) goto fail;
+    auto add_quotes = scm_c_eval_string("gnc:book-add-quotes");
+    auto session = gnc_get_current_session();
+    if (!session)
+        scm_cleanup_and_exit_with_failure (session);
 
-    qof_session_begin(session, add_quotes_file, FALSE, FALSE, FALSE);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+    qof_session_begin(session, add_quotes_file->c_str(), FALSE, FALSE, FALSE);
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
     qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
-    scm_book = gnc_book_to_scm(qof_session_get_book(session));
-    scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
+    auto scm_book = gnc_book_to_scm(qof_session_get_book(session));
+    auto scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
 
     qof_session_save(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
+    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
     qof_session_destroy(session);
     if (!scm_is_true(scm_result))
     {
-        g_warning("Failed to add quotes to %s.", add_quotes_file);
-        goto fail;
+        g_warning("Failed to add quotes to %s.", add_quotes_file->c_str());
+        scm_cleanup_and_exit_with_failure (session);
     }
 
     qof_event_resume();
     gnc_shutdown(0);
     return;
-fail:
-    if (session)
-    {
-        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-            g_warning("Session Error: %s",
-                      qof_session_get_error_message(session));
-        qof_session_destroy(session);
-    }
-    qof_event_resume();
-    gnc_shutdown(1);
 }
 
 static void
@@ -132,7 +138,6 @@ scm_run_report (void *data,
                 [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto args = static_cast<run_report_args*>(data);
-    QofSession *session = nullptr;
 
     scm_c_eval_string("(debug-set! stack 200000)");
     scm_c_use_module ("gnucash utilities");
@@ -155,18 +160,21 @@ scm_run_report (void *data,
 
     /* dry-run? is #t: try report, check validity of options */
     if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
-        goto fail;
+        scm_cleanup_and_exit_with_failure (nullptr);
 
     fprintf (stderr, "Loading datafile %s...\n", datafile);
 
-    session = gnc_get_current_session ();
-    if (!session) goto fail;
+    auto session = gnc_get_current_session ();
+    if (!session)
+        scm_cleanup_and_exit_with_failure (session);
 
     qof_session_begin (session, datafile, TRUE, FALSE, FALSE);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
     qof_session_load (session, report_session_percentage);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
     fprintf (stderr, "\n");
 
@@ -174,31 +182,21 @@ scm_run_report (void *data,
     scm_call_4 (cmdline, report, type, file, SCM_BOOL_F);
 
     qof_session_end (session);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+        scm_cleanup_and_exit_with_failure (session);
 
     qof_session_destroy (session);
 
     qof_event_resume ();
     gnc_shutdown (0);
     return;
-fail:
-    if (session)
-    {
-        if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-            g_warning ("Session Error: %d %s",
-                       qof_session_get_error (session),
-                       qof_session_get_error_message (session));
-        qof_session_destroy (session);
-    }
-    qof_event_resume ();
-    gnc_shutdown (1);
 }
 
 int
-Gnucash::add_quotes (std::string &uri)
+Gnucash::add_quotes (const std::string& uri)
 {
-    if (not uri.empty())
-        scm_boot_guile (0, nullptr, scm_add_quotes, (void *)uri.c_str());
+    if (!uri.empty())
+        scm_boot_guile (0, nullptr, scm_add_quotes, (void *)&uri);
 
     return 0;
 }
@@ -211,7 +209,7 @@ Gnucash::run_report (const std::string& file_to_load,
 {
     auto args = run_report_args { file_to_load, run_report,
                                   export_type, output_file };
-    if (not run_report.empty())
+    if (!run_report.empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
 
     return 0;

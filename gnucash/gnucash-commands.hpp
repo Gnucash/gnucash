@@ -29,7 +29,7 @@
 
 namespace Gnucash {
 
-    int add_quotes (std::string &uri);
+    int add_quotes (const std::string& uri);
     int run_report (const std::string& file_to_load,
                     const std::string& run_report,
                     const std::string& export_type,
