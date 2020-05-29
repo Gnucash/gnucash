@@ -99,6 +99,8 @@
 ;; result-owner argument is mutated to it.
 (define (gnc:owner-from-split split result-owner)
   (define (notnull x) (and (not (null? x)) x))
+  (issue-deprecation-warning
+   "gnc:owner-from-split is deprecated. use gnc:split->owner instead.")
   (let* ((trans (xaccSplitGetParent split))
 	 (invoice (notnull (gncInvoiceGetInvoiceFromTxn trans)))
 	 (temp (gncOwnerNew))
@@ -114,3 +116,27 @@
     (cond (owner (gncOwnerCopy (gncOwnerGetEndOwner owner) result-owner)
                  result-owner)
           (else  '()))))
+
+
+;; optimized from above, and simpler: does not search all transaction
+;; splits. It will allocate and memoize (cache) the owners because
+;; gncOwnerGetOwnerFromLot is slow. after use, it must be called with
+;; #f to free the owners.
+(define gnc:split->owner
+  (let ((ht (make-hash-table)))
+    (lambda (split)
+      (cond
+       ((not split)
+        (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
+        (hash-clear! ht))
+       ((hashv-ref ht (string-hash (gncSplitGetGUID split))) => identity)
+       (else
+        (let ((lot (xaccSplitGetLot split))
+              (owner (gncOwnerNew)))
+          (unless (gncOwnerGetOwnerFromLot lot owner)
+            (gncOwnerCopy (gncOwnerGetEndOwner
+                           (gncInvoiceGetOwner
+                            (gncInvoiceGetInvoiceFromLot lot)))
+                          owner))
+          (hashv-set! ht (string-hash (gncSplitGetGUID split)) owner)
+          owner))))))

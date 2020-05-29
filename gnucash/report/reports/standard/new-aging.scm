@@ -171,10 +171,10 @@ exist but have no suitable transactions."))
              (eqv? type TXN-TYPE-PAYMENT)))))
 
 (define (split-has-owner? split owner)
-  (gncOwnerEqual (split->owner split) owner))
+  (gncOwnerEqual (gnc:split->owner split) owner))
 
 (define (split-owner-is-invalid? split)
-  (not (gncOwnerIsValid (split->owner split))))
+  (not (gncOwnerIsValid (gnc:split->owner split))))
 
 (define (split-from-acct? split acct)
   (equal? acct (xaccSplitGetAccount split)))
@@ -182,28 +182,6 @@ exist but have no suitable transactions."))
 (define (list-split lst fn cmp)
   (let-values (((list-yes list-no) (partition (lambda (elt) (fn elt cmp)) lst)))
     (cons list-yes list-no)))
-
-;; optimized from gnc:owner-from-split. It will allocate and memoize
-;; (cache) the owners because gncOwnerGetOwnerFromLot is slow. after
-;; use, it must be called with #f to free the owners.
-(define split->owner
-  (let ((ht (make-hash-table)))
-    (lambda (split)
-      (cond
-       ((not split)
-        (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
-        (hash-clear! ht))
-       ((hashv-ref ht (string-hash (gncSplitGetGUID split))) => identity)
-       (else
-        (let ((lot (xaccSplitGetLot split))
-              (owner (gncOwnerNew)))
-          (unless (gncOwnerGetOwnerFromLot lot owner)
-            (gncOwnerCopy (gncOwnerGetEndOwner
-                           (gncInvoiceGetOwner
-                            (gncInvoiceGetInvoiceFromLot lot)))
-                          owner))
-          (hashv-set! ht (string-hash (gncSplitGetGUID split)) owner)
-          owner))))))
 
 (define (aging-renderer report-obj receivable)
   (define options (gnc:report-options report-obj))
@@ -263,6 +241,10 @@ exist but have no suitable transactions."))
       (setup-query query accounts report-date)
       (let* ((splits (xaccQueryGetSplitsUniqueTrans query)))
         (qof-query-destroy query)
+
+        ;; split->owner hashtable should be empty at the start of
+        ;; report renderer. clear it anyway.
+        (gnc:split->owner #f)
 
         ;; loop into each APAR account
         (let loop ((accounts accounts)
@@ -345,7 +327,7 @@ exist but have no suitable transactions."))
                         acc-totals)))))
                  (reverse accounts-and-owners))
 
-                (split->owner #f)       ;free the gncOwners
+                (gnc:split->owner #f)       ;free the gncOwners
                 (gnc:html-document-add-object! document table)
 
                 (unless (null? invalid-splits)
@@ -402,7 +384,7 @@ exist but have no suitable transactions."))
                        owners-and-aging))
 
                   ((this . _)
-                   (match-let* ((owner (split->owner this))
+                   (match-let* ((owner (gnc:split->owner this))
                                 ((owner-splits . other-owner-splits)
                                  (list-split acc-splits split-has-owner? owner))
                                 (aging (gnc:owner-splits->aging-list

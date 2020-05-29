@@ -73,6 +73,7 @@
 (export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
 (export gnc:owner-from-split)
+(export gnc:split->owner)
 
 (load-from-path "gnucash/engine/gnc-numeric")
 (load-from-path "gnucash/engine/commodity-table")
