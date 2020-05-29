@@ -47,6 +47,7 @@ extern "C" {
 #include <gnc-version.h>
 }
 
+#include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
 #include <iostream>
 #include <string>
@@ -348,60 +349,65 @@ load_user_config(void)
 
 
 static void
-gnc_log_init (gchar **log_flags, gchar *log_to_filename)
+gnc_log_init (std::vector <std::string> &log_flags, std::string &log_to_filename)
 {
-    if (log_to_filename != NULL)
-        qof_log_init_filename_special(log_to_filename);
+    if (!log_to_filename.empty())
+    {
+#ifdef __MINGW64__
+        auto *utf8_filename = g_utf16_to_utf8 (log_to_filename, -1, NULL, NULL, NULL);
+#else
+        auto utf8_filename = log_to_filename.c_str();
+#endif
+
+        qof_log_init_filename_special (utf8_filename);
+
+#ifdef __MINGW64__
+        g_free (utf8_filename);
+#endif
+    }
     else
     {
         /* initialize logging to our file. */
-        gchar *tracefilename;
-        tracefilename = g_build_filename(g_get_tmp_dir(), "gnucash.trace",
-                                         (gchar *)NULL);
-        qof_log_init_filename(tracefilename);
-        g_free(tracefilename);
+        auto tracefilename = g_build_filename (g_get_tmp_dir(), "gnucash.trace",
+                                               (gchar *)NULL);
+        qof_log_init_filename (tracefilename);
+        g_free (tracefilename);
     }
 
     // set a reasonable default.
     qof_log_set_default(QOF_LOG_WARNING);
-
     gnc_log_default();
 
     if (gnc_prefs_is_debugging_enabled())
     {
-        qof_log_set_level("", QOF_LOG_INFO);
-        qof_log_set_level("qof", QOF_LOG_INFO);
-        qof_log_set_level("gnc", QOF_LOG_INFO);
+        qof_log_set_level ("", QOF_LOG_INFO);
+        qof_log_set_level ("qof", QOF_LOG_INFO);
+        qof_log_set_level ("gnc", QOF_LOG_INFO);
     }
 
-    {
-        gchar *log_config_filename;
-        log_config_filename = g_build_filename (gnc_userconfig_dir (),
-                                                "log.conf", (char *)NULL);
-        if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
-            qof_log_parse_log_config(log_config_filename);
-        g_free(log_config_filename);
-    }
+    auto log_config_filename = g_build_filename (gnc_userconfig_dir (),
+                                                 "log.conf", (char *)NULL);
+    if (g_file_test (log_config_filename, G_FILE_TEST_EXISTS))
+        qof_log_parse_log_config (log_config_filename);
+    g_free (log_config_filename);
 
-    if (log_flags != NULL)
+    if (!log_flags.empty())
     {
-        int i = 0;
-        for (; log_flags[i] != NULL; i++)
+        for (auto log_flag : log_flags)
         {
-            QofLogLevel level;
-            gchar **parts = NULL;
-
-            gchar *log_opt = log_flags[i];
-            parts = g_strsplit(log_opt, "=", 2);
-            if (parts == NULL || parts[0] == NULL || parts[1] == NULL)
+            if (log_flag.empty () ||
+                log_flag[0] == '=' ||
+                log_flag[log_flag.length () - 1] == '=')
             {
-                g_warning("string [%s] not parseable", log_opt);
+                g_warning ("string [%s] not parseable", log_flag.c_str());
                 continue;
             }
 
-            level = qof_log_level_from_string(parts[1]);
-            qof_log_set_level(parts[0], level);
-            g_strfreev(parts);
+            std::vector<std::string> split_flag;
+            boost::split (split_flag, log_flag, [](char c){return c == '=';});
+
+            auto level = qof_log_level_from_string (split_flag[1].c_str());
+            qof_log_set_level (split_flag[0].c_str(), level);
         }
     }
 }
@@ -567,11 +573,6 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
 void
 Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 {
-#ifdef __MINGW64__
-    wchar_t *tmp_log_to_filename = NULL;
-#else
-    char *tmp_log_to_filename = NULL;
-#endif
     try
     {
     bpo::store (bpo::command_line_parser (argc, argv).
@@ -584,16 +585,6 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         std::cerr << *m_opt_desc.get();
 
         exit(1);
-    }
-
-    if (tmp_log_to_filename != NULL)
-    {
-#ifdef __MINGW64__
-        log_to_filename = g_utf16_to_utf8(tmp_log_to_filename, -1, NULL, NULL, NULL);
-        g_free (tmp_log_to_filename);
-#else
-        log_to_filename = tmp_log_to_filename;
-#endif
     }
 
     if (m_opt_map["version"].as<bool>())
@@ -623,6 +614,14 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         gnc_gsettings_set_prefix (m_opt_map["gsettings-prefix"].
             as<std::string>().c_str());
 
+    if (m_opt_map.count ("log"))
+        m_log_flags = m_opt_map["log"].
+            as<std::vector <std::string>>();
+
+    if (m_opt_map.count ("logto"))
+        m_log_to_filename = m_opt_map["logto"].
+            as<std::string>().c_str();
+
     if (args_remaining)
         file_to_load = args_remaining[0];
 }
@@ -631,12 +630,6 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 void
 Gnucash::CoreApp::add_common_program_options (void)
 {
-    #ifdef __MINGW64__
-    wchar_t *tmp_log_to_filename = NULL;
-    #else
-    char *tmp_log_to_filename = NULL;
-    #endif
-
     bpo::options_description common_options(_("Common Options"));
     common_options.add_options()
         ("help,h", bpo::bool_switch(),
@@ -669,7 +662,7 @@ Gnucash::CoreApp::start (void)
     if (userdata_migration_msg)
         g_print("\n\n%s\n", userdata_migration_msg);
 
-    gnc_log_init (log_flags, log_to_filename);
+    gnc_log_init (m_log_flags, m_log_to_filename);
     gnc_engine_init (0, NULL);
 
     /* Write some locale details to the log to simplify debugging */

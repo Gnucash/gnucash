@@ -54,11 +54,12 @@ private:
     void add_common_program_options (void);
 
     /* Command-line option variables */
+    std::string m_log_to_filename;
+    std::vector <std::string> m_log_flags;
+
     int gnucash_show_version = 0;
     int debugging = 0;
     int extra = 0;
-    char **log_flags;
-    char *log_to_filename = nullptr;
     int nofile = 0;
     const char *gsettings_prefix = nullptr;
     const char *add_quotes_file = nullptr;
