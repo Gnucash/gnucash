@@ -287,6 +287,9 @@
      (gnc:lookup-option
       (gnc:report-options report-obj) pagename optname)))
 
+  (issue-deprecation-warning
+   "old balance-sheet is deprecated and will be removed in 5.x")
+
   (gnc:report-starting reportname)
 
   ;; get all option's values

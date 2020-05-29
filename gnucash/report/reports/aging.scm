@@ -653,6 +653,9 @@ copying this report to a spreadsheet for use in a mail merge.")
       (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)) ;; shipping
       (gncOwnerGetAddr owner)))                            ;; billing
 
+  (issue-deprecation-warning
+   "old aging reports are deprecated and will be removed in 5.x")
+
   (set! receivable (eq? (op-value "__hidden" "receivable-or-payable") 'R))
   (gnc:report-starting reportname)
   (let* ((companys (make-hash-table 23))

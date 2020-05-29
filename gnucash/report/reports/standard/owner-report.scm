@@ -720,6 +720,9 @@
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  (issue-deprecation-warning
+   "old owner reports are deprecated and will be removed in 5.x")
+
   (let* ((document (gnc:make-html-document))
      (table '())
      (orders '())

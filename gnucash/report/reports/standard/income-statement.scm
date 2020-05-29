@@ -290,7 +290,10 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  
+
+  (issue-deprecation-warning
+   "old income-statement is deprecated and will be removed in 5.x")
+
   (gnc:report-starting reportname)
   
   ;; get all option's values
