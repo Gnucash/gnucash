@@ -22251,9 +22251,8 @@ msgid "Have a nice day!"
 msgstr "Einen schönen Tag noch."
 
 #: gnucash/python/init.py:118
-#, fuzzy, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Willkommen bei GnuCash ~a"
+msgstr "Willkommen zur GnuCash %s Shell"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
