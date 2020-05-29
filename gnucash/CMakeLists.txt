@@ -31,14 +31,20 @@ else()
 
 endif()
 
+set(gnucash_noinst_HEADERS
+    gnucash-base.hpp
+)
+
 set (gnucash_SOURCES
   gnucash.cpp
+  gnucash-base.cpp
   gnucash-gresources.c
   ${GNUCASH_RESOURCE_FILE}
 )
 
 add_executable (gnucash
-  ${gnucash_SOURCES}
+    ${gnucash_SOURCES}
+    ${gnucash_noinst_HEADERS}
 )
 
 add_dependencies (gnucash gnucash-manpage)
@@ -55,7 +61,9 @@ target_link_libraries (gnucash
 
 add_executable (gnucash-cli
     gnucash-cli.cpp
+    gnucash-base.cpp
     ${GNUCASH_RESOURCE_FILE}
+    ${gnucash_noinst_HEADERS}
 )
 
 add_dependencies (gnucash-cli gnucash)
@@ -275,8 +283,8 @@ gnc_add_scheme_targets(price-quotes
     DEPENDS "scm-engine;scm-app-utils;scm-gnome-utils")
 
 set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
-    gnucash.cpp gnucash-cli.cpp gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
-    price-quotes.scm ${gnucash_EXTRA_DIST})
+    gnucash.cpp gnucash-cli.cpp gnucash-base.cpp gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
+    price-quotes.scm ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
 
 set (gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST} ${gnome_utils_DIST}
     ${gschemas_DIST} ${gtkbuilder_DIST} ${html_DIST} ${import_export_DIST} ${python_DIST} ${register_DIST}
