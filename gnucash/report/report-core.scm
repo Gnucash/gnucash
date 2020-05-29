@@ -772,3 +772,62 @@ not found.")))
       (gnc:debug "Renaming report " template-guid)
       (gnc:report-template-set-name templ new-name)
       (gnc:save-all-reports))))
+
+(define (stderr-log tmpl . args)
+  (apply format (current-error-port) tmpl args)
+  #f)
+
+(define (template-export report template export-type output-file dry-run?)
+  (let* ((report-guid (gnc:report-template-report-guid template))
+         (parent-template-guid (gnc:report-template-parent-type template))
+         (parent-template (hash-ref *gnc:_report-templates_* parent-template-guid))
+         (parent-export-thunk (gnc:report-template-export-thunk parent-template))
+         (parent-export-types (gnc:report-template-export-types parent-template)))
+
+    (cond
+     ((not parent-export-thunk) (stderr-log "Report ~s has no export code\n" report))
+     ((not parent-export-types) (stderr-log "Report ~s has no export-types\n" report))
+     ((not (assoc export-type parent-export-types))
+      (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
+                  export-type (string-join (map car parent-export-types) ", ")))
+     ((not output-file) (stderr-log "No output file specified\n"))
+     (dry-run? #t)
+     (else
+      (display "Running export..." (current-error-port))
+      (parent-export-thunk
+       (gnc-report-find (gnc:make-report report-guid))
+       (assoc-ref parent-export-types export-type) output-file)
+      (display "done!\n" (current-error-port))))))
+
+(define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
+  (let ((template (or (gnc:find-report-template report)
+                      (let lp ((custom-templates (gnc:custom-report-templates-list)))
+                        (cond
+                         ((null? custom-templates) #f)
+                         ((equal? (gnc:report-template-name (cdar custom-templates))
+                                  report) (cdar custom-templates))
+                         (else (lp (cdr custom-templates))))))))
+
+    (define (run-report output-port)
+      (display
+       (gnc:report-render-html
+        (gnc-report-find
+         (gnc:make-report
+          (gnc:report-template-report-guid template))) #t) output-port))
+
+    (cond
+     ((not template)
+      (stderr-log "Cannot find report ~s. Valid reports are:\n" report)
+      (for-each
+       (lambda (template)
+         (stderr-log "* ~a\n" (gnc:report-template-name (cdr template))))
+       (gnc:custom-report-templates-list))
+      #f)
+     (export-type (template-export report template export-type output-file dry-run?))
+     (dry-run? #t)
+     (output-file
+      (format (current-error-port) "Saving report to ~a..." output-file)
+      (call-with-output-file output-file run-report)
+      (display "complete!\n" (current-error-port)))
+     (else
+      (run-report (current-output-port))))))

@@ -44,6 +44,13 @@ extern "C" {
 
 namespace bl = boost::locale;
 
+struct run_report_args {
+    const char *file_to_load;
+    const char *run_report;
+    const char *export_type;
+    const char *output_file;
+};
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -108,11 +115,103 @@ fail:
     gnc_shutdown(1);
 }
 
+static void
+report_session_percentage (const char *message, double percent)
+{
+    static double previous = 0.0;
+    if ((percent - previous) < 5.0)
+        return;
+    fprintf (stderr, "\r%3.0f%% complete...", percent);
+    previous = percent;
+    return;
+}
+
+static void
+scm_run_report (void *data,
+                [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
+    auto args = static_cast<run_report_args*>(data);
+    QofSession *session = NULL;
+    SCM cmdline, report, type, file;
+    const gchar *datafile;
+
+    scm_c_eval_string("(debug-set! stack 200000)");
+    scm_c_use_module ("gnucash utilities");
+    scm_c_use_module ("gnucash app-utils");
+    scm_c_use_module ("gnucash reports");
+
+    // gnc_report_init ();
+    // load_system_config();
+    // load_user_config();
+    gnc_prefs_init ();
+    qof_event_suspend ();
+    datafile = args->file_to_load;
+
+    cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
+    report = scm_from_utf8_string (args->run_report);
+    type = args->export_type ? scm_from_utf8_string (args->export_type) : SCM_BOOL_F;
+    file = args->output_file ? scm_from_utf8_string (args->output_file) : SCM_BOOL_F;
+
+    /* dry-run? is #t: try report, check validity of options */
+    if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
+        goto fail;
+
+    fprintf (stderr, "Loading datafile %s...\n", datafile);
+
+    session = gnc_get_current_session ();
+    if (!session) goto fail;
+
+    qof_session_begin (session, datafile, TRUE, FALSE, FALSE);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_load (session, report_session_percentage);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    fprintf (stderr, "\n");
+
+    /* dry-run? is #f: run the report */
+    scm_call_4 (cmdline, report, type, file, SCM_BOOL_F);
+
+    qof_session_end (session);
+    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR) goto fail;
+
+    qof_session_destroy (session);
+
+    qof_event_resume ();
+    gnc_shutdown (0);
+    return;
+fail:
+    if (session)
+    {
+        if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
+            g_warning ("Session Error: %d %s",
+                       qof_session_get_error (session),
+                       qof_session_get_error_message (session));
+        qof_session_destroy (session);
+    }
+    qof_event_resume ();
+    gnc_shutdown (1);
+}
+
 int
 Gnucash::add_quotes (std::string &uri)
 {
     if (not uri.empty())
         scm_boot_guile (0, nullptr, scm_add_quotes, (void *)uri.c_str());
+
+    return 0;
+}
+
+int
+Gnucash::run_report (const std::string file_to_load, std::string &run_report,
+                     std::string &export_type, std::string &output_file)
+{
+    auto args = run_report_args { file_to_load.c_str(),
+                                  run_report.c_str(),
+                                  export_type.c_str(),
+                                  output_file.c_str() };
+    if (not run_report.empty())
+        scm_boot_guile (0, nullptr, scm_run_report, &args);
 
     return 0;
 }
