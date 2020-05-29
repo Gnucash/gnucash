@@ -126,7 +126,18 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             return Gnucash::add_quotes (m_file_to_load);
     }
 
-
+    if (!m_run_report.empty())
+    {
+        if (m_file_to_load.empty())
+        {
+            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+                      << *m_opt_desc.get();
+            return 1;
+        }
+        else
+            return Gnucash::run_report(m_file_to_load, m_run_report,
+                                       m_export_type, m_output_file);
+    }
     return 1;
 }
 
