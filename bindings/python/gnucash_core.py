@@ -29,6 +29,7 @@
 #  @ingroup python_bindings
 
 from gnucash import gnucash_core_c
+from gnucash import gnucash_core_cc
 from gnucash import _sw_core_utils
 
 from gnucash.function_class import \
