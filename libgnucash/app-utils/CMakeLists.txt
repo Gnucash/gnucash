@@ -1,5 +1,6 @@
 # NB: Unit tests which require GSchemas should be made conditional on COMPILE_GSCHEMAS.
 add_subdirectory(test)
+add_subdirectory(mocks)
 # Build the library
 
 set (app_utils_noinst_HEADERS
@@ -198,4 +199,8 @@ add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-2 scm-app-utils-1)
 set_local_dist(app_utils_DIST_local
         ${app_utils_ALL_SOURCES} ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
         app-utils.i CMakeLists.txt gnc-help-utils.c)
-set(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)
+set(app_utils_DIST
+    ${app_utils_DIST_local}
+    ${test_app_utils_DIST}
+    ${app_utils_mocks_DIST}
+    PARENT_SCOPE)

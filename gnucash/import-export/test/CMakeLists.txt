@@ -34,10 +34,6 @@ set(IMPORT_ACCOUNT_MATCHER_TEST_LIBS gnc-generic-import gnc-engine test-core gte
 gnc_add_test(test-import-account-matcher gtest-import-account-matcher.cpp
   IMPORT_ACCOUNT_MATCHER_TEST_INCLUDE_DIRS IMPORT_ACCOUNT_MATCHER_TEST_LIBS)
 
-set_dist_list(test_generic_import_DIST CMakeLists.txt
-  test-import-parse.c test-import-pending-matches.cpp
-  gtest-import-account-matcher.cpp)
-
 set(gtest_import_backend_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common
@@ -85,3 +81,9 @@ set(gtest_import_backend_SOURCES
 gnc_add_test(test-import-backend "${gtest_import_backend_SOURCES}"
   gtest_import_backend_INCLUDE_DIRS gtest_import_backend_LIBS)
 
+set_dist_list(test_generic_import_DIST
+    CMakeLists.txt
+    test-import-parse.c
+    test-import-pending-matches.cpp
+    gtest-import-account-matcher.cpp
+    gtest-import-backend.cpp)
