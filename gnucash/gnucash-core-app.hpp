@@ -38,7 +38,7 @@ public:
     CoreApp ();
     CoreApp (const char* app_name);
 
-    void parse_command_line (int *argc, char ***argv);
+    void parse_command_line (int argc, char **argv);
     void start (void);
 
     const char *get_file_to_load (void);

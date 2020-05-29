@@ -114,7 +114,7 @@ namespace Gnucash {
     {
     public:
         GnucashCli (const char* app_name);
-        void parse_command_line (int *argc, char ***argv);
+        void parse_command_line (int argc, char **argv);
         void start (int argc, char **argv);
     private:
         void configure_program_options (void);
@@ -130,7 +130,7 @@ Gnucash::GnucashCli::GnucashCli (const char *app_name) : Gnucash::CoreApp (app_n
 }
 
 void
-Gnucash::GnucashCli::parse_command_line (int *argc, char ***argv)
+Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
 {
     Gnucash::CoreApp::parse_command_line (argc, argv);
 
@@ -171,7 +171,7 @@ main(int argc, char **argv)
 {
     Gnucash::GnucashCli application (argv[0]);
 
-    application.parse_command_line (&argc, &argv);
+    application.parse_command_line (argc, argv);
     application.start (argc, argv);
 
     exit(0);  /* never reached */

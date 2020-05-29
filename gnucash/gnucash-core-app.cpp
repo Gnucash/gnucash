@@ -565,7 +565,7 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
  * before parsing any arguments if the GUI can't be initialized.
  */
 void
-Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
+Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 {
 #ifdef __MINGW64__
     wchar_t *tmp_log_to_filename = NULL;
@@ -573,7 +573,7 @@ Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
     char *tmp_log_to_filename = NULL;
 #endif
 
-    bpo::store (bpo::command_line_parser (*argc, *argv).
+    bpo::store (bpo::command_line_parser (argc, argv).
         options (*m_opt_desc.get()).positional(m_pos_opt_desc).run(), m_opt_map);
     bpo::notify (m_opt_map);
 
