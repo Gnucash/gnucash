@@ -1152,38 +1152,81 @@ invoices and amounts.")))))
 (define (job-renderer obj)
   (reg-renderer obj GNC-OWNER-JOB))
 
+(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
+(define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
+(define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
+
 (gnc:define-report
  'version 1
- 'name (N_ "Customer Report (beta)")
- 'report-guid "c146317be32e4948a561ec7fc89d15c1-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Customer Report")
+ 'report-guid customer-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-CUSTOMER))
  'renderer customer-renderer
  'in-menu? #t)
 
 (gnc:define-report
  'version 1
- 'name (N_ "Vendor Report (beta)")
- 'report-guid "d7d1e53505ee4b1b82efad9eacedaea0-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Vendor Report")
+ 'report-guid vendor-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-VENDOR))
  'renderer vendor-renderer
  'in-menu? #t)
 
 (gnc:define-report
  'version 1
- 'name (N_ "Employee Report (beta)")
- 'report-guid "08ae9c2e884b4f9787144f47eacd7f44-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Employee Report")
+ 'report-guid employee-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-EMPLOYEE))
  'renderer employee-renderer
  'in-menu? #t)
 
 (gnc:define-report
  'version 1
- 'name (N_ "Job Report (beta)")
- 'report-guid "5518ac227e474f47a34439f2d4d049de-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Job Report")
+ 'report-guid "5518ac227e474f47a34439f2d4d049de"
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-JOB))
  'renderer job-renderer
  'in-menu? #t)
+
+
+(define (owner-report-create-internal report-guid owner owner-type)
+  (let* ((options (gnc:make-report-options report-guid))
+         (owner-op (gnc:lookup-option options owner-page (owner-string owner-type))))
+
+    (gnc:option-set-value owner-op owner)
+    (gnc:make-report report-guid options)))
+
+(define (owner-report-create owner account)
+  ;; note account isn't actually used
+  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
+    (cond
+     ((eqv? type GNC-OWNER-CUSTOMER)
+      ;; Not sure whether to pass type, or to use the guid in the report function
+      (owner-report-create-internal customer-report-guid owner type))
+
+     ((eqv? type GNC-OWNER-VENDOR)
+      (owner-report-create-internal vendor-report-guid owner type))
+
+     ((eqv? type GNC-OWNER-EMPLOYEE)
+      (owner-report-create-internal employee-report-guid owner type))
+
+     (else #f))))
+
+(define (gnc:owner-report-create-internal
+         account split query journal? double? title debit-string credit-string)
+
+  (let* ((temp-owner (gncOwnerNew))
+         (owner (gnc:owner-from-split split temp-owner))
+         (res (if (null? owner)
+                  -1
+                  (owner-report-create owner))))
+    (gncOwnerFree temp-owner)
+    res))
+
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #t gnc:owner-report-create-internal)
+(export owner-report-create)

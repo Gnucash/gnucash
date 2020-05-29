@@ -15,10 +15,10 @@
 
 ;; This is implementation testing for Balance Sheet and Profit&Loss.
 
-(define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13")
-(define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
-(define multicol-balsheet-uuid "065d5d5a77ba11e8b31e83ada73c5eea")
-(define multicol-pnl-uuid "0e94fd0277ba11e8825d43e27232c9d4")
+(define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13-old")
+(define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc-old")
+(define multicol-balsheet-uuid "c4173ac99b2b448289bf4d11c731af13")
+(define multicol-pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
@@ -540,7 +540,7 @@
     ;; the following includes non-zero retained earnings of $1,270
     (set-option! multi-bs-options "General" "End Date"
                  (cons 'absolute (gnc-dmy2time64 1 3 1980)))
-    (set-option! multi-bs-options "General" "Period duration" #f)
+    (set-option! multi-bs-options "General" "Period duration" 'disabled)
     (let ((sxml (options->sxml multicol-balsheet-uuid multi-bs-options
                                "multicol-balsheet-retained")))
       (test-equal "bal-1/3/80"

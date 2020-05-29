@@ -444,20 +444,53 @@ exist but have no suitable transactions."))
 (define (receivables-renderer report-obj)
   (aging-renderer report-obj #t))
 
+(define payables-aging-guid "e57770f2dbca46619d6dac4ac5469b50")
+(define receivables-aging-guid "9cf76bed17f14401b8e3e22d0079cb98")
+
 (gnc:define-report
  'version 1
- 'name (N_ "Payable Aging (beta)")
- 'report-guid "e57770f2dbca46619d6dac4ac5469b50-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Payable Aging")
+ 'report-guid payables-aging-guid
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator payable-options-generator
  'renderer payables-renderer
  'in-menu? #t)
 
 (gnc:define-report
  'version 1
- 'name (N_ "Receivable Aging (beta)")
- 'report-guid "9cf76bed17f14401b8e3e22d0079cb98-new"
- 'menu-path (list gnc:menuname-experimental)
+ 'name (N_ "Receivable Aging")
+ 'report-guid "9cf76bed17f14401b8e3e22d0079cb98"
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator receivable-options-generator
  'renderer receivables-renderer
  'in-menu? #t)
+
+(define (receivables-report-create-internal acct title show-zeros?)
+  (let* ((options (gnc:make-report-options receivables-aging-guid))
+         (zero-op (gnc:lookup-option options gnc:pagename-general optname-show-zeros))
+         (title-op (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)))
+    (when title (gnc:option-set-value title-op title))
+    (gnc:option-set-value zero-op show-zeros?)
+    (gnc:make-report receivables-aging-guid options)))
+
+(define (payables-report-create-internal acct title show-zeros?)
+  (let* ((options (gnc:make-report-options payables-aging-guid))
+         (zero-op (gnc:lookup-option options gnc:pagename-general optname-show-zeros))
+         (title-op (gnc:lookup-option options gnc:pagename-general gnc:optname-reportname)))
+    (when title (gnc:option-set-value title-op title))
+    (gnc:option-set-value zero-op show-zeros?)
+    (gnc:make-report payables-aging-guid options)))
+
+(define (gnc:receivables-create-internal
+         account split query journal? double? title debit-string credit-string)
+  (receivables-report-create-internal #f #f))
+
+(define (gnc:payables-create-internal
+         account split query journal? double? title debit-string credit-string)
+  (payables-report-create-internal #f #f))
+
+(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #f gnc:receivables-create-internal)
+(gnc:register-report-hook ACCT-TYPE-PAYABLE #f gnc:payables-create-internal)
+
+(export payables-report-create-internal)
+(export receivables-report-create-internal)

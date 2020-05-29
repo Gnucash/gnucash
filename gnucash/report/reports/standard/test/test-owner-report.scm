@@ -14,11 +14,11 @@
 (use-modules (system vm vm))
 
 (define uuid-list
-  (list (cons 'employee "08ae9c2e884b4f9787144f47eacd7f44")
-        (cons 'vendor "d7d1e53505ee4b1b82efad9eacedaea0")
-        (cons 'customer "c146317be32e4948a561ec7fc89d15c1")
-        (cons 'customer-new "c146317be32e4948a561ec7fc89d15c1-new")
-        (cons 'job "5518ac227e474f47a34439f2d4d049de")))
+  (list (cons 'employee "08ae9c2e884b4f9787144f47eacd7f44-old")
+        (cons 'vendor "d7d1e53505ee4b1b82efad9eacedaea0-old")
+        (cons 'customer "c146317be32e4948a561ec7fc89d15c1-old")
+        (cons 'customer-new "c146317be32e4948a561ec7fc89d15c1")
+        (cons 'job "5518ac227e474f47a34439f2d4d049de-old")))
 
 (setlocale LC_ALL "C")
 

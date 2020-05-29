@@ -41,9 +41,9 @@
 (define optname-date-driver (N_ "Due or Post Date"))
 
 ;; let's define a name for the report-guid's, much prettier
-(define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
-(define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
-(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
+(define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44-old")
+(define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0-old")
+(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 
 (define acct-string (N_ "Account"))
 (define owner-page gnc:pagename-general)
@@ -831,75 +831,28 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Customer Report")
+ 'name "Customer Report (legacy)"
  'report-guid customer-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator customer-options-generator
  'renderer reg-renderer
- 'in-menu? #t)
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Vendor Report")
+ 'name "Vendor Report (legacy)"
  'report-guid vendor-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator vendor-options-generator
  'renderer reg-renderer
- 'in-menu? #t)
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Employee Report")
+ 'name "Employee Report (legacy)"
  'report-guid employee-report-guid 
  'menu-path (list gnc:menuname-business-reports)
  'options-generator employee-options-generator
  'renderer reg-renderer
- 'in-menu? #t)
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
-(define (owner-report-create-internal report-guid owner account owner-type)
-  (let* ((options (gnc:make-report-options report-guid))
-     (owner-op (gnc:lookup-option options owner-page (owner-string owner-type))) 
-     (account-op (gnc:lookup-option options owner-page acct-string)))
-
-    (gnc:option-set-value owner-op owner)
-    (gnc:option-set-value account-op account)
-    (gnc:make-report report-guid options)))
-
-(define* (owner-report-create owner account #:key currency)
-  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    ; Figure out an account to use if nothing exists here.
-    (if (null? account)
-        (set! account (find-first-account-for-owner owner #:currency currency)))
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (owner-report-create-internal customer-report-guid owner account type)) ;; Not sure whether to pass type, or to use the guid in the report function
-
-      ((eqv? type GNC-OWNER-VENDOR)
-       (owner-report-create-internal vendor-report-guid owner account type))
-
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (owner-report-create-internal employee-report-guid owner account type))
-
-      (else #f))))
-
-(define (gnc:owner-report-create-internal
-     account split query journal? double? title
-     debit-string credit-string)
-
-  (let* ((temp-owner (gncOwnerNew))
-     (owner (gnc:owner-from-split split temp-owner))
-     (res -1)) ;; XXX -- in this case we should create an error report
-
-    (if (not (null? owner))
-    (set! res (owner-report-create owner account)))
-
-    (gncOwnerFree temp-owner)
-    res))
-
-(gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t
-              gnc:owner-report-create-internal)
-
-(gnc:register-report-hook ACCT-TYPE-PAYABLE #t
-              gnc:owner-report-create-internal)
-
-(export owner-report-create)

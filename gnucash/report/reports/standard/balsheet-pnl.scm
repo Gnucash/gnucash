@@ -44,12 +44,6 @@
   (split-balance col-datum-get-split-balance)
   (split-value-balance col-datum-get-split-value-balance))
 
-(define FOOTER-TEXT
-  (gnc:make-html-text
-   (_ "WARNING: Foreign currency conversions, and unrealized gains
-calculations are not confirmed correct. This report may be modified
-without notice. Bug reports are very welcome at
-https://bugs.gnucash.org/")))
 
 ;; define all option's names and help text so that they are properly
 
@@ -130,7 +124,7 @@ also show overall period profit & loss."))
 
 (define periodlist
   (list
-   (list #f
+   (list 'disabled
          (cons 'text (_ "Disabled"))
          (cons 'tip (_ "Disabled")))
 
@@ -186,29 +180,30 @@ also show overall period profit & loss."))
      (gnc:make-multichoice-callback-option
       gnc:pagename-general optname-period
       "c2" opthelp-period
-      #f
+      'disabled
       (keylist->vectorlist periodlist)
       #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options
-         gnc:pagename-general optname-disable-amount-indent
-         (not x))
-        (gnc-option-db-set-option-selectable-by-name
-         options
-         gnc:pagename-general optname-dual-columns
-         (not x))
-        (case report-type
-          ((balsheet)
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-include-chart x)
+        (let ((x (not (eq? x 'disabled))))
+          (gnc-option-db-set-option-selectable-by-name
+           options
+           gnc:pagename-general optname-disable-amount-indent
+           (not x))
+          (gnc-option-db-set-option-selectable-by-name
+           options
+           gnc:pagename-general optname-dual-columns
+           (not x))
+          (case report-type
+            ((balsheet)
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-include-chart x)
 
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-startdate x))
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-startdate x))
 
-          ((pnl)
-           (gnc-option-db-set-option-selectable-by-name
-            options gnc:pagename-general optname-include-overall-period x))))))
+            ((pnl)
+             (gnc-option-db-set-option-selectable-by-name
+              options gnc:pagename-general optname-include-overall-period x)))))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -710,10 +705,10 @@ also show overall period profit & loss."))
          (disable-account-indent? (get-option gnc:pagename-display
                                               optname-account-full-name))
          (incr (get-option gnc:pagename-general optname-period))
-         (disable-amount-indent? (and (not incr)
+         (disable-amount-indent? (and (eq? incr 'disabled)
                                       (get-option gnc:pagename-general
                                                   optname-disable-amount-indent)))
-         (enable-dual-columns? (and (not incr)
+         (enable-dual-columns? (and (eq? incr 'disabled)
                                     (get-option gnc:pagename-general
                                                 optname-dual-columns)))
          (accounts (get-option gnc:pagename-accounts
@@ -759,7 +754,8 @@ also show overall period profit & loss."))
 
          (report-dates
           (cond
-           (incr (gnc:make-date-list startdate enddate (gnc:deltasym-to-delta incr)))
+           ((not (eq? incr 'disabled))
+            (gnc:make-date-list startdate enddate (gnc:deltasym-to-delta incr)))
            ((eq? report-type 'pnl) (list startdate enddate))
            (else (list enddate))))
 
@@ -909,7 +905,7 @@ also show overall period profit & loss."))
            (lambda ()
              (display report-title)
              (display " ")
-             (if (or incr (eq? report-type 'pnl))
+             (if (or (not (eq? incr 'disabled)) (eq? report-type 'pnl))
                  (format #t (_ "~a to ~a")
                          (qof-print-date startdate) (qof-print-date enddate))
                  (display (qof-print-date enddate))))))
@@ -1025,7 +1021,7 @@ also show overall period profit & loss."))
                       (income-expense-balance 'format gnc:make-gnc-monetary #f)))))
 
              (chart (and-let* (include-chart?
-                               incr
+                               (not (eq? incr 'disabled))
                                (curr (or common-currency book-main-currency))
                                (price (or price-source 'pricedb-nearest)))
                       (gnc:make-report-anchor
@@ -1080,7 +1076,7 @@ also show overall period profit & loss."))
                                                         get-cell-anchor-fn)
                               ))))
 
-        (when incr
+        (unless (eq? incr 'disabled)
           (add-to-table multicol-table-left (_ "Date") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f
@@ -1118,7 +1114,7 @@ also show overall period profit & loss."))
                           #:show-accounts? #f
                           #:show-total? #f))
 
-        (if (and include-chart? incr)
+        (if (and include-chart? (not (eq? incr 'disabled)))
             (gnc:html-document-add-object!
              doc
              (gnc:make-html-text
@@ -1157,7 +1153,7 @@ also show overall period profit & loss."))
                 (let ((datepair (col-idx->datepair col-idx))
                       (show-orig? (and common-currency #t))
                       (curr (or common-currency book-main-currency))
-                      (delta (or incr 'MonthDelta))
+                      (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
                       (price (or price-source 'pricedb-nearest))
                       (accts (if (pair? account) account (list account))))
                   (gnc:make-report-anchor
@@ -1174,7 +1170,7 @@ also show overall period profit & loss."))
              (chart
               (and-let* (include-chart?
                          (curr (or common-currency book-main-currency))
-                         (delta (or incr 'MonthDelta))
+                         (delta (or (not (eq? incr 'disabled)) 'MonthDelta))
                          (price (or price-source 'pricedb-nearest)))
                 (gnc:make-report-anchor
                  pnl-barchart-uuid report-obj
@@ -1233,7 +1229,7 @@ also show overall period profit & loss."))
                               #:get-cell-anchor-fn (and use-amount-links?
                                                         get-cell-anchor-fn)))))
 
-        (when incr
+        (unless (eq? incr 'disabled)
           (add-to-table multicol-table-left (_ "Period") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f
@@ -1281,30 +1277,36 @@ also show overall period profit & loss."))
       (gnc:html-document-add-object!
        doc multicol-table))
 
-    (gnc:html-document-add-object!
-     doc FOOTER-TEXT)
-
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
     doc))
 
-(define balsheet-reportname (_ "Balance Sheet (Multicolumn)"))
-(define pnl-reportname (_ "Income Statement (Multicolumn)"))
+(define balsheet-reportname (_ "Balance Sheet"))
+(define is-reportname (_ "Income Statement"))
+(define pnl-reportname (_ "Profit & Loss"))
 
 (gnc:define-report
  'version 1
  'name balsheet-reportname
- 'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
- 'menu-path (list gnc:menuname-experimental)
+ 'report-guid "c4173ac99b2b448289bf4d11c731af13"
+ 'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (multicol-report-options-generator 'balsheet))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
 
 (gnc:define-report
  'version 1
+ 'name is-reportname
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
+ 'menu-path (list gnc:menuname-income-expense)
+ 'options-generator (lambda () (multicol-report-options-generator 'pnl))
+ 'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
+
+(gnc:define-report
+ 'version 1
  'name pnl-reportname
- 'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
- 'menu-path (list gnc:menuname-experimental)
+ 'report-guid "8758ba23984c40dea5527f5f0ca2779e"
+ 'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (multicol-report-options-generator 'pnl))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
 
