@@ -801,13 +801,12 @@ not found.")))
 
 (define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
   (let ((template (or (gnc:find-report-template report)
-                      (let ((retval #f))
-                        (hash-for-each
-                         (lambda (report-guid template)
-                           (when (equal? (gnc:report-template-name template) report)
-                             (set! retval template)))
-                         *gnc:_report-templates_*)
-                        retval))))
+                      (let lp ((custom-templates (gnc:custom-report-templates-list)))
+                        (cond
+                         ((null? custom-templates) #f)
+                         ((equal? (gnc:report-template-name (cdar custom-templates))
+                                  report) (cdar custom-templates))
+                         (else (lp (cdr custom-templates))))))))
 
     (define (run-report output-port)
       (display
@@ -817,7 +816,12 @@ not found.")))
           (gnc:report-template-report-guid template))) #t) output-port))
 
     (cond
-     ((not template) (stderr-log "Cannot find report ~s\n" report))
+     ((not template)
+      (stderr-log "Cannot find report ~s. Valid reports are:\n" report)
+      (for-each
+       (lambda (template)
+         (stderr-log "* ~a\n" (gnc:report-template-name (cdr template))))
+       (gnc:custom-report-templates-list)))
      (export-type (template-export report template export-type output-file dry-run?))
      (dry-run? #t)
      (output-file
