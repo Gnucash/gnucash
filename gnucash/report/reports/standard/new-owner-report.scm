@@ -1219,12 +1219,11 @@ invoices and amounts.")))))
 (define (gnc:owner-report-create-internal
          account split query journal? double? title debit-string credit-string)
 
-  (let* ((temp-owner (gncOwnerNew))
-         (owner (gnc:owner-from-split split temp-owner))
-         (res (if (null? owner)
-                  -1
-                  (owner-report-create owner account))))
-    (gncOwnerFree temp-owner)
+  (let* ((owner (gnc:split->owner split))
+         (res (if (gncOwnerIsValid owner)
+                  (owner-report-create owner account)
+                  -1)))
+    (gnc:split->owner #f)
     res))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #t gnc:owner-report-create-internal)
