@@ -50,12 +50,63 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static GHashTable *reports = NULL;
 static gint report_next_serial_id = 0;
 
+static gboolean
+try_load_config_array(const gchar *fns[])
+{
+    gchar *filename;
+    int i;
+
+    for (i = 0; fns[i]; i++)
+    {
+        filename = gnc_build_userdata_path(fns[i]);
+        if (gfec_try_load(filename))
+        {
+            g_free(filename);
+            return TRUE;
+        }
+        g_free(filename);
+    }
+    return FALSE;
+}
+
+static void
+update_message(const gchar *msg)
+{
+    //gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
+    g_message("%s", msg);
+}
+
+static void
+load_custom_reports_stylesheets(void)
+{
+    /* Don't continue adding to this list. When 3.0 rolls around bump
+     *      the 2.4 files off the list. */
+    static const gchar *saved_report_files[] =
+    {
+        SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
+    };
+    static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
+    static int is_user_config_loaded = FALSE;
+
+    if (is_user_config_loaded)
+        return;
+    else is_user_config_loaded = TRUE;
+
+    update_message("loading saved reports");
+    try_load_config_array(saved_report_files);
+    update_message("loading stylesheets");
+    try_load_config_array(stylesheet_files);
+}
+
 void
 gnc_report_init (void)
 {
     scm_init_sw_report_module();
     scm_c_use_module ("gnucash report");
+    scm_c_use_module ("gnucash reports");
     scm_c_eval_string("(report-module-loader (list '(gnucash report stylesheets)))");
+
+    load_custom_reports_stylesheets();
 }
 
 

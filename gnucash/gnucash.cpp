@@ -69,25 +69,6 @@ namespace bl = boost::locale;
 static QofLogModule log_module = GNC_MOD_GUI;
 static gchar *userdata_migration_msg = NULL;
 
-static gboolean
-try_load_config_array(const gchar *fns[])
-{
-    gchar *filename;
-    int i;
-
-    for (i = 0; fns[i]; i++)
-    {
-        filename = gnc_build_userdata_path(fns[i]);
-        if (gfec_try_load(filename))
-        {
-            g_free(filename);
-            return TRUE;
-        }
-        g_free(filename);
-    }
-    return FALSE;
-}
-
 static void
 update_message(const gchar *msg)
 {
@@ -136,11 +117,6 @@ load_user_config(void)
         gfec_try_load(config_filename);
         g_free(config_filename);
     }
-
-    update_message("loading saved reports");
-    try_load_config_array(saved_report_files);
-    update_message("loading stylesheets");
-    try_load_config_array(stylesheet_files);
 }
 
 static void
