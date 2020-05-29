@@ -56,9 +56,9 @@ namespace Gnucash {
         void configure_program_options (void);
 
         bool m_add_quotes;
-        std::string run_report;
-        std::string export_type;
-        std::string output_file;
+        std::string m_run_report;
+        std::string m_export_type;
+        std::string m_output_file;
     };
 
 }
@@ -80,13 +80,13 @@ Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
         as<std::string>().c_str());
 
     if (m_opt_map.count ("run-report"))
-        run_report = m_opt_map["run-report"].as<std::string>();
+        m_run_report = m_opt_map["run-report"].as<std::string>();
 
     if (m_opt_map.count ("export-type"))
-        export_type = m_opt_map["export-type"].as<std::string>();
+        m_export_type = m_opt_map["export-type"].as<std::string>();
 
     if (m_opt_map.count ("output-file"))
-        output_file = m_opt_map["output-file"].as<std::string>();
+        m_output_file = m_opt_map["output-file"].as<std::string>();
 }
 
 // Define command line options specific to gnucash-cli.
