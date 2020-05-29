@@ -29,7 +29,7 @@
 #include <fcntl.h>
 #endif
 
-#include "gnucash-base.hpp"
+#include "gnucash-core-app.hpp"
 
 extern "C" {
 #include <gnc-engine-guile.h>
@@ -110,7 +110,7 @@ fail:
 int
 main(int argc, char ** argv)
 {
-    Gnucash::Base application;
+    Gnucash::CoreApp application;
 
     application.parse_command_line (&argc, &argv);
     application.start ();

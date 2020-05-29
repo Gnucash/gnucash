@@ -1,5 +1,5 @@
 /*
- * gnucash-base.cpp -- Basic application object for gnucash binaries
+ * gnucash-core-app.cpp -- Basic application object for gnucash binaries
  *
  * Copyright (C) 2020 Geert Janssens <geert@kobaltwit.be>
  *
@@ -32,7 +32,7 @@
 #include <fcntl.h>
 #endif
 
-#include "gnucash-base.hpp"
+#include "gnucash-core-app.hpp"
 
 extern "C" {
 #include <gfec.h>
@@ -495,7 +495,7 @@ redirect_stdout (void)
 #endif
 }
 
-Gnucash::Base::Base ()
+Gnucash::CoreApp::CoreApp ()
 {
     #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
     #    error "No GLib thread implementation available!"
@@ -547,7 +547,7 @@ Gnucash::Base::Base ()
  * before parsing any arguments if the GUI can't be initialized.
  */
 void
-Gnucash::Base::parse_command_line (int *argc, char ***argv)
+Gnucash::CoreApp::parse_command_line (int *argc, char ***argv)
 {
 #ifdef __MINGW64__
     wchar_t *tmp_log_to_filename = NULL;
@@ -667,25 +667,25 @@ Gnucash::Base::parse_command_line (int *argc, char ***argv)
 }
 
 const char*
-Gnucash::Base::get_file_to_load (void)
+Gnucash::CoreApp::get_file_to_load (void)
 {
     return file_to_load;
 }
 
 int
-Gnucash::Base::get_no_file (void)
+Gnucash::CoreApp::get_no_file (void)
 {
     return nofile;
 }
 
 const char*
-Gnucash::Base::get_quotes_file (void)
+Gnucash::CoreApp::get_quotes_file (void)
 {
     return add_quotes_file;
 }
 
 void
-Gnucash::Base::start (void)
+Gnucash::CoreApp::start (void)
 {
     gnc_print_unstable_message();
 

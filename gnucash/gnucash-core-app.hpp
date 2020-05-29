@@ -1,5 +1,5 @@
 /*
- * gnucash-base.hpp -- Basic application object for gnucash binaries
+ * gnucash-core-app.hpp -- Core application object for gnucash binaries
  *
  * Copyright (C) 2020 Geert Janssens <geert@kobaltwit.be>
  *
@@ -21,15 +21,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#ifndef GNUCASH_BASE_HPP
-#define GNUCASH_BASE_HPP
+#ifndef GNUCASH_CORE_APP_HPP
+#define GNUCASH_CORE_APP_HPP
+
+#include <string>
 
 namespace Gnucash {
 
-class Base
+class CoreApp
 {
 public:
-    Base ();
+    CoreApp ();
 
     void parse_command_line (int *argc, char ***argv);
     void start (void);

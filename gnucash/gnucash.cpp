@@ -29,7 +29,7 @@
 #include <fcntl.h>
 #endif
 
-#include "gnucash-base.hpp"
+#include "gnucash-core-app.hpp"
 
 extern "C" {
 #include <dialog-new-user.h>
@@ -354,7 +354,7 @@ inner_main (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 int
 main(int argc, char ** argv)
 {
-    Gnucash::Base application;
+    Gnucash::CoreApp application;
 
     application.parse_command_line (&argc, &argv);
     application.start();
