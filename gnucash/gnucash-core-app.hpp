@@ -41,9 +41,6 @@ public:
     void parse_command_line (int argc, char **argv);
     void start (void);
 
-    const char *get_file_to_load (void);
-    int get_no_file (void);
-
 protected:
     int gtk_show_help = 0;
     std::string m_app_name;

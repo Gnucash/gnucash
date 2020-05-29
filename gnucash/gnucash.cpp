@@ -187,7 +187,7 @@ load_gnucash_modules()
 static char *
 get_file_to_load (const char* file_to_load)
 {
-    if (file_to_load)
+    if (file_to_load && *file_to_load != '\0')
         return g_strdup(file_to_load);
     else
         /* Note history will always return a valid (possibly empty) string */
@@ -202,7 +202,7 @@ struct t_file_spec {
 };
 
 static void
-inner_main (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto user_file_spec = static_cast<t_file_spec*>(data);
     SCM main_mod;
@@ -298,13 +298,13 @@ namespace Gnucash {
     public:
         Gnucash (const char* app_name);
         void parse_command_line (int argc, char **argv);
+        int start (int argc, char **argv);
 
-        std::string get_quotes_file (void)
-            { return m_quotes_file; }
     private:
         void configure_program_options (void);
 
         std::string m_gtk_help_msg;
+        std::string m_file_to_load;
         std::string m_quotes_file; // Deprecated will be removed in gnucash 5.0
     };
 
@@ -333,6 +333,9 @@ Gnucash::Gnucash::parse_command_line (int argc, char **argv)
 
     if (m_opt_map.count ("add-price-quotes"))
         m_quotes_file = m_opt_map["add-price-quotes"].as<std::string>();
+
+    if (m_opt_map.count ("input-file"))
+        m_file_to_load = m_opt_map["input-file"].as<std::string>();
 }
 
 // Define command line options specific to gnucash.
@@ -354,7 +357,10 @@ Gnucash::Gnucash::configure_program_options (void)
     ("nofile", bpo::bool_switch(),
      N_("Do not load the last file opened"))
     ("help-gtk",  bpo::bool_switch(),
-     _("Show help for gtk options"))
+     _("Show help for gtk options"));
+
+    bpo::options_description depr_options(_("Deprecated Options"));
+    depr_options.add_options()
     ("add-price-quotes", bpo::value<std::string>(),
      N_("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
@@ -368,7 +374,35 @@ Gnucash::Gnucash::configure_program_options (void)
 
     m_pos_opt_desc.add("input-file", -1);
 
-    m_opt_desc->add (app_options);
+    m_opt_desc->add (app_options).add (depr_options);
+}
+
+int
+Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
+    Gnucash::CoreApp::start();
+
+    // Test for the deprecated add-price-quotes option and run it
+    // Will be removed in 5.0
+    if (!m_quotes_file.empty())
+    {
+        std::cerr << bl::translate ("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
+                                    "Please use 'gnucash-cli --add-price-quotes' instead.") << "\n";
+        return add_quotes (m_quotes_file);
+    }
+
+    /* Now the module files are looked up, which might cause some library
+     initialization to be run, hence gtk must be initialized b*eforehand. */
+    gnc_module_system_init();
+
+    gnc_gui_init();
+
+    auto user_file_spec = t_file_spec {
+        m_opt_map["nofile"].as<bool>(),
+        m_file_to_load.c_str()};
+    scm_boot_guile (argc, argv, scm_run_gnucash, &user_file_spec);
+
+    return 0;
 }
 
 int
@@ -387,21 +421,5 @@ main(int argc, char ** argv)
     }
 
     application.parse_command_line (argc, argv);
-    application.start();
-
-    /* If asked via a command line parameter, fetch quotes only */
-    auto quotes_file = application.get_quotes_file ();
-    if (!quotes_file.empty())
-        return Gnucash::add_quotes (quotes_file);
-
-    /* Now the module files are looked up, which might cause some library
-    initialization to be run, hence gtk must be initialized beforehand. */
-    gnc_module_system_init();
-
-    gnc_gui_init();
-
-    auto user_file_spec = t_file_spec {application.get_no_file (), application.get_file_to_load ()};
-    scm_boot_guile (argc, argv, inner_main, &user_file_spec);
-
-    return 0;
+    return application.start (argc, argv);
 }

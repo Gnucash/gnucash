@@ -657,18 +657,6 @@ Gnucash::CoreApp::add_common_program_options (void)
         m_opt_desc->add (common_options);
 }
 
-const char*
-Gnucash::CoreApp::get_file_to_load (void)
-{
-    return file_to_load;
-}
-
-int
-Gnucash::CoreApp::get_no_file (void)
-{
-    return nofile;
-}
-
 void
 Gnucash::CoreApp::start (void)
 {
