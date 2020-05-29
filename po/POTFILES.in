@@ -211,6 +211,7 @@ gnucash/gnome-utils/search-param.c
 gnucash/gnome-utils/tree-view-utils.c
 gnucash/gnome-utils/window-main-summarybar.c
 gnucash/gnucash-cli.cpp
+gnucash/gnucash-commands.cpp
 gnucash/gnucash-core-app.cpp
 gnucash/gnucash.cpp
 gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in

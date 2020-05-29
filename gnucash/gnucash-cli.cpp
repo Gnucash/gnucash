@@ -22,21 +22,18 @@
  */
 #include <config.h>
 
-#include <libguile.h>
-#include <guile-mappings.h>
 #ifdef __MINGW32__
 #include <Windows.h>
 #include <fcntl.h>
 #endif
 
+#include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
 
 extern "C" {
-#include <gnc-engine-guile.h>
+#include <glib/gi18n.h>
+#include <gnc-engine.h>
 #include <gnc-prefs.h>
-#include <gnc-prefs-utils.h>
-#include <gnc-gnome-utils.h>
-#include <gnc-session.h>
 }
 
 #include <boost/locale.hpp>
@@ -47,67 +44,6 @@ namespace bl = boost::locale;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void
-inner_main_add_price_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
-{
-    const char* add_quotes_file = static_cast<const char*>(data);
-    SCM mod, add_quotes, scm_book, scm_result = SCM_BOOL_F;
-    QofSession *session = NULL;
-
-    scm_c_eval_string("(debug-set! stack 200000)");
-
-    mod = scm_c_resolve_module("gnucash price-quotes");
-    scm_set_current_module(mod);
-
-    gnc_prefs_init ();
-    qof_event_suspend();
-    scm_c_eval_string("(gnc:price-quotes-install-sources)");
-
-    if (!gnc_quote_source_fq_installed())
-    {
-        std::cerr << bl::translate ("No quotes retrieved. Finance::Quote isn't "
-                                    "installed properly.") << "\n";
-        goto fail;
-    }
-
-    add_quotes = scm_c_eval_string("gnc:book-add-quotes");
-    session = gnc_get_current_session();
-    if (!session) goto fail;
-
-    qof_session_begin(session, add_quotes_file, FALSE, FALSE, FALSE);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
-
-    qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
-
-    scm_book = gnc_book_to_scm(qof_session_get_book(session));
-    scm_result = scm_call_2(add_quotes, SCM_BOOL_F, scm_book);
-
-    qof_session_save(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR) goto fail;
-
-    qof_session_destroy(session);
-    if (!scm_is_true(scm_result))
-    {
-        g_warning("Failed to add quotes to %s.", add_quotes_file);
-        goto fail;
-    }
-
-    qof_event_resume();
-    gnc_shutdown(0);
-    return;
-fail:
-    if (session)
-    {
-        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-            g_warning("Session Error: %s",
-                      qof_session_get_error_message(session));
-        qof_session_destroy(session);
-    }
-    qof_event_resume();
-    gnc_shutdown(1);
-}
-
 namespace Gnucash {
 
     class GnucashCli : public CoreApp
@@ -115,7 +51,7 @@ namespace Gnucash {
     public:
         GnucashCli (const char* app_name);
         void parse_command_line (int argc, char **argv);
-        void start (int argc, char **argv);
+        int start (int argc, char **argv);
     private:
         void configure_program_options (void);
 
@@ -156,14 +92,15 @@ Gnucash::GnucashCli::configure_program_options (void)
     m_opt_desc->add (quotes_options);
 }
 
-void
-Gnucash::GnucashCli::start (int argc, char **argv)
+int
+Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     Gnucash::CoreApp::start();
 
-    if (not m_quotes_file.empty())
-        scm_boot_guile (argc, argv, inner_main_add_price_quotes, (void *)m_quotes_file.c_str());
+    if (m_quotes_file.empty())
+        return 1;
 
+    return Gnucash::add_quotes (m_quotes_file);
 }
 
 int
