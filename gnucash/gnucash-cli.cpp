@@ -174,5 +174,5 @@ main(int argc, char **argv)
     application.parse_command_line (argc, argv);
     application.start (argc, argv);
 
-    exit(0);  /* never reached */
+    return 0;
 }

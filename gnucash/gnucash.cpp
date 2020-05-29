@@ -465,5 +465,6 @@ main(int argc, char ** argv)
 
     auto user_file_spec = t_file_spec {application.get_no_file (), application.get_file_to_load ()};
     scm_boot_guile (argc, argv, inner_main, &user_file_spec);
-    exit(0); /* never reached */
+
+    return 0;
 }
