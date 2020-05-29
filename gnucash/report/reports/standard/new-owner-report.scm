@@ -1223,7 +1223,7 @@ invoices and amounts.")))))
          (owner (gnc:owner-from-split split temp-owner))
          (res (if (null? owner)
                   -1
-                  (owner-report-create owner))))
+                  (owner-report-create owner account))))
     (gncOwnerFree temp-owner)
     res))
 

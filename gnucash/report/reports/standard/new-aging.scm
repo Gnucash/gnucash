@@ -483,11 +483,11 @@ exist but have no suitable transactions."))
 
 (define (gnc:receivables-create-internal
          account split query journal? double? title debit-string credit-string)
-  (receivables-report-create-internal #f #f))
+  (receivables-report-create-internal account #f #f))
 
 (define (gnc:payables-create-internal
          account split query journal? double? title debit-string credit-string)
-  (payables-report-create-internal #f #f))
+  (payables-report-create-internal account #f #f))
 
 (gnc:register-report-hook ACCT-TYPE-RECEIVABLE #f gnc:receivables-create-internal)
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #f gnc:payables-create-internal)
