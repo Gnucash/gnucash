@@ -622,6 +622,9 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         m_log_to_filename = m_opt_map["logto"].
             as<std::string>().c_str();
 
+    if (m_opt_map.count ("input-file"))
+        m_file_to_load = m_opt_map["input-file"].as<std::string>();
+
     if (args_remaining)
         file_to_load = args_remaining[0];
 }
@@ -645,7 +648,11 @@ Gnucash::CoreApp::add_common_program_options (void)
         ("logto", bpo::value<std::string>(),
          N_("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
         ("gsettings-prefix", bpo::value<std::string>(),
-         N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."));
+         N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."))
+        ("input-file", bpo::value<std::string>(),
+         N_("[datafile]"));
+
+        m_pos_opt_desc.add("input-file", -1);
 
         m_opt_desc->add (common_options);
 }

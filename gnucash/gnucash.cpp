@@ -304,8 +304,7 @@ namespace Gnucash {
         void configure_program_options (void);
 
         std::string m_gtk_help_msg;
-        std::string m_file_to_load;
-        std::string m_quotes_file; // Deprecated will be removed in gnucash 5.0
+        bool m_add_quotes; // Deprecated will be removed in gnucash 5.0
     };
 
 }
@@ -327,15 +326,11 @@ Gnucash::Gnucash::parse_command_line (int argc, char **argv)
         exit(0);
     }
 
+    m_add_quotes = m_opt_map["add-price-quotes"].as<bool>();
+
     if (m_opt_map.count ("namespace"))
         gnc_prefs_set_namespace_regexp (m_opt_map["namespace"].
             as<std::string>().c_str());
-
-    if (m_opt_map.count ("add-price-quotes"))
-        m_quotes_file = m_opt_map["add-price-quotes"].as<std::string>();
-
-    if (m_opt_map.count ("input-file"))
-        m_file_to_load = m_opt_map["input-file"].as<std::string>();
 }
 
 // Define command line options specific to gnucash.
@@ -361,18 +356,14 @@ Gnucash::Gnucash::configure_program_options (void)
 
     bpo::options_description depr_options(_("Deprecated Options"));
     depr_options.add_options()
-    ("add-price-quotes", bpo::value<std::string>(),
+    ("add-price-quotes", bpo::bool_switch(),
      N_("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
         "Please use \"gnucash-cli --add-price-quotes\" instead."))
     ("namespace", bpo::value<std::string>(),
      N_("Regular expression determining which namespace commodities will be retrieved"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
-        "Please use \"gnucash-cli --add-price-quotes\" instead."))
-    ("input-file", bpo::value<std::string>(),
-     N_("[datafile]"));
-
-    m_pos_opt_desc.add("input-file", -1);
+        "Please use \"gnucash-cli --add-price-quotes\" instead."));
 
     m_opt_desc->add (app_options).add (depr_options);
 }
@@ -384,11 +375,18 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
 
     // Test for the deprecated add-price-quotes option and run it
     // Will be removed in 5.0
-    if (!m_quotes_file.empty())
+    if (m_add_quotes)
     {
         std::cerr << bl::translate ("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
                                     "Please use 'gnucash-cli --add-price-quotes' instead.") << "\n";
-        return add_quotes (m_quotes_file);
+        if (m_file_to_load.empty())
+        {
+            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+            << *m_opt_desc.get();
+            return 1;
+        }
+        else
+            return add_quotes (m_file_to_load);
     }
 
     /* Now the module files are looked up, which might cause some library

@@ -45,6 +45,7 @@ protected:
     int gtk_show_help = 0;
     std::string m_app_name;
     std::string tagline;
+    std::string m_file_to_load;
 
     std::unique_ptr<bpo::options_description> m_opt_desc;
     bpo::variables_map m_opt_map;

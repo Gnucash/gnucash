@@ -55,7 +55,7 @@ namespace Gnucash {
     private:
         void configure_program_options (void);
 
-        std::string m_quotes_file;
+        bool m_add_quotes;
     };
 
 }
@@ -70,12 +70,11 @@ Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
 {
     Gnucash::CoreApp::parse_command_line (argc, argv);
 
+    m_add_quotes = m_opt_map["add-price-quotes"].as<bool>();
+
     if (m_opt_map.count ("namespace"))
         gnc_prefs_set_namespace_regexp(m_opt_map["namespace"].
         as<std::string>().c_str());
-
-    if (m_opt_map.count ("add-price-quotes"))
-        m_quotes_file = m_opt_map["add-price-quotes"].as<std::string>();
 }
 
 // Define command line options specific to gnucash-cli.
@@ -84,7 +83,7 @@ Gnucash::GnucashCli::configure_program_options (void)
 {
     bpo::options_description quotes_options(_("Price Retrieval Options"));
     quotes_options.add_options()
-    ("add-price-quotes", bpo::value<std::string>(),
+    ("add-price-quotes", bpo::bool_switch(),
      N_("Add price quotes to given GnuCash datafile.\n"))
     ("namespace", bpo::value<std::string>(),
      N_("Regular expression determining which namespace commodities will be retrieved"));
@@ -97,10 +96,20 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
 {
     Gnucash::CoreApp::start();
 
-    if (m_quotes_file.empty())
-        return 1;
+    if (m_add_quotes)
+    {
+        if (m_file_to_load.empty())
+        {
+            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+                      << *m_opt_desc.get();
+            return 1;
+        }
+        else
+            return Gnucash::add_quotes (m_file_to_load);
+    }
 
-    return Gnucash::add_quotes (m_quotes_file);
+
+    return 1;
 }
 
 int
