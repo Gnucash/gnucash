@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-05-29 03:48+0200\n"
-"PO-Revision-Date: 2020-03-28 04:22+0100\n"
+"PO-Revision-Date: 2020-05-29 16:43+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -22251,6 +22251,7 @@ msgid "Have a nice day!"
 msgstr "Einen schönen Tag noch."
 
 #: gnucash/python/init.py:118
+#, python-format
 msgid "Welcome to GnuCash %s Shell"
 msgstr "Willkommen zur GnuCash %s Shell"
 
