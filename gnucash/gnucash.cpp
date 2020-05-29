@@ -381,7 +381,7 @@ Gnucash::Gnucash::parse_command_line (int argc, char **argv)
 {
     Gnucash::CoreApp::parse_command_line (argc, argv);
 
-    if (m_opt_map.count ("help-gtk"))
+    if (m_opt_map["help-gtk"].as<bool>())
     {
         std::cout << m_gtk_help_msg;
         exit(0);
@@ -411,9 +411,10 @@ Gnucash::Gnucash::configure_program_options (void)
 
     bpo::options_description app_options(_("Application Options"));
     app_options.add_options()
-    ("nofile",
+    ("nofile", bpo::bool_switch(),
      N_("Do not load the last file opened"))
-    ("help-gtk", _("Show help for gtk options"))
+    ("help-gtk",  bpo::bool_switch(),
+     _("Show help for gtk options"))
     ("add-price-quotes", bpo::value<std::string>(),
      N_("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"

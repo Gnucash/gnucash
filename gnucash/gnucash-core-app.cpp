@@ -587,7 +587,7 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 #endif
     }
 
-    if (m_opt_map.count ("version"))
+    if (m_opt_map["version"].as<bool>())
     {
         bl::format rel_fmt (bl::translate ("GnuCash {1}"));
         bl::format dev_fmt (bl::translate ("GnuCash {1} development version"));
@@ -601,14 +601,14 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         exit(0);
     }
 
-    if (m_opt_map.count ("help"))
+    if (m_opt_map["help"].as<bool>())
     {
         std::cout << *m_opt_desc.get() << "\n";
         exit(0);
     }
 
-    gnc_prefs_set_debugging (m_opt_map.count ("debug"));
-    gnc_prefs_set_extra (m_opt_map.count ("extra"));
+    gnc_prefs_set_debugging (m_opt_map["debug"].as<bool>());
+    gnc_prefs_set_extra (m_opt_map["extra"].as<bool>());
 
     if (m_opt_map.count ("gsettings-prefix"))
         gnc_gsettings_set_prefix (m_opt_map["gsettings-prefix"].
@@ -630,13 +630,13 @@ Gnucash::CoreApp::add_common_program_options (void)
 
     bpo::options_description common_options(_("Common Options"));
     common_options.add_options()
-        ("help,h",
+        ("help,h", bpo::bool_switch(),
          N_("Show this help message"))
-        ("version,v",
+        ("version,v", bpo::bool_switch(),
          N_("Show GnuCash version"))
-        ("debug",
+        ("debug", bpo::bool_switch(),
          N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""))
-        ("extra",
+        ("extra", bpo::bool_switch(),
          N_("Enable extra/development/debugging features."))
         ("log", bpo::value< std::vector<std::string> >(),
          N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
