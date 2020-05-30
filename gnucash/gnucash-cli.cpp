@@ -97,16 +97,20 @@ Gnucash::GnucashCli::configure_program_options (void)
     quotes_options.add_options()
     ("add-price-quotes", bpo::bool_switch(),
      N_("Add price quotes to given GnuCash datafile.\n"))
+    ("namespace", bpo::value<std::string>(),
+     N_("Regular expression determining which namespace commodities will be retrieved"));
+    m_opt_desc->add (quotes_options);
+
+    bpo::options_description report_options(_("Run Report Options"));
+    report_options.add_options()
     ("run-report", bpo::value<std::string>(),
      N_("Runs a report\n"))
     ("export-type", bpo::value<std::string>(),
      N_("Specify export type\n"))
     ("output-file", bpo::value<std::string>(),
-     N_("Output file for report\n"))
-    ("namespace", bpo::value<std::string>(),
-     N_("Regular expression determining which namespace commodities will be retrieved"));
+     N_("Output file for report\n"));
+    m_opt_desc->add (report_options);
 
-    m_opt_desc->add (quotes_options);
 }
 
 int

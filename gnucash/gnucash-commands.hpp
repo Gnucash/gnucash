@@ -30,8 +30,10 @@
 namespace Gnucash {
 
     int add_quotes (std::string &uri);
-    int run_report (const std::string file_to_load, std::string &run_report,
-                    std::string &export_type, std::string &output_file);
+    int run_report (const std::string& file_to_load,
+                    const std::string& run_report,
+                    const std::string& export_type,
+                    const std::string& output_file);
 
 }
 #endif

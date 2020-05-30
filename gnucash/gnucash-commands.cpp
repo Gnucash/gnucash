@@ -45,10 +45,10 @@ extern "C" {
 namespace bl = boost::locale;
 
 struct run_report_args {
-    const char *file_to_load;
-    const char *run_report;
-    const char *export_type;
-    const char *output_file;
+    const std::string& file_to_load;
+    const std::string& run_report;
+    const std::string& export_type;
+    const std::string& output_file;
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -138,6 +138,7 @@ scm_run_report (void *data,
     scm_c_eval_string("(debug-set! stack 200000)");
     scm_c_use_module ("gnucash utilities");
     scm_c_use_module ("gnucash app-utils");
+    scm_c_use_module ("gnucash report");
     scm_c_use_module ("gnucash reports");
 
     // gnc_report_init ();
@@ -145,12 +146,13 @@ scm_run_report (void *data,
     // load_user_config();
     gnc_prefs_init ();
     qof_event_suspend ();
-    datafile = args->file_to_load;
+    datafile = args->file_to_load.c_str();
 
     cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
-    report = scm_from_utf8_string (args->run_report);
-    type = args->export_type ? scm_from_utf8_string (args->export_type) : SCM_BOOL_F;
-    file = args->output_file ? scm_from_utf8_string (args->output_file) : SCM_BOOL_F;
+    report = scm_from_utf8_string (args->run_report.c_str());
+
+    type = !args->export_type.empty() ? scm_from_utf8_string (args->export_type.c_str()) : SCM_BOOL_F;
+    file = !args->output_file.empty() ? scm_from_utf8_string (args->output_file.c_str()) : SCM_BOOL_F;
 
     /* dry-run? is #t: try report, check validity of options */
     if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
@@ -203,13 +205,13 @@ Gnucash::add_quotes (std::string &uri)
 }
 
 int
-Gnucash::run_report (const std::string file_to_load, std::string &run_report,
-                     std::string &export_type, std::string &output_file)
+Gnucash::run_report (const std::string& file_to_load,
+                     const std::string& run_report,
+                     const std::string& export_type,
+                     const std::string& output_file)
 {
-    auto args = run_report_args { file_to_load.c_str(),
-                                  run_report.c_str(),
-                                  export_type.c_str(),
-                                  output_file.c_str() };
+    auto args = run_report_args { file_to_load, run_report,
+                                  export_type, output_file };
     if (not run_report.empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
 
