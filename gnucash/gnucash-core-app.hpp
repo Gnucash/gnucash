@@ -24,6 +24,9 @@
 #ifndef GNUCASH_CORE_APP_HPP
 #define GNUCASH_CORE_APP_HPP
 
+#ifdef __MINGW32__
+#undef _GLIBCXX_USE_C99_MATH_TR1 // Avoid cmath missing function decl.
+#endif
 #include <boost/program_options.hpp>
 #include <string>
 #include <vector>
