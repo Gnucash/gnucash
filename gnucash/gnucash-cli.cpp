@@ -93,7 +93,7 @@ Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
 void
 Gnucash::GnucashCli::configure_program_options (void)
 {
-    bpo::options_description quotes_options(_("Price Retrieval Options"));
+    bpo::options_description quotes_options(_("Price Quotes Retrieval Options"));
     quotes_options.add_options()
     ("add-price-quotes", bpo::bool_switch(),
      N_("Add price quotes to given GnuCash datafile.\n"))
@@ -101,7 +101,7 @@ Gnucash::GnucashCli::configure_program_options (void)
      N_("Regular expression determining which namespace commodities will be retrieved"));
     m_opt_desc->add (quotes_options);
 
-    bpo::options_description report_options(_("Run Report Options"));
+    bpo::options_description report_options(_("Report Generation Options"));
     report_options.add_options()
     ("run-report", bpo::value<std::string>(),
      N_("Runs a report\n"))

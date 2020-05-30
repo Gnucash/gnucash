@@ -36,6 +36,7 @@ extern "C" {
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
 #include <gnc-gnome-utils.h>
+#include <gnc-report.h>
 #include <gnc-session.h>
 }
 
@@ -43,13 +44,6 @@ extern "C" {
 #include <iostream>
 
 namespace bl = boost::locale;
-
-struct run_report_args {
-    const std::string& file_to_load;
-    const std::string& run_report;
-    const std::string& export_type;
-    const std::string& output_file;
-};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -126,33 +120,38 @@ report_session_percentage (const char *message, double percent)
     return;
 }
 
+struct run_report_args {
+    const std::string& file_to_load;
+    const std::string& run_report;
+    const std::string& export_type;
+    const std::string& output_file;
+};
+
 static void
 scm_run_report (void *data,
                 [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     auto args = static_cast<run_report_args*>(data);
-    QofSession *session = NULL;
-    SCM cmdline, report, type, file;
-    const gchar *datafile;
+    QofSession *session = nullptr;
 
     scm_c_eval_string("(debug-set! stack 200000)");
     scm_c_use_module ("gnucash utilities");
     scm_c_use_module ("gnucash app-utils");
-    scm_c_use_module ("gnucash report");
     scm_c_use_module ("gnucash reports");
 
-    // gnc_report_init ();
+    gnc_report_init ();
     // load_system_config();
     // load_user_config();
     gnc_prefs_init ();
     qof_event_suspend ();
-    datafile = args->file_to_load.c_str();
 
-    cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
-    report = scm_from_utf8_string (args->run_report.c_str());
-
-    type = !args->export_type.empty() ? scm_from_utf8_string (args->export_type.c_str()) : SCM_BOOL_F;
-    file = !args->output_file.empty() ? scm_from_utf8_string (args->output_file.c_str()) : SCM_BOOL_F;
+    auto datafile = args->file_to_load.c_str();
+    auto cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
+    auto report = scm_from_utf8_string (args->run_report.c_str());
+    auto type = !args->export_type.empty() ?
+                scm_from_utf8_string (args->export_type.c_str()) : SCM_BOOL_F;
+    auto file = !args->output_file.empty() ?
+                scm_from_utf8_string (args->output_file.c_str()) : SCM_BOOL_F;
 
     /* dry-run? is #t: try report, check validity of options */
     if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
