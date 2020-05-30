@@ -41,9 +41,12 @@ set (gnucash_SOURCES
   gnucash-commands.cpp
   gnucash-core-app.cpp
   gnucash-gresources.c
-  gnucash-windows-locale.c
   ${GNUCASH_RESOURCE_FILE}
-)
+  )
+
+if (MINGW)
+  list(APPEND gnucash_SOURCES "gnucash-windows-locale.c")
+endif()
 
 add_executable (gnucash
     ${gnucash_SOURCES}
@@ -63,11 +66,18 @@ target_link_libraries (gnucash
    ${Boost_LIBRARIES}
 )
 
-add_executable (gnucash-cli
+set(gnucash_cli_SOURCES
     gnucash-cli.cpp
     gnucash-commands.cpp
     gnucash-core-app.cpp
-    gnucash-windows-locale.c
+    )
+
+if (MINGW)
+  list(APPEND gnucash_cli_SOURCES "gnucash-windows-locale.c")
+endif()
+
+add_executable (gnucash-cli
+    ${gnucash_cli_SOURCES}
     ${GNUCASH_RESOURCE_FILE}
     ${gnucash_noinst_HEADERS}
 )
