@@ -800,24 +800,22 @@ not found.")))
       (display "done!\n" (current-error-port))))))
 
 (define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
-  (let ((template (or (gnc:find-report-template report)
-                      (let ((retval #f))
-                        (hash-for-each
-                         (lambda (report-guid template)
-                           (when (equal? (gnc:report-template-name template) report)
-                             (set! retval template)))
-                         *gnc:_report-templates_*)
-                        retval))))
+  (let ((templates (or (and=> (gnc:find-report-template report) list)
+                       (hash-fold
+                        (lambda (report-guid template prev)
+                          (if (equal? (gnc:report-template-name template) report)
+                              (cons template prev) prev))
+                        '() *gnc:_report-templates_*))))
 
     (define (run-report output-port)
       (display
        (gnc:report-render-html
         (gnc-report-find
          (gnc:make-report
-          (gnc:report-template-report-guid template))) #t) output-port))
+          (gnc:report-template-report-guid (car templates)))) #t) output-port))
 
     (cond
-     ((not template)
+     ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
       (for-each
        (lambda (pair)
@@ -831,7 +829,21 @@ not found.")))
                 (gnc:report-template-name (cdr a))
                 (gnc:report-template-name (cdr b))))))
       (stderr-log "\n"))
-     (export-type (template-export report template export-type output-file dry-run?))
+
+     ((pair? (cdr templates))
+      (stderr-log "~s matches multiple reports. Select guid instead:\n" report)
+      (for-each
+       (lambda (template)
+         (let* ((options-gen (gnc:report-template-options-generator template))
+                (options (options-gen)))
+           (stderr-log "\n* guid: ~a\n~a"
+                       (gnc:report-template-report-guid template)
+                       (gnc:html-render-options-changed options #t))))
+       templates)
+      (stderr-log "\n"))
+
+     (export-type (template-export report (car templates)
+                                   export-type output-file dry-run?))
      (dry-run? #t)
      (output-file
       (format (current-error-port) "Saving report to ~a..." output-file)
