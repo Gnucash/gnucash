@@ -41,6 +41,7 @@ set (gnucash_SOURCES
   gnucash-commands.cpp
   gnucash-core-app.cpp
   gnucash-gresources.c
+  gnucash-windows-locale.c
   ${GNUCASH_RESOURCE_FILE}
 )
 
@@ -66,6 +67,7 @@ add_executable (gnucash-cli
     gnucash-cli.cpp
     gnucash-commands.cpp
     gnucash-core-app.cpp
+    gnucash-windows-locale.c
     ${GNUCASH_RESOURCE_FILE}
     ${gnucash_noinst_HEADERS}
 )
