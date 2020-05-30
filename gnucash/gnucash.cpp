@@ -333,12 +333,12 @@ Gnucash::Gnucash::configure_program_options (void)
     bpo::options_description depr_options(_("Deprecated Options"));
     depr_options.add_options()
     ("add-price-quotes", bpo::bool_switch(),
-     N_("Add price quotes to given GnuCash datafile.\n"
+     _("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
         "Please use \"gnucash-cli --add-price-quotes\" instead."))
     ("namespace", bpo::value<std::string>(),
-     N_("Regular expression determining which namespace commodities will be retrieved"
-        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
+     _("Regular expression determining which namespace commodities will be retrieved.\n"
+       "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
         "Please use \"gnucash-cli --add-price-quotes\" instead."));
 
     m_opt_desc->add (app_options).add (depr_options);

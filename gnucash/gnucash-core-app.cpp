@@ -561,7 +561,8 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
 
     // Now that gettext is properly initialized, set our help tagline.
     tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
-    m_opt_desc = std::make_unique<bpo::options_description> ((bl::format (bl::gettext ("{1} [options]")) % m_app_name).str() + tagline);
+    m_opt_desc = std::make_unique<bpo::options_description>
+        ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + tagline);
     add_common_program_options();
 }
 
@@ -636,21 +637,21 @@ Gnucash::CoreApp::add_common_program_options (void)
     bpo::options_description common_options(_("Common Options"));
     common_options.add_options()
         ("help,h", bpo::bool_switch(),
-         N_("Show this help message"))
+         _("Show this help message"))
         ("version,v", bpo::bool_switch(),
-         N_("Show GnuCash version"))
+         _("Show GnuCash version"))
         ("debug", bpo::bool_switch(),
-         N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""))
+         _("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""))
         ("extra", bpo::bool_switch(),
-         N_("Enable extra/development/debugging features."))
+         _("Enable extra/development/debugging features."))
         ("log", bpo::value< std::vector<std::string> >(),
-         N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
+         _("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
         ("logto", bpo::value<std::string>(),
-         N_("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
+         _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
         ("gsettings-prefix", bpo::value<std::string>(),
-         N_("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."))
+         _("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."))
         ("input-file", bpo::value<std::string>(),
-         N_("[datafile]"));
+         _("[datafile]"));
 
         m_pos_opt_desc.add("input-file", -1);
 
