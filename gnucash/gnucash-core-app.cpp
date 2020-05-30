@@ -566,6 +566,14 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
 }
 
 
+void
+Gnucash::CoreApp::load_configs (void)
+{
+    gnc_report_init ();
+    load_system_config ();
+    load_user_config ();
+}
+
 /* Parse command line options, using GOption interface.
  * We can't let gtk_init_with_args do it because it fails
  * before parsing any arguments if the GUI can't be initialized.

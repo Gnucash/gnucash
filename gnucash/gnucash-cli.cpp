@@ -50,6 +50,7 @@ namespace Gnucash {
     {
     public:
         GnucashCli (const char* app_name);
+        void load_configs (void);
         void parse_command_line (int argc, char **argv);
         int start (int argc, char **argv);
     private:
@@ -139,8 +140,11 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             return 1;
         }
         else
+        {
+            Gnucash::CoreApp::load_configs ();
             return Gnucash::run_report(m_file_to_load, m_run_report,
                                        m_export_type, m_output_file);
+        }
     }
     return 1;
 }

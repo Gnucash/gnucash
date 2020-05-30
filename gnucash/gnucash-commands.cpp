@@ -141,9 +141,6 @@ scm_run_report (void *data,
     scm_c_use_module ("gnucash report");
     scm_c_use_module ("gnucash reports");
 
-    // gnc_report_init ();
-    // load_system_config();
-    // load_user_config();
     gnc_prefs_init ();
     qof_event_suspend ();
     datafile = args->file_to_load.c_str();
