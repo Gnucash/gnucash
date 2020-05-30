@@ -214,6 +214,7 @@ gnucash/gnucash-cli.cpp
 gnucash/gnucash-commands.cpp
 gnucash/gnucash-core-app.cpp
 gnucash/gnucash.cpp
+gnucash/gnucash-windows-locale.c
 gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in
 gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
 gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
