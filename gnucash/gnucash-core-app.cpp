@@ -23,9 +23,6 @@
 #include <config.h>
 
 #include <libguile.h>
-#include <glib/gi18n.h>
-#include <binreloc.h>
-#include <gnc-engine.h>
 #include <guile-mappings.h>
 #ifdef __MINGW32__
 #include <Windows.h>
@@ -35,6 +32,9 @@
 #include "gnucash-core-app.hpp"
 
 extern "C" {
+#include <glib/gi18n.h>
+#include <binreloc.h>
+#include <gnc-engine.h>
 #include <gfec.h>
 #include <gnc-environment.h>
 #include <gnc-filepath-utils.h>
