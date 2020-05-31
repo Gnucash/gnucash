@@ -52,6 +52,13 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <tuple>
+
 #include "gnc-imp-settings-csv-price.hpp"
 #include "gnc-import-price.hpp"
 #include "gnc-tokenizer-fw.hpp"

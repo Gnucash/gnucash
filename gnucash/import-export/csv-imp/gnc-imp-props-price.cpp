@@ -34,6 +34,8 @@ extern "C" {
 #include "gnc-ui-util.h"
 }
 
+#include <exception>
+#include <map>
 #include <string>
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>

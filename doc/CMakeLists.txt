@@ -1,27 +1,12 @@
 add_subdirectory(examples)
 
 set(doc_DATA
-  README.francais
-  README.german
-  README-ca.win32-bin.txt
-  README-de.win32-bin.txt
-  README-fr.win32-bin.txt
-  README-hr.win32-bin.txt
-  README-it.win32-bin.txt
-  README-lv.win32-bin.txt
-  README-nl.win32-bin.txt
-  README-zh_CN.win32-bin.txt
-  README-zh_TW.win32-bin.txt
-  README.win32-bin.txt
-  guile-hackers.txt
-  projects.html
   gtk-3.0.css
 )
 
 set(doc_noinst_DATA
         CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in
-        README.HBCI README.OFX README.translator.txt tip_of_the_day.list.c
-        TRANSLATION_HOWTO)
+        tip_of_the_day.list.c README.txt)
 
 install(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 

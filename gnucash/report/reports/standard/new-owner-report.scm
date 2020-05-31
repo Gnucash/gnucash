@@ -529,7 +529,7 @@
 
   (define (add-balance-row odd-row? total)
     (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
-             currency total #f #f #f (list (make-list rhs-cols #f)) #f
+             currency total #f #f #f #f #f
              link-option (case link-option
                            ((none) '(()))
                            ((simple) '((#f)))

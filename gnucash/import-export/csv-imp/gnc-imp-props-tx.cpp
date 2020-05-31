@@ -39,7 +39,12 @@ extern "C" {
 
 }
 
+#include <algorithm>
+#include <exception>
+#include <map>
 #include <string>
+#include <vector>
+
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
 #include "gnc-imp-props-tx.hpp"

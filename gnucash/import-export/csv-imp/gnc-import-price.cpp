@@ -35,8 +35,17 @@ extern "C" {
 #include "gnc-pricedb.h"
 }
 
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <tuple>
+#include <vector>
+
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
+#include <boost/optional.hpp>
 
 #include "gnc-import-price.hpp"
 #include "gnc-imp-props-price.hpp"
