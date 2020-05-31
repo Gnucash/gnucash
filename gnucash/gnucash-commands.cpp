@@ -54,9 +54,15 @@ scm_cleanup_and_exit_with_failure (QofSession *session)
 {
     if (session)
     {
-        if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-            PWARN("Session Error: %s\n",
-                     qof_session_get_error_message (session));
+        auto error{qof_session_get_error (session)};
+        if (error != ERR_BACKEND_NO_ERR)
+        {
+            if (error == ERR_BACKEND_LOCKED)
+                PERR ("File is locked, won't open.");
+            else
+                PERR ("Session Error: %s\n",
+                      qof_session_get_error_message (session));
+        }
         qof_session_destroy (session);
     }
     qof_event_resume();
@@ -171,10 +177,7 @@ scm_run_report (void *data,
 
     qof_session_begin (session, datafile, FALSE, FALSE, FALSE);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-    {
-        PERR ("datafile not found, or locked in another session\n");
         scm_cleanup_and_exit_with_failure (session);
-    }
 
     qof_session_load (session, report_session_percentage);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
