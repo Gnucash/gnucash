@@ -1,5 +1,267 @@
 Version history:
 ------- -------
+3.903 - 1 June 2020
+The second undatble release leading to the new 4.x stable series. See 3.902
+below for additional requirements and features.
+
+New Dependency: Boost program_options.
+
+New Features:
+
+  A new separate executable, gnucash-cli (gnucash-cli.exe on Microsoft Windows)
+    for doing command-line things like updating the prices in your book.
+    gnucash-cli gains the ability to run reports from the command line. Specify
+    reports to run by name or guid. It also provides an export format and an
+    output file name without which it will output the report to stdout.
+    Report Synopsis:
+      gnucash --run-report=[reportname/guid] datafile.gnucash
+      gnucash --run-report=[reportname/guid] --output-file=x.html datafile.gnucash
+      gnucash --run-report=[reportname/guid] --output-file=x.html --export-type=TYPE datafile.gnucash
+
+  When deleting accounts the destination accounts of moved splits will be
+    checked to ensure that they're the same as the source. If they're not
+    you'll get a warning and the opportunity to pick another account or to
+    carry on regardless.
+
+  New type-ahead search added to sequential search when selecting an account in
+    the register: Instead of typing the first few characters of a top level
+    account, the separator, the first few characters of the next level account
+    and so on you may instead type a few characters of any part of a full
+    account name and the drop-list will be filtered to contain only matching
+    accounts. Once you have a small enough list you can use the arrow keys to
+    select the account that you want.
+
+  Python bindings are now localized and their strings available for translation.
+
+  The new reports introduced in the Experimental Reports menu are moved to the
+    main menu and the old reports hidden; the old reports can be unhidded by
+    running GnuCash from the commandline with the --extra argument. That will
+    cause the old reports to appear in their regular locations on the menu
+    labeled legacy. Note that new reports use different options and layouts and
+    you may need to adjust your saved report configurations.
+
+  A new Transaction Association dialog, available from the new Update
+    Transaction Association item in the register context menu, provides the
+    ability to have multiple associations for a single transaction. Associations
+    may now be easily removed.
+
+  Allow Associations to be added to invoices. The actual association when
+    present is added as a link button which is shown below the notes.
+
+  A symbol is now displayed on transactions in the register when they have an
+    attachment and the selected font supports the symbol.
+
+  The OFX file importer can now import more than one file at a time.
+
+  A new report menu supbmenu Multicolumn contains the old custom-multicolumn
+    report and a new Dashboard report containing Account reports for expenses
+    and income, an income-expense chart, and an account summary.
+
+  When importing, the matcher will no longer offer to match a transaction to
+    one that has already matched in a previous import, nor will it offer to
+    match more than one imported transaction to a single existing transaction.
+
+  When no file is open don't ask to save it when opening another file or
+    quitting GnuCash.
+
+  Support for UK VAT and Australian GST added to the Income-GST report. The
+    reports options are changed from source accounts to source sales and
+    purchase accounts to permit proper reporting of capital purchases.
+    N.B. This is incompatible with previous versions of the report and will
+    require regenerating saved configurations.
+
+  Add option to save Layout for Business items.
+    Add two menu items under windows, one to save an existing layout for
+    Invoices, Bills and Vouchers to there respective default layouts so the
+    user set column widths will be used. The second menu item will reset the
+    column widths to defaults and remove the default layout. Open Business
+    items will also save there column widths to the page section so these can
+    temporarily have different widths.
+
+Newly Revised Reports
+  Income GST
+
+Significant Code Changes:
+
+  gnucash-bin.c has been split into 4 parts, mostly C++:
+    * gnucash.cpp, the GUI executable.
+    * gnucash-cli.cpp, the command-line executable.
+    * gnucash-commands.cpp, implementation for the commands that can be run
+      from the command-line.
+    * gnucash-app-core.cpp, common code required by both the command line and
+      gui programs.
+    * There's also an auxiliarty file, gnucash-windows-locale.c because the
+      localization code proved resistant to compiling as C++. We're planning
+      another auxiliary file for the MacOS localization.
+
+  A new mock facility for several engine classes to permit better-isolated
+    unit testing of components that depend on those classes.
+
+  Register filter and sort values are saved in the book's state file (book.gcm)
+    in the user's configdir instead of in the book.
+
+  QofSession no longer creates its book, instead one must create a book first
+    and pass that to qof_session_new()/QofSession::QofSession().
+
+  Add option to save Layout for Register itemsAdd two menu items under
+    windows, one to save an existing register layout based on the register type
+    to there respective default layouts so the user set column widths will be
+    used when opening registers. The second menu item will reset the column
+    widths to defaults and remove the associated default layout. Open registers
+    will also save there column widths to the page section so these could can
+    temporarily have different widths.
+
+  Add option to save Layout for Business items.
+    Add two menu items under windows, one to save an existing layout for
+    Invoices, Bills and Vouchers to there respective default layouts so the
+    user set column widths will be used. The second menu item will reset the
+    column widths to defaults and remove the default layout. Open Business
+    items will also save there column widths to the page section so these can
+    temporarily have different widths.
+
+  Input Method handling in the register is moved to the GtkEntry where it
+    belongs.
+
+
+Between 3.10 and 3.901, the following bugfixes were accomplished:
+
+  Bug 796531 - transaction report: export file/location associated with
+               transaction.
+               Displays the Transaction Association link in the Transaction
+               Report and when selected will open the association outside of
+               Gnucash as it currently does when opened from the register.
+  Bug 796932 - Invoices order when assigning paymentssorts documents in
+               dialog-payment.c by date, then by document ID.
+  Bug 797052 - Autofill Selection is Corrupted After Clicking Description
+  Bug 797185 - [transaction association window] sorting by column.
+  Bug 797185 - Allow sorting on all Transaction Association columns
+  Bug 797220 - delete account allows move of all transactions to account having
+               non-matching currency
+  Bug 797236 - Regression: Reconcile window transaction list resets to top
+               when new transaction created in account.
+  Bug 797264 - 3.5 can't use Chinese IME input.
+  Bug 797329 - Using Japanese IME to enter transactions results in unexpected
+               field jumps
+  Bug 797388 - GnuCash 3.6 segfaults regularly.
+  Bug 797648 - Cannot reconcile both splits of a transaction with 2 splits for
+               bank account subaccounts if only 1 is cleared
+  Bug 797659 - Liabilities in budget report no longer calculate correctly
+  Bug 797689 - Child dialog windows are demoted behind parent window when task
+               switching.
+  Bug 797707 - CSV Transaction Export: custom dates should be insensitive by
+               default
+  Bug 797717 - Summary bar changes height when opening a menu or scrolling over
+               an option
+  Bug 797737 - Import matching can match an imported transaction to an existing,
+               previously matched transaction
+  Bug 797743 - Monetary amounts are occasionally rendered in fractions
+  Bug 797745 - Unable to change default report currency
+  Bug 797748 - missing header "algorithm"
+  Bug 797750 - SIGSEV in swig-engine.c
+  Bug 797754 - In an account register, scrolling stops working when the mouse
+               pointer re-enters the scrollbar after leaving it.
+  Bug 797760 - Broken register split activity--cannot delete splits, unable to
+               tab complete account name.
+  Bug 797761 - Customer report beta: opening balance tax column shows garbage
+               string
+  Bug 797768 - View Lots sorting numbers not right.
+  Bug 797770 - Reconciliation report does not consider credit transactions
+
+
+ The following fixes and improvements were not associated with bug reports or new features:
+
+  Add an Invoice section to dialog-utils for when the path head changes.
+  Change the position the register pop up so it aligns better.
+  Fix the alignment of the Notes label in Transfer dialog.
+  Set the initial Split horizontal paned position to be half way when the
+    window is realized.
+  Set the expanding columns in the lot viewer to be the 'Title' and the
+    'Description'. Also ellipsize the description to help with long
+    transaction descriptions.
+  Change the alignment of the numeric values in the lot viewer to be right
+    aligned so the numbers line up.
+  [new-aging] speed up split->ownerseveral speed ups
+    1. split->owner will now cache results, bypassing gncOwnerGetOwnerFromLot
+       and gncInvoiceGetInvoiceFromLot for repeated calls to the same split.
+    2. previously each call to split->owner would allocate a new gncOwner. Now
+       a new gncOwner is only allocated during a cache miss. the list of
+       gncOwners is maintained and is purged when split->owner is called with
+       #f. There is no need to maintain a to-free list of gncOwners anymore.
+    3. instead of slow gncOwnerReturnGUID to test equality, use gncOwnerEqual.
+  Fix crash in case filter is less than 4 parameters.
+  Change the Options GtkCheckBox to use its own built-in label and remove the
+    label in the first column.
+    widgets.
+  Enable the Options Checkbox label to be used to toggle values.
+  Add enum SplitRegisterTypeGroup to group registers.
+  Change state_section parameter for gnc_table_save_state
+  Fix clang error about type mismatch GtkWidget* != void* aka gpointer.
+  HIG, I18N: Improve Budget menu entries
+  I18N: fix translator comments in window-reconcile.c
+  I18N: Fix several issuse with 'Help not found' strings
+  [QofLog] Replace hashtable with tree of vectors: 16x speedup.
+  Make qof_log_set_file static. Used only internally.
+  Move QofLogModule typedef to qoflog.h where it belongs.
+  [balsheet-eg] don't use safe-cadr and safe-cdr
+    They are safety hacks which indicate inability to deal with lists. Use
+    lists properly.
+  [eguile-utilities] deprecate single-use function used only by balsheet-eg.scm
+  [balsheet-eg] use "foreign" css class correctly.
+  [eguile-gnc] don't catch errors in eguile-gnc
+  Initially select the last account chosen in the account picker dialogs.
+    Separately keeps track of last investment account, security account, and
+    income account. One issue is that gnc_import_select_account doesn't tell
+    the caller if it put up a dialog or found the online ID on an existing
+    account. This means the last account may be one the user didn't manually
+    select.
+  Transaction matcher dialogue was not closing when changing book.
+  Correct parent widget for import new account dialog.
+  No Selection on load for Bill Terms.
+    Change the selection process so it selects the first entry if present on
+    load and also selects a newly created entry when completed.
+  Change the Tax Table dialogue to be based on a GtkWindow.
+    When using Gnucash on Microsoft Windows and a dialog opens a further dialog
+    when you switch away from the application and back the last dialog that has
+    the focus is behind the parent and it appears like the application has
+    frozen.
+  Fix LIBDBI_DRIVERS_DIR generation.
+  L10N:de: "Für" klein in "Ergebnisrechnung für Periode" etc.
+  I18N: Msgmerge recent changes
+  I18N: Hotfix for bug 797725Add a translator comment
+  L10N:de_CH: Ein weiterer Tippfehler im Kontenrahmen KMU
+  [test-stress-options] fix combinatorics testing
+    Premise: pairwise combinatorics testing is only possible when all options
+    have at least 2 options.  The "General Journal" report is unique because
+    it starts with the Transaction Report options generator, and adds a few
+    hidden options. Unfortunately the Transaction Report receives the
+    "General/Stylesheet" option, with only 1 default stylesheet.  The General
+    Journal report therefore has 1 stylesheet option with only 1 choice, and
+    is not acceptable to jenny for pairwise testing. It would fail the
+    combinatorics testing. Adding other stylesheets did not successfully allow
+    pairwise testing. Therefore the simplest way to test General Journal is to
+    disable multichoice testing whereby num(choices) is only 1.
+  [Account.cpp] more xaccAccountTypeGetFundamental types
+  Fix the crash that occurs when opening a new book when the
+    transaction-matching dialog has been opened then closed.
+  Display report zoom factor with one decimal space.
+  Fix transaction post_date being set to midnight local.
+  Respect the environment LD_LIBRARY_PATH for loading Scheme modules and tests.
+  Add a tip about announcements and other mailing lists.
+  Change occurrences of gdk_display_get_default to gdk_window_get_display()
+  Remove some Gtk version checks in code
+  Remove some Gtk version checks for CSS
+  Fix libgnc-app-utils.dylib install_name_dir. The install location changed as
+    part of expunging libgnc-module. 
+
+Updated Translations: German, Swiss German, Ukrainian
+
+ Known Problems:
+
+  Bug 797708 - Reconcile Dialog on Import
+  Bug 797746 - [reports] German umlauts not escaped
+
+
+
 3.902 - 27 April 2020
 The first unstable release leading to the new 4.x stable series.
 
