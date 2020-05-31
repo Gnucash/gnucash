@@ -54,9 +54,9 @@ scm_cleanup_and_exit_with_failure (QofSession *session)
     if (session)
     {
         if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-            g_warning ("Session Error: %s",
-                       qof_session_get_error_message (session));
-            qof_session_destroy (session);
+            fprintf (stderr, "Session Error: %s\n",
+                     qof_session_get_error_message (session));
+        qof_session_destroy (session);
     }
     qof_event_resume();
     gnc_shutdown (1);
@@ -106,7 +106,7 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
     qof_session_destroy(session);
     if (!scm_is_true(scm_result))
     {
-        g_warning("Failed to add quotes to %s.", add_quotes_file->c_str());
+        fprintf (stderr, "Failed to add quotes to %s.", add_quotes_file->c_str());
         scm_cleanup_and_exit_with_failure (session);
     }
 
