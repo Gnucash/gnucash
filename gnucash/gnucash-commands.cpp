@@ -38,6 +38,7 @@ extern "C" {
 #include <gnc-gnome-utils.h>
 #include <gnc-report.h>
 #include <gnc-session.h>
+#include <qoflog.h>
 }
 
 #include <boost/locale.hpp>
@@ -54,7 +55,7 @@ scm_cleanup_and_exit_with_failure (QofSession *session)
     if (session)
     {
         if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-            fprintf (stderr, "Session Error: %s\n",
+            PWARN("Session Error: %s\n",
                      qof_session_get_error_message (session));
         qof_session_destroy (session);
     }
@@ -106,7 +107,7 @@ scm_add_quotes(void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **ar
     qof_session_destroy(session);
     if (!scm_is_true(scm_result))
     {
-        fprintf (stderr, "Failed to add quotes to %s.", add_quotes_file->c_str());
+        PERR ("Failed to add quotes to %s.", add_quotes_file->c_str());
         scm_cleanup_and_exit_with_failure (session);
     }
 
@@ -121,7 +122,7 @@ report_session_percentage (const char *message, double percent)
     static double previous = 0.0;
     if ((percent - previous) < 5.0)
         return;
-    fprintf (stderr, "\r%3.0f%% complete...", percent);
+    PINFO ("\r%3.0f%% complete...", percent);
     previous = percent;
     return;
 }
@@ -162,7 +163,7 @@ scm_run_report (void *data,
     if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
         scm_cleanup_and_exit_with_failure (nullptr);
 
-    fprintf (stderr, "Loading datafile %s...\n", datafile);
+    PINFO ("Loading datafile %s...\n", datafile);
 
     auto session = gnc_get_current_session ();
     if (!session)
@@ -171,15 +172,13 @@ scm_run_report (void *data,
     qof_session_begin (session, datafile, FALSE, FALSE, FALSE);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
     {
-        fprintf (stderr, "ERROR: datafile not found, or locked in another session\n");
+        PERR ("datafile not found, or locked in another session\n");
         scm_cleanup_and_exit_with_failure (session);
     }
 
     qof_session_load (session, report_session_percentage);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
-
-    fprintf (stderr, "\n");
 
     /* dry-run? is #f: run the report */
     scm_call_4 (cmdline, report, type, file, SCM_BOOL_F);
