@@ -49,6 +49,7 @@ protected:
     std::string m_app_name;
     std::string tagline;
     std::string m_file_to_load;
+    std::string m_log_to_filename;
 
     std::unique_ptr<bpo::options_description> m_opt_desc;
     bpo::variables_map m_opt_map;
@@ -58,7 +59,6 @@ private:
     void add_common_program_options (void);
 
     /* Command-line option variables */
-    std::string m_log_to_filename;
     std::vector <std::string> m_log_flags;
 
     int gnucash_show_version = 0;

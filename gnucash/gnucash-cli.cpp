@@ -73,6 +73,9 @@ Gnucash::GnucashCli::parse_command_line (int argc, char **argv)
 {
     Gnucash::CoreApp::parse_command_line (argc, argv);
 
+    if (m_log_to_filename.empty())
+        m_log_to_filename.assign("stderr");
+
     m_add_quotes = m_opt_map["add-price-quotes"].as<bool>();
 
     if (m_opt_map.count ("namespace"))
