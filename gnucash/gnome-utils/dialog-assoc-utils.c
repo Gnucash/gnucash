@@ -423,7 +423,7 @@ gnc_assoc_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_
     use_new_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_new_path_head"));
 
     // display path head text and test if present
-    gnc_assoc_set_path_head_label (old_head_label, old_path_head_uri, _("Exsiting"));
+    gnc_assoc_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
     gnc_assoc_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
 
     gtk_widget_show (dialog);
