@@ -215,6 +215,8 @@ static const GncGUID * gncEntryGetGUID(GncEntry *x);
 %include <cap-gains.h>
 %include <Scrub3.h>
 
+%include <qoflog.h>
+
 %init %{
 gnc_environment_setup();
 qof_log_init();
