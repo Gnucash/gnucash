@@ -129,11 +129,6 @@ QofXmlBackendProvider::type_check (const char *uri)
     }
 
     filename = gnc_uri_get_path (uri);
-    if (0 == g_strcmp0 (filename, QOF_STDOUT))
-    {
-        result = FALSE;
-        goto det_exit;
-    }
     t = g_fopen (filename, "r");
     if (!t)
     {

@@ -259,23 +259,6 @@ void     qof_session_end  (QofSession *session);
 /** @}
 */
 
-/** \brief Allow session data to be printed to stdout
-
-book_id can't be NULL and we do need to have an access_method,
-so use one to solve the other.
-
-To print a session to stdout, use ::qof_session_begin. Example:
-
-\a qof_session_begin(session,QOF_STDOUT,TRUE,FALSE);
-
-When you call qof_session_save(session, NULL), the output will appear
-on stdout and can be piped or redirected to other processes.
-
-Currently, only the QSF backend supports writing to stdout, other
-backends may return a ::QofBackendError.
-*/
-#define QOF_STDOUT ">"
-
 /** @name Event Handling
 
   @{ */
