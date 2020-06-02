@@ -85,7 +85,7 @@ gnc_account_imap_find_account_bayes (
         GList *tokens)
 {
     // \todo use std::list instead of std::vector, since GList is a double-linked list like std::list
-    std::vector<std::string> tokenVec;
+    std::vector<const char*> tokenVec;
 
     for (auto token = tokens; token; token = token->next)
     {
@@ -102,7 +102,7 @@ gnc_account_imap_add_account_bayes (
         Account *acc)
 {
     // \todo use std::list instead of std::vector, since GList is a double-linked list like std::list
-    std::vector<std::string> tokenVec;
+    std::vector<const char*> tokenVec;
 
     for (auto token = tokens; token; token = token->next)
     {

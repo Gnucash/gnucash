@@ -62,8 +62,8 @@ public:
 
     MOCK_METHOD2(findAccount, Account *(const char*, const char*));
     MOCK_METHOD3(addAccount, void(const char*, const char*, Account*));
-    MOCK_METHOD1(findAccountBayes, Account *(std::vector<std::string>));
-    MOCK_METHOD2(addAccountBayes, void(std::vector<std::string>, Account*));
+    MOCK_METHOD1(findAccountBayes, Account *(std::vector<const char*>));
+    MOCK_METHOD2(addAccountBayes, void(std::vector<const char*>, Account*));
 };
 
 #endif

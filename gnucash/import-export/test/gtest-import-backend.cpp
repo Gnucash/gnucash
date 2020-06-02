@@ -248,7 +248,7 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
 
     // check tokens created from transaction
     EXPECT_CALL(imap, findAccountBayes(AllOf(
-            Each(Not(IsEmpty())),                // tokens must not be empty strings
+            Each(Not(StrEq(""))),                // tokens must not be empty strings
             Each(Not(HasSubstr(" "))),           // tokens must not contain separator
             Not(HasDuplicates()),                // tokens must be unique
             Contains(StrEq(local_day_of_week)),  // tokens must contain local day of week
