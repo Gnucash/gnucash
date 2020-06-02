@@ -376,7 +376,7 @@ error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
 
 template <> void
 GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
-                                                 const char* book_id,
+                                                 const char* new_uri,
                                                  bool ignore_lock,
                                                  bool create, bool force)
 {
@@ -384,12 +384,12 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
     PairVec options;
 
     g_return_if_fail (session != nullptr);
-    g_return_if_fail (book_id != nullptr);
+    g_return_if_fail (new_uri != nullptr);
 
     ENTER (" ");
 
     /* Remove uri type if present */
-    auto path = gnc_uri_get_path (book_id);
+    auto path = gnc_uri_get_path (new_uri);
     std::string filepath{path};
     g_free(path);
     GFileTest ftest = static_cast<decltype (ftest)> (
@@ -441,7 +441,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
     if (result < 0)
     {
         dbi_conn_close(conn);
-        PERR ("Unable to connect to %s: %d\n", book_id, result);
+        PERR ("Unable to connect to %s: %d\n", new_uri, result);
         set_error (ERR_BACKEND_BAD_URL);
         LEAVE("Error");
         return;
@@ -611,21 +611,21 @@ adjust_sql_options (dbi_conn connection)
 
 
 template <DbType Type> void
-GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
+GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
                                     bool ignore_lock, bool create, bool force)
 {
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
 
     g_return_if_fail (session != nullptr);
-    g_return_if_fail (book_id != nullptr);
+    g_return_if_fail (new_uri != nullptr);
 
     ENTER (" ");
 
     /* Split the book-id
      * Format is protocol://username:password@hostname:port/dbname
      where username, password and port are optional) */
-    UriStrings uri(book_id);
+    UriStrings uri(new_uri);
 
     if (Type == DbType::DBI_PGSQL)
     {

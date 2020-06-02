@@ -106,11 +106,11 @@ GncXmlBackend::check_path (const char* fullpath, bool create)
 }
 
 void
-GncXmlBackend::session_begin(QofSession* session, const char* book_id,
+GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
                        bool ignore_lock, bool create, bool force)
 {
     /* Make sure the directory is there */
-    m_fullpath = gnc_uri_get_path (book_id);
+    m_fullpath = gnc_uri_get_path (new_uri);
 
     if (m_fullpath.empty())
     {

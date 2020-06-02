@@ -185,7 +185,7 @@ public:
 /**
  *    Open the file or connect to the server.
  *    @param session The QofSession that will control the backend.
- *    @param book_id The book's string identifier.
+ *    @param new_uri The location of the data store that the backend will use.
  *    @param ignore_lock indicates whether the single-user lock on the backend
  *    should be cleared.  The typical GUI sequence leading to this is:
  *    (1) GUI attempts to open the backend by calling this routine with
@@ -203,7 +203,7 @@ public:
  *    @param force works with create to force creating a new database even if
  *    one already exists at the same URI.
  */
-    virtual void session_begin(QofSession *session, const char* book_id,
+    virtual void session_begin(QofSession *session, const char* new_uri,
                                bool ignore_lock, bool create, bool force) = 0;
     virtual void session_end() = 0;
 /**

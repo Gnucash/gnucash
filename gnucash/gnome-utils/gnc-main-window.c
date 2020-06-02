@@ -1499,7 +1499,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     QofBook *book;
     gboolean immutable;
     gchar *filename = NULL;
-    const gchar *book_id = NULL;
+    const gchar *uri = NULL;
     const gchar *dirty = "";
     const gchar *readonly_text = NULL;
     gchar *readonly;
@@ -1507,7 +1507,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
 
     if (gnc_current_session_exist())
     {
-        book_id = qof_session_get_url (gnc_get_current_session ());
+        uri = qof_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
         if (qof_book_session_not_saved (book))
             dirty = "*";
@@ -1522,15 +1522,15 @@ gnc_main_window_generate_title (GncMainWindow *window)
                ? g_strdup_printf(" %s", readonly_text)
                : g_strdup("");
 
-    if (!book_id || g_strcmp0 (book_id, "") == 0)
+    if (!uri || g_strcmp0 (uri, "") == 0)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
-        if (gnc_uri_targets_local_fs (book_id))
+        if (gnc_uri_targets_local_fs (uri))
         {
             /* The filename is a true file.
              * The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-            gchar *path = gnc_uri_get_path ( book_id );
+            gchar *path = gnc_uri_get_path ( uri );
             filename = g_path_get_basename ( path );
             g_free ( path );
         }
@@ -1538,7 +1538,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
         {
             /* The filename is composed of database connection parameters.
              * For this we will show access_method://username@database[:port] */
-            filename = gnc_uri_normalize_uri (book_id, FALSE);
+            filename = gnc_uri_normalize_uri (uri, FALSE);
         }
     }
 
@@ -1654,22 +1654,22 @@ static gboolean statusbar_notification_off(gpointer user_data_unused)
 static gchar *generate_statusbar_lastmodified_message()
 {
     gchar *message = NULL;
-    const gchar *book_id = NULL;
+    const gchar *uri = NULL;
 
     if (gnc_current_session_exist())
     {
-        book_id = qof_session_get_url (gnc_get_current_session ());
+        uri = qof_session_get_url (gnc_get_current_session ());
     }
 
-    if (!(book_id && strlen (book_id)))
+    if (!(uri && strlen (uri)))
         return NULL;
     else
     {
-        if (gnc_uri_targets_local_fs (book_id))
+        if (gnc_uri_targets_local_fs (uri))
         {
 #ifdef HAVE_SYS_STAT_H
             /* The filename is a true file. */
-            gchar *filepath = gnc_uri_get_path ( book_id );
+            gchar *filepath = gnc_uri_get_path ( uri );
             gchar *filename = g_path_get_basename ( filepath );
             {
                 // Access the mtime information through stat(2)

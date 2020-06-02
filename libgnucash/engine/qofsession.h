@@ -152,7 +152,7 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  *    If an error occurs, it will be pushed onto the session error
  *    stack, and that is where it should be examined.
  */
-void qof_session_begin (QofSession *session, const char * book_id,
+void qof_session_begin (QofSession *session, const char * new_uri,
                         gboolean ignore_lock, gboolean create,
                         gboolean force);
 

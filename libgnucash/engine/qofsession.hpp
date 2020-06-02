@@ -41,7 +41,7 @@ struct QofSessionImpl
     ~QofSessionImpl () noexcept;
 
     /** Begin this session.  */
-    void begin (std::string book_id, bool ignore_lock, bool create, bool force) noexcept;
+    void begin (const char* new_uri, bool ignore_lock, bool create, bool force) noexcept;
 
     /** Swap books with another session */
     void swap_books (QofSessionImpl &) noexcept;
@@ -62,7 +62,7 @@ struct QofSessionImpl
      * We return by reference so that a pointer to the data of the string lives
      * long enough to make it back to C code.
      */
-    std::string const & get_book_id () const noexcept;
+    std::string const & get_uri () const noexcept;
     /**
      * Returns and clears the local cached error. If there is no local error, we check
      * for an error in the backend.
@@ -92,10 +92,10 @@ private:
     /* A book holds pointers to the various types of datasets.
      * A session has exactly one book. */
     QofBook * m_book;
-    /* The requested book id, in the form or a URI, such as
-     * file:/some/where, or sql:server.host.com:555
+    /* The requested URI, such as
+     * file://some/where, or sql:server.host.com:555
      */
-    std::string m_book_id;
+    std::string m_uri;
 
     bool m_saving;
     bool m_creating;
@@ -113,8 +113,8 @@ private:
     /* These functions support the old testing infrastructure and should
      * be removed when they are no longer necessary.*/
     friend void qof_session_load_backend (QofSession *, const char *);
-    friend char const * qof_session_get_book_id (QofSession *);
-    friend void qof_session_set_book_id (QofSession *, char const *);
+    friend char const * qof_session_get_uri (QofSession *);
+    friend void qof_session_set_uri (QofSession *, char const *);
 };
 
 typedef struct qof_instance_copy_data
