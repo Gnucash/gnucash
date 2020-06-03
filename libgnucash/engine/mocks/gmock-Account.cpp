@@ -14,7 +14,7 @@ G_DEFINE_TYPE(MockAccount, gnc_mock_account, QOF_TYPE_INSTANCE);
 static void
 gnc_mock_account_init (MockAccount *inst)
 {
-    // function is unused, initialization is done in the MockAccount's constructor
+    // function is unused, initialization is done in the MockAccount's C++ constructor
 }
 
 static void

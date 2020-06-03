@@ -17,7 +17,7 @@ G_DEFINE_TYPE(MockSplit, gnc_mock_split, QOF_TYPE_INSTANCE);
 static void
 gnc_mock_split_init (MockSplit *inst)
 {
-    // function is unused since it's overwritten by MockSplit's constructor anyway
+    // function is unused, initialization is done in the MockSplit's C++ constructor
 }
 
 static void

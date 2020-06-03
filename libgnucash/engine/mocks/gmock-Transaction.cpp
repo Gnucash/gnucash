@@ -15,7 +15,7 @@ G_DEFINE_TYPE(MockTransaction, gnc_mock_transaction, QOF_TYPE_INSTANCE);
 static void
 gnc_mock_transaction_init (MockTransaction *inst)
 {
-    // function is unused, initialization is done in the MockTransaction's constructor
+    // function is unused, initialization is done in the MockTransaction's C++ constructor
 }
 
 static void

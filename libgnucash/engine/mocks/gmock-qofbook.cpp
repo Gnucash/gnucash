@@ -11,7 +11,7 @@ G_DEFINE_TYPE(QofMockBook, qof_mock_book, QOF_TYPE_INSTANCE);
 static void
 qof_mock_book_init (QofMockBook *inst)
 {
-    // function is unused, initialization is done in the QofMockBook's constructor
+    // function is unused, initialization is done in the QofMockBook's C++ constructor
 }
 
 static void
