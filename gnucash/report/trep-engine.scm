@@ -885,12 +885,13 @@ be excluded from periodic reporting.")
   ;; Display options
 
   (let ((disp-memo? #t)
-        (disp-accname? #t)
-        (disp-other-accname? #f)
-        (detail-is-single? #t)
-        (amount-value 'single))
+        (disp-accname? #f)
+        (disp-other-accname? #t)
+        (disp-detail-level? 'single)
+        (amount-value 'double))
 
     (define (apply-selectable-by-name-display-options)
+      (define detail-is-single? (eq? disp-detail-level? 'single))
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Account Name")
        disp-accname?)
@@ -963,7 +964,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Memo")
-      "d"  (_ "Display the memo?") #t
+      "d"  (_ "Display the memo?") disp-memo?
       disp-memo?
       (lambda (x)
         (set! disp-memo? x)
@@ -973,7 +974,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Account Name")
-      "e"  (_ "Display the account name?") #t
+      "e"  (_ "Display the account name?") disp-accname?
       disp-accname?
       (lambda (x)
         (set! disp-accname? x)
@@ -983,7 +984,7 @@ be excluded from periodic reporting.")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Other Account Name")
-      "h5"  (_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
+      "h5"  (_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") disp-other-accname?
       disp-other-accname?
       (lambda (x)
         (set! disp-other-accname? x)
@@ -993,7 +994,7 @@ be excluded from periodic reporting.")
      (gnc:make-multichoice-callback-option
       gnc:pagename-display optname-detail-level
       "h" (_ "Amount of detail to display per transaction.")
-      'single
+      disp-detail-level?
       (list (vector 'multi-line
                     (_ "Multi-Line")
                     (_ "Display all splits in a transaction on a separate line."))
@@ -1002,7 +1003,7 @@ be excluded from periodic reporting.")
                     (_ "Display one line per transaction, merging multiple splits where required.")))
       #f
       (lambda (x)
-        (set! detail-is-single? (eq? x 'single))
+        (set! disp-detail-level? x)
         (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option

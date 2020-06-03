@@ -166,6 +166,9 @@
         (set-option! options "General" "Table for Exporting" #t)
         (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
         (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
+        (set-option! options "Display" "Account Name" #t)
+        (set-option! options "Display" "Other Account Name" #f)
+        (set-option! options "Display" "Amount" 'single)
         options))
 
     ;; This will make all accounts use default currency (I think depends on locale)
