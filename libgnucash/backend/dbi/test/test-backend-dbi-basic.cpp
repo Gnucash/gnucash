@@ -541,7 +541,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     qof_session_end (sess);
     qof_session_destroy (sess);
     sess = qof_session_new (qof_book_new());
-    qof_session_begin (sess, url, SESSION_NORMAL_OPEN);
+    qof_session_begin (sess, url, SESSION_READ_ONLY);
     qof_session_load (sess, NULL);
     err = qof_session_pop_error (sess);
     g_assert_cmpint (err, == , ERR_SQL_DB_TOO_OLD);
@@ -554,7 +554,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     qof_session_end (sess);
     qof_session_destroy (sess);
     sess = qof_session_new (qof_book_new());
-    qof_session_begin (sess, url, SESSION_NORMAL_OPEN);
+    qof_session_begin (sess, url, SESSION_READ_ONLY);
     qof_session_load (sess, NULL);
     qof_session_ensure_all_data_loaded (sess);
     err = qof_session_pop_error (sess);

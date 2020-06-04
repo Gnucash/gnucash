@@ -89,9 +89,11 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
             make_dbi_provider<DbType::DBI_MYSQL>() :
             make_dbi_provider<DbType::DBI_PGSQL>()},
     m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
-    m_retry{false}, m_sql_savepoint{0}
+    m_retry{false}, m_sql_savepoint{0}, m_readonly{false}
 {
-    if (mode != SESSION_READ_ONLY && !lock_database(mode == SESSION_BREAK_LOCK))
+    if (mode == SESSION_READ_ONLY)
+        m_readonly = true;
+    else if (!lock_database(mode == SESSION_BREAK_LOCK))
         throw std::runtime_error("Failed to lock database!");
     if (!check_and_rollback_failed_save())
     {
@@ -174,6 +176,7 @@ void
 GncDbiSqlConnection::unlock_database ()
 {
     if (m_conn == nullptr) return;
+    if (m_readonly) return;
     g_return_if_fail (dbi_conn_error (m_conn, nullptr) == 0);
 
     auto tables = m_provider->get_table_list (m_conn, lock_table);

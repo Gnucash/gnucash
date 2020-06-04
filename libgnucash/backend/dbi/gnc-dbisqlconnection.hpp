@@ -108,6 +108,7 @@ private:
      */
     bool m_retry;
     unsigned int m_sql_savepoint;
+    bool m_readonly; 
     bool lock_database(bool break_lock);
     void unlock_database();
     bool rename_table(const std::string& old_name, const std::string& new_name);
