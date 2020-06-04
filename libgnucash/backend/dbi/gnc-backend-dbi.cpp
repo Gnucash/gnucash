@@ -609,10 +609,46 @@ adjust_sql_options (dbi_conn connection)
     }
 }
 
+template <DbType Type> bool
+drop_database(dbi_conn conn, const UriStrings& uri)
+{
+    const char *root_db;
+    if (Type == DbType::DBI_PGSQL)
+    {
+        root_db = "template1";
+    }
+    else if (Type == DbType::DBI_MYSQL)
+    {
+        root_db = "mysql";
+    }
+    else
+    {
+        PERR ("Unknown database type, can't proceed.");
+        LEAVE("Error");
+        return false;
+    }
+    if (dbi_conn_select_db (conn, root_db) == -1)
+    {
+        PERR ("Failed to switch out of %s, drop will fail.",
+              uri.quote_dbname(Type).c_str());
+        LEAVE ("Error");
+        return false;
+    }
+    if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
+                          uri.quote_dbname(Type).c_str()))
+    {
+        PERR ("Failed to drop database %s prior to recreating it."
+              "Proceeding would combine old and new data.",
+              uri.quote_dbname(Type).c_str());
+        LEAVE ("Error");
+        return false;
+    }
+    return true;
+}
 
 template <DbType Type> void
 GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
-                                    bool ignore_lock, bool create, bool force)
+                                    SessionOpenMode mode)
 {
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
@@ -677,27 +713,9 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* new_uri,
                 }
                 else
                 {
-                    PERR ("Unknown database type, can't proceed.");
-                    LEAVE("Error");
+                if (!drop_database<Type>(conn, uri))
                     return;
                 }
-                if (dbi_conn_select_db (conn, root_db) == -1)
-                {
-                    PERR ("Failed to switch out of %s, drop will fail.",
-                          uri.quote_dbname(Type).c_str());
-                    LEAVE ("Error");
-                    return;
-                }
-                if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
-                                 uri.quote_dbname(Type).c_str()))
-                {
-                    PERR ("Failed to drop database %s prior to recreating it."
-                          "Proceeding would combine old and new data.",
-                           uri.quote_dbname(Type).c_str());
-                    LEAVE ("Error");
-                    return;
-                }
-            }
             else
             {
                 set_error (ERR_BACKEND_STORE_EXISTS);
