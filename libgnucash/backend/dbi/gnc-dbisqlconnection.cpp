@@ -81,7 +81,7 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
 }
 
 GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
-                                          dbi_conn conn, bool ignore_lock) :
+                                          dbi_conn conn, SessionOpenMode mode) :
     m_qbe{qbe}, m_conn{conn},
     m_provider{type == DbType::DBI_SQLITE ?
             make_dbi_provider<DbType::DBI_SQLITE>() :
@@ -91,7 +91,7 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
     m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
     m_retry{false}, m_sql_savepoint{0}
 {
-    if (!lock_database(ignore_lock))
+    if (mode != SESSION_READ_ONLY && !lock_database(mode == SESSION_BREAK_LOCK))
         throw std::runtime_error("Failed to lock database!");
     if (!check_and_rollback_failed_save())
     {
@@ -101,7 +101,7 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
 }
 
 bool
-GncDbiSqlConnection::lock_database (bool ignore_lock)
+GncDbiSqlConnection::lock_database (bool break_lock)
 {
     const char *errstr;
     /* Protect everything with a single transaction to prevent races */
@@ -127,7 +127,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         }
     }
 
-    /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
+    /* Check for an existing entry; delete it if break_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
     auto result = dbi_conn_queryf (m_conn, "SELECT * FROM %s",
                                    lock_table.c_str());
@@ -135,7 +135,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     {
         dbi_result_free (result);
         result = nullptr;
-        if (!ignore_lock)
+        if (!break_lock)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_LOCKED);
             /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */

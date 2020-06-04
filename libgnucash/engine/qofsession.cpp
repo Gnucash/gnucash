@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /**
- * @file qofsession.c
+ * @file qofsession.cpp
  * @brief Encapsulate a connection to a storage backend.
  *
  * HISTORY:
@@ -250,11 +250,11 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
 }
 
 void
-QofSessionImpl::begin (const char* new_uri, bool ignore_lock,
-                       bool create, bool force) noexcept
+QofSessionImpl::begin (const char* new_uri, SessionOpenMode mode) noexcept
 {
-    ENTER (" sess=%p ignore_lock=%d, book-id=%s",
-           this, ignore_lock, new_uri);
+
+
+    ENTER (" sess=%p mode=%d, URI=%s", this, mode, new_uri);
     clear_error ();
     /* Check to see if this session is already open */
     if (m_uri.size ())
@@ -294,7 +294,7 @@ QofSessionImpl::begin (const char* new_uri, bool ignore_lock,
     destroy_backend ();
     /* Store the session URL  */
     m_uri = new_uri;
-    m_creating = create;
+    m_creating = mode == SESSION_NEW_STORE || mode == SESSION_NEW_OVERWRITE;
     if (filename)
         load_backend ("file");
     else                       /* access method found, load appropriate backend */
@@ -314,8 +314,7 @@ QofSessionImpl::begin (const char* new_uri, bool ignore_lock,
     }
 
     /* If there's a begin method, call that. */
-    m_backend->session_begin(this, m_uri.c_str(),
-                             ignore_lock, create, force);
+    m_backend->session_begin(this, m_uri.c_str(), mode);
     PINFO ("Done running session_begin on backend");
     QofBackendError const err {m_backend->get_error()};
     auto msg (m_backend->get_message());
@@ -610,11 +609,10 @@ qof_session_get_backend (const QofSession *session)
 }
 
 void
-qof_session_begin (QofSession *session, const char * new_uri,
-                   gboolean ignore_lock, gboolean create, gboolean force)
+qof_session_begin (QofSession *session, const char * uri, SessionOpenMode mode)
 {
     if (!session) return;
-    session->begin((new_uri ? new_uri : ""), ignore_lock, create, force);
+    session->begin(uri, mode);
 }
 
 void

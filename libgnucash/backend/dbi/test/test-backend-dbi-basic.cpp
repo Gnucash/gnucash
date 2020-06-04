@@ -97,8 +97,8 @@ setup (Fixture* fixture, gconstpointer pData)
      * prevents creating the lock file. Force the session to get
      * around that.
      */
-    qof_session_begin (fixture->session, DBI_TEST_XML_FILENAME, TRUE,
-                       FALSE, TRUE);
+    qof_session_begin (fixture->session, DBI_TEST_XML_FILENAME,
+                       SESSION_BREAK_LOCK);
     g_assert_cmpint (qof_session_get_error (fixture->session), == ,
                      ERR_BACKEND_NO_ERR);
     qof_session_load (fixture->session, NULL);
@@ -394,7 +394,7 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     // Save the session data
     auto book2{qof_book_new()};
     auto session_2 = qof_session_new (book2);
-    qof_session_begin (session_2, url, FALSE, TRUE, TRUE);
+    qof_session_begin (session_2, url, SESSION_NEW_OVERWRITE);
     g_assert (session_2 != NULL);
     g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
     qof_session_swap_data (fixture->session, session_2);
@@ -407,7 +407,7 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     auto book3{qof_book_new()};
     auto session_3 = qof_session_new (book3);
     g_assert (session_3 != NULL);
-    qof_session_begin (session_3, url, TRUE, FALSE, FALSE);
+    qof_session_begin (session_3, url, SESSION_READ_ONLY);
     g_assert (session_3 != NULL);
     g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     qof_session_load (session_3, NULL);
@@ -447,7 +447,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
     // Load the session data
     auto book1{qof_book_new()};
     auto session_1 = qof_session_new (book1);
-    qof_session_begin (session_1, url, FALSE, TRUE, TRUE);
+    qof_session_begin (session_1, url, SESSION_NEW_OVERWRITE);
     if (session_1 &&
         qof_session_get_error (session_1) != ERR_BACKEND_NO_ERR)
     {
@@ -473,7 +473,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
     /* Destroy the session and reload it */
 
     session_2 = qof_session_new (qof_book_new());
-    qof_session_begin (session_2, url, TRUE, FALSE, FALSE);
+    qof_session_begin (session_2, url, SESSION_READ_ONLY);
     if (session_2 &&
         qof_session_get_error (session_2) != ERR_BACKEND_NO_ERR)
     {
@@ -521,7 +521,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     if (fixture->filename)
         url = fixture->filename;
     auto sess = qof_session_new (nullptr);
-    qof_session_begin (sess, url, FALSE, TRUE, TRUE);
+    qof_session_begin (sess, url, SESSION_NEW_OVERWRITE);
     if (sess && qof_session_get_error (sess) != ERR_BACKEND_NO_ERR)
     {
         g_warning ("Session Error: %d, %s", qof_session_get_error (sess),
@@ -541,7 +541,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     qof_session_end (sess);
     qof_session_destroy (sess);
     sess = qof_session_new (qof_book_new());
-    qof_session_begin (sess, url, TRUE, FALSE, FALSE);
+    qof_session_begin (sess, url, SESSION_NORMAL_OPEN);
     qof_session_load (sess, NULL);
     err = qof_session_pop_error (sess);
     g_assert_cmpint (err, == , ERR_SQL_DB_TOO_OLD);
@@ -554,7 +554,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     qof_session_end (sess);
     qof_session_destroy (sess);
     sess = qof_session_new (qof_book_new());
-    qof_session_begin (sess, url, TRUE, FALSE, FALSE);
+    qof_session_begin (sess, url, SESSION_NORMAL_OPEN);
     qof_session_load (sess, NULL);
     qof_session_ensure_all_data_loaded (sess);
     err = qof_session_pop_error (sess);
@@ -583,14 +583,14 @@ test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
         url = fixture->filename;
     // Save the session data
     auto session_2 = qof_session_new (qof_book_new());
-    qof_session_begin (session_2, url, FALSE, TRUE, TRUE);
+    qof_session_begin (session_2, url, SESSION_NEW_OVERWRITE);
     qof_session_swap_data (fixture->session, session_2);
     qof_book_mark_session_dirty (qof_session_get_book (session_2));
     qof_session_save (session_2, NULL);
 
     // Reload the session data
     auto session_3 = qof_session_new (qof_book_new());
-    qof_session_begin (session_3, url, TRUE, FALSE, FALSE);
+    qof_session_begin (session_3, url, SESSION_READ_ONLY);
     qof_session_load (session_3, NULL);
 
     // Compare with the original data

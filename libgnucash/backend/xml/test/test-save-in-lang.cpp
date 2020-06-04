@@ -100,7 +100,7 @@ test_file (const char* filename)
 
         auto session = qof_session_new (nullptr);
 
-        qof_session_begin (session, filename, TRUE, FALSE, FALSE);
+        qof_session_begin (session, filename, SESSION_READ_ONLY);
         err = qof_session_pop_error (session);
         if (err)
         {
@@ -121,7 +121,7 @@ test_file (const char* filename)
 
         auto new_session = qof_session_new (nullptr);
 
-        qof_session_begin (new_session, new_file, FALSE, FALSE, FALSE);
+        qof_session_begin (new_session, new_file, SESSION_NORMAL_OPEN);
         err = qof_session_pop_error (new_session);
         if (err)
         {

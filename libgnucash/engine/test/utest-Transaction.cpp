@@ -86,7 +86,7 @@ class TransMockBackend : public QofBackend
 public:
     TransMockBackend() : QofBackend(), m_last_call{"Constructor"},
                     m_result_err{ERR_BACKEND_NO_ERR} {}
-    void session_begin(QofSession*, const char*, bool, bool, bool) override {
+    void session_begin(QofSession*, const char*, SessionOpenMode) override {
         m_last_call = "session_begin";
     }
     void session_end() override {

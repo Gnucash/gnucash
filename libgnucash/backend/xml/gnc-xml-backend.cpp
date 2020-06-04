@@ -107,7 +107,7 @@ GncXmlBackend::check_path (const char* fullpath, bool create)
 
 void
 GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
-                       bool ignore_lock, bool create, bool force)
+                      SessionOpenMode mode)
 {
     /* Make sure the directory is there */
     m_fullpath = gnc_uri_get_path (new_uri);
@@ -118,14 +118,15 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
         set_message("No path specified");
         return;
     }
-    if (create && !force && save_may_clobber_data())
+    if (mode == SESSION_NEW_STORE && save_may_clobber_data())
     {
         set_error(ERR_BACKEND_STORE_EXISTS);
         PWARN ("Might clobber, no force");
         return;
     }
 
-    if (!check_path(m_fullpath.c_str(), create))
+    if (!check_path(m_fullpath.c_str(),
+                    SESSION_NEW_STORE || mode == SESSION_NEW_OVERWRITE))
         return;
     m_dirname = g_path_get_dirname (m_fullpath.c_str());
 
@@ -137,34 +138,19 @@ GncXmlBackend::session_begin(QofSession* session, const char* new_uri,
     xaccLogSetBaseName (m_fullpath.c_str());
     PINFO ("logpath=%s", m_fullpath.empty() ? "(null)" : m_fullpath.c_str());
 
-    /* And let's see if we can get a lock on it. */
+    if (mode == SESSION_READ_ONLY)
+        return; // Read-only, don't care about locks.
+
+    /* Set the lock file */
     m_lockfile = m_fullpath + ".LCK";
-
-    if (!ignore_lock && !get_file_lock())
+    auto locked = get_file_lock();
+    if (mode == SESSION_BREAK_LOCK && !locked)
     {
-        // We should not ignore the lock, but couldn't get it. The
-        // be_get_file_lock() already set the appropriate backend_error in this
-        // case, so we just return here.
-        m_lockfile.clear();
-
-        if (force)
-        {
-            QofBackendError berror = get_error();
-            if (berror == ERR_BACKEND_LOCKED || berror == ERR_BACKEND_READONLY)
-            {
-                // Even though we couldn't get the lock, we were told to force
-                // the opening. This is ok because the FORCE argument is
-                // changed only if the caller wants a read-only book.
-            }
-            else
-            {
-                // Unknown error. Push it again on the error stack.
-                set_error(berror);
-                return;
-            }
-        }
+        // Don't pass on locked or readonly errors.
+        QofBackendError berror = get_error();
+        if (!(berror == ERR_BACKEND_LOCKED || berror == ERR_BACKEND_READONLY))
+            set_error(berror);
     }
-    m_book = nullptr;
 }
 
 void

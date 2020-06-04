@@ -790,7 +790,8 @@ RESTART:
     new_session = qof_session_new (qof_book_new());
 
     // Begin the new session. If we are in read-only mode, ignore the locks.
-    qof_session_begin (new_session, newfile, is_readonly, FALSE, FALSE);
+    qof_session_begin (new_session, newfile,
+                       is_readonly ? SESSION_READ_ONLY : SESSION_NORMAL_OPEN);
     io_err = qof_session_get_error (new_session);
 
     if (ERR_BACKEND_BAD_URL == io_err)
@@ -872,11 +873,11 @@ RESTART:
         case RESPONSE_READONLY:
             is_readonly = TRUE;
             /* user told us to open readonly. We do ignore locks (just as before), but now also force the opening. */
-            qof_session_begin (new_session, newfile, is_readonly, FALSE, TRUE);
+            qof_session_begin (new_session, newfile, SESSION_READ_ONLY);
             break;
         case RESPONSE_OPEN:
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
+            qof_session_begin (new_session, newfile, SESSION_BREAK_LOCK);
             break;
         default:
             /* Can't use the given file, so just create a new
@@ -895,7 +896,7 @@ RESTART:
             /* user told us to create a new database. Do it. We
                      * shouldn't have to worry about locking or clobbering,
                      * it's supposed to be new. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, SESSION_NEW_STORE);
         }
     }
 
@@ -1286,7 +1287,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
     /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
     new_session = qof_session_new (NULL);
-    qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
+    qof_session_begin (new_session, newfile, SESSION_NEW_STORE);
 
     io_err = qof_session_get_error (new_session);
     /* If the file exists and would be clobbered, ask the user */
@@ -1305,7 +1306,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         {
             return;
         }
-        qof_session_begin (new_session, newfile, FALSE, TRUE, TRUE);
+        qof_session_begin (new_session, newfile, SESSION_NEW_OVERWRITE);
     }
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
@@ -1313,7 +1314,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_EXPORT))
         {
             /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
+            qof_session_begin (new_session, newfile, SESSION_BREAK_LOCK);
         }
     }
 
@@ -1532,7 +1533,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     save_in_progress++;
 
     new_session = qof_session_new (NULL);
-    qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
+    qof_session_begin (new_session, newfile, SESSION_NEW_STORE);
 
     io_err = qof_session_get_error (new_session);
 
@@ -1558,15 +1559,15 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
             save_in_progress--;
             return;
         }
-        qof_session_begin (new_session, newfile, FALSE, TRUE, TRUE);
+        qof_session_begin (new_session, newfile, SESSION_NEW_OVERWRITE);
     }
     /* if file appears to be locked, ask the user ... */
     else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
         if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
-            /* user told us to ignore locks. So ignore them. */
-            qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
+            // User wants to replace the file.
+            qof_session_begin (new_session, newfile, SESSION_BREAK_LOCK);
         }
     }
 
@@ -1578,7 +1579,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
         if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to create a new database. Do it. */
-            qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
+            qof_session_begin (new_session, newfile, SESSION_NEW_STORE);
         }
     }
 

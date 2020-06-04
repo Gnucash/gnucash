@@ -41,7 +41,7 @@ struct QofSessionImpl
     ~QofSessionImpl () noexcept;
 
     /** Begin this session.  */
-    void begin (const char* new_uri, bool ignore_lock, bool create, bool force) noexcept;
+    void begin (const char* new_uri, SessionOpenMode mode) noexcept;
 
     /** Swap books with another session */
     void swap_books (QofSessionImpl &) noexcept;

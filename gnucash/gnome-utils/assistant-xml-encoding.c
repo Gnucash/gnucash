@@ -1082,7 +1082,7 @@ gxi_parse_file (GncXmlImportData *data)
     gxi_session_destroy (data);
     session = qof_session_new (NULL);
     data->session = session;
-    qof_session_begin (session, data->filename, TRUE, FALSE, FALSE);
+    qof_session_begin (session, data->filename, SESSION_READ_ONLY);
     io_err = qof_session_get_error (session);
     if (io_err != ERR_BACKEND_NO_ERR)
     {

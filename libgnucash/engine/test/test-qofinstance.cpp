@@ -55,8 +55,8 @@ public:
     QofInstMockBackend() : m_qof_error{ERR_BACKEND_NO_ERR} {
         commit_test.m_be = this;
     }
-    void session_begin(QofSession* sess, const char* book_name,
-                       bool ignore_lock, bool create, bool force) override {}
+    void session_begin(QofSession* sess, const char* uri,
+                       SessionOpenMode mode) override {}
     void session_end() override {}
     void load(QofBook*, QofBackendLoadType) override {}
     void sync(QofBook* book) override {}

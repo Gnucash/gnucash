@@ -32,7 +32,7 @@ int main()
     gnc_engine_init(0, no_args);
 
     s = qof_session_new(NULL);
-    qof_session_begin(s, testurl, 0, 1, 0);
+    qof_session_begin(s, testurl, SESSION_NEW_STORE);
     qof_session_load(s, NULL);
     qof_session_save(s, NULL);
     qof_session_end(s);

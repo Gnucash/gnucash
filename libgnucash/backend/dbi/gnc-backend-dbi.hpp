@@ -92,7 +92,7 @@ public:
     GncDbiBackend(GncSqlConnection *conn, QofBook* book) :
         GncSqlBackend(conn, book), m_exists{false} {}
     ~GncDbiBackend();
-    void session_begin(QofSession*, const char*, bool, bool, bool) override;
+    void session_begin(QofSession*, const char*, SessionOpenMode) override;
     void session_end() override;
     void load(QofBook*, QofBackendLoadType) override;
     void safe_sync(QofBook*) override;

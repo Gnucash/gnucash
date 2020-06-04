@@ -109,6 +109,27 @@ extern "C"
 #endif
 
 #define QOF_MOD_SESSION "qof.session"
+/**
+ * Mode for opening sessions. 
+ */
+/* This replaces three booleans that were passed in order: ignore_lock, create,
+ * and force. It's structured so that one can use it as a bit field with the
+ * values in the same order, i.e. ignore_lock = 1 << 2, create = 1 << 1, and
+ * force = 1.
+ */
+typedef enum
+{
+    SESSION_NORMAL_OPEN = 0,    // All False
+    /** Open will fail if the URI doesn't exist or is locked. */
+    SESSION_NEW_STORE = 2,      // False, True, False (create)
+    /** Create a new store at the URI. It will fail if the store already exists and is found to contain data that would be overwritten. */
+    SESSION_NEW_OVERWRITE = 3,  // False, True, True (create | force)
+    /** Create a new store at the URI even if a store already exists there. */
+    SESSION_READ_ONLY = 4,      // True, False, False (ignore_lock)
+    /** Open the session read-only, ignoring any existing lock and not creating one if the URI isn't locked. */
+    SESSION_BREAK_LOCK = 5     // True, False, True (ignore_lock | force)
+    /** Open the session, taking over any existing lock. */
+} SessionOpenMode;
 
 /* PROTOTYPES ******************************************************/
 
@@ -122,39 +143,41 @@ void         qof_session_destroy (QofSession *session);
  *    for 'Save As' type functionality. */
 void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
 
-/** The qof_session_begin () method begins a new session.
- *    It takes as an argument the book id. The book id must be a string
- *    in the form of a URI/URL. The access method specified depends
- *    on the loaded backends. Paths may be relative or absolute.
- *    If the path is relative; that is, if the argument is "file://somefile.xml"
- *    then the current working directory is assumed. Customized backends can
- *    choose to search other, application-specific, directories as well.
+/** Begins a new session.
  *
- *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
- *    to ignore any global-datastore locks (e.g. file locks) that it finds.
- *    If set to FALSE, then file/database-global locks will be tested and
- *    obeyed.
+ * @param session Newly-allocated with qof_session_new.
  *
- *    If the datastore exists, can be reached (e.g over the net),
- *    connected to, opened and read, and a lock can be obtained then a
- *    lock will be obtained.  Note that while multi-user datastores
- *    (e.g. the SQL backend) typically will have record-level locking
- *    and therefor should not need to get a global lock, qof works by
- *    having a local copy of the whole database and can't be trusted
- *    to handle multiple users writing data, so we lock the database
- *    anyway.
+ * @param uri must be a string in the form of a URI/URL. The access method
+ * specified depends on the loaded backends. Paths may be relative or
+ * absolute.  If the path is relative, that is if the argument is
+ * "file://somefile.xml", then the current working directory is
+ * assumed. Customized backends can choose to search other
+ * application-specific directories or URI schemes as well.
  *
- *    If qof_session_begin is called with create == TRUE, then it will
- *    check for the existence of the file or database and return after
- *    posting a QOF_BACKEND_STORE_EXISTS error if it exists, unless
- *    force is also set to true.
+ * @param mode The SessionMode.
  *
- *    If an error occurs, it will be pushed onto the session error
- *    stack, and that is where it should be examined.
+ * ==== SessionMode ====
+ * `SESSION_NORMAL`: Find an existing file or database at the provided uri and
+ * open it if it is unlocked. If it is locked post a QOF_BACKEND_LOCKED error.
+ * `SESSION_NEW_STORE`: Check for an existing file or database at the provided
+ * uri and if none is found, create it. If the file or database exists post a
+ * QOF_BACKED_STORE_EXISTS and return.
+ * `SESSION_READ_ONLY`: Find an existing file or database and open it without
+ * disturbing the lock if it exists or setting one if not. This will also set a
+ * flag on the book that will prevent many elements from being edited and will
+ * prevent the backend from saving any edits.
+ * `SESSION_OVERWRITE`: Create a new file or database at the provided uri,
+ * deleting any existing file or database.
+ * `SESSION_BREAK_LOCK1: Find an existing file or database, lock it, and open
+ * it. If there is already a lock replace it with a new one for this session.
+ *
+ * ==== Errors ====
+ * This function signals failure by queuing errors. After it completes use
+ * qof_session_get_error() and test that the value is `ERROR_BACKEND_NONE` to
+ * determine that the session began successfully.
  */
 void qof_session_begin (QofSession *session, const char * new_uri,
-                        gboolean ignore_lock, gboolean create,
-                        gboolean force);
+                        SessionOpenMode mode);
 
 /**
  * The qof_session_load() method causes the QofBook to be made ready to

@@ -44,7 +44,7 @@ public:
     QofSessionMockBackend(const QofSessionMockBackend&) = delete;
     QofSessionMockBackend(const QofSessionMockBackend&&) = delete;
     virtual ~QofSessionMockBackend() = default;
-    void session_begin(QofSession*, const char*, bool, bool, bool) {}
+    void session_begin(QofSession*, const char*, SessionOpenMode) {}
     void session_end() {}
     void load(QofBook*, QofBackendLoadType);
     void sync(QofBook*);
@@ -106,9 +106,9 @@ TEST (QofSessionTest, swap_books)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s1(qof_book_new());
-    s1.begin ("book1", false, false, false);
+    s1.begin ("book1", SESSION_NORMAL_OPEN);
     QofSession s2(qof_book_new());
-    s2.begin ("book2", false, false, false);
+    s2.begin ("book2", SESSION_NORMAL_OPEN);
     QofBook * b1 {s1.get_book ()};
     QofBook * b2 {s2.get_book ()};
     ASSERT_NE (b1, b2);
@@ -122,7 +122,7 @@ TEST (QofSessionTest, ensure_all_data_loaded)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     data_loaded = false;
     s.ensure_all_data_loaded ();
     EXPECT_EQ (data_loaded, true);
@@ -133,7 +133,7 @@ TEST (QofSessionTest, get_error)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     s.ensure_all_data_loaded ();
     EXPECT_NE (s.get_error (), ERR_BACKEND_NO_ERR);
     //get_error should not clear the error.
@@ -145,7 +145,7 @@ TEST (QofSessionTest, pop_error)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     //We run the test first, and make sure there is an error condition.
     s.ensure_all_data_loaded ();
     EXPECT_NE (s.pop_error (), ERR_BACKEND_NO_ERR);
@@ -157,7 +157,7 @@ TEST (QofSessionTest, clear_error)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     //We run the test first, and make sure there is an error condition.
     s.ensure_all_data_loaded ();
     EXPECT_NE (s.get_error (), ERR_BACKEND_NO_ERR);
@@ -176,7 +176,7 @@ TEST (QofSessionTest, load)
      */
     qof_backend_register_provider (get_provider ());
     QofSession s{qof_book_new()};
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     char *guidstr1 = guid_to_string(qof_instance_get_guid(s.get_book ()));
     s.load (nullptr);
     char *guidstr2 = guid_to_string(qof_instance_get_guid(s.get_book ()));
@@ -206,7 +206,7 @@ TEST (QofSessionTest, save)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     load_error = false;
     s.load (nullptr);
     qof_book_mark_session_dirty (s.get_book ());
@@ -221,7 +221,7 @@ TEST (QofSessionTest, safe_save)
 {
     qof_backend_register_provider (get_provider ());
     QofSession s(qof_book_new());
-    s.begin ("book1", false, false, false);
+    s.begin ("book1", SESSION_NORMAL_OPEN);
     s.safe_save (nullptr);
     EXPECT_EQ (safe_sync_called, true);
     qof_backend_unregister_all_providers ();
@@ -233,11 +233,11 @@ TEST (QofSessionTest, export_session)
     qof_backend_register_provider (get_provider ());
     auto b1 = qof_book_new();
     QofSession s1(b1);
-    s1.begin ("book1", false, false, false);
+    s1.begin ("book1", SESSION_NORMAL_OPEN);
     qof_book_set_backend(b1, s1.get_backend());
     auto b2 = qof_book_new();
     QofSession s2(b2);
-    s2.begin ("book2", false, false, false);
+    s2.begin ("book2", SESSION_NORMAL_OPEN);
     qof_book_set_backend(b2, s2.get_backend());
     s2.export_session (s1, nullptr);
     EXPECT_EQ (exported_book, b1);

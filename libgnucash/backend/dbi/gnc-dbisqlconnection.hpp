@@ -42,7 +42,7 @@ class GncDbiSqlConnection : public GncSqlConnection
 {
 public:
     GncDbiSqlConnection (DbType type, QofBackend* qbe, dbi_conn conn,
-                         bool ignore_lock);
+                         SessionOpenMode mode);
     ~GncDbiSqlConnection() override;
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
@@ -108,7 +108,7 @@ private:
      */
     bool m_retry;
     unsigned int m_sql_savepoint;
-    bool lock_database(bool ignore_lock);
+    bool lock_database(bool break_lock);
     void unlock_database();
     bool rename_table(const std::string& old_name, const std::string& new_name);
     bool drop_table(const std::string& table);
