@@ -69,7 +69,7 @@ enum
 /** Static Globals *****************************************************/
 
 /* This static indicates the debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_REGISTER;
+static QofLogModule log_module = G_LOG_DOMAIN;
 static GtkLayout *sheet_parent_class;
 
 
@@ -103,6 +103,7 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 static inline void
 gnucash_sheet_set_entry_selection (GnucashSheet *sheet)
 {
+    DEBUG ("Set entry selection to sheet: %d:%d", sheet->bound, sheet->pos);
     gtk_editable_select_region (GTK_EDITABLE (sheet->entry),
                                 sheet->bound, sheet->pos);
 }
@@ -117,6 +118,7 @@ gnucash_sheet_set_selection_from_entry (GnucashSheet *sheet)
 static inline void
 gnucash_sheet_set_selection (GnucashSheet *sheet, int pos, int bound)
 {
+    DEBUG ("Set sheet selection %d:%d", bound, pos);
     sheet->pos = pos;
     sheet->bound = bound;
     gnucash_sheet_set_entry_selection (sheet);
@@ -892,6 +894,7 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
 
     if (retval)
     {
+        DEBUG ("%s", retval ? retval : "nothing");
         gnucash_sheet_set_entry_value (sheet, retval);
         gnucash_sheet_set_position_and_selection (sheet, cursor_position,
                                                   start_sel, end_sel);
@@ -943,6 +946,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
                                       event);
     if (result)
     {
+        DEBUG ("%s", new_text ? new_text : "nothing");
         if (new_text != NULL)
             gnucash_sheet_set_entry_value (sheet, new_text);
         gnucash_sheet_set_position_and_selection (sheet, new_position,
@@ -1071,6 +1075,7 @@ gnucash_sheet_insert_cb (GtkEditable *editable,
          * IMContext that would reset the selection, and we may need to keep it
          * so save it in the sheet values.
          */
+        DEBUG ("%s, got %s", new_text, retval);
         gnucash_sheet_set_position_and_selection (sheet, *position, start_sel,
                                                   end_sel);
 
@@ -1169,6 +1174,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                                         "delete_text");
     }
 
+    DEBUG ("%s", retval ? retval : "nothing");
     gnucash_sheet_set_position_and_selection (sheet, cursor_position,
                                               start_sel, end_sel);
 }
