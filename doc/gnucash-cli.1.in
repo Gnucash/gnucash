@@ -4,21 +4,48 @@
 .\"
 .TH GNUCASH 1 "@GNC_VCS_REV_DATE@" "Version @GNC_VCS_REV@" "GnuCash Manual Pages"
 .SH NAME
-gnucash \- personal finance manager
+gnucash-cli \- command line tool to go with GnuCash
 .SH SYNOPSIS
-.B gnucash [options] [
+.B gnucash-cli [options] [
 .I accounts.gnc
 .B ]
 .SH DESCRIPTION
-.B GnuCash
-is a personal accounting package that allows you to record
-and track income, expenses, assets, and investments. It supports
-reconciliation, has substantial reporting capabilities, and is
-extensible using guile. It can import QIF data from Quicken(TM) and
-many other commercial accounting packages. It uses GTK+ and GNOME to
-provide an attractive user interface, and has extensive online help.
+.B gnucash-cli
+enables certain intraction with a gnucash datafile directly from
+the command line.
 
-.SH OPTIONS
+It has two modes:
+.B quotes
+mode and
+.B report
+mode.
+
+.SH Quotes Mode (activated with --quotes <cmd>)
+This mode has options to get online quotes for foreign currencies and stocks
+in the given data file. It supports the following command:
+.IP get
+Retrieves online quotes. Note this requires Finance::Quote to be properly
+configured for your system.
+
+The
+.B get
+command takes the following options:
+.IP --namespace=REGEXP
+Regular expression determining which namespace commodities will be retrieved.
+.SH Report Mode (activated with --report <cmd>)
+This mode has options to work with reports in the given data file.
+It supports the following command:
+.IP run
+Runs a report on the given data file.
+
+The
+.B run
+command takes the following options:
+.IP --name=REPORT_NAME
+Name of the report to run
+.IP --export-type=TYPE
+Specify export type
+.SH General Options
 .IP --version
 Show
 .B GnuCash
@@ -34,16 +61,6 @@ Log level overrides, of the form "log.ger.path={debug,info,warn,crit,error}"
 This option can be specified multiple times.
 .IP --logto
 File to log into; defaults to "/tmp/gnucash.trace"; can be "stderr" or "stdout".
-.IP --nofile
-Do not load the last file opened
-.IP "--add-price-quotes FILE"
-Add price quotes to the given data file. Note this option has been deprecated
-and will be removed in GnuCash 5.0. Instead use 'gnucash-cli --quotes get'.
-.IP --namespace=REGEXP
-Regular expression determining which namespace commodities will be retrieved.
-This is only relevant for the --add-price-quotes option. And as with that option
-it is deprecated and will be removed in GnuCash 5.0. The same option can be
-passed to 'gnucash-cli --quotes get' to achieve the same result.
 .SH FILES
 .I ~/.gnucash/config.auto
 .RS

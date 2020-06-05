@@ -53,7 +53,7 @@ add_executable (gnucash
     ${gnucash_noinst_HEADERS}
 )
 
-add_dependencies (gnucash gnucash-manpage)
+add_dependencies (gnucash gnucash-manpage gnucash-cli-manpage)
 
 target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
