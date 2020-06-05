@@ -59,7 +59,8 @@ namespace Gnucash {
         boost::optional <std::string> m_quotes_cmd;
         boost::optional <std::string> m_namespace;
 
-        boost::optional <std::string> m_run_report;
+        boost::optional <std::string> m_report_cmd;
+        boost::optional <std::string> m_report_name;
         boost::optional <std::string> m_export_type;
         boost::optional <std::string> m_output_file;
     };
@@ -90,7 +91,7 @@ Gnucash::GnucashCli::configure_program_options (void)
     bpo::options_description quotes_options(_("Price Quotes Retrieval Options"));
     quotes_options.add_options()
     ("quotes,Q", bpo::value (&m_quotes_cmd),
-     _("Run price quote related commands. Currently only one command is supported.\n\n"
+     _("Execute price quote related commands. Currently only one command is supported.\n\n"
        "  get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"))
     ("namespace", bpo::value (&m_namespace),
      _("Regular expression determining which namespace commodities will be retrieved for"));
@@ -98,8 +99,11 @@ Gnucash::GnucashCli::configure_program_options (void)
 
     bpo::options_description report_options(_("Report Generation Options"));
     report_options.add_options()
-    ("run-report", bpo::value (&m_run_report),
-     _("Runs a report\n"))
+    ("report,R", bpo::value (&m_report_cmd),
+     _("Execute report related commands. Currently only one command is supported.\n\n"
+     "  run: \tRun the named report in the given GnuCash datafile.\n"))
+    ("name", bpo::value (&m_report_name),
+     _("Name of the report to run\n"))
     ("export-type", bpo::value (&m_export_type),
      _("Specify export type\n"))
     ("output-file", bpo::value (&m_output_file),
@@ -129,20 +133,29 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             return 1;
         }
         else
-            return Gnucash::add_quotes (*m_file_to_load);
+            return Gnucash::add_quotes (m_file_to_load);
     }
 
-    if (m_run_report && !m_run_report->empty())
+    if (m_report_cmd)
     {
-        if (!m_file_to_load || m_file_to_load->empty())
+        if (*m_report_cmd == "run")
         {
-            std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-                      << *m_opt_desc.get();
-            return 1;
+            if (!m_file_to_load || m_file_to_load->empty())
+            {
+                std::cerr << bl::translate("Missing data file parameter") << "\n\n"
+                        << *m_opt_desc.get();
+                return 1;
+            }
+            else
+                return Gnucash::run_report(m_file_to_load, m_report_name,
+                                           m_export_type, m_output_file);
         }
         else
-            return Gnucash::run_report(*m_file_to_load, m_run_report,
-                                       m_export_type, m_output_file);
+        {
+            std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
+            << *m_opt_desc.get();
+            return 1;
+        }
     }
     return 1;
 }
