@@ -991,7 +991,10 @@ make_new_text (GnucashSheet *sheet, const char* new_text, int *position)
     int insert_length = g_utf8_strlen (new_text, -1);
 
     if (!old_text || old_length == 0)
+    {
+        *position = insert_length;
         return g_strdup(new_text);
+    }
 
     gtk_editable_get_selection_bounds (editable, &bound, &pos);
     normalize_selection_bounds (&pos, &bound, old_length);
