@@ -60,6 +60,7 @@ extern "C" {
 }
 
 #include <boost/locale.hpp>
+#include <boost/optional.hpp>
 #include <iostream>
 #include <gnc-locale-utils.hpp>
 
@@ -279,8 +280,12 @@ namespace Gnucash {
     private:
         void configure_program_options (void);
 
-        std::string m_gtk_help_msg;
+        bool m_nofile = false;
+        bool m_show_help_gtk = false;
         bool m_add_quotes; // Deprecated will be removed in gnucash 5.0
+        boost::optional <std::string> m_namespace; // Deprecated will be removed in gnucash 5.0
+
+        std::string m_gtk_help_msg;
     };
 
 }
@@ -296,17 +301,14 @@ Gnucash::Gnucash::parse_command_line (int argc, char **argv)
 {
     Gnucash::CoreApp::parse_command_line (argc, argv);
 
-    if (m_opt_map["help-gtk"].as<bool>())
+    if (m_show_help_gtk)
     {
         std::cout << m_gtk_help_msg;
         exit(0);
     }
 
-    m_add_quotes = m_opt_map["add-price-quotes"].as<bool>();
-
-    if (m_opt_map.count ("namespace"))
-        gnc_prefs_set_namespace_regexp (m_opt_map["namespace"].
-            as<std::string>().c_str());
+    if (m_namespace)
+        gnc_prefs_set_namespace_regexp (m_namespace->c_str());
 }
 
 // Define command line options specific to gnucash.
@@ -317,7 +319,7 @@ Gnucash::Gnucash::configure_program_options (void)
     // for gtk's options. The options themselves are already parsed out by
     // gtk_init_check by the time this function is called though. So it really only
     // serves to be able to display a help message.
-    auto context = g_option_context_new (tagline.c_str());
+    auto context = g_option_context_new (m_tagline.c_str());
     auto gtk_options = gtk_get_option_group(FALSE);
     g_option_context_add_group (context, gtk_options);
     m_gtk_help_msg = g_option_context_get_help (context, FALSE, gtk_options);
@@ -325,18 +327,18 @@ Gnucash::Gnucash::configure_program_options (void)
 
     bpo::options_description app_options(_("Application Options"));
     app_options.add_options()
-    ("nofile", bpo::bool_switch(),
+    ("nofile", bpo::bool_switch (&m_nofile),
      N_("Do not load the last file opened"))
-    ("help-gtk",  bpo::bool_switch(),
+    ("help-gtk",  bpo::bool_switch (&m_show_help_gtk),
      _("Show help for gtk options"));
 
     bpo::options_description depr_options(_("Deprecated Options"));
     depr_options.add_options()
-    ("add-price-quotes", bpo::bool_switch(),
+    ("add-price-quotes", bpo::bool_switch (&m_add_quotes),
      _("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
         "Please use \"gnucash-cli --add-price-quotes\" instead."))
-    ("namespace", bpo::value<std::string>(),
+    ("namespace", bpo::value (&m_namespace),
      _("Regular expression determining which namespace commodities will be retrieved.\n"
        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
         "Please use \"gnucash-cli --add-price-quotes\" instead."));
@@ -355,7 +357,7 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
     {
         std::cerr << bl::translate ("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
                                     "Please use 'gnucash-cli --add-price-quotes' instead.") << "\n";
-        if (m_file_to_load.empty())
+        if (!m_file_to_load || m_file_to_load->empty())
         {
             std::cerr << bl::translate("Missing data file parameter") << "\n\n"
             << *m_opt_desc.get();
@@ -372,8 +374,8 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
     gnc_gui_init();
 
     auto user_file_spec = t_file_spec {
-        m_opt_map["nofile"].as<bool>(),
-        m_file_to_load.c_str()};
+        m_nofile,
+        m_file_to_load ? m_file_to_load->c_str() : ""};
     scm_boot_guile (argc, argv, scm_run_gnucash, &user_file_spec);
 
     return 0;

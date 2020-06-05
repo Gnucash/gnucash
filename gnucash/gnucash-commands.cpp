@@ -198,23 +198,25 @@ scm_run_report (void *data,
 }
 
 int
-Gnucash::add_quotes (const std::string& uri)
+Gnucash::add_quotes (const bo_str& uri)
 {
-    if (!uri.empty())
-        scm_boot_guile (0, nullptr, scm_add_quotes, (void *)&uri);
+    if (uri && !uri->empty())
+        scm_boot_guile (0, nullptr, scm_add_quotes, (void *)&(*uri));
 
     return 0;
 }
 
 int
-Gnucash::run_report (const std::string& file_to_load,
-                     const std::string& run_report,
-                     const std::string& export_type,
-                     const std::string& output_file)
+Gnucash::run_report (const bo_str& file_to_load,
+                     const bo_str& run_report,
+                     const bo_str& export_type,
+                     const bo_str& output_file)
 {
-    auto args = run_report_args { file_to_load, run_report,
-                                  export_type, output_file };
-    if (!run_report.empty())
+    auto args = run_report_args { file_to_load ? *file_to_load : std::string(),
+                                  run_report ? *run_report : std::string(),
+                                  export_type ? *export_type : std::string(),
+                                  output_file ? *output_file : std::string() };
+    if (run_report && !run_report->empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
 
     return 0;

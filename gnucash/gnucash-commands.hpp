@@ -26,14 +26,17 @@
 #define GNUCASH_COMMANDS_HPP
 
 #include <string>
+#include <boost/optional.hpp>
+
+using bo_str = boost::optional <std::string>;
 
 namespace Gnucash {
 
-    int add_quotes (const std::string& uri);
-    int run_report (const std::string& file_to_load,
-                    const std::string& run_report,
-                    const std::string& export_type,
-                    const std::string& output_file);
+    int add_quotes (const bo_str& uri);
+    int run_report (const bo_str& file_to_load,
+                    const bo_str& run_report,
+                    const bo_str& export_type,
+                    const bo_str& output_file);
 
 }
 #endif

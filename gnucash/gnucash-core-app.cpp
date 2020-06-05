@@ -350,14 +350,15 @@ load_user_config(void)
 
 
 static void
-gnc_log_init (std::vector <std::string> &log_flags, std::string &log_to_filename)
+gnc_log_init (const boost::optional <std::vector <std::string>> &log_flags,
+              const boost::optional <std::string> &log_to_filename)
 {
-    if (!log_to_filename.empty())
+    if (log_to_filename && !log_to_filename->empty())
     {
 #ifdef __MINGW64__
-        auto *utf8_filename = g_utf16_to_utf8 (log_to_filename, -1, NULL, NULL, NULL);
+        auto *utf8_filename = g_utf16_to_utf8 (log_to_filename->c_str(), -1, NULL, NULL, NULL);
 #else
-        auto utf8_filename = log_to_filename.c_str();
+        auto utf8_filename = log_to_filename->c_str();
 #endif
 
         qof_log_init_filename_special (utf8_filename);
@@ -392,9 +393,9 @@ gnc_log_init (std::vector <std::string> &log_flags, std::string &log_to_filename
         qof_log_parse_log_config (log_config_filename);
     g_free (log_config_filename);
 
-    if (!log_flags.empty())
+    if (log_flags && !log_flags->empty())
     {
-        for (auto log_flag : log_flags)
+        for (auto log_flag : *log_flags)
         {
             if (log_flag.empty () ||
                 log_flag[0] == '=' ||
@@ -516,9 +517,9 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
     m_app_name = std::string(app_name);
 
     // Now that gettext is properly initialized, set our help tagline.
-    tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
+    m_tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
     m_opt_desc = std::make_unique<bpo::options_description>
-        ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + tagline);
+        ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + m_tagline);
     add_common_program_options();
 }
 
@@ -544,7 +545,7 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         exit(1);
     }
 
-    if (m_opt_map["version"].as<bool>())
+    if (m_show_version)
     {
         bl::format rel_fmt (bl::translate ("GnuCash {1}"));
         bl::format dev_fmt (bl::translate ("GnuCash {1} development version"));
@@ -558,32 +559,17 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
         exit(0);
     }
 
-    if (m_opt_map["help"].as<bool>())
+    if (m_show_help)
     {
         std::cout << *m_opt_desc.get() << "\n";
         exit(0);
     }
 
-    gnc_prefs_set_debugging (m_opt_map["debug"].as<bool>());
-    gnc_prefs_set_extra (m_opt_map["extra"].as<bool>());
+    gnc_prefs_set_debugging (m_debug);
+    gnc_prefs_set_extra (m_extra);
 
-    if (m_opt_map.count ("gsettings-prefix"))
-        gnc_gsettings_set_prefix (m_opt_map["gsettings-prefix"].
-            as<std::string>().c_str());
-
-    if (m_opt_map.count ("log"))
-        m_log_flags = m_opt_map["log"].
-            as<std::vector <std::string>>();
-
-    if (m_opt_map.count ("logto"))
-        m_log_to_filename = m_opt_map["logto"].
-            as<std::string>().c_str();
-
-    if (m_opt_map.count ("input-file"))
-        m_file_to_load = m_opt_map["input-file"].as<std::string>();
-
-    if (args_remaining)
-        file_to_load = args_remaining[0];
+    if (m_gsettings_prefix)
+        gnc_gsettings_set_prefix (m_gsettings_prefix->c_str());
 }
 
 /* Define command line options common to all gnucash binaries. */
@@ -592,21 +578,21 @@ Gnucash::CoreApp::add_common_program_options (void)
 {
     bpo::options_description common_options(_("Common Options"));
     common_options.add_options()
-        ("help,h", bpo::bool_switch(),
+        ("help,h", bpo::bool_switch (&m_show_help),
          _("Show this help message"))
-        ("version,v", bpo::bool_switch(),
+        ("version,v", bpo::bool_switch (&m_show_version),
          _("Show GnuCash version"))
-        ("debug", bpo::bool_switch(),
+        ("debug", bpo::bool_switch (&m_debug),
          _("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""))
-        ("extra", bpo::bool_switch(),
+        ("extra", bpo::bool_switch(&m_extra),
          _("Enable extra/development/debugging features."))
-        ("log", bpo::value< std::vector<std::string> >(),
+        ("log", bpo::value (&m_log_flags),
          _("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."))
-        ("logto", bpo::value<std::string>(),
+        ("logto", bpo::value (&m_log_to_filename),
          _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
-        ("gsettings-prefix", bpo::value<std::string>(),
+        ("gsettings-prefix", bpo::value (&m_gsettings_prefix),
          _("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."))
-        ("input-file", bpo::value<std::string>(),
+        ("input-file", bpo::value (&m_file_to_load),
          _("[datafile]"));
 
         m_pos_opt_desc.add("input-file", -1);

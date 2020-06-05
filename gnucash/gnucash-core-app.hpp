@@ -27,6 +27,7 @@
 #ifdef __MINGW32__
 #undef _GLIBCXX_USE_C99_MATH_TR1 // Avoid cmath missing function decl.
 #endif
+#include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 #include <string>
 #include <vector>
@@ -45,11 +46,10 @@ public:
     void start (void);
 
 protected:
-    int gtk_show_help = 0;
     std::string m_app_name;
-    std::string tagline;
-    std::string m_file_to_load;
-    std::string m_log_to_filename;
+    std::string m_tagline;
+    boost::optional <std::string> m_log_to_filename;
+    boost::optional <std::string> m_file_to_load;
 
     std::unique_ptr<bpo::options_description> m_opt_desc;
     bpo::variables_map m_opt_map;
@@ -59,17 +59,13 @@ private:
     void add_common_program_options (void);
 
     /* Command-line option variables */
-    std::vector <std::string> m_log_flags;
+    bool m_show_help = false;
+    bool m_show_version = false;
+    bool m_debug = false;
+    bool m_extra = false;
+    boost::optional <std::string> m_gsettings_prefix;
+    boost::optional <std::vector <std::string>> m_log_flags;
 
-    int gnucash_show_version = 0;
-    int debugging = 0;
-    int extra = 0;
-    int nofile = 0;
-    const char *gsettings_prefix = nullptr;
-    const char *add_quotes_file = nullptr;
-    char *namespace_regexp = nullptr;
-    const char *file_to_load = nullptr;
-    char **args_remaining = nullptr;
     char *sys_locale = nullptr;
 };
 
