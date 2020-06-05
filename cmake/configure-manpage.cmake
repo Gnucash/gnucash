@@ -7,10 +7,10 @@
 # by the calling code:
 # - SRC_DIR (top level source code directory)
 # - SRC (full path to gnc-vcs-info.h.in)
-# - DST (full path to destination for gnc-vcs-info.h)
+# - DST (name of the manpage to generate)
 # - VCS_INFO_FILE (full path to gnc-vcs-info.h - can be in source tree (release builds) or build tree (git builds))
 
 include (${SRC_DIR}/cmake/version-info2env.cmake)
 versioninfo2env (${VCS_INFO_FILE})
 configure_file(${SRC} ${DST} )
-configure_file(gnucash.1 ${DATADIR_BUILD}/gnucash/gnucash.1 COPYONLY)
+configure_file(${DST} ${DATADIR_BUILD}/gnucash/${DST} COPYONLY)

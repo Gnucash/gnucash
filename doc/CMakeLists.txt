@@ -53,6 +53,6 @@ foreach (manpage gnucash gnucash-cli)
     )
     add_custom_target(${manpage}-manpage DEPENDS ${manpage}.1)
     dist_add_generated (${BUILDING_FROM_VCS} ${manpage}.1)
-endforeach()
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)
+endforeach()
