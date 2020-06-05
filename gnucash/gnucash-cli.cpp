@@ -56,7 +56,7 @@ namespace Gnucash {
     private:
         void configure_program_options (void);
 
-        bool m_add_quotes;
+        boost::optional <std::string> m_quotes_cmd;
         boost::optional <std::string> m_namespace;
 
         boost::optional <std::string> m_run_report;
@@ -89,10 +89,11 @@ Gnucash::GnucashCli::configure_program_options (void)
 {
     bpo::options_description quotes_options(_("Price Quotes Retrieval Options"));
     quotes_options.add_options()
-    ("add-price-quotes", bpo::bool_switch (&m_add_quotes),
-     _("Add price quotes to given GnuCash datafile."))
+    ("quotes,Q", bpo::value (&m_quotes_cmd),
+     _("Run price quote related commands. Currently only one command is supported.\n\n"
+       "  get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"))
     ("namespace", bpo::value (&m_namespace),
-     _("Regular expression determining which namespace commodities will be retrieved"));
+     _("Regular expression determining which namespace commodities will be retrieved for"));
     m_opt_desc->add (quotes_options);
 
     bpo::options_description report_options(_("Report Generation Options"));
@@ -112,8 +113,15 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
 {
     Gnucash::CoreApp::start();
 
-    if (m_add_quotes)
+    if (m_quotes_cmd)
     {
+        if (*m_quotes_cmd != "get")
+        {
+            std::cerr << bl::format (bl::translate("Unknown quotes command '{1}'")) % *m_quotes_cmd << "\n\n"
+            << *m_opt_desc.get();
+            return 1;
+        }
+
         if (!m_file_to_load || m_file_to_load->empty())
         {
             std::cerr << bl::translate("Missing data file parameter") << "\n\n"

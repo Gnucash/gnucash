@@ -337,11 +337,11 @@ Gnucash::Gnucash::configure_program_options (void)
     ("add-price-quotes", bpo::bool_switch (&m_add_quotes),
      _("Add price quotes to given GnuCash datafile.\n"
         "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
-        "Please use \"gnucash-cli --add-price-quotes\" instead."))
+        "Please use 'gnucash-cli --quotes get <datafile>' instead."))
     ("namespace", bpo::value (&m_namespace),
      _("Regular expression determining which namespace commodities will be retrieved.\n"
        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
-        "Please use \"gnucash-cli --add-price-quotes\" instead."));
+       "Please use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' instead."));
 
     m_opt_desc->add (app_options).add (depr_options);
 }
@@ -356,7 +356,7 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
     if (m_add_quotes)
     {
         std::cerr << bl::translate ("The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. "
-                                    "Please use 'gnucash-cli --add-price-quotes' instead.") << "\n";
+                                    "Please use 'gnucash-cli --quotes get <datafile>' instead.") << "\n";
         if (!m_file_to_load || m_file_to_load->empty())
         {
             std::cerr << bl::translate("Missing data file parameter") << "\n\n"
