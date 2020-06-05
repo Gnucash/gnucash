@@ -175,7 +175,7 @@ scm_run_report (void *data,
     if (!session)
         scm_cleanup_and_exit_with_failure (session);
 
-    qof_session_begin (session, datafile, SESSION_NORMAL_OPEN);
+    qof_session_begin (session, datafile, SESSION_READ_ONLY);
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
 
