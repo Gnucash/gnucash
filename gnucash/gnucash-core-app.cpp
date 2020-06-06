@@ -464,9 +464,6 @@ redirect_stdout (void)
 
 Gnucash::CoreApp::CoreApp ()
 {
-    #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
-    #    error "No GLib thread implementation available!"
-    #endif
     #ifdef ENABLE_BINRELOC
     {
         GError *binreloc_error = NULL;
