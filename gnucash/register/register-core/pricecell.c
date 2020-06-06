@@ -119,7 +119,6 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
     }
 
     gnc_basic_cell_set_value_internal (_cell, newval);
-    *cursor_position += g_utf8_strlen (newval, -1);
     *end_selection = *start_selection = *cursor_position;
     cell->need_to_parse = TRUE;
 }
