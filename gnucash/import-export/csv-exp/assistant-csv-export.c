@@ -106,6 +106,8 @@ static const gchar *start_trans_string = N_(
             " require further manipulation to get them in a format you can use.\n\n"
             "Each Transaction will appear once in the export and will be listed in"
             " the order the accounts were processed\n\n"
+            "Price/Rate output format is controlled by the Preference setting,\n"
+            " General->Force Prices to display as decimals\n\n"
             "Select the settings you require for the file and then click \"Next\" to proceed"
             " or \"Cancel\" to abort the export.\n");
 
@@ -116,6 +118,8 @@ static const gchar *start_trans_simple_string = N_(
             " manipulation to get them in a format you can use. Each Transaction will"
             " appear once in the export and will be listed in the order the accounts"
             " were processed\n\n"
+            "Price/Rate output format is controlled by the Preference setting,\n"
+            " General->Force Prices to display as decimals\n\n"
             "By selecting the simple layout, the output will be equivalent to a single"
             " row register view and as such some of the transfer detail could be lost.\n\n"
             "Select the settings you require for the file and then click \"Next\" to proceed"

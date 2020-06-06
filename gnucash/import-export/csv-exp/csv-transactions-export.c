@@ -356,13 +356,14 @@ static gchar*
 add_rate (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
 {
     const gchar *amt;
+    gnc_commodity *curr = xaccAccountGetCommodity (xaccSplitGetAccount (split));
     gchar       *conv;
     gchar       *result;
 
     if (t_void)
-        amt = xaccPrintAmount (gnc_numeric_zero(), gnc_split_amount_print_info (split, FALSE));
+        amt = xaccPrintAmount (gnc_numeric_zero(), gnc_default_price_print_info (curr));
     else
-        amt = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_split_amount_print_info (split, FALSE));
+        amt = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_default_price_print_info (curr));
 
     conv = csv_txn_test_field_string (info, amt);
     result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
@@ -376,6 +377,7 @@ static gchar*
 add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
 {
     const gchar *string_amount;
+    gnc_commodity *curr = xaccAccountGetCommodity (xaccSplitGetAccount (split));
     gchar       *conv;
     gchar       *result;
 
@@ -383,10 +385,10 @@ add_price (gchar *so_far, Split *split, gboolean t_void, CsvExportInfo *info)
     {
         gnc_numeric cf = gnc_numeric_div (xaccSplitVoidFormerValue (split), xaccSplitVoidFormerAmount (split), GNC_DENOM_AUTO,
                                                    GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP);
-        string_amount = xaccPrintAmount (cf, gnc_split_amount_print_info (split, FALSE));
+        string_amount = xaccPrintAmount (cf, gnc_default_price_print_info (curr));
     }
     else
-        string_amount = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_split_amount_print_info (split, FALSE));
+        string_amount = xaccPrintAmount (xaccSplitGetSharePrice (split), gnc_default_price_print_info (curr));
 
     conv = csv_txn_test_field_string (info, string_amount);
     result = g_strconcat (so_far, conv, info->end_sep, EOLSTR, NULL);
