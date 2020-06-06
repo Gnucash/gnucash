@@ -930,6 +930,9 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     g_object_set_data_full(G_OBJECT(acc_color_column), REAL_TITLE,
                            g_strdup(_("Account Color")), g_free);
 
+    /* Also add the full title to the column header as a tooltip */
+    gtk_widget_set_tooltip_text (gtk_tree_view_column_get_button (acc_color_column), _("Account Color"));
+
     priv->notes_column
         = gnc_tree_view_add_text_view_column(view, _("Notes"), "notes", NULL,
                                         "Sample account notes.",
