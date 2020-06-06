@@ -38,5 +38,6 @@ namespace Gnucash {
                     const bo_str& export_type,
                     const bo_str& output_file);
     int report_list (void);
+    int report_show (const bo_str& run_report);
 }
 #endif

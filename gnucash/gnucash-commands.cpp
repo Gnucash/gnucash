@@ -197,6 +197,30 @@ scm_run_report (void *data,
     return;
 }
 
+
+struct show_report_args {
+    const std::string& show_report;
+};
+
+static void
+scm_report_show (void *data,
+                [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
+    auto args = static_cast<show_report_args*>(data);
+
+    scm_c_eval_string("(debug-set! stack 200000)");
+    scm_c_use_module ("gnucash utilities");
+    scm_c_use_module ("gnucash app-utils");
+    scm_c_use_module ("gnucash reports");
+    gnc_report_init ();
+
+    scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-show"),
+                scm_from_utf8_string (args->show_report.c_str()));
+    gnc_shutdown (0);
+    return;
+}
+
+
 static void
 scm_report_list ([[maybe_unused]] void *data,
                  [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
@@ -232,6 +256,16 @@ Gnucash::run_report (const bo_str& file_to_load,
                                   output_file ? *output_file : std::string() };
     if (run_report && !run_report->empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
+
+    return 0;
+}
+
+int
+Gnucash::report_show (const bo_str& show_report)
+{
+    auto args = show_report_args { show_report ? *show_report : std::string() };
+    if (show_report && !show_report->empty())
+        scm_boot_guile (0, nullptr, scm_report_show, &args);
 
     return 0;
 }

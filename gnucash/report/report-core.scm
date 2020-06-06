@@ -799,6 +799,12 @@ not found.")))
        (assoc-ref parent-export-types export-type) output-file)
       (display "done!\n" (current-error-port))))))
 
+(define (reportname->templates report)
+  (or (and=> (gnc:find-report-template report) list)
+      (hash-fold
+       (lambda (k v p) (if (equal? (gnc:report-template-name v) report) (cons v p) p))
+       '() *gnc:_report-templates_*)))
+
 (define-public (gnc:cmdline-report-list)
   (for-each
    (lambda (template)
@@ -811,13 +817,23 @@ not found.")))
          (lambda (a b)
            (string<? (gnc:report-template-name a) (gnc:report-template-name b))))))
 
+(define-public (gnc:cmdline-report-show report)
+  (let ((templates (reportname->templates report)))
+    (cond
+     ((null? templates)
+      (stderr-log "Cannot find ~s. Valid reports:\n" report)
+      (gnc:cmdline-report-list))
+     (else
+      (for-each
+       (lambda (template)
+         (let* ((options-gen (gnc:report-template-options-generator template)))
+           (stderr-log "\n* guid: ~a\n~a"
+                       (gnc:report-template-report-guid template)
+                       (gnc:html-render-options-changed (options-gen) #t))))
+       templates)))))
+
 (define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
-  (let ((templates (or (and=> (gnc:find-report-template report) list)
-                       (hash-fold
-                        (lambda (report-guid template prev)
-                          (if (equal? (gnc:report-template-name template) report)
-                              (cons template prev) prev))
-                        '() *gnc:_report-templates_*))))
+  (let ((templates (reportname->templates report)))
 
     (define (run-report output-port)
       (display
@@ -834,14 +850,7 @@ not found.")))
 
      ((pair? (cdr templates))
       (stderr-log "~s matches multiple reports. Select guid instead:\n" report)
-      (for-each
-       (lambda (template)
-         (let* ((options-gen (gnc:report-template-options-generator template))
-                (options (options-gen)))
-           (stderr-log "\n* guid: ~a\n~a"
-                       (gnc:report-template-report-guid template)
-                       (gnc:html-render-options-changed options #t))))
-       templates)
+      (gnc:cmdline-report-show report)
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
