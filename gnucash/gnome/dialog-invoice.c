@@ -612,9 +612,9 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
         iw->invoice_guid = *guid_null ();
     }
 
+    gtk_widget_destroy(widget);
     gnc_entry_ledger_destroy (iw->ledger);
     gnc_unregister_gui_component (iw->component_id);
-    gtk_widget_destroy(widget);
     gnc_resume_gui_refresh ();
 
     g_free (iw);
