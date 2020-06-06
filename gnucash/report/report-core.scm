@@ -799,6 +799,18 @@ not found.")))
        (assoc-ref parent-export-types export-type) output-file)
       (display "done!\n" (current-error-port))))))
 
+(define-public (gnc:cmdline-report-list)
+  (for-each
+   (lambda (template)
+     (stderr-log "* ~a ~a\n"
+                 (if (gnc:report-template-parent-type template) "C" " ")
+                 (gnc:report-template-name template)))
+   (sort (hash-fold
+          (lambda (k v p) (if (gnc:report-template-in-menu? v) (cons v p) p))
+          '() *gnc:_report-templates_*)
+         (lambda (a b)
+           (string<? (gnc:report-template-name a) (gnc:report-template-name b))))))
+
 (define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
   (let ((templates (or (and=> (gnc:find-report-template report) list)
                        (hash-fold
@@ -817,17 +829,7 @@ not found.")))
     (cond
      ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
-      (for-each
-       (lambda (pair)
-         (when (gnc:report-template-in-menu? (cdr pair))
-           (stderr-log "* ~a ~a\n"
-                       (if (gnc:report-template-parent-type (cdr pair)) "C" " ")
-                       (gnc:report-template-name (cdr pair)))))
-       (sort (hash-map->list cons *gnc:_report-templates_*)
-             (lambda (a b)
-               (string<?
-                (gnc:report-template-name (cdr a))
-                (gnc:report-template-name (cdr b))))))
+      (gnc:cmdline-report-list)
       (stderr-log "\n"))
 
      ((pair? (cdr templates))

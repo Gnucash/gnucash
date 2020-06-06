@@ -197,6 +197,20 @@ scm_run_report (void *data,
     return;
 }
 
+static void
+scm_report_list ([[maybe_unused]] void *data,
+                 [[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
+    scm_c_eval_string("(debug-set! stack 200000)");
+    scm_c_use_module ("gnucash app-utils");
+    scm_c_use_module ("gnucash reports");
+    gnc_report_init ();
+
+    scm_call_0 (scm_c_eval_string ("gnc:cmdline-report-list"));
+    gnc_shutdown (0);
+    return;
+}
+
 int
 Gnucash::add_quotes (const bo_str& uri)
 {
@@ -219,5 +233,12 @@ Gnucash::run_report (const bo_str& file_to_load,
     if (run_report && !run_report->empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
 
+    return 0;
+}
+
+int
+Gnucash::report_list (void)
+{
+    scm_boot_guile (0, nullptr, scm_report_list, NULL);
     return 0;
 }

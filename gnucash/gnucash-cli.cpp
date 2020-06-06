@@ -100,7 +100,8 @@ Gnucash::GnucashCli::configure_program_options (void)
     bpo::options_description report_options(_("Report Generation Options"));
     report_options.add_options()
     ("report,R", bpo::value (&m_report_cmd),
-     _("Execute report related commands. Currently only one command is supported.\n\n"
+     _("Execute report related commands. The following commands are supported.\n\n"
+     "  list: \tLists available reports.\n"
      "  run: \tRun the named report in the given GnuCash datafile.\n"))
     ("name", bpo::value (&m_report_name),
      _("Name of the report to run\n"))
@@ -150,6 +151,8 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
                 return Gnucash::run_report(m_file_to_load, m_report_name,
                                            m_export_type, m_output_file);
         }
+        else if (*m_report_cmd == "list")
+                return Gnucash::report_list ();
         else
         {
             std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
