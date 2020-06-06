@@ -3559,12 +3559,11 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
     /* Create the param list (in reverse order) */
     if (param_list == NULL)
     {
-        /* Translators: This abbreviation is the column heading for
-           the condition "Is this invoice a Credit Note?" */
-        param_list = gnc_search_param_prepend (param_list, _("CN?"), NULL, type,
-                                               INVOICE_IS_CN, NULL);
-        param_list = gnc_search_param_prepend (param_list, _("Amount"), NULL, type,
-                                               INVOICE_POST_LOT, LOT_BALANCE, NULL);
+        param_list = gnc_search_param_prepend_with_justify (param_list, _("Amount"),
+                                                            GTK_JUSTIFY_RIGHT, NULL, type,
+                                                            INVOICE_POST_LOT, LOT_BALANCE, NULL);
+        param_list = gnc_search_param_prepend (param_list, _("Type"), NULL, type,
+                                               INVOICE_TYPE_STRING, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Company"), NULL, type,
                                                INVOICE_OWNER, OWNER_PARENT, OWNER_NAME, NULL);
         param_list = gnc_search_param_prepend (param_list, _("Due"), NULL, type,

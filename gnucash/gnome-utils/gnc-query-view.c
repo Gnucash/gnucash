@@ -192,7 +192,7 @@ gnc_query_view_init (GNCQueryView *qview)
     GNCQueryViewPrivate *priv;
 
     // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(qview), "gnc-id-query-view");
+    gtk_widget_set_name (GTK_WIDGET(qview), "gnc-id-query-view-view");
 
     qview->query = NULL;
 
