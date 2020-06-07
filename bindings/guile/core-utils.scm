@@ -38,7 +38,7 @@
 
 (define-public gnc:version (gnc-version))
 ;; gettext functions
-(define-public _ gettext)
+(define-public _ gnc:gettext)
 (define-syntax N_
     (syntax-rules ()
         ((_ x) x)))

@@ -29,6 +29,8 @@
 #include <gnc-locale-utils.h>
 #include <glib.h>
 #include <gnc-version.h>
+#include <libintl.h>
+
 %}
 #if defined(SWIGGUILE)
 %{
@@ -154,6 +156,8 @@ gchar *gnc_locale_name (void);
 
 }
 
+%rename ("gnc:gettext") gettext;
+extern const char* gettext(const char*);
 %rename ("gnc-utf8?") wrap_gnc_utf8_validate;
 %inline %{
   /* This helper function wraps gnc_utf8_validate() into a predicate. */
@@ -162,6 +166,7 @@ gchar *gnc_locale_name (void);
   {
     return gnc_utf8_validate(str, -1, 0);
   }
+
 %}
 #elif defined(SWIGPYTHON)
 gboolean gnc_utf8_validate(const gchar *, gssize, const gchar**);
