@@ -54,8 +54,6 @@ class GncMockImportMatchMap : public GncImportMatchMap
 public:
     GncMockImportMatchMap(MockAccount* account)
     {
-        g_return_if_fail(GNC_IS_MOCK_ACCOUNT(account));
-
         acc  = account;
         book = account->getBook();
     };
