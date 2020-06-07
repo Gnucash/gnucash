@@ -36,7 +36,7 @@ qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
 }
 
 // This is a reimplementation of the function from qofinstance.cpp
-// with calling qof_instance_set_dirty()
+// without calling qof_instance_set_dirty()
 void
 qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
 {
