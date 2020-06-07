@@ -26,37 +26,46 @@ gnc_mock_account_class_init(MockAccountClass *klass)
 void
 xaccAccountBeginEdit (Account *account)
 {
-    g_return_if_fail(GNC_IS_MOCK_ACCOUNT(account));
+    ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
     ((MockAccount*)account)->beginEdit();
 }
 
 void
 xaccAccountCommitEdit (Account *account)
 {
-    g_return_if_fail(GNC_IS_MOCK_ACCOUNT(account));
+    ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
     ((MockAccount*)account)->commitEdit();
 }
 
 QofBook *
 gnc_account_get_book(const Account *account)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_ACCOUNT(account), NULL);
-    return ((MockAccount*)account)->getBook();
+    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
+    if (GNC_IS_MOCK_ACCOUNT(account))
+        return ((MockAccount*)account)->getBook();
+    else
+        return nullptr;
 }
 
 gint
 xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
                               void *data)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_ACCOUNT(acc), 0);
-    return ((MockAccount*)acc)->forEachTransaction(proc, data);
+    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
+    if (GNC_IS_MOCK_ACCOUNT(acc))
+        return ((MockAccount*)acc)->forEachTransaction(proc, data);
+    else
+        return 0;
 }
 
 GncImportMatchMap *
 gnc_account_imap_create_imap (Account *acc)
 {
-    g_return_val_if_fail(GNC_IS_MOCK_ACCOUNT(acc), NULL);
-    return ((MockAccount*)acc)->imapCreateImap();
+    EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
+    if (GNC_IS_MOCK_ACCOUNT(acc))
+        return ((MockAccount*)acc)->imapCreateImap();
+    else
+        return nullptr;
 }
 
 Account*

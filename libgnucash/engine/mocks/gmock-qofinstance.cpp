@@ -1,5 +1,7 @@
 #include <glib.h>
 
+#include <gmock/gmock.h>
+
 extern "C"
 {
 #include <qofinstance.h>
@@ -26,7 +28,7 @@ void
 qof_instance_get (const QofInstance *inst, const gchar *first_prop, ...)
 {
     va_list ap;
-    g_return_if_fail (QOF_IS_INSTANCE (inst));
+    ASSERT_TRUE (QOF_IS_INSTANCE (inst));
 
     va_start (ap, first_prop);
     g_object_get_valist (G_OBJECT (inst), first_prop, ap);
@@ -39,7 +41,7 @@ void
 qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
 {
     va_list ap;
-    g_return_if_fail (QOF_IS_INSTANCE (inst));
+    ASSERT_TRUE (QOF_IS_INSTANCE (inst));
 
     va_start (ap, first_prop);
     g_object_set_valist (G_OBJECT (inst), first_prop, ap);
