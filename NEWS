@@ -1,7 +1,43 @@
 Version history:
 ------- -------
+3.904 - 7 June 2020
+The third unstable release leading to the new 4.x stable series. See 3.902 and 3.903 below for additional requirements and features.
+
+3.903 was the feature-freeze release. However, the command-line arguments for both gnucash and gnucash-cli have been adjusted as follows:
+
+    --add-price-quotes is changed to --quotes get
+    --run-reports is changed to --report run --name <report name>
+    Added --report list to produce a list of available reports.
+    Added --report show --name to describe the options changed from the default values in the named report.
+
+The intent is to have command categories with subcommands to better enable a richer command line capability as illustrated with the new report commands list and show.
+Between 3.903 and 3.904, the following bugfixes were accomplished. Some of these will also be fixed in GnuCash 3.11, some are for 4.0 only.
+
+  Bug 797739 - Tweak Transaction Report Column Defaults
+  Bug 797774 - Add tooltips to abreviated header columns for all table like
+               GUI elements
+               The Bill/Invoice due reminder has a column header of 'CN?' which
+               was unclear of meaning which is 'Is this xxx a Credit Note'. A
+               tooltip was suggested but a better fix is to change the column
+               to display the 'Type' so you would see Bill, Invoice or
+               'Credit Note' just like you see in the find dialog.
+  Bug 797775 - Rate/Price displayed as fractional in CSV Export
+               Change the CSV transaction exporter to follow the Preference
+               setting of 'General->Force Prices to display as decimals'.
+  Bug 797781 - Num Field Regression - characters in wrong order when typed.
+
+The following fixes and improvements were not associated with bug reports or new features:
+
+  Add a tooltip for the 'C' column in the Chart of Accounts
+     To match existing one character headings for 'Place Holder' and 'Hidden'
+     columns.
+   Add first version of gnucash-cli manpage
+   Rework command line option parsing to store values directly in class member
+      variables
+   [cli-reports] modify to open session readonly
+
 3.903 - 1 June 2020
-The second undatble release leading to the new 4.x stable series. See 3.902
+The second unstable release leading to the new 4.x stable series. See 3.902
 below for additional requirements and features.
 
 New Dependency: Boost program_options.
