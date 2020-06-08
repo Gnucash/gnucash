@@ -338,6 +338,10 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
                       G_CALLBACK (gnc_embedded_window_add_widget), window);
 
+    /* Use the "connect-proxy" signal for tooltip display in the status bar */
+    g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
+                      G_CALLBACK (gnc_window_connect_proxy), priv->statusbar);
+
     priv->action_group = NULL;
     LEAVE(" ");
 }
