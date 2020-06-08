@@ -38,10 +38,12 @@
 ;; the column-data record. the gnc:account-accumulate-at-dates will
 ;; create a record for each report-date with split-data as follows:
 (define-record-type :col-datum
-  (make-datum last-split split-balance split-value-balance)
+  (make-datum last-split split-balance split-balance-with-closing
+              split-value-balance)
   col-datum?
   (last-split col-datum-get-last-split)
   (split-balance col-datum-get-split-balance)
+  (split-balance-with-closing col-datum-get-split-balance-with-closing)
   (split-value-balance col-datum-get-split-value-balance))
 
 
@@ -771,6 +773,7 @@ also show overall period profit & loss."))
                      (gnc:account-accumulate-at-dates
                       acc report-dates
                       #:nosplit->elt (make-datum #f (amt->monetary 0)
+                                                 (amt->monetary 0)
                                                  (gnc:make-commodity-collector))
                       #:split->elt
                       (lambda (s)
@@ -778,7 +781,9 @@ also show overall period profit & loss."))
                           (val-coll 'add
                                     (xaccTransGetCurrency (xaccSplitGetParent s))
                                     (xaccSplitGetValue s)))
-                        (make-datum s (amt->monetary (xaccSplitGetNoclosingBalance s))
+                        (make-datum s
+                                    (amt->monetary (xaccSplitGetNoclosingBalance s))
+                                    (amt->monetary (xaccSplitGetBalance s))
                                     (gnc:collector+ val-coll)))))))
            accounts))
 
@@ -789,6 +794,13 @@ also show overall period profit & loss."))
            (lambda (acc)
              (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
                          (map col-datum-get-split-balance cols-data))))
+           accounts))
+
+         (accounts-balances-with-closing
+          (map
+           (lambda (acc)
+             (cons acc (let ((cols-data (assoc-ref accounts-cols-data acc)))
+                         (map col-datum-get-split-balance-with-closing cols-data))))
            accounts))
 
          (exchange-fn (and common-currency
@@ -951,9 +963,9 @@ also show overall period profit & loss."))
 
              ;; a vector of collectors whereby collector is the sum of
              ;; incomes and expenses at report dates
-             (income-expense-balances
+             (income-expense-balances-with-closing
               (sum-balances-of-accounts
-               accounts-balances income-expense gnc:monetaries-add))
+               accounts-balances-with-closing income-expense gnc:monetaries-add))
 
              ;; an alist of (cons account list-of-collectors) whereby each
              ;; collector is the split-value-balances at report
@@ -1012,7 +1024,7 @@ also show overall period profit & loss."))
                                ((pricedb-latest) (current-time))
                                (else (list-ref report-dates col-idx))))
                        (income-expense-balance
-                        (vector-ref income-expense-balances col-idx)))
+                        (vector-ref income-expense-balances-with-closing col-idx)))
                   (if (and common-currency
                            (every has-price?
                                   (gnc:accounts-get-commodities income-expense #f)))
