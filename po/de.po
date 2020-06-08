@@ -11098,7 +11098,7 @@ msgstr "Erklärungsseiten anzeigen"
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
 msgid "Show some documentation-only pages in QIF Import assistant."
 msgstr ""
-"Seiten im QIF-Import anzeigen, die ausschließlich Dokumentation enthalten."
+"Seiten im QIF-Import-Assistenten anzeigen, die ausschließlich Dokumentation enthalten."
 
 #: gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -12723,7 +12723,7 @@ msgstr "Zusammenfassung"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
 msgid "CSV Import Assistant"
-msgstr "CSV Import-Assistent"
+msgstr "CSV-Import-Assistent"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:33
@@ -12758,7 +12758,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:54
 msgid "Import Account Assistant"
-msgstr "_Konten importieren"
+msgstr "Konten-Import-Assistent"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:69
 msgid ""
@@ -12774,7 +12774,7 @@ msgstr "Wählen Sie die zu importierende Datei"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:101
 msgid "Number of rows for the Header"
-msgstr "Spaltenanzahl der Kopfzeile"
+msgstr "Anzahl der Kopfzeilen"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:146
 msgid "Comma Separated"
@@ -12815,13 +12815,13 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:286
 msgid "Import Accounts Now"
-msgstr "_Konten jetzt importieren"
+msgstr "Konten jetzt importieren"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:334
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1062
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1151
 msgid "Import Summary"
-msgstr "importiere Kontenübersicht"
+msgstr "Importübersicht"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
