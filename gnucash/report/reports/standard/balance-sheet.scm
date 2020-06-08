@@ -424,7 +424,9 @@
                  (account-list-balance income-expense-accounts reportdate)))
 
                (trading-balance
-                (gnc:collector- (account-list-balance trading-accounts reportdate)))
+                (if use-trading-accts?
+                    (gnc:collector- (account-list-balance trading-accounts reportdate))
+                    (gnc:collector+)))
 
                (unrealized-gain-collector
                 (if use-trading-accts?
