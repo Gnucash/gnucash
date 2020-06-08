@@ -891,6 +891,7 @@ also show overall period profit & loss."))
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
          (trading-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
+         (use-trading-accts? (qof-book-use-trading-accounts (gnc-get-current-book)))
 
          (asset-liability (append-reverse asset-accounts liability-accounts))
          (income-expense (append-reverse income-accounts expense-accounts))
@@ -1118,6 +1119,24 @@ also show overall period profit & loss."))
                      (list (vector (_ "Retained Earnings")
                                    retained-earnings-fn))))
          #:negate-amounts? #t)
+
+
+        (add-to-table multicol-table-right (_ "Liability and Equity")
+                      (append liability-accounts
+                              equity-accounts
+                              (cond
+                               (use-trading-accts? trading-accounts)
+                               (common-currency (list (vector (_ "Unrealized Gains")
+                                                              unrealized-gain-fn)))
+                               (else '()))
+                              (if (null? income-expense)
+                                  '()
+                                  (list (vector (_ "Retained Earnings")
+                                                retained-earnings-fn))))
+                      #:negate-amounts? #t
+                      #:show-title? #f
+                      #:show-accounts? #f
+                      #:show-total? #t)
 
         (if (and common-currency show-rates?)
             (add-to-table multicol-table-right (_ "Exchange Rates")
