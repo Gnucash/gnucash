@@ -2,17 +2,14 @@
 add_subdirectory(standard/test)
 add_subdirectory(support)
 
+#These provide some functions used by more than one report.
 set (reports_common_SCHEME
   aging.scm
   cash-flow-calc.scm
 )
 
 # The 'with exposed generator' reports are standard reports that can
-# be created with a special generator function
-# This function is exposed via reports.scm.
-# As such these reports should be built before reports.scm
-# However all other reports need to be built after reports.scm
-# as they in turn may consume these generators.
+# be created with a special generator function, exported by reports.scm
 set (reports_standard_with_exposed_generator_SCHEME
     standard/new-aging.scm
     standard/register.scm
@@ -58,6 +55,8 @@ set (reports_standard_SCHEME
     standard/balsheet-eg.scm
 )
 
+# Reports depending on one of the generator functions from
+# scm-reports-standard-with-exposed-generator:
 set (reports_standard_SCHEME_2
     standard/customer-summary.scm # Depends on gnc:owner-report-create
 )
