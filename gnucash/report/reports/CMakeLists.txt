@@ -13,8 +13,10 @@ set (reports_common_SCHEME
 # However all other reports need to be built after reports.scm
 # as they in turn may consume these generators.
 set (reports_standard_with_exposed_generator_SCHEME
+    standard/new-aging.scm
     standard/register.scm
     standard/owner-report.scm
+    standard/new-owner-report.scm
     standard/payables.scm
     standard/receivables.scm
 )
@@ -41,7 +43,6 @@ set (reports_standard_SCHEME
     standard/income-statement.scm
     standard/lot-viewer.scm
     standard/net-charts.scm
-    standard/new-owner-report.scm
     standard/portfolio.scm
     standard/price-scatter.scm
     standard/reconcile-report.scm
@@ -58,7 +59,6 @@ set (reports_standard_SCHEME
 set (reports_standard_SCHEME_2
     standard/cashflow-barchart.scm #depends on cash-flow report
     standard/customer-summary.scm # Depends on owner-report
-    standard/new-aging.scm        # ditto
 )
 
 set(reports_example_SCHEME
