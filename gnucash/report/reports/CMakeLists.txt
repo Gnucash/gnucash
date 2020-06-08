@@ -4,6 +4,7 @@ add_subdirectory(support)
 
 set (reports_common_SCHEME
   aging.scm
+  cash-flow-calc.scm
 )
 
 # The 'with exposed generator' reports are standard reports that can
@@ -34,6 +35,7 @@ set (reports_standard_SCHEME
     standard/budget-income-statement.scm
     standard/budget.scm
     standard/cash-flow.scm
+    standard/cashflow-barchart.scm
     standard/category-barchart.scm
     standard/dashboard.scm
     standard/equity-statement.scm
@@ -57,8 +59,7 @@ set (reports_standard_SCHEME
 )
 
 set (reports_standard_SCHEME_2
-    standard/cashflow-barchart.scm #depends on cash-flow report
-    standard/customer-summary.scm # Depends on owner-report
+    standard/customer-summary.scm # Depends on gnc:owner-report-create
 )
 
 set(reports_example_SCHEME

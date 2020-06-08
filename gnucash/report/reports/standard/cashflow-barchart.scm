@@ -33,7 +33,7 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash reports standard cash-flow))
+(use-modules (gnucash reports cash-flow-calc))
 (use-modules (gnucash report))
 
 (define reportname (N_ "Cash Flow Barchart"))

@@ -455,6 +455,7 @@ gnucash/report/options-utilities.scm
 gnucash/report/report-core.scm
 gnucash/report/report-register-hooks.scm
 gnucash/report/reports/aging.scm
+gnucash/report/reports/cash-flow-calc.scm
 gnucash/report/reports/example/average-balance.scm
 gnucash/report/reports/example/daily-reports.scm
 gnucash/report/reports/example/hello-world.scm
