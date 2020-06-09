@@ -299,11 +299,15 @@ gnc_assoc_get_uri_dialog (GtkWindow *parent, const gchar *title, const gchar *ur
     }
 
     // make sure we start with the right dialog
-    if (have_uri && !uri_is_file) // location
-        setup_location_dialog (builder, button_loc, uri);
-
-    if (have_uri && uri_is_file) // file
-         setup_file_dialog (builder, fcb, path_head, uri, scheme);
+    if (have_uri)
+    {
+        if (uri_is_file) // file
+            setup_file_dialog (builder, fcb, path_head, uri, scheme);
+        else // location
+            setup_location_dialog (builder, button_loc, uri);
+    }
+    else
+        gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), path_head);
 
     g_free (scheme);
     g_object_unref (G_OBJECT(builder));
