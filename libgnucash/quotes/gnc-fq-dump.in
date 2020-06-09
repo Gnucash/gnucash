@@ -101,14 +101,13 @@ sub report {
     $$qh{$itemname, "nav"} = "**missing**";
     $$qh{$itemname, "price"} = "**missing**";
     $gccanuse = 0;
-  } else {
-    $last = defined($$qh{$itemname, "last"})
-      ? $$qh{$itemname, "last"} :  "";
-    $nav = defined($$qh{$itemname, "nav"})
-      ? $$qh{$itemname, "nav"} :  "";
-    $price = defined($$qh{$itemname, "price"})
-      ? $$qh{$itemname, "price"} :  "";
   }
+  $last = defined($$qh{$itemname, "last"})
+    ? $$qh{$itemname, "last"} :  "";
+  $nav = defined($$qh{$itemname, "nav"})
+    ? $$qh{$itemname, "nav"} :  "";
+  $price = defined($$qh{$itemname, "price"})
+    ? $$qh{$itemname, "price"} :  "";
   $timezone = defined($$qh{$itemname, "timezone"})
     ? $$qh{$itemname, "timezone"} :  "";
 
