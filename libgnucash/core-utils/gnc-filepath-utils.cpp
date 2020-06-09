@@ -589,10 +589,6 @@ static std::string migrate_gnc_datahome()
     bfs::path old_dir(g_get_home_dir(), cvt);
     old_dir /= ".gnucash";
 
-    bl::generator gen;
-    gen.add_messages_path(gnc_path_get_datadir());
-    gen.add_messages_domain(PROJECT_NAME);
-
     std::stringstream migration_msg;
     migration_msg.imbue(gnc_get_boost_locale());
 
