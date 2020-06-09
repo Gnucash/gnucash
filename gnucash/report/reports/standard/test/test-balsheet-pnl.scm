@@ -15,10 +15,10 @@
 
 ;; This is implementation testing for Balance Sheet and Profit&Loss.
 
-(define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13-old")
-(define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc-old")
-(define multicol-balsheet-uuid "c4173ac99b2b448289bf4d11c731af13")
-(define multicol-pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
+(define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13")
+(define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
+(define multicol-balsheet-uuid "065d5d5a77ba11e8b31e83ada73c5eea")
+(define multicol-pnl-uuid "0e94fd0277ba11e8825d43e27232c9d4")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")

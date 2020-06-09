@@ -291,9 +291,6 @@
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
 
-  (issue-deprecation-warning
-   "old income-statement is deprecated and will be removed in 5.x")
-
   (gnc:report-starting reportname)
   
   ;; get all option's values
@@ -572,8 +569,8 @@
 
     doc))
 
-(define is-reportname "Income Statement (legacy)")
-(define pnl-reportname "Profit & Loss (legacy)")
+(define is-reportname (N_ "Income Statement"))
+(define pnl-reportname (N_ "Profit & Loss"))
 
 (define (income-statement-options-generator)
   (income-statement-options-generator-internal is-reportname))
@@ -589,21 +586,19 @@
 (gnc:define-report 
  'version 1
  'name is-reportname
- 'report-guid "0b81a3bdfd504aff849ec2e8630524bc-old"
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
- 'renderer income-statement-renderer
- 'in-menu? (gnc-prefs-is-extra-enabled))
+ 'renderer income-statement-renderer)
 
 ;; Also make a "Profit & Loss" report, even if it's the exact same one,
 ;; just relabeled.
 (gnc:define-report 
  'version 1
  'name pnl-reportname
- 'report-guid "8758ba23984c40dea5527f5f0ca2779e-old"
+ 'report-guid "8758ba23984c40dea5527f5f0ca2779e"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator profit-and-loss-options-generator
- 'renderer profit-and-loss-renderer
- 'in-menu? (gnc-prefs-is-extra-enabled))
+ 'renderer profit-and-loss-renderer)
 
 ;; END
