@@ -60,10 +60,10 @@ copying this report to a spreadsheet for use in a mail merge."))
         (list (N_ "Address Email") "i" (N_ "Display Email."))
         (list (N_ "Active") "j" (N_ "Display Active status."))))
 
-(define no-APAR-account (_ "No valid A/Payable or A/Receivable \
+(define no-APAR-account (G_ "No valid A/Payable or A/Receivable \
 account found. Please ensure valid AP/AR account exists."))
 
-(define empty-APAR-accounts (_ "A/Payable or A/Receivable accounts \
+(define empty-APAR-accounts (G_ "A/Payable or A/Receivable accounts \
 exist but have no suitable transactions."))
 
 (define num-buckets 6)
@@ -160,7 +160,7 @@ exist but have no suitable transactions."))
                     (gncAddressGetPhone addr)
                     (gncAddressGetFax addr)
                     (gncAddressGetEmail addr)
-                    (if (gncOwnerGetActive owner) (_ "Y") (_ "N")))))
+                    (if (gncOwnerGetActive owner) (G_ "Y") (G_ "N")))))
            (else address-list-names))))
     (fold-right (lambda (opt elt prev) (if opt (cons elt prev) prev))
                 '() address-list-options result-list)))
@@ -189,14 +189,14 @@ exist but have no suitable transactions."))
     (gnc:option-value (gnc:lookup-option options section name)))
 
   (define make-heading-list
-    (list (_ "Company")
-          (_ "Pre-Payment")
-          (_ "Current")
-          (_ "0-30 days")
-          (_ "31-60 days")
-          (_ "61-90 days")
-          (_ "91+ days")
-          (_ "Total")))
+    (list (G_ "Company")
+          (G_ "Pre-Payment")
+          (G_ "Current")
+          (G_ "0-30 days")
+          (G_ "31-60 days")
+          (G_ "61-90 days")
+          (G_ "91+ days")
+          (G_ "Total")))
 
   (let* ((type (if receivable ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE))
          (accounts (filter (lambda (acc) (eqv? (xaccAccountGetType acc) type))
@@ -319,7 +319,7 @@ exist but have no suitable transactions."))
                       (append
                        (if accounts>1? '(#f) '())
                        (list (gnc:make-html-table-cell/markup
-                              "total-label-cell" (_ "Total")))
+                              "total-label-cell" (G_ "Total")))
                        (map
                         (lambda (amt)
                           (gnc:make-html-table-cell/markup
@@ -337,7 +337,7 @@ exist but have no suitable transactions."))
                   (gnc:html-document-add-object!
                    document
                    (gnc:make-html-text
-                    (_ "Please note some transactions were not processed")
+                    (G_ "Please note some transactions were not processed")
                     (gnc:html-markup-ol
                      (map
                       (lambda (invalid-split)
@@ -370,7 +370,7 @@ exist but have no suitable transactions."))
                    (let ((type (xaccTransGetTxnType (xaccSplitGetParent this))))
                      (lp rest
                          acc-totals
-                         (cons (list (format #f (_ "Invalid Txn Type ~a") type) this)
+                         (cons (list (format #f (G_ "Invalid Txn Type ~a") type) this)
                                invalid-splits)
                          owners-and-aging)))
 
@@ -380,7 +380,7 @@ exist but have no suitable transactions."))
                    (gnc:warn "split " this " has no owner")
                    (lp rest
                        acc-totals
-                       (cons (list (_ "Payment has no owner") this) invalid-splits)
+                       (cons (list (G_ "Payment has no owner") this) invalid-splits)
                        owners-and-aging))
 
                   ((this . _)

@@ -187,9 +187,9 @@
                ;; in src/engine/FreqSpeq.c. For now, we simply use
                ;; the normal translations, which show up in the glade
                ;; file src/gnome-utils/gtkbuilder/gnc-frequency.glade anyway.
-               (days-of-week (list (_"Sunday") (_"Monday")
-                                   (_"Tuesday") (_"Wednesday")
-                                   (_"Thursday") (_"Friday") (_"Saturday"))))
+               (days-of-week (list (G_ "Sunday") (G_ "Monday")
+                                   (G_ "Tuesday") (G_ "Wednesday")
+                                   (G_ "Thursday") (G_ "Friday") (G_ "Saturday"))))
 
           (gnc:debug daily-totals)
 
@@ -285,7 +285,7 @@
                           report-title
                           (string-append
                            (format #f
-                                   (_ "~a to ~a")
+                                   (G_ "~a to ~a")
                                    (qof-print-date from-date)
                                    (qof-print-date to-date))
                            (if show-total?

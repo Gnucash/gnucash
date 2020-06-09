@@ -127,7 +127,7 @@
                (open gnc:current-saved-stylesheets
                      (logior O_WRONLY O_CREAT O_TRUNC)))))
     (if (not port)
-        (gnc:warn (_ "Can't save style sheet"))
+        (gnc:warn (G_ "Can't save style sheet"))
         (begin
           (hash-fold
            (lambda (id ss-obj p)

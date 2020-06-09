@@ -38,10 +38,10 @@
      doc
      (gnc:make-html-text
       (gnc:html-markup-h2
-       (format #f (_ "Welcome to GnuCash ~a !")
+       (format #f (G_ "Welcome to GnuCash ~a !")
                gnc:version))
       (gnc:html-markup-p
-       (format #f (_ "GnuCash ~a has lots of nice features. Here are a few.")
+       (format #f (G_ "GnuCash ~a has lots of nice features. Here are a few.")
                gnc:version))))
     doc))
 

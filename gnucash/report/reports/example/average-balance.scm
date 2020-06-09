@@ -146,9 +146,9 @@
 (define columns
   ;; Watch out -- these names should be consistent with the display
   ;; option where you choose them, otherwise users are confused.
-  (list (_ "Period start") (_ "Period end") (_ "Average") 
-        (_ "Maximum") (_ "Minimum") (_ "Gain") 
-        (_ "Loss") (_ "Profit") ))
+  (list (G_ "Period start") (G_ "Period end") (G_ "Average") 
+        (G_ "Maximum") (G_ "Minimum") (G_ "Gain") 
+        (G_ "Loss") (G_ "Profit") ))
 
 
 (define (analyze-splits splits balances daily-dates interval-dates

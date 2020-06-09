@@ -165,7 +165,7 @@
             (gnc:sum-collector-commodity act-total report-currency exchange-fn)))
       (gnc:html-table-add-budget-row!
        html-table "total-number-cell"
-       (string-append (_ "Total") ":")
+       (string-append (G_ "Total") ":")
        bgt-total-numeric act-total-numeric)
 
       (gnc:html-table-append-row!
@@ -244,7 +244,7 @@
       ;; Display Grand Total
       (gnc:html-table-add-budget-row!
        html-table "total-number-cell"
-       (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric))))
+       (string-append (G_ "Total") ":") bgt-total-numeric act-total-numeric))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; budget-renderer
@@ -303,7 +303,7 @@
 
         ;; Display Title Name - Budget - Period
         (gnc:html-document-set-title!
-         doc (format #f (_ "~a: ~a - ~a")
+         doc (format #f (G_ "~a: ~a - ~a")
                      report-name (gnc-budget-get-name budget)
                      (qof-print-date (gnc-budget-get-period-start-date
                                       budget (1- period)))))

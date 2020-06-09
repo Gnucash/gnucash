@@ -106,7 +106,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-report-title
-      "a" opthelp-report-title (_ reportname)))
+      "a" opthelp-report-title (G_ reportname)))
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
@@ -166,7 +166,7 @@
     (add-option
       (gnc:make-string-option
       pagename-entries optname-closing-pattern
-      "a" opthelp-closing-pattern (_ "Closing Entries")))
+      "a" opthelp-closing-pattern (G_ "Closing Entries")))
     (add-option
      (gnc:make-simple-boolean-option
       pagename-entries optname-closing-casing
@@ -299,7 +299,7 @@
     (gnc:html-document-set-title! 
      doc (format #f
 		  (string-append "~a ~a "
-				 (_ "For Period Covering ~a to ~a"))
+				 (G_ "For Period Covering ~a to ~a"))
 		  company-name report-title
                   (qof-print-date start-date-printable)
                   (qof-print-date end-date)))
@@ -420,7 +420,7 @@
 	       ;; Create the account table below where its
 	       ;; percentage time can be tracked.
 	       (build-table (gnc:make-html-table)) ;; gnc:html-table
-	       (period-for (string-append " " (_ "for Period"))))
+	       (period-for (string-append " " (G_ "for Period"))))
 
 	  ;; a helper to add a line to our report
 	  (define (add-report-line
@@ -447,43 +447,43 @@
 
           (add-report-line
            build-table
-           (string-append (_ "Capital") ", " (qof-print-date start-date-printable))
+           (string-append (G_ "Capital") ", " (qof-print-date start-date-printable))
            #f start-total-equity 1 start-exchange-fn #f "primary-subheading")
 
           (add-report-line
            build-table
-           (string-append (_ "Net income") period-for)
-           (string-append (_ "Net loss") period-for)
+           (string-append (G_ "Net income") period-for)
+           (string-append (G_ "Net loss") period-for)
            net-income 0 end-exchange-fn #f #f)
 
           (add-report-line
            build-table
-           (string-append (_ "Investments") period-for) #f
+           (string-append (G_ "Investments") period-for) #f
            investments 0 end-exchange-fn #f #f)
 
           (add-report-line
            build-table
-           (string-append (_ "Withdrawals") period-for)
+           (string-append (G_ "Withdrawals") period-for)
            #f withdrawals 0 end-exchange-fn #f #f)
 
           (unless (gnc-commodity-collector-allzero? net-unrealized-gains)
             (add-report-line
              build-table
-             (_ "Unrealized Gains")
-             (_ "Unrealized Losses")
+             (G_ "Unrealized Gains")
+             (G_ "Unrealized Losses")
              net-unrealized-gains
              0 end-exchange-fn #f #f))
 
           (add-report-line
            build-table
-           (_ "Increase in capital")
-           (_ "Decrease in capital")
+           (G_ "Increase in capital")
+           (G_ "Decrease in capital")
            capital-increase
            1 end-exchange-fn use-rules? #f)
 
           (add-report-line
            build-table
-           (string-append (_ "Capital") ", " (qof-print-date end-date)) #f
+           (string-append (G_ "Capital") ", " (qof-print-date end-date)) #f
            end-total-equity
            1 end-exchange-fn #f "primary-subheading")
 

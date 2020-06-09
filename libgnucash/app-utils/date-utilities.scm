@@ -86,7 +86,7 @@
   (let* ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime datevec)) 7 86400))
          (begin-string (qof-print-date (+ beginweekt64 (* 3 86400))))
          (end-string (qof-print-date (+ beginweekt64 (* 9 86400)))))
-    (format #f (_ "~a to ~a") begin-string end-string)))
+    (format #f (G_ "~a to ~a") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
@@ -422,11 +422,11 @@
   (let ((rel-date-data (hash-ref gnc:relative-date-hash date-symbol)))
     (if rel-date-data
         ((gnc:reldate-get-fn rel-date-data))
-        (let* ((msg (_ "Tried to look up an undefined date symbol \
+        (let* ((msg (G_ "Tried to look up an undefined date symbol \
 '~a'. This report was probably saved by a later version of GnuCash. \
 Defaulting to today."))
                (conmsg (format #f msg date-symbol))
-               (uimsg (format #f (_ msg) date-symbol)))
+               (uimsg (format #f (G_ msg) date-symbol)))
           (gnc:gui-warn conmsg uimsg)
           (current-time)))))
 

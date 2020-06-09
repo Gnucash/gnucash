@@ -288,10 +288,10 @@
          (type-str (N_ "Customer")))
 
     (gnc:html-document-set-title!
-     document (string-append (_ type-str) " " (_ "Report")))
+     document (string-append (G_ type-str) " " (G_ "Report")))
 
     (gnc:html-document-set-title!
-     document (format #f (_ "~a ~a - ~a")
+     document (format #f (G_ "~a ~a - ~a")
                       report-title
                       (qof-print-date start-date)
                       (qof-print-date end-date)))
@@ -311,19 +311,19 @@
       (gnc:html-document-add-object!
        document
        (gnc:make-html-text
-        (_ "No valid customer found."))))
+        (G_ "No valid customer found."))))
 
      (else
       (let ((all-splits (query #f all-accounts start-date end-date))
             (table (gnc:make-html-table))
             (total-sales (gnc:make-commodity-collector))
             (total-expense (gnc:make-commodity-collector))
-            (headings (cons* (_ "Customer")
-                             (_ "Profit")
-                             (_ "Markup")
-                             (_ "Sales")
+            (headings (cons* (G_ "Customer")
+                             (G_ "Profit")
+                             (G_ "Markup")
+                             (G_ "Sales")
                              (if show-column-expense?
-                                 (list (_ "Expense"))
+                                 (list (G_ "Expense"))
                                  '())))
             (results (map
                       (lambda (owner)
@@ -399,7 +399,7 @@
                (unless (and (zero? profit) (zero? sales))
                  (set! sortingtable
                    (cons (vector
-                          (_ "No Customer") comm markup profit sales expense #f)
+                          (G_ "No Customer") comm markup profit sales expense #f)
                          sortingtable)))))
            commodities))
 
@@ -473,9 +473,9 @@
                     (markup (markup-percent profit sales)))
                (add-row (if commodities>1?
                             (format #f "~a (~a)"
-                                    (_ "Total")
+                                    (G_ "Total")
                                     (gnc-commodity-get-mnemonic comm))
-                            (_ "Total"))
+                            (G_ "Total"))
                         comm markup
                         (gnc:make-gnc-monetary comm profit)
                         (gnc:make-gnc-monetary comm sales)

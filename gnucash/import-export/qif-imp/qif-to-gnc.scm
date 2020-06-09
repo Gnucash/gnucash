@@ -193,7 +193,7 @@
                       (xaccAccountSetName new-acct new-name)
                       (xaccAccountSetDescription
                        new-acct
-                       (_ "QIF import: Name conflict with another account."))))
+                       (G_ "QIF import: Name conflict with another account."))))
 
                 ;; Set the account type.
                 (xaccAccountSetType new-acct
@@ -282,7 +282,7 @@
 
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
-                                      (_ "Preparing to convert your QIF data")))
+                                      (G_ "Preparing to convert your QIF data")))
 
       ;; Build a list of all accounts to create for the import tree.
       ;; We need to iterate over the account, category, and payee/memo
@@ -333,7 +333,7 @@
       ;; Build a local account tree to hold converted transactions.
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
-                                       (_ "Creating accounts")))
+                                       (G_ "Creating accounts")))
 
       ;; Sort the account list on the depth of the account path.  If a
       ;; short part is explicitly mentioned, make sure it gets created
@@ -382,7 +382,7 @@
       ;; duplicates.  marked transactions/splits won't get imported.
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
-                                    (_ "Matching transfers between accounts")))
+                                    (G_ "Matching transfers between accounts")))
       (if (> (length markable-xtns) 1)
           (let xloop ((xtn (car markable-xtns))
                       (rest (cdr markable-xtns)))
@@ -400,7 +400,7 @@
        (lambda (qif-file)
          (if progress-dialog
              (gnc-progress-dialog-set-sub progress-dialog
-                                          (string-append (_ "Converting") " "
+                                          (string-append (G_ "Converting") " "
                                                      (qif-file:path qif-file))))
          (for-each
           (lambda (xtn)
@@ -480,7 +480,7 @@
       ((not qif-date)
         (qif-import:log progress-dialog
                         "qif-import:qif-xtn-to-gnc-xtn"
-                        (_ "Missing transaction date."))
+                        (G_ "Missing transaction date."))
         (throw 'bad-date
                "qif-import:qif-xtn-to-gnc-xtn"
                "Missing transaction date."

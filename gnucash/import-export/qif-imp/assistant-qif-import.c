@@ -1422,7 +1422,7 @@ gnc_ui_qif_import_close_cb (GtkAssistant *gtkassistant, gpointer user_data)
 SCM
 gnc_ui_qif_import_assistant_get_mappings (QIFImportWindow * w)
 {
-    return SCM_LIST3(w->acct_map_info,
+    return scm_list_3(w->acct_map_info,
                      w->cat_map_info,
                      w->memo_map_info);
 }
@@ -3038,7 +3038,7 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
     /* This step will fill 70% of the bar. */
     gnc_progress_dialog_push (wind->convert_progress, 0.7);
     retval = scm_apply (qif_to_gnc,
-                       SCM_LIST8(wind->imported_files,
+                       scm_list_n(wind->imported_files,
                                  wind->acct_map_info,
                                  wind->cat_map_info,
                                  wind->memo_map_info,
@@ -3403,7 +3403,7 @@ gnc_ui_qif_import_finish_cb (GtkAssistant *assistant,
 
     /* Save the user's mapping preferences. */
     scm_result = scm_apply (save_map_prefs,
-                            SCM_LIST5 (wind->acct_map_info, wind->cat_map_info,
+                            scm_list_5(wind->acct_map_info, wind->cat_map_info,
                                       wind->memo_map_info, wind->security_hash,
                                       wind->security_prefs),
                             SCM_EOL);

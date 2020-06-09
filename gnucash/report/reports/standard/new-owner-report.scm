@@ -85,23 +85,23 @@
   (list
    (list GNC-OWNER-CUSTOMER
          (N_ "Customer")
-         (_ "No valid customer selected.")
-         (_ "This report requires a customer to be selected."))
+         (G_ "No valid customer selected.")
+         (G_ "This report requires a customer to be selected."))
 
    (list GNC-OWNER-EMPLOYEE
          (N_ "Employee")
-         (_ "No valid employee selected.")
-         (_ "This report requires a employee to be selected."))
+         (G_ "No valid employee selected.")
+         (G_ "This report requires a employee to be selected."))
 
    (list GNC-OWNER-JOB
          (N_ "Job")
-         (_ "No valid job selected.")
-         (_ "This report requires a job to be selected."))
+         (G_ "No valid job selected.")
+         (G_ "This report requires a job to be selected."))
 
    (list GNC-OWNER-VENDOR
          (N_ "Vendor")
-         (_ "No valid vendor selected.")
-         (_ "This report requires a vendor to be selected."))))
+         (G_ "No valid vendor selected.")
+         (G_ "This report requires a vendor to be selected."))))
 
 (define (get-info key)
   (assv-ref owner-string-alist key))
@@ -200,19 +200,19 @@
         (formal? (gnc-prefs-get-bool GNC-PREFS-GROUP-GENERAL
                                      GNC-PREF-ACCOUNTING-LABELS)))
     (if (date-col column-vector)
-        (addto! heading-list (_ date-header)))
+        (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
-        (addto! heading-list (_ due-date-header)))
+        (addto! heading-list (G_ due-date-header)))
     (if (ref-col column-vector)
-        (addto! heading-list (_ reference-header)))
+        (addto! heading-list (G_ reference-header)))
     (if (type-col column-vector)
-        (addto! heading-list (_ type-header)))
+        (addto! heading-list (G_ type-header)))
     (if (desc-col column-vector)
-        (addto! heading-list (_ desc-header)))
+        (addto! heading-list (G_ desc-header)))
     (if (sale-col column-vector)
-        (addto! heading-list (_ sale-header)))
+        (addto! heading-list (G_ sale-header)))
     (if (tax-col column-vector)
-        (addto! heading-list (_ tax-header)))
+        (addto! heading-list (G_ tax-header)))
     (if (debit-col column-vector)
         (addto! heading-list
                 (if formal? debit-header (gnc-account-get-debit-string acct-type))))
@@ -220,20 +220,20 @@
         (addto! heading-list
                 (if formal? credit-header (gnc-account-get-credit-string acct-type))))
     (if (bal-col column-vector)
-        (addto! heading-list (_ balance-header)))
+        (addto! heading-list (G_ balance-header)))
     (case link-option
       ((simple)
-       (addto! heading-list (_ linked-txns-header)))
+       (addto! heading-list (G_ linked-txns-header)))
       ((detailed)
        (if (< 0 (num-cols column-vector 'mid-spac)) (addto! heading-list #f))
-       (if (date-col column-vector) (addto! heading-list (_ "Date")))
-       (if (ref-col column-vector) (addto! heading-list (_ "Reference")))
-       (if (type-col column-vector) (addto! heading-list (_ "Type")))
-       (if (desc-col column-vector) (addto! heading-list (_ "Description")))
+       (if (date-col column-vector) (addto! heading-list (G_ "Date")))
+       (if (ref-col column-vector) (addto! heading-list (G_ "Reference")))
+       (if (type-col column-vector) (addto! heading-list (G_ "Type")))
+       (if (desc-col column-vector) (addto! heading-list (G_ "Description")))
        (if (or (debit-col column-vector) (credit-col column-vector))
-           (addto! heading-list (_ "Partial Amount")))
+           (addto! heading-list (G_ "Partial Amount")))
        (if (or (debit-col column-vector) (credit-col column-vector))
-           (addto! heading-list (_ "Amount")))))
+           (addto! heading-list (G_ "Amount")))))
     (reverse heading-list)))
 
 (define num-buckets 6)
@@ -283,9 +283,9 @@
          (invoice (gncInvoiceGetInvoiceFromTxn txn)))
     (cond
      ((txn-is-invoice? txn) (gncInvoiceGetTypeString invoice))
-     ((txn-is-payment? txn) (if refund? (_ "Refund") (_ "Payment")))
-     ((txn-is-link? txn) (_ "Link"))
-     (else (_ "Unknown")))))
+     ((txn-is-payment? txn) (if refund? (G_ "Refund") (G_ "Payment")))
+     ((txn-is-link? txn) (G_ "Link"))
+     (else (G_ "Unknown")))))
 
 ;; input: list of html-text elements
 ;; output: a cell with html-text interleaved with <br> tags
@@ -304,13 +304,13 @@
                      splits num-buckets to-date date-type (not payable?))))
 
     (gnc:html-table-set-col-headers!
-     table (list (_ "Pre-Payment")
-                 (_ "Current")
-                 (_ "0-30 days")
-                 (_ "31-60 days")
-                 (_ "61-90 days")
-                 (_ "91+ days")
-                 (_ "Total")))
+     table (list (G_ "Pre-Payment")
+                 (G_ "Current")
+                 (G_ "0-30 days")
+                 (G_ "31-60 days")
+                 (G_ "61-90 days")
+                 (G_ "91+ days")
+                 (G_ "Total")))
 
     (gnc:html-table-append-row!
      table (map (lambda (entry) (gnc:make-gnc-monetary currency entry))
@@ -332,9 +332,9 @@
     (append
      ;; Translators: ~a History refers to main details table in owner
      ;; report. ~a will be replaced with Customer, Vendor or Employee.
-     (addif (< 0 lhs) (make-heading lhs (format #f (_ "~a History") owner-desc)) )
+     (addif (< 0 lhs) (make-heading lhs (format #f (G_ "~a History") owner-desc)) )
      (addif (< 0 mid) (make-heading mid #f))
-     (addif (< 0 rhs) (make-heading rhs (_ "Linked Details"))))))
+     (addif (< 0 rhs) (make-heading rhs (G_ "Linked Details"))))))
 ;;
 ;; Make a row list based on the visible columns
 ;;
@@ -488,7 +488,7 @@
          table "grand-total"
          (append
           (addif (< 0 period-span) (gnc:make-html-table-cell/markup
-                                    "total-label-cell" (_ "Period Totals")))
+                                    "total-label-cell" (G_ "Period Totals")))
           (addif (< 1 period-span) (gnc:make-html-table-cell/size
                                     1 (1- period-span) #f))
           (addif (sale-col used-columns)   (make-cell sale))
@@ -508,8 +508,8 @@
                  (gnc:make-html-table-cell/markup
                   "total-label-cell"
                   (if (negative? total)
-                      (_ "Total Credit")
-                      (_ "Total Due"))))
+                      (G_ "Total Credit")
+                      (G_ "Total Due"))))
           (addif (< 1 grand-span)
                  (gnc:make-html-table-cell/size/markup
                   1 (1- grand-span)
@@ -528,7 +528,7 @@
                               payable? date-type currency)))))
 
   (define (add-balance-row odd-row? total)
-    (add-row table odd-row? used-columns start-date #f "" (_ "Balance") ""
+    (add-row table odd-row? used-columns start-date #f "" (G_ "Balance") ""
              currency total #f #f #f #f #f
              link-option (case link-option
                            ((none) '(()))
@@ -547,7 +547,7 @@
            (if (gncInvoiceIsPaid invoice)
                result
                (cons (make-link-desc-amount
-                      (_ "UNPAID")
+                      (G_ "UNPAID")
                       (gnc:make-gnc-monetary
                        currency (AP-negate (gnc-lot-get-balance lot)))
                       (gncInvoiceReturnGUID invoice))
@@ -683,7 +683,7 @@
         (if (zero? overpayment)
             '()
             (list (make-link-desc-amount
-                   (_ "Pre-Payment")
+                   (G_ "Pre-Payment")
                    (gnc:make-gnc-monetary currency overpayment)
                    (gncTransGetGUID txn))))))
 
@@ -784,7 +784,7 @@
          (gncInvoiceReturnGUID invoice)
          link-option
          (case link-option
-           ((simple) (list (list (and (gncInvoiceIsPaid invoice) (_ "Paid")))))
+           ((simple) (list (list (and (gncInvoiceIsPaid invoice) (G_ "Paid")))))
            ((detailed) (make-invoice->payments-table invoice))
            (else '(()))))
 
@@ -1021,7 +1021,7 @@ invoices and amounts.")))))
                               GNC-OWNER-CUSTOMER)
                         ACCT-TYPE-RECEIVABLE
                         ACCT-TYPE-PAYABLE)))
-         (report-title (string-append (_ owner-descr) " " (_ "Report"))))
+         (report-title (string-append (G_ owner-descr) " " (G_ "Report"))))
 
     (cond
      ((not (gncOwnerIsValid owner))
@@ -1036,8 +1036,8 @@ invoices and amounts.")))))
        (gnc:html-make-generic-warning
         (string-append report-title ": " (gncOwnerGetName owner))
         (gnc:report-id report-obj)
-        (_ "No valid account found")
-        (_ "This report requires a valid AP/AR account to be available."))))
+        (G_ "No valid account found")
+        (G_ "This report requires a valid AP/AR account to be available."))))
 
      (else
       (setup-query query owner accounts end-date (eqv? GNC-OWNER-JOB type))
@@ -1060,9 +1060,9 @@ invoices and amounts.")))))
           (gnc:html-document-add-object!
            document
            (gnc:make-html-text
-            (gnc:html-markup-h2 (_ "No transactions found."))
+            (gnc:html-markup-h2 (G_ "No transactions found."))
             (gnc:html-markup-p
-             (format #f (_ "No transactions were found associated with the ~a.")
+             (format #f (G_ "No transactions were found associated with the ~a.")
                      (string-downcase (car (get-info type)))))
             (gnc:html-make-options-link (gnc:report-id report-obj)))))
 
@@ -1090,7 +1090,7 @@ invoices and amounts.")))))
                              1 (length headings)
                              (gnc:make-html-text
                               (gnc:html-markup-h3
-                               (string-append (_ "Account") ": "
+                               (string-append (G_ "Account") ": "
                                               (xaccAccountGetName account)))))))
 
                    (add-owner-table table splits account start-date end-date
@@ -1123,7 +1123,7 @@ invoices and amounts.")))))
 
           (gnc:html-document-add-object!
            document (gnc:make-html-text
-                     (string-append (_ "Date Range") ": " (qof-print-date start-date)
+                     (string-append (G_ "Date Range") ": " (qof-print-date start-date)
                                     " - " (qof-print-date end-date))))
 
           (make-break! document)

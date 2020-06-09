@@ -77,18 +77,18 @@
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "No valid customer selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "No valid employee selected."))
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
         ;; FALL THROUGH
         (else
-          (_ "No valid company selected."))))
+          (G_ "No valid company selected."))))
 
 (define (invalid-selection-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "This report requires a customer to be selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "This report requires a employee to be selected."))
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
         ;; FALL THROUGH
         (else
-          (_ "This report requires a company to be selected."))))
+          (G_ "This report requires a company to be selected."))))
 
 ;; Html formatted error message documents
 (define (gnc:html-make-no-owner-warning
@@ -104,17 +104,17 @@
   (gnc:html-make-generic-warning
     report-title-string
     report-id
-    (_ "No valid account selected")
-    (_ "This report requires a valid account to be selected.")))
+    (G_ "No valid account selected")
+    (G_ "This report requires a valid account to be selected.")))
 
 
 ;; Document names, used in report names (translated)
 (define (doctype-str owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (_ "Customer"))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (_ "Employee"))
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "Employee"))
         ;; FALL THROUGH
         (else
-          (_ "Vendor")))) 
+          (G_ "Vendor")))) 
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -169,25 +169,25 @@
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (date-col column-vector)
-        (addto! heading-list (_ date-header)))
+        (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
-        (addto! heading-list (_ due-date-header)))
+        (addto! heading-list (G_ due-date-header)))
     (if (num-col column-vector)
-        (addto! heading-list (_ reference-header)))
+        (addto! heading-list (G_ reference-header)))
     (if (type-col column-vector)
-    (addto! heading-list (_ type-header)))
+    (addto! heading-list (G_ type-header)))
     (if (memo-col column-vector)
-    (addto! heading-list (_ desc-header)))
+    (addto! heading-list (G_ desc-header)))
     (if (sale-col column-vector)
-    (addto! heading-list (_ sale-header)))
+    (addto! heading-list (G_ sale-header)))
     (if (tax-col column-vector)
-    (addto! heading-list (_ tax-header)))
+    (addto! heading-list (G_ tax-header)))
     (if (credit-col column-vector)
-    (addto! heading-list (_ credit-header)))
+    (addto! heading-list (G_ credit-header)))
     (if (debit-col column-vector)
-    (addto! heading-list (_ debit-header)))
+    (addto! heading-list (G_ debit-header)))
     (if (value-col column-vector)
-    (addto! heading-list (_ amount-header)))
+    (addto! heading-list (G_ amount-header)))
     (reverse heading-list)))
 
 
@@ -256,11 +256,11 @@
 
     (gnc:html-table-set-col-headers!
      table
-     (list (_ "Current")
-           (_ "0-30 days")
-       (_ "31-60 days")
-       (_ "61-90 days")
-       (_ "91+ days")))
+     (list (G_ "Current")
+           (G_ "0-30 days")
+       (G_ "31-60 days")
+       (G_ "61-90 days")
+       (G_ "91+ days")))
 
     (gnc:html-table-append-row!
      table
@@ -316,7 +316,7 @@
       (begin
     (set! printed? #t)
     (if (and (value-col column-vector) (not (gnc-numeric-zero-p total)))
-        (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
+        (let ((row (make-row column-vector start-date #f "" (G_ "Balance") ""
                  (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
           (row-style (if odd-row? "normal-row" "alternate-row")))
           (gnc:html-table-append-row/markup! table row-style (reverse row))
@@ -350,12 +350,12 @@
          (gnc:html-markup-anchor
           (gnc:invoice-anchor-text invoice)
           (gncInvoiceGetTypeString invoice)))
-        (_ "Unknown")))
+        (G_ "Unknown")))
        ((equal? type TXN-TYPE-PAYMENT)
         (gnc:make-html-text
 	 (gnc:html-markup-anchor
-	  (gnc:split-anchor-text split) (_ "Payment"))))
-       (else (_ "Unknown"))))
+	  (gnc:split-anchor-text split) (G_ "Payment"))))
+       (else (G_ "Unknown"))))
      )
 
    (if reverse?
@@ -460,7 +460,7 @@
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
             "total-label-cell"
-            (_ "Period Totals"))
+            (G_ "Period Totals"))
            '())
 
      (let ((row-contents '())
@@ -502,8 +502,8 @@
      (append (cons (gnc:make-html-table-cell/markup
             "total-label-cell"
             (if (gnc-numeric-negative-p total)
-            (_ "Total Credit")
-            (_ "Total Due")))
+            (G_ "Total Credit")
+            (G_ "Total Due")))
            '())
          (list (gnc:make-html-table-cell/size/markup
             1 (value-col used-columns)
@@ -740,7 +740,7 @@
      (owner-descr (owner-string type))
      (date-type (opt-val gnc:pagename-general optname-date-driver))
      (owner (opt-val owner-page owner-descr))
-     (report-title (string-append (doctype-str type) " " (_ "Report"))))
+     (report-title (string-append (doctype-str type) " " (G_ "Report"))))
     (if (not (gncOwnerIsValid owner))
      (gnc:html-document-add-object!
       document
@@ -765,7 +765,7 @@
          document (gnc:html-markup
                    "span"
                    (doctype-str type)
-                   " " (_ "Report:") " "
+                   " " (G_ "Report:") " "
                    (gnc:html-markup-anchor
                     (gnc:owner-anchor-text owner)
                     (gncOwnerGetName owner))))
@@ -792,7 +792,7 @@
          document
          (gnc:make-html-text
           (string-append
-           (_ "Date Range")
+           (G_ "Date Range")
            ": "
            (qof-print-date start-date)
            " - "

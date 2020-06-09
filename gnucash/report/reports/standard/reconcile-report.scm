@@ -56,7 +56,7 @@
 
 (define reconcile-report-instructions
   (gnc:make-html-text
-   (_ "The reconcile report is designed to be similar to the formal \
+   (G_ "The reconcile report is designed to be similar to the formal \
 reconciliation tool.  Please select the account from Report \
 Options. Please note the dates specified in the options will apply \
 to the Reconciliation Date.")
@@ -83,10 +83,10 @@ to the Reconciliation Date.")
                         (and (not (positive? (split-amount s)))
                              (gnc:monetary-neg (amount s))))))
     ;; similar to default-calculated-cells but disable dual-subtotals.
-    (list (vector (_ "Funds In")
+    (list (vector (G_ "Funds In")
                   debit-amount #f #t #f
                   (const "") #t)
-          (vector (_ "Funds Out")
+          (vector (G_ "Funds Out")
                   credit-amount #f #t #f
                   (const "") #f))))
 
@@ -100,7 +100,7 @@ to the Reconciliation Date.")
 
 (gnc:define-report
  'version 1
- 'name (_ "Reconciliation Report")
+ 'name (G_ "Reconciliation Report")
  'report-guid "e45218c6d76f11e7b5ef0800277ef320"
  'options-generator reconcile-report-options-generator
  ;; the renderer is the same as trep, however we're using a different

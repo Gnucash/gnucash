@@ -172,7 +172,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; All the options stuff starts here
 
-(define reportname (_ "Balance Sheet (eguile)"))
+(define reportname (G_ "Balance Sheet (eguile)"))
 
 ;; define all option's names and help text so that they are properly
 ;; defined in *one* place.
@@ -430,10 +430,10 @@
              ;; Reason 1: zero Imbalance a/c
              ;; The line break in the next expressions will suppress comments as translator comments.
              (string-prefix?
-               (_ "Imbalance") (xaccAccountGetName (accrec-account accrec)))
+               (G_ "Imbalance") (xaccAccountGetName (accrec-account accrec)))
              ;; Reason 2: zero Orphan a/c
              (string-prefix?
-               (_ "Orphan") (xaccAccountGetName (accrec-account accrec))))))
+               (G_ "Orphan") (xaccAccountGetName (accrec-account accrec))))))
 
     (define (flattened-acc-depth acc)
       ;; Accounts deeper than required get moved to the requested depth

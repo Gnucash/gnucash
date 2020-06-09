@@ -505,9 +505,9 @@
              html-table 0 current-col
              (cond
               ((eq? (car column-list) 'total)
-               (_ "Total"))
+               (G_ "Total"))
               ((list? (car column-list))
-               (format #f (_ "~a to ~a")
+               (format #f (G_ "~a to ~a")
                        (period-to-date-string (car (car column-list)))
                        (period-to-date-string (last (car column-list)))))
               (else
@@ -531,17 +531,17 @@
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col0 "centered-label-cell"
                  ;; Translators: Abbreviation for "Budget" amount
-                 (_ "Bgt")))
+                 (G_ "Bgt")))
               (when show-actual?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col1 "centered-label-cell"
                  ;; Translators: Abbreviation for "Actual" amount
-                 (_ "Act")))
+                 (G_ "Act")))
               (when show-diff?
                 (gnc:html-table-set-cell/tag!
                  html-table 1 col2 "centered-label-cell"
                  ;; Translators: Abbreviation for "Difference" amount
-                 (_ "Diff")))
+                 (G_ "Diff")))
               (loop (cdr column-list)
                     col3))))))
 
@@ -771,7 +771,7 @@
                      ;; budget will report on budgeted and actual
                      ;; amounts from the beginning of budget, instead
                      ;; of only using the budget-period amounts.
-                     (if accumulate? (_ "using accumulated amounts")
+                     (if accumulate? (G_ "using accumulated amounts")
                          "")))
 
         ;; We do this in two steps: First the account names...  the

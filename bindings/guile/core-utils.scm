@@ -38,8 +38,6 @@
 
 (define-public gnc:version (gnc-version))
 ;; gettext functions
-(define-public _ gnc:gettext)
-(define-syntax N_
-    (syntax-rules ()
-        ((_ x) x)))
+(define-public G_ gnc:gettext)
+(define-syntax-rule (N_ x) x)
 (export N_)

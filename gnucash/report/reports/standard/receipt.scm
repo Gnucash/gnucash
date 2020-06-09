@@ -107,37 +107,37 @@
                (N_ "The format for the date->string conversion for today's date.")
                ;; Translators: Boost::date_time format string
                ;; "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
-               (_ "%l:%M %P, %e %B %Y")))
+               (G_ "%l:%M %P, %e %B %Y")))
 
   ;; Heading options
   (add-option (gnc:make-string-option
                 ; page / name / orderkey / tooltip / default
-                headingpage optname-report-title "a" "" (_ "Invoice")))
+                headingpage optname-report-title "a" "" (G_ "Invoice")))
   (add-option (gnc:make-string-option
-                headingpage optname-units "b" "" (_ "Units")))
+                headingpage optname-units "b" "" (G_ "Units")))
   (add-option (gnc:make-string-option
-                headingpage optname-qty "c" "" (_ "Qty")))
+                headingpage optname-qty "c" "" (G_ "Qty")))
   (add-option (gnc:make-string-option
-                headingpage optname-unit-price "d" "" (_ "Unit Price")))
+                headingpage optname-unit-price "d" "" (G_ "Unit Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-rate "e" "" (_ "Discount Rate")))
+                headingpage optname-disc-rate "e" "" (G_ "Discount Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-amount "f" "" (_ "Discount Amount")))
+                headingpage optname-disc-amount "f" "" (G_ "Discount Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-net-price "g" "" (_ "Net Price")))
+                headingpage optname-net-price "g" "" (G_ "Net Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-rate "h" "" (_ "Tax Rate")))
+                headingpage optname-tax-rate "h" "" (G_ "Tax Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-amount "i" "" (_ "Tax Amount")))
+                headingpage optname-tax-amount "i" "" (G_ "Tax Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-total-price "j" "" (_ "Total Price")))
+                headingpage optname-total-price "j" "" (G_ "Total Price")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-subtotal "a" "" (_ "Sub-total")))
+                headingpage2 optname-subtotal "a" "" (G_ "Sub-total")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
+                headingpage2 optname-amount-due "b" "" (G_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" ""
-                (_ "Payment received, thank you!")))
+                (G_ "Payment received, thank you!")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"

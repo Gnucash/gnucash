@@ -214,15 +214,15 @@
       (gnc:html-table-set-col-headers!
        table (list (gnc:make-html-table-header-cell/size
                     1 2 (if (null? (cdr comm-list))
-                            (_ "Exchange rate")
-                            (_ "Exchange rates"))))))
+                            (G_ "Exchange rate")
+                            (G_ "Exchange rates"))))))
     table))
 
 
 (define (gnc:html-make-generic-budget-warning report-title-string)
   (gnc:html-make-generic-simple-warning
     report-title-string
-    (_ "No budgets exist. You must create at least one budget.")))
+    (G_ "No budgets exist. You must create at least one budget.")))
 
 
 (define (gnc:html-make-generic-simple-warning report-title-string message)
@@ -242,7 +242,7 @@
       (gnc-build-url URL-TYPE-OPTIONS
        (string-append "report-id=" (format #f "~a" report-id))
        "")
-      (_ "Edit report options")))))
+      (G_ "Edit report options")))))
 
 (define* (gnc:html-render-options-changed options #:optional plaintext?)
   ;; options -> html-object or string, depending on plaintext?.  This
@@ -258,7 +258,7 @@
       (catch 'wrong-type-arg
         (lambda () (proc d))
         (const #f)))
-    (or (and (boolean? d) (if d (_ "Enabled") (_ "Disabled")))
+    (or (and (boolean? d) (if d (G_ "Enabled") (G_ "Disabled")))
         (and (null? d) "null")
         (and (list? d) (string-join (map disp d) ", "))
         (and (pair? d) (format #f "~a . ~a"
@@ -316,7 +316,7 @@
   (let ((p (gnc:make-html-text)))
    (gnc:html-text-append!
     p
-    (gnc:html-markup-h2 (string-append (_ report-title-string) ":"))
+    (gnc:html-markup-h2 (string-append (G_ report-title-string) ":"))
     (gnc:html-markup-h2 warning-title-string)
     (gnc:html-markup-p warning-string)
     (gnc:html-make-options-link report-id))
@@ -328,23 +328,23 @@
     report-title-string
     report-id
     ""
-    (_ "This report requires you to specify certain report options.")))
+    (G_ "This report requires you to specify certain report options.")))
 
 (define (gnc:html-make-no-account-warning
          report-title-string report-id)
   (gnc:html-make-generic-warning
     report-title-string
     report-id
-    (_ "No accounts selected")
-    (_ "This report requires accounts to be selected in the report options.")))
+    (G_ "No accounts selected")
+    (G_ "This report requires accounts to be selected in the report options.")))
 
 (define (gnc:html-make-empty-data-warning
          report-title-string report-id)
   (gnc:html-make-generic-warning
     report-title-string
     report-id
-    (_ "No data")
-    (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
+    (G_ "No data")
+    (G_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
 
 (define (gnc:html-js-include file)
   (format #f

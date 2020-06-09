@@ -93,11 +93,11 @@
 
 ;; define strings centrally to ease code clarity
 (define rpterr-dupe
-  (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "))
-(define rpterr-guid1 (_ "Wrong report definition: "))
-(define rpterr-guid2 (_ " Report is missing a GUID."))
+  (G_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "))
+(define rpterr-guid1 (G_ "Wrong report definition: "))
+(define rpterr-guid2 (G_ " Report is missing a GUID."))
 (define rptwarn-legacy
-  (_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly."))
+  (G_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly."))
 (define (gui-error str)
   (if (gnucash-ui-is-running)
       (gnc-error-dialog '() str)
@@ -220,7 +220,7 @@ not found.")))
          (gnc:make-string-option
           gnc:pagename-general gnc:optname-reportname "0a"
           (N_ "Enter a descriptive name for this report.")
-          (_ (gnc:report-template-name report-template))))
+          (G_ (gnc:report-template-name report-template))))
         (stylesheet
          (gnc:make-multichoice-option
           gnc:pagename-general gnc:optname-stylesheet "0b"
@@ -232,7 +232,7 @@ not found.")))
               (string->symbol (gnc:html-style-sheet-name ss))
               (gnc:html-style-sheet-name ss)
               (string-append (gnc:html-style-sheet-name ss)
-                             " " (_ "stylesheet."))))
+                             " " (G_ "stylesheet."))))
            (gnc:get-html-style-sheets)))))
 
     (let ((options (if (procedure? generator)

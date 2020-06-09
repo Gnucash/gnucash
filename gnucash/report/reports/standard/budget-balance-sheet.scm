@@ -122,7 +122,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-report-title
-      "a" opthelp-report-title (_ reportname)))
+      "a" opthelp-report-title (G_ reportname)))
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
@@ -661,7 +661,7 @@
               (gnc:html-table-append-row! right-table space)))
 
           (gnc:report-percent-done 80)
-	  (if label-assets? (add-subtotal-line left-table (_ "Assets") #f #f))
+	  (if label-assets? (add-subtotal-line left-table (G_ "Assets") #f #f))
 	  (set! asset-table
             (gnc:make-html-acct-table/env/accts
             (append table-env (list (list 'get-balance-fn asset-get-balance-fn)))
@@ -673,16 +673,16 @@
               (if new-existing?
                 (begin
                   (add-subtotal-line
-                    left-table (_ "Existing Assets") #f existing-assets)
+                    left-table (G_ "Existing Assets") #f existing-assets)
                   (add-subtotal-line
-                    left-table (_ "Allocated Assets") #f allocated-assets)))
+                    left-table (G_ "Allocated Assets") #f allocated-assets)))
 
               (if (not (gnc-commodity-collector-allzero? unallocated-assets))
                 (add-subtotal-line
-                  left-table (_ "Unallocated Assets") #f unallocated-assets))
+                  left-table (G_ "Unallocated Assets") #f unallocated-assets))
 
               (add-subtotal-line
-                left-table (_ "Total Assets") #f asset-balance)))
+                left-table (G_ "Total Assets") #f asset-balance)))
 	  
 	  (if report-form?
 	      (add-rule left-table))
@@ -691,7 +691,7 @@
 	  
 	  (gnc:report-percent-done 85)
 	  (if label-liabilities?
-	      (add-subtotal-line right-table (_ "Liabilities") #f #f))
+	      (add-subtotal-line right-table (G_ "Liabilities") #f #f))
           (set! liability-table
             (gnc:make-html-acct-table/env/accts
               (append table-env
@@ -705,22 +705,22 @@
                 (begin
                   (add-subtotal-line
                     right-table
-                    (_ "Existing Liabilities")
+                    (G_ "Existing Liabilities")
                     #f
                     existing-liabilities)
 
                   (add-subtotal-line
-                    right-table (_ "New Liabilities") #f new-liabilities)))
+                    right-table (G_ "New Liabilities") #f new-liabilities)))
 
 	      (add-subtotal-line
-                right-table (_ "Total Liabilities") #f liability-balance)))
+                right-table (G_ "Total Liabilities") #f liability-balance)))
 	  
 	  (add-rule right-table)
 	  
 	  (gnc:report-percent-done 88)
 	  (if label-equity?
 	      (add-subtotal-line
-	       right-table (_ "Equity") #f #f))
+	       right-table (G_ "Equity") #f #f))
 	  (set! equity-table
 		(gnc:make-html-acct-table/env/accts
                   (append table-env
@@ -736,27 +736,27 @@
               (begin
                 (add-subtotal-line
                   right-table
-                  (_ "Existing Retained Earnings")
-                  (_ "Existing Retained Losses")
+                  (G_ "Existing Retained Earnings")
+                  (G_ "Existing Retained Losses")
                   existing-retained-earnings)
 
                 (add-subtotal-line
                   right-table
-                  (_ "New Retained Earnings")
-                  (_ "New Retained Losses")
+                  (G_ "New Retained Earnings")
+                  (G_ "New Retained Losses")
                   new-retained-earnings)))
 
               (add-subtotal-line
                 right-table
-                (_ "Total Retained Earnings")
-                (_ "Total Retained Losses")
+                (G_ "Total Retained Earnings")
+                (G_ "Total Retained Losses")
                 retained-earnings))
 
 
           (if (not (gnc-commodity-collector-allzero? unrealized-gain))
             (add-subtotal-line right-table
-              (_ "Unrealized Gains")
-              (_ "Unrealized Losses")
+              (G_ "Unrealized Gains")
+              (G_ "Unrealized Losses")
               unrealized-gain))
 
 
@@ -765,19 +765,19 @@
               (if new-existing?
                 (begin
                   (add-subtotal-line
-                    right-table (_ "Existing Equity") #f existing-equity)
+                    right-table (G_ "Existing Equity") #f existing-equity)
 
                   (add-subtotal-line
-                    right-table (_ "New Equity") #f new-equity)))
+                    right-table (G_ "New Equity") #f new-equity)))
 
 	      (add-subtotal-line
-                right-table (_ "Total Equity") #f equity-balance)))
+                right-table (G_ "Total Equity") #f equity-balance)))
 	  
 	  (add-rule right-table)
 	  
           (add-subtotal-line
             right-table
-            (gnc:html-string-sanitize (_ "Total Liabilities & Equity"))
+            (gnc:html-string-sanitize (G_ "Total Liabilities & Equity"))
             #f
             liability-plus-equity)
 	  

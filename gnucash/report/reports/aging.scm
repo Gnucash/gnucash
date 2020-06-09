@@ -222,7 +222,7 @@
                                          "\nClient Currency:" (gnc:strify (company-get-currency company-info)))))
                      (gnc-error-dialog '() error-str)
                      (gnc:error error-str)
-                     (cons #f (format #f (_ "Transactions relating to '~a' contain \
+                     (cons #f (format #f (G_ "Transactions relating to '~a' contain \
 more than one currency. This report is not designed to cope with this possibility.")  (gncOwnerGetName owner))))
 		   (begin
 		     (gnc:debug "it's an old company")
@@ -554,24 +554,24 @@ copying this report to a spreadsheet for use in a mail merge.")
   ;; more general interval scheme in this report
   (define make-heading-list
     (list 
-      (_ "Company")
-      (_ "Current")
-      (_ "0-30 days")
-      (_ "31-60 days")
-      (_ "61-90 days")
-      (_ "91+ days")
-      (_ "Total")))
+      (G_ "Company")
+      (G_ "Current")
+      (G_ "0-30 days")
+      (G_ "31-60 days")
+      (G_ "61-90 days")
+      (G_ "91+ days")
+      (G_ "Total")))
      
 ;; following cols are optional 
-;;    (_ "Address Name")
-;;    (_ "Address 1")
-;;    (_ "Address 2")
-;;    (_ "Address 3")
-;;    (_ "Address 4")
-;;    (_ "Phone")
-;;    (_ "Fax")
-;;    (_ "Email")
-;;    (_ "Active")
+;;    (G_ "Address Name")
+;;    (G_ "Address 1")
+;;    (G_ "Address 2")
+;;    (G_ "Address 3")
+;;    (G_ "Address 4")
+;;    (G_ "Phone")
+;;    (G_ "Fax")
+;;    (G_ "Email")
+;;    (G_ "Active")
 
 
   ;;  Make a list of commodity collectors for column totals
@@ -698,23 +698,23 @@ copying this report to a spreadsheet for use in a mail merge.")
 
     ;; add optional column headings
     (if disp-addr-name
-      (set! heading-list (append heading-list (list (_ "Address Name")))))
+      (set! heading-list (append heading-list (list (G_ "Address Name")))))
     (if disp-addr1
-      (set! heading-list (append heading-list (list (_ "Address 1")))))
+      (set! heading-list (append heading-list (list (G_ "Address 1")))))
     (if disp-addr2
-      (set! heading-list (append heading-list (list (_ "Address 2")))))
+      (set! heading-list (append heading-list (list (G_ "Address 2")))))
     (if disp-addr3
-      (set! heading-list (append heading-list (list (_ "Address 3")))))
+      (set! heading-list (append heading-list (list (G_ "Address 3")))))
     (if disp-addr4
-      (set! heading-list (append heading-list (list (_ "Address 4")))))
+      (set! heading-list (append heading-list (list (G_ "Address 4")))))
     (if disp-addr-phone
-      (set! heading-list (append heading-list (list (_ "Phone")))))
+      (set! heading-list (append heading-list (list (G_ "Phone")))))
     (if disp-addr-fax
-      (set! heading-list (append heading-list (list (_ "Fax")))))
+      (set! heading-list (append heading-list (list (G_ "Fax")))))
     (if disp-addr-email
-      (set! heading-list (append heading-list (list (_ "Email")))))
+      (set! heading-list (append heading-list (list (G_ "Email")))))
     (if disp-active
-      (set! heading-list (append heading-list (list (_ "Active")))))
+      (set! heading-list (append heading-list (list (G_ "Active")))))
 
     ;; set default title
     (gnc:html-document-set-title! document report-title)
@@ -790,7 +790,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 			       (addr-fax   (gncAddressGetFax   addr))
 			       (addr-email (gncAddressGetEmail addr))
 			       (company-active (if (gncOwnerGetActive owner)
-			         (_ "Y") (_ "N")))
+			         (G_ "Y") (G_ "N")))
 			       (opt-fld-list '())
 			      )
 ;;            (gnc:debug "aging-renderer: disp-addr-source=" disp-addr-source
@@ -847,7 +847,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 	    ;; add the totals
 	    (gnc:html-table-append-row!
 	     table 
-	     (cons (_ "Total") (convert-collectors total-collector-list 
+	     (cons (G_ "Total") (convert-collectors total-collector-list 
 						   report-currency
 						   exchange-fn
 						   multi-totals-p)))
@@ -857,7 +857,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (_ "No valid account selected. Click on the Options button and select the account to use."))))
+	  (G_ "No valid account selected. Click on the Options button and select the account to use."))))
     (qof-query-destroy query)
     (gnc:report-finished)
     document))

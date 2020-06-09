@@ -439,7 +439,7 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
     (push (format #f "var chartid = 'chart-~a';\n" id))
     (push (format #f "var jumpid = 'jump-~a';\n" id))
-    (push (format #f "var loadstring = ~s;\n" (_ "Load")))
+    (push (format #f "var loadstring = ~s;\n" (G_ "Load")))
     (push (format #f "var chartjsoptions = ~a;\n\n"
                   (get-options-string chart)))
 

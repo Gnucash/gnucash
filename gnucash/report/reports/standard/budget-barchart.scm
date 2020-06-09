@@ -141,7 +141,7 @@
         (gnc:html-barchart-set-height! chart height)
         (gnc:html-barchart-set-row-labels-rotated?! chart #t)
         (gnc:html-barchart-set-col-labels!
-          chart (list (_ "Budget") (_ "Actual")))
+          chart (list (G_ "Budget") (G_ "Actual")))
         (gnc:html-barchart-set-col-colors!
           chart '("#0074D9" "#FF4136"))
       )
@@ -154,7 +154,7 @@
         (gnc:html-linechart-set-height! chart height)
         (gnc:html-linechart-set-row-labels-rotated?! chart #t)
         (gnc:html-linechart-set-col-labels!
-          chart (list (_ "Budget") (_ "Actual")))
+          chart (list (G_ "Budget") (G_ "Actual")))
         (gnc:html-linechart-set-col-colors!
           chart '("#0074D9" "#FF4136"))
       )

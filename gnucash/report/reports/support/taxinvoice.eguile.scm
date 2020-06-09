@@ -103,7 +103,7 @@
 <html dir='auto'>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>
+<title><?scm:d (G_ "Invoice") ?> <?scm:d invoiceid ?></title>
 
 <link rel="stylesheet" href="<?scm:d (make-file-url opt-css-file) ?>" type="text/css">
 <!-- Note that the external stylesheet file is overridden by this following: -->
@@ -146,7 +146,7 @@
     </td>
   <?scm )) ?>
   <td align="left">
-    <h1 class="coyname"><?scm:d (or coyname (_ "Company Name")) ?></h1>
+    <h1 class="coyname"><?scm:d (or coyname (G_ "Company Name")) ?></h1>
   </td>
   <td align="right"><h2 class="invoice"><?scm:d opt-report-title ?>
     <?scm (if opt-invnum-next-to-title (begin ?><?scm:d (nbsp invoiceid) ?><?scm )) ?>
@@ -172,25 +172,25 @@
       <?scm )) ?>
       <?scm (if coyphone (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Phone") ?>:&nbsp;</td>
+          <td align="right"><?scm:d (G_ "Phone") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyphone ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyfax (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Fax") ?>:&nbsp;</td>
+          <td align="right"><?scm:d (G_ "Fax") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyfax ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyemail (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Email") ?>:&nbsp;</td>
+          <td align="right"><?scm:d (G_ "Email") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyemail ?></td>
         </tr>
       <?scm )) ?>
       <?scm (if coyurl (begin ?>
         <tr>
-          <td align="right"><?scm:d (_ "Website") ?>:&nbsp;</td>
+          <td align="right"><?scm:d (G_ "Website") ?>:&nbsp;</td>
           <td align="right"><?scm:d coyurl ?></td>
         </tr>
       <?scm )) ?>
@@ -222,15 +222,15 @@
       <?scm )) ?>
       <?scm (if (not isposted) (begin ?>
         <tr>
-           <td colspan="2" align="right"><?scm:d (_ "Invoice in progress...") ?></td>
+           <td colspan="2" align="right"><?scm:d (G_ "Invoice in progress...") ?></td>
         </tr>
       <?scm ) (begin ?>
         <tr>
-           <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
+           <td align="right"><?scm:d (nbsp (G_ "Invoice Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (nbsp (gnc-print-time64 postdate dateformat)) ?></td>
         </tr>
         <tr>
-           <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
+           <td align="right"><?scm:d (nbsp (G_ "Due Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (nbsp (gnc-print-time64 duedate dateformat)) ?></td>
         </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
@@ -265,9 +265,9 @@
   <thead>
     <tr bgcolor="#ccc" valign="bottom">
       <?scm (if opt-col-date (begin ?>
-      <th align="center" ><?scm:d (_ "Date") ?></th>
+      <th align="center" ><?scm:d (G_ "Date") ?></th>
       <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
-      <th align="left" width="80%"><?scm:d (_ "Description") ?></th>
+      <th align="left" width="80%"><?scm:d (G_ "Description") ?></th>
       <?scm (if (and units? opt-col-units) (begin ?>
         <th align="left"><?scm:d opt-units-heading ?></th>
       <?scm (set! tbl_cols (+ tbl_cols 1)) )) ?>
@@ -420,8 +420,8 @@
 
   (cond
    ((null? opt-invoice)
-    (display (string-append "<h2>" (_ "Tax Invoice") "</h2>"))
-    (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
+    (display (string-append "<h2>" (G_ "Tax Invoice") "</h2>"))
+    (display (string-append "<p>" (G_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
 
    (else
     (display-report opt-invoice)))

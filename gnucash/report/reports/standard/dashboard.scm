@@ -49,7 +49,7 @@
       (gnc:option-set-value
        (gnc:lookup-option options section name) value))
 
-    (set-option! "General" "Report name" (_ "Dashboard"))
+    (set-option! "General" "Report name" (G_ "Dashboard"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved

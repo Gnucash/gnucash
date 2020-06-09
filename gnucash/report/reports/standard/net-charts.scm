@@ -330,7 +330,7 @@
        (gnc:html-chart-set-height! chart height)
        (gnc:html-chart-set-title!
         chart (list report-title
-                    (format #f (_ "~a to ~a")
+                    (format #f (G_ "~a to ~a")
                             (qof-print-date from-date-t64)
                             (qof-print-date to-date-t64))))
        (gnc:html-chart-set-y-axis-label!
@@ -346,7 +346,7 @@
        (when show-sep?
          (gnc:html-chart-add-data-series!
           chart
-          (if inc-exp? (_ "Income") (_ "Assets"))
+          (if inc-exp? (G_ "Income") (G_ "Assets"))
           (map gnc:gnc-monetary-amount minuend-balances)
           "#0074D9"
           'fill (not linechart?)
@@ -362,12 +362,12 @@
                   (list gnc:pagename-general
                         gnc:optname-reportname
                         (if inc-exp?
-                            (_ "Income Chart")
-                            (_ "Asset Chart"))))))
+                            (G_ "Income Chart")
+                            (G_ "Asset Chart"))))))
 
          (gnc:html-chart-add-data-series!
           chart
-          (if inc-exp? (_ "Expense") (_ "Liabilities"))
+          (if inc-exp? (G_ "Expense") (G_ "Liabilities"))
           (map - (map gnc:gnc-monetary-amount subtrahend-balances))
           "#FF4136"
           'fill (not linechart?)
@@ -383,13 +383,13 @@
                   (list gnc:pagename-general
                         gnc:optname-reportname
                         (if inc-exp?
-                            (_ "Expense Chart")
-                            (_ "Liability Chart")))))))
+                            (G_ "Expense Chart")
+                            (G_ "Liability Chart")))))))
 
        (when show-net?
          (gnc:html-chart-add-data-series!
           chart
-          (if inc-exp? (_ "Net Profit") (_ "Net Worth"))
+          (if inc-exp? (G_ "Net Profit") (G_ "Net Worth"))
           (map gnc:gnc-monetary-amount difference-balances)
           "#2ECC40"
           'fill (not linechart?)
@@ -413,16 +413,16 @@
                    (gnc:html-table-set-col-headers!
                     table
                     (append
-                     (list (_ "Date"))
+                     (list (G_ "Date"))
                      (if show-sep?
                          (if inc-exp?
-                             (list (_ "Income") (_ "Expense"))
-                             (list (_ "Assets") (_ "Liabilities")))
+                             (list (G_ "Income") (G_ "Expense"))
+                             (list (G_ "Assets") (G_ "Liabilities")))
                          '())
                      (if show-net?
                          (if inc-exp?
-                             (list (_ "Net Profit"))
-                             (list (_ "Net Worth")))
+                             (list (G_ "Net Profit"))
+                             (list (G_ "Net Worth")))
                          '())))
                    (gnc:html-table-append-column! table date-string-list)
                    (when show-sep?
