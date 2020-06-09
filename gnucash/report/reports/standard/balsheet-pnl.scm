@@ -937,7 +937,7 @@ also show overall period profit & loss."))
      ((eq? report-type 'balsheet)
       (let* ((get-cell-monetary-fn
               (lambda (account col-idx)
-                (list-ref (assoc-ref accounts-balances account) col-idx)))
+                (list-ref (assoc-ref accounts-balances-with-closing account) col-idx)))
 
              ;; an alist of (cons account vector-of-splits) where each
              ;; split is the last one at date boundary
@@ -960,7 +960,7 @@ also show overall period profit & loss."))
              ;; asset and liabilities at report dates
              (asset-liability-balances
               (sum-balances-of-accounts
-               accounts-balances asset-liability gnc:monetaries-add))
+               accounts-balances-with-closing asset-liability gnc:monetaries-add))
 
              ;; a vector of collectors whereby collector is the sum of
              ;; incomes and expenses at report dates
