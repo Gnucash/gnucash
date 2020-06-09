@@ -15,6 +15,7 @@ from test_business import TestBusiness
 from test_commodity import TestCommodity, TestCommodityNamespace
 from test_numeric import TestGncNumeric
 from test_query import TestQuery
+from test_session_cc import TestQofSessionImpl
 
 if __name__ == '__main__':
     unittest.main()
