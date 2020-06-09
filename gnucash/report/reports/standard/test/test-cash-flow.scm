@@ -2,6 +2,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (tests test-engine-extras))
 (use-modules (gnucash reports standard cash-flow))
+(use-modules (gnucash reports cash-flow-calc))
 (use-modules (gnucash report))
 
 (define (run-test)
