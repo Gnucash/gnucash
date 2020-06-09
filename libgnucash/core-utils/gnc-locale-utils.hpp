@@ -23,6 +23,7 @@
 #define GNC_LOCALE_UTILS_HPP
 
 #include <locale>
+#include <string>
 
 /** Get the default application locale.
  *
@@ -35,5 +36,31 @@
  *  setlocale() in main().
  */
 const std::locale& gnc_get_locale();
+
+
+
+/** Create  default boost locale.
+ *
+ *  std::locale has very limited used on Windows so for translation work we rely
+ *  on boost::locale instead.  Calling boost::locale("") is expensive,
+ *  so call gnc_get_boost_locale instead.
+ *
+ * However before that funcation can be called the locale should be initialized
+ * with gnc_init_boost_locale.
+ */
+void gnc_init_boost_locale(const std::string& messages_path);
+
+
+
+/** Get the default boost locale.
+ *
+ *  std::locale has very limited used on Windows so for translation work we rely
+ *  on boost::locale instead.  Calling boost::locale("") is expensive,
+ *  so call this instead.
+ *
+ *  @returns A static std::locale representing the one set with
+ *  setlocale() in main(), but generated from boost::locale.
+ */
+const std::locale& gnc_get_boost_locale();
 
 #endif /* GNC_LOCALE_UTILS_HPP */

@@ -26,6 +26,7 @@ extern "C"
 #include <clocale>
 #include <boost/locale.hpp>
 #include "gnc-locale-utils.hpp"
+#include <config.h>
 
 /** Cache the UI locale
  *
@@ -69,6 +70,51 @@ gnc_get_locale()
     }
     return cached;
 #endif
+}
+
+
+static std::locale boost_cached;
+static bool tried_boost_already = false;
+
+void
+gnc_init_boost_locale (const std::string& messages_path)
+{
+    if (!tried_boost_already)
+    {
+        tried_boost_already = true;
+
+        try
+        {
+            boost::locale::generator gen;
+            if (!messages_path.empty())
+                gen.add_messages_path(messages_path);
+            else
+                g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+                      "Attempt to initialize boost_locale without a message_path. "
+                      "If message catalogs are not installed in the system's default locations "
+                      "user interface strings will not be translated.");
+            gen.add_messages_domain(PROJECT_NAME);
+            boost_cached = gen ("");
+        }
+        catch (const std::runtime_error& err)
+        {
+            char* locale = g_strdup(setlocale(LC_ALL, ""));
+
+            g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+                  "Failed to create C++ default locale from"
+                  "%s because %s. Using the 'C' locale for C++.",
+                  locale, err.what());
+            boost_cached = std::locale::classic();
+        }
+    }
+}
+
+
+
+const std::locale&
+gnc_get_boost_locale()
+{
+    return boost_cached;
 }
 
 

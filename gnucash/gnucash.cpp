@@ -221,7 +221,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL, NULL);
 
     /* Install Price Quote Sources */
-    auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_locale());
+    auto msg = bl::translate ("Checking Finance::Quote...").str(gnc_get_boost_locale());
     gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     scm_c_use_module("gnucash price-quotes");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
@@ -230,7 +230,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
     {
-        auto msg = bl::translate ("Loading data...").str(gnc_get_locale());
+        auto msg = bl::translate ("Loading data...").str(gnc_get_boost_locale());
         gnc_update_splash_screen (msg.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
         g_free(fn);

@@ -80,8 +80,6 @@ static int is_development_version = FALSE;
 #define GNC_VCS ""
 #endif
 
-
-
 static gchar *userdata_migration_msg = NULL;
 
 static void
@@ -503,6 +501,9 @@ Gnucash::CoreApp::CoreApp ()
     bind_textdomain_codeset("iso_4217", "UTF-8");
     textdomain(PROJECT_NAME);
     bind_textdomain_codeset(PROJECT_NAME, "UTF-8");
+
+    gnc_init_boost_locale (localedir);
+    std::cerr.imbue (gnc_get_boost_locale());
     g_free(localedir);
 }
 
@@ -514,7 +515,7 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
     m_app_name = std::string(app_name);
 
     // Now that gettext is properly initialized, set our help tagline.
-    m_tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_locale());
+    m_tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_boost_locale());
     m_opt_desc = std::make_unique<bpo::options_description>
         ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + m_tagline);
     add_common_program_options();

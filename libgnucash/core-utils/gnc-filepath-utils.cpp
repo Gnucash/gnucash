@@ -594,7 +594,7 @@ static std::string migrate_gnc_datahome()
     gen.add_messages_domain(PROJECT_NAME);
 
     std::stringstream migration_msg;
-    migration_msg.imbue(gnc_get_locale());
+    migration_msg.imbue(gnc_get_boost_locale());
 
     /* Step 1: copy directory $HOME/.gnucash to $GNC_DATA_HOME */
     auto full_copy = copy_recursive (old_dir, gnc_userdata_home);
