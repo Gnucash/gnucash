@@ -1,6 +1,6 @@
 #include <config.h>
 
-#include "gmock-qofquery.h"
+#include "fake-qofquery.h"
 #include "gmock-qofbook.h"
 
 QofQuery *

@@ -1,5 +1,5 @@
-#ifndef GMOCK_QOFQUERY_H
-#define GMOCK_QOFQUERY_H
+#ifndef FAKE_QOFQUERY_H
+#define FAKE_QOFQUERY_H
 
 #include <gmock/gmock.h>
 
