@@ -251,6 +251,17 @@ void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
 
+/** Check if the split is visible and ask if register filter should
+ *  be cleared if split is not visible.
+ *
+ *  @param gsr A pointer to GNCSplitReg
+ * 
+ *  @param split A pointer to the split to check visibility on
+ * 
+ *  @return TRUE if the register filter should be cleared
+ **/
+gboolean gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split);
+
 /**
  * Set the focus of the register to the sheet
  **/

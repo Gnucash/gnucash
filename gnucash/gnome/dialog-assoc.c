@@ -607,6 +607,10 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
         gsr = gnc_plugin_page_register_get_gsr (page);
         gnc_split_reg_raise (gsr);
 
+        // Test for visibility of split
+        if (gnc_split_reg_clear_filter_for_split (gsr, split))
+            gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(page));
+
         gnc_split_reg_jump_to_split (gsr, split);
     }
 

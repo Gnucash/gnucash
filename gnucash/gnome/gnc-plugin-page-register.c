@@ -3035,6 +3035,22 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
     LEAVE (" ");
 }
 
+void
+gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page)
+{
+    GncPluginPageRegisterPrivate* priv;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+
+    priv->fd.days = 0;
+    priv->fd.start_time = 0;
+    priv->fd.end_time = 0;
+    priv->fd.cleared_match = (gint)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+
+    gnc_ppr_update_date_query (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
+}
 
 /** This function is called when the "number of days" spin button is
  *  changed which is then saved and updates the time limitation on
@@ -4008,6 +4024,11 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction* action,
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
     split = xaccTransFindSplitByAccount(new_trans, account);
+
+    /* Test for visibility of split */
+    if (gnc_split_reg_clear_filter_for_split (gsr, split))
+        gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(page));
+
     gnc_split_reg_jump_to_split (gsr, split);
     LEAVE (" ");
 }
@@ -4781,6 +4802,11 @@ gnc_plugin_page_register_cmd_jump (GtkAction* action,
 
     gnc_main_window_open_page (GNC_MAIN_WINDOW (window), new_page);
     gsr = gnc_plugin_page_register_get_gsr (new_page);
+
+    /* Test for visibility of split */
+    if (gnc_split_reg_clear_filter_for_split (gsr, split))
+        gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(new_page));
+
     gnc_split_reg_jump_to_split (gsr, split);
     LEAVE (" ");
 }

@@ -197,10 +197,14 @@ gnc_html_register_url_cb (const char *location, const char *label,
     gnc_main_window_open_page (GNC_MAIN_WINDOW (result->parent), page);
     if (split)
     {
-        gsr = gnc_plugin_page_register_get_gsr(page);
-        gnc_split_reg_jump_to_split( gsr, split );
-    }
+        gsr = gnc_plugin_page_register_get_gsr (page);
 
+        /* Test for visibility of split */ 
+        if (gnc_split_reg_clear_filter_for_split (gsr, split))
+            gnc_plugin_page_register_clear_current_filter (page);
+
+        gnc_split_reg_jump_to_split (gsr, split);
+    }
     return TRUE;
 }
 

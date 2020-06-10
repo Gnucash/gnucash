@@ -1775,6 +1775,32 @@ gnc_split_reg_expand_trans_toolbar_cb (GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "expand_ent" );
 }
 
+gboolean
+gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split)
+{
+    VirtualCellLocation vcell_loc;
+    SplitRegister *reg;
+
+    if (!gsr)
+        return FALSE;
+
+    reg = gnc_ledger_display_get_split_register (gsr->ledger);
+
+    if (!gnc_split_register_get_split_virt_loc (reg, split, &vcell_loc))
+    {
+        gint response = gnc_ok_cancel_dialog (GTK_WINDOW(gsr->window),
+             GTK_RESPONSE_CANCEL,
+             (_("Target split is currently hidden in this register.\n\n%s\n\n"
+                "Select OK to temporarily clear filter and proceed,\n"
+                "otherwise the last active cell will be selected.")),
+             gsr->filter_text);
+
+        if (response == GTK_RESPONSE_OK)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 /**
  * move the cursor to the split, if present in register
 **/
@@ -1798,7 +1824,6 @@ gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
 
     gnc_ledger_display_refresh( gsr->ledger );
 }
-
 
 /**
  * Move the cursor to the split in the non-blank amount column.

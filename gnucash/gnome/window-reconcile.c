@@ -81,6 +81,7 @@ struct _RecnWindow
 
     GtkUIManager *ui_merge;
     GtkActionGroup *action_group;
+    GncPluginPage *page;
 
     GtkWidget *starting;         /* The starting balance                 */
     GtkWidget *ending;           /* The ending balance                   */
@@ -1019,7 +1020,6 @@ static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
 {
     Account *account = recn_get_account (recnData);
-    GncPluginPage *page;
     GNCSplitReg *gsr;
     gboolean include_children;
 
@@ -1027,10 +1027,10 @@ gnc_reconcile_window_open_register(RecnWindow *recnData)
         return(NULL);
 
     include_children = xaccAccountGetReconcileChildrenStatus (account);
-    page = gnc_plugin_page_register_new (account, include_children);
-    gnc_main_window_open_page (NULL, page);
-    gsr = gnc_plugin_page_register_get_gsr(page);
-    gnc_split_reg_raise(gsr);
+    recnData->page = gnc_plugin_page_register_new (account, include_children);
+    gnc_main_window_open_page (NULL, recnData->page);
+    gsr = gnc_plugin_page_register_get_gsr (recnData->page);
+    gnc_split_reg_raise (gsr);
     return gsr;
 }
 
@@ -1049,6 +1049,11 @@ gnc_reconcile_window_double_click_cb(GNCReconcileView *view, Split *split,
     gsr = gnc_reconcile_window_open_register(recnData);
     if (gsr == NULL)
         return;
+
+    /* Test for visibility of split */
+    if (gnc_split_reg_clear_filter_for_split (gsr, split))
+        gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(recnData->page));
+
     gnc_split_reg_jump_to_split( gsr, split );
 }
 
@@ -1430,6 +1435,11 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
     gsr = gnc_reconcile_window_open_register(recnData);
     if (gsr == NULL)
         return;
+
+    /* Test for visibility of split */
+    if (gnc_split_reg_clear_filter_for_split (gsr, split))
+        gnc_plugin_page_register_clear_current_filter (GNC_PLUGIN_PAGE(recnData->page));
+
     gnc_split_reg_jump_to_split_amount( gsr, split );
 }
 

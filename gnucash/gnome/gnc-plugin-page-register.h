@@ -163,6 +163,16 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
 Transaction *
 gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page);
 
+/** This function clears the registers current filter.
+ *  It is used so jumps to splits from other places can be completed 
+ *  otherwise the jump will be to the last active cell.
+ *
+ *  @param plugin_page A pointer to the GncPluginPageRegister.
+ */
+void
+gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page);
+
+
 G_END_DECLS
 /** @} */
 /** @} */
