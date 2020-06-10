@@ -6,31 +6,13 @@
 extern "C"
 {
 #include <gnc-prefs.h>
-#include <gnc-prefs-p.h>
 }
 
 
-// mock up for PrefsBackend (singleton class)
-class MockPrefsBackend : PrefsBackend
+// mock up class implementing preferences backend (see struct PrefBackend in gnc-prefs-p.h)
+class MockPrefsBackend
 {
 public:
-    MockPrefsBackend(MockPrefsBackend const&) = delete;
-    MockPrefsBackend& operator=(MockPrefsBackend const&) = delete;
-
-    static MockPrefsBackend* getInstance()
-    {
-        static MockPrefsBackend prefs;  // preferences object
-
-        // register preferences object
-        if (prefsbackend == NULL)
-            prefsbackend = (PrefsBackend*)&prefs;
-
-        // check that preferences object is correctly registered
-        EXPECT_EQ((MockPrefsBackend*)prefsbackend, &prefs);
-
-        return &prefs;
-    }
-
     MOCK_METHOD2(getBool, gboolean(const gchar *, const gchar *));
     MOCK_METHOD2(getInt, gint(const gchar *, const gchar *));
     MOCK_METHOD2(getInt64, gint64(const gchar *, const gchar *));
@@ -38,10 +20,12 @@ public:
     MOCK_METHOD2(getString, gchar*(const gchar *, const gchar *));
     MOCK_METHOD2(getEnum, gint(const gchar *, const gchar *));
     MOCK_METHOD4(getCoords, void(const gchar *, const gchar *, gdouble *, gdouble *));
-
-private:
-    MockPrefsBackend() {}
-    ~MockPrefsBackend() {}
 };
+
+/** Define a preferences backend.
+ *
+ * \attention Each call to this function overwrites a previously set backend.
+ */
+void gmock_gnc_prefs_set_backend(MockPrefsBackend *backend);
 
 #endif

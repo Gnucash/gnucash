@@ -114,8 +114,7 @@ class ImportBackendTest : public testing::Test
 protected:
     void SetUp()
     {
-        m_prefs = MockPrefsBackend::getInstance();
-        ASSERT_NE(m_prefs, nullptr);
+        gmock_gnc_prefs_set_backend(&m_prefs);
         m_import_acc = new MockAccount();
         m_dest_acc   = new MockAccount();
         m_trans      = new MockTransaction();
@@ -136,7 +135,7 @@ protected:
         m_split->free();
     }
 
-    MockPrefsBackend* m_prefs;
+    MockPrefsBackend  m_prefs;
     MockAccount*      m_import_acc;
     MockAccount*      m_dest_acc;
     MockTransaction*  m_trans;
@@ -196,7 +195,7 @@ protected:
         using namespace testing;
 
         // set bayesian import matching in preferences
-        ON_CALL(*m_prefs, getBool(StrEq(GNC_PREFS_GROUP_IMPORT), StrEq(GNC_PREF_USE_BAYES)))
+        ON_CALL(m_prefs, getBool(StrEq(GNC_PREFS_GROUP_IMPORT), StrEq(GNC_PREF_USE_BAYES)))
             .WillByDefault(Return(true));
     }
 
