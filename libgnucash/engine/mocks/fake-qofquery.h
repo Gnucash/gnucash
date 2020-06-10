@@ -11,12 +11,12 @@ extern "C"
 #include <Query.h>
 }
 
-// mock up for QofQuery
-// hint: class QofMockQuery can not be derived from QofQuery, since struct _QofQuery is not public
-class QofMockQuery
+// Fake object providing functionality similar to QofQuery
+// Note: QofQuery is a typedef for struct _QofQuery, which is is not public
+class QofFakeQuery
 {
 public:
-    QofMockQuery() {};
+    QofFakeQuery() {};
 
     MOCK_METHOD1(setBook, void(QofBook*));
     MOCK_METHOD0(destroy, void());
@@ -40,7 +40,7 @@ class QofQueryFactory
 {
 public:
 //    MOCK_METHOD0(createForSplit, MockQofQueryWithType<Split>*());
-    MOCK_METHOD0(create, QofMockQuery*());
+    MOCK_METHOD0(create, QofFakeQuery*());
 } qof_query_factory;
 
 #endif

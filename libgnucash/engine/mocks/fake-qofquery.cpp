@@ -24,7 +24,7 @@ void
 qof_query_set_book (QofQuery *query, QofBook *book)
 {
     ASSERT_TRUE(QOF_IS_MOCK_BOOK(book));
-    ((QofMockQuery*)query)->setBook(book);
+    ((QofFakeQuery*)query)->setBook(book);
 }
 
 GList *
@@ -33,7 +33,7 @@ qof_query_run (QofQuery *query)
     GList *matching_objects = NULL;
 
     // \todo use typed mock objects
-    auto matchingObjects = ((QofMockQuery*)query)->run();
+    auto matchingObjects = ((QofFakeQuery*)query)->run();
 
     for (auto object : matchingObjects)
     {
@@ -52,17 +52,17 @@ xaccQueryAddDateMatchTT (
         time64 ett,
         QofQueryOp op)
 {
-    ((QofMockQuery*)query)->addDateMatchTT(use_start, stt, use_end, ett, op);
+    ((QofFakeQuery*)query)->addDateMatchTT(use_start, stt, use_end, ett, op);
 }
 
 void
 xaccQueryAddSingleAccountMatch(QofQuery *query, Account *acc, QofQueryOp op)
 {
-    ((QofMockQuery*)query)->addSingleAccountMatch(acc, op);
+    ((QofFakeQuery*)query)->addSingleAccountMatch(acc, op);
 }
 
 void
 qof_query_destroy (QofQuery *query)
 {
-    ((QofMockQuery*)query)->destroy();
+    ((QofFakeQuery*)query)->destroy();
 }
