@@ -71,7 +71,8 @@ class ClassFromFunctions(object):
             self.__instance = kargs[INSTANCE_ARGUMENT]
         else:
             self.__instance = getattr(self._module, self._new_instance)(
-                *process_list_convert_to_instance(args) )
+                *process_list_convert_to_instance(args),
+                **process_dict_convert_to_instance(kargs))
 
     def get_instance(self):
         """Get the instance data.
@@ -86,12 +87,29 @@ class ClassFromFunctions(object):
 
     @classmethod
     def add_method(cls, function_name, method_name):
-        """Add the function, method_name to this class as a method named name
-        """
-        def method_function(self, *meth_func_args):
+        """! Add the function, method_name to this class as a method named name
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the method that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance. Will be turned to its instance property.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self.instance,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
@@ -99,14 +117,32 @@ class ClassFromFunctions(object):
 
     @classmethod
     def ya_add_classmethod(cls, function_name, method_name):
-        """Add the function, method_name to this class as a classmethod named name
+        """! Add the function, method_name to this class as a classmethod named name
 
-        Taken from function_class and slightly modified.
-        """
-        def method_function(self, *meth_func_args):
+        Taken from function_class and modified from add_method() to add classmethod
+        instead of method and not to turn self argument to self.instance.
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the classmethod that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, classmethod(method_function))
         setattr(method_function, "__name__", method_name)
@@ -114,14 +150,32 @@ class ClassFromFunctions(object):
 
     @classmethod
     def ya_add_method(cls, function_name, method_name):
-        """Add the function, method_name to this class as a method named name
+        """! Add the function, method_name to this class as a method named name
 
-        Taken from function_class and slightly modified.
-        """
-        def method_function(self, *meth_func_args):
+        Taken from function_class. Modified to not turn self to self.instance
+        as add_method() does.
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the method that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
@@ -161,19 +215,19 @@ def method_function_returns_instance(method_function, cls):
     argument.
     """
     assert( 'instance' == INSTANCE_ARGUMENT )
-    def new_function(*args):
-        kargs = { INSTANCE_ARGUMENT : method_function(*args) }
-        if kargs['instance'] == None:
+    def new_function(*args, **kargs):
+        kargs_cls = { INSTANCE_ARGUMENT : method_function(*args, **kargs) }
+        if kargs_cls['instance'] == None:
             return None
         else:
-            return cls( **kargs )
+            return cls( **kargs_cls )
 
     return new_function
 
 def method_function_returns_instance_list(method_function, cls):
-    def new_function(*args):
+    def new_function(*args, **kargs):
         return [ cls( **{INSTANCE_ARGUMENT: item} )
-                 for item in method_function(*args) ]
+                 for item in method_function(*args, **kargs) ]
     return new_function
 
 def methods_return_instance_lists(cls, function_dict):
@@ -212,6 +266,18 @@ def process_list_convert_to_instance( value_list ):
     """
     return [ return_instance_if_value_has_it(value)
              for value in value_list ]
+
+def process_dict_convert_to_instance(value_dict):
+    """Return a dict built from value_dict, where if a value is in an instance
+    of ClassFromFunctions, we put value.instance in the dict instead.
+
+    Things that are not instances of ClassFromFunctions are returned to
+    the new dict unchanged.
+    """
+    return {
+        key: return_instance_if_value_has_it(value) for key, value in value_dict.items()
+    }
+
 
 def extract_attributes_with_prefix(obj, prefix):
     """Generator that iterates through the attributes of an object and

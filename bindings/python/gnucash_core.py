@@ -266,12 +266,12 @@ class Session(GnuCashCoreClass):
 
     # STATIC METHODS
     @staticmethod
-    def raise_backend_errors_after_call(function):
+    def raise_backend_errors_after_call(function, *args, **kwargs):
         """A function decorator that results in a call to
         raise_backend_errors after execution.
         """
-        def new_function(self, *args):
-            return_value = function(self, *args)
+        def new_function(self, *args, **kwargs):
+            return_value = function(self, *args, **kwargs)
             self.raise_backend_errors(function.__name__)
             return return_value
         return new_function
