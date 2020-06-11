@@ -1,4 +1,4 @@
- N_( "1The GnuCash online manual has lots of helpful information. \
+ N_( "The GnuCash online manual has lots of helpful information. \
 You can access the manual under the Help menu.")
 
 /* Translators: You can replace the link, if a transated page exists. */
