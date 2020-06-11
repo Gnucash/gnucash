@@ -464,6 +464,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Email-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
+"GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen etc. "
+"siehe die Liste in  https://wiki.gnucash.org/wiki/Mailing_Lists."
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -536,6 +539,8 @@ msgstr ""
 "Informationen zu den Kontoarten, die Sie zur Verfügung haben, und Hinweise "
 "zum Erstellen eines Kontenplans finden Sie im GnuCash Online-Handbuch. "
 
+#Fell: »Bemerkung anzeigen« ist nicht mehr ganz zutreffend,
+# da die 2. Zeile mindestens auch verknüpfte Dokumente enthält
 #: doc/tip_of_the_day.list.c:38
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
@@ -545,6 +550,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"Jede Buchung hat ein »Bemerkungen«-Feld, in dem Sie für Sie nützliche "
+Informationen speichern können.\n"
+"\n"
+"Um es sichtbar zu machen,\n"
+"aktivieren Sie »Bemerkung anzeigen« im Menü »Ansicht« oder\n"
+"in »Bearbeiten->Einstellungen->Voreinstellungen Kontobuch«."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -741,7 +752,7 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
-"Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
+"Um den Inhalt zweier Reiter in einem der Reiter optisch zu vergleichen,"
 "wählen Sie im Menü 'Fenster->Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
 
