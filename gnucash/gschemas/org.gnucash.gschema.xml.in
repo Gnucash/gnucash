@@ -302,8 +302,8 @@
     </key>
     <key name="double-line-mode" type="b">
       <default>false</default>
-      <summary>Show two lines of information for each transaction</summary>
-      <description>Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
+      <summary>Show a second line with "Action", "Notes", and "File Association" for each transaction.</summary>
+      <description>Show a second line with "Action", "Notes", and "File Association" for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
     </key>
     <key name="show-leaf-account-names" type="b">
       <default>false</default>

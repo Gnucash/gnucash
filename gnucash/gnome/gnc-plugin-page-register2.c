@@ -129,8 +129,8 @@ static gchar *gnc_plugin_page_register2_filter_time2dmy (time64 raw_time);
 static gchar *gnc_plugin_page_register2_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 
-static void gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page); 
-static void gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page); 
+static void gnc_ppr_update_status_query (GncPluginPageRegister2 *page, gboolean refresh_page);
+static void gnc_ppr_update_date_query (GncPluginPageRegister2 *page, gboolean refresh_page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register2_cmd_print_check (GtkAction *action, GncPluginPageRegister2 *plugin_page);
@@ -408,7 +408,7 @@ static GtkToggleActionEntry toggle_entries[] =
 {
     {
         "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL,
-        N_("Show two lines of information for each transaction"),
+        N_("Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."),
         G_CALLBACK (gnc_plugin_page_register2_cmd_style_double_line), FALSE
     },
 
@@ -908,7 +908,7 @@ gnc_plugin_page_register2_ui_update (gpointer various, GncPluginPageRegister2 *p
 
     /* Set 'Void' and 'Unvoid' */
     trans = gnc_tree_view_split_reg_get_current_trans (view);
-    voided = xaccTransHasSplitsInState (trans, VREC); 
+    voided = xaccTransHasSplitsInState (trans, VREC);
 
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                          "VoidTransactionAction");
