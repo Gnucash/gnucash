@@ -2,7 +2,7 @@
 # Messages in Deutsch für GnuCash
 # This file is distributed under the same license as the GnuCash package.
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
-# Copyright (C) 2005-2019 by the translators:
+# Copyright (C) 2005-2020 by the translators:
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2020.
@@ -21,11 +21,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.8+\n"
+"Project-Id-Version: GnuCash 3.10+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-12 01:11+0200\n"
-"PO-Revision-Date: 2020-03-28 04:22+0100\n"
+"PO-Revision-Date: 2020-03-06-12 01:19+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -551,7 +551,7 @@ msgid ""
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
 "Jede Buchung hat ein »Bemerkungen«-Feld, in dem Sie für Sie nützliche "
-Informationen speichern können.\n"
+"Informationen speichern können.\n"
 "\n"
 "Um es sichtbar zu machen,\n"
 "aktivieren Sie »Bemerkung anzeigen« im Menü »Ansicht« oder\n"
