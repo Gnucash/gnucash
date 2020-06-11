@@ -540,7 +540,7 @@ static GtkToggleActionEntry toggle_entries[] =
 {
     {
         "ViewStyleDoubleLineAction", NULL, N_ ("_Double Line"), NULL,
-        N_ ("Show two lines of information for each transaction"),
+        N_ ("Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."),
         G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE
     },
 
