@@ -28,6 +28,7 @@
 #  @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
 #  @ingroup python_bindings
 
+from enum import IntEnum
 from gnucash import gnucash_core_c
 from gnucash import _sw_core_utils
 
@@ -82,6 +83,57 @@ class GnuCashBackendException(Exception):
     def __init__(self, msg, errors):
         Exception.__init__(self, msg)
         self.errors = errors
+
+
+class SessionOpenMode(IntEnum):
+    """Mode for opening sessions.
+
+    This replaces three booleans that were passed in order: ignore_lock, create,
+    and force. It's structured so that one can use it as a bit field with the
+    values in the same order, i.e. ignore_lock = 1 << 2, create_new = 1 << 1, and
+    force_new = 1.
+
+    enumeration members
+    -------------------
+
+    SESSION_NORMAL_OPEN = 0     (All False)
+    Open will fail if the URI doesn't exist or is locked.
+
+    SESSION_NEW_STORE = 2       (False, True, False (create))
+    Create a new store at the URI. It will fail if the store already exists and is found to contain data that would be overwritten.
+
+    SESSION_NEW_OVERWRITE = 3   (False, True, True (create | force))
+    Create a new store at the URI even if a store already exists there.
+
+    SESSION_READ_ONLY = 4,      (True, False, False (ignore_lock))
+    Open the session read-only, ignoring any existing lock and not creating one if the URI isn't locked.
+
+    SESSION_BREAK_LOCK = 5     (True, False, True (ignore_lock | force))
+    Open the session, taking over any existing lock.
+
+    source: lignucash/engine/qofsession.h
+    """
+
+    SESSION_NORMAL_OPEN = gnucash_core_c.SESSION_NORMAL_OPEN
+    """All False
+    Open will fail if the URI doesn't exist or is locked."""
+
+    SESSION_NEW_STORE = gnucash_core_c.SESSION_NEW_STORE
+    """False, True, False (create)
+    Create a new store at the URI. It will fail if the store already exists and is found to contain data that would be overwritten."""
+
+    SESSION_NEW_OVERWRITE = gnucash_core_c.SESSION_NEW_OVERWRITE
+    """False, True, True (create | force)
+    Create a new store at the URI even if a store already exists there."""
+
+    SESSION_READ_ONLY = gnucash_core_c.SESSION_READ_ONLY
+    """True, False, False (ignore_lock)
+    Open the session read-only, ignoring any existing lock and not creating one if the URI isn't locked."""
+
+    SESSION_BREAK_LOCK = gnucash_core_c.SESSION_BREAK_LOCK
+    """True, False, True (ignore_lock | force)
+    Open the session, taking over any existing lock."""
+
 
 class Session(GnuCashCoreClass):
     """A GnuCash book editing session
