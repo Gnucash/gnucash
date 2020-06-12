@@ -35,6 +35,12 @@ account details. For more information on choosing an account type \
 or setting up a chart of accounts, please see the GnuCash online \
 manual.")
 
+N_( "Every transaction has a \"Notes\" field where you can put useful \
+information.\n\n\
+To make it visible\n\
+select \"View\" in the menu bar and check \"Double Line\" or\n\
+check \"Double Line Mode\" in Preferences:Register Defaults.")
+
  N_( "To enter multiple-split transactions such as a paycheck with \
 multiple deductions, click the Split button in the tool bar. \
 Alternatively, in the View menu, you can choose the register \

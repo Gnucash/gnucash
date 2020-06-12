@@ -454,9 +454,8 @@ msgid "The menu of options"
 msgstr "Das Optionsmenü"
 
 #: doc/tip_of_the_day.list.c:1
-#, fuzzy
 msgid ""
-"1The GnuCash online manual has lots of helpful information. You can access "
+"The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
 "Das GnuCash Online-Handbuch bietet jede Menge hilfreicher Informationen. Das "
@@ -469,6 +468,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Email-Listen sind die bevorzugte Form der Kommunikation innerhalb der "
+"GnuCash-Gemeinschaft. Für Ankündigungen neuer Versionen, Benutzergruppen etc. "
+"siehe die Liste in  https://wiki.gnucash.org/wiki/Mailing_Lists."
 
 #: doc/tip_of_the_day.list.c:9
 msgid ""
@@ -541,7 +543,25 @@ msgstr ""
 "Informationen zu den Kontoarten, die Sie zur Verfügung haben, und Hinweise "
 "zum Erstellen eines Kontenplans finden Sie im GnuCash Online-Handbuch. "
 
+#Fell: »Bemerkung anzeigen« ist nicht mehr ganz zutreffend,
+# da die 2. Zeile mindestens auch verknüpfte Dokumente enthält
 #: doc/tip_of_the_day.list.c:38
+msgid ""
+"Every transaction has a \"Notes\" field where you can put useful "
+"information.\n"
+"\n"
+"To make it visible\n"
+"select \"View\" in the menu bar and check \"Double Line\" or\n"
+"check \"Double Line Mode\" in Preferences:Register Defaults."
+msgstr ""
+"Jede Buchung hat ein »Bemerkungen«-Feld, in dem Sie für Sie nützliche "
+"Informationen speichern können.\n"
+"\n"
+"Um es sichtbar zu machen,\n"
+"aktivieren Sie »Bemerkung anzeigen« im Menü »Ansicht« oder\n"
+"in »Bearbeiten->Einstellungen->Voreinstellungen Kontobuch«."
+
+#: doc/tip_of_the_day.list.c:44
 msgid ""
 "To enter multiple-split transactions such as a paycheck with multiple "
 "deductions, click the Split button in the tool bar. Alternatively, in the "
@@ -553,7 +573,7 @@ msgstr ""
 "der Werkzeugleiste. Alternativ können Sie auch im Menü Ansicht die "
 "Buchungsansicht »Aktive vollständig« oder »Vollständig« wählen."
 
-#: doc/tip_of_the_day.list.c:43
+#: doc/tip_of_the_day.list.c:49
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
@@ -566,7 +586,7 @@ msgstr ""
 "gefolgt von »+«, »-«, »*« oder »/«, gefolgt von einem zweiten Wert. Nach "
 "anschließendem Drücken von »Eingabe« wird der berechnete Betrag gebucht."
 
-#: doc/tip_of_the_day.list.c:48
+#: doc/tip_of_the_day.list.c:54
 msgid ""
 "Quick-fill makes it easy to enter common transactions. When you type the "
 "first letter(s) of a common transaction description, then press the Tab key, "
@@ -578,7 +598,7 @@ msgstr ""
 "Tabulator-Taste drücken, kann GnuCash den Rest mit dem bekannten Text "
 "vervollständigen."
 
-#: doc/tip_of_the_day.list.c:53
+#: doc/tip_of_the_day.list.c:59
 msgid ""
 "Type the first letter(s) of an existing account name in the Transfer "
 "register column, and GnuCash will complete the name from your list of "
@@ -592,7 +612,7 @@ msgstr ""
 "einem ':', gefolgt von den ersten Buchstaben des Unterkontos (z.B. A:B für "
 "Aktiva:Bargeld)."
 
-#: doc/tip_of_the_day.list.c:59
+#: doc/tip_of_the_day.list.c:65
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
@@ -602,7 +622,7 @@ msgstr ""
 "ansehen. Markieren Sie im Kontenhierarchie-Fenster das übergeordnete Konto "
 "und wählen Sie den Menüpunkt »Bearbeiten->Unterkonten öffnen«."
 
-#: doc/tip_of_the_day.list.c:63
+#: doc/tip_of_the_day.list.c:69
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
@@ -613,7 +633,7 @@ msgstr ""
 "weiterschalten. Wenn Sie im Kontobuch Buchungsnummern eingeben, können Sie "
 "ebenfalls mit '+' und '-' die nächstfolgende oder vorige Nummer auswählen."
 
-#: doc/tip_of_the_day.list.c:67
+#: doc/tip_of_the_day.list.c:73
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
@@ -621,7 +641,7 @@ msgstr ""
 "Um zwischen verschiedenen Karteikarten (Tabs) zu wechseln, kann man die "
 "Tastenkombination Strg+Bild hoch/runter verwenden."
 
-#: doc/tip_of_the_day.list.c:70
+#: doc/tip_of_the_day.list.c:76
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
@@ -631,7 +651,7 @@ msgstr ""
 "»Abgeglichen« markieren. Um zwischen Haben und Soll zu wechseln, können Sie "
 "Tab (die Tabulatortaste) und Umschalt-Tab drücken."
 
-#: doc/tip_of_the_day.list.c:74
+#: doc/tip_of_the_day.list.c:80
 msgid ""
 "To transfer funds between accounts with different currencies, click on the "
 "Transfer button in the register toolbar, select the accounts, and the "
@@ -643,7 +663,7 @@ msgstr ""
 "die zusätzlichen Optionen für Währungstransaktionen werden automatisch "
 "aktiviert."
 
-#: doc/tip_of_the_day.list.c:79
+#: doc/tip_of_the_day.list.c:85
 msgid ""
 "You can set the Security Editor screen to display the Quote Source of a "
 "security, which makes it easy to see which online sources your securities "
@@ -655,7 +675,7 @@ msgstr ""
 "auf das Dreieck am rechten Ende der Überschriften und setzen Sie das Häkchen "
 "bei »Quelle«"
 
-#: doc/tip_of_the_day.list.c:84
+#: doc/tip_of_the_day.list.c:90
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
@@ -665,7 +685,7 @@ msgstr ""
 "alle Ihre Informationen im Blick zu haben. Benutzen Sie dafür den Bericht "
 "Beispiele->»Benutzerdefiniert Mehrspaltig«."
 
-#: doc/tip_of_the_day.list.c:89
+#: doc/tip_of_the_day.list.c:95
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
 "report as a report option, and use the Edit->Style Sheets menu to customize "
@@ -675,7 +695,7 @@ msgstr ""
 "Wählen Sie eine Stilvorlage für Ihren Bericht und benutzen Sie den Menüpunkt "
 "Bearbeiten->»Stilvorlagen...«, um die Stilvorlagen anzupassen. "
 
-#: doc/tip_of_the_day.list.c:93
+#: doc/tip_of_the_day.list.c:99
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
@@ -684,7 +704,7 @@ msgstr ""
 "Konten aufrufen, indem man die Tastenkombination Strg+Pfeil nach unten "
 "drückt."
 
-#: doc/tip_of_the_day.list.c:96
+#: doc/tip_of_the_day.list.c:102
 msgid ""
 "The scheduled transaction editor comes with a very flexible frequency "
 "configurator. Basic frequencies to schedule a transaction include daily, "
@@ -708,7 +728,7 @@ msgstr ""
 "Um eine Buchung für jedes Jahr zu terminieren, können Sie die monatliche "
 "Standardhäufigkeit wählen und dann 'Alle 12 Monate'."
 
-#: doc/tip_of_the_day.list.c:105
+#: doc/tip_of_the_day.list.c:111
 msgid ""
 "If you work overnight, you should close and reopen your working registers "
 "after midnight, to get the new date as default for new transactions. It is "
@@ -719,7 +739,7 @@ msgstr ""
 "damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist. Es "
 "ist nicht notwendig, GnuCash neu zu starten."
 
-#: doc/tip_of_the_day.list.c:109
+#: doc/tip_of_the_day.list.c:115
 msgid ""
 "To search through all your transactions, start a search (Edit->Find...) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
@@ -730,17 +750,17 @@ msgstr ""
 "Buchung in einem bestimmten Konto suchen, starten Sie diese Suche vom "
 "Kontofenster dieses Kontos."
 
-#: doc/tip_of_the_day.list.c:113
+#: doc/tip_of_the_day.list.c:119
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
-"Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
+"Um den Inhalt zweier Reiter in einem der Reiter optisch zu vergleichen,"
 "wählen Sie im Menü 'Fenster->Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
 
-#: doc/tip_of_the_day.list.c:117
+#: doc/tip_of_the_day.list.c:123
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -983,9 +1003,9 @@ msgstr "Darlehensrechner-Option: \"%s\""
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:611
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:47
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
-#: gnucash/import-export/import-main-matcher.c:798
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/import-main-matcher.c:770
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3699
@@ -1183,9 +1203,9 @@ msgstr "Rechnung"
 
 #: gnucash/gnome/business-gnome-utils.c:448 gnucash/gnome/gnc-split-reg.c:766
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
-#: gnucash/gtkbuilder/gnc-frequency.glade:662
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:46
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:51
+#: gnucash/gtkbuilder/gnc-frequency.glade:675
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/reports/standard/register.scm:227
 #: gnucash/report/trep-engine.scm:258 gnucash/report/trep-engine.scm:291
@@ -1861,7 +1881,7 @@ msgstr "Nummer/Aktion"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:105
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:325
 #: gnucash/report/reports/standard/invoice.scm:92
@@ -4358,54 +4378,44 @@ msgid "Are you sure you want to do this?"
 msgstr "Soll diese Aktion durchgeführt werden?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:141
-#, fuzzy
 msgid "Open the selected account."
-msgstr "Gewähltes Konto öffnen"
+msgstr "Gewähltes Konto öffnen."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:146
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
+#: gnucash/gnome/gnc-plugin-page-budget.c:141
 msgid "Open the selected account and all its subaccounts."
-msgstr "Öffne das gewählte Konto und alle Unterkonten"
+msgstr "Öffne das gewählte Konto und alle Unterkonten."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:154
-#, fuzzy
 msgid "Delete this budget."
-msgstr "Dieses Budget löschen"
+msgstr "Dieses Budget löschen."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:158
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "Budget Optionen"
+msgstr "Budget _Optionen..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Budget-Optionen ändern"
+msgstr "Budget-Optionen ändern."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:163
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "Budget abschätzen"
+msgstr "Budget ab_schätzen..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions."
 msgstr ""
 "Die Budgetwerte für die gewählten Konten abschätzen, basierenden auf den "
-"früheren Buchungen"
+"früheren Buchungen."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:169
-#, fuzzy
 msgid "_All Periods..."
-msgstr "Alle Perioden"
+msgstr "_Alle Perioden..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
 msgstr "Budget für Ausgewähltes Konto bearbeiten"
 
@@ -4420,9 +4430,8 @@ msgid "Edit note for the selected account and period"
 msgstr "Ausgewähltes Konto bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
-#, fuzzy
 msgid "Refresh this window."
-msgstr "Dieses Fenster aktualisieren"
+msgstr "Dieses Fenster aktualisieren."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:210
 #: gnucash/gnome/gnc-plugin-page-report.c:1088
@@ -4440,7 +4449,6 @@ msgid "All Periods"
 msgstr "Alle Perioden"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:213
-#, fuzzy
 msgid "Note"
 msgstr "Bemerkung"
 
@@ -8606,25 +8614,21 @@ msgid "View..."
 msgstr "Ansicht..."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
-#, fuzzy
 msgid "GnuCash could not find the files of the help documentation."
-msgstr "Die Dateien für die Hilfe-Dokumentation konnten nicht gefunden werden."
+msgstr "GnuCash konnte die Dateien für die Hilfe-Dokumentation nicht finden."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:71
-#, fuzzy
 msgid ""
 "This is likely because the \"gnucash-docs\" package is not properly "
 "installed."
 msgstr ""
-"Die Dateien für die Hilfe-Dokumentation konnten nicht gefunden werden. Das "
-"liegt vermutlich daran, dass das Paket »gnucash-docs« noch nicht installiert "
-"ist."
+"Das liegt vermutlich daran, dass das Paket »gnucash-docs« nicht richtig "
+"installiert ist."
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:73
-#, fuzzy
 msgid "Expected location"
-msgstr "Alter Speicher-Ordner:"
+msgstr "Erwarteter Speicherort"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:445
 #: gnucash/gnome-utils/gnc-gnome-utils.c:486
@@ -9938,7 +9942,7 @@ msgstr "Beschreibung / Notizen / Buchungstext"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 msgid "Void Reason"
 msgstr "Stornierungsbegründung"
 
@@ -11991,9 +11995,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:301
 msgid ""
-"Show two lines of information for each transaction in a register. This is "
-"the default setting for when a register is first opened. The setting can be "
-"changed at any time via the \"View->Double Line\" menu item."
+"Show a second line with \"Action\", \"Notes\", and \"File Association\" for "
+"each transaction in a register. This is the default setting for when a "
+"register is first opened. The setting can be changed at any time via the "
+"\"View->Double Line\" menu item."
 msgstr ""
 "Zwei Zeilen für jede Buchung im Kontofenster anzeigen. Dies ist die "
 "Voreinstellung, wenn ein Kontofenster das erste Mal geöffnet wird. Für jedes "
@@ -16509,8 +16514,8 @@ msgstr "2013-07-31"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:66
 #: gnucash/gtkbuilder/gnc-date-format.glade:24
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:50
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:47
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
 msgstr "Systemsprache"
 
@@ -20779,7 +20784,7 @@ msgid "Rate/Price"
 msgstr "Kurs/Preis"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:52
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 msgid "Transaction ID"
 msgstr "BuchungsID"
 
@@ -20792,7 +20797,7 @@ msgid "Full Account Name"
 msgstr "Volle Kontobezeichnung"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 msgid "Reconcile Date"
 msgstr "Datum des Abgleichs"
 
@@ -21129,28 +21134,28 @@ msgstr "Zeile %u, Währung %s / %s nicht gefunden\n"
 msgid "Row %u, account %s not in %s\n"
 msgstr "Zeile %u, Konto %s nicht in %s\n"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:51
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:48
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:60
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
 #: gnucash/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr "Punkt: 123,456.78"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:52
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:49
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:61
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:58
 #: gnucash/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr "Komma: 123.456,78"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:437
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:463
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:446
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:472
 msgid "Please select a date column."
 msgstr "Bitte wählen Sie die Datumsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:442
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:451
 msgid "Please select an amount column."
 msgstr "Bitte wählen sie eine Betragsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:449
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:458
 msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
@@ -21158,7 +21163,7 @@ msgstr ""
 "Bitte wählen Sie eine Spalte der Zielwährung oder wählen Sie eine Währung im "
 "Feld Zielwährung."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:457
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:466
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
@@ -21166,7 +21171,7 @@ msgstr ""
 "Bitte wählen Sie eine Spalte für das Herkunfts-Wertpapier oder wählen Sie "
 "ein Wertpapier im Feld Herkunfts-Wertpapier."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:465
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:474
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
@@ -21174,15 +21179,15 @@ msgstr ""
 "Bitte wählen Sie eine Spalte für den Namensraum oder wählen Sie ein "
 "Wertpapier im Feld Herkunfts-Wertpapier."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:473
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:182
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:204
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:482
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:184
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:206
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:284
 msgid "'Commodity From' can not be the same as 'Currency To'."
 msgstr "'Herkunfts-Wertpapier' darf nicht identisch mit 'Zielwährung' sein."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:493
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:515
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:502
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "No valid data found in the selected file. It may be empty or the selected "
 "encoding is wrong."
@@ -21190,8 +21195,8 @@ msgstr ""
 "In der gewählten Datei wurden keine gültigen Daten gefunden. Entweder ist "
 "die Datei leer oder in einem anderen Zeichensatz kodiert als angegeben."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:501
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:523
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:510
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:532
 msgid ""
 "No lines are selected for importing. Please reduce the number of lines to "
 "skip."
@@ -21199,8 +21204,8 @@ msgstr ""
 "Keine Zeilen zum Import ausgewählt. Bitte verringern Sie die Zahl der zu "
 "überspringenden Zeilen."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:520
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:542
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:529
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:551
 msgid ""
 "Not all fields could be parsed. Please correct the issues reported for each "
 "line or adjust the lines to skip."
@@ -21209,7 +21214,7 @@ msgstr ""
 "jederZeile die angezeigten Fehler oder ändern Sie die Zahl der zu "
 "überspringenden Zeilen"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:571
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:580
 msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
@@ -21218,7 +21223,7 @@ msgstr ""
 "angegeben.\n"
 "Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:588
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:597
 msgid ""
 "No 'From Namespace/From Symbol' columns selected and no selected Commodity "
 "From specified either.\n"
@@ -21228,26 +21233,26 @@ msgstr ""
 "Wertpapier angegeben.\n"
 "Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:471
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:480
 msgid "Please select an account column."
 msgstr "Wählen Sie eine Kontenspalte."
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:473
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:482
 msgid ""
 "Please select an account column or set a base account in the Account field."
 msgstr ""
 "Bitte wählen Sie eine Kontenspalte oder setzen das Basiskonto in das "
 "Kontenfeld"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:479
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:488
 msgid "Please select a description column."
 msgstr "Bitte wählen Sie eine Beschreibungsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:485
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:494
 msgid "Please select a deposit or withdrawal column."
 msgstr "Bitte wählen Sie eine Einzahlungs- oder Auszahlungsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:495
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:504
 msgid ""
 "Please select a transfer account column or remove the other transfer related "
 "columns."
@@ -21255,7 +21260,7 @@ msgstr ""
 "Bitte wählen Sie eine Herkunftskonto-Spalte oder entfernen Sie die anderen "
 "Spalten."
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:662
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
 "No account column selected and no default account specified either.\n"
 "This should never happen. Please report this as a bug."
@@ -21263,154 +21268,154 @@ msgstr ""
 "Weder wurde eine Kontenspalte ausgewählt noch ein Standardkonto angegeben.\n"
 "Dies sollte niemals passieren. Bitte berichten Sie dies als Fehler."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
 msgid "From Symbol"
 msgstr "Von Symbol"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 msgid "From Namespace"
 msgstr "Von Namensraum"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 msgid "Currency To"
 msgstr "Nach Währung"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:64
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:112
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:206
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:211
 msgid "Value doesn't appear to contain a valid number."
 msgstr "Der Wert scheint keine gültige Zahl zu enthalten."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:77
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:82
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:87
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:125
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:79
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:84
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:89
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:130
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 "Der Wert kann nicht in eine Zahl unter Verwendung des ausgewählten "
 "Währungsformats umgewandelt werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:119
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:192
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:121
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:197
 msgid "Value can't be parsed into a valid commodity."
 msgstr "Der Wert kann nicht als gültiges Wertpapier erkannt werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:139
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:141
 msgid "Value can't be parsed into a valid namespace."
 msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:153
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:155
 msgid "Column value can not be empty."
 msgstr "Der Spaltenwert darf nicht leer sein."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:172
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:174
 msgid "'From Symbol' can not be empty."
 msgstr "»Von Symbol« darf nicht leer sein."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:192
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:194
 msgid "'From Namespace' can not be empty."
 msgstr "»Von Namensraum« darf nicht leer sein."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:217
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:219
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr "Die 'Zielwährung' kann nicht gleich sein mit 'Herkunfts-Wertpapier'."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:219
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:221
 msgid "Value parsed into an invalid currency for a currency column type."
 msgstr "Wert ergibt keine gültige Währung für eine Währungsspalte"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:233
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:241
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:284
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:503
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:566
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:243
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:289
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:297
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:508
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
 msgid " could not be understood.\n"
 msgstr "konnte nicht verstanden werden.\n"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:274
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:318
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
 msgid "No date column."
 msgstr "Keine Datumsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:278
 msgid "No amount column."
 msgstr "Keine Betragsspalte."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:278
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 msgid "No 'Currency to'."
 msgstr "Keine »Nach Währung« Spalte."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
 msgid "No 'Commodity from'."
 msgstr "Keine »Von Währung/Wertpapier« Spalte."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:350
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:352
 msgid "Failed to create price from selected columns."
 msgstr "Konnte aus der gewählten Spalte keinen Preis entnehmen."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 msgid "Transaction Commodity"
 msgstr "Buchungswährung/-wertpapier"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 msgid "Transfer Action"
 msgstr "Buchungsaktion"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Transfer Memo"
 msgstr "Buchungstext"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Transfer Reconciled"
 msgstr "Buchung Abgeglichen"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Reconcile Date"
 msgstr "Buchung-Abgleichen-Datum"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:155
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:160
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:218
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:223
 msgid "Price can't be parsed into a number."
 msgstr "Preis kann nicht als Zahl erkannt werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:374
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:379
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 "Angabe zu Konto kann nicht mit einem existierenden Konto in Übereinstimmung "
 "gebracht werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:375
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 "Angabe zu Transferkonto kann nicht mit einem existierenden Konto in "
 "Übereinstimmung gebracht werden."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:424
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:429
 msgid "Account value can't be empty."
 msgstr "Angabe zu Konto darf nicht leer sein."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:435
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:440
 msgid "Transfer account value can't be empty."
 msgstr "Angabe zu Transfer-Konto darf nicht leer sein."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:586
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:591
 msgid "No deposit or withdrawal column."
 msgstr "Keine Spalte für Gutschrift oder Belastung."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:592
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:597
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 "Teilbuchung ist abgeglichen, aber das Abgleichdatum fehlt oder ist ungültig."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:599
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:604
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
@@ -21418,11 +21423,11 @@ msgstr ""
 "Transfer-Teilbuchung ist abgeglichen, aber das Transfer-Abgleichdatum fehlt "
 "oder ist ungültig"
 
-#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:45
+#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
 msgid "No Settings"
 msgstr "Keine Einstellungen"
 
-#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
+#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
 msgid "GnuCash Export Format"
 msgstr "Wählen Sie das Export-Format"
 
@@ -31152,115 +31157,3 @@ msgstr "Buchung ungültig gemacht"
 #: libgnucash/tax/us/txf.scm:98
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "Inflow from Income"
-#~ msgstr "Zufluß von Einkünften"
-
-#~ msgid "Outflow to Expenses"
-#~ msgstr "Abfluß in Aufwendungen"
-
-#~ msgid "Outflow to Asset/Equity/Liability"
-#~ msgstr "Abfluß in Aktiva und Passiva"
-
-#~ msgid "Open an existing Budget"
-#~ msgstr "Existierendes Budget öffnen"
-
-#, fuzzy
-#~ msgid "Delete Budget"
-#~ msgstr "Budget _löschen"
-
-#~ msgid "gnucash-icon"
-#~ msgstr "gnucash-icon"
-
-#~ msgid ""
-#~ "GnuCash could not find the files for the help documentation. This is "
-#~ "likely because the 'gnucash-docs' package is not installed"
-#~ msgstr ""
-#~ "Die Dateien für die Hilfe-Dokumentation konnten nicht gefunden werden. "
-#~ "Das liegt vermutlich daran, dass das Paket »gnucash-docs« noch nicht "
-#~ "installiert ist."
-
-#~ msgid "GnuCash could not find the associated file"
-#~ msgstr "GnuCash konnte die dazugehörige Datei nicht finden."
-
-#~ msgid ""
-#~ "Tool to migrate preferences from old backend (GConf) to new one "
-#~ "(GSettings) has run successfully."
-#~ msgstr ""
-#~ "Das Werkzeug zum Kopieren der Einstellungen von der alten Methode »GConf« "
-#~ "auf die neue Methode »GSettings« ist erfolgreich durchgelaufen. "
-
-#~ msgid ""
-#~ "GnuCash switched to another backend to store user preferences between 2.4 "
-#~ "and 2.6. To smooth the transition, most preferences will be migrated the "
-#~ "first time a 2.6 version of GnuCash is run. This migration should only "
-#~ "run once. This preference keeps track whether or not this migration tool "
-#~ "has run successfully."
-#~ msgstr ""
-#~ "GnuCash wechselte zwischen Version 2.4 und 2.6 zu einem anderen Backend "
-#~ "um die Nutzereinstellungen zu speichern. Um den Übergang zu ebnen, werden "
-#~ "viele Einstellungen beim ersten Start einer 2.6er Version migriert. Diese "
-#~ "Migration sollte nur einmal laufen. Diese Einstellungen halten fest, ob "
-#~ "das Migrationswerkzeug erfolgreich gelaufen ist."
-
-#~ msgid "Due Day: "
-#~ msgstr "Fälligkeitstag: "
-
-#~ msgid "Discount Day: "
-#~ msgstr "Stichtag Skonto: "
-
-#~ msgid "Discount %: "
-#~ msgstr "Skonto in Prozent: "
-
-#~ msgid "Online ID"
-#~ msgstr "Online-ID"
-
-#~ msgid "<b>Generic Importer</b>"
-#~ msgstr "<b>Buchungen importieren</b>"
-
-#~ msgid "\"U+R\""
-#~ msgstr "»Abgl+Ü«"
-
-#~ msgid "\"R\""
-#~ msgstr "»Abgl«"
-
-#~ msgid "_Password:"
-#~ msgstr "_Passwort:"
-
-#~ msgid "Welcome Sample Report"
-#~ msgstr "Einführungs-Beispielbericht"
-
-#~ msgid "Welcome-to-GnuCash report screen"
-#~ msgstr "Eine Demonstration verschiedener Berichte als Begrüßung"
-
-#~ msgid "An error occurred when processing the template:"
-#~ msgstr "Fehler aufgetreten beim Verarbeiten der Vorlage:"
-
-#~ msgid "Include sub-account balances in printed balance?"
-#~ msgstr "Unterkonten zum angezeigten Kontostand addieren?"
-
-#~ msgid "Group the accounts in main categories?"
-#~ msgstr "Konten in Kategorien gruppieren?"
-
-#~ msgid "Display the account's foreign currency amount?"
-#~ msgstr "Kontostände zusätzlich in Fremdwährung anzeigen?"
-
-#~ msgid "_Sample & Custom"
-#~ msgstr "Beispiel & Benutzer_definiert"
-
-#~ msgid ""
-#~ "The GnuCash report system has been upgraded. Your old saved reports have "
-#~ "been transferred into a new format. If you experience trouble with saved "
-#~ "reports, please contact the GnuCash development team."
-#~ msgstr ""
-#~ "Das System zum Erstellen von Berichten in GnuCash wurde erneuert. Ihre "
-#~ "alten gespeicherten Berichte wurden in ein neues Format übertragen. Wenn "
-#~ "es dabei Schwierigkeiten gibt, kontaktieren Sie bitte das GnuCash "
-#~ "Entwicklerteam."
-
-#~ msgid ""
-#~ "Display a subtotal summary table. This requires Display/Amount being "
-#~ "'single"
-#~ msgstr ""
-#~ "Anzeige einer Tabelle mit Zwischensummen. Voraussetzung ist, dass Anzeige/"
-#~ "Betrag auf »einzeln« steht."
