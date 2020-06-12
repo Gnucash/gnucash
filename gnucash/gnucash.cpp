@@ -343,7 +343,8 @@ Gnucash::Gnucash::configure_program_options (void)
        "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
        "Please use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' instead."));
 
-    m_opt_desc->add (app_options).add (depr_options);
+    m_opt_desc_display->add (app_options).add (depr_options);
+    m_opt_desc_all.add (app_options).add (depr_options);
 }
 
 int
@@ -360,7 +361,7 @@ Gnucash::Gnucash::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv
         if (!m_file_to_load || m_file_to_load->empty())
         {
             std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-            << *m_opt_desc.get();
+            << *m_opt_desc_display.get();
             return 1;
         }
         else

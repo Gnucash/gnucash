@@ -516,7 +516,7 @@ Gnucash::CoreApp::CoreApp (const char* app_name)
 
     // Now that gettext is properly initialized, set our help tagline.
     m_tagline = bl::translate("- GnuCash, accounting for personal and small business finance").str(gnc_get_boost_locale());
-    m_opt_desc = std::make_unique<bpo::options_description>
+    m_opt_desc_display = std::make_unique<bpo::options_description>
         ((bl::format (bl::gettext ("{1} [options] [datafile]")) % m_app_name).str() + std::string(" ") + m_tagline);
     add_common_program_options();
 }
@@ -532,13 +532,13 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
     try
     {
     bpo::store (bpo::command_line_parser (argc, argv).
-        options (*m_opt_desc.get()).positional(m_pos_opt_desc).run(), m_opt_map);
+        options (m_opt_desc_all).positional(m_pos_opt_desc).run(), m_opt_map);
     bpo::notify (m_opt_map);
     }
     catch (std::exception &e)
     {
         std::cerr << e.what() << "\n\n";
-        std::cerr << *m_opt_desc.get();
+        std::cerr << *m_opt_desc_display.get() << "\n";
 
         exit(1);
     }
@@ -559,7 +559,7 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 
     if (m_show_help)
     {
-        std::cout << *m_opt_desc.get() << "\n";
+        std::cout << *m_opt_desc_display.get() << "\n";
         exit(0);
     }
 
@@ -589,13 +589,19 @@ Gnucash::CoreApp::add_common_program_options (void)
         ("logto", bpo::value (&m_log_to_filename),
          _("File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"."))
         ("gsettings-prefix", bpo::value (&m_gsettings_prefix),
-         _("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."))
+         _("Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."));
+
+    bpo::options_description hidden_options(_("Hidden Options"));
+    hidden_options.add_options()
         ("input-file", bpo::value (&m_file_to_load),
          _("[datafile]"));
 
         m_pos_opt_desc.add("input-file", -1);
 
-        m_opt_desc->add (common_options);
+        m_opt_desc_all.add (common_options);
+        m_opt_desc_all.add (hidden_options);
+
+        m_opt_desc_display->add (common_options);
 }
 
 void

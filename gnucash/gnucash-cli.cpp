@@ -95,7 +95,8 @@ Gnucash::GnucashCli::configure_program_options (void)
        "  get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"))
     ("namespace", bpo::value (&m_namespace),
      _("Regular expression determining which namespace commodities will be retrieved for"));
-    m_opt_desc->add (quotes_options);
+    m_opt_desc_display->add (quotes_options);
+    m_opt_desc_all.add (quotes_options);
 
     bpo::options_description report_options(_("Report Generation Options"));
     report_options.add_options()
@@ -110,7 +111,8 @@ Gnucash::GnucashCli::configure_program_options (void)
      _("Specify export type\n"))
     ("output-file", bpo::value (&m_output_file),
      _("Output file for report\n"));
-    m_opt_desc->add (report_options);
+    m_opt_desc_display->add (report_options);
+    m_opt_desc_all.add (report_options);
 
 }
 
@@ -124,14 +126,14 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         if (*m_quotes_cmd != "get")
         {
             std::cerr << bl::format (bl::translate("Unknown quotes command '{1}'")) % *m_quotes_cmd << "\n\n"
-            << *m_opt_desc.get();
+            << *m_opt_desc_display.get();
             return 1;
         }
 
         if (!m_file_to_load || m_file_to_load->empty())
         {
             std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-                      << *m_opt_desc.get();
+                      << *m_opt_desc_display.get();
             return 1;
         }
         else
@@ -145,7 +147,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             if (!m_file_to_load || m_file_to_load->empty())
             {
                 std::cerr << bl::translate("Missing data file parameter") << "\n\n"
-                        << *m_opt_desc.get();
+                          << *m_opt_desc_display.get();
                 return 1;
             }
             else
@@ -163,7 +165,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
             if (!m_report_name || m_report_name->empty())
             {
                 std::cerr << bl::translate("Missing --name parameter") << "\n\n"
-                          << *m_opt_desc.get();
+                          << *m_opt_desc_display.get();
                 return 1;
             }
             else
@@ -171,10 +173,14 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         else
         {
             std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
-            << *m_opt_desc.get();
+                      << *m_opt_desc_display.get();
             return 1;
         }
     }
+
+    std::cerr << bl::translate("Missing command or option") << "\n\n"
+              << *m_opt_desc_display.get();
+
     return 1;
 }
 

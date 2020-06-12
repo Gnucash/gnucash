@@ -51,7 +51,8 @@ protected:
     boost::optional <std::string> m_log_to_filename;
     boost::optional <std::string> m_file_to_load;
 
-    std::unique_ptr<bpo::options_description> m_opt_desc;
+    bpo::options_description m_opt_desc_all;
+    std::unique_ptr<bpo::options_description> m_opt_desc_display;
     bpo::variables_map m_opt_map;
     bpo::positional_options_description m_pos_opt_desc;
 
