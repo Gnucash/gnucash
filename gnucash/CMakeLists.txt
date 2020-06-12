@@ -74,7 +74,6 @@ set(gnucash_cli_SOURCES
 
 if (MINGW)
   list(APPEND gnucash_cli_SOURCES "gnucash-windows-locale.c")
-  target_link_options(gnucash-cli PRIVATE -mconsole)
 endif()
 
 add_executable (gnucash-cli
@@ -82,6 +81,10 @@ add_executable (gnucash-cli
     ${GNUCASH_RESOURCE_FILE}
     ${gnucash_noinst_HEADERS}
 )
+
+if (MINGW)
+    target_link_options(gnucash-cli PRIVATE -mconsole)
+endif()
 
 add_dependencies (gnucash-cli gnucash)
 
