@@ -113,13 +113,13 @@ sub report {
 
   # Dump gnucash recognized fields
   printf "Finance::Quote fields Gnucash uses:\n";
-  printf "    symbol: %-20s <=== required\n",	  $symbol;
+  printf "    symbol: %-20s <=== required\n",     $symbol;
   printf "      date: %-20s <=== recommended\n",  $date;
-  printf "  currency: %-20s <=== required\n", 	  $currency;
-  printf "      last: %-20s <=\\       \n",    	  $last;
+  printf "  currency: %-20s <=== required\n",     $currency;
+  printf "      last: %-20s <=\\       \n",       $last;
   printf "       nav: %-20s <=== one of these\n", $nav;
-  printf "     price: %-20s <=/        \n", 	  $price;
-  printf "  timezone: %-20s <=== optional\n", 	  $timezone;
+  printf "     price: %-20s <=/        \n",       $price;
+  printf "  timezone: %-20s <=== optional\n",     $timezone;
 
   # Report failure
   if ($gccanuse == 0) {
@@ -197,15 +197,20 @@ if ($exchange eq "currency") {
 
 =head1 NAME
 
-gnc-fq-dump	- Print out data from the F::Q module
+gnc-fq-dump - Print out data from the F::Q module
 
 =head1 SYNOPSIS
 
-    gnc-fq-dump alphavantage CSCO JNPR
-    gnc-fq-dump alphavantage BAESY.PK
-    gnc-fq-dump europe 48406.PA 13000.PA
-    gnc-fq-dump vwd 632034
-    gnc-fq-dump ftportfolios FKYGTX
+  Currency Exchange Rates
+    gnc-fq-dump currency USD AUD
+    gnc-fq-dump [-v] yahoo_json USDEUR=X
+  Stock Quotes    
+    gnc-fq-dump [-v] alphavantage CSCO JNPR
+    gnc-fq-dump [-v] alphavantage BAESY.PK
+    gnc-fq-dump [-v] yahoo_json CBA.AX
+    gnc-fq-dump [-v] europe 48406.PA 13000.PA
+    gnc-fq-dump [-v] vwd 632034
+    gnc-fq-dump [-v] ftportfolios FKYGTX
 
 =head1 DESCRIPTION
 
