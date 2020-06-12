@@ -3,9 +3,11 @@
 #   @brief Example Script simple session
 #   @ingroup python_bindings_examples
 
-from gnucash import \
-     Session, GnuCashBackendException, \
+from gnucash import (
+     Session, GnuCashBackendException,
+     SessionOpenMode,
      ERR_BACKEND_LOCKED, ERR_FILEIO_FILE_NOT_FOUND
+)
 
 FILE_1 = "/tmp/not_there.xac"
 FILE_2 = "/tmp/example_file.xac"
@@ -19,7 +21,7 @@ except GnuCashBackendException as backend_exception:
 
 
 # create a new file, this requires a file type specification
-with Session("xml://%s" % FILE_2, is_new=True) as session:
+with Session("xml://%s" % FILE_2, SessionOpenMode.SESSION_NEW_STORE) as session:
     book = session.book
     root = book.get_root_account()
 

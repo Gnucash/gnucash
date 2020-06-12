@@ -64,6 +64,7 @@ try:
     from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
         Address, Invoice, Entry, TaxTable, TaxTableEntry, GNC_AMT_TYPE_PERCENT, \
             GNC_DISC_PRETAX
+    from gnucash import SessionOpenMode
     import locale
 except ImportError as import_error:
     print("Problem importing modules.")
@@ -236,7 +237,12 @@ def main(argv=None):
 
     # Try to open the given input
     try:
-        session = gnucash.Session(input_url,ignore_lock=ignore_lock)
+        session = gnucash.Session(
+            input_url,
+            SessionOpenMode.SESSION_READ_ONLY
+            if ignore_lock
+            else SessionOpenMode.SESSION_NORMAL_OPEN,
+        )
     except Exception as exception:
         print("Problem opening input.")
         print(exception)

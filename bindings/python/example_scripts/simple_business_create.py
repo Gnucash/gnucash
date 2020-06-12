@@ -53,7 +53,7 @@ from os.path import abspath
 from sys import argv, exit
 import datetime
 from datetime import timedelta
-from gnucash import Session, Account, GncNumeric
+from gnucash import Session, Account, GncNumeric, SessionOpenMode
 from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
     Address, Invoice, Entry, TaxTable, TaxTableEntry, GNC_AMT_TYPE_PERCENT, \
     GNC_DISC_PRETAX    
@@ -70,7 +70,7 @@ if len(argv) < 2:
     
 
 try:
-    s = Session(argv[1], is_new=True)
+    s = Session(argv[1], SessionOpenMode.SESSION_NEW_STORE)
 
     book = s.book
     root = book.get_root_account()

@@ -28,7 +28,8 @@
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @ingroup python_bindings_examples
 
-from gnucash import Session, Account, Transaction, Split, GncNumeric
+from gnucash import (
+        Session, Account, Transaction, Split, GncNumeric, SessionOpenMode)
 from gnucash.gnucash_core_c import \
     GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT, \
     ACCT_TYPE_ASSET, ACCT_TYPE_BANK, ACCT_TYPE_CASH, ACCT_TYPE_CHECKING, \
@@ -299,8 +300,8 @@ def main():
 
     #have everything in a try block to unable us to release our hold on stuff to the extent possible
     try:
-        original_book_session = Session(argv[1], is_new=False)
-        new_book_session = Session(argv[2], is_new=True)
+        original_book_session = Session(argv[1], SessionOpenMode.SESSION_NORMAL_OPEN)
+        new_book_session = Session(argv[2], SessionOpenMode.SESSION_NEW_STORE)
         new_book = new_book_session.get_book()
         new_book_root = new_book.get_root_account()
 

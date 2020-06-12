@@ -68,6 +68,8 @@ from gnucash import \
 from gnucash import \
     INVOICE_IS_PAID
 
+from gnucash import SessionOpenMode
+
 app = Flask(__name__)
 app.debug = True
 
@@ -1884,7 +1886,7 @@ for option, value in options:
 
 #start gnucash session base on connection string argument
 if is_new:
-    session = gnucash.Session(arguments[0], is_new=True)
+    session = gnucash.Session(arguments[0], SessionOpenMode.SESSION_NEW_STORE)
 
     # seem to get errors if we use the session directly, so save it and
     #destroy it so it's no longer new
@@ -1893,7 +1895,8 @@ if is_new:
     session.end()
     session.destroy()
 
-session = gnucash.Session(arguments[0], ignore_lock=True)
+# unsure about SESSION_BREAK_LOCK - it used to be ignore_lock=True 
+session = gnucash.Session(arguments[0], SessionOpenMode.SESSION_BREAK_LOCK)
 
 # register method to close gnucash connection gracefully
 atexit.register(shutdown)

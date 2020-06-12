@@ -39,6 +39,7 @@ try:
     import str_methods
     import jinja2
     from gncinvoicefkt import *
+    from gnucash import SessionOpenMode
 except ImportError as import_error:
     print("Problem importing modules.")
     print(import_error)
@@ -137,7 +138,7 @@ def main(argv=None):
         print("or file://filename")
         print("or mysql://user:password@host/databasename")
         print()
-        print("-f             force open = ignore lock")
+        print("-f             force open = ignore lock (read only)")
         print("-l             list all invoices")
         print("-h or --help   for this help")
         print("-I ID          use invoice ID")
@@ -150,8 +151,15 @@ def main(argv=None):
 
     # Try to open the given input
     try:
-        print("Opening", input_url, ".")
-        session = gnucash.Session(input_url, ignore_lock=ignore_lock)
+        print(
+            "Opening", input_url, " (ignore-lock = read-only)." if ignore_lock else "."
+        )
+        session = gnucash.Session(
+            input_url,
+            SessionOpenMode.SESSION_READ_ONLY
+            if ignore_lock
+            else SessionOpenMode.SESSION_NORMAL_OPEN,
+        )
     except Exception as exception:
         print("Problem opening input.")
         print(exception)

@@ -3,11 +3,11 @@
 #   @brief Example Script simple sqlite create 
 #   @ingroup python_bindings_examples
 
-from gnucash import Session, Account
+from gnucash import Session, Account, SessionOpenMode
 from os.path import abspath
 from gnucash.gnucash_core_c import ACCT_TYPE_ASSET
 
-s = Session('sqlite3://%s' % abspath('test.blob'), is_new=True)
+s = Session('sqlite3://%s' % abspath('test.blob'), SessionOpenMode.SESSION_NEW_STORE)
 # this seems to make a difference in more complex cases
 s.save()
 
