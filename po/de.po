@@ -2,7 +2,7 @@
 # Messages in Deutsch für GnuCash
 # This file is distributed under the same license as the GnuCash package.
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
-# Copyright (C) 2005-2019 by the translators:
+# Copyright (C) 2005-2020 by the translators:
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2020.
@@ -21,11 +21,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.8+\n"
+"Project-Id-Version: GnuCash 3.10+\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-05-29 03:48+0200\n"
-"PO-Revision-Date: 2020-05-29 16:43+0200\n"
+"POT-Creation-Date: 2020-06-12 01:11+0200\n"
+"PO-Revision-Date: 2020-03-06-12 01:19+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
