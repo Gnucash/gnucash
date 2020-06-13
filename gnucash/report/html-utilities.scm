@@ -270,7 +270,9 @@
         (try xaccAccountGetName)
         (try gnc-budget-get-name)
         (format #f "~a" d)))
-  (let ((render-list '()))
+  (let ((render-list '())
+        (report-list (gnc:option-value
+                      (gnc:lookup-option options "__general" "report-list"))))
     (define (add-option-if-changed option)
       (let* ((section (gnc:option-section option))
              (name (gnc:option-name option))
@@ -281,6 +283,11 @@
         (if (not (or (equal? default-value value)
                      (char=? (string-ref section 0) #\_)))
             (addto! render-list retval))))
+    (for-each
+     (lambda (child)
+       (let ((report (gnc-report-find (car child))))
+         (addto! render-list (cons "Embedded Report" (gnc:report-name report)))))
+     (or report-list '()))
     (gnc:options-for-each add-option-if-changed options)
     (if plaintext?
         (string-append
