@@ -34,6 +34,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-2))
 (use-modules (srfi srfi-9))
+(use-modules (ice-9 match))
 
 ;; the column-data record. the gnc:account-accumulate-at-dates will
 ;; create a record for each report-date with split-data as follows:
@@ -455,27 +456,25 @@ also show overall period profit & loss."))
     ;; anchor: url string for monetaries (or #f) (all have same anchor)
     ;;
     ;; outputs: html-text object
-    (let ((text (gnc:make-html-text)))
-      (for-each
-       (lambda (monetary)
-         (let ((converted (and show-orig-cur?
-                               convert-curr-fn
-                               (convert-curr-fn monetary col-datum))))
-           (if (not (and omit-zb-bals?
-                         (gnc:gnc-monetary? monetary)
-                         (zero? (gnc:gnc-monetary-amount monetary))))
-               (gnc:html-text-append! text
-                                      (if converted
-                                          (gnc:html-markup-i
-                                           (gnc:html-markup "small" monetary " "))
-                                          "")
-                                      (if anchor
-                                          (gnc:html-markup-anchor
-                                           anchor (or converted monetary))
-                                          (or converted monetary))
-                                      (gnc:html-markup-br)))))
-       monetaries)
-      text))
+    (define (hide-false-or-zero? mon)
+      (and omit-zb-bals? (gnc:gnc-monetary? mon)
+           (zero? (gnc:gnc-monetary-amount mon))))
+    (let lp ((monetaries monetaries) (accum '()))
+      (match monetaries
+        (() (apply gnc:make-html-text (reverse accum)))
+        (((? hide-false-or-zero?) . rest) (lp rest accum))
+        ((monetary . rest)
+           (lp rest
+               (let ((converted (and show-orig-cur? convert-curr-fn
+                                     (convert-curr-fn monetary col-datum))))
+                 (cons* (gnc:html-markup-br)
+                        (if anchor
+                            (gnc:html-markup-anchor anchor (or converted monetary))
+                            (or converted monetary))
+                        (if converted
+                            (gnc:html-markup-i (gnc:html-markup "small" monetary " "))
+                            "")
+                        accum)))))))
 
   (define (account->depth acc)
     (cond ((vector? acc) 0)
@@ -518,35 +517,34 @@ also show overall period profit & loss."))
 
   (define (sum-accounts-at-col accounts datum convert?)
     ;; outputs: list of gnc-monetary
+    (let loop ((accounts accounts) (result '()))
+      (match accounts
+        (() (apply monetary+ result))
+        ((acc . rest)
+         (let* ((monetary (if (vector? acc)
+                              ((vector-ref acc 1) datum)
+                              (get-cell-monetary-fn acc datum)))
+                (amt (or (and convert? convert-curr-fn
+                              (not (pair? monetary))
+                              (convert-curr-fn monetary datum))
+                         monetary)))
+           (loop rest (if (pair? amt)
+                          (append-reverse amt result)
+                          (cons amt result))))))))
 
-    (let loop ((accounts accounts)
-               (result '()))
-      (cond
-       ((null? accounts)
-        (apply monetary+ result))
-       (else
-        (let* ((acc (car accounts))
-               (monetary (if (vector? acc)
-                             ((vector-ref acc 1) datum)
-                             (get-cell-monetary-fn acc datum)))
-               (amt (or (and convert? convert-curr-fn
-                             (not (list? monetary))
-                             (convert-curr-fn monetary datum))
-                        monetary)))
-          (loop (cdr accounts)
-                (if (list? amt)
-                    (append-reverse amt result)
-                    (cons amt result))))))))
-
+  (define (monetary-is-not-zero? mon) (not (zero? (gnc:gnc-monetary-amount mon))))
   (define (is-not-zero? accts)
     ;; this function tests whether accounts (with descendants) of all
     ;; columns are zero.
-    (not (every zero? (concatenate
-                       (map
-                        (lambda (col-datum)
-                          (map gnc:gnc-monetary-amount
-                               (sum-accounts-at-col accts col-datum #f)))
-                        cols-data)))))
+    (let lp ((cols-data cols-data))
+      (match cols-data
+        (() #f)
+        ((this . rest)
+         (let lp1 ((monetaries (sum-accounts-at-col accts this #f)))
+           (match monetaries
+             (() (lp rest))
+             (((? monetary-is-not-zero?) . _) #t)
+             ((_ . tail) (lp1 tail))))))))
 
   (define* (add-recursive-subtotal lvl lvl-acct #:key account-style-normal?)
     (if (or show-zb-accts?
@@ -614,40 +612,40 @@ also show overall period profit & loss."))
                             (gnc:html-make-empty-cells num-columns))))
 
   (let loop ((accounts (if show-accounts? accountlist '())))
-    (if (pair? accounts)
-        (let* ((curr (car accounts))
-               (rest (cdr accounts))
-               (next (and (pair? rest) (car rest)))
-               (lvl-curr (account->depth curr))
-               (lvl-next (if next (account->depth next) 0))
-               (curr-descendants-list (filter
-                                       (lambda (acc) (member acc accountlist))
-                                       (account->descendants curr)))
-               (recursive-parent-acct? (and recursive-bals?
-                                            (pair? curr-descendants-list)))
-               (multilevel-parent-acct? (and (not recursive-bals?)
-                                             (pair? curr-descendants-list))))
+    (match accounts
+      (() #f)
+      ((curr . rest)
+       (let* ((next (and (pair? rest) (car rest)))
+              (lvl-curr (account->depth curr))
+              (lvl-next (if next (account->depth next) 0))
+              (curr-descendants-list (filter
+                                      (lambda (acc) (member acc accountlist))
+                                      (account->descendants curr)))
+              (recursive-parent-acct? (and recursive-bals?
+                                           (pair? curr-descendants-list)))
+              (multilevel-parent-acct? (and (not recursive-bals?)
+                                            (pair? curr-descendants-list))))
 
-          (if recursive-parent-acct?
-              (begin
-                (add-recursive-subtotal lvl-curr curr #:account-style-normal? #t)
-                (if (is-not-zero? (list curr))
-                    (add-account-row (1+ lvl-curr) curr #:override-show-zb-accts? #t)))
-              (add-account-row lvl-curr curr
-                               #:account-indent (if multilevel-parent-acct? 1 0)
-                               #:override-show-zb-accts? multilevel-parent-acct?))
+         (if recursive-parent-acct?
+             (begin
+               (add-recursive-subtotal lvl-curr curr #:account-style-normal? #t)
+               (if (is-not-zero? (list curr))
+                   (add-account-row (1+ lvl-curr) curr #:override-show-zb-accts? #t)))
+             (add-account-row lvl-curr curr
+                              #:account-indent (if multilevel-parent-acct? 1 0)
+                              #:override-show-zb-accts? multilevel-parent-acct?))
 
-          (if (and (not recursive-bals?)
-                   (> lvl-curr lvl-next))
-              (let multilevel-loop ((lvl (1- lvl-curr))
-                                    (lvl-acct (gnc-account-get-parent curr)))
-                (unless (or (zero? lvl)
-                            (not (member lvl-acct accountlist))
-                            (< lvl lvl-next))
-                  (add-recursive-subtotal lvl lvl-acct)
-                  (multilevel-loop (1- lvl)
-                                   (gnc-account-get-parent lvl-acct)))))
-          (loop rest))))
+         (if (and (not recursive-bals?)
+                  (> lvl-curr lvl-next))
+             (let multilevel-loop ((lvl (1- lvl-curr))
+                                   (lvl-acct (gnc-account-get-parent curr)))
+               (unless (or (zero? lvl)
+                           (not (member lvl-acct accountlist))
+                           (< lvl lvl-next))
+                 (add-recursive-subtotal lvl lvl-acct)
+                 (multilevel-loop (1- lvl)
+                                  (gnc-account-get-parent lvl-acct)))))
+         (loop rest)))))
 
   (if show-total?
       (add-indented-row 0
