@@ -1035,18 +1035,18 @@ also show overall period profit & loss."))
                                              common-currency price-source date)
                       (income-expense-balance 'format gnc:make-gnc-monetary #f)))))
 
-             (chart (and-let* (include-chart?
-                               (not (eq? incr 'disabled))
-                               (curr (or common-currency book-main-currency))
-                               (price (or price-source 'pricedb-nearest)))
-                      (gnc:make-report-anchor
-                       networth-barchart-uuid report-obj
-                       (list (list "General" "Start Date" (cons 'absolute startdate))
-                             (list "General" "End Date" (cons 'absolute enddate))
-                             (list "General" "Report's currency" curr)
-                             (list "General" "Step Size" incr)
-                             (list "General" "Price Source" price)
-                             (list "Accounts" "Accounts" asset-liability)))))
+             (chart
+              (and include-chart? (not (eq? incr 'disabled))
+                   (let ((chart-currency (or common-currency book-main-currency))
+                         (price-source (or price-source 'pricedb-nearest)))
+                     (gnc:make-report-anchor
+                      networth-barchart-uuid report-obj
+                      (list (list "General" "Start Date" (cons 'absolute startdate))
+                            (list "General" "End Date" (cons 'absolute enddate))
+                            (list "General" "Report's currency" chart-currency)
+                            (list "General" "Step Size" incr)
+                            (list "General" "Price Source" price-source)
+                            (list "Accounts" "Accounts" asset-liability))))))
 
              (get-col-header-fn
               (lambda (accounts col-idx)
