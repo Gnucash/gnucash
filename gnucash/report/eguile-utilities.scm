@@ -78,27 +78,25 @@
   ;; Then look in Gnucash' gnucash/reports/'ftype' directory.
   ;; If no file is found, returns just 'fname' for use in error messages.
   (let* ((userpath (gnc-build-userdata-path fname))
-         (frelpath (string-join (list (symbol->string ftype) fname) "/"))
-         (syspath  (gnc-build-reports-path frelpath)))
-        (if (access? userpath R_OK)
-          userpath
-          (if (access? syspath R_OK)
-            syspath
-            fname))))
+         (syspath  (gnc-build-reports-path (string-append ftype "/" fname))))
+    (cond
+     ((access? userpath R_OK) userpath)
+     ((access? syspath R_OK) syspath)
+     (else fname))))
 
 (define-public (find-stylesheet fname)
   ;; Find the stylesheet 'fname', and return its full path.
   ;; First look in the user's .config/gnucash directory.
   ;; Then look in Gnucash' gnucash/reports/stylesheets directory.
   ;; If no file is found, returns just 'fname' for use in error messages.
-  (find-internal 'stylesheets fname))
+  (find-internal "stylesheets" fname))
 
 (define-public (find-template fname)
   ;; Find the template 'ftype'/'fname', and return its full path.
   ;; First look in the user's .config/gnucash directory.
   ;; Then look in Gnucash' gnucash/reports/templates directory.
   ;; If no file is found, returns just 'fname' for use in error messages.
-  (find-internal 'templates fname))
+  (find-internal "templates" fname))
 
 ; Define syntax for more readable for loops (the built-in for-each requires an
 ; explicit lambda and has the list expression all the way at the end).
