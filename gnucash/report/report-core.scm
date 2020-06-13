@@ -805,31 +805,31 @@ not found.")))
        (lambda (k v p) (if (equal? (gnc:report-template-name v) report) (cons v p) p))
        '() *gnc:_report-templates_*)))
 
-(define-public (gnc:cmdline-report-list)
+(define-public (gnc:cmdline-report-list port)
   (for-each
    (lambda (template)
-     (stderr-log "* ~a ~a\n"
-                 (if (gnc:report-template-parent-type template) "C" " ")
-                 (gnc:report-template-name template)))
+     (format port "* ~a ~a\n"
+             (if (gnc:report-template-parent-type template) "C" " ")
+             (gnc:report-template-name template)))
    (sort (hash-fold
           (lambda (k v p) (if (gnc:report-template-in-menu? v) (cons v p) p))
           '() *gnc:_report-templates_*)
          (lambda (a b)
            (string<? (gnc:report-template-name a) (gnc:report-template-name b))))))
 
-(define-public (gnc:cmdline-report-show report)
+(define-public (gnc:cmdline-report-show report port)
   (let ((templates (reportname->templates report)))
     (cond
      ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
-      (gnc:cmdline-report-list))
+      (gnc:cmdline-report-list (current-error-port)))
      (else
       (for-each
        (lambda (template)
          (let* ((options-gen (gnc:report-template-options-generator template)))
-           (stderr-log "\n* guid: ~a\n~a"
-                       (gnc:report-template-report-guid template)
-                       (gnc:html-render-options-changed (options-gen) #t))))
+           (format port "\n* guid: ~a\n~a"
+                   (gnc:report-template-report-guid template)
+                   (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
 (define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
@@ -845,12 +845,12 @@ not found.")))
     (cond
      ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
-      (gnc:cmdline-report-list)
+      (gnc:cmdline-report-list (current-error-port))
       (stderr-log "\n"))
 
      ((pair? (cdr templates))
       (stderr-log "~s matches multiple reports. Select guid instead:\n" report)
-      (gnc:cmdline-report-show report)
+      (gnc:cmdline-report-show report (current-error-port))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)

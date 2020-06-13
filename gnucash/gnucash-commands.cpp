@@ -214,8 +214,9 @@ scm_report_show (void *data,
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
 
-    scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-show"),
-                scm_from_utf8_string (args->show_report.c_str()));
+    scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
+                scm_from_utf8_string (args->show_report.c_str ()),
+                scm_current_output_port ());
     gnc_shutdown (0);
     return;
 }
@@ -230,7 +231,8 @@ scm_report_list ([[maybe_unused]] void *data,
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
 
-    scm_call_0 (scm_c_eval_string ("gnc:cmdline-report-list"));
+    scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-list"),
+                scm_current_output_port ());
     gnc_shutdown (0);
     return;
 }
