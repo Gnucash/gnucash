@@ -1654,14 +1654,7 @@ be excluded from periodic reporting.")
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((account (xaccSplitGetAccount split))
-             (reversible-account? (acc-reverse? account))
-             (cells (map (lambda (cell)
-                           (let ((split->monetary (vector-ref cell 1)))
-                             (vector (split->monetary split)
-                                     (vector-ref cell 2) ;reverse?
-                                     (vector-ref cell 3) ;subtotal?
-                                     )))
-                         cell-calculators)))
+             (reversible-account? (acc-reverse? account)))
 
         (unless (column-uses? 'subtotals-only)
           (gnc:html-table-append-row/markup!
@@ -1673,9 +1666,8 @@ be excluded from periodic reporting.")
                     split transaction-row?))
                  left-columns)
             (map (lambda (cell)
-                   (let* ((cell-monetary (vector-ref cell 0))
-                          (reverse? (and (vector-ref cell 1)
-                                         reversible-account?))
+                   (let* ((cell-monetary ((vector-ref cell 1) split))
+                          (reverse? (and (vector-ref cell 2) reversible-account?))
                           (cell-content (and cell-monetary
                                              (if reverse?
                                                  (gnc:monetary-neg cell-monetary)
@@ -1686,13 +1678,10 @@ be excluded from periodic reporting.")
                            (if opt-use-links?
                                (gnc:html-split-anchor split cell-content)
                                cell-content)))))
-                 cells))))
+                 cell-calculators))))
 
-        (map (lambda (cell)
-               (let ((cell-monetary (vector-ref cell 0))
-                     (subtotal? (vector-ref cell 2)))
-                 (and subtotal? cell-monetary)))
-             cells)))
+        (map (lambda (cell) (and (vector-ref cell 3) ((vector-ref cell 1) split)))
+             cell-calculators)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
