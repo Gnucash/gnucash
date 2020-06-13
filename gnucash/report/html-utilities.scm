@@ -271,8 +271,8 @@
         (try gnc-budget-get-name)
         (format #f "~a" d)))
   (let ((render-list '())
-        (report-list (gnc:option-value
-                      (gnc:lookup-option options "__general" "report-list"))))
+        (report-list (and=> (gnc:lookup-option options "__general" "report-list")
+                            gnc:option-value)))
     (define (add-option-if-changed option)
       (let* ((section (gnc:option-section option))
              (name (gnc:option-name option))
