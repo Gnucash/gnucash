@@ -783,10 +783,8 @@ also show overall period profit & loss."))
                                                  (gnc:make-commodity-collector))
                       #:split->elt
                       (lambda (s)
-                        (unless (xaccTransGetIsClosingTxn (xaccSplitGetParent s))
-                          (val-coll 'add
-                                    (xaccTransGetCurrency (xaccSplitGetParent s))
-                                    (xaccSplitGetValue s)))
+                        (val-coll 'add (xaccTransGetCurrency (xaccSplitGetParent s))
+                                  (xaccSplitGetValue s))
                         (make-datum s
                                     (amt->monetary (xaccSplitGetNoclosingBalance s))
                                     (amt->monetary (xaccSplitGetBalance s))
