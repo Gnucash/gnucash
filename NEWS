@@ -1,5 +1,66 @@
 Version history:
 ------- -------
+3.905 - 14 June 2020
+The fourth unstable release leading to the new 4.x stable series. See 3.902 and 3.903 below for additional requirements and features.
+
+Between 3.904 and 3.905, the following bugfixes were accomplished. Some of
+these will also be fixed in GnuCash 3.11, some are for 4.0 only.
+<ul>
+    Bug 796993 - Gnucash should warn the user in case of missing Alphavantage
+                 API key instead of silently failing</a></li>
+    Bug 797531 - Improve behaviour when following a hyperlink to a split that's
+                 filtered in the register. Currently if a jump to a filtered
+                 register is made, this could be from a report, other register,
+                 reconcile window and transaction associations and the
+                 destination split is not shown the jump will end up at the
+                 last active cell. This could be confusing so add a test for
+                 the destination split being visible and warn the user with an
+                 option to temporarily clear the filter.
+    Bug 797746 - [reports] German umlauts not escaped</a></li>
+    Bug 797790 - [Transaction Association] Change dialogue: use existing
+                 information to determine the default folder. When there is no
+                 association set, if the file option is chosen set the default
+                 folder for the file chooser to that of the path head
+                 preference.
+    Bug 797791 - [Windows] list of command line options after
+                 'gnucash.exe --help'? Make gnucash-cli a console application
+                 on Windows so that its output will be redirected to the
+                 connected console.
+    Bug 797799 - Add Tip of the Day for "Notes" field</a></li>
+    Bug 797804 - Date entry field is glitchy (v3.904 regression)
+    
+The following fixes and improvements were not associated with bug reports or new features:
+
+    Ensure balance-sheet balances do not ignore closing entries, including
+        them in closing balances from profit&loss. 
+    [balsheet-pnl] value-collector doesn't need to ignore closing.
+        The value-collector is only used to tally account balances for
+        asset&liability accounts. These accounts never have closing entries.
+        No need to test closing property.
+    [trep-engine] don't create intermediate cells object.
+        From cell-calculators (a list of column-info), the cells object (list
+        of column-data) was created unnecessarily. use cell-calculators
+        directly.
+    [gnucash-cli] --report show/list outputs to stdout and their error messages
+        output to stderr.
+    I18N: Improve tooltip about double-line-mode.
+        Suggestion by Adrien Monteleone.
+    Drop unused boost::locale::generator instantiations.
+        We now have one single case in gnc-locale-utils and all code uses
+        gnc_get_boost_locale to get the proper locale. </p>
+    Fix translations using boost::locale::translate
+    Fix report dependencies that caused Xcode build failure.
+    Update Schedule Transaction Template dialog status bar.
+        Copy the functions from gnc_main_window that updates the status bar
+        with the action tooltips to gnc_window so that both GncMainWindow
+        and GncEmbeddedWindow can use without duplicating code.
+    Add the Register width menu options to the Scheduled  Transaction Template
+        dialog.
+    [balance-sheet] hide trading-accounts if use-trading-accts? is unset.
+    Fix a null parent error in the New Account Hierarchy Assistant.
+
+Updated Translations: German
+
 3.904 - 7 June 2020
 The third unstable release leading to the new 4.x stable series. See 3.902 and 3.903 below for additional requirements and features.
 
