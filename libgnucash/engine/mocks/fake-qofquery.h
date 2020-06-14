@@ -4,7 +4,6 @@
 #include <gmock/gmock.h>
 
 #include <qofquery.h>
-#include <qofquery-p.h>
 
 extern "C"
 {
