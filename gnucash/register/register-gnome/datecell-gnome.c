@@ -596,7 +596,6 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     {
         gnc_basic_cell_set_value_internal (&cell->cell, newval);
         gnc_parse_date (&(box->date), newval, FALSE);
-        *cursor_position += g_utf8_strlen (change, -1);
         *end_selection = *start_selection = *cursor_position;
 
         if (!box->date_picker)
