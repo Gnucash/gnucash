@@ -15,14 +15,15 @@ extern "C"
 class QofFakeQuery
 {
 public:
-    QofFakeQuery();
+    QofFakeQuery(QofIdTypeConst obj_type);
     ~QofFakeQuery();
 
     MOCK_METHOD1(setBook, void(QofBook*));
     MOCK_METHOD5(addDateMatchTT, void(gboolean, time64, gboolean, time64, QofQueryOp));
     MOCK_METHOD2(addSingleAccountMatch, void(Account*, QofQueryOp));
     MOCK_METHOD0(run, std::vector<void*>());
-};
 
+    QofIdTypeConst m_obj_type;
+};
 
 #endif

@@ -17,14 +17,18 @@ public:
         m_queriesNew.push_back(query);
     }
 
-    QofFakeQuery* requestQuery()
+    QofFakeQuery* requestQuery(QofIdTypeConst obj_type)
     {
         QofFakeQuery* query = nullptr;
 
-        if (!m_queriesNew.empty())
+        auto it = std::find_if(m_queriesNew.begin(), m_queriesNew.end(),
+            [obj_type](QofFakeQuery const* query) {
+                return (g_strcmp0(query->m_obj_type, obj_type) == 0);
+            });
+        if (it != m_queriesNew.end())
         {
-            query = m_queriesNew.front();
-            m_queriesNew.pop_front();
+            query = *it;
+            m_queriesNew.erase(it);
             m_queriesUsed.push_back(query);
         }
 
@@ -72,7 +76,8 @@ private:
 
 /* class QofFakeQuery */
 
-QofFakeQuery::QofFakeQuery()
+QofFakeQuery::QofFakeQuery(QofIdTypeConst obj_type) :
+    m_obj_type(obj_type)
 {
     queryPool.addQuery(this);
 }
@@ -89,7 +94,7 @@ QofFakeQuery::~QofFakeQuery()
 QofQuery *
 qof_query_create_for (QofIdTypeConst obj_type)
 {
-    return (QofQuery*)queryPool.requestQuery();
+    return (QofQuery*)queryPool.requestQuery(obj_type);
 }
 
 void
