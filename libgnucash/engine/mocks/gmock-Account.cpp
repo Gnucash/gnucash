@@ -84,7 +84,6 @@ gnc_account_imap_add_account (
         const char *key,
         Account *acc)
 {
-    // not used at the moment
     ((GncMockImportMatchMap*)imap)->addAccount(category, key, acc);
 }
 
