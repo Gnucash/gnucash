@@ -43,8 +43,9 @@ testing::Environment* const env = testing::AddGlobalTestEnvironment(new TestEnvi
 
 
 
-/* mock functions, which can not be mocked by mock classes */
+/* required fake functions from engine sources, which should not be linked to the test application */
 
+// fake function from qofutil.cpp
 gint
 safe_strcasecmp (const gchar * da, const gchar * db)
 {
@@ -52,6 +53,7 @@ safe_strcasecmp (const gchar * da, const gchar * db)
     return g_strcmp0(da, db);
 }
 
+// fake function from qoflog.cpp
 const char *
 qof_log_prettify (const char *name)
 {
@@ -59,7 +61,8 @@ qof_log_prettify (const char *name)
     return name;
 }
 
-// this is a slightly modified version of the function from engine-helpers.c
+// fake function from engine-helpers.c
+// this is a slightly modified version of the original function
 const char *
 gnc_get_num_action (const Transaction *trans, const Split *split)
 {
@@ -79,6 +82,10 @@ gnc_get_num_action (const Transaction *trans, const Split *split)
     else return NULL;
 }
 
+
+/* required fake functions from app-utils sources, which should not be linked to the test application */
+
+// fake function from gnc-ui-util.c
 QofBook *
 gnc_get_current_book (void)
 {
