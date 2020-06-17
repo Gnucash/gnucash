@@ -129,7 +129,7 @@
        ((not split)
         (hash-for-each (lambda (k v) (gncOwnerFree v)) ht)
         (hash-clear! ht))
-       ((hashv-ref ht (string-hash (gncSplitGetGUID split))) => identity)
+       ((hash-ref ht (gncSplitGetGUID split)) => identity)
        (else
         (let ((lot (xaccSplitGetLot split))
               (owner (gncOwnerNew)))
@@ -138,5 +138,5 @@
                            (gncInvoiceGetOwner
                             (gncInvoiceGetInvoiceFromLot lot)))
                           owner))
-          (hashv-set! ht (string-hash (gncSplitGetGUID split)) owner)
+          (hash-set! ht (gncSplitGetGUID split) owner)
           owner))))))
