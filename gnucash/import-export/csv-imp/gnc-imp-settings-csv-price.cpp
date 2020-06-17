@@ -28,7 +28,11 @@
 
 #include "gnc-imp-settings-csv.hpp"
 #include "gnc-imp-settings-csv-price.hpp"
+#include <algorithm>
+#include <memory>
 #include <sstream>
+#include <string>
+#include <vector>
 
 extern "C"
 {
