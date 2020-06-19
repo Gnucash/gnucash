@@ -1741,6 +1741,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     VirtualLocation new_virt_loc;
     gncTableTraversalDir direction = 0;
     int distance;
+    GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1774,7 +1775,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Don't process any keystrokes where a modifier key (Alt, Meta, etc.) is
      * being held down.  This shouldn't include NUM LOCK.
      */
-    if (event->state & GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)
+    if (event->state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         pass_on = TRUE;
     else if (process_motion_keys (sheet, event, &pass_on,
                                   &direction, &new_virt_loc)) //may set pass_on
