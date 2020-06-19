@@ -207,6 +207,22 @@ class ClassFromFunctions(object):
             setattr( cls, function_name,
                      decorator( getattr(cls, function_name) ) )
 
+    @classmethod
+    def decorate_method(cls, decorator, method_name, *args, **kargs):
+        """! decorate method method_name of class cls with decorator decorator
+
+        in difference to decorate_functions() this allows to provide additional
+        arguments for the decorator function.
+
+        arguments:
+            @param cls: class
+            @param decorator: function to decorate method
+            @param method_name: name of method to decorate (string)
+            @param *args: positional arguments for decorator
+            @param **kargs: keyword arguments for decorator"""
+        setattr(cls, method_name,
+                    decorator(getattr(cls, method_name), *args, **kargs))
+
 def method_function_returns_instance(method_function, cls):
     """A function decorator that is used to decorate method functions that
     return instance data, to return instances instead.
