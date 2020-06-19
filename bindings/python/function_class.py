@@ -252,17 +252,92 @@ def methods_return_instance_lists(cls, function_dict):
                 method_function_returns_instance_list(
                 getattr(cls, func_name), instance_name))
 
-def default_arguments_decorator(function, *args):
-    """Decorates a function to give it default, positional arguments
+def default_arguments_decorator(function, *args, **kargs):
+    """! Decorates a function to give it default, positional and keyword arguments
+
+    mimics python behavior when setting defaults in function/method arguments.
+    arguments can be set for positional or keyword arguments.
+
+    kargs_pos contains positions of the keyword arguments.
+    @exception A TypeError will be raised if an argument is set as a positional and keyword argument
+    at the same time.
+    @note It might be possible to get keyword argument positional information using
+    introspection to avoid having to specify them manually
+
+    a keyword argument default will be overwritten by a positional argument at the
+    actual function call
+
+    this function modifies the docstring of the wrapped funtion to reflect
+    the defaults.
 
     You can't use this decorator with @, because this function has more
     than one argument.
+
+    arguments:
+    @param *args: optional positional defaults
+    @param kargs_pos: dict with keyword arguments as key and their position in the argument list as value
+    @param **kargs: optional keyword defaults
+
+    @return new_function wrapping original function
     """
-    def new_function(*function_args):
+
+    def new_function(*function_args, **function_kargs):
+        kargs_pos = {}
+        if "kargs_pos" in kargs:
+            kargs_pos = kargs.pop("kargs_pos")
         new_argset = list(function_args)
-        new_argset.extend( args[ len(function_args): ] )
-        return function( *new_argset )
+        new_argset.extend(args[len(function_args) :])
+        new_kargset = {**kargs, **function_kargs}
+        for karg_pos in kargs_pos:
+            if karg_pos in new_kargset:
+                pos_karg = kargs_pos[karg_pos]
+                if pos_karg < len(new_argset):
+                    new_kargset.pop(karg_pos)
+
+        return function(*new_argset, **new_kargset)
+
+    kargs_pos = {} if "kargs_pos" not in kargs else kargs["kargs_pos"]
+    for karg_pos in kargs_pos:
+        if karg_pos in kargs:
+            pos_karg = kargs_pos[karg_pos]
+            if pos_karg < len(args):
+                raise TypeError(
+                    "default_arguments_decorator() got multiple values for argument '%s'"
+                    % karg_pos
+                )
+
+    if new_function.__doc__ is None:
+        new_function.__doc__ = ""
+    if len(args):
+        firstarg = True
+        new_function.__doc__ += "positional argument defaults:\n"
+        for arg in args:
+            if not firstarg:
+                new_function.__doc__ += ", "
+            else:
+                new_function.__doc__ += "  "
+                firstarg = False
+            new_function.__doc__ += str(arg)
+        new_function.__doc__ += "\n"
+    if len(kargs):
+        new_function.__doc__ += "keyword argument defaults:\n"
+        for karg in kargs:
+            if karg != "kargs_pos":
+                new_function.__doc__ += (
+                    "  " + str(karg) + " = " + str(kargs[karg]) + "\n"
+                )
+        if kargs_pos:
+            new_function.__doc__ += "keyword argument positions:\n"
+            for karg in kargs_pos:
+                new_function.__doc__ += (
+                    "  " + str(karg) + " is at pos " + str(kargs_pos[karg]) + "\n"
+                )
+    if len(args) or len(kargs):
+        new_function.__doc__ += (
+            "(defaults have been set by default_arguments_decorator method)"
+        )
     return new_function
+
 
 def return_instance_if_value_has_it(value):
     """Return value.instance if value is an instance of ClassFromFunctions,
