@@ -627,7 +627,9 @@ Session.decorate_functions(one_arg_default_none, "load", "save")
 
 Session.decorate_functions( Session.raise_backend_errors_after_call,
                             "begin", "load", "save", "end")
+Session.decorate_method(default_arguments_decorator, "begin", None, mode=SessionOpenMode.SESSION_NORMAL_OPEN)
 Session.decorate_functions(deprecated_args_session_begin, "begin")
+
 Session.get_book = method_function_returns_instance(
     Session.get_book, Book )
 
