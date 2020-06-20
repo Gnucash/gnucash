@@ -1,5 +1,21 @@
 Version history:
 ------- -------
+3.905 - 21 June 2020
+The fifth unstable release leading to the new 4.x stable series.  This is the release-candidate: Barring any serious bugs it's what we'll release as 4.0.
+
+Between 3.905 and 3.906, the following bugfixes were accomplished. Some of these will also be fixed in GnuCash 3.11, some are for 4.0 only.
+  Bug 797808 - Caps Lock Breaks Almost Everything
+  Bug 797811 - GnuCash crashes with segfault when saving to mysql when
+               database already exists.
+
+The following fixes and improvements were not associated with bug reports or new features:
+    Add missing #includes into gnc-imp-settings-csv-price.cpp
+      Found in failed win maint nightlies.</p></li>
+    [business-core] string-hash doesn't guarantee unique hash, use guid
+      string instead.
+
+Updated Translations: Ukrainian
+
 3.905 - 14 June 2020
 The fourth unstable release leading to the new 4.x stable series. See 3.902 and 3.903 below for additional requirements and features.
 
