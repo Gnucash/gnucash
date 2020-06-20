@@ -154,24 +154,28 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  * assumed. Customized backends can choose to search other
  * application-specific directories or URI schemes as well.
  *
- * @param mode The SessionMode.
+ * @param mode The SessionOpenMode.
  *
- * ==== SessionMode ====
- * `SESSION_NORMAL`: Find an existing file or database at the provided uri and
+ * @par ==== SessionOpenMode ====
+ * `SESSION_NORMAL_OPEN`: Find an existing file or database at the provided uri and
  * open it if it is unlocked. If it is locked post a QOF_BACKEND_LOCKED error.
+ * @par
  * `SESSION_NEW_STORE`: Check for an existing file or database at the provided
  * uri and if none is found, create it. If the file or database exists post a
  * QOF_BACKED_STORE_EXISTS and return.
+ * @par
  * `SESSION_READ_ONLY`: Find an existing file or database and open it without
  * disturbing the lock if it exists or setting one if not. This will also set a
  * flag on the book that will prevent many elements from being edited and will
  * prevent the backend from saving any edits.
+ * @par
  * `SESSION_OVERWRITE`: Create a new file or database at the provided uri,
  * deleting any existing file or database.
- * `SESSION_BREAK_LOCK1: Find an existing file or database, lock it, and open
+ * @par
+ * `SESSION_BREAK_LOCK`: Find an existing file or database, lock it, and open
  * it. If there is already a lock replace it with a new one for this session.
  *
- * ==== Errors ====
+ * @par ==== Errors ====
  * This function signals failure by queuing errors. After it completes use
  * qof_session_get_error() and test that the value is `ERROR_BACKEND_NONE` to
  * determine that the session began successfully.
