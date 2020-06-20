@@ -72,6 +72,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 using StrVec = std::vector<std::string>;
 
+static std::string empty_string{};
 static EntryVec version_table
 {
     gnc_sql_make_table_entry<CT_STRING>(
@@ -99,7 +100,7 @@ GncSqlBackend::connect(GncSqlConnection *conn) noexcept
 GncSqlStatementPtr
 GncSqlBackend::create_statement_from_sql(const std::string& str) const noexcept
 {
-    auto stmt = m_conn->create_statement_from_sql(str);
+    auto stmt = m_conn ? m_conn->create_statement_from_sql(str) : nullptr;
     if (stmt == nullptr)
     {
         PERR ("SQL error: %s\n", str.c_str());
@@ -111,7 +112,7 @@ GncSqlBackend::create_statement_from_sql(const std::string& str) const noexcept
 GncSqlResultPtr
 GncSqlBackend::execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept
 {
-    auto result = m_conn->execute_select_statement(stmt);
+    auto result = m_conn ? m_conn->execute_select_statement(stmt) : nullptr;
     if (result == nullptr)
     {
         PERR ("SQL error: %s\n", stmt->to_sql());
@@ -123,7 +124,7 @@ GncSqlBackend::execute_select_statement(const GncSqlStatementPtr& stmt) const no
 int
 GncSqlBackend::execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept
 {
-    auto result = m_conn->execute_nonselect_statement(stmt);
+    int result = m_conn ? m_conn->execute_nonselect_statement(stmt) : -1;
     if (result == -1)
     {
         PERR ("SQL error: %s\n", stmt->to_sql());
@@ -135,6 +136,9 @@ GncSqlBackend::execute_nonselect_statement(const GncSqlStatementPtr& stmt) const
 std::string
 GncSqlBackend::quote_string(const std::string& str) const noexcept
 {
+    g_return_val_if_fail (m_conn != nullptr, empty_string);
+    if (!m_conn)
+        return empty_string;
     return m_conn->quote_string(str);
 }
 
@@ -142,8 +146,9 @@ bool
 GncSqlBackend::create_table(const std::string& table_name,
                             const EntryVec& col_table) const noexcept
 {
+    g_return_val_if_fail (m_conn != nullptr, false);
+
     ColVec info_vec;
-    gboolean ok = FALSE;
 
     for (auto const& table_row : col_table)
     {
@@ -167,6 +172,7 @@ GncSqlBackend::create_index(const std::string& index_name,
                             const std::string& table_name,
                             const EntryVec& col_table) const noexcept
 {
+    g_return_val_if_fail (m_conn != nullptr, false);
     return m_conn->create_index(index_name, table_name, col_table);
 }
 
@@ -174,6 +180,8 @@ bool
 GncSqlBackend::add_columns_to_table(const std::string& table_name,
                                     const EntryVec& col_table) const noexcept
 {
+    g_return_val_if_fail (m_conn != nullptr, false);
+
     ColVec info_vec;
 
     for (auto const& table_row : col_table)
@@ -451,6 +459,7 @@ void
 GncSqlBackend::sync(QofBook* book)
 {
     g_return_if_fail (book != NULL);
+    g_return_if_fail (m_conn != nullptr);
 
     reset_version_info();
     ENTER ("book=%p, sql_be->book=%p", book, m_book);
@@ -560,6 +569,7 @@ GncSqlBackend::commit (QofInstance* inst)
     gboolean is_infant;
 
     g_return_if_fail (inst != NULL);
+    g_return_if_fail (m_conn != nullptr);
 
     if (qof_book_is_readonly(m_book))
     {
@@ -650,7 +660,7 @@ GncSqlBackend::commit (QofInstance* inst)
 void
 GncSqlBackend::init_version_info() noexcept
 {
-
+    g_return_if_fail (m_conn != nullptr);
     if (m_conn->does_table_exist (VERSION_TABLE_NAME))
     {
         std::string sql {"SELECT * FROM "};

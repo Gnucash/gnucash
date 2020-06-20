@@ -19399,6 +19399,10 @@ msgstr ""
 msgid "Statement Date is after today"
 msgstr "Дата виписки у майбутньому щодо поточної"
 
+#: gnucash/gtkbuilder/window-reconcile.glade:243
+msgid "Statement Date is after today"
+msgstr "Дата виписки у майбутньому щодо поточної"
+
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:91
 msgid "Not found"
 msgstr "Не знайдено"
