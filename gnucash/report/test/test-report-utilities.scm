@@ -249,7 +249,18 @@
       (coll-A 'add USD -25)
       (test-equal "gnc-commodity-collector-allzero? #t"
         #t
-        (gnc-commodity-collector-allzero? coll-A)))
+        (gnc-commodity-collector-allzero? coll-A))
+
+      ;; the following tests whether commodity-collector rounds
+      ;; inappropriately
+      (coll-A 'reset #f #f)
+      (coll-A 'add GBP 1/3)
+      (coll-A 'add GBP 1/3)
+      (coll-A 'add GBP 1/3)
+      (coll-A 'add GBP -1)
+      (test-equal "gnc-commodity-collector does not round inappropriately"
+        '(("GBP" . 0))
+        (collector->list coll-A)))
     (teardown)))
 
 (define (mnemonic->commodity sym)
