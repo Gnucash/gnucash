@@ -29,6 +29,8 @@
 #  @ingroup python_bindings
 
 from enum import IntEnum
+from urllib.parse import urlparse
+
 from gnucash import gnucash_core_c
 from gnucash import _sw_core_utils
 
@@ -228,7 +230,8 @@ class Session(GnuCashCoreClass):
                 # Any existing store obviously has to be loaded
                 # More background: https://bugs.gnucash.org/show_bug.cgi?id=726891
                 is_new = mode in (SessionOpenMode.SESSION_NEW_STORE, SessionOpenMode.SESSION_NEW_OVERWRITE)
-                if book_uri[:3] != "xml" or not is_new:
+                scheme = urlparse(book_uri).scheme
+                if not (is_new and scheme == 'xml'):
                     self.load()
             except GnuCashBackendException as backend_exception:
                 self.end()
