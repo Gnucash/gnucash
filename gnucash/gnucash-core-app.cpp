@@ -59,11 +59,6 @@ namespace bl = boost::locale;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-/* Change the following to have a console window attached to GnuCash
- * for displaying stdout and stderr on Windows.
- */
-#define __MSWIN_CONSOLE__ 0
-
 #include <libintl.h>
 #include <locale.h>
 #include <gnc-locale-utils.hpp>
@@ -412,54 +407,6 @@ gnc_log_init (const boost::optional <std::vector <std::string>> &log_flags,
     }
 }
 
-
-/* Creates a console window on MSWindows to display stdout and stderr
- * when __MSWIN_CONSOLE__ is defined at the top of the file.
- *
- * Useful for displaying the diagnostics printed before logging is
- * started and if logging is redirected with --logto=stderr.
- */
-static void
-redirect_stdout (void)
-{
-#if defined __MINGW32__ && __MSWIN_CONSOLE__
-    static const WORD MAX_CONSOLE_LINES = 500;
-   int hConHandle;
-    long lStdHandle;
-    CONSOLE_SCREEN_BUFFER_INFO coninfo;
-    FILE *fp;
-
-    // allocate a console for this app
-    AllocConsole();
-
-    // set the screen buffer to be big enough to let us scroll text
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
-    coninfo.dwSize.Y = MAX_CONSOLE_LINES;
-    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
-
-    // redirect unbuffered STDOUT to the console
-    lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    fp = _fdopen( hConHandle, "w" );
-    *stdout = *fp;
-    setvbuf( stdout, NULL, _IONBF, 0 );
-
-    // redirect unbuffered STDIN to the console
-    lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    fp = _fdopen( hConHandle, "r" );
-    *stdin = *fp;
-    setvbuf( stdin, NULL, _IONBF, 0 );
-
-    // redirect unbuffered STDERR to the console
-    lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
-    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
-    fp = _fdopen( hConHandle, "w" );
-    *stderr = *fp;
-    setvbuf( stderr, NULL, _IONBF, 0 );
-#endif
-}
-
 Gnucash::CoreApp::CoreApp ()
 {
     #ifdef ENABLE_BINRELOC
@@ -472,7 +419,6 @@ Gnucash::CoreApp::CoreApp ()
         }
     }
     #endif
-    redirect_stdout ();
 
     /* This should be called before gettext is initialized
      * The user may have configured a different language via
