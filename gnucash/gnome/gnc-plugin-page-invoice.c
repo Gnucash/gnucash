@@ -208,8 +208,8 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "BusinessAssociationAction", NULL, "_Update Association for Invoice", NULL,
-        "Update Association for current Invoice",
+        "BusinessAssociationAction", NULL, "Edit _Association for Invoice", NULL,
+        "Edit Association for current Invoice",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_associate)
     },
     {
@@ -308,7 +308,7 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
-    {"BusinessAssociationAction", N_("_Update Association for Invoice")},
+    {"BusinessAssociationAction", N_("Edit _Association for Invoice")},
     {"BusinessAssociationOpenAction", N_("_Open Association for Invoice")},
     {"BusinessAssociationRemoveAction", N_("_Remove Association from Invoice")},
     {NULL, NULL},
@@ -330,7 +330,7 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill")},
-    {"BusinessAssociationAction", N_("_Update Association for Bill")},
+    {"BusinessAssociationAction", N_("Edit _Association for Bill")},
     {"BusinessAssociationOpenAction", N_("_Open Association for Bill")},
     {"BusinessAssociationRemoveAction", N_("_Remove Association from Bill")},
     {NULL, NULL},
@@ -352,7 +352,7 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
-    {"BusinessAssociationAction", N_("_Update Association for Voucher")},
+    {"BusinessAssociationAction", N_("Edit _Association for Voucher")},
     {"BusinessAssociationOpenAction", N_("_Open Association for Voucher")},
     {"BusinessAssociationRemoveAction", N_("_Remove Association from Voucher")},
     {NULL, NULL},
@@ -374,7 +374,7 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
-    {"BusinessAssociationAction", N_("_Update Association for Credit Note")},
+    {"BusinessAssociationAction", N_("Edit _Association for Credit Note")},
     {"BusinessAssociationOpenAction", N_("_Open Association for Credit Note")},
     {"BusinessAssociationRemoveAction", N_("_Remove Association from Credit Note")},
     {NULL, NULL},
@@ -391,7 +391,7 @@ static action_toolbar_labels invoice_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") },
-    {"BusinessAssociationAction", N_("Update Association for current invoice")},
+    {"BusinessAssociationAction", N_("Edit Association for current invoice")},
     {"BusinessAssociationOpenAction", N_("Open Association for current invoice")},
     {"BusinessAssociationRemoveAction", N_("Remove Association from invoice")},
     {NULL, NULL},
@@ -413,7 +413,7 @@ static action_toolbar_labels bill_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") },
-    {"BusinessAssociationAction", N_("Update Association for current bill")},
+    {"BusinessAssociationAction", N_("Edit Association for current bill")},
     {"BusinessAssociationOpenAction", N_("Open Association for current bill")},
     {"BusinessAssociationRemoveAction", N_("Remove Association from bill")},
     {NULL, NULL},
@@ -435,7 +435,7 @@ static action_toolbar_labels voucher_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the voucher")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this voucher") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") },
-    {"BusinessAssociationAction", N_("Update Association for current voucher")},
+    {"BusinessAssociationAction", N_("Edit Association for current voucher")},
     {"BusinessAssociationOpenAction", N_("Open Association for current voucher")},
     {"BusinessAssociationRemoveAction", N_("Remove Association from voucher")},
     {NULL, NULL},
@@ -457,7 +457,7 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessAssociationAction", N_("Update Association for credit note")},
+    {"BusinessAssociationAction", N_("Edit Association for credit note")},
     {"BusinessAssociationOpenAction", N_("Open Association for credit note")},
     {"BusinessAssociationRemoveAction", N_("Remove Association from credit note")},
     {NULL, NULL},
@@ -1376,7 +1376,7 @@ gnc_plugin_page_invoice_cmd_associate (GtkAction *action,
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     uri = gncInvoiceGetAssociation (invoice);
 
-    ret_uri = gnc_assoc_get_uri_dialog (parent, _("Change a Business Association"), uri);
+    ret_uri = gnc_assoc_get_uri_dialog (parent, _("Edit a Business Association"), uri);
 
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
     {

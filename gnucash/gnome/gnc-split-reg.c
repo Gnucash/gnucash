@@ -1374,7 +1374,7 @@ gsr_default_associate_handler (GNCSplitReg *gsr)
     // fix an earlier error when storing relative paths before version 3.5
     uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
 
-    ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(gsr->window), _("Change a Transaction Association"), uri);
+    ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(gsr->window), _("Edit a Transaction Association"), uri);
 
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         xaccTransSetAssociation (trans, ret_uri);

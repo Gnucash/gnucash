@@ -537,7 +537,7 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
             return;
         }
 
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Business Association"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Edit a Business Association"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -628,7 +628,7 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
             g_free (uri);
             return;
         }
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Transaction Association"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Edit a Transaction Association"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {

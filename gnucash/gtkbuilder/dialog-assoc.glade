@@ -314,7 +314,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Change Association path head</property>
+                <property name="label" translatable="yes">Edit Association path head</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -731,7 +731,7 @@
             <property name="margin_top">3</property>
             <property name="margin_bottom">3</property>
             <property name="label" translatable="yes">   To jump to the Transaction, double click on the entry in the Description
-column, Association column to open the Association or Available to update</property>
+column, Association column to open the Association or Available to edit</property>
           </object>
           <packing>
             <property name="expand">False</property>

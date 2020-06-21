@@ -292,7 +292,7 @@ static GncInvoice* invoice_from_split (Split* split);
 #define PASTE_TRANSACTION_LABEL          N_("_Paste Transaction")
 #define DUPLICATE_TRANSACTION_LABEL      N_("Dup_licate Transaction")
 #define DELETE_TRANSACTION_LABEL         N_("_Delete Transaction")
-#define ASSOCIATE_TRANSACTION_LABEL      N_("Update _Association for Transaction")
+#define ASSOCIATE_TRANSACTION_LABEL      N_("Edit _Association for Transaction")
 #define ASSOCIATE_TRANSACTION_OPEN_LABEL  N_("_Open Association for Transaction")
 #define ASSOCIATE_TRANSACTION_REMOVE_LABEL N_("Re_move Association from Transaction")
 #define JUMP_ASSOCIATED_INVOICE_LABEL     N_("Open Associated Invoice")
@@ -306,7 +306,7 @@ static GncInvoice* invoice_from_split (Split* split);
 #define PASTE_TRANSACTION_TIP            N_("Paste the transaction from the clipboard")
 #define DUPLICATE_TRANSACTION_TIP        N_("Make a copy of the current transaction")
 #define DELETE_TRANSACTION_TIP           N_("Delete the current transaction")
-#define ASSOCIATE_TRANSACTION_TIP        N_("Update Association for the current transaction")
+#define ASSOCIATE_TRANSACTION_TIP        N_("Edit Association for the current transaction")
 #define ASSOCIATE_TRANSACTION_OPEN_TIP   N_("Open Association for the current transaction")
 #define ASSOCIATE_TRANSACTION_REMOVE_TIP N_("Remove the association from the current transaction")
 #define JUMP_ASSOCIATED_INVOICE_TIP      N_("Open the associated invoice")
@@ -616,7 +616,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "BlankTransactionAction",             N_ ("Blank") },
     { "ActionsReconcileAction",             N_ ("Reconcile") },
     { "ActionsAutoClearAction",             N_ ("Auto-clear") },
-    { "AssociateTransactionAction",         N_ ("Update Association") },
+    { "AssociateTransactionAction",         N_ ("Edit Association") },
     { "AssociateTransactionOpenAction",     N_ ("Open Association") },
     { "AssociateTransactionRemoveAction",   N_ ("Remove Association") },
     { "JumpAssociatedInvoiceAction",        N_ ("Open Invoice") },
