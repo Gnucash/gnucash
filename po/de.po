@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-13 20:45+0200\n"
-"PO-Revision-Date: 2020-03-06-12 01:19+0200\n"
+"PO-Revision-Date: 2020-06-21 23:18+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1261,19 +1261,16 @@ msgstr "Ungültige Konto Entität: %s"
 
 # Fixme I18N: ambiguous, append or correct?
 #: gnucash/gnome/dialog-assoc.c:186
-#, fuzzy
 msgid "Amend URL:"
-msgstr "URL ergänzen"
+msgstr "URL ergänzen:"
 
 #: gnucash/gnome/dialog-assoc.c:190
-#, fuzzy
 msgid "Enter URL like http://www.gnucash.org:"
-msgstr "Geben Sie eine URL ein, z.B. http://www.gnucash.org"
+msgstr "Geben Sie eine URL ein, z.B. http://www.gnucash.org:"
 
 #: gnucash/gnome/dialog-assoc.c:205
-#, fuzzy
 msgid "Existing Association is"
-msgstr "Die bestehende Zuordnung ist '"
+msgstr "Die bestehende Verknüpfung ist"
 
 #: gnucash/gnome/dialog-assoc.c:423 gnucash/gnome/dialog-assoc.c:466
 msgid "File Found"
@@ -1303,30 +1300,25 @@ msgid "Unknown"
 msgstr "Unbekannt"
 
 #: gnucash/gnome/dialog-assoc.c:485 gnucash/gnome/dialog-imap-editor.c:885
-#, fuzzy
 msgid "Total Entries"
-msgstr "Gesamtbetrag"
+msgstr "Anzahl Einträge"
 
 #: gnucash/gnome/dialog-assoc.c:535
-#, fuzzy
 msgid "Business item can not be modified."
-msgstr "Die Datei konnte nicht geöffnet werden."
+msgstr "Die Rechnung bzw. Lieferschein kann nicht bearbeitet werden."
 
 #: gnucash/gnome/dialog-assoc.c:540
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1379
-#, fuzzy
 msgid "Change a Business Association"
-msgstr "Buchungsverknüpfungen"
+msgstr "Buchungsverknüpfung bearbeiten"
 
 #: gnucash/gnome/dialog-assoc.c:627
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Buchungswährung/-wertpapier"
+msgstr "Buchung kann nicht bearbeitet werden."
 
 #: gnucash/gnome/dialog-assoc.c:631 gnucash/gnome/gnc-split-reg.c:1377
-#, fuzzy
 msgid "Change a Transaction Association"
-msgstr "Alle Transaktionsverknüpfungen zeigen"
+msgstr "Buchungsverknüpfung bearbeiten"
 
 #: gnucash/gnome/dialog-assoc.c:685 libgnucash/engine/gncOwner.c:215
 msgid "Undefined"
@@ -1379,19 +1371,16 @@ msgid "Description"
 msgstr "Beschreibung"
 
 #: gnucash/gnome/dialog-assoc.c:929
-#, fuzzy
 msgid ""
 "         To jump to the Business Item, double click on the entry in the id\n"
 " column, Association column to open the Association or Available to update"
 msgstr ""
-"Um zur Buchung zu springen, klicken Sie doppelt auf den Eintrag in der "
-"Spalte \n"
-"'Beschreibung' oder in der Spalte 'Verknüpfung' zum Öffnen der Verknüpfung."
+"Um zur Rechnung zu springen, machen Sie einen Doppelklick auf den Eintrag in der Spalte \n"
+"»Beschreibung«. Zum Öffnen der Verknüpfung einen Doppelklick auf die Spalte »Verknüpfung«."
 
 #: gnucash/gnome/dialog-assoc.c:932
-#, fuzzy
 msgid "Business Associations"
-msgstr "Buchungsverknüpfungen"
+msgstr "Rechnungsverknüpfungen"
 
 #: gnucash/gnome/dialog-billterms.c:270
 msgid "Discount days cannot be more than due days."
@@ -2126,7 +2115,7 @@ msgstr "Datum des Abgleichs"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -2135,13 +2124,13 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "Die Steuertabelle %s existiert nicht. Möchten Sie sie erstellen?"
-msgstr[1] "Die Steuertabelle %s existiert nicht. Möchten Sie sie erstellen?"
+msgstr[0] "Es gibt %d ungültige Zuordnung. Soll sie gelöscht werden?"
+msgstr[1] "Es gibt %d ungültige Zuordnungen. Sollen sie gelöscht werden?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "Um die ungültigen Zuordnungen zu sehen, benutzen Sie einen Filter mit »%s«"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #: gnucash/gnome/dialog-imap-editor.c:607
@@ -2150,7 +2139,7 @@ msgstr "Zugeordnetes Konto nicht gefunden"
 
 #: gnucash/gnome/dialog-imap-editor.c:372
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Falls das eine größere Zahl ist, kann das einen Moment dauern.)"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:126
@@ -2174,9 +2163,8 @@ msgid "Online Id"
 msgstr "Online Id"
 
 #: gnucash/gnome/dialog-imap-editor.c:793
-#, fuzzy
 msgid "Online HBCI"
-msgstr "Online Id"
+msgstr "Online HBCI/FinTS"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -2347,9 +2335,8 @@ msgid "View Expense Voucher"
 msgstr "Auslagenerstattung anzeigen"
 
 #: gnucash/gnome/dialog-invoice.c:2458
-#, fuzzy
 msgid "Open Association:"
-msgstr "Verknüpfung"
+msgstr "Verknüpfung öffnen:"
 
 #: gnucash/gnome/dialog-invoice.c:2571 gnucash/gnome/dialog-invoice.c:2797
 msgid "Bill Information"
@@ -3636,7 +3623,7 @@ msgstr "Buchungs_verknüpfungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Associations"
-msgstr "Alle Transaktionsverknüpfungen zeigen"
+msgstr "Alle Buchungsverknüpfungen zeigen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3669,19 +3656,16 @@ msgstr[1] ""
 "Buchungen automatisch erstellt)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:63
-#, fuzzy
 msgid "_New Budget"
-msgstr "Neues Budget"
+msgstr "_Neues Budget"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
-#, fuzzy
 msgid "Create a new Budget."
-msgstr "Neues Budget erstellen"
+msgstr "Neues Budget erstellen."
 
 #: gnucash/gnome/gnc-plugin-budget.c:69
-#, fuzzy
 msgid "_Open Budget"
-msgstr "Budget öffnen"
+msgstr "Budget _öffnen"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
 msgid ""
@@ -3690,23 +3674,20 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "Budget duplizieren"
+msgstr "Budget _kopieren"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
-#, fuzzy
 msgid "Copy an existing Budget."
-msgstr "Existierendes Budget duplizieren"
+msgstr "Existierendes Budget kopieren."
 
 #: gnucash/gnome/gnc-plugin-budget.c:80
 msgid "_Delete Budget"
 msgstr "Budget _löschen"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Existierendes Budget öffnen"
+msgstr "Existierendes Budget löschen."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -3969,14 +3950,12 @@ msgid "Open the Find Expense Voucher dialog"
 msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #: gnucash/gnome/gnc-plugin-business.c:278
-#, fuzzy
 msgid "Business _Associations"
-msgstr "Buchungsverknüpfungen"
+msgstr "Rechnungs_verknüpfungen"
 
 #: gnucash/gnome/gnc-plugin-business.c:279
-#, fuzzy
 msgid "View all Business Associations"
-msgstr "Alle Transaktionsverknüpfungen zeigen"
+msgstr "Alle Rechnungsverknüpfungen zeigen"
 
 #: gnucash/gnome/gnc-plugin-business.c:283
 msgid "Sales _Tax Table"
@@ -4123,14 +4102,12 @@ msgid "Delete selected account"
 msgstr "Ausgewähltes Konto löschen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:256
-#, fuzzy
 msgid "_Cascade Account Properties..."
-msgstr "Konto_farbe übernehmen..."
+msgstr "Konto_eigenschaften übernehmen..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:257
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Die Kontofarbe in die untergeordneten Konten übernehmen"
+msgstr "Die gewählten Kontoeigenschaften in die untergeordneten Konten übernehmen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:261
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:266
@@ -4360,13 +4337,12 @@ msgstr ""
 "das wirklich?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1377
-#, fuzzy
 msgid "_Pick another account"
-msgstr "_Herkunftskonto auswählen"
+msgstr "_Anderes Konto wählen"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1378
 msgid "_Do it anyway"
-msgstr ""
+msgstr "Buchungen _trotzdem verschieben"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1461
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
@@ -4409,14 +4385,14 @@ msgid "All transactions in this account will be deleted."
 msgstr "Alle Buchungen in diesem Konto werden gelöscht."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1691
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "Alle Unterkonten werden zum Konto %s verschoben."
+msgstr "Sein Unterkonto wird zum Konto %s verschoben."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1697
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "Alle Unterkonten werden ebenfalls gelöscht."
+msgstr "Sein Unterkonto wird ebenfalls gelöscht."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1701
 #, c-format
@@ -4445,9 +4421,8 @@ msgid "Open the selected account and all its subaccounts."
 msgstr "Öffne das gewählte Konto und alle Unterkonten."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "Budget _löschen"
+msgstr "Budget _löschen..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:154
 msgid "Select this or another budget and delete it."
@@ -4478,17 +4453,15 @@ msgstr "_Alle Perioden..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "Budget für Ausgewähltes Konto bearbeiten"
+msgstr "Budget für alle Perioden bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "Edit Note"
-msgstr "Gutschrift"
+msgstr "Notizen bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit note for the selected account and period"
-msgstr "Ausgewähltes Konto bearbeiten"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 msgid "Refresh this window."
@@ -4544,9 +4517,8 @@ msgid "You must select at least one account to edit."
 msgstr "Sie müssen mindestens ein Konto auswählen, das bearbeitet werden soll."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1234
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "Sie müssen mindestens ein Konto auswählen, das bearbeitet werden soll."
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -4711,27 +4683,24 @@ msgid "_Pay Invoice"
 msgstr "Rechnung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:311
-#, fuzzy
 msgid "_Update Association for Invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für Rechnung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:312
-#, fuzzy
 msgid "_Open Association for Invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für Rechnung _öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:313
-#, fuzzy
 msgid "_Remove Association from Invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung von Rechnung _entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:319
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "Als _voreingestelltes Layout für Kundendokumente benutzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:320
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "Voreingestelltes Layout für Kundendokumente _zurücksetzen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:326
 msgid "_Print Bill"
@@ -4762,19 +4731,16 @@ msgid "_Pay Bill"
 msgstr "Rechnung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:333
-#, fuzzy
 msgid "_Update Association for Bill"
-msgstr "Verknüpfung _prüfen"
+msgstr "Verknüpfung für Lieferantenrechnung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:334
-#, fuzzy
 msgid "_Open Association for Bill"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für Lieferantenrechnung _öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:335
-#, fuzzy
 msgid "_Remove Association from Bill"
-msgstr "Verknüpfung _prüfen"
+msgstr "Verknüpfung für Lieferantenrechnung _entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:341
 msgid "_Use as Default Layout for Vendor Documents"
@@ -4813,18 +4779,16 @@ msgid "_Pay Voucher"
 msgstr "Auslagenerstattung be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:355
-#, fuzzy
 msgid "_Update Association for Voucher"
-msgstr "Verknüpfung _prüfen"
+msgstr "Verknüpfung für Auslagenerstattung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:356
-#, fuzzy
 msgid "_Open Association for Voucher"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für Auslagenerstattung _öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:357
 msgid "_Remove Association from Voucher"
-msgstr ""
+msgstr "Verknüpfung für Auslagenerstattung _entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:363
 msgid "_Use as Default Layout for Employee Documents"
@@ -4863,19 +4827,16 @@ msgid "_Pay Credit Note"
 msgstr "Gutschrift be_zahlen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:377
-#, fuzzy
 msgid "_Update Association for Credit Note"
-msgstr "Gutschrift-Buchung _rückgängig"
+msgstr "Verknüpfung für Gutschrift bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:378
-#, fuzzy
 msgid "_Open Association for Credit Note"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für Gutschrift _öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:379
-#, fuzzy
 msgid "_Remove Association from Credit Note"
-msgstr "Gutschrift bu_chen"
+msgstr "Verknüpfung für Gutschrift _entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:385
 msgid "Make a printable invoice"
@@ -4918,19 +4879,16 @@ msgid "Open a company report window for the owner of this invoice"
 msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:394
-#, fuzzy
 msgid "Update Association for current invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für aktuelle Rechnung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:395
-#, fuzzy
 msgid "Open Association for current invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für aktuelle Rechung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:396
-#, fuzzy
 msgid "Remove Association from invoice"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung von aktueller Rechnung entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:401
 msgid ""
@@ -4985,16 +4943,15 @@ msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:416
 msgid "Update Association for current bill"
-msgstr ""
+msgstr "Verknüpfung für aktuelle Rechnung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:417
-#, fuzzy
 msgid "Open Association for current bill"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für aktuelle Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:418
 msgid "Remove Association from bill"
-msgstr ""
+msgstr "Verknüpfung für aktuelle Rechnung entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:423
 msgid "Use the current layout as default for all vendor bills and credit notes"
@@ -5048,16 +5005,15 @@ msgstr "Einen Firmenbericht für den Mandanten dieser Auslagenerstattung öffnen
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:438
 msgid "Update Association for current voucher"
-msgstr ""
+msgstr "Verknüpfung für aktuelle Auslagenerstattung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:439
-#, fuzzy
 msgid "Open Association for current voucher"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für aktuelle Auslagenerstattung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:440
 msgid "Remove Association from voucher"
-msgstr ""
+msgstr "Verknüpfung für aktuelle Auslagenerstattung entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:445
 msgid ""
@@ -5110,18 +5066,16 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "Einen Firmenbericht für den Mandanten dieser Gutschrift öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:460
-#, fuzzy
 msgid "Update Association for credit note"
-msgstr "Gutschrift bearbeiten"
+msgstr "Verknüpfung für aktuelle Gutschrift bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:461
-#, fuzzy
 msgid "Open Association for credit note"
-msgstr "Zugeordnete _Rechnung öffnen"
+msgstr "Verknüpfung für aktuelle Gutschrift öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:462
 msgid "Remove Association from credit note"
-msgstr ""
+msgstr "Verknüpfung von aktueller Gutschrift entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:468
 #: gnucash/gnome/gnc-plugin-page-register2.c:484
@@ -5604,13 +5558,10 @@ msgstr "_Bemerkung anzeigen"
 #: gnucash/gnome/gnc-plugin-page-register2.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:543
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"File Association\" for "
 "each transaction."
 msgstr ""
-"Alle Buchungssätze mit Bemerkung anzeigen, also zwei Zeilen pro Buchung "
-"anzeigen"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:416
 msgid "Show _Extra Dates"
@@ -5869,38 +5820,32 @@ msgid "Filter %s by..."
 msgstr "%s filtern nach..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:295
-#, fuzzy
 msgid "Update _Association for Transaction"
-msgstr "_Internetadresse zuordnen"
+msgstr "Verknüpfung für Buchung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:296
-#, fuzzy
 msgid "_Open Association for Transaction"
-msgstr "_Internetadresse zuordnen"
+msgstr "Verknüpfung für Buchung _öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:297
-#, fuzzy
 msgid "Re_move Association from Transaction"
-msgstr "Buchungsteil von einer Buchung entfernen"
+msgstr "Verknüpfung für Buchung _entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:298
 msgid "Open Associated Invoice"
 msgstr "Zugeordnete _Rechnung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:309
-#, fuzzy
 msgid "Update Association for the current transaction"
-msgstr "Eine Internetadresse zur aktuellen Buchung zuordnen"
+msgstr "Eine Verknüpfung zur aktuellen Buchung zuordnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:310
-#, fuzzy
 msgid "Open Association for the current transaction"
-msgstr "Eine Internetadresse zur aktuellen Buchung zuordnen"
+msgstr "Die Verknüpfung der aktuellen Buchung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:311
-#, fuzzy
 msgid "Remove the association from the current transaction"
-msgstr "Alle Buchungsteile im aktuellen Buchungssatz entfernen"
+msgstr "Die Verknüpfung von der aktuellen Buchung entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:312
 msgid "Open the associated invoice"
@@ -5928,20 +5873,17 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:619
-#, fuzzy
 msgid "Update Association"
-msgstr "Verknüpfung _prüfen"
+msgstr "Verknüpfung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:620
 #: gnucash/gtkbuilder/dialog-invoice.glade:419
-#, fuzzy
 msgid "Open Association"
-msgstr "Verknüpfung"
+msgstr "Verknüpfung öffnen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:621
-#, fuzzy
 msgid "Remove Association"
-msgstr "Verknüpfung"
+msgstr "Verknüpfung entfernen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:622
 msgid "Open Invoice"
@@ -6046,14 +5988,12 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4008
-#, fuzzy
 msgid "Reverse Transaction"
-msgstr "Stornobuchung _hinzufügen"
+msgstr "Stornobuchung hinzufügen"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4009
-#, fuzzy
 msgid "New Transaction Information"
-msgstr "Buchungsinformationen"
+msgstr "Buchungsinformationen für Stornobuchung"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4097
@@ -6458,34 +6398,28 @@ msgstr ""
 "Option »Platzhalter-Konto«."
 
 #: gnucash/gnome/gnc-split-reg.c:423
-#, fuzzy
 msgid "Currency account registers"
-msgstr "Währungsbuchführung"
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:428
-#, fuzzy
 msgid "Business account registers"
-msgstr "Dieses Konto ist schreibgeschützt."
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:433
-#, fuzzy
 msgid "Journal registers"
-msgstr "Schreibgeschütztes Kontofenster"
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:438
-#, fuzzy
 msgid "Stock account registers"
-msgstr "Aktienkonto für Wertpapier »%s«"
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:443
-#, fuzzy
 msgid "Portfolio registers"
-msgstr "Portfolio Bericht"
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:448
-#, fuzzy
 msgid "Register group Unknown"
-msgstr "Kontobuch in neuem _Fenster öffnen"
+msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:778
 msgid "Standard Order"
@@ -6684,15 +6618,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2616
-#, fuzzy
 msgid ""
 "The transactions of this account may not be edited.\n"
 "If you want to edit transactions in this register, please open the account "
 "options and turn off the placeholder checkbox."
 msgstr ""
-"Dieses Konto kann nicht bearbeitet werden. Wenn Sie Buchungen in diesem "
-"Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster »Konto "
-"Eigenschaften« und deaktivieren Sie die Option »Platzhalter-Konto«."
+"Die Buchungen in diesem Konto können nicht bearbeiten werden.\n"
+"Wenn Sie Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster »Konto Eigenschaften« und deaktivieren Sie die Option »Platzhalter-Konto«."
 
 #: gnucash/gnome/gnc-split-reg.c:2623
 #, fuzzy
@@ -6702,10 +6634,9 @@ msgid ""
 "account options and turn off the placeholder checkbox.\n"
 "You may also open an individual account instead of a set of accounts."
 msgstr ""
-"Eines der Unterkonten dieses Kontos kann nicht bearbeitet werden. Wenn Sie "
-"Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das "
-"Dialogfenster »Konto Eigenschaften« des Unterkontos und deaktivieren Sie die "
-"Option »Platzhalter-Konto«."
+"Die Buchungen in einem der Unterkonten können nicht bearbeitet werden.\n"
+"Wenn Sie Buchungen in diesem Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster »Konto Eigenschaften« des Unterkontos und deaktivieren Sie die Option »Platzhalter-Konto«.\n"
+"Stattdessen können Sie auch ein Kontofenster eines einzelnen Kontos öffnen."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
@@ -6808,13 +6739,12 @@ msgstr "Benutzerdefinierte Berichte verwalten und ausführen"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
-#, fuzzy
 msgid "Dashboard"
-msgstr "Gedankenstrich"
+msgstr "Übersicht"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
-msgstr ""
+msgstr "Eine Übersicht (Dashboard) für Ihre Finanzdaten"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
@@ -7659,28 +7589,24 @@ msgstr ""
 "Die Kontenfarbe für das Konto '%s' inklusive aller Unterkonten einrichten"
 
 #: gnucash/gnome-utils/dialog-account.c:2207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
-msgstr ""
-"Die Kontenfarbe für das Konto '%s' inklusive aller Unterkonten einrichten"
+msgstr "Die Platzhalter-Eigenschaft für das Konto »%s« inklusive aller Unterkonten einrichten"
 
 #: gnucash/gnome-utils/dialog-account.c:2221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr ""
-"Die Kontenfarbe für das Konto '%s' inklusive aller Unterkonten einrichten"
+msgstr "Die Versteckt-Eigenschaft für das Konto »%s« inklusive aller Unterkonten einrichten"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:237
-#, fuzzy
 msgid "Path head for files is,"
-msgstr "Anfang des Pfades für Dateien ist, "
+msgstr "Pfad-Anfang für Dateiverknüpfungen"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:239
-#, fuzzy
 msgid "Path head does not exist,"
-msgstr "Anfang des Pfades existiert nicht, "
+msgstr "Pfad-Anfang existiert nicht"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:242
 #, c-format
@@ -7688,9 +7614,8 @@ msgid "Path head not set, using '%s' for relative paths"
 msgstr "Pfad nicht angegeben, benutze '%s' für relative Pfade"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:426
-#, fuzzy
 msgid "Existing"
-msgstr "Existierendes verwenden"
+msgstr "Existierend"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -8825,12 +8750,11 @@ msgstr "Erwarteter Speicherort"
 #: gnucash/gnome-utils/gnc-gnome-utils.c:446
 #: gnucash/gnome-utils/gnc-gnome-utils.c:486
 msgid "GnuCash could not find the associated file."
-msgstr "GnuCash konnte die dazugehörige Datei nicht finden."
+msgstr "GnuCash konnte die verknüpfte Datei nicht finden."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:516
-#, fuzzy
 msgid "GnuCash could not open the associated file:"
-msgstr "GnuCash konnte die dazugehörige URI nicht öffnen:"
+msgstr "GnuCash konnte die verknüpfte Datei nicht öffnen:"
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
@@ -9877,7 +9801,7 @@ msgstr "Steuerrelevante Information"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:958
 msgctxt "Column header for 'Hidden'"
 msgid "H"
-msgstr ""
+msgstr "V"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1787
@@ -10370,7 +10294,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:97
-#, fuzzy
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved "
 "for"
@@ -10378,9 +10301,8 @@ msgstr ""
 "Regulärer Ausdruck für den Namensraum, in dem die Kurse geholt werden sollen"
 
 #: gnucash/gnucash-cli.cpp:101
-#, fuzzy
 msgid "Report Generation Options"
-msgstr "Berichts_optionen"
+msgstr "Berichtsoptionen"
 
 #: gnucash/gnucash-cli.cpp:104
 msgid ""
@@ -10392,19 +10314,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:109
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "Name der Organisation/Firma."
+msgstr "Name des Berichts\n"
 
 #: gnucash/gnucash-cli.cpp:111
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. Wählen Sie die Import-Art"
+msgstr "Export-Typ\n"
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "Hintergrundkachel für Berichte."
+msgstr "Ausgabedatei für Bericht\n"
 
 #: gnucash/gnucash-cli.cpp:128
 msgid "Unknown quotes command '{1}'"
@@ -10424,15 +10343,12 @@ msgid "Unknown report command '{1}'"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:181
-#, fuzzy
 msgid "Missing command or option"
-msgstr "Dies ist eine Farb-Option."
+msgstr ""
 
 #: gnucash/gnucash-commands.cpp:88
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
-msgstr ""
-"Keine Kurse abgerufen. Modul Finance::Quote ist nicht korrekt installiert.\n"
+msgstr "Keine Kurse abgerufen. Modul Finance::Quote ist nicht korrekt installiert."
 
 #: gnucash/gnucash-core-app.cpp:90
 msgid "This is a development version. It may or may not work."
@@ -10447,15 +10363,13 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a URL
 #: gnucash/gnucash-core-app.cpp:93
-#, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
-msgstr "Fehlerberichte können hier eingesehen und erstellt werden: "
+msgstr "Fehlerberichte können hier eingesehen und erstellt werden: {1}"
 
 #. Translators: {1} will be replaced with a URL
 #: gnucash/gnucash-core-app.cpp:95
-#, fuzzy
 msgid "To find the last stable version, please refer to {1}"
-msgstr "Um die letzte stabile Version zu finden, sehen Sie bitte hier nach:"
+msgstr "Um die letzte stabile Version zu finden, sehen Sie bitte hier nach: {1}"
 
 #: gnucash/gnucash-core-app.cpp:518
 msgid "- GnuCash, accounting for personal and small business finance"
@@ -10466,23 +10380,20 @@ msgid "{1} [options] [datafile]"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:548
-#, fuzzy
 msgid "GnuCash {1}"
-msgstr "GnuCash "
+msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:549
-#, fuzzy
 msgid "GnuCash {1} development version"
-msgstr "GnuCash Entwicklungsversion %s"
+msgstr "GnuCash Entwicklungsversion {1}"
 
 #: gnucash/gnucash-core-app.cpp:577
-#, fuzzy
 msgid "Common Options"
-msgstr "Buch-Optionen"
+msgstr "Gemeinsame Optionen"
 
 #: gnucash/gnucash-core-app.cpp:580
 msgid "Show this help message"
-msgstr ""
+msgstr "Diese Hilfe anzeigen"
 
 #: gnucash/gnucash-core-app.cpp:582
 msgid "Show GnuCash version"
@@ -10529,9 +10440,8 @@ msgstr ""
 "Einstellungen beim Entwanzen zu verwenden."
 
 #: gnucash/gnucash-core-app.cpp:594
-#, fuzzy
 msgid "Hidden Options"
-msgstr "Budget Optionen"
+msgstr "Versteckte Optionen"
 
 #: gnucash/gnucash-core-app.cpp:597
 msgid "[datafile]"
@@ -10546,23 +10456,20 @@ msgid "Loading data..."
 msgstr "Daten laden..."
 
 #: gnucash/gnucash.cpp:328
-#, fuzzy
 msgid "Application Options"
-msgstr "application"
+msgstr "Anwendungs-Optionen"
 
 #: gnucash/gnucash.cpp:331
 msgid "Do not load the last file opened"
 msgstr "Zuletzt geöffnete Datei nicht öffnen"
 
 #: gnucash/gnucash.cpp:333
-#, fuzzy
 msgid "Show help for gtk options"
-msgstr "Hilfe für die erste Option."
+msgstr "Hilfe für Gtk Optionen anzeigen"
 
 #: gnucash/gnucash.cpp:335
-#, fuzzy
 msgid "Deprecated Options"
-msgstr "Berichts_optionen"
+msgstr "Veraltete Optionen"
 
 #: gnucash/gnucash.cpp:338
 msgid ""
@@ -10588,12 +10495,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash.cpp:393
-#, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
-msgstr ""
-"%s\n"
-"Starten Sie '%s --help', um die ganze Liste der verfügbaren "
-"Kommandozeilenparameter zu sehen.\n"
+msgstr "Starten Sie '{1} --help', um die ganze Liste der verfügbaren Kommandozeilenparameter zu sehen."
 
 #: gnucash/gnucash.cpp:395
 msgid ""
@@ -13419,9 +13322,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:192
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:182
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr " <b>Lade- und Speichern-Einstellungen</b>"
+msgstr "<b>Lade- und Speichern-Einstellungen</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:240
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:229
@@ -13707,9 +13609,8 @@ msgid "<b>Account</b>"
 msgstr "<b>Konto</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:955
-#, fuzzy
 msgid "Select a row to change the mappings"
-msgstr "Wählen Sie eine Zeile, um die Zuordnungen zu ändern:"
+msgstr "Wählen Sie eine Zeile, um die Zuordnungen zu ändern"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:984
 #: gnucash/import-export/import-account-matcher.c:185
@@ -13853,9 +13754,8 @@ msgid "<b>Category Description</b>"
 msgstr "<b>Kategorie-Beschreibung</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:421
-#, fuzzy
 msgid "<b>Notes</b>"
-msgstr "<b>Be_schreibung</b>"
+msgstr "<b>Beschreibung</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:468
 msgid ""
@@ -13880,9 +13780,8 @@ msgstr ""
 "verschoben oder gelöscht werden."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:498
-#, fuzzy
 msgid "GnuCash Account Template Wiki"
-msgstr "GnuCash Kontoname"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:513
 msgid "Choose accounts to create"
@@ -14974,29 +14873,24 @@ msgid "_Days in advance"
 msgstr "_Tage im Voraus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
-#, fuzzy
 msgid "Cascade Account Values"
-msgstr "Kontofarbe übernehmen"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:75
-#, fuzzy
 msgid "Enable Cascading Account Color"
-msgstr "Kontofarbe übernehmen"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:121
-#, fuzzy
 msgid "Enable Cascading Account Placeholder"
-msgstr "Kontofarbe übernehmen"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:167
-#, fuzzy
 msgid "Enable Cascading Account Hidden"
-msgstr "Online-Banking Kontoname"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:198
-#, fuzzy
 msgid "Enable the sections to Cascade"
-msgstr "Konten wählen, die verglichen werden sollen"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:246
 #: gnucash/gtkbuilder/dialog-account.glade:1363
@@ -15026,18 +14920,16 @@ msgid "<b>Sub-accounts</b>"
 msgstr "<b>Unterkonten</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:507
-#, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "Dieses Konto enthält Unterkonten. Was möchten Sie mit diesen machen?"
+msgstr "Dieses Konto enthält ein Unterkonto. Was möchten Sie mit dem Konto machen?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:518
 msgid "_Move to"
 msgstr "_Verschieben nach"
 
 #: gnucash/gtkbuilder/dialog-account.glade:536
-#, fuzzy
 msgid "Delete the _subaccount"
-msgstr "Alle _Unterkonten löschen"
+msgstr "_Unterkonto löschen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:591
 msgid "<b>Transactions</b>"
@@ -15070,13 +14962,10 @@ msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>Buchungen in Unterkonten</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:764
-#, fuzzy
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
-msgstr ""
-"Ein Unterkonto (oder mehrere) dieses Kontos enthalten Buchungen. Was wollen "
-"Sie mit diesen Buchungen machen?"
+msgstr "Das Unterkonto soll gelöscht werden und es enthält Buchungen. Was wollen Sie mit diesen Buchungen machen?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:778
 msgid ""
@@ -15394,29 +15283,24 @@ msgid "_Select or add a GnuCash account:"
 msgstr "Aus_wählen oder Hinzufügen eines GnuCash Kontos:"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:84
-#, fuzzy
 msgid "_File Association"
-msgstr "Verknüpfung"
+msgstr "_Datei-Verknüpfung"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:100
-#, fuzzy
 msgid "_Location Association"
-msgstr "Verknüpfung _prüfen"
+msgstr "_Internetadresse-Verknüpfung"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:185
-#, fuzzy
 msgid "Enter URL like http://www.gnucash.org"
 msgstr "Geben Sie eine URL ein, z.B. http://www.gnucash.org"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:230
-#, fuzzy
 msgid "Location does not start with a valid scheme"
-msgstr "Diesem Buchungssatz ist keine gültige URI zugeordnet."
+msgstr "Die URL beginnt nicht mit einer Schema- (Protokoll-) Angabe"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:317
-#, fuzzy
 msgid "Change Association path head"
-msgstr "Anfang des Pfades zu Verknüpfungen der Buchungen"
+msgstr "Pfadanfang für Datei-Verknüpfungen bearbeiten"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:353
 msgid ""
@@ -15435,28 +15319,24 @@ msgid "Note: Only Associations that are not read-only will be changed."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:505
-#, fuzzy
 msgid "All Associations"
-msgstr "Verknüpfung"
+msgstr "Alle Verknüpfungen"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:523
-#, fuzzy
 msgid "Reload and Locate _Associations"
-msgstr "Verknüpfung _prüfen"
+msgstr "Verknüpfungen neu laden und Ort prüfen"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:537
-#, fuzzy
 msgid "_Reload"
-msgstr "Erneut laden"
+msgstr "Neu _laden"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:551
-#, fuzzy
 msgid "_Locate Associations"
 msgstr "Verknüpfung _prüfen"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:629
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:657 gnucash/report/trep-engine.scm:949
 msgid "Association"
@@ -16364,7 +16244,6 @@ msgid "_Expand All"
 msgstr "Alle _ausklappen"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:366
-#, fuzzy
 msgid "Collapse _All"
 msgstr "Alle _einklappen"
 
@@ -16476,29 +16355,24 @@ msgstr "»Neu«"
 
 #: gnucash/gtkbuilder/dialog-import.glade:662
 msgid "\"U+C\""
-msgstr ""
+msgstr "»Ü+Abgl«"
 
 #: gnucash/gtkbuilder/dialog-import.glade:673
-#, fuzzy
 msgid "\"C\""
-msgstr "»Neu«"
+msgstr "»Abgl«"
 
 #: gnucash/gtkbuilder/dialog-import.glade:685
 msgid "Select \"A\" to add the transaction as new."
 msgstr "Wählen Sie »Neu«, um die Buchung als neue Buchung zu importieren."
 
 #: gnucash/gtkbuilder/dialog-import.glade:697
-#, fuzzy
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
-msgstr ""
-"Wählen Sie »Abgl+Ü«, um eine existierende Buchung abzugleichen und die Daten "
-"zu übernehmen."
+msgstr "Wählen Sie »Ü+Abgl«, um die Daten zu übernehmen und eine existierende Buchung abzugleichen."
 
 #: gnucash/gtkbuilder/dialog-import.glade:709
-#, fuzzy
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr "Wählen Sie »Abgl«, um eine existierende Buchung abzugleichen"
+msgstr "Wählen Sie »Abgl«, um eine existierende Buchung abzugleichen."
 
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -16521,25 +16395,21 @@ msgid "Green"
 msgstr "Grün"
 
 #: gnucash/gtkbuilder/dialog-import.glade:876
-#, fuzzy
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
-msgstr "Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung)"
+msgstr "Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung und Zuordnung)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:919
-#, fuzzy
 msgid "Show the _Account column"
-msgstr "Herkunftskonto-Spalte anzeigen"
+msgstr "_Kontospalte anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:935
-#, fuzzy
 msgid "Show _matched information"
-msgstr "Auslagen-Informationen"
+msgstr "_Zuordnung-Spalte anzeigen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:950
-#, fuzzy
 msgid "Reconcile after match"
-msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
+msgstr "Abgleichen nach Zuordnung"
 
 #: gnucash/gtkbuilder/dialog-import.glade:973
 msgid "Generic import transaction matcher"
@@ -17099,7 +16969,6 @@ msgid "<b>Date Completion</b>"
 msgstr "<b>Datum vervollständigen</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:974
-#, fuzzy
 msgid "When a date is entered without year, it should be taken"
 msgstr ""
 "Wenn ein Datum ohne Jahreszahl eingegeben wird, soll folgendermaßen "
@@ -17113,7 +16982,6 @@ msgstr ""
 "liegen."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1003
-#, fuzzy
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
@@ -17128,7 +16996,7 @@ msgstr "Geben Sie die Anzahl Monate ein."
 #: gnucash/gtkbuilder/dialog-preferences.glade:1030
 #: gnucash/gtkbuilder/dialog-preferences.glade:1985
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1048
 msgid "Use the date format specified by the system locale."
@@ -17165,9 +17033,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3417
-#, fuzzy
 msgid "30"
-msgstr "0"
+msgstr "30"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1227
 #: gnucash/gtkbuilder/dialog-sx.glade:622
@@ -17176,9 +17043,8 @@ msgid "days"
 msgstr "Tage"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1246
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>Log-/Sicherungsdateien au_fbewahren:</b>"
+msgstr "<b>Log-/Sicherungsdateien au_fbewahren</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1258
 msgid "Com_press files"
@@ -17193,9 +17059,8 @@ msgid "<b>Files</b>"
 msgstr "<b>Dateien</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1302
-#, fuzzy
 msgid "_Decimal places"
-msgstr "Komma_stellen:"
+msgstr "Komma_stellen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1317
 msgid "How many automatic decimal places will be filled in."
@@ -17204,7 +17069,7 @@ msgstr "Wieviele Dezimalstellen automatisch ausgefüllt werden."
 #: gnucash/gtkbuilder/dialog-preferences.glade:1319
 #: gnucash/gtkbuilder/dialog-preferences.glade:2799
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1333
 msgid "_Automatic decimal point"
@@ -17227,7 +17092,6 @@ msgid "Display negative amounts in red."
 msgstr "Negative Beträge in rot anzeigen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1369
-#, fuzzy
 msgid "Force P_rices to display as decimals"
 msgstr "Preise _immer als Dezimalzahlen anzeigen"
 
@@ -17263,7 +17127,7 @@ msgstr "Zeit_intervall automatisch Speichern"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1500
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1517
 msgid "minutes"
@@ -17297,21 +17161,18 @@ msgid "Time to _wait for answer"
 msgstr "_Wartezeit für Antwort"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1656
-#, fuzzy
 msgid "20"
-msgstr "0"
+msgstr "20"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1673
 msgid "seconds"
 msgstr "Sekunden"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1701
-#, fuzzy
 msgid "Path head for Associated files"
-msgstr "Speicher-Ordner für zugeordnete Dateien von Buchungen"
+msgstr "Pfad-Anfang für Datei-Zuordnungen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1719
-#, fuzzy
 msgid "Path head for Associated Files"
 msgstr "Speicher-Ordner für zugeordnete Dateien von Buchungen"
 
@@ -17340,9 +17201,8 @@ msgstr ""
 "manche Darstellungen, z.B. register2."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1785
-#, fuzzy
 msgid "<b>Associated Files</b>"
-msgstr "Datei zuordnen"
+msgstr "<b>Verknüpfte Dateien</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:1904
@@ -17372,7 +17232,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1962
 msgid "2,00"
-msgstr ""
+msgstr "2,00"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1983
 msgid ""
@@ -17719,9 +17579,8 @@ msgid "<b>Default zoom level</b>"
 msgstr "<b>Vorgabe Vergrößerung</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3103
-#, fuzzy
 msgid "Default zoom level"
-msgstr "<b>Vorgabe Vergrößerung</b>"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3138
 msgid "Reports"
@@ -17810,9 +17669,8 @@ msgid "Windows"
 msgstr "Fenster"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3534
-#, fuzzy
 msgid "<b>Online Quotes</b>"
-msgstr "Online Kurse"
+msgstr "<b>Online Kurse</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3555
 msgid "Online Quotes"
@@ -19308,9 +19166,8 @@ msgid "Show Account Code"
 msgstr "Kontonummer anzeigen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:664
-#, fuzzy
 msgid "Show Description"
-msgstr "Beschreibung"
+msgstr "Beschreibung anzeigen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:706
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -19339,14 +19196,12 @@ msgid "Delete the Selected Budget"
 msgstr "Das gewählte Budget löschen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:871
-#, fuzzy
 msgid "Budget Notes"
-msgstr "Budgetname"
+msgstr "Budget-Notizen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:929
-#, fuzzy
 msgid "Enter Note"
-msgstr "Zusätzliche Bemerkungen"
+msgstr "Zusätzliche Notizen"
 
 #. Duplicate Transaction Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:13
@@ -19621,9 +19476,8 @@ msgstr ""
 "Währung geführt werden wie dieses Konto."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:259
-#, fuzzy
 msgid "Statement Date is after today"
-msgstr "Datum des Kontoauszugs"
+msgstr ""
 
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:91
 msgid "Not found"
@@ -19892,7 +19746,6 @@ msgid "Enter your password"
 msgstr "Geben Sie Ihr Passwort ein"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
 msgid "Con_firm Password"
 msgstr "Passwort _wiederholen:"
 
@@ -21890,7 +21743,7 @@ msgid "Import Customers and Vendors from a CSV text file."
 msgstr "Importiert Kunden oder Lieferanten aus CSV-Datei"
 
 #: gnucash/import-export/import-account-matcher.c:260
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The account '%s' is a placeholder account and does not allow transactions. "
 "Please choose a different account."
@@ -21899,13 +21752,11 @@ msgstr ""
 "wählen Sie ein anderes Konto."
 
 #: gnucash/import-export/import-account-matcher.c:277
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The account '%s' has a different commodity to the one required, '%s'. Please "
 "choose a different account."
-msgstr ""
-"Das Konto %s ist ein Platzhalter und kann keine Buchungen enthalten. Bitte "
-"wählen Sie ein anderes Konto."
+msgstr "Das Konto %s hat eine andere Währung als die benötigte Währung %s. Bitte wählen Sie ein anderes Konto."
 
 #: gnucash/import-export/import-account-matcher.c:469
 msgid "(Full account ID: "
@@ -21950,12 +21801,11 @@ msgstr "Gegenkonto zu Auswahl zuweisen."
 #: gnucash/import-export/import-main-matcher.c:806
 #: gnucash/report/trep-engine.scm:1253 gnucash/report/trep-engine.scm:1254
 msgid "A"
-msgstr "Neu"
+msgstr "V"
 
 #: gnucash/import-export/import-main-matcher.c:810
-#, fuzzy
 msgid "U+C"
-msgstr "Abgl+Ü"
+msgstr "Ü+Abgl"
 
 #: gnucash/import-export/import-main-matcher.c:821
 msgid "Info"
@@ -22112,20 +21962,18 @@ msgid "Unknown OFX investment account"
 msgstr "Unbekanntes OFX Investment-Konto"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1176
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "OFX file '%s' imported, %d transactions processed, no transactions to match"
-msgstr ""
-"OFX-Datei importiert, %d Buchungen verarbeitet, keine Buchungen zuzuordnen."
+msgstr "OFX-Datei »%s« importiert, %d Buchungen verarbeitet, keine Buchungen zuzuordnen."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1228
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1233
-#, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
-msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
+msgstr "Zu verarbeitende OFX/QFX-Datei(en) auswählen"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
@@ -23806,18 +23654,16 @@ msgid "_Taxes"
 msgstr "_Steuern"
 
 #: gnucash/report/report-core.scm:72
-#, fuzzy
 msgid "E_xamples"
-msgstr "Beispiele"
+msgstr "_Beispiele"
 
 #: gnucash/report/report-core.scm:73
 msgid "_Experimental"
 msgstr "_Experimentell"
 
 #: gnucash/report/report-core.scm:74
-#, fuzzy
 msgid "_Multicolumn"
-msgstr "Mehrspaltige Anzeige"
+msgstr "_Mehrspaltig"
 
 #: gnucash/report/report-core.scm:75
 msgid "_Custom"
@@ -26716,14 +26562,12 @@ msgid "Display a column for the budget values."
 msgstr "Eine Spalte mit den Budget-Werten anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:52
-#, fuzzy
 msgid "Show Budget Notes"
-msgstr "Budget anzeigen"
+msgstr "Budget-Notizen anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:53
-#, fuzzy
 msgid "Display a column for the budget notes."
-msgstr "Eine Spalte mit den Budget-Werten anzeigen"
+msgstr "Eine Spalte mit den Budget-Notizen anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:54
 msgid "Show Actual"
@@ -30315,9 +30159,8 @@ msgid "Display the other account code?"
 msgstr "Kontonummer des Gegenkontos anzeigen?"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
 msgid "Display the transaction association"
-msgstr "Anzeigen der Buchungsbeschreibung?"
+msgstr "Buchungsverknüpfungen anzeigen?"
 
 #: gnucash/report/trep-engine.scm:952
 #, fuzzy
@@ -31123,13 +30966,12 @@ msgstr "u"
 #: libgnucash/app-utils/gnc-ui-util.c:911
 msgctxt "Association flag for 'web'"
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: libgnucash/app-utils/gnc-ui-util.c:913
-#, fuzzy
 msgctxt "Association flag for 'file'"
 msgid "f"
-msgstr "f"
+msgstr "d"
 
 #: libgnucash/app-utils/gnc-ui-util.c:942
 msgid "Opening Balances"
@@ -31520,86 +31362,3 @@ msgstr "Buchung ungültig gemacht"
 #: libgnucash/tax/us/txf.scm:98
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "CN?"
-#~ msgstr "Gutschrift?"
-
-#~ msgid "Delete this budget."
-#~ msgstr "Dieses Budget löschen."
-
-#~ msgid "_Associate File with Transaction"
-#~ msgstr "_Datei zuordnen"
-
-#~ msgid "_Open Associated File/Location"
-#~ msgstr "Zugeordnete Datei/Internetadresse _öffnen"
-
-#~ msgid "Associate a file with the current transaction"
-#~ msgstr "Eine Datei zur aktuellen Buchung zuordnen"
-
-#~ msgid "Open the associated file or location with the current transaction"
-#~ msgstr ""
-#~ "Die Datei oder Internetadresse öffnen, welche der aktuellen Buchung "
-#~ "zugeordnet ist"
-
-#~ msgid "Associate Location"
-#~ msgstr "Internetadresse zuordnen"
-
-#~ msgid "Open File/Location"
-#~ msgstr "Datei/Adresse öffnen"
-
-#~ msgid "Associate File with Transaction"
-#~ msgstr "_Datei zuordnen"
-
-#~ msgid "Associate Location with Transaction"
-#~ msgstr "_Internetadresse zuordnen"
-
-#~ msgid "This transaction is not associated with a URI."
-#~ msgstr "Diesem Buchungssatz ist keine URI zugeordnet."
-
-#~ msgid "GSETTINGSPREFIX"
-#~ msgstr "GSETTINGSPREFIX"
-
-#~ msgid "Add price quotes to given GnuCash datafile"
-#~ msgstr "Börsenkurse zu angegebener Datei hinzufügen"
-
-#~ msgid "FILE"
-#~ msgstr "DATEI"
-
-#~ msgid "REGEXP"
-#~ msgstr "REGEXP"
-
-#, c-format
-#~ msgid "GnuCash %s"
-#~ msgstr "GnuCash %s"
-
-#, fuzzy
-#~ msgid "Path head for Transaction Association Files"
-#~ msgstr "<b>Speicher-Ordner für zugeordnete Dateien von Buchungen</b>"
-
-#, fuzzy
-#~ msgid "<b>Transaction Association</b>"
-#~ msgstr "Buchungsverknüpfungen"
-
-#~ msgid "All Transaction Associations"
-#~ msgstr "Alle Buchungsverknüpfungen"
-
-#~ msgid "_Sort Association"
-#~ msgstr "Verknüpfungen _sortieren"
-
-#~ msgid "Payable Aging (beta)"
-#~ msgstr "Fälligkeitsliste Kreditoren (beta)"
-
-#~ msgid "Receivable Aging (beta)"
-#~ msgstr "Fälligkeitsliste Debitoren (beta)"
-
-#~ msgid "Customer Report (beta)"
-#~ msgstr "Kundenbericht (beta)"
-
-#~ msgid "Vendor Report (beta)"
-#~ msgstr "Lieferantenbericht (beta)"
-
-#~ msgid "Employee Report (beta)"
-#~ msgstr "Mitarbeiterbericht (beta)"
-
-#~ msgid "Job Report (beta)"
-#~ msgstr "Auftragsbericht (beta)"
