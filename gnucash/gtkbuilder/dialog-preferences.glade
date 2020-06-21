@@ -1698,7 +1698,7 @@ many months before the current month</property>
                   <object class="GtkBox" id="pref/general/assoc-head">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_markup" translatable="yes">Path head for Associated files</property>
+                    <property name="tooltip_markup" translatable="yes">Path head for Associated Files</property>
                     <child>
                       <placeholder/>
                     </child>
