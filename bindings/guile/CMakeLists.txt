@@ -70,7 +70,14 @@ install(TARGETS gnucash-guile
 set (core_utils_SCHEME core-utils.scm)
 
 set(GUILE_OUTPUT_DIR   gnucash)
-set(GUILE_DEPENDS      gnc-core-utils gnucash-guile)
+set(GUILE_DEPENDS
+    gnc-core-utils
+    gnucash-guile
+    gncmod-backend-xml)
+
+if(WITH_SQL)
+    list(APPEND GUILE_DEPENDS gncmod-backend-dbi)
+endif()
 
 gnc_add_scheme_targets(scm-core-utils
     SOURCES "${core_utils_SCHEME}"
