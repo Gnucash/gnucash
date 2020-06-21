@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.8.9\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2020-05-05 22:02+0200\n"
+"POT-Creation-Date: 2020-06-21 04:21+0200\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -527,6 +527,16 @@ msgstr ""
 "Konti i"
 
 #: doc/tip_of_the_day.list.c:38
+msgid ""
+"Every transaction has a \"Notes\" field where you can put useful "
+"information.\n"
+"\n"
+"To make it visible\n"
+"select \"View\" in the menu bar and check \"Double Line\" or\n"
+"check \"Double Line Mode\" in Preferences:Register Defaults."
+msgstr ""
+
+#: doc/tip_of_the_day.list.c:44
 #, fuzzy
 msgid ""
 "To enter multiple-split transactions such as a paycheck with multiple "
@@ -537,7 +547,7 @@ msgstr ""
 "Injiza Igikubo Gutandukanya Ibikorwa by'ubucuruzi Nka a Igabanya Kanda i "
 "Akabuto in i in i Ibikubiyemo Guhitamo i Cyangwa"
 
-#: doc/tip_of_the_day.list.c:43
+#: doc/tip_of_the_day.list.c:49
 #, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
@@ -549,7 +559,7 @@ msgstr ""
 "Kugabanya Itangira Agaciro Hanyuma Guhitamo Cyangwa Agaciro Na Kanda Kuri "
 "Icyabitswe i Igiteranyo"
 
-#: doc/tip_of_the_day.list.c:48
+#: doc/tip_of_the_day.list.c:54
 #, fuzzy
 msgid ""
 "Quick-fill makes it easy to enter common transactions. When you type the "
@@ -560,7 +570,7 @@ msgstr ""
 "Kuzuza Kuri Injiza Ibikorwa by'ubucuruzi i Itangira Ibaruwa... S Bya a "
 "Isobanuramiterere ku buryo bwikora Byuzuye i Bya Nka Iheruka"
 
-#: doc/tip_of_the_day.list.c:53
+#: doc/tip_of_the_day.list.c:59
 #, fuzzy
 msgid ""
 "Type the first letter(s) of an existing account name in the Transfer "
@@ -570,7 +580,7 @@ msgid ""
 "Assets:Cash.)"
 msgstr "g."
 
-#: doc/tip_of_the_day.list.c:59
+#: doc/tip_of_the_day.list.c:65
 #, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
@@ -580,7 +590,7 @@ msgstr ""
 "Kuri Byose Ibikorwa by'ubucuruzi in Kwiyandikisha i Ibikubiyemo garagaza "
 "cyane i Aderesi Na Bivuye i Ibikubiyemo"
 
-#: doc/tip_of_the_day.list.c:63
+#: doc/tip_of_the_day.list.c:69
 #, fuzzy
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
@@ -590,13 +600,13 @@ msgstr ""
 "Amatariki Ubwoko Cyangwa Kuri Iyongeragaciro i Byahiswemo Itariki Gukoresha "
 "Na Kuri Iyongeragaciro Kugenzura... Imibare Nka"
 
-#: doc/tip_of_the_day.list.c:67
+#: doc/tip_of_the_day.list.c:73
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:70
+#: doc/tip_of_the_day.list.c:76
 #, fuzzy
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
@@ -604,7 +614,7 @@ msgid ""
 "and withdrawals."
 msgstr "i Idirishya Kanda i Kuri Nka Kanda Na hagati Na"
 
-#: doc/tip_of_the_day.list.c:74
+#: doc/tip_of_the_day.list.c:80
 #, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies, click on the "
@@ -616,7 +626,7 @@ msgstr ""
 "Umwanyabikoresho Guhitamo Na i Amahitamo kugirango i Cyangwa i Ikindi "
 "Igiteranyo Bihari"
 
-#: doc/tip_of_the_day.list.c:79
+#: doc/tip_of_the_day.list.c:85
 msgid ""
 "You can set the Security Editor screen to display the Quote Source of a "
 "security, which makes it easy to see which online sources your securities "
@@ -624,7 +634,7 @@ msgid ""
 "the display."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:84
+#: doc/tip_of_the_day.list.c:90
 #, fuzzy
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
@@ -634,7 +644,7 @@ msgstr ""
 "Ipaki Igikubo Raporo a UMWE Idirishya Byose i Bijyanye n'umutungo "
 "Ibisobanuro ku a Gukoresha i Kugena Kugena Icyegeranyo"
 
-#: doc/tip_of_the_day.list.c:89
+#: doc/tip_of_the_day.list.c:95
 #, fuzzy
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
@@ -644,13 +654,13 @@ msgstr ""
 "Raporo IMISUSIRE URUPAPURO kugirango Icyegeranyo Nka a Icyegeranyo Ihitamo "
 "Na Ibikubiyemo Kuri Guhanga... IMISUSIRE IMPAPURO"
 
-#: doc/tip_of_the_day.list.c:93
+#: doc/tip_of_the_day.list.c:99
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:96
+#: doc/tip_of_the_day.list.c:102
 msgid ""
 "The scheduled transaction editor comes with a very flexible frequency "
 "configurator. Basic frequencies to schedule a transaction include daily, "
@@ -664,28 +674,28 @@ msgid ""
 "frequency and then set 'Every 12 months'."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:105
+#: doc/tip_of_the_day.list.c:111
 msgid ""
 "If you work overnight, you should close and reopen your working registers "
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:109
+#: doc/tip_of_the_day.list.c:115
 msgid ""
 "To search through all your transactions, start a search (Edit->Find...) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:113
+#: doc/tip_of_the_day.list.c:119
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
 
-#: doc/tip_of_the_day.list.c:117
+#: doc/tip_of_the_day.list.c:123
 #, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
@@ -926,8 +936,8 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:611
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:47
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:53
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #: gnucash/import-export/import-main-matcher.c:770
 #: gnucash/import-export/import-match-picker.c:393
 #: gnucash/import-export/import-match-picker.c:433
@@ -1034,7 +1044,7 @@ msgstr "Wongera Igiciro"
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:526
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/import-export/import-main-matcher.c:771
 #: gnucash/import-export/import-match-picker.c:392
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
@@ -1136,8 +1146,8 @@ msgstr ""
 #: gnucash/gnome/business-gnome-utils.c:448 gnucash/gnome/gnc-split-reg.c:611
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:675
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:46
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:51
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/report-system/trep-engine.scm:256
 #: gnucash/report/report-system/trep-engine.scm:289
@@ -1295,7 +1305,7 @@ msgstr "Guhitamo a"
 #: gnucash/gnome/gnc-split-reg.c:1178 gnucash/gnome/gnc-split-reg.c:1222
 #: gnucash/gnome/gnc-split-reg.c:1350 gnucash/gnome/gnc-split-reg.c:1667
 #: gnucash/gnome/gnc-split-reg.c:1707 gnucash/gnome/window-reconcile2.c:2195
-#: gnucash/gnome/window-reconcile.c:2342
+#: gnucash/gnome/window-reconcile.c:2340
 #: gnucash/gnome-search/search-account.c:237
 #: gnucash/gnome-utils/dialog-account.c:657
 #: gnucash/gnome-utils/dialog-tax-table.c:597
@@ -1374,7 +1384,7 @@ msgstr "Guhitamo a"
 #: gnucash/import-export/aqb/dialog-ab.glade:931
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:422
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:378
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2017
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2024
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:384
 #: gnucash/register/ledger-core/gncEntryLedger.c:930
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
@@ -1393,7 +1403,7 @@ msgstr "Kureka"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:171
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1101
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:162
-#: gnucash/gnome/window-reconcile2.c:2237 gnucash/gnome/window-reconcile.c:2384
+#: gnucash/gnome/window-reconcile2.c:2237 gnucash/gnome/window-reconcile.c:2382
 #: gnucash/gtkbuilder/dialog-account.glade:194
 #: gnucash/gtkbuilder/dialog-billterms.glade:559
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:55
@@ -1738,7 +1748,7 @@ msgstr "Ukwihuza"
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register2.c:491
 #: gnucash/gnome/gnc-plugin-page-register.c:602
-#: gnucash/gnome/window-reconcile2.c:1327 gnucash/gnome/window-reconcile.c:1403
+#: gnucash/gnome/window-reconcile2.c:1327 gnucash/gnome/window-reconcile.c:1401
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:614
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
 msgid "Reconcile"
@@ -1759,7 +1769,7 @@ msgstr "Igiciro"
 #: gnucash/gtkbuilder/assistant-loan.glade:636
 #: gnucash/gtkbuilder/assistant-loan.glade:804
 #: gnucash/gtkbuilder/dialog-transfer.glade:115
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:48
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
 #: gnucash/import-export/import-main-matcher.c:773
 #: gnucash/import-export/import-match-picker.c:394
 #: gnucash/import-export/import-match-picker.c:434
@@ -1839,7 +1849,7 @@ msgstr "Igikorwa"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:131
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:325
 #: gnucash/report/business-reports/invoice.scm:94
@@ -1900,7 +1910,7 @@ msgstr "Umwirondoro:"
 #: gnucash/gtkbuilder/dialog-payment.glade:519
 #: gnucash/gtkbuilder/dialog-transfer.glade:222
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:624
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/import-export/import-main-matcher.c:775
 #: gnucash/import-export/import-match-picker.c:396
 #: gnucash/import-export/import-match-picker.c:436
@@ -1934,7 +1944,7 @@ msgstr "Ubutumwa"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:536
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:56
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:137
 #: gnucash/register/ledger-core/split-register-model.c:489
 #: gnucash/report/business-reports/balsheet-eg.scm:229
@@ -1964,7 +1974,7 @@ msgstr "ibisobanuro"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:613
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:622
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:55
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/import-export/import-main-matcher.c:774
 #: gnucash/import-export/import-match-picker.c:395
 #: gnucash/import-export/import-match-picker.c:435
@@ -2401,7 +2411,7 @@ msgstr ""
 #: gnucash/gnome/reconcile-view.c:443
 #: gnucash/gtkbuilder/dialog-payment.glade:506
 #: gnucash/gtkbuilder/dialog-transfer.glade:170
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:54
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/register/ledger-core/split-register-model.c:253
 #: gnucash/register/ledger-core/split-register-model.c:273
 #: gnucash/report/report-system/trep-engine.scm:929
@@ -2523,7 +2533,7 @@ msgstr ""
 #: gnucash/gnome/dialog-lot-viewer.c:796
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:368
 #: gnucash/gnome/gnc-plugin-page-budget.c:197
-#: gnucash/gnome/window-reconcile2.c:1713 gnucash/gnome/window-reconcile.c:1799
+#: gnucash/gnome/window-reconcile2.c:1713 gnucash/gnome/window-reconcile.c:1797
 #: gnucash/gnome-utils/gnc-file.c:103 gnucash/gnome-utils/gnc-file.c:275
 #: gnucash/gnome-utils/gnc-file.c:1065
 msgid "Open"
@@ -2909,7 +2919,7 @@ msgstr "kuzuza"
 # basctl/source\basicide\moduldlg.src:RID_TP_LIBS.RID_PB_EDIT.text
 #: gnucash/gnome/dialog-sx-editor2.c:164 gnucash/gnome/dialog-sx-editor.c:167
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:150
-#: gnucash/gnome/window-reconcile2.c:2232 gnucash/gnome/window-reconcile.c:2379
+#: gnucash/gnome/window-reconcile2.c:2232 gnucash/gnome/window-reconcile.c:2377
 #: gnucash/gnome-utils/gnc-main-window.c:266
 #: gnucash/gtkbuilder/dialog-billterms.glade:741
 #: gnucash/gtkbuilder/dialog-commodities.glade:158
@@ -2922,7 +2932,7 @@ msgid "_Edit"
 msgstr "Guhindura"
 
 #: gnucash/gnome/dialog-sx-editor2.c:165 gnucash/gnome/dialog-sx-editor.c:168
-#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2320
+#: gnucash/gnome/window-reconcile2.c:2173 gnucash/gnome/window-reconcile.c:2318
 msgid "_Transaction"
 msgstr ""
 
@@ -3297,18 +3307,44 @@ msgid "Find Vendor"
 msgstr ""
 
 #: gnucash/gnome/gnc-budget-view.c:450
-msgid "Inflow from Income"
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
+#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2976
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:33
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:39
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:48
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:54
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:60
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:66
+#: gnucash/register/ledger-core/split-register.c:2682
+#: gnucash/report/report-system/report-utilities.scm:117
+#: gnucash/report/standard-reports/advanced-portfolio.scm:1093
+#: gnucash/report/standard-reports/balsheet-pnl.scm:1246
+#: gnucash/report/standard-reports/net-charts.scm:399
+#: gnucash/report/standard-reports/net-charts.scm:479
+#: libgnucash/app-utils/prefs.scm:89 libgnucash/engine/Account.cpp:4177
+#: libgnucash/engine/Scrub.c:422
+msgid "Income"
 msgstr ""
 
 #: gnucash/gnome/gnc-budget-view.c:452
-#, fuzzy
-msgid "Outflow to Expenses"
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:80
+#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
+#: gnucash/report/report-system/report-utilities.scm:118
+#: gnucash/report/standard-reports/budget-income-statement.scm:520
+#: gnucash/report/standard-reports/income-statement.scm:512
+msgid "Expenses"
 msgstr "Ibisohoka"
 
 #: gnucash/gnome/gnc-budget-view.c:454
-#, fuzzy
-msgid "Outflow to Asset/Equity/Liability"
-msgstr "Imirongo- ntambike"
+#: gnucash/gnome/gnc-plugin-page-register2.c:483
+#: gnucash/gnome/gnc-plugin-page-register.c:594
+#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2876
+#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register-layout.c:731
+#: gnucash/register/ledger-core/split-register-model.c:346
+#: gnucash/report/standard-reports/register.scm:143
+msgid "Transfer"
+msgstr ""
 
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
@@ -3319,8 +3355,8 @@ msgstr "Imirongo- ntambike"
 msgid "Remaining to Budget"
 msgstr "Gusiba"
 
-#: gnucash/gnome/gnc-budget-view.c:1504 gnucash/gnome/window-reconcile2.c:1148
-#: gnucash/gnome/window-reconcile.c:1224
+#: gnucash/gnome/gnc-budget-view.c:1503 gnucash/gnome/window-reconcile2.c:1148
+#: gnucash/gnome/window-reconcile.c:1222
 #: gnucash/gnome-utils/gnc-tree-view-account.c:852
 #: gnucash/report/business-reports/aging.scm:569
 #: gnucash/report/business-reports/aging.scm:853
@@ -3578,32 +3614,37 @@ msgstr[0] "Oya Kuri ku iyi Igihe ku buryo bwikora Byaremwe"
 # %S is replaced by one of the type column values above
 #: gnucash/gnome/gnc-plugin-budget.c:63
 #, fuzzy
-msgid "New Budget"
+msgid "_New Budget"
 msgstr "Umubare mushya%S"
 
 #: gnucash/gnome/gnc-plugin-budget.c:64
 #, fuzzy
-msgid "Create a new Budget"
+msgid "Create a new Budget."
 msgstr "a Gishya IDOSIYE"
 
+# Preference prompts
+# %S is replaced by one of the type column values above
 #: gnucash/gnome/gnc-plugin-budget.c:69
-msgid "Open Budget"
-msgstr ""
+#, fuzzy
+msgid "_Open Budget"
+msgstr "Umubare mushya%S"
 
 #: gnucash/gnome/gnc-plugin-budget.c:70
-msgid "Open an existing Budget"
+msgid ""
+"Open an existing Budget in a new tab. If none exists a new budget will be "
+"created."
 msgstr ""
 
 # Preference prompts
 # %S is replaced by one of the type column values above
 #: gnucash/gnome/gnc-plugin-budget.c:75
 #, fuzzy
-msgid "Copy Budget"
+msgid "_Copy Budget"
 msgstr "Umubare mushya%S"
 
 #: gnucash/gnome/gnc-plugin-budget.c:76
 #, fuzzy
-msgid "Copy an existing Budget"
+msgid "Copy an existing Budget."
 msgstr "i"
 
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3612,12 +3653,12 @@ msgstr "i"
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
 #: gnucash/gnome/gnc-plugin-budget.c:80
 #, fuzzy
-msgid "Delete Budget"
+msgid "_Delete Budget"
 msgstr "Gusiba"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
 #, fuzzy
-msgid "Deletes an existing Budget"
+msgid "Delete an existing Budget."
 msgstr "i"
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
@@ -4013,7 +4054,6 @@ msgstr "Aderesi"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:186
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:197
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:310
-#: gnucash/gnome/gnc-plugin-page-budget.c:135
 #, fuzzy
 msgid "Open the selected account"
 msgstr "i Byahiswemo Aderesi"
@@ -4039,7 +4079,6 @@ msgstr "Aderesi"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:205
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:216
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:315
-#: gnucash/gnome/gnc-plugin-page-budget.c:141
 #, fuzzy
 msgid "Open the selected account and all its subaccounts"
 msgstr "i Byahiswemo Aderesi Na Byose"
@@ -4141,7 +4180,6 @@ msgid "_Refresh"
 msgstr "Kugira gishya"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:260
-#: gnucash/gnome/gnc-plugin-page-budget.c:176
 #: gnucash/gnome/gnc-plugin-page-invoice.c:155
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:188
 #: gnucash/gnome/gnc-plugin-page-register2.c:331
@@ -4180,14 +4218,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:276
 #: gnucash/gnome/gnc-plugin-page-register2.c:338
 #: gnucash/gnome/gnc-plugin-page-register.c:452
-#: gnucash/gnome/window-reconcile2.c:2213 gnucash/gnome/window-reconcile.c:2360
+#: gnucash/gnome/window-reconcile2.c:2213 gnucash/gnome/window-reconcile.c:2358
 msgid "_Transfer..."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:277
 #: gnucash/gnome/gnc-plugin-page-register2.c:339
 #: gnucash/gnome/gnc-plugin-page-register.c:453
-#: gnucash/gnome/window-reconcile2.c:2214 gnucash/gnome/window-reconcile.c:2361
+#: gnucash/gnome/window-reconcile2.c:2214 gnucash/gnome/window-reconcile.c:2359
 #, fuzzy
 msgid "Transfer funds from one account to another"
 msgstr "Bivuye Aderesi Kuri"
@@ -4223,7 +4261,7 @@ msgid "Check & Repair A_ccount"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:292
-#: gnucash/gnome/window-reconcile2.c:2219 gnucash/gnome/window-reconcile.c:2366
+#: gnucash/gnome/window-reconcile2.c:2219 gnucash/gnome/window-reconcile.c:2364
 #, fuzzy
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
@@ -4381,9 +4419,19 @@ msgstr "Urutonde"
 msgid "Are you sure you want to do this?"
 msgstr "Kuri Gusiba iyi Icyinjijwe"
 
+#: gnucash/gnome/gnc-plugin-page-budget.c:135
+#, fuzzy
+msgid "Open the selected account."
+msgstr "i Byahiswemo Aderesi"
+
 #: gnucash/gnome/gnc-plugin-page-budget.c:140
 msgid "Open _Subaccounts"
 msgstr ""
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:141
+#, fuzzy
+msgid "Open the selected account and all its subaccounts."
+msgstr "i Byahiswemo Aderesi Na Byose"
 
 # #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
@@ -4391,39 +4439,41 @@ msgstr ""
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
 #, fuzzy
-msgid "_Delete Budget"
+msgid "_Delete Budget..."
 msgstr "Gusiba"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:148
-#, fuzzy
-msgid "Delete this budget"
-msgstr "i KIGEZWEHO Icyinjijwe"
+msgid "Select this or another budget and delete it."
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:152
-#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:434
-#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:639
 #, fuzzy
-msgid "Budget Options"
+msgid "Budget _Options..."
 msgstr "Amahitamo"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
 #, fuzzy
-msgid "Edit this budget's options"
+msgid "Edit this budget's options."
 msgstr "Icyegeranyo Amahitamo"
 
+# #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
+# basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
+# #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
+# basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
 #: gnucash/gnome/gnc-plugin-page-budget.c:157
-msgid "Estimate Budget"
-msgstr ""
+#, fuzzy
+msgid "Esti_mate Budget..."
+msgstr "Gusiba"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
+#, fuzzy
 msgid ""
-"Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
+"Estimate a budget value for the selected accounts from past transactions."
+msgstr "i Byahiswemo Aderesi"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:163
-#: gnucash/gnome/gnc-plugin-page-budget.c:201
 #, fuzzy
-msgid "All Periods"
+msgid "_All Periods..."
 msgstr ""
 ".(Project- Id- Version: basctl\n"
 "POT- Creation- Date: 2003- 12- 07 17: 13+ 02\n"
@@ -4436,8 +4486,13 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
 #, fuzzy
-msgid "Edit budget for all periods for the selected accounts"
+msgid "Edit budget for all periods for the selected accounts."
 msgstr "i Byahiswemo Aderesi"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:176
+#, fuzzy
+msgid "Refresh this window."
+msgstr "iyi Idirishya"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:199
 #: gnucash/gtkbuilder/assistant-csv-export.glade:108
@@ -4450,6 +4505,19 @@ msgstr "Amahitamo"
 #, fuzzy
 msgid "Estimate"
 msgstr "Leta"
+
+#: gnucash/gnome/gnc-plugin-page-budget.c:201
+#, fuzzy
+msgid "All Periods"
+msgstr ""
+".(Project- Id- Version: basctl\n"
+"POT- Creation- Date: 2003- 12- 07 17: 13+ 02\n"
+"PO- Revision- Date: 2004- 11- 04 10: 13- 0700\n"
+"Last- Translator: Language- Team:< en@ li. org> MIME- Version: 1. 0\n"
+"Content- Type: text/ plain; charset= UTF- 8\n"
+"Content- Transfer- Encoding: 8bit\n"
+"X- Generator: KBabel 1. 0\n"
+"."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:280
 #: gnucash/gnome/gnc-plugin-page-budget.c:321
@@ -5587,7 +5655,9 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:528
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:305
 #, fuzzy
-msgid "Show two lines of information for each transaction"
+msgid ""
+"Show a second line with \"Action\", \"Notes\", and \"File Association\" for "
+"each transaction."
 msgstr "Imirongo Bya Ibisobanuro kugirango"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:416
@@ -5645,16 +5715,6 @@ msgstr "Ibikorwa by'ubucuruzi"
 #, fuzzy
 msgid "Show expanded transactions with all splits"
 msgstr "Cyagutse Ibikorwa by'ubucuruzi Na: Byose"
-
-#: gnucash/gnome/gnc-plugin-page-register2.c:483
-#: gnucash/gnome/gnc-plugin-page-register.c:594
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2876
-#: gnucash/register/ledger-core/split-register.c:2607
-#: gnucash/register/ledger-core/split-register-layout.c:731
-#: gnucash/register/ledger-core/split-register-model.c:346
-#: gnucash/report/standard-reports/register.scm:143
-msgid "Transfer"
-msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:488
 #: gnucash/gnome/gnc-plugin-page-register.c:599
@@ -6016,7 +6076,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:3390
 #: gnucash/gnome-search/search-reconciled.c:221
 #: gnucash/gnome-utils/gnc-tree-view-account.c:818
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 #: gnucash/import-export/import-match-picker.c:437
 #: gnucash/report/report-system/trep-engine.scm:124
 #: gnucash/report/report-system/trep-engine.scm:403
@@ -6245,7 +6305,7 @@ msgstr ""
 msgid "This account register is read-only."
 msgstr "ni Aderesi Urutonde Ihitamo"
 
-#: gnucash/gnome/gnc-split-reg2.c:980 gnucash/gnome/gnc-split-reg.c:2639
+#: gnucash/gnome/gnc-split-reg2.c:980
 #, fuzzy
 msgid ""
 "This account may not be edited. If you want to edit transactions in this "
@@ -6255,7 +6315,7 @@ msgstr ""
 "Aderesi Gicurasi OYA Guhindura Ibikorwa by'ubucuruzi in iyi Kwiyandikisha i "
 "Aderesi Amahitamo Na Bidakora"
 
-#: gnucash/gnome/gnc-split-reg2.c:987 gnucash/gnome/gnc-split-reg.c:2646
+#: gnucash/gnome/gnc-split-reg2.c:987
 #, fuzzy
 msgid ""
 "One of the sub-accounts selected may not be edited. If you want to edit "
@@ -6302,7 +6362,7 @@ msgstr "Bya"
 # #-#-#-#-#  scaddins.pot (PACKAGE VERSION)  #-#-#-#-#
 # scaddins/source\datefunc\datefunc.src:RID_DATE_FUNCTION_DESCRIPTIONS.DATE_FUNCDESC_DiffYears.2.text
 #: gnucash/gnome/gnc-split-reg.c:623 gnucash/gnome/window-reconcile2.c:1829
-#: gnucash/gnome/window-reconcile.c:1952
+#: gnucash/gnome/window-reconcile.c:1950
 #, fuzzy
 msgid "Statement Date"
 msgstr "Itariki y'itangira"
@@ -6509,10 +6569,32 @@ msgstr "Gutoranya ukurikije"
 
 #: gnucash/gnome/gnc-split-reg.c:2625
 msgid ""
-"This account may not be edited because its subaccounts have mismatched "
-"commodities or currencies.You need to open each account individually to edit "
-"transactions."
+"The transactions of this account may not be edited because its subaccounts "
+"have mismatched commodities or currencies.\n"
+"You need to open each account individually to edit transactions."
 msgstr ""
+
+#: gnucash/gnome/gnc-split-reg.c:2640
+#, fuzzy
+msgid ""
+"The transactions of this account may not be edited.\n"
+"If you want to edit transactions in this register, please open the account "
+"options and turn off the placeholder checkbox."
+msgstr ""
+"Aderesi Gicurasi OYA Guhindura Ibikorwa by'ubucuruzi in iyi Kwiyandikisha i "
+"Aderesi Amahitamo Na Bidakora"
+
+#: gnucash/gnome/gnc-split-reg.c:2647
+#, fuzzy
+msgid ""
+"The transactions in one of the selected sub-accounts may not be edited.\n"
+"If you want to edit transactions in this register, please open the sub-"
+"account options and turn off the placeholder checkbox.\n"
+"You may also open an individual account instead of a set of accounts."
+msgstr ""
+"Bya i Konti Byahiswemo Gicurasi OYA Kuri Guhindura Ibikorwa by'ubucuruzi "
+"Kwiyandikisha Gufungura i Na Bidakora i Akarindamwanya Gicurasi Gufungura "
+"Aderesi a Gushyiraho Bya Konti"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
@@ -6585,11 +6667,6 @@ msgstr "ku Gutangira"
 #, fuzzy
 msgid "Finance Management"
 msgstr "Idosiye"
-
-#. Translators: Icon file name, do not translate unless you also provide a localized icon file. Alternatively use the English "gnucash-icon" as msgstr
-#: gnucash/gnome/gnucash.desktop.in.in:11
-msgid "gnucash-icon"
-msgstr ""
 
 #: gnucash/gnome/reconcile-view.c:425
 #: gnucash/register/ledger-core/split-register-layout.c:707
@@ -6664,129 +6741,129 @@ msgstr ""
 msgid "The selected amount cannot be cleared."
 msgstr "Igipimo Zeru"
 
-#: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile.c:514
+#: gnucash/gnome/window-reconcile2.c:455 gnucash/gnome/window-reconcile.c:512
 #, fuzzy
 msgid "Interest Payment"
 msgstr "Inyungu"
 
-#: gnucash/gnome/window-reconcile2.c:458 gnucash/gnome/window-reconcile.c:517
+#: gnucash/gnome/window-reconcile2.c:458 gnucash/gnome/window-reconcile.c:515
 #, fuzzy
 msgid "Interest Charge"
 msgstr "Inyungu"
 
-#: gnucash/gnome/window-reconcile2.c:466 gnucash/gnome/window-reconcile.c:525
+#: gnucash/gnome/window-reconcile2.c:466 gnucash/gnome/window-reconcile.c:523
 #: gnucash/gtkbuilder/dialog-vendor.glade:784
 #: gnucash/gtkbuilder/dialog-vendor.glade:806
 msgid "Payment Information"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:476 gnucash/gnome/window-reconcile.c:535
+#: gnucash/gnome/window-reconcile2.c:476 gnucash/gnome/window-reconcile.c:533
 #: gnucash/gtkbuilder/assistant-loan.glade:597
 #: gnucash/gtkbuilder/assistant-loan.glade:817
 msgid "Payment From"
 msgstr ""
 
 #: gnucash/gnome/window-reconcile2.c:482 gnucash/gnome/window-reconcile2.c:492
-#: gnucash/gnome/window-reconcile.c:541 gnucash/gnome/window-reconcile.c:551
+#: gnucash/gnome/window-reconcile.c:539 gnucash/gnome/window-reconcile.c:549
 msgid "Reconcile Account"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:497 gnucash/gnome/window-reconcile.c:556
+#: gnucash/gnome/window-reconcile2.c:497 gnucash/gnome/window-reconcile.c:554
 #: gnucash/gtkbuilder/assistant-loan.glade:911
 msgid "Payment To"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:510 gnucash/gnome/window-reconcile.c:569
+#: gnucash/gnome/window-reconcile2.c:510 gnucash/gnome/window-reconcile.c:567
 #, fuzzy
 msgid "No Auto Interest Payments for this Account"
 msgstr "Inyungu kugirango iyi"
 
-#: gnucash/gnome/window-reconcile2.c:511 gnucash/gnome/window-reconcile.c:570
+#: gnucash/gnome/window-reconcile2.c:511 gnucash/gnome/window-reconcile.c:568
 #, fuzzy
 msgid "No Auto Interest Charges for this Account"
 msgstr "Inyungu kugirango iyi"
 
-#: gnucash/gnome/window-reconcile2.c:765 gnucash/gnome/window-reconcile.c:829
+#: gnucash/gnome/window-reconcile2.c:765 gnucash/gnome/window-reconcile.c:827
 #: gnucash/gtkbuilder/window-reconcile.glade:201
 #, fuzzy
 msgid "Enter _Interest Payment..."
 msgstr "Inyungu"
 
-#: gnucash/gnome/window-reconcile2.c:767 gnucash/gnome/window-reconcile.c:831
+#: gnucash/gnome/window-reconcile2.c:767 gnucash/gnome/window-reconcile.c:829
 #, fuzzy
 msgid "Enter _Interest Charge..."
 msgstr "Inyungu"
 
-#: gnucash/gnome/window-reconcile2.c:1072 gnucash/gnome/window-reconcile.c:1139
+#: gnucash/gnome/window-reconcile2.c:1072 gnucash/gnome/window-reconcile.c:1137
 #: gnucash/report/business-reports/new-owner-report.scm:59
 #: gnucash/report/business-reports/owner-report.scm:60
 msgid "Debits"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:1082 gnucash/gnome/window-reconcile.c:1149
+#: gnucash/gnome/window-reconcile2.c:1082 gnucash/gnome/window-reconcile.c:1147
 #: gnucash/report/business-reports/new-owner-report.scm:58
 #: gnucash/report/business-reports/owner-report.scm:59
 #: gnucash/report/report-system/report-utilities.scm:111
 msgid "Credits"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:1282 gnucash/gnome/window-reconcile.c:1358
+#: gnucash/gnome/window-reconcile2.c:1282 gnucash/gnome/window-reconcile.c:1356
 #, fuzzy
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Kuri Gusiba i Byahiswemo"
 
-#: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1962
+#: gnucash/gnome/window-reconcile2.c:1839 gnucash/gnome/window-reconcile.c:1960
 #: gnucash/gtkbuilder/window-reconcile.glade:122
 #, fuzzy
 msgid "Starting Balance"
 msgstr "Bya"
 
-#: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1972
+#: gnucash/gnome/window-reconcile2.c:1849 gnucash/gnome/window-reconcile.c:1970
 #, fuzzy
 msgid "Ending Balance"
 msgstr "Gufungura%S"
 
-#: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1982
+#: gnucash/gnome/window-reconcile2.c:1859 gnucash/gnome/window-reconcile.c:1980
 #, fuzzy
 msgid "Reconciled Balance"
 msgstr "Y"
 
-#: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1992
+#: gnucash/gnome/window-reconcile2.c:1869 gnucash/gnome/window-reconcile.c:1990
 #: gnucash/report/standard-reports/cash-flow.scm:313
 msgid "Difference"
 msgstr "Ikinyuranyo/Itandukaniro"
 
-#: gnucash/gnome/window-reconcile2.c:1958 gnucash/gnome/window-reconcile.c:2105
+#: gnucash/gnome/window-reconcile2.c:1958 gnucash/gnome/window-reconcile.c:2103
 #, fuzzy
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr "Amahinduka Kuri iyi Idirishya Kuri Kureka"
 
-#: gnucash/gnome/window-reconcile2.c:2076 gnucash/gnome/window-reconcile.c:2223
+#: gnucash/gnome/window-reconcile2.c:2076 gnucash/gnome/window-reconcile.c:2221
 #, fuzzy
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "Aderesi ni OYA Kuri Kurangiza"
 
-#: gnucash/gnome/window-reconcile2.c:2133 gnucash/gnome/window-reconcile.c:2280
+#: gnucash/gnome/window-reconcile2.c:2133 gnucash/gnome/window-reconcile.c:2278
 #, fuzzy
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Kuri iyi Na Kurangiza"
 
-#: gnucash/gnome/window-reconcile2.c:2171 gnucash/gnome/window-reconcile.c:2318
+#: gnucash/gnome/window-reconcile2.c:2171 gnucash/gnome/window-reconcile.c:2316
 msgid "_Reconcile"
 msgstr ""
 
 # svtools/source\dialogs\logindlg.src:DLG_LOGIN.FT_LOGIN_ACCOUNT.text
-#: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2319
+#: gnucash/gnome/window-reconcile2.c:2172 gnucash/gnome/window-reconcile.c:2317
 #: gnucash/gtkbuilder/dialog-tax-table.glade:454
 #, fuzzy
 msgid "_Account"
 msgstr "Aderesi"
 
 #: gnucash/gnome/window-reconcile2.c:2174
-#: gnucash/gnome/window-reconcile2.c:2255 gnucash/gnome/window-reconcile.c:2321
-#: gnucash/gnome/window-reconcile.c:2402
+#: gnucash/gnome/window-reconcile2.c:2255 gnucash/gnome/window-reconcile.c:2319
+#: gnucash/gnome/window-reconcile.c:2400
 #: gnucash/gnome-utils/gnc-main-window.c:274
 #: gnucash/gtkbuilder/dialog-account.glade:948
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:26
@@ -6807,142 +6884,144 @@ msgstr "Aderesi"
 #: gnucash/gtkbuilder/dialog-search.glade:24
 #: gnucash/gtkbuilder/dialog-sx.glade:778
 #: gnucash/gtkbuilder/dialog-vendor.glade:50
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2053
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2060
 #, fuzzy
 msgid "_Help"
 msgstr "Ifashayobora"
 
-#: gnucash/gnome/window-reconcile2.c:2179 gnucash/gnome/window-reconcile.c:2326
+#: gnucash/gnome/window-reconcile2.c:2179 gnucash/gnome/window-reconcile.c:2324
 msgid "_Reconcile Information..."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:2180 gnucash/gnome/window-reconcile.c:2327
+#: gnucash/gnome/window-reconcile2.c:2180 gnucash/gnome/window-reconcile.c:2325
 #, fuzzy
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr "i Ibisobanuro Inyandiko Itariki Na"
 
-#: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2332
+#: gnucash/gnome/window-reconcile2.c:2185 gnucash/gnome/window-reconcile.c:2330
 #, fuzzy
 msgid "_Finish"
 msgstr "Kurangiza"
 
-#: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2333
+#: gnucash/gnome/window-reconcile2.c:2186 gnucash/gnome/window-reconcile.c:2331
 #, fuzzy
 msgid "Finish the reconciliation of this account"
 msgstr "i Bya iyi Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2190 gnucash/gnome/window-reconcile.c:2337
+#: gnucash/gnome/window-reconcile2.c:2190 gnucash/gnome/window-reconcile.c:2335
 msgid "_Postpone"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:2191 gnucash/gnome/window-reconcile.c:2338
+#: gnucash/gnome/window-reconcile2.c:2191 gnucash/gnome/window-reconcile.c:2336
 #, fuzzy
 msgid "Postpone the reconciliation of this account"
 msgstr "i Bya iyi Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2196 gnucash/gnome/window-reconcile.c:2343
+#: gnucash/gnome/window-reconcile2.c:2196 gnucash/gnome/window-reconcile.c:2341
 #, fuzzy
 msgid "Cancel the reconciliation of this account"
 msgstr "i Bya iyi Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2350
+#: gnucash/gnome/window-reconcile2.c:2203 gnucash/gnome/window-reconcile.c:2348
 msgid "_Open Account"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:2204 gnucash/gnome/window-reconcile.c:2351
+#: gnucash/gnome/window-reconcile2.c:2204 gnucash/gnome/window-reconcile.c:2349
 #, fuzzy
 msgid "Open the account"
 msgstr "i Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2208 gnucash/gnome/window-reconcile.c:2355
+#: gnucash/gnome/window-reconcile2.c:2208 gnucash/gnome/window-reconcile.c:2353
 msgid "_Edit Account"
 msgstr ""
 
-#: gnucash/gnome/window-reconcile2.c:2209 gnucash/gnome/window-reconcile.c:2356
+#: gnucash/gnome/window-reconcile2.c:2209 gnucash/gnome/window-reconcile.c:2354
 #, fuzzy
 msgid "Edit the main account for this register"
 msgstr "i Aderesi kugirango iyi Kwiyandikisha"
 
-#: gnucash/gnome/window-reconcile2.c:2218 gnucash/gnome/window-reconcile.c:2365
+#: gnucash/gnome/window-reconcile2.c:2218 gnucash/gnome/window-reconcile.c:2363
 #: gnucash/gnome-utils/gnc-main-window.c:349
 msgid "_Check & Repair"
 msgstr ""
 
 # svx/source\dialog\sdstring.src:RID_SVXSTR_BMP0.text
-#: gnucash/gnome/window-reconcile2.c:2227 gnucash/gnome/window-reconcile.c:2374
+#: gnucash/gnome/window-reconcile2.c:2227 gnucash/gnome/window-reconcile.c:2372
 #: gnucash/gtkbuilder/dialog-account.glade:1510
 #, fuzzy
 msgid "_Balance"
 msgstr "Ahatanditseho"
 
-#: gnucash/gnome/window-reconcile2.c:2228 gnucash/gnome/window-reconcile.c:2375
+#: gnucash/gnome/window-reconcile2.c:2228 gnucash/gnome/window-reconcile.c:2373
 #, fuzzy
 msgid "Add a new balancing entry to the account"
 msgstr "a Gishya Kuri i Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2233 gnucash/gnome/window-reconcile.c:2380
+#: gnucash/gnome/window-reconcile2.c:2233 gnucash/gnome/window-reconcile.c:2378
 #, fuzzy
 msgid "Edit the current transaction"
 msgstr "i KIGEZWEHO"
 
-#: gnucash/gnome/window-reconcile2.c:2238 gnucash/gnome/window-reconcile.c:2385
+#: gnucash/gnome/window-reconcile2.c:2238 gnucash/gnome/window-reconcile.c:2383
 #, fuzzy
 msgid "Delete the selected transaction"
 msgstr "i Byahiswemo"
 
-#: gnucash/gnome/window-reconcile2.c:2242 gnucash/gnome/window-reconcile.c:2389
+#: gnucash/gnome/window-reconcile2.c:2242 gnucash/gnome/window-reconcile.c:2387
 #, fuzzy
 msgid "_Reconcile Selection"
 msgstr "i Byahiswemo Aderesi"
 
-#: gnucash/gnome/window-reconcile2.c:2243 gnucash/gnome/window-reconcile.c:2390
+#: gnucash/gnome/window-reconcile2.c:2243 gnucash/gnome/window-reconcile.c:2388
 #, fuzzy
 msgid "Reconcile the selected transactions"
 msgstr "i Byahiswemo"
 
-#: gnucash/gnome/window-reconcile2.c:2247 gnucash/gnome/window-reconcile.c:2394
+#: gnucash/gnome/window-reconcile2.c:2247 gnucash/gnome/window-reconcile.c:2392
 #, fuzzy
 msgid "_Unreconcile Selection"
 msgstr "Y"
 
-#: gnucash/gnome/window-reconcile2.c:2248 gnucash/gnome/window-reconcile.c:2395
+#: gnucash/gnome/window-reconcile2.c:2248 gnucash/gnome/window-reconcile.c:2393
 #, fuzzy
 msgid "Unreconcile the selected transactions"
 msgstr "i Byahiswemo"
 
-#: gnucash/gnome/window-reconcile2.c:2256 gnucash/gnome/window-reconcile.c:2403
+#: gnucash/gnome/window-reconcile2.c:2256 gnucash/gnome/window-reconcile.c:2401
 #, fuzzy
 msgid "Open the GnuCash help window"
 msgstr "i Ifashayobora Idirishya"
 
-#: gnucash/gnome/window-reconcile.c:376
+#. Translators: %d is the number of days in the future
+#: gnucash/gnome/window-reconcile.c:375
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
 msgstr[0] ""
 msgstr[1] ""
 
-#: gnucash/gnome/window-reconcile.c:384
+#. Translators: %d is the number of days in the future
+#: gnucash/gnome/window-reconcile.c:382
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
 msgstr[0] ""
 msgstr[1] ""
 
-#: gnucash/gnome/window-reconcile.c:389
+#: gnucash/gnome/window-reconcile.c:387
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1861
+#: gnucash/gnome/window-reconcile.c:1859
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1865
+#: gnucash/gnome/window-reconcile.c:1863
 msgid ""
 "This account has splits whose Reconciled Date is after this reconciliation "
 "statement date. These splits may make reconciliation difficult. If this is "
@@ -7342,7 +7421,7 @@ msgid "Parsing file..."
 msgstr "IDOSIYE"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1125
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:408
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:417
 #: gnucash/import-export/csv-imp/gnc-tokenizer-csv.cpp:109
 #, fuzzy
 msgid "There was an error parsing the file."
@@ -8567,32 +8646,28 @@ msgstr "(Itazwi>"
 msgid "View..."
 msgstr "Reba..."
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:284
+#: gnucash/gnome-utils/gnc-gnome-utils.c:68
+msgid "GnuCash could not find the files of the help documentation."
+msgstr ""
+
+#: gnucash/gnome-utils/gnc-gnome-utils.c:70
 msgid ""
-"GnuCash could not find the files for the help documentation. This is likely "
-"because the 'gnucash-docs' package is not installed"
+"This is likely because the \"gnucash-docs\" package is not properly "
+"installed."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:377
-#: gnucash/gnome-utils/gnc-gnome-utils.c:443
-msgid ""
-"GnuCash could not find the files for the help documentation. This is likely "
-"because the 'gnucash-docs' package is not installed."
-msgstr ""
+#. Translators: URI of missing help files
+#: gnucash/gnome-utils/gnc-gnome-utils.c:72
+#, fuzzy
+msgid "Expected location"
+msgstr "Amakuru yo kwohereza"
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:408
-msgid "GnuCash could not find the files for the help documentation."
-msgstr ""
-
-#: gnucash/gnome-utils/gnc-gnome-utils.c:467
+#: gnucash/gnome-utils/gnc-gnome-utils.c:465
+#: gnucash/gnome-utils/gnc-gnome-utils.c:506
 msgid "GnuCash could not find the associated file."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-gnome-utils.c:508
-msgid "GnuCash could not find the associated file"
-msgstr ""
-
-#: gnucash/gnome-utils/gnc-gnome-utils.c:540
+#: gnucash/gnome-utils/gnc-gnome-utils.c:538
 msgid "GnuCash could not open the associated URI:"
 msgstr ""
 
@@ -9470,7 +9545,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2936
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #: gnucash/register/ledger-core/split-register.c:2673
 #: gnucash/register/ledger-core/split-register-model.c:400
 #: gnucash/report/business-reports/invoice.scm:234
@@ -9502,25 +9577,6 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2950
 #: gnucash/register/ledger-core/split-register.c:2681
 msgid "STCG"
-msgstr ""
-
-#: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2951
-#: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2976
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:33
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:39
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:48
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:54
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:60
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:66
-#: gnucash/register/ledger-core/split-register.c:2682
-#: gnucash/report/report-system/report-utilities.scm:117
-#: gnucash/report/standard-reports/advanced-portfolio.scm:1093
-#: gnucash/report/standard-reports/balsheet-pnl.scm:1246
-#: gnucash/report/standard-reports/net-charts.scm:399
-#: gnucash/report/standard-reports/net-charts.scm:479
-#: libgnucash/app-utils/prefs.scm:89 libgnucash/engine/Account.cpp:4177
-#: libgnucash/engine/Scrub.c:422
-msgid "Income"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2953
@@ -10019,7 +10075,7 @@ msgstr "Umwirondoro:"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:623
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #, fuzzy
 msgid "Void Reason"
 msgstr "Ibikorwa by'ubucuruzi"
@@ -10041,7 +10097,7 @@ msgid "Amount / Value"
 msgstr "Agaciro"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2948
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #: libgnucash/app-utils/prefs.scm:81
 msgid "Withdrawal"
 msgstr ""
@@ -10064,7 +10120,7 @@ msgid "Credit Formula"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:3033
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: libgnucash/app-utils/prefs.scm:64
 msgid "Deposit"
 msgstr ""
@@ -11885,9 +11941,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:306
 msgid ""
-"Show two lines of information for each transaction in a register. This is "
-"the default setting for when a register is first opened. The setting can be "
-"changed at any time via the \"View->Double Line\" menu item."
+"Show a second line with \"Action\", \"Notes\", and \"File Association\" for "
+"each transaction in a register. This is the default setting for when a "
+"register is first opened. The setting can be changed at any time via the "
+"\"View->Double Line\" menu item."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:310
@@ -16409,7 +16466,7 @@ msgid "Transaction Details"
 msgstr "Ibikorwa by'ubucuruzi"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:738
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 msgid "Transfer Account"
 msgstr ""
 
@@ -16447,8 +16504,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:49
 #: gnucash/gtkbuilder/gnc-date-format.glade:24
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:50
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:47
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:59
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:56
 msgid "Locale"
 msgstr ""
 
@@ -18965,6 +19022,12 @@ msgstr "Impuzandengo"
 msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
 
+#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:434
+#: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:639
+#, fuzzy
+msgid "Budget Options"
+msgstr "Amahitamo"
+
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:509
 msgid "Budget Name"
 msgstr "Izina rya konti"
@@ -20788,7 +20851,7 @@ msgid "Rate/Price"
 msgstr "Igiciro"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:620
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:52
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 #, fuzzy
 msgid "Transaction ID"
 msgstr "Ibikorwa by'ubucuruzi"
@@ -20805,7 +20868,7 @@ msgid "Full Account Name"
 msgstr "Izina rya konti"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:627
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "Y"
@@ -20940,69 +21003,69 @@ msgid ""
 "The number of Accounts added was %u and %u were updated.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:867
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:836
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:874
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:843
 msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:890
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:859
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:897
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:866
 #, fuzzy
 msgid "Delete the Import Settings."
 msgstr "i KIGEZWEHO"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:924
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:893
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:931
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:900
 msgid "Setting name already exists, over write?"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:907
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:945
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:914
 msgid "The settings have been saved."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:963
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:932
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:970
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:939
 #, fuzzy
 msgid "There was a problem saving the settings, please try again."
 msgstr "Ikosa Mu kubika i IDOSIYE"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1129
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1106
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1136
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1113
 msgid "Invalid encoding selected"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1290
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1216
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1297
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1223
 msgid "Merge with column on _left"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1294
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1220
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1301
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1227
 msgid "Merge with column on _right"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1299
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1225
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1306
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1232
 #, fuzzy
 msgid "_Split this column"
 msgstr "Gikora Ibara"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1304
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1230
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1311
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1237
 msgid "_Widen this column"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1308
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1234
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1315
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1241
 #, fuzzy
 msgid "_Narrow this column"
 msgstr "i Cyuzuye"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1867
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1874
 #, fuzzy, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
@@ -21010,7 +21073,7 @@ msgstr[0] "a Gishya Igiciro"
 msgstr[1] "a Gishya Igiciro"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1872
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1879
 #, fuzzy, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
@@ -21018,14 +21081,14 @@ msgstr[0] "Gusubiramo"
 msgstr[1] "Gusubiramo"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1877
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1884
 #, fuzzy, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "Igiciro"
 msgstr[1] "Igiciro"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1882
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1889
 #, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -21036,7 +21099,7 @@ msgid ""
 "- %s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1926
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1933
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -21047,18 +21110,18 @@ msgid ""
 msgstr ""
 
 # svtools/source\dialogs\logindlg.src:DLG_LOGIN.FT_LOGIN_ACCOUNT.text
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1739
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1746
 #, fuzzy
 msgid "No Linked Account"
 msgstr "Aderesi"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1961
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1968
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2005
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2012
 #, c-format
 msgid ""
 "An unexpected error has occurred while mapping accounts. Please report this "
@@ -21068,7 +21131,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2039
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2046
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -21078,12 +21141,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2048
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2055
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2088
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2095
 #, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "Icyegeranyo ku iyi Aderesi"
@@ -21103,127 +21166,127 @@ msgstr ""
 msgid "Row %u, account %s not in %s\n"
 msgstr "Aderesi Amazina"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:51
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:48
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:60
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:57
 #: gnucash/import-export/import-format-dialog.c:62
 msgid "Period: 123,456.78"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:52
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:49
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:61
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:58
 #: gnucash/import-export/import-format-dialog.c:70
 msgid "Comma: 123.456,78"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:437
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:463
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:446
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:472
 #, fuzzy
 msgid "Please select a date column."
 msgstr "Guhitamo a Byemewe Aderesi"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:442
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:451
 #, fuzzy
 msgid "Please select an amount column."
 msgstr "Guhitamo a Byemewe Aderesi"
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:449
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:458
 msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:457
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:466
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:465
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:474
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:473
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:182
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:204
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:482
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:184
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:206
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:284
 msgid "'Commodity From' can not be the same as 'Currency To'."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:493
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:515
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:502
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "No valid data found in the selected file. It may be empty or the selected "
 "encoding is wrong."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:501
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:523
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:510
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:532
 msgid ""
 "No lines are selected for importing. Please reduce the number of lines to "
 "skip."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:520
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:542
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:529
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:551
 msgid ""
 "Not all fields could be parsed. Please correct the issues reported for each "
 "line or adjust the lines to skip."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:571
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:580
 msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-price.cpp:588
+#: gnucash/import-export/csv-imp/gnc-import-price.cpp:597
 msgid ""
 "No 'From Namespace/From Symbol' columns selected and no selected Commodity "
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:471
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:480
 #, fuzzy
 msgid "Please select an account column."
 msgstr "Guhitamo a Byemewe Aderesi"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:473
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:482
 msgid ""
 "Please select an account column or set a base account in the Account field."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:479
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:488
 #, fuzzy
 msgid "Please select a description column."
 msgstr "Guhitamo a Byemewe"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:485
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:494
 #, fuzzy
 msgid "Please select a deposit or withdrawal column."
 msgstr "Guhitamo a Byemewe Aderesi"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:495
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:504
 #, fuzzy
 msgid ""
 "Please select a transfer account column or remove the other transfer related "
 "columns."
 msgstr "Guhitamo a Aderesi Cyangwa Gufungura%S Aderesi"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:662
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
 "No account column selected and no default account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:49
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
 #, fuzzy
 msgid "From Symbol"
 msgstr "ikimenyetso"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:50
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #, fuzzy
 msgid "From Namespace"
 msgstr "Izina"
@@ -21232,164 +21295,164 @@ msgstr "Izina"
 # svx/source\dialog\numfmt.src:RID_SVXPAGE_NUMBERFORMAT.LB_CATEGORY.5.text
 # #-#-#-#-#  svx.pot (PACKAGE VERSION)  #-#-#-#-#
 # svx/source\dialog\sdstring.src:RID_SVXSTR_TBLAFMT_CURRENCY.text
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #, fuzzy
 msgid "Currency To"
 msgstr "Ifaranga"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:64
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:112
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:206
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:211
 msgid "Value doesn't appear to contain a valid number."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:77
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:82
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:87
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:125
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:79
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:84
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:89
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:130
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:135
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:119
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:192
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:121
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:197
 #, fuzzy
 msgid "Value can't be parsed into a valid commodity."
 msgstr "i Igiciro Bya iyi"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:139
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:141
 #, fuzzy
 msgid "Value can't be parsed into a valid namespace."
 msgstr "i Igiciro Bya iyi"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:153
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:155
 msgid "Column value can not be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:172
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:174
 msgid "'From Symbol' can not be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:192
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:194
 msgid "'From Namespace' can not be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:217
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:219
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:219
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:221
 msgid "Value parsed into an invalid currency for a currency column type."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:233
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:241
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:284
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:292
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:503
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:511
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:566
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:574
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:243
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:289
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:297
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:508
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:516
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:571
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:579
 #, fuzzy
 msgid " could not be understood.\n"
 msgstr "IDOSIYE OYA Byabonetse"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:274
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:318
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:323
 #, fuzzy
 msgid "No date column."
 msgstr "Umwandiko"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:276
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:278
 #, fuzzy
 msgid "No amount column."
 msgstr "Igiteranyo Kugaragaza"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:278
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
 #, fuzzy
 msgid "No 'Currency to'."
 msgstr "Ifaranga"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:280
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:282
 #, fuzzy
 msgid "No 'Commodity from'."
 msgstr "Amabara"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:350
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:352
 #, fuzzy
 msgid "Failed to create price from selected columns."
 msgstr "Kuri Kurema kugirango"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #, fuzzy
 msgid "Transaction Commodity"
 msgstr "Ibikorwa by'ubucuruzi"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #, fuzzy
 msgid "Transfer Action"
 msgstr "Ibikorwa by'ubucuruzi"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 #, fuzzy
 msgid "Transfer Memo"
 msgstr "Bivuye Kuri"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 #, fuzzy
 msgid "Transfer Reconciled"
 msgstr "Y"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 #, fuzzy
 msgid "Transfer Reconcile Date"
 msgstr "ku i"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:155
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:160
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:218
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:223
 #, fuzzy
 msgid "Price can't be parsed into a number."
 msgstr "i Igiciro Bya iyi"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:374
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:379
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:375
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:380
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:424
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:429
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:435
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:440
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:586
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:591
 msgid "No deposit or withdrawal column."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:592
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:597
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:599
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:604
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:45
+#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:49
 msgid "No Settings"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
+#: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:50
 #, fuzzy
 msgid "GnuCash Export Format"
 msgstr "Kohereza Imiterere"
@@ -21986,14 +22049,6 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-util.c:972
 msgid "Retained Earnings"
 msgstr ""
-
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:80
-#: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
-#: gnucash/report/report-system/report-utilities.scm:118
-#: gnucash/report/standard-reports/budget-income-statement.scm:520
-#: gnucash/report/standard-reports/income-statement.scm:512
-msgid "Expenses"
-msgstr "Ibisohoka"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:81
 msgid "Commissions"
@@ -31955,6 +32010,26 @@ msgstr ""
 #, fuzzy
 msgid "No help available."
 msgstr "a IMPINDURAGACIRO"
+
+#, fuzzy
+#~ msgid "Outflow to Expenses"
+#~ msgstr "Ibisohoka"
+
+#, fuzzy
+#~ msgid "Outflow to Asset/Equity/Liability"
+#~ msgstr "Imirongo- ntambike"
+
+# #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
+# basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
+# #-#-#-#-#  basctl.pot (PACKAGE VERSION)  #-#-#-#-#
+# basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
+#, fuzzy
+#~ msgid "Delete Budget"
+#~ msgstr "Gusiba"
+
+#, fuzzy
+#~ msgid "Delete this budget"
+#~ msgstr "i KIGEZWEHO Icyinjijwe"
 
 #, fuzzy
 #~ msgid "Display a period credits column?"
