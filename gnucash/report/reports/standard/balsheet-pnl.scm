@@ -765,11 +765,16 @@ also show overall period profit & loss."))
                          (map col-datum-get-split-balance-with-closing cols-data))))
            accounts))
 
-         (exchange-fn (and common-currency
-                           (gnc:case-exchange-time-fn
-                            price-source common-currency
-                            (map xaccAccountGetCommodity accounts) enddate
-                            #f #f)))
+         ;; a list of exchange-fn, one element per report date for
+         ;; multicolumn reports.
+         (list-of-exchange-fn
+          (and common-currency
+               (map (lambda (date)
+                      (gnc:case-exchange-time-fn
+                       price-source common-currency
+                       (map xaccAccountGetCommodity accounts) date
+                       #f #f))
+                    report-dates)))
 
          ;; from col-idx, find effective date to retrieve pricedb
          ;; entry or to limit transactions to calculate average-cost
@@ -795,7 +800,7 @@ also show overall period profit & loss."))
                        (gnc:gnc-monetary-commodity monetary)
                        common-currency))
                  (has-price? (gnc:gnc-monetary-commodity monetary))
-                 (exchange-fn
+                 ((list-ref list-of-exchange-fn col-idx)
                   monetary common-currency
                   (col-idx->price-date col-idx)))))
 
@@ -958,14 +963,13 @@ also show overall period profit & loss."))
 
              ;; converts monetaries to common currency
              (monetaries->exchanged
-              (lambda (monetaries target-currency price-source date)
-                (let ((exchange-fn (gnc:case-exchange-fn
-                                    price-source target-currency date)))
+              (lambda (monetaries target-currency date col-idx)
+                (let ((exchange-fn (list-ref list-of-exchange-fn col-idx)))
                   (apply gnc:monetary+
                          (cons (gnc:make-gnc-monetary target-currency 0)
                                (map
                                 (lambda (mon)
-                                  (exchange-fn mon target-currency))
+                                  (exchange-fn mon target-currency date))
                                 (monetaries 'format gnc:make-gnc-monetary #f)))))))
 
              ;; the unrealized gain calculator retrieves the
@@ -984,8 +988,7 @@ also show overall period profit & loss."))
                             (vector-ref asset-liability-value-balances col-idx))
                            (unrealized (gnc:collector- asset-liability-basis
                                                        asset-liability-balance)))
-                  (monetaries->exchanged
-                   unrealized common-currency price-source date))))
+                  (monetaries->exchanged unrealized common-currency date col-idx))))
 
              ;; the retained earnings calculator retrieves the
              ;; income-and-expense report-date balance, and converts
@@ -1000,8 +1003,8 @@ also show overall period profit & loss."))
                   (if (and common-currency
                            (every has-price?
                                   (gnc:accounts-get-commodities income-expense #f)))
-                      (monetaries->exchanged income-expense-balance
-                                             common-currency price-source date)
+                      (monetaries->exchanged income-expense-balance common-currency
+                                             date col-idx)
                       (income-expense-balance 'format gnc:make-gnc-monetary #f)))))
 
              (chart
