@@ -249,47 +249,6 @@ install(FILES ${SCRIPT_LIST} ${VALGRIND_OUTDIR}/gnucash-valgrind DESTINATION ${C
 install(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION
   ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
 
-if (WIN32)
-  # Write out a command script for windows
-  set(lib_directories boost enchant libsoup mysql pgsql libxslt)
-  set(bin_directories mingw gnutls libgsf pcre gnome guile webkit regex aqbanking gwenhywfar libofx opensp
-    libdbi sqlite3 mysql pgsql enchant libsoup libxslt)
-
-  set(CMD_LINES "")
-  set(BUILD_CMD_LINES "")
-  foreach(dir bin lib lib/gnucash)
-    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${dir} INSTALL_PATH_ITEM)
-    file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/${dir} BUILD_PATH_ITEM)
-    list(APPEND CMD_LINES "set PATH=${INSTALL_PATH_ITEM}\;%PATH%\n")
-    list(APPEND BUILD_CMD_LINES "set PATH=${BUILD_PATH_ITEM}\;%PATH%\n")
-  endforeach(dir)
-  if (NOT ${MINGW64})
-    foreach(dir ${lib_directories})
-      file(TO_NATIVE_PATH ${CMAKE_PREFIX_PATH}/${dir}/lib PATH_ITEM)
-      list(APPEND CMD_LINES "set PATH=${PATH_ITEM}\;%PATH%\n")
-    endforeach(dir)
-
-    foreach(dir ${bin_directories})
-      file(TO_NATIVE_PATH ${CMAKE_PREFIX_PATH}/${dir}/bin PATH_ITEM)
-      list(APPEND CMD_LINES "set PATH=${PATH_ITEM}\;%PATH%\n")
-    endforeach(dir)
-  endif()
-  set(CMD_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnucash-launcher.cmd)
-  file(WRITE ${CMD_FILE} "@echo off\nsetlocal\n\n")
-  foreach(line ${CMD_LINES})
-    file(APPEND ${CMD_FILE} "${line}")
-  endforeach(line)
-  file(APPEND ${CMD_FILE} "\nstart gnucash %*\n")
-
-  set(BUILD_CMD_FILE ${CMAKE_BINARY_DIR}/bin/gnucash-launcher.cmd)
-  file(WRITE ${BUILD_CMD_FILE} "@echo off\nsetlocal\n\n")
-  foreach(line ${CMD_LINES})
-     file(APPEND ${BUILD_CMD_FILE} "${line}")
-  endforeach(line)
-  file(APPEND ${BUILD_CMD_FILE} "\nstart gnucash %*\n")
-
-  install(PROGRAMS ${CMD_FILE} DESTINATION  ${CMAKE_INSTALL_BINDIR})
-endif()
 
 # The GResource Files are absolute paths but set_local_dist requires
 # relative paths.
