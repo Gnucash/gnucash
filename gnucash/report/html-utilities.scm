@@ -24,6 +24,7 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
+(use-modules (ice-9 match))
 
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cell) #f)
@@ -283,32 +284,18 @@
         (if (not (or (equal? default-value value)
                      (char=? (string-ref section 0) #\_)))
             (addto! render-list retval))))
+    (define (name-fn name) (if plaintext? name (gnc:html-markup-b name)))
+    (define br (if plaintext? "\n" (gnc:html-markup-br)))
     (for-each
      (lambda (child)
        (let ((report (gnc-report-find (car child))))
          (addto! render-list (cons "Embedded Report" (gnc:report-name report)))))
      (or report-list '()))
     (gnc:options-for-each add-option-if-changed options)
-    (if plaintext?
-        (string-append
-         (string-join
-          (map (lambda (item)
-                 (format #f "~a: ~a\n" (car item) (cdr item)))
-               render-list)
-          "")
-         "\n")
-        (apply
-         gnc:make-html-text
-         (apply
-          append
-          (map
-           (lambda (item)
-             (list
-              (gnc:html-markup-b (car item))
-              ": "
-              (cdr item)
-              (gnc:html-markup-br)))
-           render-list))))))
+    (let lp ((render-list (reverse render-list)) (acc '()))
+      (match render-list
+        (() (if plaintext? (string-concatenate acc) (apply gnc:make-html-text acc)))
+        (((name . val) . rest) (lp rest (cons* (name-fn name) ": " val br acc)))))))
 
 (define (gnc:html-make-generic-warning
          report-title-string report-id
