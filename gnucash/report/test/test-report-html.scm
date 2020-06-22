@@ -637,11 +637,6 @@ HTML Document Title</title></head><body></body>\n\
                (test-doc (gnc:make-html-document))
                (test-table (gnc:make-html-table))
              )
-          ;; change the default settings just to see what effect it has
-          ;;(gnc:html-table-set-col-headers! test-table #t)
-          ;; -> this make (gnc:html-table-render test-table test-doc) crash
-          ;; col-headers must be #f or a list
-          (gnc:html-table-set-row-headers! test-table #t)
           (gnc:html-table-set-caption! test-table #t)
           (gnc:html-table-append-row! test-table "Row 1")
           (gnc:html-table-append-row! test-table "Row 2")
@@ -660,11 +655,6 @@ HTML Document Title</title></head><body></body>\n\
                (test-doc (gnc:make-html-document))
                (test-table (gnc:make-html-table))
              )
-          ;; change the default settings just to see what effect it has
-          ;;(gnc:html-table-set-col-headers! test-table #t)
-          ;; -> this make (gnc:html-table-render test-table test-doc) crash
-          ;; col-headers must be #f or a list
-          (gnc:html-table-set-row-headers! test-table #t)
           (gnc:html-table-set-caption! test-table #t)
           (gnc:html-table-append-row! test-table "Row 2")
           (gnc:html-table-prepend-row! test-table "Row 1")
@@ -687,11 +677,6 @@ HTML Document Title</title></head><body></body>\n\
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
            )
-        ;; change the default settings just to see what effect it has
-        ;;(gnc:html-table-set-col-headers! test-table #t)
-        ;; -> this make (gnc:html-table-render test-table test-doc) crash
-        ;; col-headers must be #f or a list
-        (gnc:html-table-set-row-headers! test-table #t)
         (gnc:html-table-set-caption! test-table #t)
         (gnc:html-table-append-row! test-table "Row 1")
         (gnc:html-table-append-row! test-table "Row 2")
@@ -718,11 +703,6 @@ HTML Document Title</title></head><body></body>\n\
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
            )
-        ;; change the default settings just to see what effect it has
-        ;;(gnc:html-table-set-col-headers! test-table #t)
-        ;; -> this make (gnc:html-table-render test-table test-doc) crash
-        ;; col-headers must be #f or a list
-        (gnc:html-table-set-row-headers! test-table #t)
         (gnc:html-table-set-caption! test-table #t)
         (gnc:html-table-append-row! test-table "r1c1")
         (gnc:html-table-append-row! test-table '("r2c1" "r2c2" "r2c3"))
@@ -747,11 +727,6 @@ HTML Document Title</title></head><body></body>\n\
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
            )
-        ;; change the default settings just to see what effect it has
-        ;;(gnc:html-table-set-col-headers! test-table #t)
-        ;; -> this make (gnc:html-table-render test-table test-doc) crash
-        ;; col-headers must be #f or a list
-        (gnc:html-table-set-row-headers! test-table #t)
         (gnc:html-table-set-caption! test-table #t)
         (gnc:html-table-append-row! test-table "Row 1")
         (gnc:html-table-append-row! test-table "Row 2")

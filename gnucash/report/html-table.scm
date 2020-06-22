@@ -204,17 +204,6 @@
 (define gnc:html-table-set-caption!
   (record-modifier <html-table> 'caption))
 
-;; note the following function is now generally unused.
-(define (gnc:html-table-col-headers table)
-  (issue-deprecation-warning "gnc:html-table-col-headers is deprecated. \
-use gnc:html-table-multirow-col-headers instead.")
-  (let ((headers ((record-accessor <html-table> 'col-headers) table)))
-    (cond
-     ((not headers) #f)
-     ((null? (cdr headers)) (car headers))
-     (else (gnc:warn "gnc:html-table-col-headers used on a table object \
-with multiple rows. returning the first row only.") (car headers)))))
-
 (define (gnc:html-table-set-col-headers! table col-headers)
   (gnc:html-table-set-multirow-col-headers! table (list col-headers)))
 
@@ -223,14 +212,6 @@ with multiple rows. returning the first row only.") (car headers)))))
 
 (define gnc:html-table-set-multirow-col-headers!
   (record-modifier <html-table> 'col-headers))
-
-(define (gnc:html-table-row-headers table)
-  (issue-deprecation-warning "gnc:html-table-row-headers is unused.")
-  ((record-accessor <html-table> 'row-headers) table))
-
-(define (gnc:html-table-set-row-headers! table . rest)
-  (issue-deprecation-warning "gnc:html-table-set-row-headers! is unused.")
-  (apply (record-modifier <html-table> 'row-headers) table rest))
 
 (define gnc:html-table-style
   (record-accessor <html-table> 'style))
