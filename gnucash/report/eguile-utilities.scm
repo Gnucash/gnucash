@@ -66,7 +66,7 @@
   (let* ((stylesheetpath (find-stylesheet fname))
          (templatepath  (find-template fname)))
     ; make sure there's a trailing delimiter
-      (issue-deprecation-warning "find-file is deprecated. Please use find-stylesheet or find-template instead.")
+      (issue-deprecation-warning "find-file is deprecated in 4.x. Please use find-stylesheet or find-template instead.")
       (cond
        ((access? stylesheetpath R_OK) stylesheetpath)
        ((access? templatepath R_OK) templatepath)

@@ -62,7 +62,7 @@
 
 (define (gnc:make-html-piechart)
   (issue-deprecation-warning
-   "(gnc:make-html-piechart) is deprecated. use gnc:make-html-chart instead.")
+   "(gnc:make-html-piechart) is deprecated in 4.x. use gnc:make-html-chart instead.")
   (gnc:make-html-piechart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f #f #f #f #f #f #f #f))
 
 (define gnc:html-piechart-data

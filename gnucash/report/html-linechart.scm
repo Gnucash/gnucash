@@ -74,7 +74,7 @@
 
 (define (gnc:make-html-linechart)
   (issue-deprecation-warning
-   "(gnc:make-html-linechart) is deprecated. use gnc:make-html-chart instead.")
+   "(gnc:make-html-linechart) is deprecated in 4.x. use gnc:make-html-chart instead.")
   (gnc:make-html-linechart-internal
     '(pixels . -1)  ;;width
     '(pixels . -1)  ;;height

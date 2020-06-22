@@ -100,7 +100,7 @@
 (define (gnc:owner-from-split split result-owner)
   (define (notnull x) (and (not (null? x)) x))
   (issue-deprecation-warning
-   "gnc:owner-from-split is deprecated. use gnc:split->owner instead.")
+   "gnc:owner-from-split is deprecated in 4.x. use gnc:split->owner instead.")
   (let* ((trans (xaccSplitGetParent split))
 	 (invoice (notnull (gncInvoiceGetInvoiceFromTxn trans)))
 	 (temp (gncOwnerNew))

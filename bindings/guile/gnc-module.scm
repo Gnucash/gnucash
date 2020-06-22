@@ -30,6 +30,7 @@
 (use-modules (ice-9 match))
 
 (define (deprecate . lst)
+  ;; 4.x deprecation. remove in 5.x
   (issue-deprecation-warning (string-concatenate lst)))
 
 (define (no-op-deprecation-warning)

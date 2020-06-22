@@ -309,11 +309,11 @@
 
 ;; Symbols deprecated in 4.x, to remove for 5.x
 (define-public (gnc:get-debit-string acct-type)
-    (issue-deprecation-warning "gnc:get-debit-string is deprecated. Please use (gnucash engine)'s gnc-account-get-debit-string instead.")
+    (issue-deprecation-warning "gnc:get-debit-string is deprecated in 4.x. Please use (gnucash engine)'s gnc-account-get-debit-string instead.")
     (gnc-account-get-debit-string acct-type))
 (define-public (gnc:get-credit-string acct-type)
-    (issue-deprecation-warning "gnc:get-credit-string is deprecated. Please use (gnucash engine)'s gnc-account-get-credit-string instead.")
+    (issue-deprecation-warning "gnc:get-credit-string is deprecated in 4.x. Please use (gnucash engine)'s gnc-account-get-credit-string instead.")
     (gnc-account-get-debit-string acct-type))
 (define-public (gnc:config-file-format-version version)
-    (issue-deprecation-warning "gnc:config-file-format-version is deprecated and will be removed from a future version.")
+    (issue-deprecation-warning "gnc:config-file-format-version is deprecated in 4.x and will be removed from a future version.")
     #t)

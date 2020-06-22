@@ -68,7 +68,7 @@
 
 (define (gnc:make-html-scatter)
   (issue-deprecation-warning
-   "(gnc:make-html-scatter) is deprecated. use gnc:make-html-chart instead.")
+   "(gnc:make-html-scatter) is deprecated in 4.x. use gnc:make-html-chart instead.")
   (gnc:make-html-scatter-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() #f #f))
 
 (define gnc:html-scatter-width

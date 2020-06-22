@@ -67,7 +67,7 @@
 
 (define (gnc:make-html-barchart)
   (issue-deprecation-warning
-   "(gnc:make-html-barchart) is deprecated. use gnc:make-html-chart instead.")
+   "(gnc:make-html-barchart) is deprecated in 4.x. use gnc:make-html-chart instead.")
   (gnc:make-html-barchart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() '() '() 
 				   #f #f #f '() #f #f #f #f #f #f))
 
