@@ -555,10 +555,15 @@ gsr_create_table( GNCSplitReg *gsr )
     // see if register group has the date_width key, old format pre 4.0
     has_date_width = g_key_file_has_key (state_file, register_state_section, "date_width", NULL);
 
-    // if this is from a page recreate and no register state use those settings,
+    // if this is from a page recreate and no date_width use register state for settings,
     // register state width information is dropped at the end of function.
-    if (gsr->page_state_name && !has_date_width)
-        group = gsr->page_state_name;
+    if (gsr->page_state_name)
+    {
+        if (g_key_file_has_key (state_file, gsr->page_state_name, "date_width", NULL))
+            group = gsr->page_state_name;  // new format with widths
+        else
+            group = register_state_section;
+    }
     else
     {
         // if no default state, use register state if available
