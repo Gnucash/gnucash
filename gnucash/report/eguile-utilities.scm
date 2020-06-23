@@ -36,7 +36,8 @@
   (number->string (if (integer? n) (inexact->exact n) n)))
 
 ;; Format gnc-numeric n with as many decimal places as required
-(define-public fmtnumeric fmtnumber)
+(define-public fmtnumeric
+  (compose fmtnumber exact->inexact))
 
 (define-public (gnc-monetary-neg? monetary)
   ;; return true if the monetary value is negative
