@@ -158,16 +158,16 @@
     (apply-basis-ratio basis2 2 3))
 
   (test-equal "basis-builder buy new units"
-    '((3 . 133333333/100000000))
+    '((3 . 4/3))
     (basis-builder '() 3 4 'average-basis 100))
   (test-equal "basis-builder buy new units average"
-    '((6 . 266666667/100000000))
+    '((6 . 8/3))
     (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'average-basis 100))
   (test-equal "basis-builder buy new units FIFO"
-    '((3 . 4) (5 . 6) (7 . 8) (3 . 133333333/100000000))
+    '((3 . 4) (5 . 6) (7 . 8) (3 . 4/3))
     (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'fifo-basis 100))
   (test-equal "basis-builder buy new units LIFO"
-    '((3 . 4) (5 . 6) (7 . 8) (3 . 133333333/100000000))
+    '((3 . 4) (5 . 6) (7 . 8) (3 . 4/3))
     (basis-builder '((3 . 4) (5 . 6) (7 . 8)) 3 4 'filo-basis 100))
 
   (test-equal "basis-builder sell average"

@@ -33,6 +33,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 
 (define reportname (N_ "Advanced Portfolio"))
 
@@ -205,6 +206,20 @@ by preventing negative stock balances.<br/>")
             (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
       '()))
 
+;; in: b-list: an alist of pair of (num-units . price-per-unit)
+;;     b-units: units being sold - starts from first pair
+;; in:  '((4 . 2) (3 . 4)) -3     --> '((1 . 2) (3 . 4))
+;; in:  '((5 . 6) (4 . 5)) -8     --> '((1 . 5))
+(define (remove-from-head b-list b-units)
+  (match b-list
+    (() (gnc:warn "selling more than available units") '())
+    (((unit1 . value1) . rest)
+     (let ((units-left (+ b-units unit1)))
+       (cond
+        ((< 0 units-left) (cons (cons units-left value1) rest))
+        ((= 0 units-left) rest)
+        (else (remove-from-head rest units-left)))))))
+
 ;; this builds a list for basis calculation and handles average, fifo
 ;; and lifo methods the list is cons cells of (units-of-stock
 ;; . price-per-unit)... average method produces only one cell that
@@ -213,121 +228,62 @@ by preventing negative stock balances.<br/>")
 ;; price adjusted to carryover the basis.
 (define (basis-builder b-list b-units b-value b-method currency-frac)
   (gnc:debug "actually in basis-builder")
-  (gnc:debug "b-list is " b-list " b-units is " (gnc-numeric-to-string b-units)
-             " b-value is " (gnc-numeric-to-string b-value) " b-method is " b-method)
+  (gnc:debug "b-list is " b-list " b-units is " b-units
+             " b-value is " b-value " b-method is " b-method)
 
   ;; if there is no b-value, then this is a split/merger and needs
   ;; special handling
   (cond
 
    ;; we have value and positive units, add units to basis
-   ((and (not (gnc-numeric-zero-p b-value))
-         (gnc-numeric-positive-p b-units))
+   ((and (not (zero? b-value)) (positive? b-units))
     (case b-method
       ((average-basis)
-       (if (not (eqv? b-list '()))
-           (list (cons (gnc-numeric-add b-units
-                                        (caar b-list) units-denom GNC-RND-ROUND)
-                       (gnc-numeric-div
-                        (gnc-numeric-add b-value
-                                         (gnc-numeric-mul (caar b-list)
-                                                          (cdar b-list)
-                                                          GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                                         GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                        (let ((denom (gnc-numeric-add b-units
-                                                      (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
-                          (if (zero? denom)
-                              (throw 'div/0 (format #f "buying ~0,4f share units" b-units))
-                              denom))
-                        price-denom GNC-RND-ROUND)))
-           (append b-list
-                   (list (cons b-units (gnc-numeric-div
-                                        b-value b-units price-denom GNC-RND-ROUND))))))
-      (else (append b-list
-                    (list (cons b-units (gnc-numeric-div
-                                         b-value b-units price-denom GNC-RND-ROUND)))))))
+       (match b-list
+         (() (list (cons b-units (/ b-value b-units))))
+         (((unit1 . value1) . _)
+          (let ((new-units (+ b-units unit1))
+                (new-value (+ b-value (* unit1 value1))))
+            (if (zero? new-units)
+                (throw 'div/0 (format #f "buying ~0,4f share units" b-units))
+                (list (cons new-units (/ new-value new-units))))))))
+
+      (else (append b-list (list (cons b-units (/ b-value b-units)))))))
 
    ;; we have value and negative units, remove units from basis
-   ((and (not (gnc-numeric-zero-p b-value))
-         (gnc-numeric-negative-p b-units))
-    (if (not (eqv? b-list '()))
-        (case b-method
-          ((fifo-basis)
-           (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar b-list))
-             ((-1)
-              ;; Sold less than the first lot, create a new first lot
-              ;; from the remainder
-              (let ((new-units (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)))
-                (cons (cons new-units (cdar b-list)) (cdr b-list))))
-             ((0)
-              ;; Sold all of the first lot
-              (cdr b-list))
-             ((1)
-              ;; Sold more than the first lot, delete it and recurse
-              (basis-builder (cdr b-list) (gnc-numeric-add b-units (caar b-list) units-denom GNC-RND-ROUND)
-                             ;; Only the sign of b-value matters since
-                             ;; the new b-units is negative
-                             b-value
-                             b-method currency-frac))))
-          ((filo-basis)
-           (let ((rev-b-list (reverse b-list)))
-             (case (gnc-numeric-compare (gnc-numeric-abs b-units) (caar rev-b-list))
-               ((-1)
-                ;; Sold less than the last lot
-                (let ((new-units (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)))
-                  (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
-               ((0)
-                ;; Sold all of the last lot
-                (reverse (cdr rev-b-list))
-                )
-               ((1)
-                ;; Sold more than the last lot
-                (basis-builder (reverse (cdr rev-b-list)) (gnc-numeric-add b-units (caar rev-b-list) units-denom GNC-RND-ROUND)
-                               b-value b-method currency-frac)))))
-          ((average-basis)
-           (list (cons (gnc-numeric-add
-                        (caar b-list) b-units units-denom GNC-RND-ROUND)
-                       (cdar b-list)))))
-        '()))
+   ((and (not (zero? b-value)) (negative? b-units))
+    (case b-method
+      ((fifo-basis) (remove-from-head b-list b-units))
+      ((filo-basis) (reverse (remove-from-head (reverse b-list) b-units)))
+      ((average-basis)
+       (match b-list
+         (() '())
+         (((unit1 . value1) . _) (list (cons (+ unit1 b-units) value1)))))))
 
    ;; no value, just units, this is a split/merge...
-   ((and (gnc-numeric-zero-p b-value)
-         (not (gnc-numeric-zero-p b-units)))
+   ((and (zero? b-value) (not (zero? b-units)))
     (let* ((current-units (units-basis b-list))
            ;; If current-units is zero then so should be everything else.
-           (units-ratio (if (zero? current-units) (gnc-numeric-zero)
-                            (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                                             current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
+           (units-ratio (if (zero? current-units) 0
+                            (/ (+ b-units current-units) current-units)))
            ;; If the units ratio is zero the stock is worthless and
            ;; the value should be zero too
-           (value-ratio (if (gnc-numeric-zero-p units-ratio)
-                            (gnc-numeric-zero)
-                            (gnc-numeric-div 1/1 units-ratio GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
-
-      (gnc:debug "blist is " b-list " current units is "
-                 (gnc-numeric-to-string current-units)
-                 " value ratio is " (gnc-numeric-to-string value-ratio)
-                 " units ratio is " (gnc-numeric-to-string units-ratio))
+           (value-ratio (if (zero? units-ratio) 0 (/ 1 units-ratio))))
+      (gnc:debug "blist is " b-list " current units is " current-units
+                 " value ratio is " value-ratio " units ratio is " units-ratio)
       (apply-basis-ratio b-list units-ratio value-ratio)))
 
    ;; If there are no units, just a value, then its a spin-off,
    ;; calculate a ratio for the values, but leave the units alone
-   ;; with a ratio of 1
-   ((and (gnc-numeric-zero-p b-units)
-         (not (gnc-numeric-zero-p b-value)))
+   ((and (zero? b-units) (not (zero? b-value)))
     (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
-           (value-ratio (if (zero? current-value)
-                            (throw 'div/0 (format #f "spinoff of ~,2f currency units" current-value))
-                            (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-                                             current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
-
-      (gnc:debug "this is a spinoff")
-      (gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
-      (apply-basis-ratio b-list 1/1 value-ratio)))
+           (value-ratio (if (zero? current-value) 0
+                            (/ (+ b-value current-value) current-value))))
+      (gnc:debug "spinoff: blist is " b-list " value ratio is " value-ratio)
+      (apply-basis-ratio b-list 1 value-ratio)))
 
    ;; when all else fails, just send the b-list back
-   (else
-    b-list)))
+   (else b-list)))
 
 
 
