@@ -184,27 +184,16 @@ by preventing negative stock balances.<br/>")
 
 ;; sum up the contents of the b-list built by basis-builder below
 (define (sum-basis b-list currency-frac)
-  (if (not (eqv? b-list '()))
-      (gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND)
-                       (sum-basis (cdr b-list) currency-frac) currency-frac GNC-RND-ROUND)
-      (gnc-numeric-zero)))
+  (fold (lambda (a b) (+ (* (car a) (cdr a)) b)) 0 b-list))
 
 ;; sum up the total number of units in the b-list built by
 ;; basis-builder below
 (define (units-basis b-list)
-  (if (not (eqv? b-list '()))
-      (gnc-numeric-add (caar b-list) (units-basis (cdr b-list))
-                       units-denom GNC-RND-ROUND)
-      (gnc-numeric-zero)))
+  (fold (lambda (a b) (+ (car a) b)) 0 b-list))
 
 ;; apply a ratio to an existing basis-list, useful for splits/mergers and spinoffs
-;; I need to get a brain and use (map) for this.
 (define (apply-basis-ratio b-list units-ratio value-ratio)
-  (if (not (eqv? b-list '()))
-      (cons (cons (gnc-numeric-mul units-ratio (caar b-list) units-denom GNC-RND-ROUND)
-                  (gnc-numeric-mul value-ratio (cdar b-list) price-denom GNC-RND-ROUND))
-            (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
-      '()))
+  (map (lambda (a) (cons (* units-ratio (car a)) (* value-ratio (cdr a)))) b-list))
 
 ;; in: b-list: an alist of pair of (num-units . price-per-unit)
 ;;     b-units: units being sold - starts from first pair
