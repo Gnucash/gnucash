@@ -920,7 +920,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     /* Translators: The C is the column title and stands for Color, this should be one character */
     acc_color_column
-        = gnc_tree_view_add_text_column(view, _("C"), "account-color", NULL,
+        = gnc_tree_view_add_text_column(view, C_("Shorthand column title for: Color", "C"), "account-color", NULL,
                                         "xx",
                                         GNC_TREE_VIEW_COLUMN_DATA_NONE,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
