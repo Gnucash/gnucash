@@ -1162,10 +1162,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
     gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
 
     /* Set 'ExecAssociatedInvoice' */
-    inv = invoice_from_split (gnc_split_register_get_current_split (reg));
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                         "JumpAssociatedInvoiceAction");
-    gtk_action_set_sensitive (GTK_ACTION (action), inv != NULL);
+                                        "JumpAssociatedInvoiceAction");
+
+    gtk_action_set_sensitive (GTK_ACTION (action),
+                                (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE));
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE (page));
 
@@ -4624,15 +4625,19 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GncInvoice* invoice;
+    Transaction *txn;
 
     ENTER ("(action %p, plugin_page %p)", action, plugin_page);
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
-    invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
-    if (invoice)
+    txn = gnc_split_register_get_current_trans (reg);
+    if (xaccTransGetTxnType (txn) == TXN_TYPE_INVOICE)
+    {
+        invoice = invoice_from_split (xaccTransGetFirstAPARAcctSplit (txn, TRUE));
         gnc_ui_invoice_edit (NULL, invoice);
+    }
 
     LEAVE (" ");
 }
