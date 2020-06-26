@@ -11,6 +11,10 @@
 
     <menu name="View" action="ViewAction">
       <placeholder name="ViewPlaceholder">
+        <separator name="ViewSep44"/>
+        <menuitem name="ViewSaveLayout"         action="ViewSaveLayoutAction"/>
+        <menuitem name="ViewResetLayout"        action="ViewResetLayoutAction"/>
+        <separator name="ViewSep45"/>
         <menu name="SortOrder"                  action="SortOrderAction">
           <menuitem name="SortStandard"         action="SortStandardAction"/>
           <separator name="ViewSep43"/>
@@ -54,14 +58,6 @@
         <menuitem name="ReportsCompanyReport"   action="ReportsCompanyReportAction"/>
       </placeholder>
     </menu>
-    
-    <menu name="Windows" action="WindowsAction">
-      <placeholder name="WindowsLayoutPlaceholder">
-        <menuitem name="WindowsSaveLayout"         action="WindowsSaveLayoutAction"/>
-        <menuitem name="WindowsResetLayout"        action="WindowsResetLayoutAction"/>
-       </placeholder>
-    </menu>
-    
   </menubar>
 
   <toolbar name="DefaultToolbar">
