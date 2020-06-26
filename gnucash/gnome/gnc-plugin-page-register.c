@@ -1142,11 +1142,23 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                          "AssociateTransactionRemoveAction");
     gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
 
-    /* Set 'ExecAssociatedInvoice' */
+    /* Set 'ExecAssociatedInvoice'
+       We can determine an invoice from a txn if either
+       - it is an invoice transaction
+       - it has splits with an invoice associated with it
+       As payment txns can have more than one split associated
+       with an invoice, we can't tell which invoice to open based on
+       the transaction type alone (like in a bank account). However we can
+       uniquely determine an invoice from a split starting from an APAR account
+       as only those splits will have invoice information. For a more universal
+       mechanism (like to be able to display invoices from a bank account) we would
+       need user interaction which is not implemented so far. */
+    inv = invoice_from_split (gnc_split_register_get_current_split (reg));
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                         "JumpAssociatedInvoiceAction");
 
     gtk_action_set_sensitive (GTK_ACTION (action),
+                                inv ||
                                 (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE));
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE (page));
@@ -4590,11 +4602,14 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
     txn = gnc_split_register_get_current_trans (reg);
+    invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
     if (xaccTransGetTxnType (txn) == TXN_TYPE_INVOICE)
-    {
         invoice = invoice_from_split (xaccTransGetFirstAPARAcctSplit (txn, TRUE));
+    else
+        invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
+
+    if (invoice)
         gnc_ui_invoice_edit (NULL, invoice);
-    }
 
     LEAVE (" ");
 }
