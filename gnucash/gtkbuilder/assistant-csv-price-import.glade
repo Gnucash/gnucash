@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="end_row_adj">
@@ -43,6 +43,9 @@
     <signal name="close" handler="csv_price_imp_assist_close_cb" swapped="no"/>
     <signal name="destroy" handler="csv_price_imp_assist_close_cb" swapped="no"/>
     <signal name="prepare" handler="csv_price_imp_assist_prepare_cb" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <placeholder/>
     </child>
@@ -88,7 +91,7 @@ Click on "Next" to proceed or "Cancel" to Abort Import.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">
-Select location and file name for the Import, then click 'OK'...
+Select location and file name for the Import, then click "OK"...
 </property>
             <property name="wrap">True</property>
           </object>
@@ -1065,6 +1068,9 @@ Cancel to abort.&lt;/b&gt;</property>
       </packing>
     </child>
     <child>
+      <placeholder/>
+    </child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
