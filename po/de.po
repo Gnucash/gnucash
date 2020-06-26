@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-26 21:51+0200\n"
-"PO-Revision-Date: 2020-06-21 23:18+0200\n"
+"PO-Revision-Date: 2020-06-26 22:57+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -2043,7 +2043,7 @@ msgstr "Nummer"
 #: gnucash/gnome/dialog-find-transactions2.c:149
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr "Beschreibung / Notizen / Buchungstext"
+msgstr "Beschreibung / Bemerkung / Buchungstext"
 
 #: gnucash/gnome/dialog-find-transactions2.c:153
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -3669,7 +3669,7 @@ msgstr "Budget _öffnen"
 msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created."
-msgstr ""
+msgstr "Vorhandenes Budget in einer neuen Ansicht öffnen. Falls kein Budget vorhanden ist, wird ein neues erstellt."
 
 #: gnucash/gnome/gnc-plugin-budget.c:75
 msgid "_Copy Budget"
@@ -4326,14 +4326,12 @@ msgid "Accounts"
 msgstr "Konten"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1369
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
 "transactions from.\n"
 "Are you sure you want to do this?"
-msgstr ""
-"Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. Möchten Sie "
-"das wirklich?"
+msgstr "Das Zielkonto %s hat nicht die gleiche Währung wie das Konto, von dem Sie die Buchungen verschieben.  Sollen die Buchungen trotzdem verschoben werden?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1377
 msgid "_Pick another account"
@@ -4425,7 +4423,7 @@ msgstr "Budget _löschen..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:154
 msgid "Select this or another budget and delete it."
-msgstr ""
+msgstr "Das gewählte Budget (oder dann ein anderes gewähltes) löschen."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:158
 msgid "Budget _Options..."
@@ -4456,11 +4454,11 @@ msgstr "Budget für alle Perioden bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
 msgid "Edit Note"
-msgstr "Notizen bearbeiten"
+msgstr "Bemerkung bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
 msgid "Edit note for the selected account and period"
-msgstr ""
+msgstr "Die Bemerkung für das gewählte Konto und Periode bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 msgid "Refresh this window."
@@ -4517,7 +4515,7 @@ msgstr "Sie müssen mindestens ein Konto auswählen, das bearbeitet werden soll.
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1234
 msgid "You must select one budget cell to edit."
-msgstr ""
+msgstr "Sie müssen eine Budget-Zelle gewählt haben zum Bearbeiten."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -5552,7 +5550,7 @@ msgstr "Kontobuch als Bericht für den gewählten Buchungssatz öffnen"
 #: gnucash/gnome/gnc-plugin-page-register2.c:410
 #: gnucash/gnome/gnc-plugin-page-register.c:526
 msgid "_Double Line"
-msgstr "_Bemerkung anzeigen"
+msgstr "_Zweizeilig"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:527
@@ -5560,7 +5558,7 @@ msgstr "_Bemerkung anzeigen"
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"File Association\" for "
 "each transaction."
-msgstr ""
+msgstr "Eine zweite Zeile mit »Aktion«, »Bemerkung« und »Datei-Verknüpfung« für alle Buchungen anzeigen."
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:416
 msgid "Show _Extra Dates"
@@ -6559,7 +6557,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:2368
 msgid "Sort By:"
-msgstr "Sortiere nach:"
+msgstr "Sortieren nach:"
 
 #: gnucash/gnome/gnc-split-reg.c:2483
 msgid ""
@@ -6989,22 +6987,22 @@ msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Abgleich-Datum ist %d Tag in der Zukunft."
+msgstr[1] "Abgleich-Datum ist %d Tage in der Zukunft."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:383
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Das Abgleich-Datum, das Sie gewählt haben, ist %d Tag in der Zukunft."
+msgstr[1] "Das Abgleich-Datum, das Sie gewählt haben, is %d Tage in der Zukunft."
 
 #: gnucash/gnome/window-reconcile.c:388
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
-msgstr ""
+msgstr "Dies kann zu Problemen beim nächsten Abgleichen führen. Bitte prüfen Sie erneut, ob dieses Datum beabsichtigt ist."
 
 #: gnucash/gnome/window-reconcile.c:1918
 msgid ""
@@ -8163,7 +8161,7 @@ msgstr "Heute"
 
 #: gnucash/gnome-utils/gnc-cell-view.c:73
 msgid "Use Shift combined with Return or Keypad Enter to finish editing"
-msgstr ""
+msgstr "Klicken Sie Umschalt+Eingabetaste oder am Nummerblock die Enter-Taste, um das Bearbeiten zu beenden"
 
 #: gnucash/gnome-utils/gnc-date-delta.c:224
 #: gnucash/report/reports/standard/price-scatter.scm:223
@@ -9753,7 +9751,6 @@ msgid "Total (Period)"
 msgstr "Saldo (Periodenbezogen)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:923
-#, fuzzy
 msgctxt "Column header for 'Color'"
 msgid "C"
 msgstr "Farbe"
@@ -10021,7 +10018,7 @@ msgstr "Lieferant / Buchungstext"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2818
 msgid "Description / Notes / Memo"
-msgstr "Beschreibung / Notizen / Buchungstext"
+msgstr "Beschreibung / Bemerkung / Buchungstext"
 
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2848
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:625
@@ -10348,7 +10345,7 @@ msgstr "- GnuCash, die Finanzverwaltung für Privatanwender und Kleinbetriebe"
 
 #: gnucash/gnucash-core-app.cpp:466
 msgid "{1} [options] [datafile]"
-msgstr ""
+msgstr "{1} [Optionen] [Datei]"
 
 #: gnucash/gnucash-core-app.cpp:494
 msgid "GnuCash {1}"
@@ -12258,9 +12255,7 @@ msgstr "Anzahl Buchstaben für Auto-Vervollständigen."
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
-msgstr ""
-"Setzt die Anzahl der Buchstaben, bis das Auto-Vervollständigen Vorschläge "
-"machen wird. Dies gilt für die Felder Beschreibung, Buchungstext und Notizen."
+msgstr "Setzt die Anzahl der Buchstaben, bis das Auto-Vervollständigen Vorschläge machen wird. Dies gilt für die Felder Beschreibung, Buchungstext und Bemerkung."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:343
 msgid "Create a new window for each new report"
@@ -15389,19 +15384,16 @@ msgstr ""
 "soll."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:213
-#, fuzzy
 msgid "Due Day"
-msgstr "Fälligkeitstage"
+msgstr "Fälligkeitstag"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:226
-#, fuzzy
 msgid "Discount Day"
-msgstr "Tage für Skonto"
+msgstr "Tag für Skonto"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:252
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "Stichtag Monatswechsel: "
+msgstr "Stichtag Monatswechsel"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:266
 msgid ""
@@ -16051,14 +16043,12 @@ msgid "Beginning"
 msgstr "Anfang"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:625
-#, fuzzy
 msgid "<b>Compounding</b>"
-msgstr "<b>Zinsen:</b>"
+msgstr "<b>Aufzinsung</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:640
-#, fuzzy
 msgid "<b>Period</b>"
-msgstr "<b>Zeitintervall:</b>"
+msgstr "<b>Periode</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:768
 msgid "When paid"
@@ -16119,7 +16109,7 @@ msgstr "Import-Zuordnungen bearbeiten"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:55
 msgid "_Remove Invalid Mappings"
-msgstr ""
+msgstr "Ungültige Zuordnungen _entfernen"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:109
 msgid "<b>What type of information to display?</b>"
@@ -16249,7 +16239,6 @@ msgid "This transaction requires your intervention or it will NOT be imported."
 msgstr "Diese Buchung benötigt Ihre Auswahl oder sie würde nicht importiert."
 
 #: gnucash/gtkbuilder/dialog-import.glade:475
-#, fuzzy
 msgid ""
 "Double click on the transaction to either change the matching transaction in "
 "GnuCash or the destination account of the auto-balance split (if required)."
@@ -16453,8 +16442,7 @@ msgstr "<b>Be_schreibung</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:176
 msgid "Enter any notes you want to make about this lot."
-msgstr ""
-"Geben Sie hier alle Notizen ein, die Sie zu diesem Posten speichern wollen."
+msgstr "Geben Sie hier alle Bemerkungen ein, die Sie zu diesem Posten speichern wollen."
 
 # N wird für neu verwendet.
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:194
@@ -17480,11 +17468,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3025
 msgid "<b>Default zoom level</b>"
-msgstr "<b>Vorgabe Vergrößerung</b>"
+msgstr "<b>Voreingestellte Vergrößerung</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3103
 msgid "Default zoom level"
-msgstr ""
+msgstr "Voreingestellte Vergrößerung"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3138
 msgid "Reports"
@@ -19105,11 +19093,11 @@ msgstr "Das gewählte Budget löschen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:870
 msgid "Budget Notes"
-msgstr "Budget-Notizen"
+msgstr "Budget-Bemerkungen"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:928
 msgid "Enter Note"
-msgstr "Zusätzliche Notizen"
+msgstr "Bemerkung eingeben"
 
 #. Duplicate Transaction Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:13
@@ -19385,7 +19373,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:259
 msgid "Statement Date is after today"
-msgstr ""
+msgstr "Abgleich-Datum ist in der Zukunft"
 
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:91
 msgid "Not found"
@@ -21708,22 +21696,19 @@ msgid "Assign a transfer account to the selection."
 msgstr "Gegenkonto zu Auswahl zuweisen."
 
 #: gnucash/import-export/import-main-matcher.c:805
-#, fuzzy
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
-msgstr "V"
+msgstr "Neu"
 
 #: gnucash/import-export/import-main-matcher.c:808
-#, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "Ü+Abgl"
 
 #: gnucash/import-export/import-main-matcher.c:812
-#, fuzzy
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
-msgstr "Farbe"
+msgstr "Abgl"
 
 #: gnucash/import-export/import-main-matcher.c:818
 msgid "Info"
@@ -23031,7 +23016,7 @@ msgstr ""
 "Buchung ändern, auch wenn diese einen abgeglichenem Buchungsteil enthält?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2217
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
 "following accounts:\n"
@@ -23085,7 +23070,7 @@ msgstr "Anpassungsbuchungen"
 
 #: gnucash/report/html-chart.scm:442
 msgid "Load"
-msgstr ""
+msgstr "Laden"
 
 #: gnucash/report/html-fonts.scm:68 gnucash/report/html-fonts.scm:73
 #: gnucash/report/html-fonts.scm:78 gnucash/report/html-fonts.scm:83
@@ -24419,9 +24404,8 @@ msgstr ""
 "Diese Option ist nur zum Testen, Ihre Berichte sollten sowas nicht haben..."
 
 #: gnucash/report/reports/example/hello-world.scm:215
-#, fuzzy
 msgid "This is a Radio Button option."
-msgstr "Dies ist eine Datums-Option."
+msgstr "Dies ist eine Radio-Button-Option."
 
 #: gnucash/report/reports/example/hello-world.scm:342
 msgid ""
@@ -24475,9 +24459,9 @@ msgid "false"
 msgstr "falsch"
 
 #: gnucash/report/reports/example/hello-world.scm:368
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The radio button option is ~a."
-msgstr "Die String-Option ist ~a."
+msgstr "Die Radio-Button-Option ist ~a."
 
 #: gnucash/report/reports/example/hello-world.scm:373
 #, scheme-format
@@ -24548,25 +24532,24 @@ msgid "A sample report with examples."
 msgstr "Ein Beispielbericht."
 
 #: gnucash/report/reports/example/sample-graphs.scm:42
-#, fuzzy
 msgid "Sample Graphs"
-msgstr "Beispiel"
+msgstr "Beispiel-Diagramme"
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
-msgstr ""
+msgstr "Torte:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:147
 msgid "Bar, normal:"
-msgstr ""
+msgstr "Balken, normal:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:152
 msgid "Bar, stacked:"
-msgstr ""
+msgstr "Balken, gestapelt:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
 msgid "Scatter:"
-msgstr ""
+msgstr "Punkte:"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, scheme-format
@@ -25247,11 +25230,11 @@ msgstr "Zeige Kontenbeschreibung an."
 
 #: gnucash/report/reports/standard/account-summary.scm:121
 msgid "Account Notes"
-msgstr "Kontennotizen"
+msgstr "Kontobemerkungen"
 
 #: gnucash/report/reports/standard/account-summary.scm:122
 msgid "Show an account's notes."
-msgstr "Zeige Kontennotizen an."
+msgstr "Zeige Kontobemerkungen an."
 
 #: gnucash/report/reports/standard/account-summary.scm:124
 #: gnucash/report/reports/standard/balance-sheet.scm:136
@@ -26149,9 +26132,8 @@ msgid "Liability"
 msgstr "Fremdkapital"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1127
-#, fuzzy
 msgid "Liability and Equity"
-msgstr "_Passiva"
+msgstr "Verbindlichkeiten und Eigenkapital"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1145
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1293
@@ -26483,11 +26465,11 @@ msgstr "Eine Spalte mit den Budget-Werten anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:52
 msgid "Show Budget Notes"
-msgstr "Budget-Notizen anzeigen"
+msgstr "Budget-Bemerkungen anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:53
 msgid "Display a column for the budget notes."
-msgstr "Eine Spalte mit den Budget-Notizen anzeigen"
+msgstr "Eine Spalte mit den Budget-Bemerkungen anzeigen"
 
 #: gnucash/report/reports/standard/budget.scm:54
 msgid "Show Actual"
@@ -27325,9 +27307,8 @@ msgstr ""
 "Zu zahlende Steuern anzeigen (Steuer auf Verkäufe minus Steuer auf Käufe)."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:138
-#, fuzzy
 msgid "Purchases"
-msgstr "Einkaufsnetto"
+msgstr "Materialaufwand"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:147
 msgid "Tax Accounts"
@@ -27348,20 +27329,17 @@ msgstr ""
 "Fremdkapital sein."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:158
-#, fuzzy
 msgid "Report format"
-msgstr "Wählen Sie das Export-Format"
+msgstr "Berichtsformat"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:159
-#, fuzzy
 msgid "Report Format"
-msgstr "Fehler im Bericht"
+msgstr "Berichtsformat"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
 #: gnucash/report/reports/standard/income-gst-statement.scm:162
-#, fuzzy
 msgid "default format"
-msgstr "Voreingestellte _Schrift"
+msgstr "Voreingestelltes Format"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 msgid "Australia BAS"
@@ -27372,9 +27350,8 @@ msgid "Australia BAS. Specify sales, purchase and tax accounts."
 msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:168
-#, fuzzy
 msgid "UK VAT Return"
-msgstr "Gesamtertrag"
+msgstr "Großbritannien VAT-Erstattung"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:169
 msgid ""
@@ -29170,9 +29147,8 @@ msgid "Rendering '~a' report ..."
 msgstr "Bericht »~a« darstellen..."
 
 #: gnucash/report/report-utilities.scm:619
-#, fuzzy
 msgid "Untitled"
-msgstr "Bis"
+msgstr "Ohne Titel"
 
 #: gnucash/report/stylesheets/css.scm:113
 msgid "CSS code. This field specifies the CSS code for styling reports."
@@ -29661,9 +29637,8 @@ msgid "Transaction Filter excludes matched strings"
 msgstr "Buchungsfilter blendet passende Zeichenketten aus"
 
 #: gnucash/report/trep-engine.scm:96
-#, fuzzy
 msgid "Transaction Filter is case insensitive"
-msgstr "Buchungsfilter blendet passende Zeichenketten aus"
+msgstr "Buchungsfilter beachtet Groß-/Kleinschreibung"
 
 #: gnucash/report/trep-engine.scm:97
 msgid "Reconcile Status"
@@ -29945,22 +29920,15 @@ msgid ""
 "e.g. '#gift' will find all transactions with #gift in description, notes or "
 "memo. It can be left blank, which will disable the filter."
 msgstr ""
-"Nur Transaktionen anzeigen, bei denen die Beschreibung, Notizen oder Vermerk "
-"mit diesem Filter übereinstimmen.\n"
-"z.B.'#gift' findet alle Transaktionen mit #gift in der Beschreibung, Notizen "
-"oder Vermerk. Es kann leer gelassen werden, wodurch der Filter deaktiviert "
-"wird."
+"Nur Transaktionen anzeigen, bei denen die Beschreibung, Bemerkung oder Buchungstext mit diesem Filter übereinstimmen.\n"
+"z.B.'#gift' findet alle Transaktionen mit #gift in der Beschreibung, Bemerkung oder Buchungstext. Es kann leer gelassen werden, wodurch der Filter deaktiviert wird."
 
 #: gnucash/report/trep-engine.scm:607
 msgid ""
 "By default the transaction filter will search substring only. Set this to "
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo. "
-msgstr ""
-"Standardmäßig sucht der Transaktionsfilter nur nach Teilstrings. Setzen Sie "
-"dies auf true, um volle POSIX-Funktionen für reguläre Ausdrücke zu "
-"ermöglichen. '#Arbeit|#Familie' passt auf beide Tags innerhalb der "
-"Beschreibung, Notizen oder Vermerke."
+msgstr "Standardmäßig sucht der Transaktionsfilter nur nach Teilstrings. Setzen Sie dies auf true, um volle POSIX-Funktionen für reguläre Ausdrücke zu ermöglichen. '#Arbeit|#Familie' passt auf beide Tags innerhalb der Beschreibung, Bemerkung oder Buchungstext."
 
 #: gnucash/report/trep-engine.scm:616
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -29969,13 +29937,10 @@ msgstr ""
 "passen."
 
 #: gnucash/report/trep-engine.scm:623
-#, fuzzy
 msgid ""
 "If this option is selected, transactions matching filter is not case "
 "sensitive."
-msgstr ""
-"Wenn aktiv, werden die Buchungen ausgeblendet, die auf den Buchungsfilter "
-"passen."
+msgstr "Wenn aktiv, wird die Groß-/Kleinschreibung bei den Buchungsfilter-Kriterien ignoriert."
 
 #: gnucash/report/trep-engine.scm:629
 msgid "Filter by reconcile status."
@@ -30083,9 +30048,8 @@ msgid "Display the transaction association"
 msgstr "Buchungsverknüpfungen anzeigen?"
 
 #: gnucash/report/trep-engine.scm:952
-#, fuzzy
 msgid "Display a subtotal summary table."
-msgstr "Zwischensalden anzeigen?"
+msgstr "Tabelle der Zwischensalden anzeigen?"
 
 #: gnucash/report/trep-engine.scm:960
 msgid "Display the trans number?"
@@ -31287,52 +31251,3 @@ msgstr "Buchung ungültig gemacht"
 #: libgnucash/tax/us/txf.scm:98
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid ""
-#~ "\n"
-#~ "Select location and file name for the Import, then click 'OK'...\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Wählen Sie Ort und Dateinamen für den Import. Dann betätigen Sie »OK«...\n"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "1/10"
-#~ msgstr "1/10"
-
-#~ msgid "1/100"
-#~ msgstr "1/100"
-
-#~ msgid "1/1000"
-#~ msgstr "1/1000"
-
-#~ msgid "1/10000"
-#~ msgstr "1/10000"
-
-#~ msgid "1/100000"
-#~ msgstr "1/100000"
-
-#~ msgid "1/1000000"
-#~ msgstr "1/1000000"
-
-#~ msgid "1/10000000"
-#~ msgstr "1/10000000"
-
-#~ msgid "1/100000000"
-#~ msgstr "1/100000000"
-
-#~ msgid "1/1000000000"
-#~ msgstr "1/1000000000"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "Path head for Associated files"
-#~ msgstr "Pfad-Anfang für Datei-Zuordnungen"
