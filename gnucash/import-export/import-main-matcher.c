@@ -802,17 +802,14 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     add_text_column (view, _("Description"), DOWNLOADED_COL_DESCRIPTION, FALSE);
     add_text_column (view, _("Memo"), DOWNLOADED_COL_MEMO, TRUE);
     add_toggle_column (view,
-                       /* toggle column: add new transaction */
-                       _("A"), DOWNLOADED_COL_ACTION_ADD,
+                       C_("Column header for 'Adding transaction'", "A"), DOWNLOADED_COL_ACTION_ADD,
                        G_CALLBACK(gnc_gen_trans_add_toggled_cb), info);
     column = add_toggle_column (view,
-            /* toggle column: update existing transaction & mark it reconciled */
-            _("U+C"), DOWNLOADED_COL_ACTION_UPDATE,
+                               C_("Column header for 'Updating plus Clearing transaction'", "U+C"), DOWNLOADED_COL_ACTION_UPDATE,
                                G_CALLBACK(gnc_gen_trans_update_toggled_cb), info);
     gtk_tree_view_column_set_visible (column, show_update);
     add_toggle_column (view,
-            /* toggle column: mark existing transaction reconciled */
-            _("C"), DOWNLOADED_COL_ACTION_CLEAR,
+                       C_("Column header for 'Clearing transaction'", "C"), DOWNLOADED_COL_ACTION_CLEAR,
                       G_CALLBACK(gnc_gen_trans_clear_toggled_cb), info);
 
     /* The last column has multiple renderers */
