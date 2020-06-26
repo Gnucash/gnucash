@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="account_cascade_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Cascade Account Values</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -400,7 +400,7 @@
     <property name="default_width">500</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -835,7 +835,7 @@
     <property name="title" translatable="yes">Filter By...</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gppat_filter_response_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -1019,24 +1019,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="show_zero">
-                    <property name="label" translatable="yes">Show _zero total accounts</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Show accounts which have a zero total value.</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="gppat_filter_show_zero_toggled_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="show_unused">
                     <property name="label" translatable="yes">Show _unused accounts</property>
                     <property name="visible">True</property>
@@ -1047,6 +1029,24 @@
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gppat_filter_show_unused_toggled_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="show_zero">
+                    <property name="label" translatable="yes">Show _zero total accounts</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Show accounts which have a zero total value.</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="gppat_filter_show_zero_toggled_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1097,34 +1097,34 @@
         <col id="0" translatable="yes">Use Commodity Value</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1</col>
+        <col id="0">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/10</col>
+        <col id="0">1/10</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/100</col>
+        <col id="0">1/100</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/1000</col>
+        <col id="0">1/1000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/10000</col>
+        <col id="0">1/10000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/100000</col>
+        <col id="0">1/100000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/1000000</col>
+        <col id="0">1/1000000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/10000000</col>
+        <col id="0">1/10000000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/100000000</col>
+        <col id="0">1/100000000</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1/1000000000</col>
+        <col id="0">1/1000000000</col>
       </row>
     </data>
   </object>
@@ -1135,7 +1135,7 @@
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="gnc_account_window_destroy_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -1926,7 +1926,7 @@
     <property name="default_width">400</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_account_renumber_response_cb" swapped="no"/>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">

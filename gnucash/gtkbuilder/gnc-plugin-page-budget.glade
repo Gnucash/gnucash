@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="DigitsToRound_Adj">
@@ -15,7 +15,7 @@
     <property name="title" translatable="yes">Edit budget for all periods</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -179,7 +179,6 @@
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">The number of leading digits to keep when rounding</property>
                 <property name="hexpand">True</property>
-                <property name="text" translatable="yes">1</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="adjustment">DigitsToRound_Adj</property>
@@ -241,7 +240,7 @@
     <property name="title" translatable="yes">Estimate Budget Values</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -423,7 +422,7 @@
     <property name="title" translatable="yes">Budget Options</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -723,7 +722,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Budget List</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -871,7 +870,7 @@
     <property name="title" translatable="yes">Budget Notes</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
