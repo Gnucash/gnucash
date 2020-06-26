@@ -470,9 +470,11 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
         if (event->button.button != 1)
             break;
 
-
         if (header->in_resize)
         {
+            if (header->resize_col_width == 0)
+                header->resize_col_width = 1;
+
             gnc_header_resize_column
                 (header,
                  header->resize_col,
