@@ -263,6 +263,9 @@ gnc_assoc_cell_set_read_only (AssocCell *cell, gboolean read_only)
 void
 gnc_assoc_cell_set_use_glyphs (AssocCell *cell)
 {
+#ifdef MAC_INTEGRATION
+    cell->use_glyphs = FALSE;
+#else 
     gboolean use_glyphs = TRUE;
     gchar *test_text;
     GtkWidget *label;
@@ -286,4 +289,5 @@ gnc_assoc_cell_set_use_glyphs (AssocCell *cell)
     g_free (test_text);
 
     cell->use_glyphs = use_glyphs;
+#endif
 }
