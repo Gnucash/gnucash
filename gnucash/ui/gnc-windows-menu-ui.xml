@@ -5,8 +5,6 @@
     <menu name="Windows" action="WindowsAction">
       <menuitem name="WindowNew"      action="WindowNewAction"/>
       <menuitem name="WindowMovePage" action="WindowMovePageAction"/>
-      <separator name="ViewSep5"/>
-      <placeholder name="WindowsLayoutPlaceholder"/>
       <separator name="ViewSep4"/>
       <menuitem name="Window0"        action="Window0Action"/>
       <menuitem name="Window1"        action="Window1Action"/>

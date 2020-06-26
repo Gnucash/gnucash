@@ -253,10 +253,6 @@ static void gnc_plugin_page_register_cmd_account_report (GtkAction* action,
                                                          GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
         GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_save_layout (GtkAction *action,
-                                                      GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_reset_layout (GtkAction *action,
-                                                       GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
                                                                 GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
@@ -519,18 +515,6 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         N_ ("Open a register report for the selected Transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report)
     },
-
-    /* Windows menu */
-    {
-        "WindowsSaveLayoutAction", NULL, "_Use as Default Layout for this Register Group", NULL,
-        N_("Use the current layout as default for all registers in the group 'Currency account registers'"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_save_layout)
-    },
-    {
-        "WindowsResetLayoutAction", NULL, "_Reset Default Layout for this Register Group", NULL,
-        N_("Reset default layout for all registers in the group 'Currency account registers' back to built-in defaults and update page accordingly"),
-        G_CALLBACK (gnc_plugin_page_register_cmd_reset_layout)
-    },
 };
 
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (
@@ -654,8 +638,6 @@ typedef struct GncPluginPageRegisterPrivate
     GNCSplitReg* gsr;
 
     GtkWidget* widget;
-
-    const gchar *page_state_name; /* Used for loading state information */
 
     gint event_handler_id;
     gint component_manager_id;
@@ -925,7 +907,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
     priv->enable_refresh    = TRUE;
     priv->search_query      = NULL;
     priv->filter_query      = NULL;
-    priv->page_state_name   = NULL;
 }
 
 static void
@@ -1220,26 +1201,6 @@ gnc_plugin_page_register_ui_update (gpointer various,
             }
         }
     }
-
-    // update the register default layouts actions
-    {
-        gboolean has_default = FALSE;
-        const gchar *group = gnc_split_reg_get_register_state_group (priv->gsr);
-        GtkAction *layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "WindowsSaveLayoutAction");
-        gchar *tt = g_strdup_printf (gettext ("Use the current layout as default for all registers in the group '%s'"), _(group));
-        gtk_action_set_tooltip (layout_action, tt);
-        g_free (tt);
-
-        layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "WindowsResetLayoutAction");
-        tt = g_strdup_printf (gettext ("Reset default layout for all registers in the group '%s' back to built-in defaults and update page accordingly"), _(group));
-        gtk_action_set_tooltip (layout_action, tt);
-        g_free (tt);
-
-        // if there is no default layout do not enable reset action
-        if (gnc_split_reg_register_has_user_state (priv->gsr))
-            has_default = TRUE;
-        gtk_action_set_sensitive (layout_action, has_default);
-    }
 }
 
 static void
@@ -1382,7 +1343,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
     gsr = gnc_split_reg_new (priv->ledger,
                              gnc_window_get_gtk_window (gnc_window),
-                             numRows, priv->read_only, priv->page_state_name);
+                             numRows, priv->read_only);
     priv->gsr = (GNCSplitReg *)gsr;
 
     gtk_widget_show (gsr);
@@ -1745,9 +1706,6 @@ gnc_plugin_page_register_save_page (GncPluginPage* plugin_page,
     g_key_file_set_boolean (key_file, group_name, KEY_DOUBLE_LINE,
                             reg->use_double_line);
 
-    // save the open table layout
-    gnc_table_save_state (reg->table, group_name);
-
     LEAVE(" ");
 }
 
@@ -1885,7 +1843,6 @@ gnc_plugin_page_register_recreate_page (GtkWidget* window,
      * sort/filter updates and double line/style changes */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     priv->enable_refresh = FALSE;
-    priv->page_state_name = group_name;
 
     /* Recreate page in given window */
     gnc_plugin_page_set_use_new_window (page, FALSE);
@@ -5009,46 +4966,6 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
     if (id >= 0)
         gnc_main_window_open_report (id, window);
     LEAVE (" ");
-}
-
-static void
-gnc_plugin_page_register_cmd_save_layout (GtkAction *action, GncPluginPageRegister *plugin_page)
-{
-    GNCSplitReg *gsr;
-    GtkAction *layout_action;
-
-    ENTER("(action %p, plugin_page %p)", action, plugin_page);
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
-
-    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(plugin_page));
-
-    gnc_split_reg_save_register_layout_to_user_state (gsr);
-
-    layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
-                                                "WindowsResetLayoutAction");
-    gtk_action_set_sensitive (layout_action, TRUE);
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_page_register_cmd_reset_layout (GtkAction *action, GncPluginPageRegister *plugin_page)
-{
-    GNCSplitReg *gsr;
-    GtkAction *layout_action;
-
-    ENTER("(action %p, plugin_page %p)", action, plugin_page);
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
-
-    gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE(plugin_page));
-
-    gnc_split_reg_reset_register_layout_and_clear_user_state (gsr);
-
-    layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
-                                                "WindowsResetLayoutAction");
-    gtk_action_set_sensitive (layout_action, FALSE);
-    LEAVE(" ");
 }
 
 /************************************************************/

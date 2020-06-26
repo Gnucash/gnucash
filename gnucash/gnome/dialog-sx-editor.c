@@ -168,7 +168,6 @@ static GtkActionEntry gnc_sxed_menu_entries [] =
     { "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
     { "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
     { "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
-    { "WindowsAction", NULL, N_("_Windows"), NULL, NULL, NULL },
 };
 static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
 
