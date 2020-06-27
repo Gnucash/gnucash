@@ -1,5 +1,30 @@
 Version history:
 ------- -------
+4.0  - 28 June 2020
+The first release of the 4.x stable series.
+
+Between 3.906 and 4.0 the following bugfixes were accomplished:
+
+    Bug 787295 - Allow UI jump from Business accounts to their relevant
+		 invoice/bill/voucher
+    Bug 797815 - Obsolete gnucash-launcher.cmd still shipped
+
+Other fixes and improvements were not associated with bug reports:
+
+    Revert the changes made to save Register default layouts as discussed
+      in PR #743
+    Setting a sheet column width to 1 when resizing by dragging
+      Column widths of 0 are not saved by the table and so revert back to
+      calculated widths when reloaded.
+    Disable showing glyphs for associations on MacOS
+   i18n: Fix missing context in single-character translated strings
+    [advanced-portfolio] move helper functions to toplevel for testing
+    [html-utilities] use ice-9 match
+    deprecations: remove functions deprecated in 3.x
+    deprecations: clarify functions deprecated in 4.x.
+
+Updated Translations: Dutch, German
+
 3.11 - 28 June 2020
 The twelfth and final release of the 3.x stable series.
 
