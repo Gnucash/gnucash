@@ -1,6 +1,81 @@
 Version history:
 ------- -------
-3.905 - 21 June 2020
+3.11 - 28 June 2020
+The twelfth and final release of the 3.x stable series.
+
+Between 3.10 and 3.11, the following bugfixes were accomplished:
+
+    Bug 782455 - Modify Add Reversing Transaction feature.
+    Bug 797114 - Fixing an SX due to deleted account stuck in an error loop
+    Bug 797351 - General ledger register transaction becomes "zombie" after
+                 deletion.
+    Bug 797648 - Cannot reconcile both splits of a transaction with 2 splits
+                 for bank account subaccounts if only 1 is cleared.
+    Bug 797659 - Liabilities in budget report no longer calculate correctly.
+                 Restores budget-3.7 behaviour for current budgets. Fixes
+                 future budget behaviour. Restore budget-3.7 headings
+                 "Income/Expense/Transfer" Renamed budget-3.7 heading Total
+                 to "Remaining".
+    Bug 797670 - scheduled transaction editor can remain open when switching
+                 file, which causes seg fault when later closed
+    Bug 797677 - Price Database Saving Wrong Price for Foreign Currency.
+    Bug 797684 - GTK_DEBUG=interactive - Bail out -
+                 gdk_window_set_cursor_internal.
+    Bug 797697 - Enable DEP and ASLR for the Windows build.
+    Bug 797707 - CSV Transaction Export: custom dates should be insensitive
+                 by default.
+    Bug 797717 - Summary bar changes height when opening a menu or scrolling
+                 over an option.
+    Bug 797737 - Import matching can match an imported transaction to an
+                 existing, previously matched transaction.
+    Bug 797748 - missing header "algorithm".
+    Bug 797750 - SIGSEV in swig-engine.c
+    Bug 797761 - Customer report beta: opening balance tax column shows garbage
+                 string.
+    Bug 797799 - Add Tip of the Day for "Notes" field
+    Bug 797811 - GnuCash crashes with segfault when saving to mysql when
+                 database already exists.
+
+Other fixes and improvements were not associated with bug reports:
+
+    [eguile-utilities] fmtnumeric displays decimal instead of fraction.
+    L12N: merge recent messages into all po files.
+    Add missing std c++ #includes into gnc-imp-settings-csv-price.cpp.
+    I18N: Improve tooltip about double-line-mode.
+    Update description of gnc_gnome_help and gnc_launch_assoc
+    Remove obsolete documentation files.
+    Move the Windows README files to gnucash-on-windows where they belong.
+    I18N: Fix several issuse with 'Help not found' strings.
+    Fix the crash that occurs when opening a new book when the
+        transaction-matching dialog has been opened then closed.
+    Display report zoom factor with one decimal space to match the paramter.
+    Invoices were setting the transaction post date to midnight local instead
+        of 10:59 UTC normalized time.
+    Add a tip about announcements and other mailing lists to the Tip of the
+        Day list.
+    Fix three problems with setting dates in the Scheduled Transaction editor:
+        * If the recurrence date is before the start date in the current month
+          the SX summary dialog would show the next occurrence in the current
+          month, before the start date.
+        * If the recurrence date is one day before the start date the calendar
+          control would incorrectly mark the first instance in the starting
+          month.
+        * Set a monthly recurrence on the 18th, with a start date on the 20th
+          and an end date on the 17 of the following month. The calendar should
+          show no mark, but fails to erase the marks that were present.
+    Improve python shell output and explanatory comments.
+    Ensure that python help displays help.
+    [fin.scm] return #f instead of -1 if n is out of range
+    Add a "Delete Budget" menu item to Actions>Budgets.
+    [gnc-exp-parser] If gnc:fn returns anything other than a number, abort
+        rather than crash.
+    [window-reconcile] Refactor common actions into WidgetSetAmount.
+    Force WITH_PYTHON=YES for distcheck to ensure that it works from the
+        tarball.
+
+Updated Translations: Croatian, Finnish, German, Hebrew, Ukrainian
+
+3.906 - 21 June 2020
 The fifth unstable release leading to the new 4.x stable series.  This is the release-candidate: Barring any serious bugs it's what we'll release as 4.0.
 
 Between 3.905 and 3.906, the following bugfixes were accomplished. Some of these will also be fixed in GnuCash 3.11, some are for 4.0 only.
@@ -44,11 +119,11 @@ these will also be fixed in GnuCash 3.11, some are for 4.0 only.
                  connected console.
     Bug 797799 - Add Tip of the Day for "Notes" field</a></li>
     Bug 797804 - Date entry field is glitchy (v3.904 regression)
-    
+
 The following fixes and improvements were not associated with bug reports or new features:
 
     Ensure balance-sheet balances do not ignore closing entries, including
-        them in closing balances from profit&loss. 
+        them in closing balances from profit&loss.
     [balsheet-pnl] value-collector doesn't need to ignore closing.
         The value-collector is only used to tally account balances for
         asset&liability accounts. These accounts never have closing entries.
@@ -497,7 +572,6 @@ The following fixes and improvements were not associated with bug reports:
     Fix failed build of python tests and failed test in 3.10 tarball.
 
 Updated Translations: Croatian, Hebrew, Ukrainian
-
 3.10 - 10 April 2020
 The eleventh release of the 3.x stable series.
 
