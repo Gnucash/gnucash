@@ -76,6 +76,7 @@
 #include "gnc-window.h"
 #include "gnc-main-window.h"
 #include "gnc-session.h"
+#include "gnc-ui.h"
 #include "gnc-warnings.h"
 #include "gnucash-sheet.h"
 #include "dialog-lot-viewer.h"
@@ -278,6 +279,7 @@ static void gnc_plugin_page_register_event_handler (QofInstance* entity,
                                                     GncEventData* ed);
 
 static GncInvoice* invoice_from_split (Split* split);
+static GList* invoices_from_transaction (Transaction* trans);
 
 /************************************************************/
 /*                          Actions                         */
@@ -1064,7 +1066,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
     GtkAction* action;
     gboolean expanded, voided, read_only = FALSE;
     Transaction* trans;
-    GncInvoice* inv;
+    GList* invoices;
     CursorClass cursor_class;
     const char* uri;
 
@@ -1146,20 +1148,13 @@ gnc_plugin_page_register_ui_update (gpointer various,
        We can determine an invoice from a txn if either
        - it is an invoice transaction
        - it has splits with an invoice associated with it
-       As payment txns can have more than one split associated
-       with an invoice, we can't tell which invoice to open based on
-       the transaction type alone (like in a bank account). However we can
-       uniquely determine an invoice from a split starting from an APAR account
-       as only those splits will have invoice information. For a more universal
-       mechanism (like to be able to display invoices from a bank account) we would
-       need user interaction which is not implemented so far. */
-    inv = invoice_from_split (gnc_split_register_get_current_split (reg));
+    */
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
                                         "JumpAssociatedInvoiceAction");
 
-    gtk_action_set_sensitive (GTK_ACTION (action),
-                                inv ||
-                                (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE));
+    invoices = invoices_from_transaction (trans);
+    gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
+    g_list_free (invoices);
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE (page));
 
@@ -4592,6 +4587,18 @@ static GncInvoice* invoice_from_split (Split* split)
     return invoice;
 }
 
+GList* invoices_from_transaction (Transaction* trans)
+{
+    GList *invoices = NULL;
+    for (GList *node = xaccTransGetAPARAcctSplitList(trans, TRUE); node;
+         node = node->next)
+    {
+        GncInvoice* inv = invoice_from_split ((Split*) node->data);
+        if (inv) invoices = g_list_prepend (invoices, inv);
+    }
+    return invoices;
+}
+
 static void
 gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
                                                       GncPluginPageRegister* plugin_page)
@@ -4608,10 +4615,49 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
     reg = gnc_ledger_display_get_split_register (priv->gsr->ledger);
     txn = gnc_split_register_get_current_trans (reg);
     invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
-    if (xaccTransGetTxnType (txn) == TXN_TYPE_INVOICE)
-        invoice = invoice_from_split (xaccTransGetFirstAPARAcctSplit (txn, TRUE));
-    else
-        invoice = invoice_from_split (gnc_split_register_get_current_split (reg));
+
+    if (!invoice)
+    {
+        GList *invoices = invoices_from_transaction (txn);
+        if (!invoices)
+            PERR ("shouldn't happen: if no invoices, function is never called");
+        else if (!invoices->next)
+            invoice = (GncInvoice*) invoices->data;
+        else
+        {
+            GList *details = NULL;
+            gint choice;
+            const gchar *amt;
+            for (GList *node = invoices; node; node = node->next)
+            {
+                GncInvoice* inv = node->data;
+                gchar *date = qof_print_date (gncInvoiceGetDatePosted (inv));
+                amt = xaccPrintAmount
+                    (gncInvoiceGetTotal (inv),
+                     gnc_account_print_info (gncInvoiceGetPostedAcc (inv), TRUE));
+                details = g_list_prepend
+                    (details,
+                     /* Translators: %s refer to the following in
+                        order: invoice type, invoice ID, owner name,
+                        posted date, amount */
+                     g_strdup_printf (_("%s %s from %s, posted %s, amount %s"),
+                                      gncInvoiceGetTypeString (inv),
+                                      gncInvoiceGetID (inv),
+                                      gncOwnerGetName (gncInvoiceGetOwner (inv)),
+                                      date, amt));
+                g_free (date);
+            }
+            details = g_list_reverse (details);
+            choice = gnc_choose_radio_option_dialog
+                (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select invoice"),
+                 _("Several invoices are associated with this transaction. \
+Please choose one:"), _("Select"), 0, details);
+            if (choice >= 0)
+                invoice = (GncInvoice *)(g_list_nth (invoices, choice))->data;
+            g_list_free_full (details, g_free);
+        }
+        g_list_free (invoices);
+    }
 
     if (invoice)
         gnc_ui_invoice_edit (NULL, invoice);
