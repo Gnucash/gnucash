@@ -282,7 +282,7 @@ by preventing negative stock balances.<br/>")
          basis-method prefer-pricelist handle-brokerage-fees
          total-basis total-value
          total-moneyin total-moneyout total-income total-gain
-         total-ugain total-brokerage share-print-info)
+         total-ugain total-brokerage share-print-info warnings)
 
   (define work-to-do 0)
 
@@ -790,8 +790,8 @@ by preventing negative stock balances.<br/>")
                 ;; If we're using the txn, warn the user
                 (if use-txn
                     (if pricing-txn
-                        (set! warn-price-dirty #t)
-                        (set! warn-no-price #t)
+                        (hashq-set! warnings 'warn-price-dirty #t)
+                        (hashq-set! warnings 'warn-no-price #t)
                         ))
 
                 (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
@@ -881,8 +881,8 @@ by preventing negative stock balances.<br/>")
 
 (define (advanced-portfolio-renderer report-obj)
 
- (let ((warn-no-price #f)
-       (warn-price-dirty #f))
+  ;; report-warnings hash-table.
+  (define warnings (make-hash-table))
 
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
@@ -1062,7 +1062,7 @@ by preventing negative stock balances.<br/>")
                prefer-pricelist handle-brokerage-fees
                total-basis total-value total-moneyin total-moneyout
                total-income total-gain total-ugain total-brokerage
-               share-print-info))
+               share-print-info warnings))
             (lambda (k reason)
               (gnc:html-document-add-object!
                document (format #f OVERFLOW-ERROR reason))))
@@ -1142,15 +1142,15 @@ by preventing negative stock balances.<br/>")
             )
 
           (gnc:html-document-add-object! document table)
-          (if warn-price-dirty
+          (if (hashq-ref warnings 'warn-price-dirty)
               (gnc:html-document-append-objects! document
                                                  (list (gnc:make-html-text (_ "* this commodity data was built using transaction pricing instead of the price list."))
 						       (gnc:make-html-text (gnc:html-markup-br))
 						       (gnc:make-html-text (_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
 
-          (if warn-no-price
+          (if (hashq-ref warnings 'warn-no-price)
               (gnc:html-document-append-objects! document
-                                                 (list (gnc:make-html-text (if warn-price-dirty (gnc:html-markup-br) ""))
+                                                 (list (gnc:make-html-text (if (hashq-ref warnings 'warn-price-dirty) (gnc:html-markup-br) ""))
                                                        (gnc:make-html-text (_ "** this commodity has no price and a price of 1 has been used.")))))
 )
 
@@ -1161,7 +1161,7 @@ by preventing negative stock balances.<br/>")
 	  report-title (gnc:report-id report-obj))))
 
     (gnc:report-finished)
-    document)))
+    document))
 
 (gnc:define-report
  'version 1
