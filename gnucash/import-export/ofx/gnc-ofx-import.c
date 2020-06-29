@@ -1252,6 +1252,10 @@ void gnc_file_ofx_import (GtkWindow *parent)
         info = g_new(ofx_info,1);
         info->num_trans_processed = 0;
         info->statement = NULL;
+        info->last_investment_account = NULL;
+        info->last_import_account = NULL;
+        info->last_income_account = NULL;
+        info->created_commodites = NULL;
         info->parent = parent;
         info->run_reconcile = FALSE;
         info->file_list = selected_filenames;
