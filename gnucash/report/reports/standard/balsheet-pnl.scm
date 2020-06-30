@@ -670,22 +670,6 @@ also show overall period profit & loss."))
                          cols-data)))
   (add-whole-line #f))
 
-(define (monetary-less . monetaries)
-  ;; syntax: (monetary-less mon0 mon1 mon2 ...)
-  ;; equiv:  (- mon0 mon1 mon2 ...)
-  ;; this works only if all monetaries have the same commodity
-  (let ((res (gnc:make-commodity-collector)))
-    (res 'add (gnc:gnc-monetary-commodity (car monetaries))
-         (gnc:gnc-monetary-amount (car monetaries)))
-    (for-each
-     (lambda (mon)
-       (res 'add (gnc:gnc-monetary-commodity mon) (- (gnc:gnc-monetary-amount mon))))
-     (cdr monetaries))
-    (let ((reslist (res 'format gnc:make-gnc-monetary #f)))
-      (if (null? (cdr reslist))
-          (car reslist)
-          (gnc:error "monetary-less: 1 commodity only" monetaries)))))
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; multicol-report-renderer
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1178,9 +1162,9 @@ also show overall period profit & loss."))
               (lambda (account col-idx)
                 (let* ((balances (assoc-ref accounts-balances account))
                        (monetarypair (col-idx->monetarypair balances col-idx)))
-                  (monetary-less
+                  (gnc:monetary+
                    (cdr monetarypair)
-                   (car monetarypair)))))
+                   (gnc:monetary-neg (car monetarypair))))))
 
              (get-cell-anchor-fn
               (lambda (account col-idx)
