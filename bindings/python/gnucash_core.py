@@ -45,7 +45,9 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
     gncVendorNextID, gncTaxTableGetTables, gnc_numeric_zero, \
     gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
-    gnc_numeric_to_string
+    gnc_numeric_to_string, \
+    SESSION_NORMAL_OPEN, SESSION_NEW_STORE, SESSION_NEW_OVERWRITE, \
+    SESSION_READ_ONLY, SESSION_BREAK_LOCK
 
 try:
     import gettext
@@ -67,6 +69,17 @@ except:
 
     import builtins
     builtins.__dict__['_'] = _
+
+class Default:
+
+    def __repr__(self):
+        return self.value.__repr__()
+
+    def __init__(self, value):
+        self.value = value
+
+def _encode_session_open_mode (ignore_lock, is_new, force_new):
+    return (bool(ignore_lock) << 2) + (bool(is_new) << 1) + (bool(force_new) << 0)
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -96,8 +109,9 @@ class Session(GnuCashCoreClass):
     Invoice..) is associated with a particular book where it is stored.
     """
 
-    def __init__(self, book_uri=None, ignore_lock=False, is_new=False,
-                 force_new=False, instance=None):
+    def __init__(self, book_uri=None, ignore_lock=Default(False), is_new=Default(False),
+                 force_new=Default(False), instance=None,
+                 open_mode=Default(SESSION_NORMAL_OPEN)):
         """A convenient constructor that allows you to specify a book URI,
         begin the session, and load the book.
 
@@ -121,14 +135,24 @@ class Session(GnuCashCoreClass):
         wrapper for an existing session instance
 
 
-        This function can raise a GnuCashBackendException. If it does,
+        This function can raise a GnuCashBackendException or ValueError. If it does,
         you don't need to cleanup and call end() and destroy(), that is handled
         for you, and the exception is raised.
         """
         GnuCashCoreClass.__init__(self, Book())
         if book_uri is not None:
+            if ignore_lock is self.__init__.__defaults__[1] and \
+               is_new      is self.__init__.__defaults__[2] and \
+               force_new   is self.__init__.__defaults__[3]:
+                open_mode = int(open_mode)
+            elif open_mode is self.__init__.__defaults__[5]:
+                open_mode = _encode_session_open_mode(ignore_lock, is_new, force_new)
+            elif open_mode != _encode_session_open_mode(ignore_lock, is_new, force_new):
+                raise ValueError(
+                    f"Inconsistent combination of parameter values ignore_lock={ignore_lock}"
+                    f", is_new={is_new}, force_new={force_new}, open_mode={open_mode}")
             try:
-                self.begin(book_uri, ignore_lock, is_new, force_new)
+                self.begin(book_uri, open_mode)
                 # Take care of backend inconsistency
                 # New xml file can't be loaded, new sql store
                 # has to be loaded before it can be altered
