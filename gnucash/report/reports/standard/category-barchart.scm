@@ -495,10 +495,11 @@ developing over time"))
            (and (not (null? all-data))
                 (not-all-zeros  (map cadr all-data)))
 
-           (let ((dates-list (if do-intervals?
-                                 (list-head dates-list (1- (length dates-list)))
-                                 dates-list))
-                 (date-string-list (map qof-print-date dates-list)))
+           (let* ((dates-list (if do-intervals?
+                                  (list-head dates-list (1- (length dates-list)))
+                                  dates-list))
+                  (date-string-list (map qof-print-date dates-list)))
+
              ;; Set chart title, subtitle etc.
 
              (gnc:html-chart-set-type!
