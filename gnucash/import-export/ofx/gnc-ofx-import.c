@@ -75,11 +75,8 @@ typedef struct _ofx_info
     gint num_trans_processed;               // Number of transactions processed
     struct OfxStatementData* statement;     // Statement, if any
     gboolean run_reconcile;                 // If TRUE the reconcile window is opened after matching.
-    GList *created_commodites;
     GSList* file_list;                      // List of OFX files to import
 } ofx_info ;
-
-GList *ofx_created_commodites = NULL;
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -290,8 +287,6 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
             /* Remember the commodity */
             gnc_commodity_table_insert(gnc_get_current_commodities(), commodity);
 
-            /* Remember this new commodity for us as well */
-            info->created_commodites = g_list_prepend(info->created_commodites, commodity);
 	    g_free (commodity_namespace);
 
         }
@@ -1074,18 +1069,6 @@ gnc_ofx_process_next_file (GtkDialog *dialog, gpointer user_data)
     {
         // Final cleanup.
         g_free (info);
-        if (ofx_created_commodites)
-        {
-            /* FIXME: Present some result window about the newly created
-             * commodities */
-            g_warning ("Created %d new commodities during import", g_list_length(ofx_created_commodites));
-            g_list_free (ofx_created_commodites);
-            ofx_created_commodites = NULL;
-        }
-        else
-        {
-            //g_warning("No new commodities created");
-        }
     }
 }
 
@@ -1255,7 +1238,6 @@ void gnc_file_ofx_import (GtkWindow *parent)
         info->last_investment_account = NULL;
         info->last_import_account = NULL;
         info->last_income_account = NULL;
-        info->created_commodites = NULL;
         info->parent = parent;
         info->run_reconcile = FALSE;
         info->file_list = selected_filenames;
