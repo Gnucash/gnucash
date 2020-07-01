@@ -189,7 +189,7 @@
                                                                      (cons 'labelString "")))
                                                   (cons 'ticks (list
                                                                 (cons 'fontSize 10)
-                                                                (cons 'beginAtZero #t))))
+                                                                (cons 'beginAtZero #f))))
                                                  ;; the following another yAxis on the right
                                                  '((position . right)
                                                    (ticks . ((display . #f)))
