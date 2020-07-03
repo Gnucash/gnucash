@@ -905,7 +905,7 @@ Account *gnc_account_lookup_by_name (const Account *parent, const char *name);
 Account *gnc_account_lookup_by_full_name (const Account *any_account,
         const gchar *name);
 
-/** The gnc_account_lookup_full_name() subroutine works like
+/** The gnc_account_lookup_by_code() subroutine works like
  *  gnc_account_lookup_by_name, but uses the account code.
  */
 Account *gnc_account_lookup_by_code (const Account *parent,
