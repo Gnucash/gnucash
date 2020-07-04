@@ -169,7 +169,7 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  * flag on the book that will prevent many elements from being edited and will
  * prevent the backend from saving any edits.
  * @par
- * `SESSION_OVERWRITE`: Create a new file or database at the provided uri,
+ * `SESSION_NEW_OVERWRITE`: Create a new file or database at the provided uri,
  * deleting any existing file or database.
  * @par
  * `SESSION_BREAK_LOCK`: Find an existing file or database, lock it, and open
