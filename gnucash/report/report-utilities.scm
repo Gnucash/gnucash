@@ -230,14 +230,11 @@
     ;; helper function to add a (commodity . value) pair to our list.
     ;; If no pair with this commodity exists, we will create one.
     (define (add-commodity-value commodity value)
-      (let ((pair (assoc commodity commoditylist))
-            (rvalue (gnc-numeric-convert
-                     value
-                     (gnc-commodity-get-fraction commodity) GNC-RND-ROUND)))
+      (let ((pair (assoc commodity commoditylist)))
 	(unless pair
 	  (set! pair (list commodity (gnc:make-value-collector)))
 	  (set! commoditylist (cons pair commoditylist)))
-	((cadr pair) 'add rvalue)))
+	((cadr pair) 'add value)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity . collector) pair to our list at the appropriate
