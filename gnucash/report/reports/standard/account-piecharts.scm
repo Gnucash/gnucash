@@ -418,30 +418,30 @@ balance at a given time"))
            (other-anchor "")
            (print-info (gnc-commodity-print-info report-currency #t)))
 
-      ;; Converts a commodity-collector into one single double
+      ;; Converts a commodity-collector into one single inexact
       ;; number, depending on the report's currency and the
       ;; exchange-fn calculated above. Returns the absolute value
-      ;; as double, multiplied by the averaging-multiplies (smaller
-      ;; than one; multiplication instead of division to avoid
-      ;; division-by-zero issues) in case the user wants to see the
-      ;; amounts averaged over some value.
-      (define (collector->double c)
+      ;; multiplied by the averaging-multiplier (smaller than one;
+      ;; multiplication instead of division to avoid division-by-zero
+      ;; issues) in case the user wants to see the amounts averaged
+      ;; over some value.
+      (define (collector->amount c)
         ;; Future improvement: Let the user choose which kind of
         ;; currency combining she want to be done. Right now
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the average
         ;; cost of all holdings.
-        (*
-         (gnc:gnc-monetary-amount
-          (gnc:sum-collector-commodity
-           c report-currency
-           exchange-fn))
-         averaging-multiplier))
+        (gnc-numeric-convert
+         (* (gnc:gnc-monetary-amount
+             (gnc:sum-collector-commodity c report-currency exchange-fn))
+            averaging-multiplier)
+         (gnc-commodity-get-fraction report-currency)
+         GNC-RND-ROUND))
 
-      ;; Get balance of an account as double number, already converted
-      ;; to the report's currency.
+      ;; Get balance of an account as an inexact number converted to,
+      ;; and using precision of the report's currency.
       (define (account-balance a subaccts?)
-        (collector->double (profit-fn a subaccts?)))
+        (collector->amount (profit-fn a subaccts?)))
 
       (define (count-accounts current-depth accts)
 	(if (< current-depth tree-depth)
