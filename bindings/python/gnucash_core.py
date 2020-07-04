@@ -184,7 +184,7 @@ class Session(GnuCashCoreClass):
         @note SessionOpenMode replaces deprecated ignore_lock, is_new and force_new.
 
         @par SessionOpenMode
-        `SESSION_NORMAL`: Find an existing file or database at the provided uri and
+        `SESSION_NORMAL_OPEN`: Find an existing file or database at the provided uri and
         open it if it is unlocked. If it is locked post a QOF_BACKEND_LOCKED error.
         @par
         `SESSION_NEW_STORE`: Check for an existing file or database at the provided
@@ -196,7 +196,7 @@ class Session(GnuCashCoreClass):
         flag on the book that will prevent many elements from being edited and will
         prevent the backend from saving any edits.
         @par
-        `SESSION_OVERWRITE`: Create a new file or database at the provided uri,
+        `SESSION_NEW_OVERWRITE`: Create a new file or database at the provided uri,
         deleting any existing file or database.
         @par
         `SESSION_BREAK_LOCK`: Find an existing file or database, lock it, and open
