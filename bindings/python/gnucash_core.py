@@ -191,13 +191,13 @@ class Session(GnuCashCoreClass):
         uri and if none is found, create it. If the file or database exists post a
         QOF_BACKED_STORE_EXISTS and return.
         @par
+        `SESSION_NEW_OVERWRITE`: Create a new file or database at the provided uri,
+        deleting any existing file or database.
+        @par
         `SESSION_READ_ONLY`: Find an existing file or database and open it without
         disturbing the lock if it exists or setting one if not. This will also set a
         flag on the book that will prevent many elements from being edited and will
         prevent the backend from saving any edits.
-        @par
-        `SESSION_NEW_OVERWRITE`: Create a new file or database at the provided uri,
-        deleting any existing file or database.
         @par
         `SESSION_BREAK_LOCK`: Find an existing file or database, lock it, and open
         it. If there is already a lock replace it with a new one for this session.
