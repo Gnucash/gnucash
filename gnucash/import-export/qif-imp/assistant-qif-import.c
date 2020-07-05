@@ -1590,7 +1590,7 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 
         /* See if the file is already loaded. */
         if (scm_call_2 (qif_file_loaded,
-                        scm_from_locale_string (path_to_load ? path_to_load : ""),
+                        scm_from_utf8_string (path_to_load ? path_to_load : ""),
                         wind->imported_files) == SCM_BOOL_T)
             gnc_error_dialog (GTK_WINDOW(assistant), "%s",
                               _("That QIF file is already loaded. "
@@ -1802,7 +1802,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     gnc_progress_dialog_push (wind->load_progress, 0.7);
     load_return = scm_call_5 (qif_file_load,
                               SCM_CAR(imported_files),
-                              scm_from_locale_string (path_to_load ? path_to_load : ""),
+                              scm_from_utf8_string (path_to_load ? path_to_load : ""),
                               wind->ticker_map,
                               progress,
                               scm_from_utf8_string (qif_encoding));
@@ -3572,6 +3572,14 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     }
 }
 
+inline static GtkWidget*
+make_encoding_widget (GObject* container)
+{
+    GtkWidget* encoding_widget = go_charmap_sel_new (GO_CHARMAP_SEL_TO_UTF8);
+    gtk_container_add (GTK_CONTAINER (container), encoding_widget);
+    return encoding_widget;
+}
+
 
 /********************************************************************
  * get_assistant_widgets
@@ -3581,16 +3589,14 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
 static void
 get_assistant_widgets (QIFImportWindow *wind, GtkBuilder *builder)
 {
+    GtkWidget *enc_con = GTK_WIDGET (gtk_builder_get_object (builder, "encoding_container"));
+
     g_return_if_fail (wind);
     g_return_if_fail (builder);
 
     wind->window             = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_assistant"));
     wind->filename_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_filename_entry"));
-    {
-        GtkWidget *enc_con = GTK_WIDGET (gtk_builder_get_object (builder, "encoding_container"));
-        wind->qif_encoding = go_charmap_sel_new (GO_CHARMAP_SEL_TO_UTF8);
-        gtk_container_add (GTK_CONTAINER (enc_con), wind->qif_encoding);
-    }
+    wind->qif_encoding       = make_encoding_widget (gtk_builder_get_object (builder, "encoding_container"));
     wind->load_pause         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_pause"));
     wind->load_start         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_start"));
     wind->load_log           = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_log"));

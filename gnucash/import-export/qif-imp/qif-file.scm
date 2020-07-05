@@ -527,8 +527,9 @@
       (let ((msg (string-append
                   (case key
                     ((decoding-error)
-                     (format #f (_ "Invalid charset ~a specified.") encoding))
-                    ((system-error) (_ "I/O system error. Try again."))
+                     (format #f (G_ "The file contains characters that are not \
+part of charset ~a. Please choose a different one.") encoding))
+                    ((system-error) (G_ "I/O system error. Try again."))
                     (else (format #f "~a: ~s" key rest)))
                   "\n")))
         (gnc-progress-dialog-append-log progress-dialog msg)

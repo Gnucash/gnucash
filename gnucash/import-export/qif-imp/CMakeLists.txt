@@ -6,19 +6,10 @@ set (qif_import_SOURCES
     dialog-account-picker.c
     assistant-qif-import.c
     gnc-plugin-qif-import.c
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.c
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.c
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.c
 )
-
-set (qif_import_remote_HEADERS
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.h
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.h
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.h
-  )
-
-set (qif_import_remote_SOURCES
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.c
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.c
-  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.c
-  )
 
 # Add dependency on config.h
 set_source_files_properties (${qif_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
@@ -27,15 +18,12 @@ set (qif_import_noinst_HEADERS
     dialog-account-picker.h
     assistant-qif-import.h
     gnc-plugin-qif-import.h
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.h
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.h
+    ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.h
 )
 
-add_library (gnc-qif-import
-  ${qif_import_noinst_HEADERS}
-  ${qif_import_remote_HEADERS}
-  ${qif_import_HEADERS}
-  ${qif_import_remote_SOURCES}
-  ${qif_import_SOURCES}
-)
+add_library	(gnc-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
 
 target_link_libraries(gnc-qif-import
     gnc-app-utils
