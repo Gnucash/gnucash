@@ -1,7 +1,7 @@
 
 set(cmake_FILES
   GncAddGSchemaTargets.cmake GncAddSchemeTargets.cmake
-  GncAddSwigCommand.cmake GncAddTest.cmake
+  GncAddSwigCommand.cmake GncAddTest.cmake GncFindLibm.cmake
   MacroAddSourceFileCompileFlags.cmake MacroAppendForeach.cmake
   MakeDist.cmake MakeDistFiles.cmake MakeDistCheck.cmake
   )

@@ -1,6 +1,9 @@
 # NB: Unit tests which require GSchemas should be made conditional on COMPILE_GSCHEMAS.
 add_subdirectory(test)
 add_subdirectory(mocks)
+
+include (GncFindLibm)
+
 # Build the library
 
 set (app_utils_noinst_HEADERS
@@ -67,9 +70,14 @@ set (app_utils_SOURCES
   gnc-ui-util.c
   gnc-ui-balances.c
   option-util.c
-)
+  )
 
 set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
+gnc_check_standard_math_library()
+if (NOT STANDARD_MATH_LIBRARY_FOUND)
+  message(FATAL_ERROR "An implementation of the standard C function pow() is required and is supported neither by the C runtime nor libm.so.")
+endif()
 
 set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
 set(app_utils_ALL_LIBRARIES
@@ -78,7 +86,10 @@ set(app_utils_ALL_LIBRARIES
     gnucash-guile
     ${GIO_LDFLAGS}
     ${LIBXML2_LDFLAGS}
-    ${LIBXSLT_LDFLAGS})
+    ${LIBXSLT_LDFLAGS}
+    ${STANDARD_MATH_LIBRARY}
+)
+
 set(app_utils_ALL_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/calculation
     ${GIO_INCLUDE_DIRS}
