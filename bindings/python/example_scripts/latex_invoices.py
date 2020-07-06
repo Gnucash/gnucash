@@ -57,112 +57,127 @@ try:
     import str_methods
     from gncinvoicefkt import *
     from IPython import version_info as IPython_version_info
-    if IPython_version_info[0]>=1:
+
+    if IPython_version_info[0] >= 1:
         from IPython.terminal.ipapp import TerminalIPythonApp
     else:
         from IPython.frontend.terminal.ipapp import TerminalIPythonApp
-    from gnucash.gnucash_business import Customer, Employee, Vendor, Job, \
-        Address, Invoice, Entry, TaxTable, TaxTableEntry, GNC_AMT_TYPE_PERCENT, \
-            GNC_DISC_PRETAX
+    from gnucash.gnucash_business import (
+        Customer,
+        Employee,
+        Vendor,
+        Job,
+        Address,
+        Invoice,
+        Entry,
+        TaxTable,
+        TaxTableEntry,
+        GNC_AMT_TYPE_PERCENT,
+        GNC_DISC_PRETAX,
+    )
+    from gnucash import SessionOpenMode
     import locale
 except ImportError as import_error:
     print("Problem importing modules.")
     print(import_error)
     sys.exit(2)
 
+
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
 
+
 def invoice_to_lco(invoice):
-  """returns a string which forms a lco-file for use with LaTeX"""
+    """returns a string which forms a lco-file for use with LaTeX"""
 
-  lco_out=u"\ProvidesFile{data.lco}[]\n"
+    lco_out = u"\ProvidesFile{data.lco}[]\n"
 
-  def write_variable(ukey, uvalue, replace_linebreak=True):
+    def write_variable(ukey, uvalue, replace_linebreak=True):
 
-    outstr = u""
-    if uvalue.endswith("\n"):
-        uvalue=uvalue[0:len(uvalue)-1]
+        outstr = u""
+        if uvalue.endswith("\n"):
+            uvalue = uvalue[0 : len(uvalue) - 1]
 
-    if not ukey in [u"fromaddress",u"toaddress",u"date"]:
-        outstr += u'\\newkomavar{'
+        if not ukey in [u"fromaddress", u"toaddress", u"date"]:
+            outstr += u"\\newkomavar{"
+            outstr += ukey
+            outstr += u"}\n"
+
+        outstr += u"\\setkomavar{"
         outstr += ukey
-        outstr += u"}\n"
+        outstr += u"}{"
+        if replace_linebreak:
+            outstr += uvalue.replace(u"\n", u"\\\\") + "}"
+        return outstr
 
-    outstr += u"\\setkomavar{"
-    outstr += ukey
-    outstr += u"}{"
-    if replace_linebreak:
-        outstr += uvalue.replace(u"\n",u"\\\\")+"}"
-    return outstr
+    # Write owners address
+    add_str = u""
+    owner = invoice.GetOwner()
+    if owner.GetName() != "":
+        add_str += owner.GetName().decode("UTF-8") + "\n"
 
-  # Write owners address
-  add_str=u""
-  owner = invoice.GetOwner()
-  if owner.GetName() != "":
-    add_str += owner.GetName().decode("UTF-8")+"\n"
+    addr = owner.GetAddr()
+    if addr.GetName() != "":
+        add_str += addr.GetName().decode("UTF-8") + "\n"
+    if addr.GetAddr1() != "":
+        add_str += addr.GetAddr1().decode("UTF-8") + "\n"
+    if addr.GetAddr2() != "":
+        add_str += addr.GetAddr2().decode("UTF-8") + "\n"
+    if addr.GetAddr3() != "":
+        add_str += addr.GetAddr3().decode("UTF-8") + "\n"
+    if addr.GetAddr4() != "":
+        add_str += addr.GetAddr4().decode("UTF-8") + "\n"
 
-  addr  = owner.GetAddr()
-  if addr.GetName() != "":
-    add_str += addr.GetName().decode("UTF-8")+"\n"
-  if addr.GetAddr1() != "":
-    add_str += addr.GetAddr1().decode("UTF-8")+"\n"
-  if addr.GetAddr2() != "":
-    add_str += addr.GetAddr2().decode("UTF-8")+"\n"
-  if addr.GetAddr3() != "":
-    add_str += addr.GetAddr3().decode("UTF-8")+"\n"
-  if addr.GetAddr4() != "":
-    add_str += addr.GetAddr4().decode("UTF-8")+"\n"
+    lco_out += write_variable("toaddress2", add_str)
 
-  lco_out += write_variable("toaddress2",add_str)
+    # Invoice number
+    inr_str = invoice.GetID()
+    lco_out += write_variable("rechnungsnummer", inr_str)
 
-  # Invoice number
-  inr_str = invoice.GetID()
-  lco_out += write_variable("rechnungsnummer",inr_str)
+    # date
+    date = invoice.GetDatePosted()
+    udate = date.strftime("%d.%m.%Y")
+    lco_out += write_variable("date", udate) + "\n"
 
-  # date
-  date      = invoice.GetDatePosted()
-  udate     = date.strftime("%d.%m.%Y")
-  lco_out  += write_variable("date",udate)+"\n"
+    # date due
+    date_due = invoice.GetDateDue()
+    udate_due = date_due.strftime("%d.%m.%Y")
+    lco_out += write_variable("date_due", udate_due) + "\n"
 
-  # date due
-  date_due  = invoice.GetDateDue()
-  udate_due = date_due.strftime("%d.%m.%Y")
-  lco_out  += write_variable("date_due",udate_due)+"\n"
+    # Write the entries
+    ent_str = u""
+    locale.setlocale(locale.LC_ALL, "de_DE")
+    for n, ent in enumerate(invoice.GetEntries()):
 
+        line_str = u""
 
-  # Write the entries
-  ent_str = u""
-  locale.setlocale(locale.LC_ALL,"de_DE")
-  for n,ent in enumerate(invoice.GetEntries()):
+        if type(ent) != Entry:
+            ent = Entry(instance=ent)  # Add to method_returns_list
 
-      line_str = u""
+        descr = ent.GetDescription()
+        price = ent.GetInvPrice().to_double()
+        n = ent.GetQuantity()
 
-      if type(ent) != Entry:
-        ent=Entry(instance=ent)                                 # Add to method_returns_list
+        uprice = locale.currency(price).rstrip(" EUR")
+        un = unicode(
+            int(float(n.num()) / n.denom())
+        )  # choose best way to format numbers according to locale
 
-      descr = ent.GetDescription()
-      price = ent.GetInvPrice().to_double()
-      n     = ent.GetQuantity()
+        line_str = u"\Artikel{"
+        line_str += un
+        line_str += u"}{"
+        line_str += descr.decode("UTF-8")
+        line_str += u"}{"
+        line_str += uprice
+        line_str += u"}"
 
-      uprice = locale.currency(price).rstrip(" EUR")
-      un = unicode(int(float(n.num())/n.denom()))               # choose best way to format numbers according to locale
+        # print(line_str)
+        ent_str += line_str
 
-      line_str =  u"\Artikel{"
-      line_str += un
-      line_str += u"}{"
-      line_str += descr.decode("UTF-8")
-      line_str += u"}{"
-      line_str += uprice
-      line_str += u"}"
+    lco_out += write_variable("entries", ent_str)
 
-      #print(line_str)
-      ent_str += line_str
-
-  lco_out += write_variable("entries",ent_str)
-
-  return lco_out
+    return lco_out
 
 
 def main(argv=None):
@@ -180,20 +195,20 @@ def main(argv=None):
         try:
             opts, args = getopt.getopt(argv[1:], "fhiln:po:", ["help"])
         except getopt.error as msg:
-             raise Usage(msg)
+            raise Usage(msg)
 
         for opt in opts:
             if opt[0] in ["-f"]:
                 print("ignoring lock")
                 ignore_lock = True
-            if opt[0] in ["-h","--help"]:
+            if opt[0] in ["-h", "--help"]:
                 raise Usage("Help:")
             if opt[0] in ["-i"]:
                 print("Using ipshell")
                 with_ipshell = True
             if opt[0] in ["-l"]:
                 print("listing all invoices")
-                list_invoices=True
+                list_invoices = True
             if opt[0] in ["-n"]:
                 invoice_number = int(opt[1])
                 print("using invoice number", invoice_number)
@@ -201,25 +216,25 @@ def main(argv=None):
             if opt[0] in ["-o"]:
                 output_file_name = opt[1]
                 print("using output file", output_file_name)
-        if len(args)>1:
-            print("opts:",opts,"args:",args)
+        if len(args) > 1:
+            print("opts:", opts, "args:", args)
             raise Usage("Only one input can be accepted !")
-        if len(args)==0:
+        if len(args) == 0:
             raise Usage("No input given !")
         input_url = args[0]
     except Usage as err:
         if err.msg == "Help:":
-            retcode=0
+            retcode = 0
         else:
             print("Error:", err.msg, file=sys.stderr)
             print("for help use --help", file=sys.stderr)
-            retcode=2
+            retcode = 2
 
         print("Generate a LaTeX invoice or print out all invoices.")
         print()
         print("Usage:")
         print()
-        print("Invoke with",prog_name,"input.")
+        print("Invoke with", prog_name, "input.")
         print("where input is")
         print("   filename")
         print("or file://filename")
@@ -236,7 +251,12 @@ def main(argv=None):
 
     # Try to open the given input
     try:
-        session = gnucash.Session(input_url,ignore_lock=ignore_lock)
+        session = gnucash.Session(
+            input_url,
+            SessionOpenMode.SESSION_READ_ONLY
+            if ignore_lock
+            else SessionOpenMode.SESSION_NORMAL_OPEN,
+        )
     except Exception as exception:
         print("Problem opening input.")
         print(exception)
@@ -247,39 +267,39 @@ def main(argv=None):
     comm_table = book.get_table()
     EUR = comm_table.lookup("CURRENCY", "EUR")
 
-    invoice_list=get_all_invoices(book)
+    invoice_list = get_all_invoices(book)
 
     if list_invoices:
-        for number,invoice in enumerate(invoice_list):
-            print(str(number)+")")
+        for number, invoice in enumerate(invoice_list):
+            print(str(number) + ")")
             print(invoice)
 
     if not (no_latex_output):
 
         if invoice_number == None:
             print("Using the first invoice:")
-            invoice_number=0
+            invoice_number = 0
 
-        invoice=invoice_list[invoice_number]
+        invoice = invoice_list[invoice_number]
         print("Using the following invoice:")
         print(invoice)
 
-        lco_str=invoice_to_lco(invoice)
+        lco_str = invoice_to_lco(invoice)
 
         # Opening output file
-        f=open(output_file_name,"w")
-        lco_str=lco_str.encode("latin1")
+        f = open(output_file_name, "w")
+        lco_str = lco_str.encode("latin1")
         f.write(lco_str)
         f.close()
 
     if with_ipshell:
         app = TerminalIPythonApp.instance()
-        app.initialize(argv=[]) # argv=[] instructs IPython to ignore sys.argv
+        app.initialize(argv=[])  # argv=[] instructs IPython to ignore sys.argv
         app.start()
 
-    #session.save()
+    # session.save()
     session.end()
+
 
 if __name__ == "__main__":
     sys.exit(main())
-

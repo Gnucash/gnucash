@@ -3,11 +3,12 @@
 # @brief Creates a basic set of accounts and a couple of transactions
 # @ingroup python_bindings_examples
 
-from gnucash import Session, Account, Transaction, Split, GncNumeric
+from gnucash import (
+        Session, Account, Transaction, Split, GncNumeric, SessionOpenMode)
 
 FILE_1 = "/tmp/example.gnucash"
 
-with Session("xml://%s" % FILE_1, is_new=True) as session:
+with Session("xml://%s" % FILE_1, SessionOpenMode.SESSION_NEW_STORE) as session:
 
     book = session.book
     root_acct = Account(book)

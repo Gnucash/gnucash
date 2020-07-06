@@ -5,13 +5,13 @@
 #   @ingroup python_bindings_examples
 
 import sys
-from gnucash import Session
+from gnucash import Session, SessionOpenMode
 
 # We need to tell GnuCash the data format to create the new file as (xml://)
 uri = "xml:///tmp/simple_book.gnucash"
 
 print("uri:", uri)
-with Session(uri, is_new=True) as ses:
+with Session(uri, SessionOpenMode.SESSION_NEW_STORE) as ses:
     book = ses.get_book()
 
     #Call some methods that produce output to show that Book works

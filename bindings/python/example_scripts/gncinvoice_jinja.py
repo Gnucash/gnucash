@@ -39,14 +39,17 @@ try:
     import str_methods
     import jinja2
     from gncinvoicefkt import *
+    from gnucash import SessionOpenMode
 except ImportError as import_error:
     print("Problem importing modules.")
     print(import_error)
     sys.exit(2)
 
+
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
+
 
 def main(argv=None):
     if argv is None:
@@ -68,27 +71,27 @@ def main(argv=None):
         try:
             opts, args = getopt.getopt(argv[1:], "fhliI:t:o:OP:", ["help"])
         except getopt.error as msg:
-             raise Usage(msg)
+            raise Usage(msg)
 
         for opt in opts:
             if opt[0] in ["-f"]:
                 print("ignoring lock")
                 ignore_lock = True
-            if opt[0] in ["-h","--help"]:
+            if opt[0] in ["-h", "--help"]:
                 raise Usage("Help:")
             if opt[0] in ["-I"]:
                 invoice_id = opt[1]
-                print ("using invoice ID '" + str(invoice_id) + "'.")
+                print("using invoice ID '" + str(invoice_id) + "'.")
             if opt[0] in ["-i"]:
-                print ("Using ipshell")
+                print("Using ipshell")
                 with_ipshell = True
             if opt[0] in ["-o"]:
                 filename_output = opt[1]
                 print("using output file", filename_output)
             if opt[0] in ["-O"]:
                 if filename_output:
-                    print ("given output filename will be overwritten,")
-                print ("creating output filename from Invoice data.")
+                    print("given output filename will be overwritten,")
+                print("creating output filename from Invoice data.")
                 filename_from_invoice = True
             if opt[0] in ["-t"]:
                 filename_template = opt[1]
@@ -98,13 +101,13 @@ def main(argv=None):
                 print("listing invoices")
             if opt[0] in ["-P"]:
                 output_path = opt[1]
-                print ("output path is", output_path + ".")
+                print("output path is", output_path + ".")
 
         # Check for correct input
-        if len(args)>1:
-            print("opts:",opts,"args:",args)
+        if len(args) > 1:
+            print("opts:", opts, "args:", args)
             raise Usage("Only one input possible !")
-        if len(args)==0:
+        if len(args) == 0:
             raise Usage("No input given !")
         input_url = args[0]
 
@@ -122,22 +125,22 @@ def main(argv=None):
 
     except Usage as err:
         if err.msg == "Help:":
-            retcode=0
+            retcode = 0
         else:
             print("Error:", err.msg, file=sys.stderr)
             print("for help use --help", file=sys.stderr)
-            retcode=2
+            retcode = 2
 
         print()
         print("Usage:")
         print()
-        print("Invoke with",prog_name,"gnucash_url.")
+        print("Invoke with", prog_name, "gnucash_url.")
         print("where input is")
         print("   filename")
         print("or file://filename")
         print("or mysql://user:password@host/databasename")
         print()
-        print("-f             force open = ignore lock")
+        print("-f             force open = ignore lock (read only)")
         print("-l             list all invoices")
         print("-h or --help   for this help")
         print("-I ID          use invoice ID")
@@ -150,8 +153,15 @@ def main(argv=None):
 
     # Try to open the given input
     try:
-        print("Opening", input_url, ".")
-        session = gnucash.Session(input_url, ignore_lock=ignore_lock)
+        print(
+            "Opening", input_url, " (ignore-lock = read-only)." if ignore_lock else "."
+        )
+        session = gnucash.Session(
+            input_url,
+            SessionOpenMode.SESSION_READ_ONLY
+            if ignore_lock
+            else SessionOpenMode.SESSION_NORMAL_OPEN,
+        )
     except Exception as exception:
         print("Problem opening input.")
         print(exception)
@@ -165,9 +175,9 @@ def main(argv=None):
     invoice_list = get_all_invoices(book)
 
     if list_invoices:
-       for number,invoice in enumerate(invoice_list):
-           print(str(number)+")")
-           print(invoice)
+        for number, invoice in enumerate(invoice_list):
+            print(str(number) + ")")
+            print(invoice)
 
     if not (no_output):
 
@@ -183,7 +193,6 @@ def main(argv=None):
         print("Using the following invoice:")
         print(invoice)
 
-
         path_template = os.path.dirname(filename_template)
         filename_template_basename = os.path.basename(filename_template)
 
@@ -191,25 +200,37 @@ def main(argv=None):
         env = jinja2.Environment(loader=loader)
         template = env.get_template(filename_template_basename)
 
-        #company = gnucash_business.Company(book.instance)
+        # company = gnucash_business.Company(book.instance)
 
-        output = template.render(invoice=invoice, locale=locale) #, company=company)
+        output = template.render(invoice=invoice, locale=locale)  # , company=company)
 
         if filename_from_invoice:
-            filename_date = invoice.GetDatePosted().strftime("%Y-%m-%d") # something like 2014-11-01
+            filename_date = invoice.GetDatePosted().strftime(
+                "%Y-%m-%d"
+            )  # something like 2014-11-01
             filename_owner_name = str(invoice.GetOwner().GetName())
             filename_invoice_id = str(invoice.GetID())
-            filename_output = filename_date + "_" + filename_owner_name + "_"  + filename_invoice_id + ".tex"
+            filename_output = (
+                filename_date
+                + "_"
+                + filename_owner_name
+                + "_"
+                + filename_invoice_id
+                + ".tex"
+            )
 
         if output_path:
-            filename_output = os.path.join(output_path, os.path.basename(filename_output))
+            filename_output = os.path.join(
+                output_path, os.path.basename(filename_output)
+            )
 
-        print ("Writing output", filename_output, ".")
-        with open(filename_output, 'w') as f:
+        print("Writing output", filename_output, ".")
+        with open(filename_output, "w") as f:
             f.write(output)
 
         if with_ipshell:
             import IPython
+
             IPython.embed()
 
 

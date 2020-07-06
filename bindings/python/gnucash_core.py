@@ -28,6 +28,9 @@
 #  @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
 #  @ingroup python_bindings
 
+from enum import IntEnum
+from urllib.parse import urlparse
+
 from gnucash import gnucash_core_c
 from gnucash import _sw_core_utils
 
@@ -46,6 +49,12 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gncVendorNextID, gncTaxTableGetTables, gnc_numeric_zero, \
     gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
     gnc_numeric_to_string
+
+from gnucash.deprecation import (
+    deprecated_args_session,
+    deprecated_args_session_init,
+    deprecated_args_session_begin
+)
 
 try:
     import gettext
@@ -83,6 +92,57 @@ class GnuCashBackendException(Exception):
         Exception.__init__(self, msg)
         self.errors = errors
 
+
+class SessionOpenMode(IntEnum):
+    """Mode for opening sessions.
+
+    This replaces three booleans that were passed in order: ignore_lock, create,
+    and force. It's structured so that one can use it as a bit field with the
+    values in the same order, i.e. ignore_lock = 1 << 2, create_new = 1 << 1, and
+    force_new = 1.
+
+    enumeration members
+    -------------------
+
+    SESSION_NORMAL_OPEN = 0     (All False)
+    Open will fail if the URI doesn't exist or is locked.
+
+    SESSION_NEW_STORE = 2       (False, True, False (create))
+    Create a new store at the URI. It will fail if the store already exists and is found to contain data that would be overwritten.
+
+    SESSION_NEW_OVERWRITE = 3   (False, True, True (create | force))
+    Create a new store at the URI even if a store already exists there.
+
+    SESSION_READ_ONLY = 4,      (True, False, False (ignore_lock))
+    Open the session read-only, ignoring any existing lock and not creating one if the URI isn't locked.
+
+    SESSION_BREAK_LOCK = 5     (True, False, True (ignore_lock | force))
+    Open the session, taking over any existing lock.
+
+    source: lignucash/engine/qofsession.h
+    """
+
+    SESSION_NORMAL_OPEN = gnucash_core_c.SESSION_NORMAL_OPEN
+    """All False
+    Open will fail if the URI doesn't exist or is locked."""
+
+    SESSION_NEW_STORE = gnucash_core_c.SESSION_NEW_STORE
+    """False, True, False (create)
+    Create a new store at the URI. It will fail if the store already exists and is found to contain data that would be overwritten."""
+
+    SESSION_NEW_OVERWRITE = gnucash_core_c.SESSION_NEW_OVERWRITE
+    """False, True, True (create | force)
+    Create a new store at the URI even if a store already exists there."""
+
+    SESSION_READ_ONLY = gnucash_core_c.SESSION_READ_ONLY
+    """True, False, False (ignore_lock)
+    Open the session read-only, ignoring any existing lock and not creating one if the URI isn't locked."""
+
+    SESSION_BREAK_LOCK = gnucash_core_c.SESSION_BREAK_LOCK
+    """True, False, True (ignore_lock | force)
+    Open the session, taking over any existing lock."""
+
+
 class Session(GnuCashCoreClass):
     """A GnuCash book editing session
 
@@ -96,45 +156,82 @@ class Session(GnuCashCoreClass):
     Invoice..) is associated with a particular book where it is stored.
     """
 
-    def __init__(self, book_uri=None, ignore_lock=False, is_new=False,
-                 force_new=False, instance=None):
-        """A convenient constructor that allows you to specify a book URI,
+    @deprecated_args_session_init
+    def __init__(self, book_uri=None, mode=None, instance=None, book=None):
+        """!
+        A convenient constructor that allows you to specify a book URI,
         begin the session, and load the book.
 
         This can give you the power of calling
         qof_session_new, qof_session_begin, and qof_session_load all in one!
 
-        book_uri can be None to skip the calls to qof_session_begin and
-        qof_session_load, or it can be a string like "file:/test.xac"
+        qof_session_load is only called if url scheme is "xml" and
+        mode is SESSION_NEW_STORE or SESSION_NEW_OVERWRITE
 
-        qof_session_load is only called if is_new is set to False
+        @param book_uri must be a string in the form of a URI/URL. The access
+        method specified depends on the loaded backends. Paths may be relative
+        or absolute.  If the path is relative, that is if the argument is
+        "file://somefile.xml", then the current working directory is
+        assumed. Customized backends can choose to search other
+        application-specific directories or URI schemes as well.
+        It be None to skip the calls to qof_session_begin and
+        qof_session_load.
 
-        is_new is passed to qof_session_begin as the argument create,
-        and force_new as the argument force. Is_new will create a new
-        database or file; force will force creation even if it will
-        destroy an existing dataset.
-
-        ignore_lock is passed to qof_session_begin's argument of the
-        same name and is used to break an existing lock on a dataset.
-
-        instance argument can be passed if new Session is used as a
+        @param instance argument can be passed if new Session is used as a
         wrapper for an existing session instance
 
+        @param mode The SessionOpenMode.
+        @note SessionOpenMode replaces deprecated ignore_lock, is_new and force_new.
 
-        This function can raise a GnuCashBackendException. If it does,
+        @par SessionOpenMode
+        `SESSION_NORMAL_OPEN`: Find an existing file or database at the provided uri and
+        open it if it is unlocked. If it is locked post a QOF_BACKEND_LOCKED error.
+        @par
+        `SESSION_NEW_STORE`: Check for an existing file or database at the provided
+        uri and if none is found, create it. If the file or database exists post a
+        QOF_BACKED_STORE_EXISTS and return.
+        @par
+        `SESSION_NEW_OVERWRITE`: Create a new file or database at the provided uri,
+        deleting any existing file or database.
+        @par
+        `SESSION_READ_ONLY`: Find an existing file or database and open it without
+        disturbing the lock if it exists or setting one if not. This will also set a
+        flag on the book that will prevent many elements from being edited and will
+        prevent the backend from saving any edits.
+        @par
+        `SESSION_BREAK_LOCK`: Find an existing file or database, lock it, and open
+        it. If there is already a lock replace it with a new one for this session.
+
+        @par Errors
+        qof_session_begin() signals failure by queuing errors. After it completes use
+        qof_session_get_error() and test that the value is `ERROR_BACKEND_NONE` to
+        determine that the session began successfully.
+
+        @exception as begin() and load() are wrapped with raise_backend_errors_after_call()
+        this function can raise a GnuCashBackendException. If it does,
         you don't need to cleanup and call end() and destroy(), that is handled
         for you, and the exception is raised.
         """
-        GnuCashCoreClass.__init__(self, Book())
+        if instance is not None:
+            GnuCashCoreClass.__init__(self, instance=instance)
+        else:
+            if book is None:
+                book = Book()
+            GnuCashCoreClass.__init__(self, book)
+
         if book_uri is not None:
             try:
-                self.begin(book_uri, ignore_lock, is_new, force_new)
+                if mode is None:
+                    mode = SessionOpenMode.SESSION_NORMAL_OPEN
+                self.begin(book_uri, mode)
                 # Take care of backend inconsistency
                 # New xml file can't be loaded, new sql store
                 # has to be loaded before it can be altered
                 # Any existing store obviously has to be loaded
                 # More background: https://bugs.gnucash.org/show_bug.cgi?id=726891
-                if book_uri[:3] != "xml" or not is_new:
+                is_new = mode in (SessionOpenMode.SESSION_NEW_STORE, SessionOpenMode.SESSION_NEW_OVERWRITE)
+                scheme = urlparse(book_uri).scheme
+                if not (is_new and scheme == 'xml'):
                     self.load()
             except GnuCashBackendException as backend_exception:
                 self.end()
@@ -177,12 +274,12 @@ class Session(GnuCashCoreClass):
 
     # STATIC METHODS
     @staticmethod
-    def raise_backend_errors_after_call(function):
+    def raise_backend_errors_after_call(function, *args, **kwargs):
         """A function decorator that results in a call to
         raise_backend_errors after execution.
         """
-        def new_function(self, *args):
-            return_value = function(self, *args)
+        def new_function(self, *args, **kwargs):
+            return_value = function(self, *args, **kwargs)
             self.raise_backend_errors(function.__name__)
             return return_value
         return new_function
@@ -533,6 +630,9 @@ Session.decorate_functions(one_arg_default_none, "load", "save")
 
 Session.decorate_functions( Session.raise_backend_errors_after_call,
                             "begin", "load", "save", "end")
+Session.decorate_method(default_arguments_decorator, "begin", None, mode=SessionOpenMode.SESSION_NORMAL_OPEN)
+Session.decorate_functions(deprecated_args_session_begin, "begin")
+
 Session.get_book = method_function_returns_instance(
     Session.get_book, Book )
 

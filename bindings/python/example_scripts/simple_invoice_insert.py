@@ -46,7 +46,7 @@
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 #   @ingroup python_bindings_examples
 
-from gnucash import Session, GUID, GncNumeric
+from gnucash import Session, GUID, GncNumeric, SessionOpenMode
 from gnucash.gnucash_business import Customer, Invoice, Entry
 from gnucash.gnucash_core_c import string_to_guid
 from os.path import abspath
@@ -86,7 +86,7 @@ def gnc_numeric_from_decimal(decimal_value):
     return GncNumeric(numerator, denominator)
 
 
-s = Session(argv[1], is_new=False)
+s = Session(argv[1], SessionOpenMode.SESSION_NORMAL_OPEN)
 
 book = s.book
 root = book.get_root_account()

@@ -35,7 +35,7 @@ from math import log10
 import csv
 
 # gnucash imports
-from gnucash import Session, GncNumeric, Split
+from gnucash import Session, GncNumeric, Split, SessionOpenMode
 
 # Invoke this script like the following example
 # $ python3 account_analysis.py gnucash_file.gnucash \
@@ -173,7 +173,7 @@ def main():
 
         account_path = argv[8:]
 
-        gnucash_session = Session(gnucash_file, is_new=False)
+        gnucash_session = Session(gnucash_file, SessionOpenMode.SESSION_NORMAL_OPEN)
         root_account = gnucash_session.book.get_root_account()
         account_of_interest = account_from_path(root_account, account_path)
 

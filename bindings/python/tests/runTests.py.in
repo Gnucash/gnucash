@@ -5,6 +5,7 @@ import os
 
 os.environ["GNC_UNINSTALLED"] = "1"
 
+from test_function_class import TestFunctionClass
 from test_gettext import TestGettext
 from test_session import TestSession
 from test_book import TestBook

@@ -71,7 +71,8 @@ class ClassFromFunctions(object):
             self.__instance = kargs[INSTANCE_ARGUMENT]
         else:
             self.__instance = getattr(self._module, self._new_instance)(
-                *process_list_convert_to_instance(args) )
+                *process_list_convert_to_instance(args),
+                **process_dict_convert_to_instance(kargs))
 
     def get_instance(self):
         """Get the instance data.
@@ -86,12 +87,29 @@ class ClassFromFunctions(object):
 
     @classmethod
     def add_method(cls, function_name, method_name):
-        """Add the function, method_name to this class as a method named name
-        """
-        def method_function(self, *meth_func_args):
+        """! Add the function, method_name to this class as a method named name
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the method that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance. Will be turned to its instance property.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self.instance,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
@@ -99,14 +117,32 @@ class ClassFromFunctions(object):
 
     @classmethod
     def ya_add_classmethod(cls, function_name, method_name):
-        """Add the function, method_name to this class as a classmethod named name
+        """! Add the function, method_name to this class as a classmethod named name
 
-        Taken from function_class and slightly modified.
-        """
-        def method_function(self, *meth_func_args):
+        Taken from function_class and modified from add_method() to add classmethod
+        instead of method and not to turn self argument to self.instance.
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the classmethod that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, classmethod(method_function))
         setattr(method_function, "__name__", method_name)
@@ -114,14 +150,32 @@ class ClassFromFunctions(object):
 
     @classmethod
     def ya_add_method(cls, function_name, method_name):
-        """Add the function, method_name to this class as a method named name
+        """! Add the function, method_name to this class as a method named name
 
-        Taken from function_class and slightly modified.
-        """
-        def method_function(self, *meth_func_args):
+        Taken from function_class. Modified to not turn self to self.instance
+        as add_method() does.
+
+        arguments:
+        @param cls Class: class to add methods to
+        @param function_name string: name of the function to add
+        @param method_name string: name of the method that function will be called
+
+        function will be wrapped by method_function"""
+
+        def method_function(self, *meth_func_args, **meth_func_kargs):
+            """! wrapper method for function
+
+            arguments:
+            @param self: FunctionClass instance.
+            @param *meth_func_args: arguments to be passed to function. All FunctionClass
+                objects will be turned to their respective instances.
+            @param **meth_func_kargs: keyword arguments to be passed to function. All
+                FunctionClass objects will be turned to their respective instances."""
             return getattr(self._module, function_name)(
                 self,
-                *process_list_convert_to_instance(meth_func_args) )
+                *process_list_convert_to_instance(meth_func_args),
+                **process_dict_convert_to_instance(meth_func_kargs)
+            )
 
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
@@ -153,6 +207,22 @@ class ClassFromFunctions(object):
             setattr( cls, function_name,
                      decorator( getattr(cls, function_name) ) )
 
+    @classmethod
+    def decorate_method(cls, decorator, method_name, *args, **kargs):
+        """! decorate method method_name of class cls with decorator decorator
+
+        in difference to decorate_functions() this allows to provide additional
+        arguments for the decorator function.
+
+        arguments:
+            @param cls: class
+            @param decorator: function to decorate method
+            @param method_name: name of method to decorate (string)
+            @param *args: positional arguments for decorator
+            @param **kargs: keyword arguments for decorator"""
+        setattr(cls, method_name,
+                    decorator(getattr(cls, method_name), *args, **kargs))
+
 def method_function_returns_instance(method_function, cls):
     """A function decorator that is used to decorate method functions that
     return instance data, to return instances instead.
@@ -161,19 +231,19 @@ def method_function_returns_instance(method_function, cls):
     argument.
     """
     assert( 'instance' == INSTANCE_ARGUMENT )
-    def new_function(*args):
-        kargs = { INSTANCE_ARGUMENT : method_function(*args) }
-        if kargs['instance'] == None:
+    def new_function(*args, **kargs):
+        kargs_cls = { INSTANCE_ARGUMENT : method_function(*args, **kargs) }
+        if kargs_cls['instance'] == None:
             return None
         else:
-            return cls( **kargs )
+            return cls( **kargs_cls )
 
     return new_function
 
 def method_function_returns_instance_list(method_function, cls):
-    def new_function(*args):
+    def new_function(*args, **kargs):
         return [ cls( **{INSTANCE_ARGUMENT: item} )
-                 for item in method_function(*args) ]
+                 for item in method_function(*args, **kargs) ]
     return new_function
 
 def methods_return_instance_lists(cls, function_dict):
@@ -182,17 +252,92 @@ def methods_return_instance_lists(cls, function_dict):
                 method_function_returns_instance_list(
                 getattr(cls, func_name), instance_name))
 
-def default_arguments_decorator(function, *args):
-    """Decorates a function to give it default, positional arguments
+def default_arguments_decorator(function, *args, **kargs):
+    """! Decorates a function to give it default, positional and keyword arguments
+
+    mimics python behavior when setting defaults in function/method arguments.
+    arguments can be set for positional or keyword arguments.
+
+    kargs_pos contains positions of the keyword arguments.
+    @exception A TypeError will be raised if an argument is set as a positional and keyword argument
+    at the same time.
+    @note It might be possible to get keyword argument positional information using
+    introspection to avoid having to specify them manually
+
+    a keyword argument default will be overwritten by a positional argument at the
+    actual function call
+
+    this function modifies the docstring of the wrapped funtion to reflect
+    the defaults.
 
     You can't use this decorator with @, because this function has more
     than one argument.
+
+    arguments:
+    @param *args: optional positional defaults
+    @param kargs_pos: dict with keyword arguments as key and their position in the argument list as value
+    @param **kargs: optional keyword defaults
+
+    @return new_function wrapping original function
     """
-    def new_function(*function_args):
+
+    def new_function(*function_args, **function_kargs):
+        kargs_pos = {}
+        if "kargs_pos" in kargs:
+            kargs_pos = kargs.pop("kargs_pos")
         new_argset = list(function_args)
-        new_argset.extend( args[ len(function_args): ] )
-        return function( *new_argset )
+        new_argset.extend(args[len(function_args) :])
+        new_kargset = {**kargs, **function_kargs}
+        for karg_pos in kargs_pos:
+            if karg_pos in new_kargset:
+                pos_karg = kargs_pos[karg_pos]
+                if pos_karg < len(new_argset):
+                    new_kargset.pop(karg_pos)
+
+        return function(*new_argset, **new_kargset)
+
+    kargs_pos = {} if "kargs_pos" not in kargs else kargs["kargs_pos"]
+    for karg_pos in kargs_pos:
+        if karg_pos in kargs:
+            pos_karg = kargs_pos[karg_pos]
+            if pos_karg < len(args):
+                raise TypeError(
+                    "default_arguments_decorator() got multiple values for argument '%s'"
+                    % karg_pos
+                )
+
+    if new_function.__doc__ is None:
+        new_function.__doc__ = ""
+    if len(args):
+        firstarg = True
+        new_function.__doc__ += "positional argument defaults:\n"
+        for arg in args:
+            if not firstarg:
+                new_function.__doc__ += ", "
+            else:
+                new_function.__doc__ += "  "
+                firstarg = False
+            new_function.__doc__ += str(arg)
+        new_function.__doc__ += "\n"
+    if len(kargs):
+        new_function.__doc__ += "keyword argument defaults:\n"
+        for karg in kargs:
+            if karg != "kargs_pos":
+                new_function.__doc__ += (
+                    "  " + str(karg) + " = " + str(kargs[karg]) + "\n"
+                )
+        if kargs_pos:
+            new_function.__doc__ += "keyword argument positions:\n"
+            for karg in kargs_pos:
+                new_function.__doc__ += (
+                    "  " + str(karg) + " is at pos " + str(kargs_pos[karg]) + "\n"
+                )
+    if len(args) or len(kargs):
+        new_function.__doc__ += (
+            "(defaults have been set by default_arguments_decorator method)"
+        )
     return new_function
+
 
 def return_instance_if_value_has_it(value):
     """Return value.instance if value is an instance of ClassFromFunctions,
@@ -212,6 +357,18 @@ def process_list_convert_to_instance( value_list ):
     """
     return [ return_instance_if_value_has_it(value)
              for value in value_list ]
+
+def process_dict_convert_to_instance(value_dict):
+    """Return a dict built from value_dict, where if a value is in an instance
+    of ClassFromFunctions, we put value.instance in the dict instead.
+
+    Things that are not instances of ClassFromFunctions are returned to
+    the new dict unchanged.
+    """
+    return {
+        key: return_instance_if_value_has_it(value) for key, value in value_dict.items()
+    }
+
 
 def extract_attributes_with_prefix(obj, prefix):
     """Generator that iterates through the attributes of an object and
