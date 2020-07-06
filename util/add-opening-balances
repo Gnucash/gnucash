@@ -1,0 +1,118 @@
+#!/bin/sh
+#
+# Find opening balance accounts by translations and add slot with key 'opening-balance' to make them translation independent
+#
+# @author Ralf Habacker <ralf.habacker@freenet.de>
+#
+r=$(realpath $0)
+r=$(dirname $r)
+r=$(dirname $r)
+
+# debug
+#grep -rn -A1 '"Opening Balances"' $r/po | grep msgstr > translation-of-opening-balance-with-files.txt
+#grep -rnf translation-of-opening-balance.txt $r/data/accounts > all-opening-balances-accounts.txt
+
+if test -z "$1" || test "$1" == "--collect"; then
+    # collect all translations for 'Opening Balances'
+    grep -rn -A1 '"Opening Balances"' $r/po | grep msgstr | gawk '{ $1=""; print $0}' | sed 's,^ ,,g;s,",,g' | grep -v "^$" | sed 's,^,<act:name>,g;s,$,.*</act:name>,g' > translation-of-opening-balance.txt
+
+    # collect all translations for 'Opening Balances' with optional last character
+    grep -rn -A1 '"Opening Balances"' $r/po | grep msgstr | gawk '{ $1=""; print $0}' | sed 's,^ ,,g;s,",,g' | grep -v "^$" | sed 's,^,<act:name>,g;s,$,*</act:name>,g' >> translation-of-opening-balance.txt
+
+    # add custom strings
+    cat << EOF >> translation-of-opening-balance.txt
+<act:name>Openingsbalans</act:name>
+<act:name>9000 Saldenvortrag Sachkonten</act:name>
+<act:name>9000 Saldenvorträge Sachkonten</act:name>
+<act:name>Saldenvorträge Sachkonten</act:name>
+EOF
+
+fi
+
+# collect all files that contains a translation for 'Opening Balances'
+for i in $(grep -rnf translation-of-opening-balance.txt $r/data/accounts | sed 's,:[ ]*,:,g;s, ,#,g'); do
+    #echo $i
+    file=$(echo $i | sed 's,:.*$,,g')
+    pattern=$(echo $i | sed 's,^.*:<,<,g;s,#, ,g')
+    #echo "searching for $pattern in $file"
+    # add equity-type slot
+    gawk '
+BEGIN {
+    found = 0;
+    slotadded = 0;
+    slotpresent = 0;
+    patternfound = 0;
+}
+
+# search for account name
+$0 ~ PATTERN {
+    slotadded = 0
+    slotpresent = 0
+    patternfound = 1
+    replace = 1
+    #print "<!-- replace -->"
+}
+
+# opening-balance slot is already available
+replace && $1 == "<slot:key>equity-type</slot:key>" {
+    slotkeypresent = 1
+}
+
+slotkeypresent && $1 == "<slot:value type=\"string\">opening-balance</slot:value>" {
+    replace = 0
+    slotpresent = 1
+}
+
+#exclude parent named like opening balance account
+replace && $1 == "<slot:key>placeholder</slot:key>" {
+    replace = 0
+}
+
+# add new slots tag
+replace && $1 == "</gnc:account>" {
+    if (slotkeypresent) {
+        print FILE ": slot equity-type already present with different value, could not tag '" PATTERN "' as opening balance account" > /dev/stderr
+    } else {
+        print "  <act:slots>"
+        print "    <slot>"
+        print "      <slot:key>equity-type</slot:key>"
+        print "      <slot:value type=\"string\">opening-balance</slot:value>"
+        print "    </slot>"
+        print "  </act:slots>"
+        slotadded = 1
+        replace = 0
+    }
+}
+
+{
+    print $0;
+}
+
+END {
+    if (!patternfound)
+        print FILE ": opening balance account not found with pattern " PATTERN > /dev/stderr
+    #if (!slotpresent && !slotadded)
+    #print FILE " opening balance account not found with pattern " PATTERN > /dev/stderr
+}
+    ' "PATTERN=$pattern" $file > $file.new
+    mv $file.new $file
+done
+
+oba=""
+nooba=""
+for i in $(find $r/data/accounts -name '*.gnucash-xea'); do
+    o=$(grep -Hn "opening-balance" $i)
+    if test -z "$o"; then
+        nooba="$nooba\n$i"
+    else
+        oba="$oba\n$i"
+    fi
+done
+
+echo "------------------------------------------------------------"
+echo -e "The following files do not have an account with slot key 'opening-balance'"
+echo -e $nooba
+echo
+echo "------------------------------------------------------------"
+echo -e "The following files have an account with slot key 'opening-balance'"
+echo -e $oba
