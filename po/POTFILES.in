@@ -13,6 +13,7 @@ bindings/guile/gnc-module.scm
 bindings/guile/gnc-numeric.scm
 bindings/guile/utilities.scm
 bindings/python/app_utils.py
+bindings/python/deprecation.py
 bindings/python/example_scripts/account_analysis.py
 bindings/python/example_scripts/change_tax_code.py
 bindings/python/example_scripts/gnc_convenience.py
