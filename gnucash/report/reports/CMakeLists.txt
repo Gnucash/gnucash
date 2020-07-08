@@ -4,7 +4,7 @@ add_subdirectory(support)
 
 #These provide some functions used by more than one report.
 set (reports_common_SCHEME
-  aging.scm
+  aging.scm                     #deprecated 4.x to be removed in 5.x
   cash-flow-calc.scm
 )
 
@@ -13,10 +13,10 @@ set (reports_common_SCHEME
 set (reports_standard_with_exposed_generator_SCHEME
     standard/new-aging.scm
     standard/register.scm
-    standard/owner-report.scm
+    standard/owner-report.scm   #deprecated 4.x to be removed in 5.x
     standard/new-owner-report.scm
-    standard/payables.scm
-    standard/receivables.scm
+    standard/payables.scm       #deprecated 4.x to be removed in 5.x
+    standard/receivables.scm    #deprecated 4.x to be removed in 5.x
 )
 
 set (reports_standard_SCHEME
