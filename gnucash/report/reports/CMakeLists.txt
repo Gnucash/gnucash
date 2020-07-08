@@ -20,6 +20,7 @@ set (reports_standard_with_exposed_generator_SCHEME
 )
 
 set (reports_standard_SCHEME
+    standard/acb-tool.scm
     standard/account-piecharts.scm
     standard/account-summary.scm
     standard/advanced-portfolio.scm
