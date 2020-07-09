@@ -3271,7 +3271,7 @@ xaccAccountGetCommodity (const Account *acc)
 gnc_commodity * gnc_account_get_currency_or_parent(const Account* account)
 {
     gnc_commodity * commodity;
-    g_assert(account);
+    g_return_val_if_fail (account, NULL);
 
     commodity = xaccAccountGetCommodity (account);
     if (gnc_commodity_is_currency(commodity))
