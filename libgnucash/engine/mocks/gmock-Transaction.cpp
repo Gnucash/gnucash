@@ -29,14 +29,14 @@ void
 xaccTransBeginEdit (Transaction *trans)
 {
     ASSERT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->beginEdit();
+    ((MockTransaction*)trans)->begin_edit();
 }
 
 void
 xaccTransCommitEdit (Transaction *trans)
 {
     ASSERT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->commitEdit();
+    ((MockTransaction*)trans)->commit_edit();
 }
 
 Split *
@@ -44,7 +44,7 @@ xaccTransGetSplit (const Transaction *trans, int i)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getSplit(i);
+        return ((MockTransaction*)trans)->get_split(i);
     else
         return nullptr;
 }
@@ -55,7 +55,7 @@ xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->findSplitByAccount(acc);
+        return ((MockTransaction*)trans)->find_split_by_account(acc);
     else
         return nullptr;
 }
@@ -65,7 +65,7 @@ xaccTransGetDate (const Transaction *trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getDate();
+        return ((MockTransaction*)trans)->get_date();
     else
         return 0;
 }
@@ -74,7 +74,7 @@ void
 xaccTransSetDatePostedSecsNormalized (Transaction *trans, time64 time)
 {
     ASSERT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDatePostedSecsNormalized(time);
+    ((MockTransaction*)trans)->set_date_posted_secs_normalized(time);
 }
 
 const char *
@@ -82,7 +82,7 @@ xaccTransGetDescription (const Transaction *trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getDescription();
+        return ((MockTransaction*)trans)->get_description();
     else
         return nullptr;
 }
@@ -91,7 +91,7 @@ void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
     ASSERT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDescription(desc);
+    ((MockTransaction*)trans)->set_description(desc);
 }
 
 const char *
@@ -99,7 +99,7 @@ xaccTransGetNotes (const Transaction *trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getNotes();
+        return ((MockTransaction*)trans)->get_notes();
     else
         return nullptr;
 }
@@ -108,7 +108,7 @@ void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
     ASSERT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
-    ((MockTransaction*)trans)->setDescription(notes);
+    ((MockTransaction*)trans)->set_description(notes);
 }
 
 gnc_numeric
@@ -116,7 +116,7 @@ xaccTransGetImbalanceValue (const Transaction * trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getImbalanceValue();
+        return ((MockTransaction*)trans)->get_imbalance_value();
     else
         return gnc_numeric_zero();
 }
@@ -126,7 +126,7 @@ xaccTransGetNum (const Transaction *trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->getNum();
+        return ((MockTransaction*)trans)->get_num();
     else
         return nullptr;
 }
@@ -136,7 +136,7 @@ xaccTransIsOpen (const Transaction *trans)
 {
     EXPECT_TRUE(GNC_IS_MOCK_TRANSACTION(trans));
     if (GNC_IS_MOCK_TRANSACTION(trans))
-        return ((MockTransaction*)trans)->isOpen();
+        return ((MockTransaction*)trans)->is_open();
     else
         return FALSE;
 }

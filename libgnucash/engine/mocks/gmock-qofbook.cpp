@@ -24,6 +24,6 @@ gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
     g_return_val_if_fail(QOF_IS_MOCK_BOOK(book), FALSE);
-    return ((QofMockBook*)book)->useSplitActionForNumField();
+    return ((QofMockBook*)book)->use_split_action_for_num_field();
 }
 

@@ -36,11 +36,11 @@ public:
         mock_g_object_unref(acc, size);
     }
 
-    MOCK_METHOD0(beginEdit, void());
-    MOCK_METHOD0(commitEdit, void());
-    MOCK_METHOD0(getBook, QofMockBook*());
-    MOCK_METHOD2(forEachTransaction, gint(TransactionCallback, void*));
-    MOCK_METHOD0(imapCreateImap, GncImportMatchMap*());
+    MOCK_METHOD0(begin_edit, void());
+    MOCK_METHOD0(commit_edit, void());
+    MOCK_METHOD0(get_book, QofMockBook*());
+    MOCK_METHOD2(for_each_transaction, gint(TransactionCallback, void*));
+    MOCK_METHOD0(create_imap, GncImportMatchMap*());
 
 protected:
     // Protect destructor to avoid MockAccount objects to be created on stack. MockAccount
@@ -55,13 +55,13 @@ public:
     GncMockImportMatchMap(MockAccount* account)
     {
         acc  = account;
-        book = account->getBook();
+        book = account->get_book();
     };
 
-    MOCK_METHOD2(findAccount, Account *(const char*, const char*));
-    MOCK_METHOD3(addAccount, void(const char*, const char*, Account*));
-    MOCK_METHOD1(findAccountBayes, Account *(std::vector<const char*>&));
-    MOCK_METHOD2(addAccountBayes, void(std::vector<const char*>&, Account*));
+    MOCK_METHOD2(find_account, Account *(const char*, const char*));
+    MOCK_METHOD3(add_account, void(const char*, const char*, Account*));
+    MOCK_METHOD1(find_account_bayes, Account *(std::vector<const char*>&));
+    MOCK_METHOD2(add_account_bayes, void(std::vector<const char*>&, Account*));
 };
 
 #endif

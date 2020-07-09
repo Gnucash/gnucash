@@ -12,12 +12,12 @@
 static class QofFakeQueryPool
 {
 public:
-    void addQuery(QofFakeQuery *query)
+    void add_query(QofFakeQuery *query)
     {
         m_queriesNew.push_back(query);
     }
 
-    QofFakeQuery* requestQuery(QofIdTypeConst obj_type)
+    QofFakeQuery* request_query(QofIdTypeConst obj_type)
     {
         QofFakeQuery* query = nullptr;
 
@@ -36,14 +36,14 @@ public:
         return query;
     }
 
-    bool queryUsed(QofQuery *query)
+    bool query_used(QofQuery *query)
     {
         auto it = std::find(m_queriesUsed.begin(), m_queriesUsed.end(), (QofFakeQuery*)query);
 
         return (it != m_queriesUsed.end());
     }
 
-    void releaseQuery(QofFakeQuery *query)
+    void release_query(QofFakeQuery *query)
     {
         ASSERT_TRUE(query_used((QofQuery*)query));
         auto it = std::find(m_queriesUsed.begin(), m_queriesUsed.end(), query);
@@ -51,9 +51,9 @@ public:
         m_queriesConsumed.push_back(*it);
     }
 
-    void removeQuery(QofFakeQuery *query)
+    void remove_query(QofFakeQuery *query)
     {
-        ASSERT_FALSE(queryUsed((QofQuery*)query));
+        ASSERT_FALSE(query_used((QofQuery*)query));
         auto it = std::find(m_queriesConsumed.begin(), m_queriesConsumed.end(), (QofFakeQuery*)query);
         if (it != m_queriesConsumed.end())
             m_queriesConsumed.erase(it);
@@ -79,12 +79,12 @@ private:
 QofFakeQuery::QofFakeQuery(QofIdTypeConst obj_type) :
     m_obj_type(obj_type)
 {
-    queryPool.addQuery(this);
+    queryPool.add_query(this);
 }
 
 QofFakeQuery::~QofFakeQuery()
 {
-    queryPool.removeQuery(this);
+    queryPool.remove_query(this);
 }
 
 
@@ -94,21 +94,21 @@ QofFakeQuery::~QofFakeQuery()
 QofQuery *
 qof_query_create_for (QofIdTypeConst obj_type)
 {
-    return (QofQuery*)queryPool.requestQuery(obj_type);
+    return (QofQuery*)queryPool.request_query(obj_type);
 }
 
 void
 qof_query_destroy (QofQuery *query)
 {
-    queryPool.releaseQuery((QofFakeQuery*)query);
+    queryPool.release_query((QofFakeQuery*)query);
 }
 
 void
 qof_query_set_book (QofQuery *query, QofBook *book)
 {
-    ASSERT_TRUE(queryPool.queryUsed(query));
+    ASSERT_TRUE(queryPool.query_used(query));
     ASSERT_TRUE(QOF_IS_MOCK_BOOK(book));
-    ((QofFakeQuery*)query)->setBook(book);
+    ((QofFakeQuery*)query)->set_book(book);
 }
 
 void
@@ -120,22 +120,22 @@ xaccQueryAddDateMatchTT (
         time64 ett,
         QofQueryOp op)
 {
-    ASSERT_TRUE(queryPool.queryUsed(query));
-    ((QofFakeQuery*)query)->addDateMatchTT(use_start, stt, use_end, ett, op);
+    ASSERT_TRUE(queryPool.query_used(query));
+    ((QofFakeQuery*)query)->add_date_match_tt(use_start, stt, use_end, ett, op);
 }
 
 void
 xaccQueryAddSingleAccountMatch(QofQuery *query, Account *acc, QofQueryOp op)
 {
-    ASSERT_TRUE(queryPool.queryUsed(query));
-    ((QofFakeQuery*)query)->addSingleAccountMatch(acc, op);
+    ASSERT_TRUE(queryPool.query_used(query));
+    ((QofFakeQuery*)query)->add_single_account_match(acc, op);
 }
 
 GList *
 qof_query_run (QofQuery *query)
 {
     GList *matching_objects = NULL;
-    bool  query_used        = queryPool.queryUsed(query);
+    bool  query_used        = queryPool.query_used(query);
 
     EXPECT_TRUE(query_used);
     if (query_used)

@@ -60,21 +60,21 @@ public:
     }
 
     MOCK_METHOD0(init, void());
-    MOCK_METHOD0(getBook, QofBook *());
-    MOCK_METHOD0(getAccount, Account *());
-    MOCK_METHOD1(setAccount, void(Account*));
-    MOCK_METHOD0(getAmount, gnc_numeric());
-    MOCK_METHOD1(setAmount, void(gnc_numeric));
-    MOCK_METHOD0(getValue, gnc_numeric());
-    MOCK_METHOD1(setValue, void(gnc_numeric));
-    MOCK_METHOD0(getMemo, const char *());
-    MOCK_METHOD0(getReconcile, char());
-    MOCK_METHOD1(setReconcile, void(char));
-    MOCK_METHOD1(setDateReconciledSecs, void(time64));
-    MOCK_METHOD0(getAction, const char *());
-    MOCK_METHOD0(getOtherSplit, Split *());
-    MOCK_METHOD0(getParent, Transaction *());
-    MOCK_METHOD1(setParent, void(Transaction*));
+    MOCK_METHOD0(get_book, QofBook *());
+    MOCK_METHOD0(get_account, Account *());
+    MOCK_METHOD1(set_account, void(Account*));
+    MOCK_METHOD0(get_amount, gnc_numeric());
+    MOCK_METHOD1(set_amount, void(gnc_numeric));
+    MOCK_METHOD0(get_value, gnc_numeric());
+    MOCK_METHOD1(set_value, void(gnc_numeric));
+    MOCK_METHOD0(get_memo, const char *());
+    MOCK_METHOD0(get_reconcile, char());
+    MOCK_METHOD1(set_reconcile, void(char));
+    MOCK_METHOD1(set_date_reconciled_secs, void(time64));
+    MOCK_METHOD0(get_action, const char *());
+    MOCK_METHOD0(get_other_split, Split *());
+    MOCK_METHOD0(get_parent, Transaction *());
+    MOCK_METHOD1(set_parent, void(Transaction*));
 
 protected:
     // Protect destructor to avoid MockSplit objects to be created on stack. MockSplit

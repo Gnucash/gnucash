@@ -130,7 +130,7 @@ protected:
         using namespace testing;
 
         // define behaviour of m_import_acc
-        ON_CALL(*m_import_acc, getBook())
+        ON_CALL(*m_import_acc, get_book())
             .WillByDefault(Return(((TestEnvironment*)env)->m_book));
     }
 
@@ -164,14 +164,14 @@ TEST_F(ImportBackendTest, CreateTransInfo)
     //qof_instance_get (QOF_INSTANCE (split), "online-id", &online_id, NULL);
 
     // Define first split
-    ON_CALL(*m_trans, getSplit(0))
+    ON_CALL(*m_trans, get_split(0))
         .WillByDefault(Return(m_split));
     // define description of the transaction
-    ON_CALL(*m_trans, getDescription())
+    ON_CALL(*m_trans, get_description())
         .WillByDefault(Return("This is the description"));
 
     // function gnc_import_TransInfo_new() should try to find account using the description from the transaction
-    EXPECT_CALL(imap, findAccount(_, StrEq("This is the description")))
+    EXPECT_CALL(imap, find_account(_, StrEq("This is the description")))
         .WillOnce(Return(m_dest_acc));
 
     // call function to be tested
@@ -182,7 +182,7 @@ TEST_F(ImportBackendTest, CreateTransInfo)
     EXPECT_EQ(gnc_import_TransInfo_get_destacc(trans_info), m_dest_acc);
 
     // transaction is not open anymore
-    ON_CALL(*m_trans, isOpen())
+    ON_CALL(*m_trans, is_open())
         .WillByDefault(Return(false));
 
     // delete transaction info
@@ -202,7 +202,7 @@ protected:
         using namespace testing;
 
         // set bayesian import matching in preferences
-        ON_CALL(m_prefs, getBool(StrEq(GNC_PREFS_GROUP_IMPORT), StrEq(GNC_PREF_USE_BAYES)))
+        ON_CALL(m_prefs, get_bool(StrEq(GNC_PREFS_GROUP_IMPORT), StrEq(GNC_PREF_USE_BAYES)))
             .WillByDefault(Return(true));
     }
 
@@ -232,10 +232,10 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
     gnc_tm_free(tm_struct);
 
     // Define first split
-    ON_CALL(*m_trans, getSplit(0))
+    ON_CALL(*m_trans, get_split(0))
         .WillByDefault(Return(m_split));
     // Transaction has no further splits
-    ON_CALL(*m_trans, getSplit(Gt(0)))
+    ON_CALL(*m_trans, get_split(Gt(0)))
         .WillByDefault(Return(nullptr));
     // Define description and memo of first split
     // This transaction is used for testing tokenization of its content.
@@ -244,16 +244,16 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
     //   * separators at the beginning and end of string
     //   * duplicated tokens within and between description text end memo
     // The token separator is space.
-    ON_CALL(*m_trans, getDescription())
+    ON_CALL(*m_trans, get_description())
         .WillByDefault(Return(" test  tokens within   description  tokens  "));
-    ON_CALL(*m_split, getMemo())
+    ON_CALL(*m_split, get_memo())
         .WillByDefault(Return("  test   the memo test "));
     // Define transaction date
-    ON_CALL(*m_trans, getDate())
+    ON_CALL(*m_trans, get_date())
         .WillByDefault(Return(date));
 
     // check tokens created from transaction
-    EXPECT_CALL(imap, findAccountBayes(AllOf(
+    EXPECT_CALL(imap, find_account_bayes(AllOf(
             Each(Not(StrEq(""))),                // tokens must not be empty strings
             Each(Not(HasSubstr(" "))),           // tokens must not contain separator
             Not(HasDuplicates()),                // tokens must be unique
@@ -271,7 +271,7 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
     EXPECT_EQ(gnc_import_TransInfo_get_destacc(trans_info), m_dest_acc);
 
     // transaction is not open anymore
-    ON_CALL(*m_trans, isOpen())
+    ON_CALL(*m_trans, is_open())
         .WillByDefault(Return(false));
 
     // delete transaction info

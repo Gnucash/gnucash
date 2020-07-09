@@ -50,8 +50,8 @@ public:
         mock_g_object_unref(book, size);
     }
 
-    MOCK_METHOD0(mallocSplit, Split *());
-    MOCK_METHOD0(useSplitActionForNumField, gboolean());
+    MOCK_METHOD0(malloc_split, Split *());
+    MOCK_METHOD0(use_split_action_for_num_field, gboolean());
 
 protected:
     // Protect destructor to avoid MockQofBook objects to be created on stack. MockQofBook

@@ -49,19 +49,19 @@ public:
         mock_g_object_unref(trans, size);
     }
 
-    MOCK_METHOD0(beginEdit, void());
-    MOCK_METHOD0(commitEdit, void());
-    MOCK_METHOD1(getSplit, Split *(int));
-    MOCK_METHOD1(findSplitByAccount, Split *(const Account*));
-    MOCK_METHOD0(getDate, time64());
-    MOCK_METHOD1(setDatePostedSecsNormalized, void(time64));
-    MOCK_METHOD0(getDescription, const char *());
-    MOCK_METHOD1(setDescription, void(const char*));
-    MOCK_METHOD0(getNotes, const char *());
-    MOCK_METHOD1(setNotes, void(const char*));
-    MOCK_METHOD0(getImbalanceValue, gnc_numeric());
-    MOCK_METHOD0(getNum, const char *());
-    MOCK_METHOD0(isOpen, gboolean());
+    MOCK_METHOD0(begin_edit, void());
+    MOCK_METHOD0(commit_edit, void());
+    MOCK_METHOD1(get_split, Split *(int));
+    MOCK_METHOD1(find_split_by_account, Split *(const Account*));
+    MOCK_METHOD0(get_date, time64());
+    MOCK_METHOD1(set_date_posted_secs_normalized, void(time64));
+    MOCK_METHOD0(get_description, const char *());
+    MOCK_METHOD1(set_description, void(const char*));
+    MOCK_METHOD0(get_notes, const char *());
+    MOCK_METHOD1(set_notes, void(const char*));
+    MOCK_METHOD0(get_imbalance_value, gnc_numeric());
+    MOCK_METHOD0(get_num, const char *());
+    MOCK_METHOD0(is_open, gboolean());
     MOCK_METHOD0(destroy, void());
 
 protected:

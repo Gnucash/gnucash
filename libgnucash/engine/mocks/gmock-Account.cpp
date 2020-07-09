@@ -27,14 +27,14 @@ void
 xaccAccountBeginEdit (Account *account)
 {
     ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
-    ((MockAccount*)account)->beginEdit();
+    ((MockAccount*)account)->begin_edit();
 }
 
 void
 xaccAccountCommitEdit (Account *account)
 {
     ASSERT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
-    ((MockAccount*)account)->commitEdit();
+    ((MockAccount*)account)->commit_edit();
 }
 
 QofBook *
@@ -42,7 +42,7 @@ gnc_account_get_book(const Account *account)
 {
     EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(account));
     if (GNC_IS_MOCK_ACCOUNT(account))
-        return ((MockAccount*)account)->getBook();
+        return ((MockAccount*)account)->get_book();
     else
         return nullptr;
 }
@@ -53,7 +53,7 @@ xaccAccountForEachTransaction(const Account *acc, TransactionCallback proc,
 {
     EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
     if (GNC_IS_MOCK_ACCOUNT(acc))
-        return ((MockAccount*)acc)->forEachTransaction(proc, data);
+        return ((MockAccount*)acc)->for_each_transaction(proc, data);
     else
         return 0;
 }
@@ -63,7 +63,7 @@ gnc_account_imap_create_imap (Account *acc)
 {
     EXPECT_TRUE(GNC_IS_MOCK_ACCOUNT(acc));
     if (GNC_IS_MOCK_ACCOUNT(acc))
-        return ((MockAccount*)acc)->imapCreateImap();
+        return ((MockAccount*)acc)->create_imap();
     else
         return nullptr;
 }
@@ -74,7 +74,7 @@ gnc_account_imap_find_account (
         const char* category,
         const char *key)
 {
-    return ((GncMockImportMatchMap*)imap)->findAccount(category, key);
+    return ((GncMockImportMatchMap*)imap)->find_account(category, key);
 }
 
 void
@@ -84,7 +84,7 @@ gnc_account_imap_add_account (
         const char *key,
         Account *acc)
 {
-    ((GncMockImportMatchMap*)imap)->addAccount(category, key, acc);
+    ((GncMockImportMatchMap*)imap)->add_account(category, key, acc);
 }
 
 Account*
@@ -99,7 +99,7 @@ gnc_account_imap_find_account_bayes (
         tokenVec.push_back(static_cast <char const *> (token->data));
     }
 
-    return ((GncMockImportMatchMap*)imap)->findAccountBayes(tokenVec);
+    return ((GncMockImportMatchMap*)imap)->find_account_bayes(tokenVec);
 }
 
 void
@@ -115,6 +115,6 @@ gnc_account_imap_add_account_bayes (
         tokenVec.push_back(static_cast <char const *> (token->data));
     }
 
-    ((GncMockImportMatchMap*)imap)->addAccountBayes(tokenVec, acc);
+    ((GncMockImportMatchMap*)imap)->add_account_bayes(tokenVec, acc);
 }
 
