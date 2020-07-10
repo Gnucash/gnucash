@@ -1,3 +1,7 @@
+/**
+ * @file fake-qofquery.cpp
+*/
+
 #include <config.h>
 
 #include <list>
@@ -12,11 +16,14 @@
 static class QofFakeQueryPool
 {
 public:
+
+    /* Add QofFakeQuery object to the pool */
     void add_query(QofFakeQuery *query)
     {
         m_queriesNew.push_back(query);
     }
 
+    /* Request to use a QofFakeQuery object */
     QofFakeQuery* request_query(QofIdTypeConst obj_type)
     {
         QofFakeQuery* query = nullptr;
@@ -36,6 +43,8 @@ public:
         return query;
     }
 
+    /* Check if a QofFakeQuery object is currently used, i.e. it has been
+     * requested before */
     bool query_used(QofQuery *query)
     {
         auto it = std::find(m_queriesUsed.begin(), m_queriesUsed.end(), (QofFakeQuery*)query);
@@ -43,6 +52,8 @@ public:
         return (it != m_queriesUsed.end());
     }
 
+    /* Release a formerly requested QofFakeQuery object, which is not used
+     * anymore */
     void release_query(QofFakeQuery *query)
     {
         ASSERT_TRUE(query_used((QofQuery*)query));
@@ -51,6 +62,7 @@ public:
         m_queriesConsumed.push_back(*it);
     }
 
+    /* Remove a formerly added QofFakeQueryObject from the pool */
     void remove_query(QofFakeQuery *query)
     {
         ASSERT_FALSE(query_used((QofQuery*)query));
