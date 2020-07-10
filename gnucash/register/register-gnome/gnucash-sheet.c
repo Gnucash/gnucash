@@ -1063,7 +1063,7 @@ gnucash_sheet_insert_cb (GtkEditable *editable,
         return;
 
     new_text = make_new_text (sheet, insert_text, position);
-    new_text_len = g_utf8_strlen (new_text, -1);
+    new_text_len = strlen (new_text);
 
 
     retval = gnc_table_modify_update (table, virt_loc,
