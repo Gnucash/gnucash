@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-27 15:34-0700\n"
-"PO-Revision-Date: 2020-07-10 17:54+0200\n"
+"PO-Revision-Date: 2020-07-10 23:17+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -4722,7 +4722,7 @@ msgstr "_Aktualiziraj poveznicu za vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:354
 msgid "_Open Association for Voucher"
-msgstr "Otvori poveznicu za vaučer"
+msgstr "_Otvori poveznicu za vaučer"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:355
 msgid "_Remove Association from Voucher"
@@ -5754,7 +5754,7 @@ msgstr "A_ktualiziraj poveznicu za transakciju"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:292
 msgid "_Open Association for Transaction"
-msgstr "Otvori poveznicu za transakciju"
+msgstr "_Otvori poveznicu za transakciju"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:293
 msgid "Re_move Association from Transaction"
@@ -15035,7 +15035,7 @@ msgstr "Sve poveznice"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:523
 msgid "Reload and Locate _Associations"
-msgstr "Učitaj ponovo i odredi poveznice"
+msgstr "Učitaj ponovo i odredi po_veznice"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:537
 msgid "_Reload"
