@@ -1816,6 +1816,11 @@ gnc_plugin_page_register_recreate_page (GtkWidget* window,
         include_subs = (g_ascii_strcasecmp (reg_type, LABEL_SUBACCOUNT) == 0);
         DEBUG ("Include subs: %d", include_subs);
         book = qof_session_get_book (gnc_get_current_session());
+        if (book)
+        {
+            LEAVE("Session has no book");
+            return NULL;
+        }
         acct_guid = g_key_file_get_string (key_file, group_name,
                                            KEY_ACCOUNT_GUID, &error);
         if (string_to_guid (acct_guid, &guid)) //find account by guid

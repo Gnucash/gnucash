@@ -2507,6 +2507,7 @@ tree_restore_expanded_row (GncTreeViewAccount *view,
     QofBook *book;
 
     book = qof_session_get_book(gnc_get_current_session());
+    g_return_if_fail(book);
     account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
               account_name);
     if (account)
@@ -2529,6 +2530,7 @@ tree_restore_selected_row (GncTreeViewAccount *view,
     QofBook *book;
 
     book = qof_session_get_book(gnc_get_current_session());
+    g_return_if_fail(book);
     account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
               account_name);
     if (account)
