@@ -101,6 +101,12 @@ td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
 td.highlight {
     background-color: #e1e1e1
 }
+
+@media print {
+    html, body {
+        height: unset;
+    }
+}
 ")
 
 (define (css-options)
