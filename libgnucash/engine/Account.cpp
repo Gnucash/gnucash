@@ -106,6 +106,7 @@ enum
 
     PROP_HIDDEN,                        /* Table slot exists, but in KVP in memory & xml */
     PROP_PLACEHOLDER,                   /* Table slot exists, but in KVP in memory & xml */
+    PROP_AUTO_INTEREST,
     PROP_FILTER,                        /* KVP */
     PROP_SORT_ORDER,                    /* KVP */
     PROP_SORT_REVERSED,
@@ -460,6 +461,9 @@ gnc_account_get_property (GObject         *object,
     case PROP_HIDDEN:
         g_value_set_boolean(value, xaccAccountGetHidden(account));
         break;
+    case PROP_AUTO_INTEREST:
+        g_value_set_boolean (value, xaccAccountGetAutoInterest (account));
+        break;
     case PROP_PLACEHOLDER:
         g_value_set_boolean(value, xaccAccountGetPlaceholder(account));
         break;
@@ -584,6 +588,9 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_HIDDEN:
         xaccAccountSetHidden(account, g_value_get_boolean(value));
+        break;
+    case PROP_AUTO_INTEREST:
+        xaccAccountSetAutoInterest (account, g_value_get_boolean (value));
         break;
     case PROP_PLACEHOLDER:
         xaccAccountSetPlaceholder(account, g_value_get_boolean(value));
@@ -973,6 +980,16 @@ gnc_account_class_init (AccountClass *klass)
                            FALSE,
                            static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
+    g_object_class_install_property
+    (gobject_class,
+     PROP_AUTO_INTEREST,
+     g_param_spec_boolean ("auto-interest-transfer",
+                           "Auto Interest",
+                           "Whether an interest transfer should be automatically  "
+                           "added before reconcile.",
+                           FALSE,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
+    
     g_object_class_install_property
     (gobject_class,
      PROP_PLACEHOLDER,
@@ -4093,6 +4110,21 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 }
 
 /********************************************************************\
+ \********************************************************************/
+
+gboolean
+xaccAccountGetAutoInterest (const Account *acc)
+{
+    return boolean_from_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"});
+}
+
+void
+xaccAccountSetAutoInterest (Account *acc, gboolean val)
+{
+    set_boolean_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"}, val);
+}
+
+/********************************************************************\
 \********************************************************************/
 
 gboolean
@@ -4648,28 +4680,6 @@ xaccAccountClearReconcilePostpone (Account *acc)
     qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {KEY_RECONCILE_INFO, KEY_POSTPONE});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-/* xaccAccountGetAutoInterestXfer: determine whether the auto interest
- * xfer option is enabled for this account, and return that value.
- * If it is not defined for the account, return the default value.
- */
-gboolean
-xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
-{
-    return boolean_from_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"});
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
-{
-    set_boolean_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"}, option);
 }
 
 /********************************************************************\

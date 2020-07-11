@@ -116,6 +116,8 @@ typedef struct _AccountWindow
     GtkWidget * tax_related_button;
     GtkWidget * placeholder_button;
     GtkWidget * hidden_button;
+    GtkWidget * auto_interest_button;
+    GtkWidget * auto_interest_button_label;
 
     gint component_id;
 } AccountWindow;
@@ -274,6 +276,10 @@ gnc_account_to_ui(AccountWindow *aw)
 
     flag = xaccAccountGetHidden (account);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->hidden_button),
+                                  flag);
+
+    flag = xaccAccountGetAutoInterest (account);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button),
                                   flag);
     LEAVE(" ");
 }
@@ -442,6 +448,11 @@ gnc_ui_to_account(AccountWindow *aw)
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->hidden_button));
     if (xaccAccountGetHidden (account) != flag)
         xaccAccountSetHidden (account, flag);
+
+    flag =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button));
+    if (xaccAccountGetAutoInterest (account) != flag)
+        xaccAccountSetAutoInterest (account, flag);
 
     parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
 
@@ -1084,6 +1095,18 @@ gnc_account_parent_changed_cb (GtkTreeSelection *selection, gpointer data)
 }
 
 static void
+set_auto_interest_box(AccountWindow *aw)
+{
+    Account* account = aw_get_account (aw);
+    gboolean flag = account_type_has_auto_interest_xfer (aw->type);
+    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button), flag);
+    if (!flag)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button_label), flag);
+   
+}
+
+static void
 gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
     AccountWindow *aw = data;
@@ -1120,6 +1143,7 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
         gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                     gnc_numeric_zero ());
     }
+    set_auto_interest_box(aw);
 }
 
 static void
@@ -1389,6 +1413,10 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     aw->tax_related_button = GTK_WIDGET(gtk_builder_get_object (builder, "tax_related_button"));
     aw->placeholder_button = GTK_WIDGET(gtk_builder_get_object (builder, "placeholder_button"));
     aw->hidden_button = GTK_WIDGET(gtk_builder_get_object (builder, "hidden_button"));
+    aw->auto_interest_button = GTK_WIDGET(gtk_builder_get_object (builder, "auto_interest_button"));
+    aw->auto_interest_button_label = GTK_WIDGET(gtk_builder_get_object (builder, "label405"));
+    set_auto_interest_box(aw);
+
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "opening_balance_box"));
     amount = gnc_amount_edit_new ();
