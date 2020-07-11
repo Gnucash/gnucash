@@ -76,52 +76,46 @@
             onedepth1)
     ;; Recursively display the accounts table from the given tree
     ;; (as returned by process-acc-list)
-    (for accrec in tree do
-        (let ((rshift2 0)    ; adjust the amount column by this much
-              (showamt? #t)) ; whether to show the amount (e.g. not if zero)
-          (if (and (accrec-sublist accrec)
-                ;   (> (accrec-depth accrec) 0))
-                )
-            ; has sub-accounts: shift left to put balance in same column as sub-accounts
-            (set! rshift2 -1))
-          ; Don't show zero amount for a placeholder -- the value to
-          ; test for zero depends on whether or not this is a 'summary' value
-          ; (i.e. a total of sub-accounts that are not shown separately)
-          (if (and (accrec-placeholder? accrec)
-                   (if (accrec-summary? accrec)
-                     (not (accrec-non-zero? accrec))
-                     (gnc-numeric-zero-p (accrec-balance-num accrec))))
-            (set! showamt? #f))
-          (display-acc-row
+    (for-each
+     (lambda (accrec)
+       (display-acc-row
+        maxdepth
+        (accrec-depth accrec)
+        ;; has sub-accounts: shift left to put balance in same column
+        ;; as sub-accounts
+        (+ rshift (if (accrec-sublist accrec) -1 0))
+        (accrec-namelink accrec)
+        ;; Don't show zero amount for a placeholder -- the value to
+        ;; test for zero depends on whether or not this is a 'summary'
+        ;; value (i.e. a total of sub-accounts that are not shown
+        ;; separately)
+        (cond
+         ((and (accrec-placeholder? accrec)
+               (if (accrec-summary? accrec)
+                   (not (accrec-non-zero? accrec))
+                   (zero? (accrec-balance-num accrec))))
+          "&nbsp;")
+         ((accrec-summary? accrec) (format-comm-coll (accrec-subtotal-cc accrec)))
+         (else (format-monetary (accrec-balance-mny accrec))))
+        (< (accrec-depth accrec) 1); total?
+        #f) ; leftoverrule?
+       (when (accrec-sublist accrec)
+         ;; recurse to deeper accounts...
+         (display-accounts-table-r
+          (accrec-sublist accrec) neg? maxdepth rshift onedepth1)
+         ;; ...and then display the total
+         ;; unless there is only one depth-1 account
+         (unless (and onedepth1 (= 1 (accrec-depth accrec)))
+           (display-acc-row
             maxdepth
             (accrec-depth accrec)
-            (+ rshift rshift2)
-            (accrec-namelink accrec)
-            (if showamt?
-              (if (accrec-summary? accrec)
-                (format-comm-coll (accrec-subtotal-cc accrec))
-                (format-monetary (accrec-balance-mny accrec)))
-              "&nbsp;"
-              )
-            (< (accrec-depth accrec) 1); total?
-            #f) ; leftoverrule?
-          (if (accrec-sublist accrec)
-            (begin
-              ; recurse to deeper accounts...
-              (display-accounts-table-r (accrec-sublist accrec) neg? maxdepth rshift onedepth1)
-              ; ...and then display the total
-              ; unless there is only one depth-1 account
-              (if (not (and onedepth1
-                            (= 1 (accrec-depth accrec))))
-                (display-acc-row
-                  maxdepth
-                  (accrec-depth accrec)
-                  (if (> (accrec-depth accrec) 1) rshift 0)
-                  (string-append (_ "Total") " " (accrec-namelink accrec))
-                  (format-comm-coll-total (accrec-subtotal-cc accrec))
-                  (<= (accrec-depth accrec) 1)        ; total?
-                  (> (accrec-depth accrec) 0)))))))   ; leftoverrule?
-      )
+            (if (> (accrec-depth accrec) 1) rshift 0)
+            (string-append (_ "Total") " " (accrec-namelink accrec))
+            (format-comm-coll-total (accrec-subtotal-cc accrec))
+            (<= (accrec-depth accrec) 1)        ; total?
+            (> (accrec-depth accrec) 0)))))   ; leftoverrule?
+
+     tree))
 ?>
 
 <!-- The HTML starts here... -->

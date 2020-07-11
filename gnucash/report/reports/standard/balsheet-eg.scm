@@ -46,12 +46,12 @@
 (define debugging? #f)
 
 (define (debug . args)
-  (if debugging?
-    (for arg in args do
-        (if (string? arg)
-          (display (string-append arg " "))
-          (display (string-append (dump arg) " "))))
-      ))
+  (when debugging?
+    (for-each
+     (lambda (arg)
+       (display (if (string? arg) arg (dump arg)))
+       (display " "))
+     args)))
 
 (define (hrule cols) ; in fact just puts in an empty row for spacing
   (display "<tr valign=\"center\"><td colspan=\"")
@@ -102,10 +102,12 @@
   (display " sublist: ")     (if (accrec-sublist accrec)
                                (begin
                                  (display "\n<ul>")
-                                 (for sub-accrec in (accrec-sublist accrec) do
+                                 (for-each
+                                  (lambda (sub-accrec)
                                      (display "\n<li>")
                                      (accrec-printer sub-accrec port)
                                      (display "</li>"))
+                                  (accrec-sublist accrec))
                                  (display "</ul>"))
                                (display "#f")))
 (define accrectype (make-record-type "accrecc"
@@ -122,6 +124,7 @@
                                         subtotal-cc ; of sublist plus this a/c
                                         sublist)
                                      accrec-printer))
+
 (define newaccrec-full (record-constructor accrectype))                ; requires all the fields
 (define (newaccrec-clean)
   ;; Create a new accrec with 'clean' empty values, e.g. strings are "", not #f
