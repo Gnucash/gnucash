@@ -132,40 +132,24 @@
 ;;  style.  The return should be an HTML string.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-data-style-info> 
-  (make-record-type "<html-data-style-info>"
-                    '(renderer data inheritable?))) 
+(define-record-type <html-data-style-info>
+  (make-html-data-style-info-internal renderer data inheritable?)
+  data-style-info?
+  (renderer html-data-style-info-renderer html-data-style-info-set-renderer)
+  (data html-data-style-info-data html-data-style-info-set-data)
+  (inheritable? html-data-style-info-inherit html-data-style-info-set-inherit))
 
-(define gnc:html-data-style-info? 
-  (record-predicate <html-data-style-info>))
-
-(define gnc:make-html-data-style-info-internal
-  (record-constructor <html-data-style-info>))
+(define gnc:make-html-data-style-info-internal make-html-data-style-info-internal)
+(define gnc:html-data-style-info? data-style-info?)
+(define gnc:html-data-style-info-renderer html-data-style-info-renderer)
+(define gnc:html-data-style-info-set-renderer! html-data-style-info-set-renderer)
+(define gnc:html-data-style-info-data html-data-style-info-data)
+(define gnc:html-data-style-info-set-data! html-data-style-info-set-data)
+(define gnc:html-data-style-info-inheritable? html-data-style-info-inherit)
+(define gnc:html-data-style-info-set-inheritable?! html-data-style-info-set-inherit)
 
 (define (gnc:make-html-data-style-info renderer data)
   (gnc:make-html-data-style-info-internal renderer data #t))
-
-(define gnc:html-data-style-info? 
-  (record-predicate <html-data-style-info>))
-
-(define gnc:html-data-style-info-renderer 
-  (record-accessor <html-data-style-info> 'renderer))
-
-(define gnc:html-data-style-info-set-renderer!
-  (record-modifier <html-data-style-info> 'renderer))
-
-(define gnc:html-data-style-info-data 
-  (record-accessor <html-data-style-info> 'data))
-
-(define gnc:html-data-style-info-set-data!
-  (record-modifier <html-data-style-info> 'data))
-
-(define gnc:html-data-style-info-inheritable? 
-  (record-accessor <html-data-style-info> 'inheritable?))
-
-(define gnc:html-data-style-info-set-inheritable?!
-  (record-modifier <html-data-style-info> 'inheritable?))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  default renderers for some data types.  
