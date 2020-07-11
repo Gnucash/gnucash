@@ -258,10 +258,13 @@ set_mac_locale()
  * before another call to setlocale messes it up. */
     gnc_localeconv ();
     /* Process the languages, including the one from the Apple locale. */
-    if ([languages count] > 0)
-        mac_set_languages(languages, lang_str);
-    else
-        g_setenv("LANGUAGE", [lang_str UTF8String], TRUE);
+    if (g_getenv("LANGUAGE") == NULL)
+    {
+        if ([languages count] > 0)
+            mac_set_languages(languages, lang_str);
+        else
+            g_setenv("LANGUAGE", [lang_str UTF8String], TRUE);
+    }
     [languages release];
     [pool drain];
 }
