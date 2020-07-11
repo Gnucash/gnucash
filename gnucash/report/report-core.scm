@@ -29,6 +29,7 @@
 (use-modules (sw_report))
 
 (use-modules (ice-9 match))
+(use-modules (srfi srfi-9))
 
 ; Export the swig-wrapped symbols in the public interface of this module
 (let ((i (module-public-interface (current-module))))
@@ -82,14 +83,46 @@
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 ;; A <report-template> represents one of the available report types.
-(define <report-template>
-  (make-record-type
-   "<report-template>"
-   ;; The data items in a report record
-   '(version name report-guid parent-type options-generator
-             options-cleanup-cb options-changed-cb
-             renderer in-menu? menu-path menu-name
-             menu-tip export-types export-thunk)))
+(define-record-type <report-template>
+  (make-new-record-template version name report-guid parent-type options-generator
+                            options-cleanup-cb options-changed-cb
+                            renderer in-menu? menu-path menu-name
+                            menu-tip export-types export-thunk)
+  report-template?
+  (version report-template-version)
+  (report-guid report-template-report-guid report-template-set-report-guid!)
+  (name report-template-name report-template-set-name)
+  (parent-type report-template-parent-type report-template-set-parent-type!)
+  (options-generator report-template-options-generator)
+  (options-cleanup-cb report-template-options-cleanup-cb)
+  (options-changed-cb report-template-options-changed-cb)
+  (renderer report-template-renderer)
+  (in-menu? report-template-in-menu?)
+  (menu-path report-template-menu-path)
+  (menu-name report-template-menu-name)
+  (menu-tip report-template-menu-tip)
+  (export-types report-template-export-types)
+  (export-thunk report-template-export-thunk))
+
+(define (make-report-template)
+  (make-new-record-template #f #f #f #f #f #f #f #f #t #f #f #f #f #f))
+(define gnc:report-template-version report-template-version)
+(define gnc:report-template-report-guid report-template-report-guid)
+(define gnc:report-template-set-report-guid! report-template-set-report-guid!)
+(define gnc:report-template-name report-template-name)
+(define gnc:report-template-set-name report-template-set-name)
+(define gnc:report-template-parent-type report-template-parent-type)
+(define gnc:report-template-set-parent-type! report-template-set-parent-type!)
+(define gnc:report-template-options-generator report-template-options-generator)
+(define gnc:report-template-options-cleanup-cb report-template-options-cleanup-cb)
+(define gnc:report-template-options-changed-cb report-template-options-changed-cb)
+(define gnc:report-template-renderer report-template-renderer)
+(define gnc:report-template-in-menu? report-template-in-menu?)
+(define gnc:report-template-menu-path report-template-menu-path)
+(define gnc:report-template-menu-name report-template-menu-name)
+(define gnc:report-template-menu-tip report-template-menu-tip)
+(define gnc:report-template-export-types report-template-export-types)
+(define gnc:report-template-export-thunk report-template-export-thunk)
 
 ;; define strings centrally to ease code clarity
 (define rpterr-dupe
@@ -121,14 +154,16 @@ not found.")))
   ;; The renderer should be a function that accepts one argument, a
   ;; set of options, and generates the report. the renderer must
   ;; return as its final value an <html-document> object.
+  (define report-rec (make-report-template))
 
-  (let* ((report-rec (let loop ((report-rec (make-report-template)) (args args))
-                       (match args
-                         (() report-rec)
-                         ((field val . rest)
-                          ((record-modifier <report-template> field) report-rec val)
-                          (loop report-rec rest)))))
-         (report-guid (gnc:report-template-report-guid report-rec))
+  (let loop ((args args))
+    (match args
+      (() #f)
+      ((field val . rest)
+       ((record-modifier <report-template> field) report-rec val)
+       (loop rest))))
+
+  (let* ((report-guid (gnc:report-template-report-guid report-rec))
          (report-name (gnc:report-template-name report-rec)))
     (cond
 
@@ -143,60 +178,6 @@ not found.")))
      ;; good: new report definition, store into report-templates hash
      (else
       (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
-
-(define gnc:report-template-version
-  (record-accessor <report-template> 'version))
-(define gnc:report-template-report-guid
-  (record-accessor <report-template> 'report-guid))
-(define gnc:report-template-set-report-guid!
-  (record-modifier <report-template> 'report-guid))
-(define gnc:report-template-name
-  (record-accessor <report-template> 'name))
-(define gnc:report-template-set-name
-  (record-modifier <report-template> 'name))
-(define gnc:report-template-parent-type
-  (record-accessor <report-template> 'parent-type))
-(define gnc:report-template-set-parent-type!
-  (record-modifier <report-template> 'parent-type))
-(define gnc:report-template-options-generator
-  (record-accessor <report-template> 'options-generator))
-(define gnc:report-template-options-cleanup-cb
-  (record-accessor <report-template> 'options-cleanup-cb))
-(define gnc:report-template-options-changed-cb
-  (record-accessor <report-template> 'options-changed-cb))
-(define gnc:report-template-renderer
-  (record-accessor <report-template> 'renderer))
-(define gnc:report-template-in-menu?
-  (record-accessor <report-template> 'in-menu?))
-(define gnc:report-template-menu-path
-  (record-accessor <report-template> 'menu-path))
-(define gnc:report-template-menu-name
-  (record-accessor <report-template> 'menu-name))
-(define gnc:report-template-menu-tip
-  (record-accessor <report-template> 'menu-tip))
-(define gnc:report-template-export-types
-  (record-accessor <report-template> 'export-types))
-(define gnc:report-template-export-thunk
-  (record-accessor <report-template> 'export-thunk))
-(define (make-report-template)
-  ((record-constructor <report-template>)
-   #f                         ;; version
-   #f                         ;; name
-   #f                         ;; report-guid
-   #f                         ;; parent-type (meaning guid of
-                              ;; report-template this template is
-                              ;; based on)
-   #f                         ;; options-generator
-   #f                         ;; options-cleanup-cb
-   #f                         ;; options-changed-cb
-   #f                         ;; renderer
-   #t                         ;; in-menu?
-   #f                         ;; menu-path
-   #f                         ;; menu-name
-   #f                         ;; menu-tip
-   #f                         ;; export-types
-   #f                         ;; export-thunk
-   ))
 
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
