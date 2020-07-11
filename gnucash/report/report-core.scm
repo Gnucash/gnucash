@@ -231,68 +231,41 @@ not found.")))
       options)))
 
 ;; A <report> represents an instantiation of a particular report type.
-(define <report>
-  (make-record-type
-   "<report>"
-   '(type id options dirty? needs-save? editor-widget ctext custom-template)))
+(define-record-type <report>
+  (make-report type id options dirty? needs-save? editor-widget ctext custom-template)
+  report?
+  (type report-type report-set-type!)
+  (id report-id report-set-id!)
+  (options report-options report-set-options!)
+  (dirty? report-dirty? report-set-dirty?!)
+  (needs-save? report-needs-save? report-set-needs-save?!)
+  (editor-widget report-editor-widget report-set-editor-widget!)
+  (ctext report-ctext report-set-ctext!)
+  (custom-template report-custom-template report-set-custom-template!))
 
-(define gnc:report-type
-  (record-accessor <report> 'type))
-
-(define gnc:report-set-type!
-  (record-modifier <report> 'type))
-
-(define gnc:report-id
-  (record-accessor <report> 'id))
-
-(define gnc:report-set-id!
-  (record-modifier <report> 'id))
-
-(define gnc:report-options
-  (record-accessor <report> 'options))
-
-(define gnc:report-set-options!
-  (record-modifier <report> 'options))
-
-(define gnc:report-needs-save?
-  (record-accessor <report> 'needs-save?))
-
-(define gnc:report-set-needs-save?!
-  (record-modifier <report> 'needs-save?))
-
-(define gnc:report-dirty?
-  (record-accessor <report> 'dirty?))
-
-(define gnc:report-set-dirty?-internal!
-  (record-modifier <report> 'dirty?))
+(define gnc:report-type report-type)
+(define gnc:report-set-type! report-set-type!)
+(define gnc:report-id report-id)
+(define gnc:report-set-id! report-set-id!)
+(define gnc:report-options report-options)
+(define gnc:report-set-options! report-set-options!)
+(define gnc:report-needs-save? report-needs-save?)
+(define gnc:report-set-needs-save?! report-set-needs-save?!)
+(define gnc:report-dirty? report-dirty?)
+(define gnc:report-set-dirty?-internal! report-set-dirty?!)
+(define gnc:report-editor-widget report-editor-widget)
+(define gnc:report-set-editor-widget! report-set-editor-widget!)
+(define gnc:report-ctext report-ctext)
+(define gnc:report-set-ctext! report-set-ctext!)
+(define gnc:report-custom-template report-custom-template)
+(define gnc:report-set-custom-template! report-set-custom-template!)
 
 (define (gnc:report-set-dirty?! report val)
   (gnc:report-set-dirty?-internal! report val)
-  (let* ((template (hash-ref *gnc:_report-templates_*
-                             (gnc:report-type report)))
+  (let* ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report)))
          (cb (gnc:report-template-options-changed-cb template)))
     (if (and cb (procedure? cb))
         (cb report))))
-
-(define gnc:report-editor-widget
-  (record-accessor <report> 'editor-widget))
-
-(define gnc:report-set-editor-widget!
-  (record-modifier <report> 'editor-widget))
-
-;; ctext is for caching the rendered html
-(define gnc:report-ctext
-  (record-accessor <report> 'ctext))
-
-(define gnc:report-set-ctext!
-  (record-modifier <report> 'ctext))
-
-(define gnc:report-custom-template
-  (record-accessor <report> 'custom-template))
-
-(define gnc:report-set-custom-template!
-  (record-modifier <report> 'custom-template))
-
 
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
@@ -301,7 +274,7 @@ not found.")))
                            (hash-ref *gnc:_report-templates_* template-id)))
          (report-type (or template-parent template-id))
          (custom-template (if template-parent template-id ""))
-         (r ((record-constructor <report>)
+         (r (make-report
              report-type     ;; type
              #f              ;; id
              #f              ;; options
@@ -329,8 +302,7 @@ not found.")))
 
 (define (gnc:restore-report-by-guid id template-id template-name options)
   (if options
-      (let* ((r ((record-constructor <report>)
-                 template-id id options #t #t #f #f ""))
+      (let* ((r (make-report template-id id options #t #t #f #f ""))
              (report-id (gnc-report-add r)))
         (if (number? report-id)
             (gnc:report-set-id! r report-id))
@@ -342,8 +314,7 @@ not found.")))
 (define (gnc:restore-report-by-guid-with-custom-template
          id template-id template-name custom-template-id options)
   (if options
-      (let* ((r ((record-constructor <report>)
-                 template-id id options #t #t #f #f custom-template-id))
+      (let* ((r (make-report template-id id options #t #t #f #f custom-template-id))
              (report-id (gnc-report-add r)))
         (if (number? report-id)
             (gnc:report-set-id! r report-id))
