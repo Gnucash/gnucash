@@ -1816,7 +1816,7 @@ gnc_plugin_page_register_recreate_page (GtkWidget* window,
         include_subs = (g_ascii_strcasecmp (reg_type, LABEL_SUBACCOUNT) == 0);
         DEBUG ("Include subs: %d", include_subs);
         book = qof_session_get_book (gnc_get_current_session());
-        if (book)
+        if (!book)
         {
             LEAVE("Session has no book");
             return NULL;

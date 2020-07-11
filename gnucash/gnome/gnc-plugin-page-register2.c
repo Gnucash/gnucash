@@ -1495,7 +1495,7 @@ gnc_plugin_page_register2_recreate_page (GtkWidget *window,
         acct_name = g_key_file_get_string (key_file, group_name,
                                           KEY_ACCOUNT_NAME, &error);
         book = qof_session_get_book (gnc_get_current_session());
-        if (book)
+        if (!book)
         {
             LEAVE("Session has no book");
             return NULL;
