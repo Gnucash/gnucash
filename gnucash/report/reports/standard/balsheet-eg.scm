@@ -42,6 +42,7 @@
 
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (srfi srfi-13)) ; for extra string functions
+(use-modules (srfi srfi-9))
 
 (define debugging? #f)
 
@@ -110,67 +111,31 @@
                                   (accrec-sublist accrec))
                                  (display "</ul>"))
                                (display "#f")))
-(define accrectype (make-record-type "accrecc"
-                                     '(account
-                                        code
-                                        placeholder?
-                                        namelink ; a/c name, as link if required
-                                        commodity
-                                        balance-num ; excluding sublist
-                                        depth
-                                        treedepth
-                                        non-zero?  ; #t if this or any sub-a/cs are non zero
-                                        summary?   ; #t if subaccounts summarised here
-                                        subtotal-cc ; of sublist plus this a/c
-                                        sublist)
-                                     accrec-printer))
 
-(define newaccrec-full (record-constructor accrectype))                ; requires all the fields
-(define (newaccrec-clean)
-  ;; Create a new accrec with 'clean' empty values, e.g. strings are "", not #f
-  (newaccrec-full #f         ; account
-                  ""         ; code
-                  #f         ; placeholder?
-                  ""         ; namelink
-                  (gnc-default-currency)         ; commodity
-                  (gnc-numeric-zero) ; balance-num
-                  0         ; depth
-                  0         ; treedepth
-                  #f         ; non-zero?
-                  #f        ; summary?
-                  (gnc:make-commodity-collector) ; subtotal-cc
-                  #f        ;'()        ; sublist
-                  ))
-(define accrec? (record-predicate accrectype))
-(define accrec-account      (record-accessor accrectype 'account))
-(define accrec-code         (record-accessor accrectype 'code))
-(define accrec-placeholder? (record-accessor accrectype 'placeholder?))
-(define accrec-namelink     (record-accessor accrectype 'namelink))
-(define accrec-commodity    (record-accessor accrectype 'commodity))
-(define accrec-balance-num  (record-accessor accrectype 'balance-num))
+(define-record-type <accrec>
+  (newaccrec-full account code placeholder? namelink commodity balance-num depth
+                  treedepth non-zero? summary? subtotal-cc sublist)
+  accrec?
+  (account accrec-account accrec-set-account!)
+  (code accrec-code accrec-set-code!)
+  (placeholder? accrec-placeholder? accrec-set-placeholder?!)
+  (namelink accrec-namelink accrec-set-namelink!)
+  (commodity accrec-commodity accrec-set-commodity!)
+  (balance-num accrec-balance-num accrec-set-balance-num!)
+  (depth accrec-depth accrec-set-depth!)
+  (treedepth accrec-treedepth accrec-set-treedepth!)
+  (non-zero? accrec-non-zero? accrec-set-non-zero?!)
+  (summary? accrec-summary? accrec-set-summary?!)
+  (subtotal-cc accrec-subtotal-cc accrec-set-subtotal-cc!)
+  (sublist accrec-sublist accrec-set-sublist!))
+
 (define (accrec-balance-mny accrec)
   (gnc:make-gnc-monetary (accrec-commodity accrec) (accrec-balance-num accrec)))
-(define accrec-depth        (record-accessor accrectype 'depth))
-(define accrec-treedepth    (record-accessor accrectype 'treedepth))
-(define accrec-non-zero?    (record-accessor accrectype 'non-zero?))
-(define accrec-summary?     (record-accessor accrectype 'summary?))
-(define accrec-subtotal-cc  (record-accessor accrectype 'subtotal-cc))
-(define accrec-sublist      (record-accessor accrectype 'sublist))
-(define accrec-set-account!      (record-modifier accrectype 'account))
-(define accrec-set-code!         (record-modifier accrectype 'code))
-(define accrec-set-placeholder?! (record-modifier accrectype 'placeholder?))
-(define accrec-set-namelink!     (record-modifier accrectype 'namelink))
-(define accrec-set-commodity!    (record-modifier accrectype 'commodity))
-(define accrec-set-balance-num!  (record-modifier accrectype 'balance-num))
-(define (accrec-set-balance-mny! accrec mny)
-  (accrec-set-commodity!   accrec (gnc:gnc-monetary-commodity mny))
-  (accrec-set-balance-num! accrec (gnc:gnc-monetary-amount    mny)))
-(define accrec-set-depth!        (record-modifier accrectype 'depth))
-(define accrec-set-treedepth!    (record-modifier accrectype 'treedepth))
-(define accrec-set-non-zero?!    (record-modifier accrectype 'non-zero?))
-(define accrec-set-summary?!     (record-modifier accrectype 'summary?))
-(define accrec-set-subtotal-cc!  (record-modifier accrectype 'subtotal-cc))
-(define accrec-set-sublist!      (record-modifier accrectype 'sublist))
+
+(define (newaccrec-clean)
+  (newaccrec-full #f "" #f "" (gnc-default-currency) 0 0 0 #f #f
+                  (gnc:make-commodity-collector) #f))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; All the options stuff starts here
