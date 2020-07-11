@@ -265,14 +265,18 @@
 ;;  want.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-object>
-  (make-record-type "<html-object>"
-                    '(renderer data)))
-(define gnc:html-object?
-  (record-predicate <html-object>))
+(define-record-type <html-object>
+  (make-html-object-internal renderer data)
+  html-object?
+  (renderer html-object-renderer html-object-set-renderer!)
+  (data html-object-data html-object-set-data!))
 
-(define gnc:make-html-object-internal
-  (record-constructor <html-object>))
+(define gnc:html-object? html-object?)
+(define gnc:make-html-object-internal make-html-object-internal)
+(define gnc:html-object-renderer html-object-renderer)
+(define gnc:html-object-set-renderer! html-object-set-renderer!)
+(define gnc:html-object-data html-object-data)
+(define gnc:html-object-set-data! html-object-set-data!)
 
 (define (gnc:make-html-object obj)
   (cond
@@ -319,18 +323,6 @@
     (gnc:make-html-object-internal
      (lambda (obj doc)
        (gnc:html-document-render-data doc obj)) obj))))
-
-(define gnc:html-object-renderer
-  (record-accessor <html-object> 'renderer))
-
-(define gnc:html-object-set-renderer!
-  (record-modifier <html-object> 'renderer))
-
-(define gnc:html-object-data
-  (record-accessor <html-object> 'data))
-
-(define gnc:html-object-set-data!
-  (record-modifier <html-object> 'data))
 
 (define (gnc:html-object-render obj doc)
   (if (gnc:html-object? obj)
