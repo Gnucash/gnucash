@@ -338,21 +338,6 @@
 
          (html #f))
 
-    ;; end of all the lets.  time for some real code
-
-    ;; The following routines are defined inside
-    ;; the renderer to make options available:
-
-    ;; number formatting stuff
-    (define (fmtnumber n)
-      ;; format double n with as many decimal places as required
-      (number->string (if (integer? n) (inexact->exact n) n)))
-    (define (fmtnumeric n)
-      ;; format gnc-numeric n for printing
-      (fmtnumber (gnc-numeric-to-double n)))
-
-    ;; HTML-specific formatting
-
     (define (negstyle item)
       ;; apply styling for negative amounts
       (string-append "<span class=\"negative\">" item "</span>"))
