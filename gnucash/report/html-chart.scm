@@ -25,6 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash json builder))            ;for building JSON options
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -106,26 +107,42 @@
 ;; width - pair
 ;; height - pair
 
-(define <html-chart>
-  (make-record-type "<html-chart>"
-                    '(width
-                      height
-                      chart-options
-                      currency-iso
-                      currency-symbol
-                      custom-x-axis-ticks?
-                      custom-y-axis-ticks?)))
+(define-record-type <html-chart>
+  (make-html-chart width height chart-options currency-iso
+                   currency-symbol custom-x-axis-ticks? custom-y-axis-ticks?)
+  html-chart?
+  (width html-chart-width html-chart-set-width)
+  (height html-chart-height html-chart-set-height)
+  (chart-options html-chart-chart-options html-chart-set-chart-options)
+  (currency-iso html-chart-currency-iso html-chart-set-currency-iso)
+  (currency-symbol html-chart-currency-symbol html-chart-set-currency-symbol)
+  (custom-x-axis-ticks? html-chart-custom-x-axis-ticks?
+                        html-chart-set-custom-x-axis-ticks?)
+  (custom-y-axis-ticks? html-chart-custom-y-axis-ticks?
+                        html-chart-set-custom-y-axis-ticks?))
 
-(define gnc:html-chart?
-  (record-predicate <html-chart>))
+(define gnc:make-html-chart-internal make-html-chart)
+(define gnc:html-chart? html-chart?)
+(define gnc:html-chart-width html-chart-width)
+(define gnc:html-chart-set-width! html-chart-set-width)
+(define gnc:html-chart-height html-chart-height)
+(define gnc:html-chart-set-height! html-chart-set-height)
+(define gnc:html-chart-currency-iso html-chart-currency-iso)
+(define gnc:html-chart-set-currency-iso! html-chart-set-currency-iso)
+(define gnc:html-chart-currency-symbol html-chart-currency-symbol)
+(define gnc:html-chart-set-currency-symbol! html-chart-set-currency-symbol)
+(define gnc:html-chart-custom-x-axis-ticks? html-chart-custom-x-axis-ticks?)
+(define gnc:html-chart-set-custom-x-axis-ticks?! html-chart-set-custom-x-axis-ticks?)
+(define gnc:html-chart-custom-y-axis-ticks? html-chart-custom-y-axis-ticks?)
+(define gnc:html-chart-set-custom-y-axis-ticks?! html-chart-set-custom-y-axis-ticks?)
+(define gnc:html-chart-get-options-internal html-chart-chart-options)
+(define gnc:html-chart-set-options-internal! html-chart-set-chart-options)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-chart> class
 ;;  generate the <object> form for an html chart.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define gnc:make-html-chart-internal
-  (record-constructor <html-chart>))
 
 (define (gnc:make-html-chart)
   (gnc:make-html-chart-internal
@@ -207,18 +224,6 @@
    #t        ;custom y-axis ticks?
    ))
 
-(define gnc:html-chart-width
-  (record-accessor <html-chart> 'width))
-
-(define gnc:html-chart-set-width!
-  (record-modifier <html-chart> 'width))
-
-(define gnc:html-chart-height
-  (record-accessor <html-chart> 'height))
-
-(define gnc:html-chart-set-height!
-  (record-modifier <html-chart> 'height))
-
 (define (gnc:html-chart-type chart)
   (gnc:html-chart-get chart '(type)))
 
@@ -288,12 +293,6 @@
 (define-public (gnc:html-chart-set-y-axis-label! chart label)
   (gnc:html-chart-set! chart '(options scales yAxes (0) scaleLabel labelString) label))
 
-(define gnc:html-chart-get-options-internal
-  (record-accessor <html-chart> 'chart-options))
-
-(define gnc:html-chart-set-options-internal!
-  (record-modifier <html-chart> 'chart-options))
-
 (define (gnc:html-chart-get chart path)
   (let ((options (gnc:html-chart-get-options-internal chart)))
     (nested-alist-get options path)))
@@ -303,30 +302,6 @@
         (val-vec (list-to-vec val)))
     (nested-alist-set! options path val-vec)
     (gnc:html-chart-set-options-internal! chart options)))
-
-(define gnc:html-chart-currency-iso
-  (record-accessor <html-chart> 'currency-iso))
-
-(define gnc:html-chart-set-currency-iso!
-  (record-modifier <html-chart> 'currency-iso))
-
-(define gnc:html-chart-currency-symbol
-  (record-accessor <html-chart> 'currency-symbol))
-
-(define gnc:html-chart-set-currency-symbol!
-  (record-modifier <html-chart> 'currency-symbol))
-
-(define gnc:html-chart-custom-x-axis-ticks?
-  (record-accessor <html-chart> 'custom-x-axis-ticks?))
-
-(define-public gnc:html-chart-set-custom-x-axis-ticks?!
-  (record-modifier <html-chart> 'custom-x-axis-ticks?))
-
-(define gnc:html-chart-custom-y-axis-ticks?
-  (record-accessor <html-chart> 'custom-y-axis-ticks?))
-
-(define-public gnc:html-chart-set-custom-y-axis-ticks?!
-  (record-modifier <html-chart> 'custom-y-axis-ticks?))
 
 (define JS-Number-to-String "
 // The following snippet from MDN
