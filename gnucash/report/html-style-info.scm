@@ -22,6 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (ice-9 match))
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-markup-style-info> class 
@@ -38,31 +39,36 @@
 ;;  attribute   : single attribute-value pair in a list 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-record-type <html-markup-style-info>
+  (make-html-markup-style-info-internal tag attributes inheritable?)
+  html-markup-style-info?
+  (tag style-info-tag style-info-set-tag)
+  (attributes style-info-attributes style-info-set-attributes)
+  (inheritable? style-info-inheritable? style-info-set-inheritable?))
 
-(define <html-markup-style-info> 
-  (make-record-type "<html-markup-style-info>"
-                    '(tag 
-                      attributes
-                      inheritable?)))
-
-(define gnc:html-markup-style-info?
-  (record-predicate <html-markup-style-info>))
-
-(define gnc:make-html-markup-style-info-internal 
-  (record-constructor <html-markup-style-info>))
+(define gnc:make-html-markup-style-info-internal make-html-markup-style-info-internal)
+(define gnc:html-markup-style-info? html-markup-style-info?)
+(define gnc:html-markup-style-info-tag style-info-tag)
+(define gnc:html-markup-style-info-set-tag! style-info-set-tag)
+(define gnc:html-markup-style-info-attributes style-info-attributes)
+(define gnc:html-markup-style-info-set-attributes! style-info-set-attributes)
+(define gnc:html-markup-style-info-inheritable? style-info-inheritable?)
+(define gnc:html-markup-style-info-set-inheritable?! style-info-set-inheritable?)
 
 (define (gnc:make-html-markup-style-info . rest)
-  (let ((retval (gnc:make-html-markup-style-info-internal 
-                 #f (make-hash-table) #t)))
+  (let ((retval (gnc:make-html-markup-style-info-internal #f (make-hash-table) #t)))
     (apply gnc:html-markup-style-info-set! retval rest)
     retval))
 
 (define (gnc:html-markup-style-info-set! style . rest)
   (let loop ((arglist rest))
     (match arglist
-      (('attribute (key . val) . rest)
-       (gnc:html-markup-style-info-set-attribute!
-        style key (and (pair? val) (car val)))
+      (('attribute (key val) . rest)
+       (gnc:html-markup-style-info-set-attribute! style key val)
+       (loop rest))
+
+      (('attribute (key) . rest)
+       (gnc:html-markup-style-info-set-attribute! style key #f)
        (loop rest))
 
       ((field value . rest)
@@ -70,24 +76,6 @@
        (loop rest))
 
       (else style))))
-
-(define gnc:html-markup-style-info-tag
-  (record-accessor <html-markup-style-info> 'tag))
-
-(define gnc:html-markup-style-info-set-tag!
-  (record-modifier <html-markup-style-info> 'tag))
-
-(define gnc:html-markup-style-info-attributes
-  (record-accessor <html-markup-style-info> 'attributes))
-
-(define gnc:html-markup-style-info-set-attributes!
-  (record-modifier <html-markup-style-info> 'attributes))
-
-(define gnc:html-markup-style-info-inheritable? 
-  (record-accessor <html-markup-style-info> 'inheritable?))
-
-(define gnc:html-markup-style-info-set-inheritable?!
-  (record-modifier <html-markup-style-info> 'inheritable?))
 
 (define (gnc:html-markup-style-info-set-attribute! info attr val)
   (hash-set! (gnc:html-markup-style-info-attributes info) attr val))
