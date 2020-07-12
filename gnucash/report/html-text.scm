@@ -21,6 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-text> class
@@ -30,34 +31,24 @@
 ;;  doc as arg to get the string out. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-text> 
-  (make-record-type "<html-text>"
-                    '(body style)))
-(define gnc:html-text? 
-  (record-predicate <html-text>))
+(define-record-type <html-text>
+  (make-html-text body style)
+  html-text?
+  (body html-text-body html-text-set-body!)
+  (style html-text-style html-text-set-style!))
 
-(define gnc:make-html-text-internal
-  (record-constructor <html-text>))
+(define gnc:html-text? html-text?)
+(define gnc:make-html-text-internal make-html-text)
+(define gnc:html-text-body html-text-body)
+(define gnc:html-text-set-body-internal! html-text-set-body!)
+(define gnc:html-text-style html-text-style)
+(define gnc:html-text-set-style-internal! html-text-set-style!)
 
 (define (gnc:make-html-text . body)
-  (gnc:make-html-text-internal 
-   body
-   (gnc:make-html-style-table)))
-
-(define gnc:html-text-body
-  (record-accessor <html-text> 'body))
-
-(define gnc:html-text-set-body-internal!
-  (record-modifier <html-text> 'body))
+  (gnc:make-html-text-internal body (gnc:make-html-style-table)))
 
 (define (gnc:html-text-set-body! txt . rest)
   (gnc:html-text-set-body-internal! txt rest))
-
-(define gnc:html-text-style
-  (record-accessor <html-text> 'style))
-
-(define gnc:html-text-set-style-internal!
-  (record-modifier <html-text> 'style))
 
 (define (gnc:html-text-set-style! text tag . rest)
   (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
