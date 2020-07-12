@@ -31,6 +31,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
+(use-modules (srfi srfi-9))
 
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
@@ -67,42 +68,20 @@
 ;; if any.  Any bills get taken out of the overpayment before
 ;; incurring debt.
 
-(define company-info (make-record-type "ComanyInfo" 
-				       '(currency
-					 bucket-vector
-					 overpayment
-					 owner-obj)))
+(define-record-type :company-info
+  (make-company-private currency bucket overpayment owner-obj)
+  company-info?
+  (currency company-get-currency)
+  (bucket company-get-buckets company-set-buckets)
+  (overpayment company-get-overpayment company-set-overpayment)
+  (owner-obj company-get-owner-obj company-set-owner-obj!))
 
 (define num-buckets 5)
 (define (new-bucket-vector)
   (make-vector num-buckets (gnc-numeric-zero)))
 
-(define make-company-private
-  (record-constructor company-info '(currency bucket-vector overpayment owner-obj)))
-
 (define (make-company currency owner-obj)
-  (make-company-private currency (new-bucket-vector) (gnc-numeric-zero) owner-obj))
-
-(define company-get-currency
-  (record-accessor company-info 'currency))
-
-(define company-get-owner-obj
-  (record-accessor company-info 'owner-obj))
-
-(define company-set-owner-obj!
-  (record-modifier company-info 'owner-obj))
-
-(define company-get-buckets
-  (record-accessor company-info 'bucket-vector))
-
-(define company-set-buckets
-  (record-modifier company-info 'bucket-vector))
-
-(define company-get-overpayment
-  (record-accessor company-info 'overpayment))
-
-(define company-set-overpayment
-  (record-modifier company-info 'overpayment))
+  (make-company-private currency (new-bucket-vector) 0 owner-obj))
 
 ;; Put an invoice in the appropriate bucket
 
