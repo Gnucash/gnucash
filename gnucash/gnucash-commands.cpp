@@ -133,11 +133,15 @@ report_session_percentage (const char *message, double percent)
     return;
 }
 
+/* Don't try to use std::string& for the members of the following struct, it
+ * results in the values getting corrupted as it passes through initializing
+ * Scheme when compiled with Clang.
+ */
 struct run_report_args {
-    const std::string& file_to_load;
-    const std::string& run_report;
-    const std::string& export_type;
-    const std::string& output_file;
+    const std::string file_to_load;
+    const std::string run_report;
+    const std::string export_type;
+    const std::string output_file;
 };
 
 static void
