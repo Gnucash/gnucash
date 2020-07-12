@@ -124,65 +124,31 @@
        (apply gnc:make-html-data-style-info rest)
        (apply gnc:make-html-markup-style-info rest))))
 
-(define (gnc:make-html-style-sheet template-name style-sheet-name)
-  (let* ((template (gnc:html-style-sheet-template-find template-name)))
-    (if template
-        (let ((rv (gnc:make-html-style-sheet-internal 
-                   style-sheet-name template-name 
-                   ((gnc:html-style-sheet-template-options-generator template))
-                   (gnc:html-style-sheet-template-renderer template)
-                   (gnc:make-html-style-table))))
-          ;; set up the fallback data styles for every rendered document 
-          (gnc:html-style-sheet-set-style! 
-           rv "<string>" 
-           gnc:default-html-string-renderer #f)
-          
-          (gnc:html-style-sheet-set-style! 
-           rv "<gnc-numeric>" 
-           gnc:default-html-gnc-numeric-renderer #f)
-          
-          (gnc:html-style-sheet-set-style!
-           rv "<number>" 
-           gnc:default-html-number-renderer #f)
-          
-          (gnc:html-style-sheet-set-style!
-           rv "<gnc-monetary>" 
-           gnc:default-html-gnc-monetary-renderer #f)
+(define (make-html-style-sheet-internal template-name style-sheet-name options)
+  (define template (gnc:html-style-sheet-template-find template-name))
+  (define fallback-styles
+    (list (cons "<string>" gnc:default-html-string-renderer)
+          (cons "<gnc-numeric>" gnc:default-html-gnc-numeric-renderer)
+          (cons "<number>" gnc:default-html-number-renderer)
+          (cons "<gnc-monetary>" gnc:default-html-gnc-monetary-renderer)))
+  (and template
+       (let ((ss (gnc:make-html-style-sheet-internal
+                  style-sheet-name template-name
+                  (or options
+                      ((gnc:html-style-sheet-template-options-generator template)))
+                  (gnc:html-style-sheet-template-renderer template)
+                  (gnc:make-html-style-table))))
+         (for-each (lambda (pair)
+                     (gnc:html-style-sheet-set-style! ss (car pair) (cdr pair) #f))
+                   fallback-styles)
+         (hash-set! *gnc:_style-sheets_* style-sheet-name ss)
+         ss)))
 
-          ;; store it in the style sheet hash 
-          (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
-          rv)
-        #f)))
+(define (gnc:make-html-style-sheet template-name style-sheet-name)
+  (make-html-style-sheet-internal template-name style-sheet-name #f))
 
 (define (gnc:restore-html-style-sheet style-sheet-name template-name options)
-  (let* ((template (gnc:html-style-sheet-template-find template-name)))
-    (if template
-        (let ((rv (gnc:make-html-style-sheet-internal 
-                   style-sheet-name template-name 
-                   options
-                   (gnc:html-style-sheet-template-renderer template)
-                   (gnc:make-html-style-table))))
-          ;; set up the fallback data styles for every rendered document 
-          (gnc:html-style-sheet-set-style! 
-           rv "<string>" 
-           gnc:default-html-string-renderer #f)
-          
-          (gnc:html-style-sheet-set-style! 
-           rv "<gnc-numeric>" 
-           gnc:default-html-gnc-numeric-renderer #f)
-          
-          (gnc:html-style-sheet-set-style!
-           rv "<number>" 
-           gnc:default-html-number-renderer #f)
-          
-          (gnc:html-style-sheet-set-style!
-           rv "<gnc-monetary>" 
-           gnc:default-html-gnc-monetary-renderer #f)
-          
-          ;; store it in the style sheet hash 
-          (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
-          rv)
-        #f)))
+  (make-html-style-sheet-internal template-name style-sheet-name options))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
