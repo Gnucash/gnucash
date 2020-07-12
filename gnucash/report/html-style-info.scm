@@ -188,36 +188,23 @@
 ;; deserves a record structure. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-style-table>
-  (make-record-type "<html-style-table>"
-                    '(primary compiled inheritable)))
+(define-record-type <html-style-table>
+  (make-html-style-table primary compiled inheritable)
+  html-style-table?
+  (primary html-style-table-primary)
+  (compiled html-style-table-compiled html-style-table-set-compiled!)
+  (inheritable html-style-table-inheritable html-style-table-set-inheritable!))
 
-(define gnc:html-style-table? 
-  (record-predicate <html-style-table>))
-
-(define gnc:make-html-style-table-internal 
-  (record-constructor <html-style-table>))
-
+(define gnc:html-style-table? html-style-table?)
+(define gnc:make-html-style-table-internal make-html-style-table)
+(define gnc:html-style-table-primary html-style-table-primary)
+(define gnc:html-style-table-set-compiled! html-style-table-set-compiled!)
+(define gnc:html-style-table-inheritable html-style-table-inheritable)
+(define gnc:html-style-table-set-inheritable! html-style-table-set-inheritable!)
+(define gnc:html-style-table-compiled html-style-table-compiled)
+(define gnc:html-style-table-compiled? gnc:html-style-table-compiled)
 (define (gnc:make-html-style-table)
   (gnc:make-html-style-table-internal (make-hash-table) #f #f))
-
-(define gnc:html-style-table-primary
-  (record-accessor <html-style-table> 'primary))
-
-(define gnc:html-style-table-compiled
-  (record-accessor <html-style-table> 'compiled))
-
-(define gnc:html-style-table-set-compiled!
-  (record-modifier <html-style-table> 'compiled))
-
-(define gnc:html-style-table-inheritable
-  (record-accessor <html-style-table> 'inheritable))
-
-(define gnc:html-style-table-set-inheritable!
-  (record-modifier <html-style-table> 'inheritable))
-
-(define (gnc:html-style-table-compiled? table)
-  (gnc:html-style-table-compiled table))
 
 (define (gnc:html-style-table-compile table antecedents)
   ;; merge a key-value pair from an antecedent into the 
