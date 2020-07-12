@@ -374,13 +374,13 @@
              (gnc:make-html-text
               (gnc:html-markup-h3 headline)
               (gnc:html-markup-br)
-              (_ "Prepared by: ")
+              (G_ "Prepared by: ")
               (gnc:html-markup-b preparer)
               (gnc:html-markup-br)
-              (_ "Prepared for: ")
+              (G_ "Prepared for: ")
               (gnc:html-markup-b prepared-for)
               (gnc:html-markup-br)
-              (_ "Date: ")
+              (G_ "Date: ")
               (qof-print-date
                (current-time)))
 

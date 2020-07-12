@@ -27,7 +27,7 @@
 
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash core-utils)) ; for gnc:version and (G_ ...)
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 
@@ -49,7 +49,7 @@
       (gnc:option-set-value
        (gnc:lookup-option options section name) value))
 
-    (set-option! "General" "Report name" (_ "Dashboard"))
+    (set-option! "General" "Report name" (G_ "Dashboard"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved

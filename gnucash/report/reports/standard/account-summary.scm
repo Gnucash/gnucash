@@ -145,7 +145,7 @@
     (add-option
      (gnc:make-string-option
       gnc:pagename-general optname-report-title
-      "a" opthelp-report-title (_ reportname)))
+      "a" opthelp-report-title (G_ reportname)))
     (add-option
      (gnc:make-string-option
       gnc:pagename-general optname-party-name
@@ -322,7 +322,7 @@
           company-name " " report-title " "
           (if sx?
               ;; Translators: This is part of the report title, which is capitalzed in English, but not all other languages
-              (format #f (_ "For Period Covering ~a to ~a")
+              (format #f (G_ "For Period Covering ~a to ~a")
                       (qof-print-date from-date)
                       (qof-print-date to-date))
               (qof-print-date to-date))))
@@ -403,10 +403,10 @@
            build-table
            (map make-header
                 (append
-                 (if show-code? (list (_ "Code")) '())
-                 (if show-type? (list (_ "Type")) '())
-                 (if show-desc? (list (_ "Description")) '())
-                 (list (_ "Account title")))))
+                 (if show-code? (list (G_ "Code")) '())
+                 (if show-type? (list (G_ "Type")) '())
+                 (if show-desc? (list (G_ "Description")) '())
+                 (list (G_ "Account title")))))
           ;; add any fields to be displayed before the account name
           (if show-code? (add-col 'account-code))
           (if show-type? (add-col 'account-type-string))
@@ -418,7 +418,7 @@
                 account-cols))
           (when show-bals?
             (gnc:html-table-set-cell/tag!
-             build-table 0 (+ cur-col account-cols) "number-header" (_ "Balance")))
+             build-table 0 (+ cur-col account-cols) "number-header" (G_ "Balance")))
           (let rowloop ((row 0))
             (when (< row table-rows)
               (gnc:html-table-set-row-markup!
@@ -433,7 +433,7 @@
           (set! cur-col (+ cur-col hold-table-width))
           (when show-notes?
             (gnc:html-table-set-cell/tag!
-             build-table 0 cur-col "number-header" (_ "Notes"))
+             build-table 0 cur-col "number-header" (G_ "Notes"))
             (add-col 'account-notes))
 
           (gnc:html-document-add-object! doc build-table)

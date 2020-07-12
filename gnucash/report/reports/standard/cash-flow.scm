@@ -185,7 +185,7 @@
      doc (string-append
           (get-option gnc:pagename-general gnc:optname-reportname)
           " - "
-          (format #f (_ "~a to ~a")
+          (format #f (G_ "~a to ~a")
                   (qof-print-date from-date-t64) (qof-print-date to-date-t64))))
 
     (if (not (null? accounts))
@@ -200,8 +200,8 @@
                     (if (and (= (gnc-account-get-current-depth account) tree-depth)
                              (pair? (gnc-account-get-children account)))
                         (if show-subaccts?
-                            (_ "~a and subaccounts")
-                            (_ "~a and selected subaccounts"))
+                            (G_ "~a and subaccounts")
+                            (G_ "~a and selected subaccounts"))
                         "~a")
                     (gnc:html-markup-anchor
                      (gnc:account-anchor-text account)
@@ -251,7 +251,7 @@
 
               (gnc:html-document-add-object!
                doc
-               (gnc:make-html-text (_ "Selected Accounts")))
+               (gnc:make-html-text (G_ "Selected Accounts")))
 
               (gnc:html-document-add-object!
                doc
@@ -265,7 +265,7 @@
                table
                "primary-subheading"
                (list
-                (_ "Money into selected accounts comes from")
+                (G_ "Money into selected accounts comes from")
                 ""))
 
               (add-accounts-flow money-in-accounts money-in-alist)
@@ -274,7 +274,7 @@
                table
                "grand-total"
                (list
-                (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money In"))
+                (gnc:make-html-table-header-cell/markup "text-cell" (G_ "Money In"))
                 (gnc:make-html-table-header-cell/markup
                  "total-number-cell"
                  (gnc:sum-collector-commodity
@@ -286,7 +286,7 @@
                table
                "primary-subheading"
                (list
-                (_ "Money out of selected accounts goes to")
+                (G_ "Money out of selected accounts goes to")
                 ""))
 
               (add-accounts-flow money-out-accounts money-out-alist)
@@ -295,7 +295,7 @@
                table
                "grand-total"
                (list
-                (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money Out"))
+                (gnc:make-html-table-header-cell/markup "text-cell" (G_ "Money Out"))
                 (gnc:make-html-table-header-cell/markup
                  "total-number-cell"
                  (gnc:sum-collector-commodity
@@ -307,7 +307,7 @@
                table
                "grand-total"
                (list
-                (gnc:make-html-table-header-cell/markup "text-cell" (_ "Difference"))
+                (gnc:make-html-table-header-cell/markup "text-cell" (G_ "Difference"))
                 (gnc:make-html-table-header-cell/markup
                  "total-number-cell"
                  (gnc:sum-collector-commodity

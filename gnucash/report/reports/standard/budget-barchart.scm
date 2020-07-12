@@ -213,18 +213,18 @@
                  (list (xaccAccountGetName acct)
                        ;; Translators: Bgt and Act refer to budgeted and
                        ;; actual total amounts.
-                       (format #f (_ "Bgt: ~a Act: ~a")
+                       (format #f (G_ "Bgt: ~a Act: ~a")
                                (amount->monetary bgt-sum)
                                (amount->monetary act-sum)))
                  (list (xaccAccountGetName acct))))
       (gnc:html-chart-set-data-labels! chart (reverse dates-list))
       (gnc:html-chart-add-data-series! chart
-                                       (_ "Actual")
+                                       (G_ "Actual")
                                        (reverse act-vals)
                                        "#FF4136"
                                        'fill (eq? chart-type 'bars))
       (gnc:html-chart-add-data-series! chart
-                                       (_ "Budget")
+                                       (G_ "Budget")
                                        (reverse bgt-vals)
                                        "#0074D9"
                                        'fill (eq? chart-type 'bars))

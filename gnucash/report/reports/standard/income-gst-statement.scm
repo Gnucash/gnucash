@@ -45,7 +45,7 @@
   (gnc:make-html-text
 
    (gnc:html-markup-p
-    (_ "This report is useful to calculate periodic business tax \
+    (G_ "This report is useful to calculate periodic business tax \
 payable/receivable from authorities. From 'Edit report options', \
 choose your business sales and purchase accounts. Each transaction \
 may contain, in addition to the asset, liability, A/Payable or \
@@ -53,22 +53,22 @@ A/Receivable accounts, a split to a tax account, e.g. Income:Sales \
 -$1000, A/Receivable $1100, Liability:GST on Sales -$100."))
 
    (gnc:html-markup-p
-    (_ "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills \
+    (G_ "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills \
 which will require Tax Tables to be set up correctly. Please see the documentation."))
 
    (gnc:html-markup-p
-    (_ "From the Report Options, you will need to select the accounts which will \
+    (G_ "From the Report Options, you will need to select the accounts which will \
 hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
 monies which are wholly sent or claimed from tax authorities during periodic GST/VAT returns. These \
 accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales."))
 
    (gnc:html-markup-p
-    (_ "Note the UK variant may specify EU VAT accounts may be tagged \
+    (G_ "Note the UK variant may specify EU VAT accounts may be tagged \
 with *EUVAT* in the VAT account description. EU Goods sales and purchase \
 accounts may be tagged with *EUGOODS* in the account description."))
 
    (gnc:html-markup-p
-    (_ "This message will be removed when tax accounts are specified."))))
+    (G_ "This message will be removed when tax accounts are specified."))))
 
 (define* (gst-statement-renderer rpt #:optional export-type file-name)
   (define (opt-val section name)
@@ -156,17 +156,17 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
    options
    (gnc:make-multichoice-callback-option
     pagename-format (N_ "Report format")
-    "a" (_ "Report Format") 'default
+    "a" (G_ "Report Format") 'default
     (list (vector 'default
-                  (_ "default format")
-                  (_ "default format"))
+                  (G_ "default format")
+                  (G_ "default format"))
           (vector 'au-bas
-                  (_ "Australia BAS")
-                  (_ "Australia BAS. Specify sales, purchase and tax \
+                  (G_ "Australia BAS")
+                  (G_ "Australia BAS. Specify sales, purchase and tax \
 accounts."))
           (vector 'uk-vat
-                  (_ "UK VAT Return")
-                  (_ "UK VAT Return. Specify sales, purchase and tax \
+                  (G_ "UK VAT Return")
+                  (G_ "UK VAT Return. Specify sales, purchase and tax \
 accounts. EU rules may be used. Denote EU VAT accounts *EUVAT* in \
 account description, and denote EU goods sales and purchases accounts \
 with *EUGOODS* in the account description."))) #f
@@ -310,25 +310,25 @@ with *EUGOODS* in the account description."))) #f
          (append
 
           ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
-          (list (vector (_ "Gross Sales") tot-sales #f #t #f #f))
+          (list (vector (G_ "Gross Sales") tot-sales #f #t #f #f))
 
           (if (opt-val pagename-format "Individual sales columns")
               (map
                (lambda (acc)
                  (vector (xaccAccountGetName acc) (account-adder-neg acc) #f #t #f #f))
                accounts-sales)
-              (list (vector (_ "Net Sales") net-sales #f #t #f #f)))
+              (list (vector (G_ "Net Sales") net-sales #f #t #f #f)))
 
           (if (opt-val pagename-format "Individual tax columns")
               (map
                (lambda (acc)
                  (vector (xaccAccountGetName acc) (account-adder-neg acc) #f #t #f #f))
                accounts-tax-collected)
-              (list (vector (_ "Tax on Sales") tax-sales #f #t #f #f)))
+              (list (vector (G_ "Tax on Sales") tax-sales #f #t #f #f)))
 
           ;; Translators: "Gross Purchases" refer to Net Purchase +
           ;; GST/VAT on Purchase
-          (list (vector (_ "Gross Purchases") tot-purch #f #t #f #f))
+          (list (vector (G_ "Gross Purchases") tot-purch #f #t #f #f))
 
           (if (opt-val pagename-format "Individual purchases columns")
               (map
@@ -336,7 +336,7 @@ with *EUGOODS* in the account description."))) #f
                  (vector (xaccAccountGetName acc) (account-adder acc) #f #t #f #f))
                accounts-purchases)
               (list
-               (vector (_ "Net Purchases") net-purch #f #t #f #f)))
+               (vector (G_ "Net Purchases") net-purch #f #t #f #f)))
 
           (if (opt-val pagename-format "Individual tax columns")
               (map
@@ -344,13 +344,13 @@ with *EUGOODS* in the account description."))) #f
                  (vector (xaccAccountGetName acc) (account-adder acc) #f #t #f #f))
                accounts-tax-paid)
               (list
-               (vector (_ "Tax on Purchases") tax-purch #f #t #f #f)))
+               (vector (G_ "Tax on Purchases") tax-purch #f #t #f #f)))
 
           (if (opt-val pagename-format "Gross Balance")
               ;; Translators: "Gross Balance" refer to "Gross Sales
               ;; minus Gross Purchases" in GST Report
               (list
-               (vector (_ "Gross Balance") tot-bal #f #t #f #f))
+               (vector (G_ "Gross Balance") tot-bal #f #t #f #f))
               '())
 
           ;; Note: Net income = net balance - other costs
@@ -358,14 +358,14 @@ with *EUGOODS* in the account description."))) #f
               ;; Translators: "Net Balance" refer to Net Sales - Net
               ;; Purchases in GST Report
               (list
-               (vector (_ "Net Balance") net-bal #f #t #f #f))
+               (vector (G_ "Net Balance") net-bal #f #t #f #f))
               '())
 
           (if (opt-val pagename-format "Tax payable")
               ;; Translators: "Tax Payable" refer to the difference
               ;; GST Sales - GST Purchases
               (list
-               (vector (_ "Tax payable") tax-diff #f #t #f #f))
+               (vector (G_ "Tax payable") tax-diff #f #t #f #f))
               '()))))
 
       ((au-bas)

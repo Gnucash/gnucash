@@ -142,7 +142,7 @@
           (list "oth s" GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE)
           (list "mutual" GNC-BANK-TYPE)))
   (or (assoc-ref string-map-alist (string-downcase! (string-trim-both read-value)))
-      (let ((msg (format #f (_ "Unrecognized account type '~s'. Defaulting to Bank.")
+      (let ((msg (format #f (G_ "Unrecognized account type '~s'. Defaulting to Bank.")
                          read-value)))
         (errorproc errortype msg)
         (list GNC-BANK-TYPE))))
@@ -205,7 +205,7 @@
   (and read-value
        (let ((sym (string->symbol (string-downcase (string-trim-both read-value)))))
          (or (any (lambda (lst) (and (memq sym lst) (car lst))) action-map)
-             (let ((msg (format #f (_ "Unrecognized action '~a'.") read-value)))
+             (let ((msg (format #f (G_ "Unrecognized action '~a'.") read-value)))
                (errorproc errortype msg))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -224,7 +224,7 @@
    (not (string-null? read-value))
    (let* ((secondchar (string-ref read-value 0)))
      (or (any (lambda (m) (and (memq secondchar (cdr m)) (car m))) maplist)
-         (let ((msg (format #f (_ "Unrecognized status '~a'. Defaulting to uncleared.")
+         (let ((msg (format #f (G_ "Unrecognized status '~a'. Defaulting to uncleared.")
                             read-value)))
            (errorproc errortype msg))))))
 

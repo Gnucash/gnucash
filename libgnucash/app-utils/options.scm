@@ -27,7 +27,7 @@
 GnuCash. One of the newer ~a options '~a' is not available, fallback to \
 the option '~a'."))
          (console-msg (format #f template type newoption fallback))
-         (ui-msg (format #f (_ template) type newoption fallback)))
+         (ui-msg (format #f (G_ template) type newoption fallback)))
     (gnc:gui-warn console-msg ui-msg)))
 
 (define (gnc:make-option

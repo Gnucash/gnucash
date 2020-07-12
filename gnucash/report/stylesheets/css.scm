@@ -206,7 +206,7 @@ td.highlight {
       (gnc:html-document-set-style-text! ssdoc default-css)
       (gnc:html-document-add-object!
        ssdoc (gnc:make-html-text
-              (_ "&lt;/style is disallowed in CSS. Using default CSS."))))
+              (G_ "&lt;/style is disallowed in CSS. Using default CSS."))))
 
      (else
       (gnc:html-document-set-style-text! ssdoc all-css)))

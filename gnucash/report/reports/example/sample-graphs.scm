@@ -33,7 +33,7 @@
 
 ;; Add this module to enable translatable strings
 ;; Use (N_ string) to mark string for translation (it won't be translated on the spot)
-;; Use (_ string) to use a translation of this string if it exists.
+;; Use (G_ string) to use a translation of this string if it exists.
 (use-modules (gnucash core-utils))
 
 ;; It's common to define frequently used strings once
@@ -135,26 +135,26 @@
 
   (let ((document (gnc:make-html-document)))
 
-    (gnc:html-document-set-title! document (_ reportname))
+    (gnc:html-document-set-title! document (G_ reportname))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Pie:"))))
+     (gnc:make-html-text (gnc:html-markup-p (G_ "Pie:"))))
     (gnc:html-document-add-object! document (simple-pie-chart))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, normal:"))))
+     (gnc:make-html-text (gnc:html-markup-p (G_ "Bar, normal:"))))
     (gnc:html-document-add-object! document (simple-bar-chart #f))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Bar, stacked:"))))
+     (gnc:make-html-text (gnc:html-markup-p (G_ "Bar, stacked:"))))
     (gnc:html-document-add-object! document (simple-bar-chart #t))
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p (_ "Scatter:"))))
+     (gnc:make-html-text (gnc:html-markup-p (G_ "Scatter:"))))
     (gnc:html-document-add-object! document (simple-scatter-chart))
 
     document))
@@ -179,11 +179,11 @@
 
  ;; The name in the menu
  ;; (only necessary if it differs from the name)
- 'menu-name (_ reportname)
+ 'menu-name (G_ reportname)
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
- 'menu-tip (_ reportname)
+ 'menu-tip (G_ reportname)
 
  ;; A path describing where to put the report in the menu system.
  ;; In this case, it's going under the utility menu.

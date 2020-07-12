@@ -403,7 +403,7 @@
        prices)))
 
   (define (show-error msg)
-    (gnc:gui-error msg (_ msg)))
+    (gnc:gui-error msg (G_ msg)))
 
   ;; Add the alphavantage api key to the environment. This value is taken from
   ;; the Online Quotes preference tab
@@ -453,7 +453,7 @@ Run 'gnc-fq-update' as root to install them.")))
      ((memq 'need-alphavantage-key fq-results)
       (set! keep-going? #f)
       (gnc-error-dialog
-       window (format #f (_ "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A")
+       window (format #f (G_ "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A")
                       "https://wiki.gnucash.org/wiki/Online_Quotes#Source_Alphavantage.2C_US")))
 
      ((memq 'system-error fq-results)
@@ -485,18 +485,18 @@ Run 'gnc-fq-update' as root to install them.")))
           (gnc-verify-dialog
            window #t (with-output-to-string
                        (lambda ()
-                         (display (_ "Unable to retrieve quotes for these items:"))
+                         (display (G_ "Unable to retrieve quotes for these items:"))
                          (display "\n  ")
                          (display (string-join problem-syms "\n  "))
                          (newline)
-                         (display (_ "Continue using only the good quotes?")))))))
+                         (display (G_ "Continue using only the good quotes?")))))))
 
        (else
         (set! keep-going? #f)
         (gnc-error-dialog
          window (with-output-to-string
                   (lambda ()
-                    (display (_ "Unable to retrieve quotes for these items:"))
+                    (display (G_ "Unable to retrieve quotes for these items:"))
                     (display "\n  ")
                     (display (string-join problem-syms "\n  ")))))))))
 
@@ -511,11 +511,11 @@ Run 'gnc-fq-update' as root to install them.")))
                  window #t
                  (with-output-to-string
                    (lambda ()
-                     (display (_ "Unable to create prices for these items:"))
+                     (display (G_ "Unable to create prices for these items:"))
                      (display "\n  ")
                      (display (string-join (filter string? prices) "\n  "))
                      (newline)
-                     (display (_ "Add remaining good quotes?"))))))
+                     (display (G_ "Add remaining good quotes?"))))))
               (gnc:warn
                (with-output-to-string
                  (lambda ()
@@ -533,7 +533,7 @@ Run 'gnc-fq-update' as root to install them.")))
     (cond
      ((list? sources)
       ;; Translators: ~A is the version string
-      (format #t (_ "Found Finance::Quote version ~A.") (car sources))
+      (format #t (G_ "Found Finance::Quote version ~A.") (car sources))
       (newline)
       (gnc:msg "Found Finance::Quote version " (car sources))
       (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))

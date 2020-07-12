@@ -1004,8 +1004,8 @@ by preventing negative stock balances.<br/>")
                    (lambda (foreign domestic date)
                     (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
 		     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
-	       (headercols (list (_ "Account")))
-	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
+	       (headercols (list (G_ "Account")))
+	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (G_ "Total"))))
 	       (sum-total-moneyin (gnc-numeric-zero))
 	       (sum-total-income (gnc-numeric-zero))
 	       (sum-total-both-gains (gnc-numeric-zero))
@@ -1016,37 +1016,37 @@ by preventing negative stock balances.<br/>")
 
 	  ;;begin building lists for which columns to display
           (if show-symbol
-	      (begin (append! headercols (list (_ "Symbol")))
+	      (begin (append! headercols (list (G_ "Symbol")))
 		     (append! totalscols (list " "))))
 
 	  (if show-listing
-	      (begin (append! headercols (list (_ "Listing")))
+	      (begin (append! headercols (list (G_ "Listing")))
 		     (append! totalscols (list " "))))
 
 	  (if show-shares
-	      (begin (append! headercols (list (_ "Shares")))
+	      (begin (append! headercols (list (G_ "Shares")))
 		     (append! totalscols (list " "))))
 
 	  (if show-price
-	      (begin (append! headercols (list (_ "Price")))
+	      (begin (append! headercols (list (G_ "Price")))
 		     (append! totalscols (list " "))))
 
 	  (append! headercols (list " "
-				    (_ "Basis")
-				    (_ "Value")
-				    (_ "Money In")
-				    (_ "Money Out")
-				    (_ "Realized Gain")
-				    (_ "Unrealized Gain")
-				    (_ "Total Gain")
-				    (_ "Rate of Gain")
-				    (_ "Income")))
+				    (G_ "Basis")
+				    (G_ "Value")
+				    (G_ "Money In")
+				    (G_ "Money Out")
+				    (G_ "Realized Gain")
+				    (G_ "Unrealized Gain")
+				    (G_ "Total Gain")
+				    (G_ "Rate of Gain")
+				    (G_ "Income")))
 
 	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-	      (append! headercols (list (_ "Brokerage Fees"))))
+	      (append! headercols (list (G_ "Brokerage Fees"))))
 
-	  (append! headercols (list (_ "Total Return")
-				    (_ "Rate of Return")))
+	  (append! headercols (list (G_ "Total Return")
+				    (G_ "Rate of Return")))
 
           (append! totalscols (list " "))
 
@@ -1144,14 +1144,14 @@ by preventing negative stock balances.<br/>")
           (gnc:html-document-add-object! document table)
           (if (hashq-ref warnings 'warn-price-dirty)
               (gnc:html-document-append-objects! document
-                                                 (list (gnc:make-html-text (_ "* this commodity data was built using transaction pricing instead of the price list."))
+                                                 (list (gnc:make-html-text (G_ "* this commodity data was built using transaction pricing instead of the price list."))
 						       (gnc:make-html-text (gnc:html-markup-br))
-						       (gnc:make-html-text (_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
+						       (gnc:make-html-text (G_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
 
           (if (hashq-ref warnings 'warn-no-price)
               (gnc:html-document-append-objects! document
                                                  (list (gnc:make-html-text (if (hashq-ref warnings 'warn-price-dirty) (gnc:html-markup-br) ""))
-                                                       (gnc:make-html-text (_ "** this commodity has no price and a price of 1 has been used.")))))
+                                                       (gnc:make-html-text (G_ "** this commodity has no price and a price of 1 has been used.")))))
 )
 
 					;if no accounts selected.
