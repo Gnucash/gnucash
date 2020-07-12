@@ -203,7 +203,7 @@ scm_run_report (void *data,
 
 
 struct show_report_args {
-    const std::string& show_report;
+    const std::string show_report;
 };
 
 static void
