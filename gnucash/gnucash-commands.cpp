@@ -203,6 +203,7 @@ scm_run_report (void *data,
 
 
 struct show_report_args {
+    const std::string file_to_load;
     const std::string show_report;
 };
 
@@ -217,6 +218,20 @@ scm_report_show (void *data,
     scm_c_use_module ("gnucash app-utils");
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
+
+    if (!args->file_to_load.empty())
+    {
+        auto datafile = args->file_to_load.c_str();
+        PINFO ("Loading datafile %s...\n", datafile);
+
+        auto session = gnc_get_current_session ();
+        if (session)
+        {
+            qof_session_begin (session, datafile, SESSION_READ_ONLY);
+            if (qof_session_get_error (session) == ERR_BACKEND_NO_ERR)
+                qof_session_load (session, report_session_percentage);
+        }
+    }
 
     scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
                 scm_from_utf8_string (args->show_report.c_str ()),
@@ -267,9 +282,11 @@ Gnucash::run_report (const bo_str& file_to_load,
 }
 
 int
-Gnucash::report_show (const bo_str& show_report)
+Gnucash::report_show (const bo_str& file_to_load,
+                      const bo_str& show_report)
 {
-    auto args = show_report_args { show_report ? *show_report : std::string() };
+    auto args = show_report_args { file_to_load ? *file_to_load : std::string(),
+                                   show_report ? *show_report : std::string() };
     if (show_report && !show_report->empty())
         scm_boot_guile (0, nullptr, scm_report_show, &args);
 

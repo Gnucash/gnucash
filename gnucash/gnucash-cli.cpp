@@ -103,7 +103,8 @@ Gnucash::GnucashCli::configure_program_options (void)
     ("report,R", bpo::value (&m_report_cmd),
      _("Execute report related commands. The following commands are supported.\n\n"
      "  list: \tLists available reports.\n"
-     "  show: \tDescribe the options modified in the named report.\n"
+     "  show: \tDescribe the options modified in the named report. A datafile \
+may be specified to describe some saved options.\n"
      "  run: \tRun the named report in the given GnuCash datafile.\n"))
     ("name", bpo::value (&m_report_name),
      _("Name of the report to run\n"))
@@ -154,13 +155,19 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
                 return Gnucash::run_report(m_file_to_load, m_report_name,
                                            m_export_type, m_output_file);
         }
-        // the following two commands list and show do *not* test&pass
-        // the m_file_to_load argument because the reports are global
-        // rather than per-file objects. In the future, saved reports
-        // may be saved into the datafile, therefore one will need to
-        // be specified for loading.
+
+        // The command "list" does *not* test&pass the m_file_to_load
+        // argument because the reports are global rather than
+        // per-file objects. In the future, saved reports may be saved
+        // into the datafile, therefore one will need to be specified
+        // for loading.
         else if (*m_report_cmd == "list")
                 return Gnucash::report_list ();
+
+        // The command "show" does test&pass the m_file_to_load
+        // argument, and will attempt to load datafile prior to
+        // describing report. If loading fails, it will continue
+        // showing report options.
         else if (*m_report_cmd == "show")
             if (!m_report_name || m_report_name->empty())
             {
@@ -169,7 +176,7 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
                 return 1;
             }
             else
-                return Gnucash::report_show (m_report_name);
+                return Gnucash::report_show (m_file_to_load, m_report_name);
         else
         {
             std::cerr << bl::format (bl::translate("Unknown report command '{1}'")) % *m_report_cmd << "\n\n"
