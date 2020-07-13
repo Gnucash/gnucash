@@ -1118,7 +1118,7 @@ reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, ofx_info* info)
 static void
 gnc_file_ofx_import_process_file (ofx_info* info)
 {
-    LibofxContextPtr libofx_context = libofx_get_new_context();
+    LibofxContextPtr libofx_context;
     char* filename = NULL;
     char * selected_filename = NULL;
     GtkWindow *parent = info->parent;
@@ -1127,6 +1127,7 @@ gnc_file_ofx_import_process_file (ofx_info* info)
         return;
 
     filename = info->file_list->data;
+    libofx_context = libofx_get_new_context();
 
 #ifdef G_OS_WIN32
     selected_filename = g_win32_locale_filename_from_utf8 (filename);
@@ -1150,6 +1151,9 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     // Create the match dialog, and run the ofx file through the importer.
     info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, TRUE, 42, FALSE);
     libofx_proc_file (libofx_context, selected_filename, AUTODETECT);
+    
+    // Free the libofx context before recursing to process the next file
+    libofx_free_context(libofx_context);
 
     // See whether the view has anything in it and warn the user if not.
     if(gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
@@ -1191,7 +1195,6 @@ void gnc_file_ofx_import (GtkWindow *parent)
     extern int ofx_STATUS_msg;
     GSList* selected_filenames = NULL;
     char *default_dir;
-    LibofxContextPtr libofx_context = libofx_get_new_context();
     GList *filters = NULL;
     GSList* iter = NULL;
     ofx_info* info = NULL;
