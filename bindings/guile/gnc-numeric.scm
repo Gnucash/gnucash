@@ -21,6 +21,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (srfi srfi-9))
+
 ;; use 'logior' in guile to bit-combine RND and DENOM flags.
 
 (define GNC-RND-FLOOR           1)
@@ -48,30 +50,17 @@
 (define GNC-ERROR-REMAINDER    -4)
 
 
-(define <gnc-monetary> 
-  (make-record-type "<gnc-monetary>" 
-		    '(commodity amount)))
+(define-record-type :gnc-monetary
+  (make-gnc-monetary commodity amount)
+  gnc-monetary?
+  (commodity gnc-monetary-commodity)
+  (amount gnc-monetary-amount))
 
-;; Constructor; takes one <gnc:commodity*> and one <gnc-numeric>
-(define (gnc:make-gnc-monetary c a)
-  ;;FIXME: we used to type-check the values, like:
-  ;; (gw:wcp-is-of-type? <gnc:commodity*> c)
-  (if (and #t (number? a))
-      ((record-constructor <gnc-monetary>) c a)
-      (warn "wrong arguments for gnc:make-gnc-monetary: " c a)))
-
-(define gnc:gnc-monetary? 
-  (record-predicate <gnc-monetary>))
-
-(define gnc:gnc-monetary-commodity
-  (record-accessor <gnc-monetary> 'commodity))
-
-(define gnc:gnc-monetary-amount
-  (record-accessor <gnc-monetary> 'amount))
-
+(define gnc:make-gnc-monetary make-gnc-monetary)
+(define gnc:gnc-monetary? gnc-monetary?)
+(define gnc:gnc-monetary-commodity gnc-monetary-commodity)
+(define gnc:gnc-monetary-amount gnc-monetary-amount)
 (define (gnc:monetary-neg a)
-  (if (gnc:gnc-monetary? a)
-      (gnc:make-gnc-monetary 
-       (gnc:gnc-monetary-commodity a)
-       (gnc-numeric-neg (gnc:gnc-monetary-amount a)))
-      (warn "wrong arguments for gnc:monetary-neg: " a)))
+  (gnc:make-gnc-monetary
+   (gnc:gnc-monetary-commodity a)
+   (- (gnc:gnc-monetary-amount a))))

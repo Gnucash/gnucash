@@ -130,7 +130,7 @@
     (list (cons "<string>" gnc:default-html-string-renderer)
           (cons "<gnc-numeric>" gnc:default-html-gnc-numeric-renderer)
           (cons "<number>" gnc:default-html-number-renderer)
-          (cons "<gnc-monetary>" gnc:default-html-gnc-monetary-renderer)))
+          (cons ':gnc-monetary gnc:default-html-gnc-monetary-renderer)))
   (and template
        (let ((ss (gnc:make-html-style-sheet-internal
                   style-sheet-name template-name
