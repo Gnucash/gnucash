@@ -157,6 +157,7 @@ void gnc_account_name_insert_text_cb (GtkWidget   *entry,
                                       gint         length,
                                       gint        *position,
                                       gpointer     data);
+static void set_auto_interest_box (AccountWindow *aw);
 
 /** Implementation *******************************************************/
 
@@ -278,9 +279,7 @@ gnc_account_to_ui(AccountWindow *aw)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->hidden_button),
                                   flag);
 
-    flag = xaccAccountGetAutoInterest (account);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button),
-                                  flag);
+    set_auto_interest_box (aw);
     LEAVE(" ");
 }
 
@@ -1098,12 +1097,13 @@ static void
 set_auto_interest_box(AccountWindow *aw)
 {
     Account* account = aw_get_account (aw);
-    gboolean flag = account_type_has_auto_interest_xfer (aw->type);
-    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button), flag);
-    if (!flag)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button), FALSE);
-    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button_label), flag);
-   
+    gboolean type_ok = account_type_has_auto_interest_xfer (aw->type);
+    gboolean pref_set = xaccAccountGetAutoInterest (account);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->auto_interest_button),
+                                  type_ok && pref_set);
+    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button), type_ok);
+    gtk_widget_set_sensitive (GTK_WIDGET (aw->auto_interest_button_label),
+                                          type_ok);
 }
 
 static void
