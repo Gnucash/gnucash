@@ -433,6 +433,8 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push (gnc:html-js-include "chartjs/chart.js"))
 
+    (push (gnc:html-js-include "chartjs/chartjs-chart-sankey.js"))
+
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
     (push (format #f "<div style='width:~a;height:~a;'>\n"
