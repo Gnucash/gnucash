@@ -359,19 +359,21 @@ function tooltipLabel(tooltipItem,data) {
 function tooltipTitle(array,data) {
   return data.labels[array[0].index]; }
 
+// disabled for chartJS 3.0.0
+//
 // draw the background color
-Chart.pluginService.register({
-  beforeDraw: function (chart, easing) {
-    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-      var ctx = chart.chart.ctx;
-      var chartArea = chart.chartArea;
-      ctx.save();
-      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-      ctx.restore();
-    }
-  }
-})
+// Chart.plugins.register({
+//   beforeDraw: function (chart, easing) {
+//     if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+//       var ctx = chart.chart.ctx;
+//       var chartArea = chart.chartArea;
+//       ctx.save();
+//       ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+//       ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+//       ctx.restore();
+//     }
+//   }
+// })
 
 // copy font info from css into chartjs.
 bodyStyle = window.getComputedStyle (document.querySelector ('body'));
