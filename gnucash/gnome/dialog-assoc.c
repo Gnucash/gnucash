@@ -537,7 +537,9 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
             return;
         }
 
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Business Association"), uri);
+/* Translators: This is the title of a dialog box for associating an external
+   file or URI with the current bill, invoice, transaction, or voucher. */
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Associated Document"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -628,7 +630,7 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
             g_free (uri);
             return;
         }
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Transaction Association"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Associated Document"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -912,6 +914,8 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
         GObject *desc_item_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_item"));
         GObject *desc_id_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_id"));
 
+        /* Translators: This is the label of a dialog box that lists all of the
+           transaction that have files or URIs associated with them. */
         gtk_window_set_title (GTK_WINDOW(window), _("Transaction Associations"));
 
         gtk_tree_view_column_set_visible (GTK_TREE_VIEW_COLUMN(desc_id_tree_column), FALSE);
@@ -929,6 +933,9 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
             "         To jump to the Business Item, double click on the entry in the id\n"
             " column, Association column to open the Association or Available to update");
 
+        /* Translators: This is the label of a dialog box that lists all of the
+           invoices, bills, and vouchers that have files or URIs associated with
+           them. */
         gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Associations"));
         gtk_label_set_text (GTK_LABEL(help_label), gettext (item_string));
 

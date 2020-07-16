@@ -24,7 +24,6 @@
       <separator name="TransactionSep3"/>
       <menuitem name="AssociateTransaction" action="AssociateTransactionAction"/>
       <menuitem name="AssociateTransactionOpen" action="AssociateTransactionOpenAction"/>
-      <menuitem name="AssociateTransactionRemove" action="AssociateTransactionRemoveAction"/>
       <separator name="TransactionSep4"/>
       <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
     </menu>
@@ -101,7 +100,6 @@
       <separator name="PopupSep3"/>
       <menuitem name="AssociateTransaction" action="AssociateTransactionAction"/>
       <menuitem name="AssociateTransactionOpen" action="AssociateTransactionOpenAction"/>
-      <menuitem name="AssociateTransactionRemove" action="AssociateTransactionRemoveAction"/>
       <separator name="PopupSep4"/>
       <menuitem name="JumpAssociateInvoice" action="JumpAssociatedInvoiceAction"/>
       <separator name="PopupSep5"/>
