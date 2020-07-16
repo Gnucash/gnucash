@@ -473,6 +473,7 @@ gnucash/report/reports/standard/budget-flow.scm
 gnucash/report/reports/standard/budget-income-statement.scm
 gnucash/report/reports/standard/budget.scm
 gnucash/report/reports/standard/cashflow-barchart.scm
+gnucash/report/reports/standard/cashflow-sankey.scm
 gnucash/report/reports/standard/cash-flow.scm
 gnucash/report/reports/standard/category-barchart.scm
 gnucash/report/reports/standard/customer-summary.scm
