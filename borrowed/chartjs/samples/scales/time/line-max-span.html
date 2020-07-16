@@ -53,7 +53,7 @@
 						x: newDateString(4),
 						y: randomScalingFactor()
 					}, {
-						x: newDateString(5),
+						x: newDateString(6),
 						y: randomScalingFactor()
 					}],
 				}, {
@@ -68,19 +68,20 @@
 						x: newDate(2),
 						y: randomScalingFactor()
 					}, {
-						x: newDate(4),
+						x: newDate(5),
 						y: randomScalingFactor()
 					}, {
-						x: newDate(5),
+						x: newDate(6),
 						y: randomScalingFactor()
 					}]
 				}]
 			},
 			options: {
+				spanGaps: 1000 * 60 * 60 * 24 * 2, // 2 days
 				responsive: true,
 				title: {
 					display: true,
-					text: 'Chart.js Time Point Data'
+					text: 'Chart.js Time - spanGaps: 172800000 (2 days in ms)'
 				},
 				scales: {
 					x: {
@@ -91,6 +92,8 @@
 							labelString: 'Date'
 						},
 						ticks: {
+							autoSkip: false,
+							maxRotation: 0,
 							major: {
 								enabled: true
 							},

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Grid Lines Style Settings</title>
+	<title>Grid Lines Scriptable Settings</title>
 	<script src="../../Chart.min.js"></script>
 	<script src="../utils.js"></script>
 	<style>
@@ -34,7 +34,7 @@
 					fill: false,
 					backgroundColor: window.chartColors.blue,
 					borderColor: window.chartColors.blue,
-					data: [18, 33, 22, 19, 11, 39, 30],
+					data: [18, 33, 22, 19, 11, -39, 30],
 				}]
 			},
 			options: {
@@ -47,13 +47,16 @@
 					y: {
 						gridLines: {
 							drawBorder: false,
-							color: ['pink', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']
+							color: function(context) {
+								if (context.tick.value > 0) {
+									return window.chartColors.green;
+								} else if (context.tick.value < 0) {
+									return window.chartColors.red;
+								}
+
+								return '#000000';
+							},
 						},
-						min: 0,
-						max: 100,
-						ticks: {
-							stepSize: 10
-						}
 					}
 				}
 			}

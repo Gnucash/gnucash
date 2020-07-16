@@ -437,7 +437,7 @@ document.getElementById(chartid).onclick = function(evt) {
          (id (symbol->string (gensym "chart"))))
 
     (push (gnc:html-js-include
-           (gnc-path-find-localized-html-file "chartjs/Chart.bundle.min.js")))
+           (gnc-path-find-localized-html-file "chartjs/Chart.js")))
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")

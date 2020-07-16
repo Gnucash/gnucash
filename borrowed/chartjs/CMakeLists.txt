@@ -1,7 +1,6 @@
 
 set(chartjs_DATA
-  Chart.bundle.min.js
-  Chart.bundle.js
+  Chart.js
 )
 
 file(GLOB_RECURSE chartjs_NOINST_DATA

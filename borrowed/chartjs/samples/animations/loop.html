@@ -2,16 +2,15 @@
 <html>
 
 <head>
-	<title>Line Chart - Combo Time Scale</title>
-	<script src="../../../Chart.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-	<script src="../../utils.js"></script>
+	<title>Line Chart</title>
+	<script src="../../Chart.min.js"></script>
+	<script src="../utils.js"></script>
 	<style>
-		canvas {
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
-		}
+	canvas{
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
 	</style>
 </head>
 
@@ -27,71 +26,95 @@
 	<button id="addData">Add Data</button>
 	<button id="removeData">Remove Data</button>
 	<script>
-		function newDate(days) {
-			var date = new Date();
-			date.setHours(0, 0, 0, 0);
-			date.setDate(date.getDate() + days);
-			return date.valueOf();
-		}
-
-		var labels = [];
-		var data1 = [];
-		var data2 = [];
-		var data3 = [];
-		for (var i = 0; i < 7; i++) {
-			labels.push(newDate(i));
-			data1.push(randomScalingFactor());
-			data2.push(randomScalingFactor());
-			data3.push(randomScalingFactor());
-		}
-
-		var color = Chart.helpers.color;
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var config = {
-			type: 'bar',
+			type: 'line',
 			data: {
-				labels: labels,
+				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 				datasets: [{
-					type: 'bar',
-					label: 'Dataset 1',
-					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.red,
-					data: data1,
-				}, {
-					type: 'bar',
-					label: 'Dataset 2',
-					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.blue,
-					data: data2,
-				}, {
-					type: 'line',
-					label: 'Dataset 3',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
+					label: 'My First dataset',
 					fill: false,
-					data: data3,
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}, {
+					label: 'My Second dataset',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
 				}]
 			},
 			options: {
+				animation: (context) => {
+					if (context.active) {
+						return {
+							radius: {
+								duration: 400,
+								loop: true
+							}
+						};
+					}
+					return Chart.defaults.animation;
+				},
+				elements: {
+					point: {
+						hoverRadius: 6
+					}
+				},
+				responsive: true,
 				title: {
-					text: 'Chart.js Combo Time Scale'
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'nearest',
+					axis: 'x',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					axis: 'x',
+					intersect: false
 				},
 				scales: {
 					x: {
-						type: 'time',
 						display: true,
-						offset: true,
-						time: {
-							unit: 'day'
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
 						}
 					},
-				},
+					y: {
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}
+				}
 			}
 		};
 
 		window.onload = function() {
 			var ctx = document.getElementById('canvas').getContext('2d');
 			window.myLine = new Chart(ctx, config);
-
 		};
 
 		document.getElementById('randomizeData').addEventListener('click', function() {
@@ -99,6 +122,7 @@
 				dataset.data = dataset.data.map(function() {
 					return randomScalingFactor();
 				});
+
 			});
 
 			window.myLine.update();
@@ -110,9 +134,10 @@
 			var newColor = window.chartColors[colorName];
 			var newDataset = {
 				label: 'Dataset ' + config.data.datasets.length,
+				backgroundColor: newColor,
 				borderColor: newColor,
-				backgroundColor: color(newColor).alpha(0.5).rgbString(),
 				data: [],
+				fill: false
 			};
 
 			for (var index = 0; index < config.data.labels.length; ++index) {
@@ -125,11 +150,12 @@
 
 		document.getElementById('addData').addEventListener('click', function() {
 			if (config.data.datasets.length > 0) {
-				config.data.labels.push(newDate(config.data.labels.length));
+				var month = MONTHS[config.data.labels.length % MONTHS.length];
+				config.data.labels.push(month);
 
-				for (var index = 0; index < config.data.datasets.length; ++index) {
-					config.data.datasets[index].data.push(randomScalingFactor());
-				}
+				config.data.datasets.forEach(function(dataset) {
+					dataset.data.push(randomScalingFactor());
+				});
 
 				window.myLine.update();
 			}
@@ -143,8 +169,8 @@
 		document.getElementById('removeData').addEventListener('click', function() {
 			config.data.labels.splice(-1, 1); // remove the label first
 
-			config.data.datasets.forEach(function(dataset, datasetIndex) {
-				config.data.datasets[datasetIndex].data.pop();
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.pop();
 			});
 
 			window.myLine.update();

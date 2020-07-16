@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Legend Point Style</title>
+	<title>Legend Title Positions</title>
 	<script src="../../Chart.min.js"></script>
 	<script src="../utils.js"></script>
 	<style>
@@ -28,15 +28,27 @@
 <body>
 	<div class="container">
 		<div class="chart-container">
-			<canvas id="chart-legend-normal"></canvas>
+			<canvas id="chart-legend-top-start"></canvas>
 		</div>
 		<div class="chart-container">
-			<canvas id="chart-legend-pointstyle"></canvas>
+			<canvas id="chart-legend-top-center"></canvas>
+		</div>
+		<div class="chart-container">
+			<canvas id="chart-legend-top-end"></canvas>
+		</div>
+		<div class="chart-container">
+			<canvas id="chart-legend-left-start"></canvas>
+		</div>
+		<div class="chart-container">
+			<canvas id="chart-legend-left-center"></canvas>
+		</div>
+		<div class="chart-container">
+			<canvas id="chart-legend-left-end"></canvas>
 		</div>
 	</div>
 	<script>
 		var color = Chart.helpers.color;
-		function createConfig(colorName) {
+		function createConfig(legendPosition, titlePosition, align, colorName) {
 			return {
 				type: 'line',
 				data: {
@@ -54,17 +66,18 @@
 						],
 						backgroundColor: color(window.chartColors[colorName]).alpha(0.5).rgbString(),
 						borderColor: window.chartColors[colorName],
-						borderWidth: 1,
-						pointStyle: 'rectRot',
-						pointRadius: 5,
-						pointBorderColor: 'rgb(0, 0, 0)'
+						borderWidth: 1
 					}]
 				},
 				options: {
 					responsive: true,
 					legend: {
-						labels: {
-							usePointStyle: false
+						align: align,
+						position: legendPosition,
+						title: {
+							display: true,
+							text: 'Legend Title',
+							position: titlePosition,
 						}
 					},
 					scales: {
@@ -85,29 +98,53 @@
 					},
 					title: {
 						display: true,
-						text: 'Normal Legend'
+						text: 'Legend Title Position: ' + titlePosition
 					}
 				}
 			};
 		}
 
-		function createPointStyleConfig(colorName) {
-			var config = createConfig(colorName);
-			config.options.legend.labels.usePointStyle = true;
-			config.options.title.text = 'Point Style Legend';
-			return config;
-		}
-
 		window.onload = function() {
 			[{
-				id: 'chart-legend-normal',
-				config: createConfig('red')
+				id: 'chart-legend-top-start',
+				align: 'start',
+				legendPosition: 'top',
+				titlePosition: 'start',
+				color: 'red'
 			}, {
-				id: 'chart-legend-pointstyle',
-				config: createPointStyleConfig('blue')
+				id: 'chart-legend-top-center',
+				align: 'center',
+				legendPosition: 'top',
+				titlePosition: 'center',
+				color: 'orange'
+			}, {
+				id: 'chart-legend-top-end',
+				align: 'end',
+				legendPosition: 'top',
+				titlePosition: 'end',
+				color: 'yellow'
+			}, {
+				id: 'chart-legend-left-start',
+				align: 'start',
+				legendPosition: 'left',
+				titlePosition: 'start',
+				color: 'green'
+			}, {
+				id: 'chart-legend-left-center',
+				align: 'center',
+				legendPosition: 'left',
+				titlePosition: 'center',
+				color: 'blue'
+			}, {
+				id: 'chart-legend-left-end',
+				align: 'end',
+				legendPosition: 'left',
+				titlePosition: 'end',
+				color: 'purple'
 			}].forEach(function(details) {
 				var ctx = document.getElementById(details.id).getContext('2d');
-				new Chart(ctx, details.config);
+				var config = createConfig(details.legendPosition, details.titlePosition, details.align, details.color);
+				new Chart(ctx, config);
 			});
 		};
 	</script>

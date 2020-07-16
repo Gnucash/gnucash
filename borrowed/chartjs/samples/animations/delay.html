@@ -2,9 +2,9 @@
 <html>
 
 <head>
-	<title>Stacked Bar Chart with Groups</title>
-	<script src="../../../Chart.min.js"></script>
-	<script src="../../utils.js"></script>
+	<title>Stacked Bar Chart</title>
+	<script src="../../Chart.min.js"></script>
+	<script src="../utils.js"></script>
 	<style>
 	canvas {
 		-moz-user-select: none;
@@ -25,7 +25,6 @@
 			datasets: [{
 				label: 'Dataset 1',
 				backgroundColor: window.chartColors.red,
-				stack: 'Stack 0',
 				data: [
 					randomScalingFactor(),
 					randomScalingFactor(),
@@ -38,7 +37,6 @@
 			}, {
 				label: 'Dataset 2',
 				backgroundColor: window.chartColors.blue,
-				stack: 'Stack 0',
 				data: [
 					randomScalingFactor(),
 					randomScalingFactor(),
@@ -51,7 +49,6 @@
 			}, {
 				label: 'Dataset 3',
 				backgroundColor: window.chartColors.green,
-				stack: 'Stack 1',
 				data: [
 					randomScalingFactor(),
 					randomScalingFactor(),
@@ -66,10 +63,30 @@
 		};
 		window.onload = function() {
 			var ctx = document.getElementById('canvas').getContext('2d');
+			var started = {};
 			window.myBar = new Chart(ctx, {
 				type: 'bar',
 				data: barChartData,
 				options: {
+					animation: (context) => {
+						if (context.active) {
+							return {
+								duration: 400
+							};
+						}
+						var delay = 0;
+						var dsIndex = context.datasetIndex;
+						var index = context.dataIndex;
+						if (!started[index + dsIndex * 1000]) {
+							delay = index * 300 + dsIndex * 100;
+							started[index + dsIndex * 1000] = true;
+						}
+						return {
+							easing: 'linear',
+							duration: 600,
+							delay
+						};
+					},
 					title: {
 						display: true,
 						text: 'Chart.js Bar Chart - Stacked'
