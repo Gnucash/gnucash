@@ -1,0 +1,13 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+#canvas-holder{
+	width:80%;
+	margin: auto;
+}
+div.canvas-holder {
+	width: 954px;
+	height: 600px;
+	margin: auto;
+}

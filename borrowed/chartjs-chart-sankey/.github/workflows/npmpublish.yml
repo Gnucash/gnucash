@@ -1,0 +1,61 @@
+name: Node.js Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.trim.outputs.version }}
+    steps:
+      - id: trim
+        run: echo "::set-output name=version::${TAG:1}"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        cache: npm
+        node-version: 16
+    - name: Test
+      run: |
+        npm ci
+        xvfb-run --auto-servernum npm test
+
+  publish-npm:
+    needs: [test, setup]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - name: Setup and build
+        run: |
+          npm ci
+          npm install -g json
+          json -I -f package.json -e "this.version=\"$VERSION\""
+          json -I -f package-lock.json -e "this.version=\"$VERSION\""
+          npm run build
+          npm pack
+        env:
+          VERSION: ${{ needs.setup.outputs.version }}
+      - name: Publish @next
+        run: npm publish --access=public --tag next
+        if: github.event.release.prerelease == true
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Publish @latest
+        run: npm publish --access=public --tag latest
+        if: github.event.release.prerelease == false
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

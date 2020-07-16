@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Sankey diagram</title>
+	<script src="utils.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	</link>
+</head>
+
+<body>
+<div class="canvas-holder">
+	<canvas id="chart-area"></canvas>
+</div>
+
+<script>
+
+	const getColors = () => {
+		return {
+			one: '#a4dd00',
+			oneThenTwo: '#68bc00',
+			oneThenTwoThenFour: '#009CE0',
+			oneThenTwoThenFive: '#009CE0',
+			oneThenTwoThenSix: '#68bc00',
+			oneThenTwoThenSeven: '#aea1ff',
+			oneThenTwoThenEight: '#aea1ff',
+			oneThenTwoThenNine: '#68bc00',
+			oneThenThree: '#009CE0',
+			oneThenThreeThenFive: '#009CE0',
+			oneThenThreeThenFour: '#009CE0',
+			oneThenThreeThenSix: '#68bc00',
+			oneThenThreeThenSeven: '#aea1ff',
+			oneThenThreeThenEight: '#aea1ff',
+			oneThenThreeThenNine: '#68bc00',
+		};
+	};
+
+	const getConfig = () => {
+		return [
+			{
+				from: 'one',
+				to: 'oneThenTwo',
+				flow: 11,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenFour',
+				flow: 6,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenFive',
+				flow: 2,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenSix',
+				flow: 2,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenSeven',
+				flow: 4,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenEight',
+				flow: 4,
+			},
+			{
+				from: 'oneThenTwo',
+				to: 'oneThenTwoThenNine',
+				flow: 3,
+			},
+			{
+				from: 'one',
+				to: 'oneThenThree',
+				flow: 12,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenFive',
+				flow: 2,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenFour',
+				flow: 7,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenSix',
+				flow: 4,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenSeven',
+				flow: 5,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenEight',
+				flow: 4,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenNine',
+				flow: 6,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenNine000',
+				flow: 6,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenNine001',
+				flow: 6,
+			},
+			{
+				from: 'oneThenThree',
+				to: 'oneThenThreeThenNine002',
+				flow: 6,
+			},
+		];
+	};
+
+	const colors = getColors();
+	const data = getConfig();
+
+	const getColor = (item) => {
+		return colors[item] || '#6c5ce7';
+	};
+
+	const priority = {one: 0};
+
+	Utils.load(() => {
+		// Chart.defaults.font.size = 9;
+		const ctx = document.getElementById('chart-area').getContext('2d');
+		window.chart = new Chart(ctx, {
+			type: 'sankey',
+			data: {
+				datasets: [{
+					label: 'My sankey',
+					colorFrom: (c) => getColor(c.dataset.data[c.dataIndex].from),
+					colorTo: (c) => getColor(c.dataset.data[c.dataIndex].to),
+					data,
+					size: 'min',
+					priority
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				tooltips: {
+					callbacks: {
+						title() {
+							return '';
+							// return data[tooltipItem.index].from;
+						},
+						label(context) {
+							const item = context.dataset.data[context.dataIndex];
+							return [item.from + ' -> ' + item.to, item.flow];
+						},
+					},
+				},
+			},
+		});
+
+	});
+</script>
+</body>
+
+</html>

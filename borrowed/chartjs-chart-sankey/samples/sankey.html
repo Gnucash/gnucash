@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Sankey diagram</title>
+	<script src="utils.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	</link>
+</head>
+
+<body>
+	<div class="canvas-holder">
+		<canvas id="chart-area"></canvas>
+	</div>
+
+	<script>
+		const colors = [
+			'#1F77B4',
+			'#FF7F0E',
+			'#2CA02C',
+			'#D62728',
+			'#9467BD',
+			'#8C564B',
+			'#E377C2',
+			'#7F7F7F',
+			'#BCBD22'
+		];
+
+		const category = {
+			"Agricultural 'waste'": 'Agricultural',
+			'Bio-conversion': 'Bio-conversion',
+			Liquid: 'Liquid',
+			Losses: 'Losses',
+			Solid: 'Solid',
+			Gas: 'Gas',
+			'Biofuel imports': 'Biofuel',
+			'Biomass imports': 'Biomass',
+			'Coal imports': 'Coal',
+			Coal: 'Coal',
+			'Coal reserves': 'Coal',
+			'District heating': 'District',
+			Industry: 'Industry',
+			'Heating and cooling - commercial': 'Heating',
+			'Heating and cooling - homes': 'Heating',
+			'Electricity grid': 'Electricity',
+			'Over generation / exports': 'Over',
+			'H2 conversion': 'H2',
+			'Road transport': 'Road',
+			Agriculture: 'Agriculture',
+			'Rail transport': 'Rail',
+			'Lighting & appliances - commercial': 'Lighting',
+			'Lighting & appliances - homes': 'Lighting',
+			'Gas imports': 'Gas',
+			Ngas: 'Ngas',
+			'Gas reserves': 'Gas',
+			'Thermal generation': 'Thermal',
+			Geothermal: 'Geothermal',
+			H2: 'H2',
+			Hydro: 'Hydro',
+			'International shipping': 'International',
+			'Domestic aviation': 'Domestic',
+			'International aviation': 'International',
+			'National navigation': 'National',
+			'Marine algae': 'Marine',
+			Nuclear: 'Nuclear',
+			'Oil imports': 'Oil',
+			Oil: 'Oil',
+			'Oil reserves': 'Oil',
+			'Other waste': 'Other',
+			'Pumped heat': 'Pumped',
+			'Solar PV': 'Solar',
+			'Solar Thermal': 'Solar',
+			Solar: 'Solar',
+			Tidal: 'Tidal',
+			'UK land based bioenergy': 'UK',
+			Wave: 'Wave',
+			Wind: 'Wind',
+		};
+
+		const catColors = {};
+		let colorIndex = 0;
+
+		const getColor = (item) => {
+			const cat = category[item];
+			if (!catColors[cat]) {
+				catColors[cat] = colors[colorIndex % 9];
+				colorIndex++;
+			}
+			return catColors[cat];
+		};
+
+		const data = [
+			{from: 'District heating', to: 'Industry', flow: 10.639},
+			{from: 'District heating', to: 'Heating and cooling - commercial', flow: 22.505},
+			{from: 'District heating', to: 'Heating and cooling - homes', flow: 46.184},
+			{from: 'Electricity grid', to: 'Over generation / exports', flow: 104.453},
+			{from: 'Electricity grid', to: 'Heating and cooling - homes', flow: 113.726},
+			{from: 'Electricity grid', to: 'H2 conversion', flow: 27.14},
+			{from: 'Electricity grid', to: 'Industry', flow: 342.165},
+			{from: 'Electricity grid', to: 'Road transport', flow: 37.797},
+			{from: 'Electricity grid', to: 'Agriculture', flow: 4.412},
+			{from: 'Electricity grid', to: 'Heating and cooling - commercial', flow: 40.858},
+			{from: 'Electricity grid', to: 'Losses', flow: 56.691},
+			{from: 'Electricity grid', to: 'Rail transport', flow: 7.863},
+			{from: 'Electricity grid', to: 'Lighting & appliances - commercial', flow: 90.008},
+			{from: 'Electricity grid', to: 'Lighting & appliances - homes', flow: 93.494},
+			{from: 'Pumped heat', to: 'Heating and cooling - homes', flow: 193.026},
+			{from: 'Pumped heat', to: 'Heating and cooling - commercial', flow: 70.672},
+			{from: 'Solar Thermal', to: 'Heating and cooling - homes', flow: 19.263},
+			{from: 'Solar', to: 'Solar Thermal', flow: 19.263},
+			{from: 'Solar', to: 'Solar PV', flow: 59.901},
+		];
+
+		Utils.load(() => {
+			Chart.defaults.font.size = 9;
+			const ctx = document.getElementById('chart-area').getContext('2d');
+			window.chart = new Chart(ctx, {
+				type: 'sankey',
+				data: {
+					datasets: [{
+						label: 'My sankey',
+						colorFrom: (c) => getColor(c.dataset.data[c.dataIndex].from),
+						colorTo: (c) => getColor(c.dataset.data[c.dataIndex].to),
+						data
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					tooltips: {
+						callbacks: {
+							title() {
+								return '';
+								// return data[tooltipItem.index].from;
+							},
+							label(context) {
+								const item = context.dataset.data[context.dataIndex];
+								return [item.from + ' -> ' + item.to, item.flow];
+							}
+						}
+					},
+					scales: {
+						y: {
+							type: 'linear',
+							reverse: true,
+							offset: true,
+							min: 0,
+							max: 5200
+						},
+						x: {
+							type: 'linear',
+							offset: true,
+							min: 0,
+							max: 8
+						}
+					}
+				}
+			});
+
+		});
+	</script>
+</body>
+
+</html>

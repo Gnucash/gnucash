@@ -1,0 +1,51 @@
+module.exports = {
+  config: {
+    type: 'sankey',
+    data: {
+      datasets: [
+        {
+          data: [
+            { from: 'Source 1', to: 'Total', flow: 70 },
+            { from: 'Source 2', to: 'Total', flow: 52 },
+            { from: 'Source 3', to: 'Total', flow: 38 },
+            { from: 'Source 4', to: 'Total', flow: 29 },
+            { from: 'Source 5', to: 'Total', flow: 15 },
+            { from: 'Source 6', to: 'Total', flow: 14 },
+            { from: 'Source 7', to: 'Total', flow: 12 },
+            { from: 'Total', to: 'Free', flow: 73 },
+            { from: 'Total', to: 'Reseller 1', flow: 45 },
+            { from: 'Reseller 1', to: 'Sold', flow: 19 },
+            { from: 'Reseller 1', to: 'Unsold', flow: 26 },
+            { from: 'Total', to: 'Reseller 2', flow: 40 },
+            { from: 'Reseller 2', to: 'Sold 2', flow: 30 },
+            { from: 'Reseller 2', to: 'Unsold 2', flow: 10 },
+            { from: 'Total', to: 'Reseller 3', flow: 38 },
+            { from: 'Reseller 3', to: 'Sold 3', flow: 30 },
+            { from: 'Reseller 3', to: 'Unsold 3', flow: 8 },
+            { from: 'Total', to: 'Reseller 4', flow: 34 },
+            { from: 'Reseller 4', to: 'Sold 4', flow: 30 },
+            { from: 'Reseller 4', to: 'Unsold 4', flow: 4 },
+            { from: 'Sold', to: 'Used', flow: 10 },
+            { from: 'Sold', to: 'Unused', flow: 9 },
+            { from: 'Sold 2', to: 'Used 2', flow: 20 },
+            { from: 'Sold 2', to: 'Unused 2', flow: 10 },
+            { from: 'Sold 3', to: 'Used 3', flow: 15 },
+            { from: 'Sold 3', to: 'Unused 3', flow: 15 },
+            { from: 'Sold 4', to: 'Used 4', flow: 5 },
+            { from: 'Sold 4', to: 'Unused 4', flow: 25 },
+          ],
+          colorFrom: (ctx) => (ctx.raw.from.startsWith('Source') ? 'gray' : 'green'),
+          colorTo: (ctx) => (['Un', 'Fr'].includes(ctx.raw.to.slice(0, 2)) ? 'red' : 'green'),
+          modeX: 'even',
+        },
+      ],
+    },
+  },
+  options: {
+    spriteText: true,
+    canvas: {
+      height: 320,
+      width: 600,
+    },
+  },
+}

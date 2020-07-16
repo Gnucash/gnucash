@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: typecheck
+        run: npm run typecheck
+
+      - name: build
+        run: npm run build
+
+      - name: test
+        run: xvfb-run --auto-servernum npm test
+        shell: bash
+
+      - name: cache coverage reports
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            coverage/lcov.info
+            coverage/chrome/lcov.info
+            coverage/firefox/lcov.info
+          key: coverage-${{ github.run_id }}
+
+  sonar:
+    runs-on: ubuntu-latest
+    needs: [ci]
+    # dependabot etc pull request can't have the token, so lets run only on merges.
+    if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis (SonarCloud)
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+
+      - name: Restore coverage from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            coverage/lcov.info
+            coverage/chrome/lcov.info
+            coverage/firefox/lcov.info
+          key: coverage-${{ github.run_id }}
+          restore-keys: coverage
+
+      - name: Read package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - name: Set version
+        run: echo -e "\nsonar.projectVersion=${{ steps.package-version.outputs.current-version}}" >> sonar-project.properties
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

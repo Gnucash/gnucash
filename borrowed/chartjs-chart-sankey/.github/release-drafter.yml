@@ -1,0 +1,48 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: 'Breaking Changes'
+    labels:
+        - 'breaking change'
+  - title: 'Enhancements'
+    labels:
+      - 'enhancement'
+  - title: 'Bugs Fixed'
+    labels:
+      - 'bug'
+  - title: 'Types'
+    labels:
+      - 'types'
+  - title: 'Documentation'
+    labels:
+      - 'documentation'
+  - title: 'Development'
+    labels:
+      - 'chore'
+      - 'dependencies'
+exclude-labels:
+  - 'infrastructure'
+change-template: '- #$NUMBER $TITLE'
+change-title-escapes: '\<*_&`#@'
+version-resolver:
+  major:
+    labels:
+      - 'breaking change'
+  minor:
+    labels:
+      - 'enhancement'
+  patch:
+    labels:
+      - 'bug'
+      - 'chore'
+      - 'types'
+      - 'dependencies'
+  default: patch
+template: |
+  # Essential Links
+
+  * [npm](https://www.npmjs.com/package/chartjs-chart-sankey)
+
+  $CHANGES
+
+  Thanks to $CONTRIBUTORS
