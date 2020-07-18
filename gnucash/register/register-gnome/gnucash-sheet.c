@@ -413,7 +413,38 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         }
         else
         {
-            gnucash_sheet_set_selection_from_entry (sheet);
+            GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+            Table *table = sheet->table;
+            const char *text = gnc_table_get_entry (table, virt_loc);
+            PangoLayout *layout;
+            PangoRectangle logical_rect;
+            GdkRectangle rect;
+            gint x, y, width, height;
+            gint index = 0, trailing = 0;
+            gboolean result;
+            gint x_offset = 0;
+
+            if (text && *text)
+            {
+                // Get the item_edit position
+                gnc_item_edit_get_pixel_coords (item_edit, &x, &y,
+                                                &width, &height);
+                layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet),
+                                                         text);
+                // We don't need word wrap or line wrap
+                pango_layout_set_width (layout, -1);
+                pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+                gnucash_sheet_set_text_bounds (sheet, &rect, x, y,
+                                               width, height);
+                x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
+                                                          rect.width,
+                                                          logical_rect.width);
+                pango_layout_xy_to_index (layout,
+                                          PANGO_SCALE * (sheet->button_x - rect.x - x_offset),
+                                          PANGO_SCALE * (height/2), &index, &trailing);
+                g_object_unref (layout);
+            }
+            gnucash_sheet_set_position (sheet, index + trailing);
         }
         sheet->direct_update_cell =
             gnucash_sheet_check_direct_update_cell (sheet, virt_loc);
