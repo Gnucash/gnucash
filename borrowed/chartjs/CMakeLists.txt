@@ -1,6 +1,7 @@
 
 set(chartjs_DATA
-  Chart.js
+  chart.js
+  chartjs-chart-sankey.js
 )
 
 file(GLOB_RECURSE chartjs_NOINST_DATA
