@@ -778,9 +778,22 @@ not found.")))
      (else
       (for-each
        (lambda (template)
-         (let* ((options-gen (gnc:report-template-options-generator template)))
-           (format port "\n* guid: ~a\n~a"
+         (let* ((options-gen (gnc:report-template-options-generator template))
+                (parent-guid (gnc:report-template-parent-type template))
+                (parent-template (and parent-guid
+                                      (hash-ref *gnc:_report-templates_* parent-guid)))
+                (export-types (gnc:report-template-export-types
+                               (or parent-template template))))
+           (format port "\n* name: ~a\n  guid: ~a\n~a~a~a"
+                   (gnc:report-template-name template)
                    (gnc:report-template-report-guid template)
+                   (if parent-template
+                       (format #f "  parent-template: ~a\n"
+                               (gnc:report-template-name parent-template))
+                       "")
+                   (if export-types
+                       (format #f "  export-types: ~a\n"
+                               (string-join (map car export-types) ", ")) "")
                    (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
