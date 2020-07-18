@@ -89,6 +89,14 @@ struct _GncABImExContextImport
     GData *tmp_job_list;
 };
 
+static inline time64
+gnc_gwen_date_to_time64 (const GWEN_DATE* date)
+{
+    return gnc_dmy2time64_neutral(GWEN_Date_GetDay(date),
+                                  GWEN_Date_GetMonth(date),
+                                  GWEN_Date_GetYear(date));
+}
+
 void
 gnc_GWEN_Init(void)
 {
@@ -571,11 +579,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     }
     if (valuta_date)
     {
-#ifdef AQBANKING6
-        time64 secs = GWEN_Date_toLocalTime(valuta_date);
-#else
-        time64 secs = GWEN_Time_toTime_t(valuta_date);
-#endif
+        time64 secs = gnc_gwen_date_to_time64(valuta_date);
         xaccTransSetDatePostedSecsNormalized(gnc_trans, secs);
     }
     else
@@ -1057,12 +1061,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 #endif
         if (ti)
         {
-#ifdef AQBANKING6
-            time64 secs = GWEN_Date_toLocalTime(ti);
-#else
-            time64 secs = GWEN_Time_toTime_t(ti);
-#endif
-            booked_tt = gnc_time64_get_day_neutral(secs);
+            booked_tt = gnc_gwen_date_to_time64(ti);
         }
         else
         {
