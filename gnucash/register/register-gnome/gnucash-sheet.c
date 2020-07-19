@@ -1195,18 +1195,10 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                                       &start_sel, &end_sel,
                                       &sheet->input_cancelled);
 
-    if (retval && (strcmp (retval, new_text) != 0))
-    {
+    if (retval)
         gnucash_sheet_set_entry_value (sheet, retval);
-        g_signal_stop_emission_by_name (G_OBJECT(sheet->entry),
-                                        "delete_text");
-    }
-    else if (retval == NULL)
-    {
-        /* the entry was disallowed, so we stop the delete signal */
-        g_signal_stop_emission_by_name (G_OBJECT(sheet->entry),
-                                        "delete_text");
-    }
+
+    g_signal_stop_emission_by_name (G_OBJECT(sheet->entry), "delete_text");
 
     DEBUG ("%s", retval ? retval : "nothing");
     gnucash_sheet_set_position_and_selection (sheet, cursor_position,
