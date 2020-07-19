@@ -431,12 +431,9 @@ balance at a given time"))
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the average
         ;; cost of all holdings.
-        (gnc-numeric-convert
-         (* (gnc:gnc-monetary-amount
-             (gnc:sum-collector-commodity c report-currency exchange-fn))
-            averaging-multiplier)
-         (gnc-commodity-get-fraction report-currency)
-         GNC-RND-ROUND))
+        (* (gnc:gnc-monetary-amount
+            (gnc:sum-collector-commodity c report-currency exchange-fn))
+           averaging-multiplier))
 
       ;; Get balance of an account as an inexact number converted to,
       ;; and using precision of the report's currency.
