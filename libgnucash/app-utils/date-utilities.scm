@@ -110,8 +110,8 @@
 (define (gnc:date-to-year-fraction caltime)
   (let ((lt (gnc-localtime caltime)))
     (+ (- (gnc:date-get-year lt) 1970)
-       (/ (- (gnc:date-get-year-day lt) 1.0)
-	  (* 1.0 (gnc:days-in-year (gnc:date-get-year lt)))))))
+       (/ (- (gnc:date-get-year-day lt) 1)
+          (gnc:days-in-year (gnc:date-get-year lt))))))
 
 ;; return the number of years (in floating point format) between two dates.
 (define (gnc:date-year-delta caltime1 caltime2)
@@ -146,9 +146,9 @@
 ;; convert a date in seconds since 1970 into # of months since 1970
 (define (gnc:date-to-month-fraction caltime)
   (let ((lt (gnc-localtime caltime)))
-    (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
+    (+ (* 12 (- (gnc:date-get-year lt) 1970))
        (gnc:date-get-month lt) -1
-       (/ (- (gnc:date-get-month-day lt) 1.0)
+       (/ (- (gnc:date-get-month-day lt) 1)
           (gnc:days-in-month
 	   (gnc:date-get-month lt)
 	   (gnc:date-get-year lt))))))
