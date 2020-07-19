@@ -90,11 +90,17 @@ struct _GncABImExContextImport
 };
 
 static inline time64
-gnc_gwen_date_to_time64 (const GWEN_DATE* date)
+gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
 {
+#if AQBANKING_VERSION_INT >= 59900
     return gnc_dmy2time64_neutral(GWEN_Date_GetDay(date),
                                   GWEN_Date_GetMonth(date),
                                   GWEN_Date_GetYear(date));
+#else
+    int month, day, year;
+    GWEN_Time_GetBrokenDownDate(date, &day, &month, &year);
+    return gnc_dmy2time64_neutral(day, month, year);
+#endif
 }
 
 void
