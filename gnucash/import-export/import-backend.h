@@ -64,7 +64,7 @@ typedef enum _action
  *
  * @param trans The transaction for which to check for an existing
  * online_id. */
-gboolean gnc_import_exists_online_id (Transaction *trans);
+gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* Foo);
 
 /** Evaluates the match between trans_info and split using the provided parameters.
  *

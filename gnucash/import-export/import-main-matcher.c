@@ -53,6 +53,7 @@
 #include "guid.h"
 #include "gnc-session.h"
 #include "Query.h"
+#include "SplitP.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
@@ -74,6 +75,8 @@ struct _main_matcher_info
     gboolean add_toggled;   // flag to indicate that add has been toggled to stop selection
     gint id;
     GSList* temp_trans_list; // Temporary list of imported transactions
+    GHashTable* id_hash;     // Hash table, per account, of list of transaction IDs.
+    GSList* edited_accounts; // List of accounts currently edited.
 };
 
 enum downloaded_cols
@@ -142,11 +145,46 @@ static void refresh_model_row (
                     GNCImportTransInfo *info);
 /* end local prototypes */
 
+static gboolean delete_hash (gpointer key, gpointer value, gpointer user_data)
+{
+    // Value is a hash table that needs to be destroyed. JEAN: I should free the memory used for the keys.
+    g_hash_table_destroy (value);
+    return TRUE;
+}
+
+static void
+commit_all (GNCImportMainMatcher *info)
+{
+    // Commit the edits for all accounts for which we've called inc_account_edit.
+    for (;info->edited_accounts; info->edited_accounts=info->edited_accounts->next)
+    {
+        // JEAN Check that the counter is 1 so the edit does	 something.
+        int level = qof_instance_get_editlevel (info->edited_accounts->data);
+        g_assert(level == 1);
+        xaccAccountCommitEdit (info->edited_accounts->data);
+    }
+    g_slist_free (info->edited_accounts);
+    info->edited_accounts = NULL;
+}
+
+static void
+inc_account_edit (GNCImportMainMatcher *info, Account* acc)
+{
+    // Call BeginEdit on accounts that haven't been edited yet. This will speeds things up
+    // a lot by preventing commits until we're all done.
+    if (qof_instance_get_editlevel (acc) == 0)
+    {
+        xaccAccountBeginEdit (acc);
+        info->edited_accounts = g_slist_prepend (info->edited_accounts, acc);
+    }
+}
+
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
+    Split* first_split = NULL;
 
     if (info == NULL)
         return;
@@ -165,7 +203,6 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
                 info->transaction_processed_cb (trans_info, FALSE,
                                                 info->user_data);
             }
-
             gnc_import_TransInfo_delete (trans_info);
         }
         while (gtk_tree_model_iter_next (model, &iter));
@@ -180,6 +217,13 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     }
     else
         gnc_import_Settings_delete (info->user_settings);
+
+    // We've called xaccAccountBeginEdit on many accounts to defer the commits until now.
+    // Let's do it now that we're done.
+    commit_all (info);
+    
+    g_hash_table_foreach_remove (info->id_hash, delete_hash, NULL);
+    info->id_hash = NULL;
     g_free (info);
 }
 
@@ -222,12 +266,15 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     /* Don't run any queries and/or split sorts while processing the matcher
     results. */
     gnc_suspend_gui_refresh();
-
+    printf("START OK LOOP\n");
     do
     {
         gtk_tree_model_get (model, &iter,
                             DOWNLOADED_COL_DATA, &trans_info,
                             -1);
+
+        // JEAN: the account of all splits should be set as edited. IF THERE'S ONLY 1 SPLIT, A SPLIT
+        // WILL BE CREATED with unbalanced, and the account will not have its edit level increased...
 
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
@@ -239,7 +286,8 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         }
     }
     while (gtk_tree_model_iter_next (model, &iter));
-
+    printf("DONE OK LOOP\n");
+    
     gnc_gen_trans_list_delete (info);
 
     /* Allow GUI refresh again. */
@@ -340,7 +388,10 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
              old_acc,
              &ok_pressed);
     if (ok_pressed)
-        gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
+    {
+        gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE); // JEAN: BeginEdit on this account
+        inc_account_edit (info, new_acc);
+    }
 }
 
 static void
@@ -492,7 +543,10 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                             gnc_account_get_full_name (*new_acc));
                 }
                 if (ok_pressed)
-                    gnc_import_TransInfo_set_destacc (trans_info, *new_acc, TRUE);
+                {
+                    gnc_import_TransInfo_set_destacc (trans_info, *new_acc, TRUE); // JEAN Set Begin_edit on this account.
+                    inc_account_edit (info, *new_acc);
+                }
             }
             break;
         case GNCImport_CLEAR:
@@ -566,7 +620,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (
     }
     g_list_free_full (selected_rows, (GDestroyNotify) gtk_tree_path_free);
 
-    // now reselect the transaction rows.
+    // now reselect the transaction rows. // JEAN THIS GETS REALLY SLOW AS WELL
     for (l = refs; l != NULL; l = l->next)
     {
         GtkTreePath *path = gtk_tree_row_reference_get_path (l->data);
@@ -874,6 +928,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
+    
+    info->id_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -1417,6 +1473,16 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
 void gnc_gen_trans_list_add_trans (GNCImportMainMatcher *gui, Transaction *trans)
 {
+    Account* acc = NULL;
+    Split* split = NULL;
+    int i=0;
+    
+    // JEAN call xaccAccountBeginEdit on trans_info->first_split->acc, but only once.
+    // This makes the deletion a lot faster because the commit is only done once at the end.
+    split = xaccTransGetSplit (trans, 0);
+    acc = xaccSplitGetAccount (split);
+    inc_account_edit (gui, acc);
+    
     gnc_gen_trans_list_add_trans_with_ref_id (gui, trans, 0);
     return;
 }/* end gnc_import_add_trans() */
@@ -1443,8 +1509,8 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transa
     GtkTreeIter iter;
     g_assert (gui);
     g_assert (trans);
-
-    if (gnc_import_exists_online_id (trans))
+  
+    if (gnc_import_exists_online_id (trans, gui->id_hash))
         return;
     else
     {
@@ -1497,9 +1563,13 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
     // Now put all potential matches into a hash table based on their account.
     for (potential_match=query_return; potential_match!=NULL; potential_match=potential_match->next)
     {
-        Account* split_account = xaccSplitGetAccount (potential_match->data);
+        Account* split_account;
+        GSList* per_account_list;
+        if (gnc_import_split_has_online_id (potential_match->data))
+            continue;
+        split_account = xaccSplitGetAccount (potential_match->data);
         // This will be NULL the first time around, which is fine for a GSList
-        GSList* per_account_list = g_hash_table_lookup (lists_per_accounts, split_account);
+        per_account_list = g_hash_table_lookup (lists_per_accounts, split_account);
         per_account_list = g_slist_prepend (per_account_list, potential_match->data);
         g_hash_table_replace (lists_per_accounts, import_trans_account, per_account_list);
     }
@@ -1509,7 +1579,7 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
 static gboolean
 destroy_helper (gpointer key, gpointer value, gpointer data)
 {
-    g_slist_free(value);
+    g_slist_free (value);
     return TRUE;
 }
 
@@ -1547,9 +1617,11 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
     GSList* imported_trans;
 
     query = qof_query_create_for (GNC_ID_SPLIT);
+    printf("CREATE LIST\n");
     // Gather the list of splits that could match one of the imported transactions, this return a hash table.
     lists_per_accounts = create_list_of_potential_matches (gui, model, query, match_date_hardlimit);
 
+    printf("START LOOP\n");
     // For each imported transaction, grab the list of potential matches corresponding to that account,
     // and evaluate how good a match they are.
     for (imported_trans=gui->temp_trans_list; imported_trans!=NULL; imported_trans=imported_trans->next)
@@ -1558,7 +1630,7 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
         Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
         match_struct s = {transaction_info, display_threshold, fuzzy_amount};
         
-        g_slist_foreach(g_hash_table_lookup (lists_per_accounts, importaccount),(GFunc) match_helper, &s);
+        g_slist_foreach (g_hash_table_lookup (lists_per_accounts, importaccount), (GFunc) match_helper, &s);
 
         // Sort the matches, select the best match, and set the action.
         gnc_import_TransInfo_init_matches (transaction_info, gui->user_settings);
@@ -1574,7 +1646,8 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
         gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
         refresh_model_row (gui, model, &iter, transaction_info);
     }
-
+    printf("END LOOP LIST\n");
+    
     qof_query_destroy (query);
     g_slist_free (gui->temp_trans_list);
     gui->temp_trans_list = NULL;
