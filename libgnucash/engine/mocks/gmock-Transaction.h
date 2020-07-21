@@ -52,6 +52,7 @@ public:
     MOCK_METHOD0(beginEdit, void());
     MOCK_METHOD0(commitEdit, void());
     MOCK_METHOD1(getSplit, Split *(int));
+    MOCK_METHOD0(getSplitList, SplitList *());
     MOCK_METHOD1(findSplitByAccount, Split *(const Account*));
     MOCK_METHOD0(getDate, time64());
     MOCK_METHOD1(setDatePostedSecsNormalized, void(time64));

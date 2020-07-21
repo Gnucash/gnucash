@@ -120,6 +120,8 @@ protected:
         m_dest_acc   = new MockAccount();
         m_trans      = new MockTransaction();
         m_split      = new MockSplit();
+        m_splitList  = NULL;
+        m_splitList  = g_list_prepend (m_splitList, m_split);
 
         using namespace testing;
 
@@ -141,6 +143,7 @@ protected:
     MockAccount*      m_dest_acc;
     MockTransaction*  m_trans;
     MockSplit*        m_split;
+    GList*            m_splitList;
 };
 
 
@@ -160,6 +163,8 @@ TEST_F(ImportBackendTest, CreateTransInfo)
     // Define first split
     ON_CALL(*m_trans, getSplit(0))
         .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, getSplitList())
+        .WillByDefault(Return(m_splitList));
     // define description of the transaction
     ON_CALL(*m_trans, getDescription())
         .WillByDefault(Return("This is the description"));
@@ -228,6 +233,8 @@ TEST_F(ImportBackendBayesTest, CreateTransInfo)
     // Define first split
     ON_CALL(*m_trans, getSplit(0))
         .WillByDefault(Return(m_split));
+    ON_CALL(*m_trans, getSplitList())
+        .WillByDefault(Return(m_splitList));
     // Transaction has no further splits
     ON_CALL(*m_trans, getSplit(Gt(0)))
         .WillByDefault(Return(nullptr));
