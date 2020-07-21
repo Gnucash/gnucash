@@ -156,12 +156,14 @@ static void
 commit_all (GNCImportMainMatcher *info)
 {
     // Commit the edits for all accounts for which we've called inc_account_edit.
-    for (;info->edited_accounts; info->edited_accounts=info->edited_accounts->next)
+    for (GSList* iter = info->edited_accounts; iter; iter=iter->next)
     {
-        // JEAN Check that the counter is 1 so the edit does	 something.
-        int level = qof_instance_get_editlevel (info->edited_accounts->data);
-        g_assert(level == 1);
-        xaccAccountCommitEdit (info->edited_accounts->data);
+        int level = qof_instance_get_editlevel (iter->data);
+        // This should not happen.
+        if (level != 1)
+            PERR ("import-main-macher.c: Edit level not 1");
+        while (qof_instance_get_editlevel (iter->data) > 0)
+            xaccAccountCommitEdit (iter->data);
     }
     g_slist_free (info->edited_accounts);
     info->edited_accounts = NULL;
@@ -203,7 +205,6 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
                 info->transaction_processed_cb (trans_info, FALSE,
                                                 info->user_data);
             }
-            gnc_import_TransInfo_delete (trans_info);
         }
         while (gtk_tree_model_iter_next (model, &iter));
     }
@@ -221,7 +222,9 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     // We've called xaccAccountBeginEdit on many accounts to defer the commits until now.
     // Let's do it now that we're done.
     commit_all (info);
-    
+
+    g_slist_free_full (info->temp_trans_list,(GDestroyNotify) gnc_import_TransInfo_delete);
+    info->temp_trans_list = NULL;
     g_hash_table_foreach_remove (info->id_hash, delete_hash, NULL);
     info->id_hash = NULL;
     g_free (info);
@@ -1649,8 +1652,6 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
     printf("END LOOP LIST\n");
     
     qof_query_destroy (query);
-    g_slist_free (gui->temp_trans_list);
-    gui->temp_trans_list = NULL;
     g_hash_table_foreach (lists_per_accounts, (GHFunc) destroy_helper, NULL);
     g_hash_table_destroy (lists_per_accounts);
     return;
