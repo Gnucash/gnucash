@@ -623,10 +623,6 @@ void split_find_match (GNCImportTransInfo * trans_info,
         Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
         Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
 
-        // Do not consider transactions that have been previously matched.
-        if (gnc_import_split_has_online_id (split)) // JEAN THIS CAN NOW BE REMOVED.
-            return;
-
         /* Matching heuristics */
 
         /* Amount heuristics */
@@ -1081,7 +1077,7 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     }
 }
 
-static gint collect_trans_online_id(Transaction *trans, void *user_data) //JEAN COLLECT
+static gint collect_trans_online_id(Transaction *trans, void *user_data)
 {
     Split *split;
     GHashTable *id_hash = user_data;
@@ -1101,7 +1097,7 @@ static gint collect_trans_online_id(Transaction *trans, void *user_data) //JEAN 
 
 /** Checks whether the given transaction's online_id already exists in
   its parent account. */
-gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* id_hash)
+gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
 {
     gboolean online_id_exists = FALSE;
     Account *dest_acct;
@@ -1113,15 +1109,13 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* id_hash)
     // Create a hash per account of a hash of all transactions IDs. Then the test below will be fast if
     // we have many transactions to import.
     dest_acct = xaccSplitGetAccount (source_split);
-    if (!g_hash_table_contains (id_hash, dest_acct))
+    if (!g_hash_table_contains (acct_id_hash, dest_acct))
     {
         GHashTable* new_hash = g_hash_table_new (g_str_hash, g_str_equal);
-        g_hash_table_insert (id_hash, dest_acct, new_hash);
-        printf ("CREATE HASH\n");
+        g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
         xaccAccountForEachTransaction (dest_acct, collect_trans_online_id, new_hash);
-        printf ("CREATE DONE\n");
     }
-    online_id_exists = g_hash_table_contains (g_hash_table_lookup (id_hash, dest_acct),
+    online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
                                               gnc_import_get_split_online_id (source_split));
     
     /* If it does, abort the process for this transaction, since it is
