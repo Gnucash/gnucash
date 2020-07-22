@@ -2809,17 +2809,20 @@ gnc_main_window_connect (GncMainWindow *window,
 {
     GncMainWindowPrivate *priv;
     GtkNotebook *notebook;
+    gint current_position = -1;
 
     page->window = GTK_WIDGET(window);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     notebook = GTK_NOTEBOOK (priv->notebook);
-    priv->installed_pages = g_list_append (priv->installed_pages, page);
+    current_position = g_list_index (priv->installed_pages, priv->current_page) + 1;
+    priv->installed_pages = g_list_insert (priv->installed_pages, page, current_position);
     priv->usage_order = g_list_prepend (priv->usage_order, page);
-    gtk_notebook_append_page_menu (notebook, page->notebook_page,
-                                   tab_hbox, menu_label);
+    gtk_notebook_insert_page_menu (notebook, page->notebook_page,
+                                   tab_hbox, menu_label, current_position);
     gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
     gnc_plugin_page_inserted (page);
-    gtk_notebook_set_current_page (notebook, -1);
+    gtk_notebook_set_current_page (notebook, current_position);
+
     if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
         (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
     g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
