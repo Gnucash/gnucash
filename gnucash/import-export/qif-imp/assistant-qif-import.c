@@ -1755,11 +1755,11 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     const gchar * qif_encoding;
 
     SCM make_qif_file   = scm_c_eval_string ("make-qif-file");
-    SCM qif_file_load   = scm_c_eval_string ("qif-file:read-file");
+    SCM qif_file_load   = scm_c_eval_string ("qif-file:load");
     SCM qif_file_parse  = scm_c_eval_string ("qif-file:parse-fields");
     SCM unload_qif_file = scm_c_eval_string ("qif-dialog:unload-qif-file");
     SCM parse_results   = scm_c_eval_string ("qif-file:parse-fields-results");
-    SCM scm_qiffile;
+    SCM scm_qiffile, scm_qif_contents;
     SCM imported_files = SCM_EOL;
     SCM load_return = SCM_BOOL_F, parse_return = SCM_BOOL_F;
     SCM progress;
@@ -1800,9 +1800,30 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
 
     /* This step will fill 70% of the bar. */
     gnc_progress_dialog_push (wind->load_progress, 0.7);
-    load_return = scm_call_5 (qif_file_load,
+
+    {
+        gsize length;
+        gchar *contents;
+        gchar *utf8_string;
+        GError *gerror;
+
+        g_file_get_contents(path_to_load, &contents, &length, NULL);
+
+        utf8_string = g_convert (contents, length, "UTF-8",
+                                 qif_encoding, NULL, NULL, &gerror);
+
+        /* bwahaha. crash. */
+        g_assert (gerror == G_CONVERT_ERROR_NO_CONVERSION);
+
+        scm_qif_contents = scm_from_utf8_string (utf8_string);
+        g_free (contents);
+        g_free (utf8_string);
+    }
+
+    load_return = scm_call_6 (qif_file_load,
                               SCM_CAR(imported_files),
                               scm_from_utf8_string (path_to_load ? path_to_load : ""),
+                              scm_qif_contents,
                               wind->ticker_map,
                               progress,
                               scm_from_utf8_string (qif_encoding));

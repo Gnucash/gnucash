@@ -40,10 +40,13 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-file:read-file
+;;  qif-file:load
 ;;
 ;;  Suck in all the lines. Don't do any string interpretation,
 ;;  just store the fields "raw".
+;;
+;;  path: qif file path - will be stored only, not read in guile code
+;;  strings: qif-file contents as a string
 ;;
 ;;  The return value will be:
 ;;    success:   ()
@@ -56,7 +59,7 @@
 ;;        errors and warnings rather than a single one.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:read-file self path ticker-map progress-dialog encoding)
+(define (qif-file:load self path contents ticker-map progress-dialog encoding)
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-read)
@@ -75,8 +78,7 @@
           (value #f)
           (abort-read #f)
           (delimiters (string #\cr #\nl))
-          (file-stats #f)
-          (file-size 0)
+          (file-size (string-length contents))
           (bytes-read 0))
 
       ;; This procedure simplifies handling of warnings.
@@ -84,7 +86,7 @@
         (let ((str (gnc:list-display-to-string
                      (append (list (G_ "Line") " " line-num ": ") args))))
           (set! private-retval (list #t str))
-          (qif-import:log progress-dialog "qif-file:read-file" str)))
+          (qif-import:log progress-dialog "qif-file:load" str)))
 
 
       ;; This procedure simplifies handling of failures
@@ -92,46 +94,18 @@
         (let ((str (gnc:list-display-to-string
                          (append (list (G_ "Line") " " line-num ": ") args))))
           (set! private-retval (list #f str))
-          (qif-import:log progress-dialog "qif-file:read-file"
+          (qif-import:log progress-dialog "qif-file:load"
                           (string-append str "\n" (G_ "Read aborted.")))
           (set! abort-read #t)))
 
-      (define (strip-bom)
-	(let ((c1 (read-char)))
-	  (if (char=? c1 (integer->char #xEF))
-	    (let ((c2 (read-char)))
-	      (if (char=? c2 (integer->char #xBB))
-		  (let ((c3 (read-char)))
-		    (if (char=? c3 (integer->char #xBF)) #t
-			(begin
-			  (unread-char c3)
-			  (unread-char c2)
-			  (unread-char c1)
-			#f)))
-		  (begin
-		    (unread-char c2)
-		    (unread-char c1)
-		    #f)))
-	    (begin
-	      (unread-char c1)
-	      #f))))
-
       (qif-file:set-path! self path)
-      (if (not (access? path R_OK))
-          ;; A UTF-8 encoded path won't succeed on some systems, such as
-          ;; Windows XP. Try encoding the path according to the locale.
-          (set! path (gnc-locale-from-utf8 path)))
-      (set! file-stats (stat path))
-      (set! file-size (stat:size file-stats))
-
 
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
                                        (string-append (G_ "Reading") " " path)))
 
-      (with-input-from-file path
+      (with-input-from-string contents
         (lambda ()
-	  (strip-bom)
           ;; loop over lines
           (let line-loop ()
             (set! line (read-delimited delimiters))
@@ -498,7 +472,7 @@
                 ;; ...and this is if we read a null or eof line.
                 (if (and (not abort-read)
                          (not (eof-object? line)))
-                    (line-loop))))) #:encoding encoding)
+                    (line-loop))))))
 
       ;; Reverse the transaction list so xtns are in the same order that
       ;; they appeared in the file.  This is important in a few cases.
@@ -509,18 +483,10 @@
 
   (catch #t
     (lambda ()
-      (let ((retval #f)
-            (conv (port-conversion-strategy #f)))
-
-        (set-port-conversion-strategy! #f 'error)
-        ;; Safely read the file.
-        (set! retval (private-read))
-        (set-port-conversion-strategy! #f conv)
-
+      (let ((retval (private-read)))
         ;; Fill the progress dialog.
         (when (and progress-dialog (list? retval))
           (gnc-progress-dialog-set-value progress-dialog 1))
-
         retval))
 
     (lambda (key . rest)

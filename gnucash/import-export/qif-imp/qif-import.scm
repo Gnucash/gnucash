@@ -72,7 +72,7 @@
 (export qif-map-entry:qif-name)
 (export qif-map-entry:new-acct?)
 
-(export qif-file:read-file)
+(export qif-file:load)
 (export qif-file:parse-fields)
 (export qif-file:parse-fields-results)
 (export qif-file:check-from-acct)
