@@ -85,17 +85,17 @@
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (date-col column-vector)
-        (addto! heading-list (_ date-header)))
+        (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
-        (addto! heading-list (_ due-date-header)))
+        (addto! heading-list (G_ due-date-header)))
     (if (num-col column-vector)
-        (addto! heading-list (_ reference-header)))
+        (addto! heading-list (G_ reference-header)))
     (if (type-col column-vector)
-	(addto! heading-list (_ type-header)))
+	(addto! heading-list (G_ type-header)))
     (if (memo-col column-vector)
-	(addto! heading-list (_ desc-header)))
+	(addto! heading-list (G_ desc-header)))
     (if (value-col column-vector)
-	(addto! heading-list (_ amount-header)))
+	(addto! heading-list (G_ amount-header)))
     (reverse heading-list)))
 
 
@@ -156,10 +156,10 @@
 
     (gnc:html-table-set-col-headers!
      table
-     (list (_ "0-30 days")
-	   (_ "31-60 days")
-	   (_ "61-90 days")
-	   (_ "91+ days")))
+     (list (G_ "0-30 days")
+	   (G_ "31-60 days")
+	   (G_ "61-90 days")
+	   (G_ "91+ days")))
 
     (gnc:html-table-append-row!
      table
@@ -203,7 +203,7 @@
       (begin
 	(set! printed? #t)
 	(if (not (gnc-numeric-zero-p total))
-	    (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
+	    (let ((row (make-row column-vector start-date #f "" (G_ "Balance") ""
 				 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)))
 		  (row-style (if odd-row? "normal-row" "alternate-row")))
 	      (gnc:html-table-append-row/markup! table row-style (reverse row))
@@ -236,8 +236,8 @@
 		  (gnc:invoice-anchor-text invoice)
 		  inv-str))
 		inv-str))
-	   ((equal? type TXN-TYPE-PAYMENT) (_ "Payment, thank you!"))
-	   (else (_ "Unknown"))))
+	   ((equal? type TXN-TYPE-PAYMENT) (G_ "Payment, thank you!"))
+	   (else (G_ "Unknown"))))
 	 )
 
     (if reverse?
@@ -315,8 +315,8 @@
      (append (cons (gnc:make-html-table-cell/markup
 		    "total-label-cell"
 		    (if (gnc-numeric-negative-p total)
-			(_ "Total Credit")
-			(_ "Total Due")))
+			(G_ "Total Credit")
+			(G_ "Total Due")))
 		   '())
 	     (list (gnc:make-html-table-cell/size/markup
 		    1 (value-col used-columns)
@@ -400,7 +400,7 @@
 
 (define (job-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-JOB
-                     (_ "Invoice") #f))
+                     (G_ "Invoice") #f))
 
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID owner)))
@@ -498,16 +498,16 @@
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
        (set! type-str (N_ "Customer"))
-       (set! report-title-str (_ "Customer Report")))
+       (set! report-title-str (G_ "Customer Report")))
       ((eqv? type GNC-OWNER-JOB)
        (set! type-str (N_ "Job"))
-       (set! report-title-str (_ "Job Report")))
+       (set! report-title-str (G_ "Job Report")))
       ((eqv? type GNC-OWNER-VENDOR)
        (set! type-str (N_ "Vendor"))
-       (set! report-title-str (_ "Vendor Report")))
+       (set! report-title-str (G_ "Vendor Report")))
       ((eqv? type GNC-OWNER-EMPLOYEE)
        (set! type-str (N_ "Employee"))
-       (set! report-title-str (_ "Employee Report"))))
+       (set! report-title-str (G_ "Employee Report"))))
 
     (gnc:html-document-set-title! document report-title-str)
 
@@ -540,7 +540,7 @@
 	      (set!
 	       table
 	       (gnc:make-html-text
-		(_ "No valid account selected. Click on the Options button and select the account to use."))))
+		(G_ "No valid account selected. Click on the Options button and select the account to use."))))
 
 	  (gnc:html-document-add-object!
 	   document
@@ -556,7 +556,7 @@
 	   document
 	   (gnc:make-html-text
 	    (string-append
-	     (_ "Date Range")
+	     (G_ "Date Range")
 	     ": "
 	     (qof-print-date start-date)
 	     " - "
@@ -573,16 +573,16 @@
           (string-append
            (cond
             ((eqv? type GNC-OWNER-CUSTOMER)
-             (_ "No valid customer selected."))
+             (G_ "No valid customer selected."))
             ((eqv? type GNC-OWNER-JOB)
-             (_ "No valid job selected."))
+             (G_ "No valid job selected."))
             ((eqv? type GNC-OWNER-VENDOR)
-             (_ "No valid vendor selected."))
+             (G_ "No valid vendor selected."))
             ((eqv? type GNC-OWNER-EMPLOYEE)
-             (_ "No valid employee selected."))
+             (G_ "No valid employee selected."))
             (else ""))
            " "
-           (_ "Click on the \"Options\" button to select a company.")))))
+           (G_ "Click on the \"Options\" button to select a company.")))))
 
     (qof-query-destroy query)
     document))

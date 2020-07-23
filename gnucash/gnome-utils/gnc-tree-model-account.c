@@ -741,6 +741,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     {
         g_value_init (value, G_TYPE_STRING);
         g_value_take_string (value, cached_string);
+        LEAVE("value in cache, '%s'", cached_string);
         return;
     }
 

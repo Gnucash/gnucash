@@ -360,14 +360,16 @@ gboolean      xaccTransGetIsClosingTxn (const Transaction *trans);
 */
 #define xaccTransAppendSplit(t, s) xaccSplitSetParent((s), (t))
 
-/** The xaccTransGetSplit() method returns a pointer to each of the
-    splits in this transaction.
+/** Return a pointer to the indexed split in this transaction's split list.
+
+    Note that the split list is a linked list and that indexed access is
+    O(N). Do not use this method for iteration.
     @param trans The transaction
     @param i The split number.  Valid values for i are zero to
-    (number_of__splits-1).  An invalid value of i will cause NULL to
-    be returned.  A convenient way of cycling through all splits is
-    to start at zero, and keep incrementing until a null value is returned. */
-Split *       xaccTransGetSplit (const Transaction *trans, int i);
+    (number_of__splits-1).
+    @return A Split* or NULL if i is out of range.
+*/
+Split* xaccTransGetSplit (const Transaction *trans, int i);
 
 /** Inverse of xaccTransGetSplit() */
 int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);

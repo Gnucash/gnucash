@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <html-piechart>
-  (make-record-type "<html-piechart>"
+  (make-record-type '<html-piechart>
                     '(width
                       height
                       title

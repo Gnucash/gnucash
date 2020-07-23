@@ -359,6 +359,11 @@ gnc_save_all_state (gpointer session, gpointer unused)
 
     /* Store the book's GncGUID in the top level group */
     book = qof_session_get_book(session);
+    if (!book)
+    {
+        PERR("Session has no book!");
+        return;
+    }
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_to_string_buff(guid, guid_string);
     g_key_file_set_string(keyfile, STATE_FILE_TOP, STATE_FILE_BOOK_GUID,

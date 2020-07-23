@@ -95,7 +95,7 @@
 
 (define (gnc:txf-get-help categories code)
   (or (assv-ref txf-help-strings code)
-      (_ "No help available.")))
+      (G_ "No help available.")))
 
 (define (gnc:txf-get-codes categories tax-entity-type)
   (and-let* ((sym (string->symbol tax-entity-type))

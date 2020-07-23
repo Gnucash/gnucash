@@ -152,7 +152,7 @@
 (define (eguile-file-to-string infile environment)
   (cond
    ((not (access? infile R_OK))
-    (format #f (_ "Template file \"~a\" can not be read") infile))
+    (format #f (G_ "Template file \"~a\" can not be read") infile))
    (else
     (let ((script (with-input-from-file infile
                     (lambda ()

@@ -24,48 +24,31 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-anytag>
-  (make-record-type "<html-anytag>"
-                    '(tag
-                      data
-                      style
-                      )))
-
-(define gnc:html-anytag?
-  (record-predicate <html-anytag>))
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-anytag> class
 ;;  wrapper around HTML anytags
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define gnc:make-html-anytag-internal
-  (record-constructor <html-anytag>))
+(define-record-type <html-anytag>
+  (make-html-anytag tag data style)
+  html-anytag?
+  (tag html-anytag-tag html-anytag-set-tag!)
+  (data html-anytag-data html-anytag-set-data!)
+  (style html-anytag-style html-anytag-set-style!))
+
+(define gnc:html-anytag? html-anytag?)
+(define gnc:make-html-anytag-internal make-html-anytag)
+(define gnc:html-anytag-tag html-anytag-tag)
+(define gnc:html-anytag-set-tag! html-anytag-set-tag!)
+(define gnc:html-anytag-data html-anytag-data)
+(define gnc:html-anytag-set-data! html-anytag-set-data!)
+(define gnc:html-anytag-style html-anytag-style)
+(define gnc:html-anytag-set-style-internal! html-anytag-set-style!)
 
 (define (gnc:make-html-anytag tag . data)
-  (gnc:make-html-anytag-internal
-   tag                         ;; tag
-   data                        ;; data
-   (gnc:make-html-style-table) ;; style
-   ))
-
-(define gnc:html-anytag-tag
-  (record-accessor <html-anytag> 'tag))
-
-(define gnc:html-anytag-set-tag!
-  (record-modifier <html-anytag> 'tag))
-
-(define gnc:html-anytag-data
-  (record-accessor <html-anytag> 'data))
-
-(define gnc:html-anytag-set-data!
-  (record-modifier <html-anytag> 'data))
-
-(define gnc:html-anytag-style
-  (record-accessor <html-anytag> 'style))
-
-(define gnc:html-anytag-set-style-internal!
-  (record-modifier <html-anytag> 'style))
+  (gnc:make-html-anytag-internal tag data (gnc:make-html-style-table)))
 
 (define (gnc:html-anytag-append-data! anytag . data)
   (gnc:html-anytag-set-data!
@@ -114,8 +97,10 @@
                                 'attribute (list "class" class))
     anytag))
 
-(define (gnc:make-html-div . data)                 ;ideally should have been (gnc:make-html-anytag "div" data) but it will inherit parent div class.
-  (apply gnc:make-html-div/markup (cons "" data))) ;so we have to redo as an empty-string. so annoying!
+;;ideally should have been (gnc:make-html-anytag "div" data) but it
+;;will inherit parent div class.
+(define (gnc:make-html-div . data)
+  (apply gnc:make-html-div/markup (cons "" data)))
 
 (define (gnc:make-html-span . data)
   (apply gnc:make-html-span/markup (cons "" data)))

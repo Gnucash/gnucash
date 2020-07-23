@@ -101,6 +101,12 @@ td.number-cell, td.total-number-cell, td.anchor-cell, td.date-cell {
 td.highlight {
     background-color: #e1e1e1
 }
+
+@media print {
+    html, body {
+        height: unset;
+    }
+}
 ")
 
 (define (css-options)
@@ -200,7 +206,7 @@ td.highlight {
       (gnc:html-document-set-style-text! ssdoc default-css)
       (gnc:html-document-add-object!
        ssdoc (gnc:make-html-text
-              (_ "&lt;/style is disallowed in CSS. Using default CSS."))))
+              (G_ "&lt;/style is disallowed in CSS. Using default CSS."))))
 
      (else
       (gnc:html-document-set-style-text! ssdoc all-css)))

@@ -79,8 +79,8 @@
       (list "query" (gnc-query2scm query)) ;; think this wants an scm...
       (list "journal" #t)
       (list "double" #t)
-      (list "debit-string" (_ "Debit"))
-      (list "credit-string" (_ "Credit"))
+      (list "debit-string" (G_ "Debit"))
+      (list "credit-string" (G_ "Credit"))
       )
      )
     ;; we'll leave query malloc'd in case this is required by the C side...
@@ -115,7 +115,7 @@
   ;; just delegate rendering to the Register Report renderer...
   (let* ((renderer (gnc:report-template-renderer/report-guid regrptguid #f))
          (doc (renderer report-obj)))
-    (gnc:html-document-set-title! doc (_ reportname))
+    (gnc:html-document-set-title! doc (G_ reportname))
     doc))
 
 (gnc:define-report 

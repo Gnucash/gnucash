@@ -49,7 +49,7 @@
 
 (define FOOTER-TEXT
   (gnc:make-html-text
-   (_ "WARNING: Foreign currency conversions, and unrealized gains
+   (G_ "WARNING: Foreign currency conversions, and unrealized gains
 calculations are not confirmed correct. This report may be modified
 without notice. Bug reports are very welcome at
 https://bugs.gnucash.org/")))
@@ -134,32 +134,32 @@ also show overall period profit & loss."))
 (define periodlist
   (list
    (list 'disabled
-         (cons 'text (_ "Disabled"))
-         (cons 'tip (_ "Disabled")))
+         (cons 'text (G_ "Disabled"))
+         (cons 'tip (G_ "Disabled")))
 
    (list 'YearDelta
-         (cons 'text (_ "Year"))
-         (cons 'tip (_ "One year.")))
+         (cons 'text (G_ "Year"))
+         (cons 'tip (G_ "One year.")))
 
    (list 'HalfYearDelta
-         (cons 'text (_ "Half Year"))
-         (cons 'tip (_ "Half Year.")))
+         (cons 'text (G_ "Half Year"))
+         (cons 'tip (G_ "Half Year.")))
 
    (list 'QuarterDelta
-         (cons 'text (_ "Quarter"))
-         (cons 'tip (_ "One Quarter.")))
+         (cons 'text (G_ "Quarter"))
+         (cons 'tip (G_ "One Quarter.")))
 
    (list 'MonthDelta
-         (cons 'text (_ "Month"))
-         (cons 'tip (_ "One Month.")))
+         (cons 'text (G_ "Month"))
+         (cons 'tip (G_ "One Month.")))
 
    (list 'TwoWeekDelta
-         (cons 'text (_ "2Week"))
-         (cons 'tip (_ "Two Weeks.")))
+         (cons 'text (G_ "2Week"))
+         (cons 'tip (G_ "Two Weeks.")))
 
    (list 'WeekDelta
-         (cons 'text (_ "Week"))
-         (cons 'tip (_ "One Week.")))))
+         (cons 'text (G_ "Week"))
+         (cons 'tip (G_ "One Week.")))))
 
 (define (keylist->vectorlist keylist)
   (map
@@ -235,11 +235,11 @@ also show overall period profit & loss."))
       "d" opthelp-options-summary
       'never
       (list (vector 'always
-                    (_ "Always")
-                    (_ "Always display summary."))
+                    (G_ "Always")
+                    (G_ "Always display summary."))
             (vector 'never
-                    (_ "Never")
-                    (_ "Disable report summary.")))))
+                    (G_ "Never")
+                    (G_ "Disable report summary.")))))
 
     ;; accounts to work on
     (add-option
@@ -493,7 +493,7 @@ also show overall period profit & loss."))
                        (disable-account-indent? (gnc-account-get-full-name account))
                        (else (xaccAccountGetName account))))
            (acct-label (if (and (not virtual?) total?)
-                           (string-append (_ "Total For ") acct-name)
+                           (string-append (G_ "Total For ") acct-name)
                            acct-name))
            (acct-url (and account-anchor?
                           (not total?)
@@ -649,7 +649,7 @@ also show overall period profit & loss."))
 
   (if show-total?
       (add-indented-row 0
-                        (string-append (_ "Total For ") title)
+                        (string-append (G_ "Total For ") title)
                         "total-label-cell"
                         "primary-subheading"
                         maxindent
@@ -841,7 +841,7 @@ also show overall period profit & loss."))
                          (format #f "~a ~a "
                                  (gnc:monetary->string orig-monetary)
                                  (gnc-commodity-get-nice-symbol common-currency))
-                         (_ "missing")))))
+                         (G_ "missing")))))
                  (gnc:html-text-append! cell (gnc:html-markup-br)))
                commodities)
               (gnc:make-html-table-cell/markup "number-cell" cell))))
@@ -905,7 +905,7 @@ also show overall period profit & loss."))
              (display report-title)
              (display " ")
              (if (or (not (eq? incr 'disabled)) (eq? report-type 'pnl))
-                 (format #t (_ "~a to ~a")
+                 (format #t (G_ "~a to ~a")
                          (qof-print-date startdate) (qof-print-date enddate))
                  (display (qof-print-date enddate))))))
 
@@ -1076,49 +1076,49 @@ also show overall period profit & loss."))
                               ))))
 
         (unless (eq? incr 'disabled)
-          (add-to-table multicol-table-left (_ "Date") '()
+          (add-to-table multicol-table-left (G_ "Date") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f
                         #:show-total? #f)
           (if enable-dual-columns?
-              (add-to-table multicol-table-right (_ "Date") '()
+              (add-to-table multicol-table-right (G_ "Date") '()
                             #:get-col-header-fn get-col-header-fn
                             #:show-accounts? #f
                             #:show-total? #f)))
 
         (unless (null? asset-accounts)
-          (add-to-table multicol-table-left (_ "Asset") asset-accounts))
+          (add-to-table multicol-table-left (G_ "Asset") asset-accounts))
 
         (unless (null? liability-accounts)
-          (add-to-table multicol-table-right (_ "Liability") liability-accounts
+          (add-to-table multicol-table-right (G_ "Liability") liability-accounts
                         #:negate-amounts? #t))
 
         (add-to-table
-         multicol-table-right (_ "Equity")
+         multicol-table-right (G_ "Equity")
          (append equity-accounts
                  (cond
                   (use-trading-accts? trading-accounts)
-                  (common-currency (list (vector (_ "Unrealized Gains")
+                  (common-currency (list (vector (G_ "Unrealized Gains")
                                                  unrealized-gain-fn)))
                   (else '()))
                  (if (null? income-expense)
                      '()
-                     (list (vector (_ "Retained Earnings")
+                     (list (vector (G_ "Retained Earnings")
                                    retained-earnings-fn))))
          #:negate-amounts? #t)
 
 
-        (add-to-table multicol-table-right (_ "Liability and Equity")
+        (add-to-table multicol-table-right (G_ "Liability and Equity")
                       (append liability-accounts
                               equity-accounts
                               (cond
                                (use-trading-accts? trading-accounts)
-                               (common-currency (list (vector (_ "Unrealized Gains")
+                               (common-currency (list (vector (G_ "Unrealized Gains")
                                                               unrealized-gain-fn)))
                                (else '()))
                               (if (null? income-expense)
                                   '()
-                                  (list (vector (_ "Retained Earnings")
+                                  (list (vector (G_ "Retained Earnings")
                                                 retained-earnings-fn))))
                       #:negate-amounts? #t
                       #:show-title? #f
@@ -1126,7 +1126,7 @@ also show overall period profit & loss."))
                       #:show-total? #t)
 
         (if (and common-currency show-rates?)
-            (add-to-table multicol-table-right (_ "Exchange Rates")
+            (add-to-table multicol-table-right (G_ "Exchange Rates")
                           asset-liability
                           #:get-col-header-fn get-exchange-rates-fn
                           #:show-accounts? #f
@@ -1136,7 +1136,7 @@ also show overall period profit & loss."))
             (gnc:html-document-add-object!
              doc
              (gnc:make-html-text
-              (gnc:html-markup-anchor chart (_ "Barchart")))))))
+              (gnc:html-markup-anchor chart (G_ "Barchart")))))))
 
      ((eq? report-type 'pnl)
       (let* ((include-overall-period? (get-option gnc:pagename-general
@@ -1205,7 +1205,7 @@ also show overall period profit & loss."))
                        (header (gnc:make-html-text
                                 (qof-print-date (car datepair))
                                 (gnc:html-markup-br)
-                                (_ " to ")
+                                (G_ " to ")
                                 (qof-print-date (cdr datepair))))
                        (cell (gnc:make-html-table-cell/markup
                               "total-label-cell" header)))
@@ -1248,33 +1248,33 @@ also show overall period profit & loss."))
                                                         get-cell-anchor-fn)))))
 
         (unless (eq? incr 'disabled)
-          (add-to-table multicol-table-left (_ "Period") '()
+          (add-to-table multicol-table-left (G_ "Period") '()
                         #:get-col-header-fn get-col-header-fn
                         #:show-accounts? #f
                         #:show-total? #f)
           (if enable-dual-columns?
-              (add-to-table multicol-table-right (_ "Period") '()
+              (add-to-table multicol-table-right (G_ "Period") '()
                             #:get-col-header-fn get-col-header-fn
                             #:show-accounts? #f
                             #:show-total? #f)))
 
         (unless (null? income-accounts)
-          (add-to-table multicol-table-left (_ "Income") income-accounts
+          (add-to-table multicol-table-left (G_ "Income") income-accounts
                         #:negate-amounts? #t))
 
         (unless (null? expense-accounts)
-          (add-to-table multicol-table-right (_ "Expense") expense-accounts))
+          (add-to-table multicol-table-right (G_ "Expense") expense-accounts))
 
         (unless (or (null? income-accounts)
                     (null? expense-accounts))
-          (add-to-table multicol-table-left (_ "Net Income")
+          (add-to-table multicol-table-left (G_ "Net Income")
                         income-expense
                         #:show-accounts? #f
                         #:negate-amounts? #t
                         #:force-total? #t))
 
         (if (and common-currency show-rates?)
-            (add-to-table multicol-table-left (_ "Exchange Rates")
+            (add-to-table multicol-table-left (G_ "Exchange Rates")
                           income-expense
                           #:get-col-header-fn get-exchange-rates-fn
                           #:show-accounts? #f
@@ -1303,8 +1303,8 @@ also show overall period profit & loss."))
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
     doc))
 
-(define balsheet-reportname (_ "Balance Sheet (Multicolumn)"))
-(define pnl-reportname (_ "Income Statement (Multicolumn)"))
+(define balsheet-reportname (G_ "Balance Sheet (Multicolumn)"))
+(define pnl-reportname (G_ "Income Statement (Multicolumn)"))
 
 (gnc:define-report
  'version 1

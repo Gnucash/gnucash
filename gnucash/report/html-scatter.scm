@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <html-scatter>
-  (make-record-type "<html-scatter>"
+  (make-record-type '<html-scatter>
                     '(width
                       height
                       title

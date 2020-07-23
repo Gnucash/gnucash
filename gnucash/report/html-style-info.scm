@@ -22,6 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (ice-9 match))
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; <html-markup-style-info> class 
@@ -38,31 +39,36 @@
 ;;  attribute   : single attribute-value pair in a list 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-record-type <html-markup-style-info>
+  (make-html-markup-style-info-internal tag attributes inheritable?)
+  html-markup-style-info?
+  (tag style-info-tag style-info-set-tag)
+  (attributes style-info-attributes style-info-set-attributes)
+  (inheritable? style-info-inheritable? style-info-set-inheritable?))
 
-(define <html-markup-style-info> 
-  (make-record-type "<html-markup-style-info>"
-                    '(tag 
-                      attributes
-                      inheritable?)))
-
-(define gnc:html-markup-style-info?
-  (record-predicate <html-markup-style-info>))
-
-(define gnc:make-html-markup-style-info-internal 
-  (record-constructor <html-markup-style-info>))
+(define gnc:make-html-markup-style-info-internal make-html-markup-style-info-internal)
+(define gnc:html-markup-style-info? html-markup-style-info?)
+(define gnc:html-markup-style-info-tag style-info-tag)
+(define gnc:html-markup-style-info-set-tag! style-info-set-tag)
+(define gnc:html-markup-style-info-attributes style-info-attributes)
+(define gnc:html-markup-style-info-set-attributes! style-info-set-attributes)
+(define gnc:html-markup-style-info-inheritable? style-info-inheritable?)
+(define gnc:html-markup-style-info-set-inheritable?! style-info-set-inheritable?)
 
 (define (gnc:make-html-markup-style-info . rest)
-  (let ((retval (gnc:make-html-markup-style-info-internal 
-                 #f (make-hash-table) #t)))
+  (let ((retval (gnc:make-html-markup-style-info-internal #f (make-hash-table) #t)))
     (apply gnc:html-markup-style-info-set! retval rest)
     retval))
 
 (define (gnc:html-markup-style-info-set! style . rest)
   (let loop ((arglist rest))
     (match arglist
-      (('attribute (key . val) . rest)
-       (gnc:html-markup-style-info-set-attribute!
-        style key (and (pair? val) (car val)))
+      (('attribute (key val) . rest)
+       (gnc:html-markup-style-info-set-attribute! style key val)
+       (loop rest))
+
+      (('attribute (key) . rest)
+       (gnc:html-markup-style-info-set-attribute! style key #f)
        (loop rest))
 
       ((field value . rest)
@@ -70,24 +76,6 @@
        (loop rest))
 
       (else style))))
-
-(define gnc:html-markup-style-info-tag
-  (record-accessor <html-markup-style-info> 'tag))
-
-(define gnc:html-markup-style-info-set-tag!
-  (record-modifier <html-markup-style-info> 'tag))
-
-(define gnc:html-markup-style-info-attributes
-  (record-accessor <html-markup-style-info> 'attributes))
-
-(define gnc:html-markup-style-info-set-attributes!
-  (record-modifier <html-markup-style-info> 'attributes))
-
-(define gnc:html-markup-style-info-inheritable? 
-  (record-accessor <html-markup-style-info> 'inheritable?))
-
-(define gnc:html-markup-style-info-set-inheritable?!
-  (record-modifier <html-markup-style-info> 'inheritable?))
 
 (define (gnc:html-markup-style-info-set-attribute! info attr val)
   (hash-set! (gnc:html-markup-style-info-attributes info) attr val))
@@ -144,40 +132,24 @@
 ;;  style.  The return should be an HTML string.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-data-style-info> 
-  (make-record-type "<html-data-style-info>"
-                    '(renderer data inheritable?))) 
+(define-record-type <html-data-style-info>
+  (make-html-data-style-info-internal renderer data inheritable?)
+  data-style-info?
+  (renderer html-data-style-info-renderer html-data-style-info-set-renderer)
+  (data html-data-style-info-data html-data-style-info-set-data)
+  (inheritable? html-data-style-info-inherit html-data-style-info-set-inherit))
 
-(define gnc:html-data-style-info? 
-  (record-predicate <html-data-style-info>))
-
-(define gnc:make-html-data-style-info-internal
-  (record-constructor <html-data-style-info>))
+(define gnc:make-html-data-style-info-internal make-html-data-style-info-internal)
+(define gnc:html-data-style-info? data-style-info?)
+(define gnc:html-data-style-info-renderer html-data-style-info-renderer)
+(define gnc:html-data-style-info-set-renderer! html-data-style-info-set-renderer)
+(define gnc:html-data-style-info-data html-data-style-info-data)
+(define gnc:html-data-style-info-set-data! html-data-style-info-set-data)
+(define gnc:html-data-style-info-inheritable? html-data-style-info-inherit)
+(define gnc:html-data-style-info-set-inheritable?! html-data-style-info-set-inherit)
 
 (define (gnc:make-html-data-style-info renderer data)
   (gnc:make-html-data-style-info-internal renderer data #t))
-
-(define gnc:html-data-style-info? 
-  (record-predicate <html-data-style-info>))
-
-(define gnc:html-data-style-info-renderer 
-  (record-accessor <html-data-style-info> 'renderer))
-
-(define gnc:html-data-style-info-set-renderer!
-  (record-modifier <html-data-style-info> 'renderer))
-
-(define gnc:html-data-style-info-data 
-  (record-accessor <html-data-style-info> 'data))
-
-(define gnc:html-data-style-info-set-data!
-  (record-modifier <html-data-style-info> 'data))
-
-(define gnc:html-data-style-info-inheritable? 
-  (record-accessor <html-data-style-info> 'inheritable?))
-
-(define gnc:html-data-style-info-set-inheritable?!
-  (record-modifier <html-data-style-info> 'inheritable?))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  default renderers for some data types.  
@@ -216,36 +188,23 @@
 ;; deserves a record structure. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-style-table>
-  (make-record-type "<html-style-table>"
-                    '(primary compiled inheritable)))
+(define-record-type <html-style-table>
+  (make-html-style-table primary compiled inheritable)
+  html-style-table?
+  (primary html-style-table-primary)
+  (compiled html-style-table-compiled html-style-table-set-compiled!)
+  (inheritable html-style-table-inheritable html-style-table-set-inheritable!))
 
-(define gnc:html-style-table? 
-  (record-predicate <html-style-table>))
-
-(define gnc:make-html-style-table-internal 
-  (record-constructor <html-style-table>))
-
+(define gnc:html-style-table? html-style-table?)
+(define gnc:make-html-style-table-internal make-html-style-table)
+(define gnc:html-style-table-primary html-style-table-primary)
+(define gnc:html-style-table-set-compiled! html-style-table-set-compiled!)
+(define gnc:html-style-table-inheritable html-style-table-inheritable)
+(define gnc:html-style-table-set-inheritable! html-style-table-set-inheritable!)
+(define gnc:html-style-table-compiled html-style-table-compiled)
+(define gnc:html-style-table-compiled? gnc:html-style-table-compiled)
 (define (gnc:make-html-style-table)
   (gnc:make-html-style-table-internal (make-hash-table) #f #f))
-
-(define gnc:html-style-table-primary
-  (record-accessor <html-style-table> 'primary))
-
-(define gnc:html-style-table-compiled
-  (record-accessor <html-style-table> 'compiled))
-
-(define gnc:html-style-table-set-compiled!
-  (record-modifier <html-style-table> 'compiled))
-
-(define gnc:html-style-table-inheritable
-  (record-accessor <html-style-table> 'inheritable))
-
-(define gnc:html-style-table-set-inheritable!
-  (record-modifier <html-style-table> 'inheritable))
-
-(define (gnc:html-style-table-compiled? table)
-  (gnc:html-style-table-compiled table))
 
 (define (gnc:html-style-table-compile table antecedents)
   ;; merge a key-value pair from an antecedent into the 

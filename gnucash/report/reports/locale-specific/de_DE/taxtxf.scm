@@ -69,7 +69,7 @@
 (define-module (gnucash reports locale-specific de_DE taxtxf))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities)) 
-(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash core-utils)) ; for gnc:version and (G_ ...)
 (use-modules (gnucash app-utils))
 (use-modules (gnucash locale de_DE tax))
 (use-modules (gnucash report))
@@ -262,7 +262,7 @@
            (gnc:html-markup-p
             (gnc:html-markup
              "blue"
-             (_ "WARNING: There are duplicate TXF codes assigned\
+             (G_ "WARNING: There are duplicate TXF codes assigned\
  to some accounts. Only TXF codes with payer sources may be repeated."))))
           (map (lambda (s)
                  (gnc:html-text-append!
@@ -287,10 +287,10 @@
   (gnc:html-table-prepend-row!
    table
    (append (list (gnc:make-html-table-header-cell/markup
-                  "account-header" (_ "Account Name")))
+                  "account-header" (G_ "Account Name")))
            (make-sub-headers max-level)
            (list (gnc:make-html-table-header-cell/markup
-                  "number-header" (_ "Total"))))))
+                  "number-header" (G_ "Total"))))))
 
 (define (make-sub-headers max-level)
   (if (<= max-level 1)
@@ -828,7 +828,7 @@
                    "center"
                    (gnc:html-markup-p
                     (gnc:html-markup/format
-                     (_ "Period from ~a to ~a") from-date to-date)))))
+                     (G_ "Period from ~a to ~a") from-date to-date)))))
             
             (gnc:html-document-add-object!
              doc (gnc:make-html-text
@@ -871,17 +871,17 @@ Gehen Sie zu Bearbeiten -> Optionen Steuerbericht, um Konten entsprechend einzur
  'options-generator tax-options-generator
  'renderer (lambda (report-obj)
              (generate-tax-or-txf
-              (_ "Taxable Income / Deductible Expenses")
-              (_ "This report shows your Taxable Income and \
+              (G_ "Taxable Income / Deductible Expenses")
+              (G_ "This report shows your Taxable Income and \
 Deductible Expenses.")
               report-obj
               #t
               #f))
- 'export-types (list (cons (_ "XML") 'txf))
+ 'export-types (list (cons (G_ "XML") 'txf))
  'export-thunk (lambda (report-obj choice file-name)
                  (generate-tax-or-txf
-                  (_ "Taxable Income / Deductible Expenses")
-                  (_ "This page shows your Taxable Income and \
+                  (G_ "Taxable Income / Deductible Expenses")
+                  (G_ "This page shows your Taxable Income and \
 Deductible Expenses.")
                   report-obj
                   #f

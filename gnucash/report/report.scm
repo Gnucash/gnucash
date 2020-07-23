@@ -534,6 +534,8 @@
 (export gnc:html-chart-currency-symbol)
 (export gnc:html-chart-set-currency-symbol!)
 (export gnc:html-chart-render)
+(export gnc:html-chart-set-custom-x-axis-ticks?!)
+(export gnc:html-chart-set-custom-y-axis-ticks?!)
 
 ;; html-table.scm
 

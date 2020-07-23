@@ -88,7 +88,7 @@
 <html dir='auto'>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>
+<title><?scm:d (G_ "Invoice") ?> <?scm:d invoiceid ?></title>
 
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the external stylesheet file is overridden by this following: -->
@@ -121,7 +121,7 @@
 
   <!-- header texts -->
 
-  <h1><?scm:d (nbsp (_ "Invoice No.")) ?> <?scm:d invoiceid ?></h1>
+  <h1><?scm:d (nbsp (G_ "Invoice No.")) ?> <?scm:d invoiceid ?></h1>
   <h2><?scm:d (gnc-print-time64 (gnc:get-today) opt-date-format) ?></h2>
   <p>&nbsp;</p>
   <?scm (if (not (string=? billcontact "")) (begin ?>
@@ -140,8 +140,8 @@
     <table border="0" width="100%" class="entries">
       <thead>
         <tr>
-          <th align="left" ><?scm:d (_ "Date") ?></th>
-          <th align="left" ><?scm:d (_ "Descr.") ?></th>
+          <th align="left" ><?scm:d (G_ "Date") ?></th>
+          <th align="left" ><?scm:d (G_ "Descr.") ?></th>
           <th align="right"><?scm:d opt-qty-heading ?></th>
           <th align="right"><?scm:d opt-unit-price-heading ?></th>
           <th align="right"><?scm:d opt-net-price-heading ?></th>
@@ -275,15 +275,15 @@
   ; 'mainline' code: check for a valid invoice, then display the report
   (cond
    ((null? opt-invoice)
-    (display (string-append "<h2>" (_ "Receipt") "</h2>"))
-    (display (string-append "<p>" (_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
+    (display (string-append "<h2>" (G_ "Receipt") "</h2>"))
+    (display (string-append "<p>" (G_ "No invoice has been selected -- please use the Options menu to select one.") "</p>")))
 
    ((not (eqv? GNC-OWNER-CUSTOMER
                (gncOwnerGetType
                 (gncOwnerGetEndOwner
                  (gncInvoiceGetOwner opt-invoice)))))
-    (display (string-append "<h2>" (_ "Receipt") "</h2>"))
-    (display (string-append "<p>" (_ "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.") "</p>")))
+    (display (string-append "<h2>" (G_ "Receipt") "</h2>"))
+    (display (string-append "<p>" (G_ "This report is designed for customer (sales) invoices only. Please use the Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher.") "</p>")))
 
    (else
     (display-report opt-invoice)))

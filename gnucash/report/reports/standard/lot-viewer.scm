@@ -74,6 +74,7 @@
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
   (define (get-all-lots splits)
+    (define lots-seen (make-hash-table))
     (let lp ((splits splits) (lots '()))
       (match splits
         (() (reverse lots))
@@ -82,8 +83,9 @@
            (lp rest
                (cond
                 ((null? lot) lots)
-                ((member lot lots) lots) ;warning: O(N^2)!
-                (else (cons lot lots)))))))))
+                ((hash-ref lots-seen lot) lots)
+                (else (hash-set! lots-seen lot #t)
+                      (cons lot lots)))))))))
 
   (let* ((to-date (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time

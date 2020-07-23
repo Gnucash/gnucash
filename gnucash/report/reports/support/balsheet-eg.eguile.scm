@@ -76,52 +76,46 @@
             onedepth1)
     ;; Recursively display the accounts table from the given tree
     ;; (as returned by process-acc-list)
-    (for accrec in tree do
-        (let ((rshift2 0)    ; adjust the amount column by this much
-              (showamt? #t)) ; whether to show the amount (e.g. not if zero)
-          (if (and (accrec-sublist accrec)
-                ;   (> (accrec-depth accrec) 0))
-                )
-            ; has sub-accounts: shift left to put balance in same column as sub-accounts
-            (set! rshift2 -1))
-          ; Don't show zero amount for a placeholder -- the value to
-          ; test for zero depends on whether or not this is a 'summary' value
-          ; (i.e. a total of sub-accounts that are not shown separately)
-          (if (and (accrec-placeholder? accrec)
-                   (if (accrec-summary? accrec)
-                     (not (accrec-non-zero? accrec))
-                     (gnc-numeric-zero-p (accrec-balance-num accrec))))
-            (set! showamt? #f))
-          (display-acc-row
+    (for-each
+     (lambda (accrec)
+       (display-acc-row
+        maxdepth
+        (accrec-depth accrec)
+        ;; has sub-accounts: shift left to put balance in same column
+        ;; as sub-accounts
+        (+ rshift (if (accrec-sublist accrec) -1 0))
+        (accrec-namelink accrec)
+        ;; Don't show zero amount for a placeholder -- the value to
+        ;; test for zero depends on whether or not this is a 'summary'
+        ;; value (i.e. a total of sub-accounts that are not shown
+        ;; separately)
+        (cond
+         ((and (accrec-placeholder? accrec)
+               (if (accrec-summary? accrec)
+                   (not (accrec-non-zero? accrec))
+                   (zero? (accrec-balance-num accrec))))
+          "&nbsp;")
+         ((accrec-summary? accrec) (format-comm-coll (accrec-subtotal-cc accrec)))
+         (else (format-monetary (accrec-balance-mny accrec))))
+        (< (accrec-depth accrec) 1); total?
+        #f) ; leftoverrule?
+       (when (accrec-sublist accrec)
+         ;; recurse to deeper accounts...
+         (display-accounts-table-r
+          (accrec-sublist accrec) neg? maxdepth rshift onedepth1)
+         ;; ...and then display the total
+         ;; unless there is only one depth-1 account
+         (unless (and onedepth1 (= 1 (accrec-depth accrec)))
+           (display-acc-row
             maxdepth
             (accrec-depth accrec)
-            (+ rshift rshift2)
-            (accrec-namelink accrec)
-            (if showamt?
-              (if (accrec-summary? accrec)
-                (format-comm-coll (accrec-subtotal-cc accrec))
-                (format-monetary (accrec-balance-mny accrec)))
-              "&nbsp;"
-              )
-            (< (accrec-depth accrec) 1); total?
-            #f) ; leftoverrule?
-          (if (accrec-sublist accrec)
-            (begin
-              ; recurse to deeper accounts...
-              (display-accounts-table-r (accrec-sublist accrec) neg? maxdepth rshift onedepth1)
-              ; ...and then display the total
-              ; unless there is only one depth-1 account
-              (if (not (and onedepth1
-                            (= 1 (accrec-depth accrec))))
-                (display-acc-row
-                  maxdepth
-                  (accrec-depth accrec)
-                  (if (> (accrec-depth accrec) 1) rshift 0)
-                  (string-append (_ "Total") " " (accrec-namelink accrec))
-                  (format-comm-coll-total (accrec-subtotal-cc accrec))
-                  (<= (accrec-depth accrec) 1)        ; total?
-                  (> (accrec-depth accrec) 0)))))))   ; leftoverrule?
-      )
+            (if (> (accrec-depth accrec) 1) rshift 0)
+            (string-append (G_ "Total") " " (accrec-namelink accrec))
+            (format-comm-coll-total (accrec-subtotal-cc accrec))
+            (<= (accrec-depth accrec) 1)        ; total?
+            (> (accrec-depth accrec) 0)))))   ; leftoverrule?
+
+     tree))
 ?>
 
 <!-- The HTML starts here... -->
@@ -170,29 +164,29 @@
          (rshift-ie 0)
          (balancing-cc (gnc:make-commodity-collector))
          (etl-cc (gnc:make-commodity-collector)))
-    (accrec-set-namelink! accrec-as (_ "Assets Accounts"))
+    (accrec-set-namelink! accrec-as (G_ "Assets Accounts"))
     (accrec-set-placeholder?! accrec-as #t)
     (balancing-cc 'merge (accrec-subtotal-cc accrec-as) #f)
     (if (and (one-depth-1 accrec-as)
              (> (accrec-treedepth accrec-as) 1))
       (set! rshift-as 1))
-    (accrec-set-namelink! accrec-li (_ "Liability Accounts"))
+    (accrec-set-namelink! accrec-li (G_ "Liability Accounts"))
     (accrec-set-placeholder?! accrec-li #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-li) #f)
     (if (and (one-depth-1 accrec-li)
              (> (accrec-treedepth accrec-li) 1))
       (set! rshift-li 1))
-    (accrec-set-namelink! accrec-eq (_ "Equity Accounts"))
+    (accrec-set-namelink! accrec-eq (G_ "Equity Accounts"))
     (accrec-set-placeholder?! accrec-eq #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-eq) #f)
-    (accrec-set-namelink! accrec-tr (_ "Trading Accounts"))
+    (accrec-set-namelink! accrec-tr (G_ "Trading Accounts"))
     (accrec-set-placeholder?! accrec-tr #t)
     (etl-cc 'merge (accrec-subtotal-cc accrec-tr) #f)
     (balancing-cc 'minusmerge etl-cc #f)
     (accrec-set-namelink! accrec-ie
                           (if (gnc-numeric-negative-p (accrec-balance-num accrec-ie))
-                            (_ "Retained Losses")
-                            (_ "Retained Earnings")))
+                            (G_ "Retained Losses")
+                            (G_ "Retained Earnings")))
     (accrec-set-placeholder?! accrec-ie #t)
     (balancing-cc 'minusmerge (accrec-subtotal-cc accrec-ie) #f)
     (if (and (one-depth-1 accrec-eq)
@@ -252,7 +246,7 @@
     (hrule (* maxdepth 2))
     (display-acc-row
       maxdepth 0 0
-      (_ "Total Equity, Trading, and Liabilities")
+      (G_ "Total Equity, Trading, and Liabilities")
       (format-comm-coll-total etl-cc)
       #t #f)
     (hrule (* maxdepth 2))
@@ -261,7 +255,7 @@
     (if (not (gnc-commodity-collector-allzero? balancing-cc))
         (display-acc-row
           maxdepth 0 0
-          (_ "Imbalance Amount")
+          (G_ "Imbalance Amount")
           (format-comm-coll-total balancing-cc)
           #t #f))
 
@@ -278,7 +272,7 @@
   (if (not (null? xlist))
     (begin
 ?>
-<p><?scm:d (_ "<strong>Exchange Rates</strong> used for this report") ?>
+<p><?scm:d (G_ "<strong>Exchange Rates</strong> used for this report") ?>
 <table border="0">
 <?scm
       (for-each

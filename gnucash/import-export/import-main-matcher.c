@@ -136,11 +136,6 @@ static void refresh_model_row (
                     GtkTreeModel *model,
                     GtkTreeIter *iter,
                     GNCImportTransInfo *info);
-static gboolean view_selection_function (GtkTreeSelection *selection,
-                         GtkTreeModel *model,
-                         GtkTreePath *path,
-                         gboolean path_currently_selected,
-                         gpointer data);
 /* end local prototypes */
 
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
@@ -373,7 +368,6 @@ gnc_gen_trans_add_toggled_cb (GtkCellRendererToggle *cell_renderer,
     else
     {
         gnc_import_TransInfo_set_action (trans_info, GNCImport_ADD);
-        gui->add_toggled =TRUE;  //flag A(dd) has just been toggled to view_selection_function
     }
     refresh_model_row (gui, model, &iter, trans_info);
     LEAVE("");
@@ -604,6 +598,16 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
     LEAVE("");
 }
 
+static GNCImportAction
+get_action_for_path (GtkTreePath* path, GtkTreeModel *model)
+{
+    GNCImportTransInfo *trans_info;
+    GtkTreeIter iter;
+    gtk_tree_model_get_iter (model, &iter, path);
+    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+    return gnc_import_TransInfo_get_action (trans_info);
+}
+
 static void
 gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
                               GNCImportMainMatcher *info)
@@ -614,6 +618,18 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
 
     ENTER("");
     mode = gtk_tree_selection_get_mode (selection);
+    if (gtk_tree_selection_count_selected_rows (selection) >= 2)
+    {
+        // Unselect rows that should not be selectable
+        GList* list = gtk_tree_selection_get_selected_rows (selection, &model);
+        for ( ; list; list=list->next)
+        {
+            if (get_action_for_path (list->data, model) != GNCImport_ADD)
+                gtk_tree_selection_unselect_path (selection, list->data);
+        }
+        g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
+    }
+    
     switch (mode)
     {
         case GTK_SELECTION_MULTIPLE:
@@ -678,11 +694,23 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
         event_button = (GdkEventButton *) event;
         if (event_button->button == GDK_BUTTON_SECONDARY)
         {
+            int count = 0;
             DEBUG("Right mouseClick detected- popup the menu.");
+            // Only pop up the menu if there's more than 1 selected transaction,
+            // or the selected transaction is an ADD.
             selection = gtk_tree_view_get_selection (treeview);
-            if (gtk_tree_selection_count_selected_rows (selection) > 0)
-            {
+            count = gtk_tree_selection_count_selected_rows (selection);
+            if (count > 1)
                 gnc_gen_trans_view_popup_menu (treeview, event, info);
+            else if (count > 0)
+            {
+                GList* selected;
+                GtkTreeModel *model;
+                selected = gtk_tree_selection_get_selected_rows (selection, &model);
+                get_action_for_path (selected->data, model);
+                if (get_action_for_path (selected->data, model) == GNCImport_ADD)
+                    gnc_gen_trans_view_popup_menu (treeview, event, info);
+                g_list_free_full (selected, (GDestroyNotify) gtk_tree_path_free);
             }
             LEAVE("return TRUE");
             return TRUE;
@@ -831,19 +859,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                                           GTK_SORT_ASCENDING);
     selection = gtk_tree_view_get_selection (info->view);
 
-    /* set a selection function which will block selection of rows which are not
-      flagged to be imported into Gnucash */
-    gtk_tree_selection_set_select_function
-                               (selection,
-                                view_selection_function,
-                                info,
-                                NULL);
-    /* clear the flag which indicates that A(dd) has been toggled so that the
-      view_selection_function can block selection of a row when the
-      view_selection_function is called immediately after A(dd) is toggled
-      on that row */
-    info->add_toggled = FALSE;
-
     g_signal_connect (info->view, "row-activated",
                       G_CALLBACK(gnc_gen_trans_row_activated_cb), info);
     g_signal_connect (selection, "changed",
@@ -853,78 +868,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
-}
-
-static gboolean
-view_selection_function (GtkTreeSelection *selection,
-                         GtkTreeModel *model,
-                         GtkTreePath *path,
-                         gboolean path_currently_selected,
-                         gpointer data)
-{
-    GtkTreeIter iter;
-    GNCImportTransInfo *trans_info;
-    GNCImportAction action;
-    GNCImportMainMatcher *info = data;
-
-    ENTER("view_selection_function");
-
-    // only allow response at the top level
-    if (gtk_tree_path_get_depth (path) != 1)
-        return FALSE;
-
-    if (gtk_tree_model_get_iter(model, &iter, path))
-    {
-        gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-        switch (gnc_import_TransInfo_get_action (trans_info))
-        {
-            case GNCImport_ADD:
-                DEBUG("Import action = ADD row selected");
-                if (info->add_toggled)
-                {
-                  DEBUG("Add just toggled- do not select the row.");
-                  info->add_toggled = FALSE;
-                  LEAVE("FALSE");
-                  return FALSE;
-                }
-                else
-                {
-                  DEBUG("Add has not been toggled - select the row");
-                  LEAVE("TRUE");
-                  return TRUE;
-                }
-            case GNCImport_UPDATE:
-                DEBUG("Import action = UPDATE row not selected");
-                LEAVE("FALSE");
-                return FALSE;
-            case GNCImport_CLEAR:
-                DEBUG("Import action = CLEAR row not selected");
-                LEAVE("FALSE");
-                return FALSE;
-            case GNCImport_SKIP:
-                DEBUG("Import action = SKIP row not selected");
-                LEAVE("FALSE");
-                return FALSE;
-            case GNCImport_LAST_ACTION:
-                DEBUG("Import action = LAST_ACTION row not selected");
-                LEAVE("FALSE");
-                return FALSE;
-            case GNCImport_INVALID_ACTION:
-                DEBUG("Import action = LAST_ACTION row not selected");
-                LEAVE("FALSE");
-                return FALSE;
-            default:
-                DEBUG("Import action = UNDEFINED -cannot select");
-                LEAVE("FALSE");
-                return FALSE;
-        }
-    }
-    else
-    {
-        DEBUG("path to selected row undefined");
-        LEAVE("FALSE");
-        return FALSE;
-    }
 }
 
 static void

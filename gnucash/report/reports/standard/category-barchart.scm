@@ -301,9 +301,9 @@ developing over time"))
                ;; accordingly.
                (report-title
                 (case averaging-selection
-                  ((MonthDelta) (string-append report-title " " (_ "Monthly Average")))
-                  ((WeekDelta) (string-append report-title " " (_ "Weekly Average")))
-                  ((DayDelta) (string-append report-title " " (_ "Daily Average")))
+                  ((MonthDelta) (string-append report-title " " (G_ "Monthly Average")))
+                  ((WeekDelta) (string-append report-title " " (G_ "Weekly Average")))
+                  ((DayDelta) (string-append report-title " " (G_ "Daily Average")))
                   (else report-title)))
                (currency-frac (gnc-commodity-get-fraction report-currency))
                ;; This is the list of date intervals to calculate.
@@ -509,8 +509,8 @@ developing over time"))
               chart (list report-title
                           (format #f
                                   (if do-intervals?
-                                      (_ "~a to ~a")
-                                      (_ "Balances ~a to ~a"))
+                                      (G_ "~a to ~a")
+                                      (G_ "Balances ~a to ~a"))
                                   (qof-print-date from-date-t64)
                                   (qof-print-date to-date-t64))))
 
@@ -532,7 +532,7 @@ developing over time"))
                                     (apply zip (map cadr finish)))))
                    (set! all-data
                      (append start
-                             (list (list (_ "Other") other-sum))))
+                             (list (list (G_ "Other") other-sum))))
                    (let* ((options (gnc:make-report-options reportguid)))
                      ;; now copy all the options
                      (gnc:options-copy-values
@@ -630,7 +630,7 @@ developing over time"))
                  (gnc:html-table-set-col-headers!
                   table
                   (append
-                   (list (_ "Date"))
+                   (list (G_ "Date"))
                    (map
                     (lambda (col)
                       (cond
@@ -639,7 +639,7 @@ developing over time"))
                        (else (xaccAccountGetName col))))
                     (map car all-data))
                    (if cols>1?
-                       (list (_ "Grand Total"))
+                       (list (G_ "Grand Total"))
                        '())))
 
                  (gnc:html-document-add-object! document table))))

@@ -99,8 +99,11 @@
   ;; If no file is found, returns just 'fname' for use in error messages.
   (find-internal "templates" fname))
 
-; Define syntax for more readable for loops (the built-in for-each requires an
-; explicit lambda and has the list expression all the way at the end).
+;; Define syntax for more readable for loops (the built-in for-each
+;; requires an explicit lambda and has the list expression all the way
+;; at the end).  Note: deprecated in 4.x, removal in 5.x. this syntax
+;; is pythonic rather than lispy, is not recognized by code
+;; highlighters, and is not necessary to seasoned schemers.
 (export for)
 (define-syntax for
   (syntax-rules (for in do)
@@ -110,8 +113,12 @@
     ;; Note that this template must be defined before the
     ;; next one, since the template are evaluated in-order.
     ((for (<var> ...) in (<list> ...) do <expr> ...)
-     (for-each (lambda (<var> ...) <expr> ...) <list> ...))
+     (begin
+       (issue-deprecation-warning "for loops are deprecated. use for-each instead.")
+       (for-each (lambda (<var> ...) <expr> ...) <list> ...)))
 
     ;; Single variable and list. e.g.: (for a in lst do (display a))
     ((for <var> in <list> do <expr> ...)
-     (for-each (lambda (<var>) <expr> ...) <list>))))
+     (begin
+       (issue-deprecation-warning "for loops are deprecated. use for-each instead.")
+       (for-each (lambda (<var>) <expr> ...) <list>)))))

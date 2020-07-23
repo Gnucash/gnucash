@@ -22,7 +22,7 @@
 
 /* Application wide font setting */
 * {
-  font: 12px arial, sans-serif;
+  font: 12px arial;
 }
 
 
@@ -40,7 +40,7 @@ scrollbar slider {
 
 /* Register sheet font setting */
 gnc-id-sheet {
-  font: 10px arial, sans-serif;
+  font: 10px arial;
 }
 
 
@@ -65,7 +65,7 @@ gnc-id-cursor button {
 
 /* Register sheet calendar */
 gnc-id-sheet calendar {
-  font: 13px arial, sans-serif;
+  font: 13px arial;
   background-color:lightgreen;
   border-color: green;
   border-width: 1px;

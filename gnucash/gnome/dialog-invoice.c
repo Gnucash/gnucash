@@ -3556,6 +3556,12 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
         { NULL },
     };
 
+    if (!book)
+    {
+        PERR("No book, no due invoices.");
+        return NULL;
+    }
+
     /* Create the param list (in reverse order) */
     if (param_list == NULL)
     {

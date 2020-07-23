@@ -250,12 +250,12 @@
 
           (gnc:html-table-set-col-headers!
            table
-           (list (_ "Account")
-                 (_ "Symbol")
-                 (_ "Listing")
-                 (_ "Units")
-                 (_ "Price")
-                 (_ "Value")))
+           (list (G_ "Account")
+                 (G_ "Symbol")
+                 (G_ "Listing")
+                 (G_ "Units")
+                 (G_ "Price")
+                 (G_ "Value")))
 
           (table-add-stock-rows
            table accounts to-date currency
@@ -275,7 +275,7 @@
               table
               "grand-total"
               (list (gnc:make-html-table-cell/markup
-                     "total-label-cell" (_ "Total"))
+                     "total-label-cell" (G_ "Total"))
                     (gnc:make-html-table-cell/size/markup
                      1 5 "total-number-cell"
                      (gnc:make-gnc-monetary currency amount)))))

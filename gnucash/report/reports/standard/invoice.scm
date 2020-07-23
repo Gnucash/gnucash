@@ -85,50 +85,50 @@
 (define (make-heading-list column-vector)
   (append
    (addif (date-col column-vector)
-          (_ "Date"))
+          (G_ "Date"))
    (addif (description-col column-vector)
-          (_ "Description"))
+          (G_ "Description"))
    (addif (action-col column-vector)
-          (_ "Action"))
+          (G_ "Action"))
    (addif (quantity-col column-vector)
-          (_ "Quantity"))
+          (G_ "Quantity"))
    (addif (price-col column-vector)
-          (_ "Unit Price"))
+          (G_ "Unit Price"))
    (addif (discount-col column-vector)
-          (_ "Discount"))
+          (G_ "Discount"))
    (addif (tax-col column-vector)
-          (_ "Taxable"))
+          (G_ "Taxable"))
    (addif (taxvalue-col column-vector)
-          (_ "Tax Amount"))
+          (G_ "Tax Amount"))
    (addif (value-col column-vector)
-          (_ "Total"))))
+          (G_ "Total"))))
 
 (define (monetary-or-percent numeric currency entry-type)
   (if (eqv? entry-type GNC-AMT-TYPE-PERCENT)
-      (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (_ "%"))
+      (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (G_ "%"))
       (gnc:make-gnc-monetary currency numeric)))
 
 (define layout-key-list
   ;; Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
-  (list (cons 'client (list (cons 'text (_ "Their details"))
-                            (cons 'tip (_ "Client or vendor name, address and ID"))))
+  (list (cons 'client (list (cons 'text (G_ "Their details"))
+                            (cons 'tip (G_ "Client or vendor name, address and ID"))))
 
         ;; Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
-        (cons 'company (list (cons 'text (_ "Our details"))
-                             (cons 'tip (_ "Company name, address and tax-ID"))))
+        (cons 'company (list (cons 'text (G_ "Our details"))
+                             (cons 'tip (G_ "Company name, address and tax-ID"))))
 
-        (cons 'invoice (list (cons 'text (_ "Invoice details"))
-                             (cons 'tip (_ "Invoice date, due date, billing ID, terms, job details"))))
+        (cons 'invoice (list (cons 'text (G_ "Invoice details"))
+                             (cons 'tip (G_ "Invoice date, due date, billing ID, terms, job details"))))
 
-        (cons 'today (list (cons 'text (_ "Today's date"))
-                           (cons 'tip (_ "Today's date"))))
+        (cons 'today (list (cons 'text (G_ "Today's date"))
+                           (cons 'tip (G_ "Today's date"))))
 
-        (cons 'picture (list (cons 'text (_ "Picture"))
-                             (cons 'tip (_ "Picture"))))
+        (cons 'picture (list (cons 'text (G_ "Picture"))
+                             (cons 'tip (G_ "Picture"))))
 
         ;; Translators: "(empty)" refers to invoice header section being left blank
-        (cons 'none (list (cons 'text (_ "(empty)"))
-                          (cons 'tip (_ "Empty space"))))))
+        (cons 'none (list (cons 'text (G_ "(empty)"))
+                          (cons 'tip (G_ "Empty space"))))))
 
 (define variant-list
   (list
@@ -274,7 +274,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (gnc:make-text-option
     (N_ "Display") (N_ "Payable to string")
     "ua2" (N_ "The phrase for specifying to whom payments should be made.")
-    (_ "Please make all checks payable to")))
+    (G_ "Please make all checks payable to")))
 
   (gnc:register-inv-option
    (gnc:make-complex-boolean-option
@@ -287,7 +287,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (gnc:make-text-option
     (N_ "Display") (N_ "Company contact string")
     "ub2" (N_ "The phrase used to introduce the company contact.")
-    (_ "Please direct all enquiries to")))
+    (G_ "Please direct all enquiries to")))
 
   (gnc:register-inv-option
    (gnc:make-number-range-option
@@ -341,7 +341,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
     "u" (N_ "Extra notes to put on the invoice.")
-    (_ "Thank you for your patronage!")))
+    (G_ "Thank you for your patronage!")))
 
   (gnc:register-inv-option
    (gnc:make-multichoice-option
@@ -433,7 +433,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                  (qof-print-date (xaccTransGetDate t)))
 
           (addif (description-col used-columns)
-                 (_ "Payment, thank you!"))
+                 (G_ "Payment, thank you!"))
 
           (list (gnc:make-html-table-cell/size/markup
                  1 (- (max 3 (num-columns-required used-columns))
@@ -488,7 +488,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                          (and (gncEntryGetBillTaxable entry)
                               (gncEntryGetBillTaxTable entry)))
                      ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
-                     (_ "T") ""))
+                     (G_ "T") ""))
 
           (addif (taxvalue-col used-columns)
                  (gnc:make-html-table-cell/markup
@@ -535,7 +535,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
               (if display-subtotal?
                   (add-subtotal-row (gncInvoiceGetTotalSubtotal invoice)
-                                    "grand-total" (_ "Net Price")))
+                                    "grand-total" (G_ "Net Price")))
 
               (if display-all-taxes
                   (for-each
@@ -548,10 +548,10 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
                   ;; nope, just show the total tax.
                   (add-subtotal-row (gncInvoiceGetTotalTax invoice)
-                                    "grand-total" (_ "Tax")))
+                                    "grand-total" (G_ "Tax")))
 
               (add-subtotal-row (gncInvoiceGetTotal invoice)
-                                "grand-total" (_ "Total Price"))
+                                "grand-total" (G_ "Total Price"))
 
               (total-collector 'add currency (gncInvoiceGetTotal invoice))
 
@@ -571,7 +571,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                      splits)))
 
               (add-subtotal-row (cadr (total-collector 'getpair currency #f))
-                                "grand-total" (_ "Amount Due")))
+                                "grand-total" (G_ "Amount Due")))
 
             (begin
 
@@ -600,19 +600,19 @@ for styling the invoice. Please see the exported report for the CSS class names.
         (begin
           (gnc:html-table-append-row!
            invoice-details-table
-           (make-date-row (_ "Date") (gncInvoiceGetDatePosted invoice) date-format))
+           (make-date-row (G_ "Date") (gncInvoiceGetDatePosted invoice) date-format))
 
           (if (opt-val "Display" "Due Date")
               (gnc:html-table-append-row!
                invoice-details-table
-               (make-date-row (_ "Due Date") (gncInvoiceGetDateDue invoice) date-format))))
+               (make-date-row (G_ "Due Date") (gncInvoiceGetDateDue invoice) date-format))))
 
         (gnc:html-table-append-row! invoice-details-table
                                     (gnc:make-html-table-cell/size
                                      1 2 (gnc:make-html-span/markup
                                           "invoice-in-progress"
                                           (gnc:make-html-text
-                                           (_ "Invoice in progress..."))))))
+                                           (G_ "Invoice in progress..."))))))
 
     (if (opt-val "Display" "Billing ID")
         (let ((billing-id (gncInvoiceGetBillingID invoice)))
@@ -620,7 +620,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (begin
                 (gnc:html-table-append-row! invoice-details-table
                                             (list
-                                             (_ "Reference:")
+                                             (G_ "Reference:")
                                              (gnc:make-html-div/markup
                                               "div-align-right"
                                               (multiline-to-html-text billing-id))))
@@ -632,7 +632,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
           (if (and terms (not (string-null? terms)))
               (gnc:html-table-append-row! invoice-details-table
                                           (list
-                                           (_ "Terms:")
+                                           (G_ "Terms:")
                                            (gnc:make-html-div/markup
                                             "div-align-right"
                                             (multiline-to-html-text terms)))))))
@@ -642,12 +642,12 @@ for styling the invoice. Please see the exported report for the CSS class names.
              (not (string-null? jobnumber)))
         (begin
           (gnc:html-table-append-row! invoice-details-table
-                                      (list (_ "Job number:")
+                                      (list (G_ "Job number:")
                                             (gnc:make-html-div/markup
                                              "div-align-right"
                                              jobnumber)))
           (gnc:html-table-append-row! invoice-details-table
-                                      (list (_ "Job name:")
+                                      (list (G_ "Job name:")
                                             (gnc:make-html-div/markup
                                              "div-align-right"
                                              jobname)))))
@@ -693,7 +693,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (if (and reference (not (string-null? reference)))
              (gnc:html-table-append-row! table
                                          (list (string-append
-                                                (_ "REF") " "
+                                                (G_ "REF") " "
                                                 reference))))))
      orders)
 
@@ -771,7 +771,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
     (if (null? invoice)
         (gnc:html-document-add-object! document
                                        (gnc:make-html-text
-                                        (_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
+                                        (G_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
         (let* ((book (gncInvoiceGetBook invoice))
                (owner (gncInvoiceGetOwner invoice))
                (type (gncInvoiceGetType invoice))
@@ -780,20 +780,20 @@ for styling the invoice. Please see the exported report for the CSS class names.
                (credit-note? (memv type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)))
                (default-title (cond
                                ((eqv? type GNC-INVOICE-VEND-INVOICE)
-                                (_ "Bill"))
+                                (G_ "Bill"))
                                ((eqv? type GNC-INVOICE-EMPL-INVOICE)
-                                (_ "Expense Voucher"))
+                                (G_ "Expense Voucher"))
                                ((memv type (list GNC-INVOICE-CUST-CREDIT-NOTE
                                                  GNC-INVOICE-VEND-CREDIT-NOTE
                                                  GNC-INVOICE-EMPL-CREDIT-NOTE))
-                                (_ "Credit Note"))
+                                (G_ "Credit Note"))
                                (else
-                                (_ "Invoice"))))
+                                (G_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
                ;; Translators: This is the format of the invoice title.
                ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
                ;; Replace " #" by whatever is common as number abbreviation, i.e. "~a Nr. ~a"
-               (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
+               (invoice-title (format #f (G_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'picture (gnc:make-html-div/markup
                                                           "picture"

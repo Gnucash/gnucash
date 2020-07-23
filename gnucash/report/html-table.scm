@@ -24,6 +24,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (srfi srfi-2))
+(use-modules (srfi srfi-9))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 
@@ -35,29 +36,66 @@
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define <html-table>
-  (make-record-type "<html-table>"
-                    '(col-headers
-                      row-headers
-                      caption 
-                      data
-		      num-rows
-                      style
-                      col-styles
-                      row-styles
-                      row-markup-table
-                      col-headers-style
-                      row-headers-style)))
+(define-record-type <html-table>
+  (make-html-table col-headers row-headers caption data num-rows style
+                   col-styles row-styles row-markup-table col-headers-style
+                   row-headers-style)
+  html-table?
+  (col-headers html-table-col-headers html-table-set-col-headers!)
+  (row-headers html-table-row-headers html-table-set-row-headers!)
+  (caption html-table-caption html-table-set-caption!)
+  (data html-table-data html-table-set-data!)
+  (num-rows html-table-num-rows html-table-set-num-rows!)
+  (style html-table-style html-table-set-style!)
+  (col-styles html-table-col-styles html-table-set-col-styles!)
+  (row-styles html-table-row-styles html-table-set-row-styles!)
+  (row-markup-table html-table-row-markup-table html-table-set-row-markup-table!)
+  (col-headers-style html-table-col-headers-style)
+  (row-headers-style html-table-row-headers-style))
 
-(define gnc:html-table? 
-  (record-predicate <html-table>))
+(define gnc:html-table? html-table?)
+(define gnc:make-html-table-internal make-html-table)
+(define gnc:html-table-data html-table-data)
+(define gnc:html-table-set-data! html-table-set-data!)
+(define gnc:html-table-caption html-table-caption)
+(define gnc:html-table-set-caption! html-table-set-caption!)
+(define gnc:html-table-multirow-col-headers html-table-col-headers)
+(define gnc:html-table-set-multirow-col-headers! html-table-set-col-headers!)
+(define gnc:html-table-style html-table-style)
+(define gnc:html-table-set-style-internal! html-table-set-style!)
+(define gnc:html-table-row-styles html-table-row-styles)
+(define gnc:html-table-set-row-styles! html-table-set-row-styles!)
+(define gnc:html-table-row-markup-table html-table-row-markup-table)
+(define gnc:html-table-set-row-markup-table! html-table-set-row-markup-table!)
+(define gnc:html-table-col-styles html-table-col-styles)
+(define gnc:html-table-set-col-styles! html-table-set-col-styles!)
+(define gnc:html-table-col-headers-style html-table-col-headers-style)
+(define gnc:html-table-row-headers-style html-table-row-headers-style)
+(define gnc:html-table-num-rows html-table-num-rows)
+(define gnc:html-table-set-num-rows-internal! html-table-set-num-rows!)
 
-(define <html-table-cell>
-  (make-record-type "<html-table-cell>"
-                    '(rowspan colspan tag data style)))
 
-(define gnc:make-html-table-cell-internal
-  (record-constructor <html-table-cell>))
+(define-record-type <html-table-cell>
+  (make-html-table-cell rowspan colspan tag data style)
+  html-table-cell?
+  (rowspan html-table-cell-rowspan html-table-cell-set-rowspan!)
+  (colspan html-table-cell-colspan html-table-cell-set-colspan!)
+  (tag html-table-cell-tag html-table-cell-set-tag!)
+  (data html-table-cell-data html-table-cell-set-data!)
+  (style html-table-cell-style html-table-cell-set-style!))
+
+(define gnc:make-html-table-cell-internal make-html-table-cell)
+(define gnc:html-table-cell? html-table-cell?)
+(define gnc:html-table-cell-rowspan html-table-cell-rowspan)
+(define gnc:html-table-cell-set-rowspan! html-table-cell-set-rowspan!)
+(define gnc:html-table-cell-colspan html-table-cell-colspan)
+(define gnc:html-table-cell-set-colspan! html-table-cell-set-colspan!)
+(define gnc:html-table-cell-tag html-table-cell-tag)
+(define gnc:html-table-cell-set-tag! html-table-cell-set-tag!)
+(define gnc:html-table-cell-data html-table-cell-data)
+(define gnc:html-table-cell-set-data-internal! html-table-cell-set-data!)
+(define gnc:html-table-cell-style html-table-cell-style)
+(define gnc:html-table-cell-set-style-internal! html-table-cell-set-style!)
 
 (define (gnc:make-html-table-cell . objects)
   (gnc:make-html-table-cell-internal 1 1 "td" objects 
@@ -92,39 +130,6 @@
 (define (gnc:make-html-table-header-cell/size rowspan colspan . objects)
   (gnc:make-html-table-cell-internal rowspan colspan "th"
                                      objects (gnc:make-html-style-table)))
-
-(define gnc:html-table-cell? 
-  (record-predicate <html-table-cell>))
-
-(define gnc:html-table-cell-rowspan
-  (record-accessor <html-table-cell> 'rowspan))
-
-(define gnc:html-table-cell-set-rowspan!
-  (record-modifier <html-table-cell> 'rowspan))
-
-(define gnc:html-table-cell-colspan
-  (record-accessor <html-table-cell> 'colspan))
-
-(define gnc:html-table-cell-set-colspan!
-  (record-modifier <html-table-cell> 'colspan))
-
-(define gnc:html-table-cell-tag
-  (record-accessor <html-table-cell> 'tag))
-
-(define gnc:html-table-cell-set-tag!
-  (record-modifier <html-table-cell> 'tag))
-
-(define gnc:html-table-cell-data
-  (record-accessor <html-table-cell> 'data))
-
-(define gnc:html-table-cell-set-data-internal!
-  (record-modifier <html-table-cell> 'data))
-
-(define gnc:html-table-cell-style
-  (record-accessor <html-table-cell> 'style))
-
-(define gnc:html-table-cell-set-style-internal!
-  (record-modifier <html-table-cell> 'style))
 
 (define (gnc:html-table-cell-set-style! cell tag . rest)
   (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
@@ -174,9 +179,6 @@
 ;;  wrapper around HTML tables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define gnc:make-html-table-internal
-  (record-constructor <html-table>))
-
 (define (gnc:make-html-table)
   (gnc:make-html-table-internal 
    #f                    ;; col-headers 
@@ -192,59 +194,15 @@
    (gnc:make-html-style-table) ;; row-headers-style
    ))
 
-(define gnc:html-table-data
-  (record-accessor <html-table> 'data))
-
-(define gnc:html-table-set-data!
-  (record-modifier <html-table> 'data))
-
-(define gnc:html-table-caption
-  (record-accessor <html-table> 'caption))
-
-(define gnc:html-table-set-caption!
-  (record-modifier <html-table> 'caption))
 
 (define (gnc:html-table-set-col-headers! table col-headers)
   (gnc:html-table-set-multirow-col-headers! table (list col-headers)))
 
-(define gnc:html-table-multirow-col-headers
-  (record-accessor <html-table> 'col-headers))
-
-(define gnc:html-table-set-multirow-col-headers!
-  (record-modifier <html-table> 'col-headers))
-
-(define gnc:html-table-style
-  (record-accessor <html-table> 'style))
-
-(define gnc:html-table-set-style-internal!
-  (record-modifier <html-table> 'style))
-
-(define gnc:html-table-row-styles
-  (record-accessor <html-table> 'row-styles))
-
-(define gnc:html-table-set-row-styles!
-  (record-modifier <html-table> 'row-styles))
-
-(define gnc:html-table-row-markup-table
-  (record-accessor <html-table> 'row-markup-table))
-
 (define (gnc:html-table-row-markup table row)
   (hash-ref (gnc:html-table-row-markup-table table) row))
 
-(define gnc:html-table-set-row-markup-table!
-  (record-modifier <html-table> 'row-markup-table))
-
 (define (gnc:html-table-set-row-markup! table row markup)
   (hash-set! (gnc:html-table-row-markup-table table) row markup))
-
-(define gnc:html-table-col-styles
-  (record-accessor <html-table> 'col-styles))
-
-(define gnc:html-table-set-col-styles!
-  (record-modifier <html-table> 'col-styles))
-
-(define gnc:html-table-col-headers-style
-  (record-accessor <html-table> 'col-headers-style))
 
 (define (gnc:html-table-set-col-headers-style! table tag . rest)
   (let ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
@@ -253,8 +211,6 @@
         (style (gnc:html-table-col-headers-style table)))
     (gnc:html-style-table-set! style tag newstyle)))
 
-(define gnc:html-table-row-headers-style
-  (record-accessor <html-table> 'row-headers-style))
 
 (define (gnc:html-table-set-row-headers-style! table tag . rest)
   (let* ((newstyle (if (and (= (length rest) 2) (procedure? (car rest)))
@@ -297,12 +253,6 @@
 
 (define (gnc:html-table-col-style table col)
   (hash-ref (gnc:html-table-col-styles table) col))
-
-(define gnc:html-table-num-rows
- (record-accessor <html-table> 'num-rows))
-
-(define gnc:html-table-set-num-rows-internal!
-  (record-modifier <html-table> 'num-rows))
 
 (define (gnc:html-table-num-columns table)
   (apply max (cons 0 (map length (gnc:html-table-data table)))))

@@ -25,7 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <html-linechart>
-  (make-record-type "<html-linechart>"
+  (make-record-type '<html-linechart>
                     '(width
                       height
                       title

@@ -1,9 +1,13 @@
-# GnuCash Glossary - Italian version
-# Copyright (C) 2002 Free Software Foundation, Inc.
-# Alessandro Seveso <aleseveso@tiscalinet.it>, 2002;
-# Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
+# Italian translation for GnuCash package (Glossary)
+# Copyright (C) 2020 Giuseppe Foti <foti.giuseppe@gmail.com>.
+# This file is distributed under the same license as the GnuCash package.
+# Giuseppe Foti <foti.giuseppe@gmail.com>, 2020.
+#
+# Contributors:
+# Cristian Marchi <cri79@libero.it>, 2008;
 # Lorenzo Cappelletti <lorenzo.cappelletti@email.it>, 2003;
-# Cristian Marchi <cri79@libero.it>, 2008.
+# Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
+# Alessandro Seveso <aleseveso@tiscalinet.it>, 2002.
 #
 # - I messaggi ancora dubbi sono marcati come fuzzy.
 # - Quando qui sono indicate più traduzioni, la prima è quella usata
@@ -13,13 +17,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.7.4\n"
 "POT-Creation-Date: 2020-03-27 21:58+0100\n"
-"PO-Revision-Date: 2004-01-31 15:33+0100\n"
-"Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
+"PO-Revision-Date: 2020-07-09 03:18+0200\n"
+"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -42,7 +47,6 @@ msgid "account name"
 msgstr "nome conto"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
-#, fuzzy
 msgid "account type: Active"
 msgstr "tipo conto: attivo, attività"
 
@@ -51,9 +55,8 @@ msgid "account type: Asset"
 msgstr "tipo conto: attivo, attività"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
-#, fuzzy
 msgid "account type: Assets & Liabilities"
-msgstr "tipo conto: passivo, passività, obbligazione, debito"
+msgstr "tipo conto: Stato patrimoniale"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -88,14 +91,12 @@ msgid "account type: Mutual fund"
 msgstr "tipo conto: fondi comuni"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
-#, fuzzy
 msgid "account type: Passive"
-msgstr "tipo conto: attivo, attività"
+msgstr "tipo conto: passivo, passività"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
-#, fuzzy
 msgid "account type: Profit & Loss"
-msgstr "tipo conto: attivo, attività"
+msgstr "tipo conto: Conto economico"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -106,9 +107,8 @@ msgid "account type: Stock"
 msgstr "tipo conto: azionario"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
-#, fuzzy
 msgid "account type: trading"
-msgstr "tipo conto: di risparmio"
+msgstr "tipo conto: trading"
 
 #. "-"
 msgid "account: parent account"
@@ -202,7 +202,7 @@ msgstr "operazione: prelievo"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "scadenziario"
 
 #. "A sum of money"
 msgid "amount"
@@ -217,14 +217,12 @@ msgid "balance (noun)"
 msgstr "saldo, pareggio"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "essere in pareggio, pareggiare, saldare, chiudere i conti, quadrare"
+msgstr "saldo di apertura"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "essere in pareggio, pareggiare, saldare, chiudere i conti, quadrare"
+msgstr "saldo di chiusura"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -240,12 +238,11 @@ msgstr "banca"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "ricevuta, scontrino"
+msgstr "documento di acquisto, ricevuta"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "termini di pagamento"
+msgstr "intestatario"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -257,7 +254,7 @@ msgstr "Libro"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "chiusura"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -312,9 +309,8 @@ msgid "commodity option: Symbol"
 msgstr "opzione commodity: simbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
-#, fuzzy
 msgid "compound interests"
-msgstr "interesse"
+msgstr "interesse composito"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -329,9 +325,8 @@ msgid "credit transfer"
 msgstr "bonifico"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
-#, fuzzy
 msgid "credit note"
-msgstr "bonifico"
+msgstr "nota credito, nota di credito"
 
 #. "The system of money used in a country"
 msgid "currency"
@@ -378,9 +373,8 @@ msgid "Description (column in register)"
 msgstr "Descrizione (colonna nel registro)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
-#, fuzzy
 msgid "discount"
-msgstr "conto"
+msgstr "sconto"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -391,17 +385,16 @@ msgid "employee"
 msgstr "lavoratore"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
-#, fuzzy
 msgid "equity"
-msgstr "1. valore netto  2. (a)  (b)"
+msgstr "capitale"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "prospetto delle variazioni di patrimonio netto"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr " deposito di garanzia (conto)"
+msgstr "deposito di garanzia (conto)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -441,7 +434,7 @@ msgstr "importare"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "conto economico"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
@@ -449,7 +442,7 @@ msgstr "interesse"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "fattura"
+msgstr "documento di vendita, documento, fattura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -476,23 +469,20 @@ msgid "Lost Accounts"
 msgstr "Conti persi"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
-#, fuzzy
 msgid "Lot"
 msgstr "Lotto"
 
 #. "Combine two books into one (see book)."
-#, fuzzy
 msgid "merge, to"
-msgstr "unire"
+msgstr "unire, fondere, raggruppare"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
 msgstr "marcatore"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
-#, fuzzy
 msgid "markup"
-msgstr "marcatore"
+msgstr "ricarico"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
@@ -556,7 +546,7 @@ msgstr "orfano"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "intestatario (del documento di acquisto, del documento di vendita o della nota spese)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -587,18 +577,16 @@ msgid "portfolio"
 msgstr "portafoglio, paniere"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "chiudere"
+msgstr "emettere, inviare"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
 msgstr "preferenze"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
-#, fuzzy
 msgid "principal payment"
-msgstr "operazione: pagamento"
+msgstr "pagamento quota capitale"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -622,7 +610,7 @@ msgstr "utile, profitto"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "profitti e perdite"
+msgstr "Conto economico, profitti e perdite"
 
 #. "-"
 msgid "quick-fill"
@@ -674,25 +662,23 @@ msgstr "ricaricare"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "formato report: A sezioni contrapposte"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "formato report: Scalare"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
-#, fuzzy
 msgid "Retained Earnings"
-msgstr "guadagno ritenuto"
+msgstr "utili a nuovo"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
-#, fuzzy
 msgid "reverse transaction, to (Action in the register)"
-msgstr "Descrizione (colonna nel registro)"
+msgstr "inserire una transazione inversa"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "ricavi"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -712,7 +698,7 @@ msgstr "titolo, certificato, ipoteca, obbligazioni"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "bilancio quote (registro)"
+msgstr "Bilancio quote (registro)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -735,9 +721,8 @@ msgid "subtotal"
 msgstr "subtotale"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
-#, fuzzy
 msgid "tax code"
-msgstr "info imposte"
+msgstr "codice imposta"
 
 #. "field of an account"
 msgid "tax info"
@@ -792,7 +777,6 @@ msgid "transfer, to (register toolbar)"
 msgstr "trasferire (barra degli strumenti del registro)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
-#, fuzzy
 msgid "trial balance (report)"
 msgstr "bilancio di verifica"
 
@@ -817,17 +801,16 @@ msgid "vendor"
 msgstr "fornitore"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
-#, fuzzy
 msgid "voucher"
-msgstr "buono, nota, garante"
+msgstr "nota spese, buono, nota, garante"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "prelievo (in una finestra di riconciliazione)"
 
-#, fuzzy
-#~ msgid "invoice owner"
-#~ msgstr "fattura"
+# "owner is the entity named in the document different from the company that is keeping book (so it could be the customer of an invoice, or the vendor indicated in your bill)."
+msgid "invoice owner"
+msgstr "intestatario"
 
-#~ msgid "Term"
-#~ msgstr "Termine"
+msgid "Term"
+msgstr "Termine"

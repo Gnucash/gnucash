@@ -126,27 +126,27 @@
   (let ((heading-list '()))
     (gnc:debug "Column-vector" column-vector)
     (if (date-col column-vector)
-        (addto! heading-list (_ "Date")))
+        (addto! heading-list (G_ "Date")))
     (if (num-col column-vector)
         (addto! heading-list (if action-for-num?
                                  (if ledger-type?
-                                     (_ "T-Num")
-                                     (_ "Num/Action"))
-                                 (_ "Num"))))
+                                     (G_ "T-Num")
+                                     (G_ "Num/Action"))
+                                 (G_ "Num"))))
     (if (description-col column-vector)
-        (addto! heading-list (_ "Description")))
+        (addto! heading-list (G_ "Description")))
     (if (memo-col column-vector)
-        (addto! heading-list (_ "Memo")))
+        (addto! heading-list (G_ "Memo")))
     (if (account-col column-vector)
         (addto! heading-list (if multi-rows?
-                                 (_ "Account")
-                                 (_ "Transfer"))))
+                                 (G_ "Account")
+                                 (G_ "Transfer"))))
     (if (shares-col column-vector)
-        (addto! heading-list (_ "Shares")))
+        (addto! heading-list (G_ "Shares")))
     (if (lot-col column-vector)
-        (addto! heading-list (_ "Lot")))
+        (addto! heading-list (G_ "Lot")))
     (if (price-col column-vector)
-        (addto! heading-list (_ "Price")))
+        (addto! heading-list (G_ "Price")))
     (if (amount-single-col column-vector)
         (addto! heading-list amount-string))
     (if (debit-col column-vector)
@@ -154,13 +154,13 @@
     (if (credit-col column-vector)
         (addto! heading-list credit-string))
     (if (value-single-col column-vector)
-        (addto! heading-list (_ "Value")))
+        (addto! heading-list (G_ "Value")))
     (if (value-debit-col column-vector)
-        (addto! heading-list (_ "Debit Value")))
+        (addto! heading-list (G_ "Debit Value")))
     (if (value-credit-col column-vector)
-        (addto! heading-list (_ "Credit Value")))
+        (addto! heading-list (G_ "Credit Value")))
     (if (balance-col column-vector)
-        (addto! heading-list (_ "Balance")))
+        (addto! heading-list (G_ "Balance")))
     (reverse heading-list)))
 
 (define (add-split-row table split column-vector row-style transaction-info?
@@ -224,8 +224,8 @@
                           ((2) (gnc-account-get-full-name
                                 (xaccSplitGetAccount
                                  (xaccSplitGetOtherSplit split))))
-                          ((1) (_ "None"))
-                          (else (_ "-- Split Transaction --"))))))))
+                          ((1) (G_ "None"))
+                          (else (G_ "-- Split Transaction --"))))))))
     (if (shares-col column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup
@@ -366,9 +366,9 @@
   (gnc:register-reg-option
    (gnc:make-internal-option "__reg" "double" #f))
   (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "debit-string" (_ "Debit")))
+   (gnc:make-internal-option "__reg" "debit-string" (G_ "Debit")))
   (gnc:register-reg-option
-   (gnc:make-internal-option "__reg" "credit-string" (_ "Credit")))
+   (gnc:make-internal-option "__reg" "credit-string" (G_ "Credit")))
 
   (gnc:register-reg-option
    (gnc:make-string-option
@@ -578,18 +578,18 @@
        ;; ----------------------------------
        ((null? splits)
         (when reg-report-show-totals?
-          (add-subtotal-row (_ "Total Debits") leader table used-columns
+          (add-subtotal-row (G_ "Total Debits") leader table used-columns
                             debit-collector "grand-total" #f)
-          (add-subtotal-row (_ "Total Credits") leader table used-columns
+          (add-subtotal-row (G_ "Total Credits") leader table used-columns
                             credit-collector "grand-total" #f)
-          (add-subtotal-row (_ "Total Value Debits") leader table used-columns
+          (add-subtotal-row (G_ "Total Value Debits") leader table used-columns
                             debit-value "grand-total" #t)
-          (add-subtotal-row (_ "Total Value Credits") leader table used-columns
+          (add-subtotal-row (G_ "Total Value Credits") leader table used-columns
                             credit-value "grand-total" #t))
         (when ledger-type?
-          (add-subtotal-row (_ "Net Change") leader table used-columns
+          (add-subtotal-row (G_ "Net Change") leader table used-columns
                             total-collector "grand-total" #f))
-        (add-subtotal-row (_ "Value Change") leader table used-columns
+        (add-subtotal-row (G_ "Value Change") leader table used-columns
                           total-value "grand-total" #t))
 
        ;; The general journal has a split that doesn't have an account
@@ -662,7 +662,7 @@
            (table (make-split-table splits
                                     (gnc:report-options report-obj)
                                     debit-string credit-string
-                                    (_ "Amount"))))
+                                    (G_ "Amount"))))
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
       (qof-query-destroy query))

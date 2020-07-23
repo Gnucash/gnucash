@@ -67,7 +67,7 @@
       (if pc? (format #t "~a%" (pctot 'total #f)))
       (if (and amt? pc?) (display " +&nbsp;"))
       (if amt? (display-comm-coll-total amttot #f))
-      (if (equal? amt? pc? #f) (display (_ "n/a")))))))
+      (if (equal? amt? pc? #f) (display (G_ "n/a")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
@@ -170,47 +170,47 @@
   ;; Heading options
   (add-option (gnc:make-string-option
                 ; page / name / orderkey / tooltip / default
-                headingpage optname-report-title "a" "" (_ "Invoice")))
+                headingpage optname-report-title "a" "" (G_ "Invoice")))
   (add-option (gnc:make-string-option
-                headingpage optname-units "b" "" (_ "Units")))
+                headingpage optname-units "b" "" (G_ "Units")))
   (add-option (gnc:make-string-option
-                headingpage optname-qty "c" "" (_ "Qty")))
+                headingpage optname-qty "c" "" (G_ "Qty")))
   (add-option (gnc:make-string-option
-                headingpage optname-unit-price "d" "" (_ "Unit Price")))
+                headingpage optname-unit-price "d" "" (G_ "Unit Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-rate "e" "" (_ "Discount Rate")))
+                headingpage optname-disc-rate "e" "" (G_ "Discount Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-disc-amount "f" "" (_ "Discount Amount")))
+                headingpage optname-disc-amount "f" "" (G_ "Discount Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-net-price "g" "" (_ "Net Price")))
+                headingpage optname-net-price "g" "" (G_ "Net Price")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-rate "h" "" (_ "Tax Rate")))
+                headingpage optname-tax-rate "h" "" (G_ "Tax Rate")))
   (add-option (gnc:make-string-option
-                headingpage optname-tax-amount "i" "" (_ "Tax Amount")))
+                headingpage optname-tax-amount "i" "" (G_ "Tax Amount")))
   (add-option (gnc:make-string-option
-                headingpage optname-total-price "j" "" (_ "Total Price")))
+                headingpage optname-total-price "j" "" (G_ "Total Price")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-subtotal "a" "" (_ "Sub-total")))
+                headingpage2 optname-subtotal "a" "" (G_ "Sub-total")))
   (add-option (gnc:make-string-option
-                headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
+                headingpage2 optname-amount-due "b" "" (G_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" "" 
-                (_ "Payment received, thank you!")))
+                (G_ "Payment received, thank you!")))
   (add-option (gnc:make-string-option	headingpage2	optname-invoice-number-text
-    "d" "" (_ "Invoice number: ")))
+    "d" "" (G_ "Invoice number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-to-text
-    "e" "" (_ "To: ")))
+    "e" "" (G_ "To: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-ref-text
-    "f" "" (_ "Your ref: ")))
+    "f" "" (G_ "Your ref: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobnumber-text
-    "g" "" (_ "Job number: ")))
+    "g" "" (G_ "Job number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-jobname-text
-    "h" "" (_ "Job name: ")))
+    "h" "" (G_ "Job name: ")))
 
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
-                (_ "Notes added at end of invoice -- may contain HTML markup.") 
-                (_ "Thank you for your patronage!")))
+                (G_ "Notes added at end of invoice -- may contain HTML markup.") 
+                (G_ "Thank you for your patronage!")))
 
   (add-option (gnc:make-text-option	notespage optname-extra-css "b"
                 (N_ "Embedded CSS.")	"h1.coyname { text-align: left; }"))
@@ -306,14 +306,14 @@
          (gnc:option-set-value option value)))
 
   (let ((options (options-generator)))
-       (set-opt options headingpage optname-report-title (_ "Tax Invoice"))
-       (set-opt options headingpage optname-unit-price (_ "Unit"))
-       (set-opt options headingpage optname-tax-rate (_ "GST Rate"))
-       (set-opt options headingpage optname-tax-amount (_ "GST Amount"))
-       (set-opt options headingpage2 optname-amount-due (_ "Amount Due (inc GST)"))
-       (set-opt options headingpage2 optname-invoice-number-text (_ "Invoice #: "))
-       (set-opt options headingpage2 optname-ref-text (_ "Reference: "))
-       (set-opt options headingpage2 optname-jobname-text (_ "Engagement: "))
+       (set-opt options headingpage optname-report-title (G_ "Tax Invoice"))
+       (set-opt options headingpage optname-unit-price (G_ "Unit"))
+       (set-opt options headingpage optname-tax-rate (G_ "GST Rate"))
+       (set-opt options headingpage optname-tax-amount (G_ "GST Amount"))
+       (set-opt options headingpage2 optname-amount-due (G_ "Amount Due (inc GST)"))
+       (set-opt options headingpage2 optname-invoice-number-text (G_ "Invoice #: "))
+       (set-opt options headingpage2 optname-ref-text (G_ "Reference: "))
+       (set-opt options headingpage2 optname-jobname-text (G_ "Engagement: "))
        (set-opt options notespage optname-extra-css "h1.coyname { text-align: right; margin-bottom: 0px ; font-size: 200%; } h2.invoice { text-align: left; margin-bottom: 0px ; font-size: 500%; }")
        options))
 

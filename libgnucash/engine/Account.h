@@ -455,18 +455,6 @@ void dxaccAccountSetPriceSrc (Account *account, const char *src);
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
 const char * dxaccAccountGetPriceSrc (const Account *account);
-
-/** Returns a per-account flag: Prior to reconciling an account which
-    charges or pays interest, this flag tells whether to prompt the
-    user to enter a transaction for the interest charge or
-    payment. This per-account flag overrides the global preference. */
-gboolean xaccAccountGetAutoInterestXfer (const Account *account,
-        gboolean default_value);
-/** Sets a per-account flag: Prior to reconciling an account which
-    charges or pays interest, this flag tells whether to prompt the
-    user to enter a transaction for the interest charge or
-    payment. This per-account flag overrides the global preference. */
-void xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
 /** @name Account Commodity setters/getters
@@ -1223,6 +1211,29 @@ void xaccAccountSetHidden (Account *acc, gboolean val);
  *  @return Whether or not this account should be "hidden". */
 gboolean xaccAccountIsHidden (const Account *acc);
 /** @} */
+    
+/** @name Account Auto Interest flag
+ @{
+ */
+
+/** Get the "auto interest" flag for an account.  If this flag is set then
+ *  the account (and any children) will trigger an interest transfer after reconciling.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @return The current state of the account's "auto interest" flag. */
+gboolean xaccAccountGetAutoInterest (const Account *acc);
+
+/** Set the "auto interest" flag for an account.  If this flag is set then
+ *  the account (and any children) will trigger an interest transfer after reconciling.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @param val The new state for the account's "auto interest" flag. */
+void xaccAccountSetAutoInterest (Account *acc, gboolean val);
+
+/** @} */
+
 
 /** @name Account Tax related getters/setters
  @{
