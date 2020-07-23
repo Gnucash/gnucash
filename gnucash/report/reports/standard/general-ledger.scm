@@ -143,7 +143,7 @@
   ;; just delegate rendering to the Transaction Report renderer...
   (let ((document ((gnc:report-template-renderer/report-guid xactrptguid xactrptname)
                    report-obj)))
-    (gnc:html-document-set-title! document (_ reportname))
+    (gnc:html-document-set-title! document (G_ reportname))
     document))
 
 (gnc:define-report 

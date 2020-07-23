@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <html-barchart>
-  (make-record-type "<html-barchart>"
+  (make-record-type '<html-barchart>
                     '(width 
                       height 
                       title 

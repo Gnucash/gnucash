@@ -63,7 +63,6 @@
 #endif
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
-#define GNC_PREF_AUTO_INTEREST_TRANSFER "auto-interest-transfer"
 #define GNC_PREF_AUTO_CC_PAYMENT        "auto-cc-payment"
 #define GNC_PREF_ALWAYS_REC_TO_TODAY    "always-reconcile-to-today"
 
@@ -126,24 +125,6 @@ typedef struct _startRecnWindowData
 
     time64         date;            /* the interest xfer reconcile date        */
 } startRecnWindowData;
-
-
-/* Note: make sure to update the help text for this in prefs.scm if these
- * change!  These macros define the account types for which an auto interest
- * xfer dialog could pop up, if the user's preferences allow it.
- */
-#define account_type_has_auto_interest_charge(type)  (((type) == ACCT_TYPE_CREDIT) || \
-                                                      ((type) == ACCT_TYPE_LIABILITY) ||\
-                              ((type) == ACCT_TYPE_PAYABLE))
-
-#define account_type_has_auto_interest_payment(type) (((type) == ACCT_TYPE_BANK)  || \
-                                                      ((type) == ACCT_TYPE_ASSET) || \
-                                                      ((type) == ACCT_TYPE_MUTUAL) || \
-                              ((type) == ACCT_TYPE_RECEIVABLE))
-
-#define account_type_has_auto_interest_xfer(type) \
-  (  account_type_has_auto_interest_charge(type) || \
-    account_type_has_auto_interest_payment(type) )
 
 /** PROTOTYPES ******************************************************/
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
@@ -424,21 +405,6 @@ gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
 }
 
 
-/* For a given account, determine if an auto interest xfer dialog should be
- * shown, based on both the per-account flag as well as the global reconcile
- * option.  The global option is the default that is used if there is no
- * per-account option.
- */
-static gboolean
-gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
-{
-    gboolean auto_xfer;
-
-    auto_xfer = gnc_prefs_get_bool(GNC_PREFS_GROUP_RECONCILE, GNC_PREF_AUTO_INTEREST_TRANSFER);
-    return xaccAccountGetAutoInterestXfer( account, auto_xfer );
-}
-
-
 /********************************************************************\
  * recnInterestXferWindow                                           *
  *   opens up a window to prompt the user to enter an interest      *
@@ -469,27 +435,6 @@ gnc_recn_make_interest_window_name(Account *account, char *text)
     g_free(fullname);
 
     return title;
-}
-
-
-/* user clicked button in the interest xfer dialog entitled
- * "No Auto Interest Payments for this Account".
- */
-static void
-gnc_recn_interest_xfer_no_auto_clicked_cb(GtkButton *button,
-        startRecnWindowData *data)
-{
-    /* Indicate that the user doesn't want
-     * an auto interest xfer for this account.
-     */
-    xaccAccountSetAutoInterestXfer( data->account, FALSE );
-
-    /* shut down the interest xfer dialog */
-    gnc_xfer_dialog_close( data->xferData );
-
-    /* make the button clickable again */
-    if ( data->xfer_button )
-        gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), TRUE);
 }
 
 
@@ -561,15 +506,6 @@ recnInterestXferWindow( startRecnWindowData *data)
         gnc_xfer_dialog_quickfill_to_account( data->xferData, FALSE );
     }
 
-
-    /* add a button to disable auto interest payments for this account */
-    gnc_xfer_dialog_add_user_specified_button( data->xferData,
-            ( account_type_has_auto_interest_payment( data->account_type ) ?
-              _("No Auto Interest Payments for this Account")
-              : _("No Auto Interest Charges for this Account") ),
-            G_CALLBACK(gnc_recn_interest_xfer_no_auto_clicked_cb),
-            (gpointer) data );
-
     /* no currency frame */
     gnc_xfer_dialog_toggle_currency_table( data->xferData, FALSE );
 
@@ -627,10 +563,6 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 void
 gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
 {
-    /* indicate in account that user wants
-     * an auto interest xfer for this account */
-    xaccAccountSetAutoInterestXfer( data->account, TRUE );
-
     /* make the button unclickable since we're popping up the window */
     if ( data->xfer_button )
         gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), FALSE);
@@ -730,8 +662,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     data.date = *statement_date;
 
     /* whether to have an automatic interest xfer dialog or not */
-    auto_interest_xfer_option =
-        gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
+    auto_interest_xfer_option = xaccAccountGetAutoInterest (account);
 
     data.include_children = !has_account_different_commodities(account) &&
         xaccAccountGetReconcileChildrenStatus(account);

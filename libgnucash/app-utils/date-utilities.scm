@@ -86,7 +86,7 @@
   (let* ((beginweekt64 (* (gnc:time64-get-week (gnc-mktime datevec)) 7 86400))
          (begin-string (qof-print-date (+ beginweekt64 (* 3 86400))))
          (end-string (qof-print-date (+ beginweekt64 (* 9 86400)))))
-    (format #f (_ "~a to ~a") begin-string end-string)))
+    (format #f (G_ "~a to ~a") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
@@ -110,8 +110,8 @@
 (define (gnc:date-to-year-fraction caltime)
   (let ((lt (gnc-localtime caltime)))
     (+ (- (gnc:date-get-year lt) 1970)
-       (/ (- (gnc:date-get-year-day lt) 1.0)
-	  (* 1.0 (gnc:days-in-year (gnc:date-get-year lt)))))))
+       (/ (- (gnc:date-get-year-day lt) 1)
+          (gnc:days-in-year (gnc:date-get-year lt))))))
 
 ;; return the number of years (in floating point format) between two dates.
 (define (gnc:date-year-delta caltime1 caltime2)
@@ -146,9 +146,9 @@
 ;; convert a date in seconds since 1970 into # of months since 1970
 (define (gnc:date-to-month-fraction caltime)
   (let ((lt (gnc-localtime caltime)))
-    (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
+    (+ (* 12 (- (gnc:date-get-year lt) 1970))
        (gnc:date-get-month lt) -1
-       (/ (- (gnc:date-get-month-day lt) 1.0)
+       (/ (- (gnc:date-get-month-day lt) 1)
           (gnc:days-in-month
 	   (gnc:date-get-month lt)
 	   (gnc:date-get-year lt))))))
@@ -422,11 +422,11 @@
   (let ((rel-date-data (hash-ref gnc:relative-date-hash date-symbol)))
     (if rel-date-data
         ((gnc:reldate-get-fn rel-date-data))
-        (let* ((msg (_ "Tried to look up an undefined date symbol \
+        (let* ((msg (G_ "Tried to look up an undefined date symbol \
 '~a'. This report was probably saved by a later version of GnuCash. \
 Defaulting to today."))
                (conmsg (format #f msg date-symbol))
-               (uimsg (format #f (_ msg) date-symbol)))
+               (uimsg (format #f (G_ msg) date-symbol)))
           (gnc:gui-warn conmsg uimsg)
           (current-time)))))
 

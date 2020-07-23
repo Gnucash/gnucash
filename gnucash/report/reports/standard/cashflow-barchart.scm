@@ -279,7 +279,7 @@
           (gnc:html-chart-set-title!
            chart (list report-title
                        (format #f
-                               (_ "~a to ~a")
+                               (G_ "~a to ~a")
                                (qof-print-date from-date-t64)
                                (qof-print-date to-date-t64))))
           (gnc:html-chart-set-width! chart width)
@@ -294,19 +294,19 @@
           (gnc:html-chart-set-data-labels! chart date-string-list)
           (if show-in?
               (gnc:html-chart-add-data-series! chart
-                                               (_ "Money In")
+                                               (G_ "Money In")
                                                (map gnc:gnc-monetary-amount in-list)
                                                "#0074D9"
                                                'urls cashflow-urls))
           (if show-out?
               (gnc:html-chart-add-data-series! chart
-                                               (_ "Money Out")
+                                               (G_ "Money Out")
                                                (map gnc:gnc-monetary-amount out-list)
                                                "#FF4136"
                                                'urls cashflow-urls))
           (if show-net?
               (gnc:html-chart-add-data-series! chart
-                                               (_ "Net Flow")
+                                               (G_ "Net Flow")
                                                (map gnc:gnc-monetary-amount net-list)
                                                "#2ECC40"
                                                'urls cashflow-urls))
@@ -328,13 +328,13 @@
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
                 (gnc:html-table-set-col-headers!
-                 table (append (list (_ "Date"))
-                               (if show-in? (list (_ "Money In")) '())
-                               (if show-out? (list (_ "Money Out")) '())
-                               (if show-net? (list (_ "Net Flow")) '())))
+                 table (append (list (G_ "Date"))
+                               (if show-in? (list (G_ "Money In")) '())
+                               (if show-out? (list (G_ "Money Out")) '())
+                               (if show-net? (list (G_ "Net Flow")) '())))
 
                 (gnc:html-document-add-object!
-                 doc (gnc:make-html-text (gnc:html-markup-h3 (_ "Overview:"))))
+                 doc (gnc:make-html-text (gnc:html-markup-h3 (G_ "Overview:"))))
                 (gnc:html-table-append-column! table (append date-string-list (list "Total")))
 
                 (if show-in?

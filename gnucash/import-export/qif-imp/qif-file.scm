@@ -82,7 +82,7 @@
       ;; This procedure simplifies handling of warnings.
       (define (mywarn . args)
         (let ((str (gnc:list-display-to-string
-                     (append (list (_ "Line") " " line-num ": ") args))))
+                     (append (list (G_ "Line") " " line-num ": ") args))))
           (set! private-retval (list #t str))
           (qif-import:log progress-dialog "qif-file:read-file" str)))
 
@@ -90,10 +90,10 @@
       ;; This procedure simplifies handling of failures
       (define (myfail . args)
         (let ((str (gnc:list-display-to-string
-                         (append (list (_ "Line") " " line-num ": ") args))))
+                         (append (list (G_ "Line") " " line-num ": ") args))))
           (set! private-retval (list #f str))
           (qif-import:log progress-dialog "qif-file:read-file"
-                          (string-append str "\n" (_ "Read aborted.")))
+                          (string-append str "\n" (G_ "Read aborted.")))
           (set! abort-read #t)))
 
       (define (strip-bom)
@@ -127,7 +127,7 @@
 
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
-                                       (string-append (_ "Reading") " " path)))
+                                       (string-append (G_ "Reading") " " path)))
 
       (with-input-from-file path
         (lambda ()
@@ -157,12 +157,12 @@
                             (begin
                               (set! value (gnc-utf8-strip-invalid-strdup value))
                               (mywarn
-                               (_ "Some characters have been discarded.")
-                               " " (_"Converted to: ") value))
+                               (G_ "Some characters have been discarded.")
+                               " " (G_"Converted to: ") value))
                             (begin
                               (mywarn
-                               (_ "Some characters have been converted according to your locale.")
-                               " " (_"Converted to: ") converted-value)
+                               (G_ "Some characters have been converted according to your locale.")
+                               " " (G_"Converted to: ") converted-value)
                               (set! value converted-value)))))
 
                   (if (eq? tag #\!)
@@ -220,7 +220,7 @@
                            (if (string-match "^option:"
                                              (symbol->string qstate-type))
                                (begin
-                                 (mywarn (_ "Ignoring unknown option") " '"
+                                 (mywarn (G_ "Ignoring unknown option") " '"
                                          qstate-type "'")
                                  (set! qstate-type old-qstate))))))
 
@@ -354,8 +354,8 @@
                             (if (qif-xtn:date current-xtn)
                                 (qif-file:add-xtn! self current-xtn)
                                 ;; The date is missing! Warn the user.
-                                (mywarn (_ "Date required.") " "
-                                        (_ "Discarding this transaction.")))
+                                (mywarn (G_ "Date required.") " "
+                                        (G_ "Discarding this transaction.")))
 
                             ;;(write current-xtn) (newline)
                             (set! current-xtn (make-qif-xtn))
@@ -387,7 +387,7 @@
                             (set! current-xtn (make-qif-class)))
 
                            (else
-                            (mywarn (_ "Ignoring class line") ": " line))))
+                            (mywarn (G_ "Ignoring class line") ": " line))))
 
 
                         ;;;;;;;;;;;;;;;;;;
@@ -455,7 +455,7 @@
                             (set! current-xtn (make-qif-cat)))
 
                            (else
-                            (mywarn (_ "Ignoring category line") ": " line))))
+                            (mywarn (G_ "Ignoring category line") ": " line))))
 
 
                         ;;;;;;;;;;;;;;;;;;;
@@ -486,7 +486,7 @@
                             (set! current-xtn (make-qif-stock-symbol)))
 
                            (else
-                            (mywarn (_ "Ignoring security line") ": " line))))
+                            (mywarn (G_ "Ignoring security line") ": " line))))
 
 
                         ;; trying to sneak one by, eh?
@@ -494,7 +494,7 @@
                           (if (and (not qstate-type)
                                    (not (string=? (string-trim line) "")))
                               (myfail
-                                (_ "File does not appear to be in QIF format")
+                                (G_ "File does not appear to be in QIF format")
                                 ": " line)))))
 
                   ;; Report the progress.
@@ -670,18 +670,18 @@
            (qif-import:log progress-dialog
                            "qif-file:parse-fields"
                            (string-append (case t
-                                            ((date) (_ "Transaction date"))
-                                            ((split-amounts) (_ "Transaction amount"))
-                                            ((share-price) (_ "Share price"))
-                                            ((num-shares) (_ "Share quantity"))
-                                            ((action) (_ "Investment action"))
-                                            ((cleared) (_ "Reconciliation status"))
-                                            ((commission) (_ "Commission"))
-                                            ((acct-type) (_ "Account type"))
-                                            ((tax-class) (_ "Tax class"))
-                                            ((budget-amt) (_ "Category budget amount"))
-                                            ((budget) (_ "Account budget amount"))
-                                            ((limit) (_ "Credit limit"))
+                                            ((date) (G_ "Transaction date"))
+                                            ((split-amounts) (G_ "Transaction amount"))
+                                            ((share-price) (G_ "Share price"))
+                                            ((num-shares) (G_ "Share quantity"))
+                                            ((action) (G_ "Investment action"))
+                                            ((cleared) (G_ "Reconciliation status"))
+                                            ((commission) (G_ "Commission"))
+                                            ((acct-type) (G_ "Account type"))
+                                            ((tax-class) (G_ "Tax class"))
+                                            ((budget-amt) (G_ "Category budget amount"))
+                                            ((budget) (G_ "Account budget amount"))
+                                            ((limit) (G_ "Credit limit"))
                                             (else (symbol->string t)))
                                           ": " e)))
        ;; Save the error condition.
@@ -694,7 +694,7 @@
       ;;
       ;; Fields of categories.
       ;;
-      (set-sub (_ "Parsing categories"))
+      (set-sub (G_ "Parsing categories"))
       ;; The category tasks will be 5% of the overall parsing effort.
       (start-sub 0.05)
 
@@ -726,7 +726,7 @@
       ;;
       ;; Fields of accounts
       ;;
-      (set-sub (_ "Parsing accounts"))
+      (set-sub (G_ "Parsing accounts"))
       ;; The account tasks will be 5% of the overall parsing effort.
       (start-sub 0.05)
 
@@ -767,7 +767,7 @@
       ;;
       ;; fields of transactions
       ;;
-      (set-sub (_ "Parsing transactions"))
+      (set-sub (G_ "Parsing transactions"))
       ;; Transaction parsing takes up the rest of the overall parsing effort.
       (start-sub 1)
 
@@ -943,7 +943,7 @@
      ((or (not formats)
           (null? formats))
       ;; Data was not in any of the supplied formats.
-      (errorproc errortype (_ "Unrecognized or inconsistent format."))
+      (errorproc errortype (G_ "Unrecognized or inconsistent format."))
       (set! retval #f)
       (set! do-parsing #f))
 
@@ -985,7 +985,7 @@
                         (begin
                           (set! retval #f)
                           (errorproc errortype
-                           (_ "Parsing failed.")))))))
+                           (G_ "Parsing failed.")))))))
             (set! work-done (+ 1 work-done))
             (reporter (/ work-done work-to-do)))
          objects))
@@ -1026,9 +1026,9 @@
                          (if (not (eq? errortype 'date))
                              (errorproc errortype
                                         (gnc:list-display-to-string (list
-                              (_ "Parse ambiguity between formats") " "
+                              (G_ "Parse ambiguity between formats") " "
                               formats "\n"
-                              (format #f (_ "Value '~a' could be ~a or ~a.")
+                              (format #f (G_ "Value '~a' could be ~a or ~a.")
                                        parsed
                                        (printer parsed)
                                        (printer this-parsed))))))))))

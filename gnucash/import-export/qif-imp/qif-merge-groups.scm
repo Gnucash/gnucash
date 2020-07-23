@@ -87,7 +87,7 @@
 
         (when progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
-                                       (_ "Finding duplicate transactions")))
+                                       (G_ "Finding duplicate transactions")))
 
         (let loop ((new-splits new-splits)
                    (work-done 0)

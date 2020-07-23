@@ -275,41 +275,54 @@ include (${SWIG_USE_FILE})
 string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
 # Find Guile and determine which version we are using.
-# Look for guile versions in this order: 2.2 > 2.0
+# Look for guile versions in this order: 3.0 > 2.2 > 2.0
 
 # guile library and include dir
+pkg_check_modules (GUILE3 guile-3.0 QUIET)
 pkg_check_modules (GUILE22 guile-2.2 QUIET)
-if (GUILE22_FOUND) # found guile-2.2
+pkg_check_modules (GUILE2 guile-2.0>=2.0.9 QUIET)
+
+if (GUILE3_FOUND) # found guile-3.0
+  add_definitions (-DHAVE_GUILE30)
+  set(HAVE_GUILE3 TRUE)
+  set(GUILE_EFFECTIVE_VERSION 3.0)
+  set(GUILE_INCLUDE_DIRS ${GUILE3_INCLUDE_DIRS})
+  set(GUILE_LDFLAGS ${GUILE3_LDFLAGS})
+  find_program (GUILD_EXECUTABLE NAMES guild3.0 guild)
+  if (NOT GUILD_EXECUTABLE)
+    message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
+  endif()
+  message(STATUS "Using guile-3.0.x")
+  find_program (GUILE_EXECUTABLE NAMES guile3.0 guile)
+
+elseif (GUILE22_FOUND) # found guile-2.2
   add_definitions (-DHAVE_GUILE22)
   set(HAVE_GUILE2 TRUE)
   set(GUILE_EFFECTIVE_VERSION 2.2)
   set(GUILE_INCLUDE_DIRS ${GUILE22_INCLUDE_DIRS})
   set(GUILE_LDFLAGS ${GUILE22_LDFLAGS})
-
   find_program (GUILD_EXECUTABLE NAMES guild2.2 guild)
   if (NOT GUILD_EXECUTABLE)
     message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
   endif()
   message(STATUS "Using guile-2.2.x")
   find_program (GUILE_EXECUTABLE NAMES guile2.2 guile)
-else()
-  pkg_check_modules (GUILE2 guile-2.0>=2.0.9 QUIET)
-  if (GUILE2_FOUND) # found guile-2.0
-    add_definitions (-DHAVE_GUILE20)
-    set(HAVE_GUILE2 TRUE)
-    set(GUILE_EFFECTIVE_VERSION 2.0)
-    set(GUILE_INCLUDE_DIRS ${GUILE2_INCLUDE_DIRS})
-    set(GUILE_LDFLAGS ${GUILE2_LDFLAGS})
 
-    find_program (GUILD_EXECUTABLE NAMES guild2.0 guild)
-    if (NOT GUILD_EXECUTABLE)
-      message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
-    endif()
-    message(STATUS "Using guile-2.0.x")
-    find_program (GUILE_EXECUTABLE NAMES guile2.0 guile)
-  else()
-    message (FATAL_ERROR "Neither guile 2.2 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pkg-config.")
+elseif (GUILE2_FOUND) # found guile-2.0
+  add_definitions (-DHAVE_GUILE20)
+  set(HAVE_GUILE2 TRUE)
+  set(GUILE_EFFECTIVE_VERSION 2.0)
+  set(GUILE_INCLUDE_DIRS ${GUILE2_INCLUDE_DIRS})
+  set(GUILE_LDFLAGS ${GUILE2_LDFLAGS})
+  find_program (GUILD_EXECUTABLE NAMES guild2.0 guild)
+  if (NOT GUILD_EXECUTABLE)
+    message (SEND_ERROR "The guild executable was not found, but is required. Please set GUILD_EXECUTABLE.")
   endif()
+  message(STATUS "Using guile-2.0.x")
+  find_program (GUILE_EXECUTABLE NAMES guile2.0 guile)
+
+else()
+  message (FATAL_ERROR "Neither guile 3.0, guile 2.2, nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pkg-config.")
 endif()
 
 if (NOT GUILE_EXECUTABLE)

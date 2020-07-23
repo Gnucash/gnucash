@@ -410,9 +410,9 @@ balance at a given time"))
            ;; accordingly.
            (report-title
             (case averaging-selection
-              ((YearDelta) (string-append report-title " " (_ "Yearly Average")))
-              ((MonthDelta) (string-append report-title " " (_ "Monthly Average")))
-              ((WeekDelta) (string-append report-title " " (_ "Weekly Average")))
+              ((YearDelta) (string-append report-title " " (G_ "Yearly Average")))
+              ((MonthDelta) (string-append report-title " " (G_ "Monthly Average")))
+              ((WeekDelta) (string-append report-title " " (G_ "Weekly Average")))
               (else report-title)))
            (combined '())
            (other-anchor "")
@@ -431,12 +431,9 @@ balance at a given time"))
         ;; everything foreign gets converted
         ;; (gnc:sum-collector-commodity) based on the average
         ;; cost of all holdings.
-        (gnc-numeric-convert
-         (* (gnc:gnc-monetary-amount
-             (gnc:sum-collector-commodity c report-currency exchange-fn))
-            averaging-multiplier)
-         (gnc-commodity-get-fraction report-currency)
-         GNC-RND-ROUND))
+        (* (gnc:gnc-monetary-amount
+            (gnc:sum-collector-commodity c report-currency exchange-fn))
+           averaging-multiplier))
 
       ;; Get balance of an account as an inexact number converted to,
       ;; and using precision of the report's currency.
@@ -488,7 +485,7 @@ balance at a given time"))
                        (sum (apply + (unzip1 finish))))
                   (set! combined
                         (append start
-                                (list (list sum (_ "Other")))))
+                                (list (list sum (G_ "Other")))))
                   (if depth-based?
                     (let ((options (gnc:make-report-options report-guid))
                           (id #f))
@@ -541,11 +538,11 @@ balance at a given time"))
                             (string-append
                              (if do-intervals?
                                  (format #f
-                                         (_ "~a to ~a")
+                                         (G_ "~a to ~a")
                                          (qof-print-date from-date)
                                          (qof-print-date to-date))
                                  (format #f
-                                         (_ "Balance at ~a")
+                                         (G_ "Balance at ~a")
                                          (qof-print-date to-date)))
                              (if show-total?
                                  (let ((total (apply + (unzip1 combined))))

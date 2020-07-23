@@ -490,11 +490,13 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
                 oldlist = SCM_CDR(oldlist);
             }
             newlist = scm_append
-                      (scm_list_n (scm_reverse(scm_cons(SCM_LIST4(new_report,
-                                               scm_from_int (1),
-                                               scm_from_int (1),
-                                               SCM_BOOL_F),
-                                               newlist)),
+                      (scm_list_n (scm_reverse
+                                   (scm_cons
+                                    (scm_list_4 (new_report,
+                                                 scm_from_int (1),
+                                                 scm_from_int (1),
+                                                 SCM_BOOL_F),
+                                     newlist)),
                                    oldlist,
                                    SCM_UNDEFINED));
         }
@@ -502,10 +504,11 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
         {
             newlist = scm_append
                       (scm_list_n (oldlist,
-                                   SCM_LIST1(SCM_LIST4(new_report,
-                                             scm_from_int (1),
-                                             scm_from_int (1),
-                                             SCM_BOOL_F)),
+                                   scm_list_1
+                                   (scm_list_4 (new_report,
+                                                scm_from_int (1),
+                                                scm_from_int (1),
+                                                SCM_BOOL_F)),
                                    SCM_UNDEFINED));
             r->contents_selected = oldlength;
         }
@@ -680,12 +683,12 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
 
         if (dlg_ret == GTK_RESPONSE_OK)
         {
-            current = SCM_LIST4(SCM_CAR(current),
-                                scm_from_int (gtk_spin_button_get_value_as_int
-                                              (GTK_SPIN_BUTTON(colspin))),
-                                scm_from_int (gtk_spin_button_get_value_as_int
-                                              (GTK_SPIN_BUTTON(rowspin))),
-                                SCM_BOOL_F);
+            current = scm_list_4 (SCM_CAR (current),
+                                  scm_from_int (gtk_spin_button_get_value_as_int
+                                                (GTK_SPIN_BUTTON(colspin))),
+                                  scm_from_int (gtk_spin_button_get_value_as_int
+                                                (GTK_SPIN_BUTTON(rowspin))),
+                                  SCM_BOOL_F);
             scm_gc_unprotect_object(r->contents_list);
             r->contents_list = scm_list_set_x(r->contents_list,
                                               scm_from_int (r->contents_selected),

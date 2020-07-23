@@ -128,8 +128,8 @@
 	     (gnc:html-table-cell-append-objects!
 	      contents-cell
 	      (gnc:make-html-text
-	       (gnc:html-markup-h3 (_ "Report error"))
-               (_ "An error occurred while running the report.")
+	       (gnc:html-markup-h3 (G_ "Report error"))
+               (G_ "An error occurred while running the report.")
                (gnc:html-markup "pre" gnc:last-captured-error))))
 
 	 ;; increment the alloc number for each occupied row
@@ -156,14 +156,14 @@
 		   URL-TYPE-OPTIONS
 		   (format #f "report-id=~a" (car report-info))
 		   "")
-		  (_ "Edit Options"))
+		  (G_ "Edit Options"))
 		 " "
 		 (gnc:html-markup-anchor
 		  (gnc-build-url
 		   URL-TYPE-REPORT
 		   (format #f "id=~a" (car report-info))
 		   "")
-		  (_ "Single Report")))))
+		  (G_ "Single Report")))))
 
 	 ;; add the report-table to the toplevel-cell
 	 (gnc:html-table-cell-append-objects!

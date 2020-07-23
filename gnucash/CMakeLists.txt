@@ -222,6 +222,8 @@ if (WITH_PYTHON)
 endif()
 
 if (MAC_INTEGRATION)
+  file(APPEND ${ENV_FILE_OUT} "GTK_EXE_PREFIX={GNC_HOME}\n")
+  file(APPEND ${ENV_FILE_OUT} "GIO_MODULE_DIR={SYS_LIB}/gio/modules\n")
   file(APPEND ${ENV_FILE_OUT} "XDG_CONFIG_HOME={HOME}/Library/Application Support/${PACKAGE_NAME}/config\n")
   file(APPEND ${ENV_FILE_OUT} "GDK_PIXBUF_MODULE_FILE={SYS_LIB}/gdk-pixbuf-2.0/2.10.0/loaders.cache\n")
   file(APPEND ${ENV_FILE_OUT} "FONTCONFIG_FILE={GNC_HOME}/etc/fonts/fonts.conf\n")

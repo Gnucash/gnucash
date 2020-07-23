@@ -101,7 +101,7 @@
 (define-module (gnucash reports locale-specific us taxtxf))
 (use-modules (gnucash engine))
 (use-modules (gnucash utilities))
-(use-modules (gnucash core-utils)) ; for gnc:version and (_ ...)
+(use-modules (gnucash core-utils)) ; for gnc:version and (G_ ...)
 (use-modules (gnucash app-utils))
 (use-modules (gnucash locale us tax))
 (use-modules (gnucash gnome-utils))
@@ -3371,8 +3371,8 @@
  'options-generator tax-options-generator
  'renderer (lambda (report-obj)
              (generate-tax-schedule
-              (_ "Taxable Income/Deductible Expenses")
-              (_ "This report shows transaction detail for your accounts \
+              (G_ "Taxable Income/Deductible Expenses")
+              (G_ "This report shows transaction detail for your accounts \
 related to Income Taxes.")
               report-obj
               #t
@@ -3380,8 +3380,8 @@ related to Income Taxes.")
  'export-types (list (cons "TXF" 'txf))
  'export-thunk (lambda (report-obj choice file-name)
                  (generate-tax-schedule
-                  (_ "Taxable Income/Deductible Expenses")
-                  (_ "This page shows transaction detail for relevant \
+                  (G_ "Taxable Income/Deductible Expenses")
+                  (G_ "This page shows transaction detail for relevant \
 Income Tax accounts.")
                   report-obj
                   #f

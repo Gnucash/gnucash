@@ -24,22 +24,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define-module (gnucash core-utils))
+(define-module (gnucash core-utils)
+  #:export (N_
+            G_
+            gnc:version))
 
 ;; Guile 2 needs to find the symbols from the extension at compile time already
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
+(eval-when (compile load eval expand)
+  (load-extension "libgnucash-guile" "gnc_guile_bindings_init"))
 (use-modules (sw_core_utils))
 
-; Export the swig-wrapped symbols in the public interface of this module
-(let ((i (module-public-interface (current-module))))
-     (module-use! i (resolve-interface '(sw_core_utils))))
+;; Export the swig-wrapped symbols in the public interface of this module
+(module-use! (module-public-interface (current-module))
+             (resolve-interface '(sw_core_utils)))
 
-(define-public gnc:version (gnc-version))
+(define gnc:version (gnc-version))
+
 ;; gettext functions
-(define-public _ gnc:gettext)
-(define-syntax N_
-    (syntax-rules ()
-        ((_ x) x)))
-(export N_)
+(define G_ gnc:gettext)
+(define-syntax-rule (N_ x) x)
+

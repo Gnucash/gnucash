@@ -80,6 +80,6 @@
   (define string-hash (make-hash-table))
   (lambda args
     (match args
-      (('lookup key) (_ (hash-ref string-hash key)))
+      (('lookup key) (G_ (hash-ref string-hash key)))
       (('store key string) (hash-set! string-hash key string))
       (_ (gnc:warn "string-database: bad action")))))

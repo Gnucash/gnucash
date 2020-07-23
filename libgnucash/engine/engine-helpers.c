@@ -55,16 +55,19 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 const char *
 gnc_get_num_action (const Transaction *trans, const Split *split)
 {
-    gboolean num_action = qof_book_use_split_action_for_num_field
-                           (qof_session_get_book(gnc_get_current_session ()));
-
     if (trans && !split)
         return xaccTransGetNum(trans);
     if (split && !trans)
         return xaccSplitGetAction(split);
     if (trans && split)
     {
-        if (num_action)
+        QofBook* book = qof_session_get_book(gnc_get_current_session ());
+        if (!book)
+        {
+            PERR("Session has no book but has a transaction or split!");
+            return NULL;
+        }
+        if (qof_book_use_split_action_for_num_field (book))
             return xaccSplitGetAction(split);
         else
             return xaccTransGetNum(trans);

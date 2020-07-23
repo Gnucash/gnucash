@@ -530,9 +530,11 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     int num_found = 0;
     gchar* match_str = NULL;
     const char* sep = gnc_get_account_separator_string ();
-    gchar* newval_rep = g_strdup_printf (".*%s.*", sep);
-    GRegex* regex0 = g_regex_new (sep, 0, 0, NULL);
-    char* rep_str = g_regex_replace_literal (regex0, newval, -1, 0,
+    char* escaped_sep = g_regex_escape_string (sep, -1);
+    char* escaped_newval = g_regex_escape_string (newval, -1);
+    gchar* newval_rep = g_strdup_printf (".*%s.*", escaped_sep);
+    GRegex* regex0 = g_regex_new (escaped_sep, 0, 0, NULL);
+    char* rep_str = g_regex_replace_literal (regex0, escaped_newval, -1, 0,
                                              newval_rep, 0, NULL);
     GRegex *regex = g_regex_new (rep_str, G_REGEX_CASELESS, 0, NULL);
 
@@ -546,6 +548,8 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
 
     g_free (rep_str);
     g_free (newval_rep);
+    g_free (escaped_sep);
+    g_free (escaped_newval);
     g_regex_unref (regex0);
 
     block_list_signals (cell); //Prevent recursion from gtk_tree_view signals.

@@ -653,10 +653,12 @@ GNCPrice *
 gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid)
 {
     GNCPrice *price;
-    QofSession *session;
+    QofSession *session = gnc_get_current_session();
+    QofBook* book = qof_session_get_book (session);
 
-    session = gnc_get_current_session ();
-    price = gnc_price_lookup (guid, qof_session_get_book(session));
+    if (!book)
+        return (NULL);
+    price = gnc_price_lookup (guid, book);
     if (price == NULL)
         return(NULL);
 

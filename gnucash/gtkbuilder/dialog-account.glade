@@ -1503,6 +1503,20 @@
                           </packing>
                         </child>
                         <child>
+                            <object class="GtkCheckButton" id="auto_interest_button">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment. Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                            </object>
+                            <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">10</property>
+                            </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="tax_related_button">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
@@ -1559,6 +1573,20 @@
                             <property name="left_attach">0</property>
                             <property name="top_attach">7</property>
                           </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="label405">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Auto _interest transfer</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">auto_interest_button</property>
+                            </object>
+                            <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">10</property>
+                            </packing>
                         </child>
                       </object>
                       <packing>

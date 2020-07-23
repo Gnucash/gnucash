@@ -197,7 +197,7 @@
             (gnc-commodity-get-mnemonic base-commodity)
             " - "
             (format #f
-                    (_ "~a to ~a")
+                    (G_ "~a to ~a")
                     (qof-print-date from-date)
                     (qof-print-date to-date)))))
     (gnc:html-chart-set-width! chart width)
@@ -219,11 +219,11 @@
      (gnc-commodity-get-mnemonic amount-commodity))
     (gnc:html-chart-set-x-axis-label!
      chart (case interval
-             ((DayDelta) (_ "Days"))
-             ((WeekDelta) (_ "Weeks"))
-             ((TwoWeekDelta) (_ "Double-Weeks"))
-             ((MonthDelta) (_ "Months"))
-             ((YearDelta) (_ "Years"))))
+             ((DayDelta) (G_ "Days"))
+             ((WeekDelta) (G_ "Weeks"))
+             ((TwoWeekDelta) (G_ "Double-Weeks"))
+             ((MonthDelta) (G_ "Months"))
+             ((YearDelta) (G_ "Years"))))
 
     (gnc:html-chart-set!
      chart '(options scales xAxes (0) type) 'linear)
@@ -283,11 +283,11 @@
                  (format #f "~2,2f ~a = ~a"
                          (car datum)
                          (case interval
-                           ((DayDelta) (_ "Days"))
-                           ((WeekDelta) (_ "Weeks"))
-                           ((TwoWeekDelta) (_ "Double-Weeks"))
-                           ((MonthDelta) (_ "Months"))
-                           ((YearDelta) (_ "Years")))
+                           ((DayDelta) (G_ "Days"))
+                           ((WeekDelta) (G_ "Weeks"))
+                           ((TwoWeekDelta) (G_ "Double-Weeks"))
+                           ((MonthDelta) (G_ "Months"))
+                           ((YearDelta) (G_ "Years")))
                          (gnc:monetary->string
                           (gnc:make-gnc-monetary
                            amount-commodity
@@ -295,7 +295,7 @@
                data))
 
        (gnc:html-chart-add-data-series!
-        chart (_ "Price")
+        chart (G_ "Price")
         (map
          (lambda (datum)
            (list
@@ -313,28 +313,28 @@
        (cond
         ((null? data)
          (make-warning
-          (_ "No data")
-          (_ "There is no price information available for the \
+          (G_ "No data")
+          (G_ "There is no price information available for the \
 selected commodities in the selected time period.")))
 
         ((<= (length data) 1)
          (make-warning
-          (_ "Only one price")
-          (_ "There was only one single price found for the \
+          (G_ "Only one price")
+          (G_ "There was only one single price found for the \
 selected commodities in the selected time period. This doesn't give \
 a useful plot.")))
 
         ((apply equal? (map cadr data))
          (make-warning
-          (_ "All Prices equal")
-          (_ "All the prices found are equal. \
+          (G_ "All Prices equal")
+          (G_ "All the prices found are equal. \
 This would result in a plot with one straight line. \
 Unfortunately, the plotting tool can't handle that.")))
 
         ((apply equal? (map car data))
          (make-warning
-          (_ "All Prices at the same date")
-          (_ "All the prices found are from the same date. \
+          (G_ "All Prices at the same date")
+          (G_ "All the prices found are from the same date. \
 This would result in a plot with one straight line. \
 Unfortunately, the plotting tool can't handle that.")))
 
@@ -343,8 +343,8 @@ Unfortunately, the plotting tool can't handle that.")))
 
      ;; warning if report-currency == price-commodity
      (make-warning
-      (_ "Identical commodities")
-      (_ "Your selected commodity and the currency of the report \
+      (G_ "Identical commodities")
+      (G_ "Your selected commodity and the currency of the report \
 are identical. It doesn't make sense to show prices for identical \
 commodities.")))
 
