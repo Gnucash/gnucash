@@ -17,10 +17,10 @@
 # YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 3.905\n"
+"Project-Id-Version: gnucash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-27 15:34-0700\n"
-"PO-Revision-Date: 2020-06-28 07:43+0900\n"
+"PO-Revision-Date: 2020-07-24 17:08+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
@@ -456,7 +456,7 @@ msgstr "GnuCash オンラインマニュアルには有益な情報がたくさ�
 #. Translators: You can replace the link, if a transated page exists.
 #: doc/tip_of_the_day.list.c:5
 msgid "Mailing lists are the preferred form of communication in the GnuCash community. For announcements of new releases, user groups etc. see the table at https://wiki.gnucash.org/wiki/Mailing_Lists"
-msgstr ""
+msgstr "メーリングリストが GnuCash コミュニティでよく使われるコミュニケーション方法です。新しいリリースの告知やユーザーグループなどについては表をご覧ください: https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:9
 msgid "The GnuCash developers are easy to contact. As well as several mailing lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome.org"
@@ -490,6 +490,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgstr ""
+"各取引には \"備考\" 欄があり有用な情報を書いておくことができます。\n"
+"\n"
+"これを表示するには\n"
+"メニューバーの \"表示\" を選択して \"2 行\" にチェックを入れるか\n"
+"設定:記録簿デフォルトの \"2 行モード\" にチェックを入れてください。"
 
 #: doc/tip_of_the_day.list.c:44
 msgid "To enter multiple-split transactions such as a paycheck with multiple deductions, click the Split button in the tool bar. Alternatively, in the View menu, you can choose the register style Auto-Split Ledger or Transaction Journal."
@@ -1098,9 +1103,8 @@ msgid "Change a Transaction Association"
 msgstr "取引との関連付け先を変更する"
 
 #: gnucash/gnome/dialog-assoc.c:685 libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "ユーザー定義"
+msgstr "未定義"
 
 #: gnucash/gnome/dialog-assoc.c:915
 msgid "Transaction Associations"
@@ -1858,7 +1862,7 @@ msgstr "照合日"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There is %d invalid mapping,\n"
 "\n"
@@ -1867,12 +1871,15 @@ msgid_plural ""
 "There are %d invalid mappings,\n"
 "\n"
 "Would you like to remove them now?"
-msgstr[0] "ファイル %s が存在しません。作成しますか?"
+msgstr[0] ""
+"%d 個の無効なマッピングがあります、\n"
+"\n"
+"削除しますか?"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "無効なマッピングを見るには、フィルター '%s' を使ってください"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 #: gnucash/gnome/dialog-imap-editor.c:607
@@ -1881,7 +1888,7 @@ msgstr "マッピング先勘定科目が *ありません*"
 
 #: gnucash/gnome/dialog-imap-editor.c:372
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(なお、数が多い場合は時間が掛かるかもしれません)"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:126
@@ -1905,9 +1912,8 @@ msgid "Online Id"
 msgstr "オンライン ID"
 
 #: gnucash/gnome/dialog-imap-editor.c:793
-#, fuzzy
 msgid "Online HBCI"
-msgstr "オンライン ID"
+msgstr "オンライン HBCI"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -2003,12 +2009,12 @@ msgstr "貸方票"
 
 #: gnucash/gnome/dialog-invoice.c:2037
 msgid "PAID"
-msgstr ""
+msgstr "支払済"
 
 #: gnucash/gnome/dialog-invoice.c:2039
 #: gnucash/report/reports/standard/new-owner-report.scm:550
 msgid "UNPAID"
-msgstr ""
+msgstr "未払"
 
 #: gnucash/gnome/dialog-invoice.c:2087 gnucash/gnome/dialog-invoice.c:2106
 #: gnucash/gnome/dialog-invoice.c:2125
@@ -2068,9 +2074,8 @@ msgid "View Expense Voucher"
 msgstr "立替払請求書を表示"
 
 #: gnucash/gnome/dialog-invoice.c:2458
-#, fuzzy
 msgid "Open Association:"
-msgstr "関連付け"
+msgstr "関連付けを開く:"
 
 #: gnucash/gnome/dialog-invoice.c:2571 gnucash/gnome/dialog-invoice.c:2797
 msgid "Bill Information"
@@ -2474,7 +2479,7 @@ msgstr "資金移動を行う勘定科目を選択してください。"
 
 #: gnucash/gnome/dialog-payment.c:273
 msgid "No documents were selected to assign this payment to. This may create an unattached payment."
-msgstr ""
+msgstr "この支払の割当先文書が選択されていません。関連づけのない支払を作成することになるかもしれません。"
 
 #: gnucash/gnome/dialog-payment.c:529 gnucash/gnome/dialog-payment.c:1326
 #: gnucash/report/reports/standard/new-aging.scm:193
@@ -3048,9 +3053,8 @@ msgid "Transfer"
 msgstr "資金移動"
 
 #: gnucash/gnome/gnc-budget-view.c:508
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "既存の予算を開きます。"
+msgstr "予算残"
 
 #: gnucash/gnome/gnc-budget-view.c:1652 gnucash/gnome/window-reconcile2.c:1111
 #: gnucash/gnome/window-reconcile.c:1191
@@ -3413,7 +3417,7 @@ msgstr "得意先を検索(_F)..."
 
 #: gnucash/gnome/gnc-plugin-business.c:171
 msgid "Open the Find Customer dialog"
-msgstr "得意先を検索ダイアログを開きます。"
+msgstr "得意先の検索ダイアログを開きます。"
 
 #: gnucash/gnome/gnc-plugin-business.c:175
 #: gnucash/gnome/gnc-plugin-business.c:319
@@ -3631,7 +3635,7 @@ msgstr "この取引が含まれる支払を編集します。"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:113
 #: gnucash/gtkbuilder/dialog-import.glade:32
 msgid "New _Account..."
-msgstr "勘定科目を新規作成(_N)..."
+msgstr "勘定科目を新規作成(_A)..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:198
 msgid "Create a new Account"
@@ -4005,7 +4009,6 @@ msgid "Are you sure you want to do this?"
 msgstr "本当に実行してもいいですか?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:141
-#, fuzzy
 msgid "Open the selected account."
 msgstr "選択した勘定科目を開きます。"
 
@@ -4014,36 +4017,30 @@ msgid "Open _Subaccounts"
 msgstr "子勘定科目を開く(_S)"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:147
-#, fuzzy
 msgid "Open the selected account and all its subaccounts."
 msgstr "選択した勘定科目とその子勘定科目を全部開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "予算を削除(_D)"
+msgstr "予算を削除(_D)..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:154
 msgid "Select this or another budget and delete it."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:158
-#, fuzzy
 msgid "Budget _Options..."
-msgstr "予算オプション"
+msgstr "予算オプション(_O)..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "Edit this budget's options."
 msgstr "この予算のオプションを編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:163
-#, fuzzy
 msgid "Esti_mate Budget..."
-msgstr "予算を見積り"
+msgstr "予算を見積り(_M)..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:165
-#, fuzzy
 msgid "Estimate a budget value for the selected accounts from past transactions."
 msgstr "過去の取引から選択した勘定科目の予算の値を見積もります。"
 
@@ -4056,17 +4053,14 @@ msgid "Edit budget for all periods for the selected accounts."
 msgstr "選択した勘定科目の全期間の予算を編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "Edit Note"
-msgstr "貸方票"
+msgstr "備考を編集"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit note for the selected account and period"
-msgstr "選択した勘定科目を編集します。"
+msgstr "選択した勘定科目の期間の備考を編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
-#, fuzzy
 msgid "Refresh this window."
 msgstr "このウィンドウを再表示します。"
 
@@ -4086,7 +4080,6 @@ msgid "All Periods"
 msgstr "全期間"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:213
-#, fuzzy
 msgid "Note"
 msgstr "備考"
 
@@ -4122,9 +4115,8 @@ msgid "You must select at least one account to edit."
 msgstr "編集するには勘定科目を一つ以上選択してください。"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:1234
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "見積りをするには勘定科目を一つ以上選択してください。"
+msgstr "編集するには予算のセルを一つ選択してください。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:109
 msgid "Sort _Order"
@@ -4261,9 +4253,8 @@ msgid "Sort by description"
 msgstr "説明順にソートします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:302
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "請求書を印刷"
+msgstr "請求書を印刷(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:303
 msgid "_Edit Invoice"
@@ -4279,7 +4270,7 @@ msgstr "請求書を記帳(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:306
 msgid "_Unpost Invoice"
-msgstr "請求書の記帳の取消(_U)"
+msgstr "請求書の記帳を取消(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:307
 msgid "New _Invoice"
@@ -4303,46 +4294,39 @@ msgstr "請求書から関連付けを除去(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:317
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "得意先向け文書のデフォルト配置として使う(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:318
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "得意先向け文書のデフォルト配置をリセット(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:324
-#, fuzzy
 msgid "_Print Bill"
-msgstr "印刷(_P)"
+msgstr "仕入先請求書を印刷(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:325
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "仕入先請求書を編集"
+msgstr "仕入先請求書を編集(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:326
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "複製"
+msgstr "仕入先請求書を複製(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:327
-#, fuzzy
 msgid "_Post Bill"
-msgstr "支払処理"
+msgstr "仕入先請求書を記帳(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:328
-#, fuzzy
 msgid "_Unpost Bill"
-msgstr "請求書の記帳の取消(_U)"
+msgstr "仕入先請求書の記帳を取消(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:329
-#, fuzzy
 msgid "New _Bill"
-msgstr "仕入先請求書を新規作成"
+msgstr "仕入先請求書を新規作成(_B)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:330
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "支払処理"
+msgstr "仕入先請求書の支払を行う(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:331
 msgid "_Update Association for Bill"
@@ -4358,46 +4342,39 @@ msgstr "仕入先請求書から関連付けを除去(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:339
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "仕入先向け文書のデフォルト配置として使う(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:340
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr ""
+msgstr "仕入先向け文書のデフォルト配置をリセット(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:346
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "小切手を印刷(_P)"
+msgstr "立替払請求書を印刷(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:347
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "立替払請求書を表示・編集"
+msgstr "立替払請求書を編集(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:348
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "請求書を複製(_D)"
+msgstr "立替払請求書を複製(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:349
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "立替払請求書"
+msgstr "立替払請求書を記帳(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:350
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "請求書の記帳の取消(_U)"
+msgstr "立替払請求書の記帳を取消(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:351
-#, fuzzy
 msgid "New _Voucher"
-msgstr "立替払請求書を新規作成"
+msgstr "立替払請求書を新規作成(_V)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:352
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "立替払請求書"
+msgstr "立替払請求書の支払を行う(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:353
 msgid "_Update Association for Voucher"
@@ -4413,46 +4390,39 @@ msgstr "立替払請求書から関連付けを除去(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:361
 msgid "_Use as Default Layout for Employee Documents"
-msgstr ""
+msgstr "従業員向け文書のデフォルト配置として使う(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:362
 msgid "_Reset Default Layout for Employee Documents"
-msgstr ""
+msgstr "従業員向け文書のデフォルト配置をリセット(_R)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:368
-#, fuzzy
 msgid "_Print Credit Note"
-msgstr "貸方票を編集"
+msgstr "貸方票を印刷(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:369
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "貸方票を編集"
+msgstr "貸方票を編集(_E)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:370
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "貸方票を編集"
+msgstr "貸方票を複製(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:371
-#, fuzzy
 msgid "_Post Credit Note"
-msgstr "貸方票を編集"
+msgstr "貸方票を記帳(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:372
-#, fuzzy
 msgid "_Unpost Credit Note"
-msgstr "貸方票を編集"
+msgstr "貸方票の記帳を取消(_U)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:373
-#, fuzzy
 msgid "New _Credit Note"
-msgstr "貸方票を新規作成"
+msgstr "貸方票を新規作成(_C)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:374
-#, fuzzy
 msgid "_Pay Credit Note"
-msgstr "貸方票"
+msgstr "貸方票の支払を行う(_P)"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:375
 msgid "_Update Association for Credit Note"
@@ -4479,12 +4449,10 @@ msgid "Create a new invoice as a duplicate of the current one"
 msgstr "現在の請求書を基に新しい請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:386
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "この請求書を勘定科目表に記帳します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:387
-#, fuzzy
 msgid "Unpost this invoice and make it editable"
 msgstr "この請求書の記帳を取り消し、編集可能にします。"
 
@@ -4493,17 +4461,14 @@ msgid "Create a new invoice for the same owner as the current one"
 msgstr "現在と同じ所有者の請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:389
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
 msgstr "請求書の一番下の空白項目に移動します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:390
-#, fuzzy
 msgid "Enter a payment for the owner of this invoice"
 msgstr "この請求書の所有者の支払を入力します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:391
-#, fuzzy
 msgid "Open a company report window for the owner of this invoice"
 msgstr "この請求書の所有者の会社帳票ウィンドウを開きます。"
 
@@ -4521,56 +4486,47 @@ msgstr "現在の請求書から関連付けを除去します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:399
 msgid "Use the current layout as default for all customer invoices and credit notes"
-msgstr ""
+msgstr "現在の配置を全得意先の請求書および貸方票のデフォルトとして使います。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:400
 msgid "Reset default layout for all customer invoices and credit notes back to built-in defaults and update the current page accordingly"
-msgstr ""
+msgstr "全得意先の請求書および貸方票のデフォルト配置を組み込みのデフォルトに戻し、それに合わせて現在のページを更新します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:405
-#, fuzzy
 msgid "Make a printable bill"
-msgstr "請求書を印刷可能な状態にします。"
+msgstr "仕入先請求書を印刷可能な状態にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:406
-#, fuzzy
 msgid "Edit this bill"
-msgstr "この請求書を編集します。"
+msgstr "この仕入先請求書を編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:407
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "現在の請求書を基に新しい請求書を作成します。"
+msgstr "現在の仕入先請求書を基に新しい仕入先請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:408
-#, fuzzy
 msgid "Post this bill to your Chart of Accounts"
-msgstr "この請求書を勘定科目表に記帳します。"
+msgstr "この仕入先請求書を勘定科目表に記帳します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:409
-#, fuzzy
 msgid "Unpost this bill and make it editable"
-msgstr "この請求書の記帳を取り消し、編集可能にします。"
+msgstr "この仕入先請求書の記帳を取り消し、編集可能にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:410
-#, fuzzy
 msgid "Create a new bill for the same owner as the current one"
-msgstr "現在と同じ所有者の請求書を作成します。"
+msgstr "現在と同じ所有者の仕入先請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:411
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the bill"
-msgstr "請求書の一番下の空白項目に移動します。"
+msgstr "仕入先請求書の一番下の空白項目に移動します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:412
-#, fuzzy
 msgid "Enter a payment for the owner of this bill"
-msgstr "この請求書の所有者の支払を入力します。"
+msgstr "この仕入先請求書の所有者の支払を入力します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:413
-#, fuzzy
 msgid "Open a company report window for the owner of this bill"
-msgstr "この請求書の所有者の会社帳票ウィンドウを開きます。"
+msgstr "この仕入先請求書の所有者の会社帳票ウィンドウを開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:414
 msgid "Update Association for current bill"
@@ -4586,56 +4542,47 @@ msgstr "現在の仕入先請求書から関連付けを除去します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:421
 msgid "Use the current layout as default for all vendor bills and credit notes"
-msgstr ""
+msgstr "現在の配置を全仕入先の請求書および貸方票のデフォルトとして使います。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:422
 msgid "Reset default layout for all vendor bills and credit notes back to built-in defaults and update the current page accordingly"
-msgstr ""
+msgstr "全仕入先の請求書および貸方票のデフォルト配置を組み込みのデフォルトに戻し、それに合わせて現在のページを更新します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:427
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "請求書を印刷可能な状態にします。"
+msgstr "立替払請求書を印刷可能な状態にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:428
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "この請求書を編集します。"
+msgstr "この立替払請求書を編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:429
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "現在の請求書を基に新しい請求書を作成します。"
+msgstr "現在の立替払請求書を基に新しい立替払請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:430
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "この請求書を勘定科目表に記帳します。"
+msgstr "この立替払請求書を勘定科目表に記帳します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:431
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr "この請求書の記帳を取り消し、編集可能にします。"
+msgstr "この立替払請求書の記帳を取り消し、編集可能にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:432
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "現在と同じ所有者の請求書を作成します。"
+msgstr "現在と同じ所有者の立替払請求書を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:433
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "請求書の一番下の空白項目に移動します。"
+msgstr "立替払請求書の一番下の空白項目に移動します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:434
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "この請求書の所有者の支払を入力します。"
+msgstr "この立替払請求書の所有者の支払を入力します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:435
-#, fuzzy
 msgid "Open a company report window for the owner of this voucher"
-msgstr "この請求書の所有者の会社帳票ウィンドウを開きます。"
+msgstr "この立替払請求書の所有者の会社帳票ウィンドウを開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:436
 msgid "Update Association for current voucher"
@@ -4651,56 +4598,47 @@ msgstr "現在の立替払請求書から関連付けを除去します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:443
 msgid "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
+msgstr "現在の配置を全従業員の立替払請求書および貸方票のデフォルトとして使います。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:444
 msgid "Reset default layout for all employee vouchers and credit notes back to built-in defaults and update the current page accordingly"
-msgstr ""
+msgstr "全従業員の立替払請求書および貸方票のデフォルト配置を組み込みのデフォルトに戻し、それに合わせて現在のページを更新します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:449
-#, fuzzy
 msgid "Make a printable credit note"
-msgstr "請求書を印刷可能な状態にします。"
+msgstr "貸方票を印刷可能な状態にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:450
-#, fuzzy
 msgid "Edit this credit note"
-msgstr "貸方票を編集"
+msgstr "この貸方票を編集します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:451
-#, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr "現在の請求書を基に新しい請求書を作成します。"
+msgstr "現在の貸方票を基に新しい貸方票を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:452
-#, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "この請求書を勘定科目表に記帳します。"
+msgstr "この貸方票を勘定科目表に記帳します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:453
-#, fuzzy
 msgid "Unpost this credit note and make it editable"
-msgstr "この請求書の記帳を取り消し、編集可能にします。"
+msgstr "この貸方票の記帳を取り消し、編集可能にします。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:454
-#, fuzzy
 msgid "Create a new credit note for the same owner as the current one"
-msgstr "現在と同じ所有者の請求書を作成します。"
+msgstr "現在と同じ所有者の貸方票を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:455
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr "請求書の一番下の空白項目に移動します。"
+msgstr "貸方票の一番下の空白項目に移動します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:456
-#, fuzzy
 msgid "Enter a payment for the owner of this credit note"
-msgstr "この請求書の所有者の支払を入力します。"
+msgstr "この貸方票の所有者の支払を入力します。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:457
-#, fuzzy
 msgid "Open a company report window for the owner of this credit note"
-msgstr "この請求書の所有者の会社帳票ウィンドウを開きます。"
+msgstr "この貸方票の所有者の会社帳票ウィンドウを開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:458
 msgid "Update Association for credit note"
@@ -4738,12 +4676,11 @@ msgstr "空白"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:474
 msgid "Unpost"
-msgstr "記帳を取り消す"
+msgstr "記帳を取消"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:475
-#, fuzzy
 msgid "Pay"
-msgstr "日"
+msgstr "支払"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:145
 msgid "E_dit Vendor"
@@ -5178,9 +5115,8 @@ msgstr "2 行(_D)"
 #: gnucash/gnome/gnc-plugin-page-register2.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:527
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:300
-#, fuzzy
 msgid "Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."
-msgstr "各取引の情報を 2 行で表示します。"
+msgstr "各取引の \"アクション\"、\"備考\"、および \"ファイルとの関連付け\" を 2 行目に表示します。"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:416
 #, fuzzy
@@ -5463,25 +5399,21 @@ msgid "_Sort By..."
 msgstr "ソート(_S)..."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:603
-#, fuzzy
 msgid "Update Association"
-msgstr "関連付けを確認(_L)"
+msgstr "関連付けを更新"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:604
 #: gnucash/gtkbuilder/dialog-invoice.glade:419
-#, fuzzy
 msgid "Open Association"
-msgstr "関連付け"
+msgstr "関連付け先を開く"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:605
-#, fuzzy
 msgid "Remove Association"
-msgstr "関連付け"
+msgstr "関連付けを除去"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:606
-#, fuzzy
 msgid "Open Invoice"
-msgstr "得意先請求書を新規作成"
+msgstr "請求書を開く"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:801
 msgid "You have tried to open an account in the old register while it is open in the new register."
@@ -6206,7 +6138,7 @@ msgstr "ダッシュボード"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
-msgstr ""
+msgstr "会計データの基本的なダッシュボードです。"
 
 #: gnucash/gnome/search-owner.c:136
 msgid "You have not selected an owner"
@@ -7014,7 +6946,7 @@ msgstr "ファイルパスの先頭:"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:239
 msgid "Path head does not exist,"
-msgstr "パスの先頭が見つかりません:"
+msgstr "パスの先頭・見つかりません:"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:242
 #, c-format
@@ -7022,9 +6954,8 @@ msgid "Path head not set, using '%s' for relative paths"
 msgstr "パスの先頭が設定されていないので '%s' で相対パスにアクセスします"
 
 #: gnucash/gnome-utils/dialog-assoc-utils.c:426
-#, fuzzy
 msgid "Existing"
-msgstr "既存のものを使用"
+msgstr "既存"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -7397,7 +7328,7 @@ msgstr "現在のオンライン相場表を取得します。手動で作成し
 
 #: gnucash/gnome-utils/dialog-transfer.c:1325
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "このボタンを有効にするためにはFinance::Quoteがインストールされていなければなりません。"
+msgstr "このボタンを有効にするためには Finance::Quote がインストールされていなければなりません。"
 
 #: gnucash/gnome-utils/dialog-transfer.c:1427
 msgid "You must specify an account to transfer from, or to, or both, for this transaction. Otherwise, it will not be recorded."
@@ -7911,20 +7842,17 @@ msgid "View..."
 msgstr "表示..."
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:70
-#, fuzzy
 msgid "GnuCash could not find the files of the help documentation."
-msgstr "GnuCash はヘルプ文書を見つけることができませんでした。"
+msgstr "GnuCash はヘルプ文書のファイルを見つけることができませんでした。"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:72
-#, fuzzy
 msgid "This is likely because the \"gnucash-docs\" package is not properly installed."
-msgstr "GnuCash はヘルプ文書を見つけることができませんでした。おそらく 'gnucash-docs' パッケージがインストールされていないのでしょう。"
+msgstr "おそらく \"gnucash-docs\" パッケージが適切にインストールされていないのでしょう。"
 
 #. Translators: URI of missing help files
 #: gnucash/gnome-utils/gnc-gnome-utils.c:74
-#, fuzzy
 msgid "Expected location"
-msgstr "古い場所:"
+msgstr "あるべき場所"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:446
 #: gnucash/gnome-utils/gnc-gnome-utils.c:486
@@ -8403,7 +8331,7 @@ msgstr "為替・交換レートを変更するには取引を展開する必要
 #: gnucash/register/ledger-core/split-register-control.c:1413
 #: gnucash/register/ledger-core/split-register-control.c:1426
 msgid "The two currencies involved equal each other."
-msgstr "含まれている2つの通貨は同一です。"
+msgstr "含まれている 2 つの通貨は同一です。"
 
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1253
 #: gnucash/register/ledger-core/split-register.c:515
@@ -8892,7 +8820,6 @@ msgid "Total (Period)"
 msgstr "合計 (期間)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:923
-#, fuzzy
 msgctxt "Column header for 'Color'"
 msgid "C"
 msgstr "色"
@@ -8909,7 +8836,7 @@ msgstr "税金情報"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:958
 msgctxt "Column header for 'Hidden'"
 msgid "H"
-msgstr ""
+msgstr "隠"
 
 #. Translators: %s is a currency mnemonic.
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1787
@@ -9382,7 +9309,7 @@ msgstr "利益:"
 
 #: gnucash/gnucash-cli.cpp:91
 msgid "Price Quotes Retrieval Options"
-msgstr ""
+msgstr "相場価格取得オプション"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid ""
@@ -9390,16 +9317,17 @@ msgid ""
 "\n"
 "  get: \tFetch current quotes for all foreign currencies and stocks in the given GnuCash datafile.\n"
 msgstr ""
+"相場価格関連のコマンドを実行する。 現在一つのコマンドのみサポート。\n"
+"\n"
+"  get: \t現在の相場表を指定の GnuCash データファイル内の全海外通貨 および株式に対して取得する。\n"
 
 #: gnucash/gnucash-cli.cpp:97
-#, fuzzy
 msgid "Regular expression determining which namespace commodities will be retrieved for"
-msgstr "どの名前空間の商品を取得するかを決定するための正規表現"
+msgstr "どの名前空間の商品を取得するかを 決定するための正規表現"
 
 #: gnucash/gnucash-cli.cpp:101
-#, fuzzy
 msgid "Report Generation Options"
-msgstr "帳票オプション(_R)"
+msgstr "帳票生成オプション"
 
 #: gnucash/gnucash-cli.cpp:104
 msgid ""
@@ -9409,48 +9337,48 @@ msgid ""
 "  show: \tDescribe the options modified in the named report.\n"
 "  run: \tRun the named report in the given GnuCash datafile.\n"
 msgstr ""
+"帳票関連のコマンドを実行する。 次のコマンドをサポート。\n"
+"\n"
+"  list: \t利用可能な帳票を一覧出力する。\n"
+"  show: \t指定の名前の帳票の中で変更されるオプションを詳細表示する。\n"
+"  run: \t指定の GnuCash データファイルで 指定の名前の帳票を実行する。\n"
 
 #: gnucash/gnucash-cli.cpp:109
-#, fuzzy
 msgid "Name of the report to run\n"
-msgstr "会社名です。"
+msgstr "実行する帳票の名前\n"
 
 #: gnucash/gnucash-cli.cpp:111
-#, fuzzy
 msgid "Specify export type\n"
-msgstr "2. インポートの種類を選択します"
+msgstr "エクスポート形式を指定する\n"
 
 #: gnucash/gnucash-cli.cpp:113
-#, fuzzy
 msgid "Output file for report\n"
-msgstr "帳票の背景に敷き詰める画像です。"
+msgstr "帳票の出力ファイル\n"
 
 #: gnucash/gnucash-cli.cpp:128
 msgid "Unknown quotes command '{1}'"
-msgstr ""
+msgstr "不明な相場表コマンド '{1}'。"
 
 #: gnucash/gnucash-cli.cpp:135 gnucash/gnucash-cli.cpp:149
 #: gnucash/gnucash.cpp:363
 msgid "Missing data file parameter"
-msgstr ""
+msgstr "データファイルパラメータがありません。"
 
 #: gnucash/gnucash-cli.cpp:167
 msgid "Missing --name parameter"
-msgstr ""
+msgstr "--name パラメータがありません。"
 
 #: gnucash/gnucash-cli.cpp:175
 msgid "Unknown report command '{1}'"
-msgstr ""
+msgstr "不明な帳票コマンド '{1}'。"
 
 #: gnucash/gnucash-cli.cpp:181
-#, fuzzy
 msgid "Missing command or option"
-msgstr "これは色オプションです。"
+msgstr "コマンドまたはオプションがありません。"
 
 #: gnucash/gnucash-commands.cpp:88
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly."
-msgstr "相場表が取得されていません。Finance::Quote が適切にインストールされていません。\n"
+msgstr "相場表を取得できません。Finance::Quote が適切にインストールされていません。"
 
 #: gnucash/gnucash-core-app.cpp:85
 msgid "This is a development version. It may or may not work."
@@ -9476,26 +9404,23 @@ msgstr "- GnuCash、個人および小規模ビジネス向け財務管理"
 
 #: gnucash/gnucash-core-app.cpp:466
 msgid "{1} [options] [datafile]"
-msgstr ""
+msgstr "{1} [オプション] [データファイル]"
 
 #: gnucash/gnucash-core-app.cpp:494
-#, fuzzy
 msgid "GnuCash {1}"
-msgstr "GnuCash "
+msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:495
-#, fuzzy
 msgid "GnuCash {1} development version"
-msgstr "GnuCash %s 開発バージョン"
+msgstr "GnuCash {1} 開発バージョン"
 
 #: gnucash/gnucash-core-app.cpp:523
-#, fuzzy
 msgid "Common Options"
-msgstr "帳簿オプション"
+msgstr "共通オプション"
 
 #: gnucash/gnucash-core-app.cpp:526
 msgid "Show this help message"
-msgstr ""
+msgstr "このヘルプメッセージを表示する"
 
 #: gnucash/gnucash-core-app.cpp:528
 msgid "Show GnuCash version"
@@ -9529,12 +9454,11 @@ msgstr "ログを格納するファイル: デフォルトは \"/tmp/gnucash.tra
 
 #: gnucash/gnucash-core-app.cpp:538
 msgid "Set the prefix for gsettings schemas for gsettings queries. This can be useful to have a different settings tree while debugging."
-msgstr "gsettings 問い合わせ用の gsettings スキーマのプレフィックスを設定する。これはデバッグ中に別の設定ツリーを使うときに便利。"
+msgstr "gsettings 問い合わせ用の gsettings スキーマのプレフィックスを設定。 デバッグ中に別の設定ツリーを 使うときに便利。"
 
 #: gnucash/gnucash-core-app.cpp:540
-#, fuzzy
 msgid "Hidden Options"
-msgstr "予算オプション"
+msgstr "隠しオプション"
 
 #: gnucash/gnucash-core-app.cpp:543
 msgid "[datafile]"
@@ -9549,23 +9473,20 @@ msgid "Loading data..."
 msgstr "データをロード中..."
 
 #: gnucash/gnucash.cpp:328
-#, fuzzy
 msgid "Application Options"
-msgstr "アプリケーション"
+msgstr "アプリケーションオプション"
 
 #: gnucash/gnucash.cpp:331
 msgid "Do not load the last file opened"
 msgstr "最後に開いたファイルを読み込まない"
 
 #: gnucash/gnucash.cpp:333
-#, fuzzy
 msgid "Show help for gtk options"
-msgstr "最初のオプションのヘルプです。"
+msgstr "gtk オプションのヘルプを表示する"
 
 #: gnucash/gnucash.cpp:335
-#, fuzzy
 msgid "Deprecated Options"
-msgstr "帳票オプション(_R)"
+msgstr "非推奨オプション"
 
 #: gnucash/gnucash.cpp:338
 msgid ""
@@ -9573,6 +9494,9 @@ msgid ""
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get <datafile>' instead."
 msgstr ""
+"指定した GnuCash データファイルに 相場価格を追加する。\n"
+"このオプションは非推奨で GnuCash 5.0 で削除予定なので注意。\n"
+"代わりに 'gnucash-cli --quotes get <データファイル>' をご利用ください。"
 
 #: gnucash/gnucash.cpp:342
 msgid ""
@@ -9580,17 +9504,17 @@ msgid ""
 "Note this option has been deprecated and will be removed in GnuCash 5.0.\n"
 "Please use 'gnucash-cli --quotes get --namespace <namespace> <datafile>' instead."
 msgstr ""
+"どの名前空間の商品を取得するかを 決定するための正規表現。\n"
+"このオプションは非推奨で GnuCash 5.0 で削除予定なので注意。\n"
+"代わりに 'gnucash-cli --quotes get --namespace <名前空間> <データファイル>' をご利用ください。"
 
 #: gnucash/gnucash.cpp:359
 msgid "The '--add-price-quotes' option to gnucash has been deprecated and will be removed in GnuCash 5.0. Please use 'gnucash-cli --quotes get <datafile>' instead."
-msgstr ""
+msgstr "'--add-price-quotes' オプションの gnucash への指定は非推奨で GnuCash 5.0 で削除予定。代わりに 'gnucash-cli --quotes get <データファイル>' をご利用ください。"
 
 #: gnucash/gnucash.cpp:393
-#, fuzzy
 msgid "Run '{1} --help' to see a full list of available command line options."
-msgstr ""
-"%s\n"
-"利用可能なすべてのコマンドラインオプションを参照するには '%s --help' を実行してください。\n"
+msgstr "利用可能なすべてのコマンドラインオプションを参照するには '{1} --help' を実行してください。"
 
 #: gnucash/gnucash.cpp:395
 msgid ""
@@ -11903,16 +11827,15 @@ msgstr "<b>備考</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:468
 msgid "If not satisfied with the available templates, please read the wiki page linked below and share your new or improved template."
-msgstr ""
+msgstr "利用可能なテンプレートで満足できないときは、下のリンクの wiki ページを読んで新規のもしくは改良したテンプレートを共有してください。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:481
 msgid "The selection you make here is only the starting point for your personalized account hierarchy. Accounts can be added, renamed, moved, or deleted by hand later at any time."
 msgstr "ここで選んだものはあなたに合う勘定科目階層への出発点にすぎません。勘定科目は後でいつでも追加したり、名前変更、移動、削除することができます。"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:498
-#, fuzzy
 msgid "GnuCash Account Template Wiki"
-msgstr "GnuCash 勘定科目名"
+msgstr "GnuCash 勘定科目テンプレート Wiki"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:513
 msgid "Choose accounts to create"
@@ -12817,18 +12740,16 @@ msgid "<b>Sub-accounts</b>"
 msgstr "<b>子勘定科目</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:507
-#, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "この勘定科目は子勘定科目を含んでいます。これらの子勘定科目をどうしますか?"
+msgstr "この勘定科目は子勘定科目を含んでいますがどうしますか?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:518
 msgid "_Move to"
 msgstr "移動先(_M)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:536
-#, fuzzy
 msgid "Delete the _subaccount"
-msgstr "すべての子勘定科目を削除(_S)"
+msgstr "子勘定科目を削除(_S)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:591
 msgid "<b>Transactions</b>"
@@ -12857,9 +12778,8 @@ msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>子勘定科目取引</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:764
-#, fuzzy
 msgid "You've said to delete the subaccount and it contains transactions. What would you like to do with these transactions?"
-msgstr "子勘定科目が取引を含んでいます。これらの取引をどうしますか?"
+msgstr "子勘定科目を削除しようとしていますが取引を含んでいます。これらの取引をどうしますか?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:778
 msgid "One or more sub-accounts contain read-only transactions which may not be deleted."
@@ -13106,21 +13026,20 @@ msgid "Location does not start with a valid scheme"
 msgstr "場所の先頭が有効なスキームになっていません。"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:317
-#, fuzzy
 msgid "Change Association path head"
 msgstr "関連付けパスの先頭部分を変更する"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:353
 msgid "Existing relative file path associations will be converted to absolute ones by combining them with the existing path head unless box unticked."
-msgstr ""
+msgstr "既存の相対ファイルパスの関連付けは、チェックボックスを外さない限り既存のパス先頭部分と結合して絶対パスに変換されます。"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:408
 msgid "Existing absolute file path associations will be converted to relative ones by comparing them to the new path head unless box unticked."
-msgstr ""
+msgstr "既存の絶対ファイルパスの関連付けは、チェックボックスを外さない限り新規のパス先頭部分と比較して相対パスに変換されます。"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:446
 msgid "Note: Only Associations that are not read-only will be changed."
-msgstr ""
+msgstr "備考: 読み取り専用でない関連付けのみ変更されます。"
 
 #: gnucash/gtkbuilder/dialog-assoc.glade:505
 msgid "All Associations"
@@ -13234,9 +13153,8 @@ msgstr "5. その後"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
-#, fuzzy
 msgid "window1"
-msgstr "ウィンドウ _1"
+msgstr "ウィンドウ1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:75
 msgid "Due Days"
@@ -13264,19 +13182,16 @@ msgid "The number of days to pay the bill after the post date."
 msgstr "請求金額を支払う発送日以降の日数です。"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:213
-#, fuzzy
 msgid "Due Day"
-msgstr "支払期限日数"
+msgstr "支払期限"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:226
-#, fuzzy
 msgid "Discount Day"
-msgstr "値引き期限日数"
+msgstr "値引き期限"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:252
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "締日: "
+msgstr "締日"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:266
 msgid "The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month."
@@ -13864,14 +13779,12 @@ msgid "Beginning"
 msgstr "初日"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:625
-#, fuzzy
 msgid "<b>Compounding</b>"
-msgstr "<b>複利:</b>"
+msgstr "<b>複利</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:640
-#, fuzzy
 msgid "<b>Period</b>"
-msgstr "<b>期間:</b>"
+msgstr "<b>期間</b>"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:768
 msgid "When paid"
@@ -13970,9 +13883,8 @@ msgid "_Expand All"
 msgstr "すべて展開(_E)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:366
-#, fuzzy
 msgid "Collapse _All"
-msgstr "すべて閉じる(_C)"
+msgstr "すべて閉じる(_A)"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:402
 msgid "Multiple rows can be selected and then deleted by pressing the delete button."
@@ -14054,12 +13966,10 @@ msgid "\"A\""
 msgstr "\"追加\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:662
-#, fuzzy
 msgid "\"U+C\""
 msgstr "\"更新+清算\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:673
-#, fuzzy
 msgid "\"C\""
 msgstr "\"清算\""
 
@@ -14069,11 +13979,11 @@ msgstr "取引を新規として追加するには \"追加\" を選択してく
 
 #: gnucash/gtkbuilder/dialog-import.glade:697
 msgid "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
-msgstr "一致した取引を更新して清算済 (c) とマークするには \"U+C\" を選択してください。"
+msgstr "一致した取引を更新して清算済 (清) とマークするには \"更新+清算\" を選択してください。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:709
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr "一致した取引を清算済 (c) とマークするには \"C\" を選択してください。"
+msgstr "一致した取引を清算済 (清) とマークするには \"清算\" を選択してください。"
 
 #: gnucash/gtkbuilder/dialog-import.glade:721
 msgid "Select neither to skip the transaction (it won't be imported at all)."
@@ -16590,9 +16500,8 @@ msgid "Show Account Code"
 msgstr "勘定科目コードを表示する"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:663
-#, fuzzy
 msgid "Show Description"
-msgstr "説明"
+msgstr "説明を表示する"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:705
 msgid "Note: Use View->'Filter By...' to control visible accounts."
@@ -16619,14 +16528,12 @@ msgid "Delete the Selected Budget"
 msgstr "選択した予算を削除する"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:870
-#, fuzzy
 msgid "Budget Notes"
-msgstr "予算名"
+msgstr "予算の備考"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:928
-#, fuzzy
 msgid "Enter Note"
-msgstr "特記事項"
+msgstr "備考を入力してください。"
 
 #. Duplicate Transaction Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:13
@@ -17040,37 +16947,32 @@ msgid "Online Banking Connection Window"
 msgstr "インターネットバンキング接続ウィンドウ"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:29
-#, fuzzy
 msgid "_Abort"
-msgstr "GnuCash について(_A)"
+msgstr "中止(_A)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:85
 msgid "<b>Progress</b>"
 msgstr "<b>進行</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:106
-#, fuzzy
 msgid "Current _Job"
-msgstr "現在ジョブ"
+msgstr "現在ジョブ(_J)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:148
 msgid "Progress"
 msgstr "進行"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:162
-#, fuzzy
 msgid "Current _Action"
-msgstr "現在アクション"
+msgstr "現在アクション(_A)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:211
-#, fuzzy
 msgid "<b>_Log Messages</b>"
-msgstr "<b>ログメッセージ</b>"
+msgstr "<b>ログメッセージ(_L)</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:252
-#, fuzzy
 msgid "Close when _finished"
-msgstr "終了したら閉じる"
+msgstr "終了したら閉じる(_F)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:285
 msgid "Get Transactions Online"
@@ -17117,14 +17019,12 @@ msgid "Enter your password"
 msgstr "パスワードを入力してください"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:679
-#, fuzzy
 msgid "Con_firm Password"
-msgstr "パスワード確認:"
+msgstr "パスワード確認(_F)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:719
-#, fuzzy
 msgid "_Remember the PIN in memory"
-msgstr "PIN(暗証番号)をメモリ内に記憶する"
+msgstr "PIN (暗証番号) をメモリ内に記憶する(_R)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:725
 msgid "If active, the PIN for FinTS/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed."
@@ -17149,14 +17049,12 @@ msgid "Online Transaction"
 msgstr "オンライン取引"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:887
-#, fuzzy
 msgid "Execute _later (unimpl.)"
-msgstr "あとで実行（未実装）"
+msgstr "あとで実行（未実装）(_L)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:916
-#, fuzzy
 msgid "Execute _Now"
-msgstr "実行"
+msgstr "実行(_N)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:924
 msgid "Execute this online transaction now"
@@ -17167,19 +17065,16 @@ msgid "Enter an Online Transaction"
 msgstr "オンライン取引を入力する"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:987
-#, fuzzy
 msgid "Recipient Account _Number"
-msgstr "受取人口座番号"
+msgstr "受取人口座番号(_N)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1016
-#, fuzzy
 msgid "Recipient _Bank Code"
-msgstr "受取人銀行コード"
+msgstr "受取人銀行コード(_B)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1046
-#, fuzzy
 msgid "_Recipient Name"
-msgstr "受取人名"
+msgstr "受取人名(_R)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1062
 #: gnucash/import-export/aqb/dialog-ab.glade:1162
@@ -17212,54 +17107,48 @@ msgid "Bank Code"
 msgstr "銀行コード"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1371
-#, fuzzy
 msgid "_Add current"
-msgstr "現在の取引を追加"
+msgstr "現在の取引を追加(_A)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1377
 msgid "Add the current online transaction as a new transaction template"
 msgstr "現在のオンライン取引を新規取引テンプレートとして追加する"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1389
-#, fuzzy
 msgid "_Up"
-msgstr "上へ移動"
+msgstr "上へ移動(_U)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1395
 msgid "Move the selected transaction template one row up"
 msgstr "選択された取引テンプレートを1行上に移動"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1407
-#, fuzzy
 msgid "_Down"
-msgstr "下へ移動"
+msgstr "下へ移動(_D)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1413
 msgid "Move the selected transaction template one row down"
 msgstr "選択された取引テンプレートを1行下に移動"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1425
-#, fuzzy
 msgid "_Sort"
-msgstr "ソート"
+msgstr "ソート(_S)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1431
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "取引テンプレートの一覧をアルファベット順にソートする"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1443
-#, fuzzy
 msgid "D_elete"
-msgstr "削除"
+msgstr "削除(_E)"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1449
 msgid "Delete the currently selected transaction template"
 msgstr "現在選択されている取引テンプレートを削除する"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1498
-#, fuzzy
 msgid "_Templates"
-msgstr "テンプレート(_T):"
+msgstr "テンプレート(_T)"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:24
 msgid "<b>Online Banking</b>"
@@ -17785,102 +17674,103 @@ msgid "This setting specifies the data format when importing SWIFT MT942 files. 
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Validation...\n"
-msgstr "アプリケーション"
+msgstr "検証...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:328
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
-msgstr ""
+msgstr "行 %d: 請求書 ID がインポートファイルの最初の行にありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:336
 #, c-format
 msgid "Row %d, invoice %s/%u: owner not set.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 所有者の指定がありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:348
 #, c-format
 msgid "Row %d, invoice %s/%u: vendor %s does not exist.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 仕入先 %s は存在しません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:360
 #, c-format
 msgid "Row %d, invoice %s/%u: customer %s does not exist.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 得意先 %s は存在しません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:373
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: %s は有効な記帳日ではありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:381
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid due date.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: %s は有効な期日ではありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:405
 #: gnucash/import-export/bi-import/dialog-bi-import.c:476
-#, fuzzy, c-format
+#, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "選択した記帳勘定科目%sは存在しません。"
+msgstr "行 %d、請求書 %s/%u: 勘定科目 %s は存在しません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:417
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 勘定科目 %s のタイプは買掛金ではありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:427
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 勘定科目 %s のタイプは売掛金ではありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:465
 #, c-format
 msgid "Row %d, invoice %s/%u: price not set.\n"
-msgstr ""
+msgstr "行 %d、請求書 %s/%u: 価格の指定がありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:534
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "請求書 %s でエラーがありました、この請求書の全行は無視されます。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:540
 #, c-format
 msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "ID のない請求書でエラーがありました、この請求書の全行は無視されます。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Processing...\n"
-msgstr "支払処理(_P)..."
+msgstr ""
+"\n"
+"処理...\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:717
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s created.\n"
-msgstr "請求書 %s は記帳されました。\n"
+msgstr "請求書 %s は作成されました。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:732
-#, fuzzy
 msgid "Do you want to update existing bills/invoices?"
-msgstr "本当にこの請求書を記帳しますか?"
+msgstr "既存の請求書を更新しますか?"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:740
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s not updated because it already exists.\n"
-msgstr "請求書 %s は通貨の変換が必要なので記帳されませんでした。\n"
+msgstr "請求書 %s は既に存在するので更新されませんでした。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:755
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s not updated because it is already posted.\n"
-msgstr "請求書 %s は通貨の変換が必要なので記帳されませんでした。\n"
+msgstr "請求書 %s は記帳済なので更新されませんでした。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:768
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s updated.\n"
-msgstr "請求書 %s は記帳されました。\n"
+msgstr "請求書 %s は更新されました。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:891
 #, c-format
@@ -17898,28 +17788,24 @@ msgid "Invoice %s NOT posted because it requires currency conversion.\n"
 msgstr "請求書 %s は通貨の変換が必要なので記帳されませんでした。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:926
-#, fuzzy, c-format
+#, c-format
 msgid "Nothing to process.\n"
-msgstr "リセットする警告はありません。"
+msgstr "処理するものはありません。\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:128
-#, fuzzy
 msgid "ID"
-msgstr "ID 番号"
+msgstr "ID"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
-#, fuzzy
 msgid "Date-opened"
 msgstr "作成日"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
-#, fuzzy
 msgid "Owner-ID"
-msgstr "注文ID"
+msgstr "所有者 ID"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
-#, fuzzy
 msgid "Billing-ID"
 msgstr "請求 ID"
 
@@ -17931,14 +17817,12 @@ msgid "Quantity"
 msgstr "数量"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:154
-#, fuzzy
 msgid "Disc-type"
 msgstr "値引の種類"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:155
-#, fuzzy
 msgid "Disc-how"
-msgstr "値引"
+msgstr "値引方法"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/reports/standard/invoice.scm:100
@@ -17947,39 +17831,32 @@ msgid "Taxable"
 msgstr "税区分"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
-#, fuzzy
 msgid "Taxincluded"
-msgstr "税込(_X)"
+msgstr "税込"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:159
-#, fuzzy
 msgid "Tax-table"
-msgstr "税区分"
+msgstr "税額表"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:161
-#, fuzzy
 msgid "Date-posted"
 msgstr "記帳日"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
-#, fuzzy
 msgid "Due-date"
-msgstr "期日:"
+msgstr "期日"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:163
-#, fuzzy
 msgid "Account-posted"
-msgstr "勘定科目の備考"
+msgstr "記帳勘定科目"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:164
-#, fuzzy
 msgid "Memo-posted"
-msgstr "入金"
+msgstr "記帳摘要"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:165
-#, fuzzy
 msgid "Accu-splits"
-msgstr "複数スプリット"
+msgstr "スプリット累計"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:198
 msgid "Import Bills or Invoices from csv"
@@ -17998,6 +17875,15 @@ msgid ""
 "- invoices created: %u\n"
 "- invoices updated: %u"
 msgstr ""
+"インポート:\n"
+"- 無視された行数: %i\n"
+"- インポートされた行数: %i\n"
+"\n"
+"検証 & 処理:\n"
+"- 修復された行数: %u\n"
+"- 無視された行数: %u\n"
+"- 作成された請求書の数: %u\n"
+"- 更新された請求書の数: %u"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:229
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:205
@@ -18079,7 +17965,6 @@ msgstr ""
 "ファイルに必要な設定を選択し、処理を行う場合は \"進む\" をクリックしてください。エクスポートを中止する場合は \"キャンセル\" をクリックしてください。\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
-#, fuzzy
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
 " with the separator specified below.\n"
@@ -18100,13 +17985,12 @@ msgstr ""
 "\n"
 "各取引はエクスポート時に一度だけ、勘定科目の処理順に出力されます。\n"
 "\n"
-"Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"価格・レートの出力形式は設定ダイアログでの次の設定で制御できます:\n"
+" 全般->価格を強制的に小数点で表示する\n"
 "\n"
 "ファイルに必要な設定を選択し、処理を行う場合は \"進む\" をクリックしてください。エクスポートを中止する場合は \"キャンセル\" をクリックしてください。\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:115
-#, fuzzy
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
 " with the separator specified below.\n"
@@ -18125,8 +18009,8 @@ msgstr ""
 "\n"
 "各取引は複数行にわたって出力されるので、この取引情報を使いたい書式で読み取るには追加の編集作業をする必要があるかもしれません。各取引はエクスポート時に一度だけ、勘定科目の処理順に出力されます。\n"
 "\n"
-"Price/Rate output format is controlled by the Preference setting,\n"
-" General->Force Prices to display as decimals\n"
+"価格・レートの出力形式は設定ダイアログでの次の設定で制御できます:\n"
+" 全般->価格を強制的に小数点で表示する\n"
 "\n"
 "単純な配置を選択した場合は、出力結果は 1 行記録簿ビューと同一になるので、資金移動の詳細情報が一部失われるかもしれません。\n"
 "\n"
@@ -18752,44 +18636,36 @@ msgid "Import Prices from a CSV file"
 msgstr "CSV ファイルから価格をインポートします。"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:139
-#, fuzzy
 msgid "Shipping Name"
-msgstr "納品先"
+msgstr "納品先名"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:140
-#, fuzzy
 msgid "Shipping Address 1"
-msgstr "納品先住所"
+msgstr "納品先住所 1"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:141
-#, fuzzy
 msgid "Shipping Address 2"
-msgstr "納品先住所"
+msgstr "納品先住所 2"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:142
-#, fuzzy
 msgid "Shipping Address 3"
-msgstr "納品先住所"
+msgstr "納品先住所 3"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:143
-#, fuzzy
 msgid "Shipping Address 4"
-msgstr "納品先住所"
+msgstr "納品先住所 4"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:144
-#, fuzzy
 msgid "Shipping Phone"
-msgstr "納品担当者"
+msgstr "納品先電話"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:145
-#, fuzzy
 msgid "Shipping Fax"
-msgstr "納品先"
+msgstr "納品先 FAX"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:146
-#, fuzzy
 msgid "Shipping Email"
-msgstr "納品先"
+msgstr "納品先 Eメール"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:176
 msgid "Import Customers from csv"
@@ -18822,7 +18698,7 @@ msgstr ""
 "   %u 件%sが無視されました (修復不能)\n"
 "\n"
 "   %u 件%sが作成されました\n"
-"   %u 件%sが (id に基づき) 更新されました"
+"   %u 件%sが (ID に基づき) 更新されました"
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:59
 msgid "Import _Customers & Vendors..."
@@ -18838,9 +18714,9 @@ msgid "The account '%s' is a placeholder account and does not allow transactions
 msgstr "勘定科目 '%s' はプレースホルダー勘定科目であり取引が許されません。別の勘定科目を選択してください。"
 
 #: gnucash/import-export/import-account-matcher.c:277
-#, fuzzy, c-format
+#, c-format
 msgid "The account '%s' has a different commodity to the one required, '%s'. Please choose a different account."
-msgstr "勘定科目 %s はプレースホルダー勘定科目であり取引が許されません。別の勘定科目を選択してください。"
+msgstr "勘定科目 '%s' は別の商品 '%s' であることが必須です。別の勘定科目を選択してください。"
 
 #: gnucash/import-export/import-account-matcher.c:469
 msgid "(Full account ID: "
@@ -18876,23 +18752,19 @@ msgid "Assign a transfer account to the selection."
 msgstr "選択した行の資金移動先勘定科目を割り当てる"
 
 #: gnucash/import-export/import-main-matcher.c:805
-#, fuzzy
-#| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "追加"
 
 #: gnucash/import-export/import-main-matcher.c:808
-#, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "更新+清算"
 
 #: gnucash/import-export/import-main-matcher.c:812
-#, fuzzy
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
-msgstr "色"
+msgstr "清算"
 
 #: gnucash/import-export/import-main-matcher.c:818
 msgid "Info"
@@ -19053,9 +18925,8 @@ msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1233
-#, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
-msgstr "処理するOFX/QFXファイルを選択する"
+msgstr "処理する OFX/QFX ファイルを一つ以上選択する"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.c:46
 msgid "Import _OFX/QFX..."
@@ -19468,7 +19339,7 @@ msgstr "どの商品も相場表取得に設定されていません。"
 
 #: gnucash/price-quotes.scm:446 gnucash/price-quotes.scm:469
 msgid "Unable to get quotes or diagnose the problem."
-msgstr "相場表を取得できないか、あるいは問題を診断できません"
+msgstr "相場表を取得できないか、あるいは問題を診断できません。"
 
 #: gnucash/price-quotes.scm:450
 msgid ""
@@ -19481,7 +19352,7 @@ msgstr ""
 #: gnucash/price-quotes.scm:456
 #, scheme-format
 msgid "ERROR: ALPHAVANTAGE_API_KEY must be set for currency and quotes; see ~A"
-msgstr ""
+msgstr "エラー: 通貨や相場表を扱うには ALPHAVANTAGE_API_KEY が設定されている必要があります、次をご覧ください: ~A"
 
 #: gnucash/price-quotes.scm:461
 msgid "There was a system error while retrieving the price quotes."
@@ -21371,9 +21242,8 @@ msgid "This is for testing. Your reports probably shouldn't have an option like 
 msgstr "これはテスト用です。あなたの帳票にはこんなオプションはない方がいいでしょう。"
 
 #: gnucash/report/reports/example/hello-world.scm:215
-#, fuzzy
 msgid "This is a Radio Button option."
-msgstr "これは日付オプションです。"
+msgstr "これはラジオボタンオプションです。"
 
 #: gnucash/report/reports/example/hello-world.scm:342
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
@@ -21411,9 +21281,9 @@ msgid "false"
 msgstr "偽"
 
 #: gnucash/report/reports/example/hello-world.scm:368
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The radio button option is ~a."
-msgstr "文字列オプションは ~a です。"
+msgstr "ラジオボタンオプションは ~a です。"
 
 #: gnucash/report/reports/example/hello-world.scm:373
 #, scheme-format
@@ -21481,7 +21351,7 @@ msgstr "サンプル帳票例"
 
 #: gnucash/report/reports/example/hello-world.scm:514
 msgid "A sample report with examples."
-msgstr "サンプル帳票の例"
+msgstr "サンプル帳票の例です。"
 
 #: gnucash/report/reports/example/sample-graphs.scm:42
 msgid "Sample Graphs"
@@ -22479,50 +22349,45 @@ msgstr "各データ点のマーカーを表示します。"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:52
 #: gnucash/report/reports/standard/balance-forecast.scm:53
-#, fuzzy
 msgid "Show reserve line"
-msgstr "提出先情報を表示する"
+msgstr "準備行を表示する"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:55
-#, fuzzy
 msgid "Reserve amount"
-msgstr "貸借不一致"
+msgstr "準備金額"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
-msgstr ""
+msgstr "準備金額には望んでいる最少残高を設定します。"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:59
 #: gnucash/report/reports/standard/balance-forecast.scm:60
-#, fuzzy
 msgid "Show target line"
-msgstr "表を表示する"
+msgstr "目標行を表示する"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:62
 msgid "Target amount above reserve"
-msgstr ""
+msgstr "準備金額に積み増す目標金額"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:63
 msgid "The target is used to plan for a future large purchase, which will be added as a line above the reserve amount."
-msgstr ""
+msgstr "目標は将来の大きな購入費用を計画するのに使います。この値は準備金額の上に加算した行になります。"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:67
-#, fuzzy
 msgid "Show future minimum"
-msgstr "将来の最少残高"
+msgstr "将来の最少残高を表示する"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:68
 msgid "The future minimum will add, for each date point, a projected minimum balance including scheduled transactions."
-msgstr ""
+msgstr "将来の最少残高は各日付点に予定取引を含む計画上の最少残高を表示します。"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:255
-#, fuzzy
 msgid "Target"
-msgstr "請求"
+msgstr "目標"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:265
 msgid "Reserve"
-msgstr ""
+msgstr "準備"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:72
 #: gnucash/report/reports/standard/trial-balance.scm:573
@@ -23003,14 +22868,12 @@ msgid "Net Income"
 msgstr "純利益"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1322
-#, fuzzy
 msgid "Balance Sheet (Multicolumn)"
-msgstr "貸借対照表 (eguile)"
+msgstr "貸借対照表 (複数列)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1323
-#, fuzzy
 msgid "Income Statement (Multicolumn)"
-msgstr "損益計算書"
+msgstr "損益計算書 (複数列)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
@@ -23300,14 +23163,12 @@ msgid "Display a column for the budget values."
 msgstr "予算額の列を表示します。"
 
 #: gnucash/report/reports/standard/budget.scm:52
-#, fuzzy
 msgid "Show Budget Notes"
-msgstr "予算を表示する"
+msgstr "予算の備考を表示する"
 
 #: gnucash/report/reports/standard/budget.scm:53
-#, fuzzy
 msgid "Display a column for the budget notes."
-msgstr "予算額の列を表示します。"
+msgstr "予算の備考の列を表示します。"
 
 #: gnucash/report/reports/standard/budget.scm:54
 msgid "Show Actual"
@@ -23327,7 +23188,7 @@ msgstr "差額(予算-実績)を表示します。"
 
 #: gnucash/report/reports/standard/budget.scm:58
 msgid "Use accumulated amounts"
-msgstr ""
+msgstr "累計の金額を使う"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Values are accumulated across periods."
@@ -23375,7 +23236,7 @@ msgstr "帳票範囲の終了期間そのものを選択してください。"
 
 #: gnucash/report/reports/standard/budget.scm:85
 msgid "Include collapsed periods before selected."
-msgstr "選択より前の期間をまとめた列を含めます。"
+msgstr "選択より前の期間をまとめた列を含める。"
 
 #: gnucash/report/reports/standard/budget.scm:86
 msgid "Include in report previous periods as single collapsed column (one for all periods before starting)"
@@ -23383,7 +23244,7 @@ msgstr "帳票に前の期間を一つの列 (開始期間より前の全期間�
 
 #: gnucash/report/reports/standard/budget.scm:87
 msgid "Include collapsed periods after selected."
-msgstr "選択より後の期間をまとめた列を含めます。"
+msgstr "選択より後の期間をまとめた列を含める。"
 
 #: gnucash/report/reports/standard/budget.scm:88
 msgid "Include in report further periods as single collapsed column (one for all periods after ending and to the end of budget range)"
@@ -24381,11 +24242,11 @@ msgstr "表示する請求書項目の最小数です。"
 
 #: gnucash/report/reports/standard/invoice.scm:300
 msgid "Use Detailed Tax Summary"
-msgstr ""
+msgstr "詳細な税額の要約を使う"
 
 #: gnucash/report/reports/standard/invoice.scm:301
 msgid "Display all tax categories separately (one per line) instead of one single tax line.?"
-msgstr ""
+msgstr "一行の税額行の代わりに、全税額カテゴリーを別々に (各一行ずつ) 表示するかを指定します。"
 
 #: gnucash/report/reports/standard/invoice.scm:307
 msgid "References"
@@ -24470,9 +24331,8 @@ msgstr "行 3 右"
 
 #: gnucash/report/reports/standard/invoice.scm:436
 #: gnucash/report/reports/standard/job-report.scm:239
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "支払を行いました。ありがとうございます。"
+msgstr "支払を行いました。ありがとうございます!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:491
@@ -24606,15 +24466,13 @@ msgstr "有効な得意先が選択されていません。"
 
 #: gnucash/report/reports/standard/job-report.scm:578
 #: gnucash/report/reports/standard/new-owner-report.scm:98
-#, fuzzy
 msgid "No valid job selected."
-msgstr "有効な会社が選択されていません。"
+msgstr "有効な請求のまとめが選択されていません。"
 
 #: gnucash/report/reports/standard/job-report.scm:580
 #: gnucash/report/reports/standard/new-owner-report.scm:103
-#, fuzzy
 msgid "No valid vendor selected."
-msgstr "有効な得意先が選択されていません。"
+msgstr "有効な仕入先が選択されていません。"
 
 #: gnucash/report/reports/standard/job-report.scm:582
 #: gnucash/report/reports/standard/new-owner-report.scm:93
@@ -24623,9 +24481,8 @@ msgid "No valid employee selected."
 msgstr "有効な従業員が選択されていません。"
 
 #: gnucash/report/reports/standard/job-report.scm:585
-#, fuzzy
 msgid "Click on the \"Options\" button to select a company."
-msgstr "有効な ~a が選択されていません。オプションボタンをクリックして会社を選択してください。"
+msgstr "\"オプション\" ボタンをクリックして会社を選択してください。"
 
 #: gnucash/report/reports/standard/lot-viewer.scm:60
 #, fuzzy
@@ -24710,36 +24567,32 @@ msgstr "収益・費用折れ線グラフ"
 
 #: gnucash/report/reports/standard/new-aging.scm:63
 msgid "No valid A/Payable or A/Receivable account found. Please ensure valid AP/AR account exists."
-msgstr ""
+msgstr "有効な買掛金または売掛金勘定科目がありません。有効な買掛金または売掛金勘定科目を用意してください。"
 
 #: gnucash/report/reports/standard/new-aging.scm:66
 msgid "A/Payable or A/Receivable accounts exist but have no suitable transactions."
-msgstr ""
+msgstr "買掛金または売掛金勘定科目はありますが適切な取引がありません。"
 
 #: gnucash/report/reports/standard/new-aging.scm:110
-#, fuzzy
 msgid "Alphabetical order"
 msgstr "アルファベット順"
 
 #: gnucash/report/reports/standard/new-aging.scm:111
-#, fuzzy
 msgid "Reverse alphabetical order"
-msgstr "逆順(_R)"
+msgstr "逆アルファベット順"
 
 #: gnucash/report/reports/standard/new-aging.scm:340
-#, fuzzy
 msgid "Please note some transactions were not processed"
-msgstr "クリップボードにある取引を貼り付けます。"
+msgstr "なお、一部の取引は処理されませんでした。"
 
 #: gnucash/report/reports/standard/new-aging.scm:373
 #, scheme-format
 msgid "Invalid Txn Type ~a"
-msgstr ""
+msgstr "無効な取引タイプ ~a"
 
 #: gnucash/report/reports/standard/new-aging.scm:383
-#, fuzzy
 msgid "Payment has no owner"
-msgstr "支払を行いました。ありがとうございます。"
+msgstr "支払に所有者がいません"
 
 #: gnucash/report/reports/standard/new-aging.scm:413
 #: gnucash/report/reports/standard/receivables.scm:65
@@ -24792,7 +24645,7 @@ msgstr "借方"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:58
 msgid "Links"
-msgstr ""
+msgstr "リンク"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:89
 #: gnucash/report/reports/standard/owner-report.scm:87
@@ -24805,14 +24658,12 @@ msgid "This report requires a employee to be selected."
 msgstr "この帳票を出力するには従業員を選択する必要があります。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:99
-#, fuzzy
 msgid "This report requires a job to be selected."
-msgstr "この帳票を出力するには会社を選択する必要があります。"
+msgstr "この帳票を出力するには請求のまとめを選択する必要があります。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:104
-#, fuzzy
 msgid "This report requires a vendor to be selected."
-msgstr "この帳票を出力するには得意先を選択する必要があります。"
+msgstr "この帳票を出力するには仕入先を選択する必要があります。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:234
 #, fuzzy
@@ -24821,19 +24672,18 @@ msgstr "親勘定科目(_P)"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:287
 msgid "Link"
-msgstr ""
+msgstr "リンク"
 
 #. Translators: ~a History refers to main details table in owner
 #. report. ~a will be replaced with Customer, Vendor or Employee.
 #: gnucash/report/reports/standard/new-owner-report.scm:335
 #, scheme-format
 msgid "~a History"
-msgstr ""
+msgstr "~a履歴"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:337
-#, fuzzy
 msgid "Linked Details"
-msgstr "ローン詳細"
+msgstr "リンク詳細"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:491
 #: gnucash/report/reports/standard/owner-report.scm:463
@@ -24857,7 +24707,6 @@ msgstr "税金の列を表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:886
 #: gnucash/report/reports/standard/owner-report.scm:597
-#, fuzzy
 msgid "Display the period debits column?"
 msgstr "期間の借方の列を表示するかどうかを指定します。"
 
@@ -24878,23 +24727,20 @@ msgid "Show linked transactions"
 msgstr "無効化した取引のみを表示します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:904
-#, fuzzy
 msgid "Linked transactions are hidden."
-msgstr "検索により取引を見つけます。"
+msgstr "リンクされた取引は非表示です。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:906
-#, fuzzy
 msgid "Simple"
-msgstr "表示例:"
+msgstr "単純"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:907
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:909
-#, fuzzy
 msgid "Detailed"
-msgstr "失敗しました"
+msgstr "詳細"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:910
 msgid "Invoices show list of payments, payments show list of invoices and amounts."
@@ -24911,14 +24757,13 @@ msgid "This report requires a valid AP/AR account to be available."
 msgstr "この帳票を出力するには有効な勘定科目を選択する必要があります。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1063
-#, fuzzy
 msgid "No transactions found."
-msgstr "一致する取引はありませんでした"
+msgstr "取引がありません。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1065
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "No transactions were found associated with the ~a."
-msgstr "この取引は URI と関連付けられていません。"
+msgstr "この~aと関連付けられた取引がありませんでした。"
 
 #: gnucash/report/reports/standard/owner-report.scm:84
 msgid "No valid company selected."
@@ -25195,9 +25040,8 @@ msgstr "%x(%A)"
 
 #: gnucash/report/reports/standard/receipt.scm:140
 #: gnucash/report/reports/standard/taxinvoice.scm:198
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "支払を受け取りました。ありがとうございます。"
+msgstr "支払を受け取りました。ありがとうございます!"
 
 #: gnucash/report/reports/standard/receipt.scm:144
 msgid "Notes added at end of invoice -- may contain HTML markup"
@@ -27720,36 +27564,6 @@ msgstr "ヘルプが利用できません。"
 #~ "\n"
 #~ "インポートするための場所とファイル名を選択して、'OK' を押してください...\n"
 
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "1/10"
-#~ msgstr "1/10"
-
-#~ msgid "1/100"
-#~ msgstr "1/100"
-
-#~ msgid "1/1000"
-#~ msgstr "1/1000"
-
-#~ msgid "1/10000"
-#~ msgstr "1/10000"
-
-#~ msgid "1/100000"
-#~ msgstr "1/100000"
-
-#~ msgid "1/1000000"
-#~ msgstr "1/1000000"
-
-#~ msgid "1/10000000"
-#~ msgstr "1/10000000"
-
-#~ msgid "1/100000000"
-#~ msgstr "1/100000000"
-
-#~ msgid "1/1000000000"
-#~ msgstr "1/1000000000"
-
 #, fuzzy
 #~ msgid "20"
 #~ msgstr "0"
@@ -28303,9 +28117,6 @@ msgstr "ヘルプが利用できません。"
 
 #~ msgid "Report Currency"
 #~ msgstr "帳票の通貨"
-
-#~ msgid "Payment received, thank you."
-#~ msgstr "支払を受け取りました。ありがとうございます。"
 
 #~ msgid "Roll up budget amounts to parent"
 #~ msgstr "親勘定科目に予算の累計額を表示する"
@@ -29357,9 +29168,6 @@ msgstr "ヘルプが利用できません。"
 
 #~ msgid "FILO"
 #~ msgstr "FILO"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "GnuCash 2.4にようこそ!"
 
 #~ msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
 #~ msgstr "html および構文解析済み html ファイルを検索するディレクトリ (文字列) の一覧です。各要素はディレクトリを表す文字列またはシンボルでなければいけません。'default シンボルはデフォルトのパスに展開されます。 'current は現在のパスに展開されます。"
