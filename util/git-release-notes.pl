@@ -26,6 +26,18 @@ sub text_format {
     print_notes($notes) if ($notes);
 }
 
+# escape_html lifted from https://metacpan.org/source/TOKUHIROM/HTML-Escape-1.10/lib/HTML/Escape/PurePerl.pm.
+our %_escape_table = ( '&' => '&amp;', '>' => '&gt;', '<' => '&lt;',
+                       q{"} => '&quot;', q{'} => '&#39;', q{`} => '&#96;',
+                       '{' => '&#123;', '}' => '&#125;' );
+sub escape_html {
+    my $str = shift;
+    return ''
+        unless defined $str;
+    $str =~ s/([&><"'`{}])/$_escape_table{$1}/ge; #' for poor editors
+    return $str;
+}
+
 sub html_format_bug {
     my $string = shift;
     my $href='"https://bugs.gnucash.org/show_bug.cgi?id=XXXXXX"';
@@ -34,6 +46,9 @@ sub html_format_bug {
     my $num = $1;
     die "No bug number in $sum" if ! $num;
     $href =~ s/XXXXXX/$num/;
+    $sum = escape_html($sum);
+    $desc = escape_html($desc);
+    $notes = escape_html($notes);
     print "<li><a href=$href>$sum</a>";
     print "<p>$desc</p>" if ($desc);
     print_notes($notes) if ($notes);
@@ -44,6 +59,9 @@ sub html_format_other {
     my $string = shift;
     my ($sum, $desc, $notes) = split('\<\|\>', $string);
     die "No summary in $string" if not $sum;
+    $sum = escape_html($sum);
+    $desc = escape_html($desc);
+    $notes = escape_html($notes);
     print "<li>$sum";
     print "<p>$desc</p>" if ($desc);
     print_notes($notes) if ($notes);
