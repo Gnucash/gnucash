@@ -1,5 +1,79 @@
 Version history:
 ------- -------
+4.1  - 26 July 2020
+The second release of the 4.x stable series.
+
+Between 4.0 and XXX, the following bugfixes were accomplished:
+
+    Bug 775582 - Change "Petrol" (or Gas if seen in USA) to "Fuel".
+    Bug 797759 - Some transactions are not highlighted in the matching window
+    Bug 797787 - Feature request: preference setting to open new tabs adjacent
+                 to currently active tab (as opposed to at the end of the tab
+                 list).
+    Bug 797825 - OFX import crashes on import of investment transaction
+    Bug 797827 - 4.0.1 gnucash-cli seg faults on macOS Catalina
+    Bug 797828 - Budget Barchart was not upgraded
+                 Upgrade to html-chart: Use period start/end instead of
+                 date start/end
+    Bug 797830 - Expense over time has extra empty row
+    Bug 797831 - Printer not found
+    Bug 797834 - Ctrl+A in account register fields chimes after any element
+                 newly focussed.
+    Bug 797835 - Zero Crossing in 4.0 that wasn't in 3.10
+    Bug 797842 - Windows: Insertion cursor invisible in Edit Account or New
+                 Account windows until text fields have content.
+    Bug 797843 - Quickfill broken with Cyrillic input language
+    Bug 797844 - Typing account number to select account fails
+    Bug 797845 - Backspace key produces incorrect result
+    Bug 797847 - Best match probability calculation on import is too
+                 pessimistic.
+                 Lowering the minimum value for the auto-clear preference.
+                 This is to  allow user to still auto clear even when date
+                 doesn't match exactly.
+    Bug 797850 - Account register credit/debit column headings untranslated
+    Bug 797853 - Crash on "Save As" in MacOS Mojave and Gnucash 4
+    Bug 797854 - Global Register Preference to prompt for interest payment is
+                 not being honored.
+                 Replace the global preference item with a per-account option,
+                 enabled only on those account types where interest might be
+                 paid or charged.
+    Bug 797858 - Transaction date is one day too early from SWIFT MT940 import.
+    Bug 797861 - Yearly / Monthly average reporting displays zeros
+    Bug 797873 - New Account Hierarchy selects en_US
+
+The following fixes and improvements were not associated with bug reports:
+
+    Accommodate Guile-3.0 in Scheme code.
+    [html-style-info] Display fractional amounts as decimal in price-render
+    Warn against using xaccTransGetSplit for iteration instead of encouraging it.
+    Quickfill cells: Remove the selection after a delete.
+    Accommodate AQBanking < 6 use of GWEN_TIME instead of GWEN_DATE.
+    ensure averaging-multipler returns exact numbers rather than floats
+    [gnucash-cli] improve "-R show" to describe report
+    Don't leak the libofx contexts in gnc_file_ofx_import_process_file/
+    Make the edit dialog refresh the auto-interest flag display based on pref
+    Remove global preference for auto-interest-transfer
+    [Reports] Use SRFI-9 records for HTML styling.
+    [html-style-sheet] combine 2 similar functions
+    Let environment override AppleLanguages on Macs.
+    [balsheet-eg] remove unused functions
+    [balsheet-eg] modernize accrec to use srfi-9 record
+    [account.cpp] prevent crash in gnc_account_get_currency_or_parent.
+    CMakeLists: mark deprecation of .scm files
+    [eguile-utilities] Ensure that fmtnumeric renders numbers as decimals instead of exact fractions.
+    [Python Bindings] Implement keyword paramters to selected functions.
+    [Python Bindings] Adapt to use of sessionOpenMode in qof_session_begin
+    introduce python submodule deprecation.
+    Link with libm.so on those platforms that require it.
+    [account-piecharts] round account->balance to report-currency SCU
+    [report-utilities] ensure commodity-collector doesn't round amounts
+    [advanced-portfolio] simplify basis functions
+    [advanced-portfolio] simplify basis-builderand use scheme division which is more accurate than gnc_numeric_div. tests need to change slightly. 
+    [git-release-notes.pl] html-escape strings in the html output.
+
+
+Updated Translations: Croatian, Hebrew, Italian, Japanese, Romanian, Ukrainian
+
 4.0  - 28 June 2020
 The first release of the 4.x stable series.
 
@@ -110,7 +184,7 @@ Between 3.905 and 3.906, the following bugfixes were accomplished. Some of these
 
 The following fixes and improvements were not associated with bug reports or new features:
     Add missing #includes into gnc-imp-settings-csv-price.cpp
-      Found in failed win maint nightlies.</p></li>
+      Found in failed win maint nightlies.
     [business-core] string-hash doesn't guarantee unique hash, use guid
       string instead.
 
@@ -121,9 +195,9 @@ The fourth unstable release leading to the new 4.x stable series. See 3.902 and 
 
 Between 3.904 and 3.905, the following bugfixes were accomplished. Some of
 these will also be fixed in GnuCash 3.11, some are for 4.0 only.
-<ul>
+
     Bug 796993 - Gnucash should warn the user in case of missing Alphavantage
-                 API key instead of silently failing</a></li>
+                 API key instead of silently failing
     Bug 797531 - Improve behaviour when following a hyperlink to a split that's
                  filtered in the register. Currently if a jump to a filtered
                  register is made, this could be from a report, other register,
@@ -132,7 +206,7 @@ these will also be fixed in GnuCash 3.11, some are for 4.0 only.
                  last active cell. This could be confusing so add a test for
                  the destination split being visible and warn the user with an
                  option to temporarily clear the filter.
-    Bug 797746 - [reports] German umlauts not escaped</a></li>
+    Bug 797746 - [reports] German umlauts not escaped
     Bug 797790 - [Transaction Association] Change dialogue: use existing
                  information to determine the default folder. When there is no
                  association set, if the file option is chosen set the default
@@ -142,7 +216,7 @@ these will also be fixed in GnuCash 3.11, some are for 4.0 only.
                  'gnucash.exe --help'? Make gnucash-cli a console application
                  on Windows so that its output will be redirected to the
                  connected console.
-    Bug 797799 - Add Tip of the Day for "Notes" field</a></li>
+    Bug 797799 - Add Tip of the Day for "Notes" field
     Bug 797804 - Date entry field is glitchy (v3.904 regression)
 
 The following fixes and improvements were not associated with bug reports or new features:
@@ -163,7 +237,7 @@ The following fixes and improvements were not associated with bug reports or new
         Suggestion by Adrien Monteleone.
     Drop unused boost::locale::generator instantiations.
         We now have one single case in gnc-locale-utils and all code uses
-        gnc_get_boost_locale to get the proper locale. </p>
+        gnc_get_boost_locale to get the proper locale.
     Fix translations using boost::locale::translate
     Fix report dependencies that caused Xcode build failure.
     Update Schedule Transaction Template dialog status bar.
