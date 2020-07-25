@@ -532,8 +532,12 @@ update_language_region_combos (hierarchy_data *data, const gchar *locale_dir)
                 {
                     gtk_list_store_set (region_store, &region_iter, LANGUAGE_STRING, "en", REGION_STRING, "US", -1);
                     lang_name = g_strdup ("en");
-                    g_free (start_region);
-                    start_region = g_strdup (lang_name);
+
+                    if (g_str_has_suffix (locale_dir, name))
+                    {
+                        g_free (start_region);
+                        start_region = g_strdup (lang_name);
+                    }
                 }
                 else
                     lang_name = g_strdup (parts[0]);
