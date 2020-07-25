@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gnucash 4.0\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-06-27 15:34-0700\n"
-"PO-Revision-Date: 2020-07-24 17:08+0900\n"
+"PO-Revision-Date: 2020-07-25 23:06+0900\n"
 "Last-Translator: Yasuaki Taniguchi <yasuakit@gmail.com>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
 "Language: ja\n"
@@ -18918,11 +18918,11 @@ msgstr "不明なOFX投資勘定科目"
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1176
 #, c-format
 msgid "OFX file '%s' imported, %d transactions processed, no transactions to match"
-msgstr ""
+msgstr "OFX ファイル '%s' がインポートされ、取引を %d 個処理しましたが、一致する取引がありません"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1228
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr ""
+msgstr "Open/Quicken Financial Exchange ファイル (*.ofx, *.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.c:1233
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -21359,19 +21359,19 @@ msgstr "サンプルグラフ"
 
 #: gnucash/report/reports/example/sample-graphs.scm:142
 msgid "Pie:"
-msgstr ""
+msgstr "円:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:147
 msgid "Bar, normal:"
-msgstr ""
+msgstr "棒、通常:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:152
 msgid "Bar, stacked:"
-msgstr ""
+msgstr "棒、積み上げ:"
 
 #: gnucash/report/reports/example/sample-graphs.scm:157
 msgid "Scatter:"
-msgstr ""
+msgstr "散布:"
 
 #: gnucash/report/reports/example/welcome-to-gnucash.scm:41
 #, scheme-format
@@ -24141,7 +24141,7 @@ msgstr "画像の場所"
 
 #: gnucash/report/reports/standard/invoice.scm:207
 msgid "Location for Picture"
-msgstr ""
+msgstr "画像の場所です。"
 
 #: gnucash/report/reports/standard/invoice.scm:213
 #: gnucash/report/reports/standard/register.scm:382
@@ -24485,9 +24485,8 @@ msgid "Click on the \"Options\" button to select a company."
 msgstr "\"オプション\" ボタンをクリックして会社を選択してください。"
 
 #: gnucash/report/reports/standard/lot-viewer.scm:60
-#, fuzzy
 msgid "The account to search for lots."
-msgstr "取引を検索する勘定科目です。"
+msgstr "ロットを検索する勘定科目です。"
 
 #: gnucash/report/reports/standard/net-charts.scm:47
 #: gnucash/report/reports/standard/price-scatter.scm:49
@@ -24666,9 +24665,8 @@ msgid "This report requires a vendor to be selected."
 msgstr "この帳票を出力するには仕入先を選択する必要があります。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:234
-#, fuzzy
 msgid "Partial Amount"
-msgstr "親勘定科目(_P)"
+msgstr "一部支払金額"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:287
 msgid "Link"
@@ -24722,9 +24720,8 @@ msgid "Display a running balance?"
 msgstr "運用中の残高を表示するかどうかを指定します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:901
-#, fuzzy
 msgid "Show linked transactions"
-msgstr "無効化した取引のみを表示します。"
+msgstr "リンクされた取引を表示します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:904
 msgid "Linked transactions are hidden."
@@ -24736,7 +24733,7 @@ msgstr "単純"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:907
 msgid "Invoices show if paid, payments show invoice numbers."
-msgstr ""
+msgstr "請求書では支払済かどうかを表示し、支払では請求書番号を表示します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:909
 msgid "Detailed"
@@ -24744,7 +24741,7 @@ msgstr "詳細"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:910
 msgid "Invoices show list of payments, payments show list of invoices and amounts."
-msgstr ""
+msgstr "請求書では支払一覧を表示し、支払では請求書番号と金額の一覧を表示します。"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1039
 #, fuzzy
@@ -26118,12 +26115,11 @@ msgstr "取引フィルターに正規表現を使う"
 
 #: gnucash/report/trep-engine.scm:94
 msgid "Transaction Filter excludes matched strings"
-msgstr ""
+msgstr "取引フィルターは一致した文字列を除外する"
 
 #: gnucash/report/trep-engine.scm:96
-#, fuzzy
 msgid "Transaction Filter is case insensitive"
-msgstr "取引フィルター"
+msgstr "取引フィルターは大文字小文字を区別しない"
 
 #: gnucash/report/trep-engine.scm:97
 msgid "Reconcile Status"
@@ -26383,11 +26379,11 @@ msgstr "デフォルトではこの取引フィルターは文字列の部分一
 
 #: gnucash/report/trep-engine.scm:616
 msgid "If this option is selected, transactions matching filter are excluded."
-msgstr ""
+msgstr "このオプションを選択すると、フィルターに一致する取引は除外されます。"
 
 #: gnucash/report/trep-engine.scm:623
 msgid "If this option is selected, transactions matching filter is not case sensitive."
-msgstr ""
+msgstr "このオプションを選択すると、取引一致フィルターは大文字小文字を区別しません。"
 
 #: gnucash/report/trep-engine.scm:629
 msgid "Filter by reconcile status."
@@ -26482,14 +26478,12 @@ msgid "Display the other account code?"
 msgstr "相手勘定科目コードを表示するかどうかを指定します。"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
 msgid "Display the transaction association"
-msgstr "取引の説明を表示するかどうかを指定します。"
+msgstr "取引の関連付けを表示するかどうかを指定します。"
 
 #: gnucash/report/trep-engine.scm:952
-#, fuzzy
 msgid "Display a subtotal summary table."
-msgstr "小計を表示するかどうかを指定します。"
+msgstr "小計の要約表を表示するかどうかを指定します。"
 
 #: gnucash/report/trep-engine.scm:960
 msgid "Display the trans number?"
@@ -26546,7 +26540,7 @@ msgstr "資金移動元/先"
 #. Translators: 'A' is short for Association
 #: gnucash/report/trep-engine.scm:1253 gnucash/report/trep-engine.scm:1254
 msgid "A"
-msgstr "追加"
+msgstr "関連"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
