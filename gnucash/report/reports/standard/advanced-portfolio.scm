@@ -182,6 +182,17 @@ by preventing negative stock balances.<br/>")
 
 ;; helper functions for renderer
 
+(define (same-account? a1 a2)
+  (equal? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
+
+;; Return true if either account is the parent of the other or they are siblings
+(define (parent-or-sibling? a1 a2)
+  (let ((a2parent (gnc-account-get-parent a2))
+        (a1parent (gnc-account-get-parent a1)))
+    (or (same-account? a2parent a1)
+        (same-account? a1parent a2)
+        (same-account? a1parent a2parent))))
+
 ;; sum up the contents of the b-list built by basis-builder below
 (define (sum-basis b-list currency-frac)
   (fold (lambda (a b) (+ (* (car a) (cdr a)) b)) 0 b-list))
@@ -897,9 +908,6 @@ by preventing negative stock balances.<br/>")
   (define (same-split? s1 s2)
     (equal? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
 
-  (define (same-account? a1 a2)
-    (equal? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
-
   ;; Given a price list and a currency find the price for that currency on the list.
   ;; If there is none for the requested currency, return the first one.
   ;; The price list is released but the price returned is ref counted.
@@ -916,14 +924,6 @@ by preventing negative stock balances.<br/>")
         (gnc-price-ref price)
         (gnc-price-list-destroy price-list)
         price)))
-
-  ;; Return true if either account is the parent of the other or they are siblings
-  (define (parent-or-sibling? a1 a2)
-    (let ((a2parent (gnc-account-get-parent a2))
-          (a1parent (gnc-account-get-parent a1)))
-          (or (same-account? a2parent a1)
-              (same-account? a1parent a2)
-              (same-account? a1parent a2parent))))
 
   ;; Test whether the given split is the source of a spin off transaction
   ;; This will be a no-units split with only one other split.
