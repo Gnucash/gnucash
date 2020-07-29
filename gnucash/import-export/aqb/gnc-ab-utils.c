@@ -99,7 +99,8 @@ gnc_gwen_date_to_time64 (const GNC_GWEN_DATE* date)
 #else
     int month, day, year;
     GWEN_Time_GetBrokenDownDate(date, &day, &month, &year);
-    return gnc_dmy2time64_neutral(day, month, year);
+    /* GWEN_Time_GetBrokenDownDate returns localtime(3) format; month is [0..11] */
+    return gnc_dmy2time64_neutral(day, month + 1, year);
 #endif
 }
 
