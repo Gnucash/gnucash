@@ -415,8 +415,7 @@ balance at a given time"))
               ((WeekDelta) (string-append report-title " " (G_ "Weekly Average")))
               (else report-title)))
            (combined '())
-           (other-anchor "")
-           (print-info (gnc-commodity-print-info report-currency #t)))
+           (other-anchor ""))
 
       ;; Converts a commodity-collector into one single inexact
       ;; number, depending on the report's currency and the
@@ -525,7 +524,12 @@ balance at a given time"))
                                                    ((if show-fullname?
                                                         gnc-account-get-full-name
                                                         xaccAccountGetName) acct))))))))
-                               combined))))
+                               combined)))
+                   (scu (gnc-commodity-get-fraction report-currency)))
+
+               (define (round-scu amt)
+                 (gnc-numeric-convert amt scu GNC-HOW-RND-ROUND))
+
                (gnc:html-chart-set-type! chart 'pie)
 
                (gnc:html-chart-set-currency-iso!
@@ -550,13 +554,14 @@ balance at a given time"))
                                     #f ": ~a"
                                     (gnc:monetary->string
                                      (gnc:make-gnc-monetary
-                                      report-currency total))))
+                                      report-currency
+                                      (round-scu total)))))
                                  ""))))
                (gnc:html-chart-set-width! chart width)
                (gnc:html-chart-set-height! chart height)
                (gnc:html-chart-add-data-series! chart
                                                 "Accounts"
-                                                (unzip1 combined)
+                                                (map round-scu (unzip1 combined))
                                                 (gnc:assign-colors (length combined))
                                                 'urls urls)
                (gnc:html-chart-set-axes-display! chart #f)
@@ -575,7 +580,7 @@ balance at a given time"))
                          (gnc:monetary->string
                           (gnc:make-gnc-monetary
                            report-currency
-                           (car series))))
+                           (round-scu (car series)))))
                         "")
                     (if show-percent?
                         (format #f " (~2,1f%)"
