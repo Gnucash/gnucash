@@ -2,9 +2,9 @@
   <menubar>
     <menu name="File" action="FileAction">
       <menu name="FileImport" action="FileImportAction">
-      	<placeholder name="FileImportPlaceholder">
-      	   <menuitem name="LogReplay" action="LogReplayAction"/>
-      	</placeholder>
+        <placeholder name="FileImportPlaceholder">
+           <menuitem name="LogReplay" action="LogReplayAction"/>
+        </placeholder>
       </menu>
     </menu>
   </menubar>
