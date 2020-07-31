@@ -2,9 +2,9 @@
   <menubar>
     <menu name="File" action="FileAction">
       <menu name="FileImport" action="FileImportAction">
-          <placeholder name="FileImportPlaceholder">
-           <menuitem name="bi_import" action="bi_importAction"/>
-      	</placeholder>
+        <placeholder name="FileImportPlaceholder">
+          <menuitem name="bi_import" action="bi_importAction"/>
+        </placeholder>
       </menu>
     </menu>
   </menubar>
