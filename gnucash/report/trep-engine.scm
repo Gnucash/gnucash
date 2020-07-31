@@ -1915,7 +1915,7 @@ be excluded from periodic reporting.")
                 row 'col-total commodity-idx (length list-of-cols)))
          '())))
   (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-caption! table optname-grid)
+    (gnc:html-table-set-caption! table (G_ optname-grid))
     (gnc:html-table-set-col-headers!
      table (append (list "")
                    (map cdr list-of-cols)
