@@ -2,6 +2,7 @@
 set(example_scripts_DATA
         account_analysis.py
         change_tax_code.py
+        export_account_totals.py
         Invoice.tex
         latex_invoices.py
         new_book_with_opening_balances.py
