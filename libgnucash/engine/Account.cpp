@@ -1859,6 +1859,29 @@ gnc_account_set_balance_dirty (Account *acc)
     priv->balance_dirty = TRUE;
 }
 
+void gnc_account_set_defer_bal_computation (Account *acc, gboolean defer)
+{
+    AccountPrivate *priv;
+    
+    g_return_if_fail (GNC_IS_ACCOUNT (acc));
+    
+    if (qof_instance_get_destroying (acc))
+        return;
+    
+    priv = GET_PRIVATE (acc);
+    priv->defer_bal_computation = defer;
+}
+
+gboolean gnc_account_get_defer_bal_computation (Account *acc)
+{
+    AccountPrivate *priv;
+    if (!acc)
+        return false;
+    priv = GET_PRIVATE (acc);
+    return priv->defer_bal_computation;
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
@@ -2214,7 +2237,7 @@ xaccAccountRecomputeBalance (Account * acc)
 
     priv = GET_PRIVATE(acc);
     if (qof_instance_get_editlevel(acc) > 0) return;
-    if (!priv->balance_dirty) return;
+    if (!priv->balance_dirty || priv->defer_bal_computation) return;
     if (qof_instance_get_destroying(acc)) return;
     if (qof_book_shutting_down(qof_instance_get_book(acc))) return;
 

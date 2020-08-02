@@ -126,6 +126,7 @@ typedef struct AccountPrivate
      * in any way desired.  Handy for specialty traversals of the
      * account tree. */
     short mark;
+    gboolean defer_bal_computation;
 } AccountPrivate;
 
 struct account_s

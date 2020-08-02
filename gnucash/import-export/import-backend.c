@@ -426,8 +426,6 @@ TransactionGetTokens(GNCImportTransInfo *info)
     time64 transtime;
     struct tm *tm_struct;
     char local_day_of_week[16];
-    Split* split;
-    int split_index;
 
     g_return_val_if_fail (info, NULL);
     if (info->match_tokens) return info->match_tokens;
@@ -458,12 +456,10 @@ TransactionGetTokens(GNCImportTransInfo *info)
     tokens = g_list_prepend(tokens, g_strdup(local_day_of_week));
 
     /* make tokens from the memo of each split of this transaction */
-    split_index = 0;
-    while ((split = xaccTransGetSplit(transaction, split_index)))
+    for (GList *split=xaccTransGetSplitList (transaction); split; split=split->next)
     {
-        text = xaccSplitGetMemo(split);
+        text = xaccSplitGetMemo(split->data);
         tokens = tokenize_string(tokens, text);
-        split_index++; /* next split */
     }
 
     /* remember the list of tokens for later.. */
@@ -607,7 +603,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 
 /** @brief The transaction matching heuristics are here.
  */
-static void split_find_match (GNCImportTransInfo * trans_info,
+void split_find_match (GNCImportTransInfo * trans_info,
                               Split * split,
                               gint display_threshold,
                               double fuzzy_amount_difference)
@@ -626,10 +622,6 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         int datediff_day;
         Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
         Split *new_trans_fsplit = gnc_import_TransInfo_get_fsplit (trans_info);
-
-        // Do not consider transactions that have been previously matched.
-        if (gnc_import_split_has_online_id (split))
-            return;
 
         /* Matching heuristics */
 
@@ -820,66 +812,6 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                            match_info);
     }
 }/* end split_find_match */
-
-
-/** /brief Iterate through all splits of the originating account of the given
-   transaction, and find all matching splits there. */
-void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
-                                   gint process_threshold,
-                                   double fuzzy_amount_difference,
-                                   gint match_date_hardlimit)
-{
-    GList * list_element;
-    Query *query = qof_query_create_for(GNC_ID_SPLIT);
-    g_assert (trans_info);
-
-    /* Get list of splits of the originating account. */
-    {
-        /* We used to traverse *all* splits of the account by using
-           xaccAccountGetSplitList, which is a bad idea because 90% of these
-           splits are outside the date range that is interesting. We should
-           rather use a query according to the date region, which is
-           implemented here.
-        */
-        Account *importaccount =
-            xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (trans_info));
-        time64 download_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
-
-        qof_query_set_book (query, gnc_get_current_book());
-        xaccQueryAddSingleAccountMatch (query, importaccount,
-                                        QOF_QUERY_AND);
-        xaccQueryAddDateMatchTT (query,
-                                 TRUE, download_time - match_date_hardlimit * 86400,
-                                 TRUE, download_time + match_date_hardlimit * 86400,
-                                 QOF_QUERY_AND);
-        list_element = qof_query_run (query);
-        /* Sigh. Doesn't help too much. We still create and run one query
-           for each imported transaction. Maybe it would improve
-           performance further if there is one single (master-)query at
-           the beginning, matching the full date range and all accounts in
-           question. However, this doesn't quite work because this function
-           here is called from each gnc_gen_trans_list_add_trans(), which
-           is called one at a time. Therefore the whole importer would
-           have to change its behaviour: Accept the imported txns via
-           gnc_gen_trans_list_add_trans(), and only when
-           gnc_gen_trans_list_run() is called, then calculate all the
-           different match candidates. That's too much work for now.
-        */
-    }
-
-    /* Traverse that list, calling split_find_match on each one. Note
-       that xaccAccountForEachSplit is declared in Account.h but
-       implemented nowhere :-( */
-    while (list_element != NULL)
-    {
-        split_find_match (trans_info, list_element->data,
-                          process_threshold, fuzzy_amount_difference);
-        list_element = g_list_next (list_element);
-    }
-
-    qof_query_destroy (query);
-}
-
 
 /***********************************************************************
  */
@@ -1145,9 +1077,27 @@ static gint check_trans_online_id(Transaction *trans1, void *user_data)
     }
 }
 
+static gint collect_trans_online_id(Transaction *trans, void *user_data)
+{
+    Split *split;
+    GHashTable *id_hash = user_data;
+    int i=0;
+    
+    const gchar* online_id = gnc_import_get_trans_online_id (trans);
+    if (online_id)
+        g_hash_table_add (id_hash, (void*) online_id);
+
+    for (GList *splits = xaccTransGetSplitList (trans); splits; splits = splits->next)
+    {
+        if (gnc_import_split_has_online_id (splits->data))
+            g_hash_table_add(id_hash, (void*) gnc_import_get_split_online_id (splits->data));
+    }
+    return 0;
+}
+
 /** Checks whether the given transaction's online_id already exists in
   its parent account. */
-gboolean gnc_import_exists_online_id (Transaction *trans)
+gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_hash)
 {
     gboolean online_id_exists = FALSE;
     Account *dest_acct;
@@ -1156,13 +1106,18 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
     /* Look for an online_id in the first split */
     source_split = xaccTransGetSplit(trans, 0);
     g_assert(source_split);
-
-    /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
-    dest_acct = xaccSplitGetAccount(source_split);
-    online_id_exists = xaccAccountForEachTransaction(dest_acct,
-                       check_trans_online_id,
-                       source_split);
-
+    // Create a hash per account of a hash of all transactions IDs. Then the test below will be fast if
+    // we have many transactions to import.
+    dest_acct = xaccSplitGetAccount (source_split);
+    if (!g_hash_table_contains (acct_id_hash, dest_acct))
+    {
+        GHashTable* new_hash = g_hash_table_new (g_str_hash, g_str_equal);
+        g_hash_table_insert (acct_id_hash, dest_acct, new_hash);
+        xaccAccountForEachTransaction (dest_acct, collect_trans_online_id, new_hash);
+    }
+    online_id_exists = g_hash_table_contains (g_hash_table_lookup (acct_id_hash, dest_acct),
+                                              gnc_import_get_split_online_id (source_split));
+    
     /* If it does, abort the process for this transaction, since it is
        already in the system. */
     if (online_id_exists == TRUE)
@@ -1221,13 +1176,6 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
 {
     GNCImportMatchInfo * best_match = NULL;
     g_assert (trans_info);
-
-
-    /* Find all split matches in originating account. */
-    gnc_import_find_split_matches(trans_info,
-                                  gnc_import_Settings_get_display_threshold (settings),
-                                  gnc_import_Settings_get_fuzzy_amount (settings),
-                                  gnc_import_Settings_get_match_date_hardlimit (settings));
 
     if (trans_info->match_list != NULL)
     {
