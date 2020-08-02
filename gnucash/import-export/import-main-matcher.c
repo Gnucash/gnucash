@@ -389,6 +389,7 @@ resolve_conflicts (GNCImportMainMatcher *info)
 void gnc_gen_trans_list_show_all(GNCImportMainMatcher *info)
 {
     gnc_gen_trans_list_create_matches (info);
+    resolve_conflicts (info);
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 }
 
