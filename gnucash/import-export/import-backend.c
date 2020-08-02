@@ -113,6 +113,22 @@ gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info)
     return info->match_list;
 }
 
+void
+gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list)
+{
+    g_assert (info);
+    info->match_list = match_list;
+    if (match_list)
+    {
+        info->selected_match_info.selected_match = match_list->data;
+    }
+    else
+    {
+        info->selected_match_info.selected_match = NULL;
+        gnc_import_TransInfo_set_action (info, GNCImport_ADD);
+    }
+}
+
 Transaction *
 gnc_import_TransInfo_get_trans (const GNCImportTransInfo *info)
 {
