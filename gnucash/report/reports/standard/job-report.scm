@@ -479,7 +479,8 @@
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
   (issue-deprecation-warning
-   "old job report is deprecated and will be removed in 5.x")
+   "old job report is deprecated and will be removed in 5.x. Its functionality \
+is now merged into new-owner-report.scm.")
 
   (let* ((document (gnc:make-html-document))
 	 (table '())
