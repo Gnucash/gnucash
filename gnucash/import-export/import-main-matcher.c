@@ -1673,7 +1673,6 @@ static GHashTable*
 create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model, Query *query, gint match_date_hardlimit)
 {
     GList* query_return = NULL;
-    Account *import_trans_account;
     time64 import_trans_time, min_time=G_MAXINT64, max_time=0;
     GList* all_accounts = NULL;
     static const int secs_per_day = 86400;
@@ -1684,6 +1683,7 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
     // Go through all imported transactions, gather the list of accounts, and min/max date range.
     for (imported_trans=gui->temp_trans_list; imported_trans!=NULL; imported_trans=imported_trans->next)
     {
+        Account *import_trans_account;
         GNCImportTransInfo* transaction_info;
         transaction_info = imported_trans->data;
         import_trans_account = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
@@ -1703,7 +1703,7 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
                              QOF_QUERY_AND);
     query_return = qof_query_run (query);
     g_list_free (all_accounts);
-    
+
     // Now put all potential matches into a hash table based on their account.
     for (potential_match=query_return; potential_match!=NULL; potential_match=potential_match->next)
     {
@@ -1713,10 +1713,10 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
             continue;
         split_account = xaccSplitGetAccount (potential_match->data);
         // g_hash_table_steal_extended would do the two calls in one shot but is not available until 2.58
-        per_account_list = g_hash_table_lookup (lists_per_accounts, import_trans_account);
-        g_hash_table_steal (lists_per_accounts, import_trans_account);
+        per_account_list = g_hash_table_lookup (lists_per_accounts, split_account);
+        g_hash_table_steal (lists_per_accounts, split_account);
         per_account_list = g_slist_prepend (per_account_list, potential_match->data);
-        g_hash_table_insert (lists_per_accounts, import_trans_account, per_account_list);
+        g_hash_table_insert (lists_per_accounts, split_account, per_account_list);
     }
     return lists_per_accounts;
 }
