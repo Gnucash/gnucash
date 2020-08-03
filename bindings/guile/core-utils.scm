@@ -49,6 +49,6 @@
 (cond-expand
   (guile-3)
   (guile-2
-   (define (_ x)
+   (define-public (_ x)
      (issue-deprecation-warning "Using _ to call gettext is disallowed in guile-3 and will be removed in the future. Use G_ instead.")
      (gnc:gettext x))))
