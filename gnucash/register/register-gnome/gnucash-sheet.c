@@ -1185,7 +1185,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         return;
 
     new_text = delete_text (sheet, start_pos, end_pos);
-    new_text_len = g_utf8_strlen (new_text, -1);
+    new_text_len = strlen (new_text);
     editable = GTK_EDITABLE (sheet->entry);
     gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
     retval = gnc_table_modify_update (table, virt_loc,
