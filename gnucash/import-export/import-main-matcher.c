@@ -1668,30 +1668,37 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui, Transa
     return;
 }
 
-// This creates lists of all splits that could match one of the imported transactions based on their
-// account and date and organized per account
-static GHashTable*
-create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model, Query *query, gint match_date_hardlimit)
-{
-    GList* query_return = NULL;
-    time64 import_trans_time, min_time=G_MAXINT64, max_time=0;
-    GList* all_accounts = NULL;
-    static const int secs_per_day = 86400;
-    GSList* imported_trans;
-    GList* potential_match;
-    GHashTable* lists_per_accounts = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, (GDestroyNotify)g_slist_free);
 
-    // Go through all imported transactions, gather the list of accounts, and min/max date range.
-    for (imported_trans=gui->temp_trans_list; imported_trans!=NULL; imported_trans=imported_trans->next)
+/* Query the accounts used by the imported transactions to find a list of
+ * candidate matching transactions.
+ */
+static GList*
+query_imported_transaction_accounts (GNCImportMainMatcher *gui)
+{
+    static const int secs_per_day = 86400;
+    GList* query_results = NULL;
+    GList* all_accounts = NULL;
+    GList* retval = NULL;
+    gint match_date_limit =
+        gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
+    time64 min_time=G_MAXINT64, max_time=0;
+    time64 match_timelimit = match_date_limit * secs_per_day;
+    Query *query = qof_query_create_for (GNC_ID_SPLIT);
+
+    /* Go through all imported transactions, gather the list of accounts, and
+     * min/max date range.
+     */
+    for (GSList* txn = gui->temp_trans_list; txn != NULL;
+         txn = g_slist_next (txn))
     {
-        Account *import_trans_account;
-        GNCImportTransInfo* transaction_info;
-        transaction_info = imported_trans->data;
-        import_trans_account = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
-        all_accounts = g_list_prepend (all_accounts, import_trans_account);
-        import_trans_time = xaccTransGetDate (gnc_import_TransInfo_get_trans (transaction_info));
-        min_time = MIN (min_time, import_trans_time);
-        max_time = MAX (max_time, import_trans_time);
+        GNCImportTransInfo* txn_info = txn->data;
+        Account *txn_account =
+            xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
+        time64 txn_time =
+            xaccTransGetDate (gnc_import_TransInfo_get_trans (txn_info));
+        all_accounts = g_list_prepend (all_accounts, txn_account);
+        min_time = MIN (min_time, txn_time);
+        max_time = MAX (max_time, txn_time);
     }
 
     // Make a query to find splits with the right accounts and dates.
@@ -1699,27 +1706,41 @@ create_list_of_potential_matches (GNCImportMainMatcher *gui, GtkTreeModel* model
     xaccQueryAddAccountMatch (query, all_accounts,
                               QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
     xaccQueryAddDateMatchTT (query,
-                             TRUE, min_time - match_date_hardlimit * secs_per_day,
-                             TRUE, max_time + match_date_hardlimit * secs_per_day,
+                             TRUE, min_time - match_timelimit,
+                             TRUE, max_time + match_timelimit,
                              QOF_QUERY_AND);
-    query_return = qof_query_run (query);
+    query_results = qof_query_run (query);
     g_list_free (all_accounts);
+    retval = g_list_copy (query_results);
+    qof_query_destroy (query);
 
-    // Now put all potential matches into a hash table based on their account.
-    for (potential_match=query_return; potential_match!=NULL; potential_match=potential_match->next)
+    return retval;
+}
+
+/* Create a hash by account of all splits that could match one of the imported
+ * transactions based on their account and date and organized per account.
+ */
+static GHashTable*
+create_hash_of_potential_matches (GList *candidate_txns,
+                                  GHashTable *account_hash)
+{
+    for (GList* candidate = candidate_txns; candidate != NULL;
+         candidate = g_list_next (candidate))
     {
         Account* split_account;
-        GSList* per_account_list;
-        if (gnc_import_split_has_online_id (potential_match->data))
+        GSList* split_list;
+        if (gnc_import_split_has_online_id (candidate->data))
             continue;
-        split_account = xaccSplitGetAccount (potential_match->data);
-        // g_hash_table_steal_extended would do the two calls in one shot but is not available until 2.58
-        per_account_list = g_hash_table_lookup (lists_per_accounts, split_account);
-        g_hash_table_steal (lists_per_accounts, split_account);
-        per_account_list = g_slist_prepend (per_account_list, potential_match->data);
-        g_hash_table_insert (lists_per_accounts, split_account, per_account_list);
+        split_account = xaccSplitGetAccount (candidate->data);
+        /* g_hash_table_steal_extended would do the two calls in one shot but is
+         * not available until GLib 2.58.
+         */
+        split_list = g_hash_table_lookup (account_hash, split_account);
+        g_hash_table_steal (account_hash, split_account);
+        split_list = g_slist_prepend (split_list, candidate->data);
+        g_hash_table_insert (account_hash, split_account, split_list);
     }
-    return lists_per_accounts;
+    return account_hash;
 }
 
 typedef struct _match_struct
@@ -1732,60 +1753,67 @@ typedef struct _match_struct
 static void
 match_helper (Split* data, match_struct* s)
 {
-    split_find_match (s->transaction_info, data, s->display_threshold, s->fuzzy_amount);
+    split_find_match (s->transaction_info, data,
+                      s->display_threshold, s->fuzzy_amount);
 }
 
-/* This goes through the temporary list of imported transactions, runs a single query to gater potential matching
- * register transactions based on accounts and dates, then selects potential matching transactions for
- * each imported transaction. Doing a single query makes things a lot faster than doing one query per
- * imported transaction.
+/* Iterate through the imported transactions selecting matches from the
+ * potential match lists in the account hash and update the matcher with the
+ * results.
  */
-void
-gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
+
+static void
+perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
-    GtkListStore* store = GTK_LIST_STORE (model);
-    GtkTreeIter iter;
-    GNCImportMatchInfo *selected_match;
-    gboolean match_selected_manually;
-    GHashTable* lists_per_accounts = NULL;
-    Query *query;
-    gint match_date_hardlimit = gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
-    gint display_threshold = gnc_import_Settings_get_display_threshold (gui->user_settings);
-    double fuzzy_amount = gnc_import_Settings_get_fuzzy_amount (gui->user_settings);
-    GSList* imported_trans;
+    gint display_threshold =
+        gnc_import_Settings_get_display_threshold (gui->user_settings);
+    double fuzzy_amount =
+        gnc_import_Settings_get_fuzzy_amount (gui->user_settings);
 
-    query = qof_query_create_for (GNC_ID_SPLIT);
-    // Gather the list of splits that could match one of the imported transactions, this return a hash table.
-    lists_per_accounts = create_list_of_potential_matches (gui, model, query, match_date_hardlimit);
-
-    // For each imported transaction, grab the list of potential matches corresponding to that account,
-    // and evaluate how good a match they are.
-    for (imported_trans=gui->temp_trans_list; imported_trans!=NULL; imported_trans=imported_trans->next)
+    for (GSList *imported_txn = gui->temp_trans_list; imported_txn !=NULL;
+         imported_txn = g_slist_next (imported_txn))
     {
-        GNCImportTransInfo* transaction_info = imported_trans->data;
-        Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (transaction_info));
-        match_struct s = {transaction_info, display_threshold, fuzzy_amount};
-        
-        g_slist_foreach (g_hash_table_lookup (lists_per_accounts, importaccount), (GFunc) match_helper, &s);
+        GtkTreeIter iter;
+        GNCImportMatchInfo *selected_match;
+        gboolean match_selected_manually;
+        GNCImportTransInfo* txn_info = imported_txn->data;
+        Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
+        match_struct s = {txn_info, display_threshold, fuzzy_amount};
+
+        g_slist_foreach (g_hash_table_lookup (account_hash, importaccount),
+                         (GFunc) match_helper, &s);
 
         // Sort the matches, select the best match, and set the action.
-        gnc_import_TransInfo_init_matches (transaction_info, gui->user_settings);
+        gnc_import_TransInfo_init_matches (txn_info, gui->user_settings);
 
-        selected_match = gnc_import_TransInfo_get_selected_match (transaction_info);
-        match_selected_manually = gnc_import_TransInfo_get_match_selected_manually (transaction_info);
+        selected_match = gnc_import_TransInfo_get_selected_match (txn_info);
+        match_selected_manually =
+            gnc_import_TransInfo_get_match_selected_manually (txn_info);
 
         if (selected_match)
             gnc_import_PendingMatches_add_match (gui->pending_matches,
                                                  selected_match,
                                                  match_selected_manually);
-        
+
         gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
-        refresh_model_row (gui, model, &iter, transaction_info);
+        refresh_model_row (gui, model, &iter, txn_info);
     }
-    
-    qof_query_destroy (query);
-    g_hash_table_destroy (lists_per_accounts);
+}
+
+void
+gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
+{
+    GHashTable* account_hash =
+        g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL,
+                              (GDestroyNotify)g_slist_free);
+    GList *candidate_txns = query_imported_transaction_accounts (gui);
+
+    create_hash_of_potential_matches (candidate_txns, account_hash);
+    perform_matching (gui, account_hash);
+
+    g_list_free (candidate_txns);
+    g_hash_table_destroy (account_hash);
     return;
 }
 
