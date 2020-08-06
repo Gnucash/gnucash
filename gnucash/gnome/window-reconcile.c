@@ -2246,6 +2246,8 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
     xaccAccountClearReconcilePostpone (account);
     xaccAccountSetReconcileLastDate (account, date);
 
+    xaccAccountSetBalanceAssertionAtDate (account, date, recnData->new_ending);
+
     if (auto_payment &&
             (xaccAccountGetType (account) == ACCT_TYPE_CREDIT) &&
             (gnc_numeric_negative_p (recnData->new_ending)))
