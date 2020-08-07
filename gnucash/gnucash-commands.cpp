@@ -42,9 +42,12 @@ extern "C" {
 }
 
 #include <boost/locale.hpp>
+#include <fstream>
 #include <iostream>
 
 namespace bl = boost::locale;
+
+static std::string empty_string{};
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -138,11 +141,25 @@ report_session_percentage (const char *message, double percent)
  * Scheme when compiled with Clang.
  */
 struct run_report_args {
-    const std::string file_to_load;
-    const std::string run_report;
-    const std::string export_type;
-    const std::string output_file;
+    const std::string& file_to_load;
+    const std::string& run_report;
+    const std::string& export_type;
+    const std::string& output_file;
 };
+
+static inline void
+write_report_file (const char *html, const char* file)
+{
+    if (!file || !html || !*html) return;
+    std::ofstream ofs{file};
+    if (!ofs)
+    {
+        std::cerr << "Failed to open file " << file << " for writing\n";
+        return;
+    }
+    ofs << html << std::endl;
+    // ofs destructor will close the file
+}
 
 static void
 scm_run_report (void *data,
@@ -162,15 +179,17 @@ scm_run_report (void *data,
     qof_event_suspend ();
 
     auto datafile = args->file_to_load.c_str();
-    auto cmdline = scm_c_eval_string ("gnc:cmdline-run-report");
+    auto check_report_cmd = scm_c_eval_string ("gnc:cmdline-check-report");
+    auto get_report_cmd = scm_c_eval_string ("gnc:cmdline-get-report-id");
+    auto run_export_cmd = scm_c_eval_string ("gnc:cmdline-template-export");
     auto report = scm_from_utf8_string (args->run_report.c_str());
     auto type = !args->export_type.empty() ?
                 scm_from_utf8_string (args->export_type.c_str()) : SCM_BOOL_F;
     auto file = !args->output_file.empty() ?
                 scm_from_utf8_string (args->output_file.c_str()) : SCM_BOOL_F;
 
-    /* dry-run? is #t: try report, check validity of options */
-    if (scm_is_false (scm_call_4 (cmdline, report, type, file, SCM_BOOL_T)))
+/* dry-run? is #t: try report, check validity of options */
+    if (scm_is_false (scm_call_3 (check_report_cmd, report, type, file)))
         scm_cleanup_and_exit_with_failure (nullptr);
 
     PINFO ("Loading datafile %s...\n", datafile);
@@ -187,12 +206,30 @@ scm_run_report (void *data,
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
 
-    /* dry-run? is #f: run the report */
-    scm_call_4 (cmdline, report, type, file, SCM_BOOL_F);
+    if (!args->export_type.empty())
+    {
+        scm_call_3(run_export_cmd, report, type, file);
+    }
+    else
+    {
+        SCM id = scm_call_1(get_report_cmd, report);
 
-    qof_session_end (session);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
+        if (!id)
+            scm_cleanup_and_exit_with_failure (nullptr);
+        char* html;
+        gnc_run_report (scm_to_int(id), &html);
+        if (html && *html)
+        {
+            if (!args->output_file.empty())
+            {
+                write_report_file(html, args->output_file.c_str());
+            }
+            else
+            {
+                std::cout << html << std::endl;
+            }
+        }
+    }
 
     qof_session_destroy (session);
 
@@ -203,8 +240,8 @@ scm_run_report (void *data,
 
 
 struct show_report_args {
-    const std::string file_to_load;
-    const std::string show_report;
+    const std::string& file_to_load;
+    const std::string& show_report;
 };
 
 static void
@@ -271,10 +308,10 @@ Gnucash::run_report (const bo_str& file_to_load,
                      const bo_str& export_type,
                      const bo_str& output_file)
 {
-    auto args = run_report_args { file_to_load ? *file_to_load : std::string(),
-                                  run_report ? *run_report : std::string(),
-                                  export_type ? *export_type : std::string(),
-                                  output_file ? *output_file : std::string() };
+    auto args = run_report_args { file_to_load ? *file_to_load : empty_string,
+                                  run_report ? *run_report : empty_string,
+                                  export_type ? *export_type : empty_string,
+                                  output_file ? *output_file : empty_string };
     if (run_report && !run_report->empty())
         scm_boot_guile (0, nullptr, scm_run_report, &args);
 
@@ -285,8 +322,8 @@ int
 Gnucash::report_show (const bo_str& file_to_load,
                       const bo_str& show_report)
 {
-    auto args = show_report_args { file_to_load ? *file_to_load : std::string(),
-                                   show_report ? *show_report : std::string() };
+    auto args = show_report_args { file_to_load ? *file_to_load : empty_string,
+                                   show_report ? *show_report : empty_string };
     if (show_report && !show_report->empty())
         scm_boot_guile (0, nullptr, scm_report_show, &args);
 

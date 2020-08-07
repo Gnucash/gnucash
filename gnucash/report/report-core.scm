@@ -799,16 +799,8 @@ not found.")))
                    (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
-(define-public (gnc:cmdline-run-report report export-type output-file dry-run?)
+(define-public (gnc:cmdline-check-report report export-type output-file)
   (let ((templates (reportname->templates report)))
-
-    (define (run-report output-port)
-      (display
-       (gnc:report-render-html
-        (gnc-report-find
-         (gnc:make-report
-          (gnc:report-template-report-guid (car templates)))) #t) output-port))
-
     (cond
      ((null? templates)
       (stderr-log "Cannot find ~s. Valid reports:\n" report)
@@ -821,11 +813,13 @@ not found.")))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
-                                   export-type output-file dry-run?))
-     (dry-run? #t)
-     (output-file
-      (format (current-error-port) "Saving report to ~a..." output-file)
-      (call-with-output-file output-file run-report)
-      (display "complete!\n" (current-error-port)))
-     (else
-      (run-report (current-output-port))))))
+                                   export-type output-file #t)))))
+
+(define-public (gnc:cmdline-template-export report export-type output-file)
+  (let* ((templates (reportname->templates report)))
+    (template-export report (car templates) export-type output-file #f)))
+
+(define-public (gnc:cmdline-get-report-id report)
+  (let* ((templates (reportname->templates report))
+        (rpt (gnc:make-report (gnc:report-template-report-guid (car templates)))))
+    rpt))
