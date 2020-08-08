@@ -813,7 +813,8 @@ not found.")))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
-                                   export-type output-file #t)))))
+                                   export-type output-file #t))
+    (else #t))))
 
 (define-public (gnc:cmdline-template-export report export-type output-file)
   (let* ((templates (reportname->templates report)))
