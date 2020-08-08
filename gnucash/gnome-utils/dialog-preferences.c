@@ -117,6 +117,8 @@ typedef struct addition_t
  *  structures. */
 GSList *add_ins = NULL;
 
+static gboolean invalid_account_separator_warned = FALSE;
+
 static gchar *gnc_account_separator_is_valid (const gchar *separator,
                                               gchar **normalized_separator)
 {
@@ -181,6 +183,8 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     else
         gtk_widget_hide (GTK_WIDGET(image));
 
+    invalid_account_separator_warned = FALSE;
+
     g_free (separator);
 }
 
@@ -189,16 +193,22 @@ gboolean
 gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog)
 {
     gchar *separator;
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+    gchar *conflict_msg;
 
-    /* Check if the new separator clashes with existing account names */
+    if (!invalid_account_separator_warned) {
+        conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
 
-    if (conflict_msg)
-    {
-        gnc_warning_dialog (GTK_WINDOW (dialog), "%s", conflict_msg);
-        g_free ( conflict_msg );
+        /* Check if the new separator clashes with existing account names */
+
+        if (conflict_msg)
+        {
+            gnc_warning_dialog (GTK_WINDOW (dialog), "%s", conflict_msg);
+            g_free ( conflict_msg );
+            invalid_account_separator_warned = TRUE;
+        }
+        g_free (separator);
     }
-    g_free (separator);
+
     return FALSE;
 }
 
@@ -770,7 +780,7 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     else
         gnc_assoc_pref_path_head_changed (GTK_WINDOW(gtk_widget_get_toplevel (
                                           GTK_WIDGET(fc))), old_path_head_uri);
-    
+
     g_free (old_path_head_uri);
     g_free (folder_uri);
 }
