@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2020-03-27 21:58+0100\n"
+"POT-Creation-Date: 2020-08-08 18:07+0200\n"
 "PO-Revision-Date: 2011-03-10 22:11+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -704,7 +704,7 @@ msgstr "股份結算(登記簿)"
 msgid "shares"
 msgstr "股份"
 
-#. "(of a price) A place wfrom which sth comes or is obtained"
+#. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
 msgstr "來源"
 

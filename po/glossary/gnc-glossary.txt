@@ -167,7 +167,7 @@
 "security"	"A document or certificate showing who owns shares"
 "Share Balance (register)"	"-"
 "shares"	"Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
-"source"	"(of a price) A place wfrom which sth comes or is obtained"
+"source"	"(often: of a quote) A place from which something comes or is obtained."
 "split"	"One of the two or several parts a transaction is divided into"
 "style sheet"	"This sets the particular design or shape of a report."
 "subtotal"	"The total of a set of figures that are part of a larger group of figures"
