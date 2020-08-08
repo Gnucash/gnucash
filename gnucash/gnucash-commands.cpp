@@ -182,11 +182,18 @@ scm_run_report (void *data,
     auto check_report_cmd = scm_c_eval_string ("gnc:cmdline-check-report");
     auto get_report_cmd = scm_c_eval_string ("gnc:cmdline-get-report-id");
     auto run_export_cmd = scm_c_eval_string ("gnc:cmdline-template-export");
-    auto report = scm_from_utf8_string (args->run_report.c_str());
+    /* We generally insist on using scm_from_utf8_string() throughout GnuCash
+     * because all GUI-sourced strings and all file-sourced strings are encoded
+     * that way. In this case, though, the input is coming from a shell window
+     * and Microsoft Windows shells are generally not capable of entering UTF8
+     * so it's necessary here to allow guile to read the locale and interpret
+     * the input in that encoding.
+     */
+    auto report = scm_from_locale_string (args->run_report.c_str());
     auto type = !args->export_type.empty() ?
-                scm_from_utf8_string (args->export_type.c_str()) : SCM_BOOL_F;
+                scm_from_locale_string (args->export_type.c_str()) : SCM_BOOL_F;
     auto file = !args->output_file.empty() ?
-                scm_from_utf8_string (args->output_file.c_str()) : SCM_BOOL_F;
+                scm_from_locale_string (args->output_file.c_str()) : SCM_BOOL_F;
 
 /* dry-run? is #t: try report, check validity of options */
     if (scm_is_false (scm_call_3 (check_report_cmd, report, type, file)))
@@ -271,7 +278,7 @@ scm_report_show (void *data,
     }
 
     scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
-                scm_from_utf8_string (args->show_report.c_str ()),
+                scm_from_locale_string (args->show_report.c_str ()),
                 scm_current_output_port ());
     gnc_shutdown (0);
     return;
