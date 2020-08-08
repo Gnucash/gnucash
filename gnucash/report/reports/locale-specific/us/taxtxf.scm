@@ -2902,21 +2902,12 @@
           (if tax-entity-type-valid?
               (if file-name		; cancel TXF if no file selected
                   (let ((port (catch #t ;;e.g., system-error
-                                 (lambda () (open-output-file file-name))
-                                 (lambda (key . args)
-                                    (gnc-error-dialog
-                                          '()
-                                          (string-append
-                                              "Could not open the file: "
-                                              file-name
-                                              ". The error is: "
-                                              (symbol->string key)
-                                              " - "
-                                              (car (caddr args))
-                                              "."
-                                          ))
-                                     #f)))
-                       )
+                                (lambda () (open-output-file file-name))
+                                (lambda (key . args)
+                                  (let ((msg (format #f "Could not open the file: ~a. The error is: ~a - ~a"
+                                                     file-name key (caaddr args))))
+                                    (gnc:gui-error msg msg)
+                                    #f)))))
                        (if port ;; port opened successfully
                            (let* ((output (map (lambda (form-line-acct)
                                                (handle-tax-code form-line-acct))
