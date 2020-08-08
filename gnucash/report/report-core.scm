@@ -732,7 +732,9 @@ not found.")))
 (define (template-export report template export-type output-file dry-run?)
   (let* ((report-guid (gnc:report-template-report-guid template))
          (parent-template-guid (gnc:report-template-parent-type template))
-         (parent-template (hash-ref *gnc:_report-templates_* parent-template-guid))
+         (parent-template (if parent-template-guid
+                              (hash-ref *gnc:_report-templates_* parent-template-guid)
+                              template))
          (parent-export-thunk (gnc:report-template-export-thunk parent-template))
          (parent-export-types (gnc:report-template-export-types parent-template)))
 
