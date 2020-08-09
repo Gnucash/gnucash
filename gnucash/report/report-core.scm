@@ -725,6 +725,10 @@ not found.")))
       (gnc:report-template-set-name templ new-name)
       (gnc:save-all-reports))))
 
+;;
+;; gnucash-cli helper and exported functions
+;;
+
 (define (stderr-log tmpl . args)
   (apply format (current-error-port) tmpl args)
   #f)
@@ -732,25 +736,25 @@ not found.")))
 (define (template-export report template export-type output-file dry-run?)
   (let* ((report-guid (gnc:report-template-report-guid template))
          (parent-template-guid (gnc:report-template-parent-type template))
-         (parent-template (if parent-template-guid
-                              (hash-ref *gnc:_report-templates_* parent-template-guid)
-                              template))
-         (parent-export-thunk (gnc:report-template-export-thunk parent-template))
-         (parent-export-types (gnc:report-template-export-types parent-template)))
+         (template (if parent-template-guid
+                       (hash-ref *gnc:_report-templates_* parent-template-guid)
+                       template))
+         (export-thunk (gnc:report-template-export-thunk template))
+         (export-types (gnc:report-template-export-types template)))
 
     (cond
-     ((not parent-export-thunk) (stderr-log "Report ~s has no export code\n" report))
-     ((not parent-export-types) (stderr-log "Report ~s has no export-types\n" report))
-     ((not (assoc export-type parent-export-types))
+     ((not export-thunk) (stderr-log "Report ~s has no export code\n" report))
+     ((not export-types) (stderr-log "Report ~s has no export-types\n" report))
+     ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
-                  export-type (string-join (map car parent-export-types) ", ")))
+                  export-type (string-join (map car export-types) ", ")))
      ((not output-file) (stderr-log "No output file specified\n"))
      (dry-run? #t)
      (else
       (display "Running export..." (current-error-port))
-      (parent-export-thunk
+      (export-thunk
        (gnc-report-find (gnc:make-report report-guid))
-       (assoc-ref parent-export-types export-type) output-file)
+       (assoc-ref export-types export-type) output-file)
       (display "done!\n" (current-error-port))))))
 
 (define (reportname->templates report)
@@ -799,6 +803,10 @@ not found.")))
                    (gnc:html-render-options-changed (options-gen) #t))))
        templates)))))
 
+;; In: report - string matching reportname
+;; In: export-type - string matching export type (eg CSV TXF etc)
+;; In: output-file - string for export file name
+;; Out: if args are valid and runs a single report: #t, otherwise: #f
 (define-public (gnc:cmdline-check-report report export-type output-file)
   (let ((templates (reportname->templates report)))
     (cond
@@ -814,13 +822,20 @@ not found.")))
 
      (export-type (template-export report (car templates)
                                    export-type output-file #t))
-    (else #t))))
+     (else #t))))
 
+;; In: report - string matching reportname
+;; In: export-type - string matching export type (eg CSV TXF etc)
+;; In: output-file - string for export file name
+;; Out: if error, #f
 (define-public (gnc:cmdline-template-export report export-type output-file)
-  (let* ((templates (reportname->templates report)))
-    (template-export report (car templates) export-type output-file #f)))
+  (match (reportname->templates report)
+    ((template) (template-export report template export-type output-file #f))
+    (_ (gnc:error report " does not match unique report") #f)))
 
+;; In: report - string matching reportname
+;; Out: a number, or #f if error
 (define-public (gnc:cmdline-get-report-id report)
-  (let* ((templates (reportname->templates report))
-        (rpt (gnc:make-report (gnc:report-template-report-guid (car templates)))))
-    rpt))
+  (match (reportname->templates report)
+    ((template) (gnc:make-report (gnc:report-template-report-guid template)))
+    (_ (gnc:error report " does not match unique report") #f)))
