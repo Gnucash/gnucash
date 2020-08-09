@@ -215,13 +215,16 @@ scm_run_report (void *data,
 
     if (!args->export_type.empty())
     {
-        scm_call_3(run_export_cmd, report, type, file);
+        SCM retval = scm_call_3(run_export_cmd, report, type, file);
+
+        if (scm_is_false (retval))
+            scm_cleanup_and_exit_with_failure (nullptr);
     }
     else
     {
         SCM id = scm_call_1(get_report_cmd, report);
 
-        if (!id)
+        if (scm_is_false (id))
             scm_cleanup_and_exit_with_failure (nullptr);
         char* html;
         gnc_run_report (scm_to_int(id), &html);
