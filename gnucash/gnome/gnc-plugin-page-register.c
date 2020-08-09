@@ -291,11 +291,11 @@ static GncInvoice* invoice_from_split (Split* split);
 /* Translators: This is a menu item that opens a dialog for associating an
    external file or URL with the bill, invoice, transaction, or voucher or
    removing such an association. */
-#define ASSOCIATE_TRANSACTION_LABEL      N_("_Manage Associated Document...")
+#define ASSOCIATE_TRANSACTION_LABEL      N_("_Manage Document Link...")
 /* Translators: This is a menu item that opens an external file or URI that may
    be associated with the current bill, invoice, transaction, or voucher using
    the operating system's default application for the file or URI mime type. */
-#define ASSOCIATE_TRANSACTION_OPEN_LABEL  N_("_Open Associated Document")
+#define ASSOCIATE_TRANSACTION_OPEN_LABEL  N_("_Open Linked Document")
 /* Translators: This is a menu item that will open the bill, invoice, or voucher
    that is posted to the current transaction if there is one. */
 #define JUMP_ASSOCIATED_INVOICE_LABEL     N_("Jump to Invoice")
@@ -309,9 +309,9 @@ static GncInvoice* invoice_from_split (Split* split);
 #define PASTE_TRANSACTION_TIP            N_("Paste the transaction from the clipboard")
 #define DUPLICATE_TRANSACTION_TIP        N_("Make a copy of the current transaction")
 #define DELETE_TRANSACTION_TIP           N_("Delete the current transaction")
-#define ASSOCIATE_TRANSACTION_TIP        N_("Add, change, or unlink the document associated with the current transaction")
-#define ASSOCIATE_TRANSACTION_OPEN_TIP   N_("Open the associated document for the current transaction")
-#define JUMP_ASSOCIATED_INVOICE_TIP      N_("Jump to the associated bill, invoice, or voucher")
+#define ASSOCIATE_TRANSACTION_TIP        N_("Add, change, or unlink the document linked with the current transaction")
+#define ASSOCIATE_TRANSACTION_OPEN_TIP   N_("Open the linked document for the current transaction")
+#define JUMP_ASSOCIATED_INVOICE_TIP      N_("Jump to the linked bill, invoice, or voucher")
 #define CUT_SPLIT_TIP                    N_("Cut the selected split into clipboard")
 #define COPY_SPLIT_TIP                   N_("Copy the selected split into clipboard")
 #define PASTE_SPLIT_TIP                  N_("Paste the split from the clipboard")
@@ -528,7 +528,7 @@ static GtkToggleActionEntry toggle_entries[] =
 {
     {
         "ViewStyleDoubleLineAction", NULL, N_ ("_Double Line"), NULL,
-        N_ ("Show a second line with \"Action\", \"Notes\", and \"File Association\" for each transaction."),
+        N_ ("Show a second line with \"Action\", \"Notes\", and \"File Link\" for each transaction."),
         G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE
     },
 
@@ -605,8 +605,8 @@ static action_toolbar_labels toolbar_labels[] =
     { "BlankTransactionAction",             N_ ("Blank") },
     { "ActionsReconcileAction",             N_ ("Reconcile") },
     { "ActionsAutoClearAction",             N_ ("Auto-clear") },
-    { "AssociateTransactionAction",         N_ ("Manage Association") },
-    { "AssociateTransactionOpenAction",     N_ ("Open Association") },
+    { "AssociateTransactionAction",         N_ ("Manage Link") },
+    { "AssociateTransactionOpenAction",     N_ ("Open Link") },
     { "JumpAssociatedInvoiceAction",        N_ ("Invoice") },
     { NULL, NULL },
 };
@@ -1132,7 +1132,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                          "UnvoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION (action), voided);
 
-    /* Set 'Open and Remove Associated' */
+    /* Set 'Open and Remove Linked' */
     uri = xaccTransGetAssociation (trans);
 
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),

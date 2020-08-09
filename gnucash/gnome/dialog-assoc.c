@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-assoc.c -- Associations dialog                            *
+ * dialog-assoc.c -- Links dialog                                   *
  * Copyright (C) 2020 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -202,7 +202,7 @@ setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
         GtkWidget *existing_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "existing_hbox"));
         GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
         gchar     *use_uri = gnc_assoc_get_use_uri (path_head, uri, scheme);
-        gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Association is"), display_uri);
+        gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Link is"), display_uri);
 
         label = gtk_label_new (uri_label);
 
@@ -539,7 +539,7 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
 
 /* Translators: This is the title of a dialog box for associating an external
    file or URI with the current bill, invoice, transaction, or voucher. */
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Associated Document"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Document Link"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -630,7 +630,7 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
             g_free (uri);
             return;
         }
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Associated Document"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Document Link"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -887,7 +887,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     // display path head text and test if present
     gnc_assoc_set_path_head_label (assoc_dialog->path_head_label, NULL, NULL);
 
-    // set the Associate column to be the one that expands
+    // set the Link column to be the one that expands
     tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "assoc"));
     gtk_tree_view_column_set_expand (tree_column, TRUE);
 
@@ -916,7 +916,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
         /* Translators: This is the label of a dialog box that lists all of the
            transaction that have files or URIs associated with them. */
-        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Associations"));
+        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Links"));
 
         gtk_tree_view_column_set_visible (GTK_TREE_VIEW_COLUMN(desc_id_tree_column), FALSE);
         gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN(desc_item_tree_column), _("Description"));
@@ -931,12 +931,12 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
         GtkWidget *help_label = GTK_WIDGET(gtk_builder_get_object (builder, "help_label"));
         const gchar *item_string = N_(
             "         To jump to the Business Item, double click on the entry in the id\n"
-            " column, Association column to open the Association or Available to update");
+            " column, Link column to open the Link or Available to update");
 
         /* Translators: This is the label of a dialog box that lists all of the
            invoices, bills, and vouchers that have files or URIs associated with
            them. */
-        gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Associations"));
+        gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Links"));
         gtk_label_set_text (GTK_LABEL(help_label), gettext (item_string));
 
         g_signal_connect (assoc_dialog->view, "row-activated",

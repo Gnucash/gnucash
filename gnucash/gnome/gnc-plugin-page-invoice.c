@@ -218,13 +218,13 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "BusinessAssociationAction", NULL, "_Manage Associated Document...", NULL,
-        "Manage the associated document",
+        "BusinessAssociationAction", NULL, "_Manage Document Link...", NULL,
+        "Manage document link",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_associate)
     },
     {
-        "BusinessAssociationOpenAction", NULL, "_Open Associated Document", NULL,
-        "Open the associated document",
+        "BusinessAssociationOpenAction", NULL, "_Open Linked Document", NULL,
+        "Open the link document",
         G_CALLBACK (gnc_plugin_page_invoice_cmd_associate_open)
     },
     {
@@ -301,8 +301,8 @@ static action_toolbar_labels invoice_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
     {"BusinessNewInvoiceAction", N_("New _Invoice")},
     {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
-    {"BusinessAssociationAction", N_("_Manage Associated Document...")},
-    {"BusinessAssociationOpenAction", N_("_Open Associated Document")},
+    {"BusinessAssociationAction", N_("_Manage Document Link...")},
+    {"BusinessAssociationOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -322,8 +322,8 @@ static action_toolbar_labels bill_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Bill")},
     {"BusinessNewInvoiceAction", N_("New _Bill")},
     {"ToolsProcessPaymentAction", N_("_Pay Bill")},
-    {"BusinessAssociationAction", N_("_Manage Associated Document...")},
-    {"BusinessAssociationOpenAction", N_("_Open Associated Document")},
+    {"BusinessAssociationAction", N_("_Manage Document Link...")},
+    {"BusinessAssociationOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -343,8 +343,8 @@ static action_toolbar_labels voucher_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Voucher")},
     {"BusinessNewInvoiceAction", N_("New _Voucher")},
     {"ToolsProcessPaymentAction", N_("_Pay Voucher")},
-    {"BusinessAssociationAction", N_("_Manage Associated Document...")},
-    {"BusinessAssociationOpenAction", N_("_Open Associated Document")},
+    {"BusinessAssociationAction", N_("_Manage Document Link...")},
+    {"BusinessAssociationOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -364,8 +364,8 @@ static action_toolbar_labels creditnote_action_labels[] =
     {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
     {"BusinessNewInvoiceAction", N_("New _Credit Note")},
     {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
-    {"BusinessAssociationAction", N_("_Manage Associated Document...")},
-    {"BusinessAssociationOpenAction", N_("_Open Associated Document")},
+    {"BusinessAssociationAction", N_("_Manage Document Link...")},
+    {"BusinessAssociationOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -380,8 +380,8 @@ static action_toolbar_labels invoice_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this invoice") },
-    {"BusinessAssociationAction", N_("Manage Associated Document")},
-    {"BusinessAssociationOpenAction", N_("Open Associated Document")},
+    {"BusinessAssociationAction", N_("Manage Document Link")},
+    {"BusinessAssociationOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -401,8 +401,8 @@ static action_toolbar_labels bill_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this bill") },
-    {"BusinessAssociationAction", N_("Manage Associated Document")},
-    {"BusinessAssociationOpenAction", N_("Open Associated Docyment")},
+    {"BusinessAssociationAction", N_("Manage Document Link")},
+    {"BusinessAssociationOpenAction", N_("Open Linked Docyment")},
     {NULL, NULL},
 };
 
@@ -422,8 +422,8 @@ static action_toolbar_labels voucher_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the voucher")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this voucher") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this voucher") },
-    {"BusinessAssociationAction", N_("Manage Associated Document")},
-    {"BusinessAssociationOpenAction", N_("Open Associated Document")},
+    {"BusinessAssociationAction", N_("Manage Document Link")},
+    {"BusinessAssociationOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -443,8 +443,8 @@ static action_toolbar_labels creditnote_action_tooltips[] = {
     {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
     {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
     {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessAssociationAction", N_("_Manage Associated Document...")},
-    {"BusinessAssociationOpenAction", N_("Open Associated Document")},
+    {"BusinessAssociationAction", N_("_Manage Document Link...")},
+    {"BusinessAssociationOpenAction", N_("Open Linked Document")},
     {NULL, NULL},
 };
 
@@ -1361,7 +1361,7 @@ gnc_plugin_page_invoice_cmd_associate (GtkAction *action,
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     uri = gncInvoiceGetAssociation (invoice);
 
-    ret_uri = gnc_assoc_get_uri_dialog (parent, _("Manage Associated Document"), uri);
+    ret_uri = gnc_assoc_get_uri_dialog (parent, _("Manage Document Link"), uri);
 
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
     {

@@ -275,8 +275,8 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Other menu items */
     {
-        "BusinessAssocOpenAction", NULL, N_("Business _Associations"), NULL,
-        N_("View all Business Associations"),
+        "BusinessAssocOpenAction", NULL, N_("Business _Links"), NULL,
+        N_("View all Business Links"),
         G_CALLBACK (gnc_plugin_business_cmd_assoc)
     },
     {

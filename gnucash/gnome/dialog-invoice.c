@@ -2455,7 +2455,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     if (assoc_uri)
     {
         gchar *display_uri = gnc_assoc_get_unescaped_just_uri (assoc_uri);
-        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Association:"));
+        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Link:"));
         gtk_link_button_set_uri (GTK_LINK_BUTTON(iw->assoc_link_button), display_uri);
         gtk_widget_show (GTK_WIDGET (iw->assoc_link_button));
         g_free (display_uri);

@@ -213,8 +213,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
     },
     {
-        "ToolsTransAssocAction", NULL, N_("_Transaction Associations"), NULL,
-        N_("View all Transaction Associations"),
+        "ToolsTransAssocAction", NULL, N_("_Transaction Links"), NULL,
+        N_("View all Transaction Links"),
         G_CALLBACK (gnc_main_window_cmd_tools_trans_assoc)
     },
 
