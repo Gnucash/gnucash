@@ -1666,15 +1666,41 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 
     if (scm_is_pair (choice))
     {
-        SCM file_scm;
-        SCM res;
+        SCM type = scm_cdr (choice);
+        SCM document = scm_call_3 (export_thunk, priv->cur_report, type, SCM_BOOL_F);
+        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
+        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
+        SCM export_string = scm_call_1 (get_export_string, document);
+        SCM export_error = scm_call_1 (get_export_error, document);
 
-        choice = SCM_CDR (choice);
-        file_scm = scm_from_locale_string (filepath);
-
-        res = scm_call_3 (export_thunk, priv->cur_report, choice, file_scm);
-
-        result = (res != SCM_BOOL_F);
+        if (scm_is_string (export_string))
+        {
+            GError *err = NULL;
+            gchar *exported = scm_to_utf8_string (export_string);
+            if (!g_file_set_contents (filepath, exported, -1, &err))
+                gnc_error_dialog (parent, "Error during export: %s", err->message);
+            g_free (exported);
+            if (err)
+                g_error_free (err);
+        }
+        else if (scm_is_string (export_error))
+        {
+            gchar *str = scm_to_utf8_string (export_error);
+            gnc_error_dialog (parent, "error during export: %s", str);
+            g_free (str);
+        }
+        else
+        {
+            /* compatibility path -- old report which does not effect
+               export-string and export-error during export code- call
+               with filepath */
+            SCM file = scm_from_locale_string (filepath);
+            scm_c_eval_string ("(issue-deprecation-warning \"Old report \
+with export-thunk encountered. Please upgrade report to ignore filename \
+and sets html-document export-string and/or export-error instead.\")");
+            scm_call_3 (export_thunk, priv->cur_report, type, file);
+        }
+        result = TRUE;
     }
     else
         result = gnc_html_export_to_file (priv->html, filepath);
