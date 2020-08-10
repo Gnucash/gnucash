@@ -2124,6 +2124,8 @@ be excluded from periodic reporting.")
           (string-append (G_ "Error") " " (symbol->string transaction-matcher-regexp))
           ""))))
 
+      (gnc:html-document-set-export-error document "No accounts, or regexp error")
+
       ;; if an empty-report-message is passed by a derived report to
       ;; the renderer, display it here.
       (when empty-report-message
@@ -2207,6 +2209,8 @@ be excluded from periodic reporting.")
           report-title (gnc:report-id report-obj)
           NO-MATCHING-TRANS-HEADER NO-MATCHING-TRANS-TEXT))
 
+        (gnc:html-document-set-export-error document "No splits found")
+
         (when (memq infobox-display '(always no-match))
           (gnc:html-document-add-object!
            document
@@ -2249,10 +2253,12 @@ be excluded from periodic reporting.")
               (gnc:html-document-add-object!
                document (grid->html-table grid list-of-rows list-of-cols))))
 
+          (unless (and subtotal-table?
+                       (opt-val pagename-sorting optname-show-subtotals-only))
+            (gnc:html-document-add-object! document table))
+
           (cond
-           ((and (eq? export-type 'csv)
-                 (string? filename)
-                 (not (string-null? filename)))
+           ((eq? export-type 'csv)
             (let ((old-date-fmt (qof-date-format-get))
                   (dummy (qof-date-format-set QOF-DATE-FORMAT-ISO))
                   (infolist
@@ -2260,22 +2266,13 @@ be excluded from periodic reporting.")
                     (list "from" (qof-print-date begindate))
                     (list "to" (qof-print-date enddate)))))
               (qof-date-format-set old-date-fmt)
-              (if (list? csvlist)
-                  (catch #t
-                    (lambda ()
-                      (call-with-output-file filename
-                        (lambda (p)
-                          (display (lists->csv (append infolist csvlist)) p))))
-                    (lambda (key . args)
-                      ;; Translators: ~a error type, ~a filename, ~s error details
-                      (let ((fmt (N_ "error ~a during csv output to ~a: ~s")))
-                        (gnc:gui-error (format #f fmt key filename args)
-                                       (format #f (G_ fmt) key filename args)))))
-                  (gnc:gui-error csvlist (G_ csvlist))))))
+              (cond
+               ((list? csvlist)
+                (gnc:html-document-set-export-string
+                 document (lists->csv (append infolist csvlist))))
 
-          (unless (and subtotal-table?
-                       (opt-val pagename-sorting optname-show-subtotals-only))
-            (gnc:html-document-add-object! document table)))))))
+               (else
+                (gnc:html-document-set-export-error document csvlist)))))))))))
 
     (gnc:report-finished)
 
