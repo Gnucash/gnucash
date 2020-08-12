@@ -8,22 +8,24 @@
 # Erwin Poeze <erwin.poeze@gmail.com>, 2009.
 # Tom van Braeckel <tomvanbraeckel@gmail.com>, 2010.
 # Mark Haanen <i18n@haanen.net>, 2009-2017.
+# Geert Janssens <geert@kobaltwit.be>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.7.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2020-08-12 17:12+0200\n"
-"PO-Revision-Date: 2020-06-26 18:06+0200\n"
-"Last-Translator: Mark Haanen <i18n@haanen.net>\n"
+"PO-Revision-Date: 2020-08-12 18:15+0200\n"
+"Last-Translator: Geert Janssens <geert@kobaltwit.be>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4\n"
 
 #: bindings/guile/commodity-table.scm:36
 msgid "ALL NON-CURRENCY"
@@ -2130,9 +2132,8 @@ msgid "Bayesian"
 msgstr "Bayesiaans"
 
 #: gnucash/gnome/dialog-imap-editor.c:721
-#, fuzzy
 msgid "Description Field"
-msgstr "Omschrijving"
+msgstr "Omschrijvingsveld"
 
 #: gnucash/gnome/dialog-imap-editor.c:724
 msgid "Memo Field"
@@ -2553,9 +2554,8 @@ msgstr[0] "De volgende inkoopfactuur is verschuldigd:"
 msgstr[1] "De volgende %d inkoopfacturen zijn verschuldigd:"
 
 #: gnucash/gnome/dialog-invoice.c:3670
-#, fuzzy
 msgid "Due Invoices Reminder"
-msgstr "Herinnering verschuldigde facturen"
+msgstr "Herinnering verschuldigde klantenfacturen"
 
 #: gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -3640,9 +3640,8 @@ msgid "_Delete Budget"
 msgstr "Budget _verwijderen"
 
 #: gnucash/gnome/gnc-plugin-budget.c:81
-#, fuzzy
 msgid "Delete an existing Budget."
-msgstr "Een bestaand budget openen"
+msgstr "Een bestaand budget verwijderen."
 
 #: gnucash/gnome/gnc-plugin-budget.c:288
 msgid "Select a Budget"
@@ -4304,7 +4303,7 @@ msgstr "Tegenrekening _selecteren"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1378
 msgid "_Do it anyway"
-msgstr ""
+msgstr "_Toch uitvoeren"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1461
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
@@ -4382,9 +4381,8 @@ msgid "Open the selected account and all its subaccounts."
 msgstr "De geselecteerde rekening met al zijn subrekeningen openen"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:153
-#, fuzzy
 msgid "_Delete Budget..."
-msgstr "Budget _verwijderen"
+msgstr "Budget _verwijderen..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:154
 msgid "Select this or another budget and delete it."
@@ -4395,9 +4393,8 @@ msgid "Budget _Options..."
 msgstr "Budget_opties..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:159
-#, fuzzy
 msgid "Edit this budget's options."
-msgstr "Budgetopties bewerken"
+msgstr "Opties voor dit budget bewerken."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:163
 #, fuzzy
@@ -4417,19 +4414,16 @@ msgid "_All Periods..."
 msgstr "_Alle periodes..."
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:171
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts."
-msgstr "De geselecteerde rekening bewerken"
+msgstr "De geselecteerde rekeningen voor alle periodes van het budget bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:175
-#, fuzzy
 msgid "Edit Note"
-msgstr "Creditnota"
+msgstr "Notitie bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:177
-#, fuzzy
 msgid "Edit note for the selected account and period"
-msgstr "De geselecteerde rekening bewerken"
+msgstr "Notitie voor geselecteerde rekening en periode bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:187
 #, fuzzy
@@ -4683,14 +4677,12 @@ msgid "_Print Bill"
 msgstr "Af_drukken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:325
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Inkoopfactuur bewerken"
+msgstr "Inkoopfactuur _bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:326
-#, fuzzy
 msgid "_Duplicate Bill"
-msgstr "Dupliceren"
+msgstr "Inkoopfactuur _dupliceren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:327
 #, fuzzy
@@ -4741,14 +4733,12 @@ msgid "_Print Voucher"
 msgstr "Cheques _afdrukken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:347
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "Onkostendeclaratie bekijken/bewerken"
+msgstr "Onkostendeclaratie _bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:348
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "Verkoopfactuur _dupliceren"
+msgstr "Onkostennota _dupliceren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:349
 #, fuzzy
@@ -4798,14 +4788,12 @@ msgid "_Print Credit Note"
 msgstr "Creditnota bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:369
-#, fuzzy
 msgid "_Edit Credit Note"
-msgstr "Creditnota bewerken"
+msgstr "Creditnota _bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:370
-#, fuzzy
 msgid "_Duplicate Credit Note"
-msgstr "Creditnota bewerken"
+msgstr "Creditnota _dupliceren"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:371
 #, fuzzy
@@ -4917,9 +4905,8 @@ msgid "Make a printable bill"
 msgstr "Een afdrukbare verkoopfactuur maken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:406
-#, fuzzy
 msgid "Edit this bill"
-msgstr "Deze verkoopfactuur bewerken"
+msgstr "Deze inkoopfactuur bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:407
 msgid "Create a new bill as a duplicate of the current one"
@@ -4986,9 +4973,8 @@ msgid "Make a printable voucher"
 msgstr "Een afdrukbare verkoopfactuur maken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:428
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "Deze verkoopfactuur bewerken"
+msgstr "Deze declaratie bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:429
 msgid "Create a new voucher as a duplicate of the current one"
@@ -5056,9 +5042,8 @@ msgid "Make a printable credit note"
 msgstr "Een afdrukbare verkoopfactuur maken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:450
-#, fuzzy
 msgid "Edit this credit note"
-msgstr "Creditnota bewerken"
+msgstr "Deze creditnota bewerken"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:451
 msgid "Create a new credit note as a duplicate of the current one"
@@ -6426,9 +6411,8 @@ msgid "Standard Order"
 msgstr "_Standaardvolgorde"
 
 #: gnucash/gnome/gnc-split-reg.c:685
-#, fuzzy
 msgid "Date of Entry"
-msgstr "_Invoerdatum"
+msgstr "Invoerdatum"
 
 #: gnucash/gnome/gnc-split-reg.c:688 gnucash/gnome/window-reconcile2.c:1758
 #: gnucash/gnome/window-reconcile.c:1949
@@ -6453,7 +6437,7 @@ msgid "Filtered"
 msgstr "Filtersoort"
 
 #: gnucash/gnome/gnc-split-reg.c:913
-#, fuzzy, c-format
+#, c-format
 msgid "Cut the split '%s' from the transaction '%s'?"
 msgstr "De boekregel ‘%s’ van boeking ‘%s’ verwijderen?"
 
@@ -6495,14 +6479,12 @@ msgid "(no description)"
 msgstr "(geen omschrijving)"
 
 #: gnucash/gnome/gnc-split-reg.c:976
-#, fuzzy
 msgid "_Cut Split"
 msgstr "Boekregel k_nippen"
 
 #: gnucash/gnome/gnc-split-reg.c:990
-#, fuzzy
 msgid "Cut the current transaction?"
-msgstr "De huidige boeking bewerken"
+msgstr "De huidige boeking knippen?"
 
 #: gnucash/gnome/gnc-split-reg.c:991
 #, fuzzy
@@ -6514,7 +6496,6 @@ msgstr ""
 "onverstandig omdat dan het afgestemde saldo niet meer aansluit."
 
 #: gnucash/gnome/gnc-split-reg.c:1014
-#, fuzzy
 msgid "_Cut Transaction"
 msgstr "Boeking k_nippen"
 
@@ -6746,9 +6727,8 @@ msgstr "Aangepaste rapportconfiguraties beheren en genereren"
 
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:52
-#, fuzzy
 msgid "Dashboard"
-msgstr "Streepje"
+msgstr "Dashboard"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
@@ -7820,12 +7800,11 @@ msgstr "Grootboek munteenheid"
 
 #: gnucash/gnome-utils/dialog-options.c:1309
 msgid "Default lot tracking policy"
-msgstr ""
+msgstr "Standaard lot opvolgingsbeleid"
 
 #: gnucash/gnome-utils/dialog-options.c:1333
-#, fuzzy
 msgid "Default gain/loss account"
-msgstr "Rekening %s verwijderen"
+msgstr "Standaard winst/verlies rekening"
 
 #: gnucash/gnome-utils/dialog-options.c:1501
 #: gnucash/gnome-utils/dialog-options.c:1647
@@ -8097,9 +8076,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-utils.c:437
-#, fuzzy
 msgid "Date out of range"
-msgstr "Datumbereik"
+msgstr "Datum buiten bereik"
 
 #: gnucash/gnome-utils/dialog-utils.c:765
 msgid "Remember and don't _ask me again."
@@ -9349,7 +9327,6 @@ msgstr "Nieuwe rekening op hoofdniveau"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2855
 #: gnucash/register/ledger-core/split-register.c:2617
-#, fuzzy
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "Storting"
@@ -10215,7 +10192,7 @@ msgstr "Ingeschakeld"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:141
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "I"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:152
 msgid "Last Occur"
@@ -10451,9 +10428,8 @@ msgid "Show help for gtk options"
 msgstr "Hulp bij de eerste optie."
 
 #: gnucash/gnucash.cpp:335
-#, fuzzy
 msgid "Deprecated Options"
-msgstr "_Rapportopties"
+msgstr "Verouderde opties"
 
 #: gnucash/gnucash.cpp:338
 msgid ""
@@ -13316,6 +13292,8 @@ msgstr "•"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:456
 msgid "Double-click anywhere on the table below to insert a column break"
 msgstr ""
+"Dubbelklik ergens in de onderstaande tabel om een kolom-scheiding in te "
+"voegen"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:489
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:484
@@ -14762,19 +14740,16 @@ msgid "Cascade Account Values"
 msgstr "Rekeningwaarden trapsgewijs toepassen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:75
-#, fuzzy
 msgid "Enable Cascading Account Color"
-msgstr "Rekeningkleur"
+msgstr "Recursieve rekeningkleur toepassen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:121
-#, fuzzy
 msgid "Enable Cascading Account Placeholder"
-msgstr "Rekeningkleur"
+msgstr "Recursief plaatshouder rekeningen toepassen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:167
-#, fuzzy
 msgid "Enable Cascading Account Hidden"
-msgstr "Online bankieren-rekeningnaam"
+msgstr "Recursief rekeningen verbergen toepassen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:198
 #, fuzzy
@@ -14817,9 +14792,8 @@ msgid "_Move to"
 msgstr "_Verplaatsen naar"
 
 #: gnucash/gtkbuilder/dialog-account.glade:536
-#, fuzzy
 msgid "Delete the _subaccount"
-msgstr "Alle _subrekeningen verwijderen"
+msgstr "De _subrekening verwijderen"
 
 #: gnucash/gtkbuilder/dialog-account.glade:591
 msgid "<b>Transactions</b>"
@@ -14990,7 +14964,6 @@ msgid "Ta_x related"
 msgstr "Fiscaal relevant"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1582
-#, fuzzy
 msgid "Auto _interest transfer"
 msgstr "Automatische _renteoverboeking"
 
@@ -15318,19 +15291,16 @@ msgid "The number of days to pay the bill after the post date."
 msgstr "Het aantal dagen na de boekdatum om de factuur te betalen."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:213
-#, fuzzy
 msgid "Due Day"
-msgstr "Vervaldagen"
+msgstr "Vervaldag"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:226
-#, fuzzy
 msgid "Discount Day"
 msgstr "Kortingsdagen"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:252
-#, fuzzy
 msgid "Cutoff Day"
-msgstr "Peildatum: "
+msgstr "Peildatum:"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:266
 msgid ""
@@ -16174,7 +16144,6 @@ msgstr ""
 "Deze boeking vereist uw aandacht, anders zal deze niet worden geïmporteerd."
 
 #: gnucash/gtkbuilder/dialog-import.glade:475
-#, fuzzy
 msgid ""
 "Double click on the transaction to either change the matching transaction in "
 "GnuCash or the destination account of the auto-balance split (if required)."
@@ -16911,9 +16880,8 @@ msgid "<b>Files</b>"
 msgstr "<b>Bestanden</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1302
-#, fuzzy
 msgid "_Decimal places"
-msgstr "_Decimalen:"
+msgstr "_Decimalen"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1317
 msgid "How many automatic decimal places will be filled in."
@@ -17163,9 +17131,8 @@ msgid "Print '***' before and after each text field on the check."
 msgstr "Voor en na elk tekstveld op een cheque telkens “***” afdrukken."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2229
-#, fuzzy
 msgid "Default _font"
-msgstr "Standaard_lettertype: "
+msgstr "Standaard_lettertype"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2258
 msgid "Printing"
@@ -17419,9 +17386,8 @@ msgid "<b>Default zoom level</b>"
 msgstr "<b>Standaard zoomniveau</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3085
-#, fuzzy
 msgid "Default zoom level"
-msgstr "<b>Standaard zoomniveau</b>"
+msgstr "Standaard zoomniveau"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3120
 msgid "Reports"
@@ -17559,11 +17525,8 @@ msgid "Remove Old Prices"
 msgstr "_Oude verwijderen"
 
 #: gnucash/gtkbuilder/dialog-price.glade:434
-#, fuzzy
 msgid "Delete prices that meet the following criteria:"
-msgstr ""
-"Alle aandelenkoersen vóór de hieronder genoemde datum op basis van volgende "
-"criteria verwijderen:"
+msgstr "Aandelenkoersen verwijderen die aan volgende criteria voldoen:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:454
 #, fuzzy
@@ -18903,9 +18866,8 @@ msgid "On the"
 msgstr "Op de"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
-#, fuzzy
 msgid "Edit budget for all periods"
-msgstr "Budgetperiode:"
+msgstr "Alle periodes van het budget bewerken"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:119
 msgid "Replace"
@@ -19461,20 +19423,19 @@ msgid "Start Online Banking Wizard"
 msgstr "Online bankieren-assistent starten"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:132
-#, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
 "Dubbelklik op de regel van een Online bankieren-rekeningnaam wanneer u deze "
-"wilt koppelen aan een GnuCash-rekening. Klik op [Volgende] als alle gewenste "
-"rekeningen gekoppeld zijn."
+"wilt koppelen aan een GnuCash-rekening of selecteer een foutieve "
+"overeenkomst en klik op [Geselecteerde overeenkomsten verwijderen]. Klik op "
+"[Volgende] als alle gewenste rekeningen gekoppeld zijn."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:168
-#, fuzzy
 msgid "_Delete selected matches"
-msgstr "De geselecteerde rekening verwijderen"
+msgstr "Geselecteerde overeenkomsten _verwijderen"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:191
 msgid "Match Online accounts with GnuCash accounts"
@@ -19516,18 +19477,16 @@ msgid "<b>Progress</b>"
 msgstr "<b>Voortgang</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:106
-#, fuzzy
 msgid "Current _Job"
-msgstr "Huidige opdracht"
+msgstr "Huidige _opdracht"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:148
 msgid "Progress"
 msgstr "Voortgang"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:162
-#, fuzzy
 msgid "Current _Action"
-msgstr "Huidige actie"
+msgstr "Huidige _actie"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:211
 msgid "<b>_Log Messages</b>"
@@ -19701,9 +19660,8 @@ msgid "Move the selected transaction template one row up"
 msgstr "Het geselecteerde boekingssjabloon een regel omhoog verplaatsen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1407
-#, fuzzy
 msgid "_Down"
-msgstr "Omlaag"
+msgstr "_Omlaag"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1413
 msgid "Move the selected transaction template one row down"
@@ -19719,9 +19677,8 @@ msgid "Sort the list of transaction templates alphabetically"
 msgstr "Het overzicht van de boekingssjabloon alfabetisch sorteren"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1443
-#, fuzzy
 msgid "D_elete"
-msgstr "Verwijderen"
+msgstr "Ver_wijderen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1449
 msgid "Delete the currently selected transaction template"
@@ -20509,9 +20466,8 @@ msgid "Invoice %s created.\n"
 msgstr "Factuur %s geboekt.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:732
-#, fuzzy
 msgid "Do you want to update existing bills/invoices?"
-msgstr "Weet u zeker dat u deze verkoopfacturen wilt boeken?"
+msgstr "Wilt u bestaande facturen bijwerken?"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:740
 #, fuzzy, c-format
@@ -20561,7 +20517,6 @@ msgid "ID"
 msgstr "Nummer"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:143
-#, fuzzy
 msgid "Date-opened"
 msgstr "Documentdatum"
 
@@ -20587,9 +20542,8 @@ msgid "Disc-type"
 msgstr "Soort korting"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:155
-#, fuzzy
 msgid "Disc-how"
-msgstr "Korting"
+msgstr "Kortingstoepassing"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/reports/standard/invoice.scm:100
@@ -20613,9 +20567,8 @@ msgid "Date-posted"
 msgstr "Datum geboekt"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:162
-#, fuzzy
 msgid "Due-date"
-msgstr "vervaldatum"
+msgstr "Vervaldatum"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:163
 msgid "Account-posted"
@@ -20989,9 +20942,8 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:904
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:871
-#, fuzzy
 msgid "Delete the Import Settings."
-msgstr "Export-instellingen selecteren"
+msgstr "De import-instellingen verwijderen."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:938
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:905
@@ -21285,9 +21237,8 @@ msgid "From Namespace"
 msgstr "Naamruimte"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-#, fuzzy
 msgid "Currency To"
-msgstr "Munteenheid: "
+msgstr "Munteenheid naar"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:66
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:117
@@ -22375,10 +22326,9 @@ msgid "12/12/2000"
 msgstr "31.12.2000"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:86
-#, fuzzy
 msgctxt "sample for 'Description'"
 msgid "Description of an Entry"
-msgstr "sample:Omschrijving van een boekregel"
+msgstr "Omschrijving van een factuurregel"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:92
 msgctxt "sample"
@@ -22737,10 +22687,9 @@ msgid "99999"
 msgstr "99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:679
-#, fuzzy
 msgctxt "sample"
 msgid "Description of a transaction"
-msgstr "sample:Omschrijving van een boeking"
+msgstr "Omschrijving van een boeking"
 
 #: gnucash/register/ledger-core/split-register-layout.c:703
 #: gnucash/register/ledger-core/split-register-model.c:334
@@ -25898,7 +25847,7 @@ msgstr "Begin periode"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:63
 msgid "Duration between time periods"
-msgstr ""
+msgstr "De duur tussen tijdsperioden."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:65
 #, fuzzy
@@ -25911,7 +25860,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 msgid "Disable amount indenting"
-msgstr ""
+msgstr "Insprong voor bedragen uitschakelen"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:70
 msgid ""
@@ -25953,9 +25902,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:99
-#, fuzzy
 msgid "Display amounts as hyperlinks"
-msgstr "Rekeningen als koppeling weergeven"
+msgstr "Bedragen als koppeling weergeven"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:100
 #, fuzzy
@@ -25986,9 +25934,8 @@ msgid "Whether or not to include a line indicating total amounts."
 msgstr "Een regel met de totaaltelling van alle activa weergeven."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:110
-#, fuzzy
 msgid "Enable chart"
-msgstr "Lijngrafiek"
+msgstr "Grafiek activeren"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:111
 #, fuzzy
@@ -26042,9 +25989,8 @@ msgstr "Samenvatting altijd weergeven."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:242
 #: gnucash/report/trep-engine.scm:573
-#, fuzzy
 msgid "Disable report summary."
-msgstr "Samenvatting Qif-import"
+msgstr "Rapportsamenvatting uitschakelen."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:496
 #: gnucash/report/reports/standard/balsheet-pnl.scm:652
@@ -26264,7 +26210,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-barchart.scm:73
 #: gnucash/report/reports/standard/budget.scm:120
 msgid "Current period, according to report evaluation date"
-msgstr ""
+msgstr "Huidige periode, gebaseerd op rapport evaluatie datum"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:75
 #: gnucash/report/reports/standard/budget.scm:122
@@ -26311,9 +26257,9 @@ msgstr "Het rapport als lijngrafiek weergeven."
 #. Translators: Bgt and Act refer to budgeted and
 #. actual total amounts.
 #: gnucash/report/reports/standard/budget-barchart.scm:216
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Bgt: ~a Act: ~a"
-msgstr "~a: ~a - ~a"
+msgstr "Budg: ~a Act: ~a"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:222
 msgid "Actual"
@@ -26504,9 +26450,8 @@ msgid "Show Budget Notes"
 msgstr "Budget weergeven"
 
 #: gnucash/report/reports/standard/budget.scm:53
-#, fuzzy
 msgid "Display a column for the budget notes."
-msgstr "Een kolom met de gebudgetteerde bedragen weergeven."
+msgstr "Een kolom met budgetnotities weergeven."
 
 #: gnucash/report/reports/standard/budget.scm:54
 msgid "Show Actual"
@@ -27228,7 +27173,7 @@ msgstr "Individuele belastingen"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:108
 msgid "Display individual sales columns rather than their sum"
-msgstr ""
+msgstr "Afzonderlijke verkoopkolommen weergeven in plaats van hun som"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:109
 #, fuzzy
@@ -27237,7 +27182,7 @@ msgstr "Individuele belastingen"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:110
 msgid "Display individual purchases columns rather than their sum"
-msgstr ""
+msgstr "Afzonderlijke aankoopkolommen weergeven in plaats van hun som"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:111
 #, fuzzy
@@ -27246,7 +27191,7 @@ msgstr "Individuele belastingen"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:112
 msgid "Display individual tax columns rather than their sum"
-msgstr ""
+msgstr "Afzonderlijke belastingskolommen weergeven in plaats van hun som"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:113
 #: gnucash/report/reports/standard/income-gst-statement.scm:353
@@ -27256,7 +27201,7 @@ msgstr "_Saldo opvragen"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:114
 msgid "Display the gross balance (gross sales - gross purchases)"
-msgstr ""
+msgstr "Bruto balans weergeven (bruto verkopen - bruto aankopen)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:115
 #: gnucash/report/reports/standard/income-gst-statement.scm:361
@@ -27266,7 +27211,7 @@ msgstr "_Saldo opvragen"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:116
 msgid "Display the net balance (sales without tax - purchases without tax)"
-msgstr ""
+msgstr "Netto balans weergeven (netto verkopen - netto aankopen)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:118
 #: gnucash/report/reports/standard/income-gst-statement.scm:368
@@ -27276,7 +27221,7 @@ msgstr "Belastingtarief"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:119
 msgid "Display the tax payable (tax on sales - tax on purchases)"
-msgstr ""
+msgstr "Te betalen belasting weergeven (verkoopbelasting - aankoopbelasting)"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:138
 #, fuzzy
@@ -27309,9 +27254,8 @@ msgstr "Fout in rapport"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:161
 #: gnucash/report/reports/standard/income-gst-statement.scm:162
-#, fuzzy
 msgid "default format"
-msgstr "Standaard_lettertype: "
+msgstr "Standaard formaat"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:164
 msgid "Australia BAS"
@@ -27457,9 +27401,8 @@ msgid "(empty)"
 msgstr "(leeg)"
 
 #: gnucash/report/reports/standard/invoice.scm:131
-#, fuzzy
 msgid "Empty space"
-msgstr "Naamruimte"
+msgstr "Lege ruimte"
 
 #: gnucash/report/reports/standard/invoice.scm:195
 msgid "Custom Title"
@@ -27616,6 +27559,8 @@ msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
+"Alle belastingcategorieën afzonderlijk (één per regel) weergeven in plaats "
+"van één enkele belastingregel ?"
 
 #: gnucash/report/reports/standard/invoice.scm:307
 msgid "References"
@@ -27643,9 +27588,8 @@ msgid "Invoice owner ID"
 msgstr "Eigenaar (debiteur)"
 
 #: gnucash/report/reports/standard/invoice.scm:323
-#, fuzzy
 msgid "Display the customer/vendor id?"
-msgstr "De actie weergeven?"
+msgstr "Het klanten- of leveranciersnummer weergeven?"
 
 #: gnucash/report/reports/standard/invoice.scm:328
 msgid "Display the invoice notes?"
@@ -28099,19 +28043,16 @@ msgstr "Het bedrijf voor dit rapport."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:876
 #: gnucash/report/reports/standard/owner-report.scm:582
-#, fuzzy
 msgid "Display the sale amount column?"
-msgstr "De hoeveelheid weergeven?"
+msgstr "De verkoophoeveelheid-kolom weergeven?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:881
 #: gnucash/report/reports/standard/owner-report.scm:587
-#, fuzzy
 msgid "Display the tax column?"
-msgstr "De rekening weergeven?"
+msgstr "De belasting-kolom weergeven?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:886
 #: gnucash/report/reports/standard/owner-report.scm:597
-#, fuzzy
 msgid "Display the period debits column?"
 msgstr "De debet-kolom voor deze periode weergeven?"
 
@@ -28146,9 +28087,8 @@ msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:909
-#, fuzzy
 msgid "Detailed"
-msgstr "Fout"
+msgstr "Gedetailleerd"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:910
 msgid ""
@@ -28521,10 +28461,8 @@ msgstr ""
 "bevatten."
 
 #: gnucash/report/reports/standard/receipt.scm:211
-#, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr ""
-"Een verkoopfactuur met belastingkolommen weergeven (via een eguile-sjabloon)"
+msgstr "Een verkoopfactuur als kasticket weergeven"
 
 #: gnucash/report/reports/standard/receivables.scm:36
 msgid "Receivables Account"
@@ -28910,12 +28848,12 @@ msgid "Australian Tax Invoice"
 msgstr "Australische belastingfactuur"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:325
-#, fuzzy
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
 msgstr ""
-"Een verkoopfactuur met belastingkolommen weergeven (via een eguile-sjabloon)"
+"Een Australische verkoopfactuur met belastingkolommen weergeven (via een "
+"eguile-sjabloon)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:61
 #: gnucash/report/reports/standard/trial-balance.scm:569
@@ -29931,9 +29869,9 @@ msgid "If no transactions matched"
 msgstr "Herkennen van bestaande boekingen"
 
 #: gnucash/report/trep-engine.scm:567
-#, fuzzy
 msgid "Display summary if no transactions were matched."
-msgstr "De boekingsverwijzing weergeven?"
+msgstr ""
+"Samenvatting weergeven als geen overeenstemmende boekingen gevonden werden."
 
 #: gnucash/report/trep-engine.scm:580
 msgid ""
@@ -30091,14 +30029,12 @@ msgid "Display the other account code?"
 msgstr "Het rekeningnummer van de tegenrekening weergeven?"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
 msgid "Display the transaction association"
-msgstr "De omschrijving van de boeking weergeven?"
+msgstr "De boekingsassociatie weergeven"
 
 #: gnucash/report/trep-engine.scm:952
-#, fuzzy
 msgid "Display a subtotal summary table."
-msgstr "Subtotalen weergeven?"
+msgstr "Een samenvatting van de subtotalen weergeven."
 
 #: gnucash/report/trep-engine.scm:960
 msgid "Display the trans number?"
@@ -30125,14 +30061,15 @@ msgid "Multi-Line"
 msgstr "Meerregelig"
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
 msgid "Display all splits in a transaction on a separate line."
-msgstr "De boekingsverwijzing weergeven?"
+msgstr "Elke boekregel van de boeking op een afzonderlijke regel weergeven."
 
 #: gnucash/report/trep-engine.scm:1003
 msgid ""
 "Display one line per transaction, merging multiple splits where required."
 msgstr ""
+"Eén regel per boeking weergeven, waarbij meerdere boekingsregels "
+"samengevoegd worden waar nodig."
 
 #: gnucash/report/trep-engine.scm:1015
 msgid "No amount display."
@@ -31139,9 +31076,8 @@ msgid "Use Trading Accounts"
 msgstr "Handelsportefeuilles gebruiken"
 
 #: libgnucash/engine/qofbookslots.h:67
-#, fuzzy
 msgid "Currency Accounting"
-msgstr "_Huidige rekening"
+msgstr "_Munteenheid gebaseerde boekhouding"
 
 #: libgnucash/engine/qofbookslots.h:68
 msgid "Book Currency"
@@ -31149,12 +31085,11 @@ msgstr "Grootboek munteenheid"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Default Gains Policy"
-msgstr ""
+msgstr "Standaard winst strategie"
 
 #: libgnucash/engine/qofbookslots.h:70
-#, fuzzy
 msgid "Default Gain or Loss Account"
-msgstr "Standaard munteenheid voor nieuwe rekeningen"
+msgstr "Standaard winst- of verliesrekening"
 
 #: libgnucash/engine/qofbookslots.h:71
 msgid "Day Threshold for Read-Only Transactions (red line)"
