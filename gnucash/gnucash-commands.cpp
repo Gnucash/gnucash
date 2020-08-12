@@ -192,11 +192,9 @@ scm_run_report (void *data,
     auto report = scm_from_locale_string (args->run_report.c_str());
     auto type = !args->export_type.empty() ?
                 scm_from_locale_string (args->export_type.c_str()) : SCM_BOOL_F;
-    auto file = !args->output_file.empty() ?
-                scm_from_locale_string (args->output_file.c_str()) : SCM_BOOL_F;
 
 /* dry-run? is #t: try report, check validity of options */
-    if (scm_is_false (scm_call_3 (check_report_cmd, report, type, file)))
+    if (scm_is_false (scm_call_3 (check_report_cmd, report, type, SCM_BOOL_F)))
         scm_cleanup_and_exit_with_failure (nullptr);
 
     PINFO ("Loading datafile %s...\n", datafile);
@@ -213,12 +211,40 @@ scm_run_report (void *data,
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
 
+    char *output;
+
     if (!args->export_type.empty())
     {
-        SCM retval = scm_call_3(run_export_cmd, report, type, file);
+        SCM retval = scm_call_3 (run_export_cmd, report, type, SCM_BOOL_F);
+        SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
+        SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
+        SCM export_string = scm_call_1 (get_export_string, retval);
+        SCM export_error = scm_call_1 (get_export_error, retval);
 
-        if (scm_is_false (retval))
+        if (scm_is_string (export_string))
+        {
+            output = scm_to_utf8_string (retval);
+            if (!args->output_file.empty())
+            {
+                write_report_file(output, args->output_file.c_str());
+            }
+            else
+            {
+                std::cout << output << std::endl;
+            }
+        }
+        else if (scm_is_string (export_error))
+        {
+            auto err = scm_to_utf8_string (export_error);
+            std::cout << err << std::endl;
             scm_cleanup_and_exit_with_failure (nullptr);
+        }
+        else
+        {
+            // compatibility path for old reports
+            auto file = scm_from_locale_string (args->output_file.c_str());
+            scm_call_3 (run_export_cmd, report, type, file);
+        }
     }
     else
     {
