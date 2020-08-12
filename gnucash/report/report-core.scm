@@ -752,14 +752,14 @@ not found.")))
      ((not (assoc export-type export-types))
       (stderr-log "Export-type disallowed: ~a. Allowed types: ~a\n"
                   export-type (string-join (map car export-types) ", ")))
-     ((not output-file) (stderr-log "No output file specified\n"))
      (dry-run? #t)
      (else
       (display "Running export..." (current-error-port))
-      (export-thunk
-       (gnc-report-find (gnc:make-report report-guid))
-       (assoc-ref export-types export-type) output-file)
-      (display "done!\n" (current-error-port))))))
+      (let ((output (export-thunk
+                     (gnc-report-find (gnc:make-report report-guid))
+                     (assoc-ref export-types export-type) output-file)))
+        (display "done!\n" (current-error-port))
+        output)))))
 
 (define (reportname->templates report)
   (or (and=> (gnc:find-report-template report) list)
