@@ -140,7 +140,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
   gtk_tree_view_column_set_resizable (column, TRUE); \
   gtk_tree_view_append_column (GTK_TREE_VIEW (gui->tree_view), column);
     CREATE_COLUMN (_("ID"), ID);
-    CREATE_COLUMN (_("Date-opened"), DATE_OPENED);
+    CREATE_COLUMN (_("Date Opened"), DATE_OPENED);
     CREATE_COLUMN (_("Owner-ID"), OWNER_ID);
     CREATE_COLUMN (_("Billing-ID"), BILLING_ID);
     CREATE_COLUMN (_("Notes"), NOTES);
@@ -158,8 +158,8 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
     CREATE_COLUMN (_("Taxincluded"), TAXINCLUDED);
     CREATE_COLUMN (_("Tax-table"), TAX_TABLE);
 
-    CREATE_COLUMN (_("Date-posted"), DATE_POSTED);
-    CREATE_COLUMN (_("Due-date"), DUE_DATE);
+    CREATE_COLUMN (_("Date Posted"), DATE_POSTED);
+    CREATE_COLUMN (_("Due Date"), DUE_DATE);
     CREATE_COLUMN (_("Account-posted"), ACCOUNT_POSTED);
     CREATE_COLUMN (_("Memo-posted"), MEMO_POSTED);
     CREATE_COLUMN (_("Accu-splits"), ACCU_SPLITS);
