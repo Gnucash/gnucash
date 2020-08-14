@@ -32,7 +32,8 @@
 
 (define-record-type <html-document>
   (make-html-document-internal style-sheet style-stack style
-                               style-text title headline objects)
+                               style-text title headline objects
+                               export-string export-error)
   html-document?
   (style-sheet html-document-style-sheet html-document-set-style-sheet)
   (style-stack html-document-style-stack html-document-set-style-stack)
@@ -40,7 +41,9 @@
   (style-text html-document-style-text html-document-set-style-text)
   (title html-document-title html-document-set-title)
   (headline html-document-headline html-document-set-headline)
-  (objects html-document-objects html-document-set-objects))
+  (objects html-document-objects html-document-set-objects)
+  (export-string html-document-export-string html-document-set-export-string)
+  (export-error html-document-export-error html-document-set-export-error))
 
 (define gnc:html-document-set-title! html-document-set-title)
 (define gnc:html-document-title html-document-title)
@@ -59,6 +62,10 @@
 (define gnc:html-document-objects html-document-objects)
 (define gnc:html-document? html-document?)
 (define gnc:make-html-document-internal make-html-document-internal)
+(define gnc:html-document-export-string html-document-export-string)
+(define gnc:html-document-set-export-string html-document-set-export-string)
+(define gnc:html-document-export-error html-document-export-error)
+(define gnc:html-document-set-export-error html-document-set-export-error)
 
 (define (gnc:make-html-document)
   (gnc:make-html-document-internal
@@ -69,6 +76,8 @@
    ""                    ;; document title
    #f                    ;; headline
    '()                   ;; subobjects
+   #f                    ;; export-string -- must be #f by default
+   #f                    ;; export-error -- must be #f by default
    ))
 
 (define (gnc:html-document-set-style! doc tag . rest)
