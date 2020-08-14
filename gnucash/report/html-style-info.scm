@@ -61,6 +61,8 @@
     retval))
 
 (define (gnc:html-markup-style-info-set! style . rest)
+  (define allowable-fields (record-type-fields <html-markup-style-info>))
+  (define (not-a-field? fld) (not (memq fld allowable-fields)))
   (let loop ((arglist rest))
     (match arglist
       (('attribute (key val) . rest)
@@ -70,6 +72,9 @@
       (('attribute (key) . rest)
        (gnc:html-markup-style-info-set-attribute! style key #f)
        (loop rest))
+
+      (((? not-a-field? fld) . _)
+       (gnc:error "gnc:html-markup-style-info-set! " fld " is not a valid field"))
 
       ((field value . rest)
        ((record-modifier <html-markup-style-info> field) style value)

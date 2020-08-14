@@ -10,6 +10,7 @@
   ;; if (test-runner-factory gnc:test-runner) is commented out, this
   ;; will create Testing/Temporary/test-asset-performance.log
   (test-check1)
+  (test-check-invalid-field)
   (test-check2)
   (test-check3)
   (test-check4)
@@ -27,6 +28,15 @@
                      'name "Test Report Template"
                      'report-guid "54c2fc051af64a08ba2334c2e9179e23")
   (test-equal "1 report successfully defined"
+    1
+    (length (gnc:all-report-template-guids))))
+
+(define (test-check-invalid-field)
+  (gnc:define-report 'version 3
+                     'name "Test Report Template4"
+                     'invalid-field-name 'x
+                     'report-guid "xxx")
+  (test-equal "report with invalid field name: didn't crash"
     1
     (length (gnc:all-report-template-guids))))
 

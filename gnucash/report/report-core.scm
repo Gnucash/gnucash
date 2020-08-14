@@ -155,29 +155,33 @@ not found.")))
   ;; set of options, and generates the report. the renderer must
   ;; return as its final value an <html-document> object.
   (define report-rec (make-report-template))
+  (define allowable-fields (record-type-fields <report-template>))
+  (define (not-a-field? fld) (not (memq fld allowable-fields)))
 
   (let loop ((args args))
     (match args
-      (() #f)
+      (()
+       (let ((report-guid (gnc:report-template-report-guid report-rec))
+             (report-name (gnc:report-template-name report-rec)))
+         (cond
+          ;; missing report-guid: is an error
+          ((not report-guid)
+           (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
+
+          ;; dupe: report-guid is a duplicate
+          ((hash-ref *gnc:_report-templates_* report-guid)
+           (gui-error (string-append rpterr-dupe report-guid)))
+
+          ;; good: new report definition, store into report-templates hash
+          (else
+           (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
+
+      (((? not-a-field? fld) . _)
+       (gnc:error "gnc:define-report: " fld " is not a valid field"))
+
       ((field val . rest)
        ((record-modifier <report-template> field) report-rec val)
-       (loop rest))))
-
-  (let* ((report-guid (gnc:report-template-report-guid report-rec))
-         (report-name (gnc:report-template-name report-rec)))
-    (cond
-
-     ;; missing report-guid: is an error
-     ((not report-guid)
-      (gui-error (string-append rpterr-guid1 report-name rpterr-guid2)))
-
-     ;; dupe: report-guid is a duplicate
-     ((hash-ref *gnc:_report-templates_* report-guid)
-      (gui-error (string-append rpterr-dupe report-guid)))
-
-     ;; good: new report definition, store into report-templates hash
-     (else
-      (hash-set! *gnc:_report-templates_* report-guid report-rec)))))
+       (loop rest)))))
 
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
