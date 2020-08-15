@@ -202,7 +202,7 @@ setup_file_dialog (GtkBuilder *builder, GtkFileChooserButton *fcb,
         GtkWidget *existing_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "existing_hbox"));
         GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
         gchar     *use_uri = gnc_assoc_get_use_uri (path_head, uri, scheme);
-        gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Association is"), display_uri);
+        gchar     *uri_label = g_strdup_printf ("%s '%s'", _("Existing Document Link is"), display_uri);
 
         label = gtk_label_new (uri_label);
 
@@ -537,7 +537,9 @@ row_selected_bus_cb (GtkTreeView *view, GtkTreePath *path,
             return;
         }
 
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Business Association"), uri);
+/* Translators: This is the title of a dialog box for linking an external
+   file or URI with the current bill, invoice, transaction, or voucher. */
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Document Link"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -585,7 +587,7 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
 
     gtk_tree_model_get (assoc_dialog->model, &iter, URI, &uri, ITEM_POINTER, &split, -1);
 
-    // Open associated link, subtract 1 to allow for date_int64
+    // Open linked document, subtract 1 to allow for date_int64
     if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DISPLAY_URI - 1) == col)
         gnc_assoc_open_uri (GTK_WINDOW(assoc_dialog->window), uri);
 
@@ -628,7 +630,7 @@ row_selected_trans_cb (GtkTreeView *view, GtkTreePath *path,
             g_free (uri);
             return;
         }
-        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Change a Transaction Association"), uri);
+        ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(assoc_dialog->window), _("Manage Document Link"), uri);
 
         if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
         {
@@ -912,7 +914,9 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
         GObject *desc_item_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_item"));
         GObject *desc_id_tree_column = G_OBJECT(gtk_builder_get_object (builder, "desc_id"));
 
-        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Associations"));
+        /* Translators: This is the label of a dialog box that lists all of the
+           transaction that have files or URIs linked with them. */
+        gtk_window_set_title (GTK_WINDOW(window), _("Transaction Document Links"));
 
         gtk_tree_view_column_set_visible (GTK_TREE_VIEW_COLUMN(desc_id_tree_column), FALSE);
         gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN(desc_item_tree_column), _("Description"));
@@ -926,10 +930,15 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     {
         GtkWidget *help_label = GTK_WIDGET(gtk_builder_get_object (builder, "help_label"));
         const gchar *item_string = N_(
-            "         To jump to the Business Item, double click on the entry in the id\n"
-            " column, Association column to open the Association or Available to update");
+            "\t\tDouble click on the entry in the Id column to jump to the"
+            "Business Item.\n\t\tDouble click on the entry in the Link column"
+            "to open the Linked Document.\n\t\tDouble click on the entry in"
+            "the Available? column to modify the document link.");
 
-        gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Associations"));
+        /* Translators: This is the label of a dialog box that lists all of the
+           invoices, bills, and vouchers that have files or URIs linked with
+           them. */
+        gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Business Document Links"));
         gtk_label_set_text (GTK_LABEL(help_label), gettext (item_string));
 
         g_signal_connect (assoc_dialog->view, "row-activated",

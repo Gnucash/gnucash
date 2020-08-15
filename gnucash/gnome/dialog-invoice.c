@@ -2467,7 +2467,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     if (assoc_uri)
     {
         gchar *display_uri = gnc_assoc_get_unescaped_just_uri (assoc_uri);
-        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Association:"));
+        gtk_button_set_label (GTK_BUTTON(iw->assoc_link_button), _("Open Linked Document:"));
         gtk_link_button_set_uri (GTK_LINK_BUTTON(iw->assoc_link_button), display_uri);
         gtk_widget_show (GTK_WIDGET (iw->assoc_link_button));
         g_free (display_uri);
@@ -2680,7 +2680,6 @@ gnc_invoice_update_assoc_for_window (GncInvoice *invoice, const gchar *uri)
             // update the menu actions
             uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessAssociationOpenAction");
             gtk_action_set_sensitive (uri_action, FALSE);
-            uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(iw->page), "BusinessAssociationRemoveAction");
             gtk_action_set_sensitive (uri_action, FALSE);
 
             gtk_widget_hide (assoc_link_button);

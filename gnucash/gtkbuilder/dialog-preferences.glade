@@ -1698,7 +1698,7 @@ many months before the current month</property>
                   <object class="GtkBox" id="pref/general/assoc-head">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_markup" translatable="yes">Path head for Associated Files</property>
+                    <property name="tooltip_markup" translatable="yes">Path head for Linked File Relative Paths</property>
                     <child>
                       <placeholder/>
                     </child>
@@ -1716,7 +1716,7 @@ many months before the current month</property>
                       <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Path head for Associated Files</property>
+                        <property name="label" translatable="yes">Path head for  Linked Files Relative Paths</property>
                         <property name="use_markup">True</property>
                       </object>
                       <packing>
@@ -1782,7 +1782,7 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Associated Files&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Linked Files&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
