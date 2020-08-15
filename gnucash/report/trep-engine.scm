@@ -1954,7 +1954,7 @@ be excluded from periodic reporting.")
   ;;     split->date returns #f. useful to include unreconciled splits in reconcile
   ;;     report. it can be useful for alternative date filtering, e.g. filter by
   ;;     transaction->invoice->payment date.
-  ;; #:export-type and #:filename - are provided for CSV export
+  ;; #:export-type - are provided for CSV export
   ;; #:custom-source-accounts - alternate list-of-accounts to retrieve splits from
 
   (define options (gnc:report-options report-obj))
@@ -1971,6 +1971,11 @@ be excluded from periodic reporting.")
         (((? same-split?) . rest) (lp rest))
         (((? from-account?) . _) #t)
         ((_ . rest) (lp rest)))))
+
+  (when filename
+    (issue-deprecation-warning "trep-renderer filename is obsolete, and not \
+supported for exports. please set html-document export-string instead. this \
+warning will be removed in GnuCash 5.0"))
 
   (gnc:report-starting (opt-val gnc:pagename-general gnc:optname-reportname))
 
