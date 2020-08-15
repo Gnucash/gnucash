@@ -213,7 +213,7 @@ ownerreportCB (const char *location, const char *label,
     GncOwner owner;
     Account *acc;
     GHashTable *query_ht;
-    time64 enddate;
+    time64 enddate = INT64_MAX;
     gboolean show_report = TRUE;
 
     g_return_val_if_fail (location != NULL, FALSE);
@@ -293,7 +293,13 @@ ownerreportCB (const char *location, const char *label,
 
     /* Ok, let's run this report */
     if (show_report)
-        gnc_business_call_owner_report (result->parent, &owner, acc);
+    {
+        if (enddate != INT64_MAX)
+            gnc_business_call_owner_report_with_enddate (result->parent, &owner,
+                                                         acc, enddate);
+        else
+            gnc_business_call_owner_report (result->parent, &owner, acc);
+    }
 
     g_hash_table_destroy (query_ht);
     return show_report;
