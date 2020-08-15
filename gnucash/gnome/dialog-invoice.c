@@ -1162,6 +1162,14 @@ void gnc_invoice_window_new_invoice_cb (GtkWindow *parent, gpointer data)
 
 void gnc_business_call_owner_report (GtkWindow *parent, GncOwner *owner, Account *acc)
 {
+    gnc_business_call_owner_report_with_enddate (parent, owner, acc, INT64_MAX);
+}
+
+void gnc_business_call_owner_report_with_enddate (GtkWindow *parent,
+                                                  GncOwner *owner,
+                                                  Account *acc,
+                                                  time64 enddate)
+{
     int id;
     SCM args;
     SCM func;
@@ -1171,8 +1179,12 @@ void gnc_business_call_owner_report (GtkWindow *parent, GncOwner *owner, Account
 
     args = SCM_EOL;
 
-    func = scm_c_eval_string ("gnc:owner-report-create");
+    func = scm_c_eval_string ("gnc:owner-report-create-with-enddate");
     g_return_if_fail (scm_is_procedure (func));
+
+    /* set the enddate */
+    arg = (enddate != INT64_MAX) ? scm_from_int64 (enddate) : SCM_BOOL_F;
+    args = scm_cons (arg, args);
 
     if (acc)
     {
