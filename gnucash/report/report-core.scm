@@ -737,7 +737,7 @@ not found.")))
   (apply format (current-error-port) tmpl args)
   #f)
 
-(define (template-export report template export-type output-file dry-run?)
+(define (template-export report template export-type dry-run?)
   (let* ((report-guid (gnc:report-template-report-guid template))
          (parent-template-guid (gnc:report-template-parent-type template))
          (template (if parent-template-guid
@@ -757,7 +757,7 @@ not found.")))
       (display "Running export..." (current-error-port))
       (let ((output (export-thunk
                      (gnc-report-find (gnc:make-report report-guid))
-                     (assoc-ref export-types export-type) output-file)))
+                     (assoc-ref export-types export-type))))
         (display "done!\n" (current-error-port))
         output)))))
 
@@ -809,9 +809,8 @@ not found.")))
 
 ;; In: report - string matching reportname
 ;; In: export-type - string matching export type (eg CSV TXF etc)
-;; In: output-file - string for export file name
 ;; Out: if args are valid and runs a single report: #t, otherwise: #f
-(define-public (gnc:cmdline-check-report report export-type output-file)
+(define-public (gnc:cmdline-check-report report export-type)
   (let ((templates (reportname->templates report)))
     (cond
      ((null? templates)
@@ -825,16 +824,15 @@ not found.")))
       (stderr-log "\n"))
 
      (export-type (template-export report (car templates)
-                                   export-type output-file #t))
+                                   export-type #t))
      (else #t))))
 
 ;; In: report - string matching reportname
 ;; In: export-type - string matching export type (eg CSV TXF etc)
-;; In: output-file - string for export file name
 ;; Out: if error, #f
-(define-public (gnc:cmdline-template-export report export-type output-file)
+(define-public (gnc:cmdline-template-export report export-type)
   (match (reportname->templates report)
-    ((template) (template-export report template export-type output-file #f))
+    ((template) (template-export report template export-type #f))
     (_ (gnc:error report " does not match unique report") #f)))
 
 ;; In: report - string matching reportname
