@@ -1689,17 +1689,6 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
             gnc_error_dialog (parent, "error during export: %s", str);
             g_free (str);
         }
-        else
-        {
-            /* compatibility path -- old report which does not effect
-               export-string and export-error during export code- call
-               with filepath */
-            SCM file = scm_from_locale_string (filepath);
-            scm_c_eval_string ("(issue-deprecation-warning \"Old report \
-with export-thunk encountered. Please upgrade report to ignore filename \
-and sets html-document export-string and/or export-error instead.\")");
-            scm_call_3 (export_thunk, priv->cur_report, type, file);
-        }
         result = TRUE;
     }
     else
