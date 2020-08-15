@@ -30,6 +30,7 @@
 #include "gnc-html.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "stdint.h"
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -207,11 +208,12 @@ static gboolean
 ownerreportCB (const char *location, const char *label,
                gboolean new_window, GNCURLResult * result)
 {
-    gchar *ownerptr, *acctptr, *etype = NULL;
+    gchar *ownerptr, *acctptr, *etype, *datestr = NULL;
     GncGUID guid;
     GncOwner owner;
     Account *acc;
     GHashTable *query_ht;
+    time64 enddate;
     gboolean show_report = TRUE;
 
     g_return_val_if_fail (location != NULL, FALSE);
@@ -226,6 +228,11 @@ ownerreportCB (const char *location, const char *label,
     acctptr = g_hash_table_lookup (query_ht, "acct");
     DISABLE_REPORT_IF_TRUE (!acctptr || !string_to_guid (acctptr, &guid));
     acc = xaccAccountLookup (&guid, gnc_get_current_book ());
+
+    /* parse the acct guid*/
+    datestr = g_hash_table_lookup (query_ht, "enddate");
+    if (datestr)
+        enddate = g_ascii_strtoull (datestr, NULL, 10);
 
     /* parse the owner guid */
     ownerptr = g_hash_table_lookup (query_ht, "owner");
