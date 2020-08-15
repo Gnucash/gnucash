@@ -331,7 +331,7 @@ static const char*
 gnc_split_register_get_associate_label (VirtualLocation virt_loc,
                                         gpointer user_data)
 {
-    return C_ ("Column header for 'Associate'", "A");
+    return C_ ("Column header for 'Document Link'", "L");
 }
 
 static const char*

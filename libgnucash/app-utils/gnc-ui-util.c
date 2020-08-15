@@ -908,13 +908,13 @@ gnc_get_association_str (char association_flag)
     switch (association_flag)
     {
     case WASSOC:
-        return C_("Association flag for 'web'", "w");
+        return C_("Document Link flag for 'web'", "w");
     case FASSOC:
-        return C_("Association flag for 'file'", "f");
+        return C_("Document Link flag for 'file'", "f");
     case ' ':
         return " ";
     default:
-        PERR("Bad association flag");
+        PERR("Bad link flag");
         return NULL;
     }
 }
