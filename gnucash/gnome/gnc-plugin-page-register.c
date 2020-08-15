@@ -4649,8 +4649,8 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
             }
             details = g_list_reverse (details);
             choice = gnc_choose_radio_option_dialog
-                (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select invoice"),
-                 _("Several invoices are associated with this transaction. \
+                (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select document"),
+                 _("Several documents are associated with this transaction. \
 Please choose one:"), _("Select"), 0, details);
             if (choice >= 0)
                 invoice = (GncInvoice *)(g_list_nth (invoices, choice))->data;
