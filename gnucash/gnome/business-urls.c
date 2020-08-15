@@ -171,6 +171,14 @@ jobCB (const char *location, const char *label,
     show_report = FALSE;                                                \
   }
 
+#define DISABLE_REPORT_IF_TRUE(inst)                                    \
+  if (inst)                                                             \
+  {                                                                     \
+    result->error_message =                                             \
+      g_strdup_printf (_("Badly formed URL %s"), location);             \
+    show_report = FALSE;                                                \
+  }
+
 /* parses a string "user=john&pass=smith&age=41" into a string-keyed
    GHashTable. String must not contain non-ASCII chars. Duplicate keys
    will be ignored. */
@@ -216,23 +224,14 @@ ownerreportCB (const char *location, const char *label,
 
     /* parse the acct guid*/
     acctptr = g_hash_table_lookup (query_ht, "acct");
-    if (!acctptr || !string_to_guid (acctptr, &guid))
-    {
-        result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                location);
-        show_report = FALSE;
-    }
+    DISABLE_REPORT_IF_TRUE (!acctptr || !string_to_guid (acctptr, &guid));
     acc = xaccAccountLookup (&guid, gnc_get_current_book ());
 
     /* parse the owner guid */
     ownerptr = g_hash_table_lookup (query_ht, "owner");
-    if (!ownerptr || !strchr("cvej", ownerptr[0]) || ownerptr[1] != ':' ||
-        !string_to_guid (ownerptr+2, &guid))
-    {
-        result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                location);
-        show_report = FALSE;
-    }
+    DISABLE_REPORT_IF_TRUE (!ownerptr || !strchr("cvej", ownerptr[0]) ||
+                            ownerptr[1] != ':' ||
+                            !string_to_guid (ownerptr+2, &guid));
     memset (&owner, 0, sizeof (owner));
     switch (*ownerptr)
     {
