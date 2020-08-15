@@ -230,7 +230,9 @@ exist but have no suitable transactions."))
               (else (op-num (car aging1) (car aging2)))))))))
 
     ;; set default title
-    (gnc:html-document-set-title! document report-title)
+    (gnc:html-document-set-title!
+     document
+     (format #f "~a - ~a" report-title (qof-print-date report-date)))
 
     (cond
      ((null? accounts)
@@ -309,7 +311,7 @@ exist but have no suitable transactions."))
                               "number-cell"
                               (gnc:make-html-text
                                (gnc:html-markup-anchor
-                                (gnc:owner-report-text owner account)
+                                (gnc:owner-report-text owner account report-date)
                                 (gnc:make-gnc-monetary comm aging-total)))))
                             (options->address options receivable owner)))))
                       (sort owners-and-aging sort-aging<?))
