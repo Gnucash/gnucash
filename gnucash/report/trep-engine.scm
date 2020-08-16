@@ -465,6 +465,7 @@ Credit Card, and Income accounts."))
   (and (keylist-get-info (sortkey-list split-action?) sortkey 'split-sortvalue)
        (not (keylist-get-info (sortkey-list split-action?) sortkey 'sortkey))))
 
+(define-public gnc:lists->csv lists->csv)
 (define (lists->csv lst)
   ;; converts a list of lists into CSV
   ;; this function aims to follow RFC4180, and will pad lists to
