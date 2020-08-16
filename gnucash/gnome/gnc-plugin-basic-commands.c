@@ -39,7 +39,7 @@
 #include "gnc-plugin-basic-commands.h"
 #include "gnc-ui-util.h"
 
-#include "dialog-assoc.h"
+#include "dialog-doclink.h"
 #include "dialog-book-close.h"
 #include "dialog-file-access.h"
 #include "dialog-fincalc.h"
@@ -213,8 +213,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
     },
     {
-        "ToolsTransAssocAction", NULL, N_("_Transaction Associations"), NULL,
-        N_("View all Transaction Associations"),
+        "ToolsTransLinkedDocsAction", NULL, N_("_Transaction Linked Documents"), NULL,
+        N_("View all Transaction Linked Documents"),
         G_CALLBACK (gnc_main_window_cmd_tools_trans_assoc)
     },
 
@@ -606,7 +606,7 @@ static void
 gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_assoc_trans_dialog (GTK_WINDOW (data->window));
+    gnc_doclink_trans_dialog (GTK_WINDOW (data->window));
     gnc_unset_busy_cursor (NULL);
 }
 

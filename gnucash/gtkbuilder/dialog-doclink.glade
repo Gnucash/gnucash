@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkDialog" id="association_dialog">
+  <object class="GtkDialog" id="linked_doc_dialog">
     <property name="can_focus">False</property>
     <property name="default_width">600</property>
     <property name="type_hint">dialog</property>
@@ -489,7 +489,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="association_window">
+  <object class="GtkWindow" id="linked_doc_window">
     <property name="can_focus">False</property>
     <child type="titlebar">
       <placeholder/>
@@ -652,7 +652,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="assoc">
+                  <object class="GtkTreeViewColumn" id="doclink">
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes">Linked Document</property>
                     <property name="alignment">0.5</property>

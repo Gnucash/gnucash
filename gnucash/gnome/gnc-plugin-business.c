@@ -29,7 +29,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "dialog-assoc.h"
+#include "dialog-doclink.h"
 #include "dialog-billterms.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
@@ -275,8 +275,8 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Other menu items */
     {
-        "BusinessAssocOpenAction", NULL, N_("Business _Associations"), NULL,
-        N_("View all Business Associations"),
+        "BusinessLinkOpenAction", NULL, N_("Business Links"), NULL,
+        N_("View all Linked Business Documents"),
         G_CALLBACK (gnc_plugin_business_cmd_assoc)
     },
     {
@@ -759,7 +759,7 @@ gnc_plugin_business_cmd_assoc (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    gnc_assoc_business_dialog (GTK_WINDOW (mw->window));
+    gnc_doclink_business_dialog (GTK_WINDOW (mw->window));
 }
 
 static void

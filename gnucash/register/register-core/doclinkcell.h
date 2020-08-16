@@ -1,5 +1,5 @@
 /********************************************************************\
- * assoccell.h -- association checkbox cell                         *
+ * doclinkcell.h -- Document link checkbox cell                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,9 +22,9 @@
 
 /** @addtogroup Cell Cell
  * @{
- * @file assoccell.h
- * @struct AssocCell
- * @brief The AssocCell object implements a cell handler
+ * @file doclinkcell.h
+ * @struct Doclinkcell
+ * @brief The Doclinkcell object implements a cell handler
  * that will cycle through a series of single-character
  * values when clicked upon by the mouse and will return a glyph
  * if font can show it.
@@ -36,8 +36,8 @@
  * Copyright (c) 2020 Robert Fewell
  */
 
-#ifndef ASSOC_CELL_H
-#define ASSOC_CELL_H
+#ifndef DOC_LINK_CELL_H
+#define DOC_LINK_CELL_H
 
 #include <glib.h>
 
@@ -46,8 +46,8 @@
 #define GLYPH_PAPERCLIP "\360\237\223\216" // Codepoint U+1F4CE
 #define GLYPH_LINK      "\360\237\224\227" // Codepoint U+1F517
 
-typedef const char * (*AssocCellStringGetter) (char flag);
-typedef gboolean (*AssocCellConfirm) (char old_flag, gpointer data);
+typedef const char * (*DoclinkcellStringGetter) (char flag);
+typedef gboolean (*DoclinkcellConfirm) (char old_flag, gpointer data);
 
 typedef struct
 {
@@ -59,42 +59,42 @@ typedef struct
     char * flag_order;      /** Automatic flag selection order */
     char   default_flag;    /** Default flag for unknown user input */
 
-    AssocCellStringGetter get_string;
-    AssocCellConfirm confirm_cb;
+    DoclinkcellStringGetter get_string;
+    DoclinkcellConfirm confirm_cb;
     gpointer confirm_data;
     gboolean read_only;
     gboolean use_glyphs;
-} AssocCell;
+} Doclinkcell;
 
-BasicCell * gnc_assoc_cell_new (void);
+BasicCell * gnc_doclink_cell_new (void);
 
-void gnc_assoc_cell_set_flag (AssocCell *cell, char flag);
-char gnc_assoc_cell_get_flag (AssocCell *cell);
+void gnc_doclink_cell_set_flag (Doclinkcell *cell, char flag);
+char gnc_doclink_cell_get_flag (Doclinkcell *cell);
 
-void gnc_assoc_cell_set_confirm_cb (AssocCell *cell,
-                                    AssocCellConfirm confirm_cb,
+void gnc_doclink_cell_set_confirm_cb (Doclinkcell *cell,
+                                    DoclinkcellConfirm confirm_cb,
                                     gpointer data);
 
-void gnc_assoc_cell_set_string_getter (AssocCell *cell,
-                                       AssocCellStringGetter getter);
+void gnc_doclink_cell_set_string_getter (Doclinkcell *cell,
+                                       DoclinkcellStringGetter getter);
 
 /** note that @param flags is copied into the RecnCell directly, but 
  * remains the "property" of the caller.  The caller must maintain the
  * chars pointer, and the caller must setup a mechanism to 'free' the
- * chars pointer.  The rationale is that you may have many AssocCell
+ * chars pointer.  The rationale is that you may have many Doclinkcell
  * objects that use the same set of flags.
  */
-void gnc_assoc_cell_set_valid_flags (AssocCell *cell, const char *flags,
+void gnc_doclink_cell_set_valid_flags (Doclinkcell *cell, const char *flags,
                                      char default_flag);
-void gnc_assoc_cell_set_flag_order (AssocCell *cell, const char *flags);
+void gnc_doclink_cell_set_flag_order (Doclinkcell *cell, const char *flags);
 
-void gnc_assoc_cell_set_read_only (AssocCell *cell, gboolean read_only);
+void gnc_doclink_cell_set_read_only (Doclinkcell *cell, gboolean read_only);
 
-void gnc_assoc_cell_set_use_glyphs (AssocCell *cell);
+void gnc_doclink_cell_set_use_glyphs (Doclinkcell *cell);
 
-gboolean gnc_assoc_get_use_glyphs (AssocCell *cell);
+gboolean gnc_doclink_get_use_glyphs (Doclinkcell *cell);
 
-const char * gnc_assoc_get_glyph_from_flag (char association_flag);
+const char * gnc_doclink_get_glyph_from_flag (char link_flag);
 
 /** @} */
 #endif

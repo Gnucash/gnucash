@@ -37,8 +37,8 @@
 #include "qof.h"
 #include "SX-book.h"
 #include "dialog-account.h"
-#include "dialog-assoc.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink.h"
+#include "dialog-doclink-utils.h"
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "gnc-component-manager.h"
@@ -1292,12 +1292,15 @@ gsr_default_associate_handler (GNCSplitReg *gsr)
         return;
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    ret_uri = gnc_assoc_get_uri_dialog (GTK_WINDOW(gsr->window), _("Change a Transaction Association"), uri);
+    ret_uri =
+        gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
+                                    _("Change a Transaction Linked Document"),
+                                    uri);
 
     if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-        xaccTransSetAssociation (trans, ret_uri);
+        xaccTransSetDocLink (trans, ret_uri);
 
     g_free (ret_uri);
     g_free (uri);
@@ -1327,9 +1330,9 @@ gsr_default_associate_open_handler (GNCSplitReg *gsr)
         return;
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    gnc_assoc_open_uri (GTK_WINDOW (gsr->window), uri);
+    gnc_doclink_open_uri (GTK_WINDOW (gsr->window), uri);
     g_free (uri);
 }
 
@@ -1358,7 +1361,7 @@ gsr_default_associate_remove_handler (GNCSplitReg *gsr)
     if (is_trans_readonly_and_warn (GTK_WINDOW(gsr->window), trans))
         return;
 
-    xaccTransSetAssociation (trans, "");
+    xaccTransSetDocLink (trans, "");
 }
 
 static void
@@ -1378,10 +1381,10 @@ gsr_default_associate_from_sheet_handler (GNCSplitReg *gsr)
     trans = xaccSplitGetParent (split);
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, gsr->read_only);
+    uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
     if (uri)
-        gnc_assoc_open_uri (GTK_WINDOW (gsr->window), uri);
+        gnc_doclink_open_uri (GTK_WINDOW (gsr->window), uri);
 
     g_free (uri);
 }

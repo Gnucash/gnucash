@@ -903,13 +903,13 @@ gnc_get_reconcile_flag_order (void)
 }
 
 const char *
-gnc_get_association_str (char association_flag)
+gnc_get_doclink_str (char link_flag)
 {
-    switch (association_flag)
+    switch (link_flag)
     {
-    case WASSOC:
+    case WLINK:
         return C_("Document Link flag for 'web'", "w");
-    case FASSOC:
+    case FLINK:
         return C_("Document Link flag for 'file'", "f");
     case ' ':
         return " ";
@@ -920,16 +920,16 @@ gnc_get_association_str (char association_flag)
 }
 
 const char *
-gnc_get_association_valid_flags (void)
+gnc_get_doclink_valid_flags (void)
 {
-    static const char flags[] = { FASSOC, WASSOC, ' ', 0 };
+    static const char flags[] = { FLINK, WLINK, ' ', 0 };
     return flags;
 }
 
 const char *
-gnc_get_association_flag_order (void)
+gnc_get_doclink_flag_order (void)
 {
-    static const char flags[] = { FASSOC, WASSOC, ' ', 0 };
+    static const char flags[] = { FLINK, WLINK, ' ', 0 };
     return flags;
 }
 
