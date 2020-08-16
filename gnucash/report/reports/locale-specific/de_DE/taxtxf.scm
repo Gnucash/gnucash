@@ -74,6 +74,7 @@
 (use-modules (gnucash locale de_DE tax))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-26))
 
 (define reportname (N_ "Tax Report / TXF Export"))
 
@@ -771,34 +772,20 @@
 
       (if (not tax-mode?)		; Do Txf mode
           (begin
-            (if file-name		; cancel TXF if no file selected
-                (let* ((port (open-output-file file-name))    
-                       (output
-                        (map (lambda (x) (handle-level-x-account 1 x))
-                             selected-accounts))
-		       ;; FIXME: Print the leading and trailing bits here
-                       (output-txf (list
-                                    "<WinstonAusgang>" crlf
-				    "  <Formular Typ=\"UST\"></Formular>" crlf
-				    ;; FIXME: Get this Ordnungsnummer somehow
-				    "  <Ordnungsnummer>"
-				    tax-nr
-				    "</Ordnungsnummer>" crlf
-                                    ;;"<software>GnuCash</software>" crlf
-				    ;;"<version>" gnc:version "</version>" crlf
-                                    ;; today-date crlf
-				    "  <AnmeldeJahr>" to-year "</AnmeldeJahr>" crlf
-				    ;; FIXME: Find out what this should mean
-				    "  <AnmeldeZeitraum>" "1" "</AnmeldeZeitraum>" crlf
-                                    output
-				    "</WinstonAusgang>")))
-
-                  (gnc:display-report-list-item output-txf port
-                                                "taxtxf-de.scm - ")
-                  (close-output-port port)
-                  #t)
-                #f))
-
+            (gnc:html-document-set-export-string
+             doc (call-with-output-string
+                   (lambda (port)
+                     (gnc:display-report-list-item
+                      (list
+                       "<WinstonAusgang>" crlf
+                       "  <Formular Typ=\"UST\"></Formular>" crlf
+                       "  <Ordnungsnummer>" tax-nr "</Ordnungsnummer>" crlf
+                       "  <AnmeldeJahr>" to-year "</AnmeldeJahr>" crlf
+                       "  <AnmeldeZeitraum>1</AnmeldeZeitraum>" crlf
+                       (map (cut handle-level-x-account 1 <>) selected-accounts)
+                       "</WinstonAusgang>")
+                      port "taxtxf-de.scm - "))))
+            doc)
           (begin			; else do tax report
             (gnc:html-document-set-style! 
              doc "blue"
