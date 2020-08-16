@@ -1668,26 +1668,37 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
     {
         SCM type = scm_cdr (choice);
         SCM document = scm_call_3 (export_thunk, priv->cur_report, type, SCM_BOOL_F);
+        SCM query_result = scm_c_eval_string ("gnc:html-document?");
         SCM get_export_string = scm_c_eval_string ("gnc:html-document-export-string");
         SCM get_export_error = scm_c_eval_string ("gnc:html-document-export-error");
-        SCM export_string = scm_call_1 (get_export_string, document);
-        SCM export_error = scm_call_1 (get_export_error, document);
 
-        if (scm_is_string (export_string))
+        if (scm_is_false (scm_call_1 (query_result, document)))
+            gnc_error_dialog (parent, _("This report must be upgraded to \
+return a document object with export-string or export-error."));
+        else
         {
-            GError *err = NULL;
-            gchar *exported = scm_to_utf8_string (export_string);
-            if (!g_file_set_contents (filepath, exported, -1, &err))
-                gnc_error_dialog (parent, "Error during export: %s", err->message);
-            g_free (exported);
-            if (err)
-                g_error_free (err);
-        }
-        else if (scm_is_string (export_error))
-        {
-            gchar *str = scm_to_utf8_string (export_error);
-            gnc_error_dialog (parent, "error during export: %s", str);
-            g_free (str);
+            SCM export_string = scm_call_1 (get_export_string, document);
+            SCM export_error = scm_call_1 (get_export_error, document);
+
+            if (scm_is_string (export_string))
+            {
+                GError *err = NULL;
+                gchar *exported = scm_to_utf8_string (export_string);
+                if (!g_file_set_contents (filepath, exported, -1, &err))
+                    gnc_error_dialog (parent, "Error during export: %s", err->message);
+                g_free (exported);
+                if (err)
+                    g_error_free (err);
+            }
+            else if (scm_is_string (export_error))
+            {
+                gchar *str = scm_to_utf8_string (export_error);
+                gnc_error_dialog (parent, "error during export: %s", str);
+                g_free (str);
+            }
+            else
+                gnc_error_dialog (parent, _("This report must be upgraded to \
+return a document object with export-string or export-error."));
         }
         result = TRUE;
     }
