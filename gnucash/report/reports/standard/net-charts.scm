@@ -176,7 +176,7 @@
 ;; includes all the relevant Scheme code. The option database passed
 ;; to the function is one created by the options-generator function
 ;; defined above.
-(define (net-renderer report-obj inc-exp? linechart?)
+(define (net-renderer report-obj inc-exp? linechart? export-type)
 
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
@@ -440,8 +440,18 @@
                        'attribute (list "class" "number-cell")))
                     '(1 2 3))
 
-                   (gnc:html-document-add-object! document table))
-                 ))
+                   (gnc:html-document-add-object! document table)))
+
+             (cond
+              ((eq? export-type 'csv)
+               (gnc:html-document-set-export-string
+                document
+                (gnc:lists->csv
+                 (cons (if inc-exp?
+                           (map G_ '("Date" "Income" "Expense" "Net Profit"))
+                           (map G_ '("Date" "Assets" "Liabilities" "Net Worth")))
+                       (map list date-string-list minuend-balances
+                            subtrahend-balances difference-balances)))))))
            (gnc:html-document-add-object!
             document
             (gnc:html-make-empty-data-warning
@@ -473,7 +483,10 @@
  'report-guid net-worth-barchart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f #f))
- 'renderer (lambda (report-obj) (net-renderer report-obj #f #f)))
+ 'renderer (lambda (report-obj) (net-renderer report-obj #f #f #f))
+ 'export-types '(("CSV" . csv))
+ 'export-thunk (lambda (report-obj export-type filename)
+                 (net-renderer report-obj #f #f export-type)))
 
 (gnc:define-report
  'version 1
@@ -482,7 +495,10 @@
  'menu-name (N_ "Income & Expense Barchart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t #f))
- 'renderer (lambda (report-obj) (net-renderer report-obj #t #f)))
+ 'renderer (lambda (report-obj) (net-renderer report-obj #t #f #f))
+ 'export-types '(("CSV" . csv))
+ 'export-thunk (lambda (report-obj export-type filename)
+                 (net-renderer report-obj #t #f export-type)))
 
 (gnc:define-report
  'version 1
@@ -490,7 +506,10 @@
  'report-guid net-worth-linechart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f #t))
- 'renderer (lambda (report-obj) (net-renderer report-obj #f #t)))
+ 'renderer (lambda (report-obj) (net-renderer report-obj #f #t #f))
+ 'export-types '(("CSV" . csv))
+ 'export-thunk (lambda (report-obj export-type filename)
+                 (net-renderer report-obj #f #t export-type)))
 
 ;; Not sure if a line chart makes sense for Income & Expense
 ;; Feel free to uncomment and try it though
@@ -501,4 +520,7 @@
  'menu-name (N_ "Income & Expense Linechart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t #t))
- 'renderer (lambda (report-obj) (net-renderer report-obj #t #t)))
+ 'renderer (lambda (report-obj) (net-renderer report-obj #t #t #f))
+ 'export-types '(("CSV" . csv))
+ 'export-thunk (lambda (report-obj export-type filename)
+                 (net-renderer report-obj #t #t export-type)))
