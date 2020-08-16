@@ -77,7 +77,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink-utils.h"
 
 #define DIALOG_PREFERENCES_CM_CLASS "dialog-newpreferences"
 #define GNC_PREFS_GROUP             "dialogs.preferences"
@@ -752,7 +752,7 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
     const gchar  *pref = g_object_get_data (G_OBJECT(fc), "pref");
     gchar        *folder_uri = gtk_file_chooser_get_uri (fc);
-    gchar *old_path_head_uri = gnc_assoc_get_path_head ();
+    gchar *old_path_head_uri = gnc_doclink_get_path_head ();
 
     // make sure path_head ends with a trailing '/', 3.5 onwards
     if (!g_str_has_suffix (folder_uri, "/"))
@@ -768,9 +768,10 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     if (!gnc_prefs_set_string (group, pref, folder_uri))
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
     else
-        gnc_assoc_pref_path_head_changed (GTK_WINDOW(gtk_widget_get_toplevel (
-                                          GTK_WIDGET(fc))), old_path_head_uri);
-    
+        gnc_doclink_pref_path_head_changed (
+            GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (fc))),
+            old_path_head_uri);
+
     g_free (old_path_head_uri);
     g_free (folder_uri);
 }
@@ -821,7 +822,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
         gtk_widget_hide (GTK_WIDGET(image));
     else
     {
-        gchar *path_head = gnc_assoc_get_unescape_uri (NULL, uri, "file");
+        gchar *path_head = gnc_doclink_get_unescape_uri (NULL, uri, "file");
         gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
 
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), ttip);
@@ -862,7 +863,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     GtkWidget            *box;
     GtkWidget            *fcb_new;
     gchar                *boxname;
-    gchar                *old_path_head_uri = gnc_assoc_get_path_head ();
+    gchar                *old_path_head_uri = gnc_doclink_get_path_head ();
 
     /* We need to destroy the GtkFileChooserButton and recreate as there
        does not seem to be away of resetting the folder path to NONE */
@@ -872,8 +873,9 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     if (!gnc_prefs_set_string (group, pref, ""))
         PINFO("Failed to Clear preference at %s, %s", group, pref);
     else
-        gnc_assoc_pref_path_head_changed (GTK_WINDOW(gtk_widget_get_toplevel (
-                                          GTK_WIDGET(fcb))), old_path_head_uri);
+        gnc_doclink_pref_path_head_changed (
+            GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (fcb))),
+            old_path_head_uri);
 
     gtk_widget_destroy (GTK_WIDGET(fcb));
 

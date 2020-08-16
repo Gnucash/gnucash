@@ -84,7 +84,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define _GNC_MOD_NAME     GNC_ID_INVOICE
 
 #define GNC_INVOICE_IS_CN "credit-note"
-#define GNC_INVOICE_ASSOC "assoc_uri"
+#define GNC_INVOICE_DOCLINK "doclink_uri"
 
 #define SET_STR(obj, member, str) { \
     char * tmp; \
@@ -538,18 +538,18 @@ void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes)
     gncInvoiceCommitEdit (invoice);
 }
 
-void gncInvoiceSetAssociation (GncInvoice *invoice, const char *assoc)
+void gncInvoiceSetDocLink (GncInvoice *invoice, const char *doclink)
 {
-    if (!invoice || !assoc) return;
+    if (!invoice || !doclink) return;
     gncInvoiceBeginEdit (invoice);
-    if (g_strcmp0 (assoc, "") == 0)
-        qof_instance_set_kvp (QOF_INSTANCE (invoice), NULL, 1, GNC_INVOICE_ASSOC);
+    if (g_strcmp0 (doclink, "") == 0)
+        qof_instance_set_kvp (QOF_INSTANCE (invoice), NULL, 1, GNC_INVOICE_DOCLINK);
     else
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_STRING);
-        g_value_set_string (&v, assoc);
-        qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_ASSOC);
+        g_value_set_string (&v, doclink);
+        qof_instance_set_kvp (QOF_INSTANCE (invoice), &v, 1, GNC_INVOICE_DOCLINK);
     }
     qof_instance_set_dirty (QOF_INSTANCE(invoice));
     gncInvoiceCommitEdit (invoice);
@@ -863,11 +863,11 @@ const char * gncInvoiceGetNotes (const GncInvoice *invoice)
     return invoice->notes;
 }
 
-const char * gncInvoiceGetAssociation (const GncInvoice *invoice)
+const char * gncInvoiceGetDocLink (const GncInvoice *invoice)
 {
     GValue v = G_VALUE_INIT;
     if (!invoice) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE(invoice), &v, 1, GNC_INVOICE_ASSOC);
+    qof_instance_get_kvp (QOF_INSTANCE(invoice), &v, 1, GNC_INVOICE_DOCLINK);
     if (G_VALUE_HOLDS_STRING(&v))
          return g_value_get_string (&v);
     return NULL;
@@ -2237,7 +2237,7 @@ gboolean gncInvoiceRegister (void)
         { INVOICE_IS_PAID,   QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPaid,    NULL },
         { INVOICE_BILLINGID, QOF_TYPE_STRING,  (QofAccessFunc)gncInvoiceGetBillingID, (QofSetterFunc)gncInvoiceSetBillingID },
         { INVOICE_NOTES,     QOF_TYPE_STRING,  (QofAccessFunc)gncInvoiceGetNotes,   (QofSetterFunc)gncInvoiceSetNotes },
-        { INVOICE_ASSOCIATION, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetAssociation, (QofSetterFunc)gncInvoiceSetAssociation },
+        { INVOICE_DOCLINK, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetDocLink, (QofSetterFunc)gncInvoiceSetDocLink },
         { INVOICE_ACC,       GNC_ID_ACCOUNT,   (QofAccessFunc)gncInvoiceGetPostedAcc, (QofSetterFunc)gncInvoiceSetPostedAcc },
         { INVOICE_POST_TXN,  GNC_ID_TRANS,     (QofAccessFunc)gncInvoiceGetPostedTxn, (QofSetterFunc)gncInvoiceSetPostedTxn },
         { INVOICE_POST_LOT,  GNC_ID_LOT,       (QofAccessFunc)gncInvoiceGetPostedLot, NULL/*(QofSetterFunc)gncInvoiceSetPostedLot*/ },

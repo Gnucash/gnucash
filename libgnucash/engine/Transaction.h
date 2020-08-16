@@ -320,8 +320,8 @@ void          xaccTransSetNum (Transaction *trans, const char *num);
 /** Sets the transaction Description */
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
 
-/** Sets the transaction Association */
-void          xaccTransSetAssociation (Transaction *trans, const char *assoc);
+/** Sets the transaction Document Link */
+void          xaccTransSetDocLink (Transaction *trans, const char *doclink);
 
 /** Sets the transaction Notes
  *
@@ -336,8 +336,8 @@ void          xaccTransSetNotes (Transaction *trans, const char *notes);
 const char *  xaccTransGetNum (const Transaction *trans);
 /** Gets the transaction Description */
 const char *  xaccTransGetDescription (const Transaction *trans);
-/** Gets the transaction association */
-const char *  xaccTransGetAssociation(const Transaction *trans);
+/** Gets the transaction Document Link */
+const char *  xaccTransGetDocLink(const Transaction *trans);
 /** Gets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */
@@ -755,7 +755,7 @@ time64 xaccTransGetVoidTime(const Transaction *tr);
 #define TRANS_IS_BALANCED	"trans-balanced?"
 #define TRANS_IS_CLOSING        "trans-is-closing?"
 #define TRANS_NOTES		"notes"
-#define TRANS_ASSOCIATION	"assoc"
+#define TRANS_DOCLINK		"doclink"
 #define TRANS_TYPE		"type"
 #define TRANS_VOID_STATUS	"void-p"
 #define TRANS_VOID_REASON	"void-reason"

@@ -256,13 +256,13 @@ static void gnc_plugin_page_register_cmd_account_report (GtkAction* action,
                                                          GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction* action,
         GncPluginPageRegister* plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
                                                                 GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
                                                                      GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_associate_transaction_remove (GtkAction *action,
+static void gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
                                                                        GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
+static void gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
                                                                   GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_help_changed_cb (GNCSplitReg* gsr,
                                              GncPluginPageRegister* register_page);
@@ -295,14 +295,14 @@ static GList* invoices_from_transaction (Transaction* trans);
 /* Translators: This is a menu item that opens a dialog for linking an
    external file or URL with the bill, invoice, transaction, or voucher or
    removing such an link. */
-#define ASSOCIATE_TRANSACTION_LABEL      N_("_Manage Document Link...")
+#define LINK_TRANSACTION_LABEL           N_("_Manage Document Link...")
 /* Translators: This is a menu item that opens an external file or URI that may
    be linked to the current bill, invoice, transaction, or voucher using
    the operating system's default application for the file or URI mime type. */
-#define ASSOCIATE_TRANSACTION_OPEN_LABEL N_("_Open Linked Document")
+#define LINK_TRANSACTION_OPEN_LABEL      N_("_Open Linked Document")
 /* Translators: This is a menu item that will open the bill, invoice, or voucher
    that is posted to the current transaction if there is one. */
-#define JUMP_ASSOCIATED_INVOICE_LABEL    N_("Jump to Invoice")
+#define JUMP_LINKED_INVOICE_LABEL        N_("Jump to Invoice")
 #define CUT_SPLIT_LABEL                  N_("Cu_t Split")
 #define COPY_SPLIT_LABEL                 N_("_Copy Split")
 #define PASTE_SPLIT_LABEL                N_("_Paste Split")
@@ -313,9 +313,9 @@ static GList* invoices_from_transaction (Transaction* trans);
 #define PASTE_TRANSACTION_TIP            N_("Paste the transaction from the clipboard")
 #define DUPLICATE_TRANSACTION_TIP        N_("Make a copy of the current transaction")
 #define DELETE_TRANSACTION_TIP           N_("Delete the current transaction")
-#define ASSOCIATE_TRANSACTION_TIP        N_("Add, change, or unlink the document linked with the current transaction")
-#define ASSOCIATE_TRANSACTION_OPEN_TIP   N_("Open the linked document for the current transaction")
-#define JUMP_ASSOCIATED_INVOICE_TIP      N_("Jump to the linked bill, invoice, or voucher")
+#define LINK_TRANSACTION_TIP             N_("Add, change, or unlink the document linked with the current transaction")
+#define LINK_TRANSACTION_OPEN_TIP        N_("Open the linked document for the current transaction")
+#define JUMP_LINKED_INVOICE_TIP          N_("Jump to the linked bill, invoice, or voucher")
 #define CUT_SPLIT_TIP                    N_("Cut the selected split into clipboard")
 #define COPY_SPLIT_TIP                   N_("Copy the selected split into clipboard")
 #define PASTE_SPLIT_TIP                  N_("Paste the split from the clipboard")
@@ -419,19 +419,19 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction)
     },
     {
-        "AssociateTransactionAction", NULL, ASSOCIATE_TRANSACTION_LABEL, NULL,
-        ASSOCIATE_TRANSACTION_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_associate_transaction)
+        "LinkTransactionAction", NULL, LINK_TRANSACTION_LABEL, NULL,
+        LINK_TRANSACTION_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction)
     },
     {
-        "AssociateTransactionOpenAction", NULL, ASSOCIATE_TRANSACTION_OPEN_LABEL, NULL,
-        ASSOCIATE_TRANSACTION_OPEN_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_associate_transaction_open)
+        "LinkedTransactionOpenAction", NULL, LINK_TRANSACTION_OPEN_LABEL, NULL,
+        LINK_TRANSACTION_OPEN_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_linked_transaction_open)
     },
     {
-        "JumpAssociatedInvoiceAction", NULL, JUMP_ASSOCIATED_INVOICE_LABEL, NULL,
-        JUMP_ASSOCIATED_INVOICE_TIP,
-        G_CALLBACK (gnc_plugin_page_register_cmd_jump_associated_invoice)
+        "JumpLinkedInvoiceAction", NULL, JUMP_LINKED_INVOICE_LABEL, NULL,
+        JUMP_LINKED_INVOICE_TIP,
+        G_CALLBACK (gnc_plugin_page_register_cmd_jump_linked_invoice)
     },
 
     /* View menu */
@@ -614,9 +614,9 @@ static action_toolbar_labels toolbar_labels[] =
     { "BlankTransactionAction",             N_ ("Blank") },
     { "ActionsReconcileAction",             N_ ("Reconcile") },
     { "ActionsAutoClearAction",             N_ ("Auto-clear") },
-    { "AssociateTransactionAction",         N_ ("Manage Document Link") },
-    { "AssociateTransactionOpenAction",     N_ ("Open Linked Document") },
-    { "JumpAssociatedInvoiceAction",        N_ ("Invoice") },
+    { "LinkTransactionAction",              N_ ("Manage Document Link") },
+    { "LinkedTransactionOpenAction",        N_ ("Open Linked Document") },
+    { "JumpLinkedInvoiceAction",            N_ ("Invoice") },
     { NULL, NULL },
 };
 
@@ -999,7 +999,7 @@ static const char* readonly_inactive_actions[] =
     "ScheduleTransactionAction",
     "ScrubAllAction",
     "ScrubCurrentAction",
-    "AssociateTransactionAction",
+    "LinkTransactionAction",
     NULL
 };
 
@@ -1023,9 +1023,9 @@ static const char* tran_action_labels[] =
     PASTE_TRANSACTION_LABEL,
     DUPLICATE_TRANSACTION_LABEL,
     DELETE_TRANSACTION_LABEL,
-    ASSOCIATE_TRANSACTION_LABEL,
-    ASSOCIATE_TRANSACTION_OPEN_LABEL,
-    JUMP_ASSOCIATED_INVOICE_LABEL,
+    LINK_TRANSACTION_LABEL,
+    LINK_TRANSACTION_OPEN_LABEL,
+    JUMP_LINKED_INVOICE_LABEL,
     NULL
 };
 
@@ -1037,9 +1037,9 @@ static const char* tran_action_tips[] =
     PASTE_TRANSACTION_TIP,
     DUPLICATE_TRANSACTION_TIP,
     DELETE_TRANSACTION_TIP,
-    ASSOCIATE_TRANSACTION_TIP,
-    ASSOCIATE_TRANSACTION_OPEN_TIP,
-    JUMP_ASSOCIATED_INVOICE_TIP,
+    LINK_TRANSACTION_TIP,
+    LINK_TRANSACTION_OPEN_TIP,
+    JUMP_LINKED_INVOICE_TIP,
     NULL
 };
 
@@ -1141,11 +1141,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                          "UnvoidTransactionAction");
     gtk_action_set_sensitive (GTK_ACTION (action), voided);
 
-    /* Set 'Open and Remove Associated' */
-    uri = xaccTransGetAssociation (trans);
+    /* Set 'Open and Remove Linked Documents' */
+    uri = xaccTransGetDocLink (trans);
 
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
-                                         "AssociateTransactionOpenAction");
+                                         "LinkedTransactionOpenAction");
     gtk_action_set_sensitive (GTK_ACTION(action), (uri ? TRUE:FALSE));
 
     /* Set 'ExecAssociatedInvoice'
@@ -1154,7 +1154,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
        - it has splits with an invoice associated with it
     */
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE (page),
-                                        "JumpAssociatedInvoiceAction");
+                                         "JumpLinkedInvoiceAction");
 
     invoices = invoices_from_transaction (trans);
     gtk_action_set_sensitive (GTK_ACTION (action), (invoices != NULL));
@@ -4547,8 +4547,8 @@ gnc_plugin_page_register_cmd_delete_transaction (GtkAction* action,
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
-                                                    GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction (GtkAction *action,
+                                                 GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4563,8 +4563,8 @@ gnc_plugin_page_register_cmd_associate_transaction (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
-                                                         GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_open (GtkAction *action,
+                                                      GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4578,8 +4578,8 @@ gnc_plugin_page_register_cmd_associate_transaction_open (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_associate_transaction_remove (GtkAction *action,
-                                                           GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_linked_transaction_remove (GtkAction *action,
+                                                        GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
 
@@ -4628,8 +4628,8 @@ GList* invoices_from_transaction (Transaction* trans)
 }
 
 static void
-gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
-                                                      GncPluginPageRegister* plugin_page)
+gnc_plugin_page_register_cmd_jump_linked_invoice (GtkAction* action,
+                                                  GncPluginPageRegister* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
@@ -4678,7 +4678,7 @@ gnc_plugin_page_register_cmd_jump_associated_invoice (GtkAction* action,
             details = g_list_reverse (details);
             choice = gnc_choose_radio_option_dialog
                 (GNC_PLUGIN_PAGE (plugin_page)->window, _("Select document"),
-                 _("Several documents are associated with this transaction. \
+                 _("Several documents are linked with this transaction. \
 Please choose one:"), _("Select"), 0, details);
             if (choice >= 0)
                 invoice = (GncInvoice *)(g_list_nth (invoices, choice))->data;

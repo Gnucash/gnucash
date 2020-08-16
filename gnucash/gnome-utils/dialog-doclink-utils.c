@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-assoc-utils.c -- Associations dialog Utils                *
+ * dialog-doclink-utils.c -- Document link dialog Utils             *
  * Copyright (C) 2020 Robert Fewell                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "dialog-assoc-utils.h"
+#include "dialog-doclink-utils.h"
 
 #include "dialog-utils.h"
 #include "Transaction.h"
@@ -75,7 +75,7 @@ convert_uri_to_abs_path (const gchar *path_head, const gchar *uri,
 }
 
 gchar *
-gnc_assoc_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
+gnc_doclink_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
 {
     gchar *display_str = NULL;
 
@@ -100,7 +100,7 @@ gnc_assoc_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri
 }
 
 gchar *
-gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
+gnc_doclink_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme)
 {
     gchar *use_str = NULL;
 
@@ -121,11 +121,11 @@ gnc_assoc_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_sche
 }
 
 gchar *
-gnc_assoc_get_unescaped_just_uri (const gchar *uri)
+gnc_doclink_get_unescaped_just_uri (const gchar *uri)
 {
-    gchar *path_head = gnc_assoc_get_path_head ();
+    gchar *path_head = gnc_doclink_get_path_head ();
     gchar *uri_scheme = gnc_uri_get_scheme (uri);
-    gchar *ret_uri = gnc_assoc_get_unescape_uri (path_head, uri, uri_scheme);
+    gchar *ret_uri = gnc_doclink_get_unescape_uri (path_head, uri, uri_scheme);
 
     g_free (path_head);
     g_free (uri_scheme);
@@ -133,9 +133,9 @@ gnc_assoc_get_unescaped_just_uri (const gchar *uri)
 }
 
 gchar *
-gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
+gnc_doclink_convert_trans_link_uri (gpointer trans, gboolean book_ro)
 {
-    const gchar *uri = xaccTransGetAssociation (trans); // get the existing uri
+    const gchar *uri = xaccTransGetDocLink (trans); // get the existing uri
     const gchar *part = NULL;
 
     if (!uri)
@@ -153,7 +153,7 @@ gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
             part = uri + strlen ("file:");
 
         if (!xaccTransGetReadOnly (trans) && !book_ro)
-            xaccTransSetAssociation (trans, part);
+            xaccTransSetDocLink (trans, part);
 
         return g_strdup (part);
     }
@@ -163,10 +163,10 @@ gnc_assoc_convert_trans_associate_uri (gpointer trans, gboolean book_ro)
 /* =================================================================== */
 
 static gchar *
-assoc_get_path_head_and_set (gboolean *path_head_set)
+doclink_get_path_head_and_set (gboolean *path_head_set)
 {
     gchar *ret_path = NULL;
-    gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
+    gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "doclink-head");
     *path_head_set = FALSE;
 
     if (path_head && *path_head) // not default entry
@@ -191,11 +191,11 @@ assoc_get_path_head_and_set (gboolean *path_head_set)
         ret_path = g_strdup (folder_with_slash);
         g_free (folder_with_slash);
 
-        if (*path_head_set) // prior to 3.5, assoc-head could be with or without a trailing '/'
+        if (*path_head_set) // prior to 3.5, doclink-head could be with or without a trailing '/'
         {
-            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path))
+            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "doclink-head", ret_path))
                 PINFO ("Failed to save preference at %s, %s with %s",
-                       GNC_PREFS_GROUP_GENERAL, "assoc-head", ret_path);
+                       GNC_PREFS_GROUP_GENERAL, "doclink-head", ret_path);
         }
     }
     g_free (path_head);
@@ -203,15 +203,15 @@ assoc_get_path_head_and_set (gboolean *path_head_set)
 }
 
 gchar *
-gnc_assoc_get_path_head (void)
+gnc_doclink_get_path_head (void)
 {
     gboolean path_head_set = FALSE;
 
-    return assoc_get_path_head_and_set (&path_head_set);
+    return doclink_get_path_head_and_set (&path_head_set);
 }
 
 void
-gnc_assoc_set_path_head_label (GtkWidget *path_head_label, const gchar *incoming_path_head, const gchar *prefix)
+gnc_doclink_set_path_head_label (GtkWidget *path_head_label, const gchar *incoming_path_head, const gchar *prefix)
 {
     gboolean path_head_set = FALSE;
     gchar *path_head = NULL;
@@ -225,10 +225,10 @@ gnc_assoc_set_path_head_label (GtkWidget *path_head_label, const gchar *incoming
          path_head_set = TRUE;
     }
     else
-        path_head = assoc_get_path_head_and_set (&path_head_set);
+        path_head = doclink_get_path_head_and_set (&path_head_set);
 
     scheme = gnc_uri_get_scheme (path_head);
-    path_head_str = gnc_assoc_get_unescape_uri (NULL, path_head, scheme);
+    path_head_str = gnc_doclink_get_unescape_uri (NULL, path_head, scheme);
 
     if (path_head_set)
     {
@@ -271,14 +271,14 @@ typedef struct
     const gchar *new_path_head_uri;
     gboolean     change_new;
     gboolean     book_ro;
-}AssocUpdate;
+}DoclinkUpdate;
 
 static void
 update_invoice_uri (QofInstance* data, gpointer user_data)
 {
-    AssocUpdate *assoc_update = user_data;
+    DoclinkUpdate *doclink_update = user_data;
     GncInvoice *invoice = GNC_INVOICE(data);
-    const gchar* uri = gncInvoiceGetAssociation (invoice);
+    const gchar* uri = gncInvoiceGetDocLink (invoice);
 
     if (uri && *uri)
     {
@@ -289,22 +289,22 @@ update_invoice_uri (QofInstance* data, gpointer user_data)
             rel = TRUE;
 
         // check for relative and we want to change them
-        if (rel && assoc_update->change_old)
+        if (rel && doclink_update->change_old)
         {
-            gchar *new_uri = gnc_assoc_get_use_uri (assoc_update->old_path_head_uri, uri, scheme);
-            gncInvoiceSetAssociation (invoice, new_uri);
+            gchar *new_uri = gnc_doclink_get_use_uri (doclink_update->old_path_head_uri, uri, scheme);
+            gncInvoiceSetDocLink (invoice, new_uri);
             g_free (new_uri);
         }
         g_free (scheme);
 
         // check for not relative and we want to change them
-        if (!rel && assoc_update->change_new && g_str_has_prefix (uri, assoc_update->new_path_head_uri))
+        if (!rel && doclink_update->change_new && g_str_has_prefix (uri, doclink_update->new_path_head_uri))
         {
             // relative paths do not start with a '/'
-            const gchar *part = uri + strlen (assoc_update->new_path_head_uri);
+            const gchar *part = uri + strlen (doclink_update->new_path_head_uri);
             gchar *new_uri = g_strdup (part);
 
-            gncInvoiceSetAssociation (invoice, new_uri);
+            gncInvoiceSetDocLink (invoice, new_uri);
             g_free (new_uri);
         }
     }
@@ -313,12 +313,12 @@ update_invoice_uri (QofInstance* data, gpointer user_data)
 static void
 update_trans_uri (QofInstance* data, gpointer user_data)
 {
-    AssocUpdate *assoc_update = user_data;
+    DoclinkUpdate *doclink_update = user_data;
     Transaction *trans = GNC_TRANSACTION(data);
     gchar *uri;
 
     // fix an earlier error when storing relative paths before version 3.5
-    uri = gnc_assoc_convert_trans_associate_uri (trans, assoc_update->book_ro);
+    uri = gnc_doclink_convert_trans_link_uri (trans, doclink_update->book_ro);
 
     if (uri && *uri)
     {
@@ -329,26 +329,26 @@ update_trans_uri (QofInstance* data, gpointer user_data)
             rel = TRUE;
 
         // check for relative and we want to change them
-        if (rel && assoc_update->change_old)
+        if (rel && doclink_update->change_old)
         {
-            gchar *new_uri = gnc_assoc_get_use_uri (assoc_update->old_path_head_uri, uri, scheme);
+            gchar *new_uri = gnc_doclink_get_use_uri (doclink_update->old_path_head_uri, uri, scheme);
 
             if (!xaccTransGetReadOnly (trans))
-                xaccTransSetAssociation (trans, new_uri);
+                xaccTransSetDocLink (trans, new_uri);
 
             g_free (new_uri);
         }
         g_free (scheme);
 
         // check for not relative and we want to change them
-        if (!rel && assoc_update->change_new && g_str_has_prefix (uri, assoc_update->new_path_head_uri))
+        if (!rel && doclink_update->change_new && g_str_has_prefix (uri, doclink_update->new_path_head_uri))
         {
             // relative paths do not start with a '/'
-            const gchar *part = uri + strlen (assoc_update->new_path_head_uri);
+            const gchar *part = uri + strlen (doclink_update->new_path_head_uri);
             gchar *new_uri = g_strdup (part);
 
             if (!xaccTransGetReadOnly (trans))
-                xaccTransSetAssociation (trans, new_uri);
+                xaccTransSetDocLink (trans, new_uri);
 
             g_free (new_uri);
         }
@@ -362,33 +362,33 @@ change_relative_and_absolute_uri_paths (const gchar *old_path_head_uri, gboolean
 {
     QofBook      *book = gnc_get_current_book();
     gboolean      book_ro = qof_book_is_readonly (book);
-    AssocUpdate  *assoc_update;
+    DoclinkUpdate  *doclink_update;
 
     /* if book is read only, nothing to do */
     if (book_ro)
         return;
 
-    assoc_update = g_new0 (AssocUpdate, 1);
+    doclink_update = g_new0 (DoclinkUpdate, 1);
 
-    assoc_update->old_path_head_uri = old_path_head_uri;
-    assoc_update->new_path_head_uri = new_path_head_uri;
-    assoc_update->change_old = change_old;
-    assoc_update->change_new = change_new;
-    assoc_update->book_ro = book_ro;
+    doclink_update->old_path_head_uri = old_path_head_uri;
+    doclink_update->new_path_head_uri = new_path_head_uri;
+    doclink_update->change_old = change_old;
+    doclink_update->change_new = change_new;
+    doclink_update->book_ro = book_ro;
 
     /* Loop through the transactions */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_TRANS),
-                            update_trans_uri, assoc_update);
+                            update_trans_uri, doclink_update);
 
     /* Loop through the invoices */
     qof_collection_foreach (qof_book_get_collection (book, GNC_ID_INVOICE),
-                            update_invoice_uri, assoc_update);
+                            update_invoice_uri, doclink_update);
 
-    g_free (assoc_update);
+    g_free (doclink_update);
 }
 
 void
-gnc_assoc_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_uri)
+gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_uri)
 {
     GtkWidget  *dialog;
     GtkBuilder *builder;
@@ -396,7 +396,7 @@ gnc_assoc_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_
     GtkWidget  *old_head_label, *new_head_label;
     GtkWidget  *old_hbox, *new_hbox;
     gint        result;
-    gchar      *new_path_head_uri = gnc_assoc_get_path_head ();
+    gchar      *new_path_head_uri = gnc_doclink_get_path_head ();
 
     if (g_strcmp0 (old_path_head_uri, new_path_head_uri) == 0)
     {
@@ -406,15 +406,15 @@ gnc_assoc_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_
 
     /* Create the dialog box */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-assoc.glade", "association_path_head_changed_dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "association_path_head_changed_dialog"));
+    gnc_builder_add_from_file (builder, "dialog-doclink.glade", "link_path_head_changed_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "link_path_head_changed_dialog"));
 
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
     // Set the name and style context for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-association-change");
-    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-association");
+    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-doclink-change");
+    gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
 
     old_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "existing_path_head"));
     new_head_label = GTK_WIDGET(gtk_builder_get_object (builder, "new_path_head"));
@@ -423,8 +423,8 @@ gnc_assoc_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_head_
     use_new_path_head = GTK_WIDGET(gtk_builder_get_object (builder, "use_new_path_head"));
 
     // display path head text and test if present
-    gnc_assoc_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
-    gnc_assoc_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
+    gnc_doclink_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
+    gnc_doclink_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
 
     gtk_widget_show (dialog);
     g_object_unref (G_OBJECT(builder));

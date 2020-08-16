@@ -55,7 +55,7 @@ typedef struct
     const char *m_num;
     const char *m_description;
     const char *m_notes;
-    const char *m_association;
+    const char *m_doclink;
     SplitList *m_splits;
 } FloatingTxn;
 
@@ -92,7 +92,7 @@ time64 gnc_float_txn_get_date_posted (const FloatingTxn *ft);
 const char *gnc_float_txn_get_num (const FloatingTxn *ft);
 const char *gnc_float_txn_get_description (const FloatingTxn *ft);
 const char *gnc_float_txn_get_notes (const FloatingTxn *ft);
-const char *gnc_float_txn_get_association (const FloatingTxn *ft);
+const char *gnc_float_txn_get_doclink (const FloatingTxn *ft);
 SplitList *gnc_float_txn_get_splits (const FloatingTxn *ft);
 
 FloatingSplit *gnc_float_txn_get_float_split (const FloatingTxn *ft, guint index);
@@ -106,7 +106,7 @@ void gnc_float_txn_set_date_posted (FloatingTxn *ft, time64 date_posted);
 void gnc_float_txn_set_num (FloatingTxn *ft, const char *num);
 void gnc_float_txn_set_description (FloatingTxn *ft, const char *description);
 void gnc_float_txn_set_notes (FloatingTxn *ft, const char *notes);
-void gnc_float_txn_set_association (FloatingTxn *ft, const char *association);
+void gnc_float_txn_set_doclink (FloatingTxn *ft, const char *doclink);
 void gnc_float_txn_set_splits (FloatingTxn *ft, SplitList *splits);
 
 void gnc_float_txn_append_float_split (FloatingTxn *ft, FloatingSplit *fs);

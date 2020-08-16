@@ -44,8 +44,8 @@
       <menu name="Business" action="BusinessAction">
         <placeholder name="BusinessPlaceholderMiddle">
           <separator name="BusinessSep1"/>
-          <menuitem name="BusinessAssociation" action="BusinessAssociationAction"/>
-          <menuitem name="BusinessAssociationOpen" action="BusinessAssociationOpenAction"/>
+          <menuitem name="BusinessLink" action="BusinessLinkAction"/>
+          <menuitem name="BusinessLinkOpen" action="BusinessLinkOpenAction"/>
           <separator name="BusinessSep2"/>
           <menuitem name="ToolsProcessPayment" action="ToolsProcessPaymentAction"/>
         </placeholder>

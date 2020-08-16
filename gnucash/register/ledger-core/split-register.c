@@ -602,7 +602,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
 
         if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
                                    TRUE, &date, in_num, &out_num, in_tnum, &out_tnum,
-                                   xaccTransGetAssociation (trans), &out_tassoc))
+                                   xaccTransGetDocLink (trans), &out_tassoc))
         {
             gnc_resume_gui_refresh ();
             LEAVE ("dup cancelled");
@@ -656,7 +656,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
 
         /* clear the associated entry if returned value NULL */
         if (out_tassoc == NULL)
-            xaccTransSetAssociation (new_trans, "");
+            xaccTransSetDocLink (new_trans, "");
         else
             g_free (out_tassoc);
 

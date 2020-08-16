@@ -20,7 +20,7 @@
       <summary>Character to use as separator between account names</summary>
       <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon", "slash", "backslash", "dash" and "period".</description>
     </key>
-    <key name="assoc-head" type="s">
+    <key name="doclink-head" type="s">
       <default>''</default>
       <summary>Transaction Linked Files head path</summary>
       <description>This is the path head for the Transaction Linked Files with relative paths</description>

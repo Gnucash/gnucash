@@ -1243,13 +1243,13 @@ be excluded from periodic reporting.")
                (add-if (column-uses? 'link)
                        (vector ""
                                (lambda (split transaction-row?)
-                                 (let ((url (xaccTransGetAssociation
+                                 (let ((url (xaccTransGetDocLink
                                              (xaccSplitGetParent split))))
                                    (and (not (string-null? url))
                                         (gnc:make-html-table-cell/markup
                                          "text-cell"
                                          (if opt-use-links?
-                                             (gnc:html-transaction-association-anchor
+                                             (gnc:html-transaction-doclink-anchor
                                               (xaccSplitGetParent split)
                                               ;; Translators: 'L' is short for Linked Document
                                               (G_ "L"))

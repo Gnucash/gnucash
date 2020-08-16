@@ -1314,7 +1314,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         const char *in_tnum = NULL;
         char *out_num;
         char *out_tnum;
-        char *out_tassoc = NULL;
+        char *out_tdoclink = NULL;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book());
 
@@ -1337,7 +1337,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 
         if (!gnc_dup_trans_dialog (GTK_WIDGET (window), NULL, TRUE,
                                    &date, in_num, &out_num, in_tnum, &out_tnum,
-                                   xaccTransGetAssociation (trans), &out_tassoc))
+                                   xaccTransGetDocLink (trans), &out_tdoclink))
         {
             LEAVE("dup cancelled");
             return FALSE;
@@ -1382,11 +1382,11 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
          * because otherwise the ordering is not deterministic */
         xaccTransSetDateEnteredSecs(new_trans, gnc_time(NULL));
 
-        /* clear the associated entry if returned value NULL */
-        if (out_tassoc == NULL)
-            xaccTransSetAssociation (new_trans, "");
+        /* clear the linked document entry if returned value NULL */
+        if (out_tdoclink == NULL)
+            xaccTransSetDocLink (new_trans, "");
         else
-            g_free (out_tassoc);
+            g_free (out_tdoclink);
 
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
@@ -2171,9 +2171,9 @@ gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  
         if (g_strcmp0 (text, new_text) == 0)
         {
             xaccTransCopyOnto (trans_from, trans);
-            /* if there is an association, lets clear it */
-            if (xaccTransGetAssociation (trans_from) != NULL)
-                xaccTransSetAssociation (trans, "");
+            /* if there is a doclink, lets clear it */
+            if (xaccTransGetDocLink (trans_from) != NULL)
+                xaccTransSetDocLink (trans, "");
             g_free (text);
             break;
         }

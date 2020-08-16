@@ -84,9 +84,10 @@ gchar *gnc_invoice_get_title (InvoiceWindow *iw);
 
 GncInvoice * gnc_invoice_window_get_invoice (InvoiceWindow *iw);
 
-GtkWidget * gnc_invoice_window_get_assoc_link_button (InvoiceWindow *iw);
+GtkWidget * gnc_invoice_window_get_doclink_button (InvoiceWindow *iw);
 
-void gnc_invoice_update_assoc_for_window (GncInvoice *invoice, const gchar *uri);
+void gnc_invoice_update_doclink_for_window (GncInvoice *invoice,
+                                            const gchar *uri);
 
 GncInvoiceType gnc_invoice_get_type_from_window(InvoiceWindow *iw);
 

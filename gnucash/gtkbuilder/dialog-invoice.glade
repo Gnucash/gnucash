@@ -411,11 +411,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="assoc_hbox">
+                      <object class="GtkBox" id="link_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkLinkButton" id="doc_link_button">
+                          <object class="GtkLinkButton" id="doclink_button">
                             <property name="label" translatable="yes">Open Document Link</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>

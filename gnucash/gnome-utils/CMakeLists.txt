@@ -30,7 +30,7 @@ set (gnome_utils_SOURCES
   assistant-xml-encoding.c
   cursors.c
   dialog-account.c
-  dialog-assoc-utils.c
+  dialog-doclink-utils.c
   dialog-book-close.c
   dialog-commodity.c
   dialog-dup-trans.c
@@ -124,7 +124,7 @@ set (gnome_utils_HEADERS
   account-quickfill.h
   assistant-xml-encoding.h
   dialog-account.h
-  dialog-assoc-utils.h
+  dialog-doclink-utils.h
   dialog-book-close.h
   dialog-commodity.h
   dialog-dup-trans.h
