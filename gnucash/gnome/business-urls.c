@@ -30,6 +30,7 @@
 #include "gnc-html.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "stdint.h"
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -163,120 +164,121 @@ jobCB (const char *location, const char *label,
 
 /* ================================================================= */
 
-#define RETURN_IF_NULL(inst)                                            \
+#define DISABLE_REPORT_IF_NULL(inst)                                    \
   if (NULL == inst)                                                     \
   {                                                                     \
     result->error_message =                                             \
       g_strdup_printf (_("No such owner entity: %s"), location);        \
-    return FALSE;                                                       \
+    show_report = FALSE;                                                \
   }
+
+#define DISABLE_REPORT_IF_TRUE(inst)                                    \
+  if (inst)                                                             \
+  {                                                                     \
+    result->error_message =                                             \
+      g_strdup_printf (_("Badly formed URL %s"), location);             \
+    show_report = FALSE;                                                \
+  }
+
+/* parses a string "user=john&pass=smith&age=41" into a string-keyed
+   GHashTable. String must not contain non-ASCII chars. Duplicate keys
+   will be ignored. */
+static GHashTable *parse_parameters (const gchar *parms)
+{
+    GHashTable *rethash;
+    gchar *query, *p, *orig_query;
+
+    rethash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+    query = g_strdup (parms);
+    orig_query = query;
+
+    while ((p = strsep (&query, "&\n")))
+    {
+        gchar * val = strchr (p, '=');
+        *(val++) = '\0';
+        if (val && !g_hash_table_contains (rethash, p))
+            g_hash_table_insert (rethash, g_strdup (p), g_strdup (val));
+    }
+
+    g_free (orig_query);
+    return rethash;
+}
 
 static gboolean
 ownerreportCB (const char *location, const char *label,
                gboolean new_window, GNCURLResult * result)
 {
-    char *ownerptr;
-    const char *acctptr;
+    gchar *ownerptr, *acctptr, *etype, *datestr = NULL;
     GncGUID guid;
     GncOwner owner;
-    GncOwnerType type;
-    char *etype = NULL;
-    Account *acc = NULL;
+    Account *acc;
+    GHashTable *query_ht;
+    time64 enddate;
+    gboolean show_report = TRUE;
 
     g_return_val_if_fail (location != NULL, FALSE);
     g_return_val_if_fail (result != NULL, FALSE);
 
     result->load_to_stream = FALSE;
 
-    /* href="...:owner=<owner-type>:guid=<guid>[&acct=<guid>]" */
+    /* href="...:owner=<owner-type>:<guid>[&acct=<guid>]" */
+    query_ht = parse_parameters (location);
 
-    if (strncmp ("owner=", location, 6) != 0)
-    {
-        result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                location);
-        return FALSE;
-    }
+    /* parse the acct guid*/
+    acctptr = g_hash_table_lookup (query_ht, "acct");
+    DISABLE_REPORT_IF_TRUE (!acctptr || !string_to_guid (acctptr, &guid));
+    acc = xaccAccountLookup (&guid, gnc_get_current_book ());
 
-    acctptr = strchr (location, '&');
-    if (acctptr)
-    {
-        ownerptr = g_strndup (location + 6, acctptr - location - 6);
-        acctptr++;
-    }
-    else
-        ownerptr = g_strdup (location + 6);
+    /* parse the acct guid*/
+    datestr = g_hash_table_lookup (query_ht, "enddate");
+    if (datestr)
+        enddate = g_ascii_strtoull (datestr, NULL, 10);
 
+    /* parse the owner guid */
+    ownerptr = g_hash_table_lookup (query_ht, "owner");
+    DISABLE_REPORT_IF_TRUE (!ownerptr || !strchr("cvej", ownerptr[0]) ||
+                            ownerptr[1] != ':' ||
+                            !string_to_guid (ownerptr+2, &guid));
     memset (&owner, 0, sizeof (owner));
-
     switch (*ownerptr)
     {
     case 'c':
-        type = GNC_OWNER_CUSTOMER;
-        break;
-    case 'v':
-        type = GNC_OWNER_VENDOR;
-        break;
-    case 'e':
-        type = GNC_OWNER_EMPLOYEE;
-        break;
-    case 'j':
-        type = GNC_OWNER_JOB;
-        break;
-    default:
-        result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-        g_free (ownerptr);
-        return FALSE;
-    }
-
-    if (!string_to_guid (ownerptr + 2, &guid))
-    {
-        result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-        g_free (ownerptr);
-        return FALSE;
-    }
-
-    g_free (ownerptr);
-
-    switch (type)
-    {
-    case GNC_OWNER_CUSTOMER:
     {
         GncCustomer *customer =
             gncCustomerLookup (gnc_get_current_book (), &guid);
-        RETURN_IF_NULL (customer);
+        DISABLE_REPORT_IF_NULL (customer);
         gncOwnerInitCustomer (&owner, customer);
         etype = "Customer";
         break;
     }
-    case GNC_OWNER_VENDOR:
+    case 'v':
     {
         GncVendor *vendor =
             gncVendorLookup (gnc_get_current_book (), &guid);
-        RETURN_IF_NULL (vendor);
+        DISABLE_REPORT_IF_NULL (vendor);
         gncOwnerInitVendor (&owner, vendor);
         etype = "Vendor";
         break;
     }
-    case GNC_OWNER_EMPLOYEE:
+    case 'e':
     {
         GncEmployee *employee =
             gncEmployeeLookup (gnc_get_current_book (), &guid);
-        RETURN_IF_NULL(employee);
+        DISABLE_REPORT_IF_NULL(employee);
         gncOwnerInitEmployee (&owner, employee);
         etype = "Employee";
         break;
     }
-    case GNC_OWNER_JOB:
+    case 'j':
     {
         GncJob *job =
             gncJobLookup (gnc_get_current_book (), &guid);
-        RETURN_IF_NULL(job);
+        DISABLE_REPORT_IF_NULL(job);
         gncOwnerInitJob (&owner, job);
         etype = "Job";
         break;
     }
     default:
-        etype = "OTHER";
         break;
     }
 
@@ -285,37 +287,15 @@ ownerreportCB (const char *location, const char *label,
         result->error_message =
             g_strdup_printf (_("Entity type does not match %s: %s"),
                              etype, location);
-        return FALSE;
-    }
-
-    /* Deal with acctptr, if it exists */
-    if (acctptr)
-    {
-        if (strncmp ("acct=", acctptr, 5) != 0)
-        {
-            result->error_message = g_strdup_printf (_("Bad URL %s"), location);
-            return FALSE;
-        }
-
-        if (!string_to_guid (acctptr + 5, &guid))
-        {
-            result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-            return FALSE;
-        }
-
-        acc = xaccAccountLookup (&guid, gnc_get_current_book ());
-        if (NULL == acc)
-        {
-            result->error_message = g_strdup_printf (_("No such Account entity: %s"),
-                                    location);
-            return FALSE;
-        }
+        show_report = FALSE;
     }
 
     /* Ok, let's run this report */
-    gnc_business_call_owner_report (result->parent, &owner, acc);
+    if (show_report)
+        gnc_business_call_owner_report (result->parent, &owner, acc);
 
-    return TRUE;
+    g_hash_table_destroy (query_ht);
+    return show_report;
 }
 
 void
