@@ -4590,6 +4590,8 @@ static GncInvoice* invoice_from_split (Split* split)
 GList* invoices_from_transaction (Transaction* trans)
 {
     GList *invoices = NULL;
+    if (!trans) return NULL;
+
     for (GList *node = xaccTransGetAPARAcctSplitList(trans, TRUE); node;
          node = node->next)
     {
