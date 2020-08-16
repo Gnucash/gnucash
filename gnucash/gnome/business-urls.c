@@ -279,6 +279,7 @@ ownerreportCB (const char *location, const char *label,
         break;
     }
     default:
+        etype = "Undefined";
         break;
     }
 
