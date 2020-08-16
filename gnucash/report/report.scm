@@ -735,6 +735,7 @@
 ;; trep-engine.scm
 (export gnc:trep-options-generator)
 (export gnc:trep-renderer)
+(export gnc:lists->csv)
 
 ;; report-register-hooks.scm
 
