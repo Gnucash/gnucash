@@ -602,28 +602,21 @@ developing over time"))
              (when show-table?
                (let ((table (gnc:make-html-table))
                      (scu (gnc-commodity-get-fraction report-currency))
-                     (cols>1? (> (length all-data) 1)))
+                     (cols>1? (pair? (cdr all-data))))
 
                  (define (make-cell contents)
                    (gnc:make-html-table-cell/markup "number-cell" contents))
 
-                 (define (monetary-round mon)
-                   (gnc:make-gnc-monetary
-                    report-currency
-                    (gnc-numeric-convert
-                     (gnc:gnc-monetary-amount mon)
-                     scu GNC-HOW-RND-ROUND)))
-
                  (for-each
                   (lambda (date row)
                     (gnc:html-table-append-row!
-                     table (map make-cell (append (list date)
-                                                  (map monetary-round row)
-                                                  (if cols>1?
-                                                      (list
-                                                       (monetary-round
-                                                        (apply gnc:monetary+ row)))
-                                                      '())))))
+                     table
+                     (append (list (make-cell date))
+                             (map make-cell row)
+                             (if cols>1?
+                                 (list
+                                  (make-cell (apply gnc:monetary+ row)))
+                                 '()))))
                   date-string-list
                   (apply zip (map cadr all-data)))
 
