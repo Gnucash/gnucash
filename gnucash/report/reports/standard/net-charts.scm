@@ -444,14 +444,19 @@
 
              (cond
               ((eq? export-type 'csv)
-               (gnc:html-document-set-export-string
-                document
-                (gnc:lists->csv
-                 (cons (if inc-exp?
-                           (map G_ '("Date" "Income" "Expense" "Net Profit"))
-                           (map G_ '("Date" "Assets" "Liabilities" "Net Worth")))
-                       (map list date-string-list minuend-balances
-                            subtrahend-balances difference-balances)))))))
+               (let ((old-fmt (qof-date-format-get)))
+                 (qof-date-format-set QOF-DATE-FORMAT-ISO)
+                 (gnc:html-document-set-export-string
+                  document
+                  (gnc:lists->csv
+                   (cons (if inc-exp?
+                             (map G_ '("Date" "Income" "Expense" "Net Profit"))
+                             (map G_ '("Date" "Assets" "Liabilities" "Net Worth")))
+                         (map list
+                              (map qof-print-date dates-list)
+                              minuend-balances
+                              subtrahend-balances difference-balances))))
+                 (qof-date-format-set old-fmt)))))
            (gnc:html-document-add-object!
             document
             (gnc:html-make-empty-data-warning
@@ -462,6 +467,9 @@
       document
       (gnc:html-make-no-account-warning
        report-title (gnc:report-id report-obj))))
+
+    (unless (gnc:html-document-export-string document)
+      (gnc:html-document-set-export-error document (G_ "No exportable data")))
 
     (gnc:report-finished)
     document))
