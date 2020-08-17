@@ -30,6 +30,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (ice-9 match))
 
 (define optname-from-date (N_ "Start Date"))
 (define optname-to-date (N_ "End Date"))
@@ -133,6 +134,15 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  (define intervals
+    (list (list 'DayDelta (G_ "Days") 86400)
+          (list 'WeekDelta (G_ "Weeks") 604800)
+          (list 'TwoWeekDelta (G_ "Double-Weeks") 1209600)
+          (list 'MonthDelta (G_ "Months") 2628000)
+          (list 'QuarterDelta (G_ "Quarters") (/ 31536000 4))
+          (list 'HalfYearDelta (G_ "Half Years") (/ 31536000 2))
+          (list 'YearDelta (G_ "Years") 31536000)))
+
   (let* ((to-date (gnc:time64-end-day-time 
                    (gnc:date-option-absolute-time
                     (get-option gnc:pagename-general 
@@ -173,6 +183,8 @@
 	 (invert (get-option pagename-price optname-invert))
          (amount-commodity (if invert price-commodity report-currency))
          (base-commodity (if invert report-currency price-commodity))
+         (int-label (car (assq-ref intervals interval)))
+         (int-secs (cadr (assq-ref intervals interval)))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -213,140 +225,98 @@
                            ((dash) "line")))
 
     (gnc:html-chart-set-y-axis-label!
-     chart
-     ;; Check for whether it is commodity against currency or
-     ;; the other way round. 
-     (gnc-commodity-get-mnemonic amount-commodity))
-    (gnc:html-chart-set-x-axis-label!
-     chart (case interval
-             ((DayDelta) (G_ "Days"))
-             ((WeekDelta) (G_ "Weeks"))
-             ((TwoWeekDelta) (G_ "Double-Weeks"))
-             ((MonthDelta) (G_ "Months"))
-             ((YearDelta) (G_ "Years"))))
+     chart (gnc-commodity-get-mnemonic amount-commodity))
 
-    (gnc:html-chart-set!
-     chart '(options scales xAxes (0) type) 'linear)
+    (gnc:html-chart-set-x-axis-label! chart int-label)
+
+    (gnc:html-chart-set! chart '(options scales xAxes (0) type) 'linear)
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
 
-    (if
-     (not (gnc-commodity-equiv report-currency price-commodity))
-     (begin
-       (if (or (not (null? currency-accounts))
-               (eq? price-source 'pricedb))
-           (set!
-            data
-            (case price-source
-              ((actual-transactions)
-               (gnc:get-commodity-inst-prices
-                currency-accounts to-date 
-                price-commodity report-currency))
-              ((weighted-average)
-               (gnc:get-commodity-totalavg-prices
-                currency-accounts to-date 
-                price-commodity report-currency))
-              ((pricedb)
-               (map (lambda (p)
-                      (list (gnc-price-get-time64 p)
-                            (gnc-price-get-value p)))
-                    (gnc-pricedb-get-prices
-                     (gnc-pricedb-get-db (gnc-get-current-book))
-                     price-commodity report-currency))))))
+    (cond
+     ((gnc-commodity-equiv report-currency price-commodity)
+      (make-warning
+       (G_ "Identical commodities")
+       (G_ "Your selected commodity and the currency of the report \
+are identical. It doesn't make sense to show prices for identical \
+commodities.")))
 
-       ;; the following transforms data in 1 assignment operation
-       ;; 1. filters prices within specified dates
-       ;; 2. transforms the price-date to numperiod since report start-date
-       ;; 3. inverts the price-ratio if required
-       (set! data
-         (map (lambda (datum)
-                (list
-                 (/ (- (car datum) from-date)
-                    ;; convert the dates to the x-axis scaling of the
-                    ;; scatterplot
-                    (case interval
-                      ((DayDelta) 86400)
-                      ((WeekDelta) 604800)
-                      ((TwoWeekDelta) 1209600)
-                      ((MonthDelta) 2628000)
-                      ((YearDelta) 31536000)))
-                 (if invert
-                     (/ 1 (cadr datum))
-                     (cadr datum))))
-              (filter
-               (lambda (datum)
-                 (<= from-date (car datum) to-date))
-               data)))
+     (else
+      (when (or (not (null? currency-accounts)) (eq? price-source 'pricedb))
+        (set! data
+          (case price-source
+            ((actual-transactions)
+             (gnc:get-commodity-inst-prices
+              currency-accounts to-date price-commodity report-currency))
+            ((weighted-average)
+             (gnc:get-commodity-totalavg-prices
+              currency-accounts to-date price-commodity report-currency))
+            ((pricedb)
+             (map (lambda (p)
+                    (list (gnc-price-get-time64 p) (gnc-price-get-value p)))
+                  (gnc-pricedb-get-prices
+                   (gnc-pricedb-get-db (gnc-get-current-book))
+                   price-commodity report-currency))))))
 
-       (gnc:html-chart-set-data-labels!
-        chart (map
-               (lambda (datum)
-                 (format #f "~2,2f ~a = ~a"
-                         (car datum)
-                         (case interval
-                           ((DayDelta) (G_ "Days"))
-                           ((WeekDelta) (G_ "Weeks"))
-                           ((TwoWeekDelta) (G_ "Double-Weeks"))
-                           ((MonthDelta) (G_ "Months"))
-                           ((YearDelta) (G_ "Years")))
-                         (gnc:monetary->string
-                          (gnc:make-gnc-monetary
-                           amount-commodity
-                           (cadr datum)))))
-               data))
+      ;; the following transforms data in 1 assignment operation
+      ;; 1. filters prices within specified dates
+      ;; 2. transforms the price-date to numperiod since report start-date
+      ;; 3. inverts the price-ratio if required
+      (set! data
+        (filter-map
+         (match-lambda
+           ((date amt)
+            (and (<= from-date date to-date)
+                 (list (/ (- date from-date) int-secs)
+                       (if invert (/ 1 amt) amt)))))
+         data))
 
-       (gnc:html-chart-add-data-series!
-        chart (G_ "Price")
-        (map
-         (lambda (datum)
-           (list
-            (cons 'x (car datum))
-            (cons 'y (cadr datum))))
-         data)
-        mcolor
-        'pointBorderColor mcolor
-        'fill #f
-        'borderColor "#4bb2c5"
-        'pointBackgroundColor (if (memq marker '(filledcircle filledsquare filleddiamond))
-                                  mcolor
-                                  "white"))
-
-       (cond
-        ((null? data)
-         (make-warning
-          (G_ "No data")
-          (G_ "There is no price information available for the \
+      (cond
+       ((null? data)
+        (make-warning
+         (G_ "No data")
+         (G_ "There is no price information available for the \
 selected commodities in the selected time period.")))
 
-        ((<= (length data) 1)
-         (make-warning
-          (G_ "Only one price")
-          (G_ "There was only one single price found for the \
+       ((<= (length data) 1)
+        (make-warning
+         (G_ "Only one price")
+         (G_ "There was only one single price found for the \
 selected commodities in the selected time period. This doesn't give \
 a useful plot.")))
 
-        ((apply equal? (map cadr data))
-         (make-warning
-          (G_ "All Prices equal")
-          (G_ "All the prices found are equal. \
+       ((apply equal? (map cadr data))
+        (make-warning
+         (G_ "All Prices equal")
+         (G_ "All the prices found are equal. \
 This would result in a plot with one straight line. \
 Unfortunately, the plotting tool can't handle that.")))
 
-        ((apply equal? (map car data))
-         (make-warning
-          (G_ "All Prices at the same date")
-          (G_ "All the prices found are from the same date. \
+       ((apply equal? (map car data))
+        (make-warning
+         (G_ "All Prices at the same date")
+         (G_ "All the prices found are from the same date. \
 This would result in a plot with one straight line. \
 Unfortunately, the plotting tool can't handle that.")))
 
-        (else
-         (gnc:html-document-add-object! document chart))))
+       (else
+        (gnc:html-chart-set-data-labels!
+         chart (map
+                (match-lambda
+                  ((x y)
+                   (format #f "~2,2f ~a = ~a"
+                           x int-label (gnc:monetary->string
+                                        (gnc:make-gnc-monetary amount-commodity y)))))
+                data))
 
-     ;; warning if report-currency == price-commodity
-     (make-warning
-      (G_ "Identical commodities")
-      (G_ "Your selected commodity and the currency of the report \
-are identical. It doesn't make sense to show prices for identical \
-commodities.")))
+        (gnc:html-chart-add-data-series!
+         chart (G_ "Price")
+         (map (match-lambda ((x y) (list (cons 'x x) (cons 'y y)))) data)
+         mcolor
+         'pointBorderColor mcolor 'fill #f 'borderColor "#4bb2c5"
+         'pointBackgroundColor
+         (if (memq marker '(filledcircle filledsquare filleddiamond)) mcolor "white"))
+
+        (gnc:html-document-add-object! document chart)))))
 
     document))
 
