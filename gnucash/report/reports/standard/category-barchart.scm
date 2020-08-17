@@ -212,7 +212,8 @@ developing over time"))
 ;; *really* complicated.
 
 (define (category-barchart-renderer report-obj reportname reportguid
-                                    account-types do-intervals? reverse-bal?)
+                                    account-types do-intervals? reverse-bal?
+                                    export-type)
   ;; A helper functions for looking up option values.
   (define (get-option section name)
     (gnc:option-value
@@ -635,7 +636,38 @@ developing over time"))
                        (list (G_ "Grand Total"))
                        '())))
 
-                 (gnc:html-document-add-object! document table))))
+                 (gnc:html-document-add-object! document table)))
+
+             (cond
+              ((eq? export-type 'csv)
+               (let ((old-fmt (qof-date-format-get)))
+                 (qof-date-format-set QOF-DATE-FORMAT-ISO)
+                 (gnc:html-document-set-export-string
+                  document
+                  (gnc:lists->csv
+                   (cons (append
+                          (list (G_ "Date"))
+                          (map
+                           (lambda (col)
+                             (cond
+                              ((string? col) col)
+                              (show-fullname? (gnc-account-get-full-name col))
+                              (else (xaccAccountGetName col))))
+                           (map car all-data))
+                          (if (pair? (cdr all-data))
+                              (list (G_ "Grand Total"))
+                              '()))
+                         (map
+                          (lambda (date row)
+                            (append
+                             (list date)
+                             row
+                             (if (pair? (cdr all-data))
+                                 (list (apply gnc:monetary+ row))
+                                 '())))
+                          (map qof-print-date dates-list)
+                          (apply zip (map cadr all-data))))))
+                 (qof-date-format-set old-fmt)))))
 
            ;; else if empty data
            (gnc:html-document-add-object!
@@ -648,6 +680,9 @@ developing over time"))
          document
          (gnc:html-make-no-account-warning
           report-title (gnc:report-id report-obj))))
+
+    (unless (gnc:html-document-export-string document)
+      (gnc:html-document-set-export-error document (G_ "No exportable data")))
 
     (gnc:report-finished)
     document))
@@ -665,9 +700,15 @@ developing over time"))
      'menu-name menuname
      'menu-tip menutip
      'options-generator (lambda () (options-generator account-types inc-exp?))
+     'export-types '(("CSV" . csv))
+     'export-thunk (lambda (report-obj export-type filename)
+                     (category-barchart-renderer
+                      report-obj reportname uuid account-types inc-exp? reverse-bal?
+                      export-type))
      'renderer (lambda (report-obj)
                  (category-barchart-renderer
-                  report-obj reportname uuid account-types inc-exp? reverse-bal?)))))
+                  report-obj reportname uuid account-types inc-exp? reverse-bal?
+                  #f)))))
  (list
   ;; reportname, account-types, inc-exp?,
   ;; menu-reportname, menu-tip, reverse-bal?, uuid
