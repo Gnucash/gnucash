@@ -205,15 +205,6 @@
     (test-end "multiplier test"))
   (teardown))
 
-(define (list-leaves list)
-  (if (not (pair? list))
-      (cons list '())
-      (fold (lambda (next acc)
-	      (append (list-leaves next)
-		      acc))
-	    '()
-	    list)))
-
 (define (multi-acct-test expense-report-uuid)
   (let* ((expense-options (gnc:make-report-options expense-report-uuid))
          (env (create-test-env))
@@ -223,7 +214,7 @@
                           (list "Assets"
                                 (list (cons 'type ACCT-TYPE-ASSET))
                                 (list "Bank"))))
-         (leaf-expense-accounts (list-leaves expense-accounts))
+         (leaf-expense-accounts (gnc:list-flatten expense-accounts))
          (bank-account (car (car (cdr asset-accounts)))))
     (for-each (lambda (expense-account)
                 (env-create-daily-transactions env
