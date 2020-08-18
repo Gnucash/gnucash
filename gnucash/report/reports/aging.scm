@@ -807,7 +807,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 				   (cons
 				    (gnc:make-html-text
 				     (gnc:html-markup-anchor
-				      (gnc:owner-report-text owner account)
+				      (gnc:owner-report-text owner account report-date)
 				      total))
 				    rest))))
 

@@ -94,7 +94,7 @@
       (else
        ""))))
 
-(define (gnc:owner-report-text owner acc)
+(define* (gnc:owner-report-text owner acc #:optional date)
   (let* ((end-owner (gncOwnerGetEndOwner owner))
          (type (gncOwnerGetType end-owner)))
     (gnc-build-url
@@ -105,6 +105,7 @@
             ((eqv? type GNC-OWNER-EMPLOYEE) "owner=e:")
             (else "unknown-type="))
       (gncOwnerReturnGUID end-owner)
+      (if date (format #f "&enddate=~a" date) "")
       (if (null? acc) "" (string-append "&acct=" (gncAccountGetGUID acc))))
      "")))
 

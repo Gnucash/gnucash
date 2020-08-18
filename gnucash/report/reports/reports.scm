@@ -38,6 +38,7 @@
 (export gnc:payables-report-create)
 (export gnc:receivables-report-create)
 (export gnc:owner-report-create)
+(export gnc:owner-report-create-with-enddate)
 
 (define report-dirs (list
     '(gnucash reports standard) ; prefix for standard reports included in gnucash
@@ -48,7 +49,8 @@
 ; and then load all reports found in the given prefixes
 (let* ((loc (gnc-locale-name))
        (loc-spec (if (string-prefix? "de_DE" loc) 'de_DE 'us))
-       (all-dirs (append report-dirs (list (list 'gnucash 'reports 'locale-specific loc-spec)))))
+       (all-dirs (append report-dirs
+                         `((gnucash reports locale-specific ,loc-spec)))))
       (report-module-loader all-dirs))
 
 (use-modules (gnucash engine))
@@ -86,3 +88,4 @@
 
 (use-modules (gnucash reports standard new-owner-report))
 (define gnc:owner-report-create owner-report-create)
+(define gnc:owner-report-create-with-enddate owner-report-create-with-enddate)
