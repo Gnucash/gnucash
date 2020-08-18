@@ -911,7 +911,7 @@ be excluded from periodic reporting.")
        (not (eq? amount-value 'none)))
 
       (gnc-option-db-set-option-selectable-by-name
-       options gnc:pagename-display "Enable links"
+       options gnc:pagename-display "Enable Links"
        (not (eq? amount-value 'none)))
 
       (gnc-option-db-set-option-selectable-by-name
@@ -1024,7 +1024,7 @@ be excluded from periodic reporting.")
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-display (N_ "Enable links")
+      gnc:pagename-display (N_ "Enable Links")
       "m2" (G_ "Enable hyperlinks in amounts.") #t))
 
     (gnc:register-trep-option
@@ -1127,7 +1127,7 @@ be excluded from periodic reporting.")
   (let* ((work-to-do (length splits))
          (table (gnc:make-html-table))
          (used-columns (build-columns-used))
-         (opt-use-links? (opt-val gnc:pagename-display "Enable links"))
+         (opt-use-links? (opt-val gnc:pagename-display "Enable Links"))
          (account-types-to-reverse
           (keylist-get-info sign-reverse-list
                             (opt-val gnc:pagename-display (N_ "Sign Reverses"))
