@@ -742,11 +742,15 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     GtkTreeViewColumn *tax_info_column, *acc_color_column;
     GtkCellRenderer *renderer;
     GList *col_list = NULL, *node = NULL;
+    GtkTreeSelection *selection;
 
     ENTER(" ");
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT,
                          "name", "gnc-id-account-tree", NULL);
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
 
@@ -1395,7 +1399,12 @@ gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
     mode = gtk_tree_selection_get_mode(selection);
     if ((mode != GTK_SELECTION_SINGLE) && (mode != GTK_SELECTION_BROWSE))
     {
-        return NULL;
+        GList* acct_list = gnc_tree_view_account_get_selected_accounts (view);
+        if (acct_list == NULL)
+            return NULL;
+        account = acct_list->data;
+        g_list_free(acct_list);
+        return account;
     }
     if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter))
     {
