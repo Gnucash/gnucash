@@ -20,6 +20,7 @@ set(scm_test_with_srfi64_SOURCES
   test-invoice.scm
   test-new-owner-report.scm
   test-owner-report.scm
+  test-acb.scm
   test-portfolios.scm
 )
 
