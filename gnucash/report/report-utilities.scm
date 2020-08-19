@@ -17,6 +17,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+(use-modules (srfi srfi-26))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 format))
 (use-modules (ice-9 match))
@@ -1089,36 +1090,63 @@
       (newline)
       (last args))))
 
+(define (maybe-str name str)
+  (match str
+    ((or "" #f) "")
+    (_ (format #f " ~a<~a>" name str))))
+
+(define-public (gnc:dump-split s show-acc?)
+  (define txn (xaccSplitGetParent s))
+  (format #t "~a Split ~a: ~a~a Amt<~a> ~a~a~a\n"
+          (xaccSplitGetReconcile s)
+          (string-take (gncSplitGetGUID s) 8)
+          (qof-print-date (xaccTransGetDate txn))
+          (maybe-str 'Acc (and show-acc? (xaccAccountGetName (xaccSplitGetAccount s))))
+          (gnc:monetary->string
+           (gnc:make-gnc-monetary
+            (xaccAccountGetCommodity (xaccSplitGetAccount s))
+            (xaccSplitGetAmount s)))
+          (gnc:monetary->string
+           (gnc:make-gnc-monetary
+            (xaccTransGetCurrency txn)
+            (xaccSplitGetValue s)))
+          (maybe-str 'Desc (xaccTransGetDescription txn))
+          (maybe-str 'Memo (xaccSplitGetMemo s))))
+
+(define-public (gnc:dump-all-transactions)
+  (define query (qof-query-create-for-splits))
+  (display "\n(gnc:dump-all-transactions)\n")
+  (qof-query-set-book query (gnc-get-current-book))
+  (qof-query-set-sort-order query (list SPLIT-TRANS TRANS-DATE-POSTED) '() '())
+  (qof-query-set-sort-increasing query #t #t #t)
+  (let lp ((splits (xaccQueryGetSplitsUniqueTrans query)))
+    (newline)
+    (match splits
+      (() (qof-query-destroy query))
+      ((split . rest)
+       (let ((trans (xaccSplitGetParent split)))
+         (format #t "  Trans ~a: ~a Curr ~a ~a~a\n"
+                 (string-take (gncTransGetGUID trans) 8)
+                 (qof-print-date (xaccTransGetDate trans))
+                 (gnc-commodity-get-mnemonic (xaccTransGetCurrency trans))
+                 (maybe-str 'Desc (xaccTransGetDescription trans))
+                 (maybe-str 'Notes (xaccTransGetNotes trans)))
+         (for-each (cut gnc:dump-split <> #t) (xaccTransGetSplitList trans))
+         (lp rest))))))
+
 ;; utility function for testing. dumps the whole book contents to
 ;; console.
 (define (gnc:dump-book)
   (display "\n(gnc:dump-book)\n")
   (for-each
    (lambda (acc)
-     (format #t "\nAccount: <~a> Comm<~a> Type<~a>\n"
+     (format #t "\nAccount ~a: ~a Comm<~a> Type<~a>\n"
+             (string-take (gncAccountGetGUID acc) 8)
              (gnc-account-get-full-name acc)
-             (gnc-commodity-get-mnemonic
-              (xaccAccountGetCommodity acc))
-             (xaccAccountGetTypeStr
-              (xaccAccountGetType acc)))
-     (for-each
-      (lambda (s)
-        (let ((txn (xaccSplitGetParent s)))
-          (format #t "~a Split: ~a Amt<~a> Val<~a> Desc<~a> Memo<~a>\n"
-                  (xaccSplitGetReconcile s)
-                  (qof-print-date (xaccTransGetDate txn))
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary
-                    (xaccAccountGetCommodity acc)
-                    (xaccSplitGetAmount s)))
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary
-                    (xaccTransGetCurrency txn)
-                    (xaccSplitGetValue s)))
-                  (xaccTransGetDescription txn)
-                  (xaccSplitGetMemo s))))
-      (xaccAccountGetSplitList acc))
-     (format #t "Balance: ~a Cleared: ~a Reconciled: ~a\n"
+             (gnc-commodity-get-mnemonic (xaccAccountGetCommodity acc))
+             (xaccAccountGetTypeStr (xaccAccountGetType acc)))
+     (for-each (cut gnc:dump-split <> #f) (xaccAccountGetSplitList acc))
+     (format #t "         Balance: ~a Cleared: ~a Reconciled: ~a\n"
              (gnc:monetary->string
               (gnc:make-gnc-monetary
                (xaccAccountGetCommodity acc)
