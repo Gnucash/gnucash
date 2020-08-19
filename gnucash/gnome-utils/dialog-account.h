@@ -69,6 +69,15 @@ account_type_has_auto_interest_payment(type) )
  */
 void gnc_ui_edit_account_window (GtkWindow *parent, Account *account);
 
+/** Display a window for editing the attributes of a list of existing accounts.
+ *
+ *  @param parent The widget on which to parent the dialog.
+ *
+ *  @param acct_list This parameter specifies the list of accounts whose data
+ *  will be edited.
+ */
+void gnc_ui_edit_account_list_window (GtkWindow *parent, GList* acct_list);
+
 
 /** Display a window for creating a new account.  This function will
  *  also initially set the parent account of the new account to what

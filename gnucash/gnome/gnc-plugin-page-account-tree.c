@@ -342,7 +342,6 @@ static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_p
 static const gchar *actions_not_supporting_multi_select[] =
 {
     "FileNewAccountAction",
-    "EditEditAccountAction",
     "FileAddAccountHierarchyAssistantAction",
     "FileOpenAccountAction",
     "EditRenumberSubaccountsAction",
@@ -1085,6 +1084,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
     gboolean subaccounts;
     gboolean is_readwrite = !qof_book_is_readonly(gnc_get_current_book());
     gboolean multi_account = FALSE;
+    gboolean same_parents = TRUE;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
@@ -1105,6 +1105,14 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
             account = acct_list->data;
             parent = gnc_account_get_parent (account);
             multi_account = (acct_list->next && acct_list->data);
+            for (GList* iter = acct_list->next; iter; iter=iter->next)
+            {
+                if (gnc_account_get_parent (iter->data) != parent)
+                {
+                    same_parents = FALSE;
+                    break;
+                }
+            }
         }
         sensitive = (account != NULL);
         g_list_free (acct_list);
@@ -1112,14 +1120,24 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
         subaccounts = account && (gnc_account_n_children(account) != 0);
         /* Check here for placeholder accounts, etc. */
     }
+    
+    // This resets actions that might have been previously turned off.
+    update_inactive_actions (GNC_PLUGIN_PAGE(page));
 
     action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
     gnc_plugin_update_actions (action_group, actions_requiring_account_rw,
                                "sensitive", is_readwrite && sensitive);
     gnc_plugin_update_actions (action_group, actions_requiring_account_always,
                                "sensitive", sensitive);
-    gnc_plugin_update_actions (action_group, actions_not_supporting_multi_select,
-                               "sensitive", !multi_account);
+    if (multi_account)
+        gnc_plugin_update_actions (action_group, actions_not_supporting_multi_select,
+                                   "sensitive", !multi_account);
+    if (!same_parents)
+    {
+        const gchar* foo[] = {"EditEditAccountAction", NULL};
+        gnc_plugin_update_actions (action_group, foo,
+                                   "sensitive", FALSE);
+    }
     g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
 
     action = gtk_action_group_get_action (action_group, "EditRenumberSubaccountsAction");
@@ -1208,12 +1226,16 @@ gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageA
 {
     Account *account;
     GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    GList* acct_list = NULL;
+    GncPluginPageAccountTreePrivate *priv;
     ENTER("action %p, page %p", action, page);
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
-    g_return_if_fail (account != NULL);
+    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE (page);
+    acct_list = gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (priv->tree_view));
+    g_return_if_fail (acct_list != NULL && acct_list->data != NULL);
 
-    gnc_ui_edit_account_window (parent, account);
+    gnc_ui_edit_account_list_window (parent, acct_list);
     LEAVE(" ");
 }
 
