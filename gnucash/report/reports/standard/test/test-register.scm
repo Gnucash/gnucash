@@ -81,7 +81,7 @@
     (set-option options "__reg" "journal" #t)
     (let ((sxml (options->sxml options "journal")))
       (test-equal "table has 339 cells"
-        339
+        329
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
@@ -103,7 +103,7 @@
     (set-option options "__reg" "ledger-type" #t)
     (let ((sxml (options->sxml options "ledger-type")))
       (test-equal "table has 343 cells"
-        343
+        333
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
@@ -133,7 +133,7 @@
     (set-option options "__reg" "double" #t)
     (let ((sxml (options->sxml options "double")))
       (test-equal "table has 347 cells"
-        347
+        337
         (length (sxml->table-row-col sxml 1 #f #f)))
 
       (test-equal "total debit = #6"
