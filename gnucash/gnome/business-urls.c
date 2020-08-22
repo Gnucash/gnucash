@@ -186,21 +186,21 @@ jobCB (const char *location, const char *label,
 static GHashTable *parse_parameters (const gchar *parms)
 {
     GHashTable *rethash;
-    gchar *query, *p, *orig_query;
+    char *query = strdup (parms);
+    const char *key_tok = "&\n";
+    const char val_tok = '=';
 
     rethash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-    query = g_strdup (parms);
-    orig_query = query;
 
-    while ((p = strsep (&query, "&\n")))
+    for (char *p = strtok (query, key_tok); p; p = strtok (NULL, key_tok))
     {
-        gchar * val = strchr (p, '=');
+        gchar * val = strchr (p, val_tok);
         *(val++) = '\0';
         if (val && !g_hash_table_contains (rethash, p))
             g_hash_table_insert (rethash, g_strdup (p), g_strdup (val));
     }
 
-    g_free (orig_query);
+    g_free (query);
     return rethash;
 }
 
