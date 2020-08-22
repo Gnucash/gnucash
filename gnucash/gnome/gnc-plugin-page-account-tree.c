@@ -414,6 +414,30 @@ gnc_plugin_page_account_tree_new (void)
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageAccountTree, gnc_plugin_page_account_tree, GNC_TYPE_PLUGIN_PAGE)
 
 static void
+prepare_scrubbing ()
+{
+    gnc_suspend_gui_refresh ();
+    gnc_set_abort_scrub (FALSE);
+}
+
+static gboolean
+finish (GncPluginPage* page)
+{
+    if (gnc_get_ongoing_scrub ())
+    {
+        gboolean ret = gnc_verify_dialog (NULL, FALSE, "%s", "A scrubbing operation is currently pending, do you want to abort it?");
+        if (ret)
+        {
+            gnc_set_abort_scrub (TRUE);
+            gnc_resume_gui_refresh (); // This is so quit does not complain about an ongoing operation.
+            return TRUE;
+        }
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static void
 gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -430,6 +454,8 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
     gnc_plugin_class->save_page       = gnc_plugin_page_account_tree_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_account_tree_recreate_page;
     gnc_plugin_class->focus_page_function = gnc_plugin_page_account_tree_focus_widget;
+    gnc_plugin_class->finish_pending = finish;
+
 
     plugin_page_signals[ACCOUNT_SELECTED] =
         g_signal_new ("account_selected",
@@ -1913,7 +1939,7 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
 
     g_return_if_fail (account != NULL);
 
-    gnc_suspend_gui_refresh ();
+    prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
     gnc_window_set_progressbar_window (window);
@@ -1939,7 +1965,7 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
 
     g_return_if_fail (account != NULL);
 
-    gnc_suspend_gui_refresh ();
+    prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
     gnc_window_set_progressbar_window (window);
@@ -1962,7 +1988,7 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
     Account *root = gnc_get_current_root_account ();
     GncWindow *window;
 
-    gnc_suspend_gui_refresh ();
+    prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
     gnc_window_set_progressbar_window (window);

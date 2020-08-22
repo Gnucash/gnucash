@@ -69,6 +69,16 @@
     for orphaned inodes.
     @{  */
 
+/** The gnc_set_abort_scrub () method causes a currently running scrub operation
+ *    to stop, if abort is TRUE; gnc_set_abort_scrub(FALSE) must be called before
+ *    any scrubbing operation.
+ */
+void gnc_set_abort_scrub (gboolean abort);
+
+/** The gnc_get_ongoing_scrub () method returns TRUE if a scrub operation is ongoing.
+ */
+gboolean gnc_get_ongoing_scrub (void);
+
 /** The xaccTransScrubOrphans() method scrubs only the splits in the
  *    given transaction.
  */
